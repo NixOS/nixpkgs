@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, sfml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sfml,
 }:
-
 stdenv.mkDerivation rec {
   pname = "simplenes";
   version = "unstable-2019-03-13";
@@ -15,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1nmwj431iwqzzcykxd4xinqmg0rm14mx7zsjyhcc5skz7pihz86g";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ sfml ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [sfml];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/amhndu/SimpleNES";
     description = "An NES emulator written in C++";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ivar ];
+    maintainers = with maintainers; [ivar];
     platforms = platforms.linux;
   };
 }

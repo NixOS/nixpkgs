@@ -1,5 +1,10 @@
-{ fetchzip, lib, stdenv, makeWrapper, openjdk }:
-
+{
+  fetchzip,
+  lib,
+  stdenv,
+  makeWrapper,
+  openjdk,
+}:
 stdenv.mkDerivation rec {
   pname = "gremlin-console";
   version = "3.5.2";
@@ -8,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PCr8lDQzypgozKCzD8FV4X4ls5lYZRMey1vfcFzo+Uc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tinkerpop.apache.org/";
     description = "Console of the Apache TinkerPop graph computing framework";
     license = licenses.asl20;
-    maintainers = [ maintainers.lewo ];
+    maintainers = [maintainers.lewo];
     platforms = platforms.all;
   };
 }

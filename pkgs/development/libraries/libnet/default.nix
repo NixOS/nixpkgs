@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libnet";
   version = "1.2-rc3";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qsapqa7dzq9f6lb19kzilif0pj82b64fjv5bq086hflb9w81hvj";
   };
 
-  patches = [ ./fix-includes.patch ];
+  patches = [./fix-includes.patch];
 
   meta = with lib; {
     homepage = "https://github.com/sam-github/libnet";

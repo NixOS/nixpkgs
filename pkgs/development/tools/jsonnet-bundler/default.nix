@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "jsonnet-bundler";
   version = "0.4.0";
@@ -13,14 +16,14 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = [ "cmd/jb" ];
+  subPackages = ["cmd/jb"];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.Version=${version}"];
 
   meta = with lib; {
     description = "A jsonnet package manager";
     homepage = "https://github.com/jsonnet-bundler/jsonnet-bundler";
     license = licenses.asl20;
-    maintainers = with maintainers; [ preisschild ];
+    maintainers = with maintainers; [preisschild];
   };
 }

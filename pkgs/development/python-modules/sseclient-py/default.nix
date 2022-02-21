@@ -1,5 +1,9 @@
-{ buildPythonPackage, fetchFromGitHub, lib, python }:
-
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  python,
+}:
 buildPythonPackage rec {
   pname = "sseclient-py";
   version = "1.7.2";
@@ -20,6 +24,6 @@ buildPythonPackage rec {
     description = "Pure-Python Server Side Events (SSE) client";
     homepage = "https://github.com/mpetazzoni/sseclient";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    maintainers = with maintainers; [jamiemagee];
   };
 }

@@ -1,5 +1,11 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, qtscript, cmake }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  qtscript,
+  cmake,
+}:
 mkDerivation rec {
   pname = "grantlee";
   version = "5.2.0";
@@ -12,15 +18,15 @@ mkDerivation rec {
     sha256 = "sha256-mAbgzdBdIW1wOTQNBePQuyTgkKdpn1c+zR3H7mXHvgk=";
   };
 
-  buildInputs = [ qtbase qtscript ];
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [qtbase qtscript];
+  nativeBuildInputs = [cmake];
 
   patches = [
     ./grantlee-nix-profiles.patch
     ./grantlee-no-canonicalize-filepath.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
   postFixup =
     # Disabuse CMake of the notion that libraries are in $dev
     ''
@@ -48,7 +54,7 @@ mkDerivation rec {
       and the design of Django is reused in Grantlee.'';
 
     homepage = "https://github.com/steveire/grantlee";
-    maintainers = [ maintainers.ttuegel ];
+    maintainers = [maintainers.ttuegel];
     license = licenses.lgpl21;
     inherit (qtbase.meta) platforms;
   };

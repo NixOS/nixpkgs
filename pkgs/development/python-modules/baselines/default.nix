@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, gym
-, scipy
-, tqdm
-, joblib
-, dill
-, progressbar2
-, cloudpickle
-, click
-, pyzmq
-, tensorflow
-, mpi4py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  gym,
+  scipy,
+  tqdm,
+  joblib,
+  dill,
+  progressbar2,
+  cloudpickle,
+  click,
+  pyzmq,
+  tensorflow,
+  mpi4py,
 }:
-
 buildPythonPackage {
   pname = "baselines";
   version = "0.1.6"; # remember to manually adjust the rev
@@ -59,6 +59,6 @@ buildPythonPackage {
     description = "High-quality implementations of reinforcement learning algorithms";
     homepage = "https://github.com/openai/baselines";
     license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [timokau];
   };
 }

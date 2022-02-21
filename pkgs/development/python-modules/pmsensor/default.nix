@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyserial
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyserial,
 }:
-
 buildPythonPackage rec {
   pname = "pmsensor";
   version = "0.4";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Library to read data from environment sensors";
     homepage = "https://github.com/open-homeautomation/pmsensor";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

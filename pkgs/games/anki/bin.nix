@@ -1,6 +1,13 @@
-{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg }:
-
-let
+{
+  fetchurl,
+  stdenv,
+  lib,
+  buildFHSUserEnv,
+  appimageTools,
+  writeShellScript,
+  anki,
+  undmg,
+}: let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
   version = "2.1.49";
@@ -37,41 +44,45 @@ let
 
   meta = with lib; {
     inherit (anki.meta) license homepage description longDescription;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ atemu ];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
+    maintainers = with maintainers; [atemu];
   };
 
-  passthru = { inherit sources; };
+  passthru = {inherit sources;};
 in
+  if stdenv.isLinux
+  then
+    buildFHSUserEnv (appimageTools.defaultFhsEnvArgs
+    // {
+      name = "anki";
 
-if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
-  name = "anki";
+      runScript = writeShellScript "anki-wrapper.sh" ''
+        exec ${unpacked}/bin/anki
+      '';
 
-  runScript = writeShellScript "anki-wrapper.sh" ''
-    exec ${unpacked}/bin/anki
-  '';
+      extraInstallCommands = ''
+        mkdir -p $out/share
+        cp -R ${unpacked}/share/applications \
+          ${unpacked}/share/man \
+          ${unpacked}/share/pixmaps \
+          $out/share/
+      '';
 
-  extraInstallCommands = ''
-    mkdir -p $out/share
-    cp -R ${unpacked}/share/applications \
-      ${unpacked}/share/man \
-      ${unpacked}/share/pixmaps \
-      $out/share/
-  '';
+      inherit meta passthru;
+    })
+  else
+    stdenv.mkDerivation {
+      inherit pname version passthru;
 
-  inherit meta passthru;
-}) else stdenv.mkDerivation {
-  inherit pname version passthru;
+      src = sources.darwin;
 
-  src = sources.darwin;
+      nativeBuildInputs = [undmg];
+      sourceRoot = ".";
 
-  nativeBuildInputs = [ undmg ];
-  sourceRoot = ".";
+      installPhase = ''
+        mkdir -p $out/Applications/
+        cp -a Anki.app $out/Applications/
+      '';
 
-  installPhase = ''
-    mkdir -p $out/Applications/
-    cp -a Anki.app $out/Applications/
-  '';
-
-  inherit meta;
-}
+      inherit meta;
+    }

@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl, libintl }:
-
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libintl,
+}:
 stdenv.mkDerivation rec {
   pname = "numdiff";
   version = "5.9.0";
@@ -10,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vzmjh8mhwwysn4x4m2vif7q2k8i19x8azq7pzmkwwj4g48lla47";
   };
 
-  buildInputs = [ libintl ];
+  buildInputs = [libintl];
 
   meta = with lib; {
     description = ''

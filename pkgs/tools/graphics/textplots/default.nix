@@ -1,5 +1,8 @@
-{ fetchCrate, lib, rustPlatform }:
-
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "textplots";
   version = "0.8.0";
@@ -15,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     description = "Terminal plotting written in Rust";
     homepage = "https://github.com/loony-bean/textplots-rs";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

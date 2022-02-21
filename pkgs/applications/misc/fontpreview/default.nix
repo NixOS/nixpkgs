@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, xdotool, fzf, imagemagick, sxiv, getopt }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  xdotool,
+  fzf,
+  imagemagick,
+  sxiv,
+  getopt,
+}:
 stdenv.mkDerivation rec {
   pname = "fontpreview";
   version = "1.0.6";
@@ -11,15 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "0g3i2k6n2yhp88rrcf0hp6ils7836db7hx73hw9qnpcbmckz0i4w";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   preInstall = "mkdir -p $out/bin";
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
     wrapProgram $out/bin/fontpreview \
-      --prefix PATH : ${lib.makeBinPath [ xdotool fzf imagemagick sxiv getopt ]}
+      --prefix PATH : ${lib.makeBinPath [xdotool fzf imagemagick sxiv getopt]}
   '';
 
   meta = with lib; {
@@ -35,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [maintainers.erictapen];
   };
 }

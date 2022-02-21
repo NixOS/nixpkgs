@@ -1,5 +1,12 @@
-{ stdenv, texinfo, flex, bison, fetchFromGitHub, crossLibcStdenv, buildPackages }:
-
+{
+  stdenv,
+  texinfo,
+  flex,
+  bison,
+  fetchFromGitHub,
+  crossLibcStdenv,
+  buildPackages,
+}:
 crossLibcStdenv.mkDerivation {
   name = "newlib";
   src = fetchFromGitHub {
@@ -9,11 +16,11 @@ crossLibcStdenv.mkDerivation {
     sha256 = "131r4v0nn68flnqibjcvhsrys3hs89bn0i4vwmrzgjd7v1rbgqav";
   };
   dontUpdateAutotoolsGnuConfigScripts = true;
-  configurePlatforms = [ "target" ];
+  configurePlatforms = ["target"];
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ texinfo flex bison ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [texinfo flex bison];
+  depsBuildBuild = [buildPackages.stdenv.cc];
   # newlib expects CC to build for build platform, not host platform
   preConfigure = ''
     export CC=cc

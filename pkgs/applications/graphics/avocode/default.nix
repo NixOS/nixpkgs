@@ -1,8 +1,36 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, unzip
-, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsa-lib, cups, expat, udev, gnome
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  fetchurl,
+  unzip,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  atk,
+  at-spi2-atk,
+  pango,
+  cairo,
+  freetype,
+  fontconfig,
+  dbus,
+  nss,
+  nspr,
+  alsa-lib,
+  cups,
+  expat,
+  udev,
+  gnome,
+  xorg,
+  mozjpeg,
+  makeWrapper,
+  wrapGAppsHook,
+  libuuid,
+  at-spi2-core,
+  libdrm,
+  mesa,
+  libxkbcommon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "avocode";
   version = "4.15.5";
@@ -61,7 +89,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [makeWrapper wrapGAppsHook unzip];
-  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
+  buildInputs = [gtk3 gnome.adwaita-icon-theme];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder
@@ -101,6 +129,6 @@ stdenv.mkDerivation rec {
     description = "The bridge between designers and developers";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ megheaiulian ];
+    maintainers = with maintainers; [megheaiulian];
   };
 }

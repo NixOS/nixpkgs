@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, mopidy }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pythonPackages,
+  mopidy,
+}:
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-musicbox-webclient";
   version = "3.1.0";
@@ -11,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1lzarazq67gciyn6r8cdms0f7j0ayyfwhpf28z93ydb280mfrrb9";
   };
 
-  propagatedBuildInputs = [ mopidy ];
+  propagatedBuildInputs = [mopidy];
 
   doCheck = false;
 
@@ -19,6 +24,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Mopidy extension for playing music from SoundCloud";
     license = licenses.mit;
     broken = stdenv.isDarwin;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = [maintainers.spwhitt];
   };
 }

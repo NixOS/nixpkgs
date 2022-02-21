@@ -1,5 +1,11 @@
-{lib, stdenv, fetchFromGitHub, gmp, cmake, python3}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  cmake,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "libpoly";
   version = "0.1.11";
@@ -12,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vrYB6RQYShipZ0c0j1KcSTJR1h0rQKAAeJvODMar1GM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ gmp python3 ];
+  buildInputs = [gmp python3];
 
   strictDeps = true;
 

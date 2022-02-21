@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gupnp, mate, imagemagick, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  gupnp,
+  mate,
+  imagemagick,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "caja-extensions";
   version = "1.26.0";
@@ -29,11 +40,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
+  configureFlags = ["--with-cajadir=$$out/lib/caja/extensions-2.0"];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "Set of extensions for Caja file manager";

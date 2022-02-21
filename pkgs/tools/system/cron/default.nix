@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, vim, sendmailPath ? "/usr/sbin/sendmail"}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  vim,
+  sendmailPath ? "/usr/sbin/sendmail",
+}:
 stdenv.mkDerivation rec {
   pname = "cron";
   version = "4.1";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "(mkdir cron && cd cron && sh $curSrc)";
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = ["pie"];
 
   preBuild = ''
     # do not set sticky bit in /nix/store

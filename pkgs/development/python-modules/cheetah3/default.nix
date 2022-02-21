@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "Cheetah3";
   version = "3.2.6.post2";
@@ -15,6 +18,6 @@ buildPythonPackage rec {
     homepage = "http://www.cheetahtemplate.org/";
     description = "A template engine and code generation tool";
     license = licenses.mit;
-    maintainers = with maintainers; [ pjjw ];
+    maintainers = with maintainers; [pjjw];
   };
 }

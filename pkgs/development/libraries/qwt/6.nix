@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qtbase,
+  qtsvg,
+  qttools,
+  qmake,
+}:
 stdenv.mkDerivation rec {
   pname = "qwt";
   version = "6.1.6";
@@ -9,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mUYNMcEV7kEXsBddiF9HwsWQ14QgbwmBXcBY++Xt4fY=";
   };
 
-  propagatedBuildInputs = [ qtbase qtsvg qttools ];
-  nativeBuildInputs = [ qmake ];
+  propagatedBuildInputs = [qtbase qtsvg qttools];
+  nativeBuildInputs = [qmake];
 
   postPatch = ''
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri
   '';
 
-  qmakeFlags = [ "-after doc.path=$out/share/doc/qwt-${version}" ];
+  qmakeFlags = ["-after doc.path=$out/share/doc/qwt-${version}"];
 
   dontWrapQtApps = true;
 
@@ -26,7 +33,7 @@ stdenv.mkDerivation rec {
     # LGPL 2.1 plus a few exceptions (more liberal)
     license = lib.licenses.qwt;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
     branch = "6";
   };
 }

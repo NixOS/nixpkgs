@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, attrs
-, defusedxml
-, pytest-aiohttp
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  attrs,
+  defusedxml,
+  pytest-aiohttp,
+  pytest-mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "arcam-fmj";
   version = "0.12.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Python library for speaking to Arcam receivers";
     homepage = "https://github.com/elupus/arcam_fmj";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

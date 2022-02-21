@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ginkgo";
   version = "2.1.3";
@@ -32,6 +35,6 @@ buildGoModule rec {
       integration tests, acceptance test, performance tests, etc.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ saschagrunert jk ];
+    maintainers = with maintainers; [saschagrunert jk];
   };
 }

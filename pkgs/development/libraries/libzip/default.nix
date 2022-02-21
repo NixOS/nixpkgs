@@ -1,19 +1,20 @@
-{ lib, stdenv
-, cmake
-, fetchurl
-, perl
-, zlib
-, groff
-, withBzip2 ? false
-, bzip2
-, withLZMA ? false
-, xz
-, withOpenssl ? false
-, openssl
-, withZstd ? false
-, zstd
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchurl,
+  perl,
+  zlib,
+  groff,
+  withBzip2 ? false,
+  bzip2,
+  withLZMA ? false,
+  xz,
+  withOpenssl ? false,
+  openssl,
+  withZstd ? false,
+  zstd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libzip";
   version = "1.8.0";
@@ -23,14 +24,15 @@ stdenv.mkDerivation rec {
     sha256 = "17l3ygrnbszm3b99dxmw94wcaqpbljzg54h4c0y8ss8aij35bvih";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = ["out" "dev" "man"];
 
-  nativeBuildInputs = [ cmake perl groff ];
-  propagatedBuildInputs = [ zlib ];
-  buildInputs = lib.optionals withLZMA [ xz ]
-    ++ lib.optionals withBzip2 [ bzip2 ]
-    ++ lib.optionals withOpenssl [ openssl ]
-    ++ lib.optionals withZstd [ zstd ];
+  nativeBuildInputs = [cmake perl groff];
+  propagatedBuildInputs = [zlib];
+  buildInputs =
+    lib.optionals withLZMA [xz]
+    ++ lib.optionals withBzip2 [bzip2]
+    ++ lib.optionals withOpenssl [openssl]
+    ++ lib.optionals withZstd [zstd];
 
   preCheck = ''
     # regress/runtest is a generated file

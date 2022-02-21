@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  bash,
+  fish,
+  zsh,
+}:
 buildGoModule rec {
   pname = "direnv";
   version = "2.30.3";
@@ -27,7 +34,7 @@ buildGoModule rec {
     make install PREFIX=$out
   '';
 
-  checkInputs = [ fish zsh ];
+  checkInputs = [fish zsh];
 
   # temporarily disable tests, check if they can be reenabled with the next release
   doCheck = false;
@@ -52,6 +59,6 @@ buildGoModule rec {
     '';
     homepage = "https://direnv.net";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchurl
-, pkg-config
-, ncurses
-, gzip
-, sslSupport ? true
-, openssl
-, nukeReferences
-, fetchpatch
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  pkg-config,
+  ncurses,
+  gzip,
+  sslSupport ? true,
+  openssl,
+  nukeReferences,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lynx";
   version = "2.8.9rel.1";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = ["pie"];
 
   patches = [
     (fetchpatch {
@@ -35,17 +35,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [
-    "--enable-default-colors"
-    "--enable-widec"
-    "--enable-ipv6"
-  ] ++ lib.optional sslSupport "--with-ssl";
+  configureFlags =
+    [
+      "--enable-default-colors"
+      "--enable-widec"
+      "--enable-ipv6"
+    ]
+    ++ lib.optional sslSupport "--with-ssl";
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ nukeReferences ]
+  depsBuildBuild = [buildPackages.stdenv.cc];
+  nativeBuildInputs =
+    [nukeReferences]
     ++ lib.optional sslSupport pkg-config;
 
-  buildInputs = [ ncurses gzip ]
+  buildInputs =
+    [ncurses gzip]
     ++ lib.optional sslSupport openssl;
 
   # cfg_defs.h captures lots of references to build-only dependencies, derived
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

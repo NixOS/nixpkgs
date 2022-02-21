@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, cxxtools, zlib, openssl, zip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cxxtools,
+  zlib,
+  openssl,
+  zip,
+}:
 stdenv.mkDerivation rec {
   pname = "tntnet";
   version = "2.2.1";
@@ -9,15 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "08bmak9mpbamwwl3h9p8x5qzwqlm9g3jh70y0ml5hk7hiv870cf8";
   };
 
-  buildInputs = [ cxxtools zlib openssl zip ];
+  buildInputs = [cxxtools zlib openssl zip];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://www.tntnet.org/tntnet.html";
     description = "Web server which allows users to develop web applications using C++";
-    platforms = platforms.linux ;
+    platforms = platforms.linux;
     license = licenses.lgpl21;
-    maintainers = [ maintainers.juliendehos ];
+    maintainers = [maintainers.juliendehos];
   };
 }

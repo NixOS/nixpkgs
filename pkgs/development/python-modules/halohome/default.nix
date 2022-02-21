@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, bleak
-, buildPythonPackage
-, csrmesh
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  bleak,
+  buildPythonPackage,
+  csrmesh,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "halohome";
   version = "0.5.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python library to control Eaton HALO Home Smart Lights";
     homepage = "https://github.com/nayaverdier/halohome";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

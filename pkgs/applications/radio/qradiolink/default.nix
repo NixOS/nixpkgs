@@ -1,24 +1,26 @@
-{ lib
-, fetchFromGitHub
-, libpulseaudio
-, libconfig
-# Needs a gnuradio built with qt gui support
-, gnuradio3_8
-, thrift
-# Not gnuradioPackages'
-, codec2
-, gmp
-, gsm
-, libopus
-, libjpeg
-, libsndfile
-, libftdi
-, limesuite
-, protobuf
-, speex
-, speexdsp
+{
+  lib,
+  fetchFromGitHub,
+  libpulseaudio,
+  libconfig
+  # Needs a gnuradio built with qt gui support
+  ,
+  gnuradio3_8,
+  thrift
+  # Not gnuradioPackages'
+  ,
+  codec2,
+  gmp,
+  gsm,
+  libopus,
+  libjpeg,
+  libsndfile,
+  libftdi,
+  limesuite,
+  protobuf,
+  speex,
+  speexdsp,
 }:
-
 gnuradio3_8.pkgs.mkDerivation rec {
   pname = "qradiolink";
   version = "0.8.6-2";
@@ -44,29 +46,31 @@ gnuradio3_8.pkgs.mkDerivation rec {
     install -Dm644 qradiolink.desktop $out/share/applications/qradiolink.desktop
   '';
 
-  buildInputs = [
-    gnuradio3_8.unwrapped.boost
-    codec2
-    gnuradio3_8.unwrapped.log4cpp
-    gmp
-    libpulseaudio
-    libconfig
-    gsm
-    gnuradio3_8.pkgs.osmosdr
-    libopus
-    libjpeg
-    limesuite
-    speex
-    speexdsp
-    gnuradio3_8.qt.qtbase
-    gnuradio3_8.qt.qtmultimedia
-    libftdi
-    libsndfile
-    gnuradio3_8.qwt
-  ] ++ lib.optionals (gnuradio3_8.hasFeature "gr-ctrlport") [
-    thrift
-    gnuradio3_8.unwrapped.python.pkgs.thrift
-  ];
+  buildInputs =
+    [
+      gnuradio3_8.unwrapped.boost
+      codec2
+      gnuradio3_8.unwrapped.log4cpp
+      gmp
+      libpulseaudio
+      libconfig
+      gsm
+      gnuradio3_8.pkgs.osmosdr
+      libopus
+      libjpeg
+      limesuite
+      speex
+      speexdsp
+      gnuradio3_8.qt.qtbase
+      gnuradio3_8.qt.qtmultimedia
+      libftdi
+      libsndfile
+      gnuradio3_8.qwt
+    ]
+    ++ lib.optionals (gnuradio3_8.hasFeature "gr-ctrlport") [
+      thrift
+      gnuradio3_8.unwrapped.python.pkgs.thrift
+    ];
   nativeBuildInputs = [
     protobuf
     gnuradio3_8.qt.qmake
@@ -77,7 +81,7 @@ gnuradio3_8.pkgs.mkDerivation rec {
     description = "SDR transceiver application for analog and digital modes";
     homepage = "http://qradiolink.org/";
     license = licenses.agpl3;
-    maintainers = [ maintainers.markuskowa ];
+    maintainers = [maintainers.markuskowa];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, wl-clipboard }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wl-clipboard,
+}:
 stdenv.mkDerivation rec {
   pname = "wl-clipboard-x11";
   version = "5";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-i+oF1Mu72O5WPTWzqsvo4l2CERWWp4Jq/U0DffPZ8vg=";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   postPatch = ''
     substituteInPlace src/wl-clipboard-x11 \
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A wrapper to use wl-clipboard as a drop-in replacement for X11 clipboard tools";
     homepage = "https://github.com/brunelli/wl-clipboard-x11";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samuelgrf ];
+    maintainers = with maintainers; [samuelgrf];
     mainProgram = "xclip";
   };
 }

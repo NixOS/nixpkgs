@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.minecraft-server;
 
   # We don't allow eula=false anyways
@@ -12,16 +14,24 @@ let
   '';
 
   whitelistFile = pkgs.writeText "whitelist.json"
-    (builtins.toJSON
-      (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
+  (builtins.toJSON
+  (mapAttrsToList (n: v: {
+    name = n;
+    uuid = v;
+  })
+  cfg.whitelist));
 
-  cfgToString = v: if builtins.isBool v then boolToString v else toString v;
+  cfgToString = v:
+    if builtins.isBool v
+    then boolToString v
+    else toString v;
 
   serverPropertiesFile = pkgs.writeText "server.properties" (''
     # server.properties managed by NixOS configuration
-  '' + concatStringsSep "\n" (mapAttrsToList
-    (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
-
+  ''
+  + concatStringsSep "\n" (mapAttrsToList
+  (n: v: "${n}=${cfgToString v}")
+  cfg.serverProperties));
 
   # To be able to open the firewall, we need to read out port values in the
   # server properties, but fall back to the defaults when those don't exist.
@@ -30,18 +40,18 @@ let
 
   serverPort = cfg.serverProperties.server-port or defaultServerPort;
 
-  rconPort = if cfg.serverProperties.enable-rcon or false
+  rconPort =
+    if cfg.serverProperties.enable-rcon or false
     then cfg.serverProperties."rcon.port" or 25575
     else null;
 
-  queryPort = if cfg.serverProperties.enable-query or false
+  queryPort =
+    if cfg.serverProperties.enable-query or false
     then cfg.serverProperties."query.port" or 25565
     else null;
-
 in {
   options = {
     services.minecraft-server = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -93,11 +103,14 @@ in {
 
       whitelist = mkOption {
         type = let
-          minecraftUUID = types.strMatching
-            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
+          minecraftUUID =
+            types.strMatching
+            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+            // {
               description = "Minecraft UUID";
             };
-          in types.attrsOf minecraftUUID;
+        in
+          types.attrsOf minecraftUUID;
         default = {};
         description = ''
           Whitelisted players, only has an effect when
@@ -118,7 +131,7 @@ in {
       };
 
       serverProperties = mkOption {
-        type = with types; attrsOf (oneOf [ bool int str ]);
+        type = with types; attrsOf (oneOf [bool int str]);
         default = {};
         example = literalExpression ''
           {
@@ -153,7 +166,8 @@ in {
         type = types.separatedString " ";
         default = "-Xmx2048M -Xms2048M";
         # Example options from https://minecraft.gamepedia.com/Tutorials/Server_startup_script
-        example = "-Xmx2048M -Xms4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
+        example =
+          "-Xmx2048M -Xms4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
           + "-XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 "
           + "-XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10";
         description = "JVM options for the Minecraft server.";
@@ -162,20 +176,19 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     users.users.minecraft = {
-      description     = "Minecraft server service user";
-      home            = cfg.dataDir;
-      createHome      = true;
-      isSystemUser    = true;
-      group           = "minecraft";
+      description = "Minecraft server service user";
+      home = cfg.dataDir;
+      createHome = true;
+      isSystemUser = true;
+      group = "minecraft";
     };
     users.groups.minecraft = {};
 
     systemd.services.minecraft-server = {
-      description   = "Minecraft Server Service";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Minecraft Server Service";
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
@@ -183,8 +196,8 @@ in {
         User = "minecraft";
         WorkingDirectory = cfg.dataDir;
         # Hardening
-        CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [ "" ];
+        CapabilityBoundingSet = [""];
+        DeviceAllow = [""];
         LockPersonality = true;
         PrivateDevices = true;
         PrivateTmp = true;
@@ -197,7 +210,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -205,53 +218,65 @@ in {
         UMask = "0077";
       };
 
-      preStart = ''
-        ln -sf ${eulaFile} eula.txt
-      '' + (if cfg.declarative then ''
+      preStart =
+        ''
+          ln -sf ${eulaFile} eula.txt
+        ''
+        + (if cfg.declarative
+        then
+          ''
 
-        if [ -e .declarative ]; then
+            if [ -e .declarative ]; then
 
-          # Was declarative before, no need to back up anything
-          ln -sf ${whitelistFile} whitelist.json
-          cp -f ${serverPropertiesFile} server.properties
+              # Was declarative before, no need to back up anything
+              ln -sf ${whitelistFile} whitelist.json
+              cp -f ${serverPropertiesFile} server.properties
 
+            else
+
+              # Declarative for the first time, backup stateful files
+              ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
+              cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
+
+              # server.properties must have write permissions, because every time
+              # the server starts it first parses the file and then regenerates it..
+              chmod +w server.properties
+              echo "Autogenerated file that signifies that this server configuration is managed declaratively by NixOS" \
+                > .declarative
+
+            fi
+          ''
         else
-
-          # Declarative for the first time, backup stateful files
-          ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
-          cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
-
-          # server.properties must have write permissions, because every time
-          # the server starts it first parses the file and then regenerates it..
-          chmod +w server.properties
-          echo "Autogenerated file that signifies that this server configuration is managed declaratively by NixOS" \
-            > .declarative
-
-        fi
-      '' else ''
-        if [ -e .declarative ]; then
-          rm .declarative
-        fi
-      '');
+          ''
+            if [ -e .declarative ]; then
+              rm .declarative
+            fi
+          '');
     };
 
-    networking.firewall = mkIf cfg.openFirewall (if cfg.declarative then {
-      allowedUDPPorts = [ serverPort ];
-      allowedTCPPorts = [ serverPort ]
-        ++ optional (queryPort != null) queryPort
-        ++ optional (rconPort != null) rconPort;
-    } else {
-      allowedUDPPorts = [ defaultServerPort ];
-      allowedTCPPorts = [ defaultServerPort ];
-    });
+    networking.firewall = mkIf cfg.openFirewall (if cfg.declarative
+    then
+      {
+        allowedUDPPorts = [serverPort];
+        allowedTCPPorts =
+          [serverPort]
+          ++ optional (queryPort != null) queryPort
+          ++ optional (rconPort != null) rconPort;
+      }
+    else
+      {
+        allowedUDPPorts = [defaultServerPort];
+        allowedTCPPorts = [defaultServerPort];
+      });
 
     assertions = [
-      { assertion = cfg.eula;
-        message = "You must agree to Mojangs EULA to run minecraft-server."
+      {
+        assertion = cfg.eula;
+        message =
+          "You must agree to Mojangs EULA to run minecraft-server."
           + " Read https://account.mojang.com/documents/minecraft_eula and"
           + " set `services.minecraft-server.eula` to `true` if you agree.";
       }
     ];
-
   };
 }

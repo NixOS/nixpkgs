@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "nfpm";
   version = "2.13.0";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
   meta = with lib; {
     description = "A simple deb and rpm packager written in Go";
     homepage = "https://github.com/goreleaser/nfpm";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     license = licenses.mit;
   };
 }

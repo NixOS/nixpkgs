@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
-
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   # Settings for both servers and agents
   webUi = true;
   retry_interval = "1s";
@@ -26,68 +28,72 @@ let
 
   firewallSettings = {
     # See https://www.consul.io/docs/install/ports.html
-    allowedTCPPorts = [ 8301 8302 8600 8500 8300 ];
-    allowedUDPPorts = [ 8301 8302 8600 ];
+    allowedTCPPorts = [8301 8302 8600 8500 8300];
+    allowedUDPPorts = [8301 8302 8600];
   };
 
-  client = index: { pkgs, ... }:
-    let
-      ip = builtins.elemAt allConsensusClientHosts index;
-    in
+  client = index: {pkgs, ...}: let
+    ip = builtins.elemAt allConsensusClientHosts index;
+  in {
+    environment.systemPackages = [pkgs.consul];
+
+    networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
       {
-        environment.systemPackages = [ pkgs.consul ];
+        address = ip;
+        prefixLength = 16;
+      }
+    ];
+    networking.firewall = firewallSettings;
 
-        networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = ip; prefixLength = 16; }
-        ];
-        networking.firewall = firewallSettings;
-
-        services.consul = {
-          enable = true;
-          inherit webUi;
-          extraConfig = defaultExtraConfig // {
-            server = false;
-            retry_join = allConsensusServerHosts;
-            bind_addr = ip;
-          };
+    services.consul = {
+      enable = true;
+      inherit webUi;
+      extraConfig =
+        defaultExtraConfig
+        // {
+          server = false;
+          retry_join = allConsensusServerHosts;
+          bind_addr = ip;
         };
-      };
+    };
+  };
 
-  server = index: { pkgs, ... }:
-    let
-      numConsensusServers = builtins.length allConsensusServerHosts;
-      thisConsensusServerHost = builtins.elemAt allConsensusServerHosts index;
-      ip = thisConsensusServerHost; # since we already use IPs to identify servers
-    in
+  server = index: {pkgs, ...}: let
+    numConsensusServers = builtins.length allConsensusServerHosts;
+    thisConsensusServerHost = builtins.elemAt allConsensusServerHosts index;
+    ip = thisConsensusServerHost; # since we already use IPs to identify servers
+  in {
+    networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
       {
-        networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = ip; prefixLength = 16; }
-        ];
-        networking.firewall = firewallSettings;
+        address = ip;
+        prefixLength = 16;
+      }
+    ];
+    networking.firewall = firewallSettings;
 
-        services.consul =
-          assert builtins.elem thisConsensusServerHost allConsensusServerHosts;
-          {
-            enable = true;
-            inherit webUi;
-            extraConfig = defaultExtraConfig // {
-              server = true;
-              bootstrap_expect = numConsensusServers;
-              # Tell Consul that we never intend to drop below this many servers.
-              # Ensures to not permanently lose consensus after temporary loss.
-              # See https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040
-              autopilot.min_quorum = numConsensusServers;
-              retry_join =
-                # If there's only 1 node in the network, we allow self-join;
-                # otherwise, the node must not try to join itself, and join only the other servers.
-                # See https://github.com/hashicorp/consul/issues/2868
-                if numConsensusServers == 1
-                  then allConsensusServerHosts
-                  else builtins.filter (h: h != thisConsensusServerHost) allConsensusServerHosts;
-              bind_addr = ip;
-            };
-          };
-      };
+    services.consul = assert builtins.elem thisConsensusServerHost allConsensusServerHosts; {
+      enable = true;
+      inherit webUi;
+      extraConfig =
+        defaultExtraConfig
+        // {
+          server = true;
+          bootstrap_expect = numConsensusServers;
+          # Tell Consul that we never intend to drop below this many servers.
+          # Ensures to not permanently lose consensus after temporary loss.
+          # See https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040
+          autopilot.min_quorum = numConsensusServers;
+          retry_join =
+            # If there's only 1 node in the network, we allow self-join;
+            # otherwise, the node must not try to join itself, and join only the other servers.
+            # See https://github.com/hashicorp/consul/issues/2868
+            if numConsensusServers == 1
+            then allConsensusServerHosts
+            else builtins.filter (h: h != thisConsensusServerHost) allConsensusServerHosts;
+          bind_addr = ip;
+        };
+    };
+  };
 in {
   name = "consul";
 

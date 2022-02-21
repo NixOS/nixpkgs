@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, coreutils, ncurses, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  ncurses,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "entr";
   version = "5.1";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
   dontAddPrefix = true;
   doCheck = true;
   checkTarget = "test";
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://eradman.com/entrproject/";
@@ -27,6 +33,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/eradman/entr/raw/${version}/NEWS";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub synthetica ];
+    maintainers = with maintainers; [pSub synthetica];
   };
 }

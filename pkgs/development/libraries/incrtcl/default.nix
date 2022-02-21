@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchurl, writeText, tcl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  tcl,
+}:
 tcl.mkTclDerivation rec {
   pname = "incrtcl";
   version = "4.2.2";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl${version}.tar.gz";
+    url = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl${version}.tar.gz";
     sha256 = "sha256-rExnDq8bWyVb/KzKgyCzPVa72S/VRGPGPW9pmocOFWw=";
   };
 
@@ -27,13 +32,13 @@ tcl.mkTclDerivation rec {
     export ITCL_LIBRARY=@out@/lib
   '';
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = ["out" "dev" "man"];
 
   meta = with lib; {
-    homepage    = "http://incrtcl.sourceforge.net/";
+    homepage = "http://incrtcl.sourceforge.net/";
     description = "Object Oriented Enhancements for Tcl/Tk";
-    license     = licenses.tcltk;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = licenses.tcltk;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.kresd;
 
   # Convert systemd-style address specification to kresd config line(s).
@@ -13,15 +15,19 @@ let
     al_v6 = builtins.match "\\[(.+)]:([0-9]+)(%.*|$)" addr;
     al_portOnly = builtins.match "([0-9]+)" addr;
     al = findFirst (a: a != null)
-      (throw "services.kresd.*: incorrect address specification '${addr}'")
-      [ al_v4 al_v6 al_portOnly ];
+    (throw "services.kresd.*: incorrect address specification '${addr}'")
+    [al_v4 al_v6 al_portOnly];
     port = elemAt al 1;
-    addrSpec = if al_portOnly == null then "'${head al}${elemAt al 2}'" else "{'::', '0.0.0.0'}";
-    in # freebind is set for compatibility with earlier kresd services;
-       # it could be configurable, for example.
-      ''
-        net.listen(${addrSpec}, ${port}, { kind = '${kind}', freebind = true })
-      '';
+    addrSpec =
+      if al_portOnly == null
+      then "'${head al}${elemAt al 2}'"
+      else "{'::', '0.0.0.0'}";
+  in
+    # freebind is set for compatibility with earlier kresd services;
+    # it could be configurable, for example.
+    ''
+      net.listen(${addrSpec}, ${port}, { kind = '${kind}', freebind = true })
+    '';
 
   configFile = pkgs.writeText "kresd.conf" (
     ""
@@ -31,18 +37,30 @@ let
     + cfg.extraConfig
   );
 in {
-  meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
+  meta.maintainers = [
+    maintainers.vcunat
+    /*
+     upstream developer
+     */
+  ];
 
   imports = [
-    (mkChangedOptionModule [ "services" "kresd" "interfaces" ] [ "services" "kresd" "listenPlain" ]
-      (config:
-        let value = getAttrFromPath [ "services" "kresd" "interfaces" ] config;
-        in map
-          (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53") # Syntax depends on being IPv6 or IPv4.
+    (
+      mkChangedOptionModule ["services" "kresd" "interfaces"] ["services" "kresd" "listenPlain"]
+      (
+        config: let
+          value = getAttrFromPath ["services" "kresd" "interfaces"] config;
+        in
+          map
+          (iface:
+            if elem ":" (stringToCharacters iface)
+            then "[${iface}]:53"
+            else "${iface}:53")
+          # Syntax depends on being IPv6 or IPv4.
           value
       )
     )
-    (mkRemovedOptionModule [ "services" "kresd" "cacheDir" ] "Please use (bind-)mounting instead.")
+    (mkRemovedOptionModule ["services" "kresd" "cacheDir"] "Please use (bind-)mounting instead.")
   ];
 
   ###### interface
@@ -75,8 +93,8 @@ in {
     };
     listenPlain = mkOption {
       type = with types; listOf str;
-      default = [ "[::1]:53" "127.0.0.1:53" ];
-      example = [ "53" ];
+      default = ["[::1]:53" "127.0.0.1:53"];
+      example = ["53"];
       description = ''
         What addresses and ports the server should listen on.
         For detailed syntax see ListenStream in man systemd.socket.
@@ -85,7 +103,7 @@ in {
     listenTLS = mkOption {
       type = with types; listOf str;
       default = [];
-      example = [ "198.51.100.1:853" "[2001:db8::1]:853" "853" ];
+      example = ["198.51.100.1:853" "[2001:db8::1]:853" "853"];
       description = ''
         Addresses and ports on which kresd should provide DNS over TLS (see RFC 7858).
         For detailed syntax see ListenStream in man systemd.socket.
@@ -94,7 +112,7 @@ in {
     listenDoH = mkOption {
       type = with types; listOf str;
       default = [];
-      example = [ "198.51.100.1:443" "[2001:db8::1]:443" "443" ];
+      example = ["198.51.100.1:443" "[2001:db8::1]:443" "443"];
       description = ''
         Addresses and ports on which kresd should provide DNS over HTTPS/2 (see RFC 8484).
         For detailed syntax see ListenStream in man systemd.socket.
@@ -118,22 +136,25 @@ in {
 
     networking.resolvconf.useLocalResolver = mkDefault true;
 
-    users.users.knot-resolver =
-      { isSystemUser = true;
-        group = "knot-resolver";
-        description = "Knot-resolver daemon user";
-      };
+    users.users.knot-resolver = {
+      isSystemUser = true;
+      group = "knot-resolver";
+      description = "Knot-resolver daemon user";
+    };
     users.groups.knot-resolver.gid = null;
 
-    systemd.packages = [ cfg.package ]; # the units are patched inside the package a bit
+    systemd.packages = [cfg.package]; # the units are patched inside the package a bit
 
-    systemd.targets.kresd = { # configure units started by default
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "kres-cache-gc.service" ]
+    systemd.targets.kresd = {
+      # configure units started by default
+      wantedBy = ["multi-user.target"];
+      wants =
+        ["kres-cache-gc.service"]
         ++ map (i: "kresd@${toString i}.service") (range 1 cfg.instances);
     };
     systemd.services."kresd@".serviceConfig = {
-      ExecStart = "${cfg.package}/bin/kresd --noninteractive "
+      ExecStart =
+        "${cfg.package}/bin/kresd --noninteractive "
         + "-c ${cfg.package}/lib/knot-resolver/distro-preconfig.lua -c ${configFile}";
       # Ensure /run/knot-resolver exists
       RuntimeDirectory = "knot-resolver";

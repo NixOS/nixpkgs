@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, tinyxml, udev }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  tinyxml,
+  udev,
+}:
 buildKodiBinaryAddon rec {
   pname = namespace;
   namespace = "peripheral.joystick";
@@ -11,7 +18,7 @@ buildKodiBinaryAddon rec {
     sha256 = "1dhj4afr9kj938xx70fq5r409mz6lbw4n581ljvdjj9lq7akc914";
   };
 
-  extraBuildInputs = [ tinyxml udev ];
+  extraBuildInputs = [tinyxml udev];
 
   meta = with lib; {
     description = "Binary addon for raw joystick input.";

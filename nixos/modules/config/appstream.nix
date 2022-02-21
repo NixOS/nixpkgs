@@ -1,7 +1,9 @@
-{ config, lib, ... }:
-
-with lib;
 {
+  config,
+  lib,
+  ...
+}:
+with lib; {
   options = {
     appstream.enable = mkOption {
       type = types.bool;
@@ -21,5 +23,4 @@ with lib;
       "/share/appdata"
     ];
   };
-
 }

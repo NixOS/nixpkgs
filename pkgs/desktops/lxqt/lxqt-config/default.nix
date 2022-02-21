@@ -1,23 +1,23 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, glib
-, lxqt-build-tools
-, qtbase
-, qtx11extras
-, qttools
-, qtsvg
-, kwindowsystem
-, libkscreen
-, liblxqt
-, libqtxdg
-, xkeyboard_config
-, xorg
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  glib,
+  lxqt-build-tools,
+  qtbase,
+  qtx11extras,
+  qttools,
+  qtsvg,
+  kwindowsystem,
+  libkscreen,
+  liblxqt,
+  libqtxdg,
+  xkeyboard_config,
+  xorg,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "lxqt-config";
   version = "1.0.0";
@@ -64,14 +64,13 @@ mkDerivation rec {
                 '${xkeyboard_config}/share/X11/xkb/rules/base.lst'
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-config";
     description = "Tools to configure LXQt and the underlying operating system";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
-
 }

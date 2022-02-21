@@ -1,9 +1,13 @@
-{ callPackage, fetchurl, ... } @ args:
-
-callPackage ./generic.nix (args // rec {
+{
+  callPackage,
+  fetchurl,
+  ...
+} @ args:
+callPackage ./generic.nix (args
+// rec {
   version = "1.55.0";
 
-  patches = [ ./clang-math.patch ./clang-math-2.patch ./gcc-5.patch ];
+  patches = [./clang-math.patch ./clang-math-2.patch ./gcc-5.patch];
 
   src = fetchurl {
     url = "mirror://sourceforge/boost/boost_${builtins.replaceStrings ["."] ["_"] version}.tar.bz2";

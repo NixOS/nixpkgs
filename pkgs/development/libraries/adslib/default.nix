@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "adslib";
   version = "unstable-2020-08-28";
@@ -20,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Beckhoff protocol to communicate with TwinCAT devices";
     homepage = "https://github.com/stlehmann/ADS";
     license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    maintainers = with maintainers; [jamiemagee];
   };
 }

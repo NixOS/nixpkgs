@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, requests
-, matrix-client
-, distro
-, click
-, cryptography
-, pyopenssl
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  requests,
+  matrix-client,
+  distro,
+  click,
+  cryptography,
+  pyopenssl,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "zulip";
   version = "0.8.1";
@@ -45,12 +45,12 @@ buildPythonPackage rec {
     export COLUMNS=80
   '';
 
-  pythonImportsCheck = [ "zulip" ];
+  pythonImportsCheck = ["zulip"];
 
   meta = with lib; {
     description = "Bindings for the Zulip message API";
     homepage = "https://github.com/zulip/python-zulip-api";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

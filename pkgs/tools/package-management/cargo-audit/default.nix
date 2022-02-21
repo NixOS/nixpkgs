@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, Security
-, libiconv
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  Security,
+  libiconv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
   version = "0.16.0";
@@ -25,14 +25,16 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-    libiconv
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+      libiconv
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+    ];
 
-  buildFeatures = [ "fix" ];
+  buildFeatures = ["fix"];
 
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;
@@ -40,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Audit Cargo.lock files for crates with security vulnerabilities";
     homepage = "https://rustsec.org";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ basvandijk ];
+    license = with licenses; [mit asl20];
+    maintainers = with maintainers; [basvandijk];
   };
 }

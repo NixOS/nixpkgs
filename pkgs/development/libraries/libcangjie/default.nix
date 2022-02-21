@@ -1,5 +1,15 @@
-{ lib, stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkg-config, sqlite }:
-
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  libtool,
+  m4,
+  fetchurl,
+  bash,
+  pkg-config,
+  sqlite,
+}:
 stdenv.mkDerivation rec {
   pname = "libcangjie";
   version = "1.4_rev_${rev}";
@@ -11,8 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-j5IQ0hBefoF8p966YrfZgYCw7ht5twJhYi4l0NneukQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf libtool m4 sqlite ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [automake autoconf libtool m4 sqlite];
 
   configureScript = "./autogen.sh";
 
@@ -30,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/cangjie/libcangjie";
     license = lib.licenses.lgpl3Plus;
 
-    maintainers = [ lib.maintainers.linquize ];
+    maintainers = [lib.maintainers.linquize];
     platforms = lib.platforms.all;
   };
 }

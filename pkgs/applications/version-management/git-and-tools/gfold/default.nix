@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, gitMinimal, makeWrapper, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  gitMinimal,
+  makeWrapper,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "gfold";
   version = "3.0.0";
@@ -13,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "09ywwgxm8l1p0jypp65zpqryjnb2g4gririf1dmqb9148dsj29x2";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram "$out/bin/gfold" --prefix PATH : "${gitMinimal}/bin"
@@ -21,10 +26,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description =
-      "A tool to help keep track of your Git repositories, written in Rust";
+    description = "A tool to help keep track of your Git repositories, written in Rust";
     license = licenses.asl20;
-    maintainers = [ maintainers.shanesveller ];
+    maintainers = [maintainers.shanesveller];
     platforms = platforms.unix;
   };
 }

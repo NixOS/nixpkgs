@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, cmake, nasm }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  nasm,
+}:
 stdenv.mkDerivation rec {
   pname = "svt-av1";
   version = "0.9.0";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kmFyJ5b0EiesWUN71rbULF2cQt2pICF0P/MeZ+h7W9U=";
   };
 
-  nativeBuildInputs = [ cmake nasm ];
+  nativeBuildInputs = [cmake nasm];
 
   meta = with lib; {
     description = "AV1-compliant encoder/decoder library core";
@@ -32,6 +37,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.unix;
     broken = stdenv.isAarch64; # undefined reference to `cpuinfo_arm_linux_init'
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [chiiruno];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, localBios ? true
-, nasm
-, sdlSupport ? true
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  localBios ? true,
+  nasm,
+  sdlSupport ? true,
+  SDL,
 }:
-
 stdenv.mkDerivation rec {
   pname = "8086tiny";
   version = "1.25";
@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "00aydg8f28sgy8l3rd2a7jvp56lx3b63hhak43p7g7vjdikv495w";
   };
 
-  buildInputs = lib.optional localBios nasm
+  buildInputs =
+    lib.optional localBios nasm
     ++ lib.optional sdlSupport SDL;
 
-  makeFlags = [ "8086tiny" ];
+  makeFlags = ["8086tiny"];
 
   postBuild = lib.optionalString localBios ''
     pushd bios_source
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
       "unobfuscated" version :)
     '';
     license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

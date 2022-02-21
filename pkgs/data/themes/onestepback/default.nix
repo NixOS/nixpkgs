@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "onestepback";
   version = "0.991";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   sourceRoot = ".";
 
@@ -34,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.vide.memoire.free.fr/perso/OneStepBack";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

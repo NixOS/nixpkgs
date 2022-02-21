@@ -1,8 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ...}: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "haproxy";
   nodes = {
-    machine = { ... }: {
-      imports = [ ../modules/profiles/minimal.nix ];
+    machine = {...}: {
+      imports = [../modules/profiles/minimal.nix];
       services.haproxy = {
         enable = true;
         config = ''
@@ -25,10 +25,12 @@ import ./make-test-python.nix ({ pkgs, ...}: {
         virtualHosts.localhost = {
           documentRoot = pkgs.writeTextDir "index.txt" "We are all good!";
           adminAddr = "notme@yourhost.local";
-          listen = [{
-            ip = "::1";
-            port = 8000;
-          }];
+          listen = [
+            {
+              ip = "::1";
+              port = 8000;
+            }
+          ];
         };
       };
     };

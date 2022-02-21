@@ -1,9 +1,9 @@
-{ buildPythonApplication
-, fetchPypi
-, pandocfilters
-, lib
+{
+  buildPythonApplication,
+  fetchPypi,
+  pandocfilters,
+  lib,
 }:
-
 buildPythonApplication rec {
   pname = "pandoc-plantuml-filter";
   version = "0.1.2";
@@ -21,6 +21,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/timofurrer/pandoc-plantuml-filter";
     description = "Pandoc filter which converts PlantUML code blocks to PlantUML images";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [cmcdragonkai];
   };
 }

@@ -1,5 +1,8 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
-
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "discocss";
   version = "0.2.0";
@@ -23,6 +26,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/mlvzk/discocss";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mlvzk ];
+    maintainers = with maintainers; [mlvzk];
   };
 }

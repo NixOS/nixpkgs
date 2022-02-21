@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, requests
-, requests_oauthlib
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  requests,
+  requests_oauthlib,
 }:
-
 buildPythonPackage rec {
   pname = "tellduslive";
   version = "0.10.11";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "tellduslive" ];
+  pythonImportsCheck = ["tellduslive"];
 
   meta = with lib; {
     description = "Python module to communicate with Telldus Live";
     homepage = "https://github.com/molobrakos/tellduslive";
-    license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [unlicense];
+    maintainers = with maintainers; [fab];
   };
 }

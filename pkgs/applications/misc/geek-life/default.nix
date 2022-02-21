@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "geek-life";
   version = "0.1.2";
@@ -20,7 +23,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/ajaxray/geek-life";
     description = "The Todo List / Task Manager for Geeks in command line";
-    maintainers = with maintainers; [ noisersup ];
+    maintainers = with maintainers; [noisersup];
     license = licenses.mit;
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, alembic
-, flask
-, flask_script
-, flask_sqlalchemy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  alembic,
+  flask,
+  flask_script,
+  flask_sqlalchemy,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "Flask-Migrate";
   version = "3.1.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "SQLAlchemy database migrations for Flask applications using Alembic";
     homepage = "https://github.com/miguelgrinberg/Flask-Migrate";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

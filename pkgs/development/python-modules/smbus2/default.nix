@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "smbus2";
   version = "0.4.1";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Drop-in replacement for smbus-cffi/smbus-python";
     homepage = "https://smbus2.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

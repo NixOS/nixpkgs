@@ -1,22 +1,22 @@
-{ lib
-, brotli
-, buildPythonPackage
-, certifi
-, cryptography
-, python-dateutil
-, fetchpatch
-, fetchPypi
-, idna
-, mock
-, pyopenssl
-, pysocks
-, pytest-freezegun
-, pytest-timeout
-, pytestCheckHook
-, tornado
-, trustme
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  certifi,
+  cryptography,
+  python-dateutil,
+  fetchpatch,
+  fetchPypi,
+  idna,
+  mock,
+  pyopenssl,
+  pysocks,
+  pytest-freezegun,
+  pytest-timeout,
+  pytestCheckHook,
+  tornado,
+  trustme,
 }:
-
 buildPythonPackage rec {
   pname = "urllib3";
   version = "1.26.2";
@@ -70,12 +70,12 @@ buildPythonPackage rec {
     export CI # Increases LONG_TIMEOUT
   '';
 
-  pythonImportsCheck = [ "urllib3" ];
+  pythonImportsCheck = ["urllib3"];
 
   meta = with lib; {
     description = "Powerful, sanity-friendly HTTP client for Python";
     homepage = "https://github.com/shazow/urllib3";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, fetchgit
-, bash
-, pkg-config
-, jre8
-, libuuid
-, openmodelica
-, mkOpenModelicaDerivation
-}:
-let
-  fakegit = import ./fakegit.nix { inherit lib stdenv fetchgit bash; };
+{
+  lib,
+  stdenv,
+  fetchgit,
+  bash,
+  pkg-config,
+  jre8,
+  libuuid,
+  openmodelica,
+  mkOpenModelicaDerivation,
+}: let
+  fakegit = import ./fakegit.nix {inherit lib stdenv fetchgit bash;};
 in
-mkOpenModelicaDerivation {
-  pname = "omlibrary";
-  omdir = "libraries";
-  omtarget = "omlibrary-all";
-  omdeps = [ openmodelica.omcompiler ];
+  mkOpenModelicaDerivation {
+    pname = "omlibrary";
+    omdir = "libraries";
+    omtarget = "omlibrary-all";
+    omdeps = [openmodelica.omcompiler];
 
-  postPatch = ''
-    patchShebangs --build libraries
-    cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
+    postPatch = ''
+      patchShebangs --build libraries
+      cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
 
-    # The EMOTH library is broken in OpenModelica 1.17.0
-    # Let's remove it from targets.
-    sed -i -e '/^OTHER_LIBS=/ s/EMOTH //' libraries/Makefile.libs
-  '';
+      # The EMOTH library is broken in OpenModelica 1.17.0
+      # Let's remove it from targets.
+      sed -i -e '/^OTHER_LIBS=/ s/EMOTH //' libraries/Makefile.libs
+    '';
 
-  meta = with lib; {
-    description = "A collection of Modelica libraries to use with OpenModelica,
+    meta = with lib; {
+      description = "A collection of Modelica libraries to use with OpenModelica,
 including Modelica Standard Library";
-    homepage = "https://openmodelica.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ balodja smironov ];
-    platforms = platforms.linux;
-  };
-}
+      homepage = "https://openmodelica.org";
+      license = licenses.gpl3Only;
+      maintainers = with maintainers; [balodja smironov];
+      platforms = platforms.linux;
+    };
+  }

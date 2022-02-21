@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-,  nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
-
 buildGoModule rec {
   pname = "opensmtpd-filter-rspamd";
   version = "0.1.7";
@@ -25,6 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/poolpOrg/filter-rspamd";
     description = "OpenSMTPD filter integration for the Rspamd daemon";
     license = licenses.isc;
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with maintainers; [Flakebi];
   };
 }

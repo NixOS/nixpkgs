@@ -1,18 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, SDL2
-, alsa-lib
-, libGL
-, libX11
-, libXi
-, AudioToolbox
-, Cocoa
-, CoreAudio
-, OpenGL
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  SDL2,
+  alsa-lib,
+  libGL,
+  libX11,
+  libXi,
+  AudioToolbox,
+  Cocoa,
+  CoreAudio,
+  OpenGL,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "fishfight";
   version = "0.3";
@@ -25,23 +25,26 @@ rustPlatform.buildRustPackage rec {
   };
 
   # use system sdl2 instead of bundled sdl2
-  cargoPatches = [ ./use-system-sdl2.patch ];
+  cargoPatches = [./use-system-sdl2.patch];
 
   cargoSha256 = "sha256-KQiqUzdsVMIjDmmreihekrrFoXeyNzd6ZbqApwH8B4Q=";
 
-  buildInputs =  [
-    SDL2
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-    libGL
-    libX11
-    libXi
-  ] ++ lib.optionals stdenv.isDarwin [
-    AudioToolbox
-    Cocoa
-    CoreAudio
-    OpenGL
-  ];
+  buildInputs =
+    [
+      SDL2
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+      libGL
+      libX11
+      libXi
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AudioToolbox
+      Cocoa
+      CoreAudio
+      OpenGL
+    ];
 
   postPatch = ''
     substituteInPlace src/main.rs --replace ./assets $out/share/assets
@@ -55,7 +58,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A tactical 2D shooter played by up to 4 players online or on a shared screen";
     homepage = "https://fishfight.org/";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ figsoda ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [figsoda];
   };
 }

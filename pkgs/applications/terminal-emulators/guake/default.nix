@@ -1,17 +1,17 @@
-{ lib
-, fetchFromGitHub
-, python3
-, glibcLocales
-, gobject-introspection
-, wrapGAppsHook
-, gtk3
-, keybinder3
-, libnotify
-, libutempter
-, vte
-, libwnck
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  glibcLocales,
+  gobject-introspection,
+  wrapGAppsHook,
+  gtk3,
+  keybinder3,
+  libnotify,
+  libutempter,
+  vte,
+  libwnck,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "guake";
   version = "3.6.3";
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     vte
   ];
 
-  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
+  makeWrapperArgs = ["--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"];
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python
@@ -63,14 +63,14 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libutempter ]}")
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libutempter]}")
   '';
 
   meta = with lib; {
     description = "Drop-down terminal for GNOME";
     homepage = "http://guake-project.org";
     license = licenses.gpl2;
-    maintainers = [ maintainers.msteen ];
+    maintainers = [maintainers.msteen];
     platforms = platforms.linux;
   };
 }

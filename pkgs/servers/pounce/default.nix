@@ -1,5 +1,10 @@
-{ lib, stdenv, libressl, fetchzip, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  libressl,
+  fetchzip,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "pounce";
   version = "3.0";
@@ -9,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "17vmbfr7ika6kmq9jqa3rpd4cr71arapav7hlmggnj7a9yw5b9mg";
   };
 
-  buildInputs = [ libressl ];
+  buildInputs = [libressl];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildFlags = [ "all" ];
+  buildFlags = ["all"];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -24,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Simple multi-client TLS-only IRC bouncer";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ edef ];
+    maintainers = with maintainers; [edef];
   };
 }

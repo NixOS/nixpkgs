@@ -1,5 +1,8 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
-
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 mkDiscoursePlugin {
   name = "discourse-calendar";
   bundlerEnvArgs.gemdir = ./.;
@@ -11,7 +14,7 @@ mkDiscoursePlugin {
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-calendar";
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with maintainers; [ryantm];
     license = licenses.mit;
     description = "Adds the ability to create a dynamic calendar in the first post of a topic";
   };

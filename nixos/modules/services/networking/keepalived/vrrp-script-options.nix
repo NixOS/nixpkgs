@@ -1,10 +1,7 @@
-{ lib } :
-
+{lib}:
 with lib;
-with lib.types;
-{
+with lib.types; {
   options = {
-
     script = mkOption {
       type = str;
       example = literalExpression ''"''${pkgs.curl} -f http://localhost:80"'';
@@ -58,7 +55,5 @@ with lib.types;
       default = "";
       description = "Extra lines to be added verbatim to the vrrp_script section.";
     };
-
   };
-
 }

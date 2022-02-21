@@ -1,14 +1,14 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, intltool
-, libnotify
-, python3
-, wrapGAppsHook
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  intltool,
+  libnotify,
+  python3,
+  wrapGAppsHook,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "mpDris2";
   version = "0.8";

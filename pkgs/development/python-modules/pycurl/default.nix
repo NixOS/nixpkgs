@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, isPyPy
-, fetchPypi
-, pythonOlder
-, curl
-, openssl
-, bottle
-, pytestCheckHook
-, nose
-, flaky
+{
+  lib,
+  buildPythonPackage,
+  isPyPy,
+  fetchPypi,
+  pythonOlder,
+  curl,
+  openssl,
+  bottle,
+  pytestCheckHook,
+  nose,
+  flaky,
 }:
-
 buildPythonPackage rec {
   pname = "pycurl";
   version = "7.44.1";

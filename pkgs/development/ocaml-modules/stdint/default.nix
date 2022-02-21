@@ -1,5 +1,11 @@
-{ lib, fetchurl, fetchpatch, buildDunePackage, ocaml, qcheck }:
-
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildDunePackage,
+  ocaml,
+  qcheck,
+}:
 buildDunePackage rec {
   pname = "stdint";
   version = "0.7.0";
@@ -36,12 +42,12 @@ buildDunePackage rec {
   '';
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ qcheck ];
+  checkInputs = [qcheck];
 
   meta = {
     description = "Various signed and unsigned integers for OCaml";
     homepage = "https://github.com/andrenth/ocaml-stdint";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.gebner ];
+    maintainers = [lib.maintainers.gebner];
   };
 }

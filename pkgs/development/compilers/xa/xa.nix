@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xa";
   version = "2.3.12";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-+P0VNgEtZ2/Gy/zdapF5PlZMibbvdH+NuPRnwXj7BwQ=";
   };
 
-  checkInputs = [ perl ];
+  checkInputs = [perl];
 
   dontConfigure = true;
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       - block structure for label scoping
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

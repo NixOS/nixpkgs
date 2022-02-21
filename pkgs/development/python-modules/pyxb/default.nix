@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "PyXB";
   version = "1.2.6";
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Python XML Schema Bindings";
     homepage = "https://github.com/pabigot/pyxb";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

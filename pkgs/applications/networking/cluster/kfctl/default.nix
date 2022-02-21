@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "kfctl";
   version = "1.2.0";
@@ -13,20 +17,20 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-+6sxXp0LKegZjEFv1CIQ6xYh+hXLn+o9LggRYamCzpI=";
 
-  subPackages = [ "cmd/kfctl" ];
+  subPackages = ["cmd/kfctl"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
-  installShellCompletion --cmd eksctl \
-    --bash <($out/bin/kfctl completion bash) \
-    --zsh <($out/bin/kfctl completion zsh)
+    installShellCompletion --cmd eksctl \
+      --bash <($out/bin/kfctl completion bash) \
+      --zsh <($out/bin/kfctl completion zsh)
   '';
 
   meta = with lib; {
     description = "A CLI for deploying and managing Kubeflow";
     homepage = "https://github.com/kubeflow/kfctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [mvnetbiz];
   };
 }

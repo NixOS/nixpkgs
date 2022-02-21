@@ -1,6 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, cmake, glslang, libX11, libxcb
-, libXrandr, vulkan-headers, vulkan-loader, wayland }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  glslang,
+  libX11,
+  libxcb,
+  libXrandr,
+  vulkan-headers,
+  vulkan-loader,
+  wayland,
+}:
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
   version = "1.2.198.0";
@@ -16,10 +26,10 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-oNJm9Gi41aA5krkpkQI0EYdIlMcQpdodv9yqXhnNURA=";
     });
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ glslang libX11 libxcb libXrandr vulkan-headers vulkan-loader wayland ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [glslang libX11 libxcb libXrandr vulkan-headers vulkan-loader wayland];
 
-  libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
+  libraryPath = lib.strings.makeLibraryPath [vulkan-loader];
 
   dontPatchELF = true;
 
@@ -39,9 +49,9 @@ stdenv.mkDerivation rec {
       development by enabling developers to verify their applications correct
       use of the Vulkan API.
     '';
-    homepage    = "https://github.com/KhronosGroup/Vulkan-Tools";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    homepage = "https://github.com/KhronosGroup/Vulkan-Tools";
+    platforms = platforms.linux;
+    license = licenses.asl20;
+    maintainers = [maintainers.ralith];
   };
 }

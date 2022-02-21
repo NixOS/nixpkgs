@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "shadowfox";
   version = "2.2.0";
@@ -26,6 +29,6 @@ buildGoModule rec {
     '';
     homepage = "https://overdodactyl.github.io/ShadowFox/";
     license = licenses.mit;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [infinisil];
   };
 }

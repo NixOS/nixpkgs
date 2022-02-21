@@ -1,22 +1,22 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.crowd;
 
-  pkg = cfg.package.override {
-    home = cfg.home;
-    port = cfg.listenPort;
-    openidPassword = cfg.openidPassword;
-  } // (optionalAttrs cfg.proxy.enable {
-    proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
-  });
-
-in
-
-{
+  pkg =
+    cfg.package.override {
+      home = cfg.home;
+      port = cfg.listenPort;
+      openidPassword = cfg.openidPassword;
+    }
+    // (optionalAttrs cfg.proxy.enable {
+      proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
+    });
+in {
   options = {
     services.crowd = {
       enable = mkEnableOption "Atlassian Crowd service";
@@ -59,7 +59,7 @@ in
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "-Xms1024m" "-Xmx2048m" ];
+        example = ["-Xms1024m" "-Xmx2048m"];
         description = "Java options to pass to catalina/tomcat.";
       };
 
@@ -130,11 +130,11 @@ in
     systemd.services.atlassian-crowd = {
       description = "Atlassian Crowd";
 
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "postgresql.service" ];
-      after = [ "postgresql.service" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["postgresql.service"];
+      after = ["postgresql.service"];
 
-      path = [ cfg.jrePackage ];
+      path = [cfg.jrePackage];
 
       environment = {
         JAVA_HOME = "${cfg.jrePackage}";
@@ -142,16 +142,19 @@ in
         CATALINA_TMPDIR = "/tmp";
       };
 
-      preStart = ''
-        rm -rf ${cfg.home}/work
-        mkdir -p ${cfg.home}/{logs,database,work}
+      preStart =
+        ''
+          rm -rf ${cfg.home}/work
+          mkdir -p ${cfg.home}/{logs,database,work}
 
-        sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
-        '' + (lib.optionalString cfg.proxy.enable ''
+          sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
+        ''
+        + (lib.optionalString cfg.proxy.enable ''
           -e 's,compression="on",compression="off" protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${boolToString cfg.proxy.secure}",' \
-        '') + ''
+        '')
+        + ''
           ${pkg}/apache-tomcat/conf/server.xml.dist > ${cfg.home}/server.xml
-      '';
+        '';
 
       serviceConfig = {
         User = cfg.user;

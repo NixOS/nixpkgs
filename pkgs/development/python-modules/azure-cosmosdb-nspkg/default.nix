@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-nspkg,
 }:
-
 buildPythonPackage rec {
   pname = "azure-cosmosdb-nspkg";
   version = "2.0.2";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure CosmosDB namespace package";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    maintainers = with maintainers; [maxwilson];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, substituteAll, coreutils }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  substituteAll,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   pname = "cytoscape";
   version = "3.9.1";
@@ -18,8 +25,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   installPhase = ''
     mkdir -pv $out/{share,bin}

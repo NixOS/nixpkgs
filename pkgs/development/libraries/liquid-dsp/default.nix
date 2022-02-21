@@ -1,5 +1,9 @@
-{lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation {
   pname = "liquid-dsp";
   version = "20170307";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "0zpxvdsrw0vzzp3iaag3wh4z8ygl7fkswgjppp2fz2zhhqh93k2w";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   meta = {
     homepage = "https://liquidsdr.org/";
@@ -19,5 +23,4 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-
 }

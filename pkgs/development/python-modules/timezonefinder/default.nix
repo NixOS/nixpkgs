@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, isPy27
-, numba
-, numpy
-, pytestCheckHook
-, pytest-cov
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  isPy27,
+  numba,
+  numpy,
+  pytestCheckHook,
+  pytest-cov,
 }:
-
 buildPythonPackage rec {
   pname = "timezonefinder";
   version = "5.2.0";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [ numba pytestCheckHook pytest-cov ];
+  checkInputs = [numba pytestCheckHook pytest-cov];
 
   meta = with lib; {
     description = "fast python package for finding the timezone of any point on earth (coordinates) offline";

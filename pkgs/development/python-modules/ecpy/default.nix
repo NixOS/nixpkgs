@@ -1,5 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, future }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  future,
+}:
 buildPythonPackage rec {
   pname = "ECPy";
   version = "1.2.5";
@@ -18,7 +23,7 @@ buildPythonPackage rec {
   # No tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "ecpy" ];
+  pythonImportsCheck = ["ecpy"];
 
   meta = with lib; {
     description = "Pure Pyhton Elliptic Curve Library";

@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, lib
-
-# pythonPackages
-, astroid
-, pytest
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  lib
+  # pythonPackages
+  ,
+  astroid,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "requirements-detector";
   version = "0.7";

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  six,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "whisper";
   version = "1.1.8";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     "test_resize_with_aggregate"
   ];
 
-  pythonImportsCheck = [ "whisper" ];
+  pythonImportsCheck = ["whisper"];
 
   meta = with lib; {
     homepage = "https://github.com/graphite-project/whisper";
     description = "Fixed size round-robin style database";
-    maintainers = with maintainers; [ offline basvandijk ];
+    maintainers = with maintainers; [offline basvandijk];
     license = licenses.asl20;
   };
 }

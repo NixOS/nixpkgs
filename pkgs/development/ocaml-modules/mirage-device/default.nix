@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchurl, fmt, ocaml_lwt }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  fmt,
+  ocaml_lwt,
+}:
 buildDunePackage rec {
   pname = "mirage-device";
   version = "2.0.0";
@@ -11,14 +16,12 @@ buildDunePackage rec {
     sha256 = "18alxyi6wlxqvb4lajjlbdfkgcajsmklxi9xqmpcz07j51knqa04";
   };
 
-  propagatedBuildInputs = [ fmt ocaml_lwt ];
+  propagatedBuildInputs = [fmt ocaml_lwt];
 
   meta = {
     description = "Abstract devices for MirageOS";
     homepage = "https://github.com/mirage/mirage-device";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }
-
-

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "actor-framework";
   version = "0.18.5";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "04b4kjisb5wzq6pilh8xzbxn7qcjgppl8k65hfv0zi0ja8fyp1xk";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   cmakeFlags = [
     "-DCAF_ENABLE_EXAMPLES:BOOL=OFF"
@@ -32,6 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     changelog = "https://github.com/actor-framework/actor-framework/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ bobakker tobim ];
+    maintainers = with maintainers; [bobakker tobim];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, libGL
-, libX11
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  libGL,
+  libX11,
 }:
-
 buildPythonPackage rec {
   pname = "glcontext";
   version = "2.3.4";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  buildInputs = [ libGL libX11 ];
+  buildInputs = [libGL libX11];
 
   postPatch = ''
     substituteInPlace glcontext/x11.cpp \
@@ -35,13 +35,13 @@ buildPythonPackage rec {
   # for details.
   doCheck = false;
 
-  pythonImportsCheck = [ "glcontext" ];
+  pythonImportsCheck = ["glcontext"];
 
   meta = with lib; {
     homepage = "https://github.com/moderngl/glcontext";
     description = "OpenGL implementation for ModernGL";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = with maintainers; [friedelino];
   };
 }

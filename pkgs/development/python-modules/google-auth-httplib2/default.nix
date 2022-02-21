@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, google-auth
-, httplib2
-, mock
-, pytestCheckHook
-, pytest-localserver
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  google-auth,
+  httplib2,
+  mock,
+  pytestCheckHook,
+  pytest-localserver,
 }:
-
 buildPythonPackage rec {
   pname = "google-auth-httplib2";
   version = "0.1.0";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Google Authentication Library: httplib2 transport";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

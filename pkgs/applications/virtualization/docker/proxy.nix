@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   name = "docker-proxy-${rev}";
   rev = "fa125a3512ee0f6187721c88582bf8c4378bd4d7";

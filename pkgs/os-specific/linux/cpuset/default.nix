@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, pythonPackages
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonPackages,
 }:
-
 pythonPackages.buildPythonApplication rec {
   pname = "cpuset";
   version = "1.6";
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
     })
   ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = ["prefix=$(out)"];
 
   src = fetchFromGitHub {
     owner = "lpechacek";
@@ -37,9 +37,9 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Python application that forms a wrapper around the standard Linux filesystem calls to make using the cpusets facilities in the Linux kernel easier";
-    homepage    = "https://github.com/lpechacek/cpuset";
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ thiagokokada wykurz ];
+    homepage = "https://github.com/lpechacek/cpuset";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [thiagokokada wykurz];
     mainProgram = "cset";
   };
 }

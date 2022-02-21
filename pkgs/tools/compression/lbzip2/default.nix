@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, gnulib, perl, autoconf, automake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnulib,
+  perl,
+  autoconf,
+  automake,
+}:
 stdenv.mkDerivation rec {
   pname = "lbzip2";
   version = "2.5";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h321wva6fp6khz6x0i6rqb76xh327nw6v5jhgjpcckwdarj5jv8";
   };
 
-  buildInputs = [ gnulib perl ];
-  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [gnulib perl];
+  nativeBuildInputs = [autoconf automake];
 
   preConfigure = ''
     substituteInPlace configure.ac --replace 'AC_PREREQ([2.63])' 'AC_PREREQ(2.64)'
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kjn/lbzip2"; # Formerly http://lbzip2.org/
     description = "Parallel bzip2 compression utility";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
     platforms = platforms.unix;
   };
 }

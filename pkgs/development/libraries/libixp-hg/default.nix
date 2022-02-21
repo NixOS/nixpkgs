@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, txt2tags }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  txt2tags,
+}:
 stdenv.mkDerivation rec {
   rev = "148";
   version = "hg-2012-12-02";
@@ -11,16 +16,16 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
-   sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
+    sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
   '';
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ txt2tags ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [txt2tags];
 
   meta = {
     homepage = "http://repo.cat-v.org/libixp/"; # see also https://libs.suckless.org/deprecated/libixp
     description = "Portable, simple C-language 9P client and server libary";
-    maintainers = with lib.maintainers; [ kovirobi ];
+    maintainers = with lib.maintainers; [kovirobi];
     license = lib.licenses.mit;
     platforms = with lib.platforms; unix;
   };

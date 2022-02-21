@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, notebook
-, pythonOlder
-, jupyter_server
-, pytestCheckHook
-, pytest-tornasync
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  notebook,
+  pythonOlder,
+  jupyter_server,
+  pytestCheckHook,
+  pytest-tornasync,
 }:
-
 buildPythonPackage rec {
   pname = "nbclassic";
   version = "0.3.5";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1d0x7nwsaw5qjw4iaylc2sxlpiq3hlg9sy3i2nh7sn3wckwl76lc";
   };
 
-  propagatedBuildInputs = [ jupyter_server notebook ];
+  propagatedBuildInputs = [jupyter_server notebook];
 
   preCheck = ''
     cd nbclassic
@@ -40,8 +40,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter lab environment notebook server extension.";
-    license = with licenses; [ bsd3 ];
+    license = with licenses; [bsd3];
     homepage = "https://github.com/jupyterlab/nbclassic";
-    maintainers = [ maintainers.elohmeier ];
+    maintainers = [maintainers.elohmeier];
   };
 }

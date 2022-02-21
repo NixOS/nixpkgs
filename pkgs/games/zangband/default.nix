@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  flex,
+  bison,
+  autoconf,
+  automake,
+  m4,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   pname = "zangband";
   version = "2.7.4b";
@@ -10,7 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ncurses flex bison autoconf automake m4
+    ncurses
+    flex
+    bison
+    autoconf
+    automake
+    m4
   ];
 
   preConfigure = ''

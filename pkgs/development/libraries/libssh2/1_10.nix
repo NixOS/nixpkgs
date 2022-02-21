@@ -1,5 +1,7 @@
-{ libssh2, fetchurl }:
-
+{
+  libssh2,
+  fetchurl,
+}:
 libssh2.overrideAttrs (attrs: rec {
   version = "1.10.0";
   src = fetchurl {

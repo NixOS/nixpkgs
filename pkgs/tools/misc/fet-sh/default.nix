@@ -1,5 +1,8 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
-
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "fet-sh";
   version = "1.9";
@@ -24,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/6gk/fet.sh";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ elkowar ];
+    maintainers = with maintainers; [elkowar];
     mainProgram = "fet.sh";
   };
 }

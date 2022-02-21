@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   port = 1888;
   tlsPort = 1889;
   anonPort = 1890;
@@ -9,7 +11,7 @@ let
   topic = "test/foo";
 
   snakeOil = pkgs.runCommand "snakeoil-certs" {
-    buildInputs = [ pkgs.gnutls.bin ];
+    buildInputs = [pkgs.gnutls.bin];
     caTemplate = pkgs.writeText "snakeoil-ca.template" ''
       cn = server
       expiration_days = -1
@@ -51,20 +53,19 @@ let
                 --load-ca-certificate "$out/ca.crt" \
                 --outfile "$out/client1.crt"
   '';
-
 in {
   name = "mosquitto";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [ pennae peterhoeg ];
+    maintainers = with maintainers; [pennae peterhoeg];
   };
 
   nodes = let
-    client = { pkgs, ... }: {
-      environment.systemPackages = with pkgs; [ mosquitto ];
+    client = {pkgs, ...}: {
+      environment.systemPackages = with pkgs; [mosquitto];
     };
   in {
-    server = { pkgs, ... }: {
-      networking.firewall.allowedTCPPorts = [ port tlsPort anonPort ];
+    server = {pkgs, ...}: {
+      networking.firewall.allowedTCPPorts = [port tlsPort anonPort];
       services.mosquitto = {
         enable = true;
         settings = {
@@ -96,14 +97,14 @@ in {
               };
               writer = {
                 inherit password;
-                acl = [ "write ${topic}" ];
+                acl = ["write ${topic}"];
               };
             };
           }
           {
             port = tlsPort;
             users.client1 = {
-              acl = [ "read $SYS/#" ];
+              acl = ["read $SYS/#"];
             };
             settings = {
               cafile = "${snakeOil}/ca.crt";
@@ -117,11 +118,11 @@ in {
             port = anonPort;
             omitPasswordAuth = true;
             settings.allow_anonymous = true;
-            acl = [ "pattern read #" ];
+            acl = ["pattern read #"];
             users = {
               anonWriter = {
                 password = "<ignored>" + password;
-                acl = [ "write ${topic}" ];
+                acl = ["write ${topic}"];
               };
             };
           }

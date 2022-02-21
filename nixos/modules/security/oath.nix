@@ -1,12 +1,7 @@
 # This module provides configuration for the OATH PAM modules.
-
-{ lib, ... }:
-
-with lib;
-
-{
+{lib, ...}:
+with lib; {
   options = {
-
     security.pam.oath = {
       enable = mkOption {
         type = types.bool;
@@ -17,7 +12,7 @@ with lib;
       };
 
       digits = mkOption {
-        type = types.enum [ 6 7 8 ];
+        type = types.enum [6 7 8];
         default = 6;
         description = ''
           Specify the length of the one-time password in number of
@@ -45,6 +40,5 @@ with lib;
         '';
       };
     };
-
   };
 }

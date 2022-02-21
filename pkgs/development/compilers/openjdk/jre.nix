@@ -1,22 +1,21 @@
-{ stdenv
-, jdk
-, lib
-, callPackage
-, modules ? [ "java.base" ]
-}:
-
-let
+{
+  stdenv,
+  jdk,
+  lib,
+  callPackage,
+  modules ? ["java.base"],
+}: let
   jre = stdenv.mkDerivation {
     name = "${jdk.name}-minimal-jre";
     version = jdk.version;
 
-    buildInputs = [ jdk ];
+    buildInputs = [jdk];
 
     dontUnpack = true;
 
     # Strip more heavily than the default '-S', since if you're
     # using this derivation you probably care about this.
-    stripDebugFlags = [ "--strip-unneeded" ];
+    stripDebugFlags = ["--strip-unneeded"];
 
     buildPhase = ''
       runHook preBuild
@@ -36,4 +35,5 @@ let
       ];
     };
   };
-in jre
+in
+  jre

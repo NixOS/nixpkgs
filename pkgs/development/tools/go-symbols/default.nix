@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "go-symbols";
   version = "0.1.1";
@@ -17,7 +20,7 @@ buildGoPackage rec {
   meta = {
     description = "A utility for extracting a JSON representation of the package symbols from a go source tree";
     homepage = "https://github.com/acroca/go-symbols";
-    maintainers = with lib.maintainers; [ vdemeester ];
+    maintainers = with lib.maintainers; [vdemeester];
     license = lib.licenses.mit;
   };
 }

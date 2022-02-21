@@ -1,6 +1,8 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
-
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
+}:
 buildGoPackage rec {
   pname = "reflex";
   version = "0.2.0";
@@ -19,6 +21,6 @@ buildGoPackage rec {
     homepage = "https://github.com/cespare/reflex";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nicknovitski ];
+    maintainers = with maintainers; [nicknovitski];
   };
 }

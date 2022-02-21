@@ -1,19 +1,19 @@
-{ lib
-, pkg-config
-, fetchurl
-, meson
-, ninja
-, glib
-, gtk3
-, python3
-, wrapGAppsHook
-, gnome
-, libwnck
-, gobject-introspection
-, gettext
-, itstool
+{
+  lib,
+  pkg-config,
+  fetchurl,
+  meson,
+  ninja,
+  glib,
+  gtk3,
+  python3,
+  wrapGAppsHook,
+  gnome,
+  libwnck,
+  gobject-introspection,
+  gettext,
+  itstool,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "d-feet";
   version = "0.3.16";
@@ -77,6 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://wiki.gnome.org/Apps/DFeet";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ktosiek ];
+    maintainers = with maintainers; [ktosiek];
   };
 }

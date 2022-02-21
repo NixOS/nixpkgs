@@ -1,5 +1,3 @@
-{ callPackage }:
-
-{
-  wallpapers = callPackage ./wallpapers.nix { };
+{callPackage}: {
+  wallpapers = callPackage ./wallpapers.nix {};
 }

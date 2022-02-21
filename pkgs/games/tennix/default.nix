@@ -1,5 +1,14 @@
-{lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python2 } :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  SDL_mixer,
+  SDL_image,
+  SDL_ttf,
+  SDL_net,
+  python2,
+}:
 stdenv.mkDerivation rec {
   pname = "tennix";
   version = "1.1";
@@ -8,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "0np5kw1y7i0z0dsqx4r2nvmq86qj8hv3mmgavm3hxraqnds5z8cm";
   };
 
-  buildInputs = [ python2 SDL SDL_mixer SDL_image SDL_ttf SDL_net ];
+  buildInputs = [python2 SDL SDL_mixer SDL_image SDL_ttf SDL_net];
 
-  patches = [ ./fix_FTBFS.patch ];
+  patches = [./fix_FTBFS.patch];
 
   preConfigure = ''
     makeFlags="PREFIX=$out"
@@ -22,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Classic Championship Tour 2011";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

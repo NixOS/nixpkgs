@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pyephember";
   version = "0.3.1";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Python client to the EPH Control Systems Ember API";
     homepage = "https://github.com/ttroy50/pyephember";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

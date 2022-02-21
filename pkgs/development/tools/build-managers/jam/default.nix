@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, bison }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+}:
 stdenv.mkDerivation rec {
   pname = "jam";
   version = "2.6.1";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "19xkvkpycxfsncxvin6yqrql3x3z9ypc1j8kzls5k659q4kv5rmc";
   };
 
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [bison];
 
   preConfigure = ''
     unset AR
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.perforce.com/resources/documentation/jam";
     license = licenses.free;
     description = "Just Another Make";
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.unix;
   };
 }

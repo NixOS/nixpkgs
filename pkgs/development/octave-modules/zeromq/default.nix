@@ -1,11 +1,11 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, zeromq
-, pkg-config
-, autoreconfHook
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  zeromq,
+  pkg-config,
+  autoreconfHook,
 }:
-
 buildOctavePackage rec {
   pname = "zeromq";
   version = "1.5.3";
@@ -35,7 +35,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/zeromq/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "ZeroMQ bindings for GNU Octave";
   };
 }

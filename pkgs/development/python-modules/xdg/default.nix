@@ -1,9 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, clikit
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  clikit,
+  poetry-core,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   version = "5.1.1";
   pname = "xdg";
@@ -17,18 +20,18 @@ buildPythonPackage rec {
     sha256 = "sha256-z/Zvo2WGw9qA+M3Pt9r35DuxtuhL7/I75LlFEdDOJcc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [poetry-core];
 
   propagatedBuildInputs = [
     clikit
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     description = "XDG Base Directory Specification for Python";
     homepage = "https://github.com/srstevenson/xdg";
     license = licenses.isc;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

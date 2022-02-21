@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "gitbatch-unstable";
   version = "2019-12-19";
@@ -19,7 +22,7 @@ buildGoPackage rec {
     description = "Running git UI commands";
     homepage = "https://github.com/isacikgoz/gitbatch";
     license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
     platforms = with platforms; linux;
   };
 }

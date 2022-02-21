@@ -1,16 +1,17 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libuuid
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  fetchurl,
+  libuuid,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libbutl";
   version = "0.14.0";
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${version}.tar.gz";
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # Should be true for anything built with build2,
   # but especially important when bootstrapping
-  disallowedReferences = [ build2 ];
+  disallowedReferences = [build2];
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace libbutl/uuid-linux.cxx \
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://build2.org/";
     changelog = "https://git.build2.org/cgit/libbutl/log";
     license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
     platforms = platforms.all;
   };
 }

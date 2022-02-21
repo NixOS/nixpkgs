@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, zlib, libjpeg, imake, gccmakedep, libXmu
-, libXaw, libXpm, libXp , perl, xauth, fontDirectories, openssh }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xlibsWrapper,
+  zlib,
+  libjpeg,
+  imake,
+  gccmakedep,
+  libXmu,
+  libXaw,
+  libXpm,
+  libXp,
+  perl,
+  xauth,
+  fontDirectories,
+  openssh,
+}:
 stdenv.mkDerivation rec {
   pname = "tightvnc";
   version = "1.3.10";
@@ -20,10 +35,21 @@ stdenv.mkDerivation rec {
   # for the builder script
   inherit fontDirectories;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  buildInputs = [ xlibsWrapper zlib libjpeg imake gccmakedep libXmu libXaw
-                  libXpm libXp xauth openssh ];
+  buildInputs = [
+    xlibsWrapper
+    zlib
+    libjpeg
+    imake
+    gccmakedep
+    libXmu
+    libXaw
+    libXpm
+    libXp
+    xauth
+    openssh
+  ];
 
   postPatch = ''
     fontPath=
@@ -83,7 +109,7 @@ stdenv.mkDerivation rec {
     maintainers = [];
     platforms = lib.platforms.unix;
 
-    knownVulnerabilities = [ "CVE-2021-42785" ];
+    knownVulnerabilities = ["CVE-2021-42785"];
     # Unfortunately, upstream doesn't maintain the 1.3 branch anymore, and the
     # new 2.x branch is substantially different (requiring either Windows or Java)
   };

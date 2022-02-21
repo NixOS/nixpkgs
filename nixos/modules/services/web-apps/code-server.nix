@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.code-server;
   defaultUser = "code-server";
   defaultGroup = defaultUser;
-
 in {
   ###### interface
   options = {
@@ -21,7 +22,7 @@ in {
       };
 
       extraPackages = mkOption {
-        default = [ ];
+        default = [];
         description = "Packages that are available in the PATH of code-server.";
         example = "[ pkgs.go ]";
         type = types.listOf types.package;
@@ -29,14 +30,13 @@ in {
 
       extraEnvironment = mkOption {
         type = types.attrsOf types.str;
-        description =
-          "Additional environment variables to passed to code-server.";
-        default = { };
-        example = { PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig"; };
+        description = "Additional environment variables to passed to code-server.";
+        default = {};
+        example = {PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig";};
       };
 
       extraArguments = mkOption {
-        default = [ "--disable-telemetry" ];
+        default = ["--disable-telemetry"];
         description = "Additional arguments that passed to code-server";
         example = ''[ "--verbose" ]'';
         type = types.listOf types.str;
@@ -57,13 +57,12 @@ in {
       auth = mkOption {
         default = "password";
         description = "The type of authentication to use.";
-        type = types.enum [ "none" "password" ];
+        type = types.enum ["none" "password"];
       };
 
       hashedPassword = mkOption {
         default = "";
-        description =
-          "Create the password with: 'echo -n 'thisismypassword' | npx argon2-cli -e'.";
+        description = "Create the password with: 'echo -n 'thisismypassword' | npx argon2-cli -e'.";
         type = types.str;
       };
 
@@ -88,13 +87,11 @@ in {
       };
 
       extraGroups = mkOption {
-        default = [ ];
-        description =
-          "An array of additional groups for the <literal>${defaultUser}</literal> user.";
-        example = [ "docker" ];
+        default = [];
+        description = "An array of additional groups for the <literal>${defaultUser}</literal> user.";
+        example = ["docker"];
         type = types.listOf types.str;
       };
-
     };
   };
 
@@ -102,12 +99,14 @@ in {
   config = mkIf cfg.enable {
     systemd.services.code-server = {
       description = "VSCode server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
       path = cfg.extraPackages;
-      environment = {
-        HASHED_PASSWORD = cfg.hashedPassword;
-      } // cfg.extraEnvironment;
+      environment =
+        {
+          HASHED_PASSWORD = cfg.hashedPassword;
+        }
+        // cfg.extraEnvironment;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/code-server --bind-addr ${cfg.host}:${toString cfg.port} --auth ${cfg.auth} " + builtins.concatStringsSep " " cfg.extraArguments;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -116,7 +115,6 @@ in {
         Group = cfg.group;
         Restart = "on-failure";
       };
-
     };
 
     users.users."${cfg.user}" = mkMerge [
@@ -131,9 +129,8 @@ in {
       }
     ];
 
-    users.groups."${defaultGroup}" = mkIf (cfg.group == defaultGroup) { };
-
+    users.groups."${defaultGroup}" = mkIf (cfg.group == defaultGroup) {};
   };
 
-  meta.maintainers = with maintainers; [ stackshadow ];
+  meta.maintainers = with maintainers; [stackshadow];
 }

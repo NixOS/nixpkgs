@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitiles, pkg-config, libuuid, openssl, libyaml, xz }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitiles,
+  pkg-config,
+  libuuid,
+  openssl,
+  libyaml,
+  xz,
+}:
 stdenv.mkDerivation rec {
   version = "20180311";
   checkout = "4c84e077858c809ee80a9a6f9b38185cf7dcded7";
@@ -12,15 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "1zja4ma6flch08h5j2l1hqnxmw2xwylidnddxxd5y2x05dai9ddj";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl libuuid libyaml xz ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [openssl libuuid libyaml xz];
 
   enableParallelBuilding = true;
 
-  patches = [ ./dont_static_link.patch ];
+  patches = [./dont_static_link.patch];
 
   # fix build with gcc9
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = ["-Wno-error"];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -45,6 +53,6 @@ stdenv.mkDerivation rec {
     description = "Chrome OS partitioning and kernel signing tools";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lheckemann ];
+    maintainers = with maintainers; [lheckemann];
   };
 }

@@ -1,15 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
 
   options = {
-
     services.rpcbind = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -20,21 +19,18 @@ with lib;
           `portmap`.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.rpcbind.enable {
-    environment.systemPackages = [ pkgs.rpcbind ];
+    environment.systemPackages = [pkgs.rpcbind];
 
-    systemd.packages = [ pkgs.rpcbind ];
+    systemd.packages = [pkgs.rpcbind];
 
     systemd.services.rpcbind = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
 
     users.users.rpc = {
@@ -42,5 +38,4 @@ with lib;
       uid = config.ids.uids.rpc;
     };
   };
-
 }

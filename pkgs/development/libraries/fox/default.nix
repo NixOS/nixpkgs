@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor, libXrandr, libXft
-, CoreServices ? null }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xlibsWrapper,
+  libpng,
+  libjpeg,
+  libtiff,
+  zlib,
+  bzip2,
+  libXcursor,
+  libXrandr,
+  libXft,
+  CoreServices ? null,
+}:
 stdenv.mkDerivation rec {
   pname = "fox";
   version = "1.7.9";
@@ -10,16 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "1jb9368xsin3ppdf6979n5s7in3s9klbxqbwcp0z8misjixl7nzg";
   };
 
-  patches = [ ./clang.patch ];
+  patches = [./clang.patch];
 
-  buildInputs = [ libpng xlibsWrapper libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft ]
+  buildInputs =
+    [libpng xlibsWrapper libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft]
     ++ lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "C++ based class library for building Graphical User Interfaces";

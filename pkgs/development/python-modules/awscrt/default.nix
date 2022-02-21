@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, perl
-, stdenv
-, gcc10
-, CoreFoundation
-, Security
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  perl,
+  stdenv,
+  gcc10,
+  CoreFoundation,
+  Security,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "awscrt";
   version = "0.13.3";
@@ -34,12 +34,14 @@ buildPythonPackage rec {
   ];
 
   # gcc <10 is not supported, LLVM on darwin is just fine
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
-    gcc10
-    perl
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
+      gcc10
+      perl
+    ];
 
   dontUseCmakeConfigure = true;
 
@@ -55,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/awslabs/aws-crt-python";
     description = "Python bindings for the AWS Common Runtime";
     license = licenses.asl20;
-    maintainers = with maintainers; [ davegallant ];
+    maintainers = with maintainers; [davegallant];
   };
 }

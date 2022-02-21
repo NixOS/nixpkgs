@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "css-html-js-minify";
   version = "2.5.5";
@@ -15,12 +15,12 @@ buildPythonPackage rec {
 
   doCheck = false; # Tests are useless and broken
 
-  pythonImportsCheck = [ "css_html_js_minify" ];
+  pythonImportsCheck = ["css_html_js_minify"];
 
   meta = with lib; {
     description = "StandAlone Async cross-platform Minifier for the Web";
     homepage = "https://github.com/juancarlospaco/css-html-js-minify";
-    license = with licenses; [ gpl3Plus lgpl3Plus mit ];
-    maintainers = with maintainers; [ FlorianFranzen ];
+    license = with licenses; [gpl3Plus lgpl3Plus mit];
+    maintainers = with maintainers; [FlorianFranzen];
   };
 }

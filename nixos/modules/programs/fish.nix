@@ -1,21 +1,22 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfge = config.environment;
 
   cfg = config.programs.fish;
 
   fishAbbrs = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "abbr -ag ${k} ${escapeShellArg v}")
-      cfg.shellAbbrs
+    cfg.shellAbbrs
   );
 
   fishAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k} ${escapeShellArg v}")
-      (filterAttrs (k: v: v != null) cfg.shellAliases)
+    (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
   envShellInit = pkgs.writeText "shellInit" cfge.shellInit;
@@ -25,28 +26,22 @@ let
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;
 
   sourceEnv = file:
-  if cfg.useBabelfish then
-    "source /etc/fish/${file}.fish"
-  else
-    ''
-      set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $fish_function_path
-      fenv source /etc/fish/foreign-env/${file} > /dev/null
-      set -e fish_function_path[1]
-    '';
+    if cfg.useBabelfish
+    then "source /etc/fish/${file}.fish"
+    else
+      ''
+        set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $fish_function_path
+        fenv source /etc/fish/foreign-env/${file} > /dev/null
+        set -e fish_function_path[1]
+      '';
 
   babelfishTranslate = path: name:
     pkgs.runCommand "${name}.fish" {
-      nativeBuildInputs = [ pkgs.babelfish ];
+      nativeBuildInputs = [pkgs.babelfish];
     } "${pkgs.babelfish}/bin/babelfish < ${path} > $out;";
-
-in
-
-{
-
+in {
   options = {
-
     programs.fish = {
-
       enable = mkOption {
         default = false;
         description = ''
@@ -140,13 +135,10 @@ in
         '';
         type = types.lines;
       };
-
     };
-
   };
 
   config = mkIf cfg.enable {
-
     programs.fish.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
     # Required for man completions
@@ -159,7 +151,7 @@ in
         etc."fish/shellInit.fish".source = babelfishTranslate envShellInit "shellInit";
         etc."fish/loginShellInit.fish".source = babelfishTranslate envLoginShellInit "loginShellInit";
         etc."fish/interactiveShellInit.fish".source = babelfishTranslate envInteractiveShellInit "interactiveShellInit";
-     })
+      })
 
       (mkIf (!cfg.useBabelfish)
       {
@@ -170,77 +162,78 @@ in
 
       {
         etc."fish/nixos-env-preinit.fish".text =
-        if cfg.useBabelfish
-        then ''
-          # source the NixOS environment config
-          if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
-            source /etc/fish/setEnvironment.fish
-          end
-        ''
-        else ''
-          # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
-          # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
-          set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
+          if cfg.useBabelfish
+          then
+            ''
+              # source the NixOS environment config
+              if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
+                source /etc/fish/setEnvironment.fish
+              end
+            ''
+          else
+            ''
+              # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
+              # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
+              set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
 
-          # source the NixOS environment config
-          if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
-            fenv source ${config.system.build.setEnvironment}
-          end
+              # source the NixOS environment config
+              if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
+                fenv source ${config.system.build.setEnvironment}
+              end
 
-          # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
-          set -e fish_function_path
-        '';
+              # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
+              set -e fish_function_path
+            '';
       }
 
       {
         etc."fish/config.fish".text = ''
-        # /etc/fish/config.fish: DO NOT EDIT -- this file has been generated automatically.
+          # /etc/fish/config.fish: DO NOT EDIT -- this file has been generated automatically.
 
-        # if we haven't sourced the general config, do it
-        if not set -q __fish_nixos_general_config_sourced
-          ${sourceEnv "shellInit"}
+          # if we haven't sourced the general config, do it
+          if not set -q __fish_nixos_general_config_sourced
+            ${sourceEnv "shellInit"}
 
-          ${cfg.shellInit}
+            ${cfg.shellInit}
 
-          # and leave a note so we don't source this config section again from
-          # this very shell (children will source the general config anew)
-          set -g __fish_nixos_general_config_sourced 1
-        end
+            # and leave a note so we don't source this config section again from
+            # this very shell (children will source the general config anew)
+            set -g __fish_nixos_general_config_sourced 1
+          end
 
-        # if we haven't sourced the login config, do it
-        status --is-login; and not set -q __fish_nixos_login_config_sourced
-        and begin
-          ${sourceEnv "loginShellInit"}
+          # if we haven't sourced the login config, do it
+          status --is-login; and not set -q __fish_nixos_login_config_sourced
+          and begin
+            ${sourceEnv "loginShellInit"}
 
-          ${cfg.loginShellInit}
+            ${cfg.loginShellInit}
 
-          # and leave a note so we don't source this config section again from
-          # this very shell (children will source the general config anew)
-          set -g __fish_nixos_login_config_sourced 1
-        end
+            # and leave a note so we don't source this config section again from
+            # this very shell (children will source the general config anew)
+            set -g __fish_nixos_login_config_sourced 1
+          end
 
-        # if we haven't sourced the interactive config, do it
-        status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
-        and begin
-          ${fishAbbrs}
-          ${fishAliases}
+          # if we haven't sourced the interactive config, do it
+          status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
+          and begin
+            ${fishAbbrs}
+            ${fishAliases}
 
-          ${sourceEnv "interactiveShellInit"}
+            ${sourceEnv "interactiveShellInit"}
 
-          ${cfg.promptInit}
-          ${cfg.interactiveShellInit}
+            ${cfg.promptInit}
+            ${cfg.interactiveShellInit}
 
-          # and leave a note so we don't source this config section again from
-          # this very shell (children will source the general config anew,
-          # allowing configuration changes in, e.g, aliases, to propagate)
-          set -g __fish_nixos_interactive_config_sourced 1
-        end
-      '';
+            # and leave a note so we don't source this config section again from
+            # this very shell (children will source the general config anew,
+            # allowing configuration changes in, e.g, aliases, to propagate)
+            set -g __fish_nixos_interactive_config_sourced 1
+          end
+        '';
       }
 
       {
-        etc."fish/generated_completions".source =
-        let
+        etc."fish/generated_completions".source = let
           patchedGenerator = pkgs.stdenv.mkDerivation {
             name = "fish_patched-completion-generator";
             srcs = [
@@ -249,7 +242,7 @@ in
             ];
             unpackCmd = "cp $curSrc $(basename $curSrc)";
             sourceRoot = ".";
-            patches = [ ./fish_completion-generator.patch ]; # to prevent collisions of identical completion files
+            patches = [./fish_completion-generator.patch]; # to prevent collisions of identical completion files
             dontBuild = true;
             installPhase = ''
               mkdir -p $out
@@ -258,7 +251,8 @@ in
             preferLocalBuild = true;
             allowSubstitutes = false;
           };
-          generateCompletions = package: pkgs.runCommand
+          generateCompletions = package:
+            pkgs.runCommand
             "${package.name}_fish-completions"
             (
               {
@@ -266,7 +260,7 @@ in
                 preferLocalBuild = true;
                 allowSubstitutes = false;
               }
-              // optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
+              // optionalAttrs (package ? meta.priority) {meta.priority = package.meta.priority;}
             )
             ''
               mkdir -p $out
@@ -284,13 +278,14 @@ in
 
       # include programs that bring their own completions
       {
-        pathsToLink = []
-        ++ optional cfg.vendor.config.enable "/share/fish/vendor_conf.d"
-        ++ optional cfg.vendor.completions.enable "/share/fish/vendor_completions.d"
-        ++ optional cfg.vendor.functions.enable "/share/fish/vendor_functions.d";
+        pathsToLink =
+          []
+          ++ optional cfg.vendor.config.enable "/share/fish/vendor_conf.d"
+          ++ optional cfg.vendor.completions.enable "/share/fish/vendor_completions.d"
+          ++ optional cfg.vendor.functions.enable "/share/fish/vendor_functions.d";
       }
 
-      { systemPackages = [ pkgs.fish ]; }
+      {systemPackages = [pkgs.fish];}
 
       {
         shells = [
@@ -314,7 +309,5 @@ in
         ${pkgs.coreutils}/bin/mkdir $__fish_user_data_dir/generated_completions
       end
     '';
-
   };
-
 }

@@ -1,5 +1,12 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, SystemConfiguration, libiconv }:
-
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  SystemConfiguration,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
   version = "2.0.0";
@@ -13,11 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-cyuDXMmVrVx3kluumR6WleMzuoV+261f47rpkVYHzZA=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [SystemConfiguration libiconv];
 
-  checkFlags = [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
+  checkFlags = ["--skip=test_single_huge_payload" "--skip=test_create_unix_socket"];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -31,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Nukesor/pueue";
     changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

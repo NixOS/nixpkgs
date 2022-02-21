@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, gnome
-, glib
-, gtk3
-, pango
-, wrapGAppsHook
-, python3
-, gobject-introspection
-, gjs
-, libunistring
-, libhandy
-, gsettings-desktop-schemas
-, adwaita-icon-theme
-, gnome-desktop
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  gnome,
+  glib,
+  gtk3,
+  pango,
+  wrapGAppsHook,
+  python3,
+  gobject-introspection,
+  gjs,
+  libunistring,
+  libhandy,
+  gsettings-desktop-schemas,
+  adwaita-icon-theme,
+  gnome-desktop,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
   version = "41.0";
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
   ];
-
 
   buildInputs = [
     adwaita-icon-theme

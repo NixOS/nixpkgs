@@ -1,28 +1,27 @@
-{ lib
-, buildPythonPackage
-, toPythonModule
-, pythonOlder
-, pythonAtLeast
-, fetchFromGitHub
-, pyparsing
-, opencascade
-, stdenv
-, python
-, cmake
-, swig
-, smesh
-, freetype
-, libGL
-, libGLU
-, libX11
-, six
-, pytest
-, makeFontsConf
-, freefont_ttf
-, Cocoa
-}:
-
-let
+{
+  lib,
+  buildPythonPackage,
+  toPythonModule,
+  pythonOlder,
+  pythonAtLeast,
+  fetchFromGitHub,
+  pyparsing,
+  opencascade,
+  stdenv,
+  python,
+  cmake,
+  swig,
+  smesh,
+  freetype,
+  libGL,
+  libGLU,
+  libX11,
+  six,
+  pytest,
+  makeFontsConf,
+  freefont_ttf,
+  Cocoa,
+}: let
   pythonocc-core-cadquery = toPythonModule (stdenv.mkDerivation {
     pname = "pythonocc-core-cadquery";
     version = "0.18.2";
@@ -40,15 +39,17 @@ let
       swig
     ];
 
-    buildInputs = [
-      python
-      opencascade
-      smesh
-      freetype
-      libGL
-      libGLU
-      libX11
-    ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+    buildInputs =
+      [
+        python
+        opencascade
+        smesh
+        freetype
+        libGL
+        libGLU
+        libX11
+      ]
+      ++ lib.optionals stdenv.isDarwin [Cocoa];
 
     propagatedBuildInputs = [
       six
@@ -62,7 +63,6 @@ let
       "-DPYTHONOCC_WRAP_SMESH=TRUE"
     ];
   });
-
 in
   buildPythonPackage rec {
     pname = "cadquery";
@@ -85,7 +85,7 @@ in
     ];
 
     FONTCONFIG_FILE = makeFontsConf {
-      fontDirectories = [ freefont_ttf ];
+      fontDirectories = [freefont_ttf];
     };
 
     checkInputs = [
@@ -98,6 +98,6 @@ in
       description = "Parametric scripting language for creating and traversing CAD models";
       homepage = "https://github.com/CadQuery/cadquery";
       license = licenses.asl20;
-      maintainers = with maintainers; [ costrouc marcus7070 ];
+      maintainers = with maintainers; [costrouc marcus7070];
     };
   }

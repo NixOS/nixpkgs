@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, buildPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  ncurses,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "mg";
   version = "7.0";
@@ -13,15 +19,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config" ];
+  makeFlags = ["PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"];
 
   installPhase = ''
     install -m 555 -Dt $out/bin mg
     install -m 444 -Dt $out/share/man/man1 mg.1
   '';
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   meta = with lib; {
     description = "Micro GNU/emacs, a portable version of the mg maintained by the OpenBSD team";

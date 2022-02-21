@@ -1,8 +1,10 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
   cfg = config.services.prometheus.exporters.knot;
 in {
   port = 9433;
@@ -44,7 +46,7 @@ in {
           --knot-socket-timeout ${toString cfg.knotSocketTimeout} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
-      SupplementaryGroups = [ "knot" ];
+      SupplementaryGroups = ["knot"];
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data
         "AF_UNIX"

@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, alembic
-, oslo-config
-, oslo-context
-, oslo-utils
-, oslotest
-, pbr
-, sqlalchemy
-, sqlalchemy-migrate
-, stestr
-, testresources
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  alembic,
+  oslo-config,
+  oslo-context,
+  oslo-utils,
+  oslotest,
+  pbr,
+  sqlalchemy,
+  sqlalchemy-migrate,
+  stestr,
+  testresources,
+  testscenarios,
 }:
-
 buildPythonPackage rec {
   pname = "oslo-db";
   version = "11.1.0";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "8469c54544f1c0d7ac0a998477033eab13733b186d159554311c6132b43862e9";
   };
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
   propagatedBuildInputs = [
     alembic
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "oslo_db" ];
+  pythonImportsCheck = ["oslo_db"];
 
   meta = with lib; {
     description = "Oslo Database library";

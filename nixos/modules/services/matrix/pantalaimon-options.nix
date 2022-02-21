@@ -1,7 +1,10 @@
-{ config, lib, name, ... }:
-
-with lib;
 {
+  config,
+  lib,
+  name,
+  ...
+}:
+with lib; {
   options = {
     dataPath = mkOption {
       type = types.path;
@@ -12,7 +15,7 @@ with lib;
     };
 
     logLevel = mkOption {
-      type = types.enum [ "info" "warning" "error" "debug" ];
+      type = types.enum ["info" "warning" "error" "debug"];
       default = "warning";
       description = ''
         Set the log level of the daemon.
@@ -59,7 +62,7 @@ with lib;
 
     extraSettings = mkOption {
       type = types.attrs;
-      default = { };
+      default = {};
       description = ''
         Extra configuration options. See
         <link xlink:href="https://github.com/matrix-org/pantalaimon/blob/master/docs/man/pantalaimon.5.md">pantalaimon(5)</link>

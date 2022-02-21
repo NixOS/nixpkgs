@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, netaddr, pytestCheckHook, coverage
-, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  netaddr,
+  pytestCheckHook,
+  coverage,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "pyeapi";
   version = "0.8.4";
@@ -13,9 +19,9 @@ buildPythonPackage rec {
     sha256 = "13chya6wix5jb82k67gr44bjx35gcdwz80nsvpv0gvzs6shn4d7b";
   };
 
-  propagatedBuildInputs = [ netaddr ];
+  propagatedBuildInputs = [netaddr];
 
-  checkInputs = [ coverage mock ];
+  checkInputs = [coverage mock];
   checkPhase = ''
     make unittest
   '';
@@ -24,6 +30,6 @@ buildPythonPackage rec {
     description = "Client for Arista eAPI";
     homepage = "https://github.com/arista-eosplus/pyeapi";
     license = licenses.bsd3;
-    maintainers = [ maintainers.astro ];
+    maintainers = [maintainers.astro];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "enjarify";
   version = "1.0.3";
@@ -24,12 +29,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/enjarify
   '';
 
-  buildInputs = [ ];
+  buildInputs = [];
 
   meta = with lib; {
     description = "Tool for translating Dalvik bytecode to equivalent Java bytecode";
     homepage = "https://github.com/google/enjarify/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

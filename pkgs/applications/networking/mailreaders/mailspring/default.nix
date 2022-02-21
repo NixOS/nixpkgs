@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, alsa-lib
-, coreutils
-, db
-, dpkg
-, glib
-, gtk3
-, wrapGAppsHook
-, libkrb5
-, libsecret
-, nss
-, openssl
-, udev
-, xorg
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  alsa-lib,
+  coreutils,
+  db,
+  dpkg,
+  glib,
+  gtk3,
+  wrapGAppsHook,
+  libkrb5,
+  libsecret,
+  nss,
+  openssl,
+  udev,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mailspring";
   version = "1.9.2";
@@ -75,10 +75,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = /* sh */ ''
-    substituteInPlace $out/share/applications/Mailspring.desktop \
-      --replace Exec=mailspring Exec=$out/bin/mailspring
-  '';
+  postFixup =
+    /*
+     sh
+     */
+    ''
+      substituteInPlace $out/share/applications/Mailspring.desktop \
+        --replace Exec=mailspring Exec=$out/bin/mailspring
+    '';
 
   meta = with lib; {
     description = "A beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
@@ -87,7 +91,7 @@ stdenv.mkDerivation rec {
       Mailspring's sync engine runs locally, but its source is not open.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ toschmidt doronbehar ];
+    maintainers = with maintainers; [toschmidt doronbehar];
     homepage = "https://getmailspring.com";
     downloadPage = "https://github.com/Foundry376/Mailspring";
     platforms = platforms.x86_64;

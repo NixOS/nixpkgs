@@ -1,10 +1,14 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
-
-let
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+}: let
   humioCtlVersion = "0.28.11";
   sha256 = "sha256-CdGeGpOEWYn7yIWJxWpRrSPHcuult+jtqpjYaSjfBLQ=";
   vendorSha256 = "sha256-fgRQ2n5tzj5s4rT65VIqh61wDwu+x/fWhpaKwyr8XWA=";
-in buildGoModule {
+in
+  buildGoModule {
     name = "humioctl-${humioCtlVersion}";
     pname = "humioctl";
     version = humioCtlVersion;
@@ -20,9 +24,9 @@ in buildGoModule {
       sha256 = sha256;
     };
 
-    ldflags = [ "-X main.version=${humioCtlVersion}" ];
+    ldflags = ["-X main.version=${humioCtlVersion}"];
 
-    nativeBuildInputs = [ installShellFiles ];
+    nativeBuildInputs = [installShellFiles];
 
     postInstall = ''
       $out/bin/humioctl completion bash > humioctl.bash
@@ -34,6 +38,6 @@ in buildGoModule {
       homepage = "https://github.com/humio/cli";
       description = "A CLI for managing and sending data to Humio";
       license = licenses.asl20;
-      maintainers = with maintainers; [ lucperkins ];
+      maintainers = with maintainers; [lucperkins];
     };
   }

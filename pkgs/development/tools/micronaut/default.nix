@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk,
+  makeWrapper,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "micronaut";
   version = "1.3.7";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f9fhp10fdm18g33kxl70l6l3x1k8p81h2c3zahjmhlg0sam78zw";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
   installPhase = ''
     runHook preInstall
@@ -34,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://micronaut.io/";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    maintainers = with maintainers; [moaxcp];
   };
 }

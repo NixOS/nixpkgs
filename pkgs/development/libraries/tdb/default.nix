@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, wafHook
-, python3
-, readline
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wafHook,
+  python3,
+  readline,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tdb";
   version = "1.4.6";

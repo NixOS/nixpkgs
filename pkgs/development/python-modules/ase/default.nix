@@ -1,15 +1,15 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPy27
-, numpy
-, scipy
-, matplotlib
-, flask
-, pillow
-, psycopg2
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy27,
+  numpy,
+  scipy,
+  matplotlib,
+  flask,
+  pillow,
+  psycopg2,
 }:
-
 buildPythonPackage rec {
   pname = "ase";
   version = "3.22.1";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "sha256-AE32sOoEsRFMeQ+t/kXUEl6w5TElxmqTQlr4U9gqtDI=";
   };
 
-  propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];
+  propagatedBuildInputs = [numpy scipy matplotlib flask pillow psycopg2];
 
   checkPhase = ''
     $out/bin/ase test
@@ -29,12 +29,12 @@ buildPythonPackage rec {
   # tests just hang most likely due to something with subprocesses and cli
   doCheck = false;
 
-  pythonImportsCheck = [ "ase" ];
+  pythonImportsCheck = ["ase"];
 
   meta = with lib; {
     description = "Atomic Simulation Environment";
     homepage = "https://wiki.fysik.dtu.dk/ase/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

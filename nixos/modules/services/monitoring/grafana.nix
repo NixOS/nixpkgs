@@ -1,61 +1,73 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.grafana;
   opt = options.services.grafana;
-  declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
+  declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: {
+    name = pkg.pname;
+    path = pkg;
+  })
+  cfg.declarativePlugins);
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
 
-  envOptions = {
-    PATHS_DATA = cfg.dataDir;
-    PATHS_PLUGINS = if builtins.isNull cfg.declarativePlugins then "${cfg.dataDir}/plugins" else declarativePlugins;
-    PATHS_LOGS = "${cfg.dataDir}/log";
+  envOptions =
+    {
+      PATHS_DATA = cfg.dataDir;
+      PATHS_PLUGINS =
+        if builtins.isNull cfg.declarativePlugins
+        then "${cfg.dataDir}/plugins"
+        else declarativePlugins;
+      PATHS_LOGS = "${cfg.dataDir}/log";
 
-    SERVER_PROTOCOL = cfg.protocol;
-    SERVER_HTTP_ADDR = cfg.addr;
-    SERVER_HTTP_PORT = cfg.port;
-    SERVER_SOCKET = cfg.socket;
-    SERVER_DOMAIN = cfg.domain;
-    SERVER_ROOT_URL = cfg.rootUrl;
-    SERVER_STATIC_ROOT_PATH = cfg.staticRootPath;
-    SERVER_CERT_FILE = cfg.certFile;
-    SERVER_CERT_KEY = cfg.certKey;
+      SERVER_PROTOCOL = cfg.protocol;
+      SERVER_HTTP_ADDR = cfg.addr;
+      SERVER_HTTP_PORT = cfg.port;
+      SERVER_SOCKET = cfg.socket;
+      SERVER_DOMAIN = cfg.domain;
+      SERVER_ROOT_URL = cfg.rootUrl;
+      SERVER_STATIC_ROOT_PATH = cfg.staticRootPath;
+      SERVER_CERT_FILE = cfg.certFile;
+      SERVER_CERT_KEY = cfg.certKey;
 
-    DATABASE_TYPE = cfg.database.type;
-    DATABASE_HOST = cfg.database.host;
-    DATABASE_NAME = cfg.database.name;
-    DATABASE_USER = cfg.database.user;
-    DATABASE_PASSWORD = cfg.database.password;
-    DATABASE_PATH = cfg.database.path;
-    DATABASE_CONN_MAX_LIFETIME = cfg.database.connMaxLifetime;
+      DATABASE_TYPE = cfg.database.type;
+      DATABASE_HOST = cfg.database.host;
+      DATABASE_NAME = cfg.database.name;
+      DATABASE_USER = cfg.database.user;
+      DATABASE_PASSWORD = cfg.database.password;
+      DATABASE_PATH = cfg.database.path;
+      DATABASE_CONN_MAX_LIFETIME = cfg.database.connMaxLifetime;
 
-    SECURITY_ADMIN_USER = cfg.security.adminUser;
-    SECURITY_ADMIN_PASSWORD = cfg.security.adminPassword;
-    SECURITY_SECRET_KEY = cfg.security.secretKey;
+      SECURITY_ADMIN_USER = cfg.security.adminUser;
+      SECURITY_ADMIN_PASSWORD = cfg.security.adminPassword;
+      SECURITY_SECRET_KEY = cfg.security.secretKey;
 
-    USERS_ALLOW_SIGN_UP = boolToString cfg.users.allowSignUp;
-    USERS_ALLOW_ORG_CREATE = boolToString cfg.users.allowOrgCreate;
-    USERS_AUTO_ASSIGN_ORG = boolToString cfg.users.autoAssignOrg;
-    USERS_AUTO_ASSIGN_ORG_ROLE = cfg.users.autoAssignOrgRole;
+      USERS_ALLOW_SIGN_UP = boolToString cfg.users.allowSignUp;
+      USERS_ALLOW_ORG_CREATE = boolToString cfg.users.allowOrgCreate;
+      USERS_AUTO_ASSIGN_ORG = boolToString cfg.users.autoAssignOrg;
+      USERS_AUTO_ASSIGN_ORG_ROLE = cfg.users.autoAssignOrgRole;
 
-    AUTH_ANONYMOUS_ENABLED = boolToString cfg.auth.anonymous.enable;
-    AUTH_ANONYMOUS_ORG_NAME = cfg.auth.anonymous.org_name;
-    AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
-    AUTH_GOOGLE_ENABLED = boolToString cfg.auth.google.enable;
-    AUTH_GOOGLE_ALLOW_SIGN_UP = boolToString cfg.auth.google.allowSignUp;
-    AUTH_GOOGLE_CLIENT_ID = cfg.auth.google.clientId;
+      AUTH_ANONYMOUS_ENABLED = boolToString cfg.auth.anonymous.enable;
+      AUTH_ANONYMOUS_ORG_NAME = cfg.auth.anonymous.org_name;
+      AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
+      AUTH_GOOGLE_ENABLED = boolToString cfg.auth.google.enable;
+      AUTH_GOOGLE_ALLOW_SIGN_UP = boolToString cfg.auth.google.allowSignUp;
+      AUTH_GOOGLE_CLIENT_ID = cfg.auth.google.clientId;
 
-    ANALYTICS_REPORTING_ENABLED = boolToString cfg.analytics.reporting.enable;
+      ANALYTICS_REPORTING_ENABLED = boolToString cfg.analytics.reporting.enable;
 
-    SMTP_ENABLED = boolToString cfg.smtp.enable;
-    SMTP_HOST = cfg.smtp.host;
-    SMTP_USER = cfg.smtp.user;
-    SMTP_PASSWORD = cfg.smtp.password;
-    SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
-  } // cfg.extraOptions;
+      SMTP_ENABLED = boolToString cfg.smtp.enable;
+      SMTP_HOST = cfg.smtp.host;
+      SMTP_USER = cfg.smtp.user;
+      SMTP_PASSWORD = cfg.smtp.password;
+      SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
+    }
+    // cfg.extraOptions;
 
   datasourceConfiguration = {
     apiVersion = 1;
@@ -78,7 +90,7 @@ let
 
   notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
-  provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
+  provisionConfDir = pkgs.runCommand "grafana-provisioning" {} ''
     mkdir -p $out/{datasources,dashboards,notifiers}
     ln -sf ${datasourceFile} $out/datasources/datasource.yaml
     ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
@@ -349,7 +361,10 @@ in {
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
       # times.
-      apply = x: if isList x then lib.unique x else x;
+      apply = x:
+        if isList x
+        then lib.unique x
+        else x;
     };
 
     dataDir = mkOption {
@@ -415,7 +430,7 @@ in {
         '';
         default = "unlimited";
         example = 14400;
-        type = types.either types.int (types.enum [ "unlimited" ]);
+        type = types.either types.int (types.enum ["unlimited"]);
       };
     };
 
@@ -604,8 +619,9 @@ in {
   config = mkIf cfg.enable {
     warnings = flatten [
       (optional (
-        cfg.database.password != opt.database.password.default ||
-        cfg.security.adminPassword != opt.security.adminPassword.default
+        cfg.database.password
+        != opt.database.password.default
+        || cfg.security.adminPassword != opt.security.adminPassword.default
       ) "Grafana passwords will be stored as plaintext in the Nix store!")
       (optional (
         any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) cfg.provision.datasources
@@ -615,7 +631,7 @@ in {
       ) "Notifier secure settings will be stored as plaintext in the Nix store!")
     ];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     assertions = [
       {
@@ -640,36 +656,50 @@ in {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
       after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
-      environment = {
-        QT_QPA_PLATFORM = "offscreen";
-      } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
+      environment =
+        {
+          QT_QPA_PLATFORM = "offscreen";
+        }
+        // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
-        ${optionalString (cfg.auth.google.clientSecretFile != null) ''
-          GF_AUTH_GOOGLE_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.google.clientSecretFile})"
-          export GF_AUTH_GOOGLE_CLIENT_SECRET
-        ''}
-        ${optionalString (cfg.database.passwordFile != null) ''
-          GF_DATABASE_PASSWORD="$(<${escapeShellArg cfg.database.passwordFile})"
-          export GF_DATABASE_PASSWORD
-        ''}
-        ${optionalString (cfg.security.adminPasswordFile != null) ''
-          GF_SECURITY_ADMIN_PASSWORD="$(<${escapeShellArg cfg.security.adminPasswordFile})"
-          export GF_SECURITY_ADMIN_PASSWORD
-        ''}
-        ${optionalString (cfg.security.secretKeyFile != null) ''
-          GF_SECURITY_SECRET_KEY="$(<${escapeShellArg cfg.security.secretKeyFile})"
-          export GF_SECURITY_SECRET_KEY
-        ''}
-        ${optionalString (cfg.smtp.passwordFile != null) ''
-          GF_SMTP_PASSWORD="$(<${escapeShellArg cfg.smtp.passwordFile})"
-          export GF_SMTP_PASSWORD
-        ''}
-        ${optionalString cfg.provision.enable ''
-          export GF_PATHS_PROVISIONING=${provisionConfDir};
-        ''}
+        ${
+          optionalString (cfg.auth.google.clientSecretFile != null) ''
+            GF_AUTH_GOOGLE_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.google.clientSecretFile})"
+            export GF_AUTH_GOOGLE_CLIENT_SECRET
+          ''
+        }
+        ${
+          optionalString (cfg.database.passwordFile != null) ''
+            GF_DATABASE_PASSWORD="$(<${escapeShellArg cfg.database.passwordFile})"
+            export GF_DATABASE_PASSWORD
+          ''
+        }
+        ${
+          optionalString (cfg.security.adminPasswordFile != null) ''
+            GF_SECURITY_ADMIN_PASSWORD="$(<${escapeShellArg cfg.security.adminPasswordFile})"
+            export GF_SECURITY_ADMIN_PASSWORD
+          ''
+        }
+        ${
+          optionalString (cfg.security.secretKeyFile != null) ''
+            GF_SECURITY_SECRET_KEY="$(<${escapeShellArg cfg.security.secretKeyFile})"
+            export GF_SECURITY_SECRET_KEY
+          ''
+        }
+        ${
+          optionalString (cfg.smtp.passwordFile != null) ''
+            GF_SMTP_PASSWORD="$(<${escapeShellArg cfg.smtp.passwordFile})"
+            export GF_SMTP_PASSWORD
+          ''
+        }
+        ${
+          optionalString cfg.provision.enable ''
+            export GF_PATHS_PROVISIONING=${provisionConfDir};
+          ''
+        }
         exec ${cfg.package}/bin/grafana-server -homepath ${cfg.dataDir}
       '';
       serviceConfig = {
@@ -678,9 +708,12 @@ in {
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening
-        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
-        DeviceAllow = [ "" ];
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) ["CAP_NET_BIND_SERVICE"];
+        CapabilityBoundingSet =
+          if (cfg.port < 1024)
+          then ["CAP_NET_BIND_SERVICE"]
+          else [""];
+        DeviceAllow = [""];
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
@@ -695,14 +728,14 @@ in {
         ProtectProc = "invisible";
         ProtectSystem = "full";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6" "AF_UNIX"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         # Upstream grafana is not setting SystemCallFilter for compatibility
         # reasons, see https://github.com/grafana/grafana/pull/40176
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
         UMask = "0027";
       };
       preStart = ''

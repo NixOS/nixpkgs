@@ -1,6 +1,8 @@
-{ reason, re, ... }:
-
 {
+  reason,
+  re,
+  ...
+}: {
   pname = "pastel";
 
   minimalOCamlVersion = "4.05";

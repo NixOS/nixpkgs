@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+}:
 stdenv.mkDerivation rec {
   pname = "rtl88x2bu";
   version = "${kernel.version}-unstable-2021-11-04";
@@ -11,12 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "0f1hsfdw3ar78kqzr4hi04kpp5wnx0hd29f9rm698k0drxaw1g44";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
-  nativeBuildInputs = [ bc ];
+  nativeBuildInputs = [bc];
   buildInputs = kernel.moduleBuildDependencies;
 
- prePatch = ''
+  prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
       --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
@@ -35,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/morrownr/88x2bu";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.ralith ];
+    maintainers = [maintainers.ralith];
   };
 }

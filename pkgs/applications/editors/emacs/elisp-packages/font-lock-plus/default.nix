@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, trivialBuild
+{
+  lib,
+  fetchFromGitHub,
+  trivialBuild,
 }:
-
 trivialBuild {
   pname = "font-lock-plus";
   version = "208+unstable=2018-01-01";

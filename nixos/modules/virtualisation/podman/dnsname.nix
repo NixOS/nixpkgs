@@ -1,18 +1,20 @@
-{ config, lib, pkgs, ... }:
-let
-  inherit (lib)
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit
+    (lib)
     mkOption
     mkIf
     types
     ;
 
   cfg = config.virtualisation.podman;
-
-in
-{
+in {
   options = {
     virtualisation.podman = {
-
       defaultNetwork.dnsname.enable = mkOption {
         type = types.bool;
         default = false;
@@ -20,12 +22,11 @@ in
           Enable DNS resolution in the default podman network.
         '';
       };
-
     };
   };
 
   config = {
-    virtualisation.containers.containersConf.cniPlugins = mkIf cfg.defaultNetwork.dnsname.enable [ pkgs.dnsname-cni ];
+    virtualisation.containers.containersConf.cniPlugins = mkIf cfg.defaultNetwork.dnsname.enable [pkgs.dnsname-cni];
     virtualisation.podman.defaultNetwork.extraPlugins =
       lib.optional cfg.defaultNetwork.dnsname.enable {
         type = "dnsname";

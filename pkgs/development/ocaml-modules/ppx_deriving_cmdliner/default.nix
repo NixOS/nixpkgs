@@ -1,12 +1,12 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, alcotest
-, cmdliner
-, ppx_deriving
-, ppxlib
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  alcotest,
+  cmdliner,
+  ppx_deriving,
+  ppxlib,
 }:
-
 buildDunePackage rec {
   pname = "ppx_deriving_cmdliner";
   version = "0.6.0";
@@ -36,6 +36,6 @@ buildDunePackage rec {
     description = "Ppx_deriving plugin for generating command line interfaces from types for OCaml";
     inherit (src.meta) homepage;
     license = licenses.asl20;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

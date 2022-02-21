@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "netcat-gnu";
   version = "0.7.1";

@@ -1,5 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "martin";
   version = "0.5.0";
@@ -21,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.urbica.co/";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = with platforms; linux ++ darwin;
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-learn
-, scipy
-, pytest
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  scikit-learn,
+  scipy,
+  pytest,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "bayesian-optimization";
   version = "1.2.0";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   checkPhase = ''
     # New sklearn broke one test: https://github.com/fmfn/BayesianOptimization/issues/243
     pytest tests -k "not test_suggest_with_one_observation"
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "A Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/fmfn/BayesianOptimization";
     license = licenses.mit;
-    maintainers = [ maintainers.juliendehos ];
+    maintainers = [maintainers.juliendehos];
   };
 }

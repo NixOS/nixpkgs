@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, rustc
-, cargo
-, setuptools-rust
-# build inputs
-, cffi
-, glean-parser
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  rustc,
+  cargo,
+  setuptools-rust
+  # build inputs
+  ,
+  cffi,
+  glean-parser,
 }:
-
 buildPythonPackage rec {
   pname = "glean-sdk";
   version = "44.0.0";
@@ -36,12 +37,12 @@ buildPythonPackage rec {
     glean-parser
   ];
 
-  pythonImportsCheck = [ "glean" ];
+  pythonImportsCheck = ["glean"];
 
   meta = with lib; {
     description = "Modern cross-platform telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [maintainers.kvark];
   };
 }

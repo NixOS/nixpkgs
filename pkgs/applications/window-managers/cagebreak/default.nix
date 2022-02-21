@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cairo
-, fontconfig
-, libevdev
-, libinput
-, libxkbcommon
-, makeWrapper
-, mesa
-, meson
-, ninja
-, nixosTests
-, pango
-, pixman
-, pkg-config
-, scdoc
-, systemd
-, wayland
-, wayland-protocols
-, withXwayland ? true , xwayland
-, wlroots
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+  fontconfig,
+  libevdev,
+  libinput,
+  libxkbcommon,
+  makeWrapper,
+  mesa,
+  meson,
+  ninja,
+  nixosTests,
+  pango,
+  pixman,
+  pkg-config,
+  scdoc,
+  systemd,
+  wayland,
+  wayland-protocols,
+  withXwayland ? true,
+  xwayland,
+  wlroots,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cagebreak";
   version = "1.8.1";
@@ -73,14 +74,14 @@ stdenv.mkDerivation rec {
 
   postFixup = lib.optionalString withXwayland ''
     wrapProgram $out/bin/cagebreak \
-      --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
+      --prefix PATH : "${lib.makeBinPath [xwayland]}"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/project-repo/cagebreak";
     description = "A Wayland tiling compositor inspired by ratpoison";
     license = licenses.mit;
-    maintainers = with maintainers; [ berbiche ];
+    maintainers = with maintainers; [berbiche];
     platforms = platforms.linux;
   };
 

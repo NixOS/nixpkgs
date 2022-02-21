@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, darwin, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  darwin,
+  python2,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.1";
   pname = "iproute2mac";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n6la7blbxza2m79cpnywsavhzsdv4gzdxrkly4dppyidjg6jy1h";
   };
 
-  buildInputs = [ python2 ];
+  buildInputs = [python2];
 
   postPatch = ''
     substituteInPlace src/ip.py \
@@ -32,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/brona/iproute2mac";
     description = "CLI wrapper for basic network utilites on Mac OS X inspired with iproute2 on Linux systems - ip command.";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
     platforms = platforms.darwin;
   };
 }

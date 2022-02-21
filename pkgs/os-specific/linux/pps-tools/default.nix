@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "pps-tools";
   version = "1.0.3";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eLLFHrCgOQzOtVxlAsZ5X91KK+vZiKMGL7zbQFiIZtI=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -28,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://linuxpps.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sorki ];
+    maintainers = with maintainers; [sorki];
   };
 }

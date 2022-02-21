@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 stdenv.mkDerivation {
   version = "28";
   pname = "pforth";
@@ -18,19 +22,18 @@ stdenv.mkDerivation {
     })
   ];
 
-  makeFlags = [ "SRCDIR=." ];
+  makeFlags = ["SRCDIR=."];
   makefile = "build/unix/Makefile";
 
   installPhase = ''
     install -Dm755 pforth_standalone $out/bin/pforth
   '';
 
-
   meta = {
     description = "Portable ANSI style Forth written in ANSI C";
     homepage = "http://www.softsynth.com/pforth/";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ yrashk ];
+    maintainers = with lib.maintainers; [yrashk];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, perl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "multimarkdown";
   version = "6.6.0";
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       - glossary entries (LaTeX only)
       - document metadata (e.g. title, author, date, etc.)
     '';
-    license = with licenses; [ mit ];
+    license = with licenses; [mit];
     platforms = platforms.all;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, sqlite
-, python3
-, coreutils
-, findutils
-, gnused
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  sqlite,
+  python3,
+  coreutils,
+  findutils,
+  gnused,
 }:
-
 stdenv.mkDerivation rec {
   pname = "time-ghc-modules";
   version = "1.0.1";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp ./time-ghc-modules $out/bin/time-ghc-modules
-    wrapProgram $out/bin/time-ghc-modules --prefix PATH : ${lib.makeBinPath [ sqlite python3 coreutils findutils gnused ]} \
+    wrapProgram $out/bin/time-ghc-modules --prefix PATH : ${lib.makeBinPath [sqlite python3 coreutils findutils gnused]} \
                                           --set PROCESS_SCRIPT $out/lib/process \
                                           --set HTML_FILE $out/lib/index.html
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Analyze GHC .dump-timings files";
     homepage = "https://github.com/codedownio/time-ghc-modules";
     license = licenses.mit;
-    maintainers = [ maintainers.thomasjm ];
+    maintainers = [maintainers.thomasjm];
     platforms = platforms.all;
   };
 }

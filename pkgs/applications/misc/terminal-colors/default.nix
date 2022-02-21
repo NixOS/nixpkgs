@@ -1,9 +1,14 @@
-{ stdenv, lib, help2man, python3, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  help2man,
+  python3,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "terminal-colors";
   version = "3.0.1";
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   src = fetchFromGitHub {
     owner = "eikenb";
@@ -12,8 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-hekt77/FhSTMEARVuck49/Q1dIuqkwbOYmgGD1IItyc=";
   };
 
-  buildInputs = [ python3 ];
-  nativeBuildInputs = [ help2man ];
+  buildInputs = [python3];
+  nativeBuildInputs = [help2man];
 
   postPatch =
     # This sed command modifies output of --version command in way that
@@ -50,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "Script displaying terminal colors in various formats";
     homepage = "https://github.com/eikenb/terminal-colors";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kaction ];
+    maintainers = with maintainers; [kaction];
   };
 }

@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "stt";
   version = "0.9.3";
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/coqui-ai/STT";
     description = "Deep learning toolkit for Speech-to-Text, battle-tested in research and production";
     license = licenses.mpl20;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ rvolosatovs ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [rvolosatovs];
   };
 }

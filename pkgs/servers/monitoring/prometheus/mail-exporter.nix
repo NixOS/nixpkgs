@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
+}:
 buildGoModule {
   pname = "mailexporter";
   version = "2020-07-16";
@@ -13,20 +18,20 @@ buildGoModule {
 
   vendorSha256 = "1hwahk8v3qnmyn6bwk9l2zpr0k7p2w7zjzxmjwgjyx429g9rzqs0";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installManPage $src/man/mailexporter.1
     installManPage $src/man/mailexporter.conf.5
   '';
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) mail; };
+  passthru.tests = {inherit (nixosTests.prometheus-exporters) mail;};
 
   meta = with lib; {
     description = "Export Prometheus-style metrics about mail server functionality";
     homepage = "https://github.com/cherti/mailexporter";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ willibutz globin ];
+    maintainers = with maintainers; [willibutz globin];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "kitchen";
   version = "1.2.6";
@@ -11,6 +15,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kitchen contains a cornucopia of useful code";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

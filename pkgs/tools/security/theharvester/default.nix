@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
   version = "4.0.3";
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     uvloop
   ];
 
-  checkInputs = with  python3.pkgs; [
+  checkInputs = with python3.pkgs; [
     pytest
     pytest-asyncio
   ];
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
       gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
     '';
     homepage = "https://github.com/laramies/theHarvester";
-    maintainers = with maintainers; [ c0bw3b treemo ];
+    maintainers = with maintainers; [c0bw3b treemo];
     license = licenses.gpl2Only;
   };
 }

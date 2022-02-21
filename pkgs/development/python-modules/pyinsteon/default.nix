@@ -1,19 +1,19 @@
-{ lib
-, aiofiles
-, aiohttp
-, async_generator
-, buildPythonPackage
-, fetchFromGitHub
-, pypubsub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  async_generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pypubsub,
+  pyserial,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "pyinsteon";
   version = "1.0.16";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

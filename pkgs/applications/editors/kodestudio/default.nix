@@ -1,36 +1,52 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
-, # Patchelf dependencies:
-  alsa-lib, atomEnv, boehmgc, flac, libogg, libvorbis, libXScrnSaver, libGLU, libGL
-, openssl, xorg, zlib
-}:
-
-let
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  # Patchelf dependencies:
+  alsa-lib,
+  atomEnv,
+  boehmgc,
+  flac,
+  libogg,
+  libvorbis,
+  libXScrnSaver,
+  libGLU,
+  libGL,
+  openssl,
+  xorg,
+  zlib,
+}: let
   version = "17.1";
 
-  sha256 = if stdenv.hostPlatform.system == "x86_64-linux"  then "1kddisnvlk48jip6k59mw3wlkrl7rkck2lxpaghn0gfx02cvms5f"
-      else if stdenv.hostPlatform.system == "i686-cygwin"   then "1izp42afrlh4yd322ax9w85ki388gnkqfqbw8dwnn4k3j7r5487z"
-      else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  sha256 =
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then "1kddisnvlk48jip6k59mw3wlkrl7rkck2lxpaghn0gfx02cvms5f"
+    else if stdenv.hostPlatform.system == "i686-cygwin"
+    then "1izp42afrlh4yd322ax9w85ki388gnkqfqbw8dwnn4k3j7r5487z"
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   urlBase = "https://github.com/Kode/KodeStudio/releases/download/v${version}/KodeStudio-";
 
-  urlStr = if stdenv.hostPlatform.system == "x86_64-linux"  then urlBase + "linux64.tar.gz"
-      else if stdenv.hostPlatform.system == "i686-cygwin"   then urlBase + "win32.zip"
-      else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-
+  urlStr =
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then urlBase + "linux64.tar.gz"
+    else if stdenv.hostPlatform.system == "i686-cygwin"
+    then urlBase + "win32.zip"
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
-
   stdenv.mkDerivation {
     pname = "kodestudio";
     inherit version;
 
     src = fetchurl {
-        url = urlStr;
-        inherit sha256;
+      url = urlStr;
+      inherit sha256;
     };
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ libXScrnSaver ];
+    nativeBuildInputs = [makeWrapper];
+    buildInputs = [libXScrnSaver];
 
     desktopItem = makeDesktopItem {
       name = "kodestudio";
@@ -112,7 +128,7 @@ in
 
       # Wrap preload libXss
       wrapProgram $out/bin/kodestudio \
-          --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
+          --prefix LD_PRELOAD : ${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1
     '';
 
     meta = with lib; {
@@ -129,7 +145,7 @@ in
       homepage = "http://kode.tech/";
       downloadPage = "https://github.com/Kode/KodeStudio/releases";
       license = licenses.mit;
-      maintainers = [ maintainers.patternspandemic ];
-      platforms = [ "x86_64-linux" "i686-cygwin" ];
+      maintainers = [maintainers.patternspandemic];
+      platforms = ["x86_64-linux" "i686-cygwin"];
     };
   }

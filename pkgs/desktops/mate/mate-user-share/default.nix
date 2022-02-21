@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtk3, dbus-glib, libnotify, libxml2
-, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  gtk3,
+  dbus-glib,
+  libnotify,
+  libxml2,
+  libcanberra-gtk3,
+  mod_dnssd,
+  apacheHttpd,
+  hicolor-icon-theme,
+  mate,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-user-share";
   version = "1.26.0";
@@ -45,12 +61,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "User level public file sharing for the MATE desktop";
     homepage = "https://github.com/mate-desktop/mate-user-share";
-    license = with licenses; [ gpl2Plus ];
+    license = with licenses; [gpl2Plus];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

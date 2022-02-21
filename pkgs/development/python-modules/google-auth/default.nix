@@ -1,21 +1,21 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, cachetools
-, flask
-, freezegun
-, mock
-, oauth2client
-, pyasn1-modules
-, pyu2f
-, pytest-localserver
-, responses
-, rsa
-, pyopenssl
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  cachetools,
+  flask,
+  freezegun,
+  mock,
+  oauth2client,
+  pyasn1-modules,
+  pyu2f,
+  pytest-localserver,
+  responses,
+  rsa,
+  pyopenssl,
 }:
-
 buildPythonPackage rec {
   pname = "google-auth";
   version = "2.6.0";
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

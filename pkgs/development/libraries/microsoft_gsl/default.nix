@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, fetchurl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  fetchurl,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "microsoft_gsl";
   version = "3.1.0";
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ gtest ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [gtest];
 
   doCheck = true;
 
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Microsoft/GSL";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice yuriaisaka ];
+    maintainers = with maintainers; [thoughtpolice yuriaisaka];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libconfig";
   version = "1.7.3";
@@ -17,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.hyperrealm.com/libconfig";
     description = "A simple library for processing structured configuration files";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = with platforms; linux ++ darwin ++ windows;
   };
 }

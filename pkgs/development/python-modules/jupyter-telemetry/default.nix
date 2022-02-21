@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python-json-logger
-, jsonschema
-, ruamel-yaml
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  python-json-logger,
+  jsonschema,
+  ruamel-yaml,
+  traitlets,
 }:
-
 buildPythonPackage rec {
   pname = "jupyter_telemetry";
   version = "0.1.0";
@@ -19,13 +19,16 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    python-json-logger jsonschema ruamel-yaml traitlets
+    python-json-logger
+    jsonschema
+    ruamel-yaml
+    traitlets
   ];
 
   meta = with lib; {
     description = "Telemetry for Jupyter Applications and extensions";
     homepage = "https://jupyter-telemetry.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with lib.maintainers; [ chiroptical ];
+    maintainers = with lib.maintainers; [chiroptical];
   };
 }

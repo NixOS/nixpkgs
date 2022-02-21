@@ -1,12 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, cli11, nlohmann_json, curl, libarchive, libyamlcpp, libsolv, reproc, spdlog, termcolor, ghc_filesystem
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  cli11,
+  nlohmann_json,
+  curl,
+  libarchive,
+  libyamlcpp,
+  libsolv,
+  reproc,
+  spdlog,
+  termcolor,
+  ghc_filesystem,
+}: let
   libsolv' = libsolv.overrideAttrs (oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DENABLE_CONDA=true"
-    ];
+    cmakeFlags =
+      oldAttrs.cmakeFlags
+      ++ [
+        "-DENABLE_CONDA=true"
+      ];
 
     patches = [
       # Patch added by the mamba team
@@ -22,50 +36,50 @@ let
     ];
   });
 in
-stdenv.mkDerivation rec {
-  pname = "micromamba";
-  version = "0.18.1";
+  stdenv.mkDerivation rec {
+    pname = "micromamba";
+    version = "0.18.1";
 
-  src = fetchFromGitHub {
-    owner = "mamba-org";
-    repo = "mamba";
-    rev = version;
-    sha256 = "1gr9r257l300hafp8zm61bn58rysdk9i4wv1879q96b6n6v8hwa6";
-  };
+    src = fetchFromGitHub {
+      owner = "mamba-org";
+      repo = "mamba";
+      rev = version;
+      sha256 = "1gr9r257l300hafp8zm61bn58rysdk9i4wv1879q96b6n6v8hwa6";
+    };
 
-  nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [cmake];
 
-  buildInputs = [
-    cli11
-    nlohmann_json
-    curl
-    libarchive
-    libyamlcpp
-    libsolv'
-    reproc
-    spdlog
-    termcolor
-    ghc_filesystem
-  ];
+    buildInputs = [
+      cli11
+      nlohmann_json
+      curl
+      libarchive
+      libyamlcpp
+      libsolv'
+      reproc
+      spdlog
+      termcolor
+      ghc_filesystem
+    ];
 
-  postPatch = ''
-    # See https://github.com/gabime/spdlog/issues/1897
-    sed -i '1a add_compile_definitions(SPDLOG_FMT_EXTERNAL)' CMakeLists.txt
-    echo 'target_link_libraries(micromamba PRIVATE -lspdlog -lfmt)' >> micromamba/CMakeLists.txt
-  '';
+    postPatch = ''
+      # See https://github.com/gabime/spdlog/issues/1897
+      sed -i '1a add_compile_definitions(SPDLOG_FMT_EXTERNAL)' CMakeLists.txt
+      echo 'target_link_libraries(micromamba PRIVATE -lspdlog -lfmt)' >> micromamba/CMakeLists.txt
+    '';
 
-  cmakeFlags = [
-    "-DBUILD_LIBMAMBA=ON"
-    "-DBUILD_SHARED=ON"
-    "-DBUILD_MICROMAMBA=ON"
-    # "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
-  ];
+    cmakeFlags = [
+      "-DBUILD_LIBMAMBA=ON"
+      "-DBUILD_SHARED=ON"
+      "-DBUILD_MICROMAMBA=ON"
+      # "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
+    ];
 
-  meta = with lib; {
-    description = "Reimplementation of the conda package manager";
-    homepage = "https://github.com/mamba-org/mamba";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mausch ];
-  };
-}
+    meta = with lib; {
+      description = "Reimplementation of the conda package manager";
+      homepage = "https://github.com/mamba-org/mamba";
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [mausch];
+    };
+  }

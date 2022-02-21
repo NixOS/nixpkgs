@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
-, sysfsutils, dmidecode, kmod }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  makeWrapper,
+  sysfsutils,
+  dmidecode,
+  kmod,
+}:
 stdenv.mkDerivation {
   pname = "edac-utils";
   version = "unstable-2015-01-07";
@@ -12,8 +19,8 @@ stdenv.mkDerivation {
     sha256 = "1dmfqb15ffldl5zirbmwiqzpxbcc2ny9rpfvxcfvpmh5b69knvdg";
   };
 
-  nativeBuildInputs = [ perl makeWrapper ];
-  buildInputs = [ sysfsutils ];
+  nativeBuildInputs = [perl makeWrapper];
+  buildInputs = [sysfsutils];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -26,7 +33,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     wrapProgram "$out/sbin/edac-ctl" \
-      --set PATH ${lib.makeBinPath [ dmidecode kmod ]}
+      --set PATH ${lib.makeBinPath [dmidecode kmod]}
   '';
 
   meta = with lib; {

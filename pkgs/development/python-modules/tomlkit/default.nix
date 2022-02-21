@@ -1,7 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, enum34, functools32, typing ? null
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  enum34,
+  functools32,
+  typing ? null,
 }:
-
 buildPythonPackage rec {
   pname = "tomlkit";
   version = "0.8.0";
@@ -12,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs =
-    lib.optionals isPy27 [ enum34 functools32 ]
+    lib.optionals isPy27 [enum34 functools32]
     ++ lib.optional isPy27 typing;
 
   # The Pypi tarball doesn't include tests, and the GitHub source isn't
@@ -24,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdispater/tomlkit";
     description = "Style-preserving TOML library for Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [jakewaksbaum];
   };
 }

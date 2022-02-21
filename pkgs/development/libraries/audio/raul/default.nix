@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchgit, boost, gtk2, pkg-config, python3, wafHook }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  boost,
+  gtk2,
+  pkg-config,
+  python3,
+  wafHook,
+}:
 stdenv.mkDerivation rec {
   pname = "raul";
   version = "unstable-2019-12-09";
@@ -12,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1z37jb6ghc13b8nv8a8hcg669gl8vh4ni9djvfgga9vcz8rmcg8l";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook python3 ];
-  buildInputs = [ boost gtk2 ];
+  nativeBuildInputs = [pkg-config wafHook python3];
+  buildInputs = [boost gtk2];
 
   strictDeps = true;
 
@@ -21,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A C++ utility library primarily aimed at audio/musical applications";
     homepage = "http://drobilla.net/software/raul";
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.unix;
   };
 }

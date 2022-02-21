@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, asn1crypto
-, azure-storage-blob
-, boto3
-, certifi
-, cffi
-, fetchPypi
-, future
-, idna
-, ijson
-, oscrypto
-, pyarrow
-, pyasn1-modules
-, pycryptodomex
-, pyjwt
-, pyopenssl
-, pytz
-, requests
-, six
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  asn1crypto,
+  azure-storage-blob,
+  boto3,
+  certifi,
+  cffi,
+  fetchPypi,
+  future,
+  idna,
+  ijson,
+  oscrypto,
+  pyarrow,
+  pyasn1-modules,
+  pycryptodomex,
+  pyjwt,
+  pyopenssl,
+  pytz,
+  requests,
+  six,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
   version = "2.7.4";
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "Snowflake Connector for Python";
     homepage = "https://www.snowflake.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

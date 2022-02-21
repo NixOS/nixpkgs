@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pytado";
   version = "0.13.0";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Python binding for Tado web API";
     homepage = "https://github.com/wmalgadey/PyTado";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [elseym];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "hashcat-utils";
   version = "1.9";
@@ -25,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hashcat/hashcat-utils";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fadenb ];
+    maintainers = with maintainers; [fadenb];
   };
 }

@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, popt, avahi, pkg-config, python3, gtk3, runCommand
-, gcc, autoconf, automake, which, procps, libiberty_static
-, runtimeShell
-, sysconfDir ? ""   # set this parameter to override the default value $out/etc
-, static ? false
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  popt,
+  avahi,
+  pkg-config,
+  python3,
+  gtk3,
+  runCommand,
+  gcc,
+  autoconf,
+  automake,
+  which,
+  procps,
+  libiberty_static,
+  runtimeShell,
+  sysconfDir ? ""
+  # set this parameter to override the default value $out/etc
+  ,
+  static ? false,
+}: let
   pname = "distcc";
   version = "2021-03-11";
   distcc = stdenv.mkDerivation {
@@ -17,20 +31,39 @@ let
       sha256 = "0zjba1090awxkmgifr9jnjkxf41zhzc4f6mrnbayn3v6s77ca9x4";
     };
 
-  nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [pkg-config];
     buildInputs = [popt avahi pkg-config python3 gtk3 autoconf automake which procps libiberty_static];
-    preConfigure =
-    ''
+    preConfigure = ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
 
       configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
                             CXXFLAGS="-O2 -fno-strict-aliasing"
           --mandir=$out/share/man
-                            ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
-                            ${if static then "LDFLAGS=-static" else ""}
-                            --with${if static == true || popt == null then "" else "out"}-included-popt
-                            --with${if avahi != null then "" else "out"}-avahi
-                            --with${if gtk3 != null then "" else "out"}-gtk
+                            ${
+        if sysconfDir == ""
+        then ""
+        else "--sysconfdir=${sysconfDir}"
+      }
+                            ${
+        if static
+        then "LDFLAGS=-static"
+        else ""
+      }
+                            --with${
+        if static == true || popt == null
+        then ""
+        else "out"
+      }-included-popt
+                            --with${
+        if avahi != null
+        then ""
+        else "out"
+      }-avahi
+                            --with${
+        if gtk3 != null
+        then ""
+        else "out"
+      }-gtk
                             --without-gnome
                             --enable-rfc2553
                             --disable-Werror   # a must on gcc 4.6
@@ -49,26 +82,26 @@ let
       #
       # extraConfig is meant to be sh lines exporting environment
       # variables like DISTCC_HOSTS, DISTCC_DIR, ...
-      links = extraConfig: (runCommand "distcc-links" { passthru.gcc = gcc.cc; }
-        ''
-          mkdir -p $out/bin
-          if [ -x "${gcc.cc}/bin/gcc" ]; then
-            cat > $out/bin/gcc << EOF
-            #!${runtimeShell}
-            ${extraConfig}
-            exec ${distcc}/bin/distcc gcc "\$@"
-          EOF
-            chmod +x $out/bin/gcc
-          fi
-          if [ -x "${gcc.cc}/bin/g++" ]; then
-            cat > $out/bin/g++ << EOF
-            #!${runtimeShell}
-            ${extraConfig}
-            exec ${distcc}/bin/distcc g++ "\$@"
-          EOF
-            chmod +x $out/bin/g++
-          fi
-        '');
+      links = extraConfig: (runCommand "distcc-links" {passthru.gcc = gcc.cc;}
+      ''
+        mkdir -p $out/bin
+        if [ -x "${gcc.cc}/bin/gcc" ]; then
+          cat > $out/bin/gcc << EOF
+          #!${runtimeShell}
+          ${extraConfig}
+          exec ${distcc}/bin/distcc gcc "\$@"
+        EOF
+          chmod +x $out/bin/gcc
+        fi
+        if [ -x "${gcc.cc}/bin/g++" ]; then
+          cat > $out/bin/g++ << EOF
+          #!${runtimeShell}
+          ${extraConfig}
+          exec ${distcc}/bin/distcc g++ "\$@"
+        EOF
+          chmod +x $out/bin/g++
+        fi
+      '');
     };
 
     meta = {
@@ -77,7 +110,7 @@ let
       license = "GPL";
 
       platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ anderspapitto ];
+      maintainers = with lib.maintainers; [anderspapitto];
     };
   };
 in

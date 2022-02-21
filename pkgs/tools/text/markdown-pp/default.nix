@@ -1,12 +1,12 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "MarkdownPP";
   version = "1.5.1";
-  propagatedBuildInputs = with python3.pkgs; [ pillow watchdog ];
+  propagatedBuildInputs = with python3.pkgs; [pillow watchdog];
   checkPhase = ''
     cd test
     PATH=$out/bin:$PATH ${python3}/bin/${python3.executable} test.py
@@ -21,6 +21,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Preprocessor for Markdown files to generate a table of contents and other documentation needs";
     license = licenses.mit;
     homepage = "https://github.com/jreese/markdown-pp";
-    maintainers = with maintainers; [ zgrannan ];
+    maintainers = with maintainers; [zgrannan];
   };
 }

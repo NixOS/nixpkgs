@@ -1,17 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation {
   pname = "check-uptime";
   version = "20161112";
 
   src = fetchFromGitHub {
-    owner  = "madrisan";
-    repo   = "nagios-plugins-uptime";
-    rev    = "51822dacd1d404b3eabf3b4984c64b2475ed6f3b";
+    owner = "madrisan";
+    repo = "nagios-plugins-uptime";
+    rev = "51822dacd1d404b3eabf3b4984c64b2475ed6f3b";
     sha256 = "18q9ibzqn97dsyr9xs3w9mqk80nmmfw3kcjidrdsj542amlsycyk";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   enableParallelBuilding = true;
 
@@ -19,8 +23,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Uptime check plugin for Sensu/Nagios/others";
-    homepage    = "https://github.com/madrisan/nagios-plugins-uptime";
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    homepage = "https://github.com/madrisan/nagios-plugins-uptime";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [peterhoeg];
   };
 }

@@ -1,5 +1,9 @@
-{ fetchurl, lib, stdenv, ncurses }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "nmon";
   version = "16n";
@@ -9,14 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "1wpm2f30414b87kpbr9hbidblr5cmfby5skwqd0fkpi5v712q0f0";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
   dontUnpack = true;
   buildPhase = "${stdenv.cc.targetPrefix}cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D ${
     with stdenv.targetPlatform;
-    if isx86_32 || isx86_64 then "X86"
-    else if isAarch32 || isAarch64 then "ARM"
-    else if isPower then "POWER"
-    else "UNKNOWN"
+      if isx86_32 || isx86_64
+      then "X86"
+      else if isAarch32 || isAarch64
+      then "ARM"
+      else if isPower
+      then "POWER"
+      else "UNKNOWN"
   }";
   installPhase = ''
     mkdir -p $out/bin
@@ -28,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://nmon.sourceforge.net";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sveitser ];
+    maintainers = with maintainers; [sveitser];
   };
 }

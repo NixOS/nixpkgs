@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, perl, gettext, buildPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  gettext,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "texi2html";
   version = "5.0";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ gettext perl ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [gettext perl];
+  buildInputs = [perl];
 
   postPatch = ''
     patchShebangs separated_to_hash.pl
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Perl script which converts Texinfo source files to HTML output";
     homepage = "https://www.nongnu.org/texi2html/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.marcweber ];
+    maintainers = [maintainers.marcweber];
     platforms = platforms.unix;
   };
 }

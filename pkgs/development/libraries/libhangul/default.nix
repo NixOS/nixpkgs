@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libhangul";
   version = "0.1.0";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Core algorithm library for Korean input routines";
     homepage = "https://github.com/choehwanjin/libhangul";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.ianwookim ];
+    maintainers = [maintainers.ianwookim];
     platforms = platforms.linux;
   };
 }

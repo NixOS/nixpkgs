@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "sexpdata";
   version = "0.0.3";
@@ -19,5 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tkf/sexpdata";
     license = licenses.bsd0;
   };
-
 }

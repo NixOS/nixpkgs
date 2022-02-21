@@ -1,5 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub, qtbase, qtx11extras, qmake, pkg-config, boost }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qtbase,
+  qtx11extras,
+  qmake,
+  pkg-config,
+  boost,
+}:
 mkDerivation {
   pname = "twmn";
   version = "unstable-2018-10-01";
@@ -11,8 +19,8 @@ mkDerivation {
     sha256 = "0mpjvp800x07lp9i3hfcc5f4bqj1fj4w3dyr0zwaxc6wqmm0fdqz";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
-  buildInputs = [ qtbase qtx11extras boost ];
+  nativeBuildInputs = [pkg-config qmake];
+  buildInputs = [qtbase qtx11extras boost];
 
   postPatch = ''
     sed -i s/-Werror// twmnd/twmnd.pro
@@ -31,7 +39,7 @@ mkDerivation {
     description = "A notification system for tiling window managers";
     homepage = "https://github.com/sboli/twmn";
     platforms = with lib.platforms; linux;
-    maintainers = [ lib.maintainers.matejc ];
+    maintainers = [lib.maintainers.matejc];
     license = lib.licenses.lgpl3;
   };
 }

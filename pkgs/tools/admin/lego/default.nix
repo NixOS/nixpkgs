@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "lego";
   version = "4.6.0";
@@ -15,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/lego" ];
+  subPackages = ["cmd/lego"];
 
   ldflags = [
     "-X main.version=${version}"

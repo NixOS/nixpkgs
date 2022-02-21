@@ -1,8 +1,8 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "XStatic-Bootstrap";
   version = "4.5.3.1";
@@ -15,11 +15,10 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://getbootstrap.com";
     description = "Bootstrap packaged static files for python";
     license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
-
 }

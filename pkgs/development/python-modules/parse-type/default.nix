@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, parse
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  parse,
+  pytestCheckHook,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "parse-type";
   version = "0.5.6";
@@ -34,12 +34,12 @@ buildPythonPackage rec {
       --replace "--junit-xml=build/testing/report.xml" ""
   '';
 
-  pythonImportsCheck = [ "parse_type" ];
+  pythonImportsCheck = ["parse_type"];
 
   meta = with lib; {
     description = "Simplifies to build parse types based on the parse module";
     homepage = "https://github.com/jenisys/parse_type";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ alunduil ];
+    maintainers = with maintainers; [alunduil];
   };
 }

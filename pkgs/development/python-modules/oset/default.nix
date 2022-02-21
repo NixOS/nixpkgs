@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "oset";
   version = "0.1.3";
@@ -15,5 +18,4 @@ buildPythonPackage rec {
     description = "Ordered set";
     license = licenses.psfl;
   };
-
 }

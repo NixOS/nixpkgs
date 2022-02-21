@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "hyperion-py";
   version = "0.7.4";
@@ -46,12 +46,12 @@ buildPythonPackage rec {
       --replace " --timeout=9 --cov=hyperion" ""
   '';
 
-  pythonImportsCheck = [ "hyperion" ];
+  pythonImportsCheck = ["hyperion"];
 
   meta = with lib; {
     description = "Python package for Hyperion Ambient Lighting";
     homepage = "https://github.com/dermotduffy/hyperion-py";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

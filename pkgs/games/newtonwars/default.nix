@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, freeglut, libGLU, libGL }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  freeglut,
+  libGLU,
+  libGL,
+}:
 stdenv.mkDerivation {
   pname = "newtonwars";
   version = "20150609";
@@ -11,8 +18,8 @@ stdenv.mkDerivation {
     sha256 = "0g63fwfcdxxlnqlagj1fb8ngm385gmv8f7p8b4r1z5cny2znxdvs";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ freeglut libGL libGLU ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [freeglut libGL libGLU];
 
   patchPhase = ''
     sed -i "s;font24.raw;$out/share/font24.raw;g" display.c
@@ -33,7 +40,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A space battle game with gravity as the main theme";
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.linux;
     license = licenses.mit;
   };

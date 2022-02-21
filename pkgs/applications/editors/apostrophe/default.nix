@@ -1,58 +1,97 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja
-, wrapGAppsHook, pkg-config, desktop-file-utils
-, appstream-glib, pythonPackages, glib, gobject-introspection
-, gtk3, webkitgtk, glib-networking, gnome, gspell, texlive
-, shared-mime-info, libhandy, fira, sassc
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  wrapGAppsHook,
+  pkg-config,
+  desktop-file-utils,
+  appstream-glib,
+  pythonPackages,
+  glib,
+  gobject-introspection,
+  gtk3,
+  webkitgtk,
+  glib-networking,
+  gnome,
+  gspell,
+  texlive,
+  shared-mime-info,
+  libhandy,
+  fira,
+  sassc,
+}: let
+  pythonEnv = pythonPackages.python.withPackages (p:
+    with p; [
+      regex
+      setuptools
+      python-Levenshtein
+      pyenchant
+      pygobject3
+      pycairo
+      pypandoc
+      chardet
+    ]);
+in
+  stdenv.mkDerivation rec {
+    pname = "apostrophe";
+    version = "2.5";
 
-let
-  pythonEnv = pythonPackages.python.withPackages(p: with p; [
-    regex setuptools python-Levenshtein pyenchant
-    pygobject3 pycairo pypandoc chardet
-  ]);
+    src = fetchFromGitLab {
+      owner = "World";
+      repo = pname;
+      domain = "gitlab.gnome.org";
+      rev = "v${version}";
+      sha256 = "06yfiflmj3ip7ppcz41nb3xpgb5ggw5h74w0v87yaqqkq7qh31lp";
+    };
 
-in stdenv.mkDerivation rec {
-  pname = "apostrophe";
-  version = "2.5";
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
+      desktop-file-utils
+      appstream-glib
+      wrapGAppsHook
+      sassc
+    ];
 
-  src = fetchFromGitLab {
-    owner  = "World";
-    repo   = pname;
-    domain = "gitlab.gnome.org";
-    rev    = "v${version}";
-    sha256 = "06yfiflmj3ip7ppcz41nb3xpgb5ggw5h74w0v87yaqqkq7qh31lp";
-  };
+    buildInputs = [
+      glib
+      pythonEnv
+      gobject-introspection
+      gtk3
+      gnome.adwaita-icon-theme
+      webkitgtk
+      gspell
+      texlive
+      glib-networking
+      libhandy
+    ];
 
-  nativeBuildInputs = [ meson ninja pkg-config desktop-file-utils
-    appstream-glib wrapGAppsHook sassc ];
+    postPatch = ''
+      substituteInPlace data/media/css/web/base.css                                        \
+        --replace 'url("/app/share/fonts/FiraSans-Regular.ttf") format("ttf")'             \
+                  'url("${fira}/share/fonts/opentype/FiraSans-Regular.otf") format("otf")' \
+        --replace 'url("/app/share/fonts/FiraMono-Regular.ttf") format("ttf")'             \
+                  'url("${fira}/share/fonts/opentype/FiraMono-Regular.otf") format("otf")'
 
-  buildInputs = [ glib pythonEnv gobject-introspection gtk3
-    gnome.adwaita-icon-theme webkitgtk gspell texlive
-    glib-networking libhandy ];
+      patchShebangs --build build-aux/meson_post_install.py
+    '';
 
-  postPatch = ''
-    substituteInPlace data/media/css/web/base.css                                        \
-      --replace 'url("/app/share/fonts/FiraSans-Regular.ttf") format("ttf")'             \
-                'url("${fira}/share/fonts/opentype/FiraSans-Regular.otf") format("otf")' \
-      --replace 'url("/app/share/fonts/FiraMono-Regular.ttf") format("ttf")'             \
-                'url("${fira}/share/fonts/opentype/FiraMono-Regular.otf") format("otf")'
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
+        --prefix PATH : "${texlive}/bin"
+        --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      )
+    '';
 
-    patchShebangs --build build-aux/meson_post_install.py
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
-      --prefix PATH : "${texlive}/bin"
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-    )
-  '';
-
-  meta = with lib; {
-    homepage = "https://gitlab.gnome.org/World/apostrophe";
-    description = "A distraction free Markdown editor for GNU/Linux";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sternenseemann ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://gitlab.gnome.org/World/apostrophe";
+      description = "A distraction free Markdown editor for GNU/Linux";
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+      maintainers = [maintainers.sternenseemann];
+    };
+  }

@@ -1,27 +1,23 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.nfs.server;
 
   exports = pkgs.writeText "exports" cfg.exports;
-
-in
-
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "nfs" "lockdPort" ] [ "services" "nfs" "server" "lockdPort" ])
-    (mkRenamedOptionModule [ "services" "nfs" "statdPort" ] [ "services" "nfs" "server" "statdPort" ])
+    (mkRenamedOptionModule ["services" "nfs" "lockdPort"] ["services" "nfs" "server" "lockdPort"])
+    (mkRenamedOptionModule ["services" "nfs" "statdPort"] ["services" "nfs" "server" "statdPort"])
   ];
 
   ###### interface
 
   options = {
-
     services.nfs = {
-
       server = {
         enable = mkOption {
           type = types.bool;
@@ -103,18 +99,13 @@ in
             useful if the NFS server is behind a firewall.
           '';
         };
-
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     services.nfs.extraConfig = ''
       [nfsd]
       threads=${toString cfg.nproc}
@@ -128,48 +119,47 @@ in
       ${optionalString (cfg.statdPort != null) "port=${toString cfg.statdPort}"}
 
       [lockd]
-      ${optionalString (cfg.lockdPort != null) ''
-        port=${toString cfg.lockdPort}
-        udp-port=${toString cfg.lockdPort}
-      ''}
+      ${
+        optionalString (cfg.lockdPort != null) ''
+          port=${toString cfg.lockdPort}
+          udp-port=${toString cfg.lockdPort}
+        ''
+      }
     '';
 
     services.rpcbind.enable = true;
 
-    boot.supportedFilesystems = [ "nfs" ]; # needed for statd and idmapd
+    boot.supportedFilesystems = ["nfs"]; # needed for statd and idmapd
 
     environment.etc.exports.source = exports;
 
-    systemd.services.nfs-server =
-      { enable = true;
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.nfs-server = {
+      enable = true;
+      wantedBy = ["multi-user.target"];
 
-        preStart =
+      preStart = ''
+        mkdir -p /var/lib/nfs/v4recovery
+      '';
+    };
+
+    systemd.services.nfs-mountd = {
+      enable = true;
+      restartTriggers = [exports];
+
+      preStart = ''
+        mkdir -p /var/lib/nfs
+
+        ${
+          optionalString cfg.createMountPoints
           ''
-            mkdir -p /var/lib/nfs/v4recovery
-          '';
-      };
-
-    systemd.services.nfs-mountd =
-      { enable = true;
-        restartTriggers = [ exports ];
-
-        preStart =
+            # create export directories:
+            # skip comments, take first col which may either be a quoted
+            # "foo bar" or just foo (-> man export)
+            sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+            | xargs -d '\n' mkdir -p
           ''
-            mkdir -p /var/lib/nfs
-
-            ${optionalString cfg.createMountPoints
-              ''
-                # create export directories:
-                # skip comments, take first col which may either be a quoted
-                # "foo bar" or just foo (-> man export)
-                sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
-                | xargs -d '\n' mkdir -p
-              ''
-            }
-          '';
-      };
-
+        }
+      '';
+    };
   };
-
 }

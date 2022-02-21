@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  bison,
+  flex,
+  rdma-core,
+}:
 stdenv.mkDerivation rec {
   pname = "opensm";
   version = "3.3.24";
@@ -11,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/bqo5r9pVt7vg29xaRRO/9k21AMlmoe2327Ot5gVIwc=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool bison flex ];
+  nativeBuildInputs = [autoconf automake libtool bison flex];
 
-  buildInputs = [ rdma-core ];
+  buildInputs = [rdma-core];
 
   preConfigure = ''
     patchShebangs ./autogen.sh
@@ -26,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Infiniband subnet manager";
     homepage = "https://www.openfabrics.org/";
     license = licenses.gpl2; # dual licensed as 2-clause BSD
-    maintainers = [ maintainers.aij ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.aij];
+    platforms = ["x86_64-linux"];
   };
 }

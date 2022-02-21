@@ -1,78 +1,93 @@
-{ stdenv, lib, writeText, fetchurl, upx, libGLU, glib, gtk2, alsa-lib, libSM, libX11, gdk-pixbuf, pango, libXinerama, mpg123, runtimeShell }:
+{
+  stdenv,
+  lib,
+  writeText,
+  fetchurl,
+  upx,
+  libGLU,
+  glib,
+  gtk2,
+  alsa-lib,
+  libSM,
+  libX11,
+  gdk-pixbuf,
+  pango,
+  libXinerama,
+  mpg123,
+  runtimeShell,
+}: let
+  libPath = lib.makeLibraryPath [stdenv.cc.cc libGLU glib gtk2 alsa-lib libSM libX11 gdk-pixbuf pango libXinerama];
+in
+  stdenv.mkDerivation {
+    pname = "kega-fusion";
+    version = "3.63x";
 
-let
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc libGLU glib gtk2 alsa-lib libSM libX11 gdk-pixbuf pango libXinerama ];
+    src = fetchurl {
+      url = "http://www.carpeludum.com/download/Fusion363x.tar.gz";
+      sha256 = "14s6czy20h5khyy7q95hd7k77v17ssafv9l6lafkiysvj2nmw94g";
+    };
 
-in stdenv.mkDerivation {
-  pname = "kega-fusion";
-  version = "3.63x";
+    plugins = fetchurl {
+      url = "http://www.carpeludum.com/download/PluginsLinux.tar.gz";
+      sha256 = "0d623cvh6n5ijj3wb64g93mxx2xbichsn7hj7brbb0ndw5cs70qj";
+    };
 
-  src = fetchurl {
-    url = "http://www.carpeludum.com/download/Fusion363x.tar.gz";
-    sha256 = "14s6czy20h5khyy7q95hd7k77v17ssafv9l6lafkiysvj2nmw94g";
-  };
+    runner = writeText "kega-fusion" ''
+      #!${runtimeShell} -ex
 
-  plugins = fetchurl {
-    url = "http://www.carpeludum.com/download/PluginsLinux.tar.gz";
-    sha256 = "0d623cvh6n5ijj3wb64g93mxx2xbichsn7hj7brbb0ndw5cs70qj";
-  };
+      kega_libdir="@out@/lib/kega-fusion"
+      kega_localdir="$HOME/.Kega Fusion"
 
-  runner = writeText "kega-fusion" ''
-    #!${runtimeShell} -ex
+      # create local plugins directory if not present
+      mkdir -p "$kega_localdir/Plugins"
 
-    kega_libdir="@out@/lib/kega-fusion"
-    kega_localdir="$HOME/.Kega Fusion"
+      # create links for every included plugin
+      if [ $(ls -1A $kega_libdir/plugins | wc -l) -gt 0 ]; then
+        for i in $kega_libdir/plugins/*; do
+          if [ ! -e "$kega_localdir/Plugins/$(basename "$i")" ]; then
+            ln -sf "$i" "$kega_localdir/Plugins/"
+          fi
+        done
+      fi
 
-    # create local plugins directory if not present
-    mkdir -p "$kega_localdir/Plugins"
+      # copy configuration file if not present
+      if ! [ -f "$kega_localdir/Fusion.ini" ]; then
+        cat > "$kega_localdir/Fusion.ini" <<EOF
+      ALSADeviceName=default
+      libmpg123path=${lib.getLib mpg123}/lib/libmpg123.so.0
+      EOF
+      else
+        sed -i 's,^\(libmpg123path=\).*,\1${lib.getLib mpg123}/lib/libmpg123.so.0,' "$kega_localdir/Fusion.ini"
+      fi
 
-    # create links for every included plugin
-    if [ $(ls -1A $kega_libdir/plugins | wc -l) -gt 0 ]; then
-      for i in $kega_libdir/plugins/*; do
-        if [ ! -e "$kega_localdir/Plugins/$(basename "$i")" ]; then
-          ln -sf "$i" "$kega_localdir/Plugins/"
-        fi
-      done
-    fi
+      # here we go!
+      exec "$kega_libdir/Fusion" "$@"
+    '';
 
-    # copy configuration file if not present
-    if ! [ -f "$kega_localdir/Fusion.ini" ]; then
-      cat > "$kega_localdir/Fusion.ini" <<EOF
-    ALSADeviceName=default
-    libmpg123path=${lib.getLib mpg123}/lib/libmpg123.so.0
-    EOF
-    else
-      sed -i 's,^\(libmpg123path=\).*,\1${lib.getLib mpg123}/lib/libmpg123.so.0,' "$kega_localdir/Fusion.ini"
-    fi
+    dontStrip = true;
+    dontPatchELF = true;
 
-    # here we go!
-    exec "$kega_libdir/Fusion" "$@"
-  '';
+    nativeBuildInputs = [upx];
 
-  dontStrip = true;
-  dontPatchELF = true;
+    installPhase = ''
+      upx -d Fusion
+      install -Dm755 Fusion "$out/lib/kega-fusion/Fusion"
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}" "$out/lib/kega-fusion/Fusion"
 
-  nativeBuildInputs = [ upx ];
+      tar -xaf $plugins
+      mkdir -p "$out/lib/kega-fusion/plugins"
+      cp -r Plugins/*.rpi "$out/lib/kega-fusion/plugins"
 
-  installPhase = ''
-    upx -d Fusion
-    install -Dm755 Fusion "$out/lib/kega-fusion/Fusion"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}" "$out/lib/kega-fusion/Fusion"
+      mkdir -p "$out/bin"
+      substitute "$runner" "$out/bin/kega-fusion" --subst-var out
+      chmod +x "$out/bin/kega-fusion"
+    '';
 
-    tar -xaf $plugins
-    mkdir -p "$out/lib/kega-fusion/plugins"
-    cp -r Plugins/*.rpi "$out/lib/kega-fusion/plugins"
-
-    mkdir -p "$out/bin"
-    substitute "$runner" "$out/bin/kega-fusion" --subst-var out
-    chmod +x "$out/bin/kega-fusion"
-  '';
-
-  meta = with lib; {
-    description = "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
-    homepage = "https://www.carpeludum.com/kega-fusion/";
-    maintainers = with maintainers; [ abbradar ];
-    license = licenses.unfreeRedistributable;
-    platforms = [ "i686-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
+      homepage = "https://www.carpeludum.com/kega-fusion/";
+      maintainers = with maintainers; [abbradar];
+      license = licenses.unfreeRedistributable;
+      platforms = ["i686-linux"];
+    };
+  }

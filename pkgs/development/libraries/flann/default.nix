@@ -1,15 +1,15 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, lz4
-, pkg-config
-, python3
-, stdenv
-, unzip
-, enablePython ? false
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  lz4,
+  pkg-config,
+  python3,
+  stdenv,
+  unzip,
+  enablePython ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "flann";
   version = "1.9.1";
@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_EXAMPLES:BOOL=OFF"
     "-DBUILD_TESTS:BOOL=OFF"
     "-DBUILD_MATLAB_BINDINGS:BOOL=OFF"
-    "-DBUILD_PYTHON_BINDINGS:BOOL=${if enablePython then "ON" else "OFF"}"
+    "-DBUILD_PYTHON_BINDINGS:BOOL=${
+      if enablePython
+      then "ON"
+      else "OFF"
+    }"
   ];
 
   nativeBuildInputs = [
@@ -57,9 +61,9 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  propagatedBuildInputs = [ lz4 ];
+  propagatedBuildInputs = [lz4];
 
-  buildInputs = lib.optionals enablePython [ python3 ];
+  buildInputs = lib.optionals enablePython [python3];
 
   meta = {
     homepage = "https://github.com/flann-lib/flann";

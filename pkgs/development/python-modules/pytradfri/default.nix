@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiocoap
-, dtlssocket
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiocoap,
+  dtlssocket,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytradfri";
   version = "9.0.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";
     homepage = "https://github.com/home-assistant-libs/pytradfri";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,11 +1,15 @@
-{ lib, stdenv, fetchurl, memstreamHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  memstreamHook,
+}:
 stdenv.mkDerivation rec {
   pname = "hyx";
   version = "2021.06.09";
 
   src = fetchurl {
-    url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings [ "-" ] [ "." ] version}.tar.xz";
+    url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings ["-"] ["."] version}.tar.xz";
     sha256 = "sha256-jU8U5YWE1syPBOQ8o4BC7tIYiCo4kknCCwhnMCVtpes=";
   };
 
@@ -24,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "minimalistic but powerful Linux console hex editor";
     homepage = "https://yx7.cc/code/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
     platforms = with platforms; linux ++ darwin;
   };
 }

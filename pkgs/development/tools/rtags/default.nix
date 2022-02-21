@@ -1,12 +1,22 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkg-config }:
-
+{
+  stdenv,
+  lib,
+  fetchgit,
+  cmake,
+  llvmPackages,
+  openssl,
+  apple_sdk,
+  emacs,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "rtags";
   version = "2.38";
-  nativeBuildInputs = [ cmake pkg-config llvmPackages.llvm.dev ];
-  buildInputs = [ llvmPackages.llvm llvmPackages.libclang openssl emacs ]
-    ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
-    ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
+  nativeBuildInputs = [cmake pkg-config llvmPackages.llvm.dev];
+  buildInputs =
+    [llvmPackages.llvm llvmPackages.libclang openssl emacs]
+    ++ lib.optionals stdenv.cc.isGNU [llvmPackages.clang-unwrapped]
+    ++ lib.optionals stdenv.isDarwin [apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices];
 
   src = fetchgit {
     rev = "refs/tags/v${version}";

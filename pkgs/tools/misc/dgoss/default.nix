@@ -1,13 +1,13 @@
-{ lib
-, fetchFromGitHub
-, resholvePackage
-, substituteAll
-, bash
-, coreutils
-, goss
-, which
+{
+  lib,
+  fetchFromGitHub,
+  resholvePackage,
+  substituteAll,
+  bash,
+  coreutils,
+  goss,
+  which,
 }:
-
 resholvePackage rec {
   pname = "dgoss";
   version = "0.3.16";
@@ -29,11 +29,11 @@ resholvePackage rec {
 
   solutions = {
     default = {
-      scripts = [ "bin/dgoss" ];
+      scripts = ["bin/dgoss"];
       interpreter = "${bash}/bin/bash";
-      inputs = [ coreutils which ];
+      inputs = [coreutils which];
       fake = {
-        external = [ "docker" ];
+        external = ["docker"];
       };
     };
   };
@@ -43,6 +43,6 @@ resholvePackage rec {
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual ];
+    maintainers = with maintainers; [hyzual];
   };
 }

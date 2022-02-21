@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, which, diffutils, gnupatch, gnutar }:
-
+{
+  stdenv,
+  fetchurl,
+  which,
+  diffutils,
+  gnupatch,
+  gnutar,
+}:
 stdenv.mkDerivation rec {
   pname = "tla";
   version = "1.3.5";
@@ -9,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "01mfzj1i6p4s8191cgd5850hds1zls88hkf9rb6qx1vqjv585aj0";
   };
 
-  patches = [ ./configure-tmpdir.patch ];
+  patches = [./configure-tmpdir.patch];
 
-  buildInputs = [ which ];
+  buildInputs = [which];
 
-  propagatedBuildInputs = [ diffutils gnupatch gnutar ];
+  propagatedBuildInputs = [diffutils gnupatch gnutar];
 
   # Instead of GNU Autoconf, tla uses Tom Lord's now
   # defunct `package-framework'.

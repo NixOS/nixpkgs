@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paramiko
-, selectors2
-, lxml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paramiko,
+  selectors2,
+  lxml,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "ncclient";
   version = "0.6.12";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ncclient" ];
+  pythonImportsCheck = ["ncclient"];
 
   meta = with lib; {
     homepage = "https://github.com/ncclient/ncclient";
     description = "Python library for NETCONF clients";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xnaveira ];
+    maintainers = with maintainers; [xnaveira];
   };
 }

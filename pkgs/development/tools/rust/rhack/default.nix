@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rhack";
   version = "0.1.0";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Temporary edit external crates that your project depends on";
     homepage = "https://github.com/nakabonne/rhack";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

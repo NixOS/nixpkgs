@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "croaring";
   version = "0.2.61";
@@ -16,13 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "1y2mbn4i8lj3lkn5s8zziyr9pl1fq9hndzz9c01dkv3s8sn7f55s";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "Compressed bitset library for C and C++";
     homepage = "http://roaringbitmap.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.all;
   };
 }

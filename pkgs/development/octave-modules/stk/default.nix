@@ -1,8 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
-
 buildOctavePackage rec {
   pname = "stk";
   version = "2.6.1";
@@ -15,7 +15,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/stk/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "STK is a (not so) Small Toolbox for Kriging";
     longDescription = ''
       The STK is a (not so) Small Toolbox for Kriging. Its primary focus is on

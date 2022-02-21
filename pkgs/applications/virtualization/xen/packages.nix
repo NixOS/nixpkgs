@@ -1,10 +1,6 @@
-{ callPackage
-
-}:
-
+{callPackage}:
 # TODO(@oxij) on new Xen version: generalize this to generate [vanilla slim
 # light] for each ./<version>.nix.
-
 rec {
   xen_4_10-vanilla = callPackage ./4.10.nix {
     meta = {
@@ -55,5 +51,4 @@ rec {
   xen-vanilla = xen_4_10-vanilla;
   xen-slim = xen_4_10-slim;
   xen-light = xen_4_10-light;
-
 }

@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, erlangR22
+{
+  lib,
+  stdenv,
+  fetchurl,
+  erlangR22,
 }:
-
 stdenv.mkDerivation rec {
   pname = "asls";
   version = "0.5.1";
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "05kp44p4q4sdykfw0b4k9j3qdp0qvwgjbs48ncmnd0ass0xrmi3s";
   };
 
-  buildInputs = [ erlangR22 ];
+  buildInputs = [erlangR22];
   installPhase = "install -Dm755 -t $out/bin asls";
 
   meta = with lib; {
@@ -20,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/saulecabrera/asls";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ saulecabrera ];
+    maintainers = with maintainers; [saulecabrera];
   };
 }

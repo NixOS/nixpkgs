@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, djangorestframework, python, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  djangorestframework,
+  python,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "django-filter";
   version = "21.1";
@@ -14,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-YyolH6jxqttLjM7/kyu1L+L4Jt19/n8+rEDlxGPWg24=";
   };
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [django];
 
   pythonImportsCheck = [
     "django_filters"
@@ -39,6 +41,6 @@ buildPythonPackage rec {
     description = "Reusable Django application for allowing users to filter querysets dynamically";
     homepage = "https://pypi.org/project/django-filter/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ mmai ];
+    maintainers = with maintainers; [mmai];
   };
 }

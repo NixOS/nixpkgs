@@ -1,32 +1,34 @@
-{ config, lib, pkgs, utils, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}: let
   cfg = config.virtualisation.containers;
 
   inherit (lib) literalExpression mkOption types;
 
-  toml = pkgs.formats.toml { };
-in
-{
+  toml = pkgs.formats.toml {};
+in {
   meta = {
     maintainers = [] ++ lib.teams.podman.members;
   };
 
-
   imports = [
     (
       lib.mkRemovedOptionModule
-      [ "virtualisation" "containers" "users" ]
+      ["virtualisation" "containers" "users"]
       "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
     )
     (
       lib.mkRemovedOptionModule
-      [ "virtualisation" "containers" "containersConf" "extraConfig" ]
+      ["virtualisation" "containers" "containersConf" "extraConfig"]
       "Use virtualisation.containers.containersConf.settings instead."
     )
   ];
 
   options.virtualisation.containers = {
-
     enable =
       mkOption {
         type = types.bool;
@@ -44,7 +46,7 @@ in
 
     containersConf.settings = mkOption {
       type = toml.type;
-      default = { };
+      default = {};
       description = "containers.conf configuration";
     };
 
@@ -80,7 +82,7 @@ in
     registries = {
       search = mkOption {
         type = types.listOf types.str;
-        default = [ "docker.io" "quay.io" ];
+        default = ["docker.io" "quay.io"];
         description = ''
           List of repositories to search.
         '';
@@ -122,20 +124,20 @@ in
         <literal>skopeo</literal> will be used.
       '';
     };
-
   };
 
   config = lib.mkIf cfg.enable {
-
-    virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
+    virtualisation.containers.containersConf.cniPlugins = [pkgs.cni-plugins];
 
     virtualisation.containers.containersConf.settings = {
       network.cni_plugin_dirs = map (p: "${lib.getBin p}/bin") cfg.containersConf.cniPlugins;
-      engine = {
-        init_path = "${pkgs.catatonit}/bin/catatonit";
-      } // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
-        hooks_dir = [ config.boot.kernelPackages.oci-seccomp-bpf-hook ];
-      };
+      engine =
+        {
+          init_path = "${pkgs.catatonit}/bin/catatonit";
+        }
+        // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
+          hooks_dir = [config.boot.kernelPackages.oci-seccomp-bpf-hook];
+        };
     };
 
     environment.etc."containers/containers.conf".source =
@@ -145,12 +147,12 @@ in
       toml.generate "storage.conf" cfg.storage.settings;
 
     environment.etc."containers/registries.conf".source = toml.generate "registries.conf" {
-      registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
+      registries = lib.mapAttrs (n: v: {registries = v;}) cfg.registries;
     };
 
     environment.etc."containers/policy.json".source =
-      if cfg.policy != {} then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
+      if cfg.policy != {}
+      then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
       else utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
   };
-
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "pamela";
   version = "1.0.0";
@@ -26,5 +26,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/minrk/pamela";
     license = licenses.mit;
   };
-
 }

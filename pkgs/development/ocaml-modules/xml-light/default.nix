@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-xml-light";
   version = "2.4";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2txmkl/ZN5RGaLQJmr+orqwB4CbFk2RpLJd4gr7kPiE=";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ocaml findlib];
 
   createFindlibDestdir = true;
 
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://tech.motion-twin.com/xmllight.html";
     license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.romildo ];
+    maintainers = [lib.maintainers.romildo];
     inherit (ocaml.meta) platforms;
   };
 }

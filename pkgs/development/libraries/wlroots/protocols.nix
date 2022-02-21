@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, wayland-scanner }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  wayland-scanner,
+}:
 stdenv.mkDerivation rec {
   pname = "wlr-protocols";
   version = "unstable-2021-11-01";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vw8b10d1pwsj6f4sr3imvwsy55d3435sp068sj4hdszkxc6axsr";
   };
 
-  checkInputs = [ wayland-scanner ];
+  checkInputs = [wayland-scanner];
 
   patchPhase = ''
     substituteInPlace wlr-protocols.pc.in \
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     make check
   '';
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  installFlags = ["DESTDIR=$(out)" "PREFIX="];
 
   meta = with lib; {
     description = "Wayland roots protocol extensions";
@@ -39,9 +43,9 @@ stdenv.mkDerivation rec {
       extend the functionality of some other protocol either in Wayland core,
       or some other protocol in wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
-    license     = licenses.mit; # See file headers
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ twitchyliquid64 ];
+    homepage = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
+    license = licenses.mit; # See file headers
+    platforms = platforms.linux;
+    maintainers = with maintainers; [twitchyliquid64];
   };
 }

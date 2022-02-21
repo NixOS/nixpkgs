@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pythonOlder
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  poetry-core,
+  pythonOlder,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "elmax";
   version = "0.1.5";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "sha256-EcYEpYv+EwwEfW8Sy7aQjFAPpmsA6qVbmlwrPdxdnEw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [poetry-core];
 
   propagatedBuildInputs = [
     httpx
@@ -36,12 +36,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "elmax" ];
+  pythonImportsCheck = ["elmax"];
 
   meta = with lib; {
     description = "Python API client for the Elmax Cloud services";
     homepage = "https://github.com/home-assistant-ecosystem/python-elmax";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, unzip, flex, tk, ncurses, readline }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  flex,
+  tk,
+  ncurses,
+  readline,
+}:
 stdenv.mkDerivation {
   pname = "lc3tools";
   version = "0.12";
@@ -21,8 +29,8 @@ stdenv.mkDerivation {
     ./0003-lc3sim-tk-path.patch
   ];
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ flex tk ncurses readline ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [flex tk ncurses readline];
 
   # lumetta published this a while ago but handrolled his configure
   # jank in the original packaging makes this necessary:
@@ -42,6 +50,6 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Toolchain and emulator for the LC-3 architecture";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ anna328p ];
+    maintainers = with maintainers; [anna328p];
   };
 }

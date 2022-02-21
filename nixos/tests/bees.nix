@@ -1,19 +1,28 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
-{
+import ./make-test-python.nix ({
+  lib,
+  pkgs,
+  ...
+}: {
   name = "bees";
 
-  machine = { config, pkgs, ... }: {
+  machine = {
+    config,
+    pkgs,
+    ...
+  }: {
     boot.initrd.postDeviceCommands = ''
       ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux1 /dev/vdb
       ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux2 /dev/vdc
     '';
-    virtualisation.emptyDiskImages = [ 4096 4096 ];
+    virtualisation.emptyDiskImages = [4096 4096];
     virtualisation.fileSystems = {
-      "/aux1" = { # filesystem configured to be deduplicated
+      "/aux1" = {
+        # filesystem configured to be deduplicated
         device = "/dev/disk/by-label/aux1";
         fsType = "btrfs";
       };
-      "/aux2" = { # filesystem not configured to be deduplicated
+      "/aux2" = {
+        # filesystem not configured to be deduplicated
         device = "/dev/disk/by-label/aux2";
         fsType = "btrfs";
       };
@@ -27,11 +36,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     };
   };
 
-  testScript =
-  let
-    someContentIsShared = loc: pkgs.writeShellScript "some-content-is-shared" ''
-      [[ $(btrfs fi du -s --raw ${lib.escapeShellArg loc}/dedup-me-{1,2} | awk 'BEGIN { count=0; } NR>1 && $3 == 0 { count++ } END { print count }') -eq 0 ]]
-    '';
+  testScript = let
+    someContentIsShared = loc:
+      pkgs.writeShellScript "some-content-is-shared" ''
+        [[ $(btrfs fi du -s --raw ${lib.escapeShellArg loc}/dedup-me-{1,2} | awk 'BEGIN { count=0; } NR>1 && $3 == 0 { count++ } END { print count }') -eq 0 ]]
+      '';
   in ''
     # shut down the instance started by systemd at boot, so we can test our test procedure
     machine.succeed("systemctl stop beesd@aux1.service")

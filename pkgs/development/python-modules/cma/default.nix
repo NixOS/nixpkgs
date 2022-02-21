@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "cma";
   version = "3.1.0";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "CMA-ES, Covariance Matrix Adaptation Evolution Strategy for non-linear numerical optimization in Python";
     homepage = "https://github.com/CMA-ES/pycma";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

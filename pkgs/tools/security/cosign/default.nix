@@ -1,5 +1,15 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true, pkcs11Support ? true }:
-
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pcsclite,
+  pkg-config,
+  installShellFiles,
+  PCSC,
+  pivKeySupport ? true,
+  pkcs11Support ? true,
+}:
 buildGoModule rec {
   pname = "cosign";
   version = "1.5.2";
@@ -11,18 +21,19 @@ buildGoModule rec {
     sha256 = "sha256-37jahAGgQn7HwwdRTlAS/oJQ3BxTkMViI6iJMBYFgjI=";
   };
 
-  buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
-    ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
+  buildInputs =
+    lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
+    ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [PCSC];
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [pkg-config installShellFiles];
 
   vendorSha256 = "sha256-d3aOX4iMlhlxgYbqCHCIFKXunVha0Fw4ZBmy4OA6EhI=";
 
   excludedPackages = "\\(sample\\|webhook\\|help\\)";
 
-  tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
+  tags = [] ++ lib.optionals pivKeySupport ["pivkey"] ++ lib.optionals pkcs11Support ["pkcs11key"];
 
-  ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/pkg/version.GitVersion=v${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/sigstore/cosign/pkg/version.GitVersion=v${version}"];
 
   postPatch = ''
     rm pkg/cosign/tuf/client_test.go # Require network access
@@ -47,6 +58,6 @@ buildGoModule rec {
     changelog = "https://github.com/sigstore/cosign/releases/tag/v${version}";
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse jk ];
+    maintainers = with maintainers; [lesuisse jk];
   };
 }

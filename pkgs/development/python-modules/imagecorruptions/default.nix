@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, fetchPypi
-, numpy
-, scikitimage
-, lib
-, opencv3
+{
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scikitimage,
+  lib,
+  opencv3,
 }:
-
 buildPythonPackage rec {
   pname = "imagecorruptions";
   version = "1.1.2";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
   ];
 
   doCheck = false;
-  pythonImportsCheck = [ "imagecorruptions" ];
+  pythonImportsCheck = ["imagecorruptions"];
 
   meta = with lib; {
     homepage = "https://github.com/bethgelab/imagecorruptions";
     description = "This package provides a set of image corruptions";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rakesh4g ];
+    maintainers = with maintainers; [rakesh4g];
   };
 }

@@ -1,9 +1,19 @@
-{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
-, bundlerEnv, pkg-config
-# libgit2 + dependencies
-, libgit2, openssl, zlib, pcre, http-parser }:
-
-let
+{
+  lib,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  buildGoModule,
+  ruby,
+  bundlerEnv,
+  pkg-config
+  # libgit2 + dependencies
+  ,
+  libgit2,
+  openssl,
+  zlib,
+  pcre,
+  http-parser,
+}: let
   # git2go 32.0.5 does not support libgit2 1.2.0 or 1.3.0.
   # It needs a specific commit in between those two releases.
   libgit2_custom = libgit2.overrideAttrs (oldAttrs: rec {
@@ -28,44 +38,43 @@ let
   version = "14.7.2";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
 in
+  buildGoModule {
+    pname = "gitaly";
+    inherit version;
 
-buildGoModule {
-  pname = "gitaly";
-  inherit version;
+    src = fetchFromGitLab {
+      owner = "gitlab-org";
+      repo = "gitaly";
+      rev = "v${version}";
+      sha256 = "sha256-gtQmRryTYwT2e4lamWYJ7Ri7dEGI7vg/Ir1gnuGmHQg=";
+    };
 
-  src = fetchFromGitLab {
-    owner = "gitlab-org";
-    repo = "gitaly";
-    rev = "v${version}";
-    sha256 = "sha256-gtQmRryTYwT2e4lamWYJ7Ri7dEGI7vg/Ir1gnuGmHQg=";
-  };
+    vendorSha256 = "sha256-eapqtSstc7d3R7A/5krKV0uVr9GhGkHHMrmsBOpWAbo=";
 
-  vendorSha256 = "sha256-eapqtSstc7d3R7A/5krKV0uVr9GhGkHHMrmsBOpWAbo=";
+    passthru = {
+      inherit rubyEnv;
+    };
 
-  passthru = {
-    inherit rubyEnv;
-  };
+    ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
 
-  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+    tags = ["static,system_libgit2"];
+    nativeBuildInputs = [pkg-config];
+    buildInputs = [rubyEnv.wrappedRuby libgit2_custom openssl zlib pcre http-parser];
+    doCheck = false;
 
-  tags = [ "static,system_libgit2" ];
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2_custom openssl zlib pcre http-parser ];
-  doCheck = false;
+    postInstall = ''
+      mkdir -p $ruby
+      cp -rv $src/ruby/{bin,lib,proto,git-hooks} $ruby
+      mv $out/bin/gitaly-git2go $out/bin/gitaly-git2go-${version}
+    '';
 
-  postInstall = ''
-    mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib,proto,git-hooks} $ruby
-    mv $out/bin/gitaly-git2go $out/bin/gitaly-git2go-${version}
-  '';
+    outputs = ["out" "ruby"];
 
-  outputs = [ "out" "ruby" ];
-
-  meta = with lib; {
-    homepage = "https://gitlab.com/gitlab-org/gitaly";
-    description = "A Git RPC service for handling all the git calls made by GitLab";
-    platforms = platforms.linux ++ [ "x86_64-darwin" ];
-    maintainers = with maintainers; [ roblabla globin fpletz talyz ];
-    license = licenses.mit;
-  };
-}
+    meta = with lib; {
+      homepage = "https://gitlab.com/gitlab-org/gitaly";
+      description = "A Git RPC service for handling all the git calls made by GitLab";
+      platforms = platforms.linux ++ ["x86_64-darwin"];
+      maintainers = with maintainers; [roblabla globin fpletz talyz];
+      license = licenses.mit;
+    };
+  }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bzip2, libtomcrypt, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bzip2,
+  libtomcrypt,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "StormLib";
   version = "9.22";
@@ -16,14 +23,14 @@ stdenv.mkDerivation rec {
     "-DWITH_LIBTOMCRYPT=ON"
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ bzip2 libtomcrypt zlib ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [bzip2 libtomcrypt zlib];
 
   meta = with lib; {
     homepage = "https://github.com/ladislav-zezula/StormLib";
     license = licenses.mit;
     description = "An open-source project that can work with Blizzard MPQ archives";
     platforms = platforms.all;
-    maintainers = with maintainers; [ aanderse karolchmist ];
+    maintainers = with maintainers; [aanderse karolchmist];
   };
 }

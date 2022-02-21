@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "eternalegypt";
   version = "0.0.13";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "eternalegypt" ];
+  pythonImportsCheck = ["eternalegypt"];
 
   meta = with lib; {
     description = "Python API for Netgear LTE modems";
     homepage = "https://github.com/amelchio/eternalegypt";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

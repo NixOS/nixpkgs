@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "novnc";
   version = "1.3.0";
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "VNC client web application";
     homepage = "https://novnc.com";
-    license = with licenses; [ mpl20 ofl bsd3 bsd2 mit ];
-    maintainers = with maintainers; [ neverbehave ];
+    license = with licenses; [mpl20 ofl bsd3 bsd2 mit];
+    maintainers = with maintainers; [neverbehave];
   };
 }

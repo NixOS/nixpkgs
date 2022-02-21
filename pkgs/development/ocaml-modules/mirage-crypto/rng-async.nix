@@ -1,8 +1,12 @@
-{ lib, buildDunePackage
-, mirage-crypto, mirage-crypto-rng
-, dune-configurator, async, logs
+{
+  lib,
+  buildDunePackage,
+  mirage-crypto,
+  mirage-crypto-rng,
+  dune-configurator,
+  async,
+  logs,
 }:
-
 buildDunePackage {
   pname = "mirage-crypto-rng-async";
 
@@ -19,7 +23,9 @@ buildDunePackage {
     mirage-crypto-rng
   ];
 
-  meta = mirage-crypto.meta // {
-    description = "Feed the entropy source in an Async-friendly way";
-  };
+  meta =
+    mirage-crypto.meta
+    // {
+      description = "Feed the entropy source in an Async-friendly way";
+    };
 }

@@ -1,5 +1,8 @@
-{ buildPythonPackage, fetchPypi, lib }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+}:
 buildPythonPackage rec {
   pname = "teletype";
   version = "1.1.0";
@@ -11,12 +14,12 @@ buildPythonPackage rec {
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "teletype" ];
+  pythonImportsCheck = ["teletype"];
 
   meta = with lib; {
     description = "A high-level cross platform tty library";
     homepage = "https://github.com/jkwill87/teletype";
     license = licenses.mit;
-    maintainers = with maintainers; [ urlordjames ];
+    maintainers = with maintainers; [urlordjames];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, bluez }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  bluez,
+}:
 stdenv.mkDerivation rec {
   pname = "redfang";
   version = "2.5";
@@ -20,16 +25,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  installFlags = [ "DESTDIR=$(out)" ];
+  installFlags = ["DESTDIR=$(out)"];
 
   NIX_CFLAGS_COMPILE = "-Wno-format-security";
 
-  buildInputs = [ bluez ];
+  buildInputs = [bluez];
 
   meta = with lib; {
     description = "A small proof-of-concept application to find non discoverable bluetooth devices";
     homepage = "https://gitlab.com/kalilinux/packages/redfang";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
   };
 }

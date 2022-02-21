@@ -1,25 +1,25 @@
-{ buildPythonPackage
-, cloudpickle
-, deepdish
-, deepmerge
-, dm-haiku
-, fetchFromGitHub
-, jaxlib
-, lib
-, poetry
-, pytestCheckHook
-, pytorch
-, pyyaml
-, sh
-, tables
-, tabulate
-, tensorboardx
-, tensorflow
-, toolz
-, treex
-, typing-extensions
+{
+  buildPythonPackage,
+  cloudpickle,
+  deepdish,
+  deepmerge,
+  dm-haiku,
+  fetchFromGitHub,
+  jaxlib,
+  lib,
+  poetry,
+  pytestCheckHook,
+  pytorch,
+  pyyaml,
+  sh,
+  tables,
+  tabulate,
+  tensorboardx,
+  tensorflow,
+  toolz,
+  treex,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "elegy";
   version = "0.8.4";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     poetry
   ];
 
-  buildInputs = [ jaxlib ];
+  buildInputs = [jaxlib];
 
   propagatedBuildInputs = [
     cloudpickle
@@ -73,6 +73,6 @@ buildPythonPackage rec {
     description = "Neural Networks framework based on Jax inspired by Keras and Haiku";
     homepage = "https://github.com/poets-ai/elegy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 buildGoModule rec {
   pname = "gron";
   version = "0.6.1";
@@ -31,7 +35,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/tomnomnom/gron";
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz SuperSandro2000 ];
+    maintainers = with maintainers; [fgaz SuperSandro2000];
     platforms = platforms.unix;
   };
 }

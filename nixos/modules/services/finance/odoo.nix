@@ -1,12 +1,13 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.odoo;
   format = pkgs.formats.ini {};
-in
-{
+in {
   options = {
     services.odoo = {
       enable = mkEnableOption "odoo";
@@ -93,13 +94,13 @@ in
     users.groups.odoo = {};
 
     systemd.services.odoo = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "postgresql.service" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target" "postgresql.service"];
 
       # pg_dump
-      path = [ config.services.postgresql.package ];
+      path = [config.services.postgresql.package];
 
-      requires = [ "postgresql.service" ];
+      requires = ["postgresql.service"];
       script = "HOME=$STATE_DIRECTORY ${cfg.package}/bin/odoo ${optionalString (cfg.addons != []) "--addons-path=${concatMapStringsSep "," escapeShellArg cfg.addons}"} -c ${cfgFile}";
 
       serviceConfig = {
@@ -112,11 +113,13 @@ in
     services.postgresql = {
       enable = true;
 
-      ensureUsers = [{
-        name = "odoo";
-        ensurePermissions = { "DATABASE odoo" = "ALL PRIVILEGES"; };
-      }];
-      ensureDatabases = [ "odoo" ];
+      ensureUsers = [
+        {
+          name = "odoo";
+          ensurePermissions = {"DATABASE odoo" = "ALL PRIVILEGES";};
+        }
+      ];
+      ensureDatabases = ["odoo"];
     };
   });
 }

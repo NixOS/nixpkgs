@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-  cfg = config.services.k3s;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.k3s;
+in {
   # interface
   options.services.k3s = {
     enable = mkEnableOption "k3s";
@@ -22,7 +24,7 @@ in
         Note that the server, by default, also runs as an agent.
       '';
       default = "server";
-      type = types.enum [ "server" "agent" ];
+      type = types.enum ["server" "agent"];
     };
 
     serverAddr = mkOption {
@@ -96,17 +98,20 @@ in
     # supporting it, or their bundled containerd
     systemd.enableUnifiedCgroupHierarchy = false;
 
-    environment.systemPackages = [ config.services.k3s.package ];
+    environment.systemPackages = [config.services.k3s.package];
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = [ "network.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
-      wants = [ "network.service" "firewall.service" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.service" "firewall.service"] ++ (optional cfg.docker "docker.service");
+      wants = ["network.service" "firewall.service"];
+      wantedBy = ["multi-user.target"];
       path = optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
         # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
-        Type = if cfg.role == "agent" then "exec" else "notify";
+        Type =
+          if cfg.role == "agent"
+          then "exec"
+          else "notify";
         KillMode = "process";
         Delegate = "yes";
         Restart = "always";
@@ -118,13 +123,14 @@ in
         ExecStart = concatStringsSep " \\\n " (
           [
             "${cfg.package}/bin/k3s ${cfg.role}"
-          ] ++ (optional cfg.docker "--docker")
+          ]
+          ++ (optional cfg.docker "--docker")
           ++ (optional cfg.disableAgent "--disable-agent")
           ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
           ++ (optional (cfg.token != "") "--token ${cfg.token}")
           ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
           ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
-          ++ [ cfg.extraFlags ]
+          ++ [cfg.extraFlags]
         );
       };
     };

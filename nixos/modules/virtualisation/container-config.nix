@@ -1,11 +1,11 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
 {
-
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; {
   config = mkIf config.boot.isContainer {
-
     # Disable some features that are not useful in a container.
     nix.optimise.automatic = mkDefault false; # the store is host managed
     services.udisks2.enable = mkDefault false;
@@ -25,7 +25,5 @@ with lib;
 
     # Use the host's nix-daemon.
     environment.variables.NIX_REMOTE = "daemon";
-
   };
-
 }

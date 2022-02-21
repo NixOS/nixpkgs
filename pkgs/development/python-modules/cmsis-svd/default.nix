@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+}:
 buildPythonPackage rec {
   pname = "cmsis-svd";
   version = "0.4";
@@ -15,14 +19,14 @@ buildPythonPackage rec {
     cd python
   '';
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
-  pythonImportsCheck = [ "cmsis_svd" ];
+  pythonImportsCheck = ["cmsis_svd"];
 
   meta = with lib; {
     description = "CMSIS SVD parser";
     homepage = "https://github.com/posborne/cmsis-svd";
-    maintainers = with maintainers; [ dump_stack ];
+    maintainers = with maintainers; [dump_stack];
     license = licenses.asl20;
   };
 }

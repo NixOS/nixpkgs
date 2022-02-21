@@ -1,46 +1,46 @@
-{ alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, cairo
-, cups
-, curl
-, dbus
-, dnsmasq
-, dpkg
-, expat
-, fetchurl
-, gdk-pixbuf
-, glib
-, gtk3
-, icu
-, iproute2
-, krb5
-, lib
-, libdrm
-, libsecret
-, libuuid
-, libxcb
-, libxkbcommon
-, lttng-ust
-, makeWrapper
-, mesa
-, networkmanager
-, nspr
-, nss
-, openssl
-, pango
-, procps
-, python3
-, stdenv
-, systemd
-, xdg-utils
-, xorg
-, zlib
+{
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dnsmasq,
+  dpkg,
+  expat,
+  fetchurl,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  icu,
+  iproute2,
+  krb5,
+  lib,
+  libdrm,
+  libsecret,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  lttng-ust,
+  makeWrapper,
+  mesa,
+  networkmanager,
+  nspr,
+  nss,
+  openssl,
+  pango,
+  procps,
+  python3,
+  stdenv,
+  systemd,
+  xdg-utils,
+  xorg,
+  zlib,
 }:
-with lib;
-let
+with lib; let
   deps = [
     alsa-lib
     at-spi2-atk
@@ -85,74 +85,74 @@ let
     zlib
   ];
 in
-stdenv.mkDerivation rec {
-  pname = "appgate-sdp";
-  version = "5.5.3";
+  stdenv.mkDerivation rec {
+    pname = "appgate-sdp";
+    version = "5.5.3";
 
-  src = fetchurl {
-    url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "sha256-qSo4JX/Jj+JkeetZIMw88MK7SzOgT8aNbQby2kJ91oo=";
-  };
+    src = fetchurl {
+      url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
+      sha256 = "sha256-qSo4JX/Jj+JkeetZIMw88MK7SzOgT8aNbQby2kJ91oo=";
+    };
 
-  # just patch interpreter
-  autoPatchelfIgnoreMissingDeps = true;
-  dontConfigure = true;
-  dontBuild = true;
+    # just patch interpreter
+    autoPatchelfIgnoreMissingDeps = true;
+    dontConfigure = true;
+    dontBuild = true;
 
-  buildInputs = [
-    python3
-    python3.pkgs.dbus-python
-  ];
+    buildInputs = [
+      python3
+      python3.pkgs.dbus-python
+    ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-    dpkg
-  ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      makeWrapper
+      dpkg
+    ];
 
-  unpackPhase = ''
-    dpkg-deb -x $src $out
-  '';
+    unpackPhase = ''
+      dpkg-deb -x $src $out
+    '';
 
-  installPhase = ''
-    cp -r $out/usr/share $out/share
+    installPhase = ''
+      cp -r $out/usr/share $out/share
 
-    substituteInPlace $out/lib/systemd/system/appgate-dumb-resolver.service \
-        --replace "/opt/" "$out/opt/"
+      substituteInPlace $out/lib/systemd/system/appgate-dumb-resolver.service \
+          --replace "/opt/" "$out/opt/"
 
-    substituteInPlace $out/lib/systemd/system/appgatedriver.service \
-        --replace "/opt/" "$out/opt/" \
-        --replace "InaccessiblePaths=/mnt /srv /boot /media" "InaccessiblePaths=-/mnt -/srv -/boot -/media"
+      substituteInPlace $out/lib/systemd/system/appgatedriver.service \
+          --replace "/opt/" "$out/opt/" \
+          --replace "InaccessiblePaths=/mnt /srv /boot /media" "InaccessiblePaths=-/mnt -/srv -/boot -/media"
 
-    substituteInPlace $out/lib/systemd/system/appgate-resolver.service \
-        --replace "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq" \
-        --replace "/opt/" "$out/opt/"
+      substituteInPlace $out/lib/systemd/system/appgate-resolver.service \
+          --replace "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq" \
+          --replace "/opt/" "$out/opt/"
 
-    substituteInPlace $out/opt/appgate/linux/nm.py \
-        --replace "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq"
+      substituteInPlace $out/opt/appgate/linux/nm.py \
+          --replace "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq"
 
-    substituteInPlace $out/opt/appgate/linux/set_dns \
-        --replace "/etc/appgate.conf" "$out/etc/appgate.conf"
+      substituteInPlace $out/opt/appgate/linux/set_dns \
+          --replace "/etc/appgate.conf" "$out/etc/appgate.conf"
 
-    wrapProgram $out/opt/appgate/service/createdump \
-        --set LD_LIBRARY_PATH "${makeLibraryPath [ stdenv.cc.cc ]}"
+      wrapProgram $out/opt/appgate/service/createdump \
+          --set LD_LIBRARY_PATH "${makeLibraryPath [stdenv.cc.cc]}"
 
-    wrapProgram $out/opt/appgate/appgate-driver \
-        --prefix PATH : ${makeBinPath [ iproute2 networkmanager dnsmasq ]} \
-        --set LD_LIBRARY_PATH $out/opt/appgate/service
+      wrapProgram $out/opt/appgate/appgate-driver \
+          --prefix PATH : ${makeBinPath [iproute2 networkmanager dnsmasq]} \
+          --set LD_LIBRARY_PATH $out/opt/appgate/service
 
-    makeWrapper $out/opt/appgate/Appgate $out/bin/appgate \
-        --prefix PATH : ${makeBinPath [ xdg-utils ]} \
-        --set LD_LIBRARY_PATH $out/opt/appgate:${makeLibraryPath deps}
+      makeWrapper $out/opt/appgate/Appgate $out/bin/appgate \
+          --prefix PATH : ${makeBinPath [xdg-utils]} \
+          --set LD_LIBRARY_PATH $out/opt/appgate:${makeLibraryPath deps}
 
-    wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
-  '';
+      wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
+    '';
 
-  meta = with lib; {
-    description = "Appgate SDP (Software Defined Perimeter) desktop client";
-    homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ymatsiuk ];
-  };
-}
+    meta = with lib; {
+      description = "Appgate SDP (Software Defined Perimeter) desktop client";
+      homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
+      license = licenses.unfree;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ymatsiuk];
+    };
+  }

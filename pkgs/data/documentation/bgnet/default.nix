@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, python3, pandoc }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3,
+  pandoc,
+}:
 stdenv.mkDerivation {
   pname = "bgnet";
   # to be found in the Makefile
@@ -23,13 +28,13 @@ stdenv.mkDerivation {
     install -Dm644 src/bgnet.html $out/share/doc/bgnet/html/index.html
   '';
 
-  nativeBuildInputs = [ python3 pandoc ];
+  nativeBuildInputs = [python3 pandoc];
 
   meta = {
     description = "Beej’s Guide to Network Programming";
     homepage = "https://beej.us/guide/bgnet/";
     license = lib.licenses.unfree;
 
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = with lib.maintainers; [Profpatsch];
   };
 }

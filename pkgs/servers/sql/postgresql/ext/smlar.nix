@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchgit, postgresql }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  postgresql,
+}:
 stdenv.mkDerivation rec {
   pname = "smlar-unstable";
   version = "2020-10-07";
@@ -10,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "14mj63mbkcphrzw6890pb5n8igh27i9g7kh4wjdhgx3g7llbjbdw";
   };
 
-  buildInputs = [ postgresql ];
+  buildInputs = [postgresql];
 
-  makeFlags = [ "USE_PGXS=1" ];
+  makeFlags = ["USE_PGXS=1"];
 
   installPhase = ''
     install -D -t $out/lib *.so
@@ -25,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "http://sigaev.ru/git/gitweb.cgi?p=smlar.git";
     platforms = postgresql.meta.platforms;
     license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

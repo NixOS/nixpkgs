@@ -1,15 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.icecream.scheduler;
 in {
-
   ###### interface
 
   options = {
-
     services.icecream.scheduler = {
       enable = mkEnableOption "Icecream Scheduler";
 
@@ -65,7 +65,7 @@ in {
         type = types.listOf types.str;
         default = [];
         description = "Additional command line parameters";
-        example = [ "-v" ];
+        example = ["-v"];
       };
     };
   };
@@ -74,21 +74,22 @@ in {
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = mkMerge [
-      (mkIf cfg.openFirewall [ cfg.port ])
-      (mkIf cfg.openTelnet [ 8766 ])
+      (mkIf cfg.openFirewall [cfg.port])
+      (mkIf cfg.openTelnet [8766])
     ];
 
     systemd.services.icecc-scheduler = {
       description = "Icecream scheduling server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         ExecStart = escapeShellArgs ([
           "${getBin cfg.package}/bin/icecc-scheduler"
-          "-p" (toString cfg.port)
+          "-p"
+          (toString cfg.port)
         ]
-        ++ optionals (cfg.netName != null) [ "-n" (toString cfg.netName) ]
+        ++ optionals (cfg.netName != null) ["-n" (toString cfg.netName)]
         ++ optional cfg.persistentClientConnection "-r"
         ++ cfg.extraArgs);
 
@@ -97,5 +98,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ emantor ];
+  meta.maintainers = with lib.maintainers; [emantor];
 }

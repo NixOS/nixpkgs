@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, libiconv
-, zlib
-, enableOcr ? true
-, makeWrapper
-, tesseract4
-, leptonica
-, ffmpeg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libiconv,
+  zlib,
+  enableOcr ? true,
+  makeWrapper,
+  tesseract4,
+  leptonica,
+  ffmpeg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ccextractor";
   version = "0.93";
@@ -30,13 +30,14 @@ stdenv.mkDerivation rec {
 
   cmakeDir = "../src";
 
-  nativeBuildInputs = [ pkg-config cmake makeWrapper ];
+  nativeBuildInputs = [pkg-config cmake makeWrapper];
 
-  buildInputs = [ zlib ]
+  buildInputs =
+    [zlib]
     ++ lib.optional (!stdenv.isLinux) libiconv
-    ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg ];
+    ++ lib.optionals enableOcr [leptonica tesseract4 ffmpeg];
 
-  cmakeFlags = lib.optionals enableOcr [ "-DWITH_OCR=on" "-DWITH_HARDSUBX=on" ];
+  cmakeFlags = lib.optionals enableOcr ["-DWITH_OCR=on" "-DWITH_HARDSUBX=on"];
 
   postInstall = lib.optionalString enableOcr ''
     wrapProgram "$out/bin/ccextractor" \
@@ -59,6 +60,6 @@ stdenv.mkDerivation rec {
     # during Linking C executable ccextractor
     broken = stdenv.isAarch64;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ titanous ];
+    maintainers = with maintainers; [titanous];
   };
 }

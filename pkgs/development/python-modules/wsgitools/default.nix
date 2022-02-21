@@ -1,8 +1,8 @@
-{lib
-,buildPythonPackage
-,fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "wsgitools";
   version = "0.3.1";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    maintainers = with maintainers; [ clkamp ];
+    maintainers = with maintainers; [clkamp];
     description = "A set of tools working with WSGI";
     longDescription = ''
       wsgitools is a set of tools working with WSGI (see PEP 333). It

@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.modemmanager;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.modemmanager;
+in {
   port = 9539;
   extraOpts = {
     refreshRate = mkOption {

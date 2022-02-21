@@ -1,8 +1,23 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
-, paramiko, pycurl, ajpy, impacket, pyopenssl, cx_oracle, mysqlclient
-, psycopg2, pycrypto, dnspython, ipy, pysnmp, pyasn1, pysqlcipher3 }:
-
-
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  paramiko,
+  pycurl,
+  ajpy,
+  impacket,
+  pyopenssl,
+  cx_oracle,
+  mysqlclient,
+  psycopg2,
+  pycrypto,
+  dnspython,
+  ipy,
+  pysnmp,
+  pyasn1,
+  pysqlcipher3,
+}:
 buildPythonPackage rec {
   pname = "patator";
   version = "0.9";
@@ -42,6 +57,6 @@ buildPythonPackage rec {
     description = "multi-purpose brute-forcer";
     homepage = "https://github.com/lanjelot/patator";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ y0no SuperSandro2000 ];
+    maintainers = with maintainers; [y0no SuperSandro2000];
   };
 }

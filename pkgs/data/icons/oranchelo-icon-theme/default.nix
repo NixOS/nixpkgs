@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, plasma5Packages, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  plasma5Packages,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "oranchelo-icon-theme";
   version = "0.8.0.1";
@@ -32,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OrancheloTeam/oranchelo-icon-theme";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ _414owen ];
+    maintainers = with maintainers; [_414owen];
   };
 }

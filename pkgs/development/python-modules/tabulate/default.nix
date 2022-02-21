@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
-
 buildPythonPackage rec {
   version = "0.8.9";
   pname = "tabulate";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   # Tests: cannot import common (relative import).
   doCheck = false;
@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "Pretty-print tabular data";
     homepage = "https://bitbucket.org/astanin/python-tabulate";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

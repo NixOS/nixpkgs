@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, sphinx
-, beautifulsoup4
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  sphinx,
+  beautifulsoup4,
 }:
-
 buildPythonPackage rec {
   pname = "furo";
   version = "2022.2.14.1";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
     cd -
   '';
 
-  pythonImportsCheck = [ "furo" ];
+  pythonImportsCheck = ["furo"];
 
   meta = with lib; {
     description = "A clean customizable documentation theme for Sphinx";
     homepage = "https://github.com/pradyunsg/furo";
     license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

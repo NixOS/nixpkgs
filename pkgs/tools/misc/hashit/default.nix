@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config, vala, pantheon, python3, libgee, gtk3, desktop-file-utils, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  pantheon,
+  python3,
+  libgee,
+  gtk3,
+  desktop-file-utils,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "hashit";
   version = "1.1.0";

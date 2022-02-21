@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glfw,
+  freetype,
+  openssl,
+  makeWrapper,
+  upx,
+}:
 stdenv.mkDerivation rec {
   pname = "vlang";
   version = "weekly.2021.51";
@@ -18,10 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = "1acgx1qp480jmsv1xvqy1zf7iyy90mvg9x1m1b0zrwx09wz4y1cq";
   };
 
-  propagatedBuildInputs = [ glfw freetype openssl ]
+  propagatedBuildInputs =
+    [glfw freetype openssl]
     ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   makeFlags = [
     "local=1"
@@ -38,7 +47,7 @@ stdenv.mkDerivation rec {
     cp -r {cmd,vlib,thirdparty} $out/lib
     mv v $out/lib
     ln -s $out/lib/v $out/bin/v
-    wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+    wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [stdenv.cc]}
     runHook postInstall
   '';
 
@@ -46,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [chiiruno];
     platforms = platforms.all;
   };
 }

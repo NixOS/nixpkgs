@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gnome-shell
-, gtk-engine-murrine
-, gtk_engines
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnome-shell,
+  gtk-engine-murrine,
+  gtk_engines,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vimix-gtk-themes";
   version = "2021-08-17";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnome-shell  # needed to determine the gnome-shell version
+    gnome-shell # needed to determine the gnome-shell version
   ];
 
   buildInputs = [
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vinceliuice/vimix-gtk-themes";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

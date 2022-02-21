@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "interruptingcow";
   version = "0.8";
@@ -12,6 +16,6 @@ buildPythonPackage rec {
     description = "A watchdog that interrupts long running code";
     homepage = "https://bitbucket.org/evzijst/interruptingcow";
     license = licenses.mit;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [benley];
   };
 }

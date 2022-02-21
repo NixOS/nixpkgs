@@ -1,18 +1,15 @@
 {
-  bazel
-, bazelTest
-, bazel-examples
-, gccStdenv
-, lib
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
-}:
-
-let
-
+  bazel,
+  bazelTest,
+  bazel-examples,
+  gccStdenv,
+  lib,
+  runLocal,
+  runtimeShell,
+  writeScript,
+  writeText,
+  distDir,
+}: let
   toolsBazel = writeScript "bazel" ''
     #! ${runtimeShell}
 
@@ -49,5 +46,5 @@ let
           //...
     '';
   };
-
-in testBazel
+in
+  testBazel

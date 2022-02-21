@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "volkszaehler";
   version = "0.3.2";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for interacting with the Volkszahler API";
     homepage = "https://github.com/home-assistant-ecosystem/python-volkszaehler";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

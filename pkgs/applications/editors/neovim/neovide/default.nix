@@ -1,27 +1,28 @@
-{ rustPlatform
-, runCommand
-, lib
-, fetchFromGitHub
-, fetchgit
-, fetchurl
-, makeWrapper
-, pkg-config
-, python2
-, python3
-, openssl
-, SDL2
-, fontconfig
-, freetype
-, ninja
-, gn
-, llvmPackages
-, makeFontsConf
-, libglvnd
-, libxkbcommon
-, stdenv
-, enableWayland ? stdenv.isLinux
-, wayland
-, xorg
+{
+  rustPlatform,
+  runCommand,
+  lib,
+  fetchFromGitHub,
+  fetchgit,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  python2,
+  python3,
+  openssl,
+  SDL2,
+  fontconfig,
+  freetype,
+  ninja,
+  gn,
+  llvmPackages,
+  makeFontsConf,
+  libglvnd,
+  libxkbcommon,
+  stdenv,
+  enableWayland ? stdenv.isLinux,
+  wayland,
+  xorg,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
@@ -36,27 +37,27 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-TaZN49ou6bf1vW0mEsmaItp1c73d0M826MMrSGXpnGE=";
 
-  SKIA_SOURCE_DIR =
-    let
-      repo = fetchFromGitHub {
-        owner = "rust-skia";
-        repo = "skia";
-        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m93-0.42.0";
-        sha256 = "sha256-F1DWLm7bdKnuCu5tMMekxSyaGq8gPRNtZwcRVXJxjZQ=";
-      };
-      # The externals for skia are taken from skia/DEPS
-      externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
-    in
-      runCommand "source" {} (
-        ''
-          cp -R ${repo} $out
-          chmod -R +w $out
+  SKIA_SOURCE_DIR = let
+    repo = fetchFromGitHub {
+      owner = "rust-skia";
+      repo = "skia";
+      # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+      rev = "m93-0.42.0";
+      sha256 = "sha256-F1DWLm7bdKnuCu5tMMekxSyaGq8gPRNtZwcRVXJxjZQ=";
+    };
+    # The externals for skia are taken from skia/DEPS
+    externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
+  in
+    runCommand "source" {} (
+      ''
+        cp -R ${repo} $out
+        chmod -R +w $out
 
-          mkdir -p $out/third_party/externals
-          cd $out/third_party/externals
-        '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals))
-      );
+        mkdir -p $out/third_party/externals
+        cd $out/third_party/externals
+      ''
+      + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals))
+    );
 
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
   SKIA_GN_COMMAND = "${gn}/bin/gn";
@@ -67,7 +68,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # test needs a valid fontconfig file
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  FONTCONFIG_FILE = makeFontsConf {fontDirectories = [];};
 
   nativeBuildInputs = [
     pkg-config
@@ -108,11 +109,12 @@ rustPlatform.buildRustPackage rec {
       xorg.libXext
       xorg.libXrandr
       xorg.libXi
-    ] ++ lib.optionals enableWayland [ wayland ]);
+    ]
+    ++ lib.optionals enableWayland [wayland]);
   in ''
-      wrapProgram $out/bin/neovide \
-        --prefix LD_LIBRARY_PATH : ${libPath}
-    '';
+    wrapProgram $out/bin/neovide \
+      --prefix LD_LIBRARY_PATH : ${libPath}
+  '';
 
   postInstall = ''
     for n in 16x16 32x32 48x48 256x256; do
@@ -126,8 +128,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "This is a simple graphical user interface for Neovim.";
     homepage = "https://github.com/Kethku/neovide";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ck3d ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [ck3d];
     platforms = platforms.unix;
     mainProgram = "neovide";
   };

@@ -1,5 +1,8 @@
-{ lib, buildPythonApplication, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+}:
 buildPythonApplication rec {
   pname = "cxxtest";
   version = "4.4";
@@ -31,6 +34,6 @@ buildPythonApplication rec {
     description = "Unit testing framework for C++";
     platforms = platforms.unix;
     license = licenses.lgpl3;
-    maintainers = [ maintainers.juliendehos ];
+    maintainers = [maintainers.juliendehos];
   };
 }

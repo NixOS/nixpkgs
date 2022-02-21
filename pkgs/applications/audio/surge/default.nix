@@ -1,8 +1,23 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, cmake, git, pkg-config, python3
-, cairo, libsndfile, libxcb, libxkbcommon, xcbutil, xcbutilcursor, xcbutilkeysyms, zenity
-, curl, rsync
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  cmake,
+  git,
+  pkg-config,
+  python3,
+  cairo,
+  libsndfile,
+  libxcb,
+  libxkbcommon,
+  xcbutil,
+  xcbutilcursor,
+  xcbutilkeysyms,
+  zenity,
+  curl,
+  rsync,
 }:
-
 stdenv.mkDerivation rec {
   pname = "surge";
   version = "1.9.0";
@@ -21,8 +36,8 @@ stdenv.mkDerivation rec {
     rev = "afc591cc06d9adc3dc8dc515a55c66873fa10296";
     sha256 = "1wqv86l70nwlrb10n47rib80f47a96j9qqg8w5dv46ys1sq2nz7z";
   };
-  nativeBuildInputs = [ cmake git pkg-config python3 ];
-  buildInputs = [ cairo libsndfile libxcb libxkbcommon xcbutil xcbutilcursor xcbutilkeysyms zenity curl rsync ];
+  nativeBuildInputs = [cmake git pkg-config python3];
+  buildInputs = [cairo libsndfile libxcb libxkbcommon xcbutil xcbutilcursor xcbutilkeysyms zenity curl rsync];
 
   postPatch = ''
     substituteInPlace src/common/SurgeStorage.cpp --replace "/usr/share/Surge" "$out/share/surge"
@@ -30,7 +45,6 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/linux/
     cp -r $extraContent/Skins/ resources/data/skins
   '';
-
 
   installPhase = ''
     cd ..
@@ -48,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "LV2 & VST3 synthesizer plug-in (previously released as Vember Audio Surge)";
     homepage = "https://surge-synthesizer.github.io";
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon orivej ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [magnetophon orivej];
   };
 }

@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.bind;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.bind;
+in {
   port = 9119;
   extraOpts = {
     bindURI = mkOption {
@@ -23,15 +24,15 @@ in
       '';
     };
     bindVersion = mkOption {
-      type = types.enum [ "xml.v2" "xml.v3" "auto" ];
+      type = types.enum ["xml.v2" "xml.v3" "auto"];
       default = "auto";
       description = ''
         BIND statistics version. Can be detected automatically.
       '';
     };
     bindGroups = mkOption {
-      type = types.listOf (types.enum [ "server" "view" "tasks" ]);
-      default = [ "server" "view" ];
+      type = types.listOf (types.enum ["server" "view" "tasks"]);
+      default = ["server" "view"];
       description = ''
         List of statistics to collect. Available: [server, view, tasks]
       '';

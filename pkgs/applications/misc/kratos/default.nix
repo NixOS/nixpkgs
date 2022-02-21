@@ -1,5 +1,9 @@
-{ fetchFromGitHub, buildGoModule, lib, stdenv }:
-
+{
+  fetchFromGitHub,
+  buildGoModule,
+  lib,
+  stdenv,
+}:
 buildGoModule rec {
   pname = "kratos";
   version = "0.8.0-alpha.3";
@@ -13,9 +17,9 @@ buildGoModule rec {
 
   vendorSha256 = "175pckj30cm5xkbvsdvwzarvwapsylyjgj4ss8v5r1sa0fjpj008";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  tags = [ "sqlite" ];
+  tags = ["sqlite"];
 
   doCheck = false;
 
@@ -34,7 +38,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ mrmebelman ];
+    maintainers = with maintainers; [mrmebelman];
     homepage = "https://www.ory.sh/kratos/";
     license = licenses.asl20;
     description = "An API-first Identity and User Management system that is built according to cloud architecture best practices";

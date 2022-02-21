@@ -1,6 +1,9 @@
-{ fetchFromGitHub, makeWrapper, chromium, mkYarnPackage
+{
+  fetchFromGitHub,
+  makeWrapper,
+  chromium,
+  mkYarnPackage,
 }:
-
 mkYarnPackage rec {
   pname = "puppeteer-cli";
   version = "1.5.1";
@@ -13,7 +16,7 @@ mkYarnPackage rec {
   packageJSON = ./package.json;
   yarnLock = ./yarn.lock;
   yarnNix = ./yarn.nix;
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   postInstall = ''
     wrapProgram $out/bin/puppeteer \
       --set PUPPETEER_EXECUTABLE_PATH ${chromium}/bin/chromium

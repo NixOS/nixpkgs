@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip, ocaml, camlp5}:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  ocaml,
+  camlp5,
+}:
 stdenv.mkDerivation {
   pname = "ledit";
   version = "2.04";
@@ -23,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "http://pauillac.inria.fr/~ddr/ledit/";
     description = "A line editor, allowing to use shell commands with control characters like in emacs";
     license = licenses.bsd3;
-    maintainers = [ maintainers.delta ];
+    maintainers = [maintainers.delta];
     broken = lib.versionOlder ocaml.version "4.03";
   };
 }

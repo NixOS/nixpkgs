@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  unzip,
+  jre,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "swingsane";
   version = "0.2";
@@ -9,12 +16,11 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/swingsane/swingsane-${version}-bin.zip";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   dontConfigure = true;
 
   installPhase = let
-
     execWrapper = ''
       #!${runtimeShell}
       exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
@@ -29,7 +35,6 @@ stdenv.mkDerivation rec {
       comment = meta.description;
       categories = "Office;";
     };
-
   in ''
     install -v -m 755    -d $out/share/java/swingsane/
     install -v -m 644 *.jar $out/share/java/swingsane/

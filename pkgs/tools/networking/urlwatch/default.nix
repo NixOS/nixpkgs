@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "urlwatch";
   version = "2.24";
@@ -37,6 +37,6 @@ python3Packages.buildPythonApplication rec {
     description = "A tool for monitoring webpages for updates";
     homepage = "https://thp.io/2008/urlwatch/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ kmein tv ];
+    maintainers = with maintainers; [kmein tv];
   };
 }

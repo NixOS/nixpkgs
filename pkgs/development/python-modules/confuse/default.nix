@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pyyaml
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pyyaml,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "confuse";
   version = "1.7.0";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Python configuration library for Python that uses YAML";
     homepage = "https://github.com/beetbox/confuse";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 buildGoModule rec {
   pname = "buildkite-agent-metrics";
   version = "5.2.1";
 
-  outputs = [ "out" "lambda" ];
+  outputs = ["out" "lambda"];
 
   src = fetchFromGitHub {
     owner = "buildkite";

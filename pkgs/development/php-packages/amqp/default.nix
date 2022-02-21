@@ -1,12 +1,15 @@
-{ buildPecl, lib, rabbitmq-c }:
-
+{
+  buildPecl,
+  lib,
+  rabbitmq-c,
+}:
 buildPecl {
   pname = "amqp";
 
   version = "1.11.0beta";
   sha256 = "sha256-HbVLN6fg2htYZgAFw+IhYHP+XN8j7cTLG6S0YHHOC14=";
 
-  buildInputs = [ rabbitmq-c ];
+  buildInputs = [rabbitmq-c];
 
   AMQP_DIR = rabbitmq-c;
 

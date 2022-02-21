@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "mpd-mpris";
   version = "0.3.1";
@@ -15,7 +18,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/${pname}" ];
+  subPackages = ["cmd/${pname}"];
 
   postInstall = ''
     substituteInPlace mpd-mpris.service \
@@ -28,7 +31,7 @@ buildGoModule rec {
     description = "An implementation of the MPRIS protocol for MPD";
     homepage = "https://github.com/natsukagami/mpd-mpris";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, which }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "l-smash";
   version = "2.14.5";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rcq9727im6kd8da8b7kzzbzxdldvmh5nsljj9pvr4m3lj484b02";
   };
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [which];
 
   configureFlags = [
     "--cc=cc"
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://l-smash.github.io/l-smash/";
     description = "MP4 container utilities";
     license = licenses.isc;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = with maintainers; [tadeokondrak];
     platforms = platforms.all;
   };
 }

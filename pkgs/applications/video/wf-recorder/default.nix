@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols, ffmpeg, x264, libpulseaudio, ocl-icd, opencl-headers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  ffmpeg,
+  x264,
+  libpulseaudio,
+  ocl-icd,
+  opencl-headers,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wf-recorder";
   version = "0.2.1";
@@ -14,9 +26,15 @@ stdenv.mkDerivation rec {
     sha256 = "1cw6kpcbl33wh95pvy32xrsrm6kkk1awccr3phyh885xjs3b3iim";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc ];
+  nativeBuildInputs = [meson ninja pkg-config wayland-scanner scdoc];
   buildInputs = [
-    wayland wayland-protocols ffmpeg x264 libpulseaudio ocl-icd opencl-headers
+    wayland
+    wayland-protocols
+    ffmpeg
+    x264
+    libpulseaudio
+    ocl-icd
+    opencl-headers
   ];
 
   meta = with lib; {
@@ -24,7 +42,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/ammen99/wf-recorder/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos CrazedProgrammer ];
+    maintainers = with maintainers; [primeos CrazedProgrammer];
     platforms = platforms.linux;
   };
 }

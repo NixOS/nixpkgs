@@ -1,17 +1,17 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, glib-networking
-, gst_all_1
-, gtkmm3
-, libappindicator-gtk3
-, pcre
-, pkg-config
-, webkitgtk
-, wrapGAppsHook
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  glib-networking,
+  gst_all_1,
+  gtkmm3,
+  libappindicator-gtk3,
+  pcre,
+  pkg-config,
+  webkitgtk,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "whatsapp-for-linux";
   version = "1.3.1";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/eneshecan/whatsapp-for-linux";
     description = "Whatsapp desktop messaging app";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bartuka ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [bartuka];
+    platforms = ["x86_64-linux"];
   };
 }

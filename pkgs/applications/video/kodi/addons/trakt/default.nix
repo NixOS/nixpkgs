@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, trakt-module, dateutil }:
+{
+  lib,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  trakt-module,
+  dateutil,
+}:
 buildKodiAddon rec {
   pname = "trakt";
   namespace = "script.trakt";

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+  pytestCheckHook,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "cffsubr";
   version = "0.2.9.post1";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "cffsubr" ];
+  pythonImportsCheck = ["cffsubr"];
 
   meta = with lib; {
     description = "Standalone CFF subroutinizer based on AFDKO tx";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

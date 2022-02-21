@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "boltons";
   version = "20.2.1";
@@ -63,6 +63,6 @@ buildPythonPackage rec {
       traces, in tbutils
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    maintainers = with maintainers; [twey];
   };
 }

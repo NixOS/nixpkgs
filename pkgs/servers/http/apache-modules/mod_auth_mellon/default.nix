@@ -1,7 +1,22 @@
-{ lib, stdenv, apacheHttpd, autoconf, automake, autoreconfHook, curl, fetchFromGitHub, glib, lasso, libtool, libxml2, libxslt, openssl, pkg-config, xmlsec }:
-
+{
+  lib,
+  stdenv,
+  apacheHttpd,
+  autoconf,
+  automake,
+  autoreconfHook,
+  curl,
+  fetchFromGitHub,
+  glib,
+  lasso,
+  libtool,
+  libxml2,
+  libxslt,
+  openssl,
+  pkg-config,
+  xmlsec,
+}:
 stdenv.mkDerivation rec {
-
   pname = "mod_auth_mellon";
   version = "0.18.0";
 
@@ -12,8 +27,8 @@ stdenv.mkDerivation rec {
     sha256 = "0alfa8hz09jdg29bi1mvhwyr2nl0nvss2a2kybrcjvdw1fx6vijn";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ apacheHttpd autoconf automake curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [apacheHttpd autoconf automake curl glib lasso libtool libxml2 libxslt openssl xmlsec];
 
   configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
 
@@ -29,7 +44,6 @@ stdenv.mkDerivation rec {
     description = "An Apache module with a simple SAML 2.0 service provider";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    maintainers = with maintainers; [womfoo];
   };
-
 }

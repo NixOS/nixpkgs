@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, fuse, pkg-config, attr, uthash }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fuse,
+  pkg-config,
+  attr,
+  uthash,
+}:
 stdenv.mkDerivation rec {
   pname = "mhddfs";
   version = "0.1.39";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "14ggmh91vv69fp2qpz0nxp0hprlw2wsijss2k2485hb0ci4cabvh";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse attr uthash ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [fuse attr uthash];
 
   patches = [
     ./fix-format-security-error.patch
@@ -30,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "http://mhddfs.uvw.ru/";
     description = "Combines a several mount points into the single one";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.makefu ];
+    maintainers = [lib.maintainers.makefu];
   };
 }

@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, aqbanking
-, boost
-, cmake
-, gettext
-, glib
-, glibcLocales
-, gtest
-, guile
-, gwenhywfar
-, icu
-, libdbi
-, libdbiDrivers
-, libofx
-, libxml2
-, libxslt
-, makeWrapper
-, perlPackages
-, pkg-config
-, swig
-, webkitgtk
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  aqbanking,
+  boost,
+  cmake,
+  gettext,
+  glib,
+  glibcLocales,
+  gtest,
+  guile,
+  gwenhywfar,
+  icu,
+  libdbi,
+  libdbiDrivers,
+  libofx,
+  libxml2,
+  libxslt,
+  makeWrapper,
+  perlPackages,
+  pkg-config,
+  swig,
+  webkitgtk,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnucash";
   version = "4.9";
@@ -41,29 +41,30 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    aqbanking
-    boost
-    glib
-    glibcLocales
-    gtest
-    guile
-    gwenhywfar
-    icu
-    libdbi
-    libdbiDrivers
-    libofx
-    libxml2
-    libxslt
-    pkg-config
-    swig
-    webkitgtk
-  ]
-  ++ (with perlPackages; [
-    DateManip
-    FinanceQuote
-    perl
-  ]);
+  buildInputs =
+    [
+      aqbanking
+      boost
+      glib
+      glibcLocales
+      gtest
+      guile
+      gwenhywfar
+      icu
+      libdbi
+      libdbiDrivers
+      libofx
+      libxml2
+      libxslt
+      pkg-config
+      swig
+      webkitgtk
+    ]
+    ++ (with perlPackages; [
+      DateManip
+      FinanceQuote
+      perl
+    ]);
 
   patches = [
     # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
 
   # this needs to be an environment variable and not a cmake flag to suppress
   # guile warning
-  GUILE_AUTO_COMPILE="0";
+  GUILE_AUTO_COMPILE = "0";
 
   # `make check` target does not define its prerequisites but expects them to
   # have already been built.  The list of targets below was built through trial
@@ -178,7 +179,7 @@ stdenv.mkDerivation rec {
 
     for file in $out/bin/gnc-fq-check $out/bin/gnc-fq-dump $out/bin/gnc-fq-helper; do
       wrapProgram $file \
-      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ DateManip FinanceQuote ]}"
+      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [DateManip FinanceQuote]}"
     done
   '';
 
@@ -206,8 +207,9 @@ stdenv.mkDerivation rec {
       - Financial Calculations
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar AndersonTorres ];
+    maintainers = with maintainers; [domenkozar AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: investigate Darwin support
+

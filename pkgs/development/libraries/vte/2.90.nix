@@ -1,9 +1,18 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk3, ncurses, gobject-introspection }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  glib,
+  gtk3,
+  ncurses,
+  gobject-introspection,
+}:
 stdenv.mkDerivation rec {
   versionMajor = "0.36";
   versionMinor = "3";
-  moduleName   = "vte";
+  moduleName = "vte";
 
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
@@ -12,10 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "54e5b07be3c0f7b158302f54ee79d4de1cb002f4259b6642b79b1e0e314a959c";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gobject-introspection intltool glib gtk3 ncurses ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gobject-introspection intltool glib gtk3 ncurses];
 
-  configureFlags = [ "--enable-introspection" ];
+  configureFlags = ["--enable-introspection"];
 
   enableParallelBuilding = true;
 
@@ -35,7 +44,7 @@ stdenv.mkDerivation rec {
       the system's terminfo database.
     '';
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ astsmtl antono ];
+    maintainers = with maintainers; [astsmtl antono];
     platforms = platforms.linux;
   };
 }

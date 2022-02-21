@@ -1,20 +1,18 @@
 {
-  bazel
-, bazelTest
-, fetchFromGitHub
-, fetchurl
-, gccStdenv
-, lib
-, openjdk8
-, jdk11_headless
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
-}:
-
-let
+  bazel,
+  bazelTest,
+  fetchFromGitHub,
+  fetchurl,
+  gccStdenv,
+  lib,
+  openjdk8,
+  jdk11_headless,
+  runLocal,
+  runtimeShell,
+  writeScript,
+  writeText,
+  distDir,
+}: let
   com_google_protobuf = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf";
@@ -57,7 +55,7 @@ let
     protobuf_deps()
     load("@rules_proto//proto:repositories.bzl", "rules_proto_toolchains")
     rules_proto_toolchains()
-    '';
+  '';
 
   protoSupport = writeText "proto-support.bzl" ''
     """Load dependencies needed to compile the protobuf library as a 3rd-party consumer."""
@@ -161,20 +159,26 @@ let
     name = "bazel-test-protocol-buffers";
     inherit workspaceDir;
     bazelPkg = bazel;
-    buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];
-    bazelScript = ''
-      ${bazel}/bin/bazel \
-        build \
-        --distdir=${distDir} \
-          --verbose_failures \
-          --curses=no \
-          --sandbox_debug \
-          //... \
-    '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
-          --host_javabase='@local_jdk//:jdk' \
-          --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-          --javabase='@local_jdk//:jdk' \
-    '';
+    buildInputs = [
+      (if lib.strings.versionOlder bazel.version "5.0.0"
+      then openjdk8
+      else jdk11_headless)
+    ];
+    bazelScript =
+      ''
+        ${bazel}/bin/bazel \
+          build \
+          --distdir=${distDir} \
+            --verbose_failures \
+            --curses=no \
+            --sandbox_debug \
+            //... \
+      ''
+      + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
+        --host_javabase='@local_jdk//:jdk' \
+        --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+        --javabase='@local_jdk//:jdk' \
+      '';
   };
-
-in testBazel
+in
+  testBazel

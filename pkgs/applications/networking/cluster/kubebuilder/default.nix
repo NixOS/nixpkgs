@@ -1,12 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, go
-, gnumake
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  go,
+  gnumake,
 }:
-
 buildGoModule rec {
   pname = "kubebuilder";
   version = "3.3.0";
@@ -34,16 +34,16 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/cmd $out/bin/kubebuilder
     wrapProgram $out/bin/kubebuilder \
-      --prefix PATH : ${lib.makeBinPath [ go gnumake ]}
+      --prefix PATH : ${lib.makeBinPath [go gnumake]}
   '';
 
   allowGoReference = true;
-  nativeBuildInputs = [ makeWrapper git ];
+  nativeBuildInputs = [makeWrapper git];
 
   meta = with lib; {
     homepage = "https://github.com/kubernetes-sigs/kubebuilder";
     description = "SDK for building Kubernetes APIs using CRDs";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmars ];
+    maintainers = with maintainers; [cmars];
   };
 }

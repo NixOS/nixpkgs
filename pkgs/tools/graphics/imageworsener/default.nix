@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, zlib
-, libpng
-, libjpeg
-, libwebp
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  libpng,
+  libjpeg,
+  libwebp,
 }:
-
 stdenv.mkDerivation rec {
   pname = "imageworsener";
   version = "1.3.4";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     cp readme.txt technical.txt $out/share/doc/imageworsener
   '';
 
-  buildInputs = [ zlib libpng libjpeg libwebp ];
+  buildInputs = [zlib libpng libjpeg libwebp];
 
   doCheck = true;
 
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://entropymine.com/imageworsener/";
     changelog = "https://github.com/jsummers/${pname}/blob/${version}/changelog.txt";
     license = licenses.mit;
-    maintainers = with maintainers; [ emily smitop ];
+    maintainers = with maintainers; [emily smitop];
     platforms = platforms.all;
   };
 }

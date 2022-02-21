@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, freeglut
-, lapack
-, libusb1
-, blas
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  freeglut,
+  lapack,
+  libusb1,
+  blas,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libsurvive";
   version = "0.4";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-atX7QsCjKGa6OVSApnx3seBvZv/mlpV3jWRB9+v7Emc=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   buildInputs = [
     freeglut
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Open Source Lighthouse Tracking System";
     homepage = "https://github.com/cntools/libsurvive";
     license = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 prusnak ];
+    maintainers = with maintainers; [expipiplus1 prusnak];
     platforms = platforms.linux;
   };
 }

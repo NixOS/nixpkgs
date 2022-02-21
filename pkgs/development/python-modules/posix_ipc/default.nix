@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "posix_ipc";
   version = "1.0.5";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     homepage = "http://semanchuk.com/philip/posix_ipc/";
   };
-
 }

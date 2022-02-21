@@ -1,5 +1,13 @@
-{ lib, fetchurl, tcl, tk, libX11, zlib, makeWrapper, makeDesktopItem }:
-
+{
+  lib,
+  fetchurl,
+  tcl,
+  tk,
+  libX11,
+  zlib,
+  makeWrapper,
+  makeDesktopItem,
+}:
 tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
   version = "4.22";
@@ -9,8 +17,8 @@ tcl.mkTclDerivation rec {
     sha256 = "sha256-PSHDPrfhJI/DyEVQLo8Ckargqf/iUG5PgvUbO/4WNJM=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ tk libX11 zlib ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [tk libX11 zlib];
 
   prePatch = ''
     sed -i -e '/^ *set headerPath *{/a ${tcl}/include ${tk}/include' \
@@ -28,17 +36,17 @@ tcl.mkTclDerivation rec {
   #   "FONTDIR=$(out)/fonts"
   # ];
 
-  preConfigure = ''configureFlags="
-    BINDIR=$out/bin
-    SHAREDIR=$out/share
-    FONTDIR=$out/fonts"
+  preConfigure = ''    configureFlags="
+        BINDIR=$out/bin
+        SHAREDIR=$out/share
+        FONTDIR=$out/fonts"
   '';
 
   patches = [
     ./0001-put-fonts-in-out.patch
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   dontPatchShebangs = true;
 
@@ -75,7 +83,7 @@ tcl.mkTclDerivation rec {
     description = "Chess database with play and training functionality";
     homepage = "http://scidvspc.sourceforge.net/";
     license = lib.licenses.gpl2;
-    maintainers = [ maintainers.paraseba ];
+    maintainers = [maintainers.paraseba];
     platforms = lib.platforms.linux;
   };
 }

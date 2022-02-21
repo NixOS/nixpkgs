@@ -1,18 +1,18 @@
-{ lib
-, aiofiles
-, aioftp
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytest-localserver
-, pytest-socket
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, tqdm
+{
+  lib,
+  aiofiles,
+  aioftp,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytest-localserver,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "parfive";
   version = "1.5.1";
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "A HTTP and FTP parallel file downloader";
     homepage = "https://parfive.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

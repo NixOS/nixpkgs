@@ -1,36 +1,36 @@
-{ stdenv
-, lib
-, fetchpatch
-, pkg-config
-, cmake
-, bluez
-, ffmpeg
-, libao
-, gtk2
-, glib
-, libGLU
-, libGL
-, gettext
-, libpthreadstubs
-, libXrandr
-, libXext
-, readline
-, openal
-, libXdmcp
-, portaudio
-, fetchFromGitHub
-, libusb1
-, libevdev
-, wxGTK30
-, soundtouch
-, miniupnpc
-, mbedtls
-, curl
-, lzo
-, sfml
-, libpulseaudio ? null
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  pkg-config,
+  cmake,
+  bluez,
+  ffmpeg,
+  libao,
+  gtk2,
+  glib,
+  libGLU,
+  libGL,
+  gettext,
+  libpthreadstubs,
+  libXrandr,
+  libXext,
+  readline,
+  openal,
+  libXdmcp,
+  portaudio,
+  fetchFromGitHub,
+  libusb1,
+  libevdev,
+  wxGTK30,
+  soundtouch,
+  miniupnpc,
+  mbedtls,
+  curl,
+  lzo,
+  sfml,
+  libpulseaudio ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
   version = "5.0";
@@ -114,9 +114,9 @@ stdenv.mkDerivation rec {
     homepage = "https://dolphin-emu.org/";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MP2E ashkitten ];
+    maintainers = with maintainers; [MP2E ashkitten];
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libbsd }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libbsd,
+}:
 stdenv.mkDerivation rec {
   pname = "rs";
   version = "20200313";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gxwlfk7bzivpp2260w2r6gkyl7vdi05cggn1fijfnp8kzf1b4li";
   };
 
-  buildInputs = [ libbsd ];
+  buildInputs = [libbsd];
 
   buildPhase = ''
     ${stdenv.cc}/bin/cc utf8.c rs.c -o rs -lbsd
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.mirbsd.org/htman/i386/man1/rs.htm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

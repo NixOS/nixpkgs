@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, python
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pycodestyle";
   version = "2.8.0";

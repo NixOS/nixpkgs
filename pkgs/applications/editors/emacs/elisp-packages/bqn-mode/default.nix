@@ -1,8 +1,8 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
+{
+  lib,
+  trivialBuild,
+  fetchFromGitHub,
 }:
-
 trivialBuild {
   pname = "bqn-mode";
   version = "0.pre+date=2022-01-07";
@@ -17,6 +17,6 @@ trivialBuild {
   meta = with lib; {
     description = "Emacs mode for BQN programming language";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sternenseemann AndersonTorres ];
+    maintainers = with maintainers; [sternenseemann AndersonTorres];
   };
 }

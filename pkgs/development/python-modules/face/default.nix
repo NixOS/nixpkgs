@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, boltons, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  boltons,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "face";
   version = "20.1.1";
@@ -9,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "7d59ca5ba341316e58cf72c6aff85cca2541cf5056c4af45cb63af9a814bed3e";
   };
 
-  propagatedBuildInputs = [ boltons ];
+  propagatedBuildInputs = [boltons];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   checkPhase = "pytest face/test";
 
   # ironically, test_parse doesn't parse, but fixed in git so no point
@@ -26,6 +31,6 @@ buildPythonPackage rec {
       users, full-featured for developers.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    maintainers = with maintainers; [twey];
   };
 }

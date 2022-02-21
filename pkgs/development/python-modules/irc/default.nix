@@ -1,8 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, six, jaraco_logging, jaraco_text, jaraco_stream, pytz, jaraco_itertools
-, setuptools-scm, jaraco_collections, importlib-metadata
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  six,
+  jaraco_logging,
+  jaraco_text,
+  jaraco_stream,
+  pytz,
+  jaraco_itertools,
+  setuptools-scm,
+  jaraco_collections,
+  importlib-metadata,
 }:
-
 buildPythonPackage rec {
   pname = "irc";
   version = "20.0.0";
@@ -16,9 +26,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [ "irc" ];
+  pythonImportsCheck = ["irc"];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
   propagatedBuildInputs = [
     six
     importlib-metadata

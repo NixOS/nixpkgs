@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "connection-pool";
   version = "0.0.3";
@@ -16,12 +16,12 @@ buildPythonPackage rec {
   };
 
   doCheck = false; # no tests
-  pythonImportsCheck = [ "connection_pool" ];
+  pythonImportsCheck = ["connection_pool"];
 
   meta = with lib; {
     description = "Thread-safe connection pool";
     homepage = "https://github.com/zhouyl/ConnectionPool";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [veprbl];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, python-lsp-server
-, pythonOlder
+{
+  lib,
+  black,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-lsp-server,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "python-lsp-black";
   version = "1.1.0";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     sha256 = "sha256-WIQf1oz3b1PLIcXfQsu4hQ58nfp7l3J7zkcWNT6RbUY=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  propagatedBuildInputs = [ black python-lsp-server ];
+  propagatedBuildInputs = [black python-lsp-server];
 
   meta = with lib; {
     homepage = "https://github.com/python-lsp/python-lsp-black";
     description = "Black plugin for the Python LSP Server";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

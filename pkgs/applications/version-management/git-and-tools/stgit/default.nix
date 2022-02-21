@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, python3Packages
-, asciidoc
-, docbook_xsl
-, docbook_xml_dtd_45
-, git
-, perl
-, xmlto
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  python3Packages,
+  asciidoc,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  git,
+  perl,
+  xmlto,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "stgit";
   version = "1.5";
@@ -21,11 +21,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-TsJr2Riygz/DZrn6UZMPvq1tTfvl3dFEZZNq2wVj1Nw=";
   };
 
-  nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 ];
+  nativeBuildInputs = [installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45];
 
   format = "other";
 
-  checkInputs = [ git perl ];
+  checkInputs = [git perl];
 
   postPatch = ''
     for f in Documentation/*.xsl; do
@@ -51,12 +51,12 @@ python3Packages.buildPythonApplication rec {
     "XMLTO_EXTRA=--skip-validation"
   ];
 
-  buildFlags = [ "all" "doc" ];
+  buildFlags = ["all" "doc"];
 
   checkTarget = "test";
-  checkFlags = [ "PERL_PATH=${perl}/bin/perl" ];
+  checkFlags = ["PERL_PATH=${perl}/bin/perl"];
 
-  installTargets = [ "install" "install-doc" "install-html" ];
+  installTargets = ["install" "install-doc" "install-html"];
   postInstall = ''
     installShellCompletion --cmd stg \
       --fish completion/stg.fish \
@@ -69,6 +69,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://stacked-git.github.io/";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jshholland ];
+    maintainers = with maintainers; [jshholland];
   };
 }

@@ -1,11 +1,18 @@
-{ lib, writeShellScript
-, coreutils, jq, common-updater-scripts
-, curl, wget, gnugrep, yarn, prefetch-yarn-deps
+{
+  lib,
+  writeShellScript,
+  coreutils,
+  jq,
+  common-updater-scripts,
+  curl,
+  wget,
+  gnugrep,
+  yarn,
+  prefetch-yarn-deps,
 }:
-
 writeShellScript "update-matrix-alertmanager" ''
   set -xe
-  export PATH="${lib.makeBinPath [ gnugrep coreutils curl wget jq common-updater-scripts yarn prefetch-yarn-deps ]}"
+  export PATH="${lib.makeBinPath [gnugrep coreutils curl wget jq common-updater-scripts yarn prefetch-yarn-deps]}"
 
   cd pkgs/servers/monitoring/matrix-alertmanager/
 

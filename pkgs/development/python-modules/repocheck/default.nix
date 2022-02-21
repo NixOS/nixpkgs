@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "repocheck";
   version = "2015-08-05";
@@ -19,5 +19,4 @@ buildPythonPackage rec {
     description = "Check the status of code repositories under a root directory";
     license = licenses.gpl3Plus;
   };
-
 }

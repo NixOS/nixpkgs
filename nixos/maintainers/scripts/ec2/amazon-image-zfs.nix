@@ -1,5 +1,5 @@
 {
-  imports = [ ./amazon-image.nix ];
+  imports = [./amazon-image.nix];
   ec2.zfs = {
     enable = true;
     datasets = {

@@ -1,4 +1,4 @@
-{ fetchurl }: [
+{fetchurl}: [
   {
     name = "microsoft.aspnetcore.app.ref";
     version = "3.1.10";

@@ -1,11 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rtrtr";
   version = "0.1.2";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-Jdu5U56Duqzakvj3rldzch17y1nhJmuxwJtq4Ydx3IY=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildNoDefaultFeatures = true;
 
@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/NLnetLabs/rtrtr";
     changelog = "https://github.com/NLnetLabs/rtrtr/blob/v${version}/Changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ steamwalker ];
+    maintainers = with maintainers; [steamwalker];
   };
 }

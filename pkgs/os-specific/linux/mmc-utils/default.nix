@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchgit }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 stdenv.mkDerivation {
   pname = "mmc-utils";
   version = "2021-05-11";
@@ -10,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0l06ahmprqshh75pkdpagb8fgnp2bwn8q8hwp1yl3laww2ghm8i5";
   };
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   installPhase = ''
     make install prefix=$out
@@ -22,7 +25,7 @@ stdenv.mkDerivation {
     description = "Configure MMC storage devices from userspace";
     homepage = "http://git.kernel.org/cgit/linux/kernel/git/cjb/mmc-utils.git/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = [maintainers.dezgeg];
     platforms = platforms.linux;
   };
 }

@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.stumpwm;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.stumpwm;
+in {
   options = {
     services.xserver.windowManager.stumpwm.enable = mkEnableOption "stumpwm";
   };
@@ -19,6 +19,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.lispPackages.stumpwm ];
+    environment.systemPackages = [pkgs.lispPackages.stumpwm];
   };
 }

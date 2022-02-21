@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "git-credential-1password";
   version = "1.0.0";
@@ -18,6 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/develerik/git-credential-1password";
     changelog = "https://github.com/develerik/git-credential-1password/releases/tag/v${version}";
     license = licenses.isc;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = [maintainers.ivankovnatsky];
   };
 }

@@ -1,5 +1,7 @@
-{ stdenv, fetchurl }:
-
+{
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation {
   name = "tipa-1.3";
 
@@ -24,5 +26,3 @@ stdenv.mkDerivation {
     description = "Phonetic font for TeX";
   };
 }
-
-

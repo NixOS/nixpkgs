@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, neon
-, procps
-, substituteAll
-, zlib
-, wrapperDir ? "/run/wrappers/bin"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  neon,
+  procps,
+  substituteAll,
+  zlib,
+  wrapperDir ? "/run/wrappers/bin",
 }:
-
 stdenv.mkDerivation rec {
   pname = "davfs2";
   version = "1.6.1";
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zj65SOzlgqUck0zLDMcOZZg5FycXyv8XP2ml4q+QxcA=";
   };
 
-  buildInputs = [ neon zlib ];
+  buildInputs = [neon zlib];
 
   patches = [
     ./fix-sysconfdir.patch
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--sysconfdir=/etc" ];
+  configureFlags = ["--sysconfdir=/etc"];
 
   makeFlags = [
     "sbindir=$(out)/sbin"

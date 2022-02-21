@@ -1,5 +1,13 @@
-{ lib, buildPerlPackage, fetchFromGitHub, makeWrapper, openssh, GitRepository, URI, XMLMini }:
-
+{
+  lib,
+  buildPerlPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  openssh,
+  GitRepository,
+  URI,
+  XMLMini,
+}:
 buildPerlPackage {
   pname = "ham-unstable";
   version = "2020-09-09";
@@ -11,10 +19,10 @@ buildPerlPackage {
     sha256 = "0m65pav2830y0ivwsy60dc4w457qlc0nqg43lji1kj2g96hmy2bw";
   };
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
-  nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ openssh GitRepository URI XMLMini ];
+  nativeBuildInputs = [makeWrapper];
+  propagatedBuildInputs = [openssh GitRepository URI XMLMini];
 
   preConfigure = ''
     patchShebangs .
@@ -36,7 +44,7 @@ buildPerlPackage {
     description = "A tool to manage big projects consisting of multiple loosely-coupled git repositories";
     homepage = "https://github.com/kernkonzept/ham";
     license = "unknown"; # should be gpl2, but not quite sure
-    maintainers = with lib.maintainers; [ aw ];
+    maintainers = with lib.maintainers; [aw];
     platforms = lib.platforms.unix;
   };
 }

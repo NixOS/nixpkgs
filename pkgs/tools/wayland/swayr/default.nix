@@ -1,5 +1,8 @@
-{ lib, fetchFromSourcehut, rustPlatform }:
-
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "swayr";
   version = "0.13.0";
@@ -24,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A window switcher (and more) for sway";
     homepage = "https://git.sr.ht/~tsdh/swayr";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ artturin ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [artturin];
   };
 }

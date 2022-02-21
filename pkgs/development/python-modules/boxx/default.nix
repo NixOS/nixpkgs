@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, xvfb-run
-, matplotlib
-, scikitimage
-, numpy
-, pandas
-, imageio
-, snakeviz
-, fn
-, pyopengl
-, seaborn
-, pytorch
-, torchvision
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  xvfb-run,
+  matplotlib,
+  scikitimage,
+  numpy,
+  pandas,
+  imageio,
+  snakeviz,
+  fn,
+  pyopengl,
+  seaborn,
+  pytorch,
+  torchvision,
 }:
-
 buildPythonPackage rec {
   pname = "boxx";
   version = "0.9.9";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  pythonImportsCheck = [ "boxx" ];
+  pythonImportsCheck = ["boxx"];
   checkInputs = [
     xvfb-run
     pytorch
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Tool-box for efficient build and debug in Python. Especially for Scientific Computing and Computer Vision.";
     homepage = "https://github.com/DIYer22/boxx";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucasew ];
+    maintainers = with maintainers; [lucasew];
   };
 }

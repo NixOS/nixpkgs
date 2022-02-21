@@ -1,76 +1,85 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   xEnv = config.systemd.services.display-manager.environment;
   cfg = dmcfg.lightdm;
   sessionData = dmcfg.sessionData;
 
-  setSessionScript = pkgs.callPackage ./account-service-util.nix { };
+  setSessionScript = pkgs.callPackage ./account-service-util.nix {};
 
   inherit (pkgs) lightdm writeScript writeText;
 
   # lightdm runs with clearenv(), but we need a few things in the environment for X to startup
   xserverWrapper = writeScript "xserver-wrapper"
-    ''
-      #! ${pkgs.bash}/bin/bash
-      ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
+  ''
+    #! ${pkgs.bash}/bin/bash
+    ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
 
-      display=$(echo "$@" | xargs -n 1 | grep -P ^:\\d\$ | head -n 1 | sed s/^://)
-      if [ -z "$display" ]
-      then additionalArgs=":0 -logfile /var/log/X.0.log"
-      else additionalArgs="-logfile /var/log/X.$display.log"
-      fi
+    display=$(echo "$@" | xargs -n 1 | grep -P ^:\\d\$ | head -n 1 | sed s/^://)
+    if [ -z "$display" ]
+    then additionalArgs=":0 -logfile /var/log/X.0.log"
+    else additionalArgs="-logfile /var/log/X.$display.log"
+    fi
 
-      exec ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} $additionalArgs "$@"
-    '';
+    exec ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} $additionalArgs "$@"
+  '';
 
   usersConf = writeText "users.conf"
-    ''
-      [UserList]
-      minimum-uid=500
-      hidden-users=${concatStringsSep " " dmcfg.hiddenUsers}
-      hidden-shells=/run/current-system/sw/bin/nologin
-    '';
+  ''
+    [UserList]
+    minimum-uid=500
+    hidden-users=${concatStringsSep " " dmcfg.hiddenUsers}
+    hidden-shells=/run/current-system/sw/bin/nologin
+  '';
 
   lightdmConf = writeText "lightdm.conf"
-    ''
-      [LightDM]
-      ${optionalString cfg.greeter.enable ''
+  ''
+    [LightDM]
+    ${
+      optionalString cfg.greeter.enable ''
         greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
-      ''}
-      sessions-directory = ${dmcfg.sessionData.desktops}/share/xsessions:${dmcfg.sessionData.desktops}/share/wayland-sessions
-      ${cfg.extraConfig}
+      ''
+    }
+    sessions-directory = ${dmcfg.sessionData.desktops}/share/xsessions:${dmcfg.sessionData.desktops}/share/wayland-sessions
+    ${cfg.extraConfig}
 
-      [Seat:*]
-      xserver-command = ${xserverWrapper}
-      session-wrapper = ${dmcfg.sessionData.wrapper}
-      ${optionalString cfg.greeter.enable ''
+    [Seat:*]
+    xserver-command = ${xserverWrapper}
+    session-wrapper = ${dmcfg.sessionData.wrapper}
+    ${
+      optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
-      ''}
-      ${optionalString dmcfg.autoLogin.enable ''
+      ''
+    }
+    ${
+      optionalString dmcfg.autoLogin.enable ''
         autologin-user = ${dmcfg.autoLogin.user}
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
         autologin-session = ${sessionData.autologinSession}
-      ''}
-      ${optionalString (dmcfg.setupCommands != "") ''
-        display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
-          #!${pkgs.bash}/bin/bash
-          ${dmcfg.setupCommands}
-        ''}
-      ''}
-      ${cfg.extraSeatDefaults}
-    '';
-
-in
-{
+      ''
+    }
+    ${
+      optionalString (dmcfg.setupCommands != "") ''
+        display-setup-script=${
+          pkgs.writeScript "lightdm-display-setup" ''
+            #!${pkgs.bash}/bin/bash
+            ${dmcfg.setupCommands}
+          ''
+        }
+      ''
+    }
+    ${cfg.extraSeatDefaults}
+  '';
+in {
   meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [] ++ teams.pantheon.members;
   };
 
   # Note: the order in which lightdm greeter modules are imported
@@ -82,26 +91,24 @@ in
     ./lightdm-greeters/enso-os.nix
     ./lightdm-greeters/pantheon.nix
     ./lightdm-greeters/tiny.nix
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ] [
+    (mkRenamedOptionModule ["services" "xserver" "displayManager" "lightdm" "autoLogin" "enable"] [
       "services"
       "xserver"
       "displayManager"
       "autoLogin"
       "enable"
     ])
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "user" ] [
-     "services"
-     "xserver"
-     "displayManager"
-     "autoLogin"
-     "user"
+    (mkRenamedOptionModule ["services" "xserver" "displayManager" "lightdm" "autoLogin" "user"] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "user"
     ])
   ];
 
   options = {
-
     services.xserver.displayManager.lightdm = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -110,7 +117,7 @@ in
         '';
       };
 
-      greeter =  {
+      greeter = {
         enable = mkOption {
           type = types.bool;
           default = true;
@@ -125,7 +132,6 @@ in
             The LightDM greeter to login via. The package should be a directory
             containing a .desktop file matching the name in the 'name' option.
           '';
-
         };
         name = mkOption {
           type = types.str;
@@ -171,24 +177,25 @@ in
           Show the greeter for this many seconds before automatic login occurs.
         '';
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-
     assertions = [
-      { assertion = xcfg.enable;
+      {
+        assertion = xcfg.enable;
         message = ''
           LightDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = dmcfg.autoLogin.enable -> sessionData.autologinSession != null;
+      {
+        assertion = dmcfg.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
           LightDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';
       }
-      { assertion = !cfg.greeter.enable -> (dmcfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
+      {
+        assertion = !cfg.greeter.enable -> (dmcfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
         message = ''
           LightDM can only run without greeter if automatic login is enabled and the timeout for it
           is set to zero.
@@ -224,7 +231,7 @@ in
       "getty@tty7.service"
       # TODO: Add "plymouth-quit.service" so LightDM can control when plymouth
       # quits. Currently this breaks switching to configurations with plymouth.
-     ];
+    ];
 
     # Pull in dependencies of services we replace.
     systemd.services.display-manager.after = [
@@ -259,49 +266,49 @@ in
     environment.etc."lightdm/users.conf".source = usersConf;
 
     services.dbus.enable = true;
-    services.dbus.packages = [ lightdm ];
+    services.dbus.packages = [lightdm];
 
     # lightdm uses the accounts daemon to remember language/window-manager per user
     services.accounts-daemon.enable = true;
 
     # Enable the accounts daemon to find lightdm's dbus interface
-    environment.systemPackages = [ lightdm ];
+    environment.systemPackages = [lightdm];
 
     security.pam.services.lightdm.text = ''
-        auth      substack      login
-        account   include       login
-        password  substack      login
-        session   include       login
+      auth      substack      login
+      account   include       login
+      password  substack      login
+      session   include       login
     '';
 
     security.pam.services.lightdm-greeter.text = ''
-        auth     required       pam_succeed_if.so audit quiet_success user = lightdm
-        auth     optional       pam_permit.so
+      auth     required       pam_succeed_if.so audit quiet_success user = lightdm
+      auth     optional       pam_permit.so
 
-        account  required       pam_succeed_if.so audit quiet_success user = lightdm
-        account  sufficient     pam_unix.so
+      account  required       pam_succeed_if.so audit quiet_success user = lightdm
+      account  sufficient     pam_unix.so
 
-        password required       pam_deny.so
+      password required       pam_deny.so
 
-        session  required       pam_succeed_if.so audit quiet_success user = lightdm
-        session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       pam_keyinit.so force revoke
-        session  optional       pam_permit.so
+      session  required       pam_succeed_if.so audit quiet_success user = lightdm
+      session  required       pam_env.so conffile=/etc/pam/environment readenv=0
+      session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+      session  optional       pam_keyinit.so force revoke
+      session  optional       pam_permit.so
     '';
 
     security.pam.services.lightdm-autologin.text = ''
-        auth      requisite     pam_nologin.so
+      auth      requisite     pam_nologin.so
 
-        auth      required      pam_succeed_if.so uid >= 1000 quiet
-        auth      required      pam_permit.so
+      auth      required      pam_succeed_if.so uid >= 1000 quiet
+      auth      required      pam_permit.so
 
-        account   sufficient    pam_unix.so
+      account   sufficient    pam_unix.so
 
-        password  requisite     pam_unix.so nullok sha512
+      password  requisite     pam_unix.so nullok sha512
 
-        session   optional      pam_keyinit.so revoke
-        session   include       login
+      session   optional      pam_keyinit.so revoke
+      session   include       login
     '';
 
     users.users.lightdm = {
@@ -320,7 +327,7 @@ in
     ];
 
     users.groups.lightdm.gid = config.ids.gids.lightdm;
-    services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..
+    services.xserver.tty = null; # We might start multiple X servers so let the tty increment themselves..
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };
 }

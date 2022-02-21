@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-
+{
+  lib,
+  fetchFromGitHub,
+}:
 fetchFromGitHub rec {
   name = "libre-bodoni-2.000";
 
@@ -30,7 +32,7 @@ fetchFromGitHub rec {
     '';
     homepage = "https://github.com/impallari/Libre-Bodoni";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = with maintainers; [cmfwyp];
     platforms = platforms.all;
   };
 }

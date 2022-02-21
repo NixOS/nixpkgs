@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, freeglut
-, freetype
-, GLUT
-, libGL
-, libGLU
-, OpenGL
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  doxygen,
+  freeglut,
+  freetype,
+  GLUT,
+  libGL,
+  libGLU,
+  OpenGL,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ftgl";
   version = "2.4.0";
@@ -28,16 +28,22 @@ stdenv.mkDerivation rec {
     doxygen
     pkg-config
   ];
-  buildInputs = [
-    freetype
-  ] ++ (if stdenv.isDarwin then [
-    OpenGL
-    GLUT
-  ] else [
-    libGL
-    libGLU
-    freeglut
-  ]);
+  buildInputs =
+    [
+      freetype
+    ]
+    ++ (if stdenv.isDarwin
+    then
+      [
+        OpenGL
+        GLUT
+      ]
+    else
+      [
+        libGL
+        libGLU
+        freeglut
+      ]);
 
   configureFlags = [
     "--with-ft-prefix=${lib.getDev freetype}"
@@ -60,7 +66,7 @@ stdenv.mkDerivation rec {
       rendering modes.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

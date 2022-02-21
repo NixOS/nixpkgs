@@ -1,10 +1,12 @@
-{ fetchurl }:
-
-rec {
-  fetchSrc = {name, sha256}: fetchurl {
-    url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
-    inherit sha256;
-  };
+{fetchurl}: rec {
+  fetchSrc = {
+    name,
+    sha256,
+  }:
+    fetchurl {
+      url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
+      inherit sha256;
+    };
 
   major = "7";
   minor = "2";
@@ -13,7 +15,11 @@ rec {
 
   subdir = "${major}.${minor}.${patch}";
 
-  version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
+  version = "${subdir}${
+    if tweak == ""
+    then ""
+    else "."
+  }${tweak}";
 
   src = fetchurl {
     url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";

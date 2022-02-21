@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, zlib, jansson, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  zlib,
+  jansson,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jose";
   version = "10";
@@ -13,16 +19,16 @@ stdenv.mkDerivation rec {
     sha256 = "15ac8a656m66rd9qg4dj53smykwaagqv606h18w7fiqn0ykxl4vi";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ zlib jansson openssl ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [zlib jansson openssl];
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = ["out" "dev" "man"];
   enableParallelBuilding = true;
 
   meta = {
     description = "C-language implementation of Javascript Object Signing and Encryption";
     homepage = "https://github.com/latchset/jose";
-    maintainers = with lib.maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [fpletz];
     license = lib.licenses.asl20;
   };
 }

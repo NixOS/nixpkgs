@@ -1,13 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.jirafeau;
 
   group = config.services.nginx.group;
   user = config.services.nginx.user;
 
-  withTrailingSlash = str: if hasSuffix "/" str then str else "${str}/";
+  withTrailingSlash = str:
+    if hasSuffix "/" str
+    then str
+    else "${str}/";
 
   localConfig = pkgs.writeText "config.local.php" ''
     <?php
@@ -19,8 +25,7 @@ let
 
       ${cfg.extraConfig}
   '';
-in
-{
+in {
   options.services.jirafeau = {
     adminPasswordSha256 = mkOption {
       type = types.str;
@@ -46,13 +51,11 @@ in
         $cfg['organisation'] = 'ACME';
       '';
       description = let
-        documentationLink =
-          "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
-      in
-        ''
-          Jirefeau configuration. Refer to <link xlink:href="${documentationLink}"/> for supported
-          values.
-        '';
+        documentationLink = "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
+      in ''
+        Jirefeau configuration. Refer to <link xlink:href="${documentationLink}"/> for supported
+        values.
+      '';
     };
 
     hostName = mkOption {
@@ -72,17 +75,16 @@ in
       default = "30m";
       description = let
         nginxCoreDocumentation = "http://nginx.org/en/docs/http/ngx_http_core_module.html";
-      in
-        ''
-          Timeout for reading client request bodies and headers. Refer to
-          <link xlink:href="${nginxCoreDocumentation}#client_body_timeout"/> and
-          <link xlink:href="${nginxCoreDocumentation}#client_header_timeout"/> for accepted values.
-        '';
+      in ''
+        Timeout for reading client request bodies and headers. Refer to
+        <link xlink:href="${nginxCoreDocumentation}#client_body_timeout"/> and
+        <link xlink:href="${nginxCoreDocumentation}#client_header_timeout"/> for accepted values.
+      '';
     };
 
     nginxConfig = mkOption {
       type = types.submodule
-        (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
+      (import ../web-servers/nginx/vhost-options.nix {inherit config lib;});
       default = {};
       example = literalExpression ''
         {
@@ -100,7 +102,7 @@ in
     };
 
     poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+      type = with types; attrsOf (oneOf [str int bool]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -116,7 +118,6 @@ in
     };
   };
 
-
   config = mkIf cfg.enable {
     services = {
       nginx = {
@@ -126,14 +127,15 @@ in
           {
             extraConfig = let
               clientMaxBodySize =
-                if cfg.maxUploadSizeMegabytes == 0 then "0" else "${cfg.maxUploadSizeMegabytes}m";
-            in
-              ''
-                index index.php;
-                client_max_body_size ${clientMaxBodySize};
-                client_body_timeout ${cfg.maxUploadTimeout};
-                client_header_timeout ${cfg.maxUploadTimeout};
-              '';
+                if cfg.maxUploadSizeMegabytes == 0
+                then "0"
+                else "${cfg.maxUploadSizeMegabytes}m";
+            in ''
+              index index.php;
+              client_max_body_size ${clientMaxBodySize};
+              client_body_timeout ${cfg.maxUploadTimeout};
+              client_header_timeout ${cfg.maxUploadTimeout};
+            '';
             locations = {
               "~ \\.php$".extraConfig = ''
                 include ${config.services.nginx.package}/conf/fastcgi_params;
@@ -152,11 +154,13 @@ in
       phpfpm.pools.jirafeau = {
         inherit group user;
         phpEnv."JIRAFEAU_CONFIG" = "${localConfig}";
-        settings = {
-          "listen.mode" = "0660";
-          "listen.owner" = user;
-          "listen.group" = group;
-        } // cfg.poolConfig;
+        settings =
+          {
+            "listen.mode" = "0660";
+            "listen.owner" = user;
+            "listen.group" = group;
+          }
+          // cfg.poolConfig;
       };
     };
 

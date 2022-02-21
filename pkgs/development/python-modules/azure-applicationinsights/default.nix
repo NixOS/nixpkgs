@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, msrest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  msrest,
 }:
-
 buildPythonPackage rec {
   pname = "azure-applicationinsights";
   version = "0.1.1";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Application Insights Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    maintainers = with maintainers; [maxwilson];
   };
 }

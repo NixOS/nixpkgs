@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchurl }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 stdenv.mkDerivation {
   name = "std-man-pages-4.4.0";
 
@@ -18,7 +21,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "GCC C++ STD manual pages";
     homepage = "https://gcc.gnu.org/";
-    license = with licenses; [ fdl12Plus ];
+    license = with licenses; [fdl12Plus];
     platforms = platforms.unix;
   };
 }

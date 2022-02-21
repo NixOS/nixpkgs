@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.fireqos;
   fireqosConfig = pkgs.writeText "fireqos.conf" "${cfg.config}";
 in {
@@ -37,7 +39,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.fireqos = {
       description = "FireQOS";
-      after = [ "network.target" ];
+      after = ["network.target"];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

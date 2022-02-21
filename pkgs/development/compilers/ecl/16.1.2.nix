@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, libtool
-, autoconf
-, automake
-, gmp
-, mpfr
-, libffi
-, makeWrapper
-, noUnicode ? false
-, gcc
-, threadSupport ? false
-, useBoehmgc ? true
-, boehmgc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libtool,
+  autoconf,
+  automake,
+  gmp,
+  mpfr,
+  libffi,
+  makeWrapper,
+  noUnicode ? false,
+  gcc,
+  threadSupport ? false,
+  useBoehmgc ? true,
+  boehmgc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ecl";
   version = "16.1.2";
@@ -31,24 +31,29 @@ stdenv.mkDerivation rec {
     automake
     makeWrapper
   ];
-  propagatedBuildInputs = [
-    libffi
-    gmp
-    mpfr
-    gcc
-  ] ++ lib.optionals useBoehmgc [
-    # replaces ecl's own gc which other packages can depend on, thus propagated
-    boehmgc
-  ];
+  propagatedBuildInputs =
+    [
+      libffi
+      gmp
+      mpfr
+      gcc
+    ]
+    ++ lib.optionals useBoehmgc [
+      # replaces ecl's own gc which other packages can depend on, thus propagated
+      boehmgc
+    ];
 
-  configureFlags = [
-    (if threadSupport then "--enable-threads" else "--disable-threads")
-    "--with-gmp-incdir=${lib.getDev gmp}/include"
-    "--with-gmp-libdir=${lib.getLib gmp}/lib"
-    # -incdir, -libdir doesn't seem to be supported for libffi
-    "--with-libffi-prefix=${lib.getDev libffi}"
-  ] ++ lib.optional (! noUnicode) "--enable-unicode"
-  ;
+  configureFlags =
+    [
+      (if threadSupport
+      then "--enable-threads"
+      else "--disable-threads")
+      "--with-gmp-incdir=${lib.getDev gmp}/include"
+      "--with-gmp-libdir=${lib.getLib gmp}/lib"
+      # -incdir, -libdir doesn't seem to be supported for libffi
+      "--with-libffi-prefix=${lib.getDev libffi}"
+    ]
+    ++ lib.optional (!noUnicode) "--enable-unicode";
 
   patches = [
     (fetchpatch {
@@ -68,35 +73,37 @@ stdenv.mkDerivation rec {
     ./ecl-1.16.2-libffi-3.3-abi.patch
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  postInstall = ''
-    sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
-    wrapProgram "$out/bin/ecl" \
-      --prefix PATH ':' "${
+  postInstall =
+    ''
+      sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
+      wrapProgram "$out/bin/ecl" \
+        --prefix PATH ':' "${
         lib.makeBinPath [
-          gcc                   # for the C compiler
+          gcc # for the C compiler
           gcc.bintools.bintools # for ar
         ]
       }" \
-  ''
-  # ecl 16.1.2 is too old to have -libdir for libffi and boehmgc, so we need to
-  # use NIX_LDFLAGS_BEFORE to make gcc find these particular libraries.
-  # Since it is missing even the prefix flag for boehmgc we also need to inject
-  # the correct -I flag via NIX_CFLAGS_COMPILE. Since we have access to it, we
-  # create the variables with suffixSalt (which seems to be necessary for
-  # NIX_CFLAGS_COMPILE even).
-  + lib.optionalString useBoehmgc ''
-    --prefix NIX_CFLAGS_COMPILE_${gcc.suffixSalt} ' ' "-I${lib.getDev boehmgc}/include" \
-    --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib boehmgc}/lib" \
-  '' + ''
-    --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
-  '';
+    ''
+    # ecl 16.1.2 is too old to have -libdir for libffi and boehmgc, so we need to
+    # use NIX_LDFLAGS_BEFORE to make gcc find these particular libraries.
+    # Since it is missing even the prefix flag for boehmgc we also need to inject
+    # the correct -I flag via NIX_CFLAGS_COMPILE. Since we have access to it, we
+    # create the variables with suffixSalt (which seems to be necessary for
+    # NIX_CFLAGS_COMPILE even).
+    + lib.optionalString useBoehmgc ''
+      --prefix NIX_CFLAGS_COMPILE_${gcc.suffixSalt} ' ' "-I${lib.getDev boehmgc}/include" \
+      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib boehmgc}/lib" \
+    ''
+    + ''
+      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
+    '';
 
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

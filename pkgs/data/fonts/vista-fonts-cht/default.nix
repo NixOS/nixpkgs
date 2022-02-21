@@ -1,5 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, cabextract }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  cabextract,
+}:
 stdenvNoCC.mkDerivation {
   pname = "vista-fonts-cht";
   version = "1";
@@ -9,7 +13,7 @@ stdenvNoCC.mkDerivation {
     sha256 = "sha256-fSnbbxlMPzbhFSQyKxQaS5paiWji8njK7tS8Eppsj6g=";
   };
 
-  nativeBuildInputs = [ cabextract ];
+  nativeBuildInputs = [cabextract];
 
   unpackPhase = ''
     cabextract --lowercase --filter '*.TTF' $src
@@ -26,12 +30,11 @@ stdenvNoCC.mkDerivation {
       --subst-var-by fontname "Microsoft JhengHei"
   '';
 
-
   meta = with lib; {
     description = "TrueType fonts from Microsoft Windows Vista For Traditional Chinese (Microsoft JhengHei)";
     homepage = "https://www.microsoft.com/typography/fonts/family.aspx";
     license = licenses.unfree;
-    maintainers = with maintainers; [ atkinschang ];
+    maintainers = with maintainers; [atkinschang];
 
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.

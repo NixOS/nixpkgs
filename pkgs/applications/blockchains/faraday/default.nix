@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "faraday";
   version = "0.2.5-alpha";
@@ -16,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "1nclmvypxp5436q6qaagp1k5bfmaia7hsykw47va0pijlsvsbmck";
 
-  subPackages = [ "cmd/frcli" "cmd/faraday" ];
+  subPackages = ["cmd/frcli" "cmd/faraday"];
 
   meta = with lib; {
     description = "LND Channel Management Tools";
     homepage = "https://github.com/lightninglabs/faraday";
     license = licenses.mit;
-    maintainers = with maintainers; [ proofofkeags prusnak ];
+    maintainers = with maintainers; [proofofkeags prusnak];
   };
 }

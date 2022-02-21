@@ -1,10 +1,18 @@
-{ lib, stdenv, unzip, src, name, postInstall ? "true", meta ? {}, findXMLCatalogs }:
-
+{
+  lib,
+  stdenv,
+  unzip,
+  src,
+  name,
+  postInstall ? "true",
+  meta ? {},
+  findXMLCatalogs,
+}:
 stdenv.mkDerivation {
   inherit src name postInstall;
 
   nativeBuildInputs = [unzip];
-  propagatedNativeBuildInputs = [ findXMLCatalogs ];
+  propagatedNativeBuildInputs = [findXMLCatalogs];
 
   unpackPhase = ''
     mkdir -p $out/xml/dtd/docbook
@@ -17,7 +25,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = meta // {
-    platforms = lib.platforms.unix;
-  };
+  meta =
+    meta
+    // {
+      platforms = lib.platforms.unix;
+    };
 }

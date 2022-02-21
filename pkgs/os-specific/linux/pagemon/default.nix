@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "pagemon";
   version = "0.01.18";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "ColinIanKing";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   makeFlags = [
     "BINDIR=$(out)/bin"

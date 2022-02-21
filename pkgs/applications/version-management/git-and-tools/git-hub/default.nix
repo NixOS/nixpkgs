@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, gitMinimal, docutils }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitMinimal,
+  docutils,
+}:
 stdenv.mkDerivation rec {
   pname = "git-hub";
   version = "2.1.3";
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gitMinimal        # Used during build to generate Bash completion.
+    gitMinimal # Used during build to generate Bash completion.
     docutils
   ];
 
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installFlags = [ "prefix=$(out)" "sysconfdir=$(out)/etc" ];
+  installFlags = ["prefix=$(out)" "sysconfdir=$(out)/etc"];
 
   postInstall = ''
     # Remove inert ftdetect vim plugin and a README that's a man page subset:

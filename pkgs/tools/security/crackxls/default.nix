@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, openssl, libgsf, gmp }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoconf,
+  automake,
+  openssl,
+  libgsf,
+  gmp,
+}:
 stdenv.mkDerivation rec {
-
   pname = "crackxls";
   version = "0.4";
 
@@ -12,11 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "0q5jl7hcds3f0rhly3iy4fhhbyh9cdrfaw7zdrazzf1wswwhyssz";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake openssl libgsf gmp ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [autoconf automake openssl libgsf gmp];
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin
     cp crackxls2003 $out/bin/
   '';

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytestCheckHook
-, pythonOlder
-, pytz
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "feedgenerator";
   version = "2.0.0";
@@ -37,12 +37,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "feedgenerator" ];
+  pythonImportsCheck = ["feedgenerator"];
 
   meta = with lib; {
     description = "Standalone version of Django's feedgenerator module";
     homepage = "https://github.com/getpelican/feedgenerator";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

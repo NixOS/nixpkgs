@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, python3Packages
-, makeWrapper
-, coreutils
-, iptables
-, nettools
-, openssh
-, procps
+{
+  lib,
+  stdenv,
+  python3Packages,
+  makeWrapper,
+  coreutils,
+  iptables,
+  nettools,
+  openssh,
+  procps,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
   version = "1.0.5";
@@ -18,22 +18,22 @@ python3Packages.buildPythonApplication rec {
     sha256 = "fd8c691aac2cb80933aae7f94d9d9e271a820efc5c48e73408f1a90da426a1bd";
   };
 
-  patches = [ ./sudo.patch ];
+  patches = [./sudo.patch];
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace '--cov=sshuttle --cov-branch --cov-report=term-missing' ""
   '';
 
-  nativeBuildInputs = [ makeWrapper python3Packages.setuptools-scm ];
+  nativeBuildInputs = [makeWrapper python3Packages.setuptools-scm];
 
-  propagatedBuildInputs = [ python3Packages.psutil ];
+  propagatedBuildInputs = [python3Packages.psutil];
 
-  checkInputs = with python3Packages; [ mock pytestCheckHook flake8 ];
+  checkInputs = with python3Packages; [mock pytestCheckHook flake8];
 
   postInstall = ''
     wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
+      --prefix PATH : "${lib.makeBinPath ([coreutils openssh procps] ++ lib.optionals stdenv.isLinux [iptables nettools])}" \
   '';
 
   meta = with lib; {
@@ -45,6 +45,6 @@ python3Packages.buildPythonApplication rec {
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ domenkozar carlosdagos ];
+    maintainers = with maintainers; [domenkozar carlosdagos];
   };
 }

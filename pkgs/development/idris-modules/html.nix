@@ -1,15 +1,16 @@
-{ build-idris-package
-, fetchFromGitHub
-, idrisscript
-, hrtime
-, webgl
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  idrisscript,
+  hrtime,
+  webgl,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "html";
   version = "2017-04-23";
 
-  idrisDeps = [ idrisscript hrtime webgl ];
+  idrisDeps = [idrisscript hrtime webgl];
 
   src = fetchFromGitHub {
     owner = "pierrebeaucamp";
@@ -26,6 +27,6 @@ build-idris-package  {
     description = "Idris library to interact with HTML";
     homepage = "https://github.com/pierrebeaucamp/idris-html";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

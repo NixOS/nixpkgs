@@ -1,11 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "vale";
   version = "2.15.1";
 
-  subPackages = [ "cmd/vale" ];
-  outputs = [ "out" "data" ];
+  subPackages = ["cmd/vale"];
+  outputs = ["out" "data"];
 
   src = fetchFromGitHub {
     owner = "errata-ai";
@@ -21,12 +24,12 @@ buildGoModule rec {
     cp -r styles $data/share/vale
   '';
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
   meta = with lib; {
     homepage = "https://docs.errata.ai/vale/about";
     description = "A syntax-aware linter for prose built with speed and extensibility in mind";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

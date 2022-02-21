@@ -1,94 +1,140 @@
-{ lib, pkgs }:
-
-with pkgs;
-
-rec {
-
-  sourceTarball = args: import ./source-tarball.nix (
-    { inherit stdenv autoconf automake libtool;
-    } // args);
+{
+  lib,
+  pkgs,
+}:
+with pkgs; rec {
+  sourceTarball = args:
+    import ./source-tarball.nix (
+      {
+        inherit stdenv autoconf automake libtool;
+      }
+      // args
+    );
 
   makeSourceTarball = sourceTarball; # compatibility
 
-  binaryTarball = args: import ./binary-tarball.nix (
-    { inherit stdenv;
-    } // args);
-
-  mvnBuild = args: import ./maven-build.nix (
-    { inherit stdenv;
-    } // args);
-
-  nixBuild = args: import ./nix-build.nix (
-    { inherit lib stdenv;
-    } // args);
-
-  coverageAnalysis = args: nixBuild (
-    { inherit lcov enableGCOVInstrumentation makeGCOVReport;
-      doCoverageAnalysis = true;
-    } // args);
-
-  clangAnalysis = args: nixBuild (
-    { inherit clang-analyzer;
-      doClangAnalysis = true;
-    } // args);
-
-  coverityAnalysis = args: nixBuild (
-    { inherit cov-build xz;
-      doCoverityAnalysis = true;
-    } // args);
-
-  rpmBuild = args: import ./rpm-build.nix (
-    { inherit vmTools;
-    } // args);
-
-  debBuild = args: import ./debian-build.nix (
-    { inherit lib stdenv vmTools checkinstall;
-    } // args);
-
-  aggregate =
-    { name, constituents, meta ? { } }:
-    pkgs.runCommand name
-      { inherit constituents meta;
-        preferLocalBuild = true;
-        _hydraAggregate = true;
+  binaryTarball = args:
+    import ./binary-tarball.nix (
+      {
+        inherit stdenv;
       }
-      ''
-        mkdir -p $out/nix-support
-        touch $out/nix-support/hydra-build-products
-        echo $constituents > $out/nix-support/hydra-aggregate-constituents
+      // args
+    );
 
-        # Propagate build failures.
-        for i in $constituents; do
-          if [ -e $i/nix-support/failed ]; then
-            touch $out/nix-support/failed
-          fi
-        done
-      '';
+  mvnBuild = args:
+    import ./maven-build.nix (
+      {
+        inherit stdenv;
+      }
+      // args
+    );
 
-  /* Create a channel job which success depends on the success of all of
-     its contituents. Channel jobs are a special type of jobs that are
-     listed in the channel tab of Hydra and that can be suscribed.
-     A tarball of the src attribute is distributed via the channel.
+  nixBuild = args:
+    import ./nix-build.nix (
+      {
+        inherit lib stdenv;
+      }
+      // args
+    );
 
-     - constituents: a list of derivations on which the channel success depends.
-     - name: the channel name that will be used in the hydra interface.
-     - src: should point to the root folder of the nix-expressions used by the
-            channel, typically a folder containing a `default.nix`.
+  coverageAnalysis = args:
+    nixBuild (
+      {
+        inherit lcov enableGCOVInstrumentation makeGCOVReport;
+        doCoverageAnalysis = true;
+      }
+      // args
+    );
 
-       channel {
-         constituents = [ foo bar baz ];
-         name = "my-channel";
-         src = ./.;
-       };
+  clangAnalysis = args:
+    nixBuild (
+      {
+        inherit clang-analyzer;
+        doClangAnalysis = true;
+      }
+      // args
+    );
 
-  */
-  channel =
-    { name, src, constituents ? [], meta ? {}, isNixOS ? true, ... }@args:
+  coverityAnalysis = args:
+    nixBuild (
+      {
+        inherit cov-build xz;
+        doCoverityAnalysis = true;
+      }
+      // args
+    );
+
+  rpmBuild = args:
+    import ./rpm-build.nix (
+      {
+        inherit vmTools;
+      }
+      // args
+    );
+
+  debBuild = args:
+    import ./debian-build.nix (
+      {
+        inherit lib stdenv vmTools checkinstall;
+      }
+      // args
+    );
+
+  aggregate = {
+    name,
+    constituents,
+    meta ? {},
+  }:
+    pkgs.runCommand name
+    {
+      inherit constituents meta;
+      preferLocalBuild = true;
+      _hydraAggregate = true;
+    }
+    ''
+      mkdir -p $out/nix-support
+      touch $out/nix-support/hydra-build-products
+      echo $constituents > $out/nix-support/hydra-aggregate-constituents
+
+      # Propagate build failures.
+      for i in $constituents; do
+        if [ -e $i/nix-support/failed ]; then
+          touch $out/nix-support/failed
+        fi
+      done
+    '';
+
+  /*
+   Create a channel job which success depends on the success of all of
+   its contituents. Channel jobs are a special type of jobs that are
+   listed in the channel tab of Hydra and that can be suscribed.
+   A tarball of the src attribute is distributed via the channel.
+   
+   - constituents: a list of derivations on which the channel success depends.
+   - name: the channel name that will be used in the hydra interface.
+   - src: should point to the root folder of the nix-expressions used by the
+          channel, typically a folder containing a `default.nix`.
+   
+     channel {
+       constituents = [ foo bar baz ];
+       name = "my-channel";
+       src = ./.;
+     };
+   
+   */
+  channel = {
+    name,
+    src,
+    constituents ? [],
+    meta ? {},
+    isNixOS ? true,
+    ...
+  } @ args:
     stdenv.mkDerivation ({
       preferLocalBuild = true;
       _hydraAggregate = true;
 
-      phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+      phases = ["unpackPhase" "patchPhase" "installPhase"];
 
       patchPhase = lib.optionalString isNixOS ''
         touch .update-on-nixos-rebuild
@@ -112,9 +158,11 @@ rec {
         done
       '';
 
-      meta = meta // {
-        isHydraChannel = true;
-      };
-    } // removeAttrs args [ "meta" ]);
-
+      meta =
+        meta
+        // {
+          isHydraChannel = true;
+        };
+    }
+    // removeAttrs args ["meta"]);
 }

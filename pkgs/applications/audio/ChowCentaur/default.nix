@@ -1,7 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, cairo, libxkbcommon
-, xcbutilcursor, xcbutilkeysyms, xcbutil, libXrandr, libXinerama, libXcursor
-, alsa-lib, libjack2, lv2, gcc-unwrapped }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cairo,
+  libxkbcommon,
+  xcbutilcursor,
+  xcbutilkeysyms,
+  xcbutil,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+  alsa-lib,
+  libjack2,
+  lv2,
+  gcc-unwrapped,
+}:
 stdenv.mkDerivation rec {
   pname = "ChowCentaur";
   version = "1.4.0";
@@ -14,7 +29,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
   buildInputs = [
     cairo
     libxkbcommon
@@ -43,11 +58,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Digital emulation of the Klon Centaur guitar pedal using RNNs, Wave Digital Filters, and more";
+    description = "Digital emulation of the Klon Centaur guitar pedal using RNNs, Wave Digital Filters, and more";
     homepage = "https://github.com/jatinchowdhury18/KlonCentaur";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [magnetophon];
   };
 }

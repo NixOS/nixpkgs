@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "qnap-qsw";
   version = "0.3.0";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python library to interact with the QNAP QSW API";
     homepage = "https://github.com/Noltari/python-qnap-qsw";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

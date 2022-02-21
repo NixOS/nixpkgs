@@ -1,63 +1,94 @@
-{ lib, stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
-, zlib, jdk, glib, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
-, makeWrapper, perl, ... }:
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  freetype,
+  fontconfig,
+  libX11,
+  libXrender,
+  zlib,
+  jdk,
+  glib,
+  gtk,
+  libXtst,
+  libsecret,
+  gsettings-desktop-schemas,
+  webkitgtk,
+  makeWrapper,
+  perl,
+  ...
+}: {
+  name,
+  src ? builtins.getAttr stdenv.hostPlatform.system sources,
+  sources ? null,
+  description,
+  productVersion,
+}:
+  stdenv.mkDerivation rec {
+    inherit name src;
 
-{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description, productVersion }:
+    desktopItem = makeDesktopItem {
+      name = "Eclipse";
+      exec = "eclipse";
+      icon = "eclipse";
+      comment = "Integrated Development Environment";
+      desktopName = "Eclipse IDE";
+      genericName = "Integrated Development Environment";
+      categories = "Development;";
+    };
 
-stdenv.mkDerivation rec {
-  inherit name src;
+    buildInputs =
+      [
+        fontconfig
+        freetype
+        glib
+        gsettings-desktop-schemas
+        gtk
+        jdk
+        libX11
+        libXrender
+        libXtst
+        libsecret
+        makeWrapper
+        zlib
+      ]
+      ++ lib.optional (webkitgtk != null) webkitgtk;
 
-  desktopItem = makeDesktopItem {
-    name = "Eclipse";
-    exec = "eclipse";
-    icon = "eclipse";
-    comment = "Integrated Development Environment";
-    desktopName = "Eclipse IDE";
-    genericName = "Integrated Development Environment";
-    categories = "Development;";
-  };
+    buildCommand = ''
+      # Unpack tarball.
+      mkdir -p $out
+      tar xfvz $src -C $out
 
-  buildInputs = [
-    fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
-    libXrender libXtst libsecret makeWrapper zlib
-  ] ++ lib.optional (webkitgtk != null) webkitgtk;
+      # Patch binaries.
+      interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+      libCairo=$out/eclipse/libcairo-swt.so
+      patchelf --set-interpreter $interpreter $out/eclipse/eclipse
+      [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [freetype fontconfig libX11 libXrender zlib]} $libCairo
 
-  buildCommand = ''
-    # Unpack tarball.
-    mkdir -p $out
-    tar xfvz $src -C $out
+      # Create wrapper script.  Pass -configuration to store
+      # settings in ~/.eclipse/org.eclipse.platform_<version> rather
+      # than ~/.eclipse/org.eclipse.platform_<version>_<number>.
+      productId=$(sed 's/id=//; t; d' $out/eclipse/.eclipseproduct)
 
-    # Patch binaries.
-    interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-    libCairo=$out/eclipse/libcairo-swt.so
-    patchelf --set-interpreter $interpreter $out/eclipse/eclipse
-    [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo
+      makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
+        --prefix PATH : ${jdk}/bin \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([glib gtk libXtst libsecret] ++ lib.optional (webkitgtk != null) webkitgtk)} \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+        --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
 
-    # Create wrapper script.  Pass -configuration to store
-    # settings in ~/.eclipse/org.eclipse.platform_<version> rather
-    # than ~/.eclipse/org.eclipse.platform_<version>_<number>.
-    productId=$(sed 's/id=//; t; d' $out/eclipse/.eclipseproduct)
+      # Create desktop item.
+      mkdir -p $out/share/applications
+      cp ${desktopItem}/share/applications/* $out/share/applications
+      mkdir -p $out/share/pixmaps
+      ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
-    makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
-      --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
+      # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
+      ${perl}/bin/perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin\n||' $out/eclipse/eclipse.ini
+    ''; # */
 
-    # Create desktop item.
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
-
-    # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
-    ${perl}/bin/perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin\n||' $out/eclipse/eclipse.ini
-  ''; # */
-
-  meta = {
-    homepage = "http://www.eclipse.org/";
-    inherit description;
-    platforms = [ "x86_64-linux" ];
-  };
-
-}
+    meta = {
+      homepage = "http://www.eclipse.org/";
+      inherit description;
+      platforms = ["x86_64-linux"];
+    };
+  }

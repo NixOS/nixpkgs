@@ -1,8 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "nginx-auth";
 
   nodes = {
-    webserver = { pkgs, lib, ... }: {
+    webserver = {
+      pkgs,
+      lib,
+      ...
+    }: {
       services.nginx = let
         root = pkgs.runCommand "testdir" {} ''
           mkdir "$out"

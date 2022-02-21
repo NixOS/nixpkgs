@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, cmake
-, ninja
-, vala
-, pkg-config
-, pantheon
-, gtk3
-, glib
-, glib-networking
-, libxml2
-, webkitgtk
-, clutter-gtk
-, clutter-gst
-, libunity
-, libnotify
-, sqlite
-, gst_all_1
-, json-glib
-, libgee
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  cmake,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  gtk3,
+  glib,
+  glib-networking,
+  libxml2,
+  webkitgtk,
+  clutter-gtk,
+  clutter-gst,
+  libunity,
+  libnotify,
+  sqlite,
+  gst_all_1,
+  json-glib,
+  libgee,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vocal";
   version = "2.4.2";
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/needle-and-thread/vocal";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.needleandthread.vocal";
   };

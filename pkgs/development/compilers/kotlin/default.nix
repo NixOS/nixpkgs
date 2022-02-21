@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "kotlin";
   version = "1.6.10";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QyJnmW0Na0sXyo3g+HjkTUoJm36fFYepjtxNJ+dsIVo=";
   };
 
-  propagatedBuildInputs = [ jre ] ;
-  nativeBuildInputs = [ makeWrapper unzip ];
+  propagatedBuildInputs = [jre];
+  nativeBuildInputs = [makeWrapper unzip];
 
   installPhase = ''
     mkdir -p $out
@@ -37,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://kotlinlang.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ SubhrajyotiSen ];
+    maintainers = with lib.maintainers; [SubhrajyotiSen];
     platforms = lib.platforms.all;
   };
 }

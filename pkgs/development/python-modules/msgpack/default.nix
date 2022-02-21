@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, pytest
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "msgpack";
   version = "1.0.3";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   meta = {
     homepage = "https://github.com/msgpack/msgpack-python";

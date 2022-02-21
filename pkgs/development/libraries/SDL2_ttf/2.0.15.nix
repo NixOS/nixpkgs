@@ -1,5 +1,13 @@
-{ lib, stdenv, pkg-config, darwin, fetchurl, SDL2, freetype, libGL }:
-
+{
+  lib,
+  stdenv,
+  pkg-config,
+  darwin,
+  fetchurl,
+  SDL2,
+  freetype,
+  libGL,
+}:
 stdenv.mkDerivation rec {
   pname = "SDL2_ttf";
   version = "2.0.15";
@@ -11,9 +19,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ SDL2 freetype libGL ]
+  buildInputs =
+    [SDL2 freetype libGL]
     ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
   meta = with lib; {

@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitLab
-, fetchpatch
-, meson
-, ninja
-, python3
+{
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  meson,
+  ninja,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
   version = "2021.8";

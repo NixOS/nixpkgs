@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "pystring";
   version = "1.1.3";
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   doCheck = true;
 
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/imageworks/pystring/";
     description = "A collection of C++ functions which match the interface and behavior of python's string class methods using std::string";
     license = licenses.bsd3;
-    maintainers = [ maintainers.rytone ];
+    maintainers = [maintainers.rytone];
     platforms = platforms.unix;
   };
 }

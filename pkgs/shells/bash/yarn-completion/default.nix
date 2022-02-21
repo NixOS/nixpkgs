@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "yarn-bash-completion";
   version = "0.17.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xflbrbwskjqv3knvc8jqygpvfxh5ak66q7w22d1ng8gwrfqzcng";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   installPhase = ''
     runHook preInstall
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dsifford/yarn-completion/";
     description = "Bash completion for Yarn";
     license = licenses.mit;
-    maintainers = with maintainers; [ DamienCassou ];
+    maintainers = with maintainers; [DamienCassou];
   };
 }

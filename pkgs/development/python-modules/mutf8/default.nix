@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "mutf8";
   version = "1.0.6";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Fast MUTF-8 encoder & decoder";
     homepage = "https://github.com/TkTech/mutf8";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

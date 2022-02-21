@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gnome
-, glib
-, gtk3
-, wrapGAppsHook
-, gettext
-, itstool
-, libxml2
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_43
-, systemd
-, python3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  glib,
+  gtk3,
+  wrapGAppsHook,
+  gettext,
+  itstool,
+  libxml2,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  systemd,
+  python3,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
   version = "3.36.0";

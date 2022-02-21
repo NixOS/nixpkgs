@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, attrs
-, colorlog
-, csvw
-, python-dateutil
-, tabulate
-, mock
-, postgresql
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  attrs,
+  colorlog,
+  csvw,
+  python-dateutil,
+  tabulate,
+  mock,
+  postgresql,
+  pytestCheckHook,
+  pytest-mock,
 }:
-
 buildPythonPackage rec {
   pname = "clldutils";
   version = "3.9.0";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "CSV on the Web";
     homepage = "https://github.com/cldf/csvw";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, runCommand
-, jdk8, ant
-, jre8, makeWrapper
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
+  jdk8,
+  ant,
+  jre8,
+  makeWrapper,
+}: let
   gcs = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
@@ -28,50 +32,51 @@ let
     rev = "gcs-4.8.0";
     sha256 = "085jpp9mpv5kw00zds9sywmfq31mrlbrgahnwcjkx0z9i22amz4g";
   };
-in stdenv.mkDerivation rec {
-  pname = "gcs";
-  version = "4.8.0";
+in
+  stdenv.mkDerivation rec {
+    pname = "gcs";
+    version = "4.8.0";
 
-  src = runCommand "${pname}-${version}-src" { preferLocalBuild = true; } ''
-    mkdir -p $out
-    cd $out
+    src = runCommand "${pname}-${version}-src" {preferLocalBuild = true;} ''
+      mkdir -p $out
+      cd $out
 
-    cp -r ${gcs} gcs
-    cp -r ${appleStubs} apple_stubs
-    cp -r ${toolkit} toolkit
-    cp -r ${library} gcs_library
-  '';
+      cp -r ${gcs} gcs
+      cp -r ${appleStubs} apple_stubs
+      cp -r ${toolkit} toolkit
+      cp -r ${library} gcs_library
+    '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk8 jre8 ant ];
-  buildPhase = ''
-    cd apple_stubs
-    ant
+    nativeBuildInputs = [makeWrapper];
+    buildInputs = [jdk8 jre8 ant];
+    buildPhase = ''
+      cd apple_stubs
+      ant
 
-    cd ../toolkit
-    ant
+      cd ../toolkit
+      ant
 
-    cd ../gcs
-    ant
+      cd ../gcs
+      ant
 
-    cd ..
-  '';
+      cd ..
+    '';
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/java
+    installPhase = ''
+      mkdir -p $out/bin $out/share/java
 
-    find gcs/libraries toolkit/libraries apple_stubs/ \( -name '*.jar' -and -not -name '*-src.jar' \) -exec cp '{}' $out/share/java ';'
+      find gcs/libraries toolkit/libraries apple_stubs/ \( -name '*.jar' -and -not -name '*-src.jar' \) -exec cp '{}' $out/share/java ';'
 
-    makeWrapper ${jre8}/bin/java $out/bin/gcs \
-      --set GCS_LIBRARY ${library} \
-      --add-flags "-cp $out/share/java/gcs-${version}.jar com.trollworks.gcs.app.GCS"
-  '';
+      makeWrapper ${jre8}/bin/java $out/bin/gcs \
+        --set GCS_LIBRARY ${library} \
+        --add-flags "-cp $out/share/java/gcs-${version}.jar com.trollworks.gcs.app.GCS"
+    '';
 
-  meta = with lib; {
-    description = "A stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
-    homepage = "https://gurpscharactersheet.com/";
-    license = licenses.mpl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [];
-  };
-}
+    meta = with lib; {
+      description = "A stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
+      homepage = "https://gurpscharactersheet.com/";
+      license = licenses.mpl20;
+      platforms = platforms.all;
+      maintainers = with maintainers; [];
+    };
+  }

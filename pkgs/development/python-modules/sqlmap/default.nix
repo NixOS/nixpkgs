@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, file
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  file,
+  stdenv,
 }:
-
 buildPythonPackage rec {
   pname = "sqlmap";
   version = "1.6.2";
@@ -26,13 +26,13 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  pythonImportsCheck = [ "sqlmap" ];
+  pythonImportsCheck = ["sqlmap"];
 
   meta = with lib; {
     description = "Automatic SQL injection and database takeover tool";
     homepage = "https://sqlmap.org";
     changelog = "https://github.com/sqlmapproject/sqlmap/releases/tag/${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [bennofs];
   };
 }

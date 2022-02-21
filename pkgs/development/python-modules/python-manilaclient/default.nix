@@ -1,25 +1,25 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, installShellFiles
-, pbr
-, openstackdocstheme
-, oslo-config
-, oslo-log
-, oslo-serialization
-, oslo-utils
-, prettytable
-, requests
-, simplejson
-, sphinx
-, sphinxcontrib-programoutput
-, Babel
-, osc-lib
-, python-keystoneclient
-, debtcollector
-, callPackage
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  installShellFiles,
+  pbr,
+  openstackdocstheme,
+  oslo-config,
+  oslo-log,
+  oslo-serialization,
+  oslo-utils,
+  prettytable,
+  requests,
+  simplejson,
+  sphinx,
+  sphinxcontrib-programoutput,
+  Babel,
+  osc-lib,
+  python-keystoneclient,
+  debtcollector,
+  callPackage,
 }:
-
 buildPythonApplication rec {
   pname = "python-manilaclient";
   version = "3.2.0";
@@ -61,10 +61,10 @@ buildPythonApplication rec {
   doCheck = false;
 
   passthru.tests = {
-    tests = callPackage ./tests.nix { };
+    tests = callPackage ./tests.nix {};
   };
 
-  pythonImportsCheck = [ "manilaclient" ];
+  pythonImportsCheck = ["manilaclient"];
 
   meta = with lib; {
     description = "Client library for OpenStack Manila API";

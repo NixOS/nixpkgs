@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "imgcrypt";
   version = "1.1.1";
@@ -16,7 +19,7 @@ buildGoModule rec {
   ];
 
   vendorSha256 = null;
-  subPackages = [ "cmd/ctd-decoder" "cmd/ctr" ];
+  subPackages = ["cmd/ctd-decoder" "cmd/ctr"];
 
   postFixup = ''
     mv $out/bin/ctr $out/bin/ctr-enc
@@ -27,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/containerd/imgcrypt";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mikroskeem ];
+    maintainers = with maintainers; [mikroskeem];
   };
 }

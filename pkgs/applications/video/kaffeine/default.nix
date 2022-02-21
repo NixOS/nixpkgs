@@ -1,18 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, kio
-, cmake
-, extra-cmake-modules
-, libvlc
-, libX11
-, kidletime
-, kdelibs4support
-, libXScrnSaver
-, wrapQtAppsHook
-, qtx11extras
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  kio,
+  cmake,
+  extra-cmake-modules,
+  libvlc,
+  libX11,
+  kidletime,
+  kdelibs4support,
+  libXScrnSaver,
+  wrapQtAppsHook,
+  qtx11extras,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kaffeine";
   version = "2.0.18";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "KDE media player";
     homepage = "https://apps.kde.org/kaffeine/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.pasqui23 ];
+    maintainers = [maintainers.pasqui23];
     platforms = platforms.all;
   };
 }

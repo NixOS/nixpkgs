@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, alsa-lib
-, ffmpeg
-, libass
-, libcddb
-, libcdio
-, libgme
-, libpulseaudio
-, libsidplayfp
-, libva
-, libXv
-, taglib
-, qtbase
-, qttools
-, vulkan-headers
-, vulkan-tools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  alsa-lib,
+  ffmpeg,
+  libass,
+  libcddb,
+  libcdio,
+  libgme,
+  libpulseaudio,
+  libsidplayfp,
+  libva,
+  libXv,
+  taglib,
+  qtbase,
+  qttools,
+  vulkan-headers,
+  vulkan-tools,
+  wrapQtAppsHook,
 }:
 stdenv.mkDerivation rec {
   pname = "qmplay2";
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
       browser.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; linux;
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, pyscard
-, pycountry
-, terminaltables
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  pyscard,
+  pycountry,
+  terminaltables,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "emv";
   version = "1.0.14";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Implementation of the EMV chip-and-pin smartcard protocol";
     homepage = "https://github.com/russss/python-emv";
     license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with maintainers; [lukegb];
   };
 }

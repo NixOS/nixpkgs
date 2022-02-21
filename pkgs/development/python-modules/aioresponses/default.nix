@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, ddt
-, fetchPypi
-, pbr
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  asynctest,
+  buildPythonPackage,
+  ddt,
+  fetchPypi,
+  pbr,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aioresponses";
   version = "0.7.3";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "A helper to mock/fake web requests in python aiohttp package";
     homepage = "https://github.com/pnuckowski/aioresponses";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rvl ];
+    maintainers = with lib.maintainers; [rvl];
   };
 }

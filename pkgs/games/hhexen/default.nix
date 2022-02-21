@@ -1,5 +1,9 @@
-{ lib, fetchurl, SDL, stdenv }:
-
+{
+  lib,
+  fetchurl,
+  SDL,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "hhexen";
   version = "1.6.3";
@@ -8,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jwccqawbdn0rjn5p59j21rjy460jdhps7zwn2z0gq9biggw325b";
   };
 
-  buildInputs = [ SDL ];
+  buildInputs = [SDL];
   installPhase = ''
     install -Dm755 hhexen-gl -t $out/bin
   '';
@@ -17,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Linux port of Raven Game's Hexen";
     homepage = "http://hhexen.sourceforge.net/hhexen.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ djanatyn ];
+    maintainers = with maintainers; [djanatyn];
   };
 }

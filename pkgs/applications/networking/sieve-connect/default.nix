@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perlPackages,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "sieve-connect";
   version = "0.90";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ghvfa5ifa68b6imh85bkmy00r93c5f9hs6d039axb73gmma580p";
   };
 
-  buildInputs = [ perlPackages.perl ];
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  buildInputs = [perlPackages.perl];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
   preBuild = ''
     # Fixes failing build when not building in git repo
@@ -22,7 +28,7 @@ stdenv.mkDerivation rec {
     echo "$(date +%Y-%m-%d)" > datefile
   '';
 
-  buildFlags = [ "PERL5LIB=${perlPackages.makePerlPath [ perlPackages.FileSlurp ]}" "bin" "man" ];
+  buildFlags = ["PERL5LIB=${perlPackages.makePerlPath [perlPackages.FileSlurp]}" "bin" "man"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,9 +36,19 @@ stdenv.mkDerivation rec {
     installManPage sieve-connect.1
 
     wrapProgram $out/bin/sieve-connect \
-      --prefix PERL5LIB : "${with perlPackages; makePerlPath [
-        AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS
-        TermReadKey TermReadLineGnu ]}"
+      --prefix PERL5LIB : "${
+      with perlPackages;
+        makePerlPath [
+          AuthenSASL
+          Socket6
+          IOSocketInet6
+          IOSocketSSL
+          NetSSLeay
+          NetDNS
+          TermReadKey
+          TermReadLineGnu
+        ]
+    }"
   '';
 
   meta = with lib; {
@@ -45,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/philpennock/sieve-connect";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [das_j];
   };
 }

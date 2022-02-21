@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, garmintools, libgcrypt, libusb-compat-0_1, pkg-config, tinyxml, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  garmintools,
+  libgcrypt,
+  libusb-compat-0_1,
+  pkg-config,
+  tinyxml,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "garmin-plugin";
   version = "0.3.26";
@@ -15,9 +24,9 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ garmintools libusb-compat-0_1 libgcrypt tinyxml zlib ];
+  buildInputs = [garmintools libusb-compat-0_1 libgcrypt tinyxml zlib];
 
   configureFlags = [
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
@@ -33,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://adiesner.github.io/GarminPlugin/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

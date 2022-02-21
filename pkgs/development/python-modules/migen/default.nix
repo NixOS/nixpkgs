@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, colorama
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  colorama,
 }:
-
 buildPythonPackage rec {
   pname = "migen";
   version = "unstable-2021-09-14";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     colorama
   ];
 
-  pythonImportsCheck = [ "migen" ];
+  pythonImportsCheck = ["migen"];
 
   meta = with lib; {
     description = " A Python toolbox for building complex digital hardware";
     homepage = "https://m-labs.hk/migen";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ l-as ];
+    maintainers = with maintainers; [l-as];
   };
 }

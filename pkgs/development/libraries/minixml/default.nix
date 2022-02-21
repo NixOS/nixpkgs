@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "mxml";
   version = "3.2";
@@ -18,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.msweet.org/mxml/";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "websockets";
   version = "10.1";
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "WebSocket implementation in Python";
     homepage = "https://websockets.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

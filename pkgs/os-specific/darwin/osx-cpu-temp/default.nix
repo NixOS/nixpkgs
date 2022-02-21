@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  IOKit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "osx-cpu-temp";
   version = "unstable-2020-12-04";
@@ -14,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nlibgr55bpln6jbdf8vqcp0fj9zv9343vflb7s9w0yh33fsbg9d";
   };
 
-  buildInputs = [ IOKit ];
+  buildInputs = [IOKit];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Outputs current CPU temperature for OSX.";
     homepage = "https://github.com/lavoiesl/osx-cpu-temp";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ virusdave ];
+    maintainers = with maintainers; [virusdave];
     platforms = platforms.darwin;
   };
 }

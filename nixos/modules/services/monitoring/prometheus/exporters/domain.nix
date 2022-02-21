@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.domain;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.domain;
+in {
   port = 9222;
   serviceOpts = {
     serviceConfig = {

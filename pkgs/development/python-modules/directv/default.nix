@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "directv";
   version = "0.4.0";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "directv" ];
+  pythonImportsCheck = ["directv"];
 
   meta = with lib; {
     description = "Asynchronous Python client for DirecTV (SHEF)";
     homepage = "https://github.com/ctalkington/python-directv";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

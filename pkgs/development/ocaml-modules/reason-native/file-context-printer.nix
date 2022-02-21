@@ -1,6 +1,9 @@
-{ reason, re, pastel, ... }:
-
 {
+  reason,
+  re,
+  pastel,
+  ...
+}: {
   pname = "file-context-printer";
 
   buildInputs = [

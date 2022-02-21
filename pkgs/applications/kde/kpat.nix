@@ -1,13 +1,13 @@
-{ lib
-, mkDerivation
-, extra-cmake-modules
-, knewstuff
-, shared-mime-info
-, libkdegames
-, freecell-solver
-, black-hole-solver
+{
+  lib,
+  mkDerivation,
+  extra-cmake-modules,
+  knewstuff,
+  shared-mime-info,
+  libkdegames,
+  freecell-solver,
+  black-hole-solver,
 }:
-
 mkDerivation {
   pname = "kpat";
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ mkDerivation {
     freecell-solver
   ];
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
-    maintainers = with lib.maintainers; [ rnhmjoj ];
+    license = with lib.licenses; [gpl2 lgpl21 fdl12];
+    maintainers = with lib.maintainers; [rnhmjoj];
   };
 }

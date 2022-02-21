@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, gnum4 }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnum4,
+}:
 stdenv.mkDerivation rec {
   pname = "adns";
   version = "1.6.0";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pi0xl07pav4zm2jrbrfpv43s1r1q1y12awgak8k7q41m5jp4hpv";
   };
 
-  nativeBuildInputs = [ gnum4 ];
+  nativeBuildInputs = [gnum4];
 
   configureFlags = lib.optional stdenv.hostPlatform.isStatic "--disable-dynamic";
 
@@ -27,10 +31,12 @@ stdenv.mkDerivation rec {
   # https://www.mail-archive.com/nix-dev@cs.uu.nl/msg01347.html for details.
   doCheck = false;
 
-  postInstall = let suffix = lib.versions.majorMinor version;
-  in lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/libadns.so.${suffix} $out/lib/libadns.so.${suffix}
-  '';
+  postInstall = let
+    suffix = lib.versions.majorMinor version;
+  in
+    lib.optionalString stdenv.isDarwin ''
+      install_name_tool -id $out/lib/libadns.so.${suffix} $out/lib/libadns.so.${suffix}
+    '';
 
   # darwin executables fail, but I don't want to fail the 100-500 packages depending on this lib
   doInstallCheck = !stdenv.isDarwin;

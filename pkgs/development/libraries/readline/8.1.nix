@@ -1,6 +1,9 @@
-{ fetchurl, stdenv, lib, ncurses
+{
+  fetchurl,
+  stdenv,
+  lib,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "readline";
   version = "8.1p${toString (builtins.length upstreamPatches)}";
@@ -10,24 +13,24 @@ stdenv.mkDerivation rec {
     sha256 = "00ibp0n9crbwx15k9vvckq5wsipw98b1px8pd8i34chy2gpb9kpq";
   };
 
-  outputs = [ "out" "dev" "man" "doc" "info" ];
+  outputs = ["out" "dev" "man" "doc" "info"];
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = [ "-p0" ];
+  patchFlags = ["-p0"];
 
-  upstreamPatches =
-    (let
-       patch = nr: sha256:
-         fetchurl {
-           url = "mirror://gnu/readline/readline-${meta.branch}-patches/readline81-${nr}";
-           inherit sha256;
-         };
-     in
-       import ./readline-8.1-patches.nix patch);
+  upstreamPatches = (let
+    patch = nr: sha256:
+      fetchurl {
+        url = "mirror://gnu/readline/readline-${meta.branch}-patches/readline81-${nr}";
+        inherit sha256;
+      };
+  in
+    import ./readline-8.1-patches.nix patch);
 
   patches =
-    [ ./link-against-ncurses.patch
+    [
+      ./link-against-ncurses.patch
       ./no-arch_only-6.3.patch
     ]
     ++ upstreamPatches;
@@ -54,7 +57,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
 
     platforms = platforms.unix;
     branch = "8.1";

@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, gettext
-, gnome
-, glib
-, gtk4
-, wayland
-, libadwaita
-, libpeas
-, gnome-online-accounts
-, gsettings-desktop-schemas
-, libportal-gtk4
-, evolution-data-server
-, libical
-, librest
-, json-glib
-, itstool
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook,
+  gettext,
+  gnome,
+  glib,
+  gtk4,
+  wayland,
+  libadwaita,
+  libpeas,
+  gnome-online-accounts,
+  gsettings-desktop-schemas,
+  libportal-gtk4,
+  evolution-data-server,
+  libical,
+  librest,
+  json-glib,
+  itstool,
+  unstableGitUpdater,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-todo";
   version = "unstable-2022-02-01";

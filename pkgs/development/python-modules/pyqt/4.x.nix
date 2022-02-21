@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, buildPythonPackage, python, dbus-python, sip_4, qt4, pkg-config, lndir, dbus, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPythonPackage,
+  python,
+  dbus-python,
+  sip_4,
+  qt4,
+  pkg-config,
+  lndir,
+  dbus,
+  makeWrapper,
+}:
 buildPythonPackage rec {
   pname = "PyQt-x11-gpl";
   version = "4.12.3";
@@ -16,15 +28,19 @@ buildPythonPackage rec {
     rm -rf "$out/nix-support"
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
-    ${lib.optionalString stdenv.isDarwin ''
-      export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
-    ''}
+    ${
+      lib.optionalString stdenv.isDarwin ''
+        export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
+      ''
+    }
 
     substituteInPlace configure.py \
       --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'" \
-    ${lib.optionalString stdenv.isDarwin ''
-      --replace "qt_macx_spec = 'macx-g++'" "qt_macx_spec = 'unsupported/macx-clang-libc++'" # for bootstrapping phase \
-    ''}
+    ${
+      lib.optionalString stdenv.isDarwin ''
+        --replace "qt_macx_spec = 'macx-g++'" "qt_macx_spec = 'unsupported/macx-clang-libc++'" # for bootstrapping phase \
+      ''
+    }
 
     chmod +x configure.py
     sed -i '1i#!${python.interpreter}' configure.py
@@ -42,10 +58,10 @@ buildPythonPackage rec {
     "--verbose"
   ];
 
-  nativeBuildInputs = [ pkg-config lndir makeWrapper qt4 ];
-  buildInputs = [ qt4 dbus ];
+  nativeBuildInputs = [pkg-config lndir makeWrapper qt4];
+  buildInputs = [qt4 dbus];
 
-  propagatedBuildInputs = [ sip_4 ];
+  propagatedBuildInputs = [sip_4];
 
   postInstall = ''
     for i in $out/bin/*; do
@@ -63,7 +79,7 @@ buildPythonPackage rec {
     description = "Python bindings for Qt";
     license = "GPL";
     homepage = "http://www.riverbankcomputing.co.uk";
-    maintainers = [ maintainers.sander ];
+    maintainers = [maintainers.sander];
     platforms = platforms.mesaPlatforms;
   };
 }

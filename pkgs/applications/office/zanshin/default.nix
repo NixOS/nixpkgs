@@ -1,13 +1,13 @@
-{ mkDerivation
-, lib
-, fetchurl
-, extra-cmake-modules
-, boost
-, akonadi-calendar
-, kontactinterface
-, krunner
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  boost,
+  akonadi-calendar,
+  kontactinterface,
+  krunner,
 }:
-
 mkDerivation rec {
   pname = "zanshin";
   version = "21.12.2";
@@ -31,7 +31,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "A powerful yet simple application to manage your day to day actions, getting your mind like water";
     homepage = "https://zanshin.kde.org/";
-    maintainers = with maintainers; [ zraexy ];
+    maintainers = with maintainers; [zraexy];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

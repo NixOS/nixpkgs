@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, boost175
-, fetchFromGitHub
-, libpcap
-, ndn-cxx
-, openssl
-, pkg-config
-, sphinx
-, wafHook
+{
+  lib,
+  stdenv,
+  boost175,
+  fetchFromGitHub,
+  libpcap,
+  ndn-cxx,
+  openssl,
+  pkg-config,
+  sphinx,
+  wafHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ndn-tools";
   version = "0.7.1";
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3hE/esOcS/ln94wZIRVCLjWgouEYnJJf3EvirNEGTeA=";
   };
 
-  nativeBuildInputs = [ pkg-config sphinx wafHook ];
-  buildInputs = [ libpcap ndn-cxx openssl ];
+  nativeBuildInputs = [pkg-config sphinx wafHook];
+  buildInputs = [libpcap ndn-cxx openssl];
 
   wafConfigureFlags = [
     "--boost-includes=${boost175.dev}/include"
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     description = "Named Data Neworking (NDN) Essential Tools";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bertof ];
+    maintainers = with maintainers; [bertof];
   };
 }

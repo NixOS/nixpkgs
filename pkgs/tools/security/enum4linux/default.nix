@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, samba
-, perl
-, openldap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  samba,
+  perl,
+  openldap,
 }:
-
 stdenv.mkDerivation rec {
   pname = "enum4linux";
   version = "0.9.1";
@@ -35,15 +35,14 @@ stdenv.mkDerivation rec {
     cp enum4linux.pl $out/bin/enum4linux
 
     wrapProgram $out/bin/enum4linux \
-      --prefix PATH : ${lib.makeBinPath [ samba openldap ]}
+      --prefix PATH : ${lib.makeBinPath [samba openldap]}
   '';
 
   meta = with lib; {
     description = "A tool for enumerating information from Windows and Samba systems";
     homepage = "https://labs.portcullis.co.uk/tools/enum4linux/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fishi0x01 ];
+    maintainers = with maintainers; [fishi0x01];
     platforms = platforms.unix;
   };
 }
-

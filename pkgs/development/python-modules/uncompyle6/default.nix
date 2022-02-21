@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, spark_parser
-, xdis
-, nose
-, pytest
-, hypothesis
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  spark_parser,
+  xdis,
+  nose,
+  pytest,
+  hypothesis,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "uncompyle6";
   version = "3.8.0";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
     sha256 = "sha256-YgYzYY9t/B8+eBh+Igk014/8Y5wOOdrsofxTWquBcBQ=";
   };
 
-  checkInputs = [ nose pytest hypothesis six ];
-  propagatedBuildInputs = [ spark_parser xdis ];
+  checkInputs = [nose pytest hypothesis six];
+  propagatedBuildInputs = [spark_parser xdis];
 
   # six import errors (yet it is supplied...)
   checkPhase = ''
@@ -35,5 +35,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/rocky/python-uncompyle6/";
     license = licenses.gpl3;
   };
-
 }

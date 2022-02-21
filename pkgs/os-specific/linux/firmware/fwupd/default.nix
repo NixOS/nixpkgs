@@ -1,62 +1,61 @@
 # Updating? Keep $out/etc synchronized with passthru keys
-
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
-, gtk-doc
-, pkg-config
-, gobject-introspection
-, gettext
-, libgudev
-, polkit
-, libxmlb
-, gusb
-, sqlite
-, libarchive
-, curl
-, libjcat
-, libxslt
-, elfutils
-, libsmbios
-, efivar
-, valgrind
-, meson
-, libuuid
-, colord
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, ninja
-, gcab
-, gnutls
-, protobufc
-, python3
-, wrapGAppsHook
-, json-glib
-, bash-completion
-, shared-mime-info
-, umockdev
-, vala
-, makeFontsConf
-, freefont_ttf
-, pango
-, tpm2-tss
-, bubblewrap
-, efibootmgr
-, flashrom
-, tpm2-tools
-, fwupd-efi
-, nixosTests
-, runCommand
-, unstableGitUpdater
-}:
-
-let
-  python = python3.withPackages (p: with p; [
-    pygobject3
-    setuptools
-  ]);
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitHub,
+  gtk-doc,
+  pkg-config,
+  gobject-introspection,
+  gettext,
+  libgudev,
+  polkit,
+  libxmlb,
+  gusb,
+  sqlite,
+  libarchive,
+  curl,
+  libjcat,
+  libxslt,
+  elfutils,
+  libsmbios,
+  efivar,
+  valgrind,
+  meson,
+  libuuid,
+  colord,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  ninja,
+  gcab,
+  gnutls,
+  protobufc,
+  python3,
+  wrapGAppsHook,
+  json-glib,
+  bash-completion,
+  shared-mime-info,
+  umockdev,
+  vala,
+  makeFontsConf,
+  freefont_ttf,
+  pango,
+  tpm2-tss,
+  bubblewrap,
+  efibootmgr,
+  flashrom,
+  tpm2-tools,
+  fwupd-efi,
+  nixosTests,
+  runCommand,
+  unstableGitUpdater,
+}: let
+  python = python3.withPackages (p:
+    with p; [
+      pygobject3
+      setuptools
+    ]);
 
   isx86 = stdenv.hostPlatform.isx86;
 
@@ -74,41 +73,42 @@ let
   # Experimental
   haveFlashrom = false;
 
-  runPythonCommand = name: buildCommandPython: runCommand name {
-    nativeBuildInputs = [ python3 ];
+  runPythonCommand = name: buildCommandPython:
+    runCommand name {
+      nativeBuildInputs = [python3];
       inherit buildCommandPython;
-  } ''
-    exec python3 -c "$buildCommandPython"
-  '';
+    } ''
+      exec python3 -c "$buildCommandPython"
+    '';
 
-  test-firmware =
-    let
-      version = "unstable-2021-11-02";
-      src = fetchFromGitHub {
-        name = "fwupd-test-firmware-${version}";
-        owner = "fwupd";
-        repo = "fwupd-test-firmware";
-        rev = "aaa2f9fd68a40684c256dd85b86093cba38ffd9d";
-        sha256 = "Slk7CNfkmvmOh3WtIBkPs3NYT96co6i8PwqcbpeVFgA=";
-        passthru = {
-          inherit src version; # For update script
-          updateScript = unstableGitUpdater {
-            url = "${test-firmware.meta.homepage}.git";
-          };
+  test-firmware = let
+    version = "unstable-2021-11-02";
+    src = fetchFromGitHub {
+      name = "fwupd-test-firmware-${version}";
+      owner = "fwupd";
+      repo = "fwupd-test-firmware";
+      rev = "aaa2f9fd68a40684c256dd85b86093cba38ffd9d";
+      sha256 = "Slk7CNfkmvmOh3WtIBkPs3NYT96co6i8PwqcbpeVFgA=";
+      passthru = {
+        inherit src version; # For update script
+        updateScript = unstableGitUpdater {
+          url = "${test-firmware.meta.homepage}.git";
         };
       };
-    in
-      src // {
-        meta = src.meta // {
+    };
+  in
+    src
+    // {
+      meta =
+        src.meta
+        // {
           # For update script
-          position =
-            let
-              pos = builtins.unsafeGetAttrPos "updateScript" test-firmware;
-            in
+          position = let
+            pos = builtins.unsafeGetAttrPos "updateScript" test-firmware;
+          in
             pos.file + ":" + toString pos.line;
         };
-      };
-
+    };
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
@@ -117,7 +117,7 @@ let
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
     # CLI programs go to out
-    outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
+    outputs = ["out" "lib" "dev" "devdoc" "man" "installedTests"];
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
@@ -167,61 +167,68 @@ let
       vala
     ];
 
-    buildInputs = [
-      polkit
-      libxmlb
-      gusb
-      sqlite
-      libarchive
-      curl
-      elfutils
-      libgudev
-      colord
-      libjcat
-      libuuid
-      json-glib
-      umockdev
-      bash-completion
-      pango
-      tpm2-tss
-      efivar
-      fwupd-efi
-      protobufc
-    ] ++ lib.optionals haveDell [
-      libsmbios
-    ];
+    buildInputs =
+      [
+        polkit
+        libxmlb
+        gusb
+        sqlite
+        libarchive
+        curl
+        elfutils
+        libgudev
+        colord
+        libjcat
+        libuuid
+        json-glib
+        umockdev
+        bash-completion
+        pango
+        tpm2-tss
+        efivar
+        fwupd-efi
+        protobufc
+      ]
+      ++ lib.optionals haveDell [
+        libsmbios
+      ];
 
-    mesonFlags = [
-      "-Ddocs=gtkdoc"
-      "-Dplugin_dummy=true"
-      # We are building the official releases.
-      "-Dsupported_build=true"
-      # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
-      # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
-      "-Dsoup_session_compat=false"
-      "-Dudevdir=lib/udev"
-      "-Dsystemd_root_prefix=${placeholder "out"}"
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "-Dsysconfdir_install=${placeholder "out"}/etc"
-      "-Defi_os_dir=nixos"
+    mesonFlags =
+      [
+        "-Ddocs=gtkdoc"
+        "-Dplugin_dummy=true"
+        # We are building the official releases.
+        "-Dsupported_build=true"
+        # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
+        # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
+        "-Dsoup_session_compat=false"
+        "-Dudevdir=lib/udev"
+        "-Dsystemd_root_prefix=${placeholder "out"}"
+        "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+        "--localstatedir=/var"
+        "--sysconfdir=/etc"
+        "-Dsysconfdir_install=${placeholder "out"}/etc"
+        "-Defi_os_dir=nixos"
 
-      # We do not want to place the daemon into lib (cyclic reference)
-      "--libexecdir=${placeholder "out"}/libexec"
-      # Our builder only adds $lib/lib to rpath but some things link
-      # against libfwupdplugin which is in $out/lib.
-      "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
-    ] ++ lib.optionals (!haveDell) [
-      "-Dplugin_dell=false"
-      "-Dplugin_synaptics_mst=false"
-    ] ++ lib.optionals (!haveRedfish) [
-      "-Dplugin_redfish=false"
-    ] ++ lib.optionals haveFlashrom [
-      "-Dplugin_flashrom=true"
-    ] ++ lib.optionals (!haveMSR) [
-      "-Dplugin_msr=false"
-    ];
+        # We do not want to place the daemon into lib (cyclic reference)
+        "--libexecdir=${placeholder "out"}/libexec"
+        # Our builder only adds $lib/lib to rpath but some things link
+        # against libfwupdplugin which is in $out/lib.
+        "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
+      ]
+      ++ lib.optionals (!haveDell) [
+        "-Dplugin_dell=false"
+        "-Dplugin_synaptics_mst=false"
+      ]
+      ++ lib.optionals (!haveRedfish) [
+        "-Dplugin_redfish=false"
+      ]
+      ++ lib.optionals haveFlashrom [
+        "-Dplugin_flashrom=true"
+      ]
+      ++ lib.optionals (!haveMSR) [
+        "-Dplugin_msr=false"
+      ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
     dontWrapGApps = true;
@@ -232,12 +239,12 @@ let
     # Environment variables
 
     # Fontconfig error: Cannot load default config file
-    FONTCONFIG_FILE =
-      let
-        fontsConf = makeFontsConf {
-          fontDirectories = [ freefont_ttf ];
-        };
-      in fontsConf;
+    FONTCONFIG_FILE = let
+      fontsConf = makeFontsConf {
+        fontDirectories = [freefont_ttf];
+      };
+    in
+      fontsConf;
 
     # error: “PolicyKit files are missing”
     # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
@@ -272,11 +279,13 @@ let
     '';
 
     preFixup = let
-      binPath = [
-        efibootmgr
-        bubblewrap
-        tpm2-tools
-      ] ++ lib.optional haveFlashrom flashrom;
+      binPath =
+        [
+          efibootmgr
+          bubblewrap
+          tpm2-tools
+        ]
+        ++ lib.optional haveFlashrom flashrom;
     in ''
       gappsWrapperArgs+=(
         --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -299,26 +308,29 @@ let
     separateDebugInfo = true;
 
     passthru = {
-      filesInstalledToEtc = [
-        "fwupd/daemon.conf"
-        "fwupd/remotes.d/lvfs-testing.conf"
-        "fwupd/remotes.d/lvfs.conf"
-        "fwupd/remotes.d/vendor.conf"
-        "fwupd/remotes.d/vendor-directory.conf"
-        "fwupd/thunderbolt.conf"
-        "fwupd/uefi_capsule.conf"
-        "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
-        "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
-        "pki/fwupd/LVFS-CA.pem"
-        "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
-        "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
-        "pki/fwupd-metadata/LVFS-CA.pem"
-        "grub.d/35_fwupd"
-      ] ++ lib.optionals haveDell [
-        "fwupd/remotes.d/dell-esrt.conf"
-      ] ++ lib.optionals haveRedfish [
-        "fwupd/redfish.conf"
-      ];
+      filesInstalledToEtc =
+        [
+          "fwupd/daemon.conf"
+          "fwupd/remotes.d/lvfs-testing.conf"
+          "fwupd/remotes.d/lvfs.conf"
+          "fwupd/remotes.d/vendor.conf"
+          "fwupd/remotes.d/vendor-directory.conf"
+          "fwupd/thunderbolt.conf"
+          "fwupd/uefi_capsule.conf"
+          "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
+          "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
+          "pki/fwupd/LVFS-CA.pem"
+          "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
+          "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
+          "pki/fwupd-metadata/LVFS-CA.pem"
+          "grub.d/35_fwupd"
+        ]
+        ++ lib.optionals haveDell [
+          "fwupd/remotes.d/dell-esrt.conf"
+        ]
+        ++ lib.optionals haveRedfish [
+          "fwupd/redfish.conf"
+        ];
 
       # DisabledPlugins key in fwupd/daemon.conf
       defaultDisabledPlugins = [
@@ -360,10 +372,10 @@ let
 
     meta = with lib; {
       homepage = "https://fwupd.org/";
-      maintainers = with maintainers; [ jtojnar ];
+      maintainers = with maintainers; [jtojnar];
       license = licenses.lgpl21Plus;
       platforms = platforms.linux;
     };
   };
-
-in self
+in
+  self

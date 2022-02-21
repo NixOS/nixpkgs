@@ -1,10 +1,20 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, fetchpatch
-, cmake, boost
-, portmidi, sqlite
-, freetype, libpng, pngpp, zlib
-, wxGTK30, wxsqlite3
+{
+  lib,
+  stdenv,
+  pkg-config,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  portmidi,
+  sqlite,
+  freetype,
+  libpng,
+  pngpp,
+  zlib,
+  wxGTK30,
+  wxsqlite3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lenmus";
   version = "5.4.2";
@@ -27,12 +37,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
   buildInputs = [
     boost
-    portmidi sqlite
-    freetype libpng pngpp zlib
-    wxGTK30 wxsqlite3
+    portmidi
+    sqlite
+    freetype
+    libpng
+    pngpp
+    zlib
+    wxGTK30
+    wxsqlite3
   ];
 
   meta = with lib; {
@@ -44,7 +59,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.lenmus.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers;  [ ramkromberg ];
+    maintainers = with maintainers; [ramkromberg];
     platforms = with platforms; linux;
     broken = stdenv.hostPlatform.isAarch64;
   };

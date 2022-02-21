@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib, wrapQtAppsHook }:
-
+{
+  stdenv,
+  fetchurl,
+  sane-backends,
+  qtbase,
+  qtsvg,
+  nss,
+  autoPatchelfHook,
+  lib,
+  wrapQtAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "masterpdfeditor";
   version = "5.8.33";
@@ -9,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sgLF/NpaNlkL5iA1l7QzMiYKwRcMDu2DHdTIaeHOtfI=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook wrapQtAppsHook ];
+  nativeBuildInputs = [autoPatchelfHook wrapQtAppsHook];
 
-  buildInputs = [ nss qtbase qtsvg sane-backends stdenv.cc.cc ];
+  buildInputs = [nss qtbase qtsvg sane-backends stdenv.cc.cc];
 
   dontStrip = true;
 
@@ -40,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Master PDF Editor";
     homepage = "https://code-industry.net/free-pdf-editor/";
     license = licenses.unfreeRedistributable;
-    platforms = with platforms; [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cmcdragonkai ];
+    platforms = with platforms; ["x86_64-linux"];
+    maintainers = with maintainers; [cmcdragonkai];
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, ezjsonm
-, zarith
-, hex
-, json-data-encoding
-, json-data-encoding-bson
-, alcotest
-, crowbar
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  ezjsonm,
+  zarith,
+  hex,
+  json-data-encoding,
+  json-data-encoding-bson,
+  alcotest,
+  crowbar,
 }:
-
 buildDunePackage {
   pname = "data-encoding";
   version = "0.4.0";
@@ -41,6 +41,6 @@ buildDunePackage {
     homepage = "https://gitlab.com/nomadic-labs/data-encoding";
     description = "Library of JSON and binary encoding combinators";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

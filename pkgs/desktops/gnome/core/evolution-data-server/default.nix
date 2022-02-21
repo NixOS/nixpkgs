@@ -1,14 +1,53 @@
-{ fetchurl, lib, stdenv, substituteAll, pkg-config, gnome, python3, gobject-introspection
-, intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr, p11-kit
-, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre, vala, cmake, ninja
-, libkrb5, openldap, webkitgtk, libaccounts-glib, json-glib, glib, gtk3, libphonenumber
-, gnome-online-accounts, libgweather, libgdata, gsettings-desktop-schemas, boost, protobuf }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  substituteAll,
+  pkg-config,
+  gnome,
+  python3,
+  gobject-introspection,
+  intltool,
+  libsoup,
+  libxml2,
+  libsecret,
+  icu,
+  sqlite,
+  tzdata,
+  libcanberra-gtk3,
+  gcr,
+  p11-kit,
+  db,
+  nspr,
+  nss,
+  libical,
+  gperf,
+  wrapGAppsHook,
+  glib-networking,
+  pcre,
+  vala,
+  cmake,
+  ninja,
+  libkrb5,
+  openldap,
+  webkitgtk,
+  libaccounts-glib,
+  json-glib,
+  glib,
+  gtk3,
+  libphonenumber,
+  gnome-online-accounts,
+  libgweather,
+  libgdata,
+  gsettings-desktop-schemas,
+  boost,
+  protobuf,
+}:
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
   version = "3.42.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -29,13 +68,39 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    cmake ninja pkg-config intltool python3 gperf wrapGAppsHook gobject-introspection vala
+    cmake
+    ninja
+    pkg-config
+    intltool
+    python3
+    gperf
+    wrapGAppsHook
+    gobject-introspection
+    vala
   ];
   buildInputs = [
-    glib libsoup libxml2 gtk3 gnome-online-accounts
-    gcr p11-kit libgweather libgdata libaccounts-glib json-glib
-    icu sqlite libkrb5 openldap webkitgtk glib-networking
-    libcanberra-gtk3 pcre libphonenumber boost protobuf
+    glib
+    libsoup
+    libxml2
+    gtk3
+    gnome-online-accounts
+    gcr
+    p11-kit
+    libgweather
+    libgdata
+    libaccounts-glib
+    json-glib
+    icu
+    sqlite
+    libkrb5
+    openldap
+    webkitgtk
+    glib-networking
+    libcanberra-gtk3
+    pcre
+    libphonenumber
+    boost
+    protobuf
   ];
 
   propagatedBuildInputs = [

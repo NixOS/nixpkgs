@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, esprima
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools-scm
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  esprima,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools-scm,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "quantum-gateway";
   version = "0.0.6";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with Verizon Fios Quantum gateway devices";
     homepage = "https://github.com/cisasteelersfan/quantum_gateway";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

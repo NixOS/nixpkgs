@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, typing-inspect
-, marshmallow-enum
-, hypothesis
-, mypy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  typing-inspect,
+  marshmallow-enum,
+  hypothesis,
+  mypy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "dataclasses-json";
   version = "0.5.6";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
     "test_type_hints"
   ];
 
-  pythonImportsCheck = [ "dataclasses_json" ];
+  pythonImportsCheck = ["dataclasses_json"];
 
   meta = with lib; {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";
     homepage = "https://github.com/lidatong/dataclasses-json";
     license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
+    maintainers = with maintainers; [albakham];
   };
 }

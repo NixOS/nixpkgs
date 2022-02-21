@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gettext, makeWrapper
-, alsa-lib, libjack2, tk, fftw
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gettext,
+  makeWrapper,
+  alsa-lib,
+  libjack2,
+  tk,
+  fftw,
 }:
-
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "puredata";
   version = "0.50-2";
 
@@ -11,9 +19,9 @@ stdenv.mkDerivation  rec {
     sha256 = "0dz6r6jy0zfs1xy1xspnrxxks8kddi9c7pxz4vpg2ygwv83ghpg5";
   };
 
-  nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];
+  nativeBuildInputs = [autoreconfHook gettext makeWrapper];
 
-  buildInputs = [ alsa-lib libjack2 fftw ];
+  buildInputs = [alsa-lib libjack2 fftw];
 
   configureFlags = [
     "--enable-alsa"
@@ -28,11 +36,11 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with lib; {
-    description = ''A real-time graphical programming environment for
-                    audio, video, and graphical processing'';
+    description = ''      A real-time graphical programming environment for
+                          audio, video, and graphical processing'';
     homepage = "http://puredata.info";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
   };
 }

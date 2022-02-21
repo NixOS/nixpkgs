@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, knightos-scas, readline, SDL2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  knightos-scas,
+  readline,
+  SDL2,
+}:
 stdenv.mkDerivation rec {
   pname = "z80e";
   version = "0.5.3";
@@ -11,17 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FQMYHxKxHEP+x98JbGyjaM0OL8QK/p3epsAWvQkv6bc=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ readline SDL2 knightos-scas ];
+  buildInputs = [readline SDL2 knightos-scas];
 
-  cmakeFlags = [ "-Denable-sdl=YES" ];
+  cmakeFlags = ["-Denable-sdl=YES"];
 
   meta = with lib; {
-    homepage    = "https://knightos.org/";
+    homepage = "https://knightos.org/";
     description = "A Z80 calculator emulator and debugger";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [siraben];
+    platforms = platforms.unix;
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-rpc-http-client-unix
-, tezos-signer-services
-, alcotest
-, alcotest-lwt
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-rpc-http-client-unix,
+  tezos-signer-services,
+  alcotest,
+  alcotest-lwt,
 }:
-
 buildDunePackage {
   pname = "tezos-signer-backends";
   inherit (tezos-stdlib) version useDune2;
@@ -24,7 +24,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: remote-signature backends for `tezos-client`";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: remote-signature backends for `tezos-client`";
+    };
 }

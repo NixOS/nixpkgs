@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gtk3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  pkg-config,
+  gtk3,
+}:
 stdenv.mkDerivation rec {
   pname = "gsimplecal";
   version = "2.2";
@@ -17,8 +24,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf gtk3 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [automake autoconf gtk3];
 
   preConfigure = "./autogen.sh";
 
@@ -38,7 +45,7 @@ stdenv.mkDerivation rec {
       display multiple clocks for different world time zones.
     '';
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.romildo ];
+    maintainers = [lib.maintainers.romildo];
     platforms = lib.platforms.linux;
   };
 }

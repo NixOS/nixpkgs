@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, vcrpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  vcrpy,
 }:
-
 buildPythonPackage rec {
   pname = "libpyvivotek";
   version = "0.4.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python Library for Vivotek IP Cameras";
     homepage = "https://github.com/HarlemSquirrel/python-vivotek";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

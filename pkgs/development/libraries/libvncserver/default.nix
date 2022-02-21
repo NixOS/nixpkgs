@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, libjpeg
-, openssl
-, zlib
-, libgcrypt
-, libpng
-, systemd
-, Carbon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libjpeg,
+  openssl,
+  zlib,
+  libgcrypt,
+  libpng,
+  systemd,
+  Carbon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libvncserver";
   version = "0.9.13";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "LibVNC";
@@ -29,16 +29,19 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs = [
-    libjpeg
-    openssl
-    libgcrypt
-    libpng
-  ] ++ lib.optionals stdenv.isLinux [
-    systemd
-  ] ++ lib.optional stdenv.isDarwin [
-    Carbon
-  ];
+  buildInputs =
+    [
+      libjpeg
+      openssl
+      libgcrypt
+      libpng
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      systemd
+    ]
+    ++ lib.optional stdenv.isDarwin [
+      Carbon
+    ];
 
   propagatedBuildInputs = [
     zlib
@@ -48,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "VNC server library";
     homepage = "https://libvnc.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

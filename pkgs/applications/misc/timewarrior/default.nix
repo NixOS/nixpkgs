@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, asciidoctor }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  asciidoctor,
+}:
 stdenv.mkDerivation rec {
   pname = "timewarrior";
   version = "1.4.3";
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake asciidoctor ];
+  nativeBuildInputs = [cmake asciidoctor];
 
   dontUseCmakeBuildDir = true;
 
@@ -20,8 +25,7 @@ stdenv.mkDerivation rec {
     description = "A command-line time tracker";
     homepage = "https://timewarrior.net";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
+    maintainers = with maintainers; [matthiasbeyer mrVanDalo];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
-

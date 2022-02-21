@@ -1,5 +1,9 @@
-{ python3, fetchFromGitHub, fetchpatch, lib }:
-
+{
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "dnd-tools";
   version = "unstable-2021-02-18";
@@ -23,6 +27,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/savagezen/dnd-tools";
     description = "A set of interactive command line tools for Dungeons and Dragons 5th Edition";
     license = licenses.agpl3Only;
-    maintainers = [ maintainers.urlordjames ];
+    maintainers = [maintainers.urlordjames];
   };
 }

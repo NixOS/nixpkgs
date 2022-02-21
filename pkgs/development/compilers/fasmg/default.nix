@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchzip
+{
+  lib,
+  stdenv,
+  fetchzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fasmg";
   version = "j27m";
@@ -15,31 +16,33 @@ stdenv.mkDerivation rec {
   buildPhase = let
     inherit (stdenv.hostPlatform) system;
 
-    path = {
-      x86_64-linux = {
-        bin = "fasmg.x64";
-        asm = "source/linux/x64/fasmg.asm";
-      };
-      x86_64-darwin = {
-        bin = "source/macos/x64/fasmg";
-        asm = "source/macos/x64/fasmg.asm";
-      };
-      x86-linux = {
-        bin = "fasmg";
-        asm = "source/linux/fasmg.asm";
-      };
-      x86-darwin = {
-        bin = "source/macos/fasmg";
-        asm = "source/macos/fasmg.asm";
-      };
-    }.${system} or (throw "Unsopported system: ${system}");
-
+    path =
+      {
+        x86_64-linux = {
+          bin = "fasmg.x64";
+          asm = "source/linux/x64/fasmg.asm";
+        };
+        x86_64-darwin = {
+          bin = "source/macos/x64/fasmg";
+          asm = "source/macos/x64/fasmg.asm";
+        };
+        x86-linux = {
+          bin = "fasmg";
+          asm = "source/linux/fasmg.asm";
+        };
+        x86-darwin = {
+          bin = "source/macos/fasmg";
+          asm = "source/macos/fasmg.asm";
+        };
+      }
+      .${system}
+      or (throw "Unsopported system: ${system}");
   in ''
     chmod +x ${path.bin}
     ./${path.bin} ${path.asm} fasmg
   '';
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   installPhase = ''
     install -Dm755 fasmg $out/bin/fasmg
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
     homepage = "https://flatassembler.net";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej luc65r ];
+    maintainers = with maintainers; [orivej luc65r];
     platforms = with platforms; intersectLists (linux ++ darwin) x86;
   };
 }

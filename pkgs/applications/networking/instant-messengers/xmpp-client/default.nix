@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "xmpp-client";
   version = "20160916-${lib.strings.substring 0 7 rev}";
@@ -20,6 +23,6 @@ buildGoPackage rec {
     description = "An XMPP client with OTR support";
     homepage = "https://github.com/agl/xmpp-client";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ codsl ];
+    maintainers = with maintainers; [codsl];
   };
 }

@@ -1,20 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, libuuid, json_c
-, doxygen, perl, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libuuid,
+  json_c,
+  doxygen,
+  perl,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "opae";
   version = "1.0.0";
 
   # the tag has a silly name for some reason. drop this in the future if
   # possible
-  tver    = "${version}-5";
+  tver = "${version}-5";
 
   src = fetchFromGitHub {
-    owner  = "opae";
-    repo   = "opae-sdk";
-    rev    = "refs/tags/${tver}";
+    owner = "opae";
+    repo = "opae-sdk";
+    rev = "refs/tags/${tver}";
     sha256 = "1dmkpnr9dqxwjhbdzx2r3fdfylvinda421yyg319am5gzlysxwi8";
   };
 
@@ -26,8 +32,8 @@ stdenv.mkDerivation rec {
     "-Wno-array-bounds"
   ];
 
-  nativeBuildInputs = [ cmake doxygen perl python3.pkgs.sphinx ];
-  buildInputs = [ libuuid json_c python3 ];
+  nativeBuildInputs = [cmake doxygen perl python3.pkgs.sphinx];
+  buildInputs = [libuuid json_c python3];
 
   # Set the Epoch to 1980; otherwise the Python wheel/zip code
   # gets very angry
@@ -37,13 +43,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  cmakeFlags = [ "-DBUILD_ASE=1" ];
+  cmakeFlags = ["-DBUILD_ASE=1"];
 
   meta = with lib; {
     description = "Open Programmable Acceleration Engine SDK";
-    homepage    = "https://01.org/opae";
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    homepage = "https://01.org/opae";
+    license = licenses.bsd3;
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

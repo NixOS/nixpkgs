@@ -1,13 +1,13 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapGAppsHook
-, gobject-introspection
-, gtksourceview3
-, libappindicator-gtk3
-, libnotify
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  wrapGAppsHook,
+  gobject-introspection,
+  gtksourceview3,
+  libappindicator-gtk3,
+  libnotify,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "autokey";
   version = "0.95.10";
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   # Tests appear to be broken with import errors within the project structure
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [wrapGAppsHook];
 
   buildInputs = [
     gobject-introspection
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapGapps = true;
 
-  pythonPath = with python3Packages; requiredPythonModules [ dbus-python xlib pygobject3 ];
+  pythonPath = with python3Packages; requiredPythonModules [dbus-python xlib pygobject3];
 
   postInstall = ''
     rm $out/bin/autokey-qt
@@ -56,8 +56,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/autokey/autokey";
     description = "Desktop automation utility for Linux and X11";
-    license = with lib.licenses; [ gpl3 ];
-    maintainers = with lib.maintainers; [ pneumaticat ];
+    license = with lib.licenses; [gpl3];
+    maintainers = with lib.maintainers; [pneumaticat];
     platforms = lib.platforms.linux;
   };
 }

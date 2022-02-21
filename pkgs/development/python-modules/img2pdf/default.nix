@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, fetchpatch
-, pikepdf
-, pillow
-, stdenv
-, exiftool
-, ghostscript
-, imagemagick
-, mupdf
-, netpbm
-, numpy
-, poppler_utils
-, pytestCheckHook
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  fetchpatch,
+  pikepdf,
+  pillow,
+  stdenv,
+  exiftool,
+  ghostscript,
+  imagemagick,
+  mupdf,
+  netpbm,
+  numpy,
+  poppler_utils,
+  pytestCheckHook,
+  scipy,
 }:
-
 buildPythonPackage rec {
   pname = "img2pdf";
   version = "0.4.3";
@@ -64,12 +64,12 @@ buildPythonPackage rec {
     "test_tiff_rgb"
   ];
 
-  pythonImportsCheck = [ "img2pdf" ];
+  pythonImportsCheck = ["img2pdf"];
 
   meta = with lib; {
     description = "Convert images to PDF via direct JPEG inclusion";
     homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ veprbl dotlambda ];
+    maintainers = with maintainers; [veprbl dotlambda];
   };
 }

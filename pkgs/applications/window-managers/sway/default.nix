@@ -1,15 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
-, meson, ninja, pkg-config, wayland-scanner, scdoc
-, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
-, pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols, libdrm
-, nixosTests
-# Used by the NixOS module:
-, isNixOS ? false
-
-, enableXWayland ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  swaybg,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  scdoc,
+  wayland,
+  libxkbcommon,
+  pcre,
+  json_c,
+  dbus,
+  libevdev,
+  pango,
+  cairo,
+  libinput,
+  libcap,
+  pam,
+  gdk-pixbuf,
+  librsvg,
+  wlroots,
+  wayland-protocols,
+  libdrm,
+  nixosTests
+  # Used by the NixOS module:
+  ,
+  isNixOS ? false,
+  enableXWayland ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
   version = "1.7";
@@ -21,43 +42,62 @@ stdenv.mkDerivation rec {
     sha256 = "0ss3l258blyf2d0lwd7pi7ga1fxfj8pxhag058k7cmjhs3y30y5l";
   };
 
-  patches = [
-    ./load-configuration-from-etc.patch
+  patches =
+    [
+      ./load-configuration-from-etc.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit swaybg;
-    })
-  ] ++ lib.optionals (!isNixOS) [
-    # References to /nix/store/... will get GC'ed which causes problems when
-    # copying the default configuration:
-    ./sway-config-no-nix-store-references.patch
-  ] ++ lib.optionals isNixOS [
-    # Use /run/current-system/sw/share and /etc instead of /nix/store
-    # references:
-    ./sway-config-nixos-paths.patch
-  ];
+      (substituteAll {
+        src = ./fix-paths.patch;
+        inherit swaybg;
+      })
+    ]
+    ++ lib.optionals (!isNixOS) [
+      # References to /nix/store/... will get GC'ed which causes problems when
+      # copying the default configuration:
+      ./sway-config-no-nix-store-references.patch
+    ]
+    ++ lib.optionals isNixOS [
+      # Use /run/current-system/sw/share and /etc instead of /nix/store
+      # references:
+      ./sway-config-nixos-paths.patch
+    ];
 
   depsBuildBuild = [
     pkg-config
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config wayland-scanner scdoc
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    scdoc
   ];
 
   buildInputs = [
-    wayland libxkbcommon pcre json_c dbus libevdev
-    pango cairo libinput libcap pam gdk-pixbuf librsvg
-    wayland-protocols libdrm
-    (wlroots.override { inherit enableXWayland; })
+    wayland
+    libxkbcommon
+    pcre
+    json_c
+    dbus
+    libevdev
+    pango
+    cairo
+    libinput
+    libcap
+    pam
+    gdk-pixbuf
+    librsvg
+    wayland-protocols
+    libdrm
+    (wlroots.override {inherit enableXWayland;})
   ];
 
-  mesonFlags = [
-    "-Dsd-bus-provider=libsystemd"
-  ]
-    ++ lib.optional (!enableXWayland) "-Dxwayland=disabled"
-  ;
+  mesonFlags =
+    [
+      "-Dsd-bus-provider=libsystemd"
+    ]
+    ++ lib.optional (!enableXWayland) "-Dxwayland=disabled";
 
   passthru.tests.basic = nixosTests.sway;
 
@@ -72,10 +112,10 @@ stdenv.mkDerivation rec {
       maximizes the efficiency of your screen and can be quickly manipulated
       using only the keyboard.
     '';
-    homepage    = "https://swaywm.org";
-    changelog   = "https://github.com/swaywm/sway/releases/tag/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ma27 ];
+    homepage = "https://swaywm.org";
+    changelog = "https://github.com/swaywm/sway/releases/tag/${version}";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [primeos synthetica ma27];
   };
 }

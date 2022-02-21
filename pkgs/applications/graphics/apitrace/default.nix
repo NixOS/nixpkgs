@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit, wrapQtAppsHook, libglvnd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libX11,
+  procps,
+  python2,
+  libdwarf,
+  qtbase,
+  qtwebkit,
+  wrapQtAppsHook,
+  libglvnd,
+}:
 stdenv.mkDerivation rec {
   pname = "apitrace";
   version = "7.1-572-g${builtins.substring 0 8 src.rev}";
@@ -13,9 +25,9 @@ stdenv.mkDerivation rec {
 
   # LD_PRELOAD wrappers need to be statically linked to work against all kinds
   # of games -- so it's fine to use e.g. bundled snappy.
-  buildInputs = [ libX11 procps python2 libdwarf qtbase qtwebkit ];
+  buildInputs = [libX11 procps python2 libdwarf qtbase qtwebkit];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [cmake wrapQtAppsHook];
 
   # Don't automatically wrap all binaries, I prefer to explicitly only wrap
   # `qapitrace`.

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  gfortran,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "libxc";
   version = "5.2.2";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "113sk7hxjpfbz3nrgjsc7bi6zrlwb3qq5s6h0zh37hz9bd1brq54";
   };
 
-  nativeBuildInputs = [ perl cmake gfortran ];
+  nativeBuildInputs = [perl cmake gfortran];
 
   preConfigure = ''
     patchShebangs ./
@@ -36,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.tddft.org/programs/Libxc/";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ markuskowa ];
+    maintainers = with maintainers; [markuskowa];
   };
 }

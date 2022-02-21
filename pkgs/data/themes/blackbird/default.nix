@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk-engine-murrine }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk-engine-murrine,
+}:
 stdenv.mkDerivation rec {
   pname = "Blackbird";
   version = "2017-12-13";
@@ -11,15 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "0xskcw36ci2ykra5gir5pkrawh2qkcv18p4fp2kxivssbd20d4jw";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [gtk-engine-murrine];
 
   meta = {
     description = "Dark Desktop Suite for Gtk, Xfce and Metacity";
     homepage = "https://github.com/shimmerproject/Blackbird";
-    license = with lib.licenses; [ gpl2Plus cc-by-nc-sa-30 ];
+    license = with lib.licenses; [gpl2Plus cc-by-nc-sa-30];
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.romildo ];
+    maintainers = [lib.maintainers.romildo];
   };
 }

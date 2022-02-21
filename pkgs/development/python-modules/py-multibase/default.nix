@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, fetchPypi
-, isPy27
-, lib
-, morphys
-, pytest
-, pytest-runner
-, python-baseconv
-, six
+{
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  lib,
+  morphys,
+  pytest,
+  pytest-runner,
+  python-baseconv,
+  six,
 }:
 buildPythonPackage rec {
   pname = "py-multibase";
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version ;
+    inherit pname version;
     sha256 = "d28a20efcbb61eec28f55827a0bf329c7cea80fffd933aecaea6ae8431267fe4";
   };
 
@@ -41,6 +42,6 @@ buildPythonPackage rec {
     description = "Multibase is a protocol for distinguishing base encodings and other simple string encodings";
     homepage = "https://github.com/multiformats/py-multibase";
     license = licenses.mit;
-    maintainers = with maintainers; [ rakesh4g ];
+    maintainers = with maintainers; [rakesh4g];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "biopython";
   version = "1.79";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [numpy];
   # Checks try to write to $HOME, which does not work with nix
   doCheck = false;
   meta = {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       bioinformatics.
     '';
     homepage = "https://biopython.org/wiki/Documentation";
-    maintainers = with lib.maintainers; [ luispedro ];
+    maintainers = with lib.maintainers; [luispedro];
     license = lib.licenses.bsd3;
   };
 }

@@ -1,6 +1,14 @@
-{ buildPythonPackage, fetchFromGitHub, lib, passlib, pytestCheckHook, setuptools
-, setuptools-git, twine, webtest }:
-
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  passlib,
+  pytestCheckHook,
+  setuptools,
+  setuptools-git,
+  twine,
+  webtest,
+}:
 buildPythonPackage rec {
   pname = "pypiserver";
   version = "1.4.2";
@@ -12,15 +20,15 @@ buildPythonPackage rec {
     sha256 = "1z5rsmqgin98m6ihy1ww42fxxr6jb4hzldn8vlc9ssv7sawdz8vz";
   };
 
-  nativeBuildInputs = [ setuptools-git ];
+  nativeBuildInputs = [setuptools-git];
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [setuptools];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [ passlib pytestCheckHook twine webtest ];
+  checkInputs = [passlib pytestCheckHook twine webtest];
 
   # These tests try to use the network
   disabledTests = [
@@ -29,12 +37,12 @@ buildPythonPackage rec {
     "test_hash_algos"
   ];
 
-  pythonImportsCheck = [ "pypiserver" ];
+  pythonImportsCheck = ["pypiserver"];
 
   meta = with lib; {
     homepage = "https://github.com/pypiserver/pypiserver";
     description = "Minimal PyPI server for use with pip/easy_install";
-    license = with licenses; [ mit zlib ];
-    maintainers = [ maintainers.austinbutler ];
+    license = with licenses; [mit zlib];
+    maintainers = [maintainers.austinbutler];
   };
 }

@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, tmux, installShellFiles }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  tmux,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "wemux";
   version = "unstable-2021-04-16";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y962nzvs7sf720pl3wa582l6irxc8vavd0gp4ag4243b2gs4qvm";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   installPhase = ''
     runHook preInstall
@@ -33,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Multi-user tmux made easy";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ bsima ];
+    maintainers = with maintainers; [bsima];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 buildDunePackage rec {
   pname = "csv";
   version = "2.4";
@@ -14,7 +17,7 @@ buildDunePackage rec {
   meta = {
     description = "A pure OCaml library to read and write CSV files";
     license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     homepage = "https://github.com/Chris00/ocaml-csv";
   };
 }

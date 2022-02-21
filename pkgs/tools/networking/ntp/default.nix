@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchurl, openssl, perl, pps-tools, libcap }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  openssl,
+  perl,
+  pps-tools,
+  libcap,
+}:
 stdenv.mkDerivation rec {
   pname = "ntp";
   version = "4.2.8p15";
@@ -9,19 +16,22 @@ stdenv.mkDerivation rec {
     sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
   };
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-openssl-libdir=${openssl.out}/lib"
-    "--with-openssl-incdir=${openssl.dev}/include"
-    "--enable-ignore-dns-errors"
-    "--with-yielding-select=yes"
-  ] ++ lib.optional stdenv.isLinux "--enable-linuxcaps";
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
+      "--with-openssl-libdir=${openssl.out}/lib"
+      "--with-openssl-incdir=${openssl.dev}/include"
+      "--enable-ignore-dns-errors"
+      "--with-yielding-select=yes"
+    ]
+    ++ lib.optional stdenv.isLinux "--enable-linuxcaps";
 
-  buildInputs = [ openssl perl ]
-    ++ lib.optionals stdenv.isLinux [ pps-tools libcap ];
+  buildInputs =
+    [openssl perl]
+    ++ lib.optionals stdenv.isLinux [pps-tools libcap];
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = ["pie"];
 
   postInstall = ''
     rm -rf $out/share/doc
@@ -34,7 +44,7 @@ stdenv.mkDerivation rec {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
-    maintainers = with maintainers; [ eelco thoughtpolice ];
+    maintainers = with maintainers; [eelco thoughtpolice];
     platforms = platforms.unix;
   };
 }

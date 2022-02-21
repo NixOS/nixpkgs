@@ -1,5 +1,8 @@
-{ fetchurl, lib, stdenv }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "qprint";
   version = "1.1";
@@ -22,8 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.fourmilab.ch/webtools/qprint/";
     license = lib.licenses.publicDomain;
     description = "Encode and decode Quoted-Printable files";
-    maintainers = [ lib.maintainers.tv ];
+    maintainers = [lib.maintainers.tv];
     platforms = lib.platforms.all;
   };
-
 }

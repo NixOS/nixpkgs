@@ -1,5 +1,8 @@
-{ lib, appleDerivation', stdenvNoCC }:
-
+{
+  lib,
+  appleDerivation',
+  stdenvNoCC,
+}:
 appleDerivation' stdenvNoCC {
   dontBuild = true;
 
@@ -9,7 +12,7 @@ appleDerivation' stdenvNoCC {
         --replace '/usr/bin/install' 'install'
   '';
 
-  installFlags = [ "EXPORT_DSTDIR=/include/architecture" ];
+  installFlags = ["EXPORT_DSTDIR=/include/architecture"];
 
   DSTROOT = "$(out)";
 
@@ -32,8 +35,8 @@ appleDerivation' stdenvNoCC {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    maintainers = with maintainers; [copumpkin];
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

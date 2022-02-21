@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "hdparm";
   version = "9.63";
@@ -11,14 +14,13 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     makeFlagsArray=(sbindir=$out/sbin manprefix=$out)
-    '';
+  '';
 
   meta = with lib; {
     description = "A tool to get/set ATA/SATA drive parameters under Linux";
     homepage = "https://sourceforge.net/projects/hdparm/";
     platforms = platforms.linux;
     license = licenses.bsd2;
-    maintainers = [ ];
+    maintainers = [];
   };
-
 }

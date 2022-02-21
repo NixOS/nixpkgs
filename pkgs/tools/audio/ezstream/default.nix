@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, libiconv, libshout, taglib, libxml2, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+  libshout,
+  taglib,
+  libxml2,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "ezstream";
   version = "0.6.0";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "f86eb8163b470c3acbc182b42406f08313f85187bd9017afb8b79b02f03635c9";
   };
 
-  buildInputs = [ libiconv libshout taglib libxml2 ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [libiconv libshout taglib libxml2];
+  nativeBuildInputs = [pkg-config];
 
   doCheck = true;
 
@@ -27,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://icecast.org/ezstream/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.barrucadu ];
+    maintainers = [maintainers.barrucadu];
     platforms = platforms.all;
   };
 }

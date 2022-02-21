@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isodate
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, responses
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isodate,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pysolcast";
   version = "1.0.7";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mcaulifn/solcast";
     # No license statement present
     # https://github.com/mcaulifn/solcast/issues/70
-    license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [unfree];
+    maintainers = with maintainers; [fab];
   };
 }

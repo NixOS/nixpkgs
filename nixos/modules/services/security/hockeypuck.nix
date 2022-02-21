@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.services.hockeypuck;
-  settingsFormat = pkgs.formats.toml { };
+  settingsFormat = pkgs.formats.toml {};
 in {
-  meta.maintainers = with lib.maintainers; [ etu ];
+  meta.maintainers = with lib.maintainers; [etu];
 
   options.services.hockeypuck = {
     enable = lib.mkEnableOption "Hockeypuck OpenPGP Key Server";
@@ -17,7 +20,7 @@ in {
 
     settings = lib.mkOption {
       type = settingsFormat.type;
-      default = { };
+      default = {};
       example = lib.literalExpression ''
         {
           hockeypuck = {
@@ -89,8 +92,8 @@ in {
 
     systemd.services.hockeypuck = {
       description = "Hockeypuck OpenPGP Key Server";
-      after = [ "network.target" "postgresql.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target" "postgresql.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         WorkingDirectory = "/var/lib/hockeypuck";
         User = "hockeypuck";

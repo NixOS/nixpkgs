@@ -1,5 +1,10 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, tinyxml }:
-
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  tinyxml,
+}:
 buildKodiBinaryAddon rec {
   pname = "libretro";
   namespace = "game.libretro";
@@ -12,7 +17,7 @@ buildKodiBinaryAddon rec {
     sha256 = "1831wbbc4a545lr4mg1fm4sbx75k5lkrfqaa5fh308aar0nm974d";
   };
 
-  extraBuildInputs = [ tinyxml ];
+  extraBuildInputs = [tinyxml];
 
   meta = with lib; {
     homepage = "https://github.com/kodi-game/game.libretro";

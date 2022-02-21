@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "libb2";
   version = "0.98.1";
@@ -18,7 +25,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.hostPlatform.isx86 "--enable-fat=yes";
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  nativeBuildInputs = [autoconf automake libtool pkg-config];
 
   doCheck = true;
 
@@ -26,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "The BLAKE2 family of cryptographic hash functions";
     homepage = "https://blake2.net/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ dfoxfranke dotlambda ];
+    maintainers = with maintainers; [dfoxfranke dotlambda];
     license = licenses.cc0;
   };
 }

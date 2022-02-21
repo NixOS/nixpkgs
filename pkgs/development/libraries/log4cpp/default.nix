@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "log4cpp";
   version = "1.1.3";
@@ -12,9 +15,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage    = "http://log4cpp.sourceforge.net/";
+    homepage = "http://log4cpp.sourceforge.net/";
     description = "A logging framework for C++ patterned after Apache log4j";
-    license     = licenses.lgpl21Plus;
-    platforms   = platforms.unix;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
   };
 }

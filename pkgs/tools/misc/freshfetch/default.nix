@@ -1,14 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, AppKit
-, CoreFoundation
-, DiskArbitration
-, Foundation
-, IOKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  AppKit,
+  CoreFoundation,
+  DiskArbitration,
+  Foundation,
+  IOKit,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "freshfetch";
   version = "0.2.0";
@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     description = "A fresh take on neofetch";
     homepage = "https://github.com/k4rakara/freshfetch";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

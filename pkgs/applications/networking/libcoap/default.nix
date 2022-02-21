@@ -1,6 +1,17 @@
-{ fetchFromGitHub, automake, autoconf, which, pkg-config, libtool, lib, stdenv, gnutls, asciidoc, doxygen
-, withTLS ? true
-, withDocs ? true
+{
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  which,
+  pkg-config,
+  libtool,
+  lib,
+  stdenv,
+  gnutls,
+  asciidoc,
+  doxygen,
+  withTLS ? true,
+  withDocs ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "libcoap";
@@ -12,15 +23,19 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "1l031ys833gch600g9g3lvbsr4nysx6glbbj4lwvx3ywl0jr6l9k";
   };
-  nativeBuildInputs = [
-    automake
-    autoconf
-    which
-    libtool
-    pkg-config
-  ] ++ lib.optional withTLS gnutls ++ lib.optionals withDocs [ doxygen asciidoc ] ;
+  nativeBuildInputs =
+    [
+      automake
+      autoconf
+      which
+      libtool
+      pkg-config
+    ]
+    ++ lib.optional withTLS gnutls
+    ++ lib.optionals withDocs [doxygen asciidoc];
   preConfigure = "./autogen.sh";
-  configureFlags = [ "--disable-shared" ]
+  configureFlags =
+    ["--disable-shared"]
     ++ lib.optional (!withDocs) "--disable-documentation"
     ++ lib.optional withTLS "--enable-dtls";
   meta = with lib; {
@@ -28,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "A CoAP (RFC 7252) implementation in C";
     platforms = platforms.unix;
     license = licenses.bsd2;
-    maintainers = [ maintainers.kmein ];
+    maintainers = [maintainers.kmein];
   };
 }

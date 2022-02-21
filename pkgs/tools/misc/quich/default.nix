@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "quich";
   version = "4.0.0";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["DESTDIR=" "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc"];
 
   meta = with lib; {
     description = "The advanced terminal calculator";
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Usbac/quich";
     license = licenses.mit;
-    maintainers = [ maintainers.xdhampus ];
+    maintainers = [maintainers.xdhampus];
     platforms = platforms.all;
   };
 }

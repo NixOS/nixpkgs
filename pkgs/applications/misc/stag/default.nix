@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, curses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curses,
+}:
 stdenv.mkDerivation {
   pname = "stag";
   version = "1.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1yrzjhcwrxrxq5jj695wvpgb0pz047m88yq5n5ymkcw5qr78fy1v";
   };
 
-  buildInputs = [ stdenv curses ];
+  buildInputs = [stdenv curses];
 
   installPhase = ''
     make install PREFIX=$out
@@ -21,7 +25,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/seenaburns/stag";
     description = "Terminal streaming bar graph passed through stdin";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
     platforms = platforms.unix;
   };
 }

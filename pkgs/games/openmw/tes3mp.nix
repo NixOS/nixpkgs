@@ -1,19 +1,18 @@
-{ lib
-, stdenv
-, cmake
-, openmw
-, fetchFromGitHub
-, formats
-, luajit
-, makeWrapper
-, symlinkJoin
-, mygui
-, crudini
-, bullet
+{
+  lib,
+  stdenv,
+  cmake,
+  openmw,
+  fetchFromGitHub,
+  formats,
+  luajit,
+  makeWrapper,
+  symlinkJoin,
+  mygui,
+  crudini,
+  bullet,
 }:
-
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
-
 let
   # raknet could also be split into dev and lib outputs
   raknet = stdenv.mkDerivation {
@@ -29,7 +28,7 @@ let
       sha256 = "0p0li9l1i5lcliswm5w9jql0zff9i6fwhiq0bl130m4i7vpr4cr3";
     };
 
-    nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [cmake];
 
     installPhase = ''
       install -Dm555 lib/libRakNetLibStatic.a $out/lib/libRakNetLibStatic.a
@@ -69,17 +68,24 @@ let
       sha256 = "sha256-xLslShNA6rVFl9kt6BNGDpSYMpO25jBTCteLJoSTXdg=";
     };
 
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [makeWrapper];
 
-    buildInputs = (builtins.map (x: if x.pname or "" == "bullet" then bullet else x) oldAttrs.buildInputs)
-      ++ [ luajit ];
+    buildInputs =
+      (builtins.map (x:
+        if x.pname or "" == "bullet"
+        then bullet
+        else x)
+      oldAttrs.buildInputs)
+      ++ [luajit];
 
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DBUILD_OPENCS=OFF"
-      "-DRakNet_INCLUDES=${raknet.src}/include"
-      "-DRakNet_LIBRARY_RELEASE=${raknet}/lib/libRakNetLibStatic.a"
-      "-DRakNet_LIBRARY_DEBUG=${raknet}/lib/libRakNetLibStatic.a"
-    ];
+    cmakeFlags =
+      oldAttrs.cmakeFlags
+      ++ [
+        "-DBUILD_OPENCS=OFF"
+        "-DRakNet_INCLUDES=${raknet.src}/include"
+        "-DRakNet_LIBRARY_RELEASE=${raknet}/lib/libRakNetLibStatic.a"
+        "-DRakNet_LIBRARY_DEBUG=${raknet}/lib/libRakNetLibStatic.a"
+      ];
 
     prePatch = ''
       substituteInPlace components/process/processinvoker.cpp \
@@ -87,7 +93,7 @@ let
     '';
 
     # https://github.com/TES3MP/openmw-tes3mp/issues/552
-    patches = [ ./tes3mp.patch ];
+    patches = [./tes3mp.patch];
 
     NIX_CFLAGS_COMPILE = "-fpermissive";
 
@@ -106,36 +112,35 @@ let
       description = "Multiplayer for TES3:Morrowind based on OpenMW";
       homepage = "https://tes3mp.com/";
       license = licenses.gpl3Only;
-      maintainers = with maintainers; [ peterhoeg ];
-      platforms = [ "x86_64-linux" "i686-linux" ];
+      maintainers = with maintainers; [peterhoeg];
+      platforms = ["x86_64-linux" "i686-linux"];
     };
   });
 
-  cfgFile = (formats.ini { }).generate "tes3mp-server.cfg" {
+  cfgFile = (formats.ini {}).generate "tes3mp-server.cfg" {
     Plugins.home = "${coreScripts}/share/openmw-tes3mp/CoreScripts";
   };
-
 in
-symlinkJoin rec {
-  name = "openmw-tes3mp-${unwrapped.version}";
-  inherit (unwrapped) version meta;
+  symlinkJoin rec {
+    name = "openmw-tes3mp-${unwrapped.version}";
+    inherit (unwrapped) version meta;
 
-  nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
 
-  paths = [ unwrapped ];
+    paths = [unwrapped];
 
-  # crudini --merge will create the file if it doesn't exist
-  postBuild = ''
-    mkdir -p $out/bin
+    # crudini --merge will create the file if it doesn't exist
+    postBuild = ''
+      mkdir -p $out/bin
 
-    dir=\''${XDG_CONFIG_HOME:-\$HOME/.config}/openmw
+      dir=\''${XDG_CONFIG_HOME:-\$HOME/.config}/openmw
 
-    makeWrapper ${unwrapped}/libexec/tes3mp-browser $out/bin/tes3mp-browser \
-      --run "cd $out/bin"
+      makeWrapper ${unwrapped}/libexec/tes3mp-browser $out/bin/tes3mp-browser \
+        --run "cd $out/bin"
 
-    makeWrapper ${unwrapped}/libexec/tes3mp-server $out/bin/tes3mp-server \
-      --run "mkdir -p $dir" \
-      --run "${crudini}/bin/crudini --merge $dir/${cfgFile.name} < ${cfgFile}" \
-      --run "cd $out/bin"
-  '';
-}
+      makeWrapper ${unwrapped}/libexec/tes3mp-server $out/bin/tes3mp-server \
+        --run "mkdir -p $dir" \
+        --run "${crudini}/bin/crudini --merge $dir/${cfgFile.name} < ${cfgFile}" \
+        --run "cd $out/bin"
+    '';
+  }

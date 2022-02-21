@@ -1,4 +1,8 @@
-{ buildGoPackage, lib, fetchFromGitHub }:
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "tgswitch";
   version = "0.5.382";
@@ -16,6 +20,6 @@ buildGoPackage rec {
     description = "A command line tool to switch between different versions of terragrunt";
     homepage = "https://github.com/warrensbox/tgswitch";
     license = licenses.mit;
-    maintainers = with maintainers; [ psibi ];
+    maintainers = with maintainers; [psibi];
   };
 }

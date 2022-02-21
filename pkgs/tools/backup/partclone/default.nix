@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, pkg-config, libuuid, e2fsprogs, nilfs-utils, ntfs3g, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libuuid,
+  e2fsprogs,
+  nilfs-utils,
+  ntfs3g,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "partclone";
   version = "0.3.18";
@@ -13,9 +21,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cSxQJmuKm54AzIQbsEZhv/I8hfpaGroszdWqbRb3Ht4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
   buildInputs = [
-    e2fsprogs libuuid stdenv.cc.libc nilfs-utils ntfs3g openssl
+    e2fsprogs
+    libuuid
+    stdenv.cc.libc
+    nilfs-utils
+    ntfs3g
+    openssl
     (lib.getOutput "static" stdenv.cc.libc)
   ];
 
@@ -44,7 +57,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://partclone.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ marcweber ];
+    maintainers = with maintainers; [marcweber];
     platforms = platforms.linux;
   };
 }

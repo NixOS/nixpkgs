@@ -1,13 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, nixosTests, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  nixosTests,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "fakechroot";
   version = "2.20.1";
 
   src = fetchFromGitHub {
-    owner  = "dex4er";
-    repo   = pname;
-    rev    = version;
+    owner = "dex4er";
+    repo = pname;
+    rev = version;
     sha256 = "0xgnwazrmrg4gm30xjxdn6sx3lhqvxahrh6gmy3yfswxc30pmg86";
   };
 
@@ -19,7 +26,7 @@ stdenv.mkDerivation rec {
       sha256 = "1mk8j2njd94s7vf2wggi08xxxzx8dxrvdricl9cbspvkyp715w2m";
       # Don't bother trying to reconcile conflicts for NEWS entries, as they will continue to occur
       # and are uninteresting as well as unimportant for our purposes (since NEWS never leaves the build env).
-      excludes = [ "NEWS.md" ];
+      excludes = ["NEWS.md"];
     })
 
     # glibc 2.33 compat (https://github.com/dex4er/fakechroot/pull/85/)
@@ -41,8 +48,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [perl];
 
   passthru = {
     tests = {
@@ -58,5 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;
   };
-
 }

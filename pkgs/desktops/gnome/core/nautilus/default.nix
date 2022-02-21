@@ -1,43 +1,44 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gettext
-, libxml2
-, desktop-file-utils
-, python3
-, wrapGAppsHook
-, gtk3
-, libhandy
-, libportal-gtk3
-, gnome
-, gnome-autoar
-, glib-networking
-, shared-mime-info
-, libnotify
-, libexif
-, libseccomp
-, exempi
-, librsvg
-, tracker
-, tracker-miners
-, gexiv2
-, libselinux
-, gdk-pixbuf
-, substituteAll
-, gnome-desktop
-, gst_all_1
-, gsettings-desktop-schemas
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  libxml2,
+  desktop-file-utils,
+  python3,
+  wrapGAppsHook,
+  gtk3,
+  libhandy,
+  libportal-gtk3,
+  gnome,
+  gnome-autoar,
+  glib-networking,
+  shared-mime-info,
+  libnotify,
+  libexif,
+  libseccomp,
+  exempi,
+  librsvg,
+  tracker,
+  tracker-miners,
+  gexiv2,
+  libselinux,
+  gdk-pixbuf,
+  substituteAll,
+  gnome-desktop,
+  gst_all_1,
+  gsettings-desktop-schemas,
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nautilus";
   version = "41.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, packaging
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  packaging,
+  python,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "numexpr";
   version = "2.8.1";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Fast numerical array expression evaluator for NumPy";
     homepage = "https://github.com/pydata/numexpr";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

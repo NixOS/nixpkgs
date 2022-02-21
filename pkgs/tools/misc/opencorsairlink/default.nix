@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, libusb1, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "OpenCorsairLink";
   version = "unstable-2019-12-23";
 
-  buildInputs = [ libusb1 ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [libusb1];
+  nativeBuildInputs = [pkg-config];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   src = fetchFromGitHub {
     owner = "audiohacked";
@@ -21,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/audiohacked/OpenCorsairLink";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = [ lib.maintainers.expipiplus1 ];
+    maintainers = [lib.maintainers.expipiplus1];
   };
 }

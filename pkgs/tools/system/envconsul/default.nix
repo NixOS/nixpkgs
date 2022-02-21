@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "envconsul";
   version = "0.7.3";
@@ -19,6 +22,6 @@ buildGoPackage rec {
     description = "Read and set environmental variables for processes from Consul";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ pradeepchhetri ];
+    maintainers = with maintainers; [pradeepchhetri];
   };
 }

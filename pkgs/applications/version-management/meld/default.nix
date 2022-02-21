@@ -1,21 +1,21 @@
-{ lib
-, fetchurl
-, gettext
-, itstool
-, python3
-, meson
-, ninja
-, wrapGAppsHook
-, libxml2
-, pkg-config
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, gtksourceview4
-, gnome
-, gsettings-desktop-schemas
+{
+  lib,
+  fetchurl,
+  gettext,
+  itstool,
+  python3,
+  meson,
+  ninja,
+  wrapGAppsHook,
+  libxml2,
+  pkg-config,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  gtksourceview4,
+  gnome,
+  gsettings-desktop-schemas,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
   version = "3.21.1";
@@ -68,6 +68,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://meldmerge.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ jtojnar mimame ];
+    maintainers = with maintainers; [jtojnar mimame];
   };
 }

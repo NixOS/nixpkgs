@@ -1,9 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, git
-, asio, catch2, spdlog
-, IOKit, udev
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  git,
+  asio,
+  catch2,
+  spdlog,
+  IOKit,
+  udev,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pc-ble-driver";
   version = "4.1.4";
@@ -19,22 +25,24 @@ stdenv.mkDerivation rec {
     "-DNRF_BLE_DRIVER_VERSION=${version}"
   ];
 
-  nativeBuildInputs = [ cmake git ];
-  buildInputs = [ asio catch2 spdlog ];
+  nativeBuildInputs = [cmake git];
+  buildInputs = [asio catch2 spdlog];
 
-  propagatedBuildInputs = [
-
-  ] ++ lib.optionals stdenv.isDarwin [
-    IOKit
-  ] ++ lib.optionals stdenv.isLinux [
-    udev
-  ];
+  propagatedBuildInputs =
+    [
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      IOKit
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      udev
+    ];
 
   meta = with lib; {
     description = "Desktop library for Bluetooth low energy development";
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver";
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jschievink ];
+    maintainers = with maintainers; [jschievink];
   };
 }

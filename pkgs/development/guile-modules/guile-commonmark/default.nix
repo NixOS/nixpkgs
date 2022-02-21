@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, guile
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  guile,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "guile-commonmark";
   version = "0.1.2";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OrangeShark/guile-commonmark";
     description = "Implementation of CommonMark for Guile";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = guile.meta.platforms;
   };
 }

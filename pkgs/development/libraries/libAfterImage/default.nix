@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, giflib, libjpeg, libpng, libX11, zlib
-, static ? stdenv.hostPlatform.isStatic
-, withX ? !stdenv.isDarwin }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  giflib,
+  libjpeg,
+  libpng,
+  libX11,
+  zlib,
+  static ? stdenv.hostPlatform.isStatic,
+  withX ? !stdenv.isDarwin,
+}:
 stdenv.mkDerivation {
   pname = "libAfterImage";
   version = "1.20";
@@ -55,32 +65,44 @@ stdenv.mkDerivation {
       stripLen = 1;
     })
   ];
-  patchFlags = [ "-p0" ];
+  patchFlags = ["-p0"];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ giflib libjpeg libpng zlib ] ++ lib.optional withX libX11;
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [giflib libjpeg libpng zlib] ++ lib.optional withX libX11;
 
-  preConfigure = ''
-    rm -rf {libjpeg,libpng,libungif,zlib}/
-    substituteInPlace Makefile.in \
-      --replace "include .depend" ""
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile.in \
-      --replace "-soname," "-install_name,$out/lib/"
-  '';
+  preConfigure =
+    ''
+      rm -rf {libjpeg,libpng,libungif,zlib}/
+      substituteInPlace Makefile.in \
+        --replace "include .depend" ""
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile.in \
+        --replace "-soname," "-install_name,$out/lib/"
+    '';
 
-  configureFlags = [
-    "--with-gif"
-    "--disable-mmx-optimization"
-    "--${if static then "enable" else "disable"}-staticlibs"
-    "--${if !static then "enable" else "disable"}-sharedlibs"
-  ] ++ lib.optional withX "--with-x";
+  configureFlags =
+    [
+      "--with-gif"
+      "--disable-mmx-optimization"
+      "--${
+        if static
+        then "enable"
+        else "disable"
+      }-staticlibs"
+      "--${
+        if !static
+        then "enable"
+        else "disable"
+      }-sharedlibs"
+    ]
+    ++ lib.optional withX "--with-x";
 
   meta = with lib; {
     homepage = "http://www.afterstep.org/afterimage/";
     description = "A generic image manipulation library";
     platforms = platforms.unix;
-    maintainers = [ maintainers.veprbl ];
+    maintainers = [maintainers.veprbl];
     license = licenses.lgpl21;
   };
 }

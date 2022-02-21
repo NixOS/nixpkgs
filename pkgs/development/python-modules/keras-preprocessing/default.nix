@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, six, scipy, pillow, pytest, keras }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  six,
+  scipy,
+  pillow,
+  pytest,
+  keras,
+}:
 buildPythonPackage rec {
   pname = "Keras_Preprocessing";
   version = "1.1.2";
@@ -11,13 +20,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # required
-    numpy six
+    numpy
+    six
     # optional
-    scipy pillow
+    scipy
+    pillow
   ];
 
   checkInputs = [
-    pytest keras
+    pytest
+    keras
   ];
 
   checkPhase = ''

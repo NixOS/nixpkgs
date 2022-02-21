@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, ... }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  ...
+}:
 stdenv.mkDerivation rec {
   pname = "scriptaculous";
   version = "1.9.0";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xpnk3cq8n07lxd69k5jxh48s21zh41ihq10z4a6lcnk238rp8qz";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   installPhase = ''
     mkdir $out
@@ -27,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://script.aculo.us/";
     downloadPage = "https://script.aculo.us/dist/";
     license = licenses.mit;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [das_j];
   };
 }

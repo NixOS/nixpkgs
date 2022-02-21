@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, asn1crypto
-, fetchPypi
-, openssl
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  asn1crypto,
+  fetchPypi,
+  openssl,
 }:
-
 buildPythonPackage rec {
   pname = "oscrypto";
   version = "1.2.1";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     sed -e '/TLSTests/d' -e '/TrustListTests/d' -i tests/__init__.py
   '';
 
-  pythonImportsCheck = [ "oscrypto" ];
+  pythonImportsCheck = ["oscrypto"];
 
   doCheck = !stdenv.isDarwin;
 

@@ -1,4 +1,9 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libusb1 }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libusb1,
+}:
 buildKodiBinaryAddon rec {
   pname = namespace;
   namespace = "peripheral.steamcontroller";
@@ -11,7 +16,7 @@ buildKodiBinaryAddon rec {
     sha256 = "09lm8i119xlsxxk0c64rnp8iw0crr90v7m8iwi9r31qdmxrdxpmg";
   };
 
-  extraBuildInputs = [ libusb1 ];
+  extraBuildInputs = [libusb1];
 
   meta = with lib; {
     description = "Binary addon for steam controller.";

@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication {
   pname = "sdat2img";
   version = "unstable-2021-11-09";
@@ -20,7 +24,7 @@ python3Packages.buildPythonApplication {
     description = "Convert sparse Android data image (.dat) into filesystem ext4 image (.img)";
     homepage = "https://github.com/xpirt/sdat2img";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.xaverdh ];
+    maintainers = [lib.maintainers.xaverdh];
     platforms = lib.platforms.unix;
   };
 }

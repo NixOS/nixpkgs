@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, intltool, perl, gettext, libusb-compat-0_1, pkg-config, bluez
-, readline, pcsclite, libical, gtk2, glib, libXpm }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  perl,
+  gettext,
+  libusb-compat-0_1,
+  pkg-config,
+  bluez,
+  readline,
+  pcsclite,
+  libical,
+  gtk2,
+  glib,
+  libXpm,
+}:
 stdenv.mkDerivation rec {
   pname = "gnokii";
   version = "0.6.31";
@@ -11,15 +25,24 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    perl intltool gettext libusb-compat-0_1
-    glib gtk2 pkg-config bluez readline
-    libXpm pcsclite libical
+    perl
+    intltool
+    gettext
+    libusb-compat-0_1
+    glib
+    gtk2
+    pkg-config
+    bluez
+    readline
+    libXpm
+    pcsclite
+    libical
   ];
 
   meta = {
     description = "Cellphone tool";
     homepage = "https://www.gnokii.org";
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     broken = true; # 2018-04-10
   };

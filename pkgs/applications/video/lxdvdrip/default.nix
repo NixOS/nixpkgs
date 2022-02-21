@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libdvdread }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libdvdread,
+}:
 stdenv.mkDerivation rec {
   pname = "lxdvdrip";
   version = "1.76";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/man1 $out/bin $out/share $out/etc
   '';
 
-  buildInputs = [ libdvdread ];
+  buildInputs = [libdvdread];
 
   meta = {
     description = "Command line tool to make a copy from a video DVD for private use";

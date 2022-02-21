@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "FanFicFare";
   version = "4.8.0";
@@ -25,6 +27,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/JimmXinu/FanFicFare";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dwarfmaster ];
+    maintainers = with maintainers; [dwarfmaster];
   };
 }

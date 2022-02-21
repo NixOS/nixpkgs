@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 stdenv.mkDerivation {
   pname = "biblatex-check";
   version = "2019-11-09";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1bq0yqckhssazwkivipdjmn1jpsf301i4ppyl88qhc5igx39wg25";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
   strictDeps = true;
 
@@ -23,6 +27,6 @@ stdenv.mkDerivation {
     description = "Python2/3 script for checking BibLatex .bib files";
     homepage = "https://github.com/Pezmc/BibLatex-Check";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

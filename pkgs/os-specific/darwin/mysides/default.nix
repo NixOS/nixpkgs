@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libarchive, p7zip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libarchive,
+  p7zip,
+}:
 stdenv.mkDerivation rec {
   pname = "mysides";
   version = "1.0.1";
@@ -10,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
-  nativeBuildInputs = [ libarchive p7zip ];
+  nativeBuildInputs = [libarchive p7zip];
 
   unpackPhase = ''
     7z x $src
@@ -30,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Manage macOS Finder sidebar favorites";
     homepage = "https://github.com/mosen/mysides";
     license = licenses.mit;
-    maintainers = with maintainers; [ tboerger ];
+    maintainers = with maintainers; [tboerger];
     platforms = platforms.darwin;
   };
 }

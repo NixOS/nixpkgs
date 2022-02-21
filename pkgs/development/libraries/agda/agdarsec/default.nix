@@ -1,6 +1,9 @@
-{ lib, mkDerivation, fetchFromGitHub
-, standard-library }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  standard-library,
+}:
 mkDerivation rec {
   pname = "agdarsec";
   version = "0.4.1";
@@ -14,15 +17,15 @@ mkDerivation rec {
 
   everythingFile = "./index.agda";
 
-  includePaths = [ "src" "examples" ];
+  includePaths = ["src" "examples"];
 
-  buildInputs = [ standard-library ];
+  buildInputs = [standard-library];
 
   meta = with lib; {
     homepage = "https://gallais.github.io/agdarsec/";
     description = "Total Parser Combinators in Agda";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ turion ];
+    maintainers = with maintainers; [turion];
   };
 }

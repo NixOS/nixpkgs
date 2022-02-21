@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "google-pasta";
   version = "0.2.0";
@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "An AST-based Python refactoring library";
-    homepage    = "https://github.com/google/pasta";
+    homepage = "https://github.com/google/pasta";
     # Usually the tag message contains a one-line summary of the changes.
-    changelog   = "https://github.com/google/pasta/releases/tag/v${version}";
-    license     = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ timokau ];
+    changelog = "https://github.com/google/pasta/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [timokau];
   };
 }

@@ -1,23 +1,29 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "octant";
   version = "0.25.0";
 
-  src =
-    let
-      inherit (stdenv.hostPlatform) system;
-      suffix = {
+  src = let
+    inherit (stdenv.hostPlatform) system;
+    suffix =
+      {
         x86_64-linux = "Linux-64bit";
         aarch64-linux = "Linux-arm64";
         x86_64-darwin = "macOS-64bit";
         aarch64-darwin = "macOS-arm64";
-      }.${system} or (throw "Unsupported system: ${system}");
-      fetchsrc = version: sha256: fetchzip {
+      }
+      .${system}
+      or (throw "Unsupported system: ${system}");
+    fetchsrc = version: sha256:
+      fetchzip {
         url = "https://github.com/vmware-tanzu/octant/releases/download/v${version}/octant_${version}_${suffix}.tar.gz";
         sha256 = sha256.${system};
       };
-    in
+  in
     fetchsrc version {
       x86_64-linux = "sha256-woBmYDOOh3AQH0RZJtMCrOfjFBrpMPzv22cVZ2/xHZo=";
       aarch64-linux = "sha256-3YUUdOZULjJZqVJP0aO/d1WulXlpwf012NYJ6Mc2qp8=";
@@ -60,7 +66,7 @@ stdenv.mkDerivation rec {
       with a plugin system to further extend its capabilities.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [jk];
+    platforms = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
   };
 }

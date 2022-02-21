@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
-, libtool, makeWrapper, autoreconfHook, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  neon,
+  libusb-compat-0_1,
+  openssl,
+  udev,
+  avahi,
+  freeipmi,
+  libtool,
+  makeWrapper,
+  autoreconfHook,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nut";
   version = "2.7.4";
@@ -19,20 +31,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi ];
+  buildInputs = [neon libusb-compat-0_1 openssl udev avahi freeipmi];
 
-  nativeBuildInputs = [ autoreconfHook libtool pkg-config makeWrapper ];
+  nativeBuildInputs = [autoreconfHook libtool pkg-config makeWrapper];
 
-  configureFlags =
-    [ "--with-all"
-      "--with-ssl"
-      "--without-snmp" # Until we have it ...
-      "--without-powerman" # Until we have it ...
-      "--without-cgi"
-      "--without-hal"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-      "--with-udev-dir=$(out)/etc/udev"
-    ];
+  configureFlags = [
+    "--with-all"
+    "--with-ssl"
+    "--without-snmp" # Until we have it ...
+    "--without-powerman" # Until we have it ...
+    "--without-cgi"
+    "--without-hal"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-udev-dir=$(out)/etc/udev"
+  ];
 
   enableParallelBuilding = true;
 
@@ -51,8 +63,8 @@ stdenv.mkDerivation rec {
     homepage = "https://networkupstools.org/";
     repositories.git = "https://github.com/networkupstools/nut.git";
     platforms = platforms.linux;
-    maintainers = [ maintainers.pierron ];
-    license = with licenses; [ gpl1Plus gpl2Plus gpl3Plus ];
+    maintainers = [maintainers.pierron];
+    license = with licenses; [gpl1Plus gpl2Plus gpl3Plus];
     priority = 10;
   };
 }

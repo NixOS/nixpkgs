@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchgit, unzip, pkg-config, ncurses, libX11, libXft, cwebbin }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  unzip,
+  pkg-config,
+  ncurses,
+  libX11,
+  libXft,
+  cwebbin,
+}:
 stdenv.mkDerivation {
   pname = "edit-nightly";
   version = "20180228";
@@ -34,7 +43,7 @@ stdenv.mkDerivation {
     description = "A relaxing mix of Vi and ACME";
     homepage = "https://c9x.me/edit";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [maintainers.vrthra];
     platforms = platforms.all;
   };
 }

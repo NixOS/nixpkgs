@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libqrtr-glib";
   version = "1.0.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";

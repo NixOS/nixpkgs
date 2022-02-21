@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, gobject-introspection
-, gnutls
-, cairo
-, glib
-, pkg-config
-, cyrus_sasl
-, libpulseaudio
-, libgcrypt
-, gtk3
-, vala
-, gettext
-, perl
-, python3
-, gnome
-, gdk-pixbuf
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gobject-introspection,
+  gnutls,
+  cairo,
+  glib,
+  pkg-config,
+  cyrus_sasl,
+  libpulseaudio,
+  libgcrypt,
+  gtk3,
+  vala,
+  gettext,
+  perl,
+  python3,
+  gnome,
+  gdk-pixbuf,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtk-vnc";
   version = "1.3.0";
 
-  outputs = [ "out" "bin" "man" "dev" ];
+  outputs = ["out" "bin" "man" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     description = "GTK VNC widget";
     homepage = "https://wiki.gnome.org/Projects/gtk-vnc";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin offline ];
+    maintainers = with maintainers; [raskin offline];
     platforms = platforms.linux;
   };
 }

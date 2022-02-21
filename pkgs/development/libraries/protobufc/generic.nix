@@ -1,16 +1,22 @@
-{ lib, stdenv, src, version
-, autoreconfHook, pkg-config, protobuf, zlib
-, ...
+{
+  lib,
+  stdenv,
+  src,
+  version,
+  autoreconfHook,
+  pkg-config,
+  protobuf,
+  zlib,
+  ...
 }:
-
 stdenv.mkDerivation {
   pname = "protobuf-c";
   inherit version;
 
   inherit src;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ protobuf zlib ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [protobuf zlib];
 
   meta = with lib; {
     homepage = "https://github.com/protobuf-c/protobuf-c/";

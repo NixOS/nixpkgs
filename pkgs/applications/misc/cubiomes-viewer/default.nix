@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtbase
-, qmake
-, wrapQtAppsHook
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  wrapQtAppsHook,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cubiomes-viewer";
   version = "1.12.1";
@@ -30,14 +30,16 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  desktopItems = [ (makeDesktopItem {
-    name = pname;
-    desktopName = "Cubiomes Viewer";
-    exec = pname;
-    icon = pname;
-    categories = "Game";
-    comment = meta.description;
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Cubiomes Viewer";
+      exec = pname;
+      icon = pname;
+      categories = "Game";
+      comment = meta.description;
+    })
+  ];
 
   preBuild = ''
     # QMAKE_PRE_LINK is not executed (I dont know why)
@@ -65,6 +67,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hqurve ];
+    maintainers = with maintainers; [hqurve];
   };
 }

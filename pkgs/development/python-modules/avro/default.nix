@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  typing-extensions,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "avro";
   version = "1.11.0";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Python serialization and RPC framework";
     homepage = "https://github.com/apache/avro";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

@@ -1,7 +1,19 @@
-{ lib, mkDerivation, fetchurl, cmake, pkg-config, sword, boost, clucene_core
-, qtbase, qttools, qtsvg, perlPackages, docbook_xml_dtd_45
-, docbook_xsl_ns }:
-
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  cmake,
+  pkg-config,
+  sword,
+  boost,
+  clucene_core,
+  qtbase,
+  qttools,
+  qtsvg,
+  perlPackages,
+  docbook_xml_dtd_45,
+  docbook_xsl_ns,
+}:
 mkDerivation rec {
   pname = "bibletime";
   version = "3.0.2";
@@ -11,7 +23,7 @@ mkDerivation rec {
     sha256 = "sha256-/JNjnU/DGD4YRtrKzX7t6MgNCZYihdgTJc+Jbr9IYJ4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config docbook_xml_dtd_45 ];
+  nativeBuildInputs = [cmake pkg-config docbook_xml_dtd_45];
   buildInputs = [
     sword
     boost
@@ -39,6 +51,6 @@ mkDerivation rec {
     homepage = "http://www.bibletime.info/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.piotr ];
+    maintainers = [maintainers.piotr];
   };
 }

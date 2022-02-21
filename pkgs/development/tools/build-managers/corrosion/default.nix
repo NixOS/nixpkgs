@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, rustPlatform
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  rustPlatform,
+  libiconv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "corrosion";
   version = "unstable-2021-11-23";
@@ -33,13 +33,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
 
   cmakeFlags = [
     "-DRust_CARGO=${rustPlatform.rust.cargo}/bin/cargo"
@@ -52,6 +54,6 @@ stdenv.mkDerivation rec {
     description = "Tool for integrating Rust into an existing CMake project";
     homepage = "https://github.com/AndrewGaspar/corrosion";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

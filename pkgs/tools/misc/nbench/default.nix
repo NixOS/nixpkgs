@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "nbench-byte";
   version = "2.2.3";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b01j7nmm3wd92ngvsmn2sbw43sl9fpx4xxmkrink68fz1rx0gbj";
   };
 
-  buildInputs = [ stdenv.cc.libc.static ];
+  buildInputs = [stdenv.cc.libc.static];
   prePatch = ''
     substituteInPlace nbench1.h --replace '"NNET.DAT"' "\"$out/NNET.DAT\""
   '';
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.math.utah.edu/~mayer/linux/bmark.html";
     description = "A synthetic computing benchmark program";
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ bennofs ];
+    maintainers = with lib.maintainers; [bennofs];
   };
 }

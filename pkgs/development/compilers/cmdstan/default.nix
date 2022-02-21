@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, python3, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "cmdstan";
   version = "2.17.1";
@@ -9,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
   };
 
-  buildFlags = [ "build" ];
+  buildFlags = ["build"];
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkInputs = [ python3 ];
+  checkInputs = [python3];
   checkPhase = "python ./runCmdStanTests.py src/test/interface"; # see #5368
 
   installPhase = ''

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "gocd-agent";
   version = "19.3.0";
@@ -14,10 +18,10 @@ stdenv.mkDerivation rec {
     homepage = "http://www.go.cd";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ grahamc swarren83 ];
+    maintainers = with maintainers; [grahamc swarren83];
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   buildCommand = "
     unzip $src -d $out

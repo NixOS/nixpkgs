@@ -1,33 +1,36 @@
-{ lib, stdenv
-, fetchFromGitHub
-, qtbase
-, qtmultimedia
-, qscintilla
-, bison
-, flex
-, eigen
-, boost
-, libGLU, libGL
-, glew
-, opencsg
-, cgal
-, mpfr
-, gmp
-, glib
-, pkg-config
-, harfbuzz
-, gettext
-, freetype
-, fontconfig
-, double-conversion
-, lib3mf
-, libzip
-, mkDerivation
-, qtmacextras
-, qmake
-, spacenavSupport ? stdenv.isLinux, libspnav
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qtmultimedia,
+  qscintilla,
+  bison,
+  flex,
+  eigen,
+  boost,
+  libGLU,
+  libGL,
+  glew,
+  opencsg,
+  cgal,
+  mpfr,
+  gmp,
+  glib,
+  pkg-config,
+  harfbuzz,
+  gettext,
+  freetype,
+  fontconfig,
+  double-conversion,
+  lib3mf,
+  libzip,
+  mkDerivation,
+  qtmacextras,
+  qmake,
+  spacenavSupport ? stdenv.isLinux,
+  libspnav,
 }:
-
 mkDerivation rec {
   pname = "openscad";
   version = "2021.01";
@@ -39,19 +42,35 @@ mkDerivation rec {
     sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
-  nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
+  nativeBuildInputs = [bison flex pkg-config gettext qmake];
 
-  buildInputs = [
-    eigen boost glew opencsg cgal mpfr gmp glib
-    harfbuzz lib3mf libzip double-conversion freetype fontconfig
-    qtbase qtmultimedia qscintilla
-  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
+  buildInputs =
+    [
+      eigen
+      boost
+      glew
+      opencsg
+      cgal
+      mpfr
+      gmp
+      glib
+      harfbuzz
+      lib3mf
+      libzip
+      double-conversion
+      freetype
+      fontconfig
+      qtbase
+      qtmultimedia
+      qscintilla
+    ]
+    ++ lib.optionals stdenv.isLinux [libGLU libGL]
     ++ lib.optional stdenv.isDarwin qtmacextras
-    ++ lib.optional spacenavSupport libspnav
-  ;
+    ++ lib.optional spacenavSupport libspnav;
 
-  qmakeFlags = [ "VERSION=${version}" ] ++
-    lib.optionals spacenavSupport [
+  qmakeFlags =
+    ["VERSION=${version}"]
+    ++ lib.optionals spacenavSupport [
       "ENABLE_SPNAV=1"
       "SPNAV_INCLUDEPATH=${libspnav}/include"
       "SPNAV_LIBPATH=${libspnav}/lib"
@@ -86,6 +105,6 @@ mkDerivation rec {
     homepage = "http://openscad.org/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
+    maintainers = with lib.maintainers; [bjornfor raskin gebner];
   };
 }

@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, gdb
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gdb,
 }:
-
 buildPythonPackage rec {
   pname = "pygdbmi";
   version = "0.10.0.0";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0a6b3zyxwdcb671c6lrwxm8fhvsbjh0m8hf1r18m9dha86laimjr";
   };
 
-  checkInputs = [ gdb ];
+  checkInputs = [gdb];
 
   # tests require gcc for some reason
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Parse gdb machine interface output with Python";
     homepage = "https://github.com/cs01/pygdbmi";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

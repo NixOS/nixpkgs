@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, perl
-, inkscape
-, librsvg
-, targets ? [ "all" ]
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  inkscape,
+  librsvg,
+  targets ? ["all"],
 }:
-
 stdenv.mkDerivation {
   pname = "iso-flags";
   version = "unstable-18012020";
@@ -21,7 +22,7 @@ stdenv.mkDerivation {
     perl
     inkscape
     librsvg
-    (perl.withPackages(pp: with pp; [ JSON XMLLibXML ]))
+    (perl.withPackages (pp: with pp; [JSON XMLLibXML]))
   ];
 
   postPatch = ''
@@ -38,8 +39,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/joielechong/iso-country-flags-svg-collection";
     description = "248 country flag SVG & PNG icons with different icon styles";
-    license = [ licenses.publicDomain ];
+    license = [licenses.publicDomain];
     platforms = platforms.linux; # the output assets should work anywhere, but unsure about the tools to build them...
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = [maintainers.mkg20001];
   };
 }

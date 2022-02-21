@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "icingaweb2-theme-lsd";
   version = "1.0.3";
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-lsd";
     license = licenses.publicDomain;
     platforms = platforms.all;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [das_j];
   };
 }

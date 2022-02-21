@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.mtr;
-
 in {
   options = {
     programs.mtr = {
@@ -29,7 +30,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ cfg.package ];
+    environment.systemPackages = with pkgs; [cfg.package];
 
     security.wrappers.mtr-packet = {
       owner = "root";

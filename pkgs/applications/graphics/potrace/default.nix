@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "potrace";
   version = "1.16";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1k3sxgjqq0jnpk9xxys05q32sl5hbf1lbk1gmfxcrmpdgnhli0my";
   };
 
-  configureFlags = [ "--with-libpotrace" ];
+  configureFlags = ["--with-libpotrace"];
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   enableParallelBuilding = true;
   doCheck = true;
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "http://potrace.sourceforge.net/";
     description = "A tool for tracing a bitmap, which means, transforming a bitmap into a smooth, scalable image";
     platforms = platforms.unix;
-    maintainers = [ maintainers.pSub ];
+    maintainers = [maintainers.pSub];
     license = licenses.gpl2;
   };
 }

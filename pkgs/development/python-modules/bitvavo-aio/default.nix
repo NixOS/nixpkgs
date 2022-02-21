@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "bitvavo-aio";
   version = "1.0.3";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "bitvavo" ];
+  pythonImportsCheck = ["bitvavo"];
 
   meta = with lib; {
     description = "Python client for Bitvavo crypto exchange API";
     homepage = "https://github.com/cyberjunky/bitvavo-aio";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

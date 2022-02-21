@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  result,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-rresult";
   version = "0.6.0";
@@ -8,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1k69a3gvrk7f2cshwjzvk7818f0bwxhacgd14wxy6d4gmrggci86";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ocaml findlib ocamlbuild topkg];
 
-  propagatedBuildInputs = [ result ];
+  propagatedBuildInputs = [result];
 
   inherit (topkg) buildPhase installPhase;
 
@@ -18,7 +26,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     homepage = "https://erratique.ch/software/rresult";
     description = "Result value combinators for OCaml";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     inherit (ocaml.meta) platforms;
   };
 }

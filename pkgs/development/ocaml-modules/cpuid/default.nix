@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 buildDunePackage rec {
   pname = "cpuid";
   version = "0.1.2";
@@ -17,6 +20,6 @@ buildDunePackage rec {
     homepage = "https://github.com/pqwy/cpuid";
     description = "Detect CPU features from OCaml";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

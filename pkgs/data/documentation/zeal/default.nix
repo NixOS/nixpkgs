@@ -1,7 +1,19 @@
-{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config
-, qtbase, qtimageformats, qtwebengine, qtx11extras, mkDerivation
-, libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
-
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  qtbase,
+  qtimageformats,
+  qtwebengine,
+  qtx11extras,
+  mkDerivation,
+  libarchive,
+  libXdmcp,
+  libpthreadstubs,
+  xcbutilkeysyms,
+}:
 mkDerivation rec {
   pname = "zeal";
   version = "0.6.999";
@@ -22,12 +34,17 @@ mkDerivation rec {
       -e 's@^project.*@project(Zeal VERSION ${version})@'
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
+  nativeBuildInputs = [cmake extra-cmake-modules pkg-config];
 
   buildInputs = [
-    qtbase qtimageformats qtwebengine qtx11extras
+    qtbase
+    qtimageformats
+    qtwebengine
+    qtx11extras
     libarchive
-    libXdmcp libpthreadstubs xcbutilkeysyms
+    libXdmcp
+    libpthreadstubs
+    xcbutilkeysyms
   ];
 
   meta = with lib; {
@@ -38,7 +55,7 @@ mkDerivation rec {
     '';
     homepage = "https://zealdocs.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ skeidel peterhoeg ];
+    maintainers = with maintainers; [skeidel peterhoeg];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchurl }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "rtptools";
   version = "1.22";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A number of small applications that can be used for processing RTP data";
     homepage = "https://www.cs.columbia.edu/irt/software/rtptools/";
-    maintainers = [ lib.maintainers.lheckemann ];
+    maintainers = [lib.maintainers.lheckemann];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, oslo-concurrency
-, oslo-db
-, pbr
-, python-dateutil
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  oslo-concurrency,
+  oslo-db,
+  pbr,
+  python-dateutil,
+  stestr,
 }:
-
 buildPythonPackage rec {
   pname = "subunit2sql";
   version = "1.10.0";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     ")
   '';
 
-  pythonImportsCheck = [ "subunit2sql" ];
+  pythonImportsCheck = ["subunit2sql"];
 
   meta = with lib; {
     description = "Command to Read a subunit file or stream and put the data in a SQL DB";

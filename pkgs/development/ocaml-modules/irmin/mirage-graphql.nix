@@ -1,7 +1,13 @@
-{ buildDunePackage, irmin-mirage, irmin-graphql
-, mirage-clock, cohttp-lwt, lwt, uri, git
+{
+  buildDunePackage,
+  irmin-mirage,
+  irmin-graphql,
+  mirage-clock,
+  cohttp-lwt,
+  lwt,
+  uri,
+  git,
 }:
-
 buildDunePackage {
   pname = "irmin-mirage-graphql";
 

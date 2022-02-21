@@ -1,11 +1,11 @@
-{ fetchurl
-, lib
-, stdenv
-, cmake
-, ninja
-, poppler
+{
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  ninja,
+  poppler,
 }:
-
 stdenv.mkDerivation rec {
   pname = "poppler-data";
   version = "0.4.11";

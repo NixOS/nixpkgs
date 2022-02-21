@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, ncurses }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "xstow";
   version = "1.0.2";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "A replacement of GNU Stow written in C++";
     homepage = "http://xstow.sourceforge.net";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nzbr ];
+    maintainers = with maintainers; [nzbr];
     platforms = platforms.unix;
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "readlike";
   version = "0.1.3";
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "GNU Readline-like line editing module";
     homepage = "https://github.com/jangler/readlike";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,29 +1,34 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, python3
-, vala
-, wrapGAppsHook
-, evolution-data-server
-, libical
-, libgee
-, json-glib
-, glib
-, glib-networking
-, sqlite
-, libsoup
-, libgdata
-, gtk3
-, pantheon /* granite, icons, maintainers */
-, webkitgtk
-, libpeas
-, libhandy
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  python3,
+  vala,
+  wrapGAppsHook,
+  evolution-data-server,
+  libical,
+  libgee,
+  json-glib,
+  glib,
+  glib-networking,
+  sqlite,
+  libsoup,
+  libgdata,
+  gtk3,
+  pantheon
+  /*
+   granite, icons, maintainers
+   */
+  ,
+  webkitgtk,
+  libpeas,
+  libhandy,
+  curl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
   version = "2.7";
@@ -83,9 +88,8 @@ stdenv.mkDerivation rec {
     description = "Task manager with Todoist support designed for GNU/Linux 🚀️";
     homepage = "https://planner-todo.web.app";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [dtzWill] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.alainm23.planner";
   };
 }
-

@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "haproxy_exporter";
   version = "0.12.0";
@@ -17,7 +20,7 @@ buildGoPackage rec {
     description = "HAProxy Exporter for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/haproxy_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz ];
+    maintainers = with maintainers; [benley fpletz];
     platforms = platforms.unix;
   };
 }

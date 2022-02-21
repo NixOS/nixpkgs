@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, asciidoctor, gawk, gnused, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asciidoctor,
+  gawk,
+  gnused,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "esh";
   version = "0.1.1";
@@ -11,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "1ddaji5nplf1dyvgkrhqjy8m5djaycqcfhjv30yprj1avjymlj6w";
   };
 
-  nativeBuildInputs = [ asciidoctor ];
+  nativeBuildInputs = [asciidoctor];
 
-  buildInputs = [ gawk gnused ];
+  buildInputs = [gawk gnused];
 
-  makeFlags = [ "prefix=$(out)" "DESTDIR=" ];
+  makeFlags = ["prefix=$(out)" "DESTDIR="];
 
   postPatch = ''
     patchShebangs .
@@ -34,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Simple templating engine based on shell";
     homepage = "https://github.com/jirutka/esh";
     license = licenses.mit;
-    maintainers = with maintainers; [ mnacamura ];
+    maintainers = with maintainers; [mnacamura];
     platforms = platforms.unix;
   };
 }

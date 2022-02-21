@@ -1,5 +1,12 @@
-{lib, stdenv, fetchurl, fetchpatch, zlib, ncurses, fuse}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  zlib,
+  ncurses,
+  fuse,
+}:
 stdenv.mkDerivation rec {
   pname = "wiimms-iso-tools";
   version = "3.02a";
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "074cvcaqz23xyihslc6n64wwxwcnl6xp7l0750yb9pc0wrqxmj69";
   };
 
-  buildInputs = [ zlib ncurses fuse ];
+  buildInputs = [zlib ncurses fuse];
 
   patches = [
     ./fix-paths.diff
@@ -44,6 +51,6 @@ stdenv.mkDerivation rec {
     description = "A set of command line tools to manipulate Wii and GameCube ISO images and WBFS containers";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nilp0inter ];
+    maintainers = with maintainers; [nilp0inter];
   };
 }

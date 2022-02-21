@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libwpg,
+  libwpd,
+  lcms,
+  pkg-config,
+  librevenge,
+  icu,
+  boost,
+  cppunit,
+}:
 stdenv.mkDerivation rec {
   pname = "libcdr";
   version = "0.1.6";
@@ -19,11 +31,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libwpg libwpd lcms librevenge icu boost cppunit ];
+  buildInputs = [libwpg libwpd lcms librevenge icu boost cppunit];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
+  CXXFLAGS = "--std=gnu++0x"; # For c++11 constants in lcms2.h
 
   meta = {
     description = "A library providing ability to interpret and import Corel Draw drawings into various applications";

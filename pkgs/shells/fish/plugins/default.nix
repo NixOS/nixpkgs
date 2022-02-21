@@ -1,26 +1,27 @@
-{ lib, newScope }:
+{
+  lib,
+  newScope,
+}:
+lib.makeScope newScope (self:
+  with self; {
+    buildFishPlugin = callPackage ./build-fish-plugin.nix {};
 
-lib.makeScope newScope (self: with self; {
+    clownfish = callPackage ./clownfish.nix {};
 
-  buildFishPlugin = callPackage ./build-fish-plugin.nix { };
+    done = callPackage ./done.nix {};
 
-  clownfish = callPackage ./clownfish.nix { };
+    # Fishtape 2.x and 3.x aren't compatible,
+    # but both versions are used in the tests of different other plugins.
+    fishtape = callPackage ./fishtape.nix {};
+    fishtape_3 = callPackage ./fishtape_3.nix {};
 
-  done = callPackage ./done.nix { };
+    foreign-env = callPackage ./foreign-env {};
 
-  # Fishtape 2.x and 3.x aren't compatible,
-  # but both versions are used in the tests of different other plugins.
-  fishtape = callPackage ./fishtape.nix { };
-  fishtape_3 = callPackage ./fishtape_3.nix { };
+    forgit = callPackage ./forgit.nix {};
 
-  foreign-env = callPackage ./foreign-env { };
+    fzf-fish = callPackage ./fzf-fish.nix {};
 
-  forgit = callPackage ./forgit.nix { };
+    pisces = callPackage ./pisces.nix {};
 
-  fzf-fish = callPackage ./fzf-fish.nix { };
-
-  pisces = callPackage ./pisces.nix { };
-
-  pure = callPackage ./pure.nix { };
-
-})
+    pure = callPackage ./pure.nix {};
+  })

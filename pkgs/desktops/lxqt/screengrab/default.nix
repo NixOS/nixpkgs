@@ -1,20 +1,20 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, kwindowsystem
-, libqtxdg
-, perl
-, xorg
-, autoPatchelfHook
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtx11extras,
+  qtsvg,
+  kwindowsystem,
+  libqtxdg,
+  perl,
+  xorg,
+  autoPatchelfHook,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "screengrab";
   version = "2.3.0";
@@ -44,13 +44,13 @@ mkDerivation rec {
     xorg.libXdmcp
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/screengrab";
     description = "Crossplatform tool for fast making screenshots";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

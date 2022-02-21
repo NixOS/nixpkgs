@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, SDL2
-, lua52Packages
-, pkg-config
-, makeWrapper
-, openlibm
-} :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  lua52Packages,
+  pkg-config,
+  makeWrapper,
+  openlibm,
+}:
 stdenv.mkDerivation rec {
   pname = "lite";
   version = "1.11";
@@ -18,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [makeWrapper pkg-config];
 
-  buildInputs = [ SDL2 lua52Packages.lua openlibm ];
+  buildInputs = [SDL2 lua52Packages.lua openlibm];
 
   postPatch = ''
     # use system Lua 5.2
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "A lightweight text editor written in Lua";
     homepage = "https://github.com/rxi/lite";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
     platforms = platforms.unix;
   };
 }

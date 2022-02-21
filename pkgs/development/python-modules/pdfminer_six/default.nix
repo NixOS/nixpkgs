@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, cryptography, chardet, nose, sortedcontainers }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  cryptography,
+  chardet,
+  nose,
+  sortedcontainers,
+}:
 buildPythonPackage rec {
   pname = "pdfminer_six";
   version = "20201018";
@@ -13,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1a2fxxnnjqbx344znpvx7cnv1881dk6585ibw01inhfq3w6yj2lr";
   };
 
-  propagatedBuildInputs = [ chardet cryptography sortedcontainers ];
+  propagatedBuildInputs = [chardet cryptography sortedcontainers];
 
   postInstall = ''
     for file in $out/bin/*.py; do
@@ -21,7 +29,7 @@ buildPythonPackage rec {
     done
   '';
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     nosetests
   '';
@@ -30,6 +38,6 @@ buildPythonPackage rec {
     description = "PDF parser and analyzer";
     homepage = "https://github.com/pdfminer/pdfminer.six";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy marsam ];
+    maintainers = with maintainers; [psyanticy marsam];
   };
 }

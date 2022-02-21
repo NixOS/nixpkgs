@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, mint-x-icons, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  gnome-icon-theme,
+  mint-x-icons,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
   version = "4.15";
@@ -11,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "1f32isq1xyn9b6p1nx5rssqgg9gw0jp9ld19860xk29fspmlfb8n";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [gtk3];
 
-  propagatedBuildInputs = [ gnome-icon-theme mint-x-icons hicolor-icon-theme ];
+  propagatedBuildInputs = [gnome-icon-theme mint-x-icons hicolor-icon-theme];
   # still missing parent themes: Ambiant-MATE, Faenza-Dark, KFaenza
 
   dontDropIconThemeCache = true;
@@ -33,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

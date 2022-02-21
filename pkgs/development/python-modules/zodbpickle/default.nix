@@ -1,8 +1,8 @@
-{ buildPythonPackage
-, isPyPy
-, fetchPypi
+{
+  buildPythonPackage,
+  isPyPy,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "zodbpickle";
   version = "2.2.0";

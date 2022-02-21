@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyopenssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyopenssl,
 }:
-
 buildPythonPackage rec {
   pname = "certipy";
   version = "0.1.3";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0n980gqpzh0fm58h3i4mi2i10wgj606lscm1r5sk60vbf6vh8mv9";
   };
 
-  propagatedBuildInputs = [ pyopenssl ];
+  propagatedBuildInputs = [pyopenssl];
 
   doCheck = false; #no tests were included
 
@@ -21,7 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/LLNL/certipy";
     description = "wrapper for pyOpenSSL";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ isgy ];
+    maintainers = with maintainers; [isgy];
   };
-
 }

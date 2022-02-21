@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchgit }:
-
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+}:
 buildGoModule rec {
   pname = "gotools-unstable";
   version = "2021-01-13";
@@ -39,8 +42,9 @@ buildGoModule rec {
     export GOTOOLDIR=$out/bin
   '';
 
-  excludedPackages = "\\("
-    + lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ])
+  excludedPackages =
+    "\\("
+    + lib.concatStringsSep "\\|" (["testdata" "vet" "cover"])
     + "\\)";
 
   # Set GOTOOLDIR for derivations adding this to buildInputs

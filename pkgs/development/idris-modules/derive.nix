@@ -1,14 +1,15 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, pruviloj
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  pruviloj,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "derive";
   version = "2018-07-02";
 
-  idrisDeps = [ contrib pruviloj ];
+  idrisDeps = [contrib pruviloj];
 
   src = fetchFromGitHub {
     owner = "david-christiansen";
@@ -21,6 +22,6 @@ build-idris-package  {
     description = "Type class deriving with elaboration reflection";
     homepage = "https://github.com/davlum/derive-all-the-instances";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

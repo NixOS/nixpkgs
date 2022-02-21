@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "hpack";
   version = "4.0.0";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "http://hyper.rtfd.org";
     license = licenses.mit;
   };
-
 }

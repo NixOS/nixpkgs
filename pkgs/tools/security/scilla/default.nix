@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "scilla";
   version = "1.2.1";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Information gathering tool for DNS, ports and more";
     homepage = "https://github.com/edoardottt/scilla";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

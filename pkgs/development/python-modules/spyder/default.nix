@@ -1,11 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree,
-  jedi, pycodestyle, psutil, rope, numpy, scipy, matplotlib, pylint,
-  keyring, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl,
-  cloudpickle, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle,
-  watchdog, python-language-server, pyqtwebengine, atomicwrites, pyxdg,
-  diff-match-patch, three-merge, pyls-black, pyls-spyder, flake8, textdistance
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  makeDesktopItem,
+  intervaltree,
+  jedi,
+  pycodestyle,
+  psutil,
+  rope,
+  numpy,
+  scipy,
+  matplotlib,
+  pylint,
+  keyring,
+  numpydoc,
+  qtconsole,
+  qtawesome,
+  nbconvert,
+  mccabe,
+  pyopengl,
+  cloudpickle,
+  pygments,
+  spyder-kernels,
+  qtpy,
+  pyzmq,
+  chardet,
+  qdarkstyle,
+  watchdog,
+  python-language-server,
+  pyqtwebengine,
+  atomicwrites,
+  pyxdg,
+  diff-match-patch,
+  three-merge,
+  pyls-black,
+  pyls-spyder,
+  flake8,
+  textdistance,
 }:
-
 buildPythonPackage rec {
   pname = "spyder";
   version = "5.2.1";
@@ -17,14 +50,43 @@ buildPythonPackage rec {
     sha256 = "b318a70a75acd200018a547d2ff2d2f55e7507054469d0c77ec6f967ac3c2d28";
   };
 
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [pyqtwebengine.wrapQtAppsHook];
 
   propagatedBuildInputs = [
-    intervaltree jedi pycodestyle psutil rope numpy scipy matplotlib pylint keyring
-    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
-    atomicwrites pyxdg diff-match-patch three-merge pyls-black pyls-spyder
-    flake8 textdistance
+    intervaltree
+    jedi
+    pycodestyle
+    psutil
+    rope
+    numpy
+    scipy
+    matplotlib
+    pylint
+    keyring
+    numpydoc
+    qtconsole
+    qtawesome
+    nbconvert
+    mccabe
+    pyopengl
+    cloudpickle
+    spyder-kernels
+    pygments
+    qtpy
+    pyzmq
+    chardet
+    pyqtwebengine
+    qdarkstyle
+    watchdog
+    python-language-server
+    atomicwrites
+    pyxdg
+    diff-match-patch
+    three-merge
+    pyls-black
+    pyls-spyder
+    flake8
+    textdistance
   ];
 
   # There is no test for spyder
@@ -82,6 +144,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

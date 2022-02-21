@@ -1,10 +1,16 @@
-{ lib, stdenv, fetchurl, autoconf, automake, allegro }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  allegro,
+}:
 stdenv.mkDerivation rec {
   pname = "garden-of-coloured-lights";
   version = "1.0.9";
 
-  buildInputs = [ allegro autoconf automake ];
+  buildInputs = [allegro autoconf automake];
 
   prePatch = ''
     noInline='s/inline //'
@@ -20,8 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Old-school vertical shoot-em-up / bullet hell";
     homepage = "http://garden.sourceforge.net/drupal/";
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with maintainers; [Profpatsch];
     license = licenses.gpl3;
   };
-
 }

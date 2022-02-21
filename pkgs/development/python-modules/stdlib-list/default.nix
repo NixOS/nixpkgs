@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "stdlib-list";
   version = "0.8.0";
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "A list of Python Standard Libraries";
     homepage = "https://github.com/jackmaney/python-stdlib-list";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

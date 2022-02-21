@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "brotli";
   version = "1.0.9";
@@ -31,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

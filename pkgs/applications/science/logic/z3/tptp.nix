@@ -1,4 +1,9 @@
-{lib, stdenv, z3, cmake}:
+{
+  lib,
+  stdenv,
+  z3,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "z3-tptp";
   version = z3.version;

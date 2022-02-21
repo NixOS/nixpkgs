@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libX11, libXrandr }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXrandr,
+}:
 stdenv.mkDerivation rec {
   pname = "sct";
   version = "unstable-2015-11-16";
@@ -10,9 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = "cat ${src} > sct.c";
-  patches = [ ./DISPLAY-segfault.patch ];
+  patches = [./DISPLAY-segfault.patch];
 
-  buildInputs = [ libX11 libXrandr ];
+  buildInputs = [libX11 libXrandr];
   buildPhase = "cc sct.c -o sct -lm -lX11 -lXrandr";
 
   installPhase = "install -Dt $out/bin sct";
@@ -20,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.tedunangst.com/flak/post/sct-set-color-temperature";
     description = "A minimal utility to set display colour temperature";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
   };

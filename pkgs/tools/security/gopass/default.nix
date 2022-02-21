@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, makeWrapper
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, git
-, gnupg
-, xclip
-, wl-clipboard
-, passAlias ? false
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  git,
+  gnupg,
+  xclip,
+  wl-clipboard,
+  passAlias ? false,
 }:
-
 buildGoModule rec {
   pname = "gopass";
   version = "1.13.1";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [installShellFiles makeWrapper];
 
   src = fetchFromGitHub {
     owner = "gopasspw";
@@ -26,28 +26,31 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-HGc6jUp4WO5P5dwfa0r7+X78a8us9fWrf+/IOotZHqk=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}"];
 
   wrapperPath = lib.makeBinPath (
     [
       git
       gnupg
       xclip
-    ] ++ lib.optional stdenv.isLinux wl-clipboard
+    ]
+    ++ lib.optional stdenv.isLinux wl-clipboard
   );
 
-  postInstall = ''
-    installManPage gopass.1
-    installShellCompletion --zsh --name _gopass zsh.completion
-    installShellCompletion --bash --name gopass.bash bash.completion
-    installShellCompletion --fish --name gopass.fish fish.completion
-  '' + lib.optionalString passAlias ''
-    ln -s $out/bin/gopass $out/bin/pass
-  '';
+  postInstall =
+    ''
+      installManPage gopass.1
+      installShellCompletion --zsh --name _gopass zsh.completion
+      installShellCompletion --bash --name gopass.bash bash.completion
+      installShellCompletion --fish --name gopass.fish fish.completion
+    ''
+    + lib.optionalString passAlias ''
+      ln -s $out/bin/gopass $out/bin/pass
+    '';
 
   postFixup = ''
     wrapProgram $out/bin/gopass \
@@ -59,7 +62,7 @@ buildGoModule rec {
     description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [rvolosatovs];
     changelog = "https://github.com/gopasspw/gopass/raw/v${version}/CHANGELOG.md";
 
     longDescription = ''

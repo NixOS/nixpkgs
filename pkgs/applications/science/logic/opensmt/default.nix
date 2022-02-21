@@ -1,9 +1,16 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, libedit, gmpxx, bison, flex
-, enableReadline ? false, readline
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libedit,
+  gmpxx,
+  bison,
+  flex,
+  enableReadline ? false,
+  readline,
+  gtest,
 }:
-
 stdenv.mkDerivation rec {
   pname = "opensmt";
   version = "2.2.0";
@@ -15,8 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6VkBGDzqG3mplpvFh5DIR0I1I2/J0Pi7xYk/yVn04Kg=";
   };
 
-  nativeBuildInputs = [ cmake bison flex ];
-  buildInputs = [ libedit gmpxx ]
+  nativeBuildInputs = [cmake bison flex];
+  buildInputs =
+    [libedit gmpxx]
     ++ lib.optional enableReadline readline;
 
   preConfigure = ''
@@ -30,9 +38,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A satisfiability modulo theory (SMT) solver";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
-    license = if enableReadline then licenses.gpl2Plus else licenses.mit;
+    license =
+      if enableReadline
+      then licenses.gpl2Plus
+      else licenses.mit;
     homepage = "https://github.com/usi-verification-and-security/opensmt";
   };
 }

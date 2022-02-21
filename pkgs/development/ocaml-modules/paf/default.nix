@@ -1,28 +1,28 @@
-{ buildDunePackage
-, lib
-, fetchurl
-, fetchpatch
-, mirage-stack
-, mirage-time
-, h2
-, tls-mirage
-, mimic
-, ke
-, bigstringaf
-, faraday
-, tls
-, lwt
-, logs
-, fmt
-, mirage-crypto-rng
-, tcpip
-, mirage-time-unix
-, ptime
-, uri
-, alcotest-lwt
-, cstruct
+{
+  buildDunePackage,
+  lib,
+  fetchurl,
+  fetchpatch,
+  mirage-stack,
+  mirage-time,
+  h2,
+  tls-mirage,
+  mimic,
+  ke,
+  bigstringaf,
+  faraday,
+  tls,
+  lwt,
+  logs,
+  fmt,
+  mirage-crypto-rng,
+  tcpip,
+  mirage-time-unix,
+  ptime,
+  uri,
+  alcotest-lwt,
+  cstruct,
 }:
-
 buildDunePackage rec {
   pname = "paf";
   version = "0.0.8";
@@ -64,7 +64,7 @@ buildDunePackage rec {
   meta = {
     description = "HTTP/AF and MirageOS";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = [lib.maintainers.sternenseemann];
     homepage = "https://github.com/dinosaure/paf-le-chien";
   };
 }

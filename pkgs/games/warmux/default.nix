@@ -1,9 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake
-, zlib, curl, gnutls, fribidi, libpng, SDL, SDL_gfx, SDL_image, SDL_mixer
-, SDL_net, SDL_ttf, libunwind, libX11, xorgproto, libxml2, pkg-config
-, gettext, intltool, libtool, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  zlib,
+  curl,
+  gnutls,
+  fribidi,
+  libpng,
+  SDL,
+  SDL_gfx,
+  SDL_image,
+  SDL_mixer,
+  SDL_net,
+  SDL_ttf,
+  libunwind,
+  libX11,
+  xorgproto,
+  libxml2,
+  pkg-config,
+  gettext,
+  intltool,
+  libtool,
+  perl,
 }:
-
 stdenv.mkDerivation {
   pname = "warmux";
   version = "unstable-2017-10-20";
@@ -19,19 +40,38 @@ stdenv.mkDerivation {
   configureFlagsArray = ("CFLAGS=-include ${zlib.dev}/include/zlib.h");
 
   nativeBuildInputs = [
-    autoconf automake gettext intltool libtool pkg-config
+    autoconf
+    automake
+    gettext
+    intltool
+    libtool
+    pkg-config
   ];
   buildInputs = [
-    zlib curl gnutls fribidi libpng SDL SDL_gfx SDL_image SDL_mixer
-    SDL_net SDL_ttf libunwind libX11 xorgproto libxml2 perl
+    zlib
+    curl
+    gnutls
+    fribidi
+    libpng
+    SDL
+    SDL_gfx
+    SDL_image
+    SDL_mixer
+    SDL_net
+    SDL_ttf
+    libunwind
+    libX11
+    xorgproto
+    libxml2
+    perl
   ];
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Ballistics turn-based battle game between teams - unofficial copy";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 ufl ];
+    license = with licenses; [gpl2 ufl];
     homepage = "https://github.com/fluxer/warmux";
   };
 }

@@ -1,7 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, nonstd, sosa
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  nonstd,
+  sosa,
 }:
-
 buildDunePackage rec {
   pname = "genspio";
   version = "0.0.2";
@@ -15,7 +18,7 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  propagatedBuildInputs = [ nonstd sosa ];
+  propagatedBuildInputs = [nonstd sosa];
 
   configurePhase = ''
     ocaml please.mlt configure
@@ -27,6 +30,6 @@ buildDunePackage rec {
     homepage = "https://smondet.gitlab.io/genspio-doc/";
     description = "Typed EDSL to generate POSIX Shell scripts";
     license = licenses.asl20;
-    maintainers = [ maintainers.alexfmpe ];
+    maintainers = [maintainers.alexfmpe];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "noise";
   version = "1.2.2";

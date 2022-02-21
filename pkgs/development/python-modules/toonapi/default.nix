@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, yarl
+{
+  lib,
+  aiohttp,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "toonapi";
   version = "0.2.1";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "toonapi" ];
+  pythonImportsCheck = ["toonapi"];
 
   meta = with lib; {
     description = "Python client for the Quby ToonAPI";
     homepage = "https://github.com/frenck/python-toonapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,22 +1,22 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, pythonOlder
-, cookiecutter
-, filelock
-, huggingface-hub
-, importlib-metadata
-, regex
-, requests
-, numpy
-, packaging
-, protobuf
-, pyyaml
-, sacremoses
-, tokenizers
-, tqdm
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  cookiecutter,
+  filelock,
+  huggingface-hub,
+  importlib-metadata,
+  regex,
+  requests,
+  numpy,
+  packaging,
+  protobuf,
+  pyyaml,
+  sacremoses,
+  tokenizers,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "transformers";
   version = "4.16.2";
@@ -28,21 +28,23 @@ buildPythonPackage rec {
     sha256 = "sha256-XF29JKIaOqZ/PdU+zu+wX7TAl1TKz+HcOutHDABc/PY=";
   };
 
-  nativeBuildInputs = [ packaging ];
+  nativeBuildInputs = [packaging];
 
-  propagatedBuildInputs = [
-    cookiecutter
-    filelock
-    huggingface-hub
-    numpy
-    protobuf
-    pyyaml
-    regex
-    requests
-    sacremoses
-    tokenizers
-    tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs =
+    [
+      cookiecutter
+      filelock
+      huggingface-hub
+      numpy
+      protobuf
+      pyyaml
+      regex
+      requests
+      sacremoses
+      tokenizers
+      tqdm
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [importlib-metadata];
 
   # Many tests require internet access.
   doCheck = false;
@@ -51,7 +53,7 @@ buildPythonPackage rec {
     sed -ri 's/tokenizers[=>]=[^"]+/tokenizers/g' setup.py src/transformers/dependency_versions_table.py
   '';
 
-  pythonImportsCheck = [ "transformers" ];
+  pythonImportsCheck = ["transformers"];
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/transformers";
@@ -59,6 +61,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pashashocky ];
+    maintainers = with maintainers; [pashashocky];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, readline, gmp, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  gmp,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   version = "6.3.3";
   pname = "yap";
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0y7sjwimadqsvgx9daz28c9mxcx9n1znxklih9xg16k6n54v9qxf";
   };
 
-  buildInputs = [ readline gmp zlib ];
+  buildInputs = [readline gmp zlib];
 
-  configureFlags = [ "--enable-tabling=yes" ];
+  configureFlags = ["--enable-tabling=yes"];
 
   NIX_CFLAGS_COMPILE = "-fpermissive";
 
@@ -21,6 +27,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.artistic2;
 
     platforms = lib.platforms.linux;
-    broken = !stdenv.is64bit;   # the linux 32 bit build fails.
+    broken = !stdenv.is64bit; # the linux 32 bit build fails.
   };
 }

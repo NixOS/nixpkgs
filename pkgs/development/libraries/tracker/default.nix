@@ -1,39 +1,39 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, gettext
-, meson
-, ninja
-, pkg-config
-, asciidoc
-, gobject-introspection
-, python3
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, libxml2
-, glib
-, wrapGAppsNoGuiHook
-, vala
-, sqlite
-, libxslt
-, libstemmer
-, gnome
-, icu
-, libuuid
-, libsoup
-, libsoup_3
-, json-glib
-, systemd
-, dbus
-, substituteAll
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  asciidoc,
+  gobject-introspection,
+  python3,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
+  libxml2,
+  glib,
+  wrapGAppsNoGuiHook,
+  vala,
+  sqlite,
+  libxslt,
+  libstemmer,
+  gnome,
+  icu,
+  libuuid,
+  libsoup,
+  libsoup_3,
+  json-glib,
+  systemd,
+  dbus,
+  substituteAll,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tracker";
   version = "3.2.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -54,23 +54,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    vala
-    pkg-config
-    asciidoc
-    gettext
-    libxslt
-    wrapGAppsNoGuiHook
-    gobject-introspection
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-    python3 # for data-generators
-    systemd # used for checks to install systemd user service
-    dbus # used for checks and pkg-config to install dbus service/s
-  ] ++ checkInputs; # gi is in the main meson.build and checked regardless of
-                    # whether tests are enabled
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      vala
+      pkg-config
+      asciidoc
+      gettext
+      libxslt
+      wrapGAppsNoGuiHook
+      gobject-introspection
+      docbook-xsl-nons
+      docbook_xml_dtd_45
+      python3 # for data-generators
+      systemd # used for checks to install systemd user service
+      dbus # used for checks and pkg-config to install dbus service/s
+    ]
+    ++ checkInputs; # gi is in the main meson.build and checked regardless of
+  # whether tests are enabled
 
   buildInputs = [
     glib

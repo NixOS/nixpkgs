@@ -1,11 +1,11 @@
 # Test whether DNS resolving returns multiple records and all address families.
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "resolv";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ckauhaus ];
+    maintainers = [ckauhaus];
   };
 
-  nodes.resolv = { ... }: {
+  nodes.resolv = {...}: {
     networking.extraHosts = ''
       # IPv4 only
       192.0.2.1 host-ipv4.example.net

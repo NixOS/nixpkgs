@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, fonttosfnt, mkfontscale, libfaketime }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fonttosfnt,
+  mkfontscale,
+  libfaketime,
+}:
 stdenv.mkDerivation rec {
   pname = "clearlyU";
   version = "12-1.9";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xn14jbv3m1khy7ydvad9ydkn7yygdbhjy9wm1v000jzjwr3lv21";
   };
 
-  nativeBuildInputs = [ fonttosfnt mkfontscale libfaketime ];
+  nativeBuildInputs = [fonttosfnt mkfontscale libfaketime];
 
   buildPhase = ''
     # convert bdf fonts to otb
@@ -29,6 +35,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A Unicode font";
     license = licenses.mit;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
   };
 }

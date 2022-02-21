@@ -1,14 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "oh-my-zsh";
 
-  machine = { pkgs, ... }:
-
-    {
-      programs.zsh = {
-        enable = true;
-        ohMyZsh.enable = true;
-      };
+  machine = {pkgs, ...}: {
+    programs.zsh = {
+      enable = true;
+      ohMyZsh.enable = true;
     };
+  };
 
   testScript = ''
     start_all()

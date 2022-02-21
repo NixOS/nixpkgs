@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "python-sql";
   version = "1.3.0";
@@ -12,7 +15,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://python-sql.tryton.org/";
     description = "A library to write SQL queries in a pythonic way";
-    maintainers = with lib.maintainers; [ johbo ];
+    maintainers = with lib.maintainers; [johbo];
     license = lib.licenses.bsd3;
   };
 }

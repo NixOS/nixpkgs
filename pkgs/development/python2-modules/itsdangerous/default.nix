@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "itsdangerous";
   version = "1.1.0";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/itsdangerous/";
     license = licenses.bsd0;
   };
-
 }

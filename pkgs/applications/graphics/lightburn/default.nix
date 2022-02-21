@@ -1,9 +1,18 @@
-{ lib, stdenv, patchelf, fetchurl, p7zip
-, nss, nspr, libusb1
-, qtbase, qtmultimedia, qtserialport
-, autoPatchelfHook, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  patchelf,
+  fetchurl,
+  p7zip,
+  nss,
+  nspr,
+  libusb1,
+  qtbase,
+  qtmultimedia,
+  qtserialport,
+  autoPatchelfHook,
+  wrapQtAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lightburn";
   version = "1.0.06";
@@ -20,8 +29,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    nss nspr libusb1
-    qtbase qtmultimedia qtserialport
+    nss
+    nspr
+    libusb1
+    qtbase
+    qtmultimedia
+    qtserialport
   ];
 
   # We nuke the vendored Qt5 libraries that LightBurn ships and instead use our
@@ -43,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Layout, editing, and control software for your laser cutter";
     homepage = "https://lightburnsoftware.com/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ q3k ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [q3k];
+    platforms = ["x86_64-linux"];
   };
 }

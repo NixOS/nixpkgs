@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aws-sam-translator
-, jschema-to-python
-, jsonpatch
-, jsonschema
-, junit-xml
-, networkx
-, pyyaml
-, sarif-om
-, setuptools
-, six
-, mock
-, pydot
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aws-sam-translator,
+  jschema-to-python,
+  jsonpatch,
+  jsonschema,
+  junit-xml,
+  networkx,
+  pyyaml,
+  sarif-om,
+  setuptools,
+  six,
+  mock,
+  pydot,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "cfn-lint";
   version = "0.56.4";

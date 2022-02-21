@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "in-place";
   version = "0.5.0";
@@ -20,14 +20,14 @@ buildPythonPackage rec {
     substituteInPlace tox.ini --replace "--cov=in_place --no-cov-on-fail" ""
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "in_place" ];
+  pythonImportsCheck = ["in_place"];
 
   meta = with lib; {
     description = "In-place file processing";
     homepage = "https://github.com/jwodder/inplace";
     license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    maintainers = with maintainers; [samuela];
   };
 }

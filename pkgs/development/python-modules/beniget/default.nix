@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gast,
 }:
-
 buildPythonPackage rec {
   pname = "beniget";
   version = "0.4.1";

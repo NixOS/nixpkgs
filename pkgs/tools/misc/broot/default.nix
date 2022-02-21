@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, makeWrapper
-, pkg-config
-, libgit2
-, oniguruma
-, libiconv
-, Security
-, libxcb
-, zlib
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+  makeWrapper,
+  pkg-config,
+  libgit2,
+  oniguruma,
+  libiconv,
+  Security,
+  libxcb,
+  zlib,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "broot";
   version = "1.9.1";
@@ -30,11 +30,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma libxcb ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
-    zlib
-  ];
+  buildInputs =
+    [libgit2 oniguruma libxcb]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      Security
+      zlib
+    ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -82,7 +84,7 @@ rustPlatform.buildRustPackage rec {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
     changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
-    maintainers = with maintainers; [ dywedir ];
-    license = with licenses; [ mit ];
+    maintainers = with maintainers; [dywedir];
+    license = with licenses; [mit];
   };
 }

@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
-
   pname = "mlmmj";
   version = "1.3.0";
 
@@ -19,9 +21,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://mlmmj.org";
     description = "Mailing List Management Made Joyful";
-    maintainers = [ maintainers.edwtjo ];
+    maintainers = [maintainers.edwtjo];
     platforms = platforms.linux;
     license = licenses.mit;
   };
-
 }

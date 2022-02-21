@@ -1,7 +1,9 @@
-{ config, lib, ... }:
-
-with lib;
 {
+  config,
+  lib,
+  ...
+}:
+with lib; {
   meta = {
     maintainers = teams.freedesktop.members;
   };
@@ -38,5 +40,4 @@ with lib;
       "/share/pixmaps"
     ];
   };
-
 }

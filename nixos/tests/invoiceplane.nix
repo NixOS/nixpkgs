@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "invoiceplane";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
@@ -9,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   };
 
   nodes = {
-    invoiceplane_caddy = { ... }: {
+    invoiceplane_caddy = {...}: {
       services.invoiceplane.webserver = "caddy";
       services.invoiceplane.sites = {
         "site1.local" = {
@@ -24,8 +22,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+      networking.firewall.allowedTCPPorts = [80];
+      networking.hosts."127.0.0.1" = ["site1.local" "site2.local"];
     };
   };
 

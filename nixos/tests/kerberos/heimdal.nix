@@ -1,10 +1,20 @@
 import ../make-test-python.nix ({pkgs, ...}: {
   name = "kerberos_server-heimdal";
-  machine = { config, libs, pkgs, ...}:
-  { services.kerberos_server =
-    { enable = true;
+  machine = {
+    config,
+    libs,
+    pkgs,
+    ...
+  }: {
+    services.kerberos_server = {
+      enable = true;
       realms = {
-        "FOO.BAR".acl = [{principal = "admin"; access = ["add" "cpw"];}];
+        "FOO.BAR".acl = [
+          {
+            principal = "admin";
+            access = ["add" "cpw"];
+          }
+        ];
       };
     };
     krb5 = {

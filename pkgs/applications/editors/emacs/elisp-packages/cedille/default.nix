@@ -1,14 +1,14 @@
-{ stdenv
-, cedille
-, emacs
+{
+  stdenv,
+  cedille,
+  emacs,
 }:
-
 stdenv.mkDerivation {
   pname = "cedille-mode";
 
   inherit (cedille) version src;
 
-  buildInputs = [ emacs ];
+  buildInputs = [emacs];
 
   dontBuild = true;
 
@@ -26,8 +26,13 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    inherit (cedille.meta)
-      homepage license maintainers platforms;
+    inherit
+      (cedille.meta)
+      homepage
+      license
+      maintainers
+      platforms
+      ;
     description = "Emacs major mode for Cedille";
   };
 }

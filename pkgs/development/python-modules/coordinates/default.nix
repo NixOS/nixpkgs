@@ -1,7 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "coordinates";
   version = "0.4.0";
@@ -15,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1zha594rshjg3qjq9mrai2hfldya282ihasp2i3km7b2j4gjdw2b";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     runHook preCheck
@@ -27,6 +30,6 @@ buildPythonPackage rec {
     description = "Convenience class for doing maths with explicit coordinates";
     homepage = "https://github.com/clbarnes/coordinates";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

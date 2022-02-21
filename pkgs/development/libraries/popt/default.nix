@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "popt";
   version = "1.18";
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/rpm-software-management/popt";
     description = "Command line option parsing library";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     license = licenses.mit;
     platforms = platforms.unix;
   };

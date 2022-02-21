@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkgsBuildBuild, cmake, python3, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkgsBuildBuild,
+  cmake,
+  python3,
+  ncurses,
+}:
 stdenv.mkDerivation {
   pname = "libtapi";
   version = "1100.0.11"; # determined by looking at VERSION.txt
@@ -15,21 +22,24 @@ stdenv.mkDerivation {
 
   # Backported from newer llvm, fixes configure error when cross compiling.
   # Also means we don't have to manually fix the result with install_name_tool.
-  patches = [
-    ./disable-rpath.patch
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # TODO: make unconditional and rebuild the world
-    # TODO: send upstream
-    ./native-clang-tblgen.patch
-  ];
+  patches =
+    [
+      ./disable-rpath.patch
+    ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # TODO: make unconditional and rebuild the world
+      # TODO: send upstream
+      ./native-clang-tblgen.patch
+    ];
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [cmake python3];
 
   # ncurses is required here to avoid a reference to bootstrap-tools, which is
   # not allowed for the stdenv.
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
-  cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=OFF" ]
+  cmakeFlags =
+    ["-DLLVM_INCLUDE_TESTS=OFF"]
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) [
       "-DCMAKE_CROSSCOMPILING=True"
       # This package could probably have a llvm_6 llvm-tblgen and clang-tblgen
@@ -61,14 +71,14 @@ stdenv.mkDerivation {
     cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="$INCLUDE_FIX")
   '';
 
-  buildFlags = [ "clangBasic" "libtapi" "tapi" ];
+  buildFlags = ["clangBasic" "libtapi" "tapi"];
 
-  installTargets = [ "install-libtapi" "install-tapi-headers" "install-tapi" ];
+  installTargets = ["install-libtapi" "install-tapi-headers" "install-tapi"];
 
   meta = with lib; {
     description = "Replaces the Mach-O Dynamic Library Stub files in Apple's SDKs to reduce the size";
     homepage = "https://github.com/tpoechtrager/apple-libtapi";
     license = licenses.apsl20;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [matthewbauer];
   };
 }

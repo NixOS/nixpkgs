@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, python-dateutil
-, requests
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiohttp,
+  python-dateutil,
+  requests,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "pytwitchapi";
   version = "2.5.1";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
   # Project has no tests.
   doCheck = false;
 
-  pythonImportsCheck = [ "twitchAPI" ];
+  pythonImportsCheck = ["twitchAPI"];
 
   meta = with lib; {
     description = "Python implementation of the Twitch Helix API, its Webhook and PubSub";
     homepage = "https://github.com/Teekeks/pyTwitchAPI";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
   };
 }

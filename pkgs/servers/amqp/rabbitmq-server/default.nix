@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, fetchurl
-, erlang
-, elixir
-, python2
-, libxml2
-, libxslt
-, xmlto
-, docbook_xml_dtd_45
-, docbook_xsl
-, zip
-, unzip
-, rsync
-, getconf
-, socat
-, procps
-, coreutils
-, gnused
-, systemd
-, glibcLocales
-, AppKit
-, Carbon
-, Cocoa
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  erlang,
+  elixir,
+  python2,
+  libxml2,
+  libxslt,
+  xmlto,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  zip,
+  unzip,
+  rsync,
+  getconf,
+  socat,
+  procps,
+  coreutils,
+  gnused,
+  systemd,
+  glibcLocales,
+  AppKit,
+  Carbon,
+  Cocoa,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
   version = "3.9.13";
@@ -35,14 +35,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DndZ74m+CFyrukxKyOpfoRCb86RID2XL7x0eUZifcno=";
   };
 
-  nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync ];
-  buildInputs = [ erlang elixir python2 libxml2 libxslt glibcLocales ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
+  nativeBuildInputs = [unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync];
+  buildInputs =
+    [erlang elixir python2 libxml2 libxslt glibcLocales]
+    ++ lib.optionals stdenv.isDarwin [AppKit Carbon Cocoa];
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = ["out" "man" "doc"];
 
-  installFlags = [ "PREFIX=$(out)" "RMQ_ERLAPP_DIR=$(out)" ];
-  installTargets = [ "install" "install-man" ];
+  installFlags = ["PREFIX=$(out)" "RMQ_ERLAPP_DIR=$(out)"];
+  installTargets = ["install" "install-man"];
 
   preBuild = ''
     export LANG=C.UTF-8 # fix elixir locale warning
@@ -55,7 +56,8 @@ stdenv.mkDerivation rec {
     procps
     gnused
     coreutils # used by helper scripts
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+  ]
+  ++ lib.optionals stdenv.isLinux [systemd]); # for systemd unit activation check
 
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early
@@ -83,6 +85,6 @@ stdenv.mkDerivation rec {
     description = "An implementation of the AMQP messaging protocol";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ turion ];
+    maintainers = with maintainers; [turion];
   };
 }

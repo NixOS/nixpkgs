@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.target;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.target;
+in {
   ###### interface
   options = {
     services.target = with types; {
@@ -29,15 +30,15 @@ in
       mode = "0600";
     };
 
-    environment.systemPackages = with pkgs; [ targetcli ];
+    environment.systemPackages = with pkgs; [targetcli];
 
-    boot.kernelModules = [ "configfs" "target_core_mod" "iscsi_target_mod" ];
+    boot.kernelModules = ["configfs" "target_core_mod" "iscsi_target_mod"];
 
     systemd.services.iscsi-target = {
       enable = true;
-      after = [ "network.target" "local-fs.target" ];
-      requires = [ "sys-kernel-config.mount" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target" "local-fs.target"];
+      requires = ["sys-kernel-config.mount"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.python3.pkgs.rtslib}/bin/targetctl restore";

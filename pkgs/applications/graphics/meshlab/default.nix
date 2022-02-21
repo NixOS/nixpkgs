@@ -1,25 +1,25 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, libGLU
-, qtbase
-, qtscript
-, qtxmlpatterns
-, lib3ds
-, bzip2
-, muparser
-, eigen
-, glew
-, gmp
-, levmar
-, qhull
-, cmake
-, cgal_5
-, boost17x
-, mpfr
-, xercesc
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  libGLU,
+  qtbase,
+  qtscript,
+  qtxmlpatterns,
+  lib3ds,
+  bzip2,
+  muparser,
+  eigen,
+  glew,
+  gmp,
+  levmar,
+  qhull,
+  cmake,
+  cgal_5,
+  boost17x,
+  mpfr,
+  xercesc,
 }:
-
 mkDerivation rec {
   pname = "meshlab";
   version = "2021.10";
@@ -51,7 +51,7 @@ mkDerivation rec {
     xercesc
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   preConfigure = ''
     substituteAll ${./meshlab.desktop} scripts/Linux/resources/meshlab.desktop
@@ -83,7 +83,7 @@ mkDerivation rec {
     description = "A system for processing and editing 3D triangular meshes";
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
   };
 }

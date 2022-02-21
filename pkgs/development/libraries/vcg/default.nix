@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, eigen }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  eigen,
+}:
 stdenv.mkDerivation rec {
   pname = "vcg";
   version = "1.0.1";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jh8jc8rn7rci8qr3q03q574fk2hsc3rllysck41j8xkr3rmxz2f";
   };
 
-  propagatedBuildInputs = [ eigen ];
+  propagatedBuildInputs = [eigen];
 
   installPhase = ''
     mkdir -p $out/include
@@ -24,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "C++ library for manipulation, processing and displaying with OpenGL of triangle and tetrahedral meshes";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

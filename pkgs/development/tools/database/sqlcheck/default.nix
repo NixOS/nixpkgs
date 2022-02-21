@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "sqlcheck";
   version = "1.2";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   doCheck = true;
 
@@ -21,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Automatically identify anti-patterns in SQL queries";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

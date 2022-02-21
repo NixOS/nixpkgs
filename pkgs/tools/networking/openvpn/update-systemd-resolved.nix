@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper
-, iproute2, systemd, coreutils, util-linux }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  iproute2,
+  systemd,
+  coreutils,
+  util-linux,
+}:
 stdenv.mkDerivation rec {
   pname = "update-systemd-resolved";
   version = "1.3.0";
@@ -13,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "19zhbpyms57yb70hi0ws5sbkpk2yqp9nnix3f86r36h1g93m70lm";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   buildFlags = [
     "PREFIX=${placeholder "out"}/libexec/openvpn"
@@ -21,13 +27,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     wrapProgram $out/libexec/openvpn/update-systemd-resolved \
-      --prefix PATH : ${lib.makeBinPath [ iproute2 systemd coreutils util-linux ]}
+      --prefix PATH : ${lib.makeBinPath [iproute2 systemd coreutils util-linux]}
   '';
 
   meta = with lib; {
     description = "Helper script for OpenVPN to directly update the DNS settings of a link through systemd-resolved via DBus";
     homepage = "https://github.com/jonathanio/update-systemd-resolved";
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
     license = licenses.gpl3;
     platforms = platforms.unix;
   };

@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib, stdenv
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  stdenv,
 }:
-
 buildGoModule rec {
   pname = "monsoon";
   version = "0.6.0";
@@ -27,6 +28,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/RedTeamPentesting/monsoon";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

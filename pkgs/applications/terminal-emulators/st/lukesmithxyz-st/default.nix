@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, harfbuzz
-, libX11
-, libXext
-, libXft
-, ncurses
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  harfbuzz,
+  libX11,
+  libXext,
+  libXft,
+  ncurses,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lukesmithxyz-st";
   version = "0.pre+unstable=2021-08-10";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LukeSmithxyz/st";
     description = "Luke Smith's fork of st";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

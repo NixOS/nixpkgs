@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, unittest2 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittest2,
+}:
 buildPythonPackage rec {
   pname = "od";
   version = "2.0.2";
@@ -21,5 +25,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/epsy/od";
     license = licenses.mit;
   };
-
 }

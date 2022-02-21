@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "oed";
   version = "6.7";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ibara/oed";
     description = "Portable ed editor from OpenBSD";
-    license = with licenses; [ bsd2 ];
+    license = with licenses; [bsd2];
     platforms = platforms.unix;
   };
 }

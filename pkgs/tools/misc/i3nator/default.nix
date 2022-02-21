@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "i3nator";
   version = "1.2.0";
@@ -16,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tmuxinator for the i3 window manager";
     homepage = "https://github.com/pitkley/i3nator";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ mpoquet ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [mpoquet];
   };
 }

@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, ant, jdk }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ant,
+  jdk,
+}:
 stdenv.mkDerivation rec {
   pname = "javacc";
   version = "7.0.10";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "120jva4sw1kylkwgqf869zxddss01mcn1nmimx9vmd4xaadz7cf2";
   };
 
-  nativeBuildInputs = [ ant jdk ];
+  nativeBuildInputs = [ant jdk];
 
   buildPhase = ''
     ant jar
@@ -27,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://javacc.github.io/javacc";
     description = "A parser generator for building parsers from grammars";
     license = licenses.bsd2;
-    maintainers = [ teams.deshaw.members ];
+    maintainers = [teams.deshaw.members];
   };
 }

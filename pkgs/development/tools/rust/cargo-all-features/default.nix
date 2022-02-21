@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-all-features";
   version = "1.6.0";
@@ -16,7 +19,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A Cargo subcommand to build and test all feature flag combinations";
     homepage = "https://github.com/frewsxcv/cargo-all-features";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [figsoda];
   };
 }

@@ -1,12 +1,12 @@
-{ trivialBuild
-, lib
-, fetchFromGitHub
-, curl
-, plz
-, cl-lib
-, ts
+{
+  trivialBuild,
+  lib,
+  fetchFromGitHub,
+  curl,
+  plz,
+  cl-lib,
+  ts,
 }:
-
 trivialBuild {
   pname = "ement";
   version = "unstable-2021-10-08";

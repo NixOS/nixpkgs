@@ -1,17 +1,19 @@
 import ../make-test-python.nix (
-  { pkgs, lib, ... }:
-  let
+  {
+    pkgs,
+    lib,
+    ...
+  }: let
     inherit (pkgs) writeTextDir python3 curl;
     webroot = writeTextDir "index.html" "<h1>Hi</h1>";
-  in
-  {
+  in {
     name = "podman-dnsname";
     meta = {
-      maintainers = with lib.maintainers; [ roberth ] ++ lib.teams.podman.members;
+      maintainers = with lib.maintainers; [roberth] ++ lib.teams.podman.members;
     };
 
     nodes = {
-      podman = { pkgs, ... }: {
+      podman = {pkgs, ...}: {
         virtualisation.podman.enable = true;
         virtualisation.podman.defaultNetwork.dnsname.enable = true;
       };

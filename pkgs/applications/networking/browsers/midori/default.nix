@@ -1,23 +1,24 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, ninja
-, pkg-config
-, intltool
-, vala
-, wrapGAppsHook
-, gcr
-, libpeas
-, gtk3
-, webkitgtk
-, sqlite
-, gsettings-desktop-schemas
-, libsoup
-, glib-networking
-, json-glib
-, libarchive
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  ninja,
+  pkg-config,
+  intltool,
+  vala,
+  wrapGAppsHook,
+  gcr,
+  libpeas,
+  gtk3,
+  webkitgtk,
+  sqlite,
+  gsettings-desktop-schemas,
+  libsoup,
+  glib-networking,
+  json-glib,
+  libarchive,
 }:
-
 stdenv.mkDerivation rec {
   pname = "midori";
   version = "9.0";
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (libsoup.override { gnomeSupport = true; })
+    (libsoup.override {gnomeSupport = true;})
     gcr
     glib-networking
     gsettings-desktop-schemas
@@ -56,8 +57,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lightweight WebKitGTK web browser";
     homepage = "https://www.midori-browser.org/";
-    license = with licenses; [ lgpl21Plus ];
+    license = with licenses; [lgpl21Plus];
     platforms = with platforms; linux;
-    maintainers = with maintainers; [ raskin ramkromberg ];
+    maintainers = with maintainers; [raskin ramkromberg];
   };
 }

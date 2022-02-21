@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "acpid";
   version = "2.0.33";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CFb3Gz6zShtmPQqOY2Pfy8UZ5j2EczBJiJhljily2+g=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/acpid2/";

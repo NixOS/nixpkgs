@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  buildsystem,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netsurf-${libname}";
   libname = "libnsutils";
@@ -12,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eQxlFjRKvoL2KJ1lY5LpzOvkdbIMx+Hi2EMBE4X3rvA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ buildsystem ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [buildsystem];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "Generalised utility library for netsurf browser";
     license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    maintainers = [maintainers.vrthra maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, StormLib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  StormLib,
+}:
 stdenv.mkDerivation rec {
   pname = "smpq";
   version = "1.6";
@@ -13,14 +18,14 @@ stdenv.mkDerivation rec {
     "-DWITH_KDE=OFF"
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ StormLib ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [StormLib];
 
   meta = with lib; {
     description = "StormLib MPQ archiving utility";
     homepage = "https://launchpad.net/smpq";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ aanderse karolchmist ];
+    maintainers = with maintainers; [aanderse karolchmist];
   };
 }

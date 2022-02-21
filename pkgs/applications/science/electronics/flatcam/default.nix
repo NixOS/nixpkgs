@@ -1,9 +1,9 @@
-{ lib
-, python3Packages
-, fetchFromBitbucket
-, fetchpatch
+{
+  lib,
+  python3Packages,
+  fetchFromBitbucket,
+  fetchpatch,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "flatcam";
   version = "8.5";
@@ -52,6 +52,6 @@ python3Packages.buildPythonApplication rec {
     description = "2-D post processing for PCB fabrication on CNC routers";
     homepage = "https://bitbucket.org/jpcgt/flatcam";
     license = licenses.mit;
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [trepetti];
   };
 }

@@ -1,5 +1,9 @@
-{lib, stdenv, fetchzip, libtommath}:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libtommath,
+}:
 stdenv.mkDerivation rec {
   pname = "convertlit";
   version = "1.8";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libtommath];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   buildPhase = ''
     cd lib

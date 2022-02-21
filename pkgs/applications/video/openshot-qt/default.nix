@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, mkDerivationWith
-, fetchFromGitHub
-, doxygen
-, gtk3
-, libopenshot
-, python3Packages
-, qtsvg
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  mkDerivationWith,
+  fetchFromGitHub,
+  doxygen,
+  gtk3,
+  libopenshot,
+  python3Packages,
+  qtsvg,
+  wrapGAppsHook,
 }:
-
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "openshot-qt";
   version = "2.6.1";
@@ -47,17 +47,18 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/openshot-qt \
-  ''
-  # Fix toolbar icons on Darwin
-  + lib.optionalString stdenv.isDarwin ''
+  postFixup =
+    ''
+      wrapProgram $out/bin/openshot-qt \
+    ''
+    # Fix toolbar icons on Darwin
+    + lib.optionalString stdenv.isDarwin ''
       --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
-  ''
-  + ''
+    ''
+    + ''
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}"
-  '';
+    '';
 
   doCheck = false;
 
@@ -72,7 +73,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
       Vimeo, Xbox 360, and many other common formats.
     '';
     license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 

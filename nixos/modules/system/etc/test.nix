@@ -1,17 +1,17 @@
-{ lib
-, coreutils
-, fakechroot
-, fakeroot
-, evalMinimalConfig
-, pkgsModule
-, runCommand
-, util-linux
-, vmTools
-, writeText
-}:
-let
-  node = evalMinimalConfig ({ config, ... }: {
-    imports = [ pkgsModule ../etc/etc.nix ];
+{
+  lib,
+  coreutils,
+  fakechroot,
+  fakeroot,
+  evalMinimalConfig,
+  pkgsModule,
+  runCommand,
+  util-linux,
+  vmTools,
+  writeText,
+}: let
+  node = evalMinimalConfig ({config, ...}: {
+    imports = [pkgsModule ../etc/etc.nix];
     environment.etc."passwd" = {
       text = passwdText;
     };
@@ -29,23 +29,23 @@ let
     # testing...
   '';
 in
-lib.recurseIntoAttrs {
-  test-etc-vm =
-    vmTools.runInLinuxVM (runCommand "test-etc-vm" { } ''
-      mkdir -p /etc
-      ${node.config.system.build.etcActivationCommands}
-      set -x
-      [[ -L /etc/passwd ]]
-      diff /etc/passwd ${writeText "expected-passwd" passwdText}
-      [[ 751 = $(stat --format %a /etc/hosts) ]]
-      diff /etc/hosts ${writeText "expected-hosts" hostsText}
-      set +x
-      touch $out
-    '');
+  lib.recurseIntoAttrs {
+    test-etc-vm =
+      vmTools.runInLinuxVM (runCommand "test-etc-vm" {} ''
+        mkdir -p /etc
+        ${node.config.system.build.etcActivationCommands}
+        set -x
+        [[ -L /etc/passwd ]]
+        diff /etc/passwd ${writeText "expected-passwd" passwdText}
+        [[ 751 = $(stat --format %a /etc/hosts) ]]
+        diff /etc/hosts ${writeText "expected-hosts" hostsText}
+        set +x
+        touch $out
+      '');
 
-  # fakeroot is behaving weird
-  test-etc-fakeroot =
-    runCommand "test-etc"
+    # fakeroot is behaving weird
+    test-etc-fakeroot =
+      runCommand "test-etc"
       {
         nativeBuildInputs = [
           fakeroot
@@ -62,9 +62,8 @@ lib.recurseIntoAttrs {
           touch $out
         '';
       } ''
-      mkdir fake-root
-      export FAKECHROOT_EXCLUDE_PATH=/dev:/proc:/sys:${builtins.storeDir}:$out
-      fakechroot fakeroot chroot $PWD/fake-root bash -c 'source $stdenv/setup; eval "$fakeRootCommands"'
-    '';
-
-}
+        mkdir fake-root
+        export FAKECHROOT_EXCLUDE_PATH=/dev:/proc:/sys:${builtins.storeDir}:$out
+        fakechroot fakeroot chroot $PWD/fake-root bash -c 'source $stdenv/setup; eval "$fakeRootCommands"'
+      '';
+  }

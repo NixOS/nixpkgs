@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "lmp";
   version = "2.0";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Scanning and validation toolkit for the Log4J vulnerability";
     homepage = "https://github.com/0xInfection/LogMePwn";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

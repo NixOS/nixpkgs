@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, pythonAtLeast
-, pythonOlder
-, fetchPypi
-, python
-, buildPythonPackage
-, numpy
-, llvmlite
-, setuptools
-, libcxx
+{
+  lib,
+  stdenv,
+  pythonAtLeast,
+  pythonOlder,
+  fetchPypi,
+  python,
+  buildPythonPackage,
+  numpy,
+  llvmlite,
+  setuptools,
+  libcxx,
 }:
-
 buildPythonPackage rec {
   version = "0.55.0";
   pname = "numba";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
-  propagatedBuildInputs = [ numpy llvmlite setuptools ];
+  propagatedBuildInputs = [numpy llvmlite setuptools];
 
   # Copy test script into $out and run the test suite.
   checkPhase = ''
@@ -41,12 +41,12 @@ buildPythonPackage rec {
   # ImportError: cannot import name '_typeconv'
   doCheck = false;
 
-  pythonImportsCheck = [ "numba" ];
+  pythonImportsCheck = ["numba"];
 
-  meta =  with lib; {
+  meta = with lib; {
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
     description = "Compiling Python code using LLVM";
-    maintainers = with maintainers; [ fridh ];
+    maintainers = with maintainers; [fridh];
   };
 }

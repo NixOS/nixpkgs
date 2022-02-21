@@ -1,4 +1,8 @@
-{ lib, python3, fetchFromGitHub }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "joystickwake";
   version = "0.3";
@@ -10,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0f990bvykjjq2rzzbm158kajnqxigfzcrzap11dc415wkvn25k6q";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ pyudev xlib ];
+  propagatedBuildInputs = with python3.pkgs; [pyudev xlib];
 
   meta = with lib; {
     description = "A joystick-aware screen waker";
@@ -19,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
       This program works around the problem by temporarily disabling screen blankers when joystick activity is detected.
     '';
     homepage = "https://github.com/foresto/joystickwake";
-    maintainers = with maintainers; [ bertof ];
+    maintainers = with maintainers; [bertof];
     license = licenses.mit;
     platforms = platforms.linux;
   };

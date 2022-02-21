@@ -1,6 +1,4 @@
-pkgs:
-
-let
+pkgs: let
   callPackage = pkgs.callPackage;
 in {
   deliantra-server = callPackage ./deliantra-server.nix {};

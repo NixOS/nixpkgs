@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, future, pyusb, ipython, pygreat }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy3k,
+  future,
+  pyusb,
+  ipython,
+  pygreat,
+}:
 buildPythonPackage rec {
   pname = "GreatFET";
   version = "2019.5.1.dev0";
@@ -13,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ future pyusb ipython pygreat ];
+  propagatedBuildInputs = [future pyusb ipython pygreat];
 
   doCheck = false;
 
@@ -27,8 +35,6 @@ buildPythonPackage rec {
     homepage = "https://greatscottgadgets.com/greatfet";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mog ];
+    maintainers = with lib.maintainers; [mog];
   };
 }
-
-

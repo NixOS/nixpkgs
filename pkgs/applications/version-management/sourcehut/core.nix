@@ -1,32 +1,32 @@
-{ lib
-, fetchgit
-, fetchNodeModules
-, buildPythonPackage
-, pgpy
-, flask
-, bleach
-, misaka
-, humanize
-, html5lib
-, markdown
-, psycopg2
-, pygments
-, requests
-, sqlalchemy
-, cryptography
-, beautifulsoup4
-, sqlalchemy-utils
-, prometheus-client
-, celery
-, alembic
-, importlib-metadata
-, mistletoe
-, minio
-, sassc
-, nodejs
-, redis
+{
+  lib,
+  fetchgit,
+  fetchNodeModules,
+  buildPythonPackage,
+  pgpy,
+  flask,
+  bleach,
+  misaka,
+  humanize,
+  html5lib,
+  markdown,
+  psycopg2,
+  pygments,
+  requests,
+  sqlalchemy,
+  cryptography,
+  beautifulsoup4,
+  sqlalchemy-utils,
+  prometheus-client,
+  celery,
+  alembic,
+  importlib-metadata,
+  mistletoe,
+  minio,
+  sassc,
+  nodejs,
+  redis,
 }:
-
 buildPythonPackage rec {
   pname = "srht";
   version = "0.68.14";
@@ -87,12 +87,12 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
-  pythonImportsCheck = [ "srht" ];
+  pythonImportsCheck = ["srht"];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

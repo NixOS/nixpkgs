@@ -1,16 +1,17 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with pkgs;
-with lib;
-
-let
-
+with lib; let
   cfg = config.services.activemq;
 
   activemqBroker = stdenv.mkDerivation {
     name = "activemq-broker";
-    phases = [ "installPhase" ];
-    buildInputs = [ jdk ];
+    phases = ["installPhase"];
+    buildInputs = [jdk];
     installPhase = ''
       mkdir -p $out/lib
       source ${activemq}/lib/classpath.env
@@ -19,9 +20,7 @@ let
       javac -d $out/lib ActiveMQBroker.java
     '';
   };
-
 in {
-
   options = {
     services.activemq = {
       enable = mkOption {
@@ -64,18 +63,20 @@ in {
       };
       javaProperties = mkOption {
         type = types.attrs;
-        default = { };
+        default = {};
         example = literalExpression ''
           {
             "java.net.preferIPv4Stack" = "true";
           }
         '';
-        apply = attrs: {
-          "activemq.base" = "${cfg.baseDir}";
-          "activemq.data" = "${cfg.baseDir}/data";
-          "activemq.conf" = "${cfg.configurationDir}";
-          "activemq.home" = "${activemq}";
-        } // attrs;
+        apply = attrs:
+          {
+            "activemq.base" = "${cfg.baseDir}";
+            "activemq.data" = "${cfg.baseDir}/data";
+            "activemq.conf" = "${cfg.configurationDir}";
+            "activemq.home" = "${activemq}";
+          }
+          // attrs;
         description = ''
           Specifies Java properties that are sent to the ActiveMQ
           broker service with the "-D" option. You can set properties
@@ -106,9 +107,9 @@ in {
     users.groups.activemq.gid = config.ids.gids.activemq;
 
     systemd.services.activemq_init = {
-      wantedBy = [ "activemq.service" ];
-      partOf = [ "activemq.service" ];
-      before = [ "activemq.service" ];
+      wantedBy = ["activemq.service"];
+      partOf = ["activemq.service"];
+      before = ["activemq.service"];
       serviceConfig.Type = "oneshot";
       script = ''
         mkdir -p "${cfg.javaProperties."activemq.data"}"
@@ -117,9 +118,9 @@ in {
     };
 
     systemd.services.activemq = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ jre ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      path = [jre];
       serviceConfig.User = "activemq";
       script = ''
         source ${activemq}/lib/classpath.env
@@ -129,7 +130,5 @@ in {
           ${cfg.extraJavaOptions} ActiveMQBroker "${cfg.configurationURI}"
       '';
     };
-
   };
-
 }

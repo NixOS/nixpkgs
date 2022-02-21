@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "httpagentparser";
   version = "1.9.2";
@@ -15,12 +15,12 @@ buildPythonPackage rec {
   # PyPi version does not include test directory
   doCheck = false;
 
-  pythonImportsCheck = [ "httpagentparser" ];
+  pythonImportsCheck = ["httpagentparser"];
 
   meta = with lib; {
     homepage = "https://github.com/shon/httpagentparser";
     description = "Extracts OS Browser etc information from http user agent string";
     license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [gador];
   };
 }

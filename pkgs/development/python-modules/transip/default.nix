@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, cryptography
-, suds-jurko
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  cryptography,
+  suds-jurko,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "transip";
   version = "2.0.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "TransIP API Connector";
     homepage = "https://github.com/benkonrath/transip-api";
     license = licenses.mit;
-    maintainers = with maintainers; [ flyfloh ];
+    maintainers = with maintainers; [flyfloh];
   };
 }

@@ -5,5 +5,5 @@ import ./generic.nix {
   sha256 = "1aq5505lpa39garky2icgfv4c7ylpx3j623cz9bsz5c466d2kqls";
 
   # Breaks build with Clang
-  hardeningDisable = [ "strictoverflow" ];
+  hardeningDisable = ["strictoverflow"];
 }

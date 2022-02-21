@@ -1,17 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.nats;
 
-  format = pkgs.formats.json { };
+  format = pkgs.formats.json {};
 
   configFile = format.generate "nats.conf" cfg.settings;
-
 in {
-
   ### Interface
 
   options = {
@@ -64,7 +63,7 @@ in {
       };
 
       settings = mkOption {
-        default = { };
+        default = {};
         type = format.type;
         example = literalExpression ''
           {
@@ -89,13 +88,13 @@ in {
     services.nats.settings = {
       server_name = cfg.serverName;
       port = cfg.port;
-      jetstream = optionalAttrs cfg.jetstream { store_dir = cfg.dataDir; };
+      jetstream = optionalAttrs cfg.jetstream {store_dir = cfg.dataDir;};
     };
 
     systemd.services.nats = {
       description = "NATS messaging system";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = mkMerge [
         (mkIf (cfg.dataDir == "/var/lib/nats") {
@@ -131,13 +130,13 @@ in {
           ProtectKernelTunables = true;
           ProtectProc = "invisible";
           ProtectSystem = "strict";
-          ReadOnlyPaths = [ ];
-          ReadWritePaths = [ cfg.dataDir ];
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          ReadOnlyPaths = [];
+          ReadWritePaths = [cfg.dataDir];
+          RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+          SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
           UMask = "0077";
         }
       ];
@@ -152,7 +151,6 @@ in {
       };
     };
 
-    users.groups = mkIf (cfg.group == "nats") { nats = { }; };
+    users.groups = mkIf (cfg.group == "nats") {nats = {};};
   };
-
 }

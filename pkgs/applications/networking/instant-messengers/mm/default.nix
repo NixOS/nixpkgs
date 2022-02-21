@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchgit }:
-
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+}:
 buildGoModule {
   pname = "mm";
   version = "2020.11.17";
@@ -16,6 +19,6 @@ buildGoModule {
     description = "A file system based matrix client";
     homepage = "https://git.lost.host/meutraa/mm";
     license = licenses.isc;
-    maintainers = with maintainers; [ meutraa ];
+    maintainers = with maintainers; [meutraa];
   };
 }

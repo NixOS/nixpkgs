@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pytest
-, pytest-cov
-, flaky
-, numpy
-, pandas
-, pytorch
-, scikit-learn
-, scipy
-, tabulate
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pytest,
+  pytest-cov,
+  flaky,
+  numpy,
+  pandas,
+  pytorch,
+  scikit-learn,
+  scipy,
+  tabulate,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "skorch";
   version = "0.11.0";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
     sha256 = "b35cb4e50045742f0ffcfad33044af691d5d36b50212573753a804483a947ca9";
   };
 
-  propagatedBuildInputs = [ numpy pytorch scikit-learn scipy tabulate tqdm ];
-  checkInputs = [ pytest pytest-cov flaky pandas pytestCheckHook ];
+  propagatedBuildInputs = [numpy pytorch scikit-learn scipy tabulate tqdm];
+  checkInputs = [pytest pytest-cov flaky pandas pytestCheckHook];
 
   disabledTests = [
     # on CPU, these expect artifacts from previous GPU run
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     homepage = "https://skorch.readthedocs.io";
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
     # TypeError: __init__() got an unexpected keyword argument 'iid'
     broken = true;
   };

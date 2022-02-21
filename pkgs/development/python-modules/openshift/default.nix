@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, kubernetes
-, ruamel-yaml
-, six
-, python-string-utils
-, pytest-bdd
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  kubernetes,
+  ruamel-yaml,
+  six,
+  python-string-utils,
+  pytest-bdd,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "openshift";
   version = "0.12.1";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Python client for the OpenShift API";
     homepage = "https://github.com/openshift/openshift-restclient-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
   };
 }

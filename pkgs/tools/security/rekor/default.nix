@@ -1,7 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
-let
-  generic = { pname, packageToBuild, description }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}: let
+  generic = {
+    pname,
+    packageToBuild,
+    description,
+  }:
     buildGoModule rec {
       inherit pname;
       version = "0.5.0";
@@ -15,11 +22,11 @@ let
 
       vendorSha256 = "sha256-0PPdnE3ND/YNIk50XkgBROpe5OhFiFre5Lwsml02DQU=";
 
-      nativeBuildInputs = [ installShellFiles ];
+      nativeBuildInputs = [installShellFiles];
 
-      subPackages = [ packageToBuild ];
+      subPackages = [packageToBuild];
 
-      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/pkg/api.GitVersion=v${version}" ];
+      ldflags = ["-s" "-w" "-X github.com/sigstore/rekor/pkg/api.GitVersion=v${version}"];
 
       postInstall = ''
         installShellCompletion --cmd ${pname} \
@@ -33,7 +40,7 @@ let
         homepage = "https://github.com/sigstore/rekor";
         changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
         license = licenses.asl20;
-        maintainers = with maintainers; [ lesuisse jk ];
+        maintainers = with maintainers; [lesuisse jk];
       };
     };
 in {

@@ -1,12 +1,13 @@
-{ buildPythonPackage,
+{
+  buildPythonPackage,
   fetchFromGitHub,
   isPy27,
   libopus,
   nose,
-  lib, stdenv,
+  lib,
+  stdenv,
   substituteAll,
 }:
-
 buildPythonPackage rec {
   pname = "opuslib";
   version = "3.0.3";
@@ -27,13 +28,13 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   meta = with lib; {
     description = "Python bindings to the libopus, IETF low-delay audio codec";
     homepage = "https://github.com/orion-labs/opuslib";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ thelegy ];
+    maintainers = with maintainers; [thelegy];
   };
 }

@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, makeWrapper
-, cvs
-, perl
-, nettools
-, findutils
-, rsync
-, coreutils
-, diffutils
-} :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  cvs,
+  perl,
+  nettools,
+  findutils,
+  rsync,
+  coreutils,
+  diffutils,
+}:
 stdenv.mkDerivation rec {
   pname = "cvsq";
   version = "1.11";
@@ -19,25 +20,34 @@ stdenv.mkDerivation rec {
     sha256 = "0491k4skk3jyyd6plp2kcihmxxav9rsch7vd1yi697m2fqckp5ws";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cvs perl nettools findutils rsync coreutils diffutils ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [cvs perl nettools findutils rsync coreutils diffutils];
 
-
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = ["prefix=$(out)"];
 
   postInstall = ''
     substituteInPlace $out/bin/cvsq --replace "/bin/sh" "${stdenv.shell}"
     substituteInPlace $out/bin/lcvs --replace "/bin/sh" "${stdenv.shell}"
-    wrapProgram $out/bin/cvsq --prefix PATH : ${lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-branch --prefix PATH : ${lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-merge --prefix PATH : ${lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-switch --prefix PATH : ${lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/lcvs --prefix PATH : ${lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
+    wrapProgram $out/bin/cvsq --prefix PATH : ${
+      lib.makeBinPath
+      [cvs nettools findutils rsync coreutils diffutils]
+    }
+    wrapProgram $out/bin/cvsq-branch --prefix PATH : ${
+      lib.makeBinPath
+      [cvs nettools findutils rsync coreutils diffutils]
+    }
+    wrapProgram $out/bin/cvsq-merge --prefix PATH : ${
+      lib.makeBinPath
+      [cvs nettools findutils rsync coreutils diffutils]
+    }
+    wrapProgram $out/bin/cvsq-switch --prefix PATH : ${
+      lib.makeBinPath
+      [cvs nettools findutils rsync coreutils diffutils]
+    }
+    wrapProgram $out/bin/lcvs --prefix PATH : ${
+      lib.makeBinPath
+      [cvs nettools findutils rsync coreutils diffutils]
+    }
   '';
 
   meta = {
@@ -61,7 +71,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.linta.de/~aehlig/cvsq/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ clkamp ];
+    maintainers = with lib.maintainers; [clkamp];
     platforms = lib.platforms.all;
   };
 }

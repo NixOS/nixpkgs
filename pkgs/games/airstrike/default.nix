@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, SDL, SDL_image }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  SDL,
+  SDL_image,
+}:
 stdenv.mkDerivation rec {
   pname = "airstrike-pre";
   version = "6a";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h6rv2zcp84ycmd0kv1pbpqjgwx57dw42x7878d2c2vnpi5jn8qi";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ SDL SDL_image ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [SDL SDL_image];
 
   NIX_LDFLAGS = "-lm";
 
@@ -30,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "A 2d dogfighting game";
     homepage = "https://icculus.org/airstrike/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.linux;
   };
 }

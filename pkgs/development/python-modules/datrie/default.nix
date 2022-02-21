@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  pytestCheckHook,
+  hypothesis,
 }:
-
 buildPythonPackage rec {
   pname = "datrie";
   version = "0.8.2";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace '"pytest-runner", ' ""
   '';
 
-  pythonImportsCheck = [ "datrie" ];
+  pythonImportsCheck = ["datrie"];
 
   meta = with lib; {
     description = "Super-fast, efficiently stored Trie for Python";
     homepage = "https://github.com/kmike/datrie";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lewo ];
+    maintainers = with maintainers; [lewo];
   };
 }

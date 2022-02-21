@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, kmod, looking-glass-client }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  kernel,
+  kmod,
+  looking-glass-client,
+}:
 stdenv.mkDerivation rec {
   pname = "kvmfr";
   version = looking-glass-client.version;
 
   src = looking-glass-client.src;
   sourceRoot = "source/module";
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = ["pic" "format"];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   patches = lib.optional (kernel.kernelAtLeast "5.16") (fetchpatch {
@@ -33,8 +40,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/gnif/LookingGlass";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ j-brn ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [j-brn];
+    platforms = ["x86_64-linux"];
     broken = kernel.kernelOlder "5.3";
   };
 }

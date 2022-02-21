@@ -1,8 +1,8 @@
-{ mkDerivation
-, fetchFromGitLab
-, extra-cmake-modules
+{
+  mkDerivation,
+  fetchFromGitLab,
+  extra-cmake-modules,
 }:
-
 mkDerivation rec {
   pname = "kquickimageeditor";
   version = "0.1.3";
@@ -15,5 +15,5 @@ mkDerivation rec {
     sha256 = "sha256-p2uOssS5MQSkmppNKOjTxp866Qx1rIB6ZPhcmVvfBxs=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [extra-cmake-modules];
 }

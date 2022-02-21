@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, unzip}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "pgfplots";
   version = "1.5.1";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xajrmq35i0qlsfwydy5zzg6f1jg88hqqh5b3xsmglzrarnllbdi";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   unpackPhase = "unzip $src";
 

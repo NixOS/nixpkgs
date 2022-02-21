@@ -1,9 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, redis
-, memcached
-, msgpack
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  redis,
+  memcached,
+  msgpack,
 }:
-
 buildPythonPackage rec {
   pname = "cachy";
   version = "0.3.0";
@@ -28,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdispater/cachy";
     description = "Cachy provides a simple yet effective caching library";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [jakewaksbaum];
   };
 }

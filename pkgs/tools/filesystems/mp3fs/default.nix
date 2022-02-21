@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, flac
-, fuse
-, lame
-, libid3tag
-, libvorbis
-, autoreconfHook
-, pkg-config
-, pandoc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  flac,
+  fuse,
+  lame,
+  libid3tag,
+  libvorbis,
+  autoreconfHook,
+  pkg-config,
+  pandoc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mp3fs";
   version = "1.1.1";
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
       --replace "osxfuse_version()" "fuse_version()"
   '';
 
-  buildInputs = [ flac fuse lame libid3tag libvorbis ];
-  nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
+  buildInputs = [flac fuse lame libid3tag libvorbis];
+  nativeBuildInputs = [autoreconfHook pkg-config pandoc];
 
   enableParallelBuilding = true;
 
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://khenriks.github.io/mp3fs/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

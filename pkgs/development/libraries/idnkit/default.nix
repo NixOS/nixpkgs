@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "idnkit";
   version = "2.3";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zp9yc84ff5s0g2i6v9yfyza2n2x4xh0kq7hjd3anhh0clbp3l16";
   };
 
-  buildInputs = [ libiconv ];
+  buildInputs = [libiconv];
 
   meta = with lib; {
     homepage = "https://jprs.co.jp/idn/index-e.html";

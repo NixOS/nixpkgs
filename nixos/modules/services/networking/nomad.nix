@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
-  cfg = config.services.nomad;
-  format = pkgs.formats.json { };
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.nomad;
+  format = pkgs.formats.json {};
+in {
   ##### interface
   options = {
     services.nomad = {
@@ -21,7 +24,7 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = [ ];
+        default = [];
         description = ''
           Extra packages to add to <envar>PATH</envar> for the Nomad agent process.
         '';
@@ -51,7 +54,7 @@ in
 
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
-        default = [ ];
+        default = [];
         description = ''
           Additional settings paths used to configure nomad. These can be files or directories.
         '';
@@ -62,7 +65,7 @@ in
 
       extraSettingsPlugins = mkOption {
         type = types.listOf (types.either types.package types.path);
-        default = [ ];
+        default = [];
         description = ''
           Additional plugins dir used to configure nomad.
         '';
@@ -71,10 +74,9 @@ in
         '';
       };
 
-
       settings = mkOption {
         type = format.type;
-        default = { };
+        default = {};
         description = ''
           Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
           for supported values.
@@ -118,30 +120,33 @@ in
 
     environment = {
       etc."nomad.json".source = format.generate "nomad.json" cfg.settings;
-      systemPackages = [ cfg.package ];
+      systemPackages = [cfg.package];
     };
 
     systemd.services.nomad = {
       description = "Nomad";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      restartTriggers = [ config.environment.etc."nomad.json".source ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"];
+      after = ["network-online.target"];
+      restartTriggers = [config.environment.etc."nomad.json".source];
 
-      path = cfg.extraPackages ++ (with pkgs; [
-        # Client mode requires at least the following:
-        coreutils
-        iproute2
-        iptables
-      ]);
+      path =
+        cfg.extraPackages
+        ++ (with pkgs; [
+          # Client mode requires at least the following:
+          coreutils
+          iproute2
+          iptables
+        ]);
 
       serviceConfig = mkMerge [
         {
           DynamicUser = cfg.dropPrivileges;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
-            concatMapStrings (path: " -plugin-dir=${path}/bin") cfg.extraSettingsPlugins;
+          ExecStart =
+            "${cfg.package}/bin/nomad agent -config=/etc/nomad.json"
+            + concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths
+            + concatMapStrings (path: " -plugin-dir=${path}/bin") cfg.extraSettingsPlugins;
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;

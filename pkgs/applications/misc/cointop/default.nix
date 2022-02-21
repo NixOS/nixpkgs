@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "cointop";
   version = "1.6.10";
@@ -13,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   meta = with lib; {
     description = "The fastest and most interactive terminal based UI application for tracking cryptocurrencies";
@@ -25,7 +28,7 @@ buildGoModule rec {
       The interface is inspired by htop and shortcut keys are inspired by vim.
     '';
     homepage = "https://cointop.sh";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     license = licenses.asl20;
   };
 }

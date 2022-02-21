@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, openssl, ncurses}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "imapproxy";
   version = "1.2.7";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j5fq755sxiz338ia93jrkiy64crv30g37pir5pxfys57q7d92nx";
   };
 
-  buildInputs = [ openssl ncurses ];
+  buildInputs = [openssl ncurses];
 
   patchPhase = ''
     sed -i -e 's/-o \(root\|bin\) -g \(sys\|bin\)//' Makefile.in

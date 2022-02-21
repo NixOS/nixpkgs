@@ -1,5 +1,8 @@
-{ buildGoPackage, lib, fetchFromGitHub }:
-
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "curl-unix-socket";
   version = "unstable-2015-04-10";

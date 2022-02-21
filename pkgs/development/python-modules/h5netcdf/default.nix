@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, h5py
-, pytestCheckHook
-, netcdf4
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  h5py,
+  pytestCheckHook,
+  netcdf4,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "h5netcdf";
   version = "0.8.1";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch{
+    (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/h5netcdf/h5netcdf/pull/82.patch";
-    sha256 = "0x9bq9jl4kvw152adkpcyqslhpi7miv80hrnpl2w2y798mmbs0s4";
+      sha256 = "0x9bq9jl4kvw152adkpcyqslhpi7miv80hrnpl2w2y798mmbs0s4";
     })
   ];
 
@@ -42,5 +42,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/shoyer/h5netcdf";
     license = lib.licenses.bsd3;
   };
-
 }

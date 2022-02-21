@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, robotframework }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  robotframework,
+}:
 buildPythonPackage rec {
   version = "2.1.0";
   pname = "robotstatuschecker";
@@ -12,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0hy1390j3l4kkfna9x9xax4y5mqaa3hdndv3fiyg9wr5f7sx3wnz";
   };
 
-  propagatedBuildInputs = [ robotframework ];
+  propagatedBuildInputs = [robotframework];
 
   checkPhase = ''
     ${python.interpreter} test/run.py
@@ -22,6 +27,6 @@ buildPythonPackage rec {
     description = "A tool for checking that Robot Framework test cases have expected statuses and log messages";
     homepage = "https://github.com/robotframework/statuschecker";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

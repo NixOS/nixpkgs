@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  stdenv,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "simplejson";
   version = "3.17.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [ "simplejson" ];
+  pythonImportsCheck = ["simplejson"];
 
   meta = with lib; {
     description = "Extensible JSON encoder/decoder for Python";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
       for unicode characters).
     '';
     homepage = "https://github.com/simplejson/simplejson";
-    license = with licenses; [ mit afl21 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit afl21];
+    maintainers = with maintainers; [fab];
   };
 }

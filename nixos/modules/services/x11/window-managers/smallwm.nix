@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.smallwm;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.smallwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.smallwm.enable = mkEnableOption "smallwm";
@@ -20,6 +21,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.smallwm ];
+    environment.systemPackages = [pkgs.smallwm];
   };
 }

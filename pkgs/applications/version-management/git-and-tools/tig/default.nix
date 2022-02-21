@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
-, readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  asciidoc,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  readline,
+  makeWrapper,
+  git,
+  libiconv,
+  autoreconfHook,
+  findXMLCatalogs,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tig";
   version = "2.5.5";
@@ -13,16 +26,17 @@ stdenv.mkDerivation rec {
     sha256 = "1yx63jfbaa5h0d3lfqlczs9l7j2rnhp5jpa8qcjn4z1n415ay2x5";
   };
 
-  nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
+  nativeBuildInputs = [makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config];
 
   autoreconfFlags = "-I tools -v";
 
-  buildInputs = [ ncurses readline git ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs =
+    [ncurses readline git]
+    ++ lib.optionals stdenv.isDarwin [libiconv];
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
-      rm contrib/config.make-*
+    rm contrib/config.make-*
   '';
 
   enableParallelBuilding = true;
@@ -49,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 ];
+    maintainers = with maintainers; [bjornfor domenkozar qknight globin ma27];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

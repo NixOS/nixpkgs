@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "nsh";
   version = "0.4.2";
@@ -19,8 +22,14 @@ rustPlatform.buildRustPackage rec {
     description = "A command-line shell like fish, but POSIX compatible";
     homepage = "https://github.com/nuta/nsh";
     changelog = "https://github.com/nuta/nsh/raw/v${version}/docs/changelog.md";
-    license = [ licenses.cc0 /* or */ licenses.mit ];
-    maintainers = [ maintainers.marsam ];
+    license = [
+      licenses.cc0
+      /*
+       or
+       */
+      licenses.mit
+    ];
+    maintainers = [maintainers.marsam];
   };
 
   passthru = {

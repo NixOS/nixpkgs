@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, ounit }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  qtest,
+  ounit,
+}:
 stdenv.mkDerivation rec {
   version = "0.5";
   pname = "ocaml${ocaml.version}-gen";
@@ -11,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "14b8vg914nb0yp1hgxzm29bg692m0gqncjj43b599s98s1cwl92h";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = lib.optionals doCheck [ qtest ounit ];
+  nativeBuildInputs = [ocaml findlib ocamlbuild];
+  buildInputs = lib.optionals doCheck [qtest ounit];
   strictDeps = true;
 
   configureFlags = lib.optional doCheck "--enable-tests";

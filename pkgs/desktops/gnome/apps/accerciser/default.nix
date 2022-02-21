@@ -1,20 +1,20 @@
-{ lib
-, fetchurl
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook
-, gobject-introspection
-, itstool
-, libxml2
-, python3
-, at-spi2-core
-, dbus
-, gettext
-, libwnck
-, adwaita-icon-theme
+{
+  lib,
+  fetchurl,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook,
+  gobject-introspection,
+  itstool,
+  libxml2,
+  python3,
+  at-spi2-core,
+  dbus,
+  gettext,
+  libwnck,
+  adwaita-icon-theme,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "accerciser";
   version = "3.38.0";

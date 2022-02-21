@@ -1,17 +1,12 @@
-{ configuration ? import ./lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
-, system ? builtins.currentSystem
-}:
-
-let
-
+{
+  configuration ? import ./lib/from-env.nix "NIXOS_CONFIG" <nixos-config>,
+  system ? builtins.currentSystem,
+}: let
   eval = import ./lib/eval-config.nix {
     inherit system;
-    modules = [ configuration ];
+    modules = [configuration];
   };
-
-in
-
-{
+in {
   inherit (eval) pkgs config options;
 
   system = eval.config.system.build.toplevel;

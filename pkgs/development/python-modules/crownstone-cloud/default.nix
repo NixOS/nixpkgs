@@ -1,13 +1,13 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, certifi
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  certifi,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "crownstone-cloud";
   version = "1.4.9";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for communicating with Crownstone Cloud and devices";
     homepage = "https://github.com/crownstone/crownstone-lib-python-cloud";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

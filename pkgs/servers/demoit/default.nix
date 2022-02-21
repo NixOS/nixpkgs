@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule {
   pname = "demoit";
   version = "unstable-2020-06-11";
@@ -14,12 +14,12 @@ buildGoModule {
     sha256 = "1jcjqr758d29h3y9ajvzhy1xmxfix5mwhylz6jwhy5nmk28bjzx9";
   };
   vendorSha256 = null;
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Live coding demos without Context Switching";
     homepage = "https://github.com/dgageot/demoit";
     license = licenses.asl20;
-    maintainers = [ maintainers.freezeboy ];
+    maintainers = [maintainers.freezeboy];
   };
 }

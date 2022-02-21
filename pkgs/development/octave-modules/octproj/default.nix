@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, proj # >= 6.3.0
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  proj
+  # >= 6.3.0
 }:
-
 buildOctavePackage rec {
   pname = "octproj";
   version = "2.0.1";
@@ -26,7 +27,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/octproj/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "GNU Octave bindings to PROJ library for cartographic projections and CRS transformations";
   };
 }

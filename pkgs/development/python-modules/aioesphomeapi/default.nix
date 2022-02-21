@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, noiseprotocol
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  noiseprotocol,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  zeroconf,
 }:
-
 buildPythonPackage rec {
   pname = "aioesphomeapi";
   version = "10.8.2";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab hexa ];
+    maintainers = with maintainers; [fab hexa];
   };
 }

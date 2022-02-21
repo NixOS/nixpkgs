@@ -1,5 +1,8 @@
-{ fetchurl, lib, stdenv }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "gsl";
   version = "2.7.1";
@@ -9,9 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3LD71DBIgyt1f/mUJpGo3XACbV2g/4VgHlJof23us0s=";
   };
 
-  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
-    MACOSX_DEPLOYMENT_TARGET=10.16
-  '' else null;
+  preConfigure =
+    if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin)
+    then
+      ''
+        MACOSX_DEPLOYMENT_TARGET=10.16
+      ''
+    else null;
 
   # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isx86_64 "-mno-fma";

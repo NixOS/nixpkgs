@@ -1,12 +1,12 @@
-{ fetchFromGitHub
-, lib
-, mkDerivation
-, qmake
-, qtbase
-, qtmultimedia
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  mkDerivation,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  stdenv,
 }:
-
 mkDerivation rec {
   pname = "mlv-app";
   version = "1.11";
@@ -18,7 +18,10 @@ mkDerivation rec {
     sha256 = "0s5sjdxi8a17ddvih4ara7mlb2xrc9xqx52jmhfaca6ng341gi4x";
   };
 
-  patches = if stdenv.isAarch64 then ./aarch64-flags.patch else null;
+  patches =
+    if stdenv.isAarch64
+    then ./aarch64-flags.patch
+    else null;
 
   installPhase = ''
     runHook preInstall
@@ -28,7 +31,7 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  qmakeFlags = [ "MLVApp.pro" ];
+  qmakeFlags = ["MLVApp.pro"];
 
   preConfigure = ''
     export HOME=$TMPDIR

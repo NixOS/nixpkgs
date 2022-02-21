@@ -1,5 +1,8 @@
-{ lib, buildPythonApplication, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+}:
 buildPythonApplication {
   pname = "protocol-unstable";
   version = "2019-03-28";
@@ -15,6 +18,6 @@ buildPythonApplication {
     description = "An ASCII Header Generator for Network Protocols";
     homepage = "https://github.com/luismartingarcia/protocol";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
   };
 }

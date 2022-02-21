@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, imagemagickBig
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  imagemagickBig,
 }:
-
 buildPythonPackage rec {
   pname = "Wand";
   version = "0.6.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ infinisil ];
+    license = [licenses.mit];
+    maintainers = with maintainers; [infinisil];
   };
 }

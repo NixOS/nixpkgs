@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "bvi";
   version = "1.4.1";
@@ -9,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0a0yl0dcyff31k3dr4dpgqmlwygp8iaslnr5gmb6814ylxf2ad9h";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   meta = with lib; {
     description = "Hex editor with vim style keybindings";
     homepage = "http://bvi.sourceforge.net/download.html";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = with platforms; linux ++ darwin;
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "elfx86exts";
   version = "0.4.3";
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
       perhaps PE-format ones as well. (It used to be more limited.)
     '';
     homepage = "https://github.com/pkgw/elfx86exts";
-    maintainers = with maintainers; [ rmcgibbo ];
-    license = with licenses; [ mit ];
+    maintainers = with maintainers; [rmcgibbo];
+    license = with licenses; [mit];
   };
 }

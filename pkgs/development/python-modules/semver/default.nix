@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "semver";
   version = "2.13.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
     homepage = "https://python-semver.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ np ];
+    maintainers = with maintainers; [np];
   };
 }

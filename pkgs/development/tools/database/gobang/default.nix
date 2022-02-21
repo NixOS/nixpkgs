@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, CoreFoundation
-, Security
-, SystemConfiguration
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  CoreFoundation,
+  Security,
+  SystemConfiguration,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "gobang";
   version = "0.1.0-alpha.5";
@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform TUI database management tool written in Rust";
     homepage = "https://github.com/tako8ki/gobang";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

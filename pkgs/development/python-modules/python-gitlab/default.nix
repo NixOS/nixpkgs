@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, argcomplete
-, requests
-, requests-toolbelt
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  argcomplete,
+  requests,
+  requests-toolbelt,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "python-gitlab";
   version = "3.1.1";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Interact with GitLab API";
     homepage = "https://github.com/python-gitlab/python-gitlab";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [nyanloutre];
   };
 }

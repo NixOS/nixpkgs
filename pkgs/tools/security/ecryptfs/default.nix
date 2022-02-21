@@ -1,6 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, util-linux, keyutils, nss, nspr, python2, pam, enablePython ? false
-, intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  perl,
+  util-linux,
+  keyutils,
+  nss,
+  nspr,
+  python2,
+  pam,
+  enablePython ? false,
+  intltool,
+  makeWrapper,
+  coreutils,
+  bash,
+  gettext,
+  cryptsetup,
+  lvm2,
+  rsync,
+  which,
+  lsof,
+}:
 stdenv.mkDerivation rec {
   pname = "ecryptfs";
   version = "111";
@@ -33,16 +54,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = lib.optionals (!enablePython) [ "--disable-pywrap" ];
+  configureFlags = lib.optionals (!enablePython) ["--disable-pywrap"];
 
-  nativeBuildInputs = [ pkg-config makeWrapper ]
-  # if python2 support is requested, it is needed at builtime as well as runtime.
-  ++ lib.optionals (enablePython) [ python2 ]
-  ;
-  buildInputs = [ perl nss nspr pam intltool ]
-  ++ lib.optionals (enablePython) [ python2 ]
-  ;
-  propagatedBuildInputs = [ coreutils gettext cryptsetup lvm2 rsync keyutils which ];
+  nativeBuildInputs =
+    [pkg-config makeWrapper]
+    # if python2 support is requested, it is needed at builtime as well as runtime.
+    ++ lib.optionals (enablePython) [python2];
+  buildInputs =
+    [perl nss nspr pam intltool]
+    ++ lib.optionals (enablePython) [python2];
+  propagatedBuildInputs = [coreutils gettext cryptsetup lvm2 rsync keyutils which];
 
   postInstall = ''
     FILES="$(grep -r '/bin/sh' $out/bin -l)"
@@ -60,8 +81,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Enterprise-class stacked cryptographic filesystem";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ obadz ];
-    platforms   = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [obadz];
+    platforms = platforms.linux;
   };
 }

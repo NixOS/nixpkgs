@@ -1,11 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, writeScript, fetchpatch, cmake, rocm-runtime, python3, rocm-cmake, busybox, gnugrep
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  writeScript,
+  fetchpatch,
+  cmake,
+  rocm-runtime,
+  python3,
+  rocm-cmake,
+  busybox,
+  gnugrep
   # rocminfo requires that the calling user have a password and be in
   # the video group. If we let rocm_agent_enumerator rely upon
   # rocminfo's output, then it, too, has those requirements. Instead,
   # we can specify the GPU targets for this system (e.g. "gfx803" for
   # Polaris) such that no system call is needed for downstream
   # compilers to determine the desired target.
-, defaultTargets ? []}:
+  ,
+  defaultTargets ? [],
+}:
 stdenv.mkDerivation rec {
   version = "4.5.2";
   pname = "rocminfo";
@@ -17,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ cmake rocm-cmake rocm-runtime ];
+  buildInputs = [cmake rocm-cmake rocm-runtime];
   cmakeFlags = [
     "-DROCM_DIR=${rocm-runtime}"
     "-DROCRTST_BLD_TYPE=Release"
@@ -28,13 +41,15 @@ stdenv.mkDerivation rec {
     sed 's,lsmod | grep ,${busybox}/bin/lsmod | ${gnugrep}/bin/grep ,' -i rocminfo.cc
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp rocminfo $out/bin
-    cp rocm_agent_enumerator $out/bin
-  '' + lib.optionalString (defaultTargets != []) ''
-    echo '${lib.concatStringsSep "\n" defaultTargets}' > $out/bin/target.lst
-  '';
+  installPhase =
+    ''
+      mkdir -p $out/bin
+      cp rocminfo $out/bin
+      cp rocm_agent_enumerator $out/bin
+    ''
+    + lib.optionalString (defaultTargets != []) ''
+      echo '${lib.concatStringsSep "\n" defaultTargets}' > $out/bin/target.lst
+    '';
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
@@ -47,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "ROCm Application for Reporting System Info";
     homepage = "https://github.com/RadeonOpenCompute/rocminfo";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
     platforms = platforms.linux;
   };
 }

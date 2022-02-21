@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, coverage
-, fetchFromGitHub
-, flask
-, pytestCheckHook
-, python-socketio
+{
+  lib,
+  buildPythonPackage,
+  coverage,
+  fetchFromGitHub,
+  flask,
+  pytestCheckHook,
+  python-socketio,
 }:
-
 buildPythonPackage rec {
   pname = "Flask-SocketIO";
   version = "5.0.1";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "flask_socketio" ];
+  pythonImportsCheck = ["flask_socketio"];
 
   meta = with lib; {
     description = "Socket.IO integration for Flask applications";
     homepage = "https://github.com/miguelgrinberg/Flask-SocketIO/";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

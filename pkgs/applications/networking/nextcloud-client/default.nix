@@ -1,24 +1,24 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, inotify-tools
-, libcloudproviders
-, libsecret
-, openssl
-, pcre
-, pkg-config
-, qtbase
-, qtkeychain
-, qttools
-, qtwebengine
-, qtwebsockets
-, qtquickcontrols2
-, qtgraphicaleffects
-, sqlite
-, inkscape
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  inotify-tools,
+  libcloudproviders,
+  libsecret,
+  openssl,
+  pcre,
+  pkg-config,
+  qtbase,
+  qtkeychain,
+  qttools,
+  qtwebengine,
+  qtwebsockets,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  sqlite,
+  inkscape,
 }:
-
 mkDerivation rec {
   pname = "nextcloud-client";
   version = "3.4.2";
@@ -59,7 +59,7 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libsecret]}"
     # See also: https://bugreports.qt.io/browse/QTBUG-85967
     "--set QML_DISABLE_DISK_CACHE 1"
   ];
@@ -73,7 +73,7 @@ mkDerivation rec {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [kranzes];
     platforms = platforms.linux;
   };
 }

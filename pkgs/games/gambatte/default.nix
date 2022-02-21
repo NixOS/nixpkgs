@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, scons, qt4, alsa-lib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  scons,
+  qt4,
+  alsa-lib,
+}:
 stdenv.mkDerivation {
   pname = "gambatte";
   version = "2020-03-14";
@@ -11,9 +17,9 @@ stdenv.mkDerivation {
     sha256 = "0cc6zcvxpvi5hgcssb1zy0fkj9nk7n0d2xm88a4v05kpm5zw7sh2";
   };
 
-  buildInputs = [ scons qt4 alsa-lib ];
+  buildInputs = [scons qt4 alsa-lib];
 
-  patches = [ ./fix-scons-paths.patch ];
+  patches = [./fix-scons-paths.patch];
 
   buildPhase = ''
     ./build_qt.sh
@@ -28,7 +34,7 @@ stdenv.mkDerivation {
     description = "Portable, open-source Game Boy Color emulator";
     homepage = "https://github.com/sinamas/gambatte";
     license = licenses.gpl2;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = [maintainers.dezgeg];
     platforms = platforms.linux;
   };
 }

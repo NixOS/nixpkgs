@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "microplane";
   version = "0.0.34";
@@ -14,7 +17,9 @@ buildGoModule rec {
   vendorSha256 = "sha256-PqSjSFTVrIsQ065blIxZ9H/ARku6BEcnjboH+0K0G14=";
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   postInstall = ''
@@ -25,6 +30,6 @@ buildGoModule rec {
     description = "A CLI tool to make git changes across many repos";
     homepage = "https://github.com/Clever/microplane";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dbirks ];
+    maintainers = with maintainers; [dbirks];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools-scm
-, vcver
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  setuptools-scm,
+  vcver,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "deepmerge";
   version = "1.0.1";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "deepmerge" ];
+  pythonImportsCheck = ["deepmerge"];
 
   meta = with lib; {
     description = "A toolset to deeply merge python dictionaries.";
     homepage = "http://deepmerge.readthedocs.io/en/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

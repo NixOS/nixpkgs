@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, sysctl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  sysctl,
 }:
-
 buildPythonPackage rec {
   pname = "py-cpuinfo";
   version = "8.0.0";
 
   src = fetchFromGitHub {
-     owner = "workhorsy";
-     repo = pname;
-     rev = "v${version}";
-     sha256 = "sha256-Mgzj1HTasUNHeHMVwV6d+TeyVqnBNUwCJ1EC3kfovf8=";
+    owner = "workhorsy";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-Mgzj1HTasUNHeHMVwV6d+TeyVqnBNUwCJ1EC3kfovf8=";
   };
 
   checkInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace "_run_and_get_stdout(['sysctl'" "_run_and_get_stdout(['${sysctl}/bin/sysctl'"
   '';
 
-  pythonImportsCheck = [ "cpuinfo" ];
+  pythonImportsCheck = ["cpuinfo"];
 
   meta = with lib; {
     description = "Get CPU info with pure Python";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/workhorsy/py-cpuinfo";
     changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

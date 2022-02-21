@@ -1,15 +1,15 @@
-{ base58
-, buildPythonPackage
-, fetchFromGitHub
-, lib
-, morphys
-, pytest-runner
-, pytestCheckHook
-, pythonOlder
-, six
-, varint
+{
+  base58,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  morphys,
+  pytest-runner,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  varint,
 }:
-
 buildPythonPackage rec {
   pname = "py-multihash";
   version = "2.0.1";
@@ -37,12 +37,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "multihash" ];
+  pythonImportsCheck = ["multihash"];
 
   meta = with lib; {
     description = "Self describing hashes - for future proofing";
     homepage = "https://github.com/multiformats/py-multihash";
     license = licenses.mit;
-    maintainers = with maintainers; [ rakesh4g ];
+    maintainers = with maintainers; [rakesh4g];
   };
 }

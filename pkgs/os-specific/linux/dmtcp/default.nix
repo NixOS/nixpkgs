@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, bash, perl, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  perl,
+  python2,
+}:
 # There are fixes for python3 compatibility on master
-
 stdenv.mkDerivation rec {
   pname = "dmtcp";
   version = "unstable-2021-03-01";
@@ -15,7 +20,7 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
 
-  patches = [ ./ld-linux-so-buffer-size.patch ];
+  patches = [./ld-linux-so-buffer-size.patch];
 
   postPatch = ''
     patchShebangs .

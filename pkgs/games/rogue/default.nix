@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, ncurses}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "rogue";
   version = "5.4.4";
@@ -13,13 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "18g81274d0f7sr04p7h7irz0d53j6kd9j1y3zbka1gcqq0gscdvx";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   meta = with lib; {
     homepage = "http://rogue.rogueforge.net/rogue-5-4/";
     description = "The final version of the original Rogue game developed for the UNIX operating system";
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [maintainers.eelco];
   };
 }

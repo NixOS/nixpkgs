@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, glibcLocales
-, importlib-resources
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  glibcLocales,
+  importlib-resources,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "netaddr";
   version = "0.8.0";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [importlib-resources];
 
-  checkInputs = [ glibcLocales pytestCheckHook ];
+  checkInputs = [glibcLocales pytestCheckHook];
 
   meta = with lib; {
     homepage = "https://netaddr.readthedocs.io/en/latest/";

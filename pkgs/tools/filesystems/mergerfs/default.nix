@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gettext, libtool, pandoc, which, attr, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  pkg-config,
+  gettext,
+  libtool,
+  pandoc,
+  which,
+  attr,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "mergerfs";
   version = "2.33.3";
@@ -12,18 +24,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    automake autoconf pkg-config gettext libtool pandoc which
+    automake
+    autoconf
+    pkg-config
+    gettext
+    libtool
+    pandoc
+    which
   ];
   prePatch = ''
     sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile
   '';
-  buildInputs = [ attr libiconv ];
+  buildInputs = [attr libiconv];
 
   preConfigure = ''
     echo "${version}" > VERSION
   '';
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "XATTR_AVAILABLE=1" "PREFIX=/" "SBINDIR=/bin" ];
+  makeFlags = ["DESTDIR=${placeholder "out"}" "XATTR_AVAILABLE=1" "PREFIX=/" "SBINDIR=/bin"];
   enableParallelBuilding = true;
 
   postFixup = ''
@@ -36,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/trapexit/mergerfs";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jfrankenau makefu ];
+    maintainers = with lib.maintainers; [jfrankenau makefu];
   };
 }

@@ -1,8 +1,19 @@
-{ lib, buildPythonApplication, fetchFromGitHub, bash, cmake, flex
-, libclang, llvm, unifdef
-, chardet, pebble, psutil, pytestCheckHook, pytest-flake8
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  flex,
+  libclang,
+  llvm,
+  unifdef,
+  chardet,
+  pebble,
+  psutil,
+  pytestCheckHook,
+  pytest-flake8,
 }:
-
 buildPythonApplication rec {
   pname = "cvise";
   version = "2.4.0";
@@ -19,10 +30,10 @@ buildPythonApplication rec {
     ./unifdef.patch
   ];
 
-  nativeBuildInputs = [ cmake flex llvm.dev ];
-  buildInputs = [ bash libclang llvm llvm.dev unifdef ];
-  propagatedBuildInputs = [ chardet pebble psutil ];
-  checkInputs = [ pytestCheckHook pytest-flake8 unifdef ];
+  nativeBuildInputs = [cmake flex llvm.dev];
+  buildInputs = [bash libclang llvm llvm.dev unifdef];
+  propagatedBuildInputs = [chardet pebble psutil];
+  checkInputs = [pytestCheckHook pytest-flake8 unifdef];
 
   # 'cvise --command=...' generates a script with hardcoded shebang.
   postPatch = ''
@@ -46,7 +57,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/marxin/cvise";
     description = "Super-parallel Python port of C-Reduce";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
 }

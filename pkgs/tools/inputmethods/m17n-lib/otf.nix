@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, autoreconfHook, libXaw, freetype }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  autoreconfHook,
+  libXaw,
+  freetype,
+}:
 stdenv.mkDerivation rec {
   pname = "libotf";
   version = "0.9.16";
@@ -29,11 +37,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
 
-  buildInputs = [ libXaw freetype ];
+  buildInputs = [libXaw freetype];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   postInstall = ''
     mkdir -p $dev/bin
@@ -47,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "Multilingual text processing library (libotf)";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bendlas ];
+    maintainers = with lib.maintainers; [bendlas];
   };
 }

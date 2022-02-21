@@ -1,5 +1,10 @@
-{ fetchurl, stdenv, texinfo, revision, sha256 }:
-
+{
+  fetchurl,
+  stdenv,
+  texinfo,
+  revision,
+  sha256,
+}:
 stdenv.mkDerivation rec {
   name = "r${toString revision}rs";
   src = fetchurl {
@@ -7,7 +12,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ texinfo ];
+  buildInputs = [texinfo];
 
   # Tell the builder about the name of the report.
   reportName = name;

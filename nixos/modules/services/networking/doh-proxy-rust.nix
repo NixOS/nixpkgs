@@ -1,34 +1,31 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.doh-proxy-rust;
-
 in {
-
   options.services.doh-proxy-rust = {
-
     enable = mkEnableOption "doh-proxy-rust";
 
     flags = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "--server-address=9.9.9.9:53" ];
+      example = ["--server-address=9.9.9.9:53"];
       description = ''
         A list of command-line flags to pass to doh-proxy. For details on the
         available options, see <link xlink:href="https://github.com/jedisct1/doh-server#usage"/>.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
     systemd.services.doh-proxy-rust = {
       description = "doh-proxy-rust";
-      after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target" "nss-lookup.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = "${pkgs.doh-proxy-rust}/bin/doh-proxy ${escapeShellArgs cfg.flags}";
         Restart = "always";
@@ -50,11 +47,10 @@ in {
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        SystemCallFilter = ["@system-service" "~@privileged @resources"];
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ stephank ];
-
+  meta.maintainers = with maintainers; [stephank];
 }

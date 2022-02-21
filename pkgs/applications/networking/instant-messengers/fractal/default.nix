@@ -1,26 +1,27 @@
-{ lib, stdenv
-, fetchFromGitLab
-, nix-update-script
-, meson
-, ninja
-, gettext
-, python3
-, rustPlatform
-, pkg-config
-, gtksourceview4
-, glib
-, libhandy_0
-, gtk3
-, dbus
-, openssl
-, sqlite
-, gst_all_1
-, cairo
-, gdk-pixbuf
-, gspell
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  nix-update-script,
+  meson,
+  ninja,
+  gettext,
+  python3,
+  rustPlatform,
+  pkg-config,
+  gtksourceview4,
+  glib,
+  libhandy_0,
+  gtk3,
+  dbus,
+  openssl,
+  sqlite,
+  gst_all_1,
+  cairo,
+  gdk-pixbuf,
+  gspell,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fractal";
   version = "4.4.0";
@@ -88,6 +89,6 @@ stdenv.mkDerivation rec {
     description = "Matrix group messaging app";
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
-    maintainers = teams.gnome.members ++ (with maintainers; [ dtzWill ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [dtzWill]);
   };
 }

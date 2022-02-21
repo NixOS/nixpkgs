@@ -1,5 +1,14 @@
-{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config, coreutils, mbedtls }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  qmake,
+  libusb1,
+  hidapi,
+  pkg-config,
+  coreutils,
+  mbedtls,
+}:
 mkDerivation rec {
   pname = "openrgb";
   version = "0.7";
@@ -11,8 +20,8 @@ mkDerivation rec {
     sha256 = "0xhfaz0b74nfnh7il2cz5c0338xlzay00g6hc2h3lsncarj8d5n7";
   };
 
-  nativeBuildInputs = [ qmake pkg-config ];
-  buildInputs = [ libusb1 hidapi mbedtls ];
+  nativeBuildInputs = [qmake pkg-config];
+  buildInputs = [libusb1 hidapi mbedtls];
 
   installPhase = ''
     runHook preInstall
@@ -40,7 +49,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Open source RGB lighting control";
     homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

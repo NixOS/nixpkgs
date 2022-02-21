@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkgs
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkgs,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "gruut-ipa";
   version = "0.12.0";

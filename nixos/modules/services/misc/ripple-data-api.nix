@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.rippleDataApi;
 
   deployment_env_config = builtins.toJSON {
@@ -31,7 +33,6 @@ let
       protocol = "http";
     };
   };
-
 in {
   options = {
     services.rippleDataApi = {
@@ -136,8 +137,8 @@ in {
     services.redis.enable = mkDefault true;
 
     systemd.services.ripple-data-api = {
-      after = [ "couchdb.service" "redis.service" "ripple-data-api-importer.service" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["couchdb.service" "redis.service" "ripple-data-api-importer.service"];
+      wantedBy = ["multi-user.target"];
 
       environment = {
         NODE_ENV = "production";
@@ -153,9 +154,9 @@ in {
     };
 
     systemd.services.ripple-data-importer = {
-      after = [ "couchdb.service" ];
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.curl ];
+      after = ["couchdb.service"];
+      wantedBy = ["multi-user.target"];
+      path = [pkgs.curl];
 
       environment = {
         NODE_ENV = "production";
@@ -166,10 +167,9 @@ in {
 
       serviceConfig = let
         importMode =
-          if cfg.minLedger != null && cfg.maxLedger != null then
-            "${toString cfg.minLedger} ${toString cfg.maxLedger}"
-          else
-            cfg.importMode;
+          if cfg.minLedger != null && cfg.maxLedger != null
+          then "${toString cfg.minLedger} ${toString cfg.maxLedger}"
+          else cfg.importMode;
       in {
         ExecStart = "${pkgs.ripple-data-api}/bin/importer ${importMode} debug";
         Restart = "always";
@@ -185,11 +185,11 @@ in {
       ];
     };
 
-    users.users.ripple-data-api =
-      { description = "Ripple data api user";
-        isSystemUser = true;
-        group = "ripple-data-api";
-      };
+    users.users.ripple-data-api = {
+      description = "Ripple data api user";
+      isSystemUser = true;
+      group = "ripple-data-api";
+    };
     users.groups.ripple-data-api = {};
   };
 }

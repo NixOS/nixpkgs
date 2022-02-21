@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, dotmap
-, fetchFromGitHub
-, pexpect
-, protobuf
-, pygatt
-, pypubsub
-, pyqrcode
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tabulate
-, pytap2
-, timeago
+{
+  lib,
+  buildPythonPackage,
+  dotmap,
+  fetchFromGitHub,
+  pexpect,
+  protobuf,
+  pygatt,
+  pypubsub,
+  pyqrcode,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tabulate,
+  pytap2,
+  timeago,
 }:
-
 buildPythonPackage rec {
   pname = "meshtastic";
   version = "1.2.85";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://meshtastic.github.io/Meshtastic-python/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

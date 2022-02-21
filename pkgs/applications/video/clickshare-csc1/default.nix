@@ -1,28 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-lib
-, autoPatchelfHook
-, binutils-unwrapped
-, gnutar
-, libav_0_8
-, libnotify
-, libresample
-, libusb1
-, qt4
-, rpmextract
-, unzip
-, xorg
-, usersGroup ? "clickshare"  # for udev access rules
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  autoPatchelfHook,
+  binutils-unwrapped,
+  gnutar,
+  libav_0_8,
+  libnotify,
+  libresample,
+  libusb1,
+  qt4,
+  rpmextract,
+  unzip,
+  xorg,
+  usersGroup ? "clickshare"
+  # for udev access rules
 }:
-
-
 # This fetches the latest firmware version that
 # contains a linux-compatible client binary.
 # Barco no longer supports linux, so updates are unlikely:
 # https://www.barco.com/de/support/clickshare-csc-1/knowledge-base/KB1191
-
-
 stdenv.mkDerivation rec {
   pname = "clickshare-csc1";
   version = "01.07.00.033";
@@ -59,24 +57,24 @@ stdenv.mkDerivation rec {
   # If the filename contains version numbers,
   # we use a wildcard and check that there
   # is actually only one file matching.
-  postUnpack =
-    let
-      rpmArch =
-        if stdenv.hostPlatform.isx86_32 then "i386" else
-        if stdenv.hostPlatform.isx86_64 then "x86_64" else
-        throw "unsupported system: ${stdenv.hostPlatform.system}";
-    in
-      ''
-        ls clickshare_baseunit_*.*_all.signed_release.ipk | wc --lines | xargs test 1 =
-        tar --verbose --extract --one-top-level=dir1 < clickshare_baseunit_*.*_all.signed_release.ipk
-        mkdir dir2
-        ( cd dir2 ; ar xv ../dir1/firmware.ipk )
-        tar --verbose --gzip --extract --one-top-level=dir3 --exclude='dev/*' < dir2/data.tar.gz
-        ls dir3/clickshare/clickshare-*-*.${rpmArch}.rpm | wc --lines | xargs test 1 =
-        mkdir dir4
-        cd dir4
-        rpmextract ../dir3/clickshare/clickshare-*-*.${rpmArch}.rpm
-      '';
+  postUnpack = let
+    rpmArch =
+      if stdenv.hostPlatform.isx86_32
+      then "i386"
+      else if stdenv.hostPlatform.isx86_64
+      then "x86_64"
+      else throw "unsupported system: ${stdenv.hostPlatform.system}";
+  in ''
+    ls clickshare_baseunit_*.*_all.signed_release.ipk | wc --lines | xargs test 1 =
+    tar --verbose --extract --one-top-level=dir1 < clickshare_baseunit_*.*_all.signed_release.ipk
+    mkdir dir2
+    ( cd dir2 ; ar xv ../dir1/firmware.ipk )
+    tar --verbose --gzip --extract --one-top-level=dir3 --exclude='dev/*' < dir2/data.tar.gz
+    ls dir3/clickshare/clickshare-*-*.${rpmArch}.rpm | wc --lines | xargs test 1 =
+    mkdir dir4
+    cd dir4
+    rpmextract ../dir3/clickshare/clickshare-*-*.${rpmArch}.rpm
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -108,9 +106,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.barco.com/de/support/clickshare-csc-1/drivers";
     downloadPage = "https://www.barco.com/de/Support/software/R33050020";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = ["i686-linux" "x86_64-linux"];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.yarny ];
+    maintainers = [lib.maintainers.yarny];
     description = "Linux driver/client for Barco ClickShare CSC-1";
     longDescription = ''
       Barco ClickShare is a wireless presentation system

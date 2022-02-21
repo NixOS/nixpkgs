@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "newrelic-sysmond";
   version = "2.3.0.132";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://newrelic.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lnl7 ];
+    maintainers = with maintainers; [lnl7];
   };
 }

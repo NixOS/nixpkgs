@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pandocfilters
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pandocfilters,
 }:
-
 buildPythonPackage rec {
   pname = "pandoc-attributes";
   version = "0.1.7";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aaren/pandoc-attributes";
     description = "An Attribute class to be used with pandocfilters";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ vcanadi ];
+    maintainers = with lib.maintainers; [vcanadi];
   };
 }

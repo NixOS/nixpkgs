@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
   version = "1.13.2";
@@ -15,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   RUSTC_BOOTSTRAP = 1;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [CoreServices libiconv];
 
   # all of these rely on connecting to www.example.com:80
   checkFlags = [
@@ -32,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
     description = "A Rust port of shadowsocks";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

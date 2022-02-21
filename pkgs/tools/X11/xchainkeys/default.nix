@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libX11 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "xchainkeys";
   version = "0.11";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rpqs7h5krral08vqxwb0imy33z17v5llvrg5hy8hkl2ap7ya0mn";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [libX11];
 
   meta = {
     homepage = "http://henning-bekel.de/xchainkeys/";

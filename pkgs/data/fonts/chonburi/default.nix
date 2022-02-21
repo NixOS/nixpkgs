@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "chonburi";
   version = "unstable-2021-09-15";
@@ -36,6 +39,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.toastal ];
+    maintainers = [maintainers.toastal];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, CoreFoundation, CoreServices }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  CoreFoundation,
+  CoreServices,
+}:
 buildPythonPackage rec {
   pname = "MacFSEvents";
   version = "0.8.1";
@@ -9,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1324b66b356051de662ba87d84f73ada062acd42b047ed1246e60a449f833e10";
   };
 
-  buildInputs = [ CoreFoundation CoreServices ];
+  buildInputs = [CoreFoundation CoreServices];
 
   # Some tests fail under nix build directory
   doCheck = false;
@@ -18,7 +23,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/malthe/macfsevents";
     description = "Thread-based interface to file system observation primitives";
     license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     platforms = platforms.darwin;
   };
 }

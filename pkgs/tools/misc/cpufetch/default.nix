@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cpufetch";
   version = "1.01";
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/Dr-Noob/cpufetch";
     changelog = "https://github.com/Dr-Noob/cpufetch/releases/tag/v${version}";
-    maintainers = with maintainers; [ devhell ];
+    maintainers = with maintainers; [devhell];
   };
 }

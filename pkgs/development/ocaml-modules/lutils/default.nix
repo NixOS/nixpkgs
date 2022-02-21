@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl, num }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  num,
+}:
 buildDunePackage rec {
   pname = "lutils";
   version = "1.51.2";

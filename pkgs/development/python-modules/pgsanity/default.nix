@@ -1,9 +1,10 @@
-{ lib
-, python
-, fetchPypi
-, buildPythonPackage
-, postgresql }:
-
+{
+  lib,
+  python,
+  fetchPypi,
+  buildPythonPackage,
+  postgresql,
+}:
 buildPythonPackage rec {
   pname = "pgsanity";
   version = "0.2.9";
@@ -17,8 +18,8 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -s test
   '';
 
-  checkInputs = [ postgresql ];
-  propagatedBuildInputs = [ postgresql ];
+  checkInputs = [postgresql];
+  propagatedBuildInputs = [postgresql];
 
   meta = with lib; {
     homepage = "https://github.com/markdrago/pgsanity";
@@ -31,6 +32,6 @@ buildPythonPackage rec {
       let ecpg report on the syntax errors of the SQL.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ nalbyuites ];
+    maintainers = with maintainers; [nalbyuites];
   };
 }

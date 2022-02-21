@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, openssl, trousers, autoreconfHook, libtool, bison, flex }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  trousers,
+  autoreconfHook,
+  libtool,
+  bison,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "opencryptoki";
   version = "3.8.2";
@@ -11,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rf7cmibmx636vzv7p54g212478a8wim2lfjf2861hfd0m96nv4l";
   };
 
-  nativeBuildInputs = [ autoreconfHook libtool bison flex ];
-  buildInputs = [ openssl trousers ];
+  nativeBuildInputs = [autoreconfHook libtool bison flex];
+  buildInputs = [openssl trousers];
 
   postPatch = ''
     substituteInPlace configure.ac \
@@ -33,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "PKCS#11 implementation for Linux";
-    homepage    = "https://github.com/opencryptoki/opencryptoki";
-    license     = licenses.cpl10;
-    maintainers = [ maintainers.tstrobel ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/opencryptoki/opencryptoki";
+    license = licenses.cpl10;
+    maintainers = [maintainers.tstrobel];
+    platforms = platforms.unix;
   };
 }

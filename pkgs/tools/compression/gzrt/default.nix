@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "gzrt";
   version = "0.8";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vhzazj47xfpbfhzkwalz27cc0n5gazddmj3kynhk0yxv99xrdxh";
   };
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.urbanophile.com/arenn/hacking/gzrt/";
     description = "The gzip Recovery Toolkit";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

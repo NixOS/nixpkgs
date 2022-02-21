@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "liblscp";
   version = "0.9.4";
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8+3qHgIv32wfNHHggXID1W8M7pTqji4bHNGob3DTkho=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  nativeBuildInputs = [autoconf automake libtool pkg-config];
 
   preConfigure = "make -f Makefile.git";
 
@@ -19,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.linuxsampler.org";
     description = "LinuxSampler Control Protocol (LSCP) wrapper library";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ipfs-cluster";
   version = "0.14.4";
@@ -18,6 +21,6 @@ buildGoModule rec {
     homepage = "https://cluster.ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Luflosi jglukasik ];
+    maintainers = with maintainers; [Luflosi jglukasik];
   };
 }

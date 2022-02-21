@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "cpulimit";
   version = "2.7";
@@ -9,13 +12,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HeBApPikDf6MegJf6YB1ZzRo+8P8zMvCMbx0AvYuxKA=";
   };
 
-  buildFlags = with stdenv; [ (
-    if isDarwin then "osx"
-    else if isFreeBSD then "freebsd"
-    else "cpulimit"
-  ) ];
+  buildFlags = with stdenv; [
+    (
+      if isDarwin
+      then "osx"
+      else if isFreeBSD
+      then "freebsd"
+      else "cpulimit"
+    )
+  ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "http://limitcpu.sourceforge.net/";

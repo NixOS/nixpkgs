@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "dgraph";
   version = "20.07.3";
@@ -15,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   # see licensing
   buildPhase = ''
@@ -34,7 +38,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://dgraph.io/";
     description = "Fast, Distributed Graph DB";
-    maintainers = with maintainers; [ sigma ];
+    maintainers = with maintainers; [sigma];
     # Apache 2.0 because we use only build "oss"
     license = licenses.asl20;
     platforms = platforms.unix;

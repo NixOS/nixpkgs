@@ -1,5 +1,8 @@
-{ lib, python3, fetchFromGitHub }:
-
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
 python3.pkgs.buildPythonApplication {
   pname = "loxodo";
   version = "unstable-2021-02-08";
@@ -11,7 +14,7 @@ python3.pkgs.buildPythonApplication {
     sha256 = "1cips4pvrqga8q1ibs23vjrf8dwan860x8jvjmc52h6qvvvv60yl";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ six wxPython_4_0 ];
+  propagatedBuildInputs = with python3.pkgs; [six wxPython_4_0];
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo
@@ -27,13 +30,13 @@ python3.pkgs.buildPythonApplication {
     EOF
   '';
 
-  doCheck = false;  # Tests are interactive.
+  doCheck = false; # Tests are interactive.
 
   meta = with lib; {
     description = "A Password Safe V3 compatible password vault";
     homepage = "https://www.christoph-sommer.de/loxodo/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

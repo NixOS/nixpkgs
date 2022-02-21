@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "git-lfs";
   version = "1.5.6";
@@ -14,7 +17,7 @@ buildGoPackage rec {
     sha256 = "0wddry1lqjccf4522fvhx6grx8h57xsz17lkaf5aybnrgw677w3d";
   };
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   preBuild = ''
     pushd go/src/github.com/git-lfs/git-lfs
@@ -24,8 +27,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Git extension for versioning large files";
-    homepage    = "https://git-lfs.github.com/";
-    license     = [ licenses.mit ];
-    maintainers = [ maintainers.twey ];
+    homepage = "https://git-lfs.github.com/";
+    license = [licenses.mit];
+    maintainers = [maintainers.twey];
   };
 }

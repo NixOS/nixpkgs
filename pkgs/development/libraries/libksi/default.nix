@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, curl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  openssl,
+  curl,
+}:
 stdenv.mkDerivation rec {
   pname = "libksi";
   version = "3.20.3025";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cagysr8j92r6g7f0mwrlkpn9xz9ncz2v3jymh47j3ljxmfbagpz";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl curl ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [openssl curl];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"

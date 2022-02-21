@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "anyascii";
   version = "0.3.0";

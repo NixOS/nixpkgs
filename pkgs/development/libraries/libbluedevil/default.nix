@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, qt4 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  qt4,
+}:
 stdenv.mkDerivation rec {
   pname = "libbluedevil";
   # bluedevil must have the same major version (x.y) as libbluedevil!
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0p4f0brhcz9gfxfd6114fa5x6swfdmgzv350xwncdr0s1qnamk8c";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [qt4];
 
   meta = {
     platforms = lib.platforms.unix;

@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, iso4217
-, pythonOlder
-, pytz
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  iso4217,
+  pythonOlder,
+  pytz,
 }:
-
 buildPythonPackage rec {
   pname = "pyefergy";
   version = "0.1.5";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pyefergy" ];
+  pythonImportsCheck = ["pyefergy"];
 
   meta = with lib; {
     description = "Python API library for Efergy energy meters";
     homepage = "https://github.com/tkdrob/pyefergy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

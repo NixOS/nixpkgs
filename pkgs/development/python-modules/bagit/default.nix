@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gettext
-, mock
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gettext,
+  mock,
+  pytestCheckHook,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "bagit";
   version = "1.8.1";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-t01P7MPWgOrktuW2zF0TIzt6u/jkLmrpD2OnqawhJaI=";
   };
 
-  nativeBuildInputs = [ gettext setuptools-scm ];
+  nativeBuildInputs = [gettext setuptools-scm];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -26,13 +26,13 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ];
-  pytestFlagsArray = [ "test.py" ];
-  pythonImportsCheck = [ "bagit" ];
+  pytestFlagsArray = ["test.py"];
+  pythonImportsCheck = ["bagit"];
 
   meta = with lib; {
     description = "Python library and command line utility for working with BagIt style packages";
     homepage = "https://libraryofcongress.github.io/bagit-python/";
-    license = with licenses; [ publicDomain ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with licenses; [publicDomain];
+    maintainers = with maintainers; [veprbl];
   };
 }

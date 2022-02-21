@@ -1,38 +1,38 @@
-{ lib
-, stdenv
-, desktop-file-utils
-, fetchFromGitHub
-, calf
-, fftwFloat
-, fmt
-, glib
-, gtk4
-, itstool
-, libadwaita
-, libbs2b
-, libebur128
-, libsamplerate
-, libsigcxx30
-, libsndfile
-, lilv
-, lsp-plugins
-, lv2
-, mda_lv2
-, meson
-, ninja
-, nlohmann_json
-, pipewire
-, pkg-config
-, python3
-, rnnoise
-, rubberband
-, speexdsp
-, tbb
-, wrapGAppsHook4
-, zam-plugins
-, zita-convolver
+{
+  lib,
+  stdenv,
+  desktop-file-utils,
+  fetchFromGitHub,
+  calf,
+  fftwFloat,
+  fmt,
+  glib,
+  gtk4,
+  itstool,
+  libadwaita,
+  libbs2b,
+  libebur128,
+  libsamplerate,
+  libsigcxx30,
+  libsndfile,
+  lilv,
+  lsp-plugins,
+  lv2,
+  mda_lv2,
+  meson,
+  ninja,
+  nlohmann_json,
+  pipewire,
+  pkg-config,
+  python3,
+  rnnoise,
+  rubberband,
+  speexdsp,
+  tbb,
+  wrapGAppsHook4,
+  zam-plugins,
+  zita-convolver,
 }:
-
 stdenv.mkDerivation rec {
   pname = "easyeffects";
   version = "6.2.3";
@@ -81,24 +81,22 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  preFixup =
-    let
-      lv2Plugins = [
-        calf # compressor exciter, bass enhancer and others
-        lsp-plugins # delay, limiter, multiband compressor
-        mda_lv2 # loudness
-        zam-plugins # maximizer
-      ];
-      ladspaPlugins = [
-        rubberband # pitch shifting
-      ];
-    in
-    ''
-      gappsWrapperArgs+=(
-        --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
-        --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
-      )
-    '';
+  preFixup = let
+    lv2Plugins = [
+      calf # compressor exciter, bass enhancer and others
+      lsp-plugins # delay, limiter, multiband compressor
+      mda_lv2 # loudness
+      zam-plugins # maximizer
+    ];
+    ladspaPlugins = [
+      rubberband # pitch shifting
+    ];
+  in ''
+    gappsWrapperArgs+=(
+      --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
+      --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
+    )
+  '';
 
   separateDebugInfo = true;
 
@@ -106,8 +104,8 @@ stdenv.mkDerivation rec {
     description = "Audio effects for PipeWire applications.";
     homepage = "https://github.com/wwmm/easyeffects";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = ["aarch64-linux"];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "ssh-audit";
   version = "2.5.0";
@@ -20,6 +23,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/jtesta/ssh-audit";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ tv SuperSandro2000 ];
+    maintainers = with maintainers; [tv SuperSandro2000];
   };
 }

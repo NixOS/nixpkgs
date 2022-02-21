@@ -1,13 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "rancher-cli";
   version = "2.6.0";
 
   src = fetchFromGitHub {
-    owner  = "rancher";
-    repo   = "cli";
-    rev    = "v${version}";
+    owner = "rancher";
+    repo = "cli";
+    rev = "v${version}";
     sha256 = "sha256-RfhcTo10nkHmKGwmS8WdjBioZhDIGSQ9vPPOv3Wg0Y4=";
   };
 
@@ -36,6 +39,6 @@ buildGoModule rec {
     description = "The Rancher Command Line Interface (CLI) is a unified tool for interacting with your Rancher Server";
     homepage = "https://github.com/rancher/cli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    maintainers = with maintainers; [bryanasdev000];
   };
 }

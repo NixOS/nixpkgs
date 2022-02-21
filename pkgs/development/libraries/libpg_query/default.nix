@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, which }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "libpg_query";
   version = "13-2.1.0";
@@ -11,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DpvPmBvpx5pWDlx6T3Kp82ALi6FjOO549Exd8tWXDIk=";
   };
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [which];
 
-  makeFlags = [ "build" ];
+  makeFlags = ["build"];
 
   installPhase = ''
     install -Dm644 -t $out/lib libpg_query.a
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/pganalyze/libpg_query/raw/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     platforms = platforms.x86_64;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

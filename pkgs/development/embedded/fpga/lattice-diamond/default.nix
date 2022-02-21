@@ -1,11 +1,23 @@
-{ lib, stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib,
-    freetype, fontconfig, xorg, libusb-compat-0_1 }:
-
+{
+  lib,
+  stdenv,
+  rpmextract,
+  patchelf,
+  makeWrapper,
+  file,
+  requireFile,
+  glib,
+  zlib,
+  freetype,
+  fontconfig,
+  xorg,
+  libusb-compat-0_1,
+}:
 stdenv.mkDerivation {
   pname = "diamond";
   version = "3.10";
 
-  nativeBuildInputs = [ rpmextract patchelf makeWrapper file ];
+  nativeBuildInputs = [rpmextract patchelf makeWrapper file];
 
   src = requireFile {
     name = "diamond_3_10-base_x64-111-2-x86_64-linux.rpm";
@@ -97,8 +109,16 @@ stdenv.mkDerivation {
   '';
 
   libPath = lib.makeLibraryPath [
-    glib zlib freetype fontconfig
-    xorg.libSM xorg.libICE xorg.libXrender xorg.libXext xorg.libX11 xorg.libXt
+    glib
+    zlib
+    freetype
+    fontconfig
+    xorg.libSM
+    xorg.libICE
+    xorg.libXrender
+    xorg.libXext
+    xorg.libX11
+    xorg.libXt
     libusb-compat-0_1
   ];
 
@@ -111,7 +131,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://www.latticesemi.com/latticediamond";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ q3k ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [q3k];
+    platforms = ["x86_64-linux"];
   };
 }

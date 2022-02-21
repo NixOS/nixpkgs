@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, desktop-file-utils
-, nix-update-script
-, elementary-icon-theme
-, fetchFromGitHub
-, flatpak
-, gettext
-, glib
-, granite
-, gtk3
-, libgee
-, libhandy
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, libxml2
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  desktop-file-utils,
+  nix-update-script,
+  elementary-icon-theme,
+  fetchFromGitHub,
+  flatpak,
+  gettext,
+  glib,
+  granite,
+  gtk3,
+  libgee,
+  libhandy,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  libxml2,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sideload";
   version = "6.0.2";

@@ -1,6 +1,4 @@
-{ fetchzip }:
-
-rec {
+{fetchzip}: rec {
   pname = "irrlicht";
   version = "1.8.4";
 

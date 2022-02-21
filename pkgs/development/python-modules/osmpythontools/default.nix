@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, geojson
-, lxml
-, matplotlib
-, numpy
-, pandas
-, ujson
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  geojson,
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  ujson,
+  xarray,
 }:
-
 buildPythonPackage rec {
   pname = "osmpythontools";
   version = "0.3.3";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mocnik-science/osm-python-tools";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ das-g ];
+    maintainers = with maintainers; [das-g];
   };
 }

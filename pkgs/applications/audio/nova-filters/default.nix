@@ -1,5 +1,12 @@
-{lib, stdenv, fetchurl, sconsPackages, boost, ladspaH, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  sconsPackages,
+  boost,
+  ladspaH,
+  pkg-config,
+}:
 stdenv.mkDerivation {
   version = "0.2-2";
   pname = "nova-filters";
@@ -9,8 +16,8 @@ stdenv.mkDerivation {
     sha256 = "16064vvl2w5lz4xi3lyjk4xx7fphwsxc14ajykvndiz170q32s6i";
   };
 
-  nativeBuildInputs = [ pkg-config sconsPackages.scons_3_0_1 ];
-  buildInputs = [ boost ladspaH ];
+  nativeBuildInputs = [pkg-config sconsPackages.scons_3_0_1];
+  buildInputs = [boost ladspaH];
 
   patchPhase = ''
     # remove TERM:
@@ -25,7 +32,7 @@ stdenv.mkDerivation {
     description = "LADSPA plugins based on filters of nova";
     homepage = "http://klingt.org/~tim/nova-filters/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
   };
 }

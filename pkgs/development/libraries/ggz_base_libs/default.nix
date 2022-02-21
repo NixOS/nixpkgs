@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, intltool, openssl, expat, libgcrypt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  openssl,
+  expat,
+  libgcrypt,
+}:
 stdenv.mkDerivation rec {
   version = "0.99.5";
   baseName = "ggz-base-libs";
@@ -10,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cw1vg0fbj36zyggnzidx9cbjwfc1yr4zqmsipxnvns7xa2awbdk";
   };
 
-  buildInputs = [ intltool openssl expat libgcrypt ];
+  buildInputs = [intltool openssl expat libgcrypt];
 
   patchPhase = ''
     substituteInPlace configure \
@@ -24,8 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GGZ Gaming zone libraries";
-    maintainers = with maintainers;
-    [
+    maintainers = with maintainers; [
       raskin
     ];
     platforms = platforms.linux;

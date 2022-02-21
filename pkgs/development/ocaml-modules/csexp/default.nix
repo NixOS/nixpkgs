@@ -1,5 +1,9 @@
-{ lib, fetchurl, buildDunePackage, result }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  result,
+}:
 buildDunePackage rec {
   pname = "csexp";
   version = "1.5.1";
@@ -20,6 +24,6 @@ buildDunePackage rec {
     homepage = "https://github.com/ocaml-dune/csexp/";
     description = "Minimal support for Canonical S-expressions";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [marsam];
   };
 }

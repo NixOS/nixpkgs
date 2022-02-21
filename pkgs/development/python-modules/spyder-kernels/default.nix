@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
-  jupyter-client, pyzmq }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cloudpickle,
+  ipykernel,
+  wurlitzer,
+  jupyter-client,
+  pyzmq,
+}:
 buildPythonPackage rec {
   pname = "spyder-kernels";
   version = "2.2.1";
@@ -27,6 +34,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/spyder-ide/spyder-kernels/releases";
     changelog = "https://github.com/spyder-ide/spyder-kernels/blob/master/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

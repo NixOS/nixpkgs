@@ -1,14 +1,14 @@
-{ lib
-, aio-georss-client
-, aresponses
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aio-georss-client,
+  aresponses,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aio-georss-gdacs";
   version = "0.5";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-aio-georss-gdacs";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

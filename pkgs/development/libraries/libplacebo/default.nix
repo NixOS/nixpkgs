@@ -1,20 +1,21 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3Packages
-, vulkan-headers
-, vulkan-loader
-, shaderc
-, glslang
-, lcms2
-, libepoxy
-, libGL
-, xorg
-, libunwind
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  python3Packages,
+  vulkan-headers,
+  vulkan-loader,
+  shaderc,
+  glslang,
+  lcms2,
+  libepoxy,
+  libGL,
+  xorg,
+  libunwind,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libplacebo";
   version = "4.192.1";
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.videolan.org/videolan/libplacebo";
     changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ primeos tadeokondrak ];
+    maintainers = with maintainers; [primeos tadeokondrak];
     platforms = platforms.all;
   };
 }

@@ -1,17 +1,20 @@
-args@{ pkgs, nextcloudVersion ? 22, ... }:
-
-(import ../make-test-python.nix ({ pkgs, ...}: let
+args @ {
+  pkgs,
+  nextcloudVersion ? 22,
+  ...
+}:
+(import ../make-test-python.nix ({pkgs, ...}: let
   adminpass = "notproduction";
   adminuser = "root";
 in {
   name = "nextcloud-basic";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ globin eqyiel ];
+    maintainers = [globin eqyiel];
   };
 
   nodes = rec {
     # The only thing the client needs to do is download a file.
-    client = { ... }: {
+    client = {...}: {
       services.davfs2.enable = true;
       system.activationScripts.davfs2-secrets = ''
         echo "http://nextcloud/remote.php/webdav/ ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
@@ -23,15 +26,19 @@ in {
           fsType = "davfs";
           options = let
             davfs2Conf = (pkgs.writeText "davfs2.conf" "secrets /tmp/davfs2-secrets");
-          in [ "conf=${davfs2Conf}" "x-systemd.automount" "noauto"];
+          in ["conf=${davfs2Conf}" "x-systemd.automount" "noauto"];
         };
       };
     };
 
-    nextcloud = { config, pkgs, ... }: let
+    nextcloud = {
+      config,
+      pkgs,
+      ...
+    }: let
       cfg = config;
     in {
-      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.firewall.allowedTCPPorts = [80];
 
       systemd.tmpfiles.rules = [
         "d /var/lib/nextcloud-data 0750 nextcloud nginx - -"
@@ -51,19 +58,26 @@ in {
           enable = true;
           startAt = "20:00";
         };
-        phpExtraExtensions = all: [ all.bz2 ];
+        phpExtraExtensions = all: [all.bz2];
       };
 
-      environment.systemPackages = [ cfg.services.nextcloud.occ ];
+      environment.systemPackages = [cfg.services.nextcloud.occ];
     };
 
-    nextcloudWithoutMagick = args@{ config, pkgs, lib, ... }:
+    nextcloudWithoutMagick = args @ {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
       lib.mkMerge
-      [ (nextcloud args)
-        { services.nextcloud.enableImagemagick = false; } ];
+      [
+        (nextcloud args)
+        {services.nextcloud.enableImagemagick = false;}
+      ];
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
@@ -83,10 +97,14 @@ in {
       diff <(echo 'hi') <(${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file)
     '';
 
-    findInClosure = what: drv: pkgs.runCommand "find-in-closure" { exportReferencesGraph = [ "graph" drv ]; inherit what; } ''
-      test -e graph
-      grep "$what" graph >$out || true
-    '';
+    findInClosure = what: drv:
+      pkgs.runCommand "find-in-closure" {
+        exportReferencesGraph = ["graph" drv];
+        inherit what;
+      } ''
+        test -e graph
+        grep "$what" graph >$out || true
+      '';
     nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.config.system.build.vm;
     nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.config.system.build.vm;
   in ''
@@ -109,4 +127,5 @@ in {
     )
     assert "hi" in client.succeed("cat /mnt/dav/test-shared-file")
   '';
-})) args
+}))
+args

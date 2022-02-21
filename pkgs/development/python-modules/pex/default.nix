@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
 }:
-
 buildPythonPackage rec {
   pname = "pex";
   version = "2.1.66";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Python library and tool for generating .pex (Python EXecutable) files";
     homepage = "https://github.com/pantsbuild/pex";
     license = licenses.asl20;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [copumpkin];
   };
 }

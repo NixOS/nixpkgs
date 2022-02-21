@@ -1,43 +1,42 @@
-{ stdenv
-, fetchFromGitHub
-, python3Packages
-, makeWrapper
-, patch
+{
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  makeWrapper,
+  patch,
+}: {
+  rev,
+  sha256,
 }:
+  stdenv.mkDerivation rec {
+    pname = "ungoogled-chromium";
 
-{ rev
-, sha256
-}:
+    version = rev;
 
-stdenv.mkDerivation rec {
-  pname = "ungoogled-chromium";
+    src = fetchFromGitHub {
+      owner = "Eloston";
+      repo = "ungoogled-chromium";
+      inherit rev sha256;
+    };
 
-  version = rev;
+    dontBuild = true;
 
-  src = fetchFromGitHub {
-    owner = "Eloston";
-    repo = "ungoogled-chromium";
-    inherit rev sha256;
-  };
+    buildInputs = [
+      python3Packages.python
+      patch
+    ];
 
-  dontBuild = true;
+    nativeBuildInputs = [
+      makeWrapper
+    ];
 
-  buildInputs = [
-    python3Packages.python
-    patch
-  ];
+    patchPhase = ''
+      sed -i '/chromium-widevine/d' patches/series
+    '';
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
-
-  patchPhase = ''
-    sed -i '/chromium-widevine/d' patches/series
-  '';
-
-  installPhase = ''
-    mkdir $out
-    cp -R * $out/
-    wrapProgram $out/utils/patches.py --add-flags "apply" --prefix PATH : "${patch}/bin"
-  '';
-}
+    installPhase = ''
+      mkdir $out
+      cp -R * $out/
+      wrapProgram $out/utils/patches.py --add-flags "apply" --prefix PATH : "${patch}/bin"
+    '';
+  }

@@ -1,19 +1,19 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, pipewire
-, glibmm
-, qmake
-, makeDesktopItem
-, pkg-config
-, libarchive
-, fetchpatch
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  pipewire,
+  glibmm,
+  qmake,
+  makeDesktopItem,
+  pkg-config,
+  libarchive,
+  fetchpatch,
 }:
-
-mkDerivation rec{
+mkDerivation rec {
   pname = "jamesdsp";
   version = "2.3";
-  src = fetchFromGitHub rec{
+  src = fetchFromGitHub rec {
     owner = "Audio4Linux";
     repo = "JDSP4Linux";
     fetchSubmodules = true;
@@ -29,7 +29,7 @@ mkDerivation rec{
     })
   ];
 
-  nativeBuildInputs = [ qmake pkg-config ];
+  nativeBuildInputs = [qmake pkg-config];
   buildInputs = [
     glibmm
     libarchive
@@ -54,11 +54,11 @@ mkDerivation rec{
     })
   ];
 
-  meta = with lib;{
+  meta = with lib; {
     description = "An audio effect processor for PipeWire clients";
     homepage = "https://github.com/Audio4Linux/JDSP4Linux";
     license = licenses.gpl3Only;
-    maintainers = with maintainers;[ pasqui23 ];
+    maintainers = with maintainers; [pasqui23];
     platforms = platforms.linux;
   };
 }

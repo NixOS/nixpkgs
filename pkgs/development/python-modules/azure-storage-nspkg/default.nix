@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-nspkg,
 }:
-
 buildPythonPackage rec {
   pname = "azure-storage-nspkg";
   version = "3.1.0";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Client library for Microsoft Azure Storage services owning the azure.storage namespace, user should not use this directly";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [cmcdragonkai];
   };
 }

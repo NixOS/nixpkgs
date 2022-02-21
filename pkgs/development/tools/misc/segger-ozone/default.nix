@@ -1,19 +1,19 @@
-{ stdenv
-, fetchurl
-, fontconfig
-, freetype
-, lib
-, libICE
-, libSM
-, udev
-, libX11
-, libXcursor
-, libXext
-, libXfixes
-, libXrandr
-, libXrender
+{
+  stdenv,
+  fetchurl,
+  fontconfig,
+  freetype,
+  lib,
+  libICE,
+  libSM,
+  udev,
+  libX11,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXrandr,
+  libXrender,
 }:
-
 stdenv.mkDerivation rec {
   pname = "segger-ozone";
   version = "3.22a";
@@ -23,20 +23,21 @@ stdenv.mkDerivation rec {
     sha256 = "0v1r8qvp1w2f3yip9fys004pa0smlmq69p7w77lfvghs1rmg1649";
   };
 
-  rpath = lib.makeLibraryPath [
-    fontconfig
-    freetype
-    libICE
-    libSM
-    udev
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXrandr
-    libXrender
-  ]
-  + ":${stdenv.cc.cc.lib}/lib64";
+  rpath =
+    lib.makeLibraryPath [
+      fontconfig
+      freetype
+      libICE
+      libSM
+      udev
+      libX11
+      libXcursor
+      libXext
+      libXfixes
+      libXrandr
+      libXrender
+    ]
+    + ":${stdenv.cc.cc.lib}/lib64";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.segger.com/products/development-tools/ozone-j-link-debugger";
     license = licenses.unfree;
-    maintainers = [ maintainers.bmilanov ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.bmilanov];
+    platforms = ["x86_64-linux"];
   };
 }

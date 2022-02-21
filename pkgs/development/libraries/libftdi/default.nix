@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, libusb-compat-0_1}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb-compat-0_1,
+}:
 stdenv.mkDerivation rec {
   pname = "libftdi";
   version = "0.20";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "13l39f6k6gff30hsgh0wa2z422g9pyl91rh8a8zz6f34k2sxaxii";
   };
 
-  buildInputs = [ libusb-compat-0_1 ];
+  buildInputs = [libusb-compat-0_1];
 
-  propagatedBuildInputs = [ libusb-compat-0_1 ];
+  propagatedBuildInputs = [libusb-compat-0_1];
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';

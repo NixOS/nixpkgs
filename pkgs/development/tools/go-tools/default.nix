@@ -1,8 +1,8 @@
-{ buildGoModule
-, lib
-, fetchFromGitHub
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "go-tools";
   version = "2021.1.2";
@@ -22,6 +22,6 @@ buildGoModule rec {
     description = "A collection of tools and libraries for working with Go code, including linters and static analysis";
     homepage = "https://staticcheck.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs kalbasit ];
+    maintainers = with maintainers; [rvolosatovs kalbasit];
   };
 }

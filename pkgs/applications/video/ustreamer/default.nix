@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libbsd, libevent, libjpeg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libbsd,
+  libevent,
+  libjpeg,
+}:
 stdenv.mkDerivation rec {
   pname = "ustreamer";
   version = "4.11";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MTzlhnnDVZzS3lnYe3P/Hi6pi6f4B0+ejmDwV0f9juI=";
   };
 
-  buildInputs = [ libbsd libevent libjpeg ];
+  buildInputs = [libbsd libevent libjpeg];
 
   enableParallelBuilding = true;
 
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
       screencast hardware data with the highest resolution and FPS possible.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tfc ];
+    maintainers = with maintainers; [tfc];
     platforms = platforms.linux;
   };
 }

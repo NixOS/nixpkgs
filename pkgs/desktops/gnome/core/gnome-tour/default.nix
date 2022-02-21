@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, rustPlatform
-, gettext
-, meson
-, ninja
-, fetchurl
-, pkg-config
-, gtk3
-, glib
-, gdk-pixbuf
-, desktop-file-utils
-, appstream-glib
-, wrapGAppsHook
-, python3
-, gnome
-, libhandy
-, librsvg
-, rustc
-, cargo
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  gettext,
+  meson,
+  ninja,
+  fetchurl,
+  pkg-config,
+  gtk3,
+  glib,
+  gdk-pixbuf,
+  desktop-file-utils,
+  appstream-glib,
+  wrapGAppsHook,
+  python3,
+  gnome,
+  libhandy,
+  librsvg,
+  rustc,
+  cargo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-tour";
   version = "40.0";

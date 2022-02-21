@@ -1,12 +1,12 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qttools
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "qlipper";
   version = "5.1.2";
@@ -27,13 +27,13 @@ mkDerivation rec {
     qttools
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     description = "Cross-platform clipboard history applet";
     homepage = "https://github.com/pvanek/qlipper";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

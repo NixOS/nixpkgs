@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gawk,
+  gnused,
+  libgcrypt,
+  zlib,
+  bzip2,
+}:
 stdenv.mkDerivation rec {
   pname = "munge";
   version = "0.5.14";
@@ -11,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "15h805rwcb9f89dyrkxfclzs41n3ff8x7cc1dbvs8mb0ds682c4j";
   };
 
-  nativeBuildInputs = [ autoreconfHook gawk gnused ];
-  buildInputs = [ libgcrypt zlib bzip2 ];
+  nativeBuildInputs = [autoreconfHook gawk gnused];
+  buildInputs = [libgcrypt zlib bzip2];
 
   preAutoreconf = ''
     # Remove the install-data stuff, since it tries to write to /var
@@ -29,6 +38,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [maintainers.rickynils];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, gettext, fetchurl, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "lrzsz";
   version = "0.12.20";
@@ -17,11 +22,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [gettext];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  configureFlags = [ "--program-transform-name=s/^l//" ];
+  configureFlags = ["--program-transform-name=s/^l//"];
 
   meta = with lib; {
     homepage = "https://ohse.de/uwe/software/lrzsz.html";

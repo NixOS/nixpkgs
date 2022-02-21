@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "sunwait";
   version = "2020-10-26";
@@ -11,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "0cs8rdcnzsl10zia2k49a6c2z6gvp5rnf31sgn3hn5c7kgy7l3ax";
   };
 
-  makeFlags = [ "C=${stdenv.cc.targetPrefix}c++" ];
+  makeFlags = ["C=${stdenv.cc.targetPrefix}c++"];
 
   installPhase = ''
     install -Dm755 sunwait -t $out/bin
@@ -21,7 +24,7 @@ stdenv.mkDerivation {
     description = "Calculates sunrise or sunset times with civil, nautical, astronomical and custom twilights";
     homepage = "https://github.com/risacher/sunwait";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [etu];
     platforms = platforms.all;
   };
 }

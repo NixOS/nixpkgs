@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, fetchgit
-, xorg
+{
+  stdenv,
+  lib,
+  fetchgit,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "drawterm";
   version = "unstable-2021-10-02";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: macos
-  makeFlags = [ "CONF=unix" ];
+  makeFlags = ["CONF=unix"];
 
   installPhase = ''
     install -Dm755 -t $out/bin/ drawterm
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Connect to Plan9 CPU servers from other operating systems.";
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [luc65r];
     platforms = platforms.linux;
   };
 }

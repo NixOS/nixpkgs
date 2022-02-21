@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+}:
 buildPythonPackage rec {
   pname = "untangle";
   version = "1.1.1";
@@ -20,6 +24,6 @@ buildPythonPackage rec {
     description = "Convert XML documents into Python objects";
     homepage = "https://github.com/stchris/untangle";
     license = licenses.mit;
-    maintainers = [ maintainers.arnoldfarkas ];
+    maintainers = [maintainers.arnoldfarkas];
   };
 }

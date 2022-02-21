@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, defusedxml
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  defusedxml,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "odfpy";
   version = "1.4.1";
@@ -14,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "1v1qqk9p12qla85yscq2g413l3qasn6yr4ncyc934465b5p6lxnv";
   };
 
-  propagatedBuildInputs = [ defusedxml ];
+  propagatedBuildInputs = [defusedxml];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     pytest

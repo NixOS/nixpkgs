@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "update-copyright";
   version = "0.6.2";

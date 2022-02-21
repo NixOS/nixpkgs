@@ -1,5 +1,12 @@
-{ fetchgit, libcommuni, qtbase, qmake, lib, stdenv, wrapQtAppsHook }:
-
+{
+  fetchgit,
+  libcommuni,
+  qtbase,
+  qmake,
+  lib,
+  stdenv,
+  wrapQtAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "communi";
   version = "3.5.0";
@@ -11,10 +18,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake ]
+  nativeBuildInputs =
+    [qmake]
     ++ lib.optional stdenv.isDarwin wrapQtAppsHook;
 
-  buildInputs = [ libcommuni qtbase ];
+  buildInputs = [libcommuni qtbase];
 
   dontWrapQtApps = true;
 
@@ -29,19 +37,24 @@ stdenv.mkDerivation rec {
     "COMMUNI_INSTALL_DESKTOP=${placeholder "out"}/share/applications"
     "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
     (if stdenv.isDarwin
-      then [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/Applications" ]
-      else [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/bin" ])
+    then ["COMMUNI_INSTALL_BINS=${placeholder "out"}/Applications"]
+    else ["COMMUNI_INSTALL_BINS=${placeholder "out"}/bin"])
   ];
 
-  postInstall = if stdenv.isDarwin then ''
-    # Nix qmake does not add the bundle rpath by default.
-    install_name_tool \
-      -add_rpath @executable_path/../Frameworks \
-      $out/Applications/Communi.app/Contents/MacOS/Communi
-  '' else ''
-    substituteInPlace "$out/share/applications/communi.desktop" \
-      --replace "/usr/bin" "$out/bin"
-  '';
+  postInstall =
+    if stdenv.isDarwin
+    then
+      ''
+        # Nix qmake does not add the bundle rpath by default.
+        install_name_tool \
+          -add_rpath @executable_path/../Frameworks \
+          $out/Applications/Communi.app/Contents/MacOS/Communi
+      ''
+    else
+      ''
+        substituteInPlace "$out/share/applications/communi.desktop" \
+          --replace "/usr/bin" "$out/bin"
+      '';
 
   preFixup = ''
     rm -rf lib
@@ -51,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "A simple and elegant cross-platform IRC client";
     homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hrdinka ];
+    maintainers = with maintainers; [hrdinka];
     platforms = platforms.all;
   };
 }

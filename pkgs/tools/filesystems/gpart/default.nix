@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "gpart";
   version = "0.3";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "baruch";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   enableParallelBuilding = true;
 

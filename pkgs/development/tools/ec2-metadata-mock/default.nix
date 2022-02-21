@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ec2-metadata-mock";
   version = "1.10.1";
@@ -21,6 +24,6 @@ buildGoModule rec {
     description = "Amazon EC2 Metadata Mock";
     homepage = "https://github.com/aws/amazon-ec2-metadata-mock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ymatsiuk ];
+    maintainers = with maintainers; [ymatsiuk];
   };
 }

@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoconf, gtkmm3, glib, pdftk, pkg-config, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoconf,
+  gtkmm3,
+  glib,
+  pdftk,
+  pkg-config,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pdfchain";
   version = "0.4.4.2";
@@ -12,20 +20,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config wrapGAppsHook autoconf
+    pkg-config
+    wrapGAppsHook
+    autoconf
   ];
 
   buildInputs = [
-    gtkmm3 pdftk glib
+    gtkmm3
+    pdftk
+    glib
   ];
 
   patches = let
-    fetchDebianPatch = {name, sha256}: fetchpatch {
-      url = "https://salsa.debian.org/debian/pdfchain/raw/2d29107756a3194fb522bdea8e9b9e393b15a8f3/debian/patches/${name}";
-      inherit name sha256;
-    };
-  in
-  [
+    fetchDebianPatch = {
+      name,
+      sha256,
+    }:
+      fetchpatch {
+        url = "https://salsa.debian.org/debian/pdfchain/raw/2d29107756a3194fb522bdea8e9b9e393b15a8f3/debian/patches/${name}";
+        inherit name sha256;
+      };
+  in [
     (fetchDebianPatch {
       name = "fix_crash_on_startup";
       sha256 = "sha256-1UyMHHGrmUIFhY53ILdMMsyocSIbcV6CKQ7sLVNhNQw=";
@@ -50,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "A graphical user interface for the PDF Toolkit (PDFtk)";
     homepage = "https://pdfchain.sourceforge.io";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hqurve ];
+    maintainers = with maintainers; [hqurve];
     platforms = platforms.linux;
   };
 }

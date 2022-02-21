@@ -1,31 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, blinker
-, setuptools
-, itsdangerous
-, flask_principal
-, passlib
-, email_validator
-, flask_wtf
-, flask_login
-, pytestCheckHook
-, flask_mail
-, sqlalchemy
-, flask_sqlalchemy
-, flask-mongoengine
-, peewee
-, pony
-, zxcvbn
-, mongoengine
-, cryptography
-, pyqrcode
-, phonenumbers
-, bleach
-, mongomock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  blinker,
+  setuptools,
+  itsdangerous,
+  flask_principal,
+  passlib,
+  email_validator,
+  flask_wtf,
+  flask_login,
+  pytestCheckHook,
+  flask_mail,
+  sqlalchemy,
+  flask_sqlalchemy,
+  flask-mongoengine,
+  peewee,
+  pony,
+  zxcvbn,
+  mongoengine,
+  cryptography,
+  pyqrcode,
+  phonenumbers,
+  bleach,
+  mongomock,
 }:
-
 buildPythonPackage rec {
   pname = "flask-security-too";
   version = "4.1.2";
@@ -65,12 +65,12 @@ buildPythonPackage rec {
     mongomock
   ];
 
-  pythonImportsCheck = [ "flask_security" ];
+  pythonImportsCheck = ["flask_security"];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/Flask-Security-Too/";
     description = "Simple security for Flask apps (fork)";
     license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [gador];
   };
 }

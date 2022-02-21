@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "bar";
   version = "1.11.1";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Console progress bar";
     homepage = "http://clpbar.sourceforge.net/";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.rdnetto ];
+    maintainers = [lib.maintainers.rdnetto];
     platforms = lib.platforms.all;
   };
 }

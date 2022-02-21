@@ -1,11 +1,19 @@
-{ lib, stdenv, fetchurl, lvm2, json_c
-, openssl, libuuid, pkg-config, popt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lvm2,
+  json_c,
+  openssl,
+  libuuid,
+  pkg-config,
+  popt,
+}:
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
   version = "2.4.3";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = ["out" "dev" "man"];
   separateDebugInfo = true;
 
   src = fetchurl {
@@ -14,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   # Disable 4 test cases that fail in a sandbox
-  patches = [ ./disable-failing-tests.patch ];
+  patches = [./disable-failing-tests.patch];
 
   postPatch = ''
     patchShebangs tests
@@ -27,16 +35,18 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
-  configureFlags = [
-    "--enable-cryptsetup-reencrypt"
-    "--with-crypto_backend=openssl"
-    "--disable-ssh-token"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    "--enable-static-cryptsetup"
-  ];
+  configureFlags =
+    [
+      "--enable-cryptsetup-reencrypt"
+      "--with-crypto_backend=openssl"
+      "--disable-ssh-token"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "--enable-static-cryptsetup"
+    ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ lvm2 json_c openssl libuuid popt ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [lvm2 json_c openssl libuuid popt];
 
   doCheck = true;
 
@@ -44,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
     platforms = with lib.platforms; linux;
   };
 }

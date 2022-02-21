@@ -1,15 +1,14 @@
 # Test ensures buildbot master comes up correctly and workers can connect
-
-{ system ? builtins.currentSystem,
+{
+  system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. {inherit system config;},
 }:
-
 import ./make-test-python.nix {
   name = "buildbot";
 
   nodes = {
-    bbmaster = { pkgs, ... }: {
+    bbmaster = {pkgs, ...}: {
       services.buildbot-master = {
         enable = true;
 
@@ -22,30 +21,30 @@ import ./make-test-python.nix {
           "changes.GitPoller('git://gitrepo/fakerepo.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
         ];
       };
-      networking.firewall.allowedTCPPorts = [ 8010 8011 9989 ];
-      environment.systemPackages = with pkgs; [ git python3Packages.buildbot-full ];
+      networking.firewall.allowedTCPPorts = [8010 8011 9989];
+      environment.systemPackages = with pkgs; [git python3Packages.buildbot-full];
     };
 
-    bbworker = { pkgs, ... }: {
+    bbworker = {pkgs, ...}: {
       services.buildbot-worker = {
         enable = true;
         masterUrl = "bbmaster:9989";
       };
-      environment.systemPackages = with pkgs; [ git python3Packages.buildbot-worker ];
+      environment.systemPackages = with pkgs; [git python3Packages.buildbot-worker];
     };
 
-    gitrepo = { pkgs, ... }: {
+    gitrepo = {pkgs, ...}: {
       services.openssh.enable = true;
-      networking.firewall.allowedTCPPorts = [ 22 9418 ];
-      environment.systemPackages = with pkgs; [ git ];
+      networking.firewall.allowedTCPPorts = [22 9418];
+      environment.systemPackages = with pkgs; [git];
       systemd.services.git-daemon = {
-        description   = "Git daemon for the test";
-        wantedBy      = [ "multi-user.target" ];
-        after         = [ "network.target" "sshd.service" ];
+        description = "Git daemon for the test";
+        wantedBy = ["multi-user.target"];
+        after = ["network.target" "sshd.service"];
 
         serviceConfig.Restart = "always";
-        path = with pkgs; [ coreutils git openssh ];
-        environment = { HOME = "/root"; };
+        path = with pkgs; [coreutils git openssh];
+        environment = {HOME = "/root";};
         preStart = ''
           git config --global user.name 'Nobody Fakeuser'
           git config --global user.email 'nobody\@fakerepo.com'
@@ -109,5 +108,5 @@ import ./make-test-python.nix {
         bbworker.fail("nc -z bbmaster 8011")
   '';
 
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = with pkgs.lib.maintainers; [];
 } {}

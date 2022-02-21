@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testVersion
-, adrgen
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testVersion,
+  adrgen,
 }:
-
 buildGoModule rec {
   pname = "adrgen";
   version = "0.4.0-beta";
@@ -29,6 +29,6 @@ buildGoModule rec {
     description = "A command-line tool for generating and managing Architecture Decision Records";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
   };
 }

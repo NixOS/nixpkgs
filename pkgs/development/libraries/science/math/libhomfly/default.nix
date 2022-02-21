@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, boehmgc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  boehmgc,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.02r5";
   pname = "libhomfly";

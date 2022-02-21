@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchurl, SDL, SDL_mixer }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  SDL_mixer,
+}:
 stdenv.mkDerivation rec {
   pname = "ltris";
   version = "1.0.19";
-  buildInputs = [ SDL SDL_mixer ];
+  buildInputs = [SDL SDL_mixer];
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Tetris clone from the LGames series";
     homepage = "http://lgames.sourceforge.net/LBreakout2/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ciil ];
+    maintainers = [maintainers.ciil];
     platforms = platforms.linux;
   };
 }

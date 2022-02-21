@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oslotest
-, pbr
-, testscenarios
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oslotest,
+  pbr,
+  testscenarios,
+  stestr,
 }:
-
 buildPythonPackage rec {
   pname = "oslo-i18n";
   version = "5.1.0";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
   checkInputs = [
     oslotest
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "oslo_i18n" ];
+  pythonImportsCheck = ["oslo_i18n"];
 
   meta = with lib; {
     description = "Oslo i18n library";

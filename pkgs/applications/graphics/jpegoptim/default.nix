@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libjpeg }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjpeg,
+}:
 stdenv.mkDerivation rec {
   version = "1.4.6";
   pname = "jpegoptim";
@@ -12,13 +16,13 @@ stdenv.mkDerivation rec {
   # There are no checks, it seems.
   doCheck = false;
 
-  buildInputs = [ libjpeg ];
+  buildInputs = [libjpeg];
 
   meta = with lib; {
     description = "Optimize JPEG files";
     homepage = "https://www.kokkonen.net/tjko/projects.html";
     license = licenses.gpl2;
-    maintainers = [ maintainers.aristid ];
+    maintainers = [maintainers.aristid];
     platforms = platforms.all;
   };
 }

@@ -1,8 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
-, xorg, ffmpeg, libjpeg, libpng, libtiff, eigen
-, Carbon ? null, Cocoa ? null
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  libGL,
+  glew,
+  xorg,
+  ffmpeg,
+  libjpeg,
+  libpng,
+  libtiff,
+  eigen,
+  Carbon ? null,
+  Cocoa ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pangolin";
 
@@ -15,24 +28,25 @@ stdenv.mkDerivation rec {
     sha256 = "0abjajxj7lc2yajshimar4w8kf8115prsjnhy83s6jc7cbz63wj8";
   };
 
-  nativeBuildInputs = [ cmake pkg-config doxygen ];
+  nativeBuildInputs = [cmake pkg-config doxygen];
 
-  buildInputs = [
-    libGL
-    glew
-    xorg.libX11
-    ffmpeg
-    libjpeg
-    libpng
-    libtiff
-    eigen
-  ]
-  ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+  buildInputs =
+    [
+      libGL
+      glew
+      xorg.libX11
+      ffmpeg
+      libjpeg
+      libpng
+      libtiff
+      eigen
+    ]
+    ++ lib.optionals stdenv.isDarwin [Carbon Cocoa];
 
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).
   doCheck = false;
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = ["-DBUILD_TESTS=OFF"];
 
   meta = {
     description = "A lightweight portable rapid development library for managing OpenGL display / interaction and abstracting video input";
@@ -48,7 +62,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/stevenlovegrove/Pangolin";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.expipiplus1 ];
+    maintainers = [lib.maintainers.expipiplus1];
     platforms = lib.platforms.all;
   };
 }

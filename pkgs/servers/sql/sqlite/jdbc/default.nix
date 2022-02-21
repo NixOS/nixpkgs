@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchMavenArtifact }:
-
+{
+  lib,
+  stdenv,
+  fetchMavenArtifact,
+}:
 stdenv.mkDerivation rec {
   pname = "sqlite-jdbc";
   version = "3.25.2";
@@ -20,7 +23,6 @@ stdenv.mkDerivation rec {
     description = "Library for accessing and creating SQLite database files in Java";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [jraygauthier];
   };
 }
-

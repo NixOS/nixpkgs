@@ -1,23 +1,22 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-
-, mailchecker
-, phonenumbers
-, python-dateutil
-, python-fsutil
-, python-slugify
-, pyyaml
-, ftfy
-, requests
-, six
-, toml
-, xmltodict
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  mailchecker,
+  phonenumbers,
+  python-dateutil,
+  python-fsutil,
+  python-slugify,
+  pyyaml,
+  ftfy,
+  requests,
+  six,
+  toml,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "python-benedict";
   version = "0.24.3";
@@ -70,6 +69,6 @@ buildPythonPackage rec {
     description = "Module with keylist/keypath support";
     homepage = "https://github.com/fabiocaccamo/python-benedict";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,13 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.rtsp-simple-server;
   package = pkgs.rtsp-simple-server;
   format = pkgs.formats.yaml {};
-in
-{
+in {
   options = {
     services.rtsp-simple-server = {
       enable = mkEnableOption "RTSP Simple Server";
@@ -56,8 +57,8 @@ in
     systemd.services.rtsp-simple-server = {
       environment = cfg.env;
 
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       path = with pkgs; [
         ffmpeg

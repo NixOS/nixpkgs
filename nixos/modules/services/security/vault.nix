@@ -1,41 +1,49 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.vault;
   opt = options.services.vault;
 
   configFile = pkgs.writeText "vault.hcl" ''
     listener "tcp" {
       address = "${cfg.address}"
-      ${if (cfg.tlsCertFile == null || cfg.tlsKeyFile == null) then ''
+      ${
+      if (cfg.tlsCertFile == null || cfg.tlsKeyFile == null)
+      then
+        ''
           tls_disable = "true"
-        '' else ''
+        ''
+      else
+        ''
           tls_cert_file = "${cfg.tlsCertFile}"
           tls_key_file = "${cfg.tlsKeyFile}"
-        ''}
+        ''
+    }
       ${cfg.listenerExtraConfig}
     }
     storage "${cfg.storageBackend}" {
-      ${optionalString (cfg.storagePath   != null) ''path = "${cfg.storagePath}"''}
+      ${optionalString (cfg.storagePath != null) ''path = "${cfg.storagePath}"''}
       ${optionalString (cfg.storageConfig != null) cfg.storageConfig}
     }
-    ${optionalString (cfg.telemetryConfig != "") ''
+    ${
+      optionalString (cfg.telemetryConfig != "") ''
         telemetry {
           ${cfg.telemetryConfig}
         }
-      ''}
+      ''
+    }
     ${cfg.extraConfig}
   '';
 
   allConfigPaths = [configFile] ++ cfg.extraSettingsPaths;
 
   configOptions = escapeShellArgs (concatMap (p: ["-config" p]) allConfigPaths);
-
-in
-
-{
+in {
   options = {
     services.vault = {
       enable = mkEnableOption "Vault daemon";
@@ -76,14 +84,17 @@ in
       };
 
       storageBackend = mkOption {
-        type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" "raft" ];
+        type = types.enum ["inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" "raft"];
         default = "inmem";
         description = "The name of the type of storage backend";
       };
 
       storagePath = mkOption {
         type = types.nullOr types.path;
-        default = if cfg.storageBackend == "file" then "/var/lib/vault" else null;
+        default =
+          if cfg.storageBackend == "file"
+          then "/var/lib/vault"
+          else null;
         defaultText = literalExpression ''
           if config.${opt.storageBackend} == "file"
           then "/var/lib/vault"
@@ -151,10 +162,12 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
+      {
+        assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
         message = ''The "inmem" storage expects no services.vault.storagePath nor services.vault.storageConfig'';
       }
-      { assertion = (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) && (cfg.storagePath != null -> cfg.storageBackend == "file");
+      {
+        assertion = (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) && (cfg.storagePath != null -> cfg.storageBackend == "file");
         message = ''You must set services.vault.storagePath only when using the "file" backend'';
       }
     ];
@@ -168,14 +181,15 @@ in
     users.groups.vault.gid = config.ids.gids.vault;
 
     systemd.tmpfiles.rules = optional (cfg.storagePath != null)
-      "d '${cfg.storagePath}' 0700 vault vault - -";
+    "d '${cfg.storagePath}' 0700 vault vault - -";
 
     systemd.services.vault = {
       description = "Vault server daemon";
 
       wantedBy = ["multi-user.target"];
-      after = [ "network.target" ]
-           ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
+      after =
+        ["network.target"]
+        ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
       restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
 
@@ -200,5 +214,4 @@ in
       unitConfig.RequiresMountsFor = optional (cfg.storagePath != null) cfg.storagePath;
     };
   };
-
 }

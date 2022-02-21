@@ -1,5 +1,18 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, pkg-config, alsa-lib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  alsa-lib,
+  libjack2,
+  portaudio,
+  libogg,
+  flac,
+  libvorbis,
+  rtmidi,
+  qtsvg,
+}:
 mkDerivation rec {
   version = "2.2.0";
   pname = "polyphone";
@@ -22,7 +35,7 @@ mkDerivation rec {
     qtsvg
   ];
 
-  nativeBuildInputs = [ qmake pkg-config ];
+  nativeBuildInputs = [qmake pkg-config];
 
   preConfigure = ''
     cd ./sources/
@@ -43,7 +56,7 @@ mkDerivation rec {
     description = "A soundfont editor for creating musical instruments";
     homepage = "https://www.polyphone-soundfonts.com/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.maxdamantus ];
+    maintainers = [maintainers.maxdamantus];
     platforms = platforms.linux;
   };
 }

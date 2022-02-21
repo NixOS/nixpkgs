@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.types) bool enum ints lines attrsOf nonEmptyStr nullOr path str submodule;
   inherit (lib.modules) mkDefault mkIf mkMerge;
@@ -25,14 +27,21 @@ let
     # those types into a list of strings.
     let
       inherit (lib.types) attrsOf coercedTo int listOf;
-      innerType = coercedTo bool (x: if x then "Yes" else "No")
-        (coercedTo int (toString) str);
+      innerType = coercedTo bool (x:
+        if x
+        then "Yes"
+        else "No")
+      (coercedTo int (toString) str);
     in
       attrsOf (coercedTo innerType lib.singleton (listOf innerType));
 
   cfg = config.services.hylafax;
 
-  modemConfigOptions = { name, config, ... }: {
+  modemConfigOptions = {
+    name,
+    config,
+    ...
+  }: {
     options = {
       name = mkOption {
         type = nonEmptyStr;
@@ -68,56 +77,47 @@ let
       };
     };
     config.name = mkDefault name;
-    config.config.Include = [ "config/${config.type}" ];
+    config.config.Include = ["config/${config.type}"];
   };
 
-  defaultConfig =
-    let
-      inherit (config.security) wrapperDir;
-      inherit (config.services.mail.sendmailSetuidWrapper) program;
-      mkIfDefault = cond: value: mkIf cond (mkDefault value);
-      noWrapper = config.services.mail.sendmailSetuidWrapper==null;
-      # If a sendmail setuid wrapper exists,
-      # we add the path to the default configuration file.
-      # Otherwise, we use `false` to provoke
-      # an error if hylafax tries to use it.
-      c.sendmailPath = mkMerge [
-        (mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
-        (mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
-      ];
-      importDefaultConfig = file:
-        lib.attrsets.mapAttrs
-        (lib.trivial.const mkDefault)
-        (import file { inherit pkgs; });
-      c.commonModemConfig = importDefaultConfig ./modem-default.nix;
-      c.faxqConfig = importDefaultConfig ./faxq-default.nix;
-      c.hfaxdConfig = importDefaultConfig ./hfaxd-default.nix;
-    in
-      c;
+  defaultConfig = let
+    inherit (config.security) wrapperDir;
+    inherit (config.services.mail.sendmailSetuidWrapper) program;
+    mkIfDefault = cond: value: mkIf cond (mkDefault value);
+    noWrapper = config.services.mail.sendmailSetuidWrapper == null;
+    # If a sendmail setuid wrapper exists,
+    # we add the path to the default configuration file.
+    # Otherwise, we use `false` to provoke
+    # an error if hylafax tries to use it.
+    c.sendmailPath = mkMerge [
+      (mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
+      (mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
+    ];
+    importDefaultConfig = file:
+      lib.attrsets.mapAttrs
+      (lib.trivial.const mkDefault)
+      (import file {inherit pkgs;});
+    c.commonModemConfig = importDefaultConfig ./modem-default.nix;
+    c.faxqConfig = importDefaultConfig ./faxq-default.nix;
+    c.hfaxdConfig = importDefaultConfig ./hfaxd-default.nix;
+  in
+    c;
 
-  localConfig =
-    let
-      c.hfaxdConfig.UserAccessFile = cfg.userAccessFile;
-      c.faxqConfig = lib.attrsets.mapAttrs
-        (lib.trivial.const (v: mkIf (v!=null) v))
-        {
-          AreaCode = cfg.areaCode;
-          CountryCode = cfg.countryCode;
-          LongDistancePrefix = cfg.longDistancePrefix;
-          InternationalPrefix = cfg.internationalPrefix;
-        };
-      c.commonModemConfig = c.faxqConfig;
-    in
-      c;
-
-in
-
-
-{
-
-
+  localConfig = let
+    c.hfaxdConfig.UserAccessFile = cfg.userAccessFile;
+    c.faxqConfig = lib.attrsets.mapAttrs
+    (lib.trivial.const (v: mkIf (v != null) v))
+    {
+      AreaCode = cfg.areaCode;
+      CountryCode = cfg.countryCode;
+      LongDistancePrefix = cfg.longDistancePrefix;
+      InternationalPrefix = cfg.internationalPrefix;
+    };
+    c.commonModemConfig = c.faxqConfig;
+  in
+    c;
+in {
   options.services.hylafax = {
-
     enable = mkEnableOption "HylaFAX server";
 
     autostart = mkOption {
@@ -245,7 +245,7 @@ in
     };
 
     modems = mkOption {
-      type = attrsOf (submodule [ modemConfigOptions ]);
+      type = attrsOf (submodule [modemConfigOptions]);
       default = {};
       example.ttyS1 = {
         type = "cirrus";
@@ -327,7 +327,7 @@ in
       '';
     };
     faxqclean.archiving = mkOption {
-      type = enum [ "never" "as-flagged" "always" ];
+      type = enum ["never" "as-flagged" "always"];
       default = "as-flagged";
       example = "always";
       description = ''
@@ -359,14 +359,10 @@ in
         unreferenced files may reside in the docq directory.
       '';
     };
-
   };
-
 
   config.services.hylafax =
     mkIf
     (config.services.hylafax.enable)
-    (mkMerge [ defaultConfig localConfig ])
-  ;
-
+    (mkMerge [defaultConfig localConfig]);
 }

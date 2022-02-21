@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, buildEnv, roundcube, roundcubePlugins }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  buildEnv,
+  roundcube,
+  roundcubePlugins,
+}:
 stdenv.mkDerivation rec {
   pname = "roundcube";
   version = "1.5.2";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8DloOBFW/nkNhYr34GnFVQqFd/uWT5ZiRDSJUnIFODg=";
   };
 
-  patches = [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];
+  patches = [./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch];
 
   dontBuild = true;
 
@@ -22,14 +28,15 @@ stdenv.mkDerivation rec {
     rm $out/composer.json-dist
   '';
 
-  passthru.withPlugins = f: buildEnv {
-    name = "${roundcube.name}-with-plugins";
-    paths = (f roundcubePlugins) ++ [ roundcube ];
-  };
+  passthru.withPlugins = f:
+    buildEnv {
+      name = "${roundcube.name}-with-plugins";
+      paths = (f roundcubePlugins) ++ [roundcube];
+    };
 
   meta = {
     description = "Open Source Webmail Software";
-    maintainers = with lib.maintainers; [ vskilet globin ma27 ];
+    maintainers = with lib.maintainers; [vskilet globin ma27];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };

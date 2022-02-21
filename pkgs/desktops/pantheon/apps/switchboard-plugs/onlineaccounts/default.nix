@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, evolution-data-server
-, glib
-, granite
-, gtk3
-, libgdata
-, libhandy
-, sqlite
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  evolution-data-server,
+  glib,
+  granite,
+  gtk3,
+  libgdata,
+  libhandy,
+  sqlite,
+  switchboard,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
   version = "6.3.0";

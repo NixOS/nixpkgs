@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "faustPhysicalModeling";
   version = "2.37.3";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h6L+qRkN2chnI4821WrjD3uRFw3J0sUYVLL8w57vR1U=";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [faust2jaqt faust2lv2];
 
   buildPhase = ''
     cd examples/physicalModeling
@@ -34,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/grame-cncm/faust/tree/master-dev/examples/physicalModeling";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [magnetophon];
   };
 }

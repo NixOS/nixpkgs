@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, zlib, bzip2, openssl, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  bzip2,
+  openssl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "dmg2img";
   version = "1.6.7";
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "066hqhg7k90xcw5aq86pgr4l7apzvnb4559vj5s010avbk8adbh2";
   };
 
-  buildInputs = [ zlib bzip2 openssl ];
+  buildInputs = [zlib bzip2 openssl];
 
   patches = [
     (fetchpatch {
@@ -18,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  patchFlags = [ "-p0" ];
+  patchFlags = ["-p0"];
 
   installPhase = ''
     install -D dmg2img $out/bin/dmg2img

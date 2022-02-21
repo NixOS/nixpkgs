@@ -1,35 +1,35 @@
-{ lib
-, stdenv
-, arxiv2bib
-, beautifulsoup4
-, bibtexparser
-, buildPythonPackage
-, chardet
-, click
-, colorama
-, configparser
-, fetchFromGitHub
-, filetype
-, habanero
-, isbnlib
-, lxml
-, prompt-toolkit
-, pygments
-, pyparsing
-, pytestCheckHook
-, python-doi
-, python-slugify
-, pythonAtLeast
-, pythonOlder
-, pyyaml
-, requests
-, stevedore
-, tqdm
-, typing-extensions
-, whoosh
-, xdg-utils
+{
+  lib,
+  stdenv,
+  arxiv2bib,
+  beautifulsoup4,
+  bibtexparser,
+  buildPythonPackage,
+  chardet,
+  click,
+  colorama,
+  configparser,
+  fetchFromGitHub,
+  filetype,
+  habanero,
+  isbnlib,
+  lxml,
+  prompt-toolkit,
+  pygments,
+  pyparsing,
+  pytestCheckHook,
+  python-doi,
+  python-slugify,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
+  requests,
+  stevedore,
+  tqdm,
+  typing-extensions,
+  whoosh,
+  xdg-utils,
 }:
-
 buildPythonPackage rec {
   pname = "papis";
   version = "0.11.1";
@@ -79,11 +79,13 @@ buildPythonPackage rec {
   # Tests are failing on Python > 3.9
   doCheck = !stdenv.isDarwin && !(pythonAtLeast "3.10");
 
-  checkInputs = ([
-    pytestCheckHook
-  ]) ++ [
-    xdg-utils
-  ];
+  checkInputs =
+    ([
+      pytestCheckHook
+    ])
+    ++ [
+      xdg-utils
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -116,6 +118,6 @@ buildPythonPackage rec {
     description = "Powerful command-line document and bibliography manager";
     homepage = "https://papis.readthedocs.io/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nico202 teto ];
+    maintainers = with maintainers; [nico202 teto];
   };
 }

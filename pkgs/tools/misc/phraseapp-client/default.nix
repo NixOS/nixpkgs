@@ -1,11 +1,14 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "phraseapp-client";
   version = "1.17.1";
 
   goPackagePath = "github.com/phrase/phraseapp-client";
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   src = fetchFromGitHub {
     owner = "phrase";
@@ -22,6 +25,6 @@ buildGoPackage rec {
     homepage = "http://docs.phraseapp.com";
     description = "PhraseApp API v2 Command Line Client";
     license = licenses.mit;
-    maintainers = with maintainers; [ manveru ];
+    maintainers = with maintainers; [manveru];
   };
 }

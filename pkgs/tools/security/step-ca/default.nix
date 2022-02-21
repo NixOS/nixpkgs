@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildGoModule
-, coreutils
-, pcsclite
-, PCSC
-, pkg-config
-, hsmSupport ? true
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  coreutils,
+  pcsclite,
+  PCSC,
+  pkg-config,
+  hsmSupport ? true,
+  nixosTests,
 }:
-
 buildGoModule rec {
   pname = "step-ca";
   version = "0.18.1";
@@ -23,13 +23,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-IJXJS+Z93Hw1I1CAeRv4mq8as9DKebqNFa0IMgZ+Kic=";
 
-  ldflags = [ "-buildid=" ];
+  ldflags = ["-buildid="];
 
-  nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
+  nativeBuildInputs = lib.optionals hsmSupport [pkg-config];
 
   buildInputs =
-    lib.optionals (hsmSupport && stdenv.isLinux) [ pcsclite ]
-    ++ lib.optionals (hsmSupport && stdenv.isDarwin) [ PCSC ];
+    lib.optionals (hsmSupport && stdenv.isLinux) [pcsclite]
+    ++ lib.optionals (hsmSupport && stdenv.isDarwin) [PCSC];
 
   postPatch = ''
     substituteInPlace systemd/step-ca.service --replace "/bin/kill" "${coreutils}/bin/kill"
@@ -53,7 +53,7 @@ buildGoModule rec {
     description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai mohe2015 ];
+    maintainers = with maintainers; [cmcdragonkai mohe2015];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

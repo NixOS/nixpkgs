@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "googler";
   version = "4.3.2";
@@ -11,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PgWg396AQ15CAnfTXGDpSg1UXx7mNCtknEjJd/KV4MU=";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [python];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
     installShellCompletion --bash --name googler.bash auto-completion/bash/googler-completion.bash
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jarun/googler";
     description = "Google Search, Google Site Search, Google News from the terminal";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ koral Br1ght0ne ];
+    maintainers = with maintainers; [koral Br1ght0ne];
     platforms = python.meta.platforms;
   };
 }

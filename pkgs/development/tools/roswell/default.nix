@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, curl, autoconf, automake, makeWrapper, sbcl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  autoconf,
+  automake,
+  makeWrapper,
+  sbcl,
+}:
 stdenv.mkDerivation rec {
   pname = "roswell";
   version = "21.10.14.111";
@@ -22,23 +30,23 @@ stdenv.mkDerivation rec {
     sh bootstrap
   '';
 
-  configureFlags = [ "--prefix=${placeholder "out"}" ];
+  configureFlags = ["--prefix=${placeholder "out"}"];
 
   postInstall = ''
     wrapProgram $out/bin/ros \
       --set image `basename $out` \
       --add-flags 'lisp=sbcl-bin/system sbcl-bin.version=system -L sbcl-bin' \
-      --prefix PATH : ${lib.makeBinPath [ sbcl ]} --argv0 ros
+      --prefix PATH : ${lib.makeBinPath [sbcl]} --argv0 ros
   '';
 
-  nativeBuildInputs = [ autoconf automake makeWrapper ];
+  nativeBuildInputs = [autoconf automake makeWrapper];
 
-  buildInputs = [ sbcl curl ];
+  buildInputs = [sbcl curl];
 
   meta = with lib; {
     description = "Roswell is a Lisp implementation installer/manager, launcher, and much more";
     license = licenses.mit;
-    maintainers = with maintainers; [ hiro98 ];
+    maintainers = with maintainers; [hiro98];
     platforms = platforms.linux;
     homepage = "https://github.com/roswell/roswell";
     mainProgram = "ros";

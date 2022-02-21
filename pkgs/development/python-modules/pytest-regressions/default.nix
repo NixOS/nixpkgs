@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, matplotlib
-, numpy
-, pandas
-, pillow
-, pytest
-, pytest-datadir
-, pytestCheckHook
-, pyyaml
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  matplotlib,
+  numpy,
+  pandas,
+  pillow,
+  pytest,
+  pytest-datadir,
+  pytestCheckHook,
+  pyyaml,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-regressions";
   version = "2.3.0";
@@ -43,7 +43,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-
   checkInputs = [
     pytestCheckHook
     matplotlib
@@ -64,6 +63,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = with maintainers; [AluisioASG];
   };
 }

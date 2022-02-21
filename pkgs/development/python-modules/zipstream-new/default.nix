@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "zipstream-new";
   version = "1.1.8";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Like Python's ZipFile module, except it works as a generator that provides the file in many small chunks";
     homepage = "https://github.com/arjan-s/python-zipstream";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

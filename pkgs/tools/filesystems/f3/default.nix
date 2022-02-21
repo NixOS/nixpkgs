@@ -1,7 +1,10 @@
-{ stdenv, lib, fetchFromGitHub
-, parted, systemd ? null
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  parted,
+  systemd ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "f3";
   version = "8.0";
@@ -14,34 +17,37 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-     sed -i 's/-oroot -groot//' Makefile
+    sed -i 's/-oroot -groot//' Makefile
 
-     for f in f3write.h2w log-f3wr; do
-      substituteInPlace $f \
-        --replace '$(dirname $0)' $out/bin
-     done
+    for f in f3write.h2w log-f3wr; do
+     substituteInPlace $f \
+       --replace '$(dirname $0)' $out/bin
+    done
   '';
 
-  buildInputs = [
-    parted
-  ]
-  ++ lib.optional stdenv.isLinux systemd;
+  buildInputs =
+    [
+      parted
+    ]
+    ++ lib.optional stdenv.isLinux systemd;
 
   enableParallelBuilding = true;
 
-  buildFlags   = [
-    "all" # f3read, f3write
-  ]
-  ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe
+  buildFlags =
+    [
+      "all" # f3read, f3write
+    ]
+    ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
   ];
 
-  installTargets = [
-    "install"
-  ]
-  ++ lib.optional stdenv.isLinux "install-extra";
+  installTargets =
+    [
+      "install"
+    ]
+    ++ lib.optional stdenv.isLinux "install-extra";
 
   postInstall = ''
     install -Dm555 -t $out/bin f3write.h2w log-f3wr
@@ -52,6 +58,6 @@ stdenv.mkDerivation rec {
     description = "Fight Flash Fraud";
     homepage = "http://oss.digirati.com.br/f3/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
 }

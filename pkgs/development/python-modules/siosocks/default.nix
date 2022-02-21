@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, trio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
+  trio,
 }:
-
 buildPythonPackage rec {
   pname = "siosocks";
   version = "0.2.0";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Python socks 4/5 client/server library/framework";
     homepage = "https://github.com/pohmelie/siosocks";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

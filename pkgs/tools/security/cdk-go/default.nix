@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "cdk-go";
   version = "1.0.4";
@@ -23,8 +23,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Container penetration toolkit";
     homepage = "https://github.com/cdk-team/CDK";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl2Only];
+    maintainers = with maintainers; [fab];
     mainProgram = "cdk";
     broken = stdenv.isDarwin; # needs to update gopsutil to at least v3.21.3 to include https://github.com/shirou/gopsutil/pull/1042
   };

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pynetgear";
   version = "0.9.1";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with Netgear wireless routers";
     homepage = "https://github.com/MatMaul/pynetgear";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

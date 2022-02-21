@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tornado
-, requests
-, httplib2
-, sure
-, nose
-, nose-exclude
-, coverage
-, rednose
-, nose-randomly
-, six
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  tornado,
+  requests,
+  httplib2,
+  sure,
+  nose,
+  nose-exclude,
+  coverage,
+  rednose,
+  nose-randomly,
+  six,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "httpretty";
   version = "0.9.7";
@@ -27,11 +27,20 @@ buildPythonPackage rec {
     sha256 = "66216f26b9d2c52e81808f3e674a6fb65d4bf719721394a1a9be926177e55fbe";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
-  checkInputs = [ nose sure coverage mock rednose
+  checkInputs = [
+    nose
+    sure
+    coverage
+    mock
+    rednose
     # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude
+    nose-randomly
+    requests
+    tornado
+    httplib2
+    nose-exclude
   ];
 
   __darwinAllowLocalNetworking = true;

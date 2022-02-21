@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pygments
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pygments,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiocoap";
   version = "0.4.3";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python CoAP library";
     homepage = "https://aiocoap.readthedocs.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

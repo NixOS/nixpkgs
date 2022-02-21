@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "treefmt";
   version = "0.3.0";
@@ -16,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "one CLI to format the code tree";
     homepage = "https://github.com/numtide/treefmt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [zimbatm];
   };
 }

@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, SDL
-, SDL_image
-, mesa
-, libtheora
-, libvorbis
-, libogg
-, ftgl
-, freetype
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  SDL,
+  SDL_image,
+  mesa,
+  libtheora,
+  libvorbis,
+  libogg,
+  ftgl,
+  freetype,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zaz";
   version = "1.0.1";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix SDL include problems
-  NIX_CFLAGS_COMPILE="-I${SDL.dev}/include/SDL -I${SDL_image}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL -I${SDL_image}/include/SDL";
   # Fix linking errors
   makeFlags = [
     "ZAZ_LIBS+=-lSDL"
@@ -51,8 +52,7 @@ stdenv.mkDerivation rec {
     description = "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
     homepage = "http://zaz.sourceforge.net/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }
-

@@ -1,11 +1,26 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, ipaddr, macaddr, logs, lwt, duration
-, mirage-time, mirage-protocols, mirage-profile
-, alcotest, ethernet, fmt, mirage-vnetif, mirage-random
-, mirage-random-test, mirage-clock-unix, mirage-time-unix
-, bisect_ppx
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  ipaddr,
+  macaddr,
+  logs,
+  lwt,
+  duration,
+  mirage-time,
+  mirage-protocols,
+  mirage-profile,
+  alcotest,
+  ethernet,
+  fmt,
+  mirage-vnetif,
+  mirage-random,
+  mirage-random-test,
+  mirage-clock-unix,
+  mirage-time-unix,
+  bisect_ppx,
 }:
-
 buildDunePackage rec {
   pname = "arp";
   version = "3.0.0";
@@ -50,6 +65,6 @@ buildDunePackage rec {
     description = "Address Resolution Protocol purely in OCaml";
     homepage = "https://github.com/mirage/arp";
     license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    maintainers = with maintainers; [sternenseemann];
   };
 }

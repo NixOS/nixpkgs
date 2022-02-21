@@ -1,4 +1,11 @@
-{ lib, buildPythonApplication, fetchPypi, psutil, matplotlib, pytest }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  psutil,
+  matplotlib,
+  pytest,
+}:
 buildPythonApplication rec {
   pname = "psrecord";
   version = "1.2";
@@ -9,7 +16,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    psutil matplotlib
+    psutil
+    matplotlib
   ];
 
   checkInputs = [
@@ -26,6 +34,6 @@ buildPythonApplication rec {
     description = "Record the CPU and memory activity of a process";
     homepage = "https://github.com/astrofrog/psrecord";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ johnazoidberg ];
+    maintainers = with lib.maintainers; [johnazoidberg];
   };
 }

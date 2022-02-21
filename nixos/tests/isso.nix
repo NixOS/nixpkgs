@@ -1,10 +1,14 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "isso";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ asbachb ];
+    maintainers = [asbachb];
   };
 
-  machine = { config, pkgs, ... }: {
+  machine = {
+    config,
+    pkgs,
+    ...
+  }: {
     services.isso = {
       enable = true;
       settings = {
@@ -18,8 +22,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = let
     port = 8080;
-  in
-  ''
+  in ''
     machine.wait_for_unit("isso.service")
 
     machine.wait_for_open_port("${toString port}")

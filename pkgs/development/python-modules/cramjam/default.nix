@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, libiconv
-, brotli
-, lz4
-, memory_profiler
-, numpy
-, pytest-benchmark
-, pytestCheckHook
-, python-snappy
-, zstd
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  libiconv,
+  brotli,
+  lz4,
+  memory_profiler,
+  numpy,
+  pytest-benchmark,
+  pytestCheckHook,
+  python-snappy,
+  zstd,
 }:
-
 buildPythonPackage rec {
   pname = "cramjam";
   version = "2.4.0";
@@ -47,13 +47,13 @@ buildPythonPackage rec {
     python-snappy
     zstd
   ];
-  pytestFlagsArray = [ "--benchmark-disable" ];
-  pythonImportsCheck = [ "cramjam" ];
+  pytestFlagsArray = ["--benchmark-disable"];
+  pythonImportsCheck = ["cramjam"];
 
   meta = with lib; {
     description = "Thin Python bindings to de/compression algorithms in Rust";
     homepage = "https://github.com/milesgranger/pyrus-cramjam";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [veprbl];
   };
 }

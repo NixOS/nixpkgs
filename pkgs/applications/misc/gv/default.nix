@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  Xaw3d,
+  ghostscriptX,
+  perl,
+  pkg-config,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "gv";
   version = "3.7.4";
@@ -13,14 +21,16 @@ stdenv.mkDerivation rec {
     "--enable-SIGCHLD-fallback"
   ];
 
-  buildInputs = [
-    Xaw3d
-    ghostscriptX
-    perl
-    pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      Xaw3d
+      ghostscriptX
+      perl
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+    ];
 
   patchPhase = ''
     sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i "src/"*.in
@@ -40,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [];
     platforms = lib.platforms.unix;
   };
 }

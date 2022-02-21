@@ -1,18 +1,20 @@
 # This test does a basic functionality check for all bird variants and demonstrates a use
 # of the preCheckConfig option.
-
-{ system ? builtins.currentSystem
-, pkgs ? import ../.. { inherit system; config = { }; }
-}:
-
-let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
+{
+  system ? builtins.currentSystem,
+  pkgs ?
+    import ../.. {
+      inherit system;
+      config = {};
+    },
+}: let
+  inherit (import ../lib/testing-python.nix {inherit system pkgs;}) makeTest;
   inherit (pkgs.lib) optionalString;
 
-  hostShared = hostId: { pkgs, ... }: {
-    virtualisation.vlans = [ 1 ];
+  hostShared = hostId: {pkgs, ...}: {
+    virtualisation.vlans = [1];
 
-    environment.systemPackages = with pkgs; [ jq ];
+    environment.systemPackages = with pkgs; [jq];
 
     networking = {
       useNetworkd = true;
@@ -26,8 +28,9 @@ let
     };
   };
 
-  birdTest = v4:
-    let variant = "bird${optionalString (!v4) "6"}"; in
+  birdTest = v4: let
+    variant = "bird${optionalString (!v4) "6"}";
+  in
     makeTest {
       name = variant;
 
@@ -52,16 +55,20 @@ let
     host1.wait_for_unit("${variant}.service")
     host2.wait_for_unit("${variant}.service")
 
-    ${optionalString v4 ''
-    with subtest("Waiting for advertised IPv4 routes"):
-      host1.wait_until_succeeds("ip --json r | jq -e 'map(select(.dst == \"10.10.0.2\")) | any'")
-      host2.wait_until_succeeds("ip --json r | jq -e 'map(select(.dst == \"10.10.0.1\")) | any'")
-    ''}
-    ${optionalString v6 ''
-    with subtest("Waiting for advertised IPv6 routes"):
-      host1.wait_until_succeeds("ip --json -6 r | jq -e 'map(select(.dst == \"fdff::2\")) | any'")
-      host2.wait_until_succeeds("ip --json -6 r | jq -e 'map(select(.dst == \"fdff::1\")) | any'")
-    ''}
+    ${
+      optionalString v4 ''
+        with subtest("Waiting for advertised IPv4 routes"):
+          host1.wait_until_succeeds("ip --json r | jq -e 'map(select(.dst == \"10.10.0.2\")) | any'")
+          host2.wait_until_succeeds("ip --json r | jq -e 'map(select(.dst == \"10.10.0.1\")) | any'")
+      ''
+    }
+    ${
+      optionalString v6 ''
+        with subtest("Waiting for advertised IPv6 routes"):
+          host1.wait_until_succeeds("ip --json -6 r | jq -e 'map(select(.dst == \"fdff::2\")) | any'")
+          host2.wait_until_succeeds("ip --json -6 r | jq -e 'map(select(.dst == \"fdff::1\")) | any'")
+      ''
+    }
 
     with subtest("Check fake routes in preCheckConfig do not exists"):
       ${optionalString v4 ''host1.fail("ip --json r | jq -e 'map(select(.dst == \"1.2.3.4\")) | any'")''}
@@ -71,8 +78,8 @@ let
       ${optionalString v6 ''host2.fail("ip --json -6 r | jq -e 'map(select(.dst == \"fd00::\")) | any'")''}
   '';
 
-  makeBirdHost = variant: hostId: { pkgs, ... }: {
-    imports = [ (hostShared hostId) ];
+  makeBirdHost = variant: hostId: {pkgs, ...}: {
+    imports = [(hostShared hostId)];
 
     services.${variant} = {
       enable = true;
@@ -107,22 +114,28 @@ let
         }
       '';
 
-      preCheckConfig =
-        let
-          route = { bird = "1.2.3.4/32"; bird6 = "fd00::/128"; }.${variant};
-        in
-        ''echo "route ${route} blackhole;" > static.conf'';
+      preCheckConfig = let
+        route =
+          {
+            bird = "1.2.3.4/32";
+            bird6 = "fd00::/128";
+          }
+          .${variant};
+      in ''echo "route ${route} blackhole;" > static.conf'';
     };
 
-    systemd.tmpfiles.rules =
-      let
-        route = { bird = "10.10.0.${hostId}/32"; bird6 = "fdff::${hostId}/128"; }.${variant};
-      in
-      [ "f /etc/bird/static.conf - - - - route ${route} blackhole;" ];
+    systemd.tmpfiles.rules = let
+      route =
+        {
+          bird = "10.10.0.${hostId}/32";
+          bird6 = "fdff::${hostId}/128";
+        }
+        .${variant};
+    in ["f /etc/bird/static.conf - - - - route ${route} blackhole;"];
   };
 
-  makeBird2Host = hostId: { pkgs, ... }: {
-    imports = [ (hostShared hostId) ];
+  makeBird2Host = hostId: {pkgs, ...}: {
+    imports = [(hostShared hostId)];
 
     services.bird2 = {
       enable = true;
@@ -197,8 +210,7 @@ let
       "f /etc/bird/static6.conf - - - - route fdff::${hostId}/128 blackhole;"
     ];
   };
-in
-{
+in {
   bird = birdTest true;
   bird6 = birdTest false;
   bird2 = bird2Test;

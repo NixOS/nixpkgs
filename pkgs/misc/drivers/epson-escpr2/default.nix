@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, cups, busybox }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  busybox,
+}:
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
   version = "1.1.46";
@@ -23,10 +28,10 @@ stdenv.mkDerivation rec {
     runHook postUnpack
   '';
 
-  patches = [ ./cups-filter-ppd-dirs.patch ];
+  patches = [./cups-filter-ppd-dirs.patch];
 
-  buildInputs = [ cups ];
-  nativeBuildInputs = [ busybox ];
+  buildInputs = [cups];
+  nativeBuildInputs = [busybox];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
@@ -38,7 +43,7 @@ stdenv.mkDerivation rec {
       Refer to the description of epson-escpr for usage.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ma9e ma27 ];
+    maintainers = with maintainers; [ma9e ma27];
     platforms = platforms.linux;
   };
 }

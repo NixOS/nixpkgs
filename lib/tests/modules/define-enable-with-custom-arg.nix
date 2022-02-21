@@ -1,6 +1,8 @@
-{ lib, custom, ... }:
-
 {
+  lib,
+  custom,
+  ...
+}: {
   config = {
     enable = custom;
   };

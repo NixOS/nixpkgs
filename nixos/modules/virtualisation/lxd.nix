@@ -1,14 +1,15 @@
 # Systemd services for lxd.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.virtualisation.lxd;
 in {
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+    (mkRemovedOptionModule ["virtualisation" "lxd" "zfsPackage"] "Override zfs in an overlay instead to override it globally")
   ];
 
   ###### interface
@@ -90,15 +91,15 @@ in {
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     # Note: the following options are also declared in virtualisation.lxc, but
     # the latter can't be simply enabled to reuse the formers, because it
     # does a bunch of unrelated things.
-    systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
+    systemd.tmpfiles.rules = ["d /var/lib/lxc/rootfs 0755 root root -"];
 
     security.apparmor = {
-      packages = [ cfg.lxcPackage ];
+      packages = [cfg.lxcPackage];
       policies = {
         "bin.lxc-start".profile = ''
           include ${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start
@@ -115,7 +116,7 @@ in {
 
     systemd.sockets.lxd = {
       description = "LXD UNIX socket";
-      wantedBy = [ "sockets.target" ];
+      wantedBy = ["sockets.target"];
 
       socketConfig = {
         ListenStream = "/var/lib/lxd/unix.socket";
@@ -128,10 +129,10 @@ in {
     systemd.services.lxd = {
       description = "LXD Container Management Daemon";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "lxcfs.service" ];
-      requires = [ "network-online.target" "lxd.socket"  "lxcfs.service" ];
-      documentation = [ "man:lxd(1)" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target" "lxcfs.service"];
+      requires = ["network-online.target" "lxd.socket" "lxcfs.service"];
+      documentation = ["man:lxd(1)"];
 
       path = optional cfg.zfsSupport config.boot.zfs.package;
 
@@ -154,15 +155,25 @@ in {
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
         # explicitly tell it where the actual configuration files are
         Environment = mkIf (config.virtualisation.lxc.lxcfs.enable)
-          "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
+        "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
     };
 
     users.groups.lxd = {};
 
     users.users.root = {
-      subUidRanges = [ { startUid = 1000000; count = 65536; } ];
-      subGidRanges = [ { startGid = 1000000; count = 65536; } ];
+      subUidRanges = [
+        {
+          startUid = 1000000;
+          count = 65536;
+        }
+      ];
+      subGidRanges = [
+        {
+          startGid = 1000000;
+          count = 65536;
+        }
+      ];
     };
 
     boot.kernel.sysctl = mkIf cfg.recommendedSysctlSettings {
@@ -176,7 +187,8 @@ in {
       "kernel.keys.maxkeys" = 2000;
     };
 
-    boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" ]
-      ++ optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    boot.kernelModules =
+      ["veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE"]
+      ++ optionals (!config.networking.nftables.enable) ["iptable_mangle"];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, pkg-config
-, scdoc
-, wayland-scanner
-, wayland
-, wayland-protocols
-, libxkbcommon
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wev";
   version = "1.0.0";
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "0l71v3fzgiiv6xkk365q1l08qvaymxd4kpaya6r2g8yzkr7i2hms";
   };
 
-  nativeBuildInputs = [ pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols libxkbcommon ];
+  nativeBuildInputs = [pkg-config scdoc wayland-scanner];
+  buildInputs = [wayland wayland-protocols libxkbcommon];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/wev";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       X11 tool xev.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
     platforms = platforms.unix;
   };
 }

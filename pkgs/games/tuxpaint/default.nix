@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer, libpng,
-  cairo, librsvg, gettext, libpaper, fribidi, pkg-config, gperf, imagemagick }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  SDL_image,
+  SDL_ttf,
+  SDL_mixer,
+  libpng,
+  cairo,
+  librsvg,
+  gettext,
+  libpaper,
+  fribidi,
+  pkg-config,
+  gperf,
+  imagemagick,
+}:
 stdenv.mkDerivation rec {
   version = "0.9.24";
   pname = "tuxpaint";
@@ -10,15 +25,29 @@ stdenv.mkDerivation rec {
     sha256 = "06m1lg2pikfkmassfvvrbwqffwgixcmjh1li6akaldgkalpmfql7";
   };
 
-  nativeBuildInputs = [ SDL SDL_image SDL_ttf SDL_mixer libpng cairo
-    librsvg gettext libpaper fribidi pkg-config gperf imagemagick ];
-  hardeningDisable = [ "format" ];
-  makeFlags = [ "GPERF=${gperf}/bin/gperf"
-                "PREFIX=$$out"
-                "COMPLETIONDIR=$$out/share/bash-completion/completions"
-              ];
+  nativeBuildInputs = [
+    SDL
+    SDL_image
+    SDL_ttf
+    SDL_mixer
+    libpng
+    cairo
+    librsvg
+    gettext
+    libpaper
+    fribidi
+    pkg-config
+    gperf
+    imagemagick
+  ];
+  hardeningDisable = ["format"];
+  makeFlags = [
+    "GPERF=${gperf}/bin/gperf"
+    "PREFIX=$$out"
+    "COMPLETIONDIR=$$out/share/bash-completion/completions"
+  ];
 
-  patches = [ ./tuxpaint-completion.diff ];
+  patches = [./tuxpaint-completion.diff];
   postPatch = ''
     grep -Zlr include.*SDL . | xargs -0 sed -i -e 's,"SDL,"SDL/SDL,'
   '';
@@ -46,7 +75,7 @@ stdenv.mkDerivation rec {
     description = "Open Source Drawing Software for Children";
     homepage = "http://www.tuxpaint.org/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ woffs ];
+    maintainers = with lib.maintainers; [woffs];
     platforms = lib.platforms.linux;
   };
 }

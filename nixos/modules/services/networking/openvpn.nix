@@ -1,86 +1,92 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.openvpn;
 
   inherit (pkgs) openvpn;
 
-  makeOpenVPNJob = cfg: name:
-    let
+  makeOpenVPNJob = cfg: name: let
+    path = makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
 
-      path = makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
+    upScript = ''
+      #! /bin/sh
+      export PATH=${path}
 
-      upScript = ''
-        #! /bin/sh
-        export PATH=${path}
-
-        # For convenience in client scripts, extract the remote domain
-        # name and name server.
-        for var in ''${!foreign_option_*}; do
-          x=(''${!var})
-          if [ "''${x[0]}" = dhcp-option ]; then
-            if [ "''${x[1]}" = DOMAIN ]; then domain="''${x[2]}"
-            elif [ "''${x[1]}" = DNS ]; then nameserver="''${x[2]}"
-            fi
+      # For convenience in client scripts, extract the remote domain
+      # name and name server.
+      for var in ''${!foreign_option_*}; do
+        x=(''${!var})
+        if [ "''${x[0]}" = dhcp-option ]; then
+          if [ "''${x[1]}" = DOMAIN ]; then domain="''${x[2]}"
+          elif [ "''${x[1]}" = DNS ]; then nameserver="''${x[2]}"
           fi
-        done
+        fi
+      done
 
-        ${cfg.up}
-        ${optionalString cfg.updateResolvConf
-           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
-      '';
+      ${cfg.up}
+      ${
+        optionalString cfg.updateResolvConf
+        "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"
+      }
+    '';
 
-      downScript = ''
-        #! /bin/sh
-        export PATH=${path}
-        ${optionalString cfg.updateResolvConf
-           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
-        ${cfg.down}
-      '';
+    downScript = ''
+      #! /bin/sh
+      export PATH=${path}
+      ${
+        optionalString cfg.updateResolvConf
+        "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"
+      }
+      ${cfg.down}
+    '';
 
-      configFile = pkgs.writeText "openvpn-config-${name}"
-        ''
-          errors-to-stderr
-          ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
-          ${cfg.config}
-          ${optionalString (cfg.up != "" || cfg.updateResolvConf)
-              "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
-          ${optionalString (cfg.down != "" || cfg.updateResolvConf)
-              "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
-          ${optionalString (cfg.authUserPass != null)
-              "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
-                ${cfg.authUserPass.username}
-                ${cfg.authUserPass.password}
-              ''}"}
-        '';
+    configFile = pkgs.writeText "openvpn-config-${name}"
+    ''
+      errors-to-stderr
+      ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
+      ${cfg.config}
+      ${
+        optionalString (cfg.up != "" || cfg.updateResolvConf)
+        "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"
+      }
+      ${
+        optionalString (cfg.down != "" || cfg.updateResolvConf)
+        "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"
+      }
+      ${
+        optionalString (cfg.authUserPass != null)
+        "auth-user-pass ${
+          pkgs.writeText "openvpn-credentials-${name}" ''
+            ${cfg.authUserPass.username}
+            ${cfg.authUserPass.password}
+          ''
+        }"
+      }
+    '';
+  in {
+    description = "OpenVPN instance ‘${name}’";
 
-    in {
-      description = "OpenVPN instance ‘${name}’";
+    wantedBy = optional cfg.autoStart "multi-user.target";
+    after = ["network.target"];
 
-      wantedBy = optional cfg.autoStart "multi-user.target";
-      after = [ "network.target" ];
+    path = [pkgs.iptables pkgs.iproute2 pkgs.nettools];
 
-      path = [ pkgs.iptables pkgs.iproute2 pkgs.nettools ];
-
-      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
-      serviceConfig.Restart = "always";
-      serviceConfig.Type = "notify";
-    };
-
-in
-
-{
+    serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
+    serviceConfig.Restart = "always";
+    serviceConfig.Type = "notify";
+  };
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
+    (mkRemovedOptionModule ["services" "openvpn" "enable"] "")
   ];
 
   ###### interface
 
   options = {
-
     services.openvpn.servers = mkOption {
       default = {};
 
@@ -124,96 +130,87 @@ in
         attribute name.
       '';
 
-      type = with types; attrsOf (submodule {
+      type = with types;
+        attrsOf (submodule {
+          options = {
+            config = mkOption {
+              type = types.lines;
+              description = ''
+                Configuration of this OpenVPN instance.  See
+                <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+                for details.
 
-        options = {
+                To import an external config file, use the following definition:
+                <literal>config = "config /path/to/config.ovpn"</literal>
+              '';
+            };
 
-          config = mkOption {
-            type = types.lines;
-            description = ''
-              Configuration of this OpenVPN instance.  See
-              <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
-              for details.
+            up = mkOption {
+              default = "";
+              type = types.lines;
+              description = ''
+                Shell commands executed when the instance is starting.
+              '';
+            };
 
-              To import an external config file, use the following definition:
-              <literal>config = "config /path/to/config.ovpn"</literal>
-            '';
-          };
+            down = mkOption {
+              default = "";
+              type = types.lines;
+              description = ''
+                Shell commands executed when the instance is shutting down.
+              '';
+            };
 
-          up = mkOption {
-            default = "";
-            type = types.lines;
-            description = ''
-              Shell commands executed when the instance is starting.
-            '';
-          };
+            autoStart = mkOption {
+              default = true;
+              type = types.bool;
+              description = "Whether this OpenVPN instance should be started automatically.";
+            };
 
-          down = mkOption {
-            default = "";
-            type = types.lines;
-            description = ''
-              Shell commands executed when the instance is shutting down.
-            '';
-          };
+            updateResolvConf = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                Use the script from the update-resolv-conf package to automatically
+                update resolv.conf with the DNS information provided by openvpn. The
+                script will be run after the "up" commands and before the "down" commands.
+              '';
+            };
 
-          autoStart = mkOption {
-            default = true;
-            type = types.bool;
-            description = "Whether this OpenVPN instance should be started automatically.";
-          };
+            authUserPass = mkOption {
+              default = null;
+              description = ''
+                This option can be used to store the username / password credentials
+                with the "auth-user-pass" authentication method.
 
-          updateResolvConf = mkOption {
-            default = false;
-            type = types.bool;
-            description = ''
-              Use the script from the update-resolv-conf package to automatically
-              update resolv.conf with the DNS information provided by openvpn. The
-              script will be run after the "up" commands and before the "down" commands.
-            '';
-          };
+                WARNING: Using this option will put the credentials WORLD-READABLE in the Nix store!
+              '';
+              type = types.nullOr (types.submodule {
+                options = {
+                  username = mkOption {
+                    description = "The username to store inside the credentials file.";
+                    type = types.str;
+                  };
 
-          authUserPass = mkOption {
-            default = null;
-            description = ''
-              This option can be used to store the username / password credentials
-              with the "auth-user-pass" authentication method.
-
-              WARNING: Using this option will put the credentials WORLD-READABLE in the Nix store!
-            '';
-            type = types.nullOr (types.submodule {
-
-              options = {
-                username = mkOption {
-                  description = "The username to store inside the credentials file.";
-                  type = types.str;
+                  password = mkOption {
+                    description = "The password to store inside the credentials file.";
+                    type = types.str;
+                  };
                 };
-
-                password = mkOption {
-                  description = "The password to store inside the credentials file.";
-                  type = types.str;
-                };
-              };
-            });
+              });
+            };
           };
-        };
-
-      });
-
+        });
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf (cfg.servers != {}) {
-
     systemd.services = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
 
-    environment.systemPackages = [ openvpn ];
+    environment.systemPackages = [openvpn];
 
-    boot.kernelModules = [ "tun" ];
-
+    boot.kernelModules = ["tun"];
   };
-
 }

@@ -1,9 +1,11 @@
-{ buildPythonPackage, lib, fetchPypi
-, requests
-, nose
-, responses
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  requests,
+  nose,
+  responses,
 }:
-
 buildPythonPackage rec {
   pname = "python-forecastio";
   version = "1.4.0";
@@ -11,12 +13,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "0m6lf4a46pnwm5xg9dnmwslwzrpnj6d9agw570grciivbvb1ji0l";
-
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
-  propagatedBuildInputs = [ requests responses ];
+  propagatedBuildInputs = [requests responses];
 
   checkPhase = ''
     nosetests
@@ -26,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://zeevgilovitz.com/python-forecast.io/";
     description = "A thin Python Wrapper for the Dark Sky (formerly forecast.io) weather API";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "jless";
   version = "0.7.2";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "A command-line pager for JSON data";
     homepage = "https://github.com/PaulJuliusMartinez/jless";
     license = licenses.mit;
-    maintainers = with maintainers; [ jfchevrette zowoq ];
+    maintainers = with maintainers; [jfchevrette zowoq];
   };
 }

@@ -1,25 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jwasm";
   version = "2.14";
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
-    repo  = "JWasm";
+    repo = "JWasm";
     rev = "v${version}";
     hash = "sha256-BUSsF73Q2vq6tF/YHMUyAmmFE/WWVQLRFJZkOD8T7f8=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   dontConfigure = true;
 
   preBuild = ''
-    cp ${if stdenv.cc.isClang then "CLUnix.mak" else "GccUnix.mak"} Makefile
+    cp ${
+      if stdenv.cc.isClang
+      then "CLUnix.mak"
+      else "GccUnix.mak"
+    } Makefile
     substituteInPlace Makefile \
       --replace "/usr/local/bin" "${placeholder "out"}/bin"
   '';
@@ -35,8 +39,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Baron-von-Riedesel/JWasm/";
     description = "A MASM-compatible x86 assembler";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: generalize for Windows builds
+

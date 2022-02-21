@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, coverage
-, isPy27
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  coverage,
+  isPy27,
+  wrapt,
 }:
-
 buildPythonPackage rec {
   pname = "aiounittest";
   version = "1.4.1";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  pythonImportsCheck = [ "aiounittest" ];
+  pythonImportsCheck = ["aiounittest"];
 
   meta = with lib; {
     description = "Test asyncio code more easily";
     homepage = "https://github.com/kwarunek/aiounittest";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

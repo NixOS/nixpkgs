@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, fetchpatch, glib, pkg-config, gettext, libxslt, python3
-, docbook_xsl, docbook_xml_dtd_42 , libgcrypt, gobject-introspection, vala
-, gtk-doc, gnome, gjs, libintl, dbus, xvfb-run }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  glib,
+  pkg-config,
+  gettext,
+  libxslt,
+  python3,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  libgcrypt,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  gnome,
+  gjs,
+  libintl,
+  dbus,
+  xvfb-run,
+}:
 stdenv.mkDerivation rec {
   pname = "libsecret";
   version = "0.20.4";
@@ -15,14 +33,22 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
-  propagatedBuildInputs = [ glib ];
+  propagatedBuildInputs = [glib];
   nativeBuildInputs = [
-    pkg-config gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
-    gobject-introspection vala gtk-doc glib
+    pkg-config
+    gettext
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    libintl
+    gobject-introspection
+    vala
+    gtk-doc
+    glib
   ];
-  buildInputs = [ libgcrypt ];
+  buildInputs = [libgcrypt];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 
   configureFlags = [
@@ -32,7 +58,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installCheckInputs = [
-    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 xvfb-run dbus gjs
+    python3
+    python3.pkgs.dbus-python
+    python3.pkgs.pygobject3
+    xvfb-run
+    dbus
+    gjs
   ];
 
   # needs to run after install because typelibs point to absolute paths

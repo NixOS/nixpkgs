@@ -1,23 +1,17 @@
 # Upower daemon.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.upower;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.upower;
+in {
   ###### interface
 
   options = {
-
     services.upower = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -193,7 +187,7 @@ in
       };
 
       criticalPowerAction = mkOption {
-        type = types.enum [ "PowerOff" "Hibernate" "HybridSleep" ];
+        type = types.enum ["PowerOff" "Hibernate" "HybridSleep"];
         default = "HybridSleep";
         description = ''
           The action to take when <literal>timeAction</literal> or
@@ -201,23 +195,19 @@ in
           (UPS or laptop batteries) supplying the computer
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [cfg.package];
 
-    environment.systemPackages = [ cfg.package ];
+    services.dbus.packages = [cfg.package];
 
-    services.dbus.packages = [ cfg.package ];
+    services.udev.packages = [cfg.package];
 
-    services.udev.packages = [ cfg.package ];
-
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [cfg.package];
 
     environment.etc."UPower/UPower.conf".text = generators.toINI {} {
       UPower = {
@@ -235,5 +225,4 @@ in
       };
     };
   };
-
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, arrow
-, requests
-, units
-, pytz
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  arrow,
+  requests,
+  units,
+  pytz,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "stravalib";
   version = "0.10.4";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python library for interacting with Strava v3 REST API";
     homepage = "https://github.com/hozn/stravalib";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

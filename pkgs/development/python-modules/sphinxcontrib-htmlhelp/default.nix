@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "sphinxcontrib-htmlhelp";
   version = "2.0.0";

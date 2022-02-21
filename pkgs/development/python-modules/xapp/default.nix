@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, psutil
-, pygobject3
-, gtk3
-, gobject-introspection
-, xapps
-, polkit
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  psutil,
+  pygobject3,
+  gtk3,
+  gobject-introspection,
+  xapps,
+  polkit,
 }:
-
 buildPythonPackage rec {
   pname = "xapp";
   version = "2.2.1";
@@ -34,13 +34,13 @@ buildPythonPackage rec {
   '';
 
   doCheck = false;
-  pythonImportsCheck = [ "xapp" ];
+  pythonImportsCheck = ["xapp"];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";
     description = "Cross-desktop libraries and common resources for python";
     license = licenses.lgpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = [maintainers.mkg20001];
   };
 }

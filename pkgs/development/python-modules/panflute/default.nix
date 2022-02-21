@@ -1,12 +1,12 @@
-{ lib
-, fetchPypi
-, click
-, pyyaml
-, buildPythonPackage
-, isPy3k
+{
+  lib,
+  fetchPypi,
+  click,
+  pyyaml,
+  buildPythonPackage,
+  isPy3k,
 }:
-
-buildPythonPackage rec{
+buildPythonPackage rec {
   version = "2.1.3";
   pname = "panflute";
 
@@ -26,6 +26,6 @@ buildPythonPackage rec{
     description = "A Pythonic alternative to John MacFarlane's pandocfilters, with extra helper functions";
     homepage = "http://scorreia.com/software/panflute";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ synthetica ];
+    maintainers = with maintainers; [synthetica];
   };
 }

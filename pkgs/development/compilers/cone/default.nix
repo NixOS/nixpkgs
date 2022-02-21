@@ -1,9 +1,9 @@
-{ llvmPackages
-, lib
-, fetchFromGitHub
-, cmake
+{
+  llvmPackages,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
-
 llvmPackages.stdenv.mkDerivation rec {
   pname = "cone";
   version = "unstable-2021-07-25";
@@ -15,7 +15,7 @@ llvmPackages.stdenv.mkDerivation rec {
     sha256 = "CTDS83AWtuDY5g6NDn7O2awrYsKFf3Kp35FkMEjfbVw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   buildInputs = [
     llvmPackages.llvm
@@ -36,7 +36,7 @@ llvmPackages.stdenv.mkDerivation rec {
     description = "Cone Programming Language";
     homepage = "https://cone.jondgoodwin.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [luc65r];
     platforms = platforms.all;
   };
 }

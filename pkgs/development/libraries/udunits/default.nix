@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, expat
-, file
-, flex
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  expat,
+  file,
+  flex,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "udunits";
   version = "unstable-2021-03-17";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       converting values.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres pSub ];
+    maintainers = with maintainers; [AndersonTorres pSub];
     platforms = platforms.all;
     mainProgram = "udunits2";
   };

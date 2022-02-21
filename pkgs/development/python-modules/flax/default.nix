@@ -1,16 +1,16 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, jaxlib
-, keras
-, lib
-, matplotlib
-, msgpack
-, numpy
-, optax
-, pytestCheckHook
-, tensorflow
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  jaxlib,
+  keras,
+  lib,
+  matplotlib,
+  msgpack,
+  numpy,
+  optax,
+  pytestCheckHook,
+  tensorflow,
 }:
-
 buildPythonPackage rec {
   pname = "flax";
   version = "0.4.0";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "0rvdaxyf68qmm5d77gbizpcibyz2ic2pb2x7rgf7p8qwijyc39ws";
   };
 
-  buildInputs = [ jaxlib ];
+  buildInputs = [jaxlib];
 
   propagatedBuildInputs = [
     matplotlib
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

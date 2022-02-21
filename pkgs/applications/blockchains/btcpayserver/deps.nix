@@ -1,4 +1,4 @@
-{ fetchNuGet }: [
+{fetchNuGet}: [
   (fetchNuGet {
     pname = "AngleSharp.Css";
     version = "0.14.2";

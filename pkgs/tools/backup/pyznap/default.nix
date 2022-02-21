@@ -1,9 +1,9 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  setuptools,
 }:
-
 buildPythonApplication rec {
   pname = "pyznap";
   version = "1.6.0";
@@ -23,7 +23,7 @@ buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/yboetz/pyznap";
     description = "ZFS snapshot tool written in python";
-    license = with lib.licenses; [ gpl3 ];
-    maintainers = with lib.maintainers; [ rbrewer ];
+    license = with lib.licenses; [gpl3];
+    maintainers = with lib.maintainers; [rbrewer];
   };
 }

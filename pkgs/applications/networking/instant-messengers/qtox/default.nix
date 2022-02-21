@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, perl
-, libtoxcore
-, libpthreadstubs
-, libXdmcp
-, libXScrnSaver
-, qtbase
-, qtsvg
-, qttools
-, qttranslations
-, ffmpeg
-, filter-audio
-, libexif
-, libsodium
-, libopus
-, libvpx
-, openal
-, pcre
-, qrencode
-, sqlcipher
-, AVFoundation
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  perl,
+  libtoxcore,
+  libpthreadstubs,
+  libXdmcp,
+  libXScrnSaver,
+  qtbase,
+  qtsvg,
+  qttools,
+  qttranslations,
+  ffmpeg,
+  filter-audio,
+  libexif,
+  libsodium,
+  libopus,
+  libvpx,
+  openal,
+  pcre,
+  qrencode,
+  sqlcipher,
+  AVFoundation,
 }:
-
 mkDerivation rec {
   pname = "qtox";
   version = "1.17.4";
@@ -37,28 +37,31 @@ mkDerivation rec {
     sha256 = "sha256-j1aAry4wjb4RResdu8PQzyVazvVxnxvZMoC59sO0frw=";
   };
 
-  buildInputs = [
-    libtoxcore
-    libpthreadstubs
-    libXdmcp
-    libXScrnSaver
-    qtbase
-    qtsvg
-    qttranslations
-    ffmpeg
-    filter-audio
-    libexif
-    libopus
-    libsodium
-    libvpx
-    openal
-    pcre
-    qrencode
-    sqlcipher
-  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation ];
+  buildInputs =
+    [
+      libtoxcore
+      libpthreadstubs
+      libXdmcp
+      libXScrnSaver
+      qtbase
+      qtsvg
+      qttranslations
+      ffmpeg
+      filter-audio
+      libexif
+      libopus
+      libsodium
+      libvpx
+      openal
+      pcre
+      qrencode
+      sqlcipher
+    ]
+    ++ lib.optionals stdenv.isDarwin [AVFoundation];
 
-  nativeBuildInputs = [ cmake pkg-config qttools ]
-    ++ lib.optionals stdenv.isDarwin [ perl ];
+  nativeBuildInputs =
+    [cmake pkg-config qttools]
+    ++ lib.optionals stdenv.isDarwin [perl];
 
   cmakeFlags = [
     "-DGIT_DESCRIBE=v${version}"
@@ -72,7 +75,7 @@ mkDerivation rec {
     description = "Qt Tox client";
     homepage = "https://tox.chat";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ akaWolf peterhoeg ];
+    maintainers = with maintainers; [akaWolf peterhoeg];
     platforms = platforms.all;
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, apsw
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, flask
-, python
-, sqlite
-, withMysql ? false
-, mysql-connector
-, withPostgres ? false
-, psycopg2
+{
+  lib,
+  apsw,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  flask,
+  python,
+  sqlite,
+  withMysql ? false,
+  mysql-connector,
+  withPostgres ? false,
+  psycopg2,
 }:
-
 buildPythonPackage rec {
   pname = "peewee";
   version = "3.14.8";
@@ -29,10 +29,12 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [
-    apsw
-  ] ++ lib.optional withPostgres psycopg2
-  ++ lib.optional withMysql mysql-connector;
+  propagatedBuildInputs =
+    [
+      apsw
+    ]
+    ++ lib.optional withPostgres psycopg2
+    ++ lib.optional withMysql mysql-connector;
 
   checkInputs = [
     flask
@@ -53,6 +55,6 @@ buildPythonPackage rec {
     description = "Python ORM with support for various database implementation";
     homepage = "http://peewee-orm.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, pexpect
-, pyyaml
-, openssh
-, nixosTests
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  pexpect,
+  pyyaml,
+  openssh,
+  nixosTests,
+  pythonOlder,
 }:
-
-buildPythonApplication rec{
+buildPythonApplication rec {
   pname = "xxh";
   version = "0.8.9";
   format = "setuptools";
@@ -36,6 +36,6 @@ buildPythonApplication rec{
     description = "Bring your favorite shell wherever you go through SSH";
     homepage = "https://github.com/xxh/xxh";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ pasqui23 ];
+    maintainers = with maintainers; [pasqui23];
   };
 }

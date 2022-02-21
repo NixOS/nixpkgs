@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest-runner, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-runner,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "Cerberus";
   version = "1.1";
@@ -9,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1pxzr8sfm2hc5s96m9k044i44nwkva70n0ypr6a35v73zn891cx5";
   };
 
-  checkInputs = [ pytest-runner pytest ];
+  checkInputs = [pytest-runner pytest];
 
   meta = with lib; {
     homepage = "http://python-cerberus.org/";

@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "clucene-core";
   version = "0.9.21b";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "202ee45af747f18642ae0a088d7c4553521714a511a1a9ec99b8144cf9928317";
   };
 
-  patches = [ ./gcc6.patch ];
+  patches = [./gcc6.patch];
 
   meta = with lib; {
     description = "Core library for full-featured text search engine";
@@ -25,6 +28,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://clucene.sourceforge.net";
     platforms = platforms.unix;
-    license = with licenses; [ asl20 lgpl2 ];
+    license = with licenses; [asl20 lgpl2];
   };
 }

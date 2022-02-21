@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.heartbeat;
 
   heartbeatYml = pkgs.writeText "heartbeat.yml" ''
@@ -11,13 +13,9 @@ let
 
     ${cfg.extraConfig}
   '';
-
-in
-{
+in {
   options = {
-
     services.heartbeat = {
-
       enable = mkEnableOption "heartbeat";
 
       name = mkOption {
@@ -48,19 +46,17 @@ in
         '';
         description = "Any other configuration options you want to add";
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - nobody nogroup - -"
     ];
 
     systemd.services.heartbeat = with pkgs; {
       description = "heartbeat log shipper";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       preStart = ''
         mkdir -p "${cfg.stateDir}"/{data,logs}
       '';

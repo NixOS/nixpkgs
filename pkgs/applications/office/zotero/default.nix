@@ -1,39 +1,44 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
-, atk
-, cairo
-, coreutils
-, curl
-, cups
-, dbus-glib
-, dbus
-, dconf
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, glibc
-, gtk3
-, libX11
-, libXScrnSaver
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrender
-, libXt
-, libnotify
-, gnome
-, libGLU, libGL
-, nspr
-, nss
-, pango
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook,
+  makeDesktopItem,
+  atk,
+  cairo,
+  coreutils,
+  curl,
+  cups,
+  dbus-glib,
+  dbus,
+  dconf,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libxcb,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXinerama,
+  libXrender,
+  libXt,
+  libnotify,
+  gnome,
+  libGLU,
+  libGL,
+  nspr,
+  nss,
+  pango,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zotero";
   version = "5.0.96.3";
@@ -43,16 +48,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eqSNzmkGNopGJ7VByvUffFEPJz3WHS7b5+jgUAW/hU4=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
+  nativeBuildInputs = [wrapGAppsHook];
+  buildInputs = [gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf];
 
   dontConfigure = true;
   dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
 
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
+  libPath =
+    lib.makeLibraryPath
+    [
+      stdenv.cc.cc
       atk
       cairo
       curl
@@ -78,11 +85,14 @@ stdenv.mkDerivation rec {
       libXrender
       libXt
       libnotify
-      libGLU libGL
+      libGLU
+      libGL
       nspr
       nss
       pango
-    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
+    ]
+    + ":"
+    + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
@@ -137,7 +147,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ coreutils ]}
+      --prefix PATH : ${lib.makeBinPath [coreutils]}
     )
   '';
 
@@ -146,6 +156,6 @@ stdenv.mkDerivation rec {
     description = "Collect, organize, cite, and share your research sources";
     license = licenses.agpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ i077 ];
+    maintainers = with maintainers; [i077];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyahocorasick";
   version = "1.4.1";
@@ -24,10 +24,10 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pytestFlagsArray = [ "unittests.py" ];
-  pythonImportsCheck = [ "ahocorasick" ];
+  pytestFlagsArray = ["unittests.py"];
+  pythonImportsCheck = ["ahocorasick"];
 
   meta = with lib; {
     description = "Python module implementing Aho-Corasick algorithm";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
       key strings occurrences at once in some input text.
     '';
     homepage = "https://github.com/WojciechMula/pyahocorasick";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

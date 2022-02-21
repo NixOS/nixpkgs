@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# native
-, flake8
-
-# tests
-, pytestCheckHook
-, pexpect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub
+  # native
+  ,
+  flake8
+  # tests
+  ,
+  pytestCheckHook,
+  pexpect,
 }:
-
 buildPythonPackage rec {
   pname = "readchar";
   version = "3.0.5";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/magmax/python-readchar";
     description = "Python library to read characters and key strokes";
     license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = [maintainers.mmahut];
   };
 }

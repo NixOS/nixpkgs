@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchurl, libressl
-, privsepPath ? "/var/empty"
-, privsepUser ? "ntp"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libressl,
+  privsepPath ? "/var/empty",
+  privsepUser ? "ntp",
 }:
-
 stdenv.mkDerivation rec {
   pname = "openntpd";
   version = "6.8p1";
@@ -25,7 +28,7 @@ stdenv.mkDerivation rec {
     "--with-cacert=/etc/ssl/certs/ca-certificates.crt"
   ];
 
-  buildInputs = [ libressl ];
+  buildInputs = [libressl];
 
   installFlags = [
     "sysconfdir=\${out}/etc"
@@ -37,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

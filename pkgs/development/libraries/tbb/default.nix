@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  fixDarwinDylibNames,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tbb";
   version = "2020.3";
@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
       details and threading mechanisms for scalability and performance.
     '';
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice dizfer ];
+    maintainers = with maintainers; [thoughtpolice dizfer];
   };
 }

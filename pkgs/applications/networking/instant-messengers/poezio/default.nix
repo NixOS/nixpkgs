@@ -1,21 +1,21 @@
-{ lib
-, aiodns
-, buildPythonApplication
-, cffi
-, fetchFromGitHub
-, mpd2
-, pkg-config
-, potr
-, pyasn1
-, pyasn1-modules
-, pyinotify
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, slixmpp
-, typing-extensions
+{
+  lib,
+  aiodns,
+  buildPythonApplication,
+  cffi,
+  fetchFromGitHub,
+  mpd2,
+  pkg-config,
+  potr,
+  pyasn1,
+  pyasn1-modules,
+  pyinotify,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  slixmpp,
+  typing-extensions,
 }:
-
 buildPythonApplication rec {
   pname = "poezio";
   version = "0.13.1";
@@ -32,19 +32,21 @@ buildPythonApplication rec {
     pkg-config
   ];
 
-  propagatedBuildInputs = [
-    aiodns
-    cffi
-    mpd2
-    potr
-    pyasn1
-    pyasn1-modules
-    pyinotify
-    setuptools
-    slixmpp
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      aiodns
+      cffi
+      mpd2
+      potr
+      pyasn1
+      pyasn1-modules
+      pyinotify
+      setuptools
+      slixmpp
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      typing-extensions
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -54,6 +56,6 @@ buildPythonApplication rec {
     description = "Free console XMPP client";
     homepage = "https://poez.io";
     license = licenses.zlib;
-    maintainers = [ maintainers.lsix ];
+    maintainers = [maintainers.lsix];
   };
 }

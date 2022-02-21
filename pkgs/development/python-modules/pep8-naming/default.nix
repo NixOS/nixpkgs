@@ -1,12 +1,12 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, flake8
-, flake8-polyfill
-, python
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  flake8,
+  flake8-polyfill,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pep8-naming";
   version = "0.12.1";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/pep8-naming";
     description = "Check PEP-8 naming conventions, plugin for flake8";
     license = licenses.mit;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

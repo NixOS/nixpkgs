@@ -1,7 +1,14 @@
-{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, lib, stdenv
-, libxslt, docbook_xsl
+{
+  fetchFromGitHub,
+  git,
+  gnupg,
+  makeWrapper,
+  openssl,
+  lib,
+  stdenv,
+  libxslt,
+  docbook_xsl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "git-crypt";
   version = "0.6.0";
@@ -13,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "13m9y0m6gc3mlw3pqv9x4i0him2ycbysizigdvdanhh514kga602";
   };
 
-  nativeBuildInputs = [ libxslt makeWrapper ];
+  nativeBuildInputs = [libxslt makeWrapper];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   patchPhase = ''
     substituteInPlace commands.cpp \
@@ -48,8 +55,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
     license = licenses.gpl3;
-    maintainers = [ maintainers.dochang ];
+    maintainers = [maintainers.dochang];
     platforms = platforms.unix;
   };
-
 }

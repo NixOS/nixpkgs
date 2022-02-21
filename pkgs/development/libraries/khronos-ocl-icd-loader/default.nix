@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, opencl-headers, cmake, withTracing ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opencl-headers,
+  cmake,
+  withTracing ? false,
+}:
 stdenv.mkDerivation rec {
   name = "khronos-ocl-icd-loader-${version}";
   version = "2022.01.04";
@@ -13,14 +19,14 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional withTracing ./tracing.patch;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ opencl-headers ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [opencl-headers];
 
   meta = with lib; {
     description = "Offical Khronos OpenCL ICD Loader";
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = with maintainers; [davidtwco];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sedutil";
   version = "1.20.0";

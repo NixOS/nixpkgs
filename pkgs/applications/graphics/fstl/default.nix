@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, qtbase, mesa_glu }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mkDerivation,
+  qtbase,
+  mesa_glu,
+}:
 mkDerivation rec {
   pname = "fstl";
   version = "0.9.4";
@@ -31,6 +37,6 @@ mkDerivation rec {
     homepage = "https://github.com/mkeeter/fstl";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ tweber ];
+    maintainers = with maintainers; [tweber];
   };
 }

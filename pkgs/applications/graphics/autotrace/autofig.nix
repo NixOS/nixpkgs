@@ -1,5 +1,7 @@
-{ stdenv, fetchurl }:
-
+{
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation {
   pname = "autofig";
   version = "0.1";

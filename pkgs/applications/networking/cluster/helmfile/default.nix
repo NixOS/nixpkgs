@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "helmfile";
   version = "0.143.0";
@@ -15,15 +18,15 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}"];
 
   meta = {
     description = "Deploy Kubernetes Helm charts";
     homepage = "https://github.com/roboll/helmfile";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pneumaticat yurrriq ];
+    maintainers = with lib.maintainers; [pneumaticat yurrriq];
     platforms = lib.platforms.unix;
   };
 }

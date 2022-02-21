@@ -1,12 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.jackett;
-
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.jackett;
+in {
   options = {
     services.jackett = {
       enable = mkEnableOption "Jackett";
@@ -51,8 +51,8 @@ in
 
     systemd.services.jackett = {
       description = "Jackett";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "simple";
@@ -64,7 +64,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 9117 ];
+      allowedTCPPorts = [9117];
     };
 
     users.users = mkIf (cfg.user == "jackett") {

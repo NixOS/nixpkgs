@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pulp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pulp,
 }:
-
 buildPythonPackage rec {
   pname = "pyschedule";
   version = "0.2.34";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Formulate and solve resource-constrained scheduling problems";
     homepage = "https://github.com/timnon/pyschedule";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "ffuf";
   version = "1.3.1";
@@ -25,6 +25,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/ffuf/ffuf";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

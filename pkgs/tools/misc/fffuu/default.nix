@@ -1,5 +1,9 @@
-{ mkDerivation, haskellPackages, fetchFromGitHub, lib }:
-
+{
+  mkDerivation,
+  haskellPackages,
+  fetchFromGitHub,
+  lib,
+}:
 mkDerivation {
   pname = "fffuu";
   version = "unstable-2018-05-26";
@@ -36,7 +40,7 @@ mkDerivation {
     optparse-generic
   ];
 
-  executableHaskellDepends = with haskellPackages; [ base ];
+  executableHaskellDepends = with haskellPackages; [base];
 
   testHaskellDepends = with haskellPackages; [
     tasty
@@ -47,5 +51,5 @@ mkDerivation {
   description = "Fancy Formal Firewall Universal Understander";
   homepage = "https://github.com/diekmann/Iptables_Semantics/tree/master/haskell_tool";
   license = lib.licenses.bsd2;
-  maintainers = [ lib.maintainers.marsam ];
+  maintainers = [lib.maintainers.marsam];
 }

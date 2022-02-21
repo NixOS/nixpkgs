@@ -1,6 +1,15 @@
-{ stdenv, lib, fetchgit, pkg-config, meson, ninja
-, enchant, gtkmm3, libchamplain, libgcrypt }:
-
+{
+  stdenv,
+  lib,
+  fetchgit,
+  pkg-config,
+  meson,
+  ninja,
+  enchant,
+  gtkmm3,
+  libchamplain,
+  libgcrypt,
+}:
 stdenv.mkDerivation rec {
   pname = "lifeograph";
   version = "2.0.2";
@@ -34,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "http://lifeograph.sourceforge.net/wiki/Main_Page";
     description = "Lifeograph is an off-line and private journal and note taking application";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
     platforms = platforms.linux;
   };
 }

@@ -1,18 +1,18 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, pybind11
-, tiledb
-, numpy
-, wheel
-, isPy3k
-, setuptools-scm
-, psutil
-, pandas
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  pybind11,
+  tiledb,
+  numpy,
+  wheel,
+  isPy3k,
+  setuptools-scm,
+  psutil,
+  pandas,
 }:
-
 buildPythonPackage rec {
   pname = "tiledb";
   version = "0.12.0";
@@ -74,13 +74,13 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest tiledb.tests.all.suite_test
     popd
   '';
-  pythonImportsCheck = [ "tiledb" ];
+  pythonImportsCheck = ["tiledb"];
 
   meta = with lib; {
     description = "Python interface to the TileDB storage manager";
     homepage = "https://github.com/TileDB-Inc/TileDB-Py";
     license = licenses.mit;
-    maintainers = with maintainers; [ fridh ];
+    maintainers = with maintainers; [fridh];
     # tiledb/core.cc:556:30: error: ‘struct std::array<long unsigned int, 2>’ has no member named ‘second’
     broken = true;
   };

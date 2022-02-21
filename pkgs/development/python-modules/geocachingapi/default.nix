@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, yarl
+{
+  lib,
+  aiohttp,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "geocachingapi";
   version = "0.1.0";
@@ -33,12 +33,12 @@ buildPythonPackage rec {
   # Tests require a token and network access
   doCheck = false;
 
-  pythonImportsCheck = [ "geocachingapi" ];
+  pythonImportsCheck = ["geocachingapi"];
 
   meta = with lib; {
     description = "Python API to control the Geocaching API";
     homepage = "https://github.com/Sholofly/geocachingapi-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

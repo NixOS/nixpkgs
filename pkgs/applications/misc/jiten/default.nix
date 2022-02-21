@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, python3
-, bash
-, makeWrapper
-, kanjidraw
-, pcre
-, sqlite
-, nodejs
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  bash,
+  makeWrapper,
+  kanjidraw,
+  pcre,
+  sqlite,
+  nodejs,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "jiten";
   version = "1.1.0";
@@ -27,10 +27,10 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "16sz8i0sw7ggy6kijcx4qyl2zr6xj789x4iav0yyllx12dfgp5b1";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pcre sqlite ];
-  propagatedBuildInputs = with python3.pkgs; [ click flask kanjidraw ];
-  checkInputs = [ nodejs ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [pcre sqlite];
+  propagatedBuildInputs = with python3.pkgs; [click flask kanjidraw];
+  checkInputs = [nodejs];
 
   preBuild = ''
     export JITEN_VERSION=${version}   # override `git describe`
@@ -96,10 +96,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/obfusk/jiten";
     license = with licenses; [
-      agpl3Plus               # code
-      cc-by-sa-30             # jmdict/kanjidic
-      unfreeRedistributable   # pitch data & audio are non-commercial
+      agpl3Plus # code
+      cc-by-sa-30 # jmdict/kanjidic
+      unfreeRedistributable # pitch data & audio are non-commercial
     ];
-    maintainers = [ maintainers.obfusk ];
+    maintainers = [maintainers.obfusk];
   };
 }

@@ -1,13 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, mistune_2_0, cjkwrap, wcwidth
-, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mistune_2_0,
+  cjkwrap,
+  wcwidth,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "md2gemini";
   version = "1.9.0";
 
-  propagatedBuildInputs = [ mistune_2_0 cjkwrap wcwidth ];
-  checkInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "md2gemini" ];
+  propagatedBuildInputs = [mistune_2_0 cjkwrap wcwidth];
+  checkInputs = [pytestCheckHook];
+  pythonImportsCheck = ["md2gemini"];
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +24,6 @@ buildPythonPackage rec {
     description = "Markdown to Gemini text format conversion library";
     homepage = "https://github.com/makeworld-the-better-one/md2gemini";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.kaction ];
+    maintainers = [maintainers.kaction];
   };
 }

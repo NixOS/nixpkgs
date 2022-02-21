@@ -1,5 +1,8 @@
-{ lib, stdenv, pkgs }:
-
+{
+  lib,
+  stdenv,
+  pkgs,
+}:
 stdenv.mkDerivation {
   version = "0.0.1";
   pname = "ecdsatool";

@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, python
-, pkg-config
-, libxml2
-, glib
-, openssl
-, zchunk
-, curl
-, check
-, gpgme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python,
+  pkg-config,
+  libxml2,
+  glib,
+  openssl,
+  zchunk,
+  curl,
+  check,
+  gpgme,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.14.2";
   pname = "librepo";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = ["out" "dev" "py"];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python.pythonVersion}" ];
+  cmakeFlags = ["-DPYTHON_DESIRED=${lib.substring 0 1 python.pythonVersion}"];
 
   postFixup = ''
     moveToOutput "lib/${python.libPrefix}" "$py"
@@ -59,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rpm-software-management.github.io/librepo/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [copumpkin];
   };
 }

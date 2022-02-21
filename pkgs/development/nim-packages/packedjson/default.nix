@@ -1,5 +1,4 @@
-{ fetchFromGitHub }:
-
+{fetchFromGitHub}:
 fetchFromGitHub {
   owner = "Araq";
   repo = "packedjson";

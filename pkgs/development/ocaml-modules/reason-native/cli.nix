@@ -1,6 +1,9 @@
-{ re, reason, pastel, ... }:
-
 {
+  re,
+  reason,
+  pastel,
+  ...
+}: {
   pname = "cli";
 
   buildInputs = [

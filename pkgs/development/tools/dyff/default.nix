@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "dyff";
   version = "1.5.1";
@@ -19,7 +23,7 @@ buildGoModule rec {
     "internal/cmd"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   # test fails with the injected version
   postPatch = ''
@@ -52,6 +56,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/homeport/dyff";
     license = licenses.mit;
-    maintainers = with maintainers; [ edlimerkaj ];
+    maintainers = with maintainers; [edlimerkaj];
   };
 }

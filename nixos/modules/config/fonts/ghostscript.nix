@@ -1,13 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   options = {
-
     fonts = {
-
       enableGhostscriptFonts = mkOption {
         type = types.bool;
         default = false;
@@ -18,16 +17,10 @@ with lib;
           applications.
         '';
       };
-
     };
-
   };
-
 
   config = mkIf config.fonts.enableGhostscriptFonts {
-
-    fonts.fonts = [ "${pkgs.ghostscript}/share/ghostscript/fonts" ];
-
+    fonts.fonts = ["${pkgs.ghostscript}/share/ghostscript/fonts"];
   };
-
 }

@@ -1,4 +1,6 @@
-{ lib, stdenv,
+{
+  lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   cmake,
@@ -14,9 +16,8 @@
   curl,
   git,
   libusb-compat-0_1,
-  cereal
+  cereal,
 }:
-
 stdenv.mkDerivation rec {
   pname = "domoticz";
   version = "2022.1";
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
       various devices like: lights, switches, various sensors/meters like
       temperature, rain, wind, UV, electra, gas, water and much more
     '';
-    maintainers = with maintainers; [ edcragg ];
+    maintainers = with maintainers; [edcragg];
     homepage = "https://www.domoticz.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

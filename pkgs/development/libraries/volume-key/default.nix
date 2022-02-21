@@ -1,9 +1,23 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, gettext, python3
-, ncurses, swig, glib, util-linux, cryptsetup, nss, gpgme
-, autoconf, automake, libtool
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  python3,
+  ncurses,
+  swig,
+  glib,
+  util-linux,
+  cryptsetup,
+  nss,
+  gpgme,
+  autoconf,
+  automake,
+  libtool,
+  buildPackages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "volume_key";
   version = "0.3.11";
@@ -14,11 +28,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sqdbcih1c39bjiv4mm1m7acc3lfh2i2hf2r9i7rk8adfzq8awma";
   };
 
-  outputs = [ "out" "man" "dev" "py" ];
+  outputs = ["out" "man" "dev" "py"];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config gettext swig ];
+  nativeBuildInputs = [autoconf automake libtool pkg-config gettext swig];
 
-  buildInputs = [ autoreconfHook glib cryptsetup nss util-linux gpgme ncurses ];
+  buildInputs = [autoreconfHook glib cryptsetup nss util-linux gpgme ncurses];
 
   configureFlags = [
     "--with-gpgme-prefix=${gpgme.dev}"

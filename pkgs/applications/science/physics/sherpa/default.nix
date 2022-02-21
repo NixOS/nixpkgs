@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, autoconf, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  gfortran,
+  hepmc2,
+  fastjet,
+  lhapdf,
+  rivet,
+  sqlite,
+}:
 stdenv.mkDerivation rec {
   pname = "sherpa";
   version = "2.2.12";
@@ -13,9 +23,9 @@ stdenv.mkDerivation rec {
     sed -ie '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
   '';
 
-  nativeBuildInputs = [ autoconf gfortran ];
+  nativeBuildInputs = [autoconf gfortran];
 
-  buildInputs = [ sqlite lhapdf rivet ];
+  buildInputs = [sqlite lhapdf rivet];
 
   enableParallelBuilding = true;
 
@@ -33,6 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = "https://gitlab.com/sherpa-team/sherpa";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [veprbl];
   };
 }

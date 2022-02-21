@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "nextdns";
   version = "1.37.7";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
   meta = with lib; {
     description = "NextDNS DNS/53 to DoH Proxy";
     homepage = "https://nextdns.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ pnelson ];
+    maintainers = with maintainers; [pnelson];
   };
 }

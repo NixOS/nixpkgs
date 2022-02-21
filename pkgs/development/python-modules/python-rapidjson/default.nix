@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, pytz
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytest,
+  pytz,
+  glibcLocales,
 }:
-
 buildPythonPackage rec {
   version = "1.6";
   pname = "python-rapidjson";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
     sha256 = "sha256-GJzxqWv5/NhtADYPFa12qDzgiJuK6NHLD9srKZXlocg=";
   };
 
-  LC_ALL="en_US.utf-8";
-  buildInputs = [ glibcLocales ];
+  LC_ALL = "en_US.utf-8";
+  buildInputs = [glibcLocales];
 
   # buildInputs = [ ];
-  checkInputs = [ pytest pytz ];
+  checkInputs = [pytest pytz];
   # propagatedBuildInputs = [ ];
 
   checkPhase = ''
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-rapidjson/python-rapidjson";
     description = "Python wrapper around rapidjson ";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

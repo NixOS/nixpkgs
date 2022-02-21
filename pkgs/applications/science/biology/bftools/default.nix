@@ -1,5 +1,10 @@
-{ stdenv, lib, makeWrapper, fetchzip, jre }:
-
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  fetchzip,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "bftools";
   version = "6.3.0";
@@ -26,16 +31,16 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/libexec/bf.sh --prefix PATH : "${lib.makeBinPath [ jre ]}"
+    wrapProgram $out/libexec/bf.sh --prefix PATH : "${lib.makeBinPath [jre]}"
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   meta = with lib; {
     description = "A bundle of scripts for using Bio-Formats on the command line with bioformats_package.jar already included";
     license = licenses.gpl2;
     platforms = platforms.all;
     homepage = "https://www.openmicroscopy.org/bio-formats/";
-    maintainers = [ maintainers.tbenst ];
+    maintainers = [maintainers.tbenst];
   };
 }

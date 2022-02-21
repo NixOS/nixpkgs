@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools-scm
-, setuptools
-, pytestCheckHook
-, freezegun
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  pytestCheckHook,
+  freezegun,
 }:
-
 buildPythonPackage rec {
   version = "3.13.1";
   pname = "humanize";
@@ -41,7 +41,6 @@ buildPythonPackage rec {
     description = "Python humanize utilities";
     homepage = "https://github.com/jmoiron/humanize";
     license = licenses.mit;
-    maintainers = with maintainers; [ rmcgibbo ];
+    maintainers = with maintainers; [rmcgibbo];
   };
-
 }

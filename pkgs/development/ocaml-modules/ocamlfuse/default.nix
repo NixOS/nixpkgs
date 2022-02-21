@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, camlidl, fuse }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  camlidl,
+  fuse,
+}:
 buildDunePackage {
   pname = "ocamlfuse";
   version = "2.7.1_cvs6_e35e76b";
@@ -11,13 +16,13 @@ buildDunePackage {
     sha256 = "1v9g0wh7rnjkrjrnw50145g6ry38plyjs8fq8w0nlzwizhf3qhff";
   };
 
-  propagatedBuildInputs = [ camlidl fuse ];
+  propagatedBuildInputs = [camlidl fuse];
 
   meta = {
     homepage = "https://sourceforge.net/projects/ocamlfuse";
     description = "OCaml bindings for FUSE";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bennofs ];
+    maintainers = with lib.maintainers; [bennofs];
   };
 }

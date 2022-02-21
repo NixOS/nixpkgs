@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, mock
-, pytestCheckHook
-, cloudpickle
-, pyinotify
-, macfsevents
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  mock,
+  pytestCheckHook,
+  cloudpickle,
+  pyinotify,
+  macfsevents,
 }:
-
 buildPythonPackage rec {
   pname = "doit";
   version = "0.34.2";
@@ -21,14 +21,15 @@ buildPythonPackage rec {
     sha256 = "sha256-OIER+Kals7RGIM7rKH0FhZJ8hdDW0/h5DTT7tFwM9sM=";
   };
 
-  propagatedBuildInputs = [ cloudpickle ]
+  propagatedBuildInputs =
+    [cloudpickle]
     ++ lib.optional stdenv.isLinux pyinotify
     ++ lib.optional stdenv.isDarwin macfsevents;
 
   # hangs on darwin
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [ mock pytestCheckHook ];
+  checkInputs = [mock pytestCheckHook];
 
   disabledTests = [
     # depends on doit-py, which has a circular dependency on doit
@@ -46,6 +47,6 @@ buildPythonPackage rec {
       custom work-flows where there is no out-of-the-box solution
       available.
     '';
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "biplist";
   version = "1.0.3";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     "testXMLPlistWithData"
   ];
 
-  pythonImportsCheck = [ "biplist" ];
+  pythonImportsCheck = ["biplist"];
 
   meta = with lib; {
     homepage = "https://bitbucket.org/wooster/biplist/src/master/";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
       by OS X, iOS, or other clients.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [siriobalmelli];
   };
 }

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libwhereami, libyamlcpp, openssl, ruby, util-linux }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  cpp-hocon,
+  curl,
+  leatherman,
+  libwhereami,
+  libyamlcpp,
+  openssl,
+  ruby,
+  util-linux,
+}:
 stdenv.mkDerivation rec {
   pname = "facter";
   version = "3.14.17";
@@ -21,14 +34,14 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby util-linux ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby util-linux];
 
   meta = with lib; {
     homepage = "https://github.com/puppetlabs/facter";
     description = "A system inventory tool";
     license = licenses.asl20;
-    maintainers = [ maintainers.womfoo ];
+    maintainers = [maintainers.womfoo];
     platforms = platforms.unix;
   };
 }

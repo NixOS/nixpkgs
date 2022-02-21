@@ -1,6 +1,11 @@
-{ fetchurl, lib, stdenv, nss, nspr, pkg-config }:
-
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  nss,
+  nspr,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "liboauth";
   version = "1.0.3";
@@ -10,13 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "07w1aq8y8wld43wmbk2q8134p3bfkp2vma78mmsfgw2jn1bh3xhd";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  propagatedBuildInputs = [ nss nspr ];
+  propagatedBuildInputs = [nss nspr];
 
-  configureFlags = [ "--enable-nss" ];
+  configureFlags = ["--enable-nss"];
 
   postInstall = ''
     substituteInPlace $out/lib/liboauth.la \
@@ -30,5 +35,4 @@ stdenv.mkDerivation rec {
     repositories.git = "https://github.com/x42/liboauth.git";
     license = licenses.mit;
   };
-
 }

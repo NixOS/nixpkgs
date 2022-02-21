@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliff
-, oslo-i18n
-, oslo-utils
-, openstacksdk
-, pbr
-, requests-mock
-, simplejson
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cliff,
+  oslo-i18n,
+  oslo-utils,
+  openstacksdk,
+  pbr,
+  requests-mock,
+  simplejson,
+  stestr,
 }:
-
 buildPythonPackage rec {
   pname = "osc-lib";
   version = "2.5.0";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "osc_lib" ];
+  pythonImportsCheck = ["osc_lib"];
 
   meta = with lib; {
     description = "OpenStackClient Library";

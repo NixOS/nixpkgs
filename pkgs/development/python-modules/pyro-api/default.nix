@@ -1,5 +1,8 @@
-{ buildPythonPackage, fetchPypi, lib }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+}:
 buildPythonPackage rec {
   version = "0.1.2";
   pname = "pyro-api";
@@ -9,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "a1b900d9580aa1c2fab3b123ab7ff33413744da7c5f440bd4aadc4d40d14d920";
   };
 
-  pythonImportsCheck = [ "pyroapi" ];
+  pythonImportsCheck = ["pyroapi"];
 
   # tests require pyro-ppl which depends on this package
   doCheck = false;
@@ -18,6 +21,6 @@ buildPythonPackage rec {
     description = "Generic API for dispatch to Pyro backends.";
     homepage = "http://pyro.ai";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ georgewhewell ];
+    maintainers = with lib.maintainers; [georgewhewell];
   };
 }

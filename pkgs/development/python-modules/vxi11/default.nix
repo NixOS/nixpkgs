@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "python-vxi11";
   version = "0.9";
@@ -12,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1xv7chp7rm0vrvbz6q57fpwhlgjz461h08q9zgmkcl2l0w96hmsn";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     nosetests
   '';
@@ -21,6 +25,6 @@ buildPythonPackage rec {
     description = "VXI-11 driver for controlling instruments over Ethernet";
     homepage = "https://github.com/python-ivi/python-vxi11";
     license = licenses.mit;
-    maintainers = with maintainers; [ bgamari ];
+    maintainers = with maintainers; [bgamari];
   };
 }

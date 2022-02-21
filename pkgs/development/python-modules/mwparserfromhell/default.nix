@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pytest-runner
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pytest-runner,
 }:
-
 buildPythonPackage rec {
   pname = "mwparserfromhell";
   version = "0.6.4";
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "MWParserFromHell is a parser for MediaWiki wikicode";
     homepage = "https://mwparserfromhell.readthedocs.io/en/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ melling ];
+    maintainers = with maintainers; [melling];
   };
 }

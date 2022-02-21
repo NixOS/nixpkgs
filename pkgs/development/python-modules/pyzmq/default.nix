@@ -1,12 +1,12 @@
-{ buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, tornado
-, zeromq
-, py
-, python
+{
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  tornado,
+  zeromq,
+  py,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pyzmq";
   version = "22.3.0";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
     pytestCheckHook
     tornado
   ];
-  buildInputs = [ zeromq ];
-  propagatedBuildInputs = [ py ];
+  buildInputs = [zeromq];
+  propagatedBuildInputs = [py];
 
   # failing tests
   disabledTests = [

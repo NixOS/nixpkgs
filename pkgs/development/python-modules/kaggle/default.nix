@@ -1,15 +1,15 @@
-{ buildPythonPackage
-, certifi
-, fetchPypi
-, lib
-, python-dateutil
-, python-slugify
-, six
-, requests
-, tqdm
-, urllib3
+{
+  buildPythonPackage,
+  certifi,
+  fetchPypi,
+  lib,
+  python-dateutil,
+  python-slugify,
+  six,
+  requests,
+  tqdm,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "kaggle";
   version = "1.5.12";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3' \
       --replace " 'slugify'," " "
-    '';
+  '';
 
   propagatedBuildInputs = [
     certifi
@@ -44,12 +44,12 @@ buildPythonPackage rec {
     echo '{"username":"foobar","key":"00000000000000000000000000000000"}' > "$HOME/.kaggle/kaggle.json"
     $out/bin/kaggle --help > /dev/null
   '';
-  pythonImportsCheck = [ "kaggle" ];
+  pythonImportsCheck = ["kaggle"];
 
   meta = with lib; {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
     homepage = "https://github.com/Kaggle/kaggle-api";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cdepillabout ];
+    maintainers = with maintainers; [cdepillabout];
   };
 }

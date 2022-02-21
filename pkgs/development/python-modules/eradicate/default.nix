@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "eradicate";
   version = "2.0.0";
@@ -12,8 +15,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "eradicate removes commented-out code from Python files.";
     homepage = "https://github.com/myint/eradicate";
-    license = [ licenses.mit ];
+    license = [licenses.mit];
 
-    maintainers = [ maintainers.mmlb ];
+    maintainers = [maintainers.mmlb];
   };
 }

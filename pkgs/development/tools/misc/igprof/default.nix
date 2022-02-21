@@ -1,5 +1,12 @@
-{lib, stdenv, fetchFromGitHub, libunwind, cmake, pcre, gdb}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libunwind,
+  cmake,
+  pcre,
+  gdb,
+}:
 stdenv.mkDerivation rec {
   version = "5.9.16";
   pname = "igprof";
@@ -13,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/igprof --replace libigprof.so $out/lib/libigprof.so
-    '';
+  '';
 
   buildInputs = [libunwind gdb pcre];
   nativeBuildInputs = [cmake];
@@ -38,6 +45,6 @@ stdenv.mkDerivation rec {
 
     homepage = "https://igprof.org/";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ktf ];
+    maintainers = with lib.maintainers; [ktf];
   };
 }

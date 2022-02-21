@@ -1,7 +1,18 @@
-{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkg-config, wrapGAppsHook, pcre-cpp, gnome }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  smartmontools,
+  autoreconfHook,
+  gettext,
+  gtkmm3,
+  pkg-config,
+  wrapGAppsHook,
+  pcre-cpp,
+  gnome,
+}:
 stdenv.mkDerivation rec {
-  version="1.1.3";
+  version = "1.1.3";
   pname = "gsmartcontrol";
 
   src = fetchurl {
@@ -13,14 +24,14 @@ stdenv.mkDerivation rec {
     ./fix-paths.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook gettext pkg-config wrapGAppsHook ];
-  buildInputs = [ gtkmm3 pcre-cpp gnome.adwaita-icon-theme ];
+  nativeBuildInputs = [autoreconfHook gettext pkg-config wrapGAppsHook];
+  buildInputs = [gtkmm3 pcre-cpp gnome.adwaita-icon-theme];
 
   enableParallelBuilding = true;
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ smartmontools ]}"
+      --prefix PATH : "${lib.makeBinPath [smartmontools]}"
     )
   '';
 

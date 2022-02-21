@@ -1,13 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, requests
-, mock
-, pytest
-, pytest-cov
-, isPy3k
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  requests,
+  mock,
+  pytest,
+  pytest-cov,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "stups-tokens";
   version = "1.1.19";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "A Python library that keeps OAuth 2.0 service access tokens in memory for your usage.";
     homepage = "https://github.com/zalando-stups/python-tokens";
     license = licenses.asl20;
-    maintainers = [ maintainers.mschuwalow ];
+    maintainers = [maintainers.mschuwalow];
   };
 }

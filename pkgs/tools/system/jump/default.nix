@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "jump";
   version = "0.40.0";
@@ -15,7 +18,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  outputs = [ "out" "man"];
+  outputs = ["out" "man"];
   postInstall = ''
     install -D --mode=444 man/j.1 man/jump.1 -t $man/man/man1/
 
@@ -36,6 +39,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gsamokovarov/jump";
     license = licenses.mit;
-    maintainers = with maintainers; [ sondr3 ];
+    maintainers = with maintainers; [sondr3];
   };
 }

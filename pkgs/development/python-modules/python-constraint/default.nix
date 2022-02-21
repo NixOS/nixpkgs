@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub
   # Check inputs
-, pytestCheckHook
+  ,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "python-constraint";
   version = "1.4.0";
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1dv11406yxmmgkkhwzqicajbg2bmla5xfad7lv57zyahxz8jzz94";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
@@ -24,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://labix.org/doc/constraint/";
     downloadPage = "https://github.com/python-constraint/python-constraint/releases";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, Security
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  Security,
+  openssl,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "hiksink";
   version = "1.2.1";
@@ -24,16 +24,18 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optional stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optional stdenv.isDarwin [
+      Security
+    ];
 
   meta = with lib; {
     description = "Tool to convert Hikvision camera events to MQTT";
     homepage = "https://github.com/CornerBit/HikSink";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchurl,
+  IOKit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libstatgrab";
   version = "0.92.1";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.i-scream.org/libstatgrab/";
     description = "A library that provides cross platforms access to statistics about the running system";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "wireless-tools";
   version = "30.pre9";

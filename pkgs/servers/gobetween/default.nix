@@ -1,7 +1,10 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib
-, enableStatic ? stdenv.hostPlatform.isStatic
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
-
 buildGoModule rec {
   pname = "gobetween";
   version = "0.8.0";
@@ -34,6 +37,6 @@ buildGoModule rec {
     description = "Modern & minimalistic load balancer for the Сloud era";
     homepage = "https://gobetween.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomberek ];
+    maintainers = with maintainers; [tomberek];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "dash-table";
   version = "5.0.0";
@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "A First-Class Interactive DataTable for Dash";
     homepage = "https://dash.plot.ly/datatable";
     license = licenses.mit;
-    maintainers = [ maintainers.antoinerg ];
+    maintainers = [maintainers.antoinerg];
   };
 }

@@ -1,7 +1,7 @@
-{ python3
-, lib
+{
+  python3,
+  lib,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudsmith-cli";
   version = "0.31.1";
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://help.cloudsmith.io/docs/cli/";
     description = "Cloudsmith Command Line Interface";
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [jtojnar];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
   };

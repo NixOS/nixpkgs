@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
 }:
-
 buildPythonPackage rec {
   pname = "smarthab";
   version = "0.21";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
   # no tests on PyPI, no tags on GitLab
   doCheck = false;
 
-  pythonImportsCheck = [ "pysmarthab" ];
+  pythonImportsCheck = ["pysmarthab"];
 
   meta = with lib; {
     description = "Control devices in a SmartHab-powered home";
     homepage = "https://gitlab.com/outadoc/python-smarthab";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

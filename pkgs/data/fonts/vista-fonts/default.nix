@@ -1,5 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, cabextract }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  cabextract,
+}:
 stdenvNoCC.mkDerivation {
   pname = "vista-fonts";
   version = "1";
@@ -9,7 +13,7 @@ stdenvNoCC.mkDerivation {
     sha256 = "07vhjdw8iip7gxk6wvp4myhvbn9619g10j9qvpbzz4ihima57ry4";
   };
 
-  nativeBuildInputs = [ cabextract ];
+  nativeBuildInputs = [cabextract];
 
   unpackPhase = ''
     cabextract --lowercase --filter ppviewer.cab $src

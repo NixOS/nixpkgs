@@ -1,25 +1,40 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.triggerhappy;
 
   socket = "/run/thd.socket";
 
   configFile = pkgs.writeText "triggerhappy.conf" ''
-    ${concatMapStringsSep "\n"
-      ({ keys, event, cmd, ... }:
-        ''${concatMapStringsSep "+" (x: "KEY_" + x) keys} ${toString { press = 1; hold = 2; release = 0; }.${event}} ${cmd}''
+    ${
+      concatMapStringsSep "\n"
+      (
+        {
+          keys,
+          event,
+          cmd,
+          ...
+        }: ''${concatMapStringsSep "+" (x: "KEY_" + x) keys} ${
+            toString
+            {
+              press = 1;
+              hold = 2;
+              release = 0;
+            }
+            .${event}
+          } ${cmd}''
       )
-      cfg.bindings}
+      cfg.bindings
+    }
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { ... }: {
+  bindingCfg = {...}: {
     options = {
-
       keys = mkOption {
         type = types.listOf types.str;
         description = "List of keys to match.  Key names as defined in linux/input-event-codes.h";
@@ -35,20 +50,13 @@ let
         type = types.str;
         description = "What to run.";
       };
-
     };
   };
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.triggerhappy = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -84,24 +92,20 @@ in
           Literal contents to append to the end of <command>triggerhappy</command> configuration file.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     systemd.sockets.triggerhappy = {
       description = "Triggerhappy Socket";
-      wantedBy = [ "sockets.target" ];
+      wantedBy = ["sockets.target"];
       socketConfig.ListenDatagram = socket;
     };
 
     systemd.services.triggerhappy = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       description = "Global hotkey daemon";
       serviceConfig = {
         ExecStart = "${pkgs.triggerhappy}/bin/thd ${optionalString (cfg.user != "root") "--user ${cfg.user}"} --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
@@ -116,7 +120,5 @@ in
           RUN+="${pkgs.triggerhappy}/bin/th-cmd --socket ${socket} --passfd --udev"
       '';
     });
-
   };
-
 }

@@ -1,23 +1,20 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-let
-  dataDir = "/var/lib/foobar";
-
-in {
+import ./make-test-python.nix (
+  {pkgs, ...}: let
+    dataDir = "/var/lib/foobar";
+  in {
     name = "etebase-server";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ felschr ];
+      maintainers = [felschr];
     };
 
-    machine = { pkgs, ... }:
-      {
-        services.etebase-server = {
-          inherit dataDir;
-          enable = true;
-          settings.global.secret_file =
-            toString (pkgs.writeText "secret" "123456");
-        };
+    machine = {pkgs, ...}: {
+      services.etebase-server = {
+        inherit dataDir;
+        enable = true;
+        settings.global.secret_file =
+          toString (pkgs.writeText "secret" "123456");
       };
+    };
 
     testScript = ''
       machine.wait_for_unit("etebase-server.service")

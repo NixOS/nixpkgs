@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, libarchive
-, p7zip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libarchive,
+  p7zip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mas";
   version = "1.8.2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "HlLQKBVIYKanS6kjkbYdabBi1T0irxE6fNd2H6mDKe4=";
   };
 
-  nativeBuildInputs = [ libarchive p7zip ];
+  nativeBuildInputs = [libarchive p7zip];
 
   unpackPhase = ''
     7z x $src
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Mac App Store command line interface";
     homepage = "https://github.com/mas-cli/mas";
     license = licenses.mit;
-    maintainers = with maintainers; [ zachcoyle ];
+    maintainers = with maintainers; [zachcoyle];
     platforms = platforms.darwin;
   };
 }

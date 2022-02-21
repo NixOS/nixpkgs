@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, desktop-file-utils
-, ffmpeg
-, gobject-introspection
-, granite
-, gtk
-, imagemagick
-, libgee
-, libhandy
-, libsecret
-, libsoup
-, meson
-, ninja
-, pkg-config
-, python
-, vala
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  ffmpeg,
+  gobject-introspection,
+  granite,
+  gtk,
+  imagemagick,
+  libgee,
+  libhandy,
+  libsecret,
+  libsoup,
+  meson,
+  ninja,
+  pkg-config,
+  python,
+  vala,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ciano";
   version = "0.2.4";
@@ -59,18 +59,17 @@ stdenv.mkDerivation rec {
       ffmpeg
       imagemagick
     ];
-  in
-    ''
-      wrapProgram $out/bin/com.github.robertsanseries.ciano \
-         --prefix PATH : ${binPath} "''${gappsWrapperArgs[@]}"
-      ln -s $out/bin/com.github.robertsanseries.ciano $out/bin/ciano
-    '';
+  in ''
+    wrapProgram $out/bin/com.github.robertsanseries.ciano \
+       --prefix PATH : ${binPath} "''${gappsWrapperArgs[@]}"
+    ln -s $out/bin/com.github.robertsanseries.ciano $out/bin/ciano
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/robertsanseries/ciano";
     description = "A multimedia file converter focused on simplicity";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

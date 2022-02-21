@@ -1,8 +1,11 @@
-{ mkDerivation, lib
-, libkdegames, extra-cmake-modules
-, kdeclarative, knewstuff
+{
+  mkDerivation,
+  lib,
+  libkdegames,
+  extra-cmake-modules,
+  kdeclarative,
+  knewstuff,
 }:
-
 mkDerivation {
   pname = "bomber";
   meta = with lib; {
@@ -14,8 +17,8 @@ mkDerivation {
 
       The goal of the game is to destroy all the buildings and advance to the next level.
       Each level gets a bit harder by increasing the speed of the plane and the height of the buildings.
-      '';
-    maintainers = with maintainers; [ freezeboy ];
+    '';
+    maintainers = with maintainers; [freezeboy];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

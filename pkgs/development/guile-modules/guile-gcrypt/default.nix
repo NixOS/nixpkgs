@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, guile
-, libgcrypt
-, autoreconfHook
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  guile,
+  libgcrypt,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "guile-gcrypt";
   version = "0.3.0";
@@ -26,7 +26,9 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config texinfo
+    autoreconfHook
+    pkg-config
+    texinfo
   ];
   buildInputs = [
     guile
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Bindings to Libgcrypt for GNU Guile";
     homepage = "https://notabug.org/cwebber/guile-gcrypt";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    maintainers = with maintainers; [ethancedwards8];
     platforms = platforms.linux;
   };
 }

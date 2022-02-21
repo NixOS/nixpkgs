@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, clickgen
-, unzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  clickgen,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bibata-extra-cursors";
   version = "1.0.1";
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "0vf14ln53wigaq3dkqdk5avarqplsq751nlv72da04ms6gqjfhdl";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
-  buildInputs = [ clickgen ];
+  buildInputs = [clickgen];
 
   buildPhase = ''
     mkdir bitmaps
@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ful1e5/Bibata_Extra_Cursor";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill AdsonCicilioti ];
+    maintainers = with maintainers; [dtzWill AdsonCicilioti];
   };
 }

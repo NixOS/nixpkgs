@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildPythonPackage, six }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  six,
+}:
 buildPythonPackage rec {
   version = "0.1.3";
   pname = "jsondate";
@@ -12,7 +16,7 @@ buildPythonPackage rec {
     fetchSubmodules = true; # Fetching by tag does not work otherwise
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   meta = {
     homepage = "https://github.com/ilya-kolpakov/jsondate";

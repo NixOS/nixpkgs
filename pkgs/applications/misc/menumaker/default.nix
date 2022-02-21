@@ -1,5 +1,8 @@
-{ lib, fetchurl, python3Packages }:
-
+{
+  lib,
+  fetchurl,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "menumaker";
   version = "0.99.13";
@@ -16,6 +19,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://menumaker.sourceforge.net";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

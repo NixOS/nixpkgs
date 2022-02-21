@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, sgmllib3k
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sgmllib3k,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "feedparser";
   version = "6.0.8";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kurtmckee/feedparser";
     description = "Universal feed parser";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

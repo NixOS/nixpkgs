@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bison, flex }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bison,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "libcue";
   version = "2.2.1";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1iqw4n01rv2jyk9lksagyxj8ml0kcfwk67n79zy1r6zv1xfp5ywm";
   };
 
-  nativeBuildInputs = [ cmake bison flex ];
+  nativeBuildInputs = [cmake bison flex];
 
   doCheck = false; # fails all the tests (ctest)
 
@@ -24,7 +30,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/libcue/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [astsmtl];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

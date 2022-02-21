@@ -1,13 +1,18 @@
-{ lib, stdenv, dockapps-sources
-, libX11, libXpm, libXext }:
-
+{
+  lib,
+  stdenv,
+  dockapps-sources,
+  libX11,
+  libXpm,
+  libXext,
+}:
 stdenv.mkDerivation rec {
   pname = "wmCalClock";
   version = "1.25";
 
   src = dockapps-sources;
 
-  buildInputs = [ libX11 libXpm libXext ];
+  buildInputs = [libX11 libXpm libXext];
 
   setSourceRoot = ''
     export sourceRoot=$(echo */${pname}/Src)
@@ -26,13 +31,13 @@ stdenv.mkDerivation rec {
     install -d ${placeholder "out"}/man/man1
   '';
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" ];
+  installFlags = ["DESTDIR=${placeholder "out"}"];
 
   meta = with lib; {
     description = "A Calendar clock with antialiased text";
     homepage = "https://www.dockapps.net/wmcalclock";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bstrik ];
+    maintainers = [maintainers.bstrik];
     platforms = platforms.linux;
   };
 }

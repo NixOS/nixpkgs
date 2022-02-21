@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchurl, cctools, fixDarwinDylibNames }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cctools,
+  fixDarwinDylibNames,
+}:
 stdenv.mkDerivation rec {
-
   pname = "lp_solve";
   version = "5.5.2.11";
 
@@ -18,7 +22,10 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   buildPhase = let
-    ccc = if stdenv.isDarwin then "ccc.osx" else "ccc";
+    ccc =
+      if stdenv.isDarwin
+      then "ccc.osx"
+      else "ccc";
   in ''
     runHook preBuild
 
@@ -44,9 +51,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Mixed Integer Linear Programming (MILP) solver";
-    homepage    = "http://lpsolve.sourceforge.net";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ smironov ];
-    platforms   = platforms.unix;
+    homepage = "http://lpsolve.sourceforge.net";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [smironov];
+    platforms = platforms.unix;
   };
 }

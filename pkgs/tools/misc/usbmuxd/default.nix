@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libusb1, libimobiledevice }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libusb1,
+  libimobiledevice,
+}:
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
   version = "unstable-2021-05-08";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hhbfRmLEhVVuJNnw65PakPnvjSCrN3oSMK6D7Zwnw60=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  propagatedBuildInputs = [ libimobiledevice libusb1 ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  propagatedBuildInputs = [libimobiledevice libusb1];
 
   preConfigure = ''
     configureFlags="$configureFlags --with-udevrulesdir=$out/lib/udev/rules.d"
@@ -33,6 +40,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [infinisil];
   };
 }

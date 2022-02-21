@@ -1,14 +1,14 @@
-{ stdenv
-, fetchurl
-, coursier
-, autoPatchelfHook
-, installShellFiles
-, makeWrapper
-, jre
-, lib
-, zlib
+{
+  stdenv,
+  fetchurl,
+  coursier,
+  autoPatchelfHook,
+  installShellFiles,
+  makeWrapper,
+  jre,
+  lib,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bloop";
   version = "1.4.13";
@@ -36,9 +36,12 @@ stdenv.mkDerivation rec {
   bloop-coursier = stdenv.mkDerivation rec {
     name = "${pname}-coursier-${version}";
 
-    platform = if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
-    else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
-    else throw "unsupported platform";
+    platform =
+      if stdenv.isLinux && stdenv.isx86_64
+      then "x86_64-pc-linux"
+      else if stdenv.isDarwin && stdenv.isx86_64
+      then "x86_64-apple-darwin"
+      else throw "unsupported platform";
 
     dontUnpack = true;
     installPhase = ''
@@ -60,15 +63,18 @@ stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "sha256-jqcecAM51qEDmTim2VBNm8IO8wQmwU19R57Zk4pxwSA="
-    else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-WJytRIbsygi4zoIVfkJmzWyFe2p8mQuT4DDO5KDKopY="
-    else throw "unsupported platform";
+    outputHash =
+      if stdenv.isLinux && stdenv.isx86_64
+      then "sha256-jqcecAM51qEDmTim2VBNm8IO8wQmwU19R57Zk4pxwSA="
+      else if stdenv.isDarwin && stdenv.isx86_64
+      then "sha256-WJytRIbsygi4zoIVfkJmzWyFe2p8mQuT4DDO5KDKopY="
+      else throw "unsupported platform";
   };
 
   dontUnpack = true;
-  nativeBuildInputs = [ autoPatchelfHook installShellFiles makeWrapper ];
-  buildInputs = [ stdenv.cc.cc.lib zlib ];
-  propagatedBuildInputs = [ jre ];
+  nativeBuildInputs = [autoPatchelfHook installShellFiles makeWrapper];
+  buildInputs = [stdenv.cc.cc.lib zlib];
+  propagatedBuildInputs = [jre];
 
   installPhase = ''
     runHook preInstall
@@ -94,7 +100,7 @@ stdenv.mkDerivation rec {
     homepage = "https://scalacenter.github.io/bloop/";
     license = licenses.asl20;
     description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ kubukoz tomahna ];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
+    maintainers = with maintainers; [kubukoz tomahna];
   };
 }

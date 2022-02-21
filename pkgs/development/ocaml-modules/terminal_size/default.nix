@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl, alcotest }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+}:
 buildDunePackage rec {
   pname = "terminal_size";
   version = "0.1.4";
@@ -11,13 +15,13 @@ buildDunePackage rec {
     sha256 = "fdca1fee7d872c4a8e5ab003d9915b6782b272e2a3661ca877f2d78dd25371a7";
   };
 
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
   doCheck = true;
 
   meta = with lib; {
     description = "Get the dimensions of the terminal";
     homepage = "https://github.com/cryptosense/terminal_size";
     license = licenses.bsd2;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

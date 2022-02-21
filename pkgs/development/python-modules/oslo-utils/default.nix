@@ -1,26 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, debtcollector
-, eventlet
-, fixtures
-, iso8601
-, netaddr
-, netifaces
-, oslo-i18n
-, oslotest
-, packaging
-, pbr
-, pyparsing
-, pytz
-, stestr
-, testscenarios
-, pyyaml
-, iana-etc
-, libredirect
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  debtcollector,
+  eventlet,
+  fixtures,
+  iso8601,
+  netaddr,
+  netifaces,
+  oslo-i18n,
+  oslotest,
+  packaging,
+  pbr,
+  pyparsing,
+  pytz,
+  stestr,
+  testscenarios,
+  pyyaml,
+  iana-etc,
+  libredirect,
 }:
-
 buildPythonPackage rec {
   pname = "oslo-utils";
   version = "4.12.2";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
   propagatedBuildInputs = [
     debtcollector
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "oslo_utils" ];
+  pythonImportsCheck = ["oslo_utils"];
 
   meta = with lib; {
     description = "Oslo Utility library";

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, prometheus-client
-, pyserial
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  prometheus-client,
+  pyserial,
+  pythonOlder,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "finitude";
   version = "0.1.1";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python module to get data from ABCD bus (RS-485) used by Carrier Infinity and Bryant Evolution HVAC systems";
     homepage = "https://github.com/dulitz/finitude";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

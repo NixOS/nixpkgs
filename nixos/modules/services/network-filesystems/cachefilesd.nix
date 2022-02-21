@@ -1,22 +1,19 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.cachefilesd;
 
   cfgFile = pkgs.writeText "cachefilesd.conf" ''
     dir ${cfg.cacheDir}
     ${cfg.extraConfig}
   '';
-
-in
-
-{
+in {
   options = {
     services.cachefilesd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -35,19 +32,17 @@ in
         example = "brun 10%";
         description = "Additional configuration file entries. See cachefilesd.conf(5) for more information.";
       };
-
     };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    boot.kernelModules = [ "cachefiles" ];
+    boot.kernelModules = ["cachefiles"];
 
     systemd.services.cachefilesd = {
       description = "Local network file caching management daemon";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "exec";
         ExecStart = "${pkgs.cachefilesd}/bin/cachefilesd -n -f ${cfgFile}";

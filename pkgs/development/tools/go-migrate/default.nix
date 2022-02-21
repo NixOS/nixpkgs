@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "go-migrate";
   version = "4.15.1";
@@ -13,13 +16,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-qgjU8mUdk8S0VHmWiTK/5euwhRQ4y3o4oRxG2EHF+7E=";
 
-  subPackages = [ "cmd/migrate" ];
+  subPackages = ["cmd/migrate"];
 
   meta = with lib; {
-    homepage    = "https://github.com/golang-migrate/migrate";
+    homepage = "https://github.com/golang-migrate/migrate";
     description = "Database migrations. CLI and Golang library";
-    maintainers = with maintainers; [ offline ];
-    license     = licenses.mit;
+    maintainers = with maintainers; [offline];
+    license = licenses.mit;
     mainProgram = "migrate";
   };
 }

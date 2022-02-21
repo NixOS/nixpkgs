@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gtk-doc, gettext
-, pkg-config, glib, libxml2, gobject-introspection, gnome-common, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gtk-doc,
+  gettext,
+  pkg-config,
+  glib,
+  libxml2,
+  gobject-introspection,
+  gnome-common,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "liblangtag";
   version = "0.6.3";
@@ -32,16 +42,16 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     lib.optional
-      (stdenv.hostPlatform.libc == "glibc")
-      "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
+    (stdenv.hostPlatform.libc == "glibc")
+    "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
 
-  buildInputs = [ gettext glib libxml2 gobject-introspection gnome-common ];
-  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config unzip ];
+  buildInputs = [gettext glib libxml2 gobject-introspection gnome-common];
+  nativeBuildInputs = [autoreconfHook gtk-doc gettext pkg-config unzip];
 
   meta = with lib; {
     description = "An interface library to access tags for identifying languages";
     license = licenses.mpl20;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.unix;
     # There are links to a homepage that are broken by a BitBucket change
     homepage = "https://bitbucket.org/tagoh/liblangtag/overview";

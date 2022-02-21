@@ -1,16 +1,17 @@
-{ lib
-, mkDerivation
-, fetchurl
-, qmake
-, qtbase
-, qtsvg
-, pkg-config
-, poppler
-, djvulibre
-, libspectre
-, cups
-, file
-, ghostscript
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  qmake,
+  qtbase,
+  qtsvg,
+  pkg-config,
+  poppler,
+  djvulibre,
+  libspectre,
+  cups,
+  file,
+  ghostscript,
 }:
 mkDerivation rec {
   pname = "qpdfview";
@@ -22,9 +23,9 @@ mkDerivation rec {
   };
 
   # apply upstream fix for qt5.15 https://bazaar.launchpad.net/~adamreichold/qpdfview/trunk/revision/2104
-  patches = [ ./qpdfview-qt515-compat.patch ];
+  patches = [./qpdfview-qt515-compat.patch];
 
-  nativeBuildInputs = [ qmake pkg-config ];
+  nativeBuildInputs = [qmake pkg-config];
   buildInputs = [
     qtbase
     qtsvg
@@ -52,7 +53,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "A tabbed document viewer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     homepage = "https://launchpad.net/qpdfview";
   };

@@ -1,15 +1,13 @@
-{ callPackage
-, fetchurl
-, gcc7
-, gcc9
-, gcc10
-, lib
-}:
-
-let
+{
+  callPackage,
+  fetchurl,
+  gcc7,
+  gcc9,
+  gcc10,
+  lib,
+}: let
   common = callPackage ./common.nix;
-in
-rec {
+in rec {
   cudatoolkit_10_0 = common {
     version = "10.0.130";
     url = "https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_410.48_linux";

@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.epgstation;
   opt = options.services.epgstation;
 
@@ -38,16 +41,27 @@ let
   logConfig = {
     appenders.stdout.type = "stdout";
     categories = {
-      default = { appenders = [ "stdout" ]; level = "info"; };
-      system = { appenders = [ "stdout" ]; level = "info"; };
-      access = { appenders = [ "stdout" ]; level = "info"; };
-      stream = { appenders = [ "stdout" ]; level = "info"; };
+      default = {
+        appenders = ["stdout"];
+        level = "info";
+      };
+      system = {
+        appenders = ["stdout"];
+        level = "info";
+      };
+      access = {
+        appenders = ["stdout"];
+        level = "info";
+      };
+      stream = {
+        appenders = ["stdout"];
+        level = "info";
+      };
     };
   };
 
   defaultPassword = "INSECURE_GO_CHECK_CONFIGURATION_NIX\n";
-in
-{
+in {
   options.services.epgstation = {
     enable = mkEnableOption "EPGStation: DTV Software in Japan";
 
@@ -137,7 +151,7 @@ in
       };
     };
 
-    database =  {
+    database = {
       name = mkOption {
         type = types.str;
         default = "epgstation";
@@ -236,7 +250,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = with cfg; [ port socketioPort ];
+      allowedTCPPorts = with cfg; [port socketioPort];
     };
 
     users.users.epgstation = {
@@ -252,7 +266,7 @@ in
     services.mysql = {
       enable = mkDefault true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = [ cfg.database.name ];
+      ensureDatabases = [cfg.database.name];
       # FIXME: enable once mysqljs supports auth_socket
       # ensureUsers = [ {
       #   name = username;
@@ -289,10 +303,10 @@ in
         maxStreaming = mkDefault 2;
       };
     in
-    mkMerge [
-      defaultSettings
-      (mkIf cfg.usePreconfiguredStreaming streamingConfig)
-    ];
+      mkMerge [
+        defaultSettings
+        (mkIf cfg.usePreconfiguredStreaming streamingConfig)
+      ];
 
     systemd.tmpfiles.rules = [
       "d '/var/lib/epgstation/streamfiles' - ${username} ${groupname} - -"
@@ -302,10 +316,12 @@ in
 
     systemd.services.epgstation = {
       description = pkgs.epgstation.meta.description;
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-      ] ++ optional config.services.mirakurun.enable "mirakurun.service"
+      wantedBy = ["multi-user.target"];
+      after =
+        [
+          "network.target"
+        ]
+        ++ optional config.services.mirakurun.enable "mirakurun.service"
         ++ optional config.services.mysql.enable "mysql.service";
 
       serviceConfig = {

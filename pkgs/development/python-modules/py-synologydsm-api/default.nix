@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, requests
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  requests,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
   version = "1.0.6";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Python API for Synology DSM";
     homepage = "https://github.com/hacf-fr/synologydsm-api";
     license = licenses.mit;
-    maintainers = with maintainers; [ uvnikita ];
+    maintainers = with maintainers; [uvnikita];
   };
 }

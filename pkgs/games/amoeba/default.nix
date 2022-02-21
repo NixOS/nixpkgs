@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, amoeba-data, alsa-lib, expat, freetype, gtk2, libvorbis, libGLU, xorg, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  amoeba-data,
+  alsa-lib,
+  expat,
+  freetype,
+  gtk2,
+  libvorbis,
+  libGLU,
+  xorg,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "amoeba";
   version = "1.1";
@@ -26,8 +38,8 @@ stdenv.mkDerivation rec {
     sed -i main/linux-config/linux-config.cpp -e 's|libgtk-x11-2.0.so.0|${gtk2}/lib/&|'
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib expat freetype gtk2 libvorbis libGLU xorg.libXxf86vm ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [alsa-lib expat freetype gtk2 libvorbis libGLU xorg.libXxf86vm];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1/
@@ -39,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Fast-paced, polished OpenGL demonstration by Excess";
     homepage = "https://packages.qa.debian.org/a/amoeba.html";
     license = licenses.gpl2; # Engine is GPLv2, data files in amoeba-data nonfree
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = [maintainers.dezgeg];
     platforms = platforms.linux;
   };
 }

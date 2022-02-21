@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "pid";
   version = "3.0.4";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0e33670e83f6a33ebb0822e43a609c3247178d4a375ff50a4689e266d853eb66";
   };
 
-  buildInputs = [ nose ];
+  buildInputs = [nose];
 
   # No tests included
   doCheck = false;
@@ -23,5 +23,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/trbs/pid/";
     license = licenses.asl20;
   };
-
 }

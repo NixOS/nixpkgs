@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, bison
-, libevent
-, libressl
-, ncurses
-, autoreconfHook
-, buildPackages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  bison,
+  libevent,
+  libressl,
+  ncurses,
+  autoreconfHook,
+  buildPackages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "telescope";
   version = "0.7.1";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Telescope is a w3m-like browser for Gemini";
     homepage = "https://telescope.omarpolo.com/";
     license = licenses.isc;
-    maintainers = with maintainers; [ heph2 ];
+    maintainers = with maintainers; [heph2];
     platforms = platforms.unix;
   };
 }

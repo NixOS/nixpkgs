@@ -1,10 +1,11 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "pysqlite";
   version = "2.8.3";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   # Since the `.egg' file is zipped, the `NEEDED' of the `.so' files
   # it contains is not taken into account.  Thus, we must explicitly make
   # it a propagated input.
-  propagatedBuildInputs = [ pkgs.sqlite ];
+  propagatedBuildInputs = [pkgs.sqlite];
 
   patchPhase = ''
     substituteInPlace "setup.cfg"                                     \
@@ -53,5 +54,4 @@ buildPythonPackage rec {
     '';
     license = licenses.bsd3;
   };
-
 }

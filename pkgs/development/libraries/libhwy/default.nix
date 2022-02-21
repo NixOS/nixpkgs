@@ -1,5 +1,12 @@
-{ lib, stdenv, cmake, ninja, gtest, fetchpatch, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  ninja,
+  gtest,
+  fetchpatch,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "libhwy";
   version = "0.15.0";
@@ -21,18 +28,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [cmake ninja];
 
-  checkInputs = [ gtest ];
+  checkInputs = [gtest];
 
   # Required for case-insensitive filesystems ("BUILD" exists)
   dontUseCmakeBuildDir = true;
 
-  cmakeFlags = [
-    "-GNinja"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optional doCheck "-DHWY_SYSTEM_GTEST:BOOL=ON";
+  cmakeFlags =
+    [
+      "-GNinja"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optional doCheck "-DHWY_SYSTEM_GTEST:BOOL=ON";
 
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -42,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/highway";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [zhaofengli];
   };
 }

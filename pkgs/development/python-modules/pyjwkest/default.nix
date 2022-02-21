@@ -1,7 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi,
-  future, pycryptodomex, pytest, requests, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  pycryptodomex,
+  pytest,
+  requests,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "pyjwkest";
   version = "1.4.2";
@@ -17,6 +23,6 @@ buildPythonPackage rec {
     sha256 = "5560fd5ba08655f29ff6ad1df1e15dc05abc9d976fcbcec8d2b5167f49b70222";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ future pycryptodomex requests six ];
+  buildInputs = [pytest];
+  propagatedBuildInputs = [future pycryptodomex requests six];
 }

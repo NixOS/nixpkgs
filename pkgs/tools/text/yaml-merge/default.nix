@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+}:
 stdenv.mkDerivation {
   pname = "yaml-merge";
   version = "unstable-2022-01-12";
@@ -11,8 +15,8 @@ stdenv.mkDerivation {
     sha256 = "sha256-S2eZw+FOZvOn0XupZDRNcolUPd4PhvU1ziu+kx2AwnY=";
   };
 
-  pythonPath = with python3Packages; [ pyyaml ];
-  nativeBuildInputs = with python3Packages;  [ wrapPython ];
+  pythonPath = with python3Packages; [pyyaml];
+  nativeBuildInputs = with python3Packages; [wrapPython];
 
   installPhase = ''
     install -Dm755 yaml-merge.py $out/bin/yaml-merge
@@ -24,6 +28,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/abbradar/yaml-merge";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

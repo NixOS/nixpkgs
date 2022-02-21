@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
 }:
-
 buildPythonPackage {
   pname = "Flask-Silk";
   version = "2018-06-28";

@@ -1,26 +1,32 @@
-{ version
-, src
-, jami-meta
-, mkDerivation
-, lib
-, pkg-config
-, cmake
-, networkmanager # for libnm
-, python3
-, qttools # for translations
-, wrapQtAppsHook
-, libnotify
-, qrencode
-, qtwebengine
-, qtdeclarative
-, qtquickcontrols2
-, qtmultimedia
-, qtsvg
-, qtwebchannel
-, qtgraphicaleffects # no gui without this
-, jami-libclient
+{
+  version,
+  src,
+  jami-meta,
+  mkDerivation,
+  lib,
+  pkg-config,
+  cmake,
+  networkmanager
+  # for libnm
+  ,
+  python3,
+  qttools
+  # for translations
+  ,
+  wrapQtAppsHook,
+  libnotify,
+  qrencode,
+  qtwebengine,
+  qtdeclarative,
+  qtquickcontrols2,
+  qtmultimedia,
+  qtsvg,
+  qtwebchannel,
+  qtgraphicaleffects
+  # no gui without this
+  ,
+  jami-libclient,
 }:
-
 mkDerivation {
   pname = "jami-client-qt";
   inherit version src;
@@ -53,7 +59,9 @@ mkDerivation {
     qtgraphicaleffects
   ];
 
-  meta = jami-meta // {
-    description = "The client based on QT" + jami-meta.description;
-  };
+  meta =
+    jami-meta
+    // {
+      description = "The client based on QT" + jami-meta.description;
+    };
 }

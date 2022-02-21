@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, prompt-toolkit
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  prompt-toolkit,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "questionary";
   version = "1.10.0";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to build command line user prompts";
     homepage = "https://github.com/tmbo/questionary";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

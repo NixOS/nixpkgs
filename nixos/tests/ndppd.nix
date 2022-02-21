@@ -1,37 +1,48 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "ndppd";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ fpletz ];
+    maintainers = [fpletz];
   };
 
   nodes = {
-    upstream = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.tcpdump ];
+    upstream = {pkgs, ...}: {
+      environment.systemPackages = [pkgs.tcpdump];
       networking.useDHCP = false;
       networking.interfaces = {
         eth1 = {
           ipv6.addresses = [
-            { address = "fd23::1"; prefixLength = 112; }
+            {
+              address = "fd23::1";
+              prefixLength = 112;
+            }
           ];
           ipv6.routes = [
-            { address = "fd42::";
+            {
+              address = "fd42::";
               prefixLength = 112;
             }
           ];
         };
       };
     };
-    server = { pkgs, ... }: {
+    server = {pkgs, ...}: {
       boot.kernel.sysctl = {
         "net.ipv6.conf.all.forwarding" = "1";
         "net.ipv6.conf.default.forwarding" = "1";
       };
-      environment.systemPackages = [ pkgs.tcpdump ];
+      environment.systemPackages = [pkgs.tcpdump];
       networking.useDHCP = false;
       networking.interfaces = {
         eth1 = {
           ipv6.addresses = [
-            { address = "fd23::2"; prefixLength = 112; }
+            {
+              address = "fd23::2";
+              prefixLength = 112;
+            }
           ];
         };
       };

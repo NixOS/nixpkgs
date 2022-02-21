@@ -1,7 +1,9 @@
 # This file was generated and will be overwritten by ./generate.sh
-
-{ stdenv, fetchurl, lib }:
-
+{
+  stdenv,
+  fetchurl,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "python27-docs-html";
   version = "2.7.16";
@@ -15,6 +17,6 @@ stdenv.mkDerivation rec {
     cp -R ./ $out/share/doc/python27/html
   '';
   meta = {
-    maintainers = [ ];
+    maintainers = [];
   };
 }

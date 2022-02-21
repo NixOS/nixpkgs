@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, networkx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  networkx,
+  pytestCheckHook,
 }:
-
 buildPythonPackage {
   pname = "importlab";
   version = "0.7";
@@ -16,18 +16,18 @@ buildPythonPackage {
     sha256 = "sha256-O8y1c65NQ+19BnGnUnWrA0jYUqF+726CFAcWzHFOiHE=";
   };
 
-  propagatedBuildInputs = [ networkx ];
+  propagatedBuildInputs = [networkx];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  disabledTestPaths = [ "tests/test_parsepy.py" ];
+  disabledTestPaths = ["tests/test_parsepy.py"];
 
-  pythonImportsCheck = [ "importlab" ];
+  pythonImportsCheck = ["importlab"];
 
   meta = with lib; {
     description = "A library that automatically infers dependencies for Python files";
     homepage = "https://github.com/google/importlab";
     license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    maintainers = with maintainers; [sei40kr];
   };
 }

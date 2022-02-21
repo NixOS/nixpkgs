@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, freezegun
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  freezegun,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "itsdangerous";
   version = "2.0.1";
@@ -26,5 +26,4 @@ buildPythonPackage rec {
     homepage = "https://itsdangerous.palletsprojects.com";
     license = licenses.bsd3;
   };
-
 }

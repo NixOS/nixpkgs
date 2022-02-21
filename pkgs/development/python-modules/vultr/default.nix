@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
-
 buildPythonPackage rec {
   version = "1.0.1";
   pname = "vultr";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # Tests disabled. They fail because they try to access the network
   doCheck = false;
 
-  pythonImportsCheck = [ "vultr" ];
+  pythonImportsCheck = ["vultr"];
 
   meta = with lib; {
     description = "Vultr.com API Client";
     homepage = "https://github.com/spry-group/python-vultr";
     license = licenses.mit;
-    maintainers = with maintainers; [ lihop ];
+    maintainers = with maintainers; [lihop];
   };
 }

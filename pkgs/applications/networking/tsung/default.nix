@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, erlang
-, python3
-, python3Packages
-, perlPackages
-, gnuplot
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  erlang,
+  python3,
+  python3Packages,
+  perlPackages,
+  gnuplot,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tsung";
   version = "1.7.0";
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     python3Packages.matplotlib
   ];
 
-
   postFixup = ''
     # Make tsung_stats.pl accessible
     # Leaving .pl at the end since all of tsung documentation is refering to it
@@ -40,8 +39,8 @@ stdenv.mkDerivation rec {
 
     # Add Template Toolkit and gnuplot to tsung_stats.pl
     wrapProgram $out/bin/tsung_stats.pl \
-        --prefix PATH : ${lib.makeBinPath [ gnuplot ]} \
-        --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.TemplateToolkit ]}"
+        --prefix PATH : ${lib.makeBinPath [gnuplot]} \
+        --set PERL5LIB "${perlPackages.makePerlPath [perlPackages.TemplateToolkit]}"
   '';
 
   meta = with lib; {
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
       AMQP, MQTT, LDAP and Jabber/XMPP servers.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ uskudnik ];
+    maintainers = with maintainers; [uskudnik];
     platforms = platforms.unix;
   };
 }

@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, config
-, fetchurl
-, unzip
-, makeWrapper
-, icu
-, libunwind
-, curl
-, zlib
-, libuuid
-, dotnetbuildhelpers
-, dotnetCorePackages
-, coreclr
-, openssl
+{
+  stdenv,
+  lib,
+  config,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  icu,
+  libunwind,
+  curl,
+  zlib,
+  libuuid,
+  dotnetbuildhelpers,
+  dotnetCorePackages,
+  coreclr,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "azure-functions-core-tools";
   version = "3.0.3785";
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Azure/azure-functions-core-tools";
     description = "Command line tools for Azure Functions";
     license = licenses.mit;
-    maintainers = with maintainers; [ jshcmpbll ];
+    maintainers = with maintainers; [jshcmpbll];
     platforms = platforms.linux;
   };
 }

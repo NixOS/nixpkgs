@@ -1,12 +1,17 @@
-{ buildDunePackage, faraday, lwt }:
-
+{
+  buildDunePackage,
+  faraday,
+  lwt,
+}:
 buildDunePackage rec {
   pname = "faraday-lwt";
   inherit (faraday) version src useDune2 minimumOCamlVersion;
 
-  propagatedBuildInputs = [ faraday lwt ];
+  propagatedBuildInputs = [faraday lwt];
 
-  meta = faraday.meta // {
-    description = "Lwt support for Faraday";
-  };
+  meta =
+    faraday.meta
+    // {
+      description = "Lwt support for Faraday";
+    };
 }

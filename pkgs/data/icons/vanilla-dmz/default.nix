@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, fetchzip
-, xorg
-, hicolor-icon-theme
+{
+  stdenv,
+  lib,
+  fetchzip,
+  xorg,
+  hicolor-icon-theme,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vanilla-dmz";
   version = "0.4.5";
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "A style neutral scalable cursor theme";
     platforms = platforms.all;
     license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [cstrahan];
   };
 }

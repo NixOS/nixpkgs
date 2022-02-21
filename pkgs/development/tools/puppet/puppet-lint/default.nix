@@ -1,7 +1,6 @@
-{ bundlerApp }:
-
+{bundlerApp}:
 bundlerApp {
   pname = "puppet-lint";
   gemdir = ./.;
-  exes = [ "puppet-lint" ];
+  exes = ["puppet-lint"];
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   version = "9.3";
   pname = "checkstyle";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Aq0zB+RgWafE+K9sX2H0d7xf2RDlavsUXEWQTJXSE6w=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   dontUnpack = true;
 
@@ -31,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://checkstyle.sourceforge.net/";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = jre.meta.platforms;
   };
 }

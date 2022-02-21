@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "alda";
   version = "2.0.6";
@@ -16,25 +21,23 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  installPhase =
-    let
-      binPath = lib.makeBinPath [ jre ];
-    in
-    ''
-      install -D $src_alda $out/bin/alda
-      install -D $src_player $out/bin/alda-player
+  installPhase = let
+    binPath = lib.makeBinPath [jre];
+  in ''
+    install -D $src_alda $out/bin/alda
+    install -D $src_player $out/bin/alda-player
 
-      wrapProgram $out/bin/alda --prefix PATH : $out/bin:${binPath}
-      wrapProgram $out/bin/alda-player --prefix PATH : $out/bin:${binPath}
-    '';
+    wrapProgram $out/bin/alda --prefix PATH : $out/bin:${binPath}
+    wrapProgram $out/bin/alda-player --prefix PATH : $out/bin:${binPath}
+  '';
 
   meta = with lib; {
     description = "A music programming language for musicians";
     homepage = "https://alda.io";
     license = licenses.epl10;
-    maintainers = [ maintainers.ericdallo ];
+    maintainers = [maintainers.ericdallo];
     platforms = jre.meta.platforms;
   };
 }

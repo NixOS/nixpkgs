@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitLab, libvirt, autoreconfHook, pkg-config, ocaml, findlib, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  libvirt,
+  autoreconfHook,
+  pkg-config,
+  ocaml,
+  findlib,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml-libvirt";
   version = "0.6.1.5";
@@ -11,13 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "0xpkdmknk74yqxgw8z2w8b7ss8hpx92xnab5fsqg2byyj55gzf2k";
   };
 
-  propagatedBuildInputs = [ libvirt ];
+  propagatedBuildInputs = [libvirt];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config findlib perl ];
+  nativeBuildInputs = [autoreconfHook pkg-config findlib perl];
 
-  buildInputs = [ ocaml ];
+  buildInputs = [ocaml];
 
-  buildFlags = [ "all" "opt" "CPPFLAGS=-Wno-error" ];
+  buildFlags = ["all" "opt" "CPPFLAGS=-Wno-error"];
   installTargets = "install-opt";
   preInstall = ''
     # Fix 'dllmllibvirt.so' install failure into non-existent directory.
@@ -28,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "OCaml bindings for libvirt";
     homepage = "https://libvirt.org/ocaml/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    maintainers = [maintainers.volth];
     platforms = ocaml.meta.platforms or [];
   };
 }

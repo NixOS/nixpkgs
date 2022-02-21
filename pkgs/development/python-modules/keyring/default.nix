@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, importlib-metadata
-, dbus-python
-, jeepney
-, secretstorage
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  importlib-metadata,
+  dbus-python,
+  jeepney,
+  secretstorage,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "keyring";
   version = "23.5.0";
@@ -54,9 +54,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Store and access your passwords safely";
-    homepage    = "https://github.com/jaraco/keyring";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ lovek323 dotlambda ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/jaraco/keyring";
+    license = licenses.mit;
+    maintainers = with maintainers; [lovek323 dotlambda];
+    platforms = platforms.unix;
   };
 }

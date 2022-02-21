@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "rangehttpserver";
   version = "1.2.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "SimpleHTTPServer with support for Range requests";
     homepage = "https://github.com/danvk/RangeHTTPServer";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libinklevel }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libinklevel,
+}:
 stdenv.mkDerivation rec {
   pname = "ink";
   version = "0.5.3";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
     libinklevel
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   meta = with lib; {
     description = "A command line tool for checking the ink level of your locally connected printer";
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ink.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.freebsd;
-    maintainers = with maintainers; [ samb96 ];
+    maintainers = with maintainers; [samb96];
   };
 }

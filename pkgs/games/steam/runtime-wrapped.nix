@@ -1,8 +1,12 @@
-{ stdenv, steamArch, lib, perl, pkgs, steam-runtime
-, runtimeOnly ? false
-}:
-
-let
+{
+  stdenv,
+  steamArch,
+  lib,
+  perl,
+  pkgs,
+  steam-runtime,
+  runtimeOnly ? false,
+}: let
   overridePkgs = lib.optionals (!runtimeOnly) (with pkgs; [
     libgpg-error
     libpulseaudio
@@ -17,29 +21,32 @@ let
     xorg.libxcb
   ]);
 
-  allPkgs = overridePkgs ++ [ steam-runtime ];
+  allPkgs = overridePkgs ++ [steam-runtime];
 
-  gnuArch = if steamArch == "amd64" then "x86_64-linux-gnu"
-            else if steamArch == "i386" then "i386-linux-gnu"
-            else abort "Unsupported architecture";
+  gnuArch =
+    if steamArch == "amd64"
+    then "x86_64-linux-gnu"
+    else if steamArch == "i386"
+    then "i386-linux-gnu"
+    else abort "Unsupported architecture";
 
-  libs = [ "lib/${gnuArch}" "lib" "usr/lib/${gnuArch}" "usr/lib" ];
-  bins = [ "bin" "usr/bin" ];
+  libs = ["lib/${gnuArch}" "lib" "usr/lib/${gnuArch}" "usr/lib"];
+  bins = ["bin" "usr/bin"];
+in
+  stdenv.mkDerivation {
+    name = "steam-runtime-wrapped";
 
-in stdenv.mkDerivation {
-  name = "steam-runtime-wrapped";
+    nativeBuildInputs = [perl];
 
-  nativeBuildInputs = [ perl ];
+    builder = ./build-wrapped.sh;
 
-  builder = ./build-wrapped.sh;
+    passthru = {
+      inherit gnuArch libs bins overridePkgs;
+      arch = steamArch;
+    };
 
-  passthru = {
-    inherit gnuArch libs bins overridePkgs;
-    arch = steamArch;
-  };
-
-  installPhase = ''
-    buildDir "${toString libs}" "${toString (map lib.getLib allPkgs)}"
-    buildDir "${toString bins}" "${toString (map lib.getBin allPkgs)}"
-  '';
-}
+    installPhase = ''
+      buildDir "${toString libs}" "${toString (map lib.getLib allPkgs)}"
+      buildDir "${toString bins}" "${toString (map lib.getBin allPkgs)}"
+    '';
+  }

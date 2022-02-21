@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, invoke
-, mock
-, pytestCheckHook
-, pythonOlder
-, sphinx_rtd_theme
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  invoke,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  sphinx_rtd_theme,
 }:
-
 buildPythonPackage rec {
   pname = "pydash";
   version = "5.1.0";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python utility libraries for doing stuff in a functional way";
     homepage = "https://pydash.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

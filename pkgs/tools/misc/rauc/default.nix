@@ -1,16 +1,16 @@
-{ autoreconfHook
-, curl
-, dbus
-, fetchFromGitHub
-, glib
-, json-glib
-, lib
-, nix-update-script
-, openssl
-, pkg-config
-, stdenv
+{
+  autoreconfHook,
+  curl,
+  dbus,
+  fetchFromGitHub,
+  glib,
+  json-glib,
+  lib,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rauc";
   version = "1.5.1";
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
 
-  buildInputs = [ curl dbus glib json-glib openssl ];
+  buildInputs = [curl dbus glib json-glib openssl];
 
   configureFlags = [
     "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Safe and secure software updates for embedded Linux";
     homepage = "https://rauc.io";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with maintainers; [emantor];
     platforms = with platforms; linux;
   };
 }

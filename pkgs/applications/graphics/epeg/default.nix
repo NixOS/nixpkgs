@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, autoconf, automake
-, libjpeg, libexif
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libtool,
+  autoconf,
+  automake,
+  libjpeg,
+  libexif,
 }:
-
 stdenv.mkDerivation rec {
   pname = "epeg";
   version = "0.9.2";
@@ -15,9 +22,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config libtool autoconf automake ];
+  nativeBuildInputs = [pkg-config libtool autoconf automake];
 
-  propagatedBuildInputs = [ libjpeg libexif ];
+  propagatedBuildInputs = [libjpeg libexif];
 
   preConfigure = ''
     ./autogen.sh
@@ -30,6 +37,6 @@ stdenv.mkDerivation rec {
     license = {
       url = "https://github.com/mattes/epeg#license";
     };
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [nh2];
   };
 }

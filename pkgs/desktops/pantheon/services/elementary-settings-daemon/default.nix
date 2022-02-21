@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, accountsservice
-, dbus
-, desktop-file-utils
-, geoclue2
-, glib
-, gobject-introspection
-, gtk3
-, granite
-, libgee
-, systemd
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  accountsservice,
+  dbus,
+  desktop-file-utils,
+  geoclue2,
+  glib,
+  gobject-introspection,
+  gtk3,
+  granite,
+  libgee,
+  systemd,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
   version = "1.1.0";

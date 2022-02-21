@@ -1,8 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy
-, pytest, pytest-cov, pytest-mock, freezegun
-, jinja2, future, binaryornot, click, whichcraft, poyo, jinja2_time, requests
-, python-slugify }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pytest,
+  pytest-cov,
+  pytest-mock,
+  freezegun,
+  jinja2,
+  future,
+  binaryornot,
+  click,
+  whichcraft,
+  poyo,
+  jinja2_time,
+  requests,
+  python-slugify,
+}:
 buildPythonPackage rec {
   pname = "cookiecutter";
   version = "1.7.3";
@@ -15,9 +29,17 @@ buildPythonPackage rec {
     sha256 = "sha256-a5pNcoguJDvgd6c5fQ8fdv5mzz35HzEV27UzDiFPpFc=";
   };
 
-  checkInputs = [ pytest pytest-cov pytest-mock freezegun ];
+  checkInputs = [pytest pytest-cov pytest-mock freezegun];
   propagatedBuildInputs = [
-    jinja2 future binaryornot click whichcraft poyo jinja2_time requests python-slugify
+    jinja2
+    future
+    binaryornot
+    click
+    whichcraft
+    poyo
+    jinja2_time
+    requests
+    python-slugify
   ];
 
   # requires network access for cloning git repos
@@ -30,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/audreyr/cookiecutter";
     description = "A command-line utility that creates projects from project templates";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ kragniz ];
+    maintainers = with maintainers; [kragniz];
   };
 }

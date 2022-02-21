@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, lib}:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "libreelec-dvb-firmware";
   version = "1.4.2";
@@ -25,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "DVB firmware from LibreELEC";
     homepage = "https://github.com/LibreELEC/dvb-firmware";
     license = licenses.unfreeRedistributableFirmware;
-    maintainers = with maintainers; [ kittywitch ];
+    maintainers = with maintainers; [kittywitch];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, vulkan-loader }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  vulkan-loader,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
   version = "0.10.0";
@@ -23,14 +29,20 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/wgpu-info \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [vulkan-loader]}
   '';
 
   meta = with lib; {
     description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API.";
     homepage = "https://wgpu.rs/";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ erictapen ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [erictapen];
     mainProgram = "wgpu-info";
   };
 }

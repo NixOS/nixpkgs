@@ -1,6 +1,21 @@
-{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python2
-, lib, valgrind, makeWrapper, fetchFromGitHub, fetchpatch }:
-
+{
+  stdenv,
+  boost,
+  fuse,
+  openssl,
+  cmake,
+  attr,
+  jdk,
+  ant,
+  which,
+  file,
+  python2,
+  lib,
+  valgrind,
+  makeWrapper,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 stdenv.mkDerivation {
   src = fetchFromGitHub {
     # using unstable release because stable (v1.5.1) has broken repl java plugin
@@ -13,8 +28,8 @@ stdenv.mkDerivation {
   pname = "XtreemFS";
   version = "1.5.1.81";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which attr python2 ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [which attr python2];
 
   patches = [
     (fetchpatch {
@@ -72,7 +87,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A distributed filesystem";
-    maintainers = with lib.maintainers; [ raskin matejc ];
+    maintainers = with lib.maintainers; [raskin matejc];
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
   };

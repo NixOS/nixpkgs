@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "acpi";
   version = "1.7";
@@ -20,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/acpiclient/";
     license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

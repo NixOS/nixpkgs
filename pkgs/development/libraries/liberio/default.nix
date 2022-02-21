@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, systemd
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  systemd,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "liberio";
   version = "unstable-2019-12-11";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Ettus Research DMA I/O Library";
     homepage = "https://github.com/EttusResearch/liberio";
     license = licenses.gpl2;
-    maintainers = [ maintainers.doronbehar ];
+    maintainers = [maintainers.doronbehar];
     platforms = platforms.all;
   };
 }

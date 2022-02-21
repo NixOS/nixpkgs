@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "shellharden";
   version = "4.1.3";
@@ -23,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/anordal/shellharden";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }

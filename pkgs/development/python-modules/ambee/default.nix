@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, poetry-core
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  poetry-core,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "ambee";
   version = "0.4.0";
@@ -45,12 +45,12 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  pythonImportsCheck = [ "ambee" ];
+  pythonImportsCheck = ["ambee"];
 
   meta = with lib; {
     description = "Python client for Ambee API";
     homepage = "https://github.com/frenck/python-ambee";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

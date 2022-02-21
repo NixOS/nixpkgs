@@ -1,58 +1,71 @@
-{ lib, stdenv, fetchurl, fetchzip, unzip }:
-
-rec {
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  unzip,
+}: rec {
   # A primitive builder of Eclipse plugins. This function is intended
   # to be used when building more advanced builders.
-  buildEclipsePluginBase =  { name
-                            , buildInputs ? []
-                            , passthru ? {}
-                            , ... } @ attrs:
-    stdenv.mkDerivation (attrs // {
+  buildEclipsePluginBase = {
+    name,
+    buildInputs ? [],
+    passthru ? {},
+    ...
+  } @ attrs:
+    stdenv.mkDerivation (attrs
+    // {
       name = "eclipse-plugin-" + name;
 
-      buildInputs = buildInputs ++ [ unzip ];
+      buildInputs = buildInputs ++ [unzip];
 
-      passthru = {
-        isEclipsePlugin = true;
-      } // passthru;
+      passthru =
+        {
+          isEclipsePlugin = true;
+        }
+        // passthru;
     });
 
   # Helper for the common case where we have separate feature and
   # plugin JARs.
-  buildEclipsePlugin =
-    { name, srcFeature, srcPlugin ? null, srcPlugins ? [], ... } @ attrs:
-      assert srcPlugin == null -> srcPlugins != [];
-      assert srcPlugin != null -> srcPlugins == [];
+  buildEclipsePlugin = {
+    name,
+    srcFeature,
+    srcPlugin ? null,
+    srcPlugins ? [],
+    ...
+  } @ attrs:
+    assert srcPlugin == null -> srcPlugins != [];
+    assert srcPlugin != null -> srcPlugins == []; let
+      pSrcs =
+        if (srcPlugin != null)
+        then [srcPlugin]
+        else srcPlugins;
+    in
+      buildEclipsePluginBase (attrs
+      // {
+        srcs = [srcFeature] ++ pSrcs;
 
-      let
+        buildCommand = ''
+          dropinDir="$out/eclipse/dropins/${name}"
 
-        pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
+          mkdir -p $dropinDir/features
+          unzip ${srcFeature} -d $dropinDir/features/
 
-      in
-
-        buildEclipsePluginBase (attrs // {
-          srcs = [ srcFeature ] ++ pSrcs;
-
-          buildCommand = ''
-            dropinDir="$out/eclipse/dropins/${name}"
-
-            mkdir -p $dropinDir/features
-            unzip ${srcFeature} -d $dropinDir/features/
-
-            mkdir -p $dropinDir/plugins
-            for plugin in ${toString pSrcs}; do
-              cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
-            done
-          '';
-        });
+          mkdir -p $dropinDir/plugins
+          for plugin in ${toString pSrcs}; do
+            cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
+          done
+        '';
+      });
 
   # Helper for the case where the build directory has the layout of an
   # Eclipse update site, that is, it contains the directories
   # `features` and `plugins`. All features and plugins inside these
   # directories will be installed.
-  buildEclipseUpdateSite = { name, ... } @ attrs:
-    buildEclipsePluginBase (attrs // {
+  buildEclipseUpdateSite = {name, ...} @ attrs:
+    buildEclipsePluginBase (attrs
+    // {
       dontBuild = true;
       doCheck = false;
 
@@ -261,7 +274,7 @@ rec {
       description = "C/C++ development tooling";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.bjornfor ];
+      maintainers = [maintainers.bjornfor];
     };
   };
 
@@ -281,7 +294,6 @@ rec {
       license = licenses.lgpl21;
       platforms = platforms.all;
     };
-
   };
 
   color-theme = buildEclipsePlugin rec {
@@ -328,13 +340,13 @@ rec {
       })
     ];
 
-    propagatedBuildInputs = [ zest ];
+    propagatedBuildInputs = [zest];
 
     meta = with lib; {
       homepage = "http://www2.cs.tum.edu/projects/cup/eclipse.php";
       description = "IDE for developing CUP based parsers";
       platforms = platforms.all;
-      maintainers = [ maintainers.romildo ];
+      maintainers = [maintainers.romildo];
     };
   };
 
@@ -433,7 +445,7 @@ rec {
       description = "GNU ARM Eclipse Plug-ins";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.bjornfor ];
+      maintainers = [maintainers.bjornfor];
     };
   };
 
@@ -446,25 +458,48 @@ rec {
       sha256 = "0zkg8d8x3l5jpfxi0mz9dn62wmy4fjgpwdikj280fvsklmcw5b86";
     };
 
-    srcPlugins =
-      let
-        fetch = { n, h }:
-          fetchurl {
-            url = "https://boothen.github.io/Json-Eclipse-Plugin/plugins/jsonedit-${n}_${version}.jar";
-            sha256 = h;
-          };
-      in
-        map fetch [
-          { n = "core"; h = "0svs0aswnhl26cqw6bmw30cisx4cr50kc5njg272sy5c1dqjm1zq"; }
-          { n = "editor"; h = "1q62dinrbb18aywbvii4mlr7rxa20rdsxxd6grix9y8h9776q4l5"; }
-          { n = "folding"; h = "1qh4ijfb1gl9xza5ydi87v1kyima3a9sh7lncwdy1way3pdhln1y"; }
-          { n = "model"; h = "1pr6k2pdfdwx8jqs7gx7wzn3gxsql3sk6lnjha8m15lv4al6d4kj"; }
-          { n = "outline"; h = "1jgr2g16j3id8v367jbgd6kx6g2w636fbzmd8jvkvkh7y1jgjqxm"; }
-          { n = "preferences"; h = "027fhaqa5xbil6dmhvkbpha3pgw6dpmc2im3nlliyds57mdmdb1h"; }
-          { n = "text"; h = "0clywylyidrxlqs0n816nhgjmk1c3xl7sn904ki4q050amfy0wb2"; }
-        ];
+    srcPlugins = let
+      fetch = {
+        n,
+        h,
+      }:
+        fetchurl {
+          url = "https://boothen.github.io/Json-Eclipse-Plugin/plugins/jsonedit-${n}_${version}.jar";
+          sha256 = h;
+        };
+    in
+      map fetch [
+        {
+          n = "core";
+          h = "0svs0aswnhl26cqw6bmw30cisx4cr50kc5njg272sy5c1dqjm1zq";
+        }
+        {
+          n = "editor";
+          h = "1q62dinrbb18aywbvii4mlr7rxa20rdsxxd6grix9y8h9776q4l5";
+        }
+        {
+          n = "folding";
+          h = "1qh4ijfb1gl9xza5ydi87v1kyima3a9sh7lncwdy1way3pdhln1y";
+        }
+        {
+          n = "model";
+          h = "1pr6k2pdfdwx8jqs7gx7wzn3gxsql3sk6lnjha8m15lv4al6d4kj";
+        }
+        {
+          n = "outline";
+          h = "1jgr2g16j3id8v367jbgd6kx6g2w636fbzmd8jvkvkh7y1jgjqxm";
+        }
+        {
+          n = "preferences";
+          h = "027fhaqa5xbil6dmhvkbpha3pgw6dpmc2im3nlliyds57mdmdb1h";
+        }
+        {
+          n = "text";
+          h = "0clywylyidrxlqs0n816nhgjmk1c3xl7sn904ki4q050amfy0wb2";
+        }
+      ];
 
-    propagatedBuildInputs = [ antlr-runtime_4_7 ];
+    propagatedBuildInputs = [antlr-runtime_4_7];
 
     meta = with lib; {
       description = "Adds support for JSON files to Eclipse";
@@ -507,10 +542,9 @@ rec {
       stripRoot = false;
       url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
       sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
-      extraPostFetch =
-        ''
-          mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
-        '';
+      extraPostFetch = ''
+        mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
+      '';
     };
 
     meta = with lib; {
@@ -596,7 +630,7 @@ rec {
       description = "A wrapper to provide a Vim-like input scheme for moving around and editing text";
       license = licenses.gpl3;
       platforms = platforms.all;
-      maintainers = [ maintainers.stumoss ];
+      maintainers = [maintainers.stumoss];
     };
   };
 
@@ -635,7 +669,7 @@ rec {
       homepage = "https://www.eclipse.org/gef/zest/";
       description = "The Eclipse Visualization Toolkit";
       platforms = platforms.all;
-      maintainers = [ maintainers.romildo ];
+      maintainers = [maintainers.romildo];
     };
   };
 
@@ -658,7 +692,7 @@ rec {
       description = "A plugin which integrates Apache Ivy's dependency management";
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
+      maintainers = [maintainers.r3dl3g];
     };
   };
 
@@ -685,7 +719,7 @@ rec {
       '';
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
+      maintainers = [maintainers.r3dl3g];
     };
   };
 
@@ -708,7 +742,7 @@ rec {
       description = "A popular dependency manager focusing on flexibility and simplicity";
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
+      maintainers = [maintainers.r3dl3g];
     };
   };
 
@@ -731,7 +765,7 @@ rec {
       description = "Ant Tasks integrated into Eclipse's Ant runtime";
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = [ maintainers.r3dl3g ];
+      maintainers = [maintainers.r3dl3g];
     };
   };
 }

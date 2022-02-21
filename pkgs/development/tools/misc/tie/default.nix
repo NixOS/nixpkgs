@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "tie";
   version = "2.4";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.ctan.org/tex-archive/web/tie";
     description = "Allow multiple web change files";
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
     license = licenses.abstyles;
   };
 }

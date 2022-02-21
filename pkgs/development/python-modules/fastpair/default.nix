@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, pytest, scipy, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-runner,
+  pytest,
+  scipy,
+  pytestCheckHook,
+}:
 buildPythonPackage {
   pname = "fastpair";
   version = "2021-05-19";
@@ -11,9 +18,9 @@ buildPythonPackage {
     sha256 = "1l8zgr8awg27lhlkpa2dsvghrb7b12jl1bkgpzg5q7pg8nizl9mx";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
+  nativeBuildInputs = [pytest-runner];
 
-  checkInputs = [ pytest pytestCheckHook ];
+  checkInputs = [pytest pytestCheckHook];
 
   propagatedBuildInputs = [
     scipy
@@ -23,6 +30,6 @@ buildPythonPackage {
     homepage = "https://github.com/carsonfarmer/fastpair";
     description = "Data-structure for the dynamic closest-pair problem";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai rakesh4g ];
+    maintainers = with maintainers; [cmcdragonkai rakesh4g];
   };
 }

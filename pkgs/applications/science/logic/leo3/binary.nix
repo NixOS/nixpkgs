@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, openjdk, runtimeShell}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openjdk,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "leo3";
   version = "1.2";

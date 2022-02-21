@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, makeWrapper, coreutils }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   pname = "taskspooler";
   version = "1.0.1";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "11i21s8sdmjl4gy5f3dyfsxsmg1japgs4r5ym0b3jdyp99xhpbl1";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -26,6 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "https://vicerveza.homeunix.net/~viric/wsgi-bin/hgweb.wsgi/ts";
     platforms = platforms.unix;
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [maintainers.sheepforce];
   };
 }

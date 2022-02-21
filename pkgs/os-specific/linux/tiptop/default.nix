@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libxml2,
+  ncurses,
+  bison,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "tiptop";
   version = "2.3.1";
@@ -28,8 +36,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./configure --replace -lcurses -lncurses
   '';
 
-  nativeBuildInputs = [ flex bison ];
-  buildInputs = [ libxml2 ncurses ];
+  nativeBuildInputs = [flex bison];
+  buildInputs = [libxml2 ncurses];
 
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
@@ -38,7 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "http://tiptop.gforge.inria.fr";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = [maintainers.vcunat];
   };
 }
-

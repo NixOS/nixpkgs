@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, autoconf, automake, bison, libtool, pkg-config, which
-, alsa-lib, asio, libjack2, libgig, libsndfile, lv2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  bison,
+  libtool,
+  pkg-config,
+  which,
+  alsa-lib,
+  asio,
+  libjack2,
+  libgig,
+  libsndfile,
+  lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "linuxsampler";
   version = "2.2.0";
@@ -14,9 +28,9 @@ stdenv.mkDerivation rec {
     make -f Makefile.svn
   '';
 
-  nativeBuildInputs = [ autoconf automake bison libtool pkg-config which ];
+  nativeBuildInputs = [autoconf automake bison libtool pkg-config which];
 
-  buildInputs = [ alsa-lib asio libjack2 libgig libsndfile lv2 ];
+  buildInputs = [alsa-lib asio libjack2 libgig libsndfile lv2];
 
   enableParallelBuilding = true;
 
@@ -35,7 +49,7 @@ stdenv.mkDerivation rec {
       FAQ, please contact us.
     '';
     license = licenses.unfree;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
   };
 }

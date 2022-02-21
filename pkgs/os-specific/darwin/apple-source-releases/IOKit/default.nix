@@ -1,11 +1,17 @@
-{ lib, appleDerivation', stdenv, IOKitSrcs, xnu, darwin-stubs }:
-
+{
+  lib,
+  appleDerivation',
+  stdenv,
+  IOKitSrcs,
+  xnu,
+  darwin-stubs,
+}:
 # Someday it'll make sense to split these out into their own packages, but today is not that day.
 appleDerivation' stdenv {
   srcs = lib.attrValues IOKitSrcs;
   sourceRoot = ".";
 
-  phases = [ "unpackPhase" "installPhase" ];
+  phases = ["unpackPhase" "installPhase"];
 
   __propagatedImpureHostDeps = [
     "/System/Library/Frameworks/IOKit.framework/IOKit"
@@ -183,8 +189,8 @@ appleDerivation' stdenv {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ joelteon copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    maintainers = with maintainers; [joelteon copumpkin];
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

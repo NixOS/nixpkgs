@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "consul";
   version = "1.11.3";
@@ -41,6 +45,6 @@ buildGoModule rec {
     homepage = "https://www.consul.io/";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 techknowlogick];
+    maintainers = with maintainers; [pradeepchhetri vdemeester nh2 techknowlogick];
   };
 }

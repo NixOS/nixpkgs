@@ -1,5 +1,4 @@
-{ fetchzip }:
-
+{fetchzip}:
 fetchzip {
   name = "bakoma-ttf";
 

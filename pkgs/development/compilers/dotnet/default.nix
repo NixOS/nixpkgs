@@ -1,18 +1,16 @@
 /*
-How to combine packages for use in development:
-dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_3_1 sdk_5_0 aspnetcore_5_0 ];
-
-Hashes below are retrived from:
-https://dotnet.microsoft.com/download/dotnet
-*/
-{ callPackage }:
-let
+ How to combine packages for use in development:
+ dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_3_1 sdk_5_0 aspnetcore_5_0 ];
+ 
+ Hashes below are retrived from:
+ https://dotnet.microsoft.com/download/dotnet
+ */
+{callPackage}: let
   buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) {};
-  buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
-  buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
-  buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
-in
-rec {
+  buildAspNetCore = attrs: buildDotnet (attrs // {type = "aspnetcore";});
+  buildNetRuntime = attrs: buildDotnet (attrs // {type = "runtime";});
+  buildNetSdk = attrs: buildDotnet (attrs // {type = "sdk";});
+in rec {
   combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
 
   # EOL

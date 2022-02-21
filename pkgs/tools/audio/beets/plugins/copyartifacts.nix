@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, beets, pythonPackages, glibcLocales }:
-
+{
+  lib,
+  fetchFromGitHub,
+  beets,
+  pythonPackages,
+  glibcLocales,
+}:
 pythonPackages.buildPythonApplication {
   pname = "beets-copyartifacts";
   version = "unstable-2020-02-15";
@@ -22,7 +27,7 @@ pythonPackages.buildPythonApplication {
            tests/test_reimport.py
   '';
 
-  nativeBuildInputs = [ beets pythonPackages.nose glibcLocales ];
+  nativeBuildInputs = [beets pythonPackages.nose glibcLocales];
 
   checkPhase = "LANG=en_US.UTF-8 nosetests";
 

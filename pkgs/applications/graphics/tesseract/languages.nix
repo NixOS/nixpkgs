@@ -1,34 +1,43 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+}: rec {
+  makeLanguages = {
+    tessdataRev,
+    tessdata ? null,
+    all ? null,
+    languages ? {},
+  }: let
+    tessdataSrc = fetchFromGitHub {
+      owner = "tesseract-ocr";
+      repo = "tessdata";
+      rev = tessdataRev;
+      sha256 = tessdata;
+    };
 
-rec {
-  makeLanguages = { tessdataRev, tessdata ? null, all ? null, languages ? {} }:
-    let
-      tessdataSrc = fetchFromGitHub {
-        owner = "tesseract-ocr";
-        repo = "tessdata";
-        rev = tessdataRev;
-        sha256 = tessdata;
-      };
-
-      languageFile = lang: sha256: fetchurl {
+    languageFile = lang: sha256:
+      fetchurl {
         url = "https://github.com/tesseract-ocr/tessdata/raw/${tessdataRev}/${lang}.traineddata";
         inherit sha256;
       };
-    in
-      {
-        # Use a simple fixed-output derivation for all languages to increase nix eval performance
-        all = stdenv.mkDerivation {
-          name = "all";
-          buildCommand = ''
-            mkdir $out
-            cd ${tessdataSrc}
-            cp *.traineddata $out
-          '';
-          outputHashMode = "recursive";
-          outputHashAlgo = "sha256";
-          outputHash = all;
-        };
-      } // (lib.mapAttrs languageFile languages);
+  in
+    {
+      # Use a simple fixed-output derivation for all languages to increase nix eval performance
+      all = stdenv.mkDerivation {
+        name = "all";
+        buildCommand = ''
+          mkdir $out
+          cd ${tessdataSrc}
+          cp *.traineddata $out
+        '';
+        outputHashMode = "recursive";
+        outputHashAlgo = "sha256";
+        outputHash = all;
+      };
+    }
+    // (lib.mapAttrs languageFile languages);
 
   v3 = makeLanguages {
     tessdataRev = "3cf1e2df1fe1d1da29295c9ef0983796c7958b7d";

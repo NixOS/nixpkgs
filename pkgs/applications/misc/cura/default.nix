@@ -1,6 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase,
- qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  qtbase,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  curaengine,
+  plugins ? [],
+}:
 mkDerivation rec {
   pname = "cura";
   version = "4.12.1";
@@ -19,12 +28,22 @@ mkDerivation rec {
     sha256 = "0ykf14j4yx4cf12qw0d4bff9ixrx96m6wxqvi83sn721y7dsd2rs";
   };
 
-  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
-  propagatedBuildInputs = with python3.pkgs; [
-    libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
-    sentry-sdk trimesh keyring
-  ] ++ plugins;
-  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
+  buildInputs = [qtbase qtquickcontrols2 qtgraphicaleffects];
+  propagatedBuildInputs = with python3.pkgs;
+    [
+      libsavitar
+      numpy-stl
+      pyserial
+      requests
+      uranium
+      zeroconf
+      pynest2d
+      sentry-sdk
+      trimesh
+      keyring
+    ]
+    ++ plugins;
+  nativeBuildInputs = [cmake python3.pkgs.wrapPython];
 
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
@@ -60,6 +79,6 @@ mkDerivation rec {
     homepage = "https://github.com/Ultimaker/Cura";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar gebner ];
+    maintainers = with maintainers; [abbradar gebner];
   };
 }

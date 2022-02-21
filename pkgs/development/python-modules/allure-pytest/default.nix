@@ -1,21 +1,21 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, six
-, pythonOlder
-, allure-python-commons
-, pytest
-, pytestCheckHook
-, pytest-check
-, pytest-flakes
-, pytest-lazy-fixture
-, pytest-rerunfailures
-, pytest-xdist
-, pyhamcrest
-, mock
-, setuptools-scm
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  six,
+  pythonOlder,
+  allure-python-commons,
+  pytest,
+  pytestCheckHook,
+  pytest-check,
+  pytest-flakes,
+  pytest-lazy-fixture,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pyhamcrest,
+  mock,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "allure-pytest";
   version = "2.9.45";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonImportsCheck = [ "allure_pytest" ];
+  pythonImportsCheck = ["allure_pytest"];
 
   propagatedBuildInputs = [
     allure-python-commons
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     description = "Allure pytest integration. It's developed as pytest plugin and distributed via pypi";
     homepage = "https://github.com/allure-framework/allure-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ evanjs ];
+    maintainers = with maintainers; [evanjs];
   };
 }

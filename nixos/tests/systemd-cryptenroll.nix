@@ -1,13 +1,17 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "systemd-cryptenroll";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ymatsiuk ];
+    maintainers = [ymatsiuk];
   };
 
-  machine = { pkgs, lib, ... }: {
-    environment.systemPackages = [ pkgs.cryptsetup ];
+  machine = {
+    pkgs,
+    lib,
+    ...
+  }: {
+    environment.systemPackages = [pkgs.cryptsetup];
     virtualisation = {
-      emptyDiskImages = [ 512 ];
+      emptyDiskImages = [512];
       qemu.options = [
         "-chardev socket,id=chrtpm,path=/tmp/swtpm-sock"
         "-tpmdev emulator,id=tpm0,chardev=chrtpm"
@@ -51,4 +55,3 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed("systemd-cryptenroll --wipe-slot=tpm2 /dev/vdb")
   '';
 })
-

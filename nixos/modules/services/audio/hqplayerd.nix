@@ -1,15 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.hqplayerd;
   pkg = pkgs.hqplayerd;
   # XXX: This is hard-coded in the distributed binary, don't try to change it.
   stateDir = "/var/lib/hqplayer";
   configDir = "/etc/hqplayer";
-in
-{
+in {
   options = {
     services.hqplayerd = {
       enable = mkEnableOption "HQPlayer Embedded";
@@ -72,26 +73,27 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = (cfg.auth.username != null -> cfg.auth.password != null)
-                 && (cfg.auth.password != null -> cfg.auth.username != null);
+        assertion =
+          (cfg.auth.username != null -> cfg.auth.password != null)
+          && (cfg.auth.password != null -> cfg.auth.username != null);
         message = "You must set either both services.hqplayer.auth.username and password, or neither.";
       }
     ];
 
     environment = {
       etc = {
-        "hqplayer/hqplayerd.xml" = mkIf (cfg.config != null) { source = pkgs.writeText "hqplayerd.xml" cfg.config; };
-        "hqplayer/hqplayerd4-key.xml" = mkIf (cfg.licenseFile != null) { source = cfg.licenseFile; };
+        "hqplayer/hqplayerd.xml" = mkIf (cfg.config != null) {source = pkgs.writeText "hqplayerd.xml" cfg.config;};
+        "hqplayer/hqplayerd4-key.xml" = mkIf (cfg.licenseFile != null) {source = cfg.licenseFile;};
         "modules-load.d/taudio2.conf".source = "${pkg}/etc/modules-load.d/taudio2.conf";
       };
-      systemPackages = [ pkg ];
+      systemPackages = [pkg];
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8088 4321 ];
+      allowedTCPPorts = [8088 4321];
     };
 
-    services.udev.packages = [ pkg ];
+    services.udev.packages = [pkg];
 
     systemd = {
       tmpfiles.rules = [
@@ -100,29 +102,31 @@ in
         "d ${stateDir}/home  0755 hqplayer hqplayer - -"
       ];
 
-      packages = [ pkg ];
+      packages = [pkg];
 
       services.hqplayerd = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-tmpfiles-setup.service" ];
+        wantedBy = ["multi-user.target"];
+        after = ["systemd-tmpfiles-setup.service"];
 
         environment.HOME = "${stateDir}/home";
 
-        unitConfig.ConditionPathExists = [ configDir stateDir ];
+        unitConfig.ConditionPathExists = [configDir stateDir];
 
-        restartTriggers = optionals (cfg.config != null) [ config.environment.etc."hqplayer/hqplayerd.xml".source ];
+        restartTriggers = optionals (cfg.config != null) [config.environment.etc."hqplayer/hqplayerd.xml".source];
 
-        preStart = ''
-          cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
-          chmod -R u+wX "${stateDir}/web"
+        preStart =
+          ''
+            cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
+            chmod -R u+wX "${stateDir}/web"
 
-          if [ ! -f "${configDir}/hqplayerd.xml" ]; then
-            echo "creating initial config file"
-            install -m 0644 "${pkg}/etc/hqplayer/hqplayerd.xml" "${configDir}/hqplayerd.xml"
-          fi
-        '' + optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
-          ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
-        '';
+            if [ ! -f "${configDir}/hqplayerd.xml" ]; then
+              echo "creating initial config file"
+              install -m 0644 "${pkg}/etc/hqplayer/hqplayerd.xml" "${configDir}/hqplayerd.xml"
+            fi
+          ''
+          + optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
+            ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
+          '';
       };
     };
 
@@ -133,7 +137,7 @@ in
     users.users = {
       hqplayer = {
         description = "hqplayer daemon user";
-        extraGroups = [ "audio" ];
+        extraGroups = ["audio"];
         group = "hqplayer";
         uid = config.ids.uids.hqplayer;
       };

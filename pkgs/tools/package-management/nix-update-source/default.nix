@@ -1,5 +1,11 @@
-{ lib, pkgs, fetchFromGitHub, python3Packages, nix-prefetch-scripts, runtimeShell }:
-
+{
+  lib,
+  pkgs,
+  fetchFromGitHub,
+  python3Packages,
+  nix-prefetch-scripts,
+  runtimeShell,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "nix-update-source";
   version = "0.6.3";
@@ -11,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "157wvv9vnaszzwbj68jpdc0imcm1hdab3z760bx2axbsgfpqqilz";
   };
 
-  propagatedBuildInputs = [ nix-prefetch-scripts ];
+  propagatedBuildInputs = [nix-prefetch-scripts];
 
   doCheck = false;
 
@@ -19,19 +25,20 @@ python3Packages.buildPythonApplication rec {
     # NOTE: `fetch` should not be used within nixpkgs because it
     # uses a non-idiomatic structure. It is provided for use by
     # out-of-tree nix derivations.
-    fetch = path:
-      let
-        fetchers = {
-          # whitelist of allowed fetchers
-          inherit (pkgs) fetchgit fetchurl fetchFromGitHub;
-        };
-        json = lib.importJSON path;
-        fetchFn = builtins.getAttr json.fetch.fn fetchers;
-        src = fetchFn json.fetch.args;
-      in
-      json // json.fetch // {
+    fetch = path: let
+      fetchers = {
+        # whitelist of allowed fetchers
+        inherit (pkgs) fetchgit fetchurl fetchFromGitHub;
+      };
+      json = lib.importJSON path;
+      fetchFn = builtins.getAttr json.fetch.fn fetchers;
+      src = fetchFn json.fetch.args;
+    in
+      json
+      // json.fetch
+      // {
         inherit src;
-        overrideSrc = drv: lib.overrideDerivation drv (orig: { inherit src; });
+        overrideSrc = drv: lib.overrideDerivation drv (orig: {inherit src;});
       };
 
     updateScript = ''
@@ -52,7 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Utility to automate updating of nix derivation sources";
-    maintainers = with lib.maintainers; [ timbertson ];
+    maintainers = with lib.maintainers; [timbertson];
     license = lib.licenses.mit;
   };
 }

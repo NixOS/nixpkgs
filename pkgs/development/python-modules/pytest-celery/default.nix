@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 buildPythonPackage rec {
   pname = "pytest-celery";
   version = "0.1.0";
@@ -26,6 +29,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to enable celery.contrib.pytest";
     homepage = "https://github.com/celery/pytest-celery";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

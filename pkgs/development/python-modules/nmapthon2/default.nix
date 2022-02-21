@@ -1,11 +1,11 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "nmapthon2";
   version = "0.1.5";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to automate nmap";
     homepage = "https://github.com/cblopez/nmapthon2";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

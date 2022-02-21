@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, glib
-, gtk3
-, cairo
-, wrapGAppsHook
-, libxml2
-, python3
-, gettext
-, itstool
-, desktop-file-utils
-, adwaita-icon-theme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  glib,
+  gtk3,
+  cairo,
+  wrapGAppsHook,
+  libxml2,
+  python3,
+  gettext,
+  itstool,
+  desktop-file-utils,
+  adwaita-icon-theme,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hitori";
   version = "3.38.3";

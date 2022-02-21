@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, gssapi
-, krb5
-, ruamel-yaml
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  gssapi,
+  krb5,
+  ruamel-yaml,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  glibcLocales,
 }:
-
 buildPythonPackage rec {
   pname = "pyspnego";
   version = "0.3.1";
@@ -44,12 +44,12 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  pythonImportsCheck = [ "spnego" ];
+  pythonImportsCheck = ["spnego"];
 
   meta = with lib; {
     description = "Python SPNEGO authentication library";
     homepage = "https://github.com/jborean93/pyspnego";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

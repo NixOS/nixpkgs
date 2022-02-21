@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, efivar, popt }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  efivar,
+  popt,
+}:
 stdenv.mkDerivation rec {
   pname = "efibootmgr";
   version = "17";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ efivar popt ];
+  buildInputs = [efivar popt];
 
   src = fetchFromGitHub {
     owner = "rhboot";
@@ -23,15 +30,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "EFIDIR=nixos" "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config" ];
+  makeFlags = ["EFIDIR=nixos" "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"];
 
-  installFlags = [ "prefix=$(out)" ];
+  installFlags = ["prefix=$(out)"];
 
   meta = with lib; {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
     homepage = "https://github.com/rhboot/efibootmgr";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

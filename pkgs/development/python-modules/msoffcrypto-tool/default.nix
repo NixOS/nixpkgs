@@ -1,14 +1,14 @@
-{ lib
-, olefile
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, cryptography
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  olefile,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  cryptography,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "msoffcrypto-tool";
   version = "5.0.0";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tool and library for decrypting MS Office files with passwords or other keys";
     homepage = "https://github.com/nolze/msoffcrypto-tool";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

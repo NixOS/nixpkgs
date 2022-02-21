@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, stdenv
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  stdenv,
 }:
-
 buildGoModule rec {
   pname = "gitjacker";
   version = "0.1.0";
@@ -18,9 +18,9 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  propagatedBuildInputs = [ git ];
+  propagatedBuildInputs = [git];
 
-  checkInputs = [ git ];
+  checkInputs = [git];
 
   doCheck = !stdenv.isDarwin;
 
@@ -37,7 +37,7 @@ buildGoModule rec {
       even where directory listings are disabled.
     '';
     homepage = "https://github.com/liamg/gitjacker";
-    license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [unlicense];
+    maintainers = with maintainers; [fab];
   };
 }

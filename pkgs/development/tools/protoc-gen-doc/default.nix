@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "protoc-gen-doc-unstable";
   version = "1.5.0";
@@ -27,6 +30,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/pseudomuto/protoc-gen-doc";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
   };
 }

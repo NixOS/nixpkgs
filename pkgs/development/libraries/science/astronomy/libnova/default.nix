@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchgit, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "libnova";
   version = "0.16";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Celestial Mechanics, Astrometry and Astrodynamics Library";
     homepage = "http://libnova.sf.net";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [hjones2199];
     platforms = platforms.unix;
   };
 }

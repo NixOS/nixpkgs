@@ -17,7 +17,6 @@
   python3,
   desktop-file-utils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tali";
   version = "40.5";

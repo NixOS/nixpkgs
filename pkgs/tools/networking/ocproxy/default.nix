@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libevent }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libevent,
+}:
 stdenv.mkDerivation rec {
   version = "1.60";
   pname = "ocproxy";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "03323nnhb4y9nzwva04mq7xg03dvdrgp689g89f69jqc261skcqx";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [ libevent ];
+  nativeBuildInputs = [autoconf automake];
+  buildInputs = [libevent];
 
   preConfigure = ''
     patchShebangs autogen.sh
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/cernekee/ocproxy";
     license = licenses.bsd3;
-    maintainers = [ maintainers.joko ];
+    maintainers = [maintainers.joko];
     platforms = platforms.unix;
   };
 }

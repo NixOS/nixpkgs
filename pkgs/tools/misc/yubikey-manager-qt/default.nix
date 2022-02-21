@@ -1,17 +1,17 @@
-{ lib
-, mkDerivation
-, fetchurl
-, pcsclite
-, pyotherside
-, python3
-, qmake
-, qtbase
-, qtgraphicaleffects
-, qtquickcontrols2
-, yubikey-manager
-, yubikey-personalization
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  pcsclite,
+  pyotherside,
+  python3,
+  qmake,
+  qtbase,
+  qtgraphicaleffects,
+  qtquickcontrols2,
+  yubikey-manager,
+  yubikey-personalization,
 }:
-
 mkDerivation rec {
   pname = "yubikey-manager-qt";
   version = "1.2.4";
@@ -39,7 +39,7 @@ mkDerivation rec {
   ];
 
   pythonPath = [
-    (yubikey-manager.override { python3Packages = python3.pkgs; })
+    (yubikey-manager.override {python3Packages = python3.pkgs;})
   ];
 
   postInstall = ''
@@ -50,7 +50,10 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ pcsclite yubikey-personalization ])
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [pcsclite yubikey-personalization])
   ];
 
   preFixup = ''
@@ -62,7 +65,7 @@ mkDerivation rec {
     description = "Cross-platform application for configuring any YubiKey over all USB interfaces";
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
     license = licenses.bsd2;
-    maintainers = [ maintainers.cbley ];
+    maintainers = [maintainers.cbley];
     platforms = platforms.linux;
   };
 }

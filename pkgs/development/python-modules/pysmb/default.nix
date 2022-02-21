@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-
-# pythonPackages
-, pyasn1
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib
+  # pythonPackages
+  ,
+  pyasn1,
 }:
-
 buildPythonPackage rec {
   pname = "pysmb";
   version = "1.2.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   #   https://github.com/miketeo/pysmb/blob/master/python3/tests/README_1st.txt
   doCheck = false;
 
-  pythonImportsCheck = [ "nmb" "smb" ];
+  pythonImportsCheck = ["nmb" "smb"];
 
   meta = {
     description = "Experimental SMB/CIFS library written in Python to support file sharing between Windows and Linux machines";

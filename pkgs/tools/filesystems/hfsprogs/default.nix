@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, openssl, libbsd }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  libbsd,
+}:
 stdenv.mkDerivation rec {
   version = "332.25";
   pname = "hfsprogs";
@@ -19,9 +24,9 @@ stdenv.mkDerivation rec {
   '';
 
   sourceRoot = "diskdev_cmds-" + version;
-  patches = [ "../debian/patches/*.patch" ];
+  patches = ["../debian/patches/*.patch"];
 
-  buildInputs = [ openssl libbsd ];
+  buildInputs = [openssl libbsd];
   makefile = "Makefile.lnx";
 
   # Inspired by PKGBUILD of https://www.archlinux.org/packages/community/x86_64/hfsprogs/

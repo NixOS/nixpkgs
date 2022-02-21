@@ -1,13 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoModule rec {
-  pname   = "nats-server";
+  pname = "nats-server";
   version = "2.7.2";
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "nats-io";
-    repo   = pname;
+    rev = "v${version}";
+    owner = "nats-io";
+    repo = pname;
     sha256 = "0w4hjz1x6zwcxhnd1y3874agyn8nsdra4fky6kc2rrfikjcw003y";
   };
 
@@ -20,7 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "High-Performance server for NATS";
     license = licenses.asl20;
-    maintainers = with maintainers; [ swdunlop derekcollison ];
+    maintainers = with maintainers; [swdunlop derekcollison];
     homepage = "https://nats.io/";
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytest-flakes
-, pytest-mock
-, pytest-socket
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytest-flakes,
+  pytest-mock,
+  pytest-socket,
+  pytestCheckHook,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "url-normalize";
   version = "1.4.3";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "URL normalization for Python";
     homepage = "https://github.com/niksite/url-normalize";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

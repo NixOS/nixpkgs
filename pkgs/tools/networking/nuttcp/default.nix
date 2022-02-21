@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "nuttcp";
   version = "8.1.4";
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     homepage = "http://nuttcp.net/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.unix;
   };
 }

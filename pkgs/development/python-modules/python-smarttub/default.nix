@@ -1,16 +1,16 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, inflection
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  inflection,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "python-smarttub";
   version = "0.0.29";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for SmartTub enabled hot tubs";
     homepage = "https://github.com/mdz/python-smarttub";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

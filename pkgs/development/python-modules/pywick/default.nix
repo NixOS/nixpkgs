@@ -1,21 +1,21 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest
-, h5py
-, hickle
-, numpy
-, pandas
-, pillow
-, six
-, pytorch
-, torchvision
-, tqdm
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest,
+  h5py,
+  hickle,
+  numpy,
+  pandas,
+  pillow,
+  six,
+  pytorch,
+  torchvision,
+  tqdm,
+  lib,
 }:
-
 buildPythonPackage rec {
-  pname   = "pywick";
+  pname = "pywick";
   version = "0.6.5";
 
   disabled = pythonOlder "3.6";
@@ -28,10 +28,18 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    h5py hickle numpy pandas pillow six pytorch torchvision tqdm
+    h5py
+    hickle
+    numpy
+    pandas
+    pillow
+    six
+    pytorch
+    torchvision
+    tqdm
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     runHook preCheck
@@ -43,6 +51,6 @@ buildPythonPackage rec {
     description = "High-level training framework for Pytorch";
     homepage = "https://github.com/achaiah/pywick";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [bcdarwin];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "homepluscontrol";
   version = "0.1";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "homepluscontrol" ];
+  pythonImportsCheck = ["homepluscontrol"];
 
   meta = with lib; {
     description = "Python API to interact with the Legrand Eliot Home and Control";
     homepage = "https://github.com/chemaaa/homepluscontrol";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

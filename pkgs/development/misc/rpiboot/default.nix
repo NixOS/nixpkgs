@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libusb1 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
+}:
 stdenv.mkDerivation rec {
   pname = "rpiboot";
   version = "2021.07.01";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BkNyYCrasfiRs7CbJa7tCo2k70TLGcXkOX+zGPyZGGE=";
   };
 
-  nativeBuildInputs = [ libusb1 ];
+  nativeBuildInputs = [libusb1];
 
   patchPhase = ''
     sed -i "s@/usr/@$out/@g" main.c
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/raspberrypi/usbboot";
     description = "Utility to boot a Raspberry Pi CM/CM3/CM4/Zero over USB";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cartr ];
-    platforms = [ "aarch64-linux" "armv7l-linux" "armv6l-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [cartr];
+    platforms = ["aarch64-linux" "armv7l-linux" "armv6l-linux" "x86_64-linux"];
   };
 }

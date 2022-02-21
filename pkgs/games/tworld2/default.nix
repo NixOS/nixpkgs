@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, qt4
-, SDL
+{
+  stdenv,
+  lib,
+  fetchurl,
+  qt4,
+  SDL,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tworld2";
   version = "2.2.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1y55v2shk2xxcds7bdwdjaq9lka31sgdp2469zqnvldchwbvcb2i";
   };
 
-  buildInputs = [ qt4 SDL ];
+  buildInputs = [qt4 SDL];
   enableParallelBuilding = true;
 
   postConfigure = ''
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tw2.bitbusters.club/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ drperceptron ];
+    maintainers = with maintainers; [drperceptron];
   };
 }

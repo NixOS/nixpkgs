@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, fetchgit
-, SDL2
-, alsa-lib
-, babl
-, curl
-, libdrm # Not documented
-, pkg-config
-, enableFb ? false
+{
+  lib,
+  stdenv,
+  fetchgit,
+  SDL2,
+  alsa-lib,
+  babl,
+  curl,
+  libdrm
+  # Not documented
+  ,
+  pkg-config,
+  enableFb ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ctx";
   version = "0.pre+date=2021-10-09";
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional enableFb "--enable-fb";
   dontAddPrefix = true;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
@@ -46,13 +48,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://ctx.graphics/";
     description = "Vector graphics terminal";
-    longDescription= ''
+    longDescription = ''
       ctx is an interactive 2D vector graphics, audio, text- canvas and
       terminal, with escape sequences that enable a 2D vector drawing API using
       a vector graphics protocol.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

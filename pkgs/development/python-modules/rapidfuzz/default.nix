@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, hypothesis
-, pandas
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  hypothesis,
+  pandas,
+  numpy,
 }:
-
 buildPythonPackage rec {
   pname = "rapidfuzz";
   version = "1.9.1";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

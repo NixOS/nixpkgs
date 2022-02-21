@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, ncurses }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "eventstat";
   version = "0.04.13";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-psamt9omhakiO3Kx2EzofPL2VAsva7XKQTZmn6zKefA=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
   installFlags = [
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/share/man/man8"
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/eventstat";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [cstrahan];
   };
 }

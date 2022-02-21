@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libjpeg
-, libpng
-, libxml2
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjpeg,
+  libpng,
+  libxml2,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "flam3";
   version = "3.1.1+date=2018-04-12";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       is specified by a long string of numbers - a genetic code of sorts.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

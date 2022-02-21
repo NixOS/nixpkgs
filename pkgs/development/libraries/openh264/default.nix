@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, nasm, windows }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nasm,
+  windows,
+}:
 stdenv.mkDerivation rec {
   pname = "openh264";
   version = "2.1.1";
@@ -11,14 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "0ffav46pz3sbj92nipd62z03fibyqgclfq9w8lgr80s6za6zdk5s";
   };
 
-  nativeBuildInputs = [ nasm ];
+  nativeBuildInputs = [nasm];
 
   buildInputs = lib.optional stdenv.hostPlatform.isWindows windows.pthreads;
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optional stdenv.hostPlatform.isWindows "OS=mingw_nt";
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isWindows "OS=mingw_nt";
 
   enableParallelBuilding = true;
 

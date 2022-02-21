@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "gotestwaf";
   version = "0.3.1";
@@ -25,6 +25,6 @@ buildGoModule rec {
     description = "Tool for API and OWASP attack simulation";
     homepage = "https://github.com/wallarm/gotestwaf";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

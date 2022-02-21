@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "amberelectric";
   version = "1.0.3";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "amberelectric" ];
+  pythonImportsCheck = ["amberelectric"];
 
   meta = with lib; {
     description = "Python Amber Electric API interface";
     homepage = "https://github.com/madpilot/amberelectric.py";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, python3, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  docker,
+  autoreconfHook,
+  coreutils,
+  makeWrapper,
+  gnused,
+  gnutar,
+  gzip,
+  findutils,
+  sudo,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
-
   version = "0.24";
   pname = "charliecloud";
 
@@ -12,14 +25,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kdaVlwE3vdCxsmJTOUwx8J+9UcBuXbKDwS2MHX2ZPPM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ];
+  nativeBuildInputs = [autoreconfHook makeWrapper];
   buildInputs = [
     docker
-    (python3.withPackages (ps: [ ps.lark ps.requests ]))
+    (python3.withPackages (ps: [ps.lark ps.requests]))
   ];
 
   configureFlags = let
-    pythonEnv = python3.withPackages (ps: [ ps.lark ps.requests ]);
+    pythonEnv = python3.withPackages (ps: [ps.lark ps.requests]);
   in [
     "--with-python=${pythonEnv}/bin/python3"
   ];
@@ -38,7 +51,7 @@ stdenv.mkDerivation rec {
   # Here we wrap those deps so they are resolved inside nixpkgs.
   postInstall = ''
     for file in $out/bin/* ; do \
-      wrapProgram $file --prefix PATH : ${lib.makeBinPath [ coreutils docker gnused gnutar gzip findutils sudo ]}
+      wrapProgram $file --prefix PATH : ${lib.makeBinPath [coreutils docker gnused gnutar gzip findutils sudo]}
     done
   '';
 
@@ -55,8 +68,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://hpc.github.io/charliecloud";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.bzizou ];
+    maintainers = [lib.maintainers.bzizou];
     platforms = lib.platforms.linux;
   };
-
 }

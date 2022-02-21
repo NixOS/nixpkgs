@@ -1,9 +1,9 @@
-{ lib
-, python3
-, stdenv
-, fetchurl
+{
+  lib,
+  python3,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "http2tcp";
   version = "0.5";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ clkamp ];
+    maintainers = with maintainers; [clkamp];
     description = "A tool for tunneling TCP connections via HTTP GET requests";
     longDescription = ''
       The http2tcp tools allow to tunnel tcp connections (presumably

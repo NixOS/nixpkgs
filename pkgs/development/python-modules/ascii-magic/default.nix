@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchPypi
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchPypi,
+  pillow,
 }:
-
 buildPythonPackage rec {
   pname = "ascii-magic";
   version = "1.6";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python module to converts pictures into ASCII art";
     homepage = "https://github.com/LeandroBarone/python-ascii_magic";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

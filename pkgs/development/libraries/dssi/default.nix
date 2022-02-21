@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchurl, ladspaH, libjack2, liblo, alsa-lib, qt4, libX11, libsndfile, libSM
-, libsamplerate, libtool, autoconf, automake, xorgproto, libICE, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ladspaH,
+  libjack2,
+  liblo,
+  alsa-lib,
+  qt4,
+  libX11,
+  libsndfile,
+  libSM,
+  libsamplerate,
+  libtool,
+  autoconf,
+  automake,
+  xorgproto,
+  libICE,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dssi";
   version = "1.1.1";
@@ -11,15 +27,27 @@ stdenv.mkDerivation rec {
     sha256 = "0kl1hzhb7cykzkrqcqgq1dk4xcgrcxv0jja251aq4z4l783jpj7j";
   };
 
-  buildInputs =
-    [ ladspaH libjack2 liblo alsa-lib qt4 libX11 libsndfile libSM
-      libsamplerate libtool autoconf automake xorgproto libICE pkg-config
-    ];
+  buildInputs = [
+    ladspaH
+    libjack2
+    liblo
+    alsa-lib
+    qt4
+    libX11
+    libsndfile
+    libSM
+    libsamplerate
+    libtool
+    autoconf
+    automake
+    xorgproto
+    libICE
+    pkg-config
+  ];
 
   meta = with lib; {
     description = "A plugin SDK for virtual instruments";
-    maintainers = with maintainers;
-    [
+    maintainers = with maintainers; [
       raskin
     ];
     platforms = platforms.linux;

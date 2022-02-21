@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gdk-pixbuf, libGL, mesa }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  gdk-pixbuf,
+  libGL,
+  mesa,
+}:
 stdenv.mkDerivation rec {
   pname = "blur-effect";
   version = "1.1.3";
@@ -28,6 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # packages 'libdrm' and 'gbm' not found
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

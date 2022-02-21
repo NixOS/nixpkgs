@@ -1,24 +1,26 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, automake
-, autoconf
-, libtool
-, ncurses
-, readline
-, which
-, python ? null
-, useMpi ? false
-, mpi
-, iv
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  automake,
+  autoconf,
+  libtool,
+  ncurses,
+  readline,
+  which,
+  python ? null,
+  useMpi ? false,
+  mpi,
+  iv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "neuron";
   version = "7.5";
 
-  nativeBuildInputs = [ which pkg-config automake autoconf libtool ];
-  buildInputs = [ ncurses readline python iv ]
+  nativeBuildInputs = [which pkg-config automake autoconf libtool];
+  buildInputs =
+    [ncurses readline python iv]
     ++ lib.optional useMpi mpi;
 
   src = fetchurl {
@@ -26,22 +28,24 @@ stdenv.mkDerivation rec {
     sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
   };
 
-  patches = (lib.optional (stdenv.isDarwin) [ ./neuron-carbon-disable.patch ]);
+  patches = (lib.optional (stdenv.isDarwin) [./neuron-carbon-disable.patch]);
 
   # With LLVM 3.8 and above, clang (really libc++) gets upset if you attempt to redefine these...
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace src/gnu/neuron_gnu_builtin.h \
-      --replace 'double abs(double arg);' "" \
-      --replace 'float abs(float arg);' "" \
-      --replace 'short abs(short arg);' "" \
-      --replace 'long abs(long arg);' ""
-  '' + lib.optionalString stdenv.isDarwin ''
-    # we are darwin, but we don't have all the quirks the source wants to compensate for
-    substituteInPlace src/nrnpython/setup.py.in --replace 'readline="edit"' 'readline="readline"'
-    for f in src/nrnpython/*.[ch] ; do
-      substituteInPlace $f --replace "<Python/Python.h>" "<Python.h>"
-    done
-  '';
+  postPatch =
+    lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace src/gnu/neuron_gnu_builtin.h \
+        --replace 'double abs(double arg);' "" \
+        --replace 'float abs(float arg);' "" \
+        --replace 'short abs(short arg);' "" \
+        --replace 'long abs(long arg);' ""
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # we are darwin, but we don't have all the quirks the source wants to compensate for
+      substituteInPlace src/nrnpython/setup.py.in --replace 'readline="edit"' 'readline="readline"'
+      for f in src/nrnpython/*.[ch] ; do
+        substituteInPlace $f --replace "<Python/Python.h>" "<Python.h>"
+      done
+    '';
 
   enableParallelBuilding = true;
 
@@ -54,11 +58,11 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = with lib;
-                    [ "--with-readline=${readline}" "--with-iv=${iv}" ]
-                    ++  optionals (python != null)  [ "--with-nrnpython=${python.interpreter}" ]
-                    ++ (if useMpi then ["--with-mpi" "--with-paranrn"]
-                        else ["--without-mpi"]);
-
+    ["--with-readline=${readline}" "--with-iv=${iv}"]
+    ++ optionals (python != null) ["--with-nrnpython=${python.interpreter}"]
+    ++ (if useMpi
+    then ["--with-mpi" "--with-paranrn"]
+    else ["--without-mpi"]);
 
   postInstall = lib.optionalString (python != null) ''
     ## standardise python neuron install dir if any
@@ -68,7 +72,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  propagatedBuildInputs = [ readline ncurses which libtool ];
+  propagatedBuildInputs = [readline ncurses which libtool];
 
   meta = with lib; {
     description = "Simulation environment for empirically-based simulations of neurons and networks of neurons";
@@ -79,10 +83,10 @@ stdenv.mkDerivation rec {
                 potential close to the membrane), and where cell membrane properties are complex,
                 involving many ion-specific channels, ion accumulation, and second messengers";
 
-    license     = licenses.bsd3;
-    homepage    = "http://www.neuron.yale.edu/neuron";
-    maintainers = [ maintainers.adev ];
+    license = licenses.bsd3;
+    homepage = "http://www.neuron.yale.edu/neuron";
+    maintainers = [maintainers.adev];
     # source claims it's only tested for x86 and powerpc
-    platforms   = platforms.x86_64 ++ platforms.i686;
+    platforms = platforms.x86_64 ++ platforms.i686;
   };
 }

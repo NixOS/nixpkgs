@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, jdk8_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
-  majorVersion ? "1.0" }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk8_headless,
+  jdk11_headless,
+  makeWrapper,
+  bash,
+  coreutils,
+  gnugrep,
+  gnused,
+  ps,
+  majorVersion ? "1.0",
+}: let
   jre8 = jdk8_headless;
   jre11 = jdk11_headless;
   versionMap = {
@@ -19,51 +29,49 @@ let
     };
   };
 in
+  with versionMap.${majorVersion};
+    stdenv.mkDerivation rec {
+      version = "${scalaVersion}-${kafkaVersion}";
+      pname = "apache-kafka";
 
-with versionMap.${majorVersion};
+      src = fetchurl {
+        url = "mirror://apache/kafka/${kafkaVersion}/kafka_${version}.tgz";
+        inherit sha256;
+      };
 
-stdenv.mkDerivation rec {
-  version = "${scalaVersion}-${kafkaVersion}";
-  pname = "apache-kafka";
+      nativeBuildInputs = [makeWrapper];
+      buildInputs = [jre bash gnugrep gnused coreutils ps];
 
-  src = fetchurl {
-    url = "mirror://apache/kafka/${kafkaVersion}/kafka_${version}.tgz";
-    inherit sha256;
-  };
+      installPhase = ''
+        mkdir -p $out
+        cp -R config libs $out
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre bash gnugrep gnused coreutils ps ];
+        mkdir -p $out/bin
+        cp bin/kafka* $out/bin
+        cp bin/connect* $out/bin
 
-  installPhase = ''
-    mkdir -p $out
-    cp -R config libs $out
+        # allow us the specify logging directory using env
+        substituteInPlace $out/bin/kafka-run-class.sh \
+          --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
 
-    mkdir -p $out/bin
-    cp bin/kafka* $out/bin
-    cp bin/connect* $out/bin
+        substituteInPlace $out/bin/kafka-server-stop.sh \
+          --replace 'ps' '${ps}/bin/ps'
 
-    # allow us the specify logging directory using env
-    substituteInPlace $out/bin/kafka-run-class.sh \
-      --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
+        for p in $out/bin\/*.sh; do
+          wrapProgram $p \
+            --set JAVA_HOME "${jre}" \
+            --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
+            --prefix PATH : "${bash}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin"
+        done
+        chmod +x $out/bin\/*
+      '';
 
-    substituteInPlace $out/bin/kafka-server-stop.sh \
-      --replace 'ps' '${ps}/bin/ps'
-
-    for p in $out/bin\/*.sh; do
-      wrapProgram $p \
-        --set JAVA_HOME "${jre}" \
-        --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
-        --prefix PATH : "${bash}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin"
-    done
-    chmod +x $out/bin\/*
-  '';
-
-  meta = with lib; {
-    homepage = "https://kafka.apache.org";
-    description = "A high-throughput distributed messaging system";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ragge ];
-    platforms = platforms.unix;
-  };
-  passthru = { inherit jre; };
-}
+      meta = with lib; {
+        homepage = "https://kafka.apache.org";
+        description = "A high-throughput distributed messaging system";
+        license = licenses.asl20;
+        maintainers = [maintainers.ragge];
+        platforms = platforms.unix;
+      };
+      passthru = {inherit jre;};
+    }

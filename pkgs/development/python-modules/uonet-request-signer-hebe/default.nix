@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pyopenssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pyopenssl,
 }:
-
 buildPythonPackage rec {
   pname = "uonet-request-signer-hebe";
   version = "0.1.1";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "UONET+ (hebe) request signer for Python";
     homepage = "https://github.com/wulkanowy/uonet-request-signer";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, libedit
-, makeWrapper
-, nasm
-, lib, stdenv
+{
+  fetchFromGitHub,
+  libedit,
+  makeWrapper,
+  nasm,
+  lib,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rappel";
   version = "unstable-2019-09-09";
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wj3hypqfrjra8mwmn32hs5qs6ic81cq3gn1v0b2fba6vkqcsqfy";
   };
 
-  buildInputs = [ libedit ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [libedit];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/yrp604/rappel";
     description = "A pretty janky assembly REPL";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.pamplemousse ];
+    maintainers = [maintainers.pamplemousse];
     platforms = platforms.linux;
   };
 }

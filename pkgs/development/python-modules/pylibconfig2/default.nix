@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pyparsing }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyparsing,
+}:
 buildPythonPackage rec {
   pname = "pylibconfig2";
   version = "0.2.5";
@@ -11,7 +16,7 @@ buildPythonPackage rec {
   # tests not included in the distribution
   doCheck = false;
 
-  propagatedBuildInputs = [ pyparsing ];
+  propagatedBuildInputs = [pyparsing];
 
   meta = with lib; {
     homepage = "https://github.com/heinzK1X/pylibconfig2";

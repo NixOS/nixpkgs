@@ -1,21 +1,22 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.starship;
 
-  settingsFormat = pkgs.formats.toml { };
+  settingsFormat = pkgs.formats.toml {};
 
   settingsFile = settingsFormat.generate "starship.toml" cfg.settings;
-
 in {
   options.programs.starship = {
     enable = mkEnableOption "the Starship shell prompt";
 
     settings = mkOption {
       inherit (settingsFormat) type;
-      default = { };
+      default = {};
       description = ''
         Configuration included in <literal>starship.toml</literal>.
 

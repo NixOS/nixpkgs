@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchurl, unzip, xorg, libGLU, libGL }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  xorg,
+  libGLU,
+  libGL,
+}:
 stdenv.mkDerivation rec {
   pname = "AntTweakBar";
   version = "1.16";
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ xorg.libX11 libGLU libGL ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [xorg.libX11 libGLU libGL];
 
   src = fetchurl {
     url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_${lib.replaceStrings ["."] [""] version}.zip";
@@ -29,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://anttweakbar.sourceforge.net/";
     license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.razvan ];
+    maintainers = [lib.maintainers.razvan];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, future
-, pyserial
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  future,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aurorapy";
   version = "0.2.6";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of the communication protocol for Power-One Aurora inverters";
     homepage = "https://gitlab.com/energievalsabbia/aurorapy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

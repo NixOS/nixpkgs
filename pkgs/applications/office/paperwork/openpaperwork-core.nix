@@ -1,15 +1,17 @@
-{ buildPythonPackage, lib, fetchFromGitLab
-
-, isPy3k, isPyPy
-
-, distro, setuptools, psutil
-
-, pkgs
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  isPy3k,
+  isPyPy,
+  distro,
+  setuptools,
+  psutil,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "openpaperwork-core";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (import ./src.nix {inherit fetchFromGitLab;}) version src;
 
   sourceRoot = "source/openpaperwork-core";
 
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     psutil
   ];
 
-  nativeBuildInputs = [ pkgs.gettext pkgs.which ];
+  nativeBuildInputs = [pkgs.gettext pkgs.which];
 
   preBuild = ''
     make l10n_compile
@@ -38,6 +40,6 @@ buildPythonPackage rec {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [aszlig symphorien];
   };
 }

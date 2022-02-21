@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, aiohttp
-, bitarray
-, cryptography
-, deepdiff
-, fetchFromGitHub
-, mediafile
-, miniaudio
-, netifaces
-, protobuf
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, requests
-, srptools
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  aiohttp,
+  bitarray,
+  cryptography,
+  deepdiff,
+  fetchFromGitHub,
+  mediafile,
+  miniaudio,
+  netifaces,
+  protobuf,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  srptools,
+  zeroconf,
 }:
-
 buildPythonPackage rec {
   pname = "pyatv";
   version = "0.10.0";
@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [elseym];
   };
 }

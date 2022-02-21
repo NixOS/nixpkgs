@@ -1,24 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, caddy, asciidoctor
-, file, lessc, sass, multimarkdown, linkchecker
-, perlPackages, python27 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  caddy,
+  asciidoctor,
+  file,
+  lessc,
+  sass,
+  multimarkdown,
+  linkchecker,
+  perlPackages,
+  python27,
+}:
 stdenv.mkDerivation rec {
   pname = "styx";
   version = "0.7.2";
 
   src = fetchFromGitHub {
-    owner  = "styx-static";
-    repo   = "styx";
-    rev    = "0f0a878156eac416620a177cc030fa9f2f69b1b8";
+    owner = "styx-static";
+    repo = "styx";
+    rev = "0f0a878156eac416620a177cc030fa9f2f69b1b8";
     sha256 = "0ig456j1s17w4zhhcmkrskpy6n7061v5f2isa3qhipmn0gwb91af";
   };
 
   server = "${caddy}/bin/caddy";
   linkcheck = "${linkchecker}/bin/linkchecker";
 
-  nativeBuildInputs = [ asciidoctor ];
+  nativeBuildInputs = [asciidoctor];
 
-  outputs = [ "out" "lib" "themes" ];
+  outputs = ["out" "lib" "themes"];
 
   propagatedBuildInputs = [
     file
@@ -27,7 +37,7 @@ stdenv.mkDerivation rec {
     asciidoctor
     multimarkdown
     perlPackages.ImageExifTool
-    (python27.withPackages (ps: [ ps.parsimonious ]))
+    (python27.withPackages (ps: [ps.parsimonious]))
   ];
 
   installPhase = ''
@@ -61,11 +71,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description  = "Nix based static site generator";
-    maintainers  = with maintainers; [ ericsagnes ];
-    homepage     = "https://styx-static.github.io/styx-site/";
+    description = "Nix based static site generator";
+    maintainers = with maintainers; [ericsagnes];
+    homepage = "https://styx-static.github.io/styx-site/";
     downloadPage = "https://github.com/styx-static/styx/";
-    platforms    = platforms.all;
-    license      = licenses.mit;
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

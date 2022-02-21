@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, coredns
-, installShellFiles
-, isFull ? false
-, enableGateway ? false
-, pname ? "kuma"
-, components ? lib.optionals isFull [
-    "kumactl"
-    "kuma-cp"
-    "kuma-prometheus-sd"
-    "kuma-dp"
-  ]
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  coredns,
+  installShellFiles,
+  isFull ? false,
+  enableGateway ? false,
+  pname ? "kuma",
+  components ?
+    lib.optionals isFull [
+      "kumactl"
+      "kuma-cp"
+      "kuma-prometheus-sd"
+      "kuma-dp"
+    ],
 }:
-
 buildGoModule rec {
-  inherit pname ;
+  inherit pname;
   version = "1.4.1";
   tags = lib.optionals enableGateway ["gateway"];
   vendorSha256 = "sha256-9v+ti/JTAF4TLZ0uvzFvrB0YBnRD2E0Q6K2yicEX3Zw=";
@@ -37,19 +38,23 @@ buildGoModule rec {
 
   subPackages = map (p: "app/" + p) components;
 
-  postInstall = lib.concatMapStringsSep "\n" (p: ''
-    installShellCompletion --cmd ${p} \
-      --bash <($out/bin/${p} completion bash) \
-      --fish <($out/bin/${p} completion fish) \
-      --zsh <($out/bin/${p} completion zsh)
-  '') components + lib.optionalString isFull ''
-    ln -sLf ${coredns}/bin/coredns $out/bin
-  '';
+  postInstall =
+    lib.concatMapStringsSep "\n" (p: ''
+      installShellCompletion --cmd ${p} \
+        --bash <($out/bin/${p} completion bash) \
+        --fish <($out/bin/${p} completion fish) \
+        --zsh <($out/bin/${p} completion zsh)
+    '')
+    components
+    + lib.optionalString isFull ''
+      ln -sLf ${coredns}/bin/coredns $out/bin
+    '';
 
   ldflags = let
     prefix = "github.com/kumahq/kuma/pkg/version";
   in [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X ${prefix}.version=${version}"
     "-X ${prefix}.gitTag=${version}"
     "-X ${prefix}.gitCommit=${version}"
@@ -60,6 +65,6 @@ buildGoModule rec {
     description = "Service mesh controller";
     homepage = "https://kuma.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zbioe ];
+    maintainers = with maintainers; [zbioe];
   };
 }

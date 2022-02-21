@@ -1,7 +1,21 @@
-{ stdenv, lib, substituteAll, fetchurl, cmake, libogg, libvorbis, libtheora, curl, freetype
-, libjpeg, libpng, SDL2, libGL, openal, zlib
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchurl,
+  cmake,
+  libogg,
+  libvorbis,
+  libtheora,
+  curl,
+  freetype,
+  libjpeg,
+  libpng,
+  SDL2,
+  libGL,
+  openal,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "warsow-engine";
   version = "2.1.0";
@@ -18,14 +32,23 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   buildInputs = [
-    libogg libvorbis libtheora curl freetype libjpeg SDL2 libGL openal zlib
+    libogg
+    libvorbis
+    libtheora
+    curl
+    freetype
+    libjpeg
+    SDL2
+    libGL
+    openal
+    zlib
     libpng
   ];
 
-  cmakeFlags = [ "-DQFUSION_GAME=Warsow" ];
+  cmakeFlags = ["-DQFUSION_GAME=Warsow"];
 
   preConfigure = ''
     cd source/source
@@ -47,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Multiplayer FPS game designed for competitive gaming (engine only)";
     homepage = "http://www.warsow.net";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ astsmtl abbradar ];
+    maintainers = with maintainers; [astsmtl abbradar];
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
   };

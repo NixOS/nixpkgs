@@ -1,13 +1,10 @@
 # Test whether hibernation from partition works.
-
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. {inherit system config;},
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
-let
+with import ../lib/testing-python.nix {inherit system pkgs;}; let
   # System configuration of the installed system, which is used for the actual
   # hibernate testing.
   installedConfig = with pkgs.lib; {
@@ -21,58 +18,71 @@ let
     documentation.nixos.enable = false;
     boot.loader.grub.device = "/dev/vda";
 
-    systemd.services.backdoor.conflicts = [ "sleep.target" ];
+    systemd.services.backdoor.conflicts = ["sleep.target"];
 
     powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
     fileSystems = {
       "/".device = "/dev/vda2";
     };
-    swapDevices = mkOverride 0 [ { device = "/dev/vda1"; } ];
+    swapDevices = mkOverride 0 [{device = "/dev/vda1";}];
   };
-  installedSystem = (import ../lib/eval-config.nix {
-    inherit system;
-    modules = [ installedConfig ];
-  }).config.system.build.toplevel;
-in makeTest {
-  name = "hibernate";
+  installedSystem =
+    (import ../lib/eval-config.nix {
+      inherit system;
+      modules = [installedConfig];
+    })
+    .config
+    .system
+    .build
+    .toplevel;
+in
+  makeTest {
+    name = "hibernate";
 
-  nodes = {
-    # System configuration used for installing the installedConfig from above.
-    machine = { config, lib, pkgs, ... }: with lib; {
-      imports = [
-        ../modules/profiles/installation-device.nix
-        ../modules/profiles/base.nix
-      ];
+    nodes = {
+      # System configuration used for installing the installedConfig from above.
+      machine = {
+        config,
+        lib,
+        pkgs,
+        ...
+      }:
+        with lib; {
+          imports = [
+            ../modules/profiles/installation-device.nix
+            ../modules/profiles/base.nix
+          ];
 
-      nix.settings = {
-        substituters = mkForce [];
-        hashed-mirrors = null;
-        connect-timeout = 1;
-      };
+          nix.settings = {
+            substituters = mkForce [];
+            hashed-mirrors = null;
+            connect-timeout = 1;
+          };
 
-      virtualisation.diskSize = 8 * 1024;
-      virtualisation.emptyDiskImages = [
-        # Small root disk for installer
-        512
-      ];
-      virtualisation.bootDevice = "/dev/vdb";
+          virtualisation.diskSize = 8 * 1024;
+          virtualisation.emptyDiskImages = [
+            # Small root disk for installer
+            512
+          ];
+          virtualisation.bootDevice = "/dev/vdb";
+        };
     };
-  };
 
-  # 9P doesn't support reconnection to virtio transport after a hibernation.
-  # Therefore, machine just hangs on any Nix store access.
-  # To avoid this, we install NixOS onto a temporary disk with everything we need
-  # included into the store.
+    # 9P doesn't support reconnection to virtio transport after a hibernation.
+    # Therefore, machine just hangs on any Nix store access.
+    # To avoid this, we install NixOS onto a temporary disk with everything we need
+    # included into the store.
 
-  testScript =
-    ''
+    testScript = ''
       def create_named_machine(name):
           machine = create_machine(
               {
                   "qemuFlags": "-cpu max ${
-                    if system == "x86_64-linux" then "-m 1024"
-                    else "-m 768 -enable-kvm -machine virt,gic-version=host"}",
+        if system == "x86_64-linux"
+        then "-m 1024"
+        else "-m 768 -enable-kvm -machine virt,gic-version=host"
+      }",
                   "hdaInterface": "virtio",
                   "hda": "vm-state-machine/machine.qcow2",
                   "name": name,
@@ -118,5 +128,4 @@ in makeTest {
       resume.start()
       resume.succeed("grep 'not persisted to disk' /run/test/suspended")
     '';
-
-}
+  }

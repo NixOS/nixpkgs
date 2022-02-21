@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, gtk2
-, openssl
-, pcsclite
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  gtk2,
+  openssl,
+  pcsclite,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pcsc-safenet";
   version = "10.0.37-0";
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://safenet.gemalto.com/multi-factor-authentication/security-applications/authentication-client-token-management";
     description = "Safenet Authentication Client";
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wldhx ];
+    maintainers = with maintainers; [wldhx];
   };
 }

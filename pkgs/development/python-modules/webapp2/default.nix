@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, webob
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  webob,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "webapp2";
   version = "2.5.2";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   # # error in tests when running with python 3+
   doCheck = false;
 
-  propagatedBuildInputs = [ webob six ];
+  propagatedBuildInputs = [webob six];
 
   meta = with lib; {
     description = "Taking Google App Engine's webapp to the next level";
     homepage = "http://webapp-improved.appspot.com";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

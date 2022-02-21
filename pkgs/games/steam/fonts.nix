@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, unzip }:
-
+{
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation {
   pname = "steam-fonts";
   version = "1";
@@ -9,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1cgygmwich5f1jhhbmbkkpnzasjl8gy36xln76n6r2gjh6awqfx0";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   sourceRoot = ".";
 

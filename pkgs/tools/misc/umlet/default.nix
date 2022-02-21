@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, jre, unzip, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  unzip,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   major = "14";
   minor = "3";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jfyxjxsjx29xhs3fl0f574nyncmk9j5jp8zlgd401mcaznn9c7l";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -45,7 +51,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.umlet.com";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
     platforms = platforms.all;
   };
 }

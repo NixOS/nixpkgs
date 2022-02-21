@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.seafile;
-  settingsFormat = pkgs.formats.ini { };
+  settingsFormat = pkgs.formats.ini {};
 
   ccnetConf = settingsFormat.generate "ccnet.conf" cfg.ccnetSettings;
 
@@ -29,9 +33,7 @@ let
   ccnetDir = "${seafRoot}/ccnet";
   dataDir = "${seafRoot}/data";
   seahubDir = "${seafRoot}/seahub";
-
 in {
-
   ###### Interface
 
   options.services.seafile = {
@@ -53,7 +55,7 @@ in {
           };
         };
       };
-      default = { };
+      default = {};
       description = ''
         Configuration for ccnet, see
         <link xlink:href="https://manual.seafile.com/config/ccnet-conf/"/>
@@ -85,7 +87,7 @@ in {
           };
         };
       };
-      default = { };
+      default = {};
       description = ''
         Configuration for seafile-server, see
         <link xlink:href="https://manual.seafile.com/config/seafile-conf/"/>
@@ -140,13 +142,12 @@ in {
   ###### Implementation
 
   config = mkIf cfg.enable {
-
     environment.etc."seafile/ccnet.conf".source = ccnetConf;
     environment.etc."seafile/seafile.conf".source = seafileConf;
     environment.etc."seafile/seahub_settings.py".source = seahubSettings;
 
     systemd.targets.seafile = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       description = "Seafile components";
     };
 
@@ -168,34 +169,36 @@ in {
         RestrictSUIDSGID = true;
         MemoryDenyWriteExecute = true;
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" ];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET"];
       };
     in {
       seaf-server = {
         description = "Seafile server";
-        partOf = [ "seafile.target" ];
-        after = [ "network.target" ];
-        wantedBy = [ "seafile.target" ];
-        restartTriggers = [ ccnetConf seafileConf ];
-        serviceConfig = securityOptions // {
-          User = "seafile";
-          Group = "seafile";
-          DynamicUser = true;
-          StateDirectory = "seafile";
-          RuntimeDirectory = "seafile";
-          LogsDirectory = "seafile";
-          ConfigurationDirectory = "seafile";
-          ExecStart = ''
-            ${cfg.seafilePackage}/bin/seaf-server \
-            --foreground \
-            -F /etc/seafile \
-            -c ${ccnetDir} \
-            -d ${dataDir} \
-            -l /var/log/seafile/server.log \
-            -P /run/seafile/server.pid \
-            -p /run/seafile
-          '';
-        };
+        partOf = ["seafile.target"];
+        after = ["network.target"];
+        wantedBy = ["seafile.target"];
+        restartTriggers = [ccnetConf seafileConf];
+        serviceConfig =
+          securityOptions
+          // {
+            User = "seafile";
+            Group = "seafile";
+            DynamicUser = true;
+            StateDirectory = "seafile";
+            RuntimeDirectory = "seafile";
+            LogsDirectory = "seafile";
+            ConfigurationDirectory = "seafile";
+            ExecStart = ''
+              ${cfg.seafilePackage}/bin/seaf-server \
+              --foreground \
+              -F /etc/seafile \
+              -c ${ccnetDir} \
+              -d ${dataDir} \
+              -l /var/log/seafile/server.log \
+              -P /run/seafile/server.pid \
+              -p /run/seafile
+            '';
+          };
         preStart = ''
           if [ ! -f "${seafRoot}/server-setup" ]; then
               mkdir -p ${dataDir}/library-template
@@ -222,11 +225,11 @@ in {
 
       seahub = {
         description = "Seafile Server Web Frontend";
-        wantedBy = [ "seafile.target" ];
-        partOf = [ "seafile.target" ];
-        after = [ "network.target" "seaf-server.service" ];
-        requires = [ "seaf-server.service" ];
-        restartTriggers = [ seahubSettings ];
+        wantedBy = ["seafile.target"];
+        partOf = ["seafile.target"];
+        after = ["network.target" "seaf-server.service"];
+        requires = ["seaf-server.service"];
+        restartTriggers = [seahubSettings];
         environment = {
           PYTHONPATH = "${pkgs.seahub.pythonPath}:${pkgs.seahub}/thirdpart:${pkgs.seahub}";
           DJANGO_SETTINGS_MODULE = "seahub.settings";
@@ -236,25 +239,27 @@ in {
           SEAFILE_RPC_PIPE_PATH = "/run/seafile";
           SEAHUB_LOG_DIR = "/var/log/seafile";
         };
-        serviceConfig = securityOptions // {
-          User = "seafile";
-          Group = "seafile";
-          DynamicUser = true;
-          RuntimeDirectory = "seahub";
-          StateDirectory = "seafile";
-          LogsDirectory = "seafile";
-          ConfigurationDirectory = "seafile";
-          ExecStart = ''
-            ${pkgs.seahub.python.pkgs.gunicorn}/bin/gunicorn seahub.wsgi:application \
-            --name seahub \
-            --workers ${toString cfg.workers} \
-            --log-level=info \
-            --preload \
-            --timeout=1200 \
-            --limit-request-line=8190 \
-            --bind unix:/run/seahub/gunicorn.sock
-          '';
-        };
+        serviceConfig =
+          securityOptions
+          // {
+            User = "seafile";
+            Group = "seafile";
+            DynamicUser = true;
+            RuntimeDirectory = "seahub";
+            StateDirectory = "seafile";
+            LogsDirectory = "seafile";
+            ConfigurationDirectory = "seafile";
+            ExecStart = ''
+              ${pkgs.seahub.python.pkgs.gunicorn}/bin/gunicorn seahub.wsgi:application \
+              --name seahub \
+              --workers ${toString cfg.workers} \
+              --log-level=info \
+              --preload \
+              --timeout=1200 \
+              --limit-request-line=8190 \
+              --bind unix:/run/seahub/gunicorn.sock
+            '';
+          };
         preStart = ''
           mkdir -p ${seahubDir}/media
           # Link all media except avatars

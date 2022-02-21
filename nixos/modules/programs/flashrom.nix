@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.programs.flashrom;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.programs.flashrom;
+in {
   options.programs.flashrom = {
     enable = mkOption {
       type = types.bool;
@@ -19,8 +20,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [ pkgs.flashrom ];
-    environment.systemPackages = [ pkgs.flashrom ];
-    users.groups.flashrom = { };
+    services.udev.packages = [pkgs.flashrom];
+    environment.systemPackages = [pkgs.flashrom];
+    users.groups.flashrom = {};
   };
 }

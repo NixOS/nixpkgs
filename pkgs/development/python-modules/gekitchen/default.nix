@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchFromGitHub
-, humanize
-, lxml
-, pytestCheckHook
-, pythonOlder
-, requests
-, slixmpp
-, websockets
+{
+  lib,
+  aiohttp,
+  bidict,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanize,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  slixmpp,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "gekitchen";
   version = "0.2.19";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Python SDK for GE smart appliances";
     homepage = "https://github.com/ajmarks/gekitchen";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

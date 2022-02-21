@@ -1,10 +1,22 @@
-{ lib, buildPythonPackage
-, fetchPypi, isPy3k, cython
-, fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
-, cudatoolkit, cudnn, cutensor, nccl
-, addOpenGLRunpath
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  cython,
+  fastrlock,
+  numpy,
+  six,
+  wheel,
+  pytestCheckHook,
+  mock,
+  setuptools,
+  cudatoolkit,
+  cudnn,
+  cutensor,
+  nccl,
+  addOpenGLRunpath,
 }:
-
 buildPythonPackage rec {
   pname = "cupy";
   version = "10.1.0";
@@ -59,7 +71,7 @@ buildPythonPackage rec {
     description = "A NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ hyphon81 ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [hyphon81];
   };
 }

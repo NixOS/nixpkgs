@@ -1,32 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, opencv3
-, pyqt5
-, pyqtgraph
-, numpy
-, scipy
-, numba
-, pandas
-, tables
-, git
-, scikitimage
-, matplotlib
-, qdarkstyle
-, GitPython
-, anytree
-, pims
-, imageio
-, imageio-ffmpeg
-, av
-, nose
-, pytestCheckHook
-, pyserial
-, arrayqueues
-, colorspacious
-, qimage2ndarray
-, flammkuchen
-, lightparam
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  opencv3,
+  pyqt5,
+  pyqtgraph,
+  numpy,
+  scipy,
+  numba,
+  pandas,
+  tables,
+  git,
+  scikitimage,
+  matplotlib,
+  qdarkstyle,
+  GitPython,
+  anytree,
+  pims,
+  imageio,
+  imageio-ffmpeg,
+  av,
+  nose,
+  pytestCheckHook,
+  pyserial,
+  arrayqueues,
+  colorspacious,
+  qimage2ndarray,
+  flammkuchen,
+  lightparam,
 }:
-
 buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
@@ -78,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/portugueslab/stytra";
     description = "A modular package to control stimulation and track behaviour";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = with lib.maintainers; [tbenst];
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, factory_boy
-, mock
-, pygments
-, pytest-django
-, pytestCheckHook
-, shortuuid
-, vobject
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  factory_boy,
+  mock,
+  pygments,
+  pytest-django,
+  pytestCheckHook,
+  shortuuid,
+  vobject,
+  werkzeug,
 }:
-
 buildPythonPackage rec {
   pname = "django-extensions";
   version = "3.1.5";

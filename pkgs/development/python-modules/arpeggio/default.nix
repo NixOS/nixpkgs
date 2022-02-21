@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytest-runner
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  pytest-runner,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "Arpeggio";
   version = "1.10.2";
@@ -17,13 +17,13 @@ buildPythonPackage rec {
 
   # Shall not be needed for next release
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = [glibcLocales];
 
-  nativeBuildInputs = [ pytest-runner ];
+  nativeBuildInputs = [pytest-runner];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  disabledTests = [ "test_examples" "test_issue_22" ];
+  disabledTests = ["test_examples" "test_issue_22"];
 
   dontUseSetuptoolsCheck = true;
 

@@ -1,9 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   e = pkgs.enlightenment;
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.enlightenment;
@@ -11,27 +12,22 @@ let
     pkgs.gst_all_1.gst-plugins-base
     pkgs.gst_all_1.gst-plugins-good
     pkgs.gst_all_1.gst-plugins-bad
-    pkgs.gst_all_1.gst-libav ];
-
-in
-
-{
+    pkgs.gst_all_1.gst-libav
+  ];
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
+    (mkRenamedOptionModule ["services" "xserver" "desktopManager" "e19" "enable"] ["services" "xserver" "desktopManager" "enlightenment" "enable"])
   ];
 
   options = {
-
     services.xserver.desktopManager.enlightenment.enable = mkOption {
       type = types.bool;
       default = false;
       description = "Enable the Enlightenment desktop environment.";
     };
-
   };
 
   config = mkIf cfg.enable {
-
     environment.systemPackages = with pkgs; [
       enlightenment.econnman
       enlightenment.efl
@@ -50,7 +46,7 @@ in
       "/share/locale"
     ];
 
-    services.xserver.displayManager.sessionPackages = [ pkgs.enlightenment.enlightenment ];
+    services.xserver.displayManager.sessionPackages = [pkgs.enlightenment.enlightenment];
 
     services.xserver.displayManager.sessionCommands = ''
       if test "$XDG_CURRENT_DESKTOP" = "Enlightenment"; then
@@ -66,54 +62,51 @@ in
 
     # Wrappers for programs installed by enlightenment that should be setuid
     security.wrappers = {
-      enlightenment_ckpasswd =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_ckpasswd";
-        };
-      enlightenment_sys =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_sys";
-        };
-      enlightenment_system =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_system";
-        };
+      enlightenment_ckpasswd = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_ckpasswd";
+      };
+      enlightenment_sys = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_sys";
+      };
+      enlightenment_system = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_system";
+      };
     };
 
     environment.etc."X11/xkb".source = xcfg.xkbDir;
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
+    fonts.fonts = [pkgs.dejavu_fonts pkgs.ubuntu_font_family];
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
-    services.dbus.packages = [ e.efl ];
+    services.dbus.packages = [e.efl];
 
-    systemd.user.services.efreet =
-      { enable = true;
-        description = "org.enlightenment.Efreet";
-        serviceConfig =
-          { ExecStart = "${e.efl}/bin/efreetd";
-            StandardOutput = "null";
-          };
+    systemd.user.services.efreet = {
+      enable = true;
+      description = "org.enlightenment.Efreet";
+      serviceConfig = {
+        ExecStart = "${e.efl}/bin/efreetd";
+        StandardOutput = "null";
       };
+    };
 
-    systemd.user.services.ethumb =
-      { enable = true;
-        description = "org.enlightenment.Ethumb";
-        serviceConfig =
-          { ExecStart = "${e.efl}/bin/ethumbd";
-            StandardOutput = "null";
-          };
+    systemd.user.services.ethumb = {
+      enable = true;
+      description = "org.enlightenment.Ethumb";
+      serviceConfig = {
+        ExecStart = "${e.efl}/bin/ethumbd";
+        StandardOutput = "null";
       };
-
-
+    };
   };
-
 }

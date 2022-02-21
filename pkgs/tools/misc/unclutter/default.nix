@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, xlibsWrapper}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xlibsWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "unclutter";
   version = "8";
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [xlibsWrapper];
 
-  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   installPhase = ''
     mkdir -pv "$out/bin"
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
 
           unclutter -idle 1 &
     '';
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
     platforms = platforms.unix;
     license = lib.licenses.publicDomain;
   };

@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, certifi
-, configparser
-, faker
-, fetchFromGitHub
-, future
-, mock
-, nose
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  configparser,
+  faker,
+  fetchFromGitHub,
+  future,
+  mock,
+  nose,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "minio";
   version = "7.1.2";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
     homepage = "https://github.com/minio/minio-py";
-    maintainers = with maintainers; [ peterromfeldhk ];
+    maintainers = with maintainers; [peterromfeldhk];
     license = licenses.asl20;
   };
 }

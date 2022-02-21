@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  buildsystem,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netsurf-${libname}";
   libname = "libnsbmp";
@@ -12,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ecSTZfhg7UUb/EEJ7d7I3j6bfOWjvgaVlr0qoZJ5Mk8=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ buildsystem ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [buildsystem];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.netsurf-browser.org/";
     description = "BMP Decoder for netsurf browser";
     license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    maintainers = [maintainers.vrthra maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

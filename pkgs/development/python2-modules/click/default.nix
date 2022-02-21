@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, locale, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  locale,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "click";
   version = "7.1.2";
@@ -14,7 +19,7 @@ buildPythonPackage rec {
       --replace "'locale'" "'${locale}/bin/locale'"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     homepage = "https://click.palletsprojects.com/";

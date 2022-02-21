@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, protobuf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  protobuf,
 }:
-
 buildPythonPackage rec {
   pname = "pycomfoconnect";
   version = "0.4";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pycomfoconnect" ];
+  pythonImportsCheck = ["pycomfoconnect"];
 
   meta = with lib; {
     description = "Python module to interact with ComfoAir Q350/450/600 units";
     homepage = "https://github.com/michaelarnauts/comfoconnect";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

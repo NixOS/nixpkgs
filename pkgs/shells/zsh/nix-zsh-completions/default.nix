@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "nix-zsh-completions";
   version = "0.4.4";
@@ -23,6 +26,6 @@ stdenv.mkDerivation rec {
     priority = 6; # prevent collisions with nix 2.4's built-in completions
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ spwhitt olejorgenb hedning ma27 ];
+    maintainers = with maintainers; [spwhitt olejorgenb hedning ma27];
   };
 }

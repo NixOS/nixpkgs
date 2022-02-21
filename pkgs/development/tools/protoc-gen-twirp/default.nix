@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "protoc-gen-twirp";
   version = "8.1.1";
@@ -23,6 +26,6 @@ buildGoPackage rec {
     description = "A simple RPC framework with protobuf service definitions";
     homepage = "https://github.com/twitchtv/twirp";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

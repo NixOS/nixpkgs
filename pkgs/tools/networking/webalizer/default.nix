@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, zlib, libpng, gd, geoip, db }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  libpng,
+  gd,
+  geoip,
+  db,
+}:
 stdenv.mkDerivation rec {
   pname = "webalizer";
   version = "2.23-05";
@@ -9,11 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "0nl88y57a7gawfragj3viiigfkh5sgivfb4n0k89wzcjw278pj5g";
   };
 
-  preConfigure =
-    ''
-      substituteInPlace ./configure \
-        --replace "--static" ""
-    '';
+  preConfigure = ''
+    substituteInPlace ./configure \
+      --replace "--static" ""
+  '';
 
   buildInputs = [zlib libpng gd geoip db];
 

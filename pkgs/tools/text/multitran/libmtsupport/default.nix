@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl} :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libmtsupport";
   version = "0.0.1alpha2";

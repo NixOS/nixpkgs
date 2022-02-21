@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, docutils, removeReferencesTo }:
-let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  varnish,
+  docutils,
+  removeReferencesTo,
+}: let
+  common = {
+    version,
+    sha256,
+    extraNativeBuildInputs ? [],
+  }:
     stdenv.mkDerivation rec {
       pname = "${varnish.name}-modules";
       inherit version;
@@ -17,10 +29,10 @@ let
         docutils
         pkg-config
         removeReferencesTo
-        varnish.python  # use same python version as varnish server
+        varnish.python # use same python version as varnish server
       ];
 
-      buildInputs = [ varnish ];
+      buildInputs = [varnish];
 
       postPatch = ''
         substituteInPlace bootstrap   --replace "''${dataroot}/aclocal"                  "${varnish.dev}/share/aclocal"
@@ -35,8 +47,7 @@ let
         inherit (varnish.meta) license platforms maintainers;
       };
     };
-in
-{
+in {
   modules15 = common {
     version = "0.15.1";
     sha256 = "1lwgjhgr5yw0d17kbqwlaj5pkn70wvaqqjpa1i0n459nx5cf5pqj";

@@ -1,5 +1,9 @@
-{lib, stdenv, fetchFromGitHub, cmake}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   version = "1.4.2";
   pname = "nanoflann";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-znIX1S0mfOqLYPIcyVziUM1asBjENPEAdafLud1CfFI=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   cmakeFlags = [
     "-DBUILD_EXAMPLES=OFF"

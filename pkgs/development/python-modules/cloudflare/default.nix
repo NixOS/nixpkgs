@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, beautifulsoup4
-, requests
-, future
-, pyyaml
-, jsonlines
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  beautifulsoup4,
+  requests,
+  future,
+  pyyaml,
+  jsonlines,
 }:
-
 buildPythonPackage rec {
   pname = "cloudflare";
   version = "2.8.15";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   # no tests associated with package
   doCheck = false;
-  pythonImportsCheck = [ "CloudFlare" ];
+  pythonImportsCheck = ["CloudFlare"];
 
   meta = with lib; {
     description = "Python wrapper for the Cloudflare v4 API";
     homepage = "https://github.com/cloudflare/python-cloudflare";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

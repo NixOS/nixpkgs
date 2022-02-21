@@ -1,5 +1,9 @@
-{ lib, fetchFromGitLab, buildGoModule, ruby }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildGoModule,
+  ruby,
+}:
 buildGoModule rec {
   pname = "gitlab-shell";
   version = "13.22.2";
@@ -10,9 +14,9 @@ buildGoModule rec {
     sha256 = "sha256-jAH/MKmCIybLXsypHehQJaKf+mK9ko5XqWoDH/XKE5w=";
   };
 
-  buildInputs = [ ruby ];
+  buildInputs = [ruby];
 
-  patches = [ ./remove-hardcoded-locations.patch ];
+  patches = [./remove-hardcoded-locations.patch];
 
   vendorSha256 = "sha256-cE6phpVYcZNCEk6bElEksIf4GOr/5vJPRdlGCubRafE=";
 
@@ -26,7 +30,7 @@ buildGoModule rec {
     description = "SSH access and repository management app for GitLab";
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin talyz ];
+    maintainers = with maintainers; [fpletz globin talyz];
     license = licenses.mit;
   };
 }

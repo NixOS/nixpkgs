@@ -1,29 +1,28 @@
 # GNOME Keyring daemon.
-
-{ config, pkgs, lib, ... }:
-
-with lib;
-
 {
-
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; {
   meta = {
     maintainers = teams.gnome.members;
   };
 
   # Added 2021-05-07
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-keyring" "enable" ]
-      [ "services" "gnome" "gnome-keyring" "enable" ]
+    (
+      mkRenamedOptionModule
+      ["services" "gnome3" "gnome-keyring" "enable"]
+      ["services" "gnome" "gnome-keyring" "enable"]
     )
   ];
 
   ###### interface
 
   options = {
-
     services.gnome.gnome-keyring = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -33,21 +32,17 @@ with lib;
           such as user names and passwords.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.gnome.gnome-keyring.enable {
+    environment.systemPackages = [pkgs.gnome.gnome-keyring];
 
-    environment.systemPackages = [ pkgs.gnome.gnome-keyring ];
+    services.dbus.packages = [pkgs.gnome.gnome-keyring pkgs.gcr];
 
-    services.dbus.packages = [ pkgs.gnome.gnome-keyring pkgs.gcr ];
-
-    xdg.portal.extraPortals = [ pkgs.gnome.gnome-keyring ];
+    xdg.portal.extraPortals = [pkgs.gnome.gnome-keyring];
 
     security.pam.services.login.enableGnomeKeyring = true;
 
@@ -57,7 +52,5 @@ with lib;
       capabilities = "cap_ipc_lock=ep";
       source = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon";
     };
-
   };
-
 }

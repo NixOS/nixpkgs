@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, scsh, sox, libnotify }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  scsh,
+  sox,
+  libnotify,
+}:
 stdenv.mkDerivation rec {
   pname = "pell";
   version = "0.0.4";
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ebzzry/pell";
     description = "A simple host availability monitor";
     license = licenses.mit;
-    maintainers = [ maintainers.ebzzry ];
+    maintainers = [maintainers.ebzzry];
     platforms = platforms.unix;
   };
 

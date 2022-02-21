@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, installShellFiles
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  installShellFiles,
 }:
-
 buildPythonPackage rec {
   pname = "xkcdpass";
   version = "1.19.3";
@@ -14,11 +14,11 @@ buildPythonPackage rec {
     sha256 = "c5a2e948746da6fe504e8404284f457d8e98da6df5047c6bb3f71b18882e9d2a";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "xkcdpass" ];
+  pythonImportsCheck = ["xkcdpass"];
 
   postInstall = ''
     installManPage *.?
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
     homepage = "https://pypi.python.org/pypi/xkcdpass/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

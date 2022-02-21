@@ -1,15 +1,15 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, xmlm
-, lwt
-, logs
-, fmt
-, cstruct
-, cmdliner
-, alcotest-lwt
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  xmlm,
+  lwt,
+  logs,
+  fmt,
+  cstruct,
+  cmdliner,
+  alcotest-lwt,
 }:
-
 buildDunePackage rec {
   pname = "wayland";
   version = "1.0";
@@ -43,7 +43,7 @@ buildDunePackage rec {
   meta = {
     description = "Pure OCaml Wayland protocol library";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = [lib.maintainers.sternenseemann];
     homepage = "https://github.com/talex5/ocaml-wayland";
   };
 }

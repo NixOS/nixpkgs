@@ -1,19 +1,19 @@
-{ alsa-lib
-, autoPatchelfHook
-, callPackage
-, fetchzip
-, gtk2
-, gtk3
-, lib
-, mesa
-, nss
-, stdenv
-, udev
-, unzip
-, wrapGAppsHook
-, xorg
+{
+  alsa-lib,
+  autoPatchelfHook,
+  callPackage,
+  fetchzip,
+  gtk2,
+  gtk3,
+  lib,
+  mesa,
+  nss,
+  stdenv,
+  udev,
+  unzip,
+  wrapGAppsHook,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cypress";
   version = "9.4.1";
@@ -26,22 +26,24 @@ stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
+  nativeBuildInputs = [autoPatchelfHook wrapGAppsHook unzip];
 
-  buildInputs = with xorg; [
-    libXScrnSaver
-    libXdamage
-    libXtst
-    libxshmfence
-  ] ++ [
-    nss
-    gtk2
-    alsa-lib
-    gtk3
-    mesa # for libgbm
-  ];
+  buildInputs = with xorg;
+    [
+      libXScrnSaver
+      libXdamage
+      libXtst
+      libxshmfence
+    ]
+    ++ [
+      nss
+      gtk2
+      alsa-lib
+      gtk3
+      mesa # for libgbm
+    ];
 
-  runtimeDependencies = [ (lib.getLib udev) ];
+  runtimeDependencies = [(lib.getLib udev)];
 
   installPhase = ''
     runHook preInstall
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
 
     tests = {
-      example = callPackage ./cypress-example-kitchensink { };
+      example = callPackage ./cypress-example-kitchensink {};
     };
   };
 
@@ -71,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ tweber mmahut ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [tweber mmahut];
   };
 }

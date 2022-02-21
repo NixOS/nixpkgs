@@ -1,6 +1,17 @@
-{ lib, buildDunePackage, fetchurl, benchmark, cstruct
-, alcotest , eqaf, hex, ppx_blob, ppx_deriving_yojson, stdlib-shims, yojson }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  benchmark,
+  cstruct,
+  alcotest,
+  eqaf,
+  hex,
+  ppx_blob,
+  ppx_deriving_yojson,
+  stdlib-shims,
+  yojson,
+}:
 buildDunePackage rec {
   pname = "hacl_x25519";
   version = "0.2.0";
@@ -11,14 +22,14 @@ buildDunePackage rec {
   };
 
   useDune2 = true;
-  propagatedBuildInputs = [ eqaf cstruct ];
-  checkInputs = [ alcotest benchmark hex ppx_blob ppx_deriving_yojson stdlib-shims yojson ];
+  propagatedBuildInputs = [eqaf cstruct];
+  checkInputs = [alcotest benchmark hex ppx_blob ppx_deriving_yojson stdlib-shims yojson];
   doCheck = true;
 
   meta = with lib; {
     description = "Primitives for Elliptic Curve Cryptography taken from Project Everest";
     homepage = "https://github.com/mirage/hacl";
     license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann ];
+    maintainers = with maintainers; [sternenseemann];
   };
 }

@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "proxify";
   version = "0.0.6";
@@ -26,6 +26,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/proxify";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

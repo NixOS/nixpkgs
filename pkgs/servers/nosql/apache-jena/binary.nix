@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, java, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  java,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "apache-jena";
   version = "4.4.0";
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "RDF database";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";

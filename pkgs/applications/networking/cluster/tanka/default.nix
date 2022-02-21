@@ -1,5 +1,9 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "tanka";
   version = "0.20.0";
@@ -15,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/tk" ];
+  subPackages = ["cmd/tk"];
 
-  ldflags = [ "-s" "-w" "-extldflags '-static'" "-X github.com/grafana/tanka/pkg/tanka.CURRENT_VERSION=v${version}" ];
+  ldflags = ["-s" "-w" "-extldflags '-static'" "-X github.com/grafana/tanka/pkg/tanka.CURRENT_VERSION=v${version}"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     echo "complete -C $out/bin/tk tk" > tk.bash
@@ -30,7 +34,7 @@ buildGoModule rec {
     description = "Flexible, reusable and concise configuration for Kubernetes";
     homepage = "https://tanka.dev";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mikefaille ];
+    maintainers = with maintainers; [mikefaille];
     platforms = platforms.unix;
   };
 }

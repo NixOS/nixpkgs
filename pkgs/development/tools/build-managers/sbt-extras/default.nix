@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
-, common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  curl,
+  makeWrapper,
+  jdk,
+  writeScript,
+  common-updater-scripts,
+  cacert,
+  git,
+  nixfmt,
+  nix,
+  jq,
+  coreutils,
+  gnused,
+}:
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
   rev = "8ccccd8a1d7efa097b7f30e0ec76e39b3aa0f3df";
@@ -15,7 +30,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -26,7 +41,7 @@ stdenv.mkDerivation rec {
 
     install bin/sbt $out/bin
 
-    wrapProgram $out/bin/sbt --prefix PATH : ${lib.makeBinPath [ which curl ]}
+    wrapProgram $out/bin/sbt --prefix PATH : ${lib.makeBinPath [which curl]}
 
     runHook postInstall
   '';
@@ -40,18 +55,18 @@ stdenv.mkDerivation rec {
      #!${stdenv.shell}
      set -xo errexit
      PATH=${
-       lib.makeBinPath [
-         common-updater-scripts
-         curl
-         cacert
-         git
-         nixfmt
-         nix
-         jq
-         coreutils
-         gnused
-       ]
-     }
+      lib.makeBinPath [
+        common-updater-scripts
+        curl
+        cacert
+        git
+        nixfmt
+        nix
+        jq
+        coreutils
+        gnused
+      ]
+    }
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
      latestSha="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
     if [ ! "null" = "$latestSha" ]; then
@@ -67,11 +82,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description =
-      "A more featureful runner for sbt, the simple/scala/standard build tool";
+    description = "A more featureful runner for sbt, the simple/scala/standard build tool";
     homepage = "https://github.com/paulp/sbt-extras";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nequissimus puffnfresh ];
+    maintainers = with lib.maintainers; [nequissimus puffnfresh];
     platforms = lib.platforms.unix;
   };
 }

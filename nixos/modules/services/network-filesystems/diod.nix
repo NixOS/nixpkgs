@@ -1,17 +1,24 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.diod;
 
-  diodBool = b: if b then "1" else "0";
+  diodBool = b:
+    if b
+    then "1"
+    else "0";
 
   diodConfig = pkgs.writeText "diod.conf" ''
     allsquash = ${diodBool cfg.allsquash}
     auth_required = ${diodBool cfg.authRequired}
     exportall = ${diodBool cfg.exportall}
     exportopts = "${concatStringsSep "," cfg.exportopts}"
-    exports = { ${concatStringsSep ", " (map (s: ''"${s}"'' ) cfg.exports)} }
-    listen = { ${concatStringsSep ", " (map (s: ''"${s}"'' ) cfg.listen)} }
+    exports = { ${concatStringsSep ", " (map (s: ''"${s}"'') cfg.exports)} }
+    listen = { ${concatStringsSep ", " (map (s: ''"${s}"'') cfg.listen)} }
     logdest = "${cfg.logdest}"
     nwthreads = ${toString cfg.nwthreads}
     squashuser = "${cfg.squashuser}"
@@ -19,8 +26,7 @@ let
     userdb = ${diodBool cfg.userdb}
     ${cfg.extraConfig}
   '';
-in
-{
+in {
   options = {
     services.diod = {
       enable = mkOption {
@@ -31,7 +37,7 @@ in
 
       listen = mkOption {
         type = types.listOf types.str;
-        default = [ "0.0.0.0:564" ];
+        default = ["0.0.0.0:564"];
         description = ''
           [ "IP:PORT" [,"IP:PORT",...] ]
           List the interfaces and ports that diod should listen on.
@@ -126,7 +132,6 @@ in
         '';
       };
 
-
       statfsPassthru = mkOption {
         type = types.bool;
         default = false;
@@ -145,12 +150,12 @@ in
   };
 
   config = mkIf config.services.diod.enable {
-    environment.systemPackages = [ pkgs.diod ];
+    environment.systemPackages = [pkgs.diod];
 
     systemd.services.diod = {
       description = "diod 9P file server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
         ExecStart = "${pkgs.diod}/sbin/diod -f -c ${diodConfig}";
       };

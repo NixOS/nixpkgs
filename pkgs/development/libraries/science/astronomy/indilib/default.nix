@@ -1,18 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, cfitsio
-, libusb1
-, zlib
-, boost
-, libnova
-, curl
-, libjpeg
-, gsl
-, fftw
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  cfitsio,
+  libusb1,
+  zlib,
+  boost,
+  libnova,
+  curl,
+  libjpeg,
+  gsl,
+  fftw,
 }:
-
 stdenv.mkDerivation rec {
   pname = "indilib";
   version = "1.9.4";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [hjones2199];
     platforms = platforms.linux;
   };
 }

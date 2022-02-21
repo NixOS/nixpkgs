@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elliptic_curves";
   version = "0.8";
@@ -11,7 +12,6 @@ stdenv.mkDerivation rec {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "0pzaym44x88dn8rydiwqgm73yghzlgf7gqvd7qqsrsdl2vyp091w";
   };
-
 
   # Script that creates the sqlite database from the allcurves textfile
   spkg-install = fetchurl {

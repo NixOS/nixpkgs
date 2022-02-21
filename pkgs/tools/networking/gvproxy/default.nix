@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "gvproxy";
   version = "0.3.0";
@@ -29,6 +32,6 @@ buildGoModule rec {
     description = "Network stack based on gVisor";
     homepage = "https://github.com/containers/gvisor-tap-vsock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    maintainers = with maintainers; [] ++ teams.podman.members;
   };
 }

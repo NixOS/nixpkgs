@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, timecop }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  timecop,
+}:
 buildPythonPackage rec {
   pname = "onetimepass";
   version = "1.0.1";
@@ -19,12 +24,12 @@ buildPythonPackage rec {
     timecop
   ];
 
-  pythonImportsCheck = [ "onetimepass" ];
+  pythonImportsCheck = ["onetimepass"];
 
   meta = with lib; {
     description = "One-time password library for HMAC-based (HOTP) and time-based (TOTP) passwords";
     homepage = "https://github.com/tadeck/onetimepass";
     license = licenses.mit;
-    maintainers = with maintainers; [ zakame ];
+    maintainers = with maintainers; [zakame];
   };
 }

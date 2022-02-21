@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, flit
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  flit,
 }:
-
 buildPythonPackage rec {
   pname = "flit-core";
   version = "3.6.0";
@@ -30,13 +30,13 @@ buildPythonPackage rec {
 
   passthru.tests = {
     inherit flit;
-    pytest = callPackage ./tests.nix { };
+    pytest = callPackage ./tests.nix {};
   };
 
   meta = with lib; {
     description = "Distribution-building parts of Flit. See flit package for more information";
     homepage = "https://github.com/takluyver/flit";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh SuperSandro2000 ];
+    maintainers = with maintainers; [fridh SuperSandro2000];
   };
 }

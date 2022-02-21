@@ -1,15 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, mercurial
-# build inputs
-, distro
-, glean-sdk
-, python-hglib
-, sentry-sdk
-, setuptools
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  mercurial
+  # build inputs
+  ,
+  distro,
+  glean-sdk,
+  python-hglib,
+  sentry-sdk,
+  setuptools,
 }:
-
 buildPythonApplication rec {
   pname = "moz-phab";
   version = "0.1.99";
@@ -51,7 +52,7 @@ buildPythonApplication rec {
     '';
     homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [maintainers.kvark];
     platforms = platforms.unix;
   };
 }

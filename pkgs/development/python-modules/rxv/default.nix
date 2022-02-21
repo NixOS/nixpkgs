@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, mock
-, pytest-asyncio
-, pytest-timeout
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  mock,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "rxv";
   version = "0.7.0";
@@ -47,12 +47,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [ "rxv" ];
+  pythonImportsCheck = ["rxv"];
 
   meta = with lib; {
     description = "Python library for communicate with Yamaha RX-Vxxx receivers";
     homepage = "https://github.com/wuub/rxv";
     license = licenses.mit;
-    maintainers = with maintainers; [ flyfloh ];
+    maintainers = with maintainers; [flyfloh];
   };
 }

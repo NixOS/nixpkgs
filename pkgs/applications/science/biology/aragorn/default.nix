@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.38";
   pname = "aragorn";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Detects tRNA, mtRNA, and tmRNA genes in nucleotide sequences";
     homepage = "http://mbio-serv2.mbioekol.lu.se/ARAGORN/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [maintainers.bzizou];
     platforms = platforms.unix;
   };
 }

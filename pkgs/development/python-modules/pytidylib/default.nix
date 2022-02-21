@@ -1,5 +1,11 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, python, html-tidy }:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  html-tidy,
+}:
 buildPythonPackage rec {
   pname = "pytidylib";
   version = "0.3.2";
@@ -29,6 +35,6 @@ buildPythonPackage rec {
     description = "Python wrapper for HTML Tidy (tidylib) on Python 2 and 3";
     homepage = "https://countergram.github.io/pytidylib/";
     license = licenses.mit;
-    maintainers = with maintainers; [ layus ];
+    maintainers = with maintainers; [layus];
   };
 }

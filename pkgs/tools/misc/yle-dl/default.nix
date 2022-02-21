@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, rtmpdump, php, wget, python3Packages, ffmpeg }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rtmpdump,
+  php,
+  wget,
+  python3Packages,
+  ffmpeg,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "yle-dl";
   version = "20220213";
@@ -12,19 +19,24 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    attrs configargparse ffmpeg future lxml requests
+    attrs
+    configargparse
+    ffmpeg
+    future
+    lxml
+    requests
   ];
-  pythonPath = [ rtmpdump php wget ];
+  pythonPath = [rtmpdump php wget];
 
   doCheck = false; # tests require network access
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3Packages; [pytestCheckHook];
 
   meta = with lib; {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
     homepage = "https://aajanki.github.io/yle-dl/";
     changelog = "https://github.com/aajanki/yle-dl/blob/${version}/ChangeLog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg SuperSandro2000 ];
+    maintainers = with maintainers; [dezgeg SuperSandro2000];
     platforms = platforms.unix;
   };
 }

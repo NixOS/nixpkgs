@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-
+{
+  lib,
+  fetchFromGitHub,
+}:
 fetchFromGitHub rec {
   name = "dosis-1.007";
 
@@ -30,7 +32,7 @@ fetchFromGitHub rec {
     '';
     homepage = "http://www.impallari.com/dosis";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = with maintainers; [cmfwyp];
     platforms = platforms.all;
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, buildDunePackage
-, fetchFromGitLab
-, bls12-381-gen
-, ctypes
-, ff-pbt
-, ff-sig
-, tezos-rust-libs
-, zarith
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  bls12-381-gen,
+  ctypes,
+  ff-pbt,
+  ff-sig,
+  tezos-rust-libs,
+  zarith,
+  alcotest,
 }:
-
 buildDunePackage rec {
   pname = "bls12-381-legacy";
 

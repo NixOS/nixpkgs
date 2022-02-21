@@ -1,26 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, glibcLocales
-, entrypoints
-, bleach
-, mistune
-, nbclient
-, jinja2
-, pygments
-, traitlets
-, testpath
-, jupyter_core
-, jupyterlab-pygments
-, nbformat
-, ipykernel
-, pandocfilters
-, tornado
-, jupyter-client
-, defusedxml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  glibcLocales,
+  entrypoints,
+  bleach,
+  mistune,
+  nbclient,
+  jinja2,
+  pygments,
+  traitlets,
+  testpath,
+  jupyter_core,
+  jupyterlab-pygments,
+  nbformat,
+  ipykernel,
+  pandocfilters,
+  tornado,
+  jupyter-client,
+  defusedxml,
 }:
-
 buildPythonPackage rec {
   pname = "nbconvert";
   version = "6.4.0";
@@ -40,13 +40,24 @@ buildPythonPackage rec {
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
   '';
 
-  checkInputs = [ pytestCheckHook glibcLocales ];
+  checkInputs = [pytestCheckHook glibcLocales];
 
   propagatedBuildInputs = [
-    entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
+    entrypoints
+    bleach
+    mistune
+    jinja2
+    pygments
+    traitlets
+    testpath
+    jupyter_core
+    nbformat
+    ipykernel
+    pandocfilters
+    tornado
+    jupyter-client
     defusedxml
-    (nbclient.override { doCheck = false; }) # avoid infinite recursion
+    (nbclient.override {doCheck = false;}) # avoid infinite recursion
     jupyterlab-pygments
   ];
 
@@ -64,7 +75,6 @@ buildPythonPackage rec {
     "--ignore=nbconvert/tests/test_nbconvertapp.py"
   ];
 
-
   disabledTests = [
     "test_export"
     "test_webpdf_without_chromium"
@@ -80,6 +90,6 @@ buildPythonPackage rec {
     description = "Converting Jupyter Notebooks";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

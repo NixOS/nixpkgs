@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pynzb";
   version = "0.1.0";
@@ -24,7 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ericflo/pynzb";
     description = "Unified API for parsing NZB files";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
-
 }

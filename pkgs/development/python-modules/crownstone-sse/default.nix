@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "crownstone-sse";
   version = "2.0.3";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for listening to Crownstone SSE events";
     homepage = "https://github.com/crownstone/crownstone-lib-python-sse";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

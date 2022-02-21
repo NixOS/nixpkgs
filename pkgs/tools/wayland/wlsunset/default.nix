@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchFromSourcehut
-, meson, pkg-config, ninja, wayland-scanner, scdoc
-, wayland, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  scdoc,
+  wayland,
+  wayland-protocols,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wlsunset";
   version = "0.2.0";
@@ -14,8 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hhsddh3rs066rbsjksr8kcwg8lvglbvs67dq0r5wx5c1xcwb51w";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner scdoc ];
-  buildInputs = [ wayland wayland-protocols ];
+  nativeBuildInputs = [meson pkg-config ninja wayland-scanner scdoc];
+  buildInputs = [wayland wayland-protocols];
 
   meta = with lib; {
     description = "Day/night gamma adjustments for Wayland";
@@ -27,6 +34,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.sr.ht/~kennylevinsen/wlsunset/refs/${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

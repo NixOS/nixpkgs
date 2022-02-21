@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "hole";
   version = "0.7.0";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for interacting with a Pihole instance.";
     homepage = "https://github.com/home-assistant-ecosystem/python-hole";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

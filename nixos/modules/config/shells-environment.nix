@@ -1,40 +1,40 @@
 # This module defines a global environment configuration and
 # a common configuration for all shells.
-
-{ config, lib, utils, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.environment;
 
-  exportedEnvVars =
-    let
-      absoluteVariables =
-        mapAttrs (n: toList) cfg.variables;
+  exportedEnvVars = let
+    absoluteVariables =
+      mapAttrs (n: toList) cfg.variables;
 
-      suffixedVariables =
-        flip mapAttrs cfg.profileRelativeEnvVars (envVar: listSuffixes:
+    suffixedVariables =
+      flip mapAttrs cfg.profileRelativeEnvVars (
+        envVar: listSuffixes:
           concatMap (profile: map (suffix: "${profile}${suffix}") listSuffixes) cfg.profiles
-        );
+      );
 
-      allVariables =
-        zipAttrsWith (n: concatLists) [ absoluteVariables suffixedVariables ];
+    allVariables =
+      zipAttrsWith (n: concatLists) [absoluteVariables suffixedVariables];
 
-      exportVariables =
-        mapAttrsToList (n: v: ''export ${n}="${concatStringsSep ":" v}"'') allVariables;
-    in
-      concatStringsSep "\n" exportVariables;
-in
-
-{
-
+    exportVariables =
+      mapAttrsToList (n: v: ''export ${n}="${concatStringsSep ":" v}"'') allVariables;
+  in
+    concatStringsSep "\n" exportVariables;
+in {
   options = {
-
     environment.variables = mkOption {
       default = {};
-      example = { EDITOR = "nvim"; VISUAL = "nvim"; };
+      example = {
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      };
       description = ''
         A set of environment variables used in the global environment.
         These variables will be set on shell initialisation (e.g. in /etc/profile).
@@ -43,7 +43,10 @@ in
         characters.
       '';
       type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
+      apply = mapAttrs (n: v:
+        if isList v
+        then concatStringsSep ":" v
+        else v);
     };
 
     environment.profiles = mkOption {
@@ -56,7 +59,10 @@ in
 
     environment.profileRelativeEnvVars = mkOption {
       type = types.attrsOf (types.listOf types.str);
-      example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
+      example = {
+        PATH = ["/bin"];
+        MANPATH = ["/man" "/share/man"];
+      };
       description = ''
         Attribute set of environment variable.  Each attribute maps to a list
         of relative paths.  Each relative path is appended to the each profile
@@ -108,7 +114,10 @@ in
     };
 
     environment.shellAliases = mkOption {
-      example = { l = null; ll = "ls -l"; };
+      example = {
+        l = null;
+        ll = "ls -l";
+      };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
@@ -158,11 +167,9 @@ in
       '';
       type = types.listOf (types.either types.shellPackage types.path);
     };
-
   };
 
   config = {
-
     system.build.binsh = pkgs.bashInteractive;
 
     # Set session variables in the shell as well. This is usually
@@ -176,49 +183,50 @@ in
     environment.shellAliases = mapAttrs (name: mkDefault) {
       ls = "ls --color=tty";
       ll = "ls -l";
-      l  = "ls -alh";
+      l = "ls -alh";
     };
 
-    environment.etc.shells.text =
-      ''
-        ${concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
-        /bin/sh
-      '';
+    environment.etc.shells.text = ''
+      ${concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
+      /bin/sh
+    '';
 
     # For resetting environment with `. /etc/set-environment` when needed
     # and discoverability (see motivation of #30418).
     environment.etc.set-environment.source = config.system.build.setEnvironment;
 
     system.build.setEnvironment = pkgs.writeText "set-environment"
-      ''
-        # DO NOT EDIT -- this file has been generated automatically.
+    ''
+      # DO NOT EDIT -- this file has been generated automatically.
 
-        # Prevent this file from being sourced by child shells.
-        export __NIXOS_SET_ENVIRONMENT_DONE=1
+      # Prevent this file from being sourced by child shells.
+      export __NIXOS_SET_ENVIRONMENT_DONE=1
 
-        ${exportedEnvVars}
+      ${exportedEnvVars}
 
-        ${cfg.extraInit}
+      ${cfg.extraInit}
 
-        ${optionalString cfg.homeBinInPath ''
+      ${
+        optionalString cfg.homeBinInPath ''
           # ~/bin if it exists overrides other bin directories.
           export PATH="$HOME/bin:$PATH"
-        ''}
+        ''
+      }
 
-        ${optionalString cfg.localBinInPath ''
+      ${
+        optionalString cfg.localBinInPath ''
           export PATH="$HOME/.local/bin:$PATH"
-        ''}
-      '';
+        ''
+      }
+    '';
 
-    system.activationScripts.binsh = stringAfter [ "stdio" ]
-      ''
-        # Create the required /bin/sh symlink; otherwise lots of things
-        # (notably the system() function) won't work.
-        mkdir -m 0755 -p /bin
-        ln -sfn "${cfg.binsh}" /bin/.sh.tmp
-        mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
-      '';
-
+    system.activationScripts.binsh = stringAfter ["stdio"]
+    ''
+      # Create the required /bin/sh symlink; otherwise lots of things
+      # (notably the system() function) won't work.
+      mkdir -m 0755 -p /bin
+      ln -sfn "${cfg.binsh}" /bin/.sh.tmp
+      mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
+    '';
   };
-
 }

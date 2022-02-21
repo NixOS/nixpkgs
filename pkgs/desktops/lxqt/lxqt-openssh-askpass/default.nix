@@ -1,18 +1,18 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
-, qtx11extras
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  lxqt-build-tools,
+  qtbase,
+  qttools,
+  qtsvg,
+  qtx11extras,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "lxqt-openssh-askpass";
   version = "1.0.0";
@@ -39,13 +39,13 @@ mkDerivation rec {
     libqtxdg
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-openssh-askpass";
     description = "GUI to query passwords on behalf of SSH agents";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

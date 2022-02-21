@@ -1,5 +1,13 @@
-{ fetchurl, lib, stdenv, libuuid, popt, icu, ncurses, nixosTests }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  libuuid,
+  popt,
+  icu,
+  ncurses,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "gptfdisk";
   version = "1.0.8";
@@ -17,21 +25,23 @@ stdenv.mkDerivation rec {
     ./ncurses-6.3.patch
   ];
 
-  postPatch = ''
-    patchShebangs gdisk_test.sh
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile.mac --replace \
-      "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
-    substituteInPlace Makefile.mac --replace \
-      " -arch i386" ""
-    substituteInPlace Makefile.mac --replace \
-      " -I/opt/local/include -I /usr/local/include -I/opt/local/include" ""
-    substituteInPlace Makefile.mac --replace \
-      "/opt/local/lib/libncurses.a" "${ncurses.out}/lib/libncurses.dylib"
-  '';
+  postPatch =
+    ''
+      patchShebangs gdisk_test.sh
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile.mac --replace \
+        "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
+      substituteInPlace Makefile.mac --replace \
+        " -arch i386" ""
+      substituteInPlace Makefile.mac --replace \
+        " -I/opt/local/include -I /usr/local/include -I/opt/local/include" ""
+      substituteInPlace Makefile.mac --replace \
+        "/opt/local/lib/libncurses.a" "${ncurses.out}/lib/libncurses.dylib"
+    '';
 
   buildPhase = lib.optionalString stdenv.isDarwin "make -f Makefile.mac";
-  buildInputs = [ libuuid popt icu ncurses ];
+  buildInputs = [libuuid popt icu ncurses];
 
   installPhase = ''
     mkdir -p $out/sbin
@@ -52,6 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = "https://www.rodsbooks.com/gdisk/";
     platforms = platforms.all;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = [maintainers.ehmry];
   };
 }

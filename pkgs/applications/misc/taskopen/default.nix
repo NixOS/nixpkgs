@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, which, perl, perlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  which,
+  perl,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "taskopen";
   version = "1.1.5";
@@ -17,9 +24,10 @@ stdenv.mkDerivation rec {
     sed 's|$(DESTDIR)/||' -i Makefile
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which ]
-    ++ (with perlPackages; [ JSON perl ]);
+  nativeBuildInputs = [makeWrapper];
+  buildInputs =
+    [which]
+    ++ (with perlPackages; [JSON perl]);
 
   installPhase = ''
     make PREFIX=$out
@@ -36,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ValiValpas/taskopen";
     platforms = platforms.linux;
     license = licenses.free;
-    maintainers = [ maintainers.winpat ];
+    maintainers = [maintainers.winpat];
   };
 }

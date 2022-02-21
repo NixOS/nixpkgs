@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "hwdata";
   version = "0.347";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs ./configure";
 
-  configureFlags = [ "--datadir=${placeholder "out"}/share" ];
+  configureFlags = ["--datadir=${placeholder "out"}/share"];
 
   doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
 

@@ -1,5 +1,8 @@
-{ lib, python38, fetchFromGitHub }:
-let
+{
+  lib,
+  python38,
+  fetchFromGitHub,
+}: let
   python = python38.override {
     self = python;
     packageOverrides = self: super: {
@@ -13,45 +16,45 @@ let
       tornado = super.tornado_4;
     };
   };
-
 in
-with python.pkgs; buildPythonApplication rec {
-  pname = "grab-site";
-  version = "2.2.2";
+  with python.pkgs;
+    buildPythonApplication rec {
+      pname = "grab-site";
+      version = "2.2.2";
 
-  src = fetchFromGitHub {
-    rev = version;
-    owner = "ArchiveTeam";
-    repo = "grab-site";
-    sha256 = "0af53g703kqpxa6bn72mb2l5l0qrjknq5wqwl4wryyscdp4xabx4";
-  };
+      src = fetchFromGitHub {
+        rev = version;
+        owner = "ArchiveTeam";
+        repo = "grab-site";
+        sha256 = "0af53g703kqpxa6bn72mb2l5l0qrjknq5wqwl4wryyscdp4xabx4";
+      };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-${ludios_wpull.version}"' '"wpull"'
-  '';
+      postPatch = ''
+        substituteInPlace setup.py \
+          --replace '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-${ludios_wpull.version}"' '"wpull"'
+      '';
 
-  propagatedBuildInputs = [
-    click
-    ludios_wpull
-    manhole
-    lmdb
-    autobahn
-    fb-re2
-    websockets
-    cchardet
-  ];
+      propagatedBuildInputs = [
+        click
+        ludios_wpull
+        manhole
+        lmdb
+        autobahn
+        fb-re2
+        websockets
+        cchardet
+      ];
 
-  checkPhase = ''
-    export PATH=$PATH:$out/bin
-    bash ./tests/offline-tests
-  '';
+      checkPhase = ''
+        export PATH=$PATH:$out/bin
+        bash ./tests/offline-tests
+      '';
 
-  meta = with lib; {
-    description = "Crawler for web archiving with WARC output";
-    homepage = "https://github.com/ArchiveTeam/grab-site";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ivan ];
-    platforms = platforms.all;
-  };
-}
+      meta = with lib; {
+        description = "Crawler for web archiving with WARC output";
+        homepage = "https://github.com/ArchiveTeam/grab-site";
+        license = licenses.mit;
+        maintainers = with maintainers; [ivan];
+        platforms = platforms.all;
+      };
+    }

@@ -1,12 +1,12 @@
-{ lib
-, atomicwrites
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  atomicwrites,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "fpyutils";
   version = "2.1.0";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of useful non-standard Python functions";
     homepage = "https://github.com/frnmst/fpyutils";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

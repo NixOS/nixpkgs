@@ -1,6 +1,19 @@
-{ lib, fetchurl, stdenv, runtimeShell, SDL2, freealut, SDL2_image, openal, physfs
-, zlib, libGLU, libGL, glew, tinyxml-2 }:
-
+{
+  lib,
+  fetchurl,
+  stdenv,
+  runtimeShell,
+  SDL2,
+  freealut,
+  SDL2_image,
+  openal,
+  physfs,
+  zlib,
+  libGLU,
+  libGL,
+  glew,
+  tinyxml-2,
+}:
 stdenv.mkDerivation rec {
   pname = "trigger-rally";
   version = "0.6.6.1";

@@ -3,7 +3,6 @@
   netlify-cli,
   runCommand,
 }:
-
 runCommand "netlify-cli-test" {
   nativeBuildInputs = [
     netlify-cli

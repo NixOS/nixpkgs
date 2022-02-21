@@ -1,23 +1,31 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.actkbd;
 
   configFile = pkgs.writeText "actkbd.conf" ''
-    ${concatMapStringsSep "\n"
-      ({ keys, events, attributes, command, ... }:
-        ''${concatMapStringsSep "+" toString keys}:${concatStringsSep "," events}:${concatStringsSep "," attributes}:${command}''
+    ${
+      concatMapStringsSep "\n"
+      (
+        {
+          keys,
+          events,
+          attributes,
+          command,
+          ...
+        }: ''${concatMapStringsSep "+" toString keys}:${concatStringsSep "," events}:${concatStringsSep "," attributes}:${command}''
       )
-      cfg.bindings}
+      cfg.bindings
+    }
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { ... }: {
+  bindingCfg = {...}: {
     options = {
-
       keys = mkOption {
         type = types.listOf types.int;
         description = "List of keycodes to match.";
@@ -25,13 +33,13 @@ let
 
       events = mkOption {
         type = types.listOf (types.enum ["key" "rep" "rel"]);
-        default = [ "key" ];
+        default = ["key"];
         description = "List of events to match.";
       };
 
       attributes = mkOption {
         type = types.listOf types.str;
-        default = [ "exec" ];
+        default = ["exec"];
         description = "List of attributes.";
       };
 
@@ -40,20 +48,13 @@ let
         default = "";
         description = "What to run.";
       };
-
     };
   };
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.actkbd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -94,16 +95,12 @@ in
           Literal contents to append to the end of actkbd configuration file.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     services.udev.packages = lib.singleton (pkgs.writeTextFile {
       name = "actkbd-udev-rules";
       destination = "/etc/udev/rules.d/61-actkbd.rules";
@@ -126,8 +123,6 @@ in
     };
 
     # For testing
-    environment.systemPackages = [ pkgs.actkbd ];
-
+    environment.systemPackages = [pkgs.actkbd];
   };
-
 }

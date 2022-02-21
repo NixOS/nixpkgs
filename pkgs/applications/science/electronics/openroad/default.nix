@@ -1,30 +1,30 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, bison
-, cmake
-, doxygen
-, flex
-, git
-, python3
-, swig4
-, boost172
-, cimg
-, eigen
-, lcov
-, lemon-graph
-, libjpeg
-, pcre
-, qtbase
-, readline
-, spdlog
-, tcl
-, tcllib
-, xorg
-, yosys
-, zlib
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  doxygen,
+  flex,
+  git,
+  python3,
+  swig4,
+  boost172,
+  cimg,
+  eigen,
+  lcov,
+  lemon-graph,
+  libjpeg,
+  pcre,
+  qtbase,
+  readline,
+  spdlog,
+  tcl,
+  tcllib,
+  xorg,
+  yosys,
+  zlib,
 }:
-
 mkDerivation rec {
   pname = "openroad";
   version = "2.0";
@@ -70,10 +70,10 @@ mkDerivation rec {
   '';
 
   # Enable output images from the placer.
-  cmakeFlags = [ "-DUSE_CIMG_LIB=ON" ];
+  cmakeFlags = ["-DUSE_CIMG_LIB=ON"];
 
   # Resynthesis needs access to the Yosys binaries.
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];
+  qtWrapperArgs = ["--prefix PATH : ${lib.makeBinPath [yosys]}"];
 
   # Upstream uses vendored package versions for some dependencies, so regression testing is prudent
   # to see if there are any breaking changes in unstable that should be vendored as well.
@@ -88,7 +88,7 @@ mkDerivation rec {
     description = "OpenROAD's unified application implementing an RTL-to-GDS flow";
     homepage = "https://theopenroadproject.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [trepetti];
     platforms = platforms.linux;
   };
 }

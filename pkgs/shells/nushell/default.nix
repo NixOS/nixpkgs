@@ -1,21 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, zlib
-, zstd
-, pkg-config
-, python3
-, xorg
-, libiconv
-, AppKit
-, Security
-, nghttp2
-, libgit2
-, withExtraFeatures ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  zlib,
+  zstd,
+  pkg-config,
+  python3,
+  xorg,
+  libiconv,
+  AppKit,
+  Security,
+  nghttp2,
+  libgit2,
+  withExtraFeatures ? true,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
   version = "0.44.0";
@@ -29,13 +29,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-wgaRTf+ZQ7alibCdeCjSQhhR9MC77qM1n0jakDgr114=";
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ];
+  nativeBuildInputs =
+    [pkg-config]
+    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [python3];
 
-  buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+  buildInputs =
+    [openssl zstd]
+    ++ lib.optionals stdenv.isDarwin [zlib libiconv Security]
+    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [xorg.libX11]
+    ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [AppKit nghttp2 libgit2];
 
   buildFeatures = lib.optional withExtraFeatures "extra";
 
@@ -50,12 +52,12 @@ rustPlatform.buildRustPackage rec {
   #
   # (If this patch needs updating, in a nushell repo add the zstd-sys line to
   # Cargo.toml, then `cargo update --package zstd-sys` to update Cargo.lock.)
-  cargoPatches = [ ./use-system-zstd-lib.diff ];
+  cargoPatches = [./use-system-zstd-lib.diff];
 
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
   # outside of TMPDIR
-  doCheck = ! stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -68,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
+    maintainers = with maintainers; [Br1ght0ne johntitor marsam];
     mainProgram = "nu";
   };
 

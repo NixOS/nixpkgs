@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools-scm
-, websocket-client
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  websocket-client,
+  zeroconf,
 }:
-
 buildPythonPackage rec {
   pname = "devolo-home-control-api";
   version = "0.17.4";
@@ -45,12 +45,12 @@ buildPythonPackage rec {
     "TestMprm"
   ];
 
-  pythonImportsCheck = [ "devolo_home_control_api" ];
+  pythonImportsCheck = ["devolo_home_control_api"];
 
   meta = with lib; {
     description = "Python library to work with devolo Home Control";
     homepage = "https://github.com/2Fake/devolo_home_control_api";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

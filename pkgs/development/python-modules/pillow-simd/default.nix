@@ -1,9 +1,27 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPyPy, isPy3k
-, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2
-, libxcb, tk, libX11, openjpeg, libimagequant, pyroma, numpy
-, pytestCheckHook
-}@args:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPyPy,
+  isPy3k,
+  olefile,
+  freetype,
+  libjpeg,
+  zlib,
+  libtiff,
+  libwebp,
+  tcl,
+  lcms2,
+  libxcb,
+  tk,
+  libX11,
+  openjpeg,
+  libimagequant,
+  pyroma,
+  numpy,
+  pytestCheckHook,
+} @ args:
 import ../pillow/generic.nix (rec {
   pname = "Pillow-SIMD";
   # check for release version on https://pypi.org/project/Pillow-SIMD/#history
@@ -29,6 +47,7 @@ import ../pillow/generic.nix (rec {
       Currently, Pillow-SIMD can be compiled with SSE4 (default) or AVX2 support.
     '';
     license = "http://www.pythonware.com/products/pil/license.htm";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
-} // args )
+}
+// args)

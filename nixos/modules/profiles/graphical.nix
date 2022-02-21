@@ -1,9 +1,6 @@
 # This module defines a NixOS configuration with the Plasma 5 desktop.
 # It's used by the graphical installation CD.
-
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   services.xserver = {
     enable = true;
     displayManager.sddm.enable = true;
@@ -16,5 +13,5 @@
   # Enable sound in virtualbox appliances.
   hardware.pulseaudio.enable = true;
 
-  environment.systemPackages = [ pkgs.glxinfo pkgs.firefox ];
+  environment.systemPackages = [pkgs.glxinfo pkgs.firefox];
 }

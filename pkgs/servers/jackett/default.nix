@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, openssl
-, mono
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  openssl,
+  mono,
 }:
-
 buildDotnetModule rec {
   pname = "jackett";
   version = "0.20.596";
@@ -24,12 +24,12 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
-  dotnetInstallFlags = [ "-p:TargetFramework=net6.0" ];
+  dotnetInstallFlags = ["-p:TargetFramework=net6.0"];
 
-  runtimeDeps = [ openssl ];
+  runtimeDeps = [openssl];
 
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64); # mono is not available on aarch64-darwin
-  checkInputs = [ mono ];
+  checkInputs = [mono];
   testProjectFile = "src/Jackett.Test/Jackett.Test.csproj";
 
   postFixup = ''
@@ -42,7 +42,7 @@ buildDotnetModule rec {
     description = "API Support for your favorite torrent trackers";
     homepage = "https://github.com/Jackett/Jackett/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
+    maintainers = with maintainers; [edwtjo nyanloutre purcell];
     platforms = platforms.all;
   };
   passthru.updateScript = ./updater.sh;

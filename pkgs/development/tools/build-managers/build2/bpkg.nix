@@ -1,21 +1,22 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, git
-, libbpkg
-, libbutl
-, libodb
-, libodb-sqlite
-, openssl
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  fetchurl,
+  git,
+  libbpkg,
+  libbutl,
+  libodb,
+  libodb-sqlite,
+  openssl,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bpkg";
   version = "0.14.0";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = ["out" "doc" "man"];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${version}.tar.gz";
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://build2.org/";
     changelog = "https://git.build2.org/cgit/bpkg/tree/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
     platforms = platforms.all;
   };
 }

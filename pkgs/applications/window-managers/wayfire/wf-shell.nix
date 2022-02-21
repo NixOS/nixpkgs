@@ -1,7 +1,19 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, wayland, git
-, alsa-lib, gtkmm3, gtk-layer-shell, pulseaudio, wayfire, wf-config
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  wayland,
+  git,
+  alsa-lib,
+  gtkmm3,
+  gtk-layer-shell,
+  pulseaudio,
+  wayfire,
+  wf-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wf-shell";
   version = "0.7.0";
@@ -13,18 +25,23 @@ stdenv.mkDerivation rec {
     sha256 = "1isybm9lcpxwyf6zh2vzkwrcnw3q7qxm21535g4f08f0l68cd5bl";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland ];
+  nativeBuildInputs = [meson ninja pkg-config wayland];
   buildInputs = [
-    alsa-lib gtkmm3 gtk-layer-shell pulseaudio wayfire wf-config
+    alsa-lib
+    gtkmm3
+    gtk-layer-shell
+    pulseaudio
+    wayfire
+    wf-config
   ];
 
-  mesonFlags = [ "--sysconfdir" "/etc" ];
+  mesonFlags = ["--sysconfdir" "/etc"];
 
   meta = with lib; {
     homepage = "https://github.com/WayfireWM/wf-shell";
     description = "GTK3-based panel for Wayfire";
     license = licenses.mit;
-    maintainers = with maintainers; [ qyliss wucke13 ];
+    maintainers = with maintainers; [qyliss wucke13];
     platforms = platforms.unix;
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, distro
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, setuptools-scm-git-archive
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  setuptools-scm-git-archive,
 }:
-
 buildPythonPackage rec {
   pname = "ruyaml";
   version = "0.91.0";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "YAML 1.2 loader/dumper package for Python";
     homepage = "https://ruyaml.readthedocs.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

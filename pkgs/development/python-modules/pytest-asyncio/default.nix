@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flaky
-, hypothesis
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flaky,
+  hypothesis,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-asyncio";
   version = "0.17.2";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

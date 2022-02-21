@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, lockfile
-, pytestCheckHook
-, testscenarios
-, testtools
-, twine
-, python
-, pythonOlder
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  lockfile,
+  pytestCheckHook,
+  testscenarios,
+  testtools,
+  twine,
+  python,
+  pythonOlder,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "python-daemon";
   version = "2.3.0";
@@ -79,7 +79,7 @@ buildPythonPackage rec {
     description = "Library to implement a well-behaved Unix daemon process";
     homepage = "https://pagure.io/python-daemon/";
     # See "Copying" section in https://pagure.io/python-daemon/blob/main/f/README
-    license = with licenses; [ gpl3Plus asl20 ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [gpl3Plus asl20];
+    maintainers = with maintainers; [];
   };
 }

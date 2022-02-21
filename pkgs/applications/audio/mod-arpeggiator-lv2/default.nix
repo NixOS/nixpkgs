@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, lv2, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lv2,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
-
   pname = "mod-arpeggiator-lv2";
   version = "unstable-2021-11-09";
 
@@ -12,15 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1KiWMTVTTf1/iR4AzJ1Oe0mOrWN5edsZN0tQMidgnRA=";
   };
 
-  buildInputs = [ lv2 pkg-config ];
+  buildInputs = [lv2 pkg-config];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "a LV2 arpeggiator";
     homepage = "https://github.com/moddevices/mod-arpeggiator-lv2";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
   };
 }

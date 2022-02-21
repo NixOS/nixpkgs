@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, cairo, expat, fftwSinglePrec, fluidsynth, glib
-, gtk2, libjack2, ladspaH , libglade, lv2, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cairo,
+  expat,
+  fftwSinglePrec,
+  fluidsynth,
+  glib,
+  gtk2,
+  libjack2,
+  ladspaH,
+  libglade,
+  lv2,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "calf";
   version = "0.90.3";
@@ -13,15 +26,24 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [
-    cairo expat fftwSinglePrec fluidsynth glib gtk2 libjack2 ladspaH
-    libglade lv2 pkg-config
+    cairo
+    expat
+    fftwSinglePrec
+    fluidsynth
+    glib
+    gtk2
+    libjack2
+    ladspaH
+    libglade
+    lv2
+    pkg-config
   ];
 
   meta = with lib; {
     homepage = "http://calf-studio-gear.org";
     description = "A set of high quality open source audio plugins for musicians";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
   };
 }

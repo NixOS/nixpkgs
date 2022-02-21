@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...}:
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   mkConfig = name: keys: ''
     import XMonad
     import XMonad.Operations (restart)
@@ -34,41 +32,41 @@ let
             )
   '';
 
-  oldKeys =
-    [ ''("M-C-x", spawn "xterm")''
-      ''("M-q", restart "xmonad" True)''
-      ''("M-C-q", compileRestart True)''
-      ''("M-C-t", spawn "touch /tmp/somefile")'' # create somefile
-    ];
+  oldKeys = [
+    ''("M-C-x", spawn "xterm")''
+    ''("M-q", restart "xmonad" True)''
+    ''("M-C-q", compileRestart True)''
+    ''("M-C-t", spawn "touch /tmp/somefile")'' # create somefile
+  ];
 
-  newKeys =
-    [ ''("M-C-x", spawn "xterm")''
-      ''("M-q", restart "xmonad" True)''
-      ''("M-C-q", compileRestart True)''
-      ''("M-C-r", spawn "rm /tmp/somefile")'' # delete somefile
-    ];
+  newKeys = [
+    ''("M-C-x", spawn "xterm")''
+    ''("M-q", restart "xmonad" True)''
+    ''("M-C-q", compileRestart True)''
+    ''("M-C-r", spawn "rm /tmp/somefile")'' # delete somefile
+  ];
 
   newConfig = pkgs.writeText "xmonad.hs" (mkConfig "newXMonad" newKeys);
 in {
   name = "xmonad";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ nequissimus ivanbrennan ];
+    maintainers = [nequissimus ivanbrennan];
   };
 
-  machine = { pkgs, ... }: {
-    imports = [ ./common/x11.nix ./common/user-account.nix ];
+  machine = {pkgs, ...}: {
+    imports = [./common/x11.nix ./common/user-account.nix];
     test-support.displayManager.auto.user = "alice";
     services.xserver.displayManager.defaultSession = "none+xmonad";
     services.xserver.windowManager.xmonad = {
       enable = true;
       enableConfiguredRecompile = true;
       enableContribAndExtras = true;
-      extraPackages = with pkgs.haskellPackages; haskellPackages: [ xmobar ];
+      extraPackages = with pkgs.haskellPackages; haskellPackages: [xmobar];
       config = mkConfig "oldXMonad" oldKeys;
     };
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
   in ''
     machine.wait_for_x()

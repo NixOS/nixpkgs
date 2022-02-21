@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, pygments }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pygments,
+}:
 buildPythonPackage rec {
   pname = "markdown2";
   version = "2.4.1";
@@ -12,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0y7kh9jj8ys00qkfmmyqj63y21g7wn7yr715kj0j1nabs6xbp0y7";
   };
 
-  checkInputs = [ pygments ];
+  checkInputs = [pygments];
 
   checkPhase = ''
     ${python.interpreter} ./test/test.py
@@ -20,8 +25,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A fast and complete Python implementation of Markdown";
-    homepage =  "https://github.com/trentm/python-markdown2";
+    homepage = "https://github.com/trentm/python-markdown2";
     license = licenses.mit;
-    maintainers = with maintainers; [ hbunke ];
+    maintainers = with maintainers; [hbunke];
   };
 }

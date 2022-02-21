@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, dbus, glib, pkg-config, expat }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dbus,
+  glib,
+  pkg-config,
+  expat,
+}:
 stdenv.mkDerivation rec {
   pname = "dbus-cplusplus";
   version = "0.9.0";
@@ -13,34 +20,37 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       name = "gcc-4.7.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/"
-          + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch";
+      url =
+        "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/"
+        + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch";
       sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
     })
     (fetchurl {
       name = "writechar.patch"; # since gcc7
-      url = "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
-          + "dbus-c++-writechar.patch?id=7f371172f5c";
+      url =
+        "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
+        + "dbus-c++-writechar.patch?id=7f371172f5c";
       sha256 = "1kkg4gbpm4hp87l25zw2a3r9c58g7vvgzcqgiman734i66zsbb9l";
     })
     (fetchurl {
       name = "threading.patch"; # since gcc7
-      url = "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
-          + "dbus-c++-threading.patch?id=7f371172f5c";
+      url =
+        "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
+        + "dbus-c++-threading.patch?id=7f371172f5c";
       sha256 = "1h362anx3wyxm5lq0v8girmip1jmkdbijrmbrq7k5pp47zkhwwrq";
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus glib expat ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [dbus glib expat];
 
-  configureFlags = [ "--disable-ecore" "--disable-tests" ];
+  configureFlags = ["--disable-ecore" "--disable-tests"];
 
   meta = with lib; {
     homepage = "http://dbus-cplusplus.sourceforge.net";
     description = "C++ API for D-BUS";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
   };
 }

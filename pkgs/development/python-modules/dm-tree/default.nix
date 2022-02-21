@@ -1,15 +1,15 @@
-{ abseil-cpp
-, absl-py
-, attrs
-, buildPythonPackage
-, cmake
-, fetchFromGitHub
-, lib
-, numpy
-, pybind11
-, wrapt
+{
+  abseil-cpp,
+  absl-py,
+  attrs,
+  buildPythonPackage,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  numpy,
+  pybind11,
+  wrapt,
 }:
-
 buildPythonPackage rec {
   pname = "dm-tree";
   # As of 2021-12-29, the latest stable version still builds with Bazel.
@@ -45,12 +45,12 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  pythonImportsCheck = [ "tree" ];
+  pythonImportsCheck = ["tree"];
 
   meta = with lib; {
     description = "Tree is a library for working with nested data structures.";
     homepage = "https://github.com/deepmind/tree";
     license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ndl ];
+    maintainers = with maintainers; [samuela ndl];
   };
 }

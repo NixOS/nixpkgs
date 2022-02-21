@@ -1,19 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.rabbitmq;
 
   inherit (builtins) concatStringsSep;
 
-  config_file_content = lib.generators.toKeyValue { } cfg.configItems;
+  config_file_content = lib.generators.toKeyValue {} cfg.configItems;
   config_file = pkgs.writeText "rabbitmq.conf" config_file_content;
 
   advanced_config_file = pkgs.writeText "advanced.config" cfg.config;
-
-in
-{
+in {
   ###### interface
   options = {
     services.rabbitmq = {
@@ -80,7 +80,7 @@ in
       };
 
       configItems = mkOption {
-        default = { };
+        default = {};
         type = types.attrsOf types.str;
         example = literalExpression ''
           {
@@ -124,13 +124,13 @@ in
       };
 
       plugins = mkOption {
-        default = [ ];
+        default = [];
         type = types.listOf types.str;
         description = "The names of plugins to enable";
       };
 
       pluginDirs = mkOption {
-        default = [ ];
+        default = [];
         type = types.listOf types.path;
         description = "The list of directories containing external plugins";
       };
@@ -148,12 +148,10 @@ in
     };
   };
 
-
   ###### implementation
   config = mkIf cfg.enable {
-
     # This is needed so we will have 'rabbitmqctl' in our PATH
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     services.epmd.enable = true;
 
@@ -167,37 +165,41 @@ in
 
     users.groups.rabbitmq.gid = config.ids.gids.rabbitmq;
 
-    services.rabbitmq.configItems = {
-      "listeners.tcp.1" = mkDefault "${cfg.listenAddress}:${toString cfg.port}";
-    } // optionalAttrs cfg.managementPlugin.enable {
-      "management.tcp.port" = toString cfg.managementPlugin.port;
-      "management.tcp.ip" = cfg.listenAddress;
-    };
+    services.rabbitmq.configItems =
+      {
+        "listeners.tcp.1" = mkDefault "${cfg.listenAddress}:${toString cfg.port}";
+      }
+      // optionalAttrs cfg.managementPlugin.enable {
+        "management.tcp.port" = toString cfg.managementPlugin.port;
+        "management.tcp.ip" = cfg.listenAddress;
+      };
 
     services.rabbitmq.plugins = optional cfg.managementPlugin.enable "rabbitmq_management";
 
     systemd.services.rabbitmq = {
       description = "RabbitMQ Server";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "epmd.socket" ];
-      wants = [ "network.target" "epmd.socket" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target" "epmd.socket"];
+      wants = ["network.target" "epmd.socket"];
 
       path = [
         cfg.package
         pkgs.coreutils # mkdir/chown/chmod for preStart
       ];
 
-      environment = {
-        RABBITMQ_MNESIA_BASE = "${cfg.dataDir}/mnesia";
-        RABBITMQ_LOGS = "-";
-        SYS_PREFIX = "";
-        RABBITMQ_CONFIG_FILE = config_file;
-        RABBITMQ_PLUGINS_DIR = concatStringsSep ":" cfg.pluginDirs;
-        RABBITMQ_ENABLED_PLUGINS_FILE = pkgs.writeText "enabled_plugins" ''
-          [ ${concatStringsSep "," cfg.plugins} ].
-        '';
-      } // optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
+      environment =
+        {
+          RABBITMQ_MNESIA_BASE = "${cfg.dataDir}/mnesia";
+          RABBITMQ_LOGS = "-";
+          SYS_PREFIX = "";
+          RABBITMQ_CONFIG_FILE = config_file;
+          RABBITMQ_PLUGINS_DIR = concatStringsSep ":" cfg.pluginDirs;
+          RABBITMQ_ENABLED_PLUGINS_FILE = pkgs.writeText "enabled_plugins" ''
+            [ ${concatStringsSep "," cfg.plugins} ].
+          '';
+        }
+        // optionalAttrs (cfg.config != "") {RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file;};
 
       serviceConfig = {
         ExecStart = "${cfg.package}/sbin/rabbitmq-server";
@@ -216,13 +218,13 @@ in
       };
 
       preStart = ''
-        ${optionalString (cfg.cookie != "") ''
+        ${
+          optionalString (cfg.cookie != "") ''
             echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
             chmod 600 ${cfg.dataDir}/.erlang.cookie
-        ''}
+          ''
+        }
       '';
     };
-
   };
-
 }

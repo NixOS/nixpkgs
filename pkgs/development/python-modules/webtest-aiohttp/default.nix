@@ -1,6 +1,15 @@
-{ buildPythonPackage, fetchFromGitHub, lib, isPy27, webtest, invoke, flake8
-, aiohttp, pytest-aiohttp, pytestCheckHook }:
-
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  isPy27,
+  webtest,
+  invoke,
+  flake8,
+  aiohttp,
+  pytest-aiohttp,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "webtest-aiohttp";
   version = "2.0.0";
@@ -17,13 +26,13 @@ buildPythonPackage rec {
     "webtest_aiohttp"
   ];
 
-  propagatedBuildInputs = [ webtest ];
-  checkInputs = [ invoke flake8 aiohttp pytest-aiohttp pytestCheckHook ];
+  propagatedBuildInputs = [webtest];
+  checkInputs = [invoke flake8 aiohttp pytest-aiohttp pytestCheckHook];
 
   meta = with lib; {
     description = "Provides integration of WebTest with aiohttp.web applications";
     homepage = "https://github.com/sloria/webtest-aiohttp";
     license = licenses.mit;
-    maintainers = with maintainers; [ cript0nauta ];
+    maintainers = with maintainers; [cript0nauta];
   };
 }

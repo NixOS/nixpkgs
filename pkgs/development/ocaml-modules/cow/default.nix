@@ -1,6 +1,13 @@
-{ lib, fetchurl, buildDunePackage, alcotest
-, uri, xmlm, omd, ezjsonm }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  alcotest,
+  uri,
+  xmlm,
+  omd,
+  ezjsonm,
+}:
 buildDunePackage rec {
   useDune2 = true;
   minimumOCamlVersion = "4.02.3";
@@ -13,8 +20,8 @@ buildDunePackage rec {
     sha256 = "1x77lwpskda4zyikwxh500xjn90pgdwz6jm7ca7f36pyav4vl6zx";
   };
 
-  propagatedBuildInputs = [ xmlm uri ezjsonm omd ];
-  checkInputs = [ alcotest ];
+  propagatedBuildInputs = [xmlm uri ezjsonm omd];
+  checkInputs = [alcotest];
   doCheck = true;
 
   meta = with lib; {
@@ -25,6 +32,6 @@ buildDunePackage rec {
       for these web formats.
     '';
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

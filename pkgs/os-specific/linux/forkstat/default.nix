@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "forkstat";
   version = "0.02.17";
@@ -22,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/forkstat";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    maintainers = with maintainers; [womfoo];
   };
 }

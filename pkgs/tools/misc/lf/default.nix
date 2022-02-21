@@ -1,5 +1,9 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "lf";
   version = "26";
@@ -13,9 +17,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-ujQh4aE++K/fn3PJqkAbTtwRyJPSI9TJQ1DvwLF9etU=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  ldflags = [ "-s" "-w" "-X main.gVersion=r${version}" ];
+  ldflags = ["-s" "-w" "-X main.gVersion=r${version}"];
 
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
@@ -35,6 +39,6 @@ buildGoModule rec {
     changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   name = "roon-server";
   cfg = config.services.roon-server;
 in {
@@ -35,9 +37,9 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.roon-server = {
-      after = [ "network.target" ];
+      after = ["network.target"];
       description = "Roon Server";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       environment.ROON_DATAROOT = "/var/lib/${name}";
 
@@ -52,10 +54,16 @@ in {
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPortRanges = [
-        { from = 9100; to = 9200; }
-        { from = 9330; to = 9332; }
+        {
+          from = 9100;
+          to = 9200;
+        }
+        {
+          from = 9330;
+          to = 9332;
+        }
       ];
-      allowedUDPPorts = [ 9003 ];
+      allowedUDPPorts = [9003];
       extraCommands = ''
         iptables -A INPUT -s 224.0.0.0/4 -j ACCEPT
         iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
@@ -65,15 +73,16 @@ in {
       '';
     };
 
-
     users.groups.${cfg.group} = {};
     users.users.${cfg.user} =
-      if cfg.user == "roon-server" then {
-        isSystemUser = true;
-        description = "Roon Server user";
-        group = cfg.group;
-        extraGroups = [ "audio" ];
-      }
+      if cfg.user == "roon-server"
+      then
+        {
+          isSystemUser = true;
+          description = "Roon Server user";
+          group = cfg.group;
+          extraGroups = ["audio"];
+        }
       else {};
   };
 }

@@ -1,19 +1,19 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, gobject-introspection
-, file
-, gtk2
-, glib
-, cairo
-, atk
-, pango
-, libtiff
-, libpng
-, libjpeg
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  gobject-introspection,
+  file,
+  gtk2,
+  glib,
+  cairo,
+  atk,
+  pango,
+  libtiff,
+  libpng,
+  libjpeg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtkextra";
   version = "3.3.4";
@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
-  nativeBuildInputs = [ gobject-introspection pkg-config ];
+  nativeBuildInputs = [gobject-introspection pkg-config];
 
-  buildInputs = [ gtk2 glib cairo atk pango libtiff libpng libjpeg ];
+  buildInputs = [gtk2 glib cairo atk pango libtiff libpng libjpeg];
 
   meta = with lib; {
     homepage = "http://gtkextra.sourceforge.net/";
     description = "GtkExtra is a useful set of widgets for creating GUI's for GTK+.";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tesq0 ];
+    maintainers = with maintainers; [tesq0];
   };
 }

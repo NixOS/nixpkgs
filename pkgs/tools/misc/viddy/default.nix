@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "viddy";
   version = "0.3.4";
@@ -24,6 +27,6 @@ buildGoModule rec {
     description = "A modern watch command";
     homepage = "https://github.com/sachaos/viddy";
     license = licenses.mit;
-    maintainers = with maintainers; [ j-hui ];
+    maintainers = with maintainers; [j-hui];
   };
 }

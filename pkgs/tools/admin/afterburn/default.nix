@@ -1,5 +1,10 @@
-{ lib, openssl, pkg-config, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  openssl,
+  pkg-config,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "afterburn";
   version = "5.2.0";
@@ -13,8 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-92E76QwxeOLp9sfO066L97r2FO/9nQ4DaVyWJrL9L2M=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [openssl];
 
   postPatch = ''
     substituteInPlace ./systemd/afterburn-checkin.service --replace /usr/bin $out/bin
@@ -31,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/coreos/ignition";
     description = "This is a small utility, typically used in conjunction with Ignition, which reads metadata from a given cloud-provider and applies it to the system.";
     license = licenses.asl20;
-    maintainers = [ maintainers.arianvp ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.arianvp];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,6 +1,10 @@
-{ callPackage, fetchurl, ... } @ args:
-
-callPackage ./generic.nix (args // rec {
+{
+  callPackage,
+  fetchurl,
+  ...
+} @ args:
+callPackage ./generic.nix (args
+// rec {
   release = "8.6";
   version = "${release}.11";
 

@@ -1,32 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook
-, at-spi2-core
-, cairo
-, dbus
-, freetype
-, fontconfig
-, glew
-, gtkmm3
-, json_c
-, libdatrie
-, libepoxy
-, libGLU
-, libpng
-, libselinux
-, libsepol
-, libthai
-, libxkbcommon
-, pangomm
-, pcre
-, util-linuxMinimal # provides libmount
-, xorg
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook,
+  at-spi2-core,
+  cairo,
+  dbus,
+  freetype,
+  fontconfig,
+  glew,
+  gtkmm3,
+  json_c,
+  libdatrie,
+  libepoxy,
+  libGLU,
+  libpng,
+  libselinux,
+  libsepol,
+  libthai,
+  libxkbcommon,
+  pangomm,
+  pcre,
+  util-linuxMinimal
+  # provides libmount
+  ,
+  xorg,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "solvespace";
   version = "3.0";
@@ -85,12 +87,12 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
+  cmakeFlags = ["-DENABLE_OPENMP=ON"];
 
   meta = with lib; {
     description = "A parametric 3d CAD program";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.edef ];
+    maintainers = [maintainers.edef];
     platforms = platforms.linux;
     homepage = "https://solvespace.com";
     changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";

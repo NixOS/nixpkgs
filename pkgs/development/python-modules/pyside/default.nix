@@ -1,5 +1,14 @@
-{ lib, fetchFromGitHub, cmake, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4, mesa, libGL }:
-
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  buildPythonPackage,
+  pysideGeneratorrunner,
+  pysideShiboken,
+  qt4,
+  mesa,
+  libGL,
+}:
 buildPythonPackage rec {
   pname = "pyside";
   version = "1.2.4";
@@ -12,17 +21,17 @@ buildPythonPackage rec {
     sha256 = "sha256-14XbihJRMk9WaeK6NUBV/4OMFZF8EBIJgEJEaCU8Ecg=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   preConfigure = ''
     cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
   '';
 
-  nativeBuildInputs = [ cmake pysideGeneratorrunner pysideShiboken qt4 ];
+  nativeBuildInputs = [cmake pysideGeneratorrunner pysideShiboken qt4];
 
-  buildInputs = [ mesa libGL ];
+  buildInputs = [mesa libGL];
 
-  makeFlags = [ "QT_PLUGIN_PATH=${pysideShiboken}/lib/generatorrunner" ];
+  makeFlags = ["QT_PLUGIN_PATH=${pysideShiboken}/lib/generatorrunner"];
 
   dontWrapQtApps = true;
 

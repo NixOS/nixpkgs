@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, which, gnuplot
-, giflib, libjpeg, libpng, libtiff, libwebp, openjpeg, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  which,
+  gnuplot,
+  giflib,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  openjpeg,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "leptonica";
   version = "1.82.0";
@@ -11,11 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FVMC7pFGaMJ7b+PKn/LaY7JF9tYvMGHI8nVjd0uK4tY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ giflib libjpeg libpng libtiff libwebp openjpeg zlib ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [giflib libjpeg libpng libtiff libwebp openjpeg zlib];
   enableParallelBuilding = true;
 
-  checkInputs = [ which gnuplot ];
+  checkInputs = [which gnuplot];
 
   # Fails on pngio_reg for unknown reason
   doCheck = false; # !stdenv.isDarwin;

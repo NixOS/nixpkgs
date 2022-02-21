@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "patiencediff";
   version = "0.2.2";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     description = "C implementation of patiencediff algorithm for Python";
     homepage = "https://github.com/breezy-team/patiencediff";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.wildsebastian ];
+    maintainers = [maintainers.wildsebastian];
   };
 }

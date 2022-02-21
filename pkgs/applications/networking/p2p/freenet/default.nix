@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ant, jdk, bash, coreutils, substituteAll }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  bash,
+  coreutils,
+  substituteAll,
+}: let
   freenet_ext = fetchurl {
     url = "https://downloads.freenetproject.org/latest/freenet-ext.jar";
     sha256 = "17ypljdvazgx2z6hhswny1lxfrknysz3x6igx8vl3xgdpvbb7wij";
@@ -36,7 +44,7 @@ let
       sed 's/@unknown@/${version}/g' -i build-clean.xml
     '';
 
-    buildInputs = [ ant jdk ];
+    buildInputs = [ant jdk];
 
     buildPhase = "ant package-only";
 
@@ -47,34 +55,34 @@ let
       cp dist/freenet.jar $out/share/freenet
     '';
   };
+in
+  stdenv.mkDerivation {
+    name = "freenet-${version}";
+    inherit version;
 
-in stdenv.mkDerivation {
-  name = "freenet-${version}";
-  inherit version;
+    src = substituteAll {
+      src = ./freenetWrapper;
+      inherit bash coreutils seednodes bcprov_version;
+      freenet = freenet-jars;
+      jre = jdk.jre;
+    };
 
-  src = substituteAll {
-    src = ./freenetWrapper;
-    inherit bash coreutils seednodes bcprov_version;
-    freenet = freenet-jars;
-    jre = jdk.jre;
-  };
+    jars = freenet-jars;
 
-  jars = freenet-jars;
+    dontUnpack = true;
 
-  dontUnpack = true;
+    installPhase = ''
+      mkdir -p $out/bin
+      cp $src $out/bin/freenet
+      chmod +x $out/bin/freenet
+      ln -s ${freenet-jars}/share $out/share
+    '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp $src $out/bin/freenet
-    chmod +x $out/bin/freenet
-    ln -s ${freenet-jars}/share $out/share
-  '';
-
-  meta = {
-    description = "Decentralised and censorship-resistant network";
-    homepage = "https://freenetproject.org/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
-    platforms = with lib.platforms; linux;
-  };
-}
+    meta = {
+      description = "Decentralised and censorship-resistant network";
+      homepage = "https://freenetproject.org/";
+      license = lib.licenses.gpl2Plus;
+      maintainers = [];
+      platforms = with lib.platforms; linux;
+    };
+  }

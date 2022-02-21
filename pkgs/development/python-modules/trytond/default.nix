@@ -1,27 +1,27 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pythonOlder
-, mock
-, lxml
-, relatorio
-, genshi
-, python-dateutil
-, polib
-, python-sql
-, werkzeug
-, wrapt
-, passlib
-, pillow
-, bcrypt
-, pydot
-, python-Levenshtein
-, simplejson
-, html2text
-, psycopg2
-, withPostgresql ? true
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pythonOlder,
+  mock,
+  lxml,
+  relatorio,
+  genshi,
+  python-dateutil,
+  polib,
+  python-sql,
+  werkzeug,
+  wrapt,
+  passlib,
+  pillow,
+  bcrypt,
+  pydot,
+  python-Levenshtein,
+  simplejson,
+  html2text,
+  psycopg2,
+  withPostgresql ? true,
 }:
-
 buildPythonApplication rec {
   pname = "trytond";
   version = "6.2.3";
@@ -41,25 +41,27 @@ buildPythonApplication rec {
     mock
   ];
 
-  propagatedBuildInputs = [
-    lxml
-    relatorio
-    genshi
-    python-dateutil
-    polib
-    python-sql
-    werkzeug
-    wrapt
-    pillow
-    passlib
+  propagatedBuildInputs =
+    [
+      lxml
+      relatorio
+      genshi
+      python-dateutil
+      polib
+      python-sql
+      werkzeug
+      wrapt
+      pillow
+      passlib
 
-    # extra dependencies
-    bcrypt
-    pydot
-    python-Levenshtein
-    simplejson
-    html2text
-  ] ++ lib.optional withPostgresql psycopg2;
+      # extra dependencies
+      bcrypt
+      pydot
+      python-Levenshtein
+      simplejson
+      html2text
+    ]
+    ++ lib.optional withPostgresql psycopg2;
 
   # If unset, trytond will try to mkdir /homeless-shelter
   preCheck = ''
@@ -78,6 +80,6 @@ buildPythonApplication rec {
     '';
     homepage = "http://www.tryton.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ udono johbo ];
+    maintainers = with maintainers; [udono johbo];
   };
 }

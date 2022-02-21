@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook
-, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  intltool,
+  pkg-config,
+  gtk3,
+  vte,
+  wrapGAppsHook,
+  libxslt,
+  docbook_xml_dtd_412,
+  docbook_xsl,
+  libxml2,
+  findXMLCatalogs,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lxterminal";
   version = "0.3.2";
@@ -19,11 +32,19 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkg-config wrapGAppsHook
-    libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
+    automake
+    autoconf
+    intltool
+    pkg-config
+    wrapGAppsHook
+    libxslt
+    docbook_xml_dtd_412
+    docbook_xsl
+    libxml2
+    findXMLCatalogs
   ];
 
-  buildInputs = [ gtk3 vte ];
+  buildInputs = [gtk3 vte];
 
   patches = [
     ./respect-xml-catalog-files-var.patch
@@ -44,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wiki.lxde.org/en/LXTerminal";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.velovix ];
+    maintainers = [lib.maintainers.velovix];
     platforms = lib.platforms.linux;
   };
 }

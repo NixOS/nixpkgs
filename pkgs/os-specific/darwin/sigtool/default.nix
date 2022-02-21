@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "sigtool";
   version = "0.1.2";
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-v4udqW37vwcqBdqfvfwHnoyXpuLFt188ekVCPCPsTPM";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [openssl];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 }

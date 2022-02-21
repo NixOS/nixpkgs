@@ -1,5 +1,8 @@
-{ fetchFromGitHub, lib, buildGoModule }:
-
+{
+  fetchFromGitHub,
+  lib,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "dolt";
   version = "0.37.0";
@@ -12,7 +15,7 @@ buildGoModule rec {
   };
 
   modRoot = "./go";
-  subPackages = [ "cmd/dolt" "cmd/git-dolt" "cmd/git-dolt-smudge" ];
+  subPackages = ["cmd/dolt" "cmd/git-dolt" "cmd/git-dolt-smudge"];
   vendorSha256 = "sha256-YqlOzHsdkRrBdQ/mWGs2JIq5JttdRhFeug9HRbl6qlw=";
 
   doCheck = false;
@@ -21,6 +24,6 @@ buildGoModule rec {
     description = "Relational database with version control and CLI a-la Git";
     homepage = "https://github.com/liquidata-inc/dolt";
     license = licenses.asl20;
-    maintainers = with maintainers; [ danbst ];
+    maintainers = with maintainers; [danbst];
   };
 }

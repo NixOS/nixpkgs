@@ -1,10 +1,10 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-protocol-010-PtGRANAD
-, tezos-protocol-environment
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-protocol-010-PtGRANAD,
+  tezos-protocol-environment,
 }:
-
 buildDunePackage {
   pname = "tezos-protocol-010-PtGRANAD-parameters";
   inherit (tezos-stdlib) version useDune2;
@@ -17,7 +17,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: parameters";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos/Protocol: parameters";
+    };
 }

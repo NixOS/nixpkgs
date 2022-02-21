@@ -1,7 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, click, click-datetime, deprecation
-, pytest, voluptuous }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  click,
+  click-datetime,
+  deprecation,
+  pytest,
+  voluptuous,
+}:
 buildPythonPackage rec {
   pname = "pyHS100";
   version = "0.3.5.2";
@@ -33,6 +40,6 @@ buildPythonPackage rec {
     description = "Python Library to control TPLink Switch (HS100 / HS110)";
     homepage = "https://github.com/GadgetReactor/pyHS100";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

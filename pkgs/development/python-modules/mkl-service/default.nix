@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cython, mkl, nose, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  mkl,
+  nose,
+  six,
+}:
 buildPythonPackage rec {
   pname = "mkl-service";
   version = "2.4.0.post1";
@@ -13,14 +20,14 @@ buildPythonPackage rec {
 
   MKLROOT = mkl;
 
-  checkInputs = [ nose ];
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ mkl six ];
+  checkInputs = [nose];
+  nativeBuildInputs = [cython];
+  propagatedBuildInputs = [mkl six];
 
   meta = with lib; {
     description = "Python hooks for Intel(R) Math Kernel Library runtime control settings";
     homepage = "https://github.com/IntelPython/mkl-service";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

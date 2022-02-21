@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, aiounittest
-, buildPythonPackage
-, fetchFromGitHub
-, ffmpeg-python
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  aiounittest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ffmpeg-python,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "reolink";
   version = "0053";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with the Reolink IP camera API";
     homepage = "https://github.com/fwestenberg/reolink";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
   version = "2.8.4";
@@ -56,6 +56,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Simple command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zalakain ];
+    maintainers = with maintainers; [zalakain];
   };
 }

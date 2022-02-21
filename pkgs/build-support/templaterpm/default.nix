@@ -1,11 +1,17 @@
-{lib, stdenv, makeWrapper, python, toposort, rpm}:
-
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  python,
+  toposort,
+  rpm,
+}:
 stdenv.mkDerivation {
   pname = "nix-template-rpm";
   version = "0.1";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python toposort rpm ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [python toposort rpm];
 
   dontUnpack = true;
 
@@ -14,11 +20,11 @@ stdenv.mkDerivation {
     cp ${./nix-template-rpm.py} $out/bin/nix-template-rpm
     wrapProgram $out/bin/nix-template-rpm \
       --set PYTHONPATH "${rpm}/lib/${python.libPrefix}/site-packages":"${toposort}/lib/${python.libPrefix}/site-packages"
-    '';
+  '';
 
   meta = with lib; {
     description = "Create templates of nix expressions from RPM .spec files";
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [tstrobel];
     platforms = platforms.unix;
     hydraPlatforms = [];
   };

@@ -1,19 +1,19 @@
-{ buildPythonPackage
-, lib
-, isPy27
-, six
-, fetchPypi
-, pyyaml
-, mock
-, contextlib2
-, wrapt
-, pytest
-, pytest-httpbin
-, yarl
-, pythonOlder
-, pythonAtLeast
+{
+  buildPythonPackage,
+  lib,
+  isPy27,
+  six,
+  fetchPypi,
+  pyyaml,
+  mock,
+  contextlib2,
+  wrapt,
+  pytest,
+  pytest-httpbin,
+  yarl,
+  pythonOlder,
+  pythonAtLeast,
 }:
-
 buildPythonPackage rec {
   pname = "vcrpy";
   version = "4.1.1";
@@ -30,13 +30,14 @@ buildPythonPackage rec {
     pytest-httpbin
   ];
 
-  propagatedBuildInputs = [
-    pyyaml
-    wrapt
-    six
-  ]
-  ++ lib.optionals (pythonOlder "3.3") [ contextlib2 mock ]
-  ++ lib.optionals (pythonAtLeast "3.4") [ yarl ];
+  propagatedBuildInputs =
+    [
+      pyyaml
+      wrapt
+      six
+    ]
+    ++ lib.optionals (pythonOlder "3.3") [contextlib2 mock]
+    ++ lib.optionals (pythonAtLeast "3.4") [yarl];
 
   checkPhase = ''
     py.test --ignore=tests/integration -k "not TestVCRConnection"
@@ -48,4 +49,3 @@ buildPythonPackage rec {
     license = licenses.mit;
   };
 }
-

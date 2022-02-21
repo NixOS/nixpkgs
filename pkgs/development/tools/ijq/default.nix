@@ -1,5 +1,12 @@
-{ buildGoModule, fetchFromSourcehut, lib, jq, installShellFiles, makeWrapper, scdoc }:
-
+{
+  buildGoModule,
+  fetchFromSourcehut,
+  lib,
+  jq,
+  installShellFiles,
+  makeWrapper,
+  scdoc,
+}:
 buildGoModule rec {
   pname = "ijq";
   version = "0.3.6";
@@ -13,9 +20,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-HbrmfZ/P5bUF7Qio5L1sb/HAYk/tL2SOmxHCXvSw72I=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper scdoc ];
+  nativeBuildInputs = [installShellFiles makeWrapper scdoc];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.Version=${version}"];
 
   postBuild = ''
     scdoc < ijq.1.scd > ijq.1
@@ -24,13 +31,13 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram "$out/bin/ijq" \
-      --prefix PATH : "${lib.makeBinPath [ jq ]}"
+      --prefix PATH : "${lib.makeBinPath [jq]}"
   '';
 
   meta = with lib; {
     description = "Interactive wrapper for jq";
     homepage = "https://git.sr.ht/~gpanders/ijq";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ justinas SuperSandro2000 ];
+    maintainers = with maintainers; [justinas SuperSandro2000];
   };
 }

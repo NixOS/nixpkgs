@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, clutter-gst
-, clutter-gtk
-, gst_all_1
-, elementary-icon-theme
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  python3,
+  desktop-file-utils,
+  gtk3,
+  granite,
+  libgee,
+  libhandy,
+  clutter-gst,
+  clutter-gtk,
+  gst_all_1,
+  elementary-icon-theme,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
   version = "2.8.3";
@@ -40,22 +40,24 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    clutter-gst
-    clutter-gtk
-    elementary-icon-theme
-    granite
-    gtk3
-    libgee
-    libhandy
-  ] ++ (with gst_all_1; [
-    gst-libav
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      clutter-gst
+      clutter-gtk
+      elementary-icon-theme
+      granite
+      gtk3
+      libgee
+      libhandy
+    ]
+    ++ (with gst_all_1; [
+      gst-libav
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gstreamer
+    ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

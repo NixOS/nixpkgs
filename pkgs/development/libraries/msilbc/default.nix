@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, ilbc, mediastreamer, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ilbc,
+  mediastreamer,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "msilbc";
   version = "2.1.2";
@@ -9,12 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "07j02y994ybh274fp7ydjvi76h34y2c34ndwjpjfcwwr03b48cfp";
   };
 
-  propagatedBuildInputs = [ ilbc mediastreamer ];
-  nativeBuildInputs = [ pkg-config ];
+  propagatedBuildInputs = [ilbc mediastreamer];
+  nativeBuildInputs = [pkg-config];
 
   configureFlags = [
-    "ILBC_LIBS=ilbc" "ILBC_CFLAGS=-I${ilbc}/include"
-    "MEDIASTREAMER_LIBS=mediastreamer" "MEDIASTREAMER_CFLAGS=-I${mediastreamer}/include"
+    "ILBC_LIBS=ilbc"
+    "ILBC_CFLAGS=-I${ilbc}/include"
+    "MEDIASTREAMER_LIBS=mediastreamer"
+    "MEDIASTREAMER_CFLAGS=-I${mediastreamer}/include"
   ];
 
   meta = with lib; {

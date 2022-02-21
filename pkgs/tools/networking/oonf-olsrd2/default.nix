@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "oonf-olsrd2";
   version = "0.15.1";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "An adhoc wireless mesh routing daemon";
     license = licenses.bsd3;
     homepage = "http://olsr.org/";
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
     platforms = platforms.linux;
   };
 }

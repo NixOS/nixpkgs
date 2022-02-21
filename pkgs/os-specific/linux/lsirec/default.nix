@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lsirec";
   version = "unstable-2019-03-03";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8v+KKjAJlJNpUT0poedRTQfPiDiwahrosXD35Bmh3jM=";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
   installPhase = ''
     runHook preInstall
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/marcan/lsirec";
     platforms = platforms.linux;
     license = licenses.bsd2;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

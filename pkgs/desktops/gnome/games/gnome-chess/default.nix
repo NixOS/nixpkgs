@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, vala
-, pkg-config
-, wrapGAppsHook4
-, gobject-introspection
-, gettext
-, itstool
-, libxml2
-, python3
-, gnome
-, glib
-, gtk4
-, librsvg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  wrapGAppsHook4,
+  gobject-introspection,
+  gettext,
+  itstool,
+  libxml2,
+  python3,
+  gnome,
+  glib,
+  gtk4,
+  librsvg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
   version = "41.1";

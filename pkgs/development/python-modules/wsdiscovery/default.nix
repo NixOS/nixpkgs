@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, netifaces
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mock,
+  netifaces,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "wsdiscovery";
   version = "2.0.0";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "WS-Discovery implementation for Python";
     homepage = "https://github.com/andreikop/python-ws-discovery";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [lgpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

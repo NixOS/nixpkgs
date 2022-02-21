@@ -1,12 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, bison
-, cmake
-, flex
-, perl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  flex,
+  perl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elkhound";
   version = "unstable-2020-04-13";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [ bison cmake flex perl ];
+  nativeBuildInputs = [bison cmake flex perl];
 
   installPhase = ''
     runHook preInstall
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "A parser generator which emits GLR parsers, either in OCaml or C++";
     homepage = "https://scottmcpeak.com/elkhound/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     # possibly works on Darwin
     platforms = platforms.linux;
   };

@@ -1,5 +1,7 @@
-{ lib, python3 }:
-
+{
+  lib,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   version = "0.17.0";
   pname = "khard";
@@ -31,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
     export COLUMNS=80
   '';
 
-  pythonImportsCheck = [ "khard" ];
+  pythonImportsCheck = ["khard"];
 
   meta = {
     homepage = "https://github.com/scheibler/khard";
     description = "Console carddav client";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [matthiasbeyer];
   };
 }

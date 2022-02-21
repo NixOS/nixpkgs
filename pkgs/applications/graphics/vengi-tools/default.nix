@@ -1,32 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeText
-
-, cmake
-, pkg-config
-, ninja
-, python3
-, makeWrapper
-
-, glm
-, lua5_4
-, SDL2
-, SDL2_mixer
-, enet
-, libuv
-, libuuid
-, wayland-protocols
-, Carbon
-, CoreServices
-# optionals
-, opencl-headers
-, OpenCL
-
-, callPackage
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  cmake,
+  pkg-config,
+  ninja,
+  python3,
+  makeWrapper,
+  glm,
+  lua5_4,
+  SDL2,
+  SDL2_mixer,
+  enet,
+  libuv,
+  libuuid,
+  wayland-protocols,
+  Carbon,
+  CoreServices
+  # optionals
+  ,
+  opencl-headers,
+  OpenCL,
+  callPackage,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vengi-tools";
   version = "0.0.18";
@@ -46,33 +44,37 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    glm
-    lua5_4
-    SDL2
-    SDL2_mixer
-    enet
-    libuv
-    libuuid
-    # Only needed for the game
-    #postgresql
-    #libpqxx
-    #mosquitto
-  ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices OpenCL ]
+  buildInputs =
+    [
+      glm
+      lua5_4
+      SDL2
+      SDL2_mixer
+      enet
+      libuv
+      libuuid
+      # Only needed for the game
+      #postgresql
+      #libpqxx
+      #mosquitto
+    ]
+    ++ lib.optional stdenv.isLinux wayland-protocols
+    ++ lib.optionals stdenv.isDarwin [Carbon CoreServices OpenCL]
     ++ lib.optional (!stdenv.isDarwin) opencl-headers;
 
-  cmakeFlags = [
-    # Disable tests due to a problem in linking gtest:
-    # ld: /build/vengi-tests-core.LDHlV1.ltrans0.ltrans.o: in function `main':
-    # <artificial>:(.text.startup+0x3f): undefined reference to `testing::InitGoogleMock(int*, char**)'
-    "-DUNITTESTS=OFF"
-    "-DVISUALTESTS=OFF"
-    # We're only interested in the generic tools
-    "-DGAMES=OFF"
-    "-DMAPVIEW=OFF"
-    "-DAIDEBUG=OFF"
-  ] ++ lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
+  cmakeFlags =
+    [
+      # Disable tests due to a problem in linking gtest:
+      # ld: /build/vengi-tests-core.LDHlV1.ltrans0.ltrans.o: in function `main':
+      # <artificial>:(.text.startup+0x3f): undefined reference to `testing::InitGoogleMock(int*, char**)'
+      "-DUNITTESTS=OFF"
+      "-DVISUALTESTS=OFF"
+      # We're only interested in the generic tools
+      "-DGAMES=OFF"
+      "-DMAPVIEW=OFF"
+      "-DAIDEBUG=OFF"
+    ]
+    ++ lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
 
   # Set the data directory for each executable. We cannot set it at build time
   # with the PKGDATADIR cmake variable because each executable needs a specific
@@ -103,8 +105,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://mgerhardy.github.io/vengi/";
     downloadPage = "https://github.com/mgerhardy/vengi/releases";
-    license = [ licenses.mit licenses.cc-by-sa-30 ];
-    maintainers = with maintainers; [ fgaz ];
+    license = [licenses.mit licenses.cc-by-sa-30];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
     # Requires SDK 10.14 https://github.com/NixOS/nixpkgs/issues/101229
     broken = stdenv.isDarwin && stdenv.isx86_64;

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, rustPlatform, Security, curl, openssl, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  rustPlatform,
+  Security,
+  curl,
+  openssl,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-fund";
   version = "0.2.0";
@@ -16,14 +25,20 @@ rustPlatform.buildRustPackage rec {
   # The tests need a GitHub API token.
   doCheck = false;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv curl ];
+  buildInputs = [openssl] ++ lib.optionals stdenv.isDarwin [Security libiconv curl];
 
   meta = with lib; {
     description = "Discover funding links for your project's dependencies";
     homepage = "https://github.com/acfoltzer/cargo-fund";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ johntitor ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [johntitor];
   };
 }

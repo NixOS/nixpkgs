@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, gettext
-, vim, glib, libxml2, ncurses, popt, screen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  vim,
+  glib,
+  libxml2,
+  ncurses,
+  popt,
+  screen,
 }:
-
 stdenv.mkDerivation rec {
   pname = "apt-dater";
   version = "1.0.4";
@@ -15,14 +24,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config autoreconfHook gettext
+    pkg-config
+    autoreconfHook
+    gettext
   ];
 
   buildInputs = [
-    libxml2 ncurses vim glib popt screen
+    libxml2
+    ncurses
+    vim
+    glib
+    popt
+    screen
   ];
 
-  configureFlags = [ "--disable-history" ];
+  configureFlags = ["--disable-history"];
 
   prePatch = ''
     substituteInPlace etc/Makefile.am \
@@ -45,6 +61,6 @@ stdenv.mkDerivation rec {
       as well as rug (e.g. openSUSE) and yum (e.g. CentOS) based systems.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0bw3b ];
+    maintainers = with maintainers; [c0bw3b];
   };
 }

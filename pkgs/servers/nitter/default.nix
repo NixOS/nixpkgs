@@ -1,5 +1,10 @@
-{ lib, nimPackages, nixosTests, fetchFromGitHub, libsass }:
-
+{
+  lib,
+  nimPackages,
+  nixosTests,
+  fetchFromGitHub,
+  libsass,
+}:
 nimPackages.buildNimPackage rec {
   pname = "nitter";
   version = "unstable-2022-02-11";
@@ -36,12 +41,12 @@ nimPackages.buildNimPackage rec {
     cp -r public $out/share/nitter/public
   '';
 
-  passthru.tests = { inherit (nixosTests) nitter; };
+  passthru.tests = {inherit (nixosTests) nitter;};
 
   meta = with lib; {
     description = "Alternative Twitter front-end";
     homepage = "https://github.com/zedeus/nitter";
-    maintainers = with maintainers; [ erdnaxe ];
+    maintainers = with maintainers; [erdnaxe];
     license = licenses.agpl3Only;
     mainProgram = "nitter";
   };

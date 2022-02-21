@@ -1,5 +1,18 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebengine, qtwebkit, openssl, xkeyboard_config, patchelfUnstable, wrapQtAppsHook }:
-
+{
+  stdenv,
+  fetchurl,
+  lib,
+  qtbase,
+  qtmultimedia,
+  qtscript,
+  qtsensors,
+  qtwebengine,
+  qtwebkit,
+  openssl,
+  xkeyboard_config,
+  patchelfUnstable,
+  wrapQtAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "p4v";
   version = "2020.1.1966006";
@@ -10,17 +23,17 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
-  nativeBuildInputs = [ patchelfUnstable wrapQtAppsHook ];
+  nativeBuildInputs = [patchelfUnstable wrapQtAppsHook];
 
   ldLibraryPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      qtbase
-      qtmultimedia
-      qtscript
-      qtsensors
-      qtwebengine
-      qtwebkit
-      openssl
+    stdenv.cc.cc.lib
+    qtbase
+    qtmultimedia
+    qtscript
+    qtsensors
+    qtwebengine
+    qtwebkit
+    openssl
   ];
 
   dontWrapQtApps = true;
@@ -49,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "Perforce Visual Client";
     homepage = "https://www.perforce.com";
     license = lib.licenses.unfreeRedistributable;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ nathyong nioncode ];
+    platforms = ["x86_64-linux"];
+    maintainers = with lib.maintainers; [nathyong nioncode];
   };
 }

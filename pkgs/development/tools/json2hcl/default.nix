@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "json2hcl";
   version = "0.0.6";
@@ -17,8 +20,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Convert JSON to HCL, and vice versa";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.matthewbauer ];
+    license = with licenses; [mit];
+    maintainers = [maintainers.matthewbauer];
     platforms = platforms.unix;
   };
 }

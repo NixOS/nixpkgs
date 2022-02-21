@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "go-license-detector";
   version = "3.1.0";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "Reliable project licenses detector";
     homepage = "https://github.com/src-d/go-license-detector";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

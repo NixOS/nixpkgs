@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip, libfaketime, xorg }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libfaketime,
+  xorg,
+}:
 stdenv.mkDerivation rec {
   pname = "efont-unicode";
   version = "0.4.2";
@@ -9,8 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bib3jgikq8s1m96imw4mlgbl5cbq1bs5sqig74s2l2cdfx3jaqc";
   };
 
-  nativeBuildInputs = with xorg;
-    [ libfaketime bdftopcf fonttosfnt mkfontscale ];
+  nativeBuildInputs = with xorg; [libfaketime bdftopcf fonttosfnt mkfontscale];
 
   buildPhase = ''
     runHook preBuild
@@ -42,13 +46,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  outputs = [ "out" "bdf" ];
+  outputs = ["out" "bdf"];
 
   meta = with lib; {
     description = "The /efont/ Unicode bitmap font";
     homepage = "http://openlab.ring.gr.jp/efont/unicode/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ maintainers.ncfavier ];
+    maintainers = [maintainers.ncfavier];
   };
 }

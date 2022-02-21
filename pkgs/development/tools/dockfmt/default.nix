@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "dockfmt";
   version = "0.3.3";
@@ -25,7 +25,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Dockerfile format";
     homepage = "https://github.com/jessfraz/dockfmt";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers.cpcloud ];
+    license = [licenses.mit];
+    maintainers = [maintainers.cpcloud];
   };
 }

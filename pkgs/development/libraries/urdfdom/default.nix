@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, validatePkgConfig
-, tinyxml, boost, urdfdom-headers, console-bridge }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  validatePkgConfig,
+  tinyxml,
+  boost,
+  urdfdom-headers,
+  console-bridge,
+}:
 stdenv.mkDerivation rec {
   pname = "urdfdom";
   version = "1.0.4";
@@ -25,15 +35,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config validatePkgConfig ];
-  buildInputs = [ tinyxml boost ];
-  propagatedBuildInputs = [ urdfdom-headers console-bridge ];
+  nativeBuildInputs = [cmake pkg-config validatePkgConfig];
+  buildInputs = [tinyxml boost];
+  propagatedBuildInputs = [urdfdom-headers console-bridge];
 
   meta = with lib; {
     description = "Provides core data structures and a simple XML parser for populating the class data structures from an URDF file";
     homepage = "https://github.com/ros/urdfdom";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [lopsided98];
     platforms = platforms.all;
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "gucci";
   version = "0.1.0";
@@ -23,7 +26,7 @@ buildGoPackage rec {
     description = "A simple CLI templating tool written in golang";
     homepage = "https://github.com/noqcks/gucci";
     license = licenses.mit;
-    maintainers = [ maintainers.braydenjw ];
+    maintainers = [maintainers.braydenjw];
     platforms = platforms.unix;
   };
 }

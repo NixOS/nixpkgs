@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m, xmlto }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docbook_xml_dtd_412,
+  docbook_xsl,
+  perl,
+  w3m,
+  xmlto,
+}:
 stdenv.mkDerivation rec {
   pname = "colordiff";
   version = "1.0.20";
@@ -11,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+TtVnUX88LMd8zmhLsKTyR9JlgR7IkUB18PF3LRgPB0=";
   };
 
-  nativeBuildInputs = [ docbook_xml_dtd_412 docbook_xsl perl w3m xmlto ];
+  nativeBuildInputs = [docbook_xml_dtd_412 docbook_xsl perl w3m xmlto];
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -31,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.colordiff.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

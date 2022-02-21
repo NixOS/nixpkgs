@@ -1,9 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, azure-common
-, azure-mgmt-core
-, msrest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-mgmt-core,
+  msrest,
 }:
-
 buildPythonPackage rec {
   pname = "azure-mgmt-extendedlocation";
   version = "1.0.0";
@@ -20,12 +22,12 @@ buildPythonPackage rec {
     msrest
   ];
 
-  pythonImportsCheck = [ "azure.mgmt.extendedlocation" ];
+  pythonImportsCheck = ["azure.mgmt.extendedlocation"];
 
   meta = with lib; {
     description = "Microsoft Azure Extendedlocation Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

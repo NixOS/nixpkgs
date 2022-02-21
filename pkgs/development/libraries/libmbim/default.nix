@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, glib
-, python3
-, systemd
-, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  python3,
+  systemd,
+  withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform,
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libmbim";
   version = "1.26.2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EMd79bXrjJK6gOm1GZI62biYNivI4ZKOK8mhfuumSa8=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = ["out" "dev" "man"];
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"

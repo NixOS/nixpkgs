@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.fail2ban;
 
   fail2banConf = pkgs.writeText "fail2ban.local" cfg.daemonConfig;
@@ -13,12 +14,14 @@ let
 
     before = paths-nixos.conf
 
-    ${concatStringsSep "\n" (attrValues (flip mapAttrs cfg.jails (name: def:
-      optionalString (def != "")
+    ${
+      concatStringsSep "\n" (attrValues (flip mapAttrs cfg.jails (name: def:
+        optionalString (def != "")
         ''
           [${name}]
           ${def}
-        '')))}
+        '')))
+    }
   '';
 
   pathsConf = pkgs.writeText "paths-nixos.conf" ''
@@ -32,15 +35,10 @@ let
 
     [DEFAULT]
   '';
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.fail2ban = {
       enable = mkOption {
         default = false;
@@ -178,9 +176,9 @@ in
       };
 
       ignoreIP = mkOption {
-        default = [ ];
+        default = [];
         type = types.listOf types.str;
-        example = [ "192.168.0.0/16" "2001:DB8::42" ];
+        example = ["192.168.0.0/16" "2001:DB8::42"];
         description = ''
           "ignoreIP" can be a list of IP addresses, CIDR masks or DNS hosts. Fail2ban will not ban a host which
           matches an address in this list. Several addresses can be defined using space (and/or comma) separator.
@@ -199,11 +197,11 @@ in
         description = ''
           The contents of Fail2ban's main configuration file.  It's
           generally not necessary to change it.
-       '';
+        '';
       };
 
       jails = mkOption {
-        default = { };
+        default = {};
         example = literalExpression ''
           { apache-nohome-iptables = '''
               # Block an IP address if it accesses a non-existent
@@ -239,20 +237,17 @@ in
           more verbose.
         '';
       };
-
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     warnings = mkIf (config.networking.firewall.enable == false && config.networking.nftables.enable == false) [
       "fail2ban can not be used without a firewall"
     ];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     environment.etc = {
       "fail2ban/fail2ban.local".source = fail2banConf;
@@ -268,13 +263,13 @@ in
     systemd.services.fail2ban = {
       description = "Fail2ban Intrusion Prevention System";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       partOf = optional config.networking.firewall.enable "firewall.service";
 
-      restartTriggers = [ fail2banConf jailConf pathsConf ];
+      restartTriggers = [fail2banConf jailConf pathsConf];
 
-      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
+      path = [cfg.package cfg.packageFirewall pkgs.iproute2] ++ cfg.extraPackages;
 
       unitConfig.Documentation = "man:fail2ban(1)";
 
@@ -286,7 +281,7 @@ in
         Restart = "on-failure";
         PIDFile = "/run/fail2ban/fail2ban.pid";
         # Capabilities
-        CapabilityBoundingSet = [ "CAP_AUDIT_READ" "CAP_DAC_READ_SEARCH" "CAP_NET_ADMIN" "CAP_NET_RAW" ];
+        CapabilityBoundingSet = ["CAP_AUDIT_READ" "CAP_DAC_READ_SEARCH" "CAP_NET_ADMIN" "CAP_NET_RAW"];
         # Security
         NoNewPrivileges = true;
         # Directory
@@ -311,15 +306,17 @@ in
     # Add some reasonable default jails.  The special "DEFAULT" jail
     # sets default values for all other jails.
     services.fail2ban.jails.DEFAULT = ''
-      ${optionalString cfg.bantime-increment.enable ''
-        # Bantime incremental
-        bantime.increment    = ${boolToString cfg.bantime-increment.enable}
-        bantime.maxtime      = ${cfg.bantime-increment.maxtime}
-        bantime.factor       = ${cfg.bantime-increment.factor}
-        bantime.formula      = ${cfg.bantime-increment.formula}
-        bantime.multipliers  = ${cfg.bantime-increment.multipliers}
-        bantime.overalljails = ${boolToString cfg.bantime-increment.overalljails}
-      ''}
+      ${
+        optionalString cfg.bantime-increment.enable ''
+          # Bantime incremental
+          bantime.increment    = ${boolToString cfg.bantime-increment.enable}
+          bantime.maxtime      = ${cfg.bantime-increment.maxtime}
+          bantime.factor       = ${cfg.bantime-increment.factor}
+          bantime.formula      = ${cfg.bantime-increment.formula}
+          bantime.multipliers  = ${cfg.bantime-increment.multipliers}
+          bantime.overalljails = ${boolToString cfg.bantime-increment.overalljails}
+        ''
+      }
       # Miscellaneous options
       ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
       maxretry    = ${toString cfg.maxretry}

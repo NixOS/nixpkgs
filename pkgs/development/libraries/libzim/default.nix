@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, icu
-, meson
-, ninja
-, pkg-config
-, xz
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  icu,
+  meson,
+  ninja,
+  pkg-config,
+  xz,
+  zstd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libzim";
   version = "7.2.0";
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "Reference implementation of the ZIM specification";
     homepage = "https://github.com/openzim/libzim";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

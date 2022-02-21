@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, sass, glib, libxml2, gdk-pixbuf
-, gtk-engine-murrine
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sass,
+  glib,
+  libxml2,
+  gdk-pixbuf,
+  gtk-engine-murrine,
 }:
-
 stdenv.mkDerivation rec {
   version = "2.6.7";
   pname = "numix-gtk-theme";
@@ -13,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "12mw0kr0kkvg395qlbsvkvaqccr90cmxw5rrsl236zh43kj8grb7";
   };
 
-  nativeBuildInputs = [ sass glib libxml2 gdk-pixbuf ];
+  nativeBuildInputs = [sass glib libxml2 gdk-pixbuf];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [gtk-engine-murrine];
 
   postPatch = ''
     substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
@@ -27,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://numixproject.github.io";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.romildo ];
+    maintainers = [lib.maintainers.romildo];
   };
 }

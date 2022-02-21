@@ -1,5 +1,13 @@
-{ lib, buildKodiAddon, fetchpatch, fetchzip, addonUpdateScript, six, requests, inputstreamhelper }:
-
+{
+  lib,
+  buildKodiAddon,
+  fetchpatch,
+  fetchzip,
+  addonUpdateScript,
+  six,
+  requests,
+  inputstreamhelper,
+}:
 buildKodiAddon rec {
   pname = "youtube";
   namespace = "plugin.video.youtube";

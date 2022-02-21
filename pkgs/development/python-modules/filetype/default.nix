@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "filetype";
   version = "1.0.10";
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Infer file type and MIME type of any file/buffer";
     homepage = "https://github.com/h2non/filetype.py";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

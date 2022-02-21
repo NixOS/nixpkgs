@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
   version = "1.0.5818";

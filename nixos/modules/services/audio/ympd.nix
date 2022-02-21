@@ -1,17 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.ympd;
 in {
-
   ###### interface
 
   options = {
-
     services.ympd = {
-
       enable = mkEnableOption "ympd, the MPD Web GUI";
 
       webPort = mkOption {
@@ -36,22 +35,16 @@ in {
           example = 6600;
         };
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     systemd.services.ympd = {
       description = "Standalone MPD Web GUI written in C";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig.ExecStart = "${pkgs.ympd}/bin/ympd --host ${cfg.mpd.host} --port ${toString cfg.mpd.port} --webport ${toString cfg.webPort} --user nobody";
     };
-
   };
-
 }

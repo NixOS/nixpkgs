@@ -1,18 +1,18 @@
-{ fetchurl
-, fetchpatch
-, lib
-, stdenv
-, pkg-config
-, intltool
-, libpulseaudio
-, gtkmm3
-, libsigcxx
-, libcanberra-gtk3
-, json-glib
-, gnome
-, wrapGAppsHook
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  stdenv,
+  pkg-config,
+  intltool,
+  libpulseaudio,
+  gtkmm3,
+  libsigcxx,
+  libcanberra-gtk3,
+  json-glib,
+  gnome,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pavucontrol";
   version = "5.0";
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
   ];
 
-  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
+  nativeBuildInputs = [pkg-config intltool wrapGAppsHook];
 
-  configureFlags = [ "--disable-lynx" ];
+  configureFlags = ["--disable-lynx"];
 
   meta = with lib; {
     description = "PulseAudio Volume Control";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ abbradar globin ];
+    maintainers = with maintainers; [abbradar globin];
     platforms = platforms.linux;
   };
 }

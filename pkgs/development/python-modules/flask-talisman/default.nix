@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  six,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "flask-talisman";
   version = "0.8.1";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "HTTP security headers for Flask";
     homepage = "https://github.com/wntrblm/flask-talisman";
     license = licenses.asl20;
-    maintainers = [ lib.maintainers.symphorien ];
+    maintainers = [lib.maintainers.symphorien];
   };
 }

@@ -1,33 +1,49 @@
-{ lib, stdenvNoCC, buildPackages, fetchurl, xar, cpio, pkgs, python3, pbzx, MacOSX-SDK }:
-
+{
+  lib,
+  stdenvNoCC,
+  buildPackages,
+  fetchurl,
+  xar,
+  cpio,
+  pkgs,
+  python3,
+  pbzx,
+  MacOSX-SDK,
+}:
 # TODO: reorganize to make this just frameworks, and move libs to default.nix
-
 let
   stdenv = stdenvNoCC;
 
-  standardFrameworkPath = name: private:
-    "/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework";
+  standardFrameworkPath = name: private: "/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework";
 
-  mkDepsRewrites = deps:
-  let
+  mkDepsRewrites = deps: let
     mergeRewrites = x: y: {
       prefix = lib.mergeAttrs (x.prefix or {}) (y.prefix or {});
       const = lib.mergeAttrs (x.const or {}) (y.const or {});
     };
 
-    rewriteArgs = { prefix ? {}, const ? {} }: lib.concatLists (
-      (lib.mapAttrsToList (from: to: [ "-p" "${from}:${to}" ]) prefix) ++
-      (lib.mapAttrsToList (from: to: [ "-c" "${from}:${to}" ]) const)
-    );
+    rewriteArgs = {
+      prefix ? {},
+      const ? {},
+    }:
+      lib.concatLists (
+        (lib.mapAttrsToList (from: to: ["-p" "${from}:${to}"]) prefix)
+        ++ (lib.mapAttrsToList (from: to: ["-c" "${from}:${to}"]) const)
+      );
 
-    rewrites = depList: lib.fold mergeRewrites {}
+    rewrites = depList:
+      lib.fold mergeRewrites {}
       (map (dep: dep.tbdRewrites)
-        (lib.filter (dep: dep ? tbdRewrites) depList));
+      (lib.filter (dep: dep ? tbdRewrites) depList));
   in
     lib.escapeShellArgs (rewriteArgs (rewrites (builtins.attrValues deps)));
 
-  mkFramework = { name, deps, private ? false }:
-    let self = stdenv.mkDerivation {
+  mkFramework = {
+    name,
+    deps,
+    private ? false,
+  }: let
+    self = stdenv.mkDerivation {
       pname = "apple-${lib.optionalString private "private-"}framework-${name}";
       version = MacOSX-SDK.version;
 
@@ -36,9 +52,9 @@ let
       # because we copy files from the system
       preferLocalBuild = true;
 
-      disallowedRequisites = [ MacOSX-SDK ];
+      disallowedRequisites = [MacOSX-SDK];
 
-      nativeBuildInputs = [ buildPackages.darwin.rewrite-tbd ];
+      nativeBuildInputs = [buildPackages.darwin.rewrite-tbd];
 
       installPhase = ''
         mkdir -p $out/Library/Frameworks
@@ -67,18 +83,27 @@ let
 
       meta = with lib; {
         description = "Apple SDK framework ${name}";
-        maintainers = with maintainers; [ copumpkin ];
-        platforms   = platforms.darwin;
+        maintainers = with maintainers; [copumpkin];
+        platforms = platforms.darwin;
       };
     };
-  in self;
+  in
+    self;
 
-  framework = name: deps: mkFramework { inherit name deps; private = false; };
-  privateFramework = name: deps: mkFramework { inherit name deps; private = true; };
+  framework = name: deps:
+    mkFramework {
+      inherit name deps;
+      private = false;
+    };
+  privateFramework = name: deps:
+    mkFramework {
+      inherit name deps;
+      private = true;
+    };
 in rec {
   libs = {
     xpc = stdenv.mkDerivation {
-      name   = "apple-lib-xpc";
+      name = "apple-lib-xpc";
       dontUnpack = true;
 
       installPhase = ''
@@ -91,11 +116,17 @@ in rec {
     };
 
     Xplugin = stdenv.mkDerivation {
-      name   = "apple-lib-Xplugin";
+      name = "apple-lib-Xplugin";
       dontUnpack = true;
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit CoreGraphics CoreServices CoreText
+        OpenGL
+        ApplicationServices
+        Carbon
+        IOKit
+        CoreGraphics
+        CoreServices
+        CoreText
       ];
 
       installPhase = ''
@@ -107,7 +138,7 @@ in rec {
     };
 
     utmp = stdenv.mkDerivation {
-      name   = "apple-lib-utmp";
+      name = "apple-lib-utmp";
       dontUnpack = true;
 
       installPhase = ''
@@ -165,17 +196,19 @@ in rec {
     JavaVM = super.JavaNativeFoundation;
   };
 
-  bareFrameworks = (
-    lib.mapAttrs framework (import ./frameworks.nix {
-      inherit frameworks libs;
-      inherit (pkgs.darwin) libobjc Libsystem;
-      inherit (pkgs.darwin.apple_sdk) libnetwork;
-    })
-  ) // (
-    lib.mapAttrs privateFramework (import ./private-frameworks.nix {
-      inherit frameworks;
-    })
-  );
+  bareFrameworks =
+    (
+      lib.mapAttrs framework (import ./frameworks.nix {
+        inherit frameworks libs;
+        inherit (pkgs.darwin) libobjc Libsystem;
+        inherit (pkgs.darwin.apple_sdk) libnetwork;
+      })
+    )
+    // (
+      lib.mapAttrs privateFramework (import ./private-frameworks.nix {
+        inherit frameworks;
+      })
+    );
 
   frameworks = bareFrameworks // overrides bareFrameworks;
 }

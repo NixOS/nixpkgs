@@ -44,81 +44,81 @@
 #     references, at the client level. This bloats the node and memory
 #     requirements, but would probably allow both aarch64/x86_64 to work.
 #
-
 let
-
   # Creates a node. If 'joinNode' parameter, a string containing an IP address,
   # is non-null, then the CockroachDB server will attempt to join/connect to
   # the cluster node specified at that address.
-  makeNode = locality: myAddr: joinNode:
-    { nodes, pkgs, lib, config, ... }:
+  makeNode = locality: myAddr: joinNode: {
+    nodes,
+    pkgs,
+    lib,
+    config,
+    ...
+  }: {
+    # Bank/TPC-C benchmarks take some memory to complete
+    virtualisation.memorySize = 2048;
 
-    {
-      # Bank/TPC-C benchmarks take some memory to complete
-      virtualisation.memorySize = 2048;
+    # Install the KVM PTP "Virtualized Clock" driver. This allows a /dev/ptp0
+    # device to appear as a reference clock, synchronized to the host clock.
+    # Because CockroachDB *requires* a time-synchronization mechanism for
+    # the system time in a cluster scenario, this is necessary to work.
+    boot.kernelModules = ["ptp_kvm"];
 
-      # Install the KVM PTP "Virtualized Clock" driver. This allows a /dev/ptp0
-      # device to appear as a reference clock, synchronized to the host clock.
-      # Because CockroachDB *requires* a time-synchronization mechanism for
-      # the system time in a cluster scenario, this is necessary to work.
-      boot.kernelModules = [ "ptp_kvm" ];
+    # Enable and configure Chrony, using the given virtualized clock passed
+    # through by KVM.
+    services.chrony.enable = true;
+    services.chrony.servers = lib.mkForce [];
+    services.chrony.extraConfig = ''
+      refclock PHC /dev/ptp0 poll 2 prefer require refid KVM
+      makestep 0.1 3
+    '';
 
-      # Enable and configure Chrony, using the given virtualized clock passed
-      # through by KVM.
-      services.chrony.enable = true;
-      services.chrony.servers = lib.mkForce [ ];
-      services.chrony.extraConfig = ''
-        refclock PHC /dev/ptp0 poll 2 prefer require refid KVM
-        makestep 0.1 3
-      '';
+    # Enable CockroachDB. In order to ensure that Chrony has performed its
+    # first synchronization at boot-time (which may take ~10 seconds) before
+    # starting CockroachDB, we block the ExecStartPre directive using the
+    # 'waitsync' command. This ensures Cockroach doesn't have its system time
+    # leap forward out of nowhere during startup/execution.
+    #
+    # Note that the default threshold for NTP-based skew in CockroachDB is
+    # ~500ms by default, so making sure it's started *after* accurate time
+    # synchronization is extremely important.
+    services.cockroachdb.enable = true;
+    services.cockroachdb.insecure = true;
+    services.cockroachdb.openPorts = true;
+    services.cockroachdb.locality = locality;
+    services.cockroachdb.listen.address = myAddr;
+    services.cockroachdb.join = lib.mkIf (joinNode != null) joinNode;
 
-      # Enable CockroachDB. In order to ensure that Chrony has performed its
-      # first synchronization at boot-time (which may take ~10 seconds) before
-      # starting CockroachDB, we block the ExecStartPre directive using the
-      # 'waitsync' command. This ensures Cockroach doesn't have its system time
-      # leap forward out of nowhere during startup/execution.
-      #
-      # Note that the default threshold for NTP-based skew in CockroachDB is
-      # ~500ms by default, so making sure it's started *after* accurate time
-      # synchronization is extremely important.
-      services.cockroachdb.enable = true;
-      services.cockroachdb.insecure = true;
-      services.cockroachdb.openPorts = true;
-      services.cockroachdb.locality = locality;
-      services.cockroachdb.listen.address = myAddr;
-      services.cockroachdb.join = lib.mkIf (joinNode != null) joinNode;
+    systemd.services.chronyd.unitConfig.ConditionPathExists = "/dev/ptp0";
 
-      systemd.services.chronyd.unitConfig.ConditionPathExists = "/dev/ptp0";
+    # Hold startup until Chrony has performed its first measurement (which
+    # will probably result in a full timeskip, thanks to makestep)
+    systemd.services.cockroachdb.preStart = ''
+      ${pkgs.chrony}/bin/chronyc waitsync
+    '';
+  };
+in
+  import ./make-test-python.nix ({pkgs, ...}: {
+    name = "cockroachdb";
+    meta.maintainers = with pkgs.lib.maintainers; [thoughtpolice];
 
-      # Hold startup until Chrony has performed its first measurement (which
-      # will probably result in a full timeskip, thanks to makestep)
-      systemd.services.cockroachdb.preStart = ''
-        ${pkgs.chrony}/bin/chronyc waitsync
-      '';
+    nodes = {
+      node1 = makeNode "country=us,region=east,dc=1" "192.168.1.1" null;
+      node2 = makeNode "country=us,region=west,dc=2b" "192.168.1.2" "192.168.1.1";
+      node3 = makeNode "country=eu,region=west,dc=2" "192.168.1.3" "192.168.1.1";
     };
 
-in import ./make-test-python.nix ({ pkgs, ...} : {
-  name = "cockroachdb";
-  meta.maintainers = with pkgs.lib.maintainers;
-    [ thoughtpolice ];
-
-  nodes = {
-    node1 = makeNode "country=us,region=east,dc=1"  "192.168.1.1" null;
-    node2 = makeNode "country=us,region=west,dc=2b" "192.168.1.2" "192.168.1.1";
-    node3 = makeNode "country=eu,region=west,dc=2"  "192.168.1.3" "192.168.1.1";
-  };
-
-  # NOTE: All the nodes must start in order and you must NOT use startAll, because
-  # there's otherwise no way to guarantee that node1 will start before the others try
-  # to join it.
-  testScript = ''
-    for node in node1, node2, node3:
-        node.start()
-        node.wait_for_unit("cockroachdb")
-    node1.succeed(
-        "cockroach sql --host=192.168.1.1 --insecure -e 'SHOW ALL CLUSTER SETTINGS' 2>&1",
-        "cockroach workload init bank 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
-        "cockroach workload run bank --duration=1m 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
-    )
-  '';
-})
+    # NOTE: All the nodes must start in order and you must NOT use startAll, because
+    # there's otherwise no way to guarantee that node1 will start before the others try
+    # to join it.
+    testScript = ''
+      for node in node1, node2, node3:
+          node.start()
+          node.wait_for_unit("cockroachdb")
+      node1.succeed(
+          "cockroach sql --host=192.168.1.1 --insecure -e 'SHOW ALL CLUSTER SETTINGS' 2>&1",
+          "cockroach workload init bank 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
+          "cockroach workload run bank --duration=1m 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
+      )
+    '';
+  })

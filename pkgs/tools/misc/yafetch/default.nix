@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitLab }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+}:
 stdenv.mkDerivation rec {
   pname = "yafetch";
   version = "unstable-2021-07-18";
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/cyberkitty/yafetch";
     description = "Yet another fetch clone written in C++";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ivar ashley ];
+    maintainers = with maintainers; [ivar ashley];
     platforms = platforms.linux;
   };
 }

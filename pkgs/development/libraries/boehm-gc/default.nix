@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook
-, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros (LARGE_CONFIG)
-, nixVersions
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  enableLargeConfig ? false
+  # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros (LARGE_CONFIG)
+  ,
+  nixVersions,
 }:
-
 stdenv.mkDerivation rec {
   pname = "boehm-gc";
   version = "8.0.6";
@@ -16,14 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "3b4914abc9fa76593596773e4da671d7ed4d5390e3d46fbf2e5f155e121bea11";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   # boehm-gc whitelists GCC threading models
   patches = lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 
   configureFlags =
-    [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
+    ["--enable-cplusplus" "--with-libatomic-ops=none"]
     ++ lib.optional enableLargeConfig "--enable-large-config";
 
   nativeBuildInputs =
@@ -60,7 +64,7 @@ stdenv.mkDerivation rec {
     # non-copyleft, X11-style license
     license = "https://hboehm.info/gc/license.txt";
 
-    maintainers = [ ];
+    maintainers = [];
     platforms = lib.platforms.all;
   };
 }

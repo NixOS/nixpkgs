@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "wsl-open";
   version = "2.1.1";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mwak846zh47p3pp4q5f54cw8d9qk61zn43q81j2pkcm35mv9lzg";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   installPhase = ''
     install -m0755 -D wsl-open.sh $out/bin/wsl-open
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/4U6U57/wsl-open";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

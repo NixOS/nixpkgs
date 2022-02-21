@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook
-, help2man
-, glib-networking
-, gst_all_1
-, gtk3
-, luafilesystem
-, luajit
-, sqlite
-, webkitgtk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook,
+  help2man,
+  glib-networking,
+  gst_all_1,
+  gtk3,
+  luafilesystem,
+  luajit,
+  sqlite,
+  webkitgtk,
 }:
-
 stdenv.mkDerivation rec {
   pname = "luakit";
   version = "2.3";
@@ -29,22 +29,23 @@ stdenv.mkDerivation rec {
     help2man
     wrapGAppsHook
   ];
-  buildInputs = [
-    gtk3
-    glib-networking # TLS support
-    luafilesystem
-    luajit
-    sqlite
-    webkitgtk
-  ] ++ ( with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-  ]);
-
+  buildInputs =
+    [
+      gtk3
+      glib-networking # TLS support
+      luafilesystem
+      luajit
+      sqlite
+      webkitgtk
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ]);
 
   # build-utils/docgen/gen.lua:2: module 'lib.lousy.util' not found
   # TODO: why is not this the default? The test runner adds
@@ -83,8 +84,8 @@ stdenv.mkDerivation rec {
       power users, developers and anyone who wants to have fine-grained control
       over their web browser’s behaviour and interface.
     '';
-    license     = licenses.gpl3Only;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms   = platforms.unix;
+    license = licenses.gpl3Only;
+    maintainers = [maintainers.AndersonTorres];
+    platforms = platforms.unix;
   };
 }

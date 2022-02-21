@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  pcre,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ucg";
   version = "0.3.3+date=2019-02-25";
@@ -50,9 +51,10 @@ stdenv.mkDerivation rec {
       appropriate with grep. Search patterns are specified as PCRE regexes.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
     broken = stdenv.isAarch64; # cpuid.h: no such file or directory
   };
 }
 # TODO: report upstream
+

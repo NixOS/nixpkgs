@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "v2ray-geoip";
   version = "202202170030";
@@ -23,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "GeoIP for V2Ray";
     homepage = "https://github.com/v2fly/geoip";
     license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with maintainers; [nickcao];
   };
 }

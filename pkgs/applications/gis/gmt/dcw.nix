@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "dcw-gmt";
   version = "2.1.0";
@@ -26,7 +29,6 @@ stdenv.mkDerivation rec {
       for use by GMT, the Generic Mapping Tools.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ tviti ];
+    maintainers = with maintainers; [tviti];
   };
-
 }

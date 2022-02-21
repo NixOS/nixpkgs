@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage {
   pname = "bugz-0.9.3";
   version = "0.13";
@@ -20,7 +20,6 @@ buildPythonPackage {
     homepage = "https://github.com/williamh/pybugz";
     description = "Command line interface for Bugzilla";
     license = licenses.gpl2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
-
 }

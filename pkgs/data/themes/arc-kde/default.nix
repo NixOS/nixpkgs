@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "arc-kde-theme";
   version = "20180614";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wli16k9my7m8a9561545vjwfifmxm4w606z1h0j08msvlky40xw";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   # Make this a fixed-output derivation
   outputHashMode = "recursive";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "A port of the arc theme for Plasma";
     homepage = "https://git.io/arc-kde";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.nixy ];
+    maintainers = [lib.maintainers.nixy];
     platforms = lib.platforms.all;
   };
 }

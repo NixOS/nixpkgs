@@ -1,5 +1,8 @@
-{ stdenvNoCC, fetchFromGitLab, lib }:
-
+{
+  stdenvNoCC,
+  fetchFromGitLab,
+  lib,
+}:
 stdenvNoCC.mkDerivation {
   pname = "quintom-cursor-theme";
   version = "unstable-2019-10-24";
@@ -22,7 +25,7 @@ stdenvNoCC.mkDerivation {
     description = "A cursor theme designed to look decent";
     homepage = "https://gitlab.com/Burning_Cube/quintom-cursor-theme";
     platforms = platforms.unix;
-    license = with licenses; [ cc-by-sa-40 gpl3Only ];
-    maintainers = with maintainers; [ frogamic ];
+    license = with licenses; [cc-by-sa-40 gpl3Only];
+    maintainers = with maintainers; [frogamic];
   };
 }

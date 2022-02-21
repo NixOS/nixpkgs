@@ -1,9 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, which, libtool, pkg-config
-, ronn, substituteAll
-, mbrolaSupport ? true, mbrola
-, pcaudiolibSupport ? true, pcaudiolib
-, sonicSupport ? true, sonic }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  which,
+  libtool,
+  pkg-config,
+  ronn,
+  substituteAll,
+  mbrolaSupport ? true,
+  mbrola,
+  pcaudiolibSupport ? true,
+  pcaudiolib,
+  sonicSupport ? true,
+  sonic,
+}:
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
   version = "1.50";
@@ -23,16 +35,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn ];
+  nativeBuildInputs = [autoconf automake which libtool pkg-config ronn];
 
-  buildInputs = lib.optional mbrolaSupport mbrola
-             ++ lib.optional pcaudiolibSupport pcaudiolib
-             ++ lib.optional sonicSupport sonic;
+  buildInputs =
+    lib.optional mbrolaSupport mbrola
+    ++ lib.optional pcaudiolibSupport pcaudiolib
+    ++ lib.optional sonicSupport sonic;
 
   preConfigure = "./autogen.sh";
 
   configureFlags = [
-    "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"
+    "--with-mbrola=${
+      if mbrolaSupport
+      then "yes"
+      else "no"
+    }"
   ];
 
   # Current release lacks dependencies on local espeak-ng:
@@ -54,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/espeak-ng/espeak-ng";
     changelog = "https://github.com/espeak-ng/espeak-ng/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aske ];
+    maintainers = with maintainers; [aske];
     platforms = platforms.all;
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, bigarray-compat
-, containers
-, cppo
-, ctypes
-, integers
-, num
-, ppxlib
-, re
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  bigarray-compat,
+  containers,
+  cppo,
+  ctypes,
+  integers,
+  num,
+  ppxlib,
+  re,
 }:
-
 buildDunePackage rec {
   pname = "ppx_cstubs";
   version = "0.6.1.2";
@@ -42,6 +42,6 @@ buildDunePackage rec {
     changelog = "https://github.com/fdopen/ppx_cstubs/raw/${version}/CHANGES.md";
     description = "Preprocessor for easier stub generation with ocaml-ctypes";
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.osener ];
+    maintainers = [maintainers.osener];
   };
 }

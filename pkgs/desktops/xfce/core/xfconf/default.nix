@@ -1,5 +1,10 @@
-{ lib, mkXfceDerivation, libxfce4util, gobject-introspection, vala }:
-
+{
+  lib,
+  mkXfceDerivation,
+  libxfce4util,
+  gobject-introspection,
+  vala,
+}:
 mkXfceDerivation {
   category = "xfce";
   pname = "xfconf";
@@ -7,12 +12,12 @@ mkXfceDerivation {
 
   sha256 = "sha256-w8wnHFj1KBX6lCnGbVLgWPEo2ul4SwfemUYVHioTlwE=";
 
-  nativeBuildInputs = [ gobject-introspection vala ];
+  nativeBuildInputs = [gobject-introspection vala];
 
-  buildInputs = [ libxfce4util ];
+  buildInputs = [libxfce4util];
 
   meta = with lib; {
     description = "Simple client-server configuration storage and query system for Xfce";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

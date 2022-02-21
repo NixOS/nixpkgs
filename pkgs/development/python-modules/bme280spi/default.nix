@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, spidev
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  spidev,
 }:
-
 buildPythonPackage rec {
   pname = "bme280spi";
   version = "0.2.0";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Library for BME280 sensor through spidev";
     homepage = "https://github.com/Kuzj/bme280spi";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

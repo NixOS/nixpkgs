@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome, gettext }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  glib,
+  gnome,
+  gettext,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-EasyScreenCast";
   version = "1.4.0";
@@ -19,10 +26,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
-  makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
+  makeFlags = ["INSTALLBASE=$(out)/share/gnome-shell/extensions"];
 
   passthru.extensionUuid = "EasyScreenCast@iacopodeenosee.gmail.com";
 
@@ -30,8 +38,7 @@ stdenv.mkDerivation rec {
     description = "Simplifies the use of the video recording function integrated in gnome shell";
     homepage = "https://github.com/EasyScreenCast/EasyScreenCast";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
     platforms = platforms.linux;
   };
 }
-

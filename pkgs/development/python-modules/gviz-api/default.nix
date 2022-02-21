@@ -1,7 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage
-, six
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "gviz_api";
   version = "1.10.0";
@@ -20,6 +22,6 @@ buildPythonPackage rec {
     description = "Python API for Google Visualization";
     homepage = "https://developers.google.com/chart/interactive/docs/dev/gviz_api_lib";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

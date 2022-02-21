@@ -1,18 +1,29 @@
 {
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  baloo, kconfig, kfilemetadata, ki18n, kio, kservice
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  baloo,
+  kconfig,
+  kfilemetadata,
+  ki18n,
+  kio,
+  kservice,
 }:
-
 mkDerivation {
   pname = "baloo-widgets";
   meta = {
-    license = [ lib.licenses.lgpl21 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    license = [lib.licenses.lgpl21];
+    maintainers = [lib.maintainers.ttuegel];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [extra-cmake-modules kdoctools];
   propagatedBuildInputs = [
-    baloo kconfig kfilemetadata ki18n kio kservice
+    baloo
+    kconfig
+    kfilemetadata
+    ki18n
+    kio
+    kservice
   ];
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 }

@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aenum
-, aiohttp
-, importlib-metadata
-, isodate
-, nest-asyncio
-, six
-, pytestCheckHook
-, mock
-, pyhamcrest
-, radish-bdd
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aenum,
+  aiohttp,
+  importlib-metadata,
+  isodate,
+  nest-asyncio,
+  six,
+  pytestCheckHook,
+  mock,
+  pyhamcrest,
+  radish-bdd,
 }:
-
 buildPythonPackage rec {
   pname = "gremlinpython";
   version = "3.5.1";
@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
     homepage = "https://tinkerpop.apache.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ turion ris ];
+    maintainers = with maintainers; [turion ris];
   };
 }

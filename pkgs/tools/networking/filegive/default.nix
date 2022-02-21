@@ -1,5 +1,8 @@
-{ buildGoPackage, lib, fetchurl }:
-
+{
+  buildGoPackage,
+  lib,
+  fetchurl,
+}:
 buildGoPackage rec {
   pname = "filegive";
   version = "0.7.4";
@@ -17,7 +20,7 @@ buildGoPackage rec {
     homepage = "https://viric.name/cgi-bin/filegive";
     description = "Easy p2p file sending program";
     license = licenses.agpl3Plus;
-    maintainers = [ maintainers.viric ];
+    maintainers = [maintainers.viric];
     platforms = platforms.unix;
   };
 }

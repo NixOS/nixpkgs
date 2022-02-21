@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "objconv";
   version = "2.52";
@@ -10,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "0r117r7yvqvvdgwgwxpkyzi6p5nm0xb6p67wvkmvggm9fdyl3z8v";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   unpackPhase = ''
     mkdir -p "$name"
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Object and executable file converter, modifier and disassembler";
     homepage = "https://www.agner.org/optimize/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej vrthra ];
+    maintainers = with maintainers; [orivej vrthra];
     platforms = platforms.unix;
   };
 }

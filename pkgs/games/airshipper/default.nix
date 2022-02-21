@@ -1,19 +1,19 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, openssl
-, vulkan-loader
-, wayland
-, wayland-protocols
-, libxkbcommon
-, libX11
-, libXrandr
-, libXi
-, libXcursor
-, pkg-config
-, makeWrapper
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  openssl,
+  vulkan-loader,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
+  libX11,
+  libXrandr,
+  libXi,
+  libXcursor,
+  pkg-config,
+  makeWrapper,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "airshipper";
   version = "0.6.0";
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     libXi
     libXcursor
   ];
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [pkg-config makeWrapper];
 
   postInstall = ''
     mkdir -p "$out/share/applications" && mkdir -p "$out/share/icons"
@@ -45,30 +45,29 @@ rustPlatform.buildRustPackage rec {
     cp "client/assets/logo.ico" "$out/share/icons/net.veloren.airshipper.ico"
   '';
 
-  postFixup =
-    let
-      libPath = lib.makeLibraryPath [
-        vulkan-loader
-        wayland
-        wayland-protocols
-        libxkbcommon
-        libX11
-        libXrandr
-        libXi
-        libXcursor
-      ];
-    in ''
-      patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
-    '';
+  postFixup = let
+    libPath = lib.makeLibraryPath [
+      vulkan-loader
+      wayland
+      wayland-protocols
+      libxkbcommon
+      libX11
+      libXrandr
+      libXi
+      libXcursor
+    ];
+  in ''
+    patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
+  '';
 
   doCheck = false;
-  cargoBuildFlags = [ "--package" "airshipper" ];
-  cargoTestFlags = [ "--package" "airshipper" ];
+  cargoBuildFlags = ["--package" "airshipper"];
+  cargoTestFlags = ["--package" "airshipper"];
 
   meta = with lib; {
     description = "Provides automatic updates for the voxel RPG Veloren.";
     homepage = "https://www.veloren.net";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ yusdacra ];
+    maintainers = with maintainers; [yusdacra];
   };
 }

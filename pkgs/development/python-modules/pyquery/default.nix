@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, cssselect
-, fetchPypi
-, lxml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cssselect,
+  fetchPypi,
+  lxml,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyquery";
   version = "1.4.3";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   # circular dependency on webtest
   doCheck = false;
-  pythonImportsCheck = [ "pyquery" ];
+  pythonImportsCheck = ["pyquery"];
 
   meta = with lib; {
     description = "A jquery-like library for Python";

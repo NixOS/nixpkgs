@@ -1,16 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.lirc;
 in {
-
   ###### interface
 
   options = {
     services.lirc = {
-
       enable = mkEnableOption "LIRC daemon";
 
       options = mkOption {
@@ -38,17 +38,16 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-
     # Note: LIRC executables raises a warning, if lirc_options.conf do not exists
     environment.etc."lirc/lirc_options.conf".text = cfg.options;
 
     passthru.lirc.socket = "/run/lirc/lircd";
 
-    environment.systemPackages = [ pkgs.lirc ];
+    environment.systemPackages = [pkgs.lirc];
 
     systemd.sockets.lircd = {
       description = "LIRC daemon socket";
-      wantedBy = [ "sockets.target" ];
+      wantedBy = ["sockets.target"];
       socketConfig = {
         ListenStream = config.passthru.lirc.socket;
         SocketUser = "lirc";
@@ -60,9 +59,9 @@ in {
       configFile = pkgs.writeText "lircd.conf" (builtins.concatStringsSep "\n" cfg.configs);
     in {
       description = "LIRC daemon service";
-      after = [ "network.target" ];
+      after = ["network.target"];
 
-      unitConfig.Documentation = [ "man:lircd(8)" ];
+      unitConfig.Documentation = ["man:lircd(8)"];
 
       serviceConfig = {
         RuntimeDirectory = ["lirc" "lirc/lock"];

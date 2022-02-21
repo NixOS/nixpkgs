@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "goveelights";
   version = "0.1.2";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Python module for interacting with the Govee API";
     homepage = "https://github.com/arcanearronax/govee_lights";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

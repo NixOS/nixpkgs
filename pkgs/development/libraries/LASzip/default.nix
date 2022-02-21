@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   version = "3.4.3";
   pname = "LASzip";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Turn quickly bulky LAS files into compact LAZ files without information loss";
     homepage = "https://laszip.org";
     license = lib.licenses.lgpl2;
-    maintainers = [ lib.maintainers.michelk ];
+    maintainers = [lib.maintainers.michelk];
     platforms = lib.platforms.unix;
   };
 }

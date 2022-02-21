@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, c-ares, curl, libev }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  c-ares,
+  curl,
+  libev,
+}:
 stdenv.mkDerivation rec {
   pname = "https-dns-proxy";
   # there are no stable releases (yet?)
@@ -12,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "1cdfswfjby4alp6gy7yyjm76kfyclh5ax0zadnqs2pyigg9plh0b";
   };
 
-  nativeBuildInputs = [ cmake gtest ];
+  nativeBuildInputs = [cmake gtest];
 
-  buildInputs = [ c-ares curl libev ];
+  buildInputs = [c-ares curl libev];
 
   installPhase = ''
     install -Dm555 -t $out/bin https_dns_proxy
@@ -28,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "DNS to DNS over HTTPS (DoH) proxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libvdpau }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libvdpau,
+}:
 stdenv.mkDerivation rec {
   pname = "vdpauinfo";
   version = "1.3";
@@ -9,14 +14,14 @@ stdenv.mkDerivation rec {
     sha256 = "0s6jdadnycyd1agsnfx7hrf17hmipasx1fpmppd4m1z6i9sp1i6g";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libvdpau ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libvdpau];
 
   meta = with lib; {
     homepage = "https://people.freedesktop.org/~aplattner/vdpau/";
     description = "Tool to query the Video Decode and Presentation API for Unix (VDPAU) abilities of the system";
     license = licenses.mit; # expat version
     platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = [maintainers.vcunat];
   };
 }

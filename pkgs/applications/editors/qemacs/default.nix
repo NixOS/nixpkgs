@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, xlibsWrapper, libXv, libpng }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  xlibsWrapper,
+  libXv,
+  libpng,
+}:
 stdenv.mkDerivation rec {
   pname = "qemacs";
   version = "0.3.3";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "156z4wpj49i6j388yjird5qvrph7hz0grb4r44l4jf3q8imadyrg";
   };
 
-  buildInputs = [ xlibsWrapper libpng libXv ];
+  buildInputs = [xlibsWrapper libpng libXv];
 
   preInstall = ''
     mkdir -p $out/bin $out/man
@@ -19,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://bellard.org/qemacs/";
     description = "Very small but powerful UNIX editor";
     license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ iblech ];
+    maintainers = with maintainers; [iblech];
   };
 }

@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "tunctl";
   version = "1.5";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "aa2a6c4cc6bfacb11e0d9f62334a6638a0d435475c61230116f00b6af8b14fff";
   };
 
-  makeFlags = [ "tunctl" ];
+  makeFlags = ["tunctl"];
   installPhase = ''
     mkdir -p $out/bin
     cp tunctl $out/bin

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, async-timeout
-, pytz
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  async-timeout,
+  pytz,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "pymetno";
   version = "0.9.0";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "A library to communicate with the met.no API";
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     license = licenses.mit;
-    maintainers = with maintainers; [ flyfloh ];
+    maintainers = with maintainers; [flyfloh];
   };
 }

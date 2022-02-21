@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "sphinxcontrib-serializinghtml";
   version = "1.1.5";

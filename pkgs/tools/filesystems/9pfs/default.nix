@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fuse }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse,
+}:
 stdenv.mkDerivation {
   pname = "9pfs";
   version = "unstable-2015-09-18";
@@ -13,24 +17,23 @@ stdenv.mkDerivation {
 
   # Upstream development has stopped and is no longer accepting patches
   # https://github.com/mischief/9pfs/pull/3
-  patches = [ ./fix-darwin-build.patch ];
+  patches = [./fix-darwin-build.patch];
 
-  preConfigure =
-    ''
-      substituteInPlace Makefile --replace '-g bin' ""
-      installFlagsArray+=(BIN=$out/bin MAN=$out/share/man/man1)
-      mkdir -p $out/bin $out/share/man/man1
-    '';
+  preConfigure = ''
+    substituteInPlace Makefile --replace '-g bin' ""
+    installFlagsArray+=(BIN=$out/bin MAN=$out/share/man/man1)
+    mkdir -p $out/bin $out/share/man/man1
+  '';
 
-  buildInputs = [ fuse ];
+  buildInputs = [fuse];
 
   enableParallelBuilding = true;
 
   meta = {
     homepage = "https://github.com/mischief/9pfs";
     description = "FUSE-based client of the 9P network filesystem protocol";
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [lib.maintainers.eelco];
     platforms = lib.platforms.unix;
-    license = with lib.licenses; [ lpl-102 bsd2 ];
+    license = with lib.licenses; [lpl-102 bsd2];
   };
 }

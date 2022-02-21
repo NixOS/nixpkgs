@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytest
-, pytest-cov
-, pytestCheckHook
-, numpy
-, astropy
-, scipy
-, h5py
-, scikitimage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pytest,
+  pytest-cov,
+  pytestCheckHook,
+  numpy,
+  astropy,
+  scipy,
+  h5py,
+  scikitimage,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-astropy-header";
   version = "0.1.2";
@@ -21,7 +21,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1y87agr324p6x5gvhziymxjlw54pyn4gqnd49papbl941djpkp5g";
   };
-  patches = [ (fetchpatch {
+  patches = [
+    (fetchpatch {
       url = "https://github.com/astropy/pytest-astropy-header/pull/16.patch";
       sha256 = "11ln63zq0kgsdx1jw3prlzpcdbxmc99p9cwr18s0x6apy0k6df31";
     })
@@ -49,6 +50,6 @@ buildPythonPackage rec {
     description = "Plugin to add diagnostic information to the header of the test output";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

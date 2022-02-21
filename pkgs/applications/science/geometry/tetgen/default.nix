@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "tetgen";
   version = "1.6.0";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h7XmHr06Rx/E8s3XEkwrEd1mOfT+sflBpdL1EQ0Fzjk=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   installPhase = ''
     runHook preInstall

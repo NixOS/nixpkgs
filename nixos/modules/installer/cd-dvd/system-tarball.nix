@@ -1,18 +1,15 @@
 # This module creates a bootable ISO image containing the given NixOS
 # configuration.  The derivation for the ISO image will be placed in
 # config.system.build.tarball.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  versionFile = pkgs.writeText "nixos-label" config.system.nixos.label;
-
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  versionFile = pkgs.writeText "nixos-label" config.system.nixos.label;
+in {
   options = {
     tarball.contents = mkOption {
       example = literalExpression ''
@@ -34,14 +31,12 @@ in
         Nix store in the generated ISO image.
       '';
     };
-
   };
 
   config = {
-
     # In stage 1 of the boot, mount the CD/DVD as the root FS by label
     # so that we don't need to know its device.
-    fileSystems = { };
+    fileSystems = {};
 
     # boot.initrd.availableKernelModules = [ "mvsdio" "reiserfs" "ext3" "ext4" ];
 
@@ -49,22 +44,25 @@ in
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
-    tarball.storeContents =
-      [ { object = config.system.build.toplevel;
-          symlink = "/run/current-system";
-        }
-      ];
+    tarball.storeContents = [
+      {
+        object = config.system.build.toplevel;
+        symlink = "/run/current-system";
+      }
+    ];
 
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.
-    tarball.contents =
-      [ { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
-          target = "/boot/" + config.system.boot.loader.initrdFile;
-        }
-        { source = versionFile;
-          target = "/nixos-version.txt";
-        }
-      ];
+    tarball.contents = [
+      {
+        source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
+        target = "/boot/" + config.system.boot.loader.initrdFile;
+      }
+      {
+        source = versionFile;
+        target = "/nixos-version.txt";
+      }
+    ];
 
     # Create the tarball
     system.build.tarball = import ../../../lib/make-system-tarball.nix {
@@ -73,21 +71,18 @@ in
       inherit (config.tarball) contents storeContents;
     };
 
-    boot.postBootCommands =
-      ''
-        # After booting, register the contents of the Nix store on the
-        # CD in the Nix database in the tmpfs.
-        if [ -f /nix-path-registration ]; then
-          ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration &&
-          rm /nix-path-registration
-        fi
+    boot.postBootCommands = ''
+      # After booting, register the contents of the Nix store on the
+      # CD in the Nix database in the tmpfs.
+      if [ -f /nix-path-registration ]; then
+        ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration &&
+        rm /nix-path-registration
+      fi
 
-        # nixos-rebuild also requires a "system" profile and an
-        # /etc/NIXOS tag.
-        touch /etc/NIXOS
-        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-      '';
-
+      # nixos-rebuild also requires a "system" profile and an
+      # /etc/NIXOS tag.
+      touch /etc/NIXOS
+      ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+    '';
   };
-
 }

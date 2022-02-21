@@ -1,10 +1,10 @@
-{ runCommand, vega-lite }:
-
-let
+{
+  runCommand,
+  vega-lite,
+}: let
   inherit (vega-lite) packageName version;
 in
-
-runCommand "${packageName}-tests" { meta.timeout = 60; }
+  runCommand "${packageName}-tests" {meta.timeout = 60;}
   ''
     # get version of installed program and compare with package version
     claimed_version="$(${vega-lite}/bin/vl2vg --version)"

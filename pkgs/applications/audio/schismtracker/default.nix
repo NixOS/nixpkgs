@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, alsa-lib
-, python3
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  alsa-lib,
+  python3,
+  SDL,
 }:
-
 stdenv.mkDerivation rec {
   pname = "schismtracker";
   version = "20220125";
@@ -18,12 +18,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Hqbm5+YyCde/6QuyIy4NE/jG4xNDzeNjEefMr60GEZM=";
   };
 
-  configureFlags = [ "--enable-dependency-tracking" ]
+  configureFlags =
+    ["--enable-dependency-tracking"]
     ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ autoreconfHook python3 ];
+  nativeBuildInputs = [autoreconfHook python3];
 
-  buildInputs = [ SDL ] ++ lib.optional stdenv.isLinux alsa-lib;
+  buildInputs = [SDL] ++ lib.optional stdenv.isLinux alsa-lib;
 
   enableParallelBuilding = true;
 
@@ -32,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "http://schismtracker.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ftrvxmtrx ];
+    maintainers = with maintainers; [ftrvxmtrx];
   };
 }

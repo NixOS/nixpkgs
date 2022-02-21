@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchgit }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 stdenv.mkDerivation {
   pname = "loadwatch";
   version = "1.1-1-g6d2544c";
@@ -18,7 +21,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Run a program using only idle cycles";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ woffs ];
+    maintainers = with maintainers; [woffs];
     platforms = platforms.all;
   };
 }

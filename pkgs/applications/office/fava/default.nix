@@ -1,5 +1,7 @@
-{ lib, python3 }:
-
+{
+  lib,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
   version = "1.19";
@@ -9,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "def7c0210bf0ce8dfffdb46ce21b3efcf71eba5a4e903565258419e4c53c2d43";
   };
 
-  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
+  nativeBuildInputs = with python3.pkgs; [setuptools-scm];
 
   propagatedBuildInputs = with python3.pkgs; [
     Babel
@@ -44,6 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://beancount.github.io/fava";
     changelog = "https://beancount.github.io/fava/changelog.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

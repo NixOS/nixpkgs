@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, imlib2
-, libX11
-, libXext
-, ncurses
-, pkg-config
-, zlib
-, x11Support ? !stdenv.isDarwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  imlib2,
+  libX11,
+  libXext,
+  ncurses,
+  pkg-config,
+  zlib,
+  x11Support ? !stdenv.isDarwin,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libcaca";
   version = "0.99.beta20";
@@ -27,19 +27,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    ncurses
-    zlib
-    (imlib2.override { inherit x11Support; })
-  ] ++ lib.optionals x11Support [
-    libX11
-    libXext
-  ];
+  buildInputs =
+    [
+      ncurses
+      zlib
+      (imlib2.override {inherit x11Support;})
+    ]
+    ++ lib.optionals x11Support [
+      libX11
+      libXext
+    ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = ["bin" "dev" "out" "man"];
 
   configureFlags = [
-    (if x11Support then "--enable-x11" else "--disable-x11")
+    (if x11Support
+    then "--enable-x11"
+    else "--disable-x11")
   ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
@@ -69,7 +73,7 @@ stdenv.mkDerivation rec {
       Libcaca was written by Sam Hocevar and Jean-Yves Lamoureux.
     '';
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

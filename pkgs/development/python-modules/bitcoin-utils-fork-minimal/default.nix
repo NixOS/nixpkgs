@@ -1,11 +1,11 @@
-{ lib
-, base58
-, buildPythonPackage
-, ecdsa
-, fetchPypi
-, sympy
+{
+  lib,
+  base58,
+  buildPythonPackage,
+  ecdsa,
+  fetchPypi,
+  sympy,
 }:
-
 buildPythonPackage rec {
   pname = "bitcoin-utils-fork-minimal";
   version = "0.4.11.4";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Bitcoin utility functions";
     homepage = "https://github.com/doersf/python-bitcoin-utils";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

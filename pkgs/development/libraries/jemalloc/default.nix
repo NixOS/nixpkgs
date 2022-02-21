@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-# By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
-# then stops downstream builds (mariadb in particular) from detecting it. This
-# option should remove the prefix and give us a working jemalloc.
-# Causes segfaults with some software (ex. rustc), but defaults to true for backward
-# compatibility.
-, stripPrefix ? stdenv.hostPlatform.isDarwin
-, disableInitExecTls ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch
+  # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
+  # then stops downstream builds (mariadb in particular) from detecting it. This
+  # option should remove the prefix and give us a working jemalloc.
+  # Causes segfaults with some software (ex. rustc), but defaults to true for backward
+  # compatibility.
+  ,
+  stripPrefix ? stdenv.hostPlatform.isDarwin,
+  disableInitExecTls ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jemalloc";
   version = "5.2.1";
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   # see the comment on stripPrefix
-  configureFlags = []
+  configureFlags =
+    []
     ++ lib.optional stripPrefix "--with-jemalloc-prefix="
     ++ lib.optional disableInitExecTls "--disable-initial-exec-tls"
     # jemalloc is unable to correctly detect transparent hugepage support on
@@ -38,8 +40,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.isAarch32 && lib.versionOlder version "5") [
       "--disable-thp"
       "je_cv_thp=no"
-    ]
-  ;
+    ];
 
   doCheck = true;
 

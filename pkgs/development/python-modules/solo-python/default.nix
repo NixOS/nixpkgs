@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, click
-, cryptography
-, ecdsa
-, fido2
-, intelhex
-, pyserial
-, pyusb
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  click,
+  cryptography,
+  ecdsa,
+  fido2,
+  intelhex,
+  pyserial,
+  pyusb,
+  requests,
 }:
-
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "solo-python";
   version = "0.0.31";
   format = "flit";
@@ -56,7 +56,7 @@
   meta = with lib; {
     description = "Python tool and library for SoloKeys";
     homepage = "https://github.com/solokeys/solo-python";
-    maintainers = with maintainers; [ wucke13 ];
-    license = with licenses; [ asl20 mit ];
+    maintainers = with maintainers; [wucke13];
+    license = with licenses; [asl20 mit];
   };
 }

@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "planarity";
   version = "3.0.0.5";

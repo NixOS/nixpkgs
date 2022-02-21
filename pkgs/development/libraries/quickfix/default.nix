@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  automake,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "quickfix";
   version = "1.15.1";
@@ -7,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev =  "v${version}";
+    rev = "v${version}";
     sha256 = "1fgpwgvyw992mbiawgza34427aakn5zrik3sjld0i924a9d17qwg";
   };
 
@@ -21,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   # autoreconfHook does not work
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [autoconf automake libtool];
 
   enableParallelBuilding = true;
 
@@ -38,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "QuickFIX C++ Fix Engine Library";
     homepage = "http://www.quickfixengine.org";
     license = licenses.free; # similar to BSD 4-clause
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

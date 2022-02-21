@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "aiotractive";
   version = "0.5.3";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aiotractive" ];
+  pythonImportsCheck = ["aiotractive"];
 
   meta = with lib; {
     description = "Python client for the Tractive REST API";
     homepage = "https://github.com/zhulik/aiotractive";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   version = "1.1.0";
   pname = "tempo";
@@ -20,7 +23,7 @@ buildGoModule rec {
     description = "A high volume, minimal dependency trace storage";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/tempo/";
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [willibutz];
     platforms = platforms.linux;
   };
 }

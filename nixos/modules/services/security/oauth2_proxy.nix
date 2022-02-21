@@ -1,9 +1,11 @@
 # NixOS module for oauth2_proxy.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.oauth2_proxy;
 
   # oauth2_proxy provides many options that are only relevant if you are using
@@ -16,75 +18,95 @@ let
       resource = cfg.azure.resource;
     };
 
-    github = cfg: { github = {
-      inherit (cfg.github) org team;
-    }; };
+    github = cfg: {
+      github = {
+        inherit (cfg.github) org team;
+      };
+    };
 
-    google = cfg: { google = with cfg.google; optionalAttrs (groups != []) {
-      admin-email = adminEmail;
-      service-account = serviceAccountJSON;
-      group = groups;
-    }; };
+    google = cfg: {
+      google = with cfg.google;
+        optionalAttrs (groups != []) {
+          admin-email = adminEmail;
+          service-account = serviceAccountJSON;
+          group = groups;
+        };
+    };
   };
 
   authenticatedEmailsFile = pkgs.writeText "authenticated-emails" cfg.email.addresses;
 
   getProviderOptions = cfg: provider: providerSpecificOptions.${provider} or (_: {}) cfg;
 
-  allConfig = with cfg; {
-    inherit (cfg) provider scope upstream;
-    approval-prompt = approvalPrompt;
-    basic-auth-password = basicAuthPassword;
-    client-id = clientID;
-    client-secret = clientSecret;
-    custom-templates-dir = customTemplatesDir;
-    email-domain = email.domains;
-    http-address = httpAddress;
-    login-url = loginURL;
-    pass-access-token = passAccessToken;
-    pass-basic-auth = passBasicAuth;
-    pass-host-header = passHostHeader;
-    reverse-proxy = reverseProxy;
-    proxy-prefix = proxyPrefix;
-    profile-url = profileURL;
-    redeem-url = redeemURL;
-    redirect-url = redirectURL;
-    request-logging = requestLogging;
-    skip-auth-regex = skipAuthRegexes;
-    signature-key = signatureKey;
-    validate-url = validateURL;
-    htpasswd-file = htpasswd.file;
-    cookie = {
-      inherit (cookie) domain secure expire name secret refresh;
-      httponly = cookie.httpOnly;
-    };
-    set-xauthrequest = setXauthrequest;
-  } // lib.optionalAttrs (cfg.email.addresses != null) {
-    authenticated-emails-file = authenticatedEmailsFile;
-  } // lib.optionalAttrs (cfg.passBasicAuth) {
-    basic-auth-password = cfg.basicAuthPassword;
-  } // lib.optionalAttrs (cfg.htpasswd.file != null) {
-    display-htpasswd-file = cfg.htpasswd.displayForm;
-  } // lib.optionalAttrs tls.enable {
-    tls-cert-file = tls.certificate;
-    tls-key-file = tls.key;
-    https-address = tls.httpsAddress;
-  } // (getProviderOptions cfg cfg.provider) // cfg.extraConfig;
+  allConfig = with cfg;
+    {
+      inherit (cfg) provider scope upstream;
+      approval-prompt = approvalPrompt;
+      basic-auth-password = basicAuthPassword;
+      client-id = clientID;
+      client-secret = clientSecret;
+      custom-templates-dir = customTemplatesDir;
+      email-domain = email.domains;
+      http-address = httpAddress;
+      login-url = loginURL;
+      pass-access-token = passAccessToken;
+      pass-basic-auth = passBasicAuth;
+      pass-host-header = passHostHeader;
+      reverse-proxy = reverseProxy;
+      proxy-prefix = proxyPrefix;
+      profile-url = profileURL;
+      redeem-url = redeemURL;
+      redirect-url = redirectURL;
+      request-logging = requestLogging;
+      skip-auth-regex = skipAuthRegexes;
+      signature-key = signatureKey;
+      validate-url = validateURL;
+      htpasswd-file = htpasswd.file;
+      cookie = {
+        inherit (cookie) domain secure expire name secret refresh;
+        httponly = cookie.httpOnly;
+      };
+      set-xauthrequest = setXauthrequest;
+    }
+    // lib.optionalAttrs (cfg.email.addresses != null) {
+      authenticated-emails-file = authenticatedEmailsFile;
+    }
+    // lib.optionalAttrs (cfg.passBasicAuth) {
+      basic-auth-password = cfg.basicAuthPassword;
+    }
+    // lib.optionalAttrs (cfg.htpasswd.file != null) {
+      display-htpasswd-file = cfg.htpasswd.displayForm;
+    }
+    // lib.optionalAttrs tls.enable {
+      tls-cert-file = tls.certificate;
+      tls-key-file = tls.key;
+      https-address = tls.httpsAddress;
+    }
+    // (getProviderOptions cfg cfg.provider)
+    // cfg.extraConfig;
 
   mapConfig = key: attr:
-  if attr != null && attr != [] then (
-    if isDerivation attr then mapConfig key (toString attr) else
-    if (builtins.typeOf attr) == "set" then concatStringsSep " "
-      (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr) else
-    if (builtins.typeOf attr) == "list" then concatMapStringsSep " " (mapConfig key) attr else
-    if (builtins.typeOf attr) == "bool" then "--${key}=${boolToString attr}" else
-    if (builtins.typeOf attr) == "string" then "--${key}='${attr}'" else
-    "--${key}=${toString attr}")
+    if attr != null && attr != []
+    then
+      (
+        if isDerivation attr
+        then mapConfig key (toString attr)
+        else if (builtins.typeOf attr) == "set"
+        then
+          concatStringsSep " "
+          (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr)
+        else if (builtins.typeOf attr) == "list"
+        then concatMapStringsSep " " (mapConfig key) attr
+        else if (builtins.typeOf attr) == "bool"
+        then "--${key}=${boolToString attr}"
+        else if (builtins.typeOf attr) == "string"
+        then "--${key}='${attr}'"
+        else "--${key}=${toString attr}"
+      )
     else "";
 
   configString = concatStringsSep " " (mapAttrsToList mapConfig allConfig);
-in
-{
+in {
   options.services.oauth2_proxy = {
     enable = mkEnableOption "oauth2_proxy";
 
@@ -145,12 +167,12 @@ in
     };
 
     skipAuthRegexes = mkOption {
-     type = types.listOf types.str;
-     default = [];
-     description = ''
-       Skip authentication for requests matching any of these regular
-       expressions.
-     '';
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        Skip authentication for requests matching any of these regular
+        expressions.
+      '';
     };
 
     # XXX: Not clear whether these two options are mutually exclusive or not.
@@ -287,7 +309,6 @@ in
         '';
       };
     };
-
 
     ####################################################
     # UPSTREAM Configuration
@@ -555,11 +576,9 @@ in
       '';
       example = "/run/keys/oauth2_proxy";
     };
-
   };
 
   config = mkIf cfg.enable {
-
     services.oauth2_proxy = mkIf (cfg.keyFile != null) {
       clientID = mkDefault null;
       clientSecret = mkDefault null;
@@ -573,9 +592,9 @@ in
 
     systemd.services.oauth2_proxy = {
       description = "OAuth2 Proxy";
-      path = [ cfg.package ];
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      path = [cfg.package];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         User = "oauth2_proxy";
@@ -584,6 +603,5 @@ in
         EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
       };
     };
-
   };
 }

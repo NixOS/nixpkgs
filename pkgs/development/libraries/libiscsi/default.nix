@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "libiscsi";
   version = "1.19.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ajrkkg5awmi8m4b3mha7h07ylg18k252qprvk1sgq0qbyd66zy7";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   # This problem is gone on libiscsi master.
   NIX_CFLAGS_COMPILE =
@@ -22,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sahlberg/libiscsi";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ misuzu ];
+    maintainers = with maintainers; [misuzu];
   };
 }

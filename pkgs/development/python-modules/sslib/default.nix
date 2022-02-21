@@ -1,5 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "sslib";
   version = "0.2.0";
@@ -17,6 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jqueiroz/python-sslib";
     description = "A Python3 library for sharing secrets";
     license = licenses.mit;
-    maintainers = with maintainers; [ jqueiroz ];
+    maintainers = with maintainers; [jqueiroz];
   };
 }

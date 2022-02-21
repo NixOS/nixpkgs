@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, bzip2
-, doxygen
-, gettext
-, imagemagick
-, libgsf
-, xmlto
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  bzip2,
+  doxygen,
+  gettext,
+  imagemagick,
+  libgsf,
+  xmlto,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libpst";
   version = "0.6.76";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.five-ten-sg.com/libpst/";
     description = "A library to read PST (MS Outlook Personal Folders) files";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.tohl ];
+    maintainers = [maintainers.tohl];
     platforms = platforms.unix;
   };
 }

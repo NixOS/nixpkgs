@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, cairomm, cmake, lv2, libpthreadstubs, libXdmcp, libXft, ntk, pcre, fftwFloat, zita-resampler }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cairomm,
+  cmake,
+  lv2,
+  libpthreadstubs,
+  libXdmcp,
+  libXft,
+  ntk,
+  pcre,
+  fftwFloat,
+  zita-resampler,
+}:
 stdenv.mkDerivation rec {
   pname = "infamousPlugins";
   version = "0.3.0";
@@ -17,8 +32,8 @@ stdenv.mkDerivation rec {
       sha256 = "08xwh6px13y1gykaw103nhvjms7vgbgkcm0avh9f5d2d7aadq0l2";
     })
   ];
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ cairomm lv2 libpthreadstubs libXdmcp libXft ntk pcre fftwFloat zita-resampler ];
+  nativeBuildInputs = [pkg-config cmake];
+  buildInputs = [cairomm lv2 libpthreadstubs libXdmcp libXft ntk pcre fftwFloat zita-resampler];
 
   meta = with lib; {
     homepage = "https://ssj71.github.io/infamousPlugins";
@@ -37,7 +52,7 @@ stdenv.mkDerivation rec {
         * lushlife - a simulated double tracking plugin capable of everything from a thin beatle effect to thick lush choruses to weird outlandish effects
     '';
     license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
   };
 }

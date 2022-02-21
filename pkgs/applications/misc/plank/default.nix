@@ -1,30 +1,31 @@
-{ lib, stdenv
-, fetchurl
-, vala
-, atk
-, cairo
-, dconf
-, glib
-, gnome
-, gtk3
-, libwnck
-, libX11
-, libXfixes
-, libXi
-, pango
-, gettext
-, pkg-config
-, libxml2
-, bamf
-, gdk-pixbuf
-, libdbusmenu-gtk3
-, file
-, gnome-menus
-, libgee
-, wrapGAppsHook
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  vala,
+  atk,
+  cairo,
+  dconf,
+  glib,
+  gnome,
+  gtk3,
+  libwnck,
+  libX11,
+  libXfixes,
+  libXi,
+  pango,
+  gettext,
+  pkg-config,
+  libxml2,
+  bamf,
+  gdk-pixbuf,
+  libdbusmenu-gtk3,
+  file,
+  gnome-menus,
+  libgee,
+  wrapGAppsHook,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "plank";
   version = "0.11.89";
@@ -83,6 +84,6 @@ stdenv.mkDerivation rec {
     homepage = "https://launchpad.net/plank";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [davidak] ++ teams.pantheon.members;
   };
 }

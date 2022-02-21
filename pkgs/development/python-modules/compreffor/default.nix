@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, fonttools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  fonttools,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "compreffor";
   version = "0.5.1.post1";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "CFF table subroutinizer for FontTools";
     homepage = "https://github.com/googlefonts/compreffor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

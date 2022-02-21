@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "editables";
   version = "0.2";
@@ -20,11 +20,11 @@ buildPythonPackage rec {
   # Tests not included in archive.
   doCheck = false;
 
-  pythonImportsCheck = [ "editables" ];
+  pythonImportsCheck = ["editables"];
 
   meta = with lib; {
     description = "Editable installations";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     homepage = "https://github.com/pfmoore/editables";
     license = licenses.mit;
   };

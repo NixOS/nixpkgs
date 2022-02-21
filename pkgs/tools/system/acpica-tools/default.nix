@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, bison, flex }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
   version = "20211217";
@@ -24,18 +29,18 @@ stdenv.mkDerivation rec {
     "iasl"
   ];
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [bison flex];
 
   # We can handle stripping ourselves.
   INSTALLFLAGS = "-m 555";
 
-  installFlags = [ "PREFIX=${placeholder "out"}" ];
+  installFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     description = "ACPICA Tools";
     homepage = "https://www.acpica.org/";
-    license = with licenses; [ iasl gpl2Only bsd3 ];
+    license = with licenses; [iasl gpl2Only bsd3];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tadfisher ];
+    maintainers = with maintainers; [tadfisher];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "esptool-ck";
   version = "0.4.13";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cb81b30a71r7i0gmkh2qagfx9lhq0myq5i37fk881bq6g7i5n2k";
   };
 
-  makeFlags = [ "VERSION=${version}" ];
+  makeFlags = ["VERSION=${version}"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "ESP8266/ESP32 build helper tool";
     homepage = "https://github.com/igrr/esptool-ck";
     license = licenses.gpl2;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = [maintainers.dezgeg];
     platforms = platforms.linux;
   };
 }

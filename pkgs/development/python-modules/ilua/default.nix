@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyter_console
-, jupyter_core
-, pygments
-, termcolor
-, txzmq
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyter_console,
+  jupyter_core,
+  pygments,
+  termcolor,
+  txzmq,
 }:
-
 buildPythonPackage rec {
   pname = "ilua";
   version = "0.2.1";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
   # No tests found
   doCheck = false;
 
-  pythonImportsCheck = [ "ilua" ];
+  pythonImportsCheck = ["ilua"];
 
   meta = with lib; {
     description = "Portable Lua kernel for Jupyter";
     homepage = "https://github.com/guysv/ilua";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
   };
 }

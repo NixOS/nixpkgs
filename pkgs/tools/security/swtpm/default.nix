@@ -1,19 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libtasn1, openssl, fuse, glib, libseccomp, json-glib
-, libtpms
-, unixtools, expect, socat
-, gnutls
-, perl
-
-# Tests
-, python3, which
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libtasn1,
+  openssl,
+  fuse,
+  glib,
+  libseccomp,
+  json-glib,
+  libtpms,
+  unixtools,
+  expect,
+  socat,
+  gnutls,
+  perl
+  # Tests
+  ,
+  python3,
+  which,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "swtpm";
   version = "0.7.1";
@@ -26,19 +34,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config unixtools.netstat expect socat
+    pkg-config
+    unixtools.netstat
+    expect
+    socat
     perl # for pod2man
     autoreconfHook
   ];
 
   checkInputs = [
-    python3 which
+    python3
+    which
   ];
 
   buildInputs = [
     libtpms
-    openssl libtasn1 libseccomp
-    fuse glib json-glib
+    openssl
+    libtasn1
+    libseccomp
+    fuse
+    glib
+    json-glib
     gnutls
   ];
 
@@ -64,14 +80,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelBuilding = true;
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  passthru.tests = { inherit (nixosTests) systemd-cryptenroll; };
+  passthru.tests = {inherit (nixosTests) systemd-cryptenroll;};
 
   meta = with lib; {
     description = "Libtpms-based TPM emulator";
     homepage = "https://github.com/stefanberger/swtpm";
     license = licenses.bsd3;
-    maintainers = [ maintainers.baloo ];
+    maintainers = [maintainers.baloo];
   };
 }

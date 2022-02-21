@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.openarena;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.openarena;
+in {
   options = {
     services.openarena = {
       enable = mkEnableOption "OpenArena";
@@ -32,13 +33,13 @@ in
 
   config = mkIf cfg.enable {
     networking.firewall = mkIf cfg.openPorts {
-      allowedUDPPorts = [ 27960 ];
+      allowedUDPPorts = [27960];
     };
 
     systemd.services.openarena = {
       description = "OpenArena";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         DynamicUser = true;

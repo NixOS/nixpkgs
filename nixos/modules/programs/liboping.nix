@@ -1,15 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.liboping;
 in {
   options.programs.liboping = {
     enable = mkEnableOption "liboping";
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ liboping ];
+    environment.systemPackages = with pkgs; [liboping];
     security.wrappers = mkMerge (map (
       exec: {
         "${exec}" = {
@@ -19,6 +21,6 @@ in {
           source = "${pkgs.liboping}/bin/${exec}";
         };
       }
-    ) [ "oping" "noping" ]);
+    ) ["oping" "noping"]);
   };
 }

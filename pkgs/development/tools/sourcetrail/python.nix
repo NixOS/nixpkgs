@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, wrapPython, python, jedi, parso, cmake, swig }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapPython,
+  python,
+  jedi,
+  parso,
+  cmake,
+  swig,
+}:
 stdenv.mkDerivation rec {
   pname = "SourcetrailPythonIndexer";
   version = "v1_db25_p5";
@@ -12,9 +21,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ wrapPython cmake swig ];
-  buildInputs = [ python ];
-  pythonPath = [ jedi parso ];
+  nativeBuildInputs = [wrapPython cmake swig];
+  buildInputs = [python];
+  pythonPath = [jedi parso];
 
   dontUseCmakeConfigure = true;
   cmakeFlags = [
@@ -22,18 +31,20 @@ stdenv.mkDerivation rec {
     "-DPYTHON_VERSION=${lib.versions.majorMinor python.version}"
   ];
 
-  buildPhase = ''
-    pushd SourcetrailDB
-    cmake -Bbuild $cmakeFlags .
-    pushd build
-    make -j $NIX_BUILD_CORES
-    popd
-    popd
-  '' + lib.optionalString stdenv.isDarwin ''
-    pushd SourcetrailDB/build/bindings_python
-    cp _sourcetraildb.dylib _sourcetraildb.so
-    popd
-  '';
+  buildPhase =
+    ''
+      pushd SourcetrailDB
+      cmake -Bbuild $cmakeFlags .
+      pushd build
+      make -j $NIX_BUILD_CORES
+      popd
+      popd
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      pushd SourcetrailDB/build/bindings_python
+      cp _sourcetraildb.dylib _sourcetraildb.so
+      popd
+    '';
 
   checkPhase = ''
     buildPythonPath "$pythonPath"

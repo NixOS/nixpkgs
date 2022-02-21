@@ -1,32 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, vala
-, gettext
-, pkg-config
-, gtk3
-, glib
-, json-glib
-, wrapGAppsHook
-, libpeas
-, bash
-, gobject-introspection
-, libsoup
-, gtksourceview4
-, gsettings-desktop-schemas
-, adwaita-icon-theme
-, gnome
-, gspell
-, shared-mime-info
-, libgee
-, libgit2-glib
-, libsecret
-, meson
-, ninja
-, python3
-, libdazzle
+{
+  lib,
+  stdenv,
+  fetchurl,
+  vala,
+  gettext,
+  pkg-config,
+  gtk3,
+  glib,
+  json-glib,
+  wrapGAppsHook,
+  libpeas,
+  bash,
+  gobject-introspection,
+  libsoup,
+  gtksourceview4,
+  gsettings-desktop-schemas,
+  adwaita-icon-theme,
+  gnome,
+  gspell,
+  shared-mime-info,
+  libgee,
+  libgit2-glib,
+  libsecret,
+  meson,
+  ninja,
+  python3,
+  libdazzle,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gitg";
   version = "41";
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gitg";
     description = "GNOME GUI client to view git repositories";
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

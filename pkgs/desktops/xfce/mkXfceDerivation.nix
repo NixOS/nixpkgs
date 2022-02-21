@@ -1,18 +1,24 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook }:
-
-{ category
-, pname
-, version
-, attrPath ? "xfce.${pname}"
-, rev-prefix ? "${pname}-"
-, rev ? "${rev-prefix}${version}"
-, sha256
-, odd-unstable ? true
-, patchlevel-unstable ? true
-, ...
-} @ args:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  xfce4-dev-tools,
+  hicolor-icon-theme,
+  xfce,
+  wrapGAppsHook,
+}: {
+  category,
+  pname,
+  version,
+  attrPath ? "xfce.${pname}",
+  rev-prefix ? "${pname}-",
+  rev ? "${rev-prefix}${version}",
+  sha256,
+  odd-unstable ? true,
+  patchlevel-unstable ? true,
+  ...
+} @ args: let
   inherit (builtins) filter getAttr head isList;
   inherit (lib) attrNames concatLists recursiveUpdate zipAttrsWithNames;
 
@@ -25,9 +31,9 @@ let
   template = rec {
     inherit pname version;
 
-    nativeBuildInputs = [ pkg-config xfce4-dev-tools wrapGAppsHook ];
-    buildInputs = [ hicolor-icon-theme ];
-    configureFlags = [ "--enable-maintainer-mode" ];
+    nativeBuildInputs = [pkg-config xfce4-dev-tools wrapGAppsHook];
+    buildInputs = [hicolor-icon-theme];
+    configureFlags = ["--enable-maintainer-mode"];
 
     src = fetchFromGitLab {
       domain = "gitlab.xfce.org";
@@ -37,7 +43,7 @@ let
     };
 
     enableParallelBuilding = true;
-    outputs = [ "out" "dev" ];
+    outputs = ["out" "dev"];
 
     pos = builtins.unsafeGetAttrPos "pname" args;
 
@@ -53,8 +59,8 @@ let
     };
   };
 
-  publicArgs = removeAttrs args [ "category" "pname" "sha256" ];
+  publicArgs = removeAttrs args ["category" "pname" "sha256"];
 in
-
-stdenv.mkDerivation (recursiveUpdate template publicArgs // concatAttrLists [ template args ])
+  stdenv.mkDerivation (recursiveUpdate template publicArgs // concatAttrLists [template args])
 # TODO [ AndersonTorres ]: verify if it allows using hash attribute as an option to sha256
+

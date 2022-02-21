@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, buildPackages
-, cmake
-, openexr
+{
+  stdenv,
+  lib,
+  buildPackages,
+  cmake,
+  openexr,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ilmbase";
   version = lib.getVersion openexr;
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
   # the ilmbase package into openexr in the future.
   inherit (openexr) src patches;
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ cmake ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [cmake];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
   # fails 1 out of 1 tests with
   # "lt-ImathTest: testBoxAlgo.cpp:892: void {anonymous}::boxMatrixTransform(): Assertion `b21 == b2' failed"

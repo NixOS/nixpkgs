@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, python2, xorg, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python2,
+  xorg,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "disper";
   version = "0.3.1.1";
@@ -11,19 +17,19 @@ stdenv.mkDerivation rec {
     sha256 = "1kl4py26n95q0690npy5mc95cv1cyfvh6kxn8rvk62gb8scwg9zn";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   strictDeps = true;
 
-  buildInputs = [ python2 ];
+  buildInputs = [python2];
 
   preConfigure = ''
     export makeFlags="PREFIX=$out"
   '';
 
   postInstall = ''
-      wrapProgram $out/bin/disper \
-        --prefix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath [ xorg.libXrandr xorg.libX11 ]}"
+    wrapProgram $out/bin/disper \
+      --prefix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath [xorg.libXrandr xorg.libX11]}"
   '';
 
   meta = {
@@ -32,5 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
   };
-
 }

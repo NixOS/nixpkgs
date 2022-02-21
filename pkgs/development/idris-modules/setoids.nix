@@ -1,13 +1,14 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "setoids";
   version = "2018-06-18";
 
-  idrisDeps = [ contrib ];
+  idrisDeps = [contrib];
 
   src = fetchFromGitHub {
     owner = "danilkolikov";
@@ -19,6 +20,6 @@ build-idris-package  {
   meta = {
     description = "Idris proofs for extensional equalities";
     homepage = "https://github.com/danilkolikov/setoids";
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

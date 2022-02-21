@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, jax
-, jaxlib
-, lib
-, poetry-core
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  lib,
+  poetry-core,
 }:
-
 buildPythonPackage rec {
   pname = "treeo";
   version = "0.4.0";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     jax
   ];
 
-  checkInputs = [ jaxlib ];
+  checkInputs = [jaxlib];
   pythonImportsCheck = [
     "treeo"
   ];
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "A small library for creating and manipulating custom JAX Pytree classes.";
     homepage = "https://github.com/cgarciae/treeo";
     license = licenses.mit;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchurl
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
 }:
-
 buildPythonPackage {
   pname = "pynac";
   version = "0.2";
@@ -17,5 +17,4 @@ buildPythonPackage {
     description = "A Python wrapper around the Dynac charged particle simulator";
     license = licenses.gpl3;
   };
-
 }

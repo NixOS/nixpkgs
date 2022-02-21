@@ -1,16 +1,16 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, cppunit
-, swig
-, boost
-, log4cpp
-, python
-, libsodium
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cppunit,
+  swig,
+  boost,
+  log4cpp,
+  python,
+  libsodium,
 }:
-
 mkDerivation {
   pname = "gr-nacl";
   version = "2017-04-10";
@@ -41,6 +41,6 @@ mkDerivation {
     homepage = "https://github.com/stwunsch/gr-nacl";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ mog ];
+    maintainers = with maintainers; [mog];
   };
 }

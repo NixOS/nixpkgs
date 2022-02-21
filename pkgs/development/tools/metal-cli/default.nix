@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "metal-cli";
   version = "0.7.3";
@@ -23,6 +26,6 @@ buildGoModule rec {
     description = "Official Equinix Metal CLI";
     homepage = "https://github.com/equinix/metal-cli/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne nshalman ];
+    maintainers = with maintainers; [Br1ght0ne nshalman];
   };
 }

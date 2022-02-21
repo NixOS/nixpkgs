@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchgit, libmowgli, pkg-config, git, gettext, pcre, libidn, cracklib, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libmowgli,
+  pkg-config,
+  git,
+  gettext,
+  pcre,
+  libidn,
+  cracklib,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "atheme";
   version = "7.2.12";
@@ -11,8 +22,8 @@ stdenv.mkDerivation rec {
     leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ pkg-config git gettext ];
-  buildInputs = [ libmowgli pcre libidn cracklib openssl ];
+  nativeBuildInputs = [pkg-config git gettext];
+  buildInputs = [libmowgli pcre libidn cracklib openssl];
 
   configureFlags = [
     "--with-pcre"
@@ -28,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://atheme.github.io/";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ leo60228 ];
+    maintainers = with maintainers; [leo60228];
   };
 }

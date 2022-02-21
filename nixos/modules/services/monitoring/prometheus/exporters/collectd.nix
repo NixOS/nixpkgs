@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.collectd;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.collectd;
+in {
   port = 9103;
   extraOpts = {
     collectdBinary = {
@@ -28,7 +29,7 @@ in
         default = "0.0.0.0";
         description = ''
           Address to listen on for binary network packets.
-          '';
+        '';
       };
 
       securityLevel = mkOption {
@@ -41,7 +42,7 @@ in
     };
 
     logFormat = mkOption {
-      type = types.enum [ "logfmt" "json" ];
+      type = types.enum ["logfmt" "json"];
       default = "logfmt";
       example = "json";
       description = ''
@@ -58,10 +59,14 @@ in
     };
   };
   serviceOpts = let
-    collectSettingsArgs = if (cfg.collectdBinary.enable) then ''
-      --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
-      --collectd.security-level ${cfg.collectdBinary.securityLevel} \
-    '' else "";
+    collectSettingsArgs =
+      if (cfg.collectdBinary.enable)
+      then
+        ''
+          --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
+          --collectd.security-level ${cfg.collectdBinary.securityLevel} \
+        ''
+      else "";
   in {
     serviceConfig = {
       ExecStart = ''

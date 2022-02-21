@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nclib
-, netaddr
-, netifaces
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nclib,
+  netaddr,
+  netifaces,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "niko-home-control";
   version = "0.2.2";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for Niko Home Control";
     homepage = "https://github.com/NoUseFreak/niko-home-control";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

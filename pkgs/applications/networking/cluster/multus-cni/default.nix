@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "multus-cni";
   version = "3.8";
@@ -31,7 +34,7 @@ buildGoModule rec {
     homepage = "https://github.com/k8snetworkplumbingwg/multus-cni";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ onixie ];
+    maintainers = with maintainers; [onixie];
     mainProgram = "multus";
   };
 }

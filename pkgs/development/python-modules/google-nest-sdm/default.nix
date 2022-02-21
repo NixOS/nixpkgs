@@ -1,19 +1,19 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, coreutils
-, fetchFromGitHub
-, google-auth
-, google-auth-oauthlib
-, google-cloud-pubsub
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests_oauthlib
+{
+  lib,
+  aiohttp,
+  asynctest,
+  buildPythonPackage,
+  coreutils,
+  fetchFromGitHub,
+  google-auth,
+  google-auth-oauthlib,
+  google-cloud-pubsub,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests_oauthlib,
 }:
-
 buildPythonPackage rec {
   pname = "google-nest-sdm";
   version = "1.7.1";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Module for Google Nest Device Access using the Smart Device Management API";
     homepage = "https://github.com/allenporter/python-google-nest-sdm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

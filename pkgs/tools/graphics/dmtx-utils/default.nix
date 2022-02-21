@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libdmtx
-, imagemagick
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libdmtx,
+  imagemagick,
+  Foundation,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dmtx-utils";
   version = "0.7.6";
@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "06m3qncqdlcnmw83n95yrx2alaq6bld320ax26z4ndnla41yk0p4";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [ libdmtx imagemagick ]
+  buildInputs =
+    [libdmtx imagemagick]
     ++ lib.optional stdenv.isDarwin Foundation;
 
   meta = {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dmtx/dmtx-utils";
     changelog = "https://github.com/dmtx/dmtx-utils/blob/v${version}/ChangeLog";
     license = lib.licenses.lgpl2;
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL
-, curl
-, openssl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  curl,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tinyemu";
   version = "2019-12-21";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  makeFlags = [ "DESTDIR=$(out)" "bindir=/bin" ];
+  makeFlags = ["DESTDIR=$(out)" "bindir=/bin"];
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       TinyEMU is a system emulator for the RISC-V and x86 architectures. Its
       purpose is to be small and simple while being complete.
     '';
-    license = with licenses; [ mit bsd2 ];
-    maintainers = with maintainers; [ jhhuh AndersonTorres ];
+    license = with licenses; [mit bsd2];
+    maintainers = with maintainers; [jhhuh AndersonTorres];
     platforms = platforms.linux;
   };
 }

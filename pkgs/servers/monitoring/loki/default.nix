@@ -1,12 +1,12 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, nixosTests
-, systemd
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  nixosTests,
+  systemd,
 }:
-
 buildGoModule rec {
   version = "2.4.2";
   pname = "grafana-loki";
@@ -28,17 +28,19 @@ buildGoModule rec {
     "cmd/logcli"
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = lib.optionals stdenv.isLinux [systemd.dev];
 
   preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
-  passthru.tests = { inherit (nixosTests) loki; };
+  passthru.tests = {inherit (nixosTests) loki;};
 
-  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+  ldflags = let
+    t = "github.com/grafana/loki/pkg/util/build";
+  in [
     "-s"
     "-w"
     "-X ${t}.Version=${version}"
@@ -52,9 +54,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Like Prometheus, but for logs";
-    license = with licenses; [ agpl3Only asl20 ];
+    license = with licenses; [agpl3Only asl20];
     homepage = "https://grafana.com/oss/loki/";
-    maintainers = with maintainers; [ willibutz globin mmahut ];
+    maintainers = with maintainers; [willibutz globin mmahut];
     platforms = platforms.unix;
   };
 }

@@ -1,8 +1,13 @@
-{ lib, buildDunePackage, fetchurl
-, ocaml
-, astring, ptime, rresult, qcheck
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml,
+  astring,
+  ptime,
+  rresult,
+  qcheck,
 }:
-
 buildDunePackage rec {
   pname = "syslog-message";
   version = "1.1.0";
@@ -31,6 +36,6 @@ buildDunePackage rec {
     description = "Syslog message parser";
     homepage = "https://github.com/verbosemode/syslog-message";
     license = licenses.bsd2;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

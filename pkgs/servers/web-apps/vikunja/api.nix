@@ -1,5 +1,11 @@
-{ lib, buildGoModule, fetchFromGitea, mage, writeShellScriptBin, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  mage,
+  writeShellScriptBin,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "vikunja-api";
   version = "0.18.1";
@@ -12,17 +18,16 @@ buildGoModule rec {
     sha256 = "sha256-ngdtK8e4mLpbuY9OP1aHk99qPX/cKwnyhb/3ImTwF6M=";
   };
 
-  nativeBuildInputs =
-      let
-        fakeGit = writeShellScriptBin "git" ''
-          if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
-              echo "${version}"
-          else
-              >&2 echo "Unknown command: $@"
-              exit 1
-          fi
-        '';
-      in [ fakeGit mage ];
+  nativeBuildInputs = let
+    fakeGit = writeShellScriptBin "git" ''
+      if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
+          echo "${version}"
+      else
+          >&2 echo "Unknown command: $@"
+          exit 1
+      fi
+    '';
+  in [fakeGit mage];
 
   vendorSha256 = "sha256-0MP04KpWX17Fa1WhLwF4yzIsDqGAeTUXxv81B+BTNe4=";
 
@@ -51,7 +56,7 @@ buildGoModule rec {
     description = "API of the Vikunja to-do list app";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ em0lar ];
+    maintainers = with lib.maintainers; [em0lar];
     platforms = lib.platforms.all;
   };
 }

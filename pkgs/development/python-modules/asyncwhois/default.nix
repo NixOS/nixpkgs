@@ -1,14 +1,14 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, python-socks
-, pythonOlder
-, tldextract
-, whodap
+{
+  lib,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-socks,
+  pythonOlder,
+  tldextract,
+  whodap,
 }:
-
 buildPythonPackage rec {
   pname = "asyncwhois";
   version = "1.0.0";
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for retrieving WHOIS information";
     homepage = "https://github.com/pogzyb/asyncwhois";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

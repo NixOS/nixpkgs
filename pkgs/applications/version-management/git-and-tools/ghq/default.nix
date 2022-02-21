@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ghq";
   version = "1.2.1";
@@ -27,7 +30,7 @@ buildGoModule rec {
   meta = {
     description = "Remote repository management made easy";
     homepage = "https://github.com/x-motemen/ghq";
-    maintainers = with lib.maintainers; [ sigma ];
+    maintainers = with lib.maintainers; [sigma];
     license = lib.licenses.mit;
   };
 }

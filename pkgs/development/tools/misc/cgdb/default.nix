@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, ncurses, readline, flex, texinfo }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  readline,
+  flex,
+  texinfo,
+}:
 stdenv.mkDerivation rec {
   pname = "cgdb";
   version = "0.8.0";
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DTi1JNN3JXsQa61thW2K4zBBQOHuJAhTQ+bd8bZYEfE=";
   };
 
-  buildInputs = [ ncurses readline flex texinfo ];
+  buildInputs = [ncurses readline flex texinfo];
 
   meta = with lib; {
     description = "A curses interface to gdb";
@@ -21,6 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     platforms = with platforms; linux ++ cygwin;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, asyncio-dgram
-, buildPythonPackage
-, click
-, dnspython
-, fetchFromGitHub
-, mock
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  asyncio-dgram,
+  buildPythonPackage,
+  click,
+  dnspython,
+  fetchFromGitHub,
+  mock,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "mcstatus";
   version = "8.0.0";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";
     homepage = "https://github.com/Dinnerbone/mcstatus";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

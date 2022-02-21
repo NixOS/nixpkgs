@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bison, flex, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bison,
+  flex,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "kcc";
 
@@ -14,15 +21,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ bison cmake flex ];
+  nativeBuildInputs = [bison cmake flex];
 
-  buildInputs = [ boost ];
+  buildInputs = [boost];
 
   meta = with lib; {
-    homepage    = "https://knightos.org/";
+    homepage = "https://knightos.org/";
     description = "KnightOS C compiler";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [siraben];
+    platforms = platforms.unix;
   };
 }

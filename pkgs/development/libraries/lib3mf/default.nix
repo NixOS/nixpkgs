@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, automaticcomponenttoolkit
-, pkg-config, libzip, gtest, openssl, libuuid, libossp_uuid }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  automaticcomponenttoolkit,
+  pkg-config,
+  libzip,
+  gtest,
+  openssl,
+  libuuid,
+  libossp_uuid,
+}:
 stdenv.mkDerivation rec {
   pname = "lib3mf";
   version = "2.2.0";
@@ -12,9 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WMTTYYgpCIM86a6Jw8iah/YVXN9T5youzEieWL/d+Bc=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  nativeBuildInputs = [cmake ninja pkg-config];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "out"}/include/lib3mf"
@@ -24,9 +35,15 @@ stdenv.mkDerivation rec {
     "-DUSE_INCLUDED_SSL=OFF"
   ];
 
-  buildInputs = [
-    libzip gtest openssl
-  ] ++ (if stdenv.isDarwin then [ libossp_uuid ] else [ libuuid ]);
+  buildInputs =
+    [
+      libzip
+      gtest
+      openssl
+    ]
+    ++ (if stdenv.isDarwin
+    then [libossp_uuid]
+    else [libuuid]);
 
   postPatch = ''
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
@@ -42,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
     platforms = platforms.all;
   };
 }

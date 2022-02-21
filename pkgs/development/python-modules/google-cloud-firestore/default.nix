@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiounittest
-, google-api-core
-, google-cloud-testutils
-, google-cloud-core
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiounittest,
+  google-api-core,
+  google-cloud-testutils,
+  google-cloud-core,
+  mock,
+  proto-plus,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
   version = "2.3.4";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Google Cloud Firestore API client library";
     homepage = "https://github.com/googleapis/python-firestore";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

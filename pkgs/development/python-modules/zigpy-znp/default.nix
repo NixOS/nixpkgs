@@ -1,21 +1,21 @@
-{ lib
-, async-timeout
-, asynctest
-, buildPythonPackage
-, coloredlogs
-, fetchFromGitHub
-, jsonschema
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
-, zigpy
+{
+  lib,
+  async-timeout,
+  asynctest,
+  buildPythonPackage,
+  coloredlogs,
+  fetchFromGitHub,
+  jsonschema,
+  pyserial,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  voluptuous,
+  zigpy,
 }:
-
 buildPythonPackage rec {
   pname = "zigpy-znp";
   version = "0.7.0";
@@ -40,14 +40,16 @@ buildPythonPackage rec {
     zigpy
   ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-mock
-    pytest-timeout
-    pytestCheckHook
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-  ];
+  checkInputs =
+    [
+      pytest-asyncio
+      pytest-mock
+      pytest-timeout
+      pytestCheckHook
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      asynctest
+    ];
 
   pythonImportsCheck = [
     "zigpy_znp"
@@ -57,7 +59,7 @@ buildPythonPackage rec {
     description = "Python library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zigpy/zigpy-znp";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [mvnetbiz];
     platforms = platforms.linux;
   };
 }

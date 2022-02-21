@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyskyqhub";
   version = "0.1.4";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python module for accessing SkyQ Hub";
     homepage = "https://github.com/RogerSelwyn/skyq_hub";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

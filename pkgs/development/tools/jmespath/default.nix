@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "jmespath";
   version = "0.2.2";
@@ -16,7 +19,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "A JMESPath implementation in Go";
     homepage = "https://github.com/jmespath/go-jmespath";
-    maintainers = with maintainers; [ cransom ];
+    maintainers = with maintainers; [cransom];
     license = licenses.asl20;
   };
 }

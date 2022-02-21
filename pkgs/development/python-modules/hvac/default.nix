@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyhcl
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyhcl,
+  requests,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "hvac";
   version = "0.11.2";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Requires running a Vault server
   doCheck = false;
 
-  pythonImportsCheck = [ "hvac" ];
+  pythonImportsCheck = ["hvac"];
 
   meta = with lib; {
     description = "HashiCorp Vault API client";
     homepage = "https://github.com/ianunruh/hvac";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

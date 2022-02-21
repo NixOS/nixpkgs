@@ -1,7 +1,7 @@
-{  buildPythonPackage
-, stestr
+{
+  buildPythonPackage,
+  stestr,
 }:
-
 buildPythonPackage rec {
   pname = "stestr-tests";
   inherit (stestr) version;

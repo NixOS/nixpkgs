@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "as-tree";
   version = "0.12.0";
@@ -15,13 +18,13 @@ rustPlatform.buildRustPackage rec {
   # the upstream 0.12.0 release didn't update the Cargo.lock file properly
   # they have updated their release script, so this patch can be removed
   # when the next version is released.
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoPatches = [./cargo-lock.patch];
 
   meta = with lib; {
     description = "Print a list of paths as a tree of paths";
     homepage = "https://github.com/jez/as-tree";
-    license = with licenses; [ blueOak100 ];
-    maintainers = with maintainers; [ jshholland ];
+    license = with licenses; [blueOak100];
+    maintainers = with maintainers; [jshholland];
     platforms = platforms.all;
   };
 }

@@ -1,22 +1,44 @@
-{ lib, stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
-, xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup, libgee
-, librsvg, libsignal-protocol-c
-, libgcrypt
-, libepoxy
-, at-spi2-core
-, sqlite
-, dbus
-, gpgme
-, pcre
-, qrencode
-, icu
-, gspell
-, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good
- }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  vala,
+  cmake,
+  ninja,
+  wrapGAppsHook,
+  pkg-config,
+  gettext,
+  gobject-introspection,
+  gnome,
+  glib,
+  gdk-pixbuf,
+  gtk3,
+  glib-networking,
+  xorg,
+  libXdmcp,
+  libxkbcommon,
+  libnotify,
+  libsoup,
+  libgee,
+  librsvg,
+  libsignal-protocol-c,
+  libgcrypt,
+  libepoxy,
+  at-spi2-core,
+  sqlite,
+  dbus,
+  gpgme,
+  pcre,
+  qrencode,
+  icu,
+  gspell,
+  srtp,
+  libnice,
+  gnutls,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-good,
+}:
 stdenv.mkDerivation rec {
   pname = "dino";
   version = "0.3.0";
@@ -37,40 +59,42 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  buildInputs = [
-    qrencode
-    gobject-introspection
-    glib-networking
-    glib
-    libgee
-    gnome.adwaita-icon-theme
-    sqlite
-    gdk-pixbuf
-    gtk3
-    libnotify
-    gpgme
-    libgcrypt
-    libsoup
-    pcre
-    libepoxy
-    at-spi2-core
-    dbus
-    icu
-    libsignal-protocol-c
-    librsvg
-    gspell
-    srtp
-    libnice
-    gnutls
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    xorg.libxcb
-    xorg.libpthreadstubs
-    libXdmcp
-    libxkbcommon
-  ];
+  buildInputs =
+    [
+      qrencode
+      gobject-introspection
+      glib-networking
+      glib
+      libgee
+      gnome.adwaita-icon-theme
+      sqlite
+      gdk-pixbuf
+      gtk3
+      libnotify
+      gpgme
+      libgcrypt
+      libsoup
+      pcre
+      libepoxy
+      at-spi2-core
+      dbus
+      icu
+      libsignal-protocol-c
+      librsvg
+      gspell
+      srtp
+      libnice
+      gnutls
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      xorg.libxcb
+      xorg.libpthreadstubs
+      libXdmcp
+      libxkbcommon
+    ];
 
   # Dino looks for plugins with a .so filename extension, even on macOS where
   # .dylib is appropriate, and despite the fact that it builds said plugins with
@@ -92,6 +116,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dino/dino";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ qyliss tomfitzhenry ];
+    maintainers = with maintainers; [qyliss tomfitzhenry];
   };
 }

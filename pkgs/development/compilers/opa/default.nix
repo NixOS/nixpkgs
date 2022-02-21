@@ -1,9 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, which, perl, jdk
-, ocamlPackages, openssl
-, coreutils, zlib, ncurses, makeWrapper
-, gcc, binutils, gnumake, nodejs
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  perl,
+  jdk,
+  ocamlPackages,
+  openssl,
+  coreutils,
+  zlib,
+  ncurses,
+  makeWrapper,
+  gcc,
+  binutils,
+  gnumake,
+  nodejs,
 }:
-
 stdenv.mkDerivation rec {
   pname = "opa";
   version = "4310";
@@ -15,11 +27,11 @@ stdenv.mkDerivation rec {
     sha256 = "1qs91rq9xrafv2mf2v415k8lv91ab3ycz0xkpjh1mng5ca3pjlf3";
   };
 
-  patches = [ ./ocaml-4.03.patch ./ocaml-4.04.patch ];
+  patches = [./ocaml-4.03.patch ./ocaml-4.04.patch];
 
   # Paths so the opa compiler code generation will use the same programs as were
   # used to build opa.
-  codeGeneratorPaths = lib.makeBinPath [ ocamlPackages.ocaml gcc binutils gnumake nodejs ];
+  codeGeneratorPaths = lib.makeBinPath [ocamlPackages.ocaml gcc binutils gnumake nodejs];
 
   preConfigure = ''
     patchShebangs .
@@ -42,13 +54,33 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  configureFlags = [ "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind" ];
+  configureFlags = ["-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind"];
 
-  buildInputs = [ which perl jdk openssl coreutils zlib ncurses
-    makeWrapper gcc binutils gnumake nodejs
-  ] ++ (with ocamlPackages; [
-    ocaml findlib ssl cryptokit camlzip ulex ocamlgraph camlp4
-  ]);
+  buildInputs =
+    [
+      which
+      perl
+      jdk
+      openssl
+      coreutils
+      zlib
+      ncurses
+      makeWrapper
+      gcc
+      binutils
+      gnumake
+      nodejs
+    ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      ssl
+      cryptokit
+      camlzip
+      ulex
+      ocamlgraph
+      camlp4
+    ]);
 
   NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
@@ -72,7 +104,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://opalang.org/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.kkallio ];
+    maintainers = [lib.maintainers.kkallio];
     platforms = with lib.platforms; unix;
   };
 }

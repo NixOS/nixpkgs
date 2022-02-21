@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "tuyaha";
   version = "0.0.11";
@@ -15,16 +15,16 @@ buildPythonPackage rec {
     sha256 = "sha256-PTIw/2NRHHiqV6E5oj2pMeGq1uApevKfT2n5zV8AQmM=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "tuyaha" ];
+  pythonImportsCheck = ["tuyaha"];
 
   meta = with lib; {
     description = "Python module with the Tuya API";
     homepage = "https://github.com/PaulAnnekov/tuyaha";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

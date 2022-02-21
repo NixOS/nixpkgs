@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, cudatoolkit, ncurses, addOpenGLRunpath }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  cudatoolkit,
+  ncurses,
+  addOpenGLRunpath,
+}:
 stdenv.mkDerivation rec {
   pname = "nvtop";
   version = "1.2.2";
@@ -17,8 +24,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
   ];
 
-  nativeBuildInputs = [ cmake addOpenGLRunpath ];
-  buildInputs = [ ncurses cudatoolkit ];
+  nativeBuildInputs = [cmake addOpenGLRunpath];
+  buildInputs = [ncurses cudatoolkit];
 
   postFixup = ''
     addOpenGLRunpath $out/bin/nvtop
@@ -29,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Syllo/nvtop";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [willibutz];
   };
 }

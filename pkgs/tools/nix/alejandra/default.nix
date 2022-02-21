@@ -1,10 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, testVersion
-, alejandra
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testVersion,
+  alejandra,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "alejandra";
   version = "0.3.1";
@@ -19,13 +19,13 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-PIqdjtqbSVQoxLj5jGSbrzRQ3qddZvp1Y7tIuFs7UEg=";
 
   passthru.tests = {
-    version = testVersion { package = alejandra; };
+    version = testVersion {package = alejandra;};
   };
 
   meta = with lib; {
     description = "The Uncompromising Nix Code Formatter";
     homepage = "https://github.com/kamadorueda/alejandra";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ _0x4A6F kamadorueda ];
+    maintainers = with maintainers; [_0x4A6F kamadorueda];
   };
 }

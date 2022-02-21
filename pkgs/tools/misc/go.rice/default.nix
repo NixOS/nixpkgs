@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "go.rice";
   version = "1.0.2";
@@ -15,13 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." "rice" ];
+  subPackages = ["." "rice"];
 
   meta = with lib; {
     homepage = "https://github.com/GeertJohan/go.rice";
     description = "A Go package that makes working with resources such as html, js, css, images, templates very easy";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [blaggacao];
   };
 }
-

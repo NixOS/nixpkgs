@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, webkitgtk
-, pkg-config
-, gtk3
-, glib
-, gnome
-, sqlite
-, itstool
-, libxml2
-, libxslt
-, gst_all_1
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  webkitgtk,
+  pkg-config,
+  gtk3,
+  glib,
+  gnome,
+  sqlite,
+  itstool,
+  libxml2,
+  libxslt,
+  gst_all_1,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "yelp";
   version = "41.2";

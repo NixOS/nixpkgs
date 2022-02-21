@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, vulkan-headers
-, vulkan-loader
-, glslang
-, opencv
-, protobuf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  vulkan-headers,
+  vulkan-loader,
+  glslang,
+  opencv,
+  protobuf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ncnn";
   version = "20211208";
@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
     "-DGLSLANG_TARGET_DIR=${glslang}/lib/cmake"
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ vulkan-headers vulkan-loader glslang opencv protobuf ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [vulkan-headers vulkan-loader glslang opencv protobuf];
 
   meta = with lib; {
     description = "ncnn is a high-performance neural network inference framework optimized for the mobile platform";
     homepage = "https://github.com/Tencent/ncnn";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ tilcreator ];
+    maintainers = with maintainers; [tilcreator];
   };
 }

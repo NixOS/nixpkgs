@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "toil";
   version = "5.6.0";
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Workflow engine written in pure Python";
     homepage = "https://toil.ucsc-cgl.org/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [veprbl];
   };
 }

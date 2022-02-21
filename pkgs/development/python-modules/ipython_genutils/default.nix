@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  glibcLocales,
 }:
-
 buildPythonPackage rec {
   pname = "ipython_genutils";
   version = "0.2.0";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8";
   };
 
-  checkInputs = [ nose glibcLocales ];
+  checkInputs = [nose glibcLocales];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" nosetests -v ipython_genutils/tests
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Vestigial utilities from IPython";
     homepage = "http://ipython.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

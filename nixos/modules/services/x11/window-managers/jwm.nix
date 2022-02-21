@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.jwm;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.jwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.jwm.enable = mkEnableOption "jwm";
@@ -20,6 +21,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.jwm ];
+    environment.systemPackages = [pkgs.jwm];
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, gpgme
-, lvm2
-, btrfs-progs
-, libapparmor
-, libselinux
-, libseccomp
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  gpgme,
+  lvm2,
+  btrfs-progs,
+  libapparmor,
+  libselinux,
+  libseccomp,
 }:
-
 buildGoModule rec {
   pname = "buildah";
   version = "1.24.2";
@@ -23,13 +23,13 @@ buildGoModule rec {
     sha256 = "sha256-gBO+H26YGmOtP3CUHZjynAaOb0h+MJbJnWqxOZdif6w=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   vendorSha256 = null;
 
   doCheck = false;
 
-  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
+  nativeBuildInputs = [go-md2man installShellFiles pkg-config];
 
   buildInputs = [
     btrfs-progs
@@ -61,7 +61,7 @@ buildGoModule rec {
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    maintainers = with maintainers; [Profpatsch] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

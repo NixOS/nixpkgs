@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, urwid
-, glibcLocales
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  urwid,
+  glibcLocales,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "urwid_readline";
   version = "0.13";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "A textbox edit widget for urwid that supports readline shortcuts";
     homepage = "https://github.com/rr-/urwid_readline";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

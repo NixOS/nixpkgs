@@ -1,9 +1,33 @@
-{ lib, stdenv, fetchurl, pkg-config, wrapQtAppsHook
-, alsa-lib, boost, bzip2, fftw, fftwFloat, libX11, libfishsound, libid3tag
-, libjack2, liblo, libmad, libogg, liboggz, libpulseaudio, libsamplerate
-, libsndfile, lrdf, opusfile, qtbase, qtsvg, rubberband, serd, sord
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wrapQtAppsHook,
+  alsa-lib,
+  boost,
+  bzip2,
+  fftw,
+  fftwFloat,
+  libX11,
+  libfishsound,
+  libid3tag,
+  libjack2,
+  liblo,
+  libmad,
+  libogg,
+  liboggz,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  lrdf,
+  opusfile,
+  qtbase,
+  qtsvg,
+  rubberband,
+  serd,
+  sord,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tony";
   version = "2.1.1";
@@ -13,12 +37,32 @@ stdenv.mkDerivation rec {
     sha256 = "03g2bmlj08lmgvh54dyd635xccjn730g4wwlhpvsw04bffz8b7fp";
   };
 
-  nativeBuildInputs = [ pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [pkg-config wrapQtAppsHook];
 
   buildInputs = [
-    alsa-lib boost bzip2 fftw fftwFloat libX11 libfishsound libid3tag
-    libjack2 liblo libmad libogg liboggz libpulseaudio libsamplerate
-    libsndfile lrdf opusfile qtbase qtsvg rubberband serd sord
+    alsa-lib
+    boost
+    bzip2
+    fftw
+    fftwFloat
+    libX11
+    libfishsound
+    libid3tag
+    libjack2
+    liblo
+    libmad
+    libogg
+    liboggz
+    libpulseaudio
+    libsamplerate
+    libsndfile
+    lrdf
+    opusfile
+    qtbase
+    qtsvg
+    rubberband
+    serd
+    sord
   ];
 
   # comment out the tests
@@ -32,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Pitch and note annotation of unaccompanied melody";
     homepage = "https://www.sonicvisualiser.org/tony/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
 }

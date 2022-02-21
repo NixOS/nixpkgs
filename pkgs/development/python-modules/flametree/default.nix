@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fontconfig
-, matplotlib
-, pandas
-, pytestCheckHook
-, weasyprint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fontconfig,
+  matplotlib,
+  pandas,
+  pytestCheckHook,
+  weasyprint,
 }:
-
 buildPythonPackage rec {
   pname = "flametree";
   version = "0.1.11";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
     "test_weasyprint"
   ];
 
-  pythonImportsCheck = [ "flametree" ];
+  pythonImportsCheck = ["flametree"];
 
   meta = with lib; {
     description = "Python file and zip operations made easy";
     homepage = "https://github.com/Edinburgh-Genome-Foundry/Flametree";
     license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
   };
 }

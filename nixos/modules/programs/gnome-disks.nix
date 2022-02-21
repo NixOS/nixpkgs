@@ -1,11 +1,11 @@
 # GNOME Disks.
-
-{ config, pkgs, lib, ... }:
-
-with lib;
-
 {
-
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; {
   meta = {
     maintainers = teams.gnome.members;
   };
@@ -13,16 +13,14 @@ with lib;
   # Added 2019-08-09
   imports = [
     (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-disks" "enable" ]
-      [ "programs" "gnome-disks" "enable" ])
+    ["services" "gnome3" "gnome-disks" "enable"]
+    ["programs" "gnome-disks" "enable"])
   ];
 
   ###### interface
 
   options = {
-
     programs.gnome-disks = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -31,20 +29,14 @@ with lib;
           be a UDisks2 graphical front-end.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.programs.gnome-disks.enable {
+    environment.systemPackages = [pkgs.gnome.gnome-disk-utility];
 
-    environment.systemPackages = [ pkgs.gnome.gnome-disk-utility ];
-
-    services.dbus.packages = [ pkgs.gnome.gnome-disk-utility ];
-
+    services.dbus.packages = [pkgs.gnome.gnome-disk-utility];
   };
-
 }

@@ -3,23 +3,22 @@
 #  * cuDNN 7.6.5, cudatoolkit 10.2
 #  * cuDNN 8.1.1, cudatoolkit 11.0-11.2
 #  * cuDNN 8.3.0, cudatoolkit 11.0-11.5
-{ callPackage
-, cudatoolkit_10_0
-, cudatoolkit_10_2
-, cudatoolkit_11_0
-, cudatoolkit_11_1
-, cudatoolkit_11_2
-, cudatoolkit_11_3
-, cudatoolkit_11_4
-, cudatoolkit_11_5
-}:
-
-let
-  generic = args: callPackage (import ./generic.nix (removeAttrs args [ "cudatoolkit" ])) {
-    inherit (args) cudatoolkit;
-  };
-in
-rec {
+{
+  callPackage,
+  cudatoolkit_10_0,
+  cudatoolkit_10_2,
+  cudatoolkit_11_0,
+  cudatoolkit_11_1,
+  cudatoolkit_11_2,
+  cudatoolkit_11_3,
+  cudatoolkit_11_4,
+  cudatoolkit_11_5,
+}: let
+  generic = args:
+    callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
+      inherit (args) cudatoolkit;
+    };
+in rec {
   # cuDNN 7.x
   # Still used by libtensorflow-bin. It should be upgraded at some point.
   cudnn_7_4_cudatoolkit_10_0 = generic rec {
@@ -51,8 +50,8 @@ rec {
     srcName = "cudnn-11.2-linux-x64-v8.1.1.33.tgz";
     hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
   };
-  cudnn_8_1_cudatoolkit_11_1 = cudnn_8_1_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_1; };
-  cudnn_8_1_cudatoolkit_11_2 = cudnn_8_1_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_2; };
+  cudnn_8_1_cudatoolkit_11_1 = cudnn_8_1_cudatoolkit_11_0.override {cudatoolkit = cudatoolkit_11_1;};
+  cudnn_8_1_cudatoolkit_11_2 = cudnn_8_1_cudatoolkit_11_0.override {cudatoolkit = cudatoolkit_11_2;};
   cudnn_8_1_cudatoolkit_11 = cudnn_8_1_cudatoolkit_11_2;
 
   # cuDNN 8.3 is necessary for the latest jaxlib, esp. jaxlib-bin. See
@@ -68,10 +67,10 @@ rec {
     srcName = "cudnn-11.5-linux-x64-v8.3.0.98.tgz";
     hash = "sha256-RMb1rVyxL7dPoMmh58qvTwTXVa3xGi5bbJ5BfaN2srI=";
   };
-  cudnn_8_3_cudatoolkit_11_1 = cudnn_8_3_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_1; };
-  cudnn_8_3_cudatoolkit_11_2 = cudnn_8_3_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_2; };
-  cudnn_8_3_cudatoolkit_11_3 = cudnn_8_3_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_3; };
-  cudnn_8_3_cudatoolkit_11_4 = cudnn_8_3_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_4; };
-  cudnn_8_3_cudatoolkit_11_5 = cudnn_8_3_cudatoolkit_11_0.override { cudatoolkit = cudatoolkit_11_5; };
+  cudnn_8_3_cudatoolkit_11_1 = cudnn_8_3_cudatoolkit_11_0.override {cudatoolkit = cudatoolkit_11_1;};
+  cudnn_8_3_cudatoolkit_11_2 = cudnn_8_3_cudatoolkit_11_0.override {cudatoolkit = cudatoolkit_11_2;};
+  cudnn_8_3_cudatoolkit_11_3 = cudnn_8_3_cudatoolkit_11_0.override {cudatoolkit = cudatoolkit_11_3;};
+  cudnn_8_3_cudatoolkit_11_4 = cudnn_8_3_cudatoolkit_11_0.override {cudatoolkit = cudatoolkit_11_4;};
+  cudnn_8_3_cudatoolkit_11_5 = cudnn_8_3_cudatoolkit_11_0.override {cudatoolkit = cudatoolkit_11_5;};
   cudnn_8_3_cudatoolkit_11 = cudnn_8_3_cudatoolkit_11_5;
 }

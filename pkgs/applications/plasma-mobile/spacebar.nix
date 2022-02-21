@@ -1,20 +1,18 @@
-{ lib
-, mkDerivation
-
-, cmake
-, extra-cmake-modules
-
-, kcontacts
-, ki18n
-, kirigami2
-, knotifications
-, kpeople
-, libphonenumber
-, libqofono
-, protobuf
-, telepathy
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  kcontacts,
+  ki18n,
+  kirigami2,
+  knotifications,
+  kpeople,
+  libphonenumber,
+  libqofono,
+  protobuf,
+  telepathy,
 }:
-
 mkDerivation rec {
   pname = "spacebar";
 
@@ -39,6 +37,6 @@ mkDerivation rec {
     description = "SMS application for Plasma Mobile";
     homepage = "https://invent.kde.org/plasma-mobile/spacebar";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [samueldr];
   };
 }

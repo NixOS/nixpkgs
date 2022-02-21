@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPackages
-, pkg-config
-, abiVersion ? "6"
-, enableStatic ? stdenv.hostPlatform.isStatic
-, withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
-, mouseSupport ? false, gpm
-, unicodeSupport ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  pkg-config,
+  abiVersion ? "6",
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt,
+  mouseSupport ? false,
+  gpm,
+  unicodeSupport ? true,
 }:
-
 stdenv.mkDerivation rec {
   # Note the revision needs to be adjusted.
   version = "6.3";
@@ -20,23 +21,26 @@ stdenv.mkDerivation rec {
   src = let
     # Note the version needs to be adjusted.
     rev = "v${version}";
-  in fetchurl {
-    url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
-    sha256 = "1mawdjhzl2na2j0dylwc37f5w95rhgyvlwnfhww5rz2r7fgkvayv";
-  };
+  in
+    fetchurl {
+      url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
+      sha256 = "1mawdjhzl2na2j0dylwc37f5w95rhgyvlwnfhww5rz2r7fgkvayv";
+    };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = ["out" "dev" "man"];
   setOutputFlags = false; # some aren't supported
 
-  configureFlags = [
-    (lib.withFeature (!enableStatic) "shared")
-    "--without-debug"
-    "--enable-pc-files"
-    "--enable-symlinks"
-    "--with-manpage-format=normal"
-    "--disable-stripping"
-    "--with-versioned-syms"
-  ] ++ lib.optional unicodeSupport "--enable-widec"
+  configureFlags =
+    [
+      (lib.withFeature (!enableStatic) "shared")
+      "--without-debug"
+      "--enable-pc-files"
+      "--enable-symlinks"
+      "--with-manpage-format=normal"
+      "--disable-stripping"
+      "--with-versioned-syms"
+    ]
+    ++ lib.optional unicodeSupport "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
     ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
@@ -52,31 +56,34 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    buildPackages.ncurses
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      buildPackages.ncurses
+    ];
 
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
-  preConfigure = ''
-    export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
-    mkdir -p "$PKG_CONFIG_LIBDIR"
-    configureFlagsArray+=(
-      "--libdir=$out/lib"
-      "--includedir=$dev/include"
-      "--bindir=$dev/bin"
-      "--mandir=$man/share/man"
-      "--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR"
-    )
-  ''
-  + lib.optionalString stdenv.isSunOS ''
-    sed -i -e '/-D__EXTENSIONS__/ s/-D_XOPEN_SOURCE=\$cf_XOPEN_SOURCE//' \
-           -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
-        configure
-    CFLAGS=-D_XOPEN_SOURCE_EXTENDED
-  '';
+  preConfigure =
+    ''
+      export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
+      mkdir -p "$PKG_CONFIG_LIBDIR"
+      configureFlagsArray+=(
+        "--libdir=$out/lib"
+        "--includedir=$dev/include"
+        "--bindir=$dev/bin"
+        "--mandir=$man/share/man"
+        "--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR"
+      )
+    ''
+    + lib.optionalString stdenv.isSunOS ''
+      sed -i -e '/-D__EXTENSIONS__/ s/-D_XOPEN_SOURCE=\$cf_XOPEN_SOURCE//' \
+             -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
+          configure
+      CFLAGS=-D_XOPEN_SOURCE_EXTENDED
+    '';
 
   enableParallelBuilding = true;
 
@@ -86,8 +93,11 @@ stdenv.mkDerivation rec {
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
   postFixup = let
-    abiVersion-extension = if stdenv.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
-  ''
+    abiVersion-extension =
+      if stdenv.isDarwin
+      then "${abiVersion}.$dylibtype"
+      else "$dylibtype.${abiVersion}";
+  in ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"

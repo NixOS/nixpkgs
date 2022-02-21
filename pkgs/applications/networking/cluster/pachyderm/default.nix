@@ -1,12 +1,15 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
+}:
 buildGoPackage rec {
   pname = "pachyderm";
   version = "1.8.5";
   rev = "v${version}";
 
   goPackagePath = "github.com/pachyderm/pachyderm";
-  subPackages = [ "src/server/cmd/pachctl" ];
+  subPackages = ["src/server/cmd/pachctl"];
 
   src = fetchFromGitHub {
     inherit rev;

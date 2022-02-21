@@ -1,5 +1,9 @@
-{ lib, stdenv, kernel, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  kernel,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "anbox-modules";
   version = "2020-06-14-${kernel.version}";
@@ -13,7 +17,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  KERNEL_SRC="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  KERNEL_SRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   buildPhase = ''
     for d in ashmem binder;do
@@ -37,6 +41,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     broken = kernel.kernelOlder "4.4" || kernel.kernelAtLeast "5.5";
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [edwtjo];
   };
 }

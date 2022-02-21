@@ -1,22 +1,19 @@
-{ callPackage }:
+{callPackage}: {
+  autocomplete-all-the-things = callPackage ./urxvt-autocomplete-all-the-things {};
 
-{
-  autocomplete-all-the-things = callPackage ./urxvt-autocomplete-all-the-things { };
+  bidi = callPackage ./urxvt-bidi {};
 
-  bidi = callPackage ./urxvt-bidi { };
+  font-size = callPackage ./urxvt-font-size {};
 
-  font-size = callPackage ./urxvt-font-size { };
+  perl = callPackage ./urxvt-perl {};
 
-  perl = callPackage ./urxvt-perl { };
+  perls = callPackage ./urxvt-perls {};
 
-  perls = callPackage ./urxvt-perls { };
+  resize-font = callPackage ./urxvt-resize-font {};
 
-  resize-font = callPackage ./urxvt-resize-font { };
+  tabbedex = callPackage ./urxvt-tabbedex {};
 
-  tabbedex = callPackage ./urxvt-tabbedex { };
+  theme-switch = callPackage ./urxvt-theme-switch {};
 
-  theme-switch = callPackage ./urxvt-theme-switch { };
-
-  vtwheel = callPackage ./urxvt-vtwheel { };
-
+  vtwheel = callPackage ./urxvt-vtwheel {};
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, ipykernel
-, isPy27
-, python
-, pexpect
-, bash
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  ipykernel,
+  isPy27,
+  python,
+  pexpect,
+  bash,
 }:
-
 buildPythonPackage rec {
   pname = "bash_kernel";
   version = "0.7.2";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
       --replace "\"bash\"" "'${bash}/bin/bash'"
   '';
 
-  propagatedBuildInputs = [ ipykernel pexpect ];
+  propagatedBuildInputs = [ipykernel pexpect];
 
   # no tests
   doCheck = false;
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Bash Kernel for Jupyter";
     homepage = "https://github.com/takluyver/bash_kernel";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [zimbatm];
   };
 }

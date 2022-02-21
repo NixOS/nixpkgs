@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, wxGTK30, boost, firebird }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wxGTK30,
+  boost,
+  firebird,
+}:
 stdenv.mkDerivation rec {
   version = "0.9.3.1";
   pname = "flamerobin";
@@ -13,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ wxGTK30 boost firebird ];
+  buildInputs = [wxGTK30 boost firebird];
 
   preBuild = ''
     sed -i 's/CXXFLAGS = -g -O2/CXXFLAGS = -g -O2 -nostartfiles/' Makefile
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Database administration tool for Firebird RDBMS";
     homepage = "https://github.com/mariuz/flamerobin";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ uralbash ];
+    maintainers = with maintainers; [uralbash];
     platforms = platforms.unix;
   };
 }

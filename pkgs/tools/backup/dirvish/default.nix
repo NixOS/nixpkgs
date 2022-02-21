@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, makeWrapper, perl, perlPackages }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  makeWrapper,
+  perl,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "dirvish";
   version = "1.2.1";
@@ -9,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "6b7f29c3541448db3d317607bda3eb9bac9fb3c51f970611ffe27e9d63507dcd";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ] ++ (with perlPackages; [ GetoptLong TimeParseDate TimePeriod ]);
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [perl] ++ (with perlPackages; [GetoptLong TimeParseDate TimePeriod]);
 
-  executables = [ "dirvish" "dirvish-runall" "dirvish-expire" "dirvish-locate" ];
-  manpages = [ "dirvish.8" "dirvish-runall.8" "dirvish-expire.8" "dirvish-locate.8" "dirvish.conf.5" ];
+  executables = ["dirvish" "dirvish-runall" "dirvish-expire" "dirvish-locate"];
+  manpages = ["dirvish.8" "dirvish-runall.8" "dirvish-expire.8" "dirvish-locate.8" "dirvish.conf.5"];
 
   buildPhase = ''
     HEADER="#!${perl}/bin/perl
@@ -59,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "http://dirvish.org/";
     license = lib.licenses.osl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.winpat ];
+    maintainers = [maintainers.winpat];
   };
 }

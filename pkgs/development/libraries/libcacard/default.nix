@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, nss }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  nss,
+}:
 stdenv.mkDerivation rec {
   pname = "libcacard";
   version = "2.8.1";
@@ -14,14 +20,14 @@ stdenv.mkDerivation rec {
     sed -i 's/^vflag = .*$/vflag = ""/' meson.build
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib nss ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [glib nss];
 
   meta = with lib; {
     description = "Smart card emulation library";
     homepage = "https://gitlab.freedesktop.org/spice/libcacard";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ yana ];
+    maintainers = with maintainers; [yana];
     platforms = platforms.unix;
   };
 }

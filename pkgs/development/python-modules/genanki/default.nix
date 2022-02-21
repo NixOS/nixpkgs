@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, cached-property
-, chevron
-, fetchPypi
-, frozendict
-, pystache
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  cached-property,
+  chevron,
+  fetchPypi,
+  frozendict,
+  pystache,
+  pythonOlder,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "genanki";
   version = "0.13.0";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Generate Anki decks programmatically";
     homepage = "https://github.com/kerrickstaley/genanki";
     license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, xcbuildHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xcbuildHook,
+}:
 stdenv.mkDerivation {
   pname = "insert_dylib";
   version = "unstable-2016-08-28";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "0az38y06pvvy9jf2wnzdwp9mp98lj6nr0ldv0cs1df5p9x2qvbya";
   };
 
-  nativeBuildInputs = [ xcbuildHook ];
+  nativeBuildInputs = [xcbuildHook];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -1,10 +1,10 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "asysocks";
   version = "0.1.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Socks4/5 client and server library";
     homepage = "https://github.com/skelsec/asysocks";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

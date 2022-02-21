@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  isPyPy,
 }:
-
 buildPythonPackage rec {
   pname = "enum";
   version = "0.4.7";
@@ -22,5 +22,4 @@ buildPythonPackage rec {
     description = "Robust enumerated type support in Python";
     license = licenses.gpl2;
   };
-
 }

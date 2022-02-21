@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, duckdb
-, mypy
-, numpy
-, pandas
-, pybind11
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  duckdb,
+  mypy,
+  numpy,
+  pandas,
+  pybind11,
+  setuptools-scm,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "duckdb";
   inherit (duckdb) version src;
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

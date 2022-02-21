@@ -1,14 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "keepassxc";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ turion ];
+    maintainers = [turion];
   };
 
-  machine = { ... }:
-
-  {
+  machine = {...}: {
     imports = [
       ./common/user-account.nix
       ./common/x11.nix
@@ -16,12 +12,12 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     services.xserver.enable = true;
     test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = [ pkgs.keepassxc ];
+    environment.systemPackages = [pkgs.keepassxc];
   };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: ''
+  testScript = {nodes, ...}: ''
     start_all()
     machine.wait_for_x()
 

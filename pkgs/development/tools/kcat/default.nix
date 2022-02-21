@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl, avro-c, libserdes, which }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  zlib,
+  rdkafka,
+  yajl,
+  avro-c,
+  libserdes,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "kcat";
 
@@ -12,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-koDhj/RQc9fhfqjrJylhURw6tppPELhLlBGbNVJsii8=";
   };
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [pkg-config which];
 
-  buildInputs = [ zlib rdkafka yajl avro-c libserdes ];
+  buildInputs = [zlib rdkafka yajl avro-c libserdes];
 
   preConfigure = ''
     patchShebangs ./configure
@@ -25,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/edenhill/kcat";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ nyarly ];
+    maintainers = with maintainers; [nyarly];
   };
 }

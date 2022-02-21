@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, gtk2 }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  gtk2,
+}:
 stdenv.mkDerivation rec {
   pname = "spnavcfg";
   version = "0.3.1";
@@ -24,16 +29,16 @@ stdenv.mkDerivation rec {
     sed -i s/4775/775/ Makefile.in
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gtk2];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   meta = with lib; {
     homepage = "http://spacenav.sourceforge.net/";
     description = "Interactive configuration GUI for space navigator input devices";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

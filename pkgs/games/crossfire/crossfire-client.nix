@@ -1,10 +1,29 @@
-{ stdenv, lib, fetchsvn
-, cmake, pkg-config, perl, vala
-, gtk2, pcre, zlib, libpng, fribidi, harfbuzzFull, xorg, util-linux, curl
-, SDL, SDL_image, SDL_mixer, libselinux, libsepol
-, version, rev, sha256
+{
+  stdenv,
+  lib,
+  fetchsvn,
+  cmake,
+  pkg-config,
+  perl,
+  vala,
+  gtk2,
+  pcre,
+  zlib,
+  libpng,
+  fribidi,
+  harfbuzzFull,
+  xorg,
+  util-linux,
+  curl,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  libselinux,
+  libsepol,
+  version,
+  rev,
+  sha256,
 }:
-
 stdenv.mkDerivation rec {
   pname = "crossfire-client";
   version = "r${toString rev}";
@@ -15,18 +34,31 @@ stdenv.mkDerivation rec {
     rev = rev;
   };
 
-  nativeBuildInputs = [ cmake pkg-config perl vala ];
+  nativeBuildInputs = [cmake pkg-config perl vala];
   buildInputs = [
-    gtk2 pcre zlib libpng fribidi harfbuzzFull xorg.libpthreadstubs
-    xorg.libXdmcp curl SDL SDL_image SDL_mixer util-linux libselinux libsepol
+    gtk2
+    pcre
+    zlib
+    libpng
+    fribidi
+    harfbuzzFull
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    curl
+    SDL
+    SDL_image
+    SDL_mixer
+    util-linux
+    libselinux
+    libsepol
   ];
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "GTKv2 client for the Crossfire free MMORPG";
     homepage = "http://crossfire.real-time.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    maintainers = with maintainers; [ToxicFrog];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchhg }:
-
+{
+  lib,
+  stdenv,
+  fetchhg,
+}:
 stdenv.mkDerivation {
   pname = "u9fs";
   version = "unstable-2020-11-21";
@@ -11,16 +14,16 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-      mkdir -p $out/bin $out/share/man4
-      cp u9fs.man $out/share/man4
-      cp u9fs $out/bin
-    '';
+    mkdir -p $out/bin $out/share/man4
+    cp u9fs.man $out/share/man4
+    cp u9fs $out/bin
+  '';
 
   meta = with lib; {
     description = "Serve 9P from Unix";
     homepage = "http://plan9.bell-labs.com/magic/man2html/4/u9fs";
     license = licenses.free;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = [maintainers.ehmry];
     platforms = platforms.unix;
   };
 }

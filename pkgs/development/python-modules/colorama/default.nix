@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "colorama";
   version = "0.4.4";
@@ -18,4 +21,3 @@ buildPythonPackage rec {
     description = "Cross-platform colored terminal text";
   };
 }
-

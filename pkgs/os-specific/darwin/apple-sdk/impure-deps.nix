@@ -81,16 +81,18 @@ rec {
   Kerberos = [
     "/System/Library/Frameworks/Kerberos.framework"
   ];
-  CoreServices = [
-    "/System/Library/Frameworks/CoreServices.framework"
-    "/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore"
-    "/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC"
-    "/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling"
-    "/usr/lib/libmecabra.dylib"
-    "/usr/lib/libcmph.dylib"
-    "/usr/lib/libiconv.2.dylib"
-    "/usr/lib/libxslt.1.dylib"
-  ] ++ Foundation;
+  CoreServices =
+    [
+      "/System/Library/Frameworks/CoreServices.framework"
+      "/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore"
+      "/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC"
+      "/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling"
+      "/usr/lib/libmecabra.dylib"
+      "/usr/lib/libcmph.dylib"
+      "/usr/lib/libiconv.2.dylib"
+      "/usr/lib/libxslt.1.dylib"
+    ]
+    ++ Foundation;
   IOSurface = [
     "/System/Library/Frameworks/IOSurface.framework"
   ];
@@ -106,11 +108,13 @@ rec {
   ImageIO = [
     "/System/Library/Frameworks/ImageIO.framework"
   ];
-  ApplicationServices = [
-    "/System/Library/Frameworks/ApplicationServices.framework"
-    "/usr/lib/libcups.2.dylib"
-    "/usr/lib/libresolv.9.dylib"
-  ] ++ AudioToolbox;
+  ApplicationServices =
+    [
+      "/System/Library/Frameworks/ApplicationServices.framework"
+      "/usr/lib/libcups.2.dylib"
+      "/usr/lib/libresolv.9.dylib"
+    ]
+    ++ AudioToolbox;
   OpenGL = [
     "/System/Library/Frameworks/OpenGL.framework"
   ];
@@ -241,9 +245,12 @@ rec {
   CoreWLAN = [
     "/System/Library/Frameworks/CoreWLAN.framework"
   ];
-  IOBluetooth = [
-    "/System/Library/Frameworks/IOBluetooth.framework"
-  ] ++ AudioUnit ++ CoreBluetooth;
+  IOBluetooth =
+    [
+      "/System/Library/Frameworks/IOBluetooth.framework"
+    ]
+    ++ AudioUnit
+    ++ CoreBluetooth;
   CoreBluetooth = [
     "/System/Library/Frameworks/CoreBluetooth.framework"
   ];

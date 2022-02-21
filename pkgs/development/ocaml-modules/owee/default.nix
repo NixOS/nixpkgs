@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+}:
 buildDunePackage rec {
   minimumOCamlVersion = "4.06";
   pname = "owee";
@@ -16,6 +19,6 @@ buildDunePackage rec {
     description = "An experimental OCaml library to work with DWARF format";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

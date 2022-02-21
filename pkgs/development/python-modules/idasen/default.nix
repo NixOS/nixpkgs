@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, bleak
-, pyyaml
-, voluptuous
-, pytestCheckHook
-, pytest-asyncio
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  bleak,
+  pyyaml,
+  voluptuous,
+  pytestCheckHook,
+  pytest-asyncio,
+  poetry-core,
 }:
-
 buildPythonPackage rec {
   pname = "idasen";
   version = "0.8.2";
@@ -39,13 +39,13 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [ "idasen" ];
+  pythonImportsCheck = ["idasen"];
 
   meta = with lib; {
     description = "Python API and CLI for the ikea IDÅSEN desk";
     homepage = "https://github.com/newAM/idasen";
     changelog = "https://github.com/newAM/idasen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ newam ];
+    maintainers = with maintainers; [newam];
   };
 }

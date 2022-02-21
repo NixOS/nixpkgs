@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, dataclasses
-, kafka-python
-, cython
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  dataclasses,
+  kafka-python,
+  cython,
+  zlib,
 }:
-
 buildPythonPackage rec {
   pname = "aiokafka";
   version = "0.7.2";
@@ -28,21 +28,23 @@ buildPythonPackage rec {
     zlib
   ];
 
-  propagatedBuildInputs = [
-    kafka-python
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs =
+    [
+      kafka-python
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      dataclasses
+    ];
 
   # checks require running kafka server
   doCheck = false;
 
-  pythonImportsCheck = [ "aiokafka" ];
+  pythonImportsCheck = ["aiokafka"];
 
   meta = with lib; {
     description = "Kafka integration with asyncio";
     homepage = "https://aiokafka.readthedocs.org";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

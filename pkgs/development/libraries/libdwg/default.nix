@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, indent}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  indent,
+}:
 stdenv.mkDerivation rec {
   pname = "libdwg";
   version = "0.6";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0l8ks1x70mkna1q7mzy1fxplinz141bd24qhrm1zkdil74mcsryc";
   };
 
-  nativeBuildInputs = [ indent ];
+  nativeBuildInputs = [indent];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';

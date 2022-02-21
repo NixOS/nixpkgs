@@ -1,11 +1,11 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, pygit2
-, python
+{
+  lib,
+  fetchFromSourcehut,
+  buildPythonPackage,
+  srht,
+  pygit2,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "mansrht";
   version = "0.15.23";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  pythonImportsCheck = [ "mansrht" ];
+  pythonImportsCheck = ["mansrht"];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     description = "Wiki service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

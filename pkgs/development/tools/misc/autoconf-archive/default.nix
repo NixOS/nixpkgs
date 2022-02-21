@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, xz }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xz,
+}:
 stdenv.mkDerivation rec {
   pname = "autoconf-archive";
   version = "2021.02.19";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6KbrnSjdy6j/7z+iEWUyOem/I5q6agGmt8/Hzq7GnL0=";
   };
 
-  buildInputs = [ xz ];
+  buildInputs = [xz];
 
   meta = with lib; {
     description = "Archive of autoconf m4 macros";

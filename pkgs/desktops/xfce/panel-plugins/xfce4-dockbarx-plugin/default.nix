@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bash
-, dockbarx
-, gobject-introspection
-, keybinder3
-, pkg-config
-, python3Packages
-, vala
-, wafHook
-, wrapGAppsHook
-, xfce
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  dockbarx,
+  gobject-introspection,
+  keybinder3,
+  pkg-config,
+  python3Packages,
+  vala,
+  wafHook,
+  wrapGAppsHook,
+  xfce,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xfce4-dockbarx-plugin";
   version = "${ver}-${rev}";
@@ -40,13 +40,14 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    keybinder3
-    python3Packages.python
-    xfce.xfce4-panel
-    xfce.xfconf
-  ]
-  ++ pythonPath;
+  buildInputs =
+    [
+      keybinder3
+      python3Packages.python
+      xfce.xfce4-panel
+      xfce.xfconf
+    ]
+    ++ pythonPath;
 
   postPatch = ''
     substituteInPlace wscript           --replace /usr/share/            "\''${PREFIX}/share/"
@@ -64,6 +65,6 @@ stdenv.mkDerivation rec {
     description = "Plugins to embed DockbarX into xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

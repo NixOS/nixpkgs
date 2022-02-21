@@ -1,8 +1,10 @@
-{ lib, pkgs, config, ... }:
-
-with lib;
-
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
   pkg = pkgs.tox-node;
   cfg = config.services.tox-node;
   homeDir = "/var/lib/tox-node";
@@ -26,17 +28,18 @@ let
         motd = cfg.motd;
       }
     );
-  in with pkgs; runCommand "config.yml" {} ''
-    ${remarshal}/bin/remarshal -if yaml -of json ${src} -o src.json
-    ${jq}/bin/jq -s '(.[0] | with_entries( select(.key == "bootstrap-nodes"))) * .[1]' src.json ${confJSON} > $out
-  '';
-
+  in
+    with pkgs;
+      runCommand "config.yml" {} ''
+        ${remarshal}/bin/remarshal -if yaml -of json ${src} -o src.json
+        ${jq}/bin/jq -s '(.[0] | with_entries( select(.key == "bootstrap-nodes"))) * .[1]' src.json ${confJSON} > $out
+      '';
 in {
   options.services.tox-node = {
     enable = mkEnableOption "Tox Node service";
 
     logType = mkOption {
-      type = types.enum [ "Stderr" "Stdout" "Syslog" "None" ];
+      type = types.enum ["Stderr" "Stdout" "Syslog" "None"];
       default = "Stderr";
       description = "Logging implementation.";
     };
@@ -52,7 +55,7 @@ in {
     };
     tcpAddresses = mkOption {
       type = types.listOf types.str;
-      default = [ "0.0.0.0:33445" ];
+      default = ["0.0.0.0:33445"];
       description = "TCP addresses to run TCP relay.";
     };
     tcpConnectionLimit = mkOption {
@@ -81,8 +84,8 @@ in {
     systemd.services.tox-node = {
       description = "Tox Node";
 
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         ExecStart = "${pkg}/bin/tox-node config ${configFile}";

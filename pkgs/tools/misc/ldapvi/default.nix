@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchgit, openldap, openssl, popt, glib, ncurses, readline, pkg-config, cyrus_sasl, autoconf, automake }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  openldap,
+  openssl,
+  popt,
+  glib,
+  ncurses,
+  readline,
+  pkg-config,
+  cyrus_sasl,
+  autoconf,
+  automake,
+}:
 stdenv.mkDerivation {
   pname = "ldapvi";
   version = "0lz1sb5r0y9ypy8d7hm0l2wfa8l69f8ll0i5c78c0apz40nyjqkg";
@@ -10,8 +23,8 @@ stdenv.mkDerivation {
     sha256 = "3ef3103030ecb04d7fe80180e3fd490377cf81fb2af96782323fddabc3225030";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openldap openssl popt glib ncurses readline cyrus_sasl autoconf automake ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [openldap openssl popt glib ncurses readline cyrus_sasl autoconf automake];
 
   preConfigure = ''
     cd ldapvi
@@ -26,7 +39,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.lichteblau.com/ldapvi/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = lib.platforms.linux;
   };
 }

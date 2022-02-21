@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libmnl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libmnl,
+}:
 stdenv.mkDerivation rec {
   pname = "libnetfilter_cttimeout";
   version = "1.0.0";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "aeab12754f557cba3ce2950a2029963d817490df7edb49880008b34d7ff8feba";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libmnl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libmnl];
 
   meta = {
     description = "Userspace library that provides the programming interface to the connection tracking timeout infrastructure";

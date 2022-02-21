@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchzip
-, jq
-, openjdk11
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jq,
+  openjdk11,
 }:
-
 stdenv.mkDerivation rec {
   pname = "eclair";
   version = "0.6.2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "038r9mblm2r8mkxnv65k29r7xj22dff5gmvzv9xiy5zf9i45mmk8";
   };
 
-  propagatedBuildInputs = [ jq openjdk11 ];
+  propagatedBuildInputs = [jq openjdk11];
 
   installPhase = ''
     runHook preInstall
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A scala implementation of the Lightning Network";
     homepage = "https://github.com/ACINQ/eclair";
     license = licenses.asl20;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
     platforms = platforms.unix;
   };
 }

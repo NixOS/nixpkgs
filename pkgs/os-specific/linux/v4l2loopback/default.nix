@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+}:
 stdenv.mkDerivation rec {
   pname = "v4l2loopback";
   version = "unstable-2021-07-13-${kernel.version}";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uglYTeqz81fgkKYYU9Cw8x9+S088jGxDEGkb3rmkhrw==";
   };
 
-  hardeningDisable = [ "format" "pic" ];
+  hardeningDisable = ["format" "pic"];
 
   preBuild = ''
     substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
@@ -21,13 +26,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildInputs = [ kmod ];
+  buildInputs = [kmod];
 
   postInstall = ''
     make install-utils PREFIX=$bin
   '';
 
-  outputs = [ "out" "bin" ];
+  outputs = ["out" "bin"];
 
   makeFlags = [
     "KERNELRELEASE=${kernel.modDirVersion}"
@@ -38,8 +43,8 @@ stdenv.mkDerivation rec {
     description = "A kernel module to create V4L2 loopback devices";
     homepage = "https://github.com/umlaeute/v4l2loopback";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
     platforms = platforms.linux;
-    outputsToInstall = [ "out" ];
+    outputsToInstall = ["out"];
   };
 }

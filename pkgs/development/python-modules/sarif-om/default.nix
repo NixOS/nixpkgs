@@ -1,8 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, attrs
-, pbr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  pbr,
 }:
-
 buildPythonPackage rec {
   pname = "sarif-om";
   version = "1.0.4";
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     attrs
   ];
 
-  pythonImportsCheck = [ "sarif_om" ];
+  pythonImportsCheck = ["sarif_om"];
 
   # no tests included with tarball
   doCheck = false;
@@ -30,6 +32,6 @@ buildPythonPackage rec {
     description = "Classes implementing the SARIF 2.1.0 object model";
     homepage = "https://github.com/microsoft/sarif-python-om";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

@@ -1,19 +1,21 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder
   # deps
-, cryptography
-, nassl
-, pydantic
-, tls-parser
+  ,
+  cryptography,
+  nassl,
+  pydantic,
+  tls-parser
   # check deps
-, faker
-, openssl_1_0_2
-, openssl_1_1
+  ,
+  faker,
+  openssl_1_0_2,
+  openssl_1_1,
 }:
-
 buildPythonPackage rec {
   pname = "sslyze";
   version = "5.0.2";
@@ -94,7 +96,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [ "sslyze" ];
+  pythonImportsCheck = ["sslyze"];
 
   propagatedBuildInputs = [
     cryptography
@@ -108,6 +110,6 @@ buildPythonPackage rec {
     description = "Fast and powerful SSL/TLS scanning library";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ veehaitch ];
+    maintainers = with maintainers; [veehaitch];
   };
 }

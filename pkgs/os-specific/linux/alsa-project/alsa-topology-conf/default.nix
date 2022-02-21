@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   name = "alsa-topology-conf-${version}";
   version = "1.2.5.1";
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.bsd3;
-    maintainers = [ maintainers.roastiek ];
+    maintainers = [maintainers.roastiek];
     platforms = platforms.linux;
   };
 }

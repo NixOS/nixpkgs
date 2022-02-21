@@ -1,5 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, perl, file }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  perl,
+  file,
+}:
 buildGoModule rec {
   pname = "holo-build";
   version = "1.6.1";
@@ -20,17 +26,17 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  nativeBuildInputs = [ installShellFiles perl ];
+  nativeBuildInputs = [installShellFiles perl];
 
-  subPackages = [ "src/holo-build" ];
+  subPackages = ["src/holo-build"];
 
-  ldflags = [ "-s" "-w" "-X github.com/holocm/holo-build/src/holo-build/common.version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/holocm/holo-build/src/holo-build/common.version=${version}"];
 
   postBuild = ''
     make build/man/holo-build.8 VERSION=${version}
   '';
 
-  checkInputs = [ file ];
+  checkInputs = [file];
 
   checkPhase = ''
     ln -s ../../go/bin/holo-build build/holo-build
@@ -54,6 +60,6 @@ buildGoModule rec {
     description = "Cross-distribution system package compiler";
     homepage = "https://holocm.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

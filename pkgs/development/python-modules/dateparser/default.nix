@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, python-dateutil
-, pytz
-, regex
-, tzlocal
-, hijri-converter
-, convertdate
-, fasttext
-, langdetect
-, parameterized
-, pytestCheckHook
-, GitPython
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  python-dateutil,
+  pytz,
+  regex,
+  tzlocal,
+  hijri-converter,
+  convertdate,
+  fasttext,
+  langdetect,
+  parameterized,
+  pytestCheckHook,
+  GitPython,
+  ruamel-yaml,
 }:
-
 buildPythonPackage rec {
   pname = "dateparser";
   version = "1.1.0";
@@ -31,9 +31,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # install_requires
-    python-dateutil pytz regex tzlocal
+    python-dateutil
+    pytz
+    regex
+    tzlocal
     # extra_requires
-    hijri-converter convertdate fasttext langdetect
+    hijri-converter
+    convertdate
+    fasttext
+    langdetect
   ];
 
   checkInputs = [
@@ -48,7 +54,7 @@ buildPythonPackage rec {
   '';
 
   # Upstream only runs the tests in tests/ in CI, others use git clone
-  pytestFlagsArray = [ "tests" ];
+  pytestFlagsArray = ["tests"];
 
   disabledTests = [
     # access network
@@ -56,12 +62,12 @@ buildPythonPackage rec {
     "test_custom_language_detect_fast_text_1"
   ];
 
-  pythonImportsCheck = [ "dateparser" ];
+  pythonImportsCheck = ["dateparser"];
 
   meta = with lib; {
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

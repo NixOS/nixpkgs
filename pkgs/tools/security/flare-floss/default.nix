@@ -1,8 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
   version = "1.7.0";

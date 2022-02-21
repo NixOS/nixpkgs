@@ -1,10 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, hypothesis
-, poetry
-, pydantic
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  poetry,
+  pydantic,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "hypothesis-auto";
   version = "1.1.4";
@@ -25,12 +27,12 @@ buildPythonPackage rec {
     pytest
   ];
 
-  pythonImportsCheck = [ "hypothesis_auto" ];
+  pythonImportsCheck = ["hypothesis_auto"];
 
   meta = with lib; {
     description = "Enables fully automatic tests for type annotated functions";
     homepage = "https://github.com/timothycrosley/hypothesis-auto/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

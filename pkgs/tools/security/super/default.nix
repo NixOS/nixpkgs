@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "super";
   version = "3.30.0";
@@ -33,18 +37,17 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(TMPDIR)" ];
+  installFlags = ["sysconfdir=$(out)/etc" "localstatedir=$(TMPDIR)"];
 
   meta = {
     homepage = "https://www.ucolick.org/~will/#super";
     description = "Allows users to execute scripts as if they were root";
-    longDescription =
-      ''
-        This package provides two commands: 1) “super”, which allows
-        users to execute commands under a different uid/gid (specified
-        in /etc/super.tab); and 2) “setuid”, which allows root to
-        execute a command under a different uid.
-      '';
+    longDescription = ''
+      This package provides two commands: 1) “super”, which allows
+      users to execute commands under a different uid/gid (specified
+      in /etc/super.tab); and 2) “setuid”, which allows root to
+      execute a command under a different uid.
+    '';
     platforms = lib.platforms.linux;
   };
 }

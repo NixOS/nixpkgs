@@ -1,9 +1,12 @@
-{ bundlerApp, bundlerUpdateScript, lib }:
-
+{
+  bundlerApp,
+  bundlerUpdateScript,
+  lib,
+}:
 bundlerApp {
   pname = "rufo";
   gemdir = ./.;
-  exes = [ "rufo" ];
+  exes = ["rufo"];
 
   passthru.updateScript = bundlerUpdateScript "rufo";
 
@@ -11,6 +14,6 @@ bundlerApp {
     description = "Ruby formatter";
     homepage = "https://github.com/ruby-formatter/rufo";
     license = licenses.mit;
-    maintainers = with maintainers; [ andersk ];
+    maintainers = with maintainers; [andersk];
   };
 }

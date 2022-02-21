@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pyaes
-, pysocks
-, async-lru
-, tgcrypto
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pyaes,
+  pysocks,
+  async-lru,
+  tgcrypto,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "pyrogram";
   version = "1.4.3";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Telegram MTProto API Client Library and Framework for Python";
     homepage = "https://github.com/pyrogram/pyrogram";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

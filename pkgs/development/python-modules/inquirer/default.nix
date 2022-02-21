@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# native
-, poetry-core
-
-# propagated
-, blessed
-, python-editor
-, readchar
-
-# tests
-, pytest-mock
-, pytestCheckHook
-, pexpect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub
+  # native
+  ,
+  poetry-core
+  # propagated
+  ,
+  blessed,
+  python-editor,
+  readchar
+  # tests
+  ,
+  pytest-mock,
+  pytestCheckHook,
+  pexpect,
 }:
-
 buildPythonPackage rec {
   pname = "inquirer";
   version = "2.9.1";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/magmax/python-inquirer";
     description = "A collection of common interactive command line user interfaces, based on Inquirer.js";
     license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = [maintainers.mmahut];
   };
 }

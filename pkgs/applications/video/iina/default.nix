@@ -1,9 +1,9 @@
-{ lib
-, fetchurl
-, stdenv
-, undmg
+{
+  lib,
+  fetchurl,
+  stdenv,
+  undmg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "iina";
   version = "1.2.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kbh+gAVfCXoct6jJGXnetTAzFfIGdVLL5zh/SL/EJzY=";
   };
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [undmg];
 
   sourceRoot = "IINA.app";
 
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "The modern media player for macOS";
     platforms = platforms.darwin;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ arkivm ];
+    maintainers = with maintainers; [arkivm];
   };
 }

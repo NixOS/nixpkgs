@@ -1,9 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, python3, bluez
-, tcl, acl, kmod, coreutils, shadow, util-linux, udev
-, alsaSupport ? stdenv.isLinux, alsa-lib
-, systemdSupport ? stdenv.isLinux, systemd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  python3,
+  bluez,
+  tcl,
+  acl,
+  kmod,
+  coreutils,
+  shadow,
+  util-linux,
+  udev,
+  alsaSupport ? stdenv.isLinux,
+  alsa-lib,
+  systemdSupport ? stdenv.isLinux,
+  systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "brltty";
   version = "6.3";
@@ -13,8 +26,9 @@ stdenv.mkDerivation rec {
     sha256 = "14psxwlvgyi2fj1zh8rfykyjcjaya8xa7yg574bxd8y8n49n8hvb";
   };
 
-  nativeBuildInputs = [ pkg-config python3.pkgs.cython tcl ];
-  buildInputs = [ bluez ]
+  nativeBuildInputs = [pkg-config python3.pkgs.cython tcl];
+  buildInputs =
+    [bluez]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional systemdSupport systemd;
 
@@ -28,7 +42,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://brltty.app";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.bramd ];
+    maintainers = [lib.maintainers.bramd];
     platforms = lib.platforms.all;
   };
 
@@ -47,7 +61,7 @@ stdenv.mkDerivation rec {
     "--with-updatable-directory=/var/lib/brltty"
     "--with-api-socket-path=/var/lib/BrlAPI"
   ];
-  installFlags = [ "install-systemd" "install-udev" "install-polkit" ];
+  installFlags = ["install-systemd" "install-udev" "install-polkit"];
 
   preConfigure = ''
     substituteInPlace configure --replace /sbin/ldconfig ldconfig

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pyjwt
-, requests
-, requests-toolbelt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  pyjwt,
+  requests,
+  requests-toolbelt,
 }:
-
 buildPythonPackage rec {
   pname = "webexteamssdk";
   version = "1.6";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   # Tests require a Webex Teams test domain
   doCheck = false;
-  pythonImportsCheck = [ "webexteamssdk" ];
+  pythonImportsCheck = ["webexteamssdk"];
 
   meta = with lib; {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/CiscoDevNet/webexteamssdk";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

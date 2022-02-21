@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "inql";
   version = "4.0.5";
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Security testing tool for GraphQL";
     homepage = "https://github.com/doyensec/inql";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

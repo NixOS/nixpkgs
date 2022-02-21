@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, rpmextract
-, patchelf
-, makeWrapper
-, openssl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  rpmextract,
+  patchelf,
+  makeWrapper,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "snowsql";
   majorVersion = "1.2";
@@ -16,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1k9dyr4vyqivpg054kbvs0jdwhbqbmlp9lsyxgazdsviw8ch70c8";
   };
 
-  nativeBuildInputs = [ rpmextract makeWrapper ];
+  nativeBuildInputs = [rpmextract makeWrapper];
 
-  libPath = lib.makeLibraryPath [ openssl ];
+  libPath = lib.makeLibraryPath [openssl];
 
   buildCommand = ''
     mkdir -p $out/bin/
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Command line client for the Snowflake database";
     homepage = "https://www.snowflake.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ andehen ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [andehen];
+    platforms = ["x86_64-linux"];
   };
 }

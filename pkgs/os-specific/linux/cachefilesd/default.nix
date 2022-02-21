@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "cachefilesd";
   version = "0.10.10";
@@ -20,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://people.redhat.com/dhowells/fscache/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "leveldb";
   version = "0.201";
@@ -12,8 +15,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://code.google.com/archive/p/py-leveldb/";
     description = "Thread-safe Python bindings for LevelDB";
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = ["x86_64-linux" "i686-linux"];
     license = licenses.bsd3;
-    maintainers = [ maintainers.aanderse ];
+    maintainers = [maintainers.aanderse];
   };
 }

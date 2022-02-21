@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, typing-extensions
-, zipp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  typing-extensions,
+  zipp,
 }:
-
 buildPythonPackage rec {
   pname = "catalogue";
   version = "2.0.6";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/catalogue";
     changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

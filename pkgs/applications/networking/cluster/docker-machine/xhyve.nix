@@ -1,5 +1,14 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkg-config, cctools, Hypervisor, vmnet }:
-
+{
+  lib,
+  stdenv,
+  buildGoPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cctools,
+  Hypervisor,
+  vmnet,
+}:
 buildGoPackage rec {
   pname = "docker-machine-xhyve";
   version = "0.4.0";
@@ -17,23 +26,23 @@ buildGoPackage rec {
     export CGO_CFLAGS=-I$(pwd)/go/src/${goPackagePath}/vendor/github.com/jceel/lib9p
     export CGO_LDFLAGS=$(pwd)/go/src/${goPackagePath}/vendor/build/lib9p/lib9p.a
   '';
-  tags = [ "lib9p" ];
+  tags = ["lib9p"];
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "machine-drivers";
-    repo   = "docker-machine-driver-xhyve";
+    rev = "v${version}";
+    owner = "machine-drivers";
+    repo = "docker-machine-driver-xhyve";
     sha256 = "0000v97fr8xc5b39v44hsa87wrbk4bcwyaaivxv4hxlf4vlgg863";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ Hypervisor vmnet ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [Hypervisor vmnet];
 
   meta = with lib; {
     homepage = "https://github.com/machine-drivers/docker-machine-driver-xhyve";
     description = "Xhyve driver for docker-machine";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ periklis ];
+    maintainers = with maintainers; [periklis];
     platforms = platforms.darwin;
   };
 }

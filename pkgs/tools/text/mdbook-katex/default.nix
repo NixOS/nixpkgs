@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-katex";
   version = "0.2.10";
@@ -13,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-tqdpIBlKiyYSWFPYTnzVeDML2GM+mukbOHS3sNYUgdc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [CoreServices];
 
   meta = with lib; {
     description = "A preprocessor for mdbook, rendering LaTeX equations to HTML at build time.";
     homepage = "https://github.com/lzanini/${pname}";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ lovesegfault ];
+    license = [licenses.mit];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

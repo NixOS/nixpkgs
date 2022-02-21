@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.alerta;
 
   alertaConf = pkgs.writeTextFile {
@@ -13,13 +15,20 @@ let
       LOG_FILE = '${cfg.logDir}/alertad.log'
       LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
       CORS_ORIGINS = [ ${concatMapStringsSep ", " (s: "\"" + s + "\"") cfg.corsOrigins} ];
-      AUTH_REQUIRED = ${if cfg.authenticationRequired then "True" else "False"}
-      SIGNUP_ENABLED = ${if cfg.signupEnabled then "True" else "False"}
+      AUTH_REQUIRED = ${
+        if cfg.authenticationRequired
+        then "True"
+        else "False"
+      }
+      SIGNUP_ENABLED = ${
+        if cfg.signupEnabled
+        then "True"
+        else "False"
+      }
       ${cfg.extraConfig}
     '';
   };
-in
-{
+in {
   options.services.alerta = {
     enable = mkEnableOption "alerta";
 
@@ -56,7 +65,7 @@ in
     corsOrigins = mkOption {
       type = types.listOf types.str;
       description = "List of URLs that can access the API for Cross-Origin Resource Sharing (CORS)";
-      default = [ "http://localhost" "http://localhost:5000" ];
+      default = ["http://localhost" "http://localhost:5000"];
     };
 
     authenticationRequired = mkOption {
@@ -85,8 +94,8 @@ in
 
     systemd.services.alerta = {
       description = "Alerta Monitoring System";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
       environment = {
         ALERTA_SVR_CONF_FILE = alertaConf;
       };
@@ -97,7 +106,7 @@ in
       };
     };
 
-    environment.systemPackages = [ pkgs.alerta ];
+    environment.systemPackages = [pkgs.alerta];
 
     users.users.alerta = {
       uid = config.ids.uids.alerta;

@@ -1,5 +1,8 @@
-{ callPackage, Foundation, libobjc }:
-
+{
+  callPackage,
+  Foundation,
+  libobjc,
+}:
 callPackage ./generic.nix ({
   inherit Foundation libobjc;
   version = "5.20.1.34";

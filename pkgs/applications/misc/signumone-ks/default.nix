@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper,
-  atk, ffmpeg, gdk-pixbuf, gtk3, libXtst }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  atk,
+  ffmpeg,
+  gdk-pixbuf,
+  gtk3,
+  libXtst,
+}:
 stdenv.mkDerivation rec {
   pname = "signumone-ks";
   version = "3.1.3";
@@ -20,8 +30,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    atk gdk-pixbuf ffmpeg
-    gtk3 libXtst
+    atk
+    gdk-pixbuf
+    ffmpeg
+    gtk3
+    libXtst
   ];
 
   libPath = lib.makeLibraryPath buildInputs;
@@ -49,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "Digital signature tool for Costa Rican electronic invoicing";
     homepage = "https://signum.one/download.html";
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

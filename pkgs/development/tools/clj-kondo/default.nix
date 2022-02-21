@@ -1,5 +1,8 @@
-{ lib, buildGraalvmNativeImage, fetchurl }:
-
+{
+  lib,
+  buildGraalvmNativeImage,
+  fetchurl,
+}:
 buildGraalvmNativeImage rec {
   pname = "clj-kondo";
   version = "2022.02.09";
@@ -19,6 +22,6 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/clj-kondo/clj-kondo";
     license = licenses.epl10;
     changelog = "https://github.com/clj-kondo/clj-kondo/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ jlesquembre bandresen thiagokokada ];
+    maintainers = with maintainers; [jlesquembre bandresen thiagokokada];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, unzip, opam-core, opam-file-format }:
-
+{
+  lib,
+  buildDunePackage,
+  unzip,
+  opam-core,
+  opam-file-format,
+}:
 buildDunePackage rec {
   pname = "opam-format";
 
@@ -11,13 +16,15 @@ buildDunePackage rec {
 
   # get rid of check for curl at configure time
   # opam-format does not call curl at run time
-  configureFlags = [ "--disable-checks" ];
+  configureFlags = ["--disable-checks"];
 
-  nativeBuildInputs = [ unzip ];
-  propagatedBuildInputs = [ opam-core opam-file-format ];
+  nativeBuildInputs = [unzip];
+  propagatedBuildInputs = [opam-core opam-file-format];
 
-  meta = opam-core.meta // {
-    description = "Definition of opam datastructures and its file interface";
-    maintainers = with lib.maintainers; [ sternenseemann ];
-  };
+  meta =
+    opam-core.meta
+    // {
+      description = "Definition of opam datastructures and its file interface";
+      maintainers = with lib.maintainers; [sternenseemann];
+    };
 }

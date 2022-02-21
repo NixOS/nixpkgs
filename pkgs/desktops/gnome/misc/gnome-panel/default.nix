@@ -1,31 +1,32 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, dconf
-, evolution-data-server
-, gdm
-, gettext
-, glib
-, gnome-desktop
-, gnome-menus
-, gnome
-, gtk3
-, itstool
-, libgweather
-, libsoup
-, libwnck
-, libxml2
-, pkg-config
-, polkit
-, systemd
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  dconf,
+  evolution-data-server,
+  gdm,
+  gettext,
+  glib,
+  gnome-desktop,
+  gnome-menus,
+  gnome,
+  gtk3,
+  itstool,
+  libgweather,
+  libsoup,
+  libwnck,
+  libxml2,
+  pkg-config,
+  polkit,
+  systemd,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-panel";
   version = "3.42.0";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = ["out" "dev" "man"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

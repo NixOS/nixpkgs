@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, plumbum
-, requests
-, setuptools
-, hypothesis
-, nose
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  plumbum,
+  requests,
+  setuptools,
+  hypothesis,
+  nose,
+  responses,
 }:
-
 buildPythonPackage rec {
   pname = "habitipy";
   version = "0.3.0";
@@ -36,12 +36,12 @@ buildPythonPackage rec {
     HOME=$TMPDIR nosetests
   '';
 
-  pythonImportsCheck = [ "habitipy" ];
+  pythonImportsCheck = ["habitipy"];
 
   meta = with lib; {
     description = "Tools and library for Habitica restful API";
     homepage = "https://github.com/ASMfreaK/habitipy";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

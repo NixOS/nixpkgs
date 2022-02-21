@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.wireshark;
   wireshark = cfg.package;
 in {
@@ -28,7 +30,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ wireshark ];
+    environment.systemPackages = [wireshark];
     users.groups.wireshark = {};
 
     security.wrappers.dumpcap = {

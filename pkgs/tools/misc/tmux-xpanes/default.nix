@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, openssl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "tmux-xpanes";
   version = "4.1.3";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-e0dEkkEkColBQ0PgOQpoVbIkR3aVsrMZoSGbg4O11SU=";
   };
 
-  buildInputs = [ openssl perl ];
+  buildInputs = [openssl perl];
 
   installPhase = ''
     # Create directories.
@@ -28,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/greymd/tmux-xpanes";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ monsieurp ];
+    maintainers = with maintainers; [monsieurp];
   };
 }

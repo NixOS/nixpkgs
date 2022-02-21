@@ -1,47 +1,66 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, neko, mbedtls, Security }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  ocaml-ng,
+  zlib,
+  pcre,
+  neko,
+  mbedtls,
+  Security,
+}: let
   ocamlDependencies = version:
     if lib.versionAtLeast version "4.2"
-    then with ocaml-ng.ocamlPackages; [
-      ocaml
-      findlib
-      sedlex_2
-      xml-light
-      ptmap
-      camlp5
-      sha
-      dune_2
-      luv
-      ocaml_extlib
-    ] else if lib.versionAtLeast version "4.0"
-    then with ocaml-ng.ocamlPackages_4_10; [
-      ocaml
-      findlib
-      sedlex_2
-      xml-light
-      ptmap
-      camlp5
-      sha
-      dune_2
-      luv
-      ocaml_extlib-1-7-7
-    ] else with ocaml-ng.ocamlPackages_4_05; [
-      ocaml
-      camlp4
-    ];
+    then
+      with ocaml-ng.ocamlPackages; [
+        ocaml
+        findlib
+        sedlex_2
+        xml-light
+        ptmap
+        camlp5
+        sha
+        dune_2
+        luv
+        ocaml_extlib
+      ]
+    else if lib.versionAtLeast version "4.0"
+    then
+      with ocaml-ng.ocamlPackages_4_10; [
+        ocaml
+        findlib
+        sedlex_2
+        xml-light
+        ptmap
+        camlp5
+        sha
+        dune_2
+        luv
+        ocaml_extlib-1-7-7
+      ]
+    else
+      with ocaml-ng.ocamlPackages_4_05; [
+        ocaml
+        camlp4
+      ];
 
   defaultPatch = ''
     substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
       --replace '"neko"' '"${neko}/bin/neko"'
   '';
 
-  generic = { sha256, version, prePatch ? defaultPatch }:
+  generic = {
+    sha256,
+    version,
+    prePatch ? defaultPatch,
+  }:
     stdenv.mkDerivation {
       pname = "haxe";
       inherit version;
 
-      buildInputs = [ zlib pcre neko ]
+      buildInputs =
+        [zlib pcre neko]
         ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls
         ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.isDarwin) Security
         ++ ocamlDependencies version;
@@ -56,7 +75,7 @@ let
 
       inherit prePatch;
 
-      buildFlags = [ "all" "tools" ];
+      buildFlags = ["all" "tools"];
 
       installPhase = ''
         install -vd "$out/bin" "$out/lib/haxe/std"
@@ -114,8 +133,8 @@ let
       meta = with lib; {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
-        license = with licenses; [ gpl2Plus mit ]; # based on upstream opam file
-        maintainers = [ maintainers.marcweber maintainers.locallycompact ];
+        license = with licenses; [gpl2Plus mit]; # based on upstream opam file
+        maintainers = [maintainers.marcweber maintainers.locallycompact];
         platforms = platforms.linux ++ platforms.darwin;
       };
     };

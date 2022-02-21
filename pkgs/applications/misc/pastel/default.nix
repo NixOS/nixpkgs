@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "pastel";
   version = "0.8.1";
@@ -19,7 +24,13 @@ rustPlatform.buildRustPackage rec {
     description = "A command-line tool to generate, analyze, convert and manipulate colors";
     homepage = "https://github.com/sharkdp/pastel";
     changelog = "https://github.com/sharkdp/pastel/releases/tag/v${version}";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ davidtwco ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [davidtwco];
   };
 }

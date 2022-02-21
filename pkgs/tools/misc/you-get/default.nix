@@ -1,5 +1,9 @@
-{ lib, buildPythonApplication, fetchPypi, installShellFiles }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  installShellFiles,
+}:
 buildPythonApplication rec {
   pname = "you-get";
   version = "0.4.1555";
@@ -13,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "99282aca720c7ee1d9ef4b63bbbd226e906ea170b789a459fafd5b0627b0b15f";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installShellCompletion --cmd you-get \
@@ -27,6 +31,6 @@ buildPythonApplication rec {
     homepage = "https://you-get.org";
     changelog = "https://github.com/soimort/you-get/raw/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ryneeverett ];
+    maintainers = with maintainers; [ryneeverett];
   };
 }

@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, glib
-, pkg-config
-, udev
-, libgudev
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  glib,
+  pkg-config,
+  udev,
+  libgudev,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libwacom";
   version = "1.99.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "linuxwacom";

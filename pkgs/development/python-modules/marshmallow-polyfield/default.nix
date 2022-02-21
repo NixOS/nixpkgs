@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "marshmallow-polyfield";
   version = "5.10";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Extension to Marshmallow to allow for polymorphic fields";
     homepage = "https://github.com/Bachmann1234/marshmallow-polyfield";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

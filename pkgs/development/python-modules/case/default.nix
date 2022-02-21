@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pythonOlder
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  pythonOlder,
+  pytestCheckHook,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "case";
   version = "1.5.3";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/celery/case";
     description = "Utilities for unittests handling";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

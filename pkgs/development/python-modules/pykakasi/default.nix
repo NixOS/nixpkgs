@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, importlib-metadata
-, jaconv
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  importlib-metadata,
+  jaconv,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pykakasi";
   version = "2.2.1";
@@ -30,12 +30,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    jaconv
-    deprecated
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      jaconv
+      deprecated
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   checkInputs = [
     pytest-benchmark
@@ -57,6 +59,6 @@ buildPythonPackage rec {
     description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
     homepage = "https://github.com/miurahr/pykakasi";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

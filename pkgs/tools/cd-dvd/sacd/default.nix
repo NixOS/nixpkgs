@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sacd";
   version = "19.7.16.37";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Sound-Linux-More/sacd";
     license = licenses.gpl3;
-    maintainers = [ maintainers.doronbehar ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.doronbehar];
+    platforms = ["x86_64-linux"];
   };
 }

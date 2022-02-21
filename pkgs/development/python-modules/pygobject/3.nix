@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, glib
-, gobject-introspection
-, pycairo
-, cairo
-, ncurses
-, meson
-, ninja
-, isPy3k
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPythonPackage,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  pycairo,
+  cairo,
+  ncurses,
+  meson,
+  ninja,
+  isPy3k,
+  gnome,
 }:
-
 buildPythonPackage rec {
   pname = "pygobject";
   version = "3.42.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   disabled = !isPy3k;
 
@@ -36,12 +36,14 @@ buildPythonPackage rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    glib
-    gobject-introspection
-  ] ++ lib.optionals stdenv.isDarwin [
-    ncurses
-  ];
+  buildInputs =
+    [
+      glib
+      gobject-introspection
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ncurses
+    ];
 
   propagatedBuildInputs = [
     pycairo
@@ -60,7 +62,7 @@ buildPythonPackage rec {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.unix;
   };
 }

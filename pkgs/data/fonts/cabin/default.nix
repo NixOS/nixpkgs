@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-
+{
+  lib,
+  fetchFromGitHub,
+}:
 fetchFromGitHub rec {
   name = "cabin-1.005";
 
@@ -31,7 +33,7 @@ fetchFromGitHub rec {
     '';
     homepage = "http://www.impallari.com/cabin";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = with maintainers; [cmfwyp];
     platforms = platforms.all;
   };
 }

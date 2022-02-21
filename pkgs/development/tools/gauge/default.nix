@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "gauge";
   version = "1.4.3";
@@ -19,7 +22,7 @@ buildGoModule rec {
     description = "Light weight cross-platform test automation";
     homepage = "https://gauge.org";
     license = licenses.asl20;
-    maintainers = [ maintainers.vdemeester ];
+    maintainers = [maintainers.vdemeester];
     platforms = platforms.unix;
   };
 }

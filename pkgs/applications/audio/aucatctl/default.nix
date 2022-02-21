@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, sndio, libbsd }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  sndio,
+  libbsd,
+}:
 stdenv.mkDerivation rec {
   pname = "aucatctl";
   version = "0.1";
@@ -9,15 +14,18 @@ stdenv.mkDerivation rec {
     sha256 = "524f2fae47db785234f166551520d9605b9a27551ca438bd807e3509ce246cf0";
   };
 
-  buildInputs = [ sndio ]
+  buildInputs =
+    [sndio]
     ++ lib.optional (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD)
     libbsd;
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-  '' + lib.optionalString
+  preBuild =
+    ''
+      makeFlagsArray+=("PREFIX=$out")
+    ''
+    + lib.optionalString
     (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD) ''
       makeFlagsArray+=(LDADD="-lsndio -lbsd")
 
@@ -27,11 +35,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description =
-      "The aucatctl utility sends MIDI messages to control sndiod and/or aucat volumes";
+    description = "The aucatctl utility sends MIDI messages to control sndiod and/or aucat volumes";
     homepage = "http://www.sndio.org";
     license = licenses.isc;
-    maintainers = with maintainers; [ sna ];
+    maintainers = with maintainers; [sna];
     platforms = platforms.unix;
   };
 }

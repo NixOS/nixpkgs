@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchurl
-, pkg-config, makeWrapper, autoreconfHook
-, openldap, python2, pam
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  makeWrapper,
+  autoreconfHook,
+  openldap,
+  python2,
+  pam,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nss-pam-ldapd";
   version = "0.9.11";
@@ -12,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dna3r0q6sjhhlkhcp8x2zkslrd4y7701kk6fl5r940sdph1pmyh";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
-  buildInputs = [ openldap pam python2 ];
+  nativeBuildInputs = [pkg-config makeWrapper autoreconfHook];
+  buildInputs = [openldap pam python2];
 
   preConfigure = ''
     substituteInPlace Makefile.in --replace "install-data-local: " "# install-data-local: "

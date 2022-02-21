@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, cython
-, pkg-config
-, libgbinder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  cython,
+  pkg-config,
+  libgbinder,
 }:
-
 buildPythonPackage rec {
   pname = "gbinder-python";
   version = "1.0.0";
@@ -26,13 +26,13 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  setupPyGlobalFlags = [ "--cython" ];
+  setupPyGlobalFlags = ["--cython"];
 
   meta = with lib; {
     description = "Python bindings for libgbinder";
     homepage = "https://github.com/erfanoabdi/gbinder-python";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ mcaju ];
+    maintainers = with maintainers; [mcaju];
     platforms = platforms.linux;
   };
 }

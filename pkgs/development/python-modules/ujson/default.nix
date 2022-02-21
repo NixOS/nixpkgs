@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "ujson";
   version = "5.1.0";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ujson" ];
+  pythonImportsCheck = ["ujson"];
 
   meta = with lib; {
     description = "Ultra fast JSON encoder and decoder for Python";
     homepage = "https://pypi.python.org/pypi/ujson";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

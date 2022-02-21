@@ -1,14 +1,14 @@
-{ callPackage
-, lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, dbus
-, libiconv
-, Security
+{
+  callPackage,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  dbus,
+  libiconv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
   version = "0.12.9";
@@ -22,10 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-zakSQptKK/X/8MDJxRUHTDIGPh77cq5PrOmPEneD0YM=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = lib.optionals stdenv.isLinux [ dbus ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [dbus]
+    ++ lib.optionals stdenv.isDarwin [Security libiconv];
 
   # Requires network access, fails in sandbox.
   doCheck = false;
@@ -44,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/PyO3/maturin";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

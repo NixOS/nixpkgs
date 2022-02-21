@@ -1,14 +1,14 @@
-{ lib
-, amqtt
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  amqtt,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "roombapy";
   version = "1.6.5";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
     homepage = "https://github.com/pschmitt/roombapy";
     license = licenses.mit;
-    maintainers = with maintainers; [ justinas ];
+    maintainers = with maintainers; [justinas];
   };
 }

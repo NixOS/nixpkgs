@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "python-crontab";
   version = "2.6.0";
@@ -9,14 +14,14 @@ buildPythonPackage rec {
     sha256 = "1e35ed7a3cdc3100545b43e196d34754e6551e7f95e4caebbe0e1c0ca41c2f1b";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   disabledTests = [
     "test_07_non_posix_shell"
     # doctest that assumes /tmp is writeable, awkward to patch
     "test_03_usage"
   ];
 
-  propagatedBuildInputs = [ python-dateutil ];
+  propagatedBuildInputs = [python-dateutil];
 
   meta = with lib; {
     description = "Python API for crontab";
@@ -26,6 +31,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://pypi.org/project/python-crontab/";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ kfollesdal ];
+    maintainers = with maintainers; [kfollesdal];
   };
 }

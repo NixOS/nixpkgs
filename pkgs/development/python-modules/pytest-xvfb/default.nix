@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, virtual-display
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  virtual-display,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-xvfb";
   version = "2.0.0";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1kyq5rg27dsnj7dc6x9y7r8vwf8rc88y2ppnnw6r96alw0nn9fn4";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
   propagatedBuildInputs = [
     virtual-display
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "A pytest plugin to run Xvfb for tests";
     homepage = "https://github.com/The-Compiler/pytest-xvfb";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromSourcehut }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromSourcehut,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-depgraph";
   version = "1.2.2";
@@ -18,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sr.ht/~jplatte/cargo-depgraph";
     changelog = "https://git.sr.ht/~jplatte/cargo-depgraph/tree/v${version}/item/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

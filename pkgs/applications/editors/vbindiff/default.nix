@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "vbindiff";
   version = "3.0_beta5";
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   src = fetchurl {
     url = "https://www.cjmweb.net/vbindiff/${pname}-${version}.tar.gz";

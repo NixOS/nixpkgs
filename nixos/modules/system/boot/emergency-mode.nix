@@ -1,13 +1,12 @@
-{ config, lib, ... }:
-
-with lib;
-
 {
-
+  config,
+  lib,
+  ...
+}:
+with lib; {
   ###### interface
 
   options = {
-
     systemd.enableEmergencyMode = mkOption {
       default = true;
       type = types.bool;
@@ -20,18 +19,15 @@ with lib;
         as possible.
       '';
     };
-
   };
 
   ###### implementation
 
   config = {
-
     systemd.additionalUpstreamSystemUnits = optionals
-      config.systemd.enableEmergencyMode [
-        "emergency.target" "emergency.service"
-      ];
-
+    config.systemd.enableEmergencyMode [
+      "emergency.target"
+      "emergency.service"
+    ];
   };
-
 }

@@ -1,8 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "mpd-discord-rpc";
   version = "1.2.3";
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Rust application which displays your currently playing song / album / artist from MPD in Discord using Rich Presence";
     homepage = "https://github.com/JakeStanger/mpd-discord-rpc";
     license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [kranzes];
   };
 }

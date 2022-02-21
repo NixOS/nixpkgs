@@ -1,11 +1,11 @@
-{ lib
-, mkDerivation
-, fetchgit
-, autoreconfHook
-, pkg-config
-, qtbase
+{
+  lib,
+  mkDerivation,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  qtbase,
 }:
-
 mkDerivation {
   pname = "ofono-phonesim";
   version = "unstable-2019-11-18";
@@ -34,7 +34,7 @@ mkDerivation {
     description = "Phone Simulator for modem testing";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

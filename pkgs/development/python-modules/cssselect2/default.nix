@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, tinycss2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  tinycss2,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "cssselect2";
   version = "0.4.1";
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     sed -i '/^addopts/d' pyproject.toml
   '';
 
-  propagatedBuildInputs = [ tinycss2 ];
+  propagatedBuildInputs = [tinycss2];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "cssselect2" ];
+  pythonImportsCheck = ["cssselect2"];
 
   meta = with lib; {
     description = "CSS selectors for Python ElementTree";

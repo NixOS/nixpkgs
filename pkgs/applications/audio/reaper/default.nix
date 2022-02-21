@@ -1,30 +1,34 @@
-{ config, lib, stdenv
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-
-, alsa-lib
-, gtk3
-, lame
-, ffmpeg
-, vlc
-, xdg-utils
-, which
-
-, jackSupport ? true, libjack2
-, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
+{
+  config,
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  alsa-lib,
+  gtk3,
+  lame,
+  ffmpeg,
+  vlc,
+  xdg-utils,
+  which,
+  jackSupport ? true,
+  libjack2,
+  pulseaudioSupport ? config.pulseaudio or true,
+  libpulseaudio,
 }:
-
 stdenv.mkDerivation rec {
   pname = "reaper";
   version = "6.47";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
-    hash = {
-      x86_64-linux = "sha256-31HmIx/ohbrzu5uj8KOOZiHNCmXwng9h+fIGaJfYyqA=";
-      aarch64-linux = "sha256-CMmcBpaZ6BEZJ1144aQhOJ/o2NrGD7/8aq+ObLVMXYE=";
-    }.${stdenv.hostPlatform.system};
+    hash =
+      {
+        x86_64-linux = "sha256-31HmIx/ohbrzu5uj8KOOZiHNCmXwng9h+fIGaJfYyqA=";
+        aarch64-linux = "sha256-CMmcBpaZ6BEZJ1144aQhOJ/o2NrGD7/8aq+ObLVMXYE=";
+      }
+      .${stdenv.hostPlatform.system};
   };
 
   nativeBuildInputs = [
@@ -40,11 +44,12 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  runtimeDependencies = [
-    gtk3 # libSwell needs libgdk-3.so.0
-  ]
-  ++ lib.optional jackSupport libjack2
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  runtimeDependencies =
+    [
+      gtk3 # libSwell needs libgdk-3.so.0
+    ]
+    ++ lib.optional jackSupport libjack2
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
   dontBuild = true;
 
@@ -64,7 +69,7 @@ stdenv.mkDerivation rec {
     # seem to have an effect for some plugins.
     # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [lame ffmpeg vlc]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
@@ -77,7 +82,7 @@ stdenv.mkDerivation rec {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer ];
+    platforms = ["x86_64-linux" "aarch64-linux"];
+    maintainers = with maintainers; [jfrankenau ilian orivej uniquepointer];
   };
 }

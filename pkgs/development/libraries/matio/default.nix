@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "matio";
   version = "1.5.21";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "A C library for reading and writing Matlab MAT files";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [maintainers.vbgl];
     homepage = "http://matio.sourceforge.net/";
   };
 }

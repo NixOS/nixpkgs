@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, ois, ogre, libX11, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  ois,
+  ogre,
+  libX11,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "ogre-paged";
   version = "1.2.0";
@@ -28,10 +38,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ois ogre libX11 boost ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ois ogre libX11 boost];
+  nativeBuildInputs = [cmake pkg-config];
 
-  cmakeFlags = [ "-DPAGEDGEOMETRY_BUILD_SAMPLES=OFF" ];
+  cmakeFlags = ["-DPAGEDGEOMETRY_BUILD_SAMPLES=OFF"];
 
   meta = {
     description = "Paged Geometry for Ogre3D";

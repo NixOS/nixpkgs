@@ -1,10 +1,17 @@
-{ stdenv, lib, bundlerEnv, ruby, bundlerUpdateScript, xsel, makeWrapper }:
-
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  ruby,
+  bundlerUpdateScript,
+  xsel,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "pws";
   version = (import ./gemset.nix).pws.version;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontUnpack = true;
 
@@ -26,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line password safe";
-    homepage    = "https://github.com/janlelis/pws";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ swistak35 nicknovitski ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/janlelis/pws";
+    license = licenses.mit;
+    maintainers = with maintainers; [swistak35 nicknovitski];
+    platforms = platforms.unix;
   };
 }

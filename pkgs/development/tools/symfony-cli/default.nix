@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "symfony-cli";
   version = "5.3.4";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "Symfony CLI";
     homepage = "https://github.com/symfony-cli/symfony-cli";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ drupol ];
+    maintainers = with maintainers; [drupol];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, testVersion
-, lsd
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  testVersion,
+  lsd,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
   version = "0.21.0";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-P0HJVp2ReJuLSZrArw/EAfLFDOZqswI0nD1SCHwegoE=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
   postInstall = ''
     installShellCompletion $releaseDir/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
   '';
@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Peltoche/lsd";
     description = "The next gen ls command";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne marsam zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [Br1ght0ne marsam zowoq SuperSandro2000];
   };
 }

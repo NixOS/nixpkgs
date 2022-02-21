@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpsig
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpsig,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pysmartapp";
   version = "0.3.4";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "Python implementation to work with SmartApp lifecycle events";
     homepage = "https://github.com/andrewsayre/pysmartapp";
     changelog = "https://github.com/andrewsayre/pysmartapp/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

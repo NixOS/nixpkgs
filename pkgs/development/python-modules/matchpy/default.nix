@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, hopcroftkarp
-, multiset
-, pytest
-, pytest-runner
-, hypothesis
-, setuptools-scm
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  hopcroftkarp,
+  multiset,
+  pytest,
+  pytest-runner,
+  hypothesis,
+  setuptools-scm,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "matchpy";
   version = "0.5.1";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     # Fix tests for pytest 4. Remove with the next release
     (fetchpatch {
       url = "https://github.com/HPAC/matchpy/commit/b405a2717a7793d58c47b2e2197d9d00c06fb13c.patch";
-      includes = [ "tests/conftest.py" ];
+      includes = ["tests/conftest.py"];
       sha256 = "1b6gqf2vy9qxg384nqr9k8il335afhbdmlyx4vhd8r8rqpv7gax9";
     })
   ];
@@ -36,14 +36,14 @@ buildPythonPackage rec {
        --replace "pytest>=3.0,<4.0" "pytest"
   '';
 
-  buildInputs = [ setuptools-scm pytest-runner ];
-  checkInputs = [ pytest hypothesis ];
-  propagatedBuildInputs = [ hopcroftkarp multiset ];
+  buildInputs = [setuptools-scm pytest-runner];
+  checkInputs = [pytest hypothesis];
+  propagatedBuildInputs = [hopcroftkarp multiset];
 
   meta = with lib; {
     description = "A library for pattern matching on symbolic expressions";
     homepage = "https://github.com/HPAC/matchpy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

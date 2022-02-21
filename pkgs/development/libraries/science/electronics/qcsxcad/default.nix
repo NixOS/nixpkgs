@@ -1,13 +1,13 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, csxcad
-, tinyxml
-, vtkWithQt5
-, qtbase
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  csxcad,
+  tinyxml,
+  vtkWithQt5,
+  qtbase,
 }:
-
 mkDerivation {
   pname = "qcsxcad";
   version = "unstable-2020-01-04";
@@ -19,7 +19,7 @@ mkDerivation {
     sha256 = "11kbh0mxbdfh7s5azqin3i2alic5ihmdfj0jwgnrhlpjk4cbf9rn";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     cmake
@@ -41,7 +41,7 @@ mkDerivation {
     description = "Qt library for CSXCAD";
     homepage = "https://github.com/thliebig/QCSXCAD";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ matthuszagh ];
+    maintainers = with maintainers; [matthuszagh];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, jre, makeWrapper}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "varscan";
   version = "2.4.4";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+yO3KrZ2+1qJvQIJHCtsmv8hC5a+4E2d7mrvTYtygU0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   dontUnpack = true;
 
@@ -30,8 +35,7 @@ stdenv.mkDerivation rec {
     # University School of Medicine.
     license = licenses.unfree;
     homepage = "https://github.com/dkoboldt/varscan";
-    maintainers = with maintainers; [ jbedo ];
+    maintainers = with maintainers; [jbedo];
     platforms = platforms.all;
   };
-
 }

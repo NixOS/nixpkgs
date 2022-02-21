@@ -1,7 +1,12 @@
-{ lib, appleDerivation, xcbuildHook, llvmPackages, makeWrapper }:
-
+{
+  lib,
+  appleDerivation,
+  xcbuildHook,
+  llvmPackages,
+  makeWrapper,
+}:
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook makeWrapper ];
+  nativeBuildInputs = [xcbuildHook makeWrapper];
 
   patches = [
     # The following copied from
@@ -32,6 +37,6 @@ appleDerivation {
 
   meta = {
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = with lib.maintainers; [matthewbauer];
   };
 }

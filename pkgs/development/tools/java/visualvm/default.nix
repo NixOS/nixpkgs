@@ -1,24 +1,31 @@
-{ stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
-
+{
+  stdenv,
+  fetchzip,
+  lib,
+  makeWrapper,
+  makeDesktopItem,
+  jdk,
+  gawk,
+}:
 stdenv.mkDerivation rec {
   version = "2.1.2";
   pname = "visualvm";
 
   src = fetchzip {
-    url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";
+    url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""] version}.zip";
     sha256 = "sha256-khbXzdsC0PA10HEu/dIFQ87+QbKpctmTUTt/zEuxV6c=";
   };
 
   desktopItem = makeDesktopItem {
-      name = "visualvm";
-      exec = "visualvm";
-      comment = "Java Troubleshooting Tool";
-      desktopName = "VisualVM";
-      genericName = "Java Troubleshooting Tool";
-      categories = "Development;";
+    name = "visualvm";
+    exec = "visualvm";
+    comment = "Java Troubleshooting Tool";
+    desktopName = "VisualVM";
+    genericName = "Java Troubleshooting Tool";
+    categories = "Development;";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     find . -type f -name "*.dll" -o -name "*.exe"  -delete;
@@ -42,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://visualvm.github.io";
     license = licenses.gpl2ClasspathPlus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ michalrus moaxcp ];
+    maintainers = with maintainers; [michalrus moaxcp];
   };
 }

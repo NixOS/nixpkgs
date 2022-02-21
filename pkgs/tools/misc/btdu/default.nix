@@ -1,12 +1,19 @@
-{stdenv, lib, fetchurl, dub, ncurses, ldc, zlib, removeReferencesTo }:
-
-let
-    _d_ae_ver              = "0.0.3100";
-    _d_btrfs_ver           = "0.0.12";
-    _d_ncurses_ver         = "0.0.149";
-    _d_emsi_containers_ver = "0.9.0";
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dub,
+  ncurses,
+  ldc,
+  zlib,
+  removeReferencesTo,
+}: let
+  _d_ae_ver = "0.0.3100";
+  _d_btrfs_ver = "0.0.12";
+  _d_ncurses_ver = "0.0.149";
+  _d_emsi_containers_ver = "0.9.0";
 in
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation rec {
     pname = "btdu";
     version = "0.3.1";
 
@@ -39,9 +46,8 @@ stdenv.mkDerivation rec {
       mv ae-${_d_ae_ver} "ae"
     '';
 
-
-    nativeBuildInputs = [ dub ldc ];
-    buildInputs = [ ncurses zlib ];
+    nativeBuildInputs = [dub ldc];
+    buildInputs = [ncurses zlib];
 
     configurePhase = ''
       runHook preConfigure
@@ -78,6 +84,6 @@ stdenv.mkDerivation rec {
       homepage = "https://github.com/CyberShadow/btdu";
       license = licenses.gpl2Only;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ atila ];
+      maintainers = with maintainers; [atila];
     };
-}
+  }

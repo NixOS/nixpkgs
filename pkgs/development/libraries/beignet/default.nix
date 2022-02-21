@@ -1,41 +1,42 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libclang
-, libllvm
-, libdrm
-, libX11
-, libpthreadstubs
-, libXdmcp
-, libXdamage
-, libXext
-, python3
-, ocl-icd
-, libGL
-, makeWrapper
-, beignet
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libclang,
+  libllvm,
+  libdrm,
+  libX11,
+  libpthreadstubs,
+  libXdmcp,
+  libXdamage,
+  libXext,
+  python3,
+  ocl-icd,
+  libGL,
+  makeWrapper,
+  beignet,
 }:
-
 stdenv.mkDerivation rec {
   pname = "beignet";
   version = "unstable-2018.08.20";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "beignet";
-    rev    = "fc5f430cb7b7a8f694d86acbb038bd5b38ec389c";
+    owner = "intel";
+    repo = "beignet";
+    rev = "fc5f430cb7b7a8f694d86acbb038bd5b38ec389c";
     sha256 = "1z64v69w7f52jrskh1jfyh1x46mzfhjrqxj9hhgzh3xxv9yla32h";
   };
 
-  patches = [ ./clang_llvm.patch ];
+  patches = [./clang_llvm.patch];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace /etc/OpenCL/vendors "\''${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors"
     patchShebangs src/git_sha1.sh
   '';
 
-  cmakeFlags = [ "-DCLANG_LIBRARY_DIR=${libclang.lib}/lib" ];
+  cmakeFlags = ["-DCLANG_LIBRARY_DIR=${libclang.lib}/lib"];
 
   buildInputs = [
     libllvm
@@ -104,9 +105,9 @@ stdenv.mkDerivation rec {
       It supports the Intel OpenCL runtime library and compiler.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ artuuge zimbatm ];
+    maintainers = with maintainers; [artuuge zimbatm];
     platforms = platforms.linux;
     # Requires libdrm_intel
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = ["aarch64-linux"];
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, cmake, libGL, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  libGL,
+  SDL2,
+  SDL2_mixer,
+  SDL2_net,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "eternity-engine";
   version = "4.02.00";
@@ -11,8 +20,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ libGL SDL2 SDL2_mixer SDL2_net ];
+  nativeBuildInputs = [cmake makeWrapper];
+  buildInputs = [libGL SDL2 SDL2_mixer SDL2_net];
 
   installPhase = ''
     install -Dm755 eternity/eternity $out/lib/eternity/eternity
@@ -26,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "New school Doom port by James Haley";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ MP2E ];
+    maintainers = with lib.maintainers; [MP2E];
   };
 }

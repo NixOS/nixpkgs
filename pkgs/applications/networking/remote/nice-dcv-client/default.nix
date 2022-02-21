@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, libX11
-, gst_all_1
-, sqlite
-, libepoxy
-, pango
-, cairo
-, gdk-pixbuf
-, e2fsprogs
-, libkrb5
-, libva
-, openssl
-, pcsclite
-, gtk3
-, libselinux
-, libxml2
-, libffi
-, python3Packages
-, cpio
-, autoPatchelfHook
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  libX11,
+  gst_all_1,
+  sqlite,
+  libepoxy,
+  pango,
+  cairo,
+  gdk-pixbuf,
+  e2fsprogs,
+  libkrb5,
+  libva,
+  openssl,
+  pcsclite,
+  gtk3,
+  libselinux,
+  libxml2,
+  libffi,
+  python3Packages,
+  cpio,
+  autoPatchelfHook,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nice-dcv-client";
   version = "2021.2.3797-1";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-iLz25SB5v7ghkAZOMGPmpNaPihd8ikzCQS//r1xBNRU=";
     };
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook python3Packages.rpm ];
+  nativeBuildInputs = [autoPatchelfHook wrapGAppsHook python3Packages.rpm];
   unpackPhase = ''
     rpm2cpio $src | ${cpio}/bin/cpio -idm
   '';
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "High-performance remote display protocol";
     homepage = "https://aws.amazon.com/hpc/dcv/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ rmcgibbo ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [rmcgibbo];
   };
 }

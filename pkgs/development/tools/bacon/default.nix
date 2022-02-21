@@ -1,5 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  CoreServices,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
   version = "1.2.5";
@@ -19,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "Background rust code checker";
     homepage = "https://github.com/Canop/bacon";
     license = licenses.agpl3Only;
-    maintainers = [ maintainers.FlorianFranzen ];
+    maintainers = [maintainers.FlorianFranzen];
   };
 }

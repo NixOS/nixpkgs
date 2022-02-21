@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, hyperscan
-, pkg-config
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  hyperscan,
+  pkg-config,
 }:
-
 buildGoModule rec {
   pname = "secretscanner";
   version = "20210214-${lib.strings.substring 0 7 rev}";
@@ -19,9 +19,9 @@ buildGoModule rec {
 
   vendorSha256 = "0b7qa83iqnigihgwlqsxi28n7d9h0dk3wx1bqvhn4k01483cipsd";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ hyperscan ];
+  buildInputs = [hyperscan];
 
   postInstall = ''
     mv $out/bin/SecretScanner $out/bin/$pname
@@ -30,8 +30,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to find secrets and passwords in container images and file systems";
     homepage = "https://github.com/deepfence/SecretScanner";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }
-

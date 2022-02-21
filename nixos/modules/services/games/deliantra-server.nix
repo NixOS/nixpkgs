@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.deliantra-server;
   serverPort = 13327;
 in {
@@ -96,11 +98,11 @@ in {
 
   config = mkIf cfg.enable {
     users.users.deliantra = {
-      description     = "Deliantra server daemon user";
-      home            = cfg.stateDir;
-      createHome      = false;
-      isSystemUser    = true;
-      group           = "deliantra";
+      description = "Deliantra server daemon user";
+      home = cfg.stateDir;
+      createHome = false;
+      isSystemUser = true;
+      group = "deliantra";
     };
     users.groups.deliantra = {};
 
@@ -110,30 +112,32 @@ in {
     # ${deliantra}/etc/deliantra-server/${name} and appending the user setting
     # to it.
     environment.etc = lib.attrsets.mapAttrs'
-      (name: value: lib.attrsets.nameValuePair "deliantra-server/${name}" {
+    (name: value:
+      lib.attrsets.nameValuePair "deliantra-server/${name}" {
         mode = "0644";
         text =
           # Deliantra doesn't come with a motd file, but respects it if present
           # in /etc.
           (optionalString (name != "motd")
-            (fileContents "${cfg.package}/etc/deliantra-server/${name}"))
+          (fileContents "${cfg.package}/etc/deliantra-server/${name}"))
           + "\n${value}";
       }) ({
-        motd = "";
-        settings = "";
-        config = "";
-        dm_file = "";
-      } // cfg.configFiles);
+      motd = "";
+      settings = "";
+      config = "";
+      dm_file = "";
+    }
+    // cfg.configFiles);
 
     systemd.services.deliantra-server = {
-      description   = "Deliantra Server Daemon";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Deliantra Server Daemon";
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       environment = {
-        DELIANTRA_DATADIR="${cfg.dataDir}";
-        DELIANTRA_LOCALDIR="${cfg.stateDir}";
-        DELIANTRA_CONFDIR="/etc/deliantra-server";
+        DELIANTRA_DATADIR = "${cfg.dataDir}";
+        DELIANTRA_LOCALDIR = "${cfg.stateDir}";
+        DELIANTRA_CONFDIR = "/etc/deliantra-server";
       };
 
       serviceConfig = mkMerge [
@@ -166,7 +170,7 @@ in {
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ serverPort ];
+      allowedTCPPorts = [serverPort];
     };
   };
 }

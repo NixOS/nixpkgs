@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, python2
-, python3
-, pkg-config
-, readline
-, gettext
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, wafHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python2,
+  python3,
+  pkg-config,
+  readline,
+  gettext,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  wafHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ntdb";
   version = "1.0";

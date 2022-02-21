@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, libvorbis, SDL }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  libvorbis,
+  SDL,
+}:
 stdenv.mkDerivation rec {
   pname = "mp3blaster";
   version = "3.2.6";
@@ -21,14 +28,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [
-    ncurses
-    libvorbis
-  ] ++ lib.optional stdenv.isDarwin SDL;
+  buildInputs =
+    [
+      ncurses
+      libvorbis
+    ]
+    ++ lib.optional stdenv.isDarwin SDL;
 
   NIX_CFLAGS_COMPILE = toString ([
     "-Wno-narrowing"
-  ] ++ lib.optionals stdenv.cc.isClang [
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
     "-Wno-reserved-user-defined-literal"
   ]);
 
@@ -36,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "An audio player for the text console";
     homepage = "http://www.mp3blaster.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ earldouglas ];
+    maintainers = with maintainers; [earldouglas];
     platforms = with platforms; linux ++ darwin;
   };
 }

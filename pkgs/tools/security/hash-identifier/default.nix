@@ -1,5 +1,8 @@
-{ lib, fetchFromGitLab, python3Packages }:
-
+{
+  lib,
+  fetchFromGitLab,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "hash-identifier";
   version = "1.2";
@@ -22,6 +25,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/blackploit/hash-identifier";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    maintainers = with maintainers; [ethancedwards8];
   };
 }

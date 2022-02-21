@@ -1,18 +1,18 @@
-{ lib
-, betamax
-, betamax-matchers
-, betamax-serializers
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, prawcore
-, pytestCheckHook
-, pythonOlder
-, requests-toolbelt
-, update_checker
-, websocket-client
+{
+  lib,
+  betamax,
+  betamax-matchers,
+  betamax-serializers,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  prawcore,
+  pytestCheckHook,
+  pythonOlder,
+  requests-toolbelt,
+  update_checker,
+  websocket-client,
 }:
-
 buildPythonPackage rec {
   pname = "praw";
   version = "7.5.0";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

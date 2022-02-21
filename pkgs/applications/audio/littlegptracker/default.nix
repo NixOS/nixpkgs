@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, SDL
-, jack2
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  SDL,
+  jack2,
+  Foundation,
 }:
-
 stdenv.mkDerivation rec {
   pname = "littlegptracker";
   version = "unstable-2020-11-26";
@@ -17,11 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "0f2ip8z5wxk8fvlw47mczsbcrzh4nh1hgw1fwf5gjrqnzm8v111x";
   };
 
-  buildInputs = [
-    SDL
-  ]
-  ++ lib.optional stdenv.isDarwin Foundation
-  ++ lib.optional stdenv.isLinux jack2;
+  buildInputs =
+    [
+      SDL
+    ]
+    ++ lib.optional stdenv.isDarwin Foundation
+    ++ lib.optional stdenv.isLinux jack2;
 
   patches = [
     # Remove outdated (pre-64bit) checks that would fail on modern platforms
@@ -31,17 +33,23 @@ stdenv.mkDerivation rec {
 
   preBuild = "cd projects";
 
-  makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ]
-    ++ lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
-    ++ lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
+  makeFlags =
+    ["CXX=${stdenv.cc.targetPrefix}c++"]
+    ++ lib.optionals stdenv.isLinux ["PLATFORM=DEB"]
+    ++ lib.optionals stdenv.isDarwin ["PLATFORM=OSX"];
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ] ++
-    lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
+  NIX_CFLAGS_COMPILE =
+    ["-fpermissive"]
+    ++ lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
   NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework Foundation";
 
-  installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
-    in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
+  installPhase = let
+    extension =
+      if stdenv.isDarwin
+      then "app"
+      else "deb-exe";
+  in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/Mdashdotdashn/littlegptracker.git";
@@ -66,7 +74,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.littlegptracker.com/";
     downloadPage = "http://www.littlegptracker.com/download.php";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
     # https://github.com/NixOS/nixpkgs/pull/91766#issuecomment-688751821
     broken = stdenv.isDarwin;

@@ -1,15 +1,15 @@
-{ lib
-, ninja
-, meson
-, fetchFromGitLab
-, systemd
-, libgudev
-, pkg-config
-, glib
-, python3
-, gobject-introspection
+{
+  lib,
+  ninja,
+  meson,
+  fetchFromGitLab,
+  systemd,
+  libgudev,
+  pkg-config,
+  glib,
+  python3,
+  gobject-introspection,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "switcheroo-control";
   version = "2.3";
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://gitlab.freedesktop.org/hadess/switcheroo-control/";
     changelog = "https://gitlab.freedesktop.org/hadess/switcheroo-control/-/blob/${version}/NEWS";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

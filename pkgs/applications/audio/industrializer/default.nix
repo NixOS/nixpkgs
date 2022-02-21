@@ -1,17 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, alsa-lib
-, audiofile
-, autoconf
-, automake
-, gnome2
-, gtk2
-, libjack2
-, libtool
-, libxml2
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  audiofile,
+  autoconf,
+  automake,
+  gnome2,
+  gtk2,
+  libjack2,
+  libtool,
+  libxml2,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "industrializer";
   version = "0.2.6";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vls94hqpkk8h17da6fddgqbl5dgm6250av3raimhhzwvm5r1gfi";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
     alsa-lib
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/industrializer/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
     platforms = lib.platforms.linux;
   };
 }

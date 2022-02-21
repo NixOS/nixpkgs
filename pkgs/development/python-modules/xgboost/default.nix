@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, pytestCheckHook
-, cmake
-, scipy
-, scikit-learn
-, stdenv
-, xgboost
-, pandas
-, matplotlib
-, graphviz
-, datatable
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  pytestCheckHook,
+  cmake,
+  scipy,
+  scikit-learn,
+  stdenv,
+  xgboost,
+  pandas,
+  matplotlib,
+  graphviz,
+  datatable,
+  hypothesis,
 }:
-
 buildPythonPackage {
   pname = "xgboost";
   inherit (xgboost) version src meta;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ xgboost ];
-  propagatedBuildInputs = [ scipy ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [xgboost];
+  propagatedBuildInputs = [scipy];
   checkInputs = [
     pytestCheckHook
     scikit-learn
@@ -53,14 +53,16 @@ buildPythonPackage {
     # Requires internet access: https://github.com/dmlc/xgboost/blob/03cd087da180b7dff21bd8ef34997bf747016025/tests/python/test_ranking.py#L81
     "../tests/python/test_ranking.py"
   ];
-  disabledTests = [
-    "test_cli_binary_classification"
-    "test_model_compatibility"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # fails to connect to the com.apple.fonts daemon in sandboxed mode
-    "test_plotting"
-    "test_sklearn_plotting"
-  ];
+  disabledTests =
+    [
+      "test_cli_binary_classification"
+      "test_model_compatibility"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # fails to connect to the com.apple.fonts daemon in sandboxed mode
+      "test_plotting"
+      "test_sklearn_plotting"
+    ];
 
   __darwinAllowLocalNetworking = true;
 }

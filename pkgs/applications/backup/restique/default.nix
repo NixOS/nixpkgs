@@ -1,12 +1,12 @@
-{ lib
-, mkDerivation
-, fetchFromGitea
-, cmake
-, libsecret
-, qtkeychain
-, restic
+{
+  lib,
+  mkDerivation,
+  fetchFromGitea,
+  cmake,
+  libsecret,
+  qtkeychain,
+  restic,
 }:
-
 mkDerivation rec {
   pname = "restique";
   version = "unstable-2021-05-03";
@@ -29,13 +29,16 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ restic ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [restic])
   ];
 
   meta = with lib; {
     description = "Restic GUI for Desktop/Laptop Backups";
     homepage = "https://git.srcbox.net/stefan/restique";
-    license = with licenses; [ gpl3Plus cc-by-sa-40 cc0 ];
-    maintainers = with maintainers; [ dotlambda ];
+    license = with licenses; [gpl3Plus cc-by-sa-40 cc0];
+    maintainers = with maintainers; [dotlambda];
   };
 }

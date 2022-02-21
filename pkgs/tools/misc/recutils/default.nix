@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, bc
-, check
-, curl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bc,
+  check,
+  curl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "recutils";
   version = "1.8";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-346uaVk/26U+Jky/SyMH37ghIMCbb6sj4trVGomlsZM=";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   buildInputs = [
     curl
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       records, each record containing an arbitrary number of named fields.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }

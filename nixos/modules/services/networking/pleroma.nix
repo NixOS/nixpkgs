@@ -1,5 +1,11 @@
-{ config, options, lib, pkgs, stdenv, ... }:
-let
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  stdenv,
+  ...
+}: let
   cfg = config.services.pleroma;
 in {
   options = {
@@ -53,7 +59,7 @@ in {
 
           Have a look to Pleroma section in the NixOS manual for more
           informations.
-          '';
+        '';
       };
 
       secretConfigFile = mkOption {
@@ -81,7 +87,7 @@ in {
       groups."${cfg.group}" = {};
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     environment.etc."/pleroma/config.exs".text = ''
       ${lib.concatMapStrings (x: "${x}") cfg.configs}
@@ -97,9 +103,9 @@ in {
 
     systemd.services.pleroma = {
       description = "Pleroma social network";
-      after = [ "network-online.target" "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
+      after = ["network-online.target" "postgresql.service"];
+      wantedBy = ["multi-user.target"];
+      restartTriggers = [config.environment.etc."/pleroma/config.exs".source];
       environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";
       serviceConfig = {
         User = cfg.user;
@@ -116,8 +122,8 @@ in {
         # It's sub-optimal as we'll always run this, even if pleroma
         # has not been updated. But the no-op process is pretty fast.
         # Better be safe than sorry migration-wise.
-        ExecStartPre =
-          let preScript = pkgs.writers.writeBashBin "pleromaStartPre" ''
+        ExecStartPre = let
+          preScript = pkgs.writers.writeBashBin "pleromaStartPre" ''
             if [ ! -f /var/lib/pleroma/.cookie ]
             then
               echo "Creating cookie file"
@@ -125,7 +131,7 @@ in {
             fi
             ${cfg.package}/bin/pleroma_ctl migrate
           '';
-          in "${preScript}/bin/pleromaStartPre";
+        in "${preScript}/bin/pleromaStartPre";
 
         ExecStart = "${cfg.package}/bin/pleroma start";
         ExecStop = "${cfg.package}/bin/pleroma stop";
@@ -142,8 +148,7 @@ in {
         CapabilityBoundingSet = "~CAP_SYS_ADMIN";
       };
     };
-
   };
-  meta.maintainers = with lib.maintainers; [ ninjatrappeur ];
+  meta.maintainers = with lib.maintainers; [ninjatrappeur];
   meta.doc = ./pleroma.xml;
 }

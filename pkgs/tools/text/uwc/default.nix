@@ -1,5 +1,8 @@
-{ rustPlatform, lib, fetchFromGitLab }:
-
+{
+  rustPlatform,
+  lib,
+  fetchFromGitLab,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "uwc";
   version = "1.0.4";
@@ -19,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     description = "Like wc, but unicode-aware, and with per-line mode";
     homepage = "https://gitlab.com/dead10ck/uwc";
     license = licenses.mit;
-    maintainers = with maintainers; [ ShamrockLee ];
+    maintainers = with maintainers; [ShamrockLee];
   };
 }

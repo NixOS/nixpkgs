@@ -1,5 +1,15 @@
-{ lib, stdenv, cmake, fetchgit, libnl, libubox, uci, ubus, json_c, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchgit,
+  libnl,
+  libubox,
+  uci,
+  ubus,
+  json_c,
+  pkg-config,
+}:
 stdenv.mkDerivation {
   pname = "netifd";
   version = "unstable-2021-04-03";
@@ -10,14 +20,14 @@ stdenv.mkDerivation {
     sha256 = "0jvk2hx8kbkc6d72gh9rwap8ds6qgnmny6306vvzxy68v03xikwv";
   };
 
-  buildInputs = [ libnl libubox uci ubus json_c ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [libnl libubox uci ubus json_c];
+  nativeBuildInputs = [cmake pkg-config];
 
   meta = with lib; {
     description = "OpenWrt Network interface configuration daemon";
     homepage = "https://git.openwrt.org/?p=project/netifd.git;a=summary";
     license = licenses.lgpl21Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [petabyteboy];
   };
 }

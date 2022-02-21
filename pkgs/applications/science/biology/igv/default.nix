@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchzip, jdk11 }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk11,
+}:
 stdenv.mkDerivation rec {
   pname = "igv";
   version = "2.8.13";
@@ -30,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "A visualization tool for interactive exploration of genomic datasets";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.mimame ];
+    maintainers = [maintainers.mimame];
   };
 }

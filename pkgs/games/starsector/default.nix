@@ -1,15 +1,15 @@
-{ lib
-, alsa-lib
-, fetchzip
-, libXxf86vm
-, makeWrapper
-, openjdk
-, stdenv
-, xorg
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  alsa-lib,
+  fetchzip,
+  libXxf86vm,
+  makeWrapper,
+  openjdk,
+  stdenv,
+  xorg,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-
 stdenv.mkDerivation rec {
   pname = "starsector";
   version = "0.95.1a-RC5";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ln -s $out/graphics/ui/s_icon64.png $out/share/icons/hicolor/64x64/apps/starsector.png
 
     wrapProgram $out/starsector.sh \
-      --prefix PATH : ${lib.makeBinPath [ openjdk ]} \
+      --prefix PATH : ${lib.makeBinPath [openjdk]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector; cd '"$out"
     ln -s $out/starsector.sh $out/bin/starsector
@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     description = "Open-world single-player space-combat, roleplaying, exploration, and economic game";
     homepage = "https://fractalsoftworks.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [bbigras];
   };
 }

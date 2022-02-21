@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, doxygen, xorg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  freeglut,
+  libGLU,
+  libGL,
+  zlib,
+  swig,
+  doxygen,
+  xorg,
+}:
 stdenv.mkDerivation {
   pname = "partio";
   version = "2018-03-01";
@@ -11,17 +23,17 @@ stdenv.mkDerivation {
     sha256 = "16sdj103v02l2dgq9y9cna9jakafabz9jxzdxsd737ir6wn10ksb";
   };
 
-  outputs = [ "dev" "out" "lib" ];
+  outputs = ["dev" "out" "lib"];
 
-  nativeBuildInputs = [ unzip cmake doxygen ];
-  buildInputs = [ freeglut libGLU libGL zlib swig xorg.libXi xorg.libXmu ];
+  nativeBuildInputs = [unzip cmake doxygen];
+  buildInputs = [freeglut libGLU libGL zlib swig xorg.libXi xorg.libXmu];
 
   buildPhase = ''
     make partio
 
     mkdir $dev
     mkdir $out
-      '';
+  '';
 
   # TODO:
   # Sexpr support
@@ -39,6 +51,6 @@ stdenv.mkDerivation {
     homepage = "https://www.disneyanimation.com/technology/partio.html";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.guibou ];
+    maintainers = [maintainers.guibou];
   };
 }

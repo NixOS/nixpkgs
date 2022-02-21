@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, click
-, click-log
-, click-threading
-, requests-toolbelt
-, requests
-, requests_oauthlib # required for google oauth sync
-, atomicwrites
-, hypothesis
-, pytestCheckHook
-, pytest-localserver
-, pytest-subtesthack
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  click,
+  click-log,
+  click-threading,
+  requests-toolbelt,
+  requests,
+  requests_oauthlib
+  # required for google oauth sync
+  ,
+  atomicwrites,
+  hypothesis,
+  pytestCheckHook,
+  pytest-localserver,
+  pytest-subtesthack,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   version = "0.18.0";
   pname = "vdirsyncer";
@@ -65,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
     license = licenses.mit;
-    maintainers = with maintainers; [ loewenheim ];
+    maintainers = with maintainers; [loewenheim];
   };
 }

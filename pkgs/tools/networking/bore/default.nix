@@ -1,5 +1,13 @@
-{ lib, stdenv, rustPlatform, fetchFromBitbucket, llvmPackages, Libsystem, SystemConfiguration, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromBitbucket,
+  llvmPackages,
+  Libsystem,
+  SystemConfiguration,
+  installShellFiles,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "bore";
   version = "0.4.1";
@@ -15,10 +23,11 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = "-p ${pname}";
 
   # FIXME can’t test --all-targets and --doc in a single invocation
-  cargoTestFlags = [ "--all-targets" "--workspace" ];
-  checkFeatures = [ "std" ];
+  cargoTestFlags = ["--all-targets" "--workspace"];
+  checkFeatures = ["std"];
 
-  nativeBuildInputs = [ installShellFiles ]
+  nativeBuildInputs =
+    [installShellFiles]
     ++ lib.optional stdenv.isDarwin llvmPackages.libclang;
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -26,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     SystemConfiguration
   ];
 
-  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = ''
     installManPage $src/bore/doc/bore.1
@@ -43,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     description = "DNS query tool";
     homepage = "https://crates.io/crates/bore";
     license = licenses.isc;
-    maintainers = [ maintainers.delan ];
+    maintainers = [maintainers.delan];
   };
 }

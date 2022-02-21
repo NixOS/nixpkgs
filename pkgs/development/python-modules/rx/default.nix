@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, nose }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "rx";
   version = "3.2.0";
@@ -13,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "159ln0c721rrdz0mqyl3zvv6qsry7ql7ddlpwpnxs9q15ik15mnj";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   # Some tests are nondeterministic. (`grep sleep -r tests`)
   # test_timeout_schedule_action_cancel: https://hydra.nixos.org/build/74954646
@@ -23,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/ReactiveX/RxPY";
     description = "Reactive Extensions for Python";
-    maintainers = with lib.maintainers; [ thanegill ];
+    maintainers = with lib.maintainers; [thanegill];
     license = lib.licenses.asl20;
   };
 }

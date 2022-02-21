@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, openssl, rsa, pyaes, pythonOlder }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  openssl,
+  rsa,
+  pyaes,
+  pythonOlder,
+}:
 buildPythonPackage rec {
   pname = "telethon";
   version = "1.24.0";
@@ -29,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/LonamiWebs/Telethon";
     description = "Full-featured Telegram client library for Python 3";
     license = licenses.mit;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [nyanloutre];
   };
 }

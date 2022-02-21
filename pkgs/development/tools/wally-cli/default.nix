@@ -1,14 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  libusb1,
+}:
 buildGoModule rec {
   pname = "wally-cli";
   version = "2.0.1";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [libusb1];
 
   src = fetchFromGitHub {
     owner = "zsa";
@@ -24,6 +29,6 @@ buildGoModule rec {
     homepage = "https://ergodox-ez.com/pages/wally-planck";
     platforms = with platforms; linux ++ darwin;
     license = licenses.mit;
-    maintainers = with maintainers; [ spacekookie r-burns ];
+    maintainers = with maintainers; [spacekookie r-burns];
   };
 }

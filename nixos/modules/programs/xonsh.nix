@@ -1,21 +1,15 @@
 # This module defines global configuration for the xonsh.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.programs.xonsh;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.programs.xonsh;
+in {
   options = {
-
     programs.xonsh = {
-
       enable = mkOption {
         default = false;
         description = ''
@@ -39,13 +33,10 @@ in
         description = "Control file to customize your shell behavior.";
         type = types.lines;
       };
-
     };
-
   };
 
   config = mkIf cfg.enable {
-
     environment.etc.xonshrc.text = ''
       # /etc/xonshrc: DO NOT EDIT -- this file has been generated automatically.
 
@@ -73,14 +64,11 @@ in
       ${cfg.config}
     '';
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
-    environment.shells =
-      [ "/run/current-system/sw/bin/xonsh"
-        "${cfg.package}/bin/xonsh"
-      ];
-
+    environment.shells = [
+      "/run/current-system/sw/bin/xonsh"
+      "${cfg.package}/bin/xonsh"
+    ];
   };
-
 }
-

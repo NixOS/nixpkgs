@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchsvn
-, pkg-config
-, which
-, autoconf
-, automake
-, libtool
-, hexdump
-, libao
-, zlib
-, curl
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  pkg-config,
+  which,
+  autoconf,
+  automake,
+  libtool,
+  hexdump,
+  libao,
+  zlib,
+  curl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sc68";
   version = "unstable-2021-08-23";
@@ -25,15 +26,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config which autoconf automake libtool hexdump ];
+  nativeBuildInputs = [pkg-config which autoconf automake libtool hexdump];
 
-  buildInputs = [ libao zlib curl ];
+  buildInputs = [libao zlib curl];
 
   meta = with lib; {
     description = "Atari ST and Amiga music player";
     homepage = "http://sc68.atari.org/project.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.all;
   };
 }

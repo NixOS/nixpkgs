@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isodate
-, dictpath
-, openapi-spec-validator
-, openapi-schema-validator
-, six
-, lazy-object-proxy
-, attrs
-, werkzeug
-, parse
-, more-itertools
-, pytestCheckHook
-, falcon
-, flask
-, django
-, djangorestframework
-, responses
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isodate,
+  dictpath,
+  openapi-spec-validator,
+  openapi-schema-validator,
+  six,
+  lazy-object-proxy,
+  attrs,
+  werkzeug,
+  parse,
+  more-itertools,
+  pytestCheckHook,
+  falcon,
+  flask,
+  django,
+  djangorestframework,
+  responses,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "openapi-core";
   version = "0.14.2";
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     description = "Client-side and server-side support for the OpenAPI Specification v3";
     homepage = "https://github.com/p1c2u/openapi-core";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

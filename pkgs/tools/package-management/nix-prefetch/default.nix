@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
-, docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
-, gnugrep, gnused, jq, nix }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  asciidoc,
+  docbook_xml_dtd_45,
+  git,
+  docbook_xsl,
+  libxml2,
+  libxslt,
+  coreutils,
+  gawk,
+  gnugrep,
+  gnused,
+  jq,
+  nix,
+}:
 stdenv.mkDerivation rec {
   pname = "nix-prefetch";
   version = "0.4.1";
@@ -52,7 +67,7 @@ stdenv.mkDerivation rec {
     install -Dm555 -t $lib src/*.sh
     install -Dm444 -t $lib lib/*
     makeWrapper $lib/main.sh $out/bin/${pname} \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ]}
+      --prefix PATH : ${lib.makeBinPath [coreutils gawk git gnugrep gnused jq nix]}
 
     installManPage doc/nix-prefetch.?
 
@@ -65,7 +80,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Prefetch any fetcher function call, e.g. package sources";
     license = licenses.mit;
-    maintainers = with maintainers; [ msteen ];
+    maintainers = with maintainers; [msteen];
     homepage = "https://github.com/msteen/nix-prefetch";
     platforms = platforms.all;
   };

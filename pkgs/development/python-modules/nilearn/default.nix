@@ -1,6 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, matplotlib
-, nibabel, numpy, pandas, scikit-learn, scipy, joblib, requests }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  matplotlib,
+  nibabel,
+  numpy,
+  pandas,
+  scikit-learn,
+  scipy,
+  joblib,
+  requests,
+}:
 buildPythonPackage rec {
   pname = "nilearn";
   version = "0.8.1";
@@ -10,9 +21,9 @@ buildPythonPackage rec {
     sha256 = "a0489940855130f35bbc4cac0750479a6f82025215ea7b1d778faca064219298";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  disabledTests = [ "test_clean_confounds" ];  # https://github.com/nilearn/nilearn/issues/2608
-  pytestFlagsArray = [ "nilearn" ];
+  checkInputs = [pytestCheckHook];
+  disabledTests = ["test_clean_confounds"]; # https://github.com/nilearn/nilearn/issues/2608
+  pytestFlagsArray = ["nilearn"];
 
   propagatedBuildInputs = [
     joblib

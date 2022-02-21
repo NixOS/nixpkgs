@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "iniparse";
   version = "0.5";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   # Does not install tests
   doCheck = false;
@@ -27,7 +27,6 @@ buildPythonPackage rec {
     description = "Accessing and Modifying INI files";
     homepage = "https://github.com/candlepin/python-iniparse";
     license = licenses.mit;
-    maintainers = with maintainers; [ danbst ];
+    maintainers = with maintainers; [danbst];
   };
-
 }

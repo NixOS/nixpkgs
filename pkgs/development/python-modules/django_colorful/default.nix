@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
 }:
-
 buildPythonPackage rec {
   pname = "django-colorful";
   version = "1.3";
@@ -17,12 +17,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   # Requires Django >= 1.8
-  buildInputs = [ django ];
+  buildInputs = [django];
 
   meta = with lib; {
     description = "Django extension that provides database and form color fields";
     homepage = "https://github.com/charettes/django-colorful";
     license = licenses.mit;
   };
-
 }

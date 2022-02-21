@@ -1,7 +1,21 @@
-{ mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, qtscript, kconfig
-, kinit, karchive, kcrash, kcmutils, kconfigwidgets, knewstuff, kparts
-, qca-qt5, shared-mime-info }:
-
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  kdoctools,
+  qtscript,
+  kconfig,
+  kinit,
+  karchive,
+  kcrash,
+  kcmutils,
+  kconfigwidgets,
+  knewstuff,
+  kparts,
+  qca-qt5,
+  shared-mime-info,
+}:
 mkDerivation rec {
   pname = "okteta";
   version = "0.26.6";
@@ -11,8 +25,8 @@ mkDerivation rec {
     sha256 = "sha256-xWnNW1VQPkbfGltckWKwiIjEJqpSxvPy+SbGWL7gFEw=";
   };
 
-  nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];
-  buildInputs = [ shared-mime-info ];
+  nativeBuildInputs = [qtscript extra-cmake-modules kdoctools];
+  buildInputs = [shared-mime-info];
 
   propagatedBuildInputs = [
     kconfig
@@ -29,7 +43,7 @@ mkDerivation rec {
   meta = with lib; {
     license = licenses.gpl2;
     description = "A hex editor";
-    maintainers = with maintainers; [ peterhoeg bkchr ];
+    maintainers = with maintainers; [peterhoeg bkchr];
     platforms = platforms.linux;
   };
 }

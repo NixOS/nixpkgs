@@ -1,43 +1,44 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, cmake
-, boost
-, zlib
-, openssl
-, R
-, qtbase
-, qtxmlpatterns
-, qtsensors
-, qtwebengine
-, qtwebchannel
-, libuuid
-, hunspellDicts
-, unzip
-, ant
-, jdk
-, gnumake
-, makeWrapper
-, pandoc
-, llvmPackages
-, libyamlcpp
-, soci
-, postgresql
-, nodejs
-, mkYarnModules
-, qmake
-, server ? false # build server version
-, sqlite
-, pam
-, nixosTests
-}:
-
-let
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  cmake,
+  boost,
+  zlib,
+  openssl,
+  R,
+  qtbase,
+  qtxmlpatterns,
+  qtsensors,
+  qtwebengine,
+  qtwebchannel,
+  libuuid,
+  hunspellDicts,
+  unzip,
+  ant,
+  jdk,
+  gnumake,
+  makeWrapper,
+  pandoc,
+  llvmPackages,
+  libyamlcpp,
+  soci,
+  postgresql,
+  nodejs,
+  mkYarnModules,
+  qmake,
+  server ? false
+  # build server version
+  ,
+  sqlite,
+  pam,
+  nixosTests,
+}: let
   pname = "RStudio";
   version = "1.4.1717";
   RSTUDIO_VERSION_MAJOR = lib.versions.major version;
@@ -72,53 +73,69 @@ let
 
   description = "Set of integrated tools for the R language";
 in
-(if server then stdenv.mkDerivation else mkDerivation)
+  (if server
+  then stdenv.mkDerivation
+  else mkDerivation)
   (rec {
     inherit pname version src RSTUDIO_VERSION_MAJOR RSTUDIO_VERSION_MINOR RSTUDIO_VERSION_PATCH;
 
-    nativeBuildInputs = [
-      cmake
-      unzip
-      ant
-      jdk
-      makeWrapper
-      pandoc
-      nodejs
-    ] ++ lib.optional (!server) [
-      copyDesktopItems
-    ];
+    nativeBuildInputs =
+      [
+        cmake
+        unzip
+        ant
+        jdk
+        makeWrapper
+        pandoc
+        nodejs
+      ]
+      ++ lib.optional (!server) [
+        copyDesktopItems
+      ];
 
-    buildInputs = [
-      boost
-      zlib
-      openssl
-      R
-      libuuid
-      libyamlcpp
-      soci
-      postgresql
-    ] ++ (if server then [
-      sqlite.dev
-      pam
-    ] else [
-      qtbase
-      qtxmlpatterns
-      qtsensors
-      qtwebengine
-      qtwebchannel
-    ]);
+    buildInputs =
+      [
+        boost
+        zlib
+        openssl
+        R
+        libuuid
+        libyamlcpp
+        soci
+        postgresql
+      ]
+      ++ (if server
+      then
+        [
+          sqlite.dev
+          pam
+        ]
+      else
+        [
+          qtbase
+          qtxmlpatterns
+          qtsensors
+          qtwebengine
+          qtwebchannel
+        ]);
 
-    cmakeFlags = [
-      "-DRSTUDIO_TARGET=${if server then "Server" else "Desktop"}"
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
-      "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
-      "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
-      "-DPANDOC_VERSION=${pandoc.version}"
-      "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
-    ] ++ lib.optional (!server) [
-      "-DQT_QMAKE_EXECUTABLE=${qmake}/bin/qmake"
-    ];
+    cmakeFlags =
+      [
+        "-DRSTUDIO_TARGET=${
+          if server
+          then "Server"
+          else "Desktop"
+        }"
+        "-DCMAKE_BUILD_TYPE=Release"
+        "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
+        "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
+        "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
+        "-DPANDOC_VERSION=${pandoc.version}"
+        "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
+      ]
+      ++ lib.optional (!server) [
+        "-DQT_QMAKE_EXECUTABLE=${qmake}/bin/qmake"
+      ];
 
     # Hack RStudio to only use the input R and provided libclang.
     patches = [
@@ -155,9 +172,11 @@ in
     # These dicts contain identically-named dict files, so we only keep the
     # -large versions in case of clashes
     largeDicts = with lib; filter (d: hasInfix "-large-wordlist" d) hunspellDictionaries;
-    otherDicts = with lib; filter
-      (d: !(hasAttr "dictFileName" d &&
-        elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
+    otherDicts = with lib;
+      filter
+      (d:
+        !(hasAttr "dictFileName" d
+        && elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
       hunspellDictionaries;
     dictionaries = largeDicts ++ otherDicts;
 
@@ -183,14 +202,18 @@ in
     postInstall = ''
       mkdir -p $out/bin $out/share
 
-      ${lib.optionalString (!server) ''
-        mkdir -p $out/share/icons/hicolor/48x48/apps
-        ln $out/lib/rstudio/rstudio.png $out/share/icons/hicolor/48x48/apps
-      ''}
+      ${
+        lib.optionalString (!server) ''
+          mkdir -p $out/share/icons/hicolor/48x48/apps
+          ln $out/lib/rstudio/rstudio.png $out/share/icons/hicolor/48x48/apps
+        ''
+      }
 
-      for f in {${if server
+      for f in {${
+        if server
         then "crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server"
-        else "diagnostics,rpostback,rstudio"}}; do
+        else "diagnostics,rpostback,rstudio"
+      }}; do
         ln -s $out/lib/rstudio/bin/$f $out/bin
       done
 
@@ -205,18 +228,19 @@ in
       inherit description;
       homepage = "https://www.rstudio.com/";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ ciil cfhammill ];
+      maintainers = with maintainers; [ciil cfhammill];
       mainProgram = "rstudio" + optionalString server "-server";
       platforms = platforms.linux;
     };
 
     passthru = {
       inherit server;
-      tests = { inherit (nixosTests) rstudio-server; };
+      tests = {inherit (nixosTests) rstudio-server;};
     };
-  } // lib.optionalAttrs (!server) {
+  }
+  // lib.optionalAttrs (!server) {
     qtWrapperArgs = [
-      "--suffix PATH : ${lib.makeBinPath [ gnumake ]}"
+      "--suffix PATH : ${lib.makeBinPath [gnumake]}"
     ];
 
     desktopItems = [

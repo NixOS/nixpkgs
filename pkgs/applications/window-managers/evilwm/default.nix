@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, libXext
-, libXrandr
-, libXrender
-, xorgproto
-, patches ? [ ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXext,
+  libXrandr,
+  libXrender,
+  xorgproto,
+  patches ? [],
 }:
-
 stdenv.mkDerivation rec {
   pname = "evilwm";
   version = "1.1.1";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       url = "http://www.6809.org.uk/evilwm/";
       free = true;
     }; # like BSD/MIT, but Share-Alike'y; See README.
-    maintainers = with maintainers; [ amiloradovsky ];
+    maintainers = with maintainers; [amiloradovsky];
     platforms = platforms.all;
   };
 }

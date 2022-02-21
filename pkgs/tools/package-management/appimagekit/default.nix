@@ -1,13 +1,30 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, cmake, autoconf, automake, libtool, makeWrapper
-, wget, xxd, desktop-file-utils, file
-, gnupg, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
-, squashfsTools
-, gtest
-}:
-
-let
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  autoconf,
+  automake,
+  libtool,
+  makeWrapper,
+  wget,
+  xxd,
+  desktop-file-utils,
+  file,
+  gnupg,
+  glib,
+  zlib,
+  cairo,
+  openssl,
+  fuse,
+  xz,
+  squashfuse,
+  inotify-tools,
+  libarchive,
+  squashfsTools,
+  gtest,
+}: let
   appimagekit_src = fetchFromGitHub {
     owner = "AppImage";
     repo = "AppImageKit";
@@ -23,7 +40,7 @@ let
 
     src = fetchFromGitHub {
       owner = "vasi";
-      repo  = pname;
+      repo = pname;
       rev = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
       sha256 = "sha256-BZd1+7sRYZHthULKk3RlgMIy4uCUei45GbSEiZxLPFM=";
     };
@@ -43,7 +60,10 @@ let
     '';
 
     configureFlags = [
-      "--disable-demo" "--disable-high-level" "--without-lzo" "--without-lz4"
+      "--disable-demo"
+      "--disable-high-level"
+      "--without-lzo"
+      "--without-lz4"
     ];
 
     postConfigure = ''
@@ -57,69 +77,84 @@ let
       cp -v ./*.h $out/include
     '';
   });
+in
+  stdenv.mkDerivation rec {
+    pname = "appimagekit";
+    version = "unstable-2020-12-31";
 
-in stdenv.mkDerivation rec {
-  pname = "appimagekit";
-  version = "unstable-2020-12-31";
+    src = appimagekit_src;
 
-  src = appimagekit_src;
+    patches = [./nix.patch];
 
-  patches = [ ./nix.patch ];
-
-  postPatch = ''
-    patchShebangs src/embed-magic-bytes-in-file.sh
-  '';
-
-  nativeBuildInputs = [
-    pkg-config cmake autoconf automake libtool wget xxd
-    desktop-file-utils makeWrapper
-  ];
-
-  buildInputs = [
-    glib zlib cairo openssl fuse xz inotify-tools
-    libarchive squashfsTools appimagekit_squashfuse
-  ];
-
-  preConfigure = ''
-    export HOME=$(pwd)
-  '';
-
-  cmakeFlags = [
-    "-DUSE_SYSTEM_XZ=ON"
-    "-DUSE_SYSTEM_SQUASHFUSE=ON"
-    "-DSQUASHFUSE=${appimagekit_squashfuse}"
-    "-DUSE_SYSTEM_LIBARCHIVE=ON"
-    "-DUSE_SYSTEM_GTEST=ON"
-    "-DUSE_SYSTEM_MKSQUASHFS=ON"
-  ];
-
-  postInstall = ''
-    mkdir -p $out/lib/appimagekit
-    cp "${squashfsTools}/bin/mksquashfs" "$out/lib/appimagekit/"
-    cp "${desktop-file-utils}/bin/desktop-file-validate" "$out/bin"
-
-    wrapProgram "$out/bin/appimagetool" \
-      --prefix PATH : "${lib.makeBinPath [ file gnupg ]}" \
-      --unset SOURCE_DATE_EPOCH
-  '';
-
-  checkInputs = [ gtest ];
-
-  # for debugging
-  passthru = {
-    squashfuse = appimagekit_squashfuse;
-  };
-
-  meta = with lib; {
-    description = "A tool to package desktop applications as AppImages";
-    longDescription = ''
-      AppImageKit is an implementation of the AppImage format that
-      provides tools such as appimagetool and appimaged for handling
-      AppImages.
+    postPatch = ''
+      patchShebangs src/embed-magic-bytes-in-file.sh
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ taeer ];
-    homepage = src.meta.homepage;
-    platforms = platforms.linux;
-  };
-}
+
+    nativeBuildInputs = [
+      pkg-config
+      cmake
+      autoconf
+      automake
+      libtool
+      wget
+      xxd
+      desktop-file-utils
+      makeWrapper
+    ];
+
+    buildInputs = [
+      glib
+      zlib
+      cairo
+      openssl
+      fuse
+      xz
+      inotify-tools
+      libarchive
+      squashfsTools
+      appimagekit_squashfuse
+    ];
+
+    preConfigure = ''
+      export HOME=$(pwd)
+    '';
+
+    cmakeFlags = [
+      "-DUSE_SYSTEM_XZ=ON"
+      "-DUSE_SYSTEM_SQUASHFUSE=ON"
+      "-DSQUASHFUSE=${appimagekit_squashfuse}"
+      "-DUSE_SYSTEM_LIBARCHIVE=ON"
+      "-DUSE_SYSTEM_GTEST=ON"
+      "-DUSE_SYSTEM_MKSQUASHFS=ON"
+    ];
+
+    postInstall = ''
+      mkdir -p $out/lib/appimagekit
+      cp "${squashfsTools}/bin/mksquashfs" "$out/lib/appimagekit/"
+      cp "${desktop-file-utils}/bin/desktop-file-validate" "$out/bin"
+
+      wrapProgram "$out/bin/appimagetool" \
+        --prefix PATH : "${lib.makeBinPath [file gnupg]}" \
+        --unset SOURCE_DATE_EPOCH
+    '';
+
+    checkInputs = [gtest];
+
+    # for debugging
+    passthru = {
+      squashfuse = appimagekit_squashfuse;
+    };
+
+    meta = with lib; {
+      description = "A tool to package desktop applications as AppImages";
+      longDescription = ''
+        AppImageKit is an implementation of the AppImage format that
+        provides tools such as appimagetool and appimaged for handling
+        AppImages.
+      '';
+      license = licenses.mit;
+      maintainers = with maintainers; [taeer];
+      homepage = src.meta.homepage;
+      platforms = platforms.linux;
+    };
+  }

@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, libX11, freeglut, glew, libXNVCtrl, libXext, lib }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  freeglut,
+  glew,
+  libXNVCtrl,
+  libXext,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "gl-gsync-demo";
   version = "unstable-2020-12-27";
@@ -11,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1innsmpsd9n9ih80v16rhj2ijrl28jd7x6a4jmxdirba7mjibm8d";
   };
 
-  buildInputs = [ libX11 freeglut glew libXNVCtrl libXext ];
+  buildInputs = [libX11 freeglut glew libXNVCtrl libXext];
 
   installPhase = ''
     runHook preInstall
@@ -24,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     license = with licenses; mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ atemu ];
+    maintainers = with maintainers; [atemu];
     description = "A very basic OpenGL demo for testing NVIDIA's G-SYNC technology on Linux";
     longDescription = ''
       The demo simply draws a vertical bar moving accross the screen at constant speed, but deliberately rendered at a variable frame rate.

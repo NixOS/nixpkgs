@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pydoods";
   version = "1.0.2";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pydoods" ];
+  pythonImportsCheck = ["pydoods"];
 
   meta = with lib; {
     description = "Python wrapper for the DOODS service";
     homepage = "https://github.com/snowzach/pydoods";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

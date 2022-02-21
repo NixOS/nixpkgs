@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, html5lib
-, isodate
-, networkx
-, nose
-, pyparsing
-, tabulate
-, pandas
-, pytestCheckHook
-, pythonOlder
-, SPARQLWrapper
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  isodate,
+  networkx,
+  nose,
+  pyparsing,
+  tabulate,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  SPARQLWrapper,
 }:
-
 buildPythonPackage rec {
   pname = "rdflib";
   version = "6.1.1";
@@ -49,19 +49,21 @@ buildPythonPackage rec {
     "--deselect test/jsonld/test_onedotone.py::test_suite"
   ];
 
-  disabledTests = [
-    # Requires network access
-    "api_key"
-    "BerkeleyDBTestCase"
-    "test_bad_password"
-    "test_service"
-    "testGuessFormatForParse"
-  ] ++ lib.optional stdenv.isDarwin [
-    # Require loopback network access
-    "test_sparqlstore"
-    "test_sparqlupdatestore_mock"
-    "TestGraphHTTP"
-  ];
+  disabledTests =
+    [
+      # Requires network access
+      "api_key"
+      "BerkeleyDBTestCase"
+      "test_bad_password"
+      "test_service"
+      "testGuessFormatForParse"
+    ]
+    ++ lib.optional stdenv.isDarwin [
+      # Require loopback network access
+      "test_sparqlstore"
+      "test_sparqlupdatestore_mock"
+      "TestGraphHTTP"
+    ];
 
   pythonImportsCheck = [
     "rdflib"
@@ -71,6 +73,6 @@ buildPythonPackage rec {
     description = "Python library for working with RDF";
     homepage = "https://rdflib.readthedocs.io";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

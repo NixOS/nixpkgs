@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, pdm-pep517
-, sybil
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  pdm-pep517,
+  sybil,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "atpublic";
   version = "3.0.1";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
       __all__ and optionally the module globals.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

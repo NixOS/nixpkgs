@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, texlive
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  texlive,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sagetex";
   version = "3.6";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Embed code, results of computations, and plots from Sage into LaTeX documents";
     homepage = "https://github.com/sagemath/sagetex";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexnortung ];
+    maintainers = with maintainers; [alexnortung];
     platforms = platforms.all;
   };
 }

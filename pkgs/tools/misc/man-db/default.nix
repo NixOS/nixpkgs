@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libpipeline,
+  db,
+  groff,
+  libiconv,
+  makeWrapper,
+  buildPackages,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "man-db";
   version = "2.9.4";
@@ -9,14 +20,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tmyZ7frRatkoyIn4fPdjgCY8FgkyPCgLOp5pY/2xZ1Y=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkg-config makeWrapper groff ];
-  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  checkInputs = [ libiconv /* for 'iconv' binary */ ];
+  nativeBuildInputs = [pkg-config makeWrapper groff];
+  buildInputs = [libpipeline db groff]; # (Yes, 'groff' is both native and build input)
+  checkInputs = [
+    libiconv
+    /*
+     for 'iconv' binary
+     */
+  ];
 
-  patches = [ ./systemwide-man-db-conf.patch ];
+  patches = [./systemwide-man-db-conf.patch];
 
   postPatch = ''
     # Remove all mandatory manpaths. Nixpkgs makes no requirements on
@@ -30,19 +46,21 @@ stdenv.mkDerivation rec {
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
   '';
 
-  configureFlags = [
-    "--disable-setuid"
-    "--disable-cache-owner"
-    "--localstatedir=/var"
-    "--with-config-file=${placeholder "out"}/etc/man_db.conf"
-    "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-pager=less"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
-    "ac_cv_func__set_invalid_parameter_handler=no"
-    "ac_cv_func_posix_fadvise=no"
-    "ac_cv_func_mempcpy=no"
-  ];
+  configureFlags =
+    [
+      "--disable-setuid"
+      "--disable-cache-owner"
+      "--localstatedir=/var"
+      "--with-config-file=${placeholder "out"}/etc/man_db.conf"
+      "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-pager=less"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      "ac_cv_func__set_invalid_parameter_handler=no"
+      "ac_cv_func_posix_fadvise=no"
+      "ac_cv_func_mempcpy=no"
+    ];
 
   preConfigure = ''
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
@@ -71,7 +89,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
+  doCheck =
+    !stdenv.hostPlatform.isMusl
+    /*
+     iconv binary
+     */
+    && !stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     nixos = nixosTests.man;

@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, googleapis-common-protos
-, grpcio
-, grpcio-status
-, protobuf
-, proto-plus
-, requests
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  googleapis-common-protos,
+  grpcio,
+  grpcio-status,
+  protobuf,
+  proto-plus,
+  requests,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "google-api-core";
   version = "2.5.0";
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-api-core";
     changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

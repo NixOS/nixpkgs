@@ -1,5 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
-
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "clickhouse-backup";
   version = "1.3.1";
@@ -21,7 +24,7 @@ buildGoModule rec {
     homepage = "https://github.com/AlexAkulov/clickhouse-backup";
     description = "Tool for easy ClickHouse backup and restore with cloud storages support";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
     platforms = platforms.linux;
   };
 }

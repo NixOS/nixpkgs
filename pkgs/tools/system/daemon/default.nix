@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "daemon";
   version = "0.8";
@@ -14,7 +18,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   meta = with lib; {
     description = "Turns other processes into daemons";
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
       Java).
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sander ];
+    maintainers = [maintainers.sander];
     platforms = platforms.unix;
   };
 }

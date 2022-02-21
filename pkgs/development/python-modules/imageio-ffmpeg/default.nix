@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, substituteAll
-, ffmpeg_4
-, python
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  substituteAll,
+  ffmpeg_4,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";
   version = "0.4.5";
@@ -36,13 +36,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "imageio_ffmpeg" ];
+  pythonImportsCheck = ["imageio_ffmpeg"];
 
   meta = with lib; {
     description = "FFMPEG wrapper for Python";
     homepage = "https://github.com/imageio/imageio-ffmpeg";
     license = licenses.bsd2;
-    maintainers = [ maintainers.pmiddend ];
+    maintainers = [maintainers.pmiddend];
   };
-
 }

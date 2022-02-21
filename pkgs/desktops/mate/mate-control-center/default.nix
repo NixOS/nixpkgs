@@ -1,9 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, dbus-glib
-, libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3
-, desktop-file-utils, dconf, gtk3, polkit, mate, hicolor-icon-theme, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
+  dbus-glib,
+  libxklavier,
+  libcanberra-gtk3,
+  librsvg,
+  libappindicator-gtk3,
+  desktop-file-utils,
+  dconf,
+  gtk3,
+  polkit,
+  mate,
+  hicolor-icon-theme,
+  wrapGAppsHook,
+  mateUpdateScript,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mate-control-center";
   version = "1.26.0";
@@ -39,7 +55,7 @@ stdenv.mkDerivation rec {
     mate.mate-settings-daemon
   ];
 
-  configureFlags = [ "--disable-update-mimedb" ];
+  configureFlags = ["--disable-update-mimedb"];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -50,7 +66,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "Utilities to configure the MATE desktop";

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, twisted
-, passlib
-, pyopenssl
-, pyparsing
-, service-identity
-, zope_interface
-, isPy3k
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  twisted,
+  passlib,
+  pyopenssl,
+  pyparsing,
+  service-identity,
+  zope_interface,
+  isPy3k,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "ldaptor";
   version = "21.2.0";
@@ -21,7 +21,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    twisted passlib pyopenssl pyparsing service-identity zope_interface
+    twisted
+    passlib
+    pyopenssl
+    pyparsing
+    service-identity
+    zope_interface
   ];
 
   disabled = !isPy3k;

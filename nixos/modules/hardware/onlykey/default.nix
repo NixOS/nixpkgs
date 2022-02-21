@@ -1,13 +1,12 @@
-{ config, lib, ... }:
-
-with lib;
-
 {
-
+  config,
+  lib,
+  ...
+}:
+with lib; {
   ####### interface
 
   options = {
-
     hardware.onlykey = {
       enable = mkOption {
         type = types.bool;
@@ -17,7 +16,6 @@ with lib;
         '';
       };
     };
-
   };
 
   ## As per OnlyKey's documentation piece (hhttps://docs.google.com/document/d/1Go_Rs218fKUx-j_JKhddbSVTqY6P0vQO831t2MKCJC8),
@@ -28,6 +26,4 @@ with lib;
   config = mkIf config.hardware.onlykey.enable {
     services.udev.extraRules = builtins.readFile ./onlykey.udev;
   };
-
-
 }

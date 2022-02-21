@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "imgsize";
   version = "2.1";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pure Python image size library";
     homepage = "https://github.com/ojii/imgsize";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ twey ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [twey];
   };
 }

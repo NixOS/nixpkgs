@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, openssl, libssh2, gpgme }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  libssh2,
+  gpgme,
+}:
 stdenv.mkDerivation rec {
   pname = "phrasendrescher";
   version = "1.2.2c";
@@ -14,15 +20,15 @@ stdenv.mkDerivation rec {
       --replace 'SSL_LIB="ssl"' 'SSL_LIB="crypto"'
   '';
 
-  buildInputs = [ openssl libssh2 gpgme ];
+  buildInputs = [openssl libssh2 gpgme];
 
-  configureFlags = [ "--with-plugins" ];
+  configureFlags = ["--with-plugins"];
 
   meta = with lib; {
     description = "A modular and multi processing pass phrase cracking tool";
     homepage = "https://leidecker.info/projects/phrasendrescher/index.shtml";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
   };
 }

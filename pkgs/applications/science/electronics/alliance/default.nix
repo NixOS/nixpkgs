@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitLab, xorgproto, motif, libX11, libXt, libXpm, bison
-, flex, automake, autoconf, libtool
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  xorgproto,
+  motif,
+  libX11,
+  libXt,
+  libXpm,
+  bison,
+  flex,
+  automake,
+  autoconf,
+  libtool,
 }:
-
 stdenv.mkDerivation rec {
   pname = "alliance";
   version = "unstable-2021-09-15";
@@ -16,8 +27,8 @@ stdenv.mkDerivation rec {
 
   prePatch = "cd alliance/src";
 
-  nativeBuildInputs = [ libtool automake autoconf flex ];
-  buildInputs = [ xorgproto motif libX11 libXt libXpm bison ];
+  nativeBuildInputs = [libtool automake autoconf flex];
+  buildInputs = [xorgproto motif libX11 libXt libXpm bison];
 
   # Disable parallel build, errors:
   #  ./pat_decl_y.y:736:5: error: expected '=', ...
@@ -26,7 +37,8 @@ stdenv.mkDerivation rec {
   ALLIANCE_TOP = placeholder "out";
 
   configureFlags = [
-    "--prefix=${placeholder "out"}" "--enable-alc-shared"
+    "--prefix=${placeholder "out"}"
+    "--enable-alc-shared"
   ];
 
   postPatch = ''
@@ -52,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://coriolis.lip6.fr/";
     license = with licenses; gpl2Plus;
-    maintainers = with maintainers; [ l-as ];
+    maintainers = with maintainers; [l-as];
     platforms = with platforms; linux;
   };
 }

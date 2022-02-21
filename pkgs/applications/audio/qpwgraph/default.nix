@@ -1,8 +1,12 @@
-{ lib, mkDerivation, fetchFromGitLab
-, cmake, pkg-config
-, alsa-lib, pipewire
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  pipewire,
 }:
-
 mkDerivation rec {
   pname = "qpwgraph";
   version = "0.2.0";
@@ -15,9 +19,9 @@ mkDerivation rec {
     sha256 = "sha256-SGx80fMFomNEa/jgH8Yeof+f7zXCDxx3Yqd0GxHZGMw=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ alsa-lib pipewire ];
+  buildInputs = [alsa-lib pipewire];
 
   meta = with lib; {
     description = "Qt graph manager for PipeWire, similar to QjackCtl.";
@@ -29,6 +33,6 @@ mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/rncbc/qpwgraph";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kanashimia ];
+    maintainers = with maintainers; [kanashimia];
   };
 }

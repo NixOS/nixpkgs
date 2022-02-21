@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libX11
-, freetype
-, libjpeg
-, openal
-, flac
-, libvorbis
-, glew
-, libXrandr
-, libXrender
-, udev
-, xcbutilimage
-, IOKit
-, Foundation
-, AppKit
-, OpenAL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libX11,
+  freetype,
+  libjpeg,
+  openal,
+  flac,
+  libvorbis,
+  glew,
+  libXrandr,
+  libXrender,
+  udev,
+  xcbutilimage,
+  IOKit,
+  Foundation,
+  AppKit,
+  OpenAL,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sfml";
   version = "2.5.1";
@@ -30,11 +30,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Xt2Ct4vV459AsSvJxQfwMsNs6iA5y3epT95pLWJGeSk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ freetype libjpeg openal flac libvorbis glew ]
+  nativeBuildInputs = [cmake];
+  buildInputs =
+    [freetype libjpeg openal flac libvorbis glew]
     ++ lib.optional stdenv.isLinux udev
-    ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXrandr libXrender xcbutilimage ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
+    ++ lib.optionals (!stdenv.isDarwin) [libX11 libXrandr libXrender xcbutilimage]
+    ++ lib.optionals stdenv.isDarwin [IOKit Foundation AppKit OpenAL];
 
   cmakeFlags = [
     "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
     license = licenses.zlib;
-    maintainers = [ maintainers.astsmtl ];
+    maintainers = [maintainers.astsmtl];
     platforms = platforms.unix;
   };
 }

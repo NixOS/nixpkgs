@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, distro
-, jinja2
-, keyring
-, proton-client
-, pygobject3
-, pyxdg
-, systemd
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  distro,
+  jinja2,
+  keyring,
+  proton-client,
+  pygobject3,
+  pyxdg,
+  systemd,
 }:
-
 buildPythonPackage rec {
   pname = "protonvpn-nm-lib";
   version = "3.7.0";
@@ -36,12 +36,12 @@ buildPythonPackage rec {
   # Project has a dummy test.
   doCheck = false;
 
-  pythonImportsCheck = [ "protonvpn_nm_lib" ];
+  pythonImportsCheck = ["protonvpn_nm_lib"];
 
   meta = with lib; {
     description = "ProtonVPN NetworkManager Library intended for every ProtonVPN service user";
     homepage = "https://github.com/ProtonVPN/protonvpn-nm-lib";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
   };
 }

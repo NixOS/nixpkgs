@@ -1,8 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, pkg-config
-, systemd, libyaml, openzwave, cython, pyserial
-, six, pydispatcher, urwid }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pkg-config,
+  systemd,
+  libyaml,
+  openzwave,
+  cython,
+  pyserial,
+  six,
+  pydispatcher,
+  urwid,
+}:
 buildPythonPackage rec {
   pname = "python_openzwave";
   version = "0.4.19";
@@ -15,9 +25,9 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ systemd libyaml openzwave cython ];
-  propagatedBuildInputs = [ six urwid pydispatcher pyserial ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [systemd libyaml openzwave cython];
+  propagatedBuildInputs = [six urwid pydispatcher pyserial];
 
   # primary location for the .xml files is in /etc/openzwave so we override the
   # /usr/local/etc lookup instead as that allows us to dump new .xml files into
@@ -27,7 +37,7 @@ buildPythonPackage rec {
       --replace /usr/local/etc/openzwave ${openzwave}/etc/openzwave
   '';
 
-  patches = [ ./cython.patch ];
+  patches = [./cython.patch];
 
   # no tests available
   doCheck = false;
@@ -36,7 +46,7 @@ buildPythonPackage rec {
     description = "Python wrapper for the OpenZWave C++ library";
     homepage = "https://github.com/OpenZWave/python-openzwave";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [etu];
     inherit (openzwave.meta) platforms;
   };
 }

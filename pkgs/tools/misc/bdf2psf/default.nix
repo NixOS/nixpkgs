@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, perl, dpkg }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  dpkg,
+}:
 stdenv.mkDerivation rec {
   pname = "bdf2psf";
   version = "1.207";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k9dv4s44k1khrhr6acsb2sqr5iq3d03ync82nzan5j7mckzs76v";
   };
 
-  nativeBuildInputs = [ dpkg ];
+  nativeBuildInputs = [dpkg];
 
   dontConfigure = true;
   dontBuild = true;
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
       Font converter to generate console fonts from BDF source fonts
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rnhmjoj vrthra ];
+    maintainers = with maintainers; [rnhmjoj vrthra];
     platforms = platforms.unix;
   };
 }

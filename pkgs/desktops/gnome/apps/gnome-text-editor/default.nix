@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, meson
-, fetchurl
-, python3
-, pkg-config
-, gtk4
-, glib
-, gtksourceview5
-, gsettings-desktop-schemas
-, wrapGAppsHook4
-, ninja
-, gnome
-, enchant
-, icu
-, itstool
-, libadwaita
-, libxml2
-, pcre
-, appstream-glib
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  meson,
+  fetchurl,
+  python3,
+  pkg-config,
+  gtk4,
+  glib,
+  gtksourceview5,
+  gsettings-desktop-schemas,
+  wrapGAppsHook4,
+  ninja,
+  gnome,
+  enchant,
+  icu,
+  itstool,
+  libadwaita,
+  libxml2,
+  pcre,
+  appstream-glib,
+  desktop-file-utils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-text-editor";
   version = "41.1";
@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     substituteInPlace build-aux/meson/postinstall.py \
       --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
-
 
   passthru = {
     updateScript = gnome.updateScript {

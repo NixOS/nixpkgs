@@ -1,5 +1,10 @@
-{ lib, stdenv, perl, installShellFiles, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  perl,
+  installShellFiles,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "cowsay";
   version = "3.04";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9jCaQ6Um6Nl9j0/urrMCRcsGeubRN3VWD3jDM/AshRg=";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   # overriding buildPhase because we don't want to use the install.sh script
   buildPhase = ''
@@ -35,13 +40,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   meta = with lib; {
     description = "A program which generates ASCII pictures of a cow with a message";
     homepage = "https://github.com/tnalpgge/rank-amateur-cowsay";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.rob ];
+    maintainers = [maintainers.rob];
   };
 }

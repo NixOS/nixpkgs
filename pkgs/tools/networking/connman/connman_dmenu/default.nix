@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, connman, dmenu }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  connman,
+  dmenu,
+}:
 stdenv.mkDerivation {
   pname = "connman_dmenu";
   version = "unstable-2015-09-29";
@@ -11,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "061fi83pai4n19l9d7wq6wwj2d7cixwkhkh742c5ibmw1wb274yk";
   };
 
-  buildInputs = [ connman dmenu ];
+  buildInputs = [connman dmenu];
 
   dontBuild = true;
 
@@ -29,7 +34,7 @@ stdenv.mkDerivation {
     description = "A dmenu wrapper for connmann";
     homepage = "https://github.com/march-linux/connman_dmenu";
     license = lib.licenses.free;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
     platforms = lib.platforms.all;
   };
 }

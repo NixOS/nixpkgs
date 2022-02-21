@@ -1,11 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, inform
-, pytestCheckHook
-, docopt
-, natsort
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  inform,
+  pytestCheckHook,
+  docopt,
+  natsort,
+  voluptuous,
 }:
-
 buildPythonPackage rec {
   pname = "nestedtext";
   version = "1.2";
@@ -18,10 +20,10 @@ buildPythonPackage rec {
     sha256 = "1dwks5apghg29aj90nc4qm0chk195jh881297zr1wk7mqd2n159y";
   };
 
-  propagatedBuildInputs = [ inform ];
+  propagatedBuildInputs = [inform];
 
-  checkInputs = [ pytestCheckHook docopt natsort voluptuous ];
-  pytestFlagsArray = [ "--ignore=build" ]; # Avoids an ImportMismatchError.
+  checkInputs = [pytestCheckHook docopt natsort voluptuous];
+  pytestFlagsArray = ["--ignore=build"]; # Avoids an ImportMismatchError.
 
   meta = with lib; {
     description = "A human friendly data format";
@@ -38,6 +40,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://nestedtext.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ jeremyschlatter ];
+    maintainers = with maintainers; [jeremyschlatter];
   };
 }

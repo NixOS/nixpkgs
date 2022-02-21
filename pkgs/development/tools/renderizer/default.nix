@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "renderizer";
   version = "2.0.13";
@@ -12,7 +15,11 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.commitHash=${src.rev}" "-X main.date=19700101T000000"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commitHash=${src.rev}"
+    "-X main.date=19700101T000000"
   ];
 
   vendorSha256 = null;
@@ -21,6 +28,6 @@ buildGoModule rec {
     description = "CLI to render Go template text files";
     inherit (src.meta) homepage;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [yurrriq];
   };
 }

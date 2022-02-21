@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchurl,
-  bison, re2c, sconsPackages,
-  libcxx
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  re2c,
+  sconsPackages,
+  libcxx,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gringo";
   version = "4.5.4";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "16k4pkwyr2mh5w8j91vhxh9aff7f4y31npwf09w6f8q63fxvpy41";
   };
 
-  buildInputs = [ bison re2c sconsPackages.scons_3_1_2 ];
+  buildInputs = [bison re2c sconsPackages.scons_3_1_2];
 
   patches = [
     ./gringo-4.5.4-cmath.patch
@@ -49,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "Converts input programs with first-order variables to equivalent ground programs";
     homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;
-    maintainers = [ maintainers.hakuch ];
+    maintainers = [maintainers.hakuch];
     license = licenses.gpl3Plus;
   };
 }

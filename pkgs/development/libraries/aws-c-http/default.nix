@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-cal
-, aws-c-common
-, aws-c-compression
-, aws-c-io
-, cmake
-, s2n-tls
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aws-c-cal,
+  aws-c-common,
+  aws-c-compression,
+  aws-c-io,
+  cmake,
+  s2n-tls,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aws-c-http";
   version = "0.6.10";
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-c-http";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, jsonrpc-async
-, jsonrpc-websocket
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  jsonrpc-async,
+  jsonrpc-websocket,
 }:
-
 buildPythonPackage rec {
   pname = "pykodi";
   version = "0.2.7";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "An async python interface for Kodi over JSON-RPC";
     homepage = "https://github.com/OnFreund/PyKodi";
     license = licenses.mit;
-    maintainers = with maintainers; [ sephalon ];
+    maintainers = with maintainers; [sephalon];
   };
 }

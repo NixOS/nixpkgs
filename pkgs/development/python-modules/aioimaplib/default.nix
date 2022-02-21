@@ -1,17 +1,17 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, imaplib2
-, mock
-, nose
-, pyopenssl
-, pytestCheckHook
-, pytz
-, tzlocal
+{
+  lib,
+  asynctest,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  imaplib2,
+  mock,
+  nose,
+  pyopenssl,
+  pytestCheckHook,
+  pytz,
+  tzlocal,
 }:
-
 buildPythonPackage rec {
   pname = "aioimaplib";
   version = "0.9.0";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  pythonImportsCheck = [ "aioimaplib" ];
+  pythonImportsCheck = ["aioimaplib"];
 
   meta = with lib; {
     description = "Python asyncio IMAP4rev1 client library";
     homepage = "https://github.com/bamthomas/aioimaplib";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-engine-murrine }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gtk-engine-murrine,
+}:
 stdenv.mkDerivation rec {
   pname = "theme-vertex";
   version = "20170128";
@@ -11,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "0c9mhrs95ahz37djrv176vn41ywvj26ilwmnr1h9171giv6hid98";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [gtk-engine-murrine];
 
-  configureFlags = [ "--disable-unity" ];
+  configureFlags = ["--disable-unity"];
 
   postInstall = ''
     mkdir -p $out/share/plank/themes
@@ -32,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Theme for GTK 3, GTK 2, Gnome-Shell, and Cinnamon";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

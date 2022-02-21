@@ -1,29 +1,29 @@
-{ lib
-, backports-zoneinfo
-, buildPythonPackage
-, cached-property
-, defusedxml
-, dnspython
-, fetchFromGitHub
-, flake8
-, isodate
-, lxml
-, oauthlib
-, psutil
-, pygments
-, python-dateutil
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-, requests_ntlm
-, requests_oauthlib
-, requests-kerberos
-, requests-mock
-, tzdata
-, tzlocal
+{
+  lib,
+  backports-zoneinfo,
+  buildPythonPackage,
+  cached-property,
+  defusedxml,
+  dnspython,
+  fetchFromGitHub,
+  flake8,
+  isodate,
+  lxml,
+  oauthlib,
+  psutil,
+  pygments,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
+  requests_ntlm,
+  requests_oauthlib,
+  requests-kerberos,
+  requests-mock,
+  tzdata,
+  tzlocal,
 }:
-
 buildPythonPackage rec {
   pname = "exchangelib";
   version = "4.7.2";
@@ -38,23 +38,25 @@ buildPythonPackage rec {
     sha256 = "sha256-fdYc+fJEePgCzAkUWz7pmL/CI/O9zm5G9xh1f4bhrH4=";
   };
 
-  propagatedBuildInputs = [
-    cached-property
-    defusedxml
-    dnspython
-    isodate
-    lxml
-    oauthlib
-    pygments
-    requests
-    requests_ntlm
-    requests_oauthlib
-    requests-kerberos
-    tzdata
-    tzlocal
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  propagatedBuildInputs =
+    [
+      cached-property
+      defusedxml
+      dnspython
+      isodate
+      lxml
+      oauthlib
+      pygments
+      requests
+      requests_ntlm
+      requests_oauthlib
+      requests-kerberos
+      tzdata
+      tzlocal
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      backports-zoneinfo
+    ];
 
   checkInputs = [
     flake8
@@ -73,6 +75,6 @@ buildPythonPackage rec {
     description = "Client for Microsoft Exchange Web Services (EWS)";
     homepage = "https://github.com/ecederstrand/exchangelib";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ catern ];
+    maintainers = with maintainers; [catern];
   };
 }

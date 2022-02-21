@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, contextlib2
-, fetchPypi
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  contextlib2,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "schema";
   version = "0.7.5";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Library for validating Python data structures";
     homepage = "https://github.com/keleshev/schema";
     license = licenses.mit;
-    maintainers = with maintainers; [ tobim ];
+    maintainers = with maintainers; [tobim];
   };
 }

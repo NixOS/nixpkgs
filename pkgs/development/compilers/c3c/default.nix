@@ -1,10 +1,10 @@
-{ llvmPackages
-, lib
-, fetchFromGitHub
-, cmake
-, python3
+{
+  llvmPackages,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
 }:
-
 llvmPackages.stdenv.mkDerivation rec {
   pname = "c3c";
   version = "unstable-2021-07-30";
@@ -16,14 +16,14 @@ llvmPackages.stdenv.mkDerivation rec {
     sha256 = "VdMKdQsedDQCnsmTxO4HnBj5GH/EThspnotvrAscSqE=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.lld
   ];
 
-  checkInputs = [ python3 ];
+  checkInputs = [python3];
 
   doCheck = true;
 
@@ -41,7 +41,7 @@ llvmPackages.stdenv.mkDerivation rec {
     description = "Compiler for the C3 language";
     homepage = "https://github.com/c3lang/c3c";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [luc65r];
     platforms = platforms.all;
   };
 }

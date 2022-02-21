@@ -1,5 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "mmtc";
   version = "0.2.14";
@@ -13,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-tVjy/O5hfnQFC6to8VMGc39mEXhA5lwUIne6pVvDec0=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   preFixup = ''
     completions=($releaseDir/build/mmtc-*/out/completions)
@@ -27,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/figsoda/mmtc";
     changelog = "https://github.com/figsoda/mmtc/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

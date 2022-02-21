@@ -1,46 +1,46 @@
-{ buildPythonPackage
-, cloudpickle
-, crcmod
-, cython
-, dill
-, fastavro
-, fetchFromGitHub
-, freezegun
-, grpcio
-, grpcio-tools
-, hdfs
-, httplib2
-, lib
-, mock
-, mypy-protobuf
-, numpy
-, oauth2client
-, orjson
-, pandas
-, parameterized
-, proto-plus
-, protobuf
-, psycopg2
-, pyarrow
-, pydot
-, pyhamcrest
-, pymongo
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, python
-, pythonAtLeast
-, python-dateutil
-, pytz
-, pyyaml
-, requests
-, requests-mock
-, setuptools
-, sqlalchemy
-, tenacity
-, typing-extensions
+{
+  buildPythonPackage,
+  cloudpickle,
+  crcmod,
+  cython,
+  dill,
+  fastavro,
+  fetchFromGitHub,
+  freezegun,
+  grpcio,
+  grpcio-tools,
+  hdfs,
+  httplib2,
+  lib,
+  mock,
+  mypy-protobuf,
+  numpy,
+  oauth2client,
+  orjson,
+  pandas,
+  parameterized,
+  proto-plus,
+  protobuf,
+  psycopg2,
+  pyarrow,
+  pydot,
+  pyhamcrest,
+  pymongo,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  python,
+  pythonAtLeast,
+  python-dateutil,
+  pytz,
+  pyyaml,
+  requests,
+  requests-mock,
+  setuptools,
+  sqlalchemy,
+  tenacity,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "apache-beam";
   version = "2.35.0";
@@ -149,6 +149,6 @@ buildPythonPackage rec {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
     homepage = "https://beam.apache.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

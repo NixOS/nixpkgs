@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "labmath";
   version = "2.2.0";
@@ -10,12 +13,12 @@ buildPythonPackage rec {
     sha256 = "sha256-dzJ4szPxnck0Cgc5IEp5FBmHvIyAC0rqKRVrkt20ntQ=";
   };
 
-  pythonImportsCheck = [ "labmath" ];
+  pythonImportsCheck = ["labmath"];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/labmath";
     description = "Module for basic math in the general vicinity of computational number theory";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
   };
 }

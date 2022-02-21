@@ -1,9 +1,29 @@
-{ lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore
-, kservice, libatasmart, libxcb, libyamlcpp, parted, polkit-qt, python, qtbase
-, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
-, ckbcomp, xkeyboard_config, mkDerivation
+{
+  lib,
+  fetchurl,
+  boost,
+  cmake,
+  extra-cmake-modules,
+  kparts,
+  kpmcore,
+  kservice,
+  libatasmart,
+  libxcb,
+  libyamlcpp,
+  parted,
+  polkit-qt,
+  python,
+  qtbase,
+  qtquickcontrols,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  util-linux,
+  tzdata,
+  ckbcomp,
+  xkeyboard_config,
+  mkDerivation,
 }:
-
 mkDerivation rec {
   pname = "calamares";
   version = "3.2.44.3";
@@ -14,11 +34,24 @@ mkDerivation rec {
     sha256 = "sha256-p3ctULrzXPt9dNs8Ckb7cqdOBpp4qOmEwu0dEVq8lEw=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [cmake extra-cmake-modules];
   buildInputs = [
-    boost kparts.dev kpmcore.out kservice.dev
-    libatasmart libxcb libyamlcpp parted polkit-qt python qtbase
-    qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
+    boost
+    kparts.dev
+    kpmcore.out
+    kservice.dev
+    libatasmart
+    libxcb
+    libyamlcpp
+    parted
+    polkit-qt
+    python
+    qtbase
+    qtquickcontrols
+    qtsvg
+    qttools
+    qtwebengine.dev
+    util-linux
   ];
 
   cmakeFlags = [
@@ -51,8 +84,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Distribution-independent installer framework";
-    license = with licenses; [ gpl3Plus bsd2 ];
-    maintainers = with maintainers; [ manveru ];
+    license = with licenses; [gpl3Plus bsd2];
+    maintainers = with maintainers; [manveru];
     platforms = platforms.linux;
   };
 }

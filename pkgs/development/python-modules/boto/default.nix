@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, isPy38
-, python
-, nose
-, mock
-, requests
-, httpretty
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  isPy38,
+  python,
+  nose,
+  mock,
+  requests,
+  httpretty,
 }:
-
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   '';
 
   doCheck = !isPy38; # hmac functionality has changed
-  checkInputs = [ nose mock ];
-  propagatedBuildInputs = [ requests httpretty ];
+  checkInputs = [nose mock];
+  propagatedBuildInputs = [requests httpretty];
 
   meta = with lib; {
     homepage = "https://github.com/boto/boto";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
       future infrastructural services offered by Amazon Web
       Services.  This includes S3, SQS, EC2, among others.
     '';
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

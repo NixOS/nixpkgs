@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchurl
-, jdk
-, ant, cunit, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  ant,
+  cunit,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
   version = "3.5.48";
@@ -12,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-woANhwLOhvTnq+Bnc8zCIDZEJOv3swNfeI/3nQ7Y1SM=";
   };
 
-  buildInputs = [ jdk ];
-  nativeBuildInputs = [ ant cunit ncurses ];
+  buildInputs = [jdk];
+  nativeBuildInputs = [ant cunit ncurses];
 
   buildPhase = ''
     export ANT_HOME=${ant}
@@ -21,7 +25,11 @@ stdenv.mkDerivation rec {
     export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
     export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
 
-    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
+    ${
+      if stdenv.isi686
+      then "./build32.sh"
+      else "./build64.sh"
+    }
   '';
 
   installPhase = ''
@@ -35,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Enables a Java Application to be run as a Windows Service or Unix Daemon";
     homepage = "https://wrapper.tanukisoftware.com/";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ maintainers.suhr ];
+    platforms = ["x86_64-linux" "i686-linux"];
+    maintainers = [maintainers.suhr];
   };
 }

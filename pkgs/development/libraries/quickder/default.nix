@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, hexio
-, cmake, bash, arpa2cm, git, asn2quickder }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  hexio,
+  cmake,
+  bash,
+  arpa2cm,
+  git,
+  asn2quickder,
+}:
 stdenv.mkDerivation rec {
   pname = "quickder";
   version = "1.3.0";
@@ -12,7 +21,7 @@ stdenv.mkDerivation rec {
     repo = "quick-der";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   buildInputs = with python3Packages; [
     arpa2cm
@@ -47,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vanrein/quick-der";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

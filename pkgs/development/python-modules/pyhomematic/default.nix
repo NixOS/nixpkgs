@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pyhomematic";
   version = "0.1.77";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest
   '';
 
-  pythonImportsCheck = [ "pyhomematic" ];
+  pythonImportsCheck = ["pyhomematic"];
 
   meta = with lib; {
     description = "Python 3 Interface to interact with Homematic devices";
     homepage = "https://github.com/danielperna84/pyhomematic";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

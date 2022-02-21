@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyparsing
-, six
-, pytestCheckHook
-, pretend
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyparsing,
+  six,
+  pytestCheckHook,
+  pretend,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "packaging";
   version = "21.3";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [ pyparsing six ];
+  propagatedBuildInputs = [pyparsing six];
 
   checkInputs = [
     pytestCheckHook
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Core utilities for Python packages";
     homepage = "https://github.com/pypa/packaging";
-    license = [ licenses.bsd2 licenses.asl20 ];
-    maintainers = with maintainers; [ bennofs ];
+    license = [licenses.bsd2 licenses.asl20];
+    maintainers = with maintainers; [bennofs];
   };
 }

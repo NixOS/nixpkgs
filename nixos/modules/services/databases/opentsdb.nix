@@ -1,20 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.opentsdb;
 
   configFile = pkgs.writeText "opentsdb.conf" cfg.config;
-
 in {
-
   ###### interface
 
   options = {
-
     services.opentsdb = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -66,27 +64,23 @@ in {
           The contents of OpenTSDB's configuration file
         '';
       };
-
     };
-
   };
 
   ###### implementation
 
   config = mkIf config.services.opentsdb.enable {
-
     systemd.services.opentsdb = {
       description = "OpenTSDB Server";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "hbase.service" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["hbase.service"];
 
       environment.JAVA_HOME = "${pkgs.jre}";
-      path = [ pkgs.gnuplot ];
+      path = [pkgs.gnuplot];
 
-      preStart =
-        ''
+      preStart = ''
         COMPRESSION=NONE HBASE_HOME=${config.services.hbase.package} ${cfg.package}/share/opentsdb/tools/create_table.sh
-        '';
+      '';
 
       serviceConfig = {
         PermissionsStartOnly = true;
@@ -103,6 +97,5 @@ in {
     };
 
     users.groups.opentsdb.gid = config.ids.gids.opentsdb;
-
   };
 }

@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, qtpy, six, pyqt5, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  qtpy,
+  six,
+  pyqt5,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "QtAwesome";
   version = "1.1.1";
@@ -9,9 +16,9 @@ buildPythonPackage rec {
     sha256 = "ec02e200231fa68a146a93845890aa0432a7edcba14bf811ff6975cf9acdab5d";
   };
 
-  propagatedBuildInputs = [ qtpy six ];
+  propagatedBuildInputs = [qtpy six];
 
-  checkInputs = [ pyqt5 pytest ];
+  checkInputs = [pyqt5 pytest];
 
   checkPhase = ''
     py.test

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "0.11.0";
   pname = "netifaces";
@@ -14,12 +14,11 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests implemented
 
-  pythonImportsCheck = [ "netifaces" ];
+  pythonImportsCheck = ["netifaces"];
 
   meta = with lib; {
     homepage = "https://alastairs-place.net/projects/netifaces/";
     description = "Portable access to network interfaces from Python";
     license = licenses.mit;
   };
-
 }

@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "MIDIUtil";
   version = "1.2.1";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MarkCWirt/MIDIUtil";
     description = "A pure python library for creating multi-track MIDI files";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

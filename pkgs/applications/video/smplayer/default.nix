@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, qtscript
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtscript,
+  wrapQtAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "smplayer";
   version = "21.10.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [ qtscript ];
+  buildInputs = [qtscript];
 
   dontUseQmakeConfigure = true;
 
@@ -52,8 +52,9 @@ stdenv.mkDerivation rec {
       possibility to play Youtube videos or download subtitles.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }
 # TODO [ AndersonTorres ]: some form of wrapping mplayer/mpv around it
+

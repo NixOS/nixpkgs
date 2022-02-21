@@ -1,7 +1,12 @@
-{ stdenv, lib, fetchFromGitHub
-, imagemagick, pkg-config, wayland, wayland-protocols
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  imagemagick,
+  pkg-config,
+  wayland,
+  wayland-protocols,
 }:
-
 stdenv.mkDerivation {
   pname = "hello-wayland-unstable";
   version = "2020-07-27";
@@ -13,8 +18,8 @@ stdenv.mkDerivation {
     sha256 = "0dz6przqp57kw8ycja3gw6jp9x12217nwbwdpgmvw7jf0lzhk4xr";
   };
 
-  nativeBuildInputs = [ imagemagick pkg-config ];
-  buildInputs = [ wayland wayland-protocols ];
+  nativeBuildInputs = [imagemagick pkg-config];
+  buildInputs = [wayland wayland-protocols];
 
   installPhase = ''
     runHook preBuild
@@ -26,7 +31,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Hello world Wayland client";
     homepage = "https://github.com/emersion/hello-wayland";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     license = licenses.mit;
     platforms = platforms.linux;
   };

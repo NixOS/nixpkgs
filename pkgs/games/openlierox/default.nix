@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, libX11, xorgproto, gd, SDL, SDL_image, SDL_mixer, zlib
-, libxml2, pkg-config, curl, cmake, libzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  xorgproto,
+  gd,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  zlib,
+  libxml2,
+  pkg-config,
+  curl,
+  cmake,
+  libzip,
+}:
 stdenv.mkDerivation rec {
   pname = "openlierox";
   version = "0.58rc3";
@@ -13,7 +27,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -std=c++98 -Wno-error";
 
   # The breakpad fails to build on x86_64, and it's only to report bugs upstream
-  cmakeFlags = [ "-DBREAKPAD=0" ];
+  cmakeFlags = ["-DBREAKPAD=0"];
 
   preConfigure = ''
     cmakeFlags="$cmakeFlags -DSYSTEM_DATA_DIR=$out/share"
@@ -29,9 +43,18 @@ stdenv.mkDerivation rec {
     cp -R ../share/gamedir/* $out/share/OpenLieroX
   '';
 
-  nativeBuildInputs = [ cmake pkg-config curl ];
-  buildInputs = [ libX11 xorgproto gd SDL SDL_image SDL_mixer zlib libxml2
-    libzip ];
+  nativeBuildInputs = [cmake pkg-config curl];
+  buildInputs = [
+    libX11
+    xorgproto
+    gd
+    SDL
+    SDL_image
+    SDL_mixer
+    zlib
+    libxml2
+    libzip
+  ];
 
   meta = {
     homepage = "http://openlierox.net";

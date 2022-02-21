@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, libaal}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libaal,
+}:
 stdenv.mkDerivation rec {
   pname = "reiser4progs";
   version = "2.0.5";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libaal];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   preConfigure = ''
     substituteInPlace configure --replace " -static" ""

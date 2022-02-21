@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptoolsBuildHook
-, attrs
-, cattrs
-, toml
-, pytestCheckHook
-, click
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptoolsBuildHook,
+  attrs,
+  cattrs,
+  toml,
+  pytestCheckHook,
+  click,
 }:
-
 buildPythonPackage rec {
   pname = "typed-settings";
   version = "0.11.1";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex, xkeyboard_config, libxcb, libX11 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  bison,
+  flex,
+  xkeyboard_config,
+  libxcb,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
   version = "0.7.2";
@@ -9,10 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "1n5rv5n210kjnkyrvbh04gfwaa7zrmzy1393p8nyqfw66lkxr918";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ bison flex xkeyboard_config libxcb ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [bison flex xkeyboard_config libxcb];
 
   configureFlags = [
     "--with-xkb-config-root=${xkeyboard_config}/etc/X11/xkb"
@@ -27,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "A library to handle keyboard descriptions";
     homepage = "https://xkbcommon.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ttuegel];
     platforms = with platforms; unix;
   };
 }

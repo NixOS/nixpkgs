@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, param
-, pytestCheckHook
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  param,
+  pytestCheckHook,
+  pyyaml,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pyct";
   version = "0.4.8";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "ClI for Python common tasks for users";
     homepage = "https://github.com/pyviz/pyct";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "patchelf";
   version = "2021-11-16";
@@ -17,10 +22,10 @@ stdenv.mkDerivation rec {
       --replace "set-rpath-library.sh" ""
   '';
 
-  setupHook = [ ./setup-hook.sh ];
+  setupHook = [./setup-hook.sh];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [];
 
   doCheck = !stdenv.isDarwin;
 
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NixOS/patchelf";
     license = licenses.gpl3;
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
-    maintainers = [ maintainers.eelco ];
+    maintainers = [maintainers.eelco];
     platforms = platforms.all;
   };
 }

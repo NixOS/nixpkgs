@@ -1,5 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, libarchive, xz, zlib, bzip2, cmake, ninja }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  libarchive,
+  xz,
+  zlib,
+  bzip2,
+  cmake,
+  ninja,
+}:
 mkDerivation rec {
   pname = "libarchive-qt";
   version = "2.0.6";
@@ -27,7 +36,7 @@ mkDerivation rec {
     description = "A Qt based archiving solution with libarchive backend";
     homepage = "https://gitlab.com/marcusbritanicus/libarchive-qt";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

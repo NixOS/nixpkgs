@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, w3lib
-, parsel
-, jmespath
-, itemadapter
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  w3lib,
+  parsel,
+  jmespath,
+  itemadapter,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "itemloaders";
   version = "1.0.4";
@@ -22,9 +22,9 @@ buildPythonPackage rec {
     sha256 = "0j68xgx2z63sc1nc9clw6744036vfbijdsghvjv6pk674d5lgyam";
   };
 
-  propagatedBuildInputs = [ w3lib parsel jmespath itemadapter ];
+  propagatedBuildInputs = [w3lib parsel jmespath itemadapter];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   disabledTests = [
     # Test are failing (AssertionError: Lists differ: ...)
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     "test_nested_xpath"
   ];
 
-  pythonImportsCheck = [ "itemloaders" ];
+  pythonImportsCheck = ["itemloaders"];
 
   meta = with lib; {
     description = "Base library for scrapy's ItemLoader";
     homepage = "https://github.com/scrapy/itemloaders";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

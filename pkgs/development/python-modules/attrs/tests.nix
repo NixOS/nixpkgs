@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, pytestCheckHook
-, attrs
-, hypothesis
+{
+  buildPythonPackage,
+  pytestCheckHook,
+  attrs,
+  hypothesis,
 }:
-
 buildPythonPackage {
   pname = "attrs-tests";
   inherit (attrs) version;

@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "crlfuzz";
   version = "1.4.1";
@@ -21,7 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to scan for CRLF vulnerability";
     homepage = "https://github.com/dwisiswant0/crlfuzz";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

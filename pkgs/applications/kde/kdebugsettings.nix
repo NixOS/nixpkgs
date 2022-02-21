@@ -1,23 +1,37 @@
 {
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
   gettext,
-  kcoreaddons, kconfig, kdbusaddons, kwidgetsaddons, kitemviews, kcompletion,
-  qtbase, python3
+  kcoreaddons,
+  kconfig,
+  kdbusaddons,
+  kwidgetsaddons,
+  kitemviews,
+  kcompletion,
+  qtbase,
+  python3,
 }:
-
 mkDerivation {
   pname = "kdebugsettings";
   meta = {
     homepage = "https://apps.kde.org/kdebugsettings/";
     description = "KDE debug settings";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = [ ];
+    license = with lib.licenses; [gpl2];
+    maintainers = [];
     broken = lib.versionOlder qtbase.version "5.13";
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [extra-cmake-modules kdoctools];
   buildInputs = [
-    gettext kcoreaddons kconfig kdbusaddons kwidgetsaddons kitemviews kcompletion python3
+    gettext
+    kcoreaddons
+    kconfig
+    kdbusaddons
+    kwidgetsaddons
+    kitemviews
+    kcompletion
+    python3
   ];
-  propagatedUserEnvPkgs = [ ];
+  propagatedUserEnvPkgs = [];
 }

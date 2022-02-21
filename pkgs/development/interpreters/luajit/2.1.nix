@@ -1,4 +1,7 @@
-{ self, callPackage }:
+{
+  self,
+  callPackage,
+}:
 callPackage ./default.nix {
   inherit self;
   version = "2.1.0-2021-10-27";

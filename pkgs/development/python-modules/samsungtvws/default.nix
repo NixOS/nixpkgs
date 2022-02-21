@@ -1,8 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, requests
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  requests,
+  websocket-client,
 }:
-
 buildPythonPackage rec {
   pname = "samsungtvws";
   version = "1.7.0";
@@ -21,12 +24,12 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "samsungtvws" ];
+  pythonImportsCheck = ["samsungtvws"];
 
   meta = with lib; {
     description = "Samsung Smart TV WS API wrapper";
     homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

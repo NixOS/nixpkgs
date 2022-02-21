@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "hexedit";
   version = "1.2.13";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mwdp1ikk64cqmagnrrps5jkn3li3n47maiqh2qc1xbp1ains4ka";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   meta = {
     description = "View and edit files in hexadecimal or in ASCII";

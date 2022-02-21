@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, webob
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  webob,
 }:
-
 buildPythonPackage rec {
   pname = "bugsnag";
   version = "4.2.0";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Automatic error monitoring for Python applications";
     homepage = "https://github.com/bugsnag/bugsnag-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

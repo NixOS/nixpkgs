@@ -1,11 +1,11 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-error-monad
-, resto
-, resto-directory
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-error-monad,
+  resto,
+  resto-directory,
 }:
-
 buildDunePackage {
   pname = "tezos-rpc";
   inherit (tezos-stdlib) version useDune2;
@@ -19,7 +19,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: library of auto-documented RPCs (service and hierarchy descriptions)";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: library of auto-documented RPCs (service and hierarchy descriptions)";
+    };
 }

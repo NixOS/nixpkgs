@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  perl,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   version = "3.6";
   pname = "kpcli";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1srd6vrqgjlf906zdyxp4bg6gihkxn62cpzyfv0zzpsqsj13iwh1";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [perl];
 
   dontUnpack = true;
 
@@ -20,11 +26,23 @@ stdenv.mkDerivation rec {
     chmod +x $out/share/kpcli.pl
 
     makeWrapper $out/share/kpcli.pl $out/bin/kpcli --set PERL5LIB \
-      "${with perlPackages; makePerlPath ([
-         CaptureTiny Clipboard Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
-      ] ++ lib.optional stdenv.isDarwin MacPasteboard)}"
+      "${
+      with perlPackages;
+        makePerlPath ([
+          CaptureTiny
+          Clipboard
+          Clone
+          CryptRijndael
+          SortNaturally
+          TermReadKey
+          TermShellUI
+          FileKeePass
+          TermReadLineGnu
+          XMLParser
+        ]
+        ++ lib.optional stdenv.isDarwin MacPasteboard)
+    }"
   '';
-
 
   meta = with lib; {
     description = "KeePass Command Line Interface";
@@ -35,6 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.artistic1;
     homepage = "http://kpcli.sourceforge.net";
     platforms = platforms.all;
-    maintainers = [ maintainers.j-keck ];
+    maintainers = [maintainers.j-keck];
   };
 }

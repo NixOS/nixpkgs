@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sqlite, cppcheck, gtest }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sqlite,
+  cppcheck,
+  gtest,
+}:
 stdenv.mkDerivation rec {
   pname = "sqlitecpp";
   version = "3.1.1";
@@ -11,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "1c2yyipiqswi5sf9xmpsgw6l1illzmcpkjm56agk6kl2hay23lgr";
   };
 
-  nativeBuildInputs = [ cmake ];
-  checkInputs = [ cppcheck gtest ];
-  buildInputs = [ sqlite ];
+  nativeBuildInputs = [cmake];
+  checkInputs = [cppcheck gtest];
+  buildInputs = [sqlite];
   doCheck = true;
 
   cmakeFlags = [
@@ -26,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "C++ SQLite3 wrapper";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.jbedo maintainers.doronbehar ];
+    maintainers = [maintainers.jbedo maintainers.doronbehar];
   };
 }

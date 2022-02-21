@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-  cfg = config.hardware.acpilight;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.hardware.acpilight;
+in {
   options = {
     hardware.acpilight = {
       enable = mkOption {
@@ -19,7 +21,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ acpilight ];
-    services.udev.packages = with pkgs; [ acpilight ];
+    environment.systemPackages = with pkgs; [acpilight];
+    services.udev.packages = with pkgs; [acpilight];
   };
 }

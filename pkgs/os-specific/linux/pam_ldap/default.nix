@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, pam, openldap, perl }:
-
+{
+  stdenv,
+  fetchurl,
+  pam,
+  openldap,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "pam_ldap";
   version = "186";
@@ -18,8 +23,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace '-o root -g root' ''
   ";
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = [ pam openldap ];
+  nativeBuildInputs = [perl];
+  buildInputs = [pam openldap];
 
   meta = {
     homepage = "https://www.padl.com/OSS/pam_ldap.html";

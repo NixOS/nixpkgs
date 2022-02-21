@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, grim, gawk, jq, swaylock
-, imagemagick, getopt, fontconfig, wmctrl, makeWrapper
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  grim,
+  gawk,
+  jq,
+  swaylock,
+  imagemagick,
+  getopt,
+  fontconfig,
+  wmctrl,
+  makeWrapper,
+}: let
   depsPath = lib.makeBinPath [
     coreutils
     grim
@@ -14,36 +24,37 @@ let
     fontconfig
     wmctrl
   ];
-in stdenv.mkDerivation rec {
-  pname = "swaylock-fancy-unstable";
-  version = "2021-10-11";
+in
+  stdenv.mkDerivation rec {
+    pname = "swaylock-fancy-unstable";
+    version = "2021-10-11";
 
-  src = fetchFromGitHub {
-    owner = "Big-B";
-    repo = "swaylock-fancy";
-    rev = "265fbfb438392339bf676b0a9dbe294abe2a699e";
-    sha256 = "NjxeJyWYXBb1P8sXKgb2EWjF+cNodTE83r1YwRYoBjM=";
-  };
+    src = fetchFromGitHub {
+      owner = "Big-B";
+      repo = "swaylock-fancy";
+      rev = "265fbfb438392339bf676b0a9dbe294abe2a699e";
+      sha256 = "NjxeJyWYXBb1P8sXKgb2EWjF+cNodTE83r1YwRYoBjM=";
+    };
 
-  postPatch = ''
-    substituteInPlace swaylock-fancy \
-      --replace "/usr/share" "$out/share"
-  '';
+    postPatch = ''
+      substituteInPlace swaylock-fancy \
+        --replace "/usr/share" "$out/share"
+    '';
 
-  nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+    makeFlags = ["PREFIX=${placeholder "out"}"];
 
-  postInstall = ''
-    wrapProgram $out/bin/swaylock-fancy \
-      --prefix PATH : "${depsPath}"
-  '';
+    postInstall = ''
+      wrapProgram $out/bin/swaylock-fancy \
+        --prefix PATH : "${depsPath}"
+    '';
 
-  meta = with lib; {
-    description = "This is an swaylock bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
-    homepage = "https://github.com/Big-B/swaylock-fancy";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
-  };
-}
+    meta = with lib; {
+      description = "This is an swaylock bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
+      homepage = "https://github.com/Big-B/swaylock-fancy";
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ma27];
+    };
+  }

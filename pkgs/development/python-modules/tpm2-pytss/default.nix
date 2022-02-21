@@ -1,9 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pkg-config, swig
-, tpm2-tss
-, cryptography, ibm-sw-tpm2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pkg-config,
+  swig,
+  tpm2-tss,
+  cryptography,
+  ibm-sw-tpm2,
 }:
-
 buildPythonPackage rec {
   pname = "tpm2-pytss";
 
@@ -22,9 +27,9 @@ buildPythonPackage rec {
       'SYSCONFDIR = "${tpm2-tss}/etc"'
   '';
 
-  nativeBuildInputs = [ pkg-config swig ];
+  nativeBuildInputs = [pkg-config swig];
   # The TCTI is dynamically loaded from tpm2-tss, we have to provide the library to the end-user
-  propagatedBuildInputs = [ tpm2-tss ];
+  propagatedBuildInputs = [tpm2-tss];
 
   checkInputs = [
     cryptography
@@ -36,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ baloo ];
+    maintainers = with maintainers; [baloo];
   };
 }

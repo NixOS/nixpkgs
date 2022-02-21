@@ -1,15 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, enableCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
-, installShellFiles
-, pkg-config
-, Security
-, libiconv
-, openssl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  enableCompletions ? stdenv.hostPlatform == stdenv.buildPlatform,
+  installShellFiles,
+  pkg-config,
+  Security,
+  libiconv,
+  openssl,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
   version = "0.5.5";
@@ -23,16 +23,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-2xkKJqp7uf0gh8g2zzDjSl8foTvPj6MVHfDuSr914HU=";
 
-  nativeBuildInputs = lib.optionals enableCompletions [ installShellFiles ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
+  nativeBuildInputs =
+    lib.optionals enableCompletions [installShellFiles]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [pkg-config];
 
   buildInputs =
-    if stdenv.hostPlatform.isDarwin then [
-      Security
-      libiconv
-    ] else [
-      openssl
-    ];
+    if stdenv.hostPlatform.isDarwin
+    then
+      [
+        Security
+        libiconv
+      ]
+    else
+      [
+        openssl
+      ];
 
   postInstall = lib.optionalString enableCompletions ''
     # Install shell function
@@ -47,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/soywod/himalaya";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ yanganto ];
+    maintainers = with maintainers; [yanganto];
   };
 }

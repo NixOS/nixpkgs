@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, alsa-lib, audiofile, gtk2, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  alsa-lib,
+  audiofile,
+  gtk2,
+  libxml2,
+}:
 stdenv.mkDerivation rec {
   name = "soundmodem";
   version = "0.20";
@@ -9,10 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "156l3wjnh5rcisxb42kcmlf74swf679v4xnj09zy5j74rd4h721z";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib audiofile gtk2 libxml2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [alsa-lib audiofile gtk2 libxml2];
 
-  patches = [ ./matFix.patch ];
+  patches = [./matFix.patch];
 
   doCheck = true;
 
@@ -30,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "http://soundmodem.vk4msl.id.au/";
     downloadPage = "https://archive.org/download/${name}-${version}/${name}-${version}.tar.gz";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ymarkus ];
+    maintainers = with maintainers; [ymarkus];
     platforms = platforms.all;
   };
 }

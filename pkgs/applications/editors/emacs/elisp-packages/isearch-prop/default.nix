@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, trivialBuild
-, emacs
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  trivialBuild,
+  emacs,
 }:
-
 trivialBuild {
   pname = "isearch-prop";
   version = "0.pre+unstable=2019-05-01";
@@ -20,7 +20,7 @@ trivialBuild {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Search text- or overlay-property contexts";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ leungbk ];
+    maintainers = with maintainers; [leungbk];
     inherit (emacs.meta) platforms;
   };
 }

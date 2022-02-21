@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  librsvg,
+  gtk-engine-murrine,
+}:
 stdenv.mkDerivation rec {
   pname = "matcha-gtk-theme";
   version = "2021-12-25";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1wgq1aypm4cjv7yavlfmqcwahlddvh2gbg2f5ca0djgnpy9vha1g";
   };
 
-  buildInputs = [ gdk-pixbuf librsvg ];
+  buildInputs = [gdk-pixbuf librsvg];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [gtk-engine-murrine];
 
   installPhase = ''
     runHook preInstall
@@ -31,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://vinceliuice.github.io/theme-matcha";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

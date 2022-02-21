@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "mdr";
   version = "0.2.5";
@@ -25,6 +28,6 @@ buildGoModule rec {
     description = "MarkDown Renderer for the terminal";
     homepage = "https://github.com/MichaelMure/mdr";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

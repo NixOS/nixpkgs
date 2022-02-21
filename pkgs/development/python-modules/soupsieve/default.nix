@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, beautifulsoup4
-, isPy3k
-, backports_functools_lru_cache
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  beautifulsoup4,
+  isPy3k,
+  backports_functools_lru_cache,
 }:
-
 buildPythonPackage rec {
   pname = "soupsieve";
   version = "2.3.1";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  checkInputs = [ pytest beautifulsoup4 ];
+  checkInputs = [pytest beautifulsoup4];
 
   propagatedBuildInputs = lib.optional (!isPy3k) backports_functools_lru_cache;
 
@@ -32,5 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/facelessuser/soupsieve";
   };
-
 }

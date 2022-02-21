@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gnome
-, gtk3
-, libhandy
-, wrapGAppsHook
-, gjs
-, gobject-introspection
-, libgweather
-, meson
-, ninja
-, geoclue2
-, gnome-desktop
-, python3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnome,
+  gtk3,
+  libhandy,
+  wrapGAppsHook,
+  gjs,
+  gobject-introspection,
+  libgweather,
+  meson,
+  ninja,
+  geoclue2,
+  gnome-desktop,
+  python3,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
   version = "41.0";

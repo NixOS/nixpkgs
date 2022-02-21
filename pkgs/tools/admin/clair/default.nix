@@ -1,5 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, rpm, xz }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  rpm,
+  xz,
+}:
 buildGoModule rec {
   pname = "clair";
   version = "4.3.6";
@@ -15,11 +21,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram $out/bin/clair \
-      --prefix PATH : "${lib.makeBinPath [ rpm xz ]}"
+      --prefix PATH : "${lib.makeBinPath [rpm xz]}"
   '';
 
   meta = with lib; {
@@ -27,6 +33,6 @@ buildGoModule rec {
     homepage = "https://github.com/quay/clair";
     changelog = "https://github.com/quay/clair/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [marsam];
   };
 }

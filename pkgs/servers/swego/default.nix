@@ -1,9 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, stdenv
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  stdenv,
 }:
-
 buildGoModule rec {
   pname = "swego";
   version = "0.97";
@@ -28,8 +28,8 @@ buildGoModule rec {
       SimpleHTTPServer but with many features.
     '';
     homepage = "https://github.com/nodauf/Swego";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl2Only];
+    maintainers = with maintainers; [fab];
     # darwin crashes with:
     # src/controllers/parsingArgs.go:130:4: undefined: PrintEmbeddedFiles
     broken = stdenv.isDarwin;

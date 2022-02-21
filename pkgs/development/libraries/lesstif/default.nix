@@ -1,5 +1,11 @@
-{lib, stdenv, fetchurl, xlibsWrapper, libXp, libXau}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xlibsWrapper,
+  libXp,
+  libXau,
+}:
 stdenv.mkDerivation rec {
   pname = "lesstif";
   version = "0.95.2";
@@ -18,12 +24,12 @@ stdenv.mkDerivation rec {
     ./c-missing_xm_h.patch
     ./c-render_table_crash.patch
     ./c-xpmpipethrough.patch
-    ];
+  ];
 
   meta = with lib; {
     description = "An open source clone of the Motif widget set";
     homepage = "http://lesstif.sourceforge.net";
     platforms = platforms.unix;
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [gpl2 lgpl2];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, llvmPackages, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  llvmPackages,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
   # Also bump llvmPackages in all-packages.nix to the supported version!
@@ -10,10 +16,10 @@ stdenv.mkDerivation rec {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
   };
 
-  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3];
-  buildInputs = with llvmPackages; [ libclang clang-unwrapped ];
+  nativeBuildInputs = with llvmPackages; [cmake llvm.dev llvm python3];
+  buildInputs = with llvmPackages; [libclang clang-unwrapped];
 
-  cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
+  cmakeFlags = ["-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}"];
 
   postInstall = ''
     substituteInPlace $out/bin/iwyu_tool.py \

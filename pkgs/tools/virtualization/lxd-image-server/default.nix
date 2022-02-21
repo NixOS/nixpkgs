@@ -1,10 +1,10 @@
-{ lib
-, openssl
-, rsync
-, python3
-, fetchFromGitHub
+{
+  lib,
+  openssl,
+  rsync,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "lxd-image-server";
   version = "0.0.4";
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    ''--prefix PATH ':' "${lib.makeBinPath [ openssl rsync ]}"''
+    ''--prefix PATH ':' "${lib.makeBinPath [openssl rsync]}"''
   ];
 
   doCheck = false;
@@ -42,6 +42,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Avature/lxd-image-server";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
   };
 }

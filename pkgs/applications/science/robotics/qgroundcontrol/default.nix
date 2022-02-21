@@ -1,24 +1,49 @@
-{ lib, mkDerivation, fetchFromGitHub, SDL2
-, qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
-, qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
-, gst_all_1, wayland, pkg-config
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  SDL2,
+  qtbase,
+  qtcharts,
+  qtlocation,
+  qtserialport,
+  qtsvg,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  qtspeech,
+  qtx11extras,
+  qmake,
+  qttools,
+  gst_all_1,
+  wayland,
+  pkg-config,
 }:
-
 mkDerivation rec {
   pname = "qgroundcontrol";
   version = "4.2.0";
 
   qtInputs = [
-    qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
-    qtgraphicaleffects qtspeech qtx11extras
+    qtbase
+    qtcharts
+    qtlocation
+    qtserialport
+    qtsvg
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtspeech
+    qtx11extras
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    wayland
   ];
 
-  buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
-  nativeBuildInputs = [ pkg-config qmake qttools ];
+  buildInputs = [SDL2] ++ gstInputs ++ qtInputs;
+  nativeBuildInputs = [pkg-config qmake qttools];
 
   preConfigure = ''
     mkdir build
@@ -73,6 +98,6 @@ mkDerivation rec {
     homepage = "http://qgroundcontrol.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [lopsided98];
   };
 }

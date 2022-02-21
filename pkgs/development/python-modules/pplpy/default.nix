@@ -1,16 +1,16 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, gmp
-, mpfr
-, libmpc
-, ppl
-, cython
-, cysignals
-, gmpy2
-, sphinx
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  gmp,
+  mpfr,
+  libmpc,
+  ppl,
+  cython,
+  cysignals,
+  gmpy2,
+  sphinx,
 }:
-
 buildPythonPackage rec {
   pname = "pplpy";
   version = "0.8.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     gmpy2
   ];
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   postBuild = ''
     # Find the build result in order to put it into PYTHONPATH. The doc

@@ -1,5 +1,11 @@
-{ lib, stdenv, makeWrapper, fetchzip, python3, python3Packages }:
-let
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchzip,
+  python3,
+  python3Packages,
+}: let
   threaded_servers = python3Packages.buildPythonPackage {
     name = "threaded_servers";
     src = fetchzip {
@@ -10,26 +16,27 @@ let
     # stuff we don't care about pacserve
     doCheck = false;
   };
-  wrappedPython = python3.withPackages (_: [ threaded_servers ]);
-in stdenv.mkDerivation {
-  pname = "quickserve";
-  version = "2018";
+  wrappedPython = python3.withPackages (_: [threaded_servers]);
+in
+  stdenv.mkDerivation {
+    pname = "quickserve";
+    version = "2018";
 
-  dontUnpack = true;
-  nativeBuildInputs = [ makeWrapper ];
+    dontUnpack = true;
+    nativeBuildInputs = [makeWrapper];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    makeWrapper ${wrappedPython}/bin/python $out/bin/quickserve \
-      --add-flags -mThreadedServers.PeeredQuickserve
-    runHook postInstall
-  '';
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin
+      makeWrapper ${wrappedPython}/bin/python $out/bin/quickserve \
+        --add-flags -mThreadedServers.PeeredQuickserve
+      runHook postInstall
+    '';
 
-  meta = with lib; {
-    description = "A simple HTTP server for quickly sharing files";
-    homepage = "https://xyne.archlinux.ca/projects/quickserve/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ lassulus ];
-  };
-}
+    meta = with lib; {
+      description = "A simple HTTP server for quickly sharing files";
+      homepage = "https://xyne.archlinux.ca/projects/quickserve/";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [lassulus];
+    };
+  }

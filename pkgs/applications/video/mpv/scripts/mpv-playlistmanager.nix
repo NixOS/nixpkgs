@@ -1,5 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, youtube-dl }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  youtube-dl,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "mpv-playlistmanager";
   version = "unstable-2021-09-27";
@@ -32,6 +36,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/jonniek/mpv-playlistmanager";
     license = licenses.unlicense;
     platforms = platforms.all;
-    maintainers = with maintainers; [ lunik1 ];
+    maintainers = with maintainers; [lunik1];
   };
 }

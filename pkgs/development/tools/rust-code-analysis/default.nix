@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rust-code-analysis";
   version = "0.0.23";
@@ -13,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-++d/czDJVGzY8GvBpBKpP0Rum4J4RpT95S81IRUWY2M=";
 
-  cargoBuildFlags = [ "--workspace" ];
+  cargoBuildFlags = ["--workspace"];
 
   meta = with lib; {
     description = "Analyze and collect metrics on source code";
@@ -22,7 +25,7 @@ rustPlatform.buildRustPackage rec {
       mit # grammars
       mpl20 # code
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
     mainProgram = "rust-code-analysis-cli";
   };
 }

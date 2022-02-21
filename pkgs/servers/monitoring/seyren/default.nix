@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "seyren";
   version = "1.5.0";
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   installPhase = ''
     mkdir -p "$out"/bin
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "An alerting dashboard for Graphite";
     homepage = "https://github.com/scobal/seyren";
     license = licenses.asl20;
-    maintainers = [ maintainers.offline ];
+    maintainers = [maintainers.offline];
     platforms = platforms.all;
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, which
-, enableStatic ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  which,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.4.2";
   pname = "rhash";
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [which];
 
   # configure script is not autotools-based, doesn't support these options
   dontAddStaticConfigureFlags = true;
 
-  configurePlatforms = [ ];
+  configurePlatforms = [];
 
   configureFlags = [
     "--ar=${stdenv.cc.targetPrefix}ar"
@@ -42,18 +42,20 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test-full";
 
-  installTargets = [
-    "install"
-    "install-lib-headers"
-  ] ++ lib.optional (!enableStatic) [
-    "install-lib-so-link"
-  ];
+  installTargets =
+    [
+      "install"
+      "install-lib-headers"
+    ]
+    ++ lib.optional (!enableStatic) [
+      "install-lib-so-link"
+    ];
 
   meta = with lib; {
     homepage = "http://rhash.sourceforge.net/";
     description = "Console utility and library for computing and verifying hash sums of files";
     license = licenses.bsd0;
     platforms = platforms.all;
-    maintainers = with maintainers; [ andrewrk ];
+    maintainers = with maintainers; [andrewrk];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "kube-router";
   version = "1.2.2";
@@ -22,7 +25,7 @@ buildGoPackage rec {
     homepage = "https://www.kube-router.io/";
     description = "All-in-one router, firewall and service proxy for Kubernetes";
     license = licenses.asl20;
-    maintainers = with maintainers; [ colemickens johanot ];
+    maintainers = with maintainers; [colemickens johanot];
     platforms = platforms.linux;
   };
 }

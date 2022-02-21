@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  efl,
+}:
 stdenv.mkDerivation rec {
   pname = "terminology";
   version = "1.12.1";
@@ -29,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.enlightenment.org/about-terminology";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [matejc tstrobel ftrvxmtrx romildo];
   };
 }

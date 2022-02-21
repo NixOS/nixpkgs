@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "powerline-go";
   version = "unstable-2021-07-15";
@@ -24,7 +24,7 @@ buildGoModule rec {
     changelog = "https://github.com/justjanne/powerline-go/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sifmelcara ];
+    maintainers = with maintainers; [sifmelcara];
     mainProgram = "powerline-go";
   };
 }

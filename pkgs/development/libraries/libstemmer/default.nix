@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation {
   pname = "libstemmer";
   version = "unstable-2017-03-02";
@@ -11,13 +15,13 @@ stdenv.mkDerivation {
     sha256 = "06md6n6h1f2zvnjrpfrq7ng46l1x12c14cacbrzmh5n0j98crpq7";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "Snowball Stemming Algorithms";
     homepage = "http://snowball.tartarus.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
     platforms = platforms.all;
   };
 }

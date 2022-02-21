@@ -1,23 +1,29 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "sogo";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ajs124 das_j ];
+    maintainers = [ajs124 das_j];
   };
 
   nodes = {
-    sogo = { config, pkgs, ... }: {
+    sogo = {
+      config,
+      pkgs,
+      ...
+    }: {
       services.nginx.enable = true;
 
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
-        ensureDatabases = [ "sogo" ];
-        ensureUsers = [{
-          name = "sogo";
-          ensurePermissions = {
-            "sogo.*" = "ALL PRIVILEGES";
-          };
-        }];
+        ensureDatabases = ["sogo"];
+        ensureUsers = [
+          {
+            name = "sogo";
+            ensurePermissions = {
+              "sogo.*" = "ALL PRIVILEGES";
+            };
+          }
+        ];
       };
 
       services.sogo = {

@@ -1,8 +1,11 @@
-{ stdenv, lib, python3 }:
-
+{
+  stdenv,
+  lib,
+  python3,
+}:
 stdenv.mkDerivation {
   name = "replace-secret";
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
   dontUnpack = true;
   installPhase = ''
     runHook preInstall
@@ -23,7 +26,7 @@ stdenv.mkDerivation {
   '';
   meta = with lib; {
     platforms = platforms.all;
-    maintainers = with maintainers; [ talyz ];
+    maintainers = with maintainers; [talyz];
     license = licenses.mit;
     description = "Replace a string in one file with a secret from a second file";
     longDescription = ''

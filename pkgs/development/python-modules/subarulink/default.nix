@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, stdiomask
+{
+  lib,
+  aiohttp,
+  asynctest,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  stdiomask,
 }:
-
 buildPythonPackage rec {
   pname = "subarulink";
   version = "0.4.2";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for interacting with STARLINK-enabled vehicle";
     homepage = "https://github.com/G-Two/subarulink";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

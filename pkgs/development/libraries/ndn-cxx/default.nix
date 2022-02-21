@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, doxygen
-, pkg-config
-, python3
-, python3Packages
-, wafHook
-, boost175
-, openssl
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  doxygen,
+  pkg-config,
+  python3,
+  python3Packages,
+  wafHook,
+  boost175,
+  openssl,
+  sqlite,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ndn-cxx";
   version = "0.7.1";
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oTSc/lh0fDdk7dQeDhYKX5+gFl2t2Xlu1KkNmw7DitE=";
   };
 
-  nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
+  nativeBuildInputs = [doxygen pkg-config python3 python3Packages.sphinx wafHook];
 
-  buildInputs = [ boost175 openssl sqlite ];
+  buildInputs = [boost175 openssl sqlite];
 
   wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     "--boost-libs=${boost175.out}/lib"
     # "--with-tests" # disabled since upstream tests fail (Net/TestFaceUri/ParseDev Bug #3896)
   ];
-
 
   doCheck = false; # disabled since upstream tests fail (Net/TestFaceUri/ParseDev Bug #3896)
   checkPhase = ''
@@ -59,6 +58,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sjmackenzie bertof ];
+    maintainers = with maintainers; [sjmackenzie bertof];
   };
 }

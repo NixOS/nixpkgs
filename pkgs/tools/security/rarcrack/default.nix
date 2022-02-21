@@ -1,5 +1,13 @@
-{lib, stdenv, fetchFromGitHub, libxml2, file, p7zip, unrar, unzip}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxml2,
+  file,
+  p7zip,
+  unrar,
+  unzip,
+}:
 stdenv.mkDerivation {
   pname = "rarcrack";
   version = "0.2";
@@ -11,13 +19,13 @@ stdenv.mkDerivation {
     sha256 = "134fq84896w5vp8vg4qg0ybpb466njibigyd7bqqm1xydr07qrgn";
   };
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ libxml2 file p7zip unrar ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [libxml2 file p7zip unrar];
   buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
-  installFlags = [ "PREFIX=\${out}" ];
+  installFlags = ["PREFIX=\${out}"];
 
   patchPhase = ''
-   substituteInPlace rarcrack.c --replace "file -i" "${file}/bin/file -i"
+    substituteInPlace rarcrack.c --replace "file -i" "${file}/bin/file -i"
   '';
 
   preInstall = ''
@@ -27,14 +35,13 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "This program can crack zip,7z and rar file passwords";
     longDescription = ''
-    If you forget your password for compressed archive (rar, 7z, zip), this program is the solution.
-    This program uses bruteforce algorithm to find correct password. You can specify wich characters will be used in password generations.
-    Warning: Please don't use this program for any illegal things!
+      If you forget your password for compressed archive (rar, 7z, zip), this program is the solution.
+      This program uses bruteforce algorithm to find correct password. You can specify wich characters will be used in password generations.
+      Warning: Please don't use this program for any illegal things!
     '';
     homepage = "https://github.com/jaredsburrows/Rarcrack";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [davidak];
     platforms = with platforms; unix;
   };
 }
-

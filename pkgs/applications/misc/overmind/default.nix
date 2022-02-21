@@ -1,13 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, tmux, which, makeWrapper }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  tmux,
+  which,
+  makeWrapper,
+}:
 buildGoModule rec {
   pname = "overmind";
   version = "2.2.2";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
-    wrapProgram "$out/bin/overmind" --prefix PATH : "${lib.makeBinPath [ tmux which ]}"
+    wrapProgram "$out/bin/overmind" --prefix PATH : "${lib.makeBinPath [tmux which]}"
   '';
 
   src = fetchFromGitHub {
@@ -22,7 +28,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/DarthSim/overmind";
     description = "Process manager for Procfile-based applications and tmux";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.adisbladis ];
+    license = with licenses; [mit];
+    maintainers = [maintainers.adisbladis];
   };
 }

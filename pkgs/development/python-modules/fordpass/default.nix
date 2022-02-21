@@ -1,10 +1,10 @@
-{ lib
-, requests
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  requests,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "fordpass";
   version = "0.0.4";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "fordpass" ];
+  pythonImportsCheck = ["fordpass"];
 
   meta = with lib; {
     description = "Python module for the FordPass API";
     homepage = "https://github.com/clarkd/fordpass-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "circuitbreaker";
   version = "1.3.2";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Circuit Breaker implementation";
     homepage = "https://github.com/fabfuel/circuitbreaker";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

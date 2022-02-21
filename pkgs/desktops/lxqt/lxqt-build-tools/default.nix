@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pcre
-, qtbase
-, glib
-, perl
-, lxqtUpdateScript
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  pcre,
+  qtbase,
+  glib,
+  perl,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "lxqt-build-tools";
   version = "0.10.0";
@@ -54,13 +54,13 @@ mkDerivation rec {
     cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-build-tools";
     description = "Various packaging tools and scripts for LXQt applications";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

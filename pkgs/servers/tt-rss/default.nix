@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "tt-rss";
   year = "21";
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Web-based news feed (RSS/Atom) aggregator";
     license = licenses.gpl2Plus;
     homepage = "https://tt-rss.org";
-    maintainers = with maintainers; [ globin zohl ];
+    maintainers = with maintainers; [globin zohl];
     platforms = platforms.all;
   };
 }

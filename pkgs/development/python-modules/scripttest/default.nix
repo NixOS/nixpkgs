@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
-
 buildPythonPackage rec {
   version = "1.3";
   pname = "scripttest";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "951cfc25219b0cd003493a565f2e621fd791beaae9f9a3bdd7024d8626419c38";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
   # Tests are not included. See https://github.com/pypa/scripttest/issues/11
   doCheck = false;
@@ -23,5 +23,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/ScriptTest/";
     license = licenses.mit;
   };
-
 }

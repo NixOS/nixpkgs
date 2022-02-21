@@ -1,12 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let cfg = config.services.espanso;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.espanso;
 in {
-  meta = { maintainers = with lib.maintainers; [ numkem ]; };
+  meta = {maintainers = with lib.maintainers; [numkem];};
 
   options = {
-    services.espanso = { enable = options.mkEnableOption "Espanso"; };
+    services.espanso = {enable = options.mkEnableOption "Espanso";};
   };
 
   config = mkIf cfg.enable {
@@ -16,9 +20,9 @@ in {
         ExecStart = "${pkgs.espanso}/bin/espanso daemon";
         Restart = "on-failure";
       };
-      wantedBy = [ "default.target" ];
+      wantedBy = ["default.target"];
     };
 
-    environment.systemPackages = [ pkgs.espanso ];
+    environment.systemPackages = [pkgs.espanso];
   };
 }

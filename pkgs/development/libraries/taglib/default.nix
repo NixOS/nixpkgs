@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "taglib";
   version = "1.12";
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-omErajnYgxbflsbe6pS2KsexZcXisso0WGYnmIud7WA=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
 
   meta = with lib; {
     homepage = "https://taglib.org/";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       files, Ogg Vorbis comments and ID3 tags and Vorbis comments in FLAC, MPC,
       Speex, WavPack, TrueAudio, WAV, AIFF, MP4 and ASF files.
     '';
-    license = with licenses; [ lgpl3 mpl11 ];
-    maintainers = with maintainers; [ ttuegel ];
+    license = with licenses; [lgpl3 mpl11];
+    maintainers = with maintainers; [ttuegel];
   };
 }

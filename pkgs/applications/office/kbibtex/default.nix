@@ -1,31 +1,35 @@
-{ lib
-, mkDerivation
-, fetchurl
-# build-time
-, extra-cmake-modules
-, shared-mime-info
-# Qt
-, qtxmlpatterns
-, qtwebengine
-, qca-qt5
-# KDE
-, ki18n
-, kxmlgui
-, kio
-, kiconthemes
-, kitemviews
-, kparts
-, kcoreaddons
-, kservice
-, ktexteditor
-, kdoctools
-, kwallet
-, kcrash
-# other
-, poppler
-, bibutils
+{
+  lib,
+  mkDerivation,
+  fetchurl
+  # build-time
+  ,
+  extra-cmake-modules,
+  shared-mime-info
+  # Qt
+  ,
+  qtxmlpatterns,
+  qtwebengine,
+  qca-qt5
+  # KDE
+  ,
+  ki18n,
+  kxmlgui,
+  kio,
+  kiconthemes,
+  kitemviews,
+  kparts,
+  kcoreaddons,
+  kservice,
+  ktexteditor,
+  kdoctools,
+  kwallet,
+  kcrash
+  # other
+  ,
+  poppler,
+  bibutils,
 }:
-
 mkDerivation rec {
   pname = "kbibtex";
   version = "0.9.2";
@@ -61,7 +65,10 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ bibutils ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [bibutils]}"
   ];
 
   meta = with lib; {
@@ -69,6 +76,6 @@ mkDerivation rec {
     homepage = "https://userbase.kde.org/KBibTeX";
     changelog = "https://invent.kde.org/office/kbibtex/-/raw/v${version}/ChangeLog";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

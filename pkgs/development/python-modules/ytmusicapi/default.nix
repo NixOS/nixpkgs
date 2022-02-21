@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "ytmusicapi";
   version = "0.20.0";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python API for YouTube Music";
     homepage = "https://github.com/sigma67/ytmusicapi";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

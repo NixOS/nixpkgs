@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_ttf, gettext, zlib, SDL2_mixer, SDL2_image, guile, libGLU, libGL }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+  SDL2_ttf,
+  gettext,
+  zlib,
+  SDL2_mixer,
+  SDL2_image,
+  guile,
+  libGLU,
+  libGL,
+}:
 stdenv.mkDerivation rec {
   pname = "trackballs";
   version = "1.3.3";
@@ -11,8 +24,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fCoQqGXwcpcq/gl67XXY5/wEvCM0ZZTV8LhjC+tnRuo=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib SDL2 SDL2_ttf SDL2_mixer SDL2_image guile gettext libGLU libGL ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [zlib SDL2 SDL2_ttf SDL2_mixer SDL2_image guile gettext libGLU libGL];
 
   meta = with lib; {
     homepage = "https://trackballs.github.io/";

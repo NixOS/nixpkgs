@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "clex";
   version = "4.6.patch10";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     url = "${meta.homepage}/download/${pname}-${version}.tar.gz";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   enableParallelBuilding = true;
 

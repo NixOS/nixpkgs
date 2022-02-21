@@ -1,14 +1,14 @@
-{ lib
-, authlib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  authlib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
 }:
-
 buildPythonPackage rec {
   pname = "pylitterbot";
   version = "2021.12.0";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package for controlling a Litter-Robot";
     homepage = "https://github.com/natekspencer/pylitterbot";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

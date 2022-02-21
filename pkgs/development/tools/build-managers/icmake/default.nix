@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, makeWrapper, gcc, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  makeWrapper,
+  gcc,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "icmake";
   version = "9.03.01";
@@ -11,13 +17,12 @@ stdenv.mkDerivation rec {
     owner = "fbb-git";
   };
 
-
   setSourceRoot = ''
     sourceRoot=$(echo */icmake)
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gcc ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [gcc];
 
   preConfigure = ''
     patchShebangs ./
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "A program maintenance (make) utility using a C-like grammar";
     homepage = "https://fbb-git.gitlab.io/icmake/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.linux;
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, attrdict
-, buildPythonPackage
-, cairosvg
-, fetchPypi
-, pillow
-, pytestCheckHook
-, setuptools-scm
-, six
-, svgwrite
-, xmldiff
+{
+  lib,
+  attrdict,
+  buildPythonPackage,
+  cairosvg,
+  fetchPypi,
+  pillow,
+  pytestCheckHook,
+  setuptools-scm,
+  six,
+  svgwrite,
+  xmldiff,
 }:
-
 buildPythonPackage rec {
   pname = "wavedrom";
   version = "2.0.3.post2";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "WaveDrom compatible Python command line";
     homepage = "https://github.com/wallento/wavedrompy";
     license = licenses.mit;
-    maintainers = with maintainers; [ airwoodix ];
+    maintainers = with maintainers; [airwoodix];
   };
 }

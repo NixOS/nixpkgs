@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "conway_polynomials";
   version = "0.5";

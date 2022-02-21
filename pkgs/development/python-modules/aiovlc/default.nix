@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiovlc";
   version = "0.1.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Python module to control VLC";
     homepage = "https://github.com/MartinHjelmare/aiovlc";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

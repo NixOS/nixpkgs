@@ -1,6 +1,16 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, libX11, libXcursor
-, libxcb, python3, installShellFiles, makeDesktopItem, copyDesktopItems }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libX11,
+  libXcursor,
+  libxcb,
+  python3,
+  installShellFiles,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "xcolor";
   version = "0.5.1";
@@ -14,9 +24,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-Zh73+FJ63SkusSavCqSCLbHVnU++4ZFSMFUIM7TnOj0=";
 
-  nativeBuildInputs = [ pkg-config python3 installShellFiles copyDesktopItems ];
+  nativeBuildInputs = [pkg-config python3 installShellFiles copyDesktopItems];
 
-  buildInputs = [ libX11 libXcursor libxcb ];
+  buildInputs = [libX11 libXcursor libxcb];
 
   desktopItems = [
     (makeDesktopItem {
@@ -41,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Lightweight color picker for X11";
     homepage = "https://github.com/Soft/xcolor";
-    maintainers = with lib.maintainers; [ fortuneteller2k ];
+    maintainers = with lib.maintainers; [fortuneteller2k];
     license = licenses.mit;
   };
 }

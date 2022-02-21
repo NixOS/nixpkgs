@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.thermald;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.thermald;
+in {
   ###### interface
   options = {
     services.thermald = {
@@ -36,11 +37,11 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
-    services.dbus.packages = [ cfg.package ];
+    services.dbus.packages = [cfg.package];
 
     systemd.services.thermald = {
       description = "Thermal Daemon Service";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         PrivateNetwork = true;
         ExecStart = ''

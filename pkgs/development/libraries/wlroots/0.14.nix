@@ -1,11 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland-scanner
-, libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg_4, xcbutilrenderutil, seatd
-
-, enableXWayland ? true, xwayland ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  libGL,
+  wayland,
+  wayland-protocols,
+  libinput,
+  libxkbcommon,
+  pixman,
+  xcbutilwm,
+  libX11,
+  libcap,
+  xcbutilimage,
+  xcbutilerrors,
+  mesa,
+  libpng,
+  ffmpeg_4,
+  xcbutilrenderutil,
+  seatd,
+  enableXWayland ? true,
+  xwayland ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wlroots";
   version = "0.14.1";
@@ -18,23 +37,35 @@ stdenv.mkDerivation rec {
   };
 
   # $out for the library and $examples for the example programs (in examples):
-  outputs = [ "out" "examples" ];
+  outputs = ["out" "examples"];
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [pkg-config];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [meson ninja pkg-config wayland-scanner];
 
-  buildInputs = [
-    libGL wayland wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg_4 xcbutilrenderutil seatd
-  ]
-    ++ lib.optional enableXWayland xwayland
-  ;
+  buildInputs =
+    [
+      libGL
+      wayland
+      wayland-protocols
+      libinput
+      libxkbcommon
+      pixman
+      xcbutilwm
+      libX11
+      libcap
+      xcbutilimage
+      xcbutilerrors
+      mesa
+      libpng
+      ffmpeg_4
+      xcbutilrenderutil
+      seatd
+    ]
+    ++ lib.optional enableXWayland xwayland;
 
   mesonFlags =
-    lib.optional (!enableXWayland) "-Dxwayland=disabled"
-  ;
+    lib.optional (!enableXWayland) "-Dxwayland=disabled";
 
   postFixup = ''
     # Install ALL example programs to $examples:
@@ -56,8 +87,8 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://github.com/swaywm/wlroots/releases/tag/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [primeos synthetica];
   };
 }

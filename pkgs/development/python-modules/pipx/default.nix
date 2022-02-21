@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, userpath
-, argcomplete
-, packaging
-, importlib-metadata
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  userpath,
+  argcomplete,
+  packaging,
+  importlib-metadata,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pipx";
   version = "1.0.0";
@@ -23,15 +23,17 @@ buildPythonPackage rec {
     sha256 = "1sgfrlhci2m83k436dfwfmqjpb8hij6yypm03pm3n8drmr2aaa4s";
   };
 
-  propagatedBuildInputs = [
-    userpath
-    argcomplete
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      userpath
+      argcomplete
+      packaging
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -64,10 +66,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description =
-      "Install and Run Python Applications in Isolated Environments";
+    description = "Install and Run Python Applications in Isolated Environments";
     homepage = "https://github.com/pipxproject/pipx";
     license = licenses.mit;
-    maintainers = with maintainers; [ yshym ];
+    maintainers = with maintainers; [yshym];
   };
 }

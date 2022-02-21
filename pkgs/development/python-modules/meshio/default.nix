@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, netcdf4
-, h5py
-, exdown
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  netcdf4,
+  h5py,
+  exdown,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "meshio";
   version = "5.2.2";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nschloe/meshio";
     description = "I/O for mesh files.";
     license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    maintainers = with maintainers; [wd15];
   };
 }

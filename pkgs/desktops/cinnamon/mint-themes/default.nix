@@ -1,11 +1,11 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, python3
-, sassc
-, sass
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  python3,
+  sassc,
+  sass,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mint-themes";
   version = "1.8.8";

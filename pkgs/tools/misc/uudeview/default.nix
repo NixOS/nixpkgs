@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, tcl
-, tk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  tcl,
+  tk,
 }:
-
 stdenv.mkDerivation rec {
   pname = "uudeview";
   version = "0.5.20";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0dg4v888fxhmf51vxq1z1gd57fslsidn15jf42pj4817vw6m36p4";
   };
 
-  buildInputs = [ tcl tk ];
+  buildInputs = [tcl tk];
 
-  configureFlags = [ "--enable-tk=${tk.dev}" "--enable-tcl=${tcl}" ];
+  configureFlags = ["--enable-tk=${tk.dev}" "--enable-tcl=${tcl}"];
 
   patches = [
     # https://wiki.tcl.tk/3577
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "The Nice and Friendly Decoder";
     homepage = "http://www.fpx.de/fp/Software/UUDeview/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ woffs ];
+    maintainers = with lib.maintainers; [woffs];
     platforms = lib.platforms.linux;
   };
 }

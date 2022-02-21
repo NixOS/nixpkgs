@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, perl, ppp, iproute2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  ppp,
+  iproute2,
+}:
 stdenv.mkDerivation rec {
   pname = "pptp";
   version = "1.10.0";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
                      PPPDIR=$out/etc/ppp )
   '';
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   postFixup = ''
     patchShebangs $out

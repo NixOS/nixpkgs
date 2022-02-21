@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, fetchurl, cstruct, mirage-crypto, alcotest }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  mirage-crypto,
+  alcotest,
+}:
 buildDunePackage rec {
   pname = "hkdf";
   version = "1.0.4";
@@ -13,14 +19,14 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [ cstruct mirage-crypto ];
-  checkInputs = [ alcotest ];
+  propagatedBuildInputs = [cstruct mirage-crypto];
+  checkInputs = [alcotest];
   doCheck = true;
 
   meta = with lib; {
     description = "HMAC-based Extract-and-Expand Key Derivation Function (RFC 5869)";
     homepage = "https://github.com/hannesm/ocaml-hkdf";
     license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann ];
+    maintainers = with maintainers; [sternenseemann];
   };
 }

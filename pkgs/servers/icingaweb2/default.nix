@@ -1,5 +1,10 @@
-{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, php }:
-
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  php,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
   version = "2.9.5";
@@ -11,14 +16,14 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-yKnG+wxWVgLwG9hRRiLPmNzm9pBrf/mh5V/lLdj8Sv8=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/share
     cp -ra application bin etc library modules public $out
     cp -ra doc $out/share
 
-    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php ]}"
+    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [php]}"
   '';
 
   meta = with lib; {
@@ -30,6 +35,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.icinga.com/products/icinga-web-2/";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [das_j];
   };
 }

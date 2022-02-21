@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gfortran
-, fftw
-, blas
-, lapack
-, useMpi ? false
-, mpi
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gfortran,
+  fftw,
+  blas,
+  lapack,
+  useMpi ? false,
+  mpi,
 }:
-
 stdenv.mkDerivation rec {
   version = "6.6";
   pname = "quantum-espresso";
@@ -28,14 +28,18 @@ stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs = [gfortran];
 
-  buildInputs = [ fftw blas lapack ]
-    ++ (lib.optionals useMpi [ mpi ]);
+  buildInputs =
+    [fftw blas lapack]
+    ++ (lib.optionals useMpi [mpi]);
 
-  configureFlags = if useMpi then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
+  configureFlags =
+    if useMpi
+    then ["LD=${mpi}/bin/mpif90"]
+    else ["LD=${gfortran}/bin/gfortran"];
 
-  makeFlags = [ "all" ];
+  makeFlags = ["all"];
 
   meta = with lib; {
     description = "Electronic-structure calculations and materials modeling at the nanoscale";
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.quantum-espresso.org/";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.costrouc ];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
+    maintainers = [maintainers.costrouc];
   };
 }

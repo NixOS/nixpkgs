@@ -1,7 +1,18 @@
-{ stdenv, fetchurl, pkg-config, glib, popt, zlib, libcanberra-gtk2
-, intltool, libbonobo, GConf, gnome_vfs, libtool, libogg
+{
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  popt,
+  zlib,
+  libcanberra-gtk2,
+  intltool,
+  libbonobo,
+  GConf,
+  gnome_vfs,
+  libtool,
+  libogg,
 }:
-
 stdenv.mkDerivation rec {
   name = "libgnome-${minVer}.1";
   minVer = "2.32";
@@ -11,13 +22,15 @@ stdenv.mkDerivation rec {
     sha256 = "197pnq8y0knqjhm2fg4j6hbqqm3qfzfnd0irhwxpk1b4hqb3kimj";
   };
 
-  patches = [ ./new-glib.patch ];
-  /* There's a comment containing an invalid utf-8 sequence, breaking glib-mkenums. */
+  patches = [./new-glib.patch];
+  /*
+   There's a comment containing an invalid utf-8 sequence, breaking glib-mkenums.
+   */
   postPatch = "sed '/returns the true filename/d' -i libgnome/gnome-config.h";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ popt zlib intltool GConf gnome_vfs libcanberra-gtk2 libtool ];
-  propagatedBuildInputs = [ glib libbonobo libogg ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [popt zlib intltool GConf gnome_vfs libcanberra-gtk2 libtool];
+  propagatedBuildInputs = [glib libbonobo libogg];
 }

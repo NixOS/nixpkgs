@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, primesieve }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  primesieve,
+}:
 stdenv.mkDerivation rec {
   pname = "primecount";
   version = "7.2";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ primesieve ];
+  buildInputs = [primesieve];
 
   src = fetchFromGitHub {
     owner = "kimwalisch";

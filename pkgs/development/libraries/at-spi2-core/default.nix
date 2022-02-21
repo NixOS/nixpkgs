@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchurl
-
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, gsettings-desktop-schemas
-, makeWrapper
-
-, dbus
-, glib
-, dconf
-, libX11
-, libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
-, libXi
-, libXext
-
-, gnome # To pass updateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  makeWrapper,
+  dbus,
+  glib,
+  dconf,
+  libX11,
+  libXtst
+  # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
+  ,
+  libXi,
+  libXext,
+  gnome
+  # To pass updateScript
 }:
-
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
   version = "2.42.0";
@@ -28,13 +29,13 @@ stdenv.mkDerivation rec {
     sha256 = "11p3lvmbm0hfck3p5xwxxycln8x0cf7l68jjz6an2g7sjh7a2pab";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection makeWrapper ];
+  nativeBuildInputs = [meson ninja pkg-config gobject-introspection makeWrapper];
   # libXext is a transitive dependency of libXi
-  buildInputs = [ libX11 libXtst libXi libXext ];
+  buildInputs = [libX11 libXtst libXi libXext];
   # In atspi-2.pc dbus-1 glib-2.0
-  propagatedBuildInputs = [ dbus glib ];
+  propagatedBuildInputs = [dbus glib];
 
   doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   # at-spi2-bus-launcher is executed. This allows us to avoid
   # including the entire dbus closure in libraries linked with
   # the at-spi2-core libraries.
-  mesonFlags = [ "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon" ];
+  mesonFlags = ["-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"];
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -1,6 +1,4 @@
-import ../make-test-python.nix ({ ... }:
-
-let
+import ../make-test-python.nix ({...}: let
   oathSnakeoilSecret = "cdd4083ef8ff1fa9178c6d46bfb1a3";
 
   # With HOTP mode the password is calculated based on a counter of
@@ -16,44 +14,39 @@ let
   alicePassword = "foobar";
   # Generated via: mkpasswd -m sha-512 and passing in "foobar"
   hashedAlicePassword = "$6$MsMrE1q.1HrCgTS$Vq2e/uILzYjSN836TobAyN9xh9oi7EmCmucnZID25qgPoibkw8qTCugiAPnn4eCGvn1A.7oEBFJaaGUaJsQQY.";
-
-in
-{
+in {
   name = "pam-oath-login";
 
-  machine =
-    { ... }:
-    {
-      security.pam.oath = {
-        enable = true;
-      };
-
-      users.users.alice = {
-        isNormalUser = true;
-        name = "alice";
-        uid = 1000;
-        hashedPassword = hashedAlicePassword;
-        extraGroups = [ "wheel" ];
-        createHome = true;
-        home = "/home/alice";
-      };
-
-
-      systemd.services.setupOathSnakeoilFile = {
-        wantedBy = [ "default.target" ];
-        before = [ "default.target" ];
-        unitConfig = {
-          type = "oneshot";
-          RemainAfterExit = true;
-        };
-        script = ''
-          touch /etc/users.oath
-          chmod 600 /etc/users.oath
-          chown root /etc/users.oath
-          echo "HOTP/E/6 alice - ${oathSnakeoilSecret}" > /etc/users.oath
-        '';
-      };
+  machine = {...}: {
+    security.pam.oath = {
+      enable = true;
     };
+
+    users.users.alice = {
+      isNormalUser = true;
+      name = "alice";
+      uid = 1000;
+      hashedPassword = hashedAlicePassword;
+      extraGroups = ["wheel"];
+      createHome = true;
+      home = "/home/alice";
+    };
+
+    systemd.services.setupOathSnakeoilFile = {
+      wantedBy = ["default.target"];
+      before = ["default.target"];
+      unitConfig = {
+        type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        touch /etc/users.oath
+        chmod 600 /etc/users.oath
+        chown root /etc/users.oath
+        echo "HOTP/E/6 alice - ${oathSnakeoilSecret}" > /etc/users.oath
+      '';
+    };
+  };
 
   testScript = ''
     def switch_to_tty(tty_number):
@@ -104,5 +97,5 @@ in
         machine.wait_until_succeeds("pgrep -u alice bash")
         machine.send_chars("touch  done4\n")
         machine.wait_for_file("/home/alice/done4")
-    '';
+  '';
 })

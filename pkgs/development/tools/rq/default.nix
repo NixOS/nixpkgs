@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rq";
   version = "1.0.2";
@@ -23,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A tool for doing record analysis and transformation";
     homepage = "https://github.com/dflemstr/rq";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ aristid Br1ght0ne ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [aristid Br1ght0ne];
   };
 }

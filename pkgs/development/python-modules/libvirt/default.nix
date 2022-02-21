@@ -1,20 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitLab, pkg-config, lxml, libvirt, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pkg-config,
+  lxml,
+  libvirt,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "libvirt";
   version = "7.10.0";
 
-  src = assert version == libvirt.version; fetchFromGitLab {
-    owner = "libvirt";
-    repo = "libvirt-python";
-    rev = "v${version}";
-    sha256 = "sha256-I1FNjNwWRyDAUSq2Co9EnjAbzKQtS0Rx8vHgPsFzSYw=";
-  };
+  src = assert version == libvirt.version;
+    fetchFromGitLab {
+      owner = "libvirt";
+      repo = "libvirt-python";
+      rev = "v${version}";
+      sha256 = "sha256-I1FNjNwWRyDAUSq2Co9EnjAbzKQtS0Rx8vHgPsFzSYw=";
+    };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libvirt lxml ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libvirt lxml];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     nosetests
   '';
@@ -23,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://libvirt.org/python.html";
     description = "libvirt Python bindings";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.fpletz ];
+    maintainers = [maintainers.fpletz];
   };
 }

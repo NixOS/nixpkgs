@@ -1,5 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, imagemagick }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  imagemagick,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "lsix";
   version = "1.8";
@@ -11,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-Qx6/PFm1XBmEI6iI+Ref9jNe6sXIhsVL4VQ1CX+caZE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -23,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/lsix \
-      --prefix PATH : ${lib.makeBinPath [ imagemagick ]}
+      --prefix PATH : ${lib.makeBinPath [imagemagick]}
   '';
 
   meta = with lib; {
@@ -31,6 +36,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/hackerb9/lsix";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ kidonng ];
+    maintainers = with maintainers; [kidonng];
   };
 }

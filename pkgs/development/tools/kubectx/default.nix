@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "kubectx";
   version = "0.9.4";
@@ -15,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installShellCompletion completion/*
@@ -25,7 +29,7 @@ buildGoModule rec {
     description = "Fast way to switch between clusters and namespaces in kubectl!";
     license = licenses.asl20;
     homepage = "https://github.com/ahmetb/kubectx";
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with maintainers; [jlesquembre];
     platforms = with platforms; unix;
   };
 }

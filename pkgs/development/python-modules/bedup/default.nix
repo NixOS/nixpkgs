@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, btrfs-progs
-, contextlib2
-, pyxdg
-, pycparser
-, alembic
-, cffi
-, pythonOlder
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  btrfs-progs,
+  contextlib2,
+  pyxdg,
+  pycparser,
+  alembic,
+  cffi,
+  pythonOlder,
+  isPyPy,
 }:
-
 buildPythonPackage rec {
   version = "0.10.1";
   pname = "bedup";
@@ -23,9 +23,10 @@ buildPythonPackage rec {
     sha256 = "0sp8pmjkxcqq0alianfp41mwq7qj10rk1qy31pjjp9kiph1rn0x6";
   };
 
-  buildInputs = [ btrfs-progs ];
-  propagatedBuildInputs = [ contextlib2 pyxdg pycparser alembic ]
-    ++ lib.optionals (!isPyPy) [ cffi ];
+  buildInputs = [btrfs-progs];
+  propagatedBuildInputs =
+    [contextlib2 pyxdg pycparser alembic]
+    ++ lib.optionals (!isPyPy) [cffi];
 
   meta = with lib; {
     description = "Deduplication for Btrfs";
@@ -37,6 +38,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/g2p/bedup";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bluescreen303 ];
+    maintainers = with maintainers; [bluescreen303];
   };
 }

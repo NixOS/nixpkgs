@@ -1,11 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, e2tools
-, makeWrapper
-, mtools
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  e2tools,
+  makeWrapper,
+  mtools,
 }:
-
 buildGoModule rec {
   pname = "fwanalyzer";
   version = "1.4.3";
@@ -19,12 +19,12 @@ buildGoModule rec {
 
   vendorSha256 = "1cjbqx75cspnkx7fgc665q920dsxnsdhqgyiawkvx0i8akczbflw";
 
-  subPackages = [ "cmd/${pname}" ];
+  subPackages = ["cmd/${pname}"];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
-    wrapProgram "$out/bin/fwanalyzer" --prefix PATH : "${lib.makeBinPath [ e2tools mtools ]}"
+    wrapProgram "$out/bin/fwanalyzer" --prefix PATH : "${lib.makeBinPath [e2tools mtools]}"
   '';
 
   # The tests requires an additional setup (unpacking images, etc.)
@@ -33,7 +33,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to analyze filesystem images";
     homepage = "https://github.com/cruise-automation/fwanalyzer";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

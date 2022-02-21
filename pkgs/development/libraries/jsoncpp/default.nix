@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, validatePkgConfig, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  validatePkgConfig,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "jsoncpp";
   version = "1.9.4";
@@ -21,7 +28,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  /* During darwin bootstrap, we have a cp that doesn't understand the
+  /*
+     During darwin bootstrap, we have a cp that doesn't understand the
    * --reflink=auto flag, which is used in the default unpackPhase for dirs
    */
   unpackPhase = ''
@@ -32,25 +40,32 @@ stdenv.mkDerivation rec {
 
   # Hack to be able to run the test, broken because we use
   # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preBuild = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="$PWD/lib''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-  '' else ''
-    export LD_LIBRARY_PATH="$PWD/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
+  preBuild =
+    if stdenv.isDarwin
+    then
+      ''
+        export DYLD_LIBRARY_PATH="$PWD/lib''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+      ''
+    else
+      ''
+        export LD_LIBRARY_PATH="$PWD/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+      '';
 
-  nativeBuildInputs = [ cmake python3 validatePkgConfig ];
+  nativeBuildInputs = [cmake python3 validatePkgConfig];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_STATIC_LIBS=OFF"
-    "-DBUILD_OBJECT_LIBS=OFF"
-    "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
-  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DJSONCPP_WITH_TESTS=OFF";
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DBUILD_STATIC_LIBS=OFF"
+      "-DBUILD_OBJECT_LIBS=OFF"
+      "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
+    ]
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DJSONCPP_WITH_TESTS=OFF";
 
   meta = with lib; {
     homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "A C++ library for interacting with JSON";
-    maintainers = with maintainers; [ ttuegel cpages ];
+    maintainers = with maintainers; [ttuegel cpages];
     license = licenses.mit;
     platforms = platforms.all;
   };

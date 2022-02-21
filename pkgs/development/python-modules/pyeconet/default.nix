@@ -1,11 +1,11 @@
-{ lib
-, paho-mqtt
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, pythonOlder
+{
+  lib,
+  paho-mqtt,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyeconet";
   version = "0.1.15";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to the EcoNet API";
     homepage = "https://github.com/w1ll1am23/pyeconet";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

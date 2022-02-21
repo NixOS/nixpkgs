@@ -1,19 +1,19 @@
-{ lib
-, boost
-, buildPythonPackage
-, cmake
-, cryptography
-, fetchFromGitHub
-, git
-, pc-ble-driver
-, pythonAtLeast
-, pythonOlder
-, scikit-build
-, setuptools
-, swig
-, wrapt
+{
+  lib,
+  boost,
+  buildPythonPackage,
+  cmake,
+  cryptography,
+  fetchFromGitHub,
+  git,
+  pc-ble-driver,
+  pythonAtLeast,
+  pythonOlder,
+  scikit-build,
+  setuptools,
+  swig,
+  wrapt,
 }:
-
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
   version = "0.16.2";
@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver-py";
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

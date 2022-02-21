@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, colour
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  colour,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "ttls";
   version = "1.4.2";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Module to interact with Twinkly LEDs";
     homepage = "https://github.com/jschlyter/ttls";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

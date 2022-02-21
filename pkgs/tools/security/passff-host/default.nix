@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, pass }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  pass,
+}:
 stdenv.mkDerivation rec {
   pname = "passff-host";
   version = "1.2.3";
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1JPToJF/ruu69TEZAAvV3Zl0qcTpEyMb2qQDAWWgKNw=";
   };
 
-  buildInputs = [ python3 ];
-  makeFlags = [ "VERSION=${version}" ];
+  buildInputs = [python3];
+  makeFlags = ["VERSION=${version}"];
 
   patchPhase = ''
     sed -i 's#COMMAND = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
@@ -43,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "Host app for the WebExtension PassFF";
     homepage = "https://github.com/passff/passff-host";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

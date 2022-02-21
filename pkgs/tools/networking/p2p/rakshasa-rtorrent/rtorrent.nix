@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, cppunit
-, curl
-, libsigcxx
-, libtool
-, libtorrent
-, ncurses
-, openssl
-, pkg-config
-, xmlrpc_c
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  cppunit,
+  curl,
+  libsigcxx,
+  libtool,
+  libtorrent,
+  ncurses,
+  openssl,
+  pkg-config,
+  xmlrpc_c,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rakshasa-rtorrent";
   version = "0.9.8+date=2021-08-07";
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ebzzry codyopel ];
+    maintainers = with maintainers; [ebzzry codyopel];
     platforms = platforms.unix;
   };
 }

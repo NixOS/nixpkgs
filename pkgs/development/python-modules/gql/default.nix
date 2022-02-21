@@ -1,23 +1,23 @@
-{ lib
-, aiofiles
-, aiohttp
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, graphql-core
-, mock
-, parse
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, urllib3
-, vcrpy
-, websockets
-, yarl
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphql-core,
+  mock,
+  parse,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  urllib3,
+  vcrpy,
+  websockets,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "gql";
   version = "3.0.0";
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "GraphQL client in Python";
     homepage = "https://github.com/graphql-python/gql";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

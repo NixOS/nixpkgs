@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, maven, jdk8_headless }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  maven,
+  jdk8_headless,
+}: let
   version = "1.2021.12";
 
   src = fetchFromGitHub {
@@ -14,7 +18,7 @@ let
   deps = stdenv.mkDerivation {
     name = "plantuml-server-${version}-deps";
     inherit src;
-    nativeBuildInputs = [ jdk8_headless maven ];
+    nativeBuildInputs = [jdk8_headless maven];
     buildPhase = ''
       runHook preBuild
 
@@ -31,40 +35,39 @@ let
     outputHash = "sha256:12w1iw9c5j7y9hhaip07j3aszjiiakkww1v3zszlj15fj8jgqyf2";
   };
 in
+  stdenv.mkDerivation rec {
+    pname = "plantuml-server";
+    inherit version;
+    inherit src;
 
-stdenv.mkDerivation rec {
-  pname = "plantuml-server";
-  inherit version;
-  inherit src;
+    nativeBuildInputs = [jdk8_headless maven];
 
-  nativeBuildInputs = [ jdk8_headless maven ];
+    buildPhase = ''
+      runHook preBuild
 
-  buildPhase = ''
-    runHook preBuild
+      # 'maven.repo.local' must be writable so copy it out of nix store
+      cp -R $src repo
+      chmod +w -R repo
+      cd repo
+      mvn package --offline -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
 
-    # 'maven.repo.local' must be writable so copy it out of nix store
-    cp -R $src repo
-    chmod +w -R repo
-    cd repo
-    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
+      runHook postBuild
+    '';
 
-    runHook postBuild
-  '';
+    installPhase = ''
+      runHook preInstall
 
-  installPhase = ''
-    runHook preInstall
+      mkdir -p "$out/webapps"
+      cp "target/plantuml.war" "$out/webapps/plantuml.war"
 
-    mkdir -p "$out/webapps"
-    cp "target/plantuml.war" "$out/webapps/plantuml.war"
+      runHook postInstall
+    '';
 
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    description = "A web application to generate UML diagrams on-the-fly.";
-    homepage = "https://plantuml.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ truh ];
-  };
-}
+    meta = with lib; {
+      description = "A web application to generate UML diagrams on-the-fly.";
+      homepage = "https://plantuml.com/";
+      license = licenses.gpl3Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [truh];
+    };
+  }

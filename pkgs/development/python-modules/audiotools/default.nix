@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
-, AudioToolbox
-, AudioUnit
-, CoreServices
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  stdenv,
+  AudioToolbox,
+  AudioUnit,
+  CoreServices,
 }:
-
 buildPythonPackage rec {
   pname = "audiotools";
   version = "3.1.1";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Utilities and Python modules for handling audio";
     homepage = "http://audiotools.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

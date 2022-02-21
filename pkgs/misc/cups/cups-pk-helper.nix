@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, glib, polkit, cups, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  glib,
+  polkit,
+  cups,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   version = "0.2.6";
   pname = "cups-pk-helper";
@@ -9,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0a52jw6rm7lr5nbyksiia0rn7sasyb5cjqcb95z1wxm2yprgi6lm";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ glib polkit cups ];
+  nativeBuildInputs = [pkg-config intltool];
+  buildInputs = [glib polkit cups];
 
   patches = [
     # Don't use etc/dbus-1/system.d
@@ -25,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.freedesktop.org/wiki/Software/cups-pk-helper/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

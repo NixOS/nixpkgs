@@ -1,22 +1,29 @@
-{ lib, stdenv, fetchurl, unzip, setJavaClassPath }:
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  setJavaClassPath,
+}: let
   # Details from https://www.azul.com/downloads/?version=java-17-lts&os=macos&package=jdk
   # Note that the latest build may differ by platform
-  dist = {
-    x86_64-darwin = {
-      arch = "x64";
-      zuluVersion = "17.30.15";
-      jdkVersion = "17.0.1";
-      sha256 = "sha256-CdZP5XY3O0MUQigRvIQC+7dwAXaCKw4eK/L/imytEOs=";
-    };
+  dist =
+    {
+      x86_64-darwin = {
+        arch = "x64";
+        zuluVersion = "17.30.15";
+        jdkVersion = "17.0.1";
+        sha256 = "sha256-CdZP5XY3O0MUQigRvIQC+7dwAXaCKw4eK/L/imytEOs=";
+      };
 
-    aarch64-darwin = {
-      arch = "aarch64";
-      zuluVersion = "17.30.15";
-      jdkVersion = "17.0.1";
-      sha256 = "sha256-zhBCXOnO/fsj6+q+vAlEz7QVMRFKLVvYnjwZzFz6mRM=";
-    };
-  }."${stdenv.hostPlatform.system}";
+      aarch64-darwin = {
+        arch = "aarch64";
+        zuluVersion = "17.30.15";
+        jdkVersion = "17.0.1";
+        sha256 = "sha256-zhBCXOnO/fsj6+q+vAlEz7QVMRFKLVvYnjwZzFz6mRM=";
+      };
+    }
+    ."${stdenv.hostPlatform.system}";
 
   jce-policies = fetchurl {
     # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
@@ -34,7 +41,7 @@ let
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [unzip];
 
     installPhase = ''
       mkdir -p $out
@@ -78,4 +85,4 @@ let
     meta = import ./meta.nix lib;
   };
 in
-jdk
+  jdk

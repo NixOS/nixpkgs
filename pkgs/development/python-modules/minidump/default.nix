@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "minidump";
   version = "0.0.21";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to parse and read Microsoft minidump file format";
     homepage = "https://github.com/skelsec/minidump";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

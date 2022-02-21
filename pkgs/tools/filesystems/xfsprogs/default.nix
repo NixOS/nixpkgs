@@ -1,7 +1,18 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
-, icu, libuuid, readline, inih
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  autoconf,
+  automake,
+  gettext,
+  libtool,
+  pkg-config,
+  icu,
+  libuuid,
+  readline,
+  inih,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
   version = "5.13.0";
@@ -11,15 +22,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ThQtS6vghq35AW2MYGyAWCnaCORjiaRDP0A0YgT5DNs=";
   };
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = ["bin" "dev" "out" "doc"];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
   nativeBuildInputs = [
-    autoconf automake libtool gettext pkg-config
+    autoconf
+    automake
+    libtool
+    gettext
+    pkg-config
     libuuid # codegen tool uses libuuid
   ];
-  buildInputs = [ readline icu inih ];
-  propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
+  buildInputs = [readline icu inih];
+  propagatedBuildInputs = [libuuid]; # Dev headers include <uuid/uuid.h>
 
   enableParallelBuilding = true;
 
@@ -38,7 +53,7 @@ stdenv.mkDerivation rec {
     "--with-systemd-unit-dir=${placeholder "out"}/lib/systemd/system"
   ];
 
-  installFlags = [ "install-dev" ];
+  installFlags = ["install-dev"];
 
   # FIXME: forbidden rpath
   postInstall = ''
@@ -48,8 +63,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://xfs.org/";
     description = "SGI XFS utilities";
-    license = with licenses; [ gpl2Only lgpl21 gpl3Plus ];  # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
+    license = with licenses; [gpl2Only lgpl21 gpl3Plus]; # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dezgeg ajs124 ];
+    maintainers = with maintainers; [dezgeg ajs124];
   };
 }

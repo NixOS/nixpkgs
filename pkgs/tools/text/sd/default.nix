@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "sd";
   version = "0.7.6";
@@ -14,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1iwgy9zzdxay6hb9pz47jchy03jrsy5csxijlq4i228qhqnvq1lr";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
 
   preFixup = ''
     installManPage $releaseDir/build/sd-*/out/sd.1
@@ -29,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     description = "Intuitive find & replace CLI (sed alternative)";
     homepage = "https://github.com/chmln/sd";
     license = licenses.mit;
-    maintainers = with maintainers; [ amar1729 Br1ght0ne ];
+    maintainers = with maintainers; [amar1729 Br1ght0ne];
   };
 }

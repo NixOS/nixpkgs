@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "dasel";
   version = "1.22.1";
@@ -17,7 +17,9 @@ buildGoModule rec {
   vendorSha256 = "1y0k03lg9dh3bpi10xzv03h7gq7h0hgggs304p78p3jkr8pmkqss";
 
   ldflags = [
-    "-s" "-w" "-X github.com/tomwright/dasel/internal.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/tomwright/dasel/internal.Version=${version}"
   ];
 
   doInstallCheck = true;
@@ -41,6 +43,6 @@ buildGoModule rec {
     changelog = "https://github.com/TomWright/dasel/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [_0x4A6F];
   };
 }

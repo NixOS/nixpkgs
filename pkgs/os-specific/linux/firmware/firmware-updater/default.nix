@@ -1,8 +1,8 @@
-{ lib
-, flutter
-, fetchFromGitHub
+{
+  lib,
+  flutter,
+  fetchFromGitHub,
 }:
-
 flutter.mkFlutterApp {
   pname = "firmware-updater";
   version = "unstable";
@@ -21,7 +21,7 @@ flutter.mkFlutterApp {
     description = "Firmware Updater for Linux";
     homepage = "https://github.com/canonical/firmware-updater";
     license = licenses.free;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
     platforms = platforms.linux;
   };
 }

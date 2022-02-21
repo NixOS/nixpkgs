@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.graylog;
 
   confFile = pkgs.writeText "graylog.conf" ''
@@ -23,16 +25,11 @@ let
     name = "graylog-plugins";
     paths = cfg.plugins;
   };
-
-in
-
-{
+in {
   ###### interface
 
   options = {
-
     services.graylog = {
-
       enable = mkEnableOption "Graylog";
 
       package = mkOption {
@@ -113,18 +110,15 @@ in
 
       plugins = mkOption {
         description = "Extra graylog plugins";
-        default = [ ];
+        default = [];
         type = types.listOf types.package;
       };
-
     };
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users = mkIf (cfg.user == "graylog") {
       graylog = {
         isSystemUser = true;
@@ -140,11 +134,11 @@ in
 
     systemd.services.graylog = {
       description = "Graylog Server";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       environment = {
         GRAYLOG_CONF = "${confFile}";
       };
-      path = [ pkgs.which pkgs.procps ];
+      path = [pkgs.which pkgs.procps];
       preStart = ''
         rm -rf /var/lib/graylog/plugins || true
         mkdir -p /var/lib/graylog/plugins -m 755
@@ -160,7 +154,7 @@ in
         done
       '';
       serviceConfig = {
-        User="${cfg.user}";
+        User = "${cfg.user}";
         StateDirectory = "graylog";
         ExecStart = "${cfg.package}/bin/graylogctl run";
       };

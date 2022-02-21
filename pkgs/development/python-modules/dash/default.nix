@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, plotly
-, flask
-, flask-compress
-, dash-core-components
-, dash-html-components
-, dash-table
-, pytest-mock
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  plotly,
+  flask,
+  flask-compress,
+  dash-core-components,
+  dash-html-components,
+  dash-table,
+  pytest-mock,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "dash";
   version = "2.2.0";
@@ -48,12 +48,12 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  pythonImportsCheck = [ "dash" ];
+  pythonImportsCheck = ["dash"];
 
   meta = with lib; {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = licenses.mit;
-    maintainers = [ maintainers.antoinerg ];
+    maintainers = [maintainers.antoinerg];
   };
 }

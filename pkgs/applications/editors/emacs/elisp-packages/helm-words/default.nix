@@ -1,11 +1,11 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, dictionary
-, emacs
-, helm
+{
+  lib,
+  trivialBuild,
+  fetchFromGitHub,
+  dictionary,
+  emacs,
+  helm,
 }:
-
 trivialBuild rec {
   pname = "helm-words";
   version = "0.pre+unstable=2019-03-12";
@@ -17,7 +17,7 @@ trivialBuild rec {
     hash = "sha256-rh8YKDLZZCUE6JnnRnFyDDyUjK+35+M2dkawR/+qwNM=";
   };
 
-  packageRequires = [ helm dictionary ];
+  packageRequires = [helm dictionary];
 
   meta = with lib; {
     homepage = "https://github.com/emacsmirror/helm-words";

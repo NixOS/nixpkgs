@@ -1,12 +1,12 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, impacket
-, ldap3
-, pyyaml
-, samba
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  impacket,
+  ldap3,
+  pyyaml,
+  samba,
 }:
-
 buildPythonApplication rec {
   pname = "enum4linux-ng";
   version = "1.1.0";
@@ -35,7 +35,7 @@ buildPythonApplication rec {
       enumerating information from Windows and Samba systems.
     '';
     homepage = "https://github.com/cddmp/enum4linux-ng";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

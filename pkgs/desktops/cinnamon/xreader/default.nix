@@ -1,29 +1,41 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, intltool
-, shared-mime-info
-, gtk3
-, wrapGAppsHook
-, libxml2
-, xapps
-, meson
-, pkg-config
-, cairo
-, libsecret
-, poppler
-, libspectre
-, libgxps
-, webkitgtk
-, nodePackages
-, ninja
-, gsettings-desktop-schemas
-, djvulibre
-, backends ? [ "pdf" "ps" /* "dvi" "t1lib" */ "djvu" "tiff" "pixbuf" "comics" "xps" "epub" ]
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  intltool,
+  shared-mime-info,
+  gtk3,
+  wrapGAppsHook,
+  libxml2,
+  xapps,
+  meson,
+  pkg-config,
+  cairo,
+  libsecret,
+  poppler,
+  libspectre,
+  libgxps,
+  webkitgtk,
+  nodePackages,
+  ninja,
+  gsettings-desktop-schemas,
+  djvulibre,
+  backends ? [
+    "pdf"
+    "ps"
+    /*
+     "dvi" "t1lib"
+     */
+    "djvu"
+    "tiff"
+    "pixbuf"
+    "comics"
+    "xps"
+    "epub"
+  ],
 }:
-
 stdenv.mkDerivation rec {
   pname = "xreader";
   version = "3.2.2";
@@ -45,10 +57,12 @@ stdenv.mkDerivation rec {
     intltool
   ];
 
-  mesonFlags = [
-    "-Dmathjax-directory=${nodePackages.mathjax}"
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
-  ] ++ (map (x: "-D${x}=true") backends);
+  mesonFlags =
+    [
+      "-Dmathjax-directory=${nodePackages.mathjax}"
+      "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    ]
+    ++ (map (x: "-D${x}=true") backends);
 
   buildInputs = [
     glib

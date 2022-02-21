@@ -1,7 +1,18 @@
-{ lib, mkXfceDerivation, exo, garcon, gtk3, glib
-, libnotify, libxfce4ui, libxfce4util, libxklavier
-, upower, xfconf, xf86inputlibinput }:
-
+{
+  lib,
+  mkXfceDerivation,
+  exo,
+  garcon,
+  gtk3,
+  glib,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  libxklavier,
+  upower,
+  xfconf,
+  xf86inputlibinput,
+}:
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
@@ -36,6 +47,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Settings manager for Xfce";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

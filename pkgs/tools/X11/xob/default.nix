@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, xorg, libconfig }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  xorg,
+  libconfig,
+}:
 stdenv.mkDerivation rec {
   pname = "xob";
   version = "0.3";
@@ -11,10 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "1x4aafiyd9k4y8cmvn7rgfif3g5s5hhlbj5nz71qsyqg21nn7hrw";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xorg.libX11 xorg.libXrender libconfig ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [xorg.libX11 xorg.libXrender libconfig];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = ["prefix=$(out)"];
 
   meta = with lib; {
     description = "A lightweight overlay bar for the X Window System";
@@ -30,6 +36,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ florentc ];
+    maintainers = with maintainers; [florentc];
   };
 }

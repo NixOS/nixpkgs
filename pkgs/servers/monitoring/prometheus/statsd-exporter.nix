@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "statsd_exporter";
   version = "0.22.2";
@@ -17,7 +20,7 @@ buildGoModule rec {
     description = "Receives StatsD-style metrics and exports them to Prometheus";
     homepage = "https://github.com/prometheus/statsd_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ivan ];
+    maintainers = with maintainers; [benley ivan];
     platforms = platforms.unix;
   };
 }

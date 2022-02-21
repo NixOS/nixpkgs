@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "categories";
   version = "2018-07-02";
 
@@ -16,6 +17,6 @@ build-idris-package  {
   meta = {
     description = "Category Theory";
     homepage = "https://github.com/danilkolikov/categories";
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

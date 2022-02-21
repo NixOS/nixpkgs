@@ -1,7 +1,8 @@
-{ config, lib, ... }:
-
-let
-
+{
+  config,
+  lib,
+  ...
+}: let
   inherit (lib.attrsets) hasAttr;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) mkEnableOption mkOption;
@@ -68,11 +69,7 @@ let
       message = "TSM service requires automatic password generation";
     }
   ];
-
-in
-
-{
-
+in {
   inherit options;
 
   config = mkIf cfg.enable {
@@ -93,8 +90,7 @@ in
         SuccessExitStatus = "4 8";
         # The `-se` option must come after the command.
         # The `-optfile` option suppresses a `dsm.opt`-not-found warning.
-        ExecStart =
-          "${cfgPrg.wrappedPackage}/bin/dsmc ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
+        ExecStart = "${cfgPrg.wrappedPackage}/bin/dsmc ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
         LogsDirectory = "tsm-backup";
         StateDirectory = "tsm-backup";
         StateDirectoryMode = "0750";
@@ -116,10 +112,9 @@ in
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
       };
-      startAt = mkIf (cfg.autoTime!=null) cfg.autoTime;
+      startAt = mkIf (cfg.autoTime != null) cfg.autoTime;
     };
   };
 
-  meta.maintainers = [ lib.maintainers.yarny ];
-
+  meta.maintainers = [lib.maintainers.yarny];
 }

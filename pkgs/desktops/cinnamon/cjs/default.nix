@@ -1,33 +1,33 @@
-{ dbus-glib
-, fetchFromGitHub
-, gobject-introspection
-, pkg-config
-, lib
-, stdenv
-, wrapGAppsHook
-, python3
-, cairo
-, gnome
-, xapps
-, keybinder3
-, upower
-, callPackage
-, glib
-, libffi
-, gtk3
-, readline
-, spidermonkey_78
-, meson
-, sysprof
-, dbus
-, xvfb-run
-, ninja
-, makeWrapper
-, which
-, libxml2
-, gtk4
+{
+  dbus-glib,
+  fetchFromGitHub,
+  gobject-introspection,
+  pkg-config,
+  lib,
+  stdenv,
+  wrapGAppsHook,
+  python3,
+  cairo,
+  gnome,
+  xapps,
+  keybinder3,
+  upower,
+  callPackage,
+  glib,
+  libffi,
+  gtk3,
+  readline,
+  spidermonkey_78,
+  meson,
+  sysprof,
+  dbus,
+  xvfb-run,
+  ninja,
+  makeWrapper,
+  which,
+  libxml2,
+  gtk4,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cjs";
   version = "5.2.0";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-06sTk513qVMdznSHJzzB3XIPTcfjgxTB2o+ALqwPpHM=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     meson

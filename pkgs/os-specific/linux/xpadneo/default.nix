@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bluez }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bluez,
+}:
 stdenv.mkDerivation rec {
   pname = "xpadneo";
   version = "0.9.1";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  buildInputs = [ bluez ];
+  buildInputs = [bluez];
 
   makeFlags = [
     "-C"
@@ -25,15 +30,15 @@ stdenv.mkDerivation rec {
     "VERSION=${version}"
   ];
 
-  buildFlags = [ "modules" ];
-  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
-  installTargets = [ "modules_install" ];
+  buildFlags = ["modules"];
+  installFlags = ["INSTALL_MOD_PATH=${placeholder "out"}"];
+  installTargets = ["modules_install"];
 
   meta = with lib; {
     description = "Advanced Linux driver for Xbox One wireless controllers";
     homepage = "https://atar-axis.github.io/xpadneo";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [kira-bruneau];
     platforms = platforms.linux;
   };
 }

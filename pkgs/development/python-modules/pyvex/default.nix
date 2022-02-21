@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, archinfo
-, bitstring
-, buildPythonPackage
-, cffi
-, fetchPypi
-, future
-, pycparser
-, pythonOlder
+{
+  lib,
+  stdenv,
+  archinfo,
+  bitstring,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  future,
+  pycparser,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyvex";
   version = "9.1.11752";
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to libVEX and VEX IR";
     homepage = "https://github.com/angr/pyvex";
-    license = with licenses; [ bsd2 gpl3Plus lgpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd2 gpl3Plus lgpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

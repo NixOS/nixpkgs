@@ -1,10 +1,44 @@
-{ stdenv, lib, requireFile, wrapQtAppsHook, autoPatchelfHook, makeWrapper, unixtools, fakeroot
-, mailcap, libGL, libpulseaudio, alsa-lib, nss, gd, gst_all_1, nspr, expat, fontconfig
-, dbus, glib, zlib, openssl, libdrm, cups, avahi-compat, xorg, wayland, libudev0-shim
-# Qt 5 subpackages
-, qtbase, qtgamepad, qtserialport, qtserialbus, qtvirtualkeyboard, qtmultimedia, qtwebkit, qt3d, mlt
+{
+  stdenv,
+  lib,
+  requireFile,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  makeWrapper,
+  unixtools,
+  fakeroot,
+  mailcap,
+  libGL,
+  libpulseaudio,
+  alsa-lib,
+  nss,
+  gd,
+  gst_all_1,
+  nspr,
+  expat,
+  fontconfig,
+  dbus,
+  glib,
+  zlib,
+  openssl,
+  libdrm,
+  cups,
+  avahi-compat,
+  xorg,
+  wayland,
+  libudev0-shim
+  # Qt 5 subpackages
+  ,
+  qtbase,
+  qtgamepad,
+  qtserialport,
+  qtserialbus,
+  qtvirtualkeyboard,
+  qtmultimedia,
+  qtwebkit,
+  qt3d,
+  mlt,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pixinsight";
   version = "1.8.8-12";
@@ -32,47 +66,49 @@ stdenv.mkDerivation rec {
     libudev0-shim
   ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-    stdenv.cc
-    libGL
-    libpulseaudio
-    alsa-lib
-    nss
-    gd
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    nspr
-    expat
-    fontconfig
-    dbus
-    glib
-    zlib
-    openssl
-    libdrm
-    wayland
-    cups
-    avahi-compat
-    # Qt stuff
-    qt3d
-    mlt
-    qtbase
-    qtgamepad
-    qtserialport
-    qtserialbus
-    qtvirtualkeyboard
-    qtmultimedia
-    qtwebkit
-  ] ++ (with xorg; [
-    libX11
-    libXdamage
-    xrandr
-    libXtst
-    libXcomposite
-    libXext
-    libXfixes
-    libXrandr
-  ]);
+  buildInputs =
+    [
+      stdenv.cc.cc.lib
+      stdenv.cc
+      libGL
+      libpulseaudio
+      alsa-lib
+      nss
+      gd
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      nspr
+      expat
+      fontconfig
+      dbus
+      glib
+      zlib
+      openssl
+      libdrm
+      wayland
+      cups
+      avahi-compat
+      # Qt stuff
+      qt3d
+      mlt
+      qtbase
+      qtgamepad
+      qtserialport
+      qtserialbus
+      qtvirtualkeyboard
+      qtmultimedia
+      qtwebkit
+    ]
+    ++ (with xorg; [
+      libX11
+      libXdamage
+      xrandr
+      libXtst
+      libXcomposite
+      libXext
+      libXfixes
+      libXrandr
+    ]);
 
   postPatch = ''
     patchelf ./installer \
@@ -125,8 +161,8 @@ stdenv.mkDerivation rec {
     description = "Scientific image processing program for astrophotography";
     homepage = "https://pixinsight.com/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.sheepforce ];
+    platforms = ["x86_64-linux"];
+    maintainers = [maintainers.sheepforce];
     mainProgram = "PixInsight";
   };
 }

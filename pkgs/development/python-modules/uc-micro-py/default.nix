@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "uc-micro-py";
   version = "1.0.1";
@@ -19,13 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-23mKwoRGjtxpCOC26V8bAN5QEHLDOoSqPeTlUuIrxZ0=";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "uc_micro" ];
+  checkInputs = [pytestCheckHook];
+  pythonImportsCheck = ["uc_micro"];
 
   meta = with lib; {
     description = "Micro subset of unicode data files for linkify-it-py";
     homepage = "https://github.com/tsutsu3/uc.micro-py";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = with maintainers; [AluisioASG];
   };
 }

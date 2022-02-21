@@ -1,9 +1,30 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
-, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg, minizip
-, lsb-release, freetype, fontconfig, polkit, polkit_gnome, pciutils
-, pulseaudio }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  genericUpdater,
+  writeShellScript,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gnome2,
+  gtk2,
+  libGLU,
+  libGL,
+  pango,
+  xorg,
+  minizip,
+  lsb-release,
+  freetype,
+  fontconfig,
+  polkit,
+  polkit_gnome,
+  pciutils,
+  pulseaudio,
+}: let
   description = "Desktop sharing application, providing remote support and online meetings";
 
   desktopItem = makeDesktopItem {
@@ -15,78 +36,105 @@ let
     categories = "Network;";
     startupNotify = "false";
   };
+in
+  stdenv.mkDerivation rec {
+    pname = "anydesk";
+    version = "6.1.1";
 
-in stdenv.mkDerivation rec {
-  pname = "anydesk";
-  version = "6.1.1";
-
-  src = fetchurl {
-    urls = [
-      "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
-      "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
-    ];
-    sha256 = "1ai58fsivb8al1279bayl800qavy0kfj40rjhf87g902ap3p4bhh";
-  };
-
-  passthru = {
-    updateScript = genericUpdater {
-      inherit pname version;
-      versionLister = writeShellScript "anydesk-versionLister" ''
-        echo "# Versions for $1:" >> "$2"
-        curl -s https://anydesk.com/en/downloads/linux \
-          | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
-          | uniq \
-          | sed 's,.*/anydesk-\(.*\)-amd64.tar.gz,\1,g'
-      '';
+    src = fetchurl {
+      urls = [
+        "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
+        "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
+      ];
+      sha256 = "1ai58fsivb8al1279bayl800qavy0kfj40rjhf87g902ap3p4bhh";
     };
-  };
 
-  buildInputs = [
-    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
-    gnome2.gtkglext libGLU libGL minizip freetype
-    fontconfig polkit polkit_gnome pulseaudio
-  ] ++ (with xorg; [
-    libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu
-    libXrandr libXtst libXt libICE libSM libXrender
-  ]);
+    passthru = {
+      updateScript = genericUpdater {
+        inherit pname version;
+        versionLister = writeShellScript "anydesk-versionLister" ''
+          echo "# Versions for $1:" >> "$2"
+          curl -s https://anydesk.com/en/downloads/linux \
+            | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
+            | uniq \
+            | sed 's,.*/anydesk-\(.*\)-amd64.tar.gz,\1,g'
+        '';
+      };
+    };
 
-  nativeBuildInputs = [ makeWrapper ];
+    buildInputs =
+      [
+        atk
+        cairo
+        gdk-pixbuf
+        glib
+        gtk2
+        stdenv.cc.cc
+        pango
+        gnome2.gtkglext
+        libGLU
+        libGL
+        minizip
+        freetype
+        fontconfig
+        polkit
+        polkit_gnome
+        pulseaudio
+      ]
+      ++ (with xorg; [
+        libxcb
+        libxkbfile
+        libX11
+        libXdamage
+        libXext
+        libXfixes
+        libXi
+        libXmu
+        libXrandr
+        libXtst
+        libXt
+        libICE
+        libSM
+        libXrender
+      ]);
 
-  installPhase = ''
-    runHook preInstall
+    nativeBuildInputs = [makeWrapper];
 
-    mkdir -p $out/bin $out/share/{applications,doc/anydesk,icons/hicolor}
-    install -m755 anydesk $out/bin/anydesk
-    cp copyright README $out/share/doc/anydesk
-    cp -r icons/hicolor/* $out/share/icons/hicolor/
-    cp ${desktopItem}/share/applications/*.desktop $out/share/applications
+    installPhase = ''
+      runHook preInstall
 
-    runHook postInstall
-  '';
+      mkdir -p $out/bin $out/share/{applications,doc/anydesk,icons/hicolor}
+      install -m755 anydesk $out/bin/anydesk
+      cp copyright README $out/share/doc/anydesk
+      cp -r icons/hicolor/* $out/share/icons/hicolor/
+      cp ${desktopItem}/share/applications/*.desktop $out/share/applications
 
-  postFixup = ''
-    patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "${lib.makeLibraryPath buildInputs}" \
-      $out/bin/anydesk
+      runHook postInstall
+    '';
 
-    # pangox is not actually necessary (it was only added as a part of gtkglext)
-    patchelf \
-      --remove-needed libpangox-1.0.so.0 \
-      $out/bin/anydesk
+    postFixup = ''
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-rpath "${lib.makeLibraryPath buildInputs}" \
+        $out/bin/anydesk
 
-    wrapProgram $out/bin/anydesk \
-      --prefix PATH : ${lib.makeBinPath [ lsb-release pciutils ]}
+      # pangox is not actually necessary (it was only added as a part of gtkglext)
+      patchelf \
+        --remove-needed libpangox-1.0.so.0 \
+        $out/bin/anydesk
 
-    substituteInPlace $out/share/applications/*.desktop \
-      --subst-var out
-  '';
+      wrapProgram $out/bin/anydesk \
+        --prefix PATH : ${lib.makeBinPath [lsb-release pciutils]}
 
-  meta = with lib; {
-    inherit description;
-    homepage = "https://www.anydesk.com";
-    license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ shyim ];
-  };
-}
+      substituteInPlace $out/share/applications/*.desktop \
+        --subst-var out
+    '';
+
+    meta = with lib; {
+      inherit description;
+      homepage = "https://www.anydesk.com";
+      license = licenses.unfree;
+      platforms = ["x86_64-linux"];
+      maintainers = with maintainers; [shyim];
+    };
+  }

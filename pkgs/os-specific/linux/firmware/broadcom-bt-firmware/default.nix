@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, cabextract, bt-fw-converter }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cabextract,
+  bt-fw-converter,
+}:
 # Kernels between 4.2 and 4.7 will not work with
 # this packages as they expect the firmware to be named "BCM.hcd"
 # see: https://github.com/NixOS/nixpkgs/pull/25478#issuecomment-299034865
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b1qjwxjk4y91l3iz157kms8601n0mmiik32cs6w9b1q4sl4pxx9";
   };
 
-  nativeBuildInputs = [ cabextract bt-fw-converter ];
+  nativeBuildInputs = [cabextract bt-fw-converter];
 
   unpackCmd = ''
     mkdir -p ${pname}-${version}
@@ -41,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.catalog.update.microsoft.com/Search.aspx?q=Broadcom+bluetooth";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ zraexy ];
+    maintainers = with maintainers; [zraexy];
   };
 }

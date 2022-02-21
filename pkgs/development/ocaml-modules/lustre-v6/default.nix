@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, fetchurl, ocaml_extlib, lutils, rdbg }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml_extlib,
+  lutils,
+  rdbg,
+}:
 buildDunePackage rec {
   pname = "lustre-v6";
   version = "6.103.3";
@@ -23,6 +29,6 @@ buildDunePackage rec {
     homepage = "https://www-verimag.imag.fr/lustre-v6.html";
     description = "Lustre V6 compiler";
     license = lib.licenses.cecill21;
-    maintainers = [ lib.maintainers.delta ];
+    maintainers = [lib.maintainers.delta];
   };
 }

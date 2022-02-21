@@ -1,10 +1,14 @@
-{ lib, mkDerivation, fetchFromGitHub, pkg-config, gcc-arm-embedded, bluez5
-, readline
-
-, hardwarePlatform ? "PM3RDV4"
-
-, hardwarePlatformExtras ? "" }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  pkg-config,
+  gcc-arm-embedded,
+  bluez5,
+  readline,
+  hardwarePlatform ? "PM3RDV4",
+  hardwarePlatformExtras ? "",
+}:
 mkDerivation rec {
   pname = "proxmark3-rrg";
   version = "4.14831";
@@ -16,8 +20,8 @@ mkDerivation rec {
     sha256 = "sha256-s0D04V6vlGW7SVkJwzMKaVfXQoT3Wi0lu7RC61Es89A=";
   };
 
-  nativeBuildInputs = [ pkg-config gcc-arm-embedded ];
-  buildInputs = [ bluez5 readline ];
+  nativeBuildInputs = [pkg-config gcc-arm-embedded];
+  buildInputs = [bluez5 readline];
 
   makeFlags = [
     "PLATFORM=${hardwarePlatform}"
@@ -33,6 +37,6 @@ mkDerivation rec {
     description = "Client for proxmark3, powerful general purpose RFID tool";
     homepage = "https://rfidresearchgroup.com/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nyanotech ];
+    maintainers = with maintainers; [nyanotech];
   };
 }

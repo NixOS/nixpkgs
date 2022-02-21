@@ -1,11 +1,17 @@
-{ autoPatchelfHook, lib, maven, stdenv, src, version }:
-
+{
+  autoPatchelfHook,
+  lib,
+  maven,
+  stdenv,
+  src,
+  version,
+}:
 stdenv.mkDerivation rec {
   pname = "skein-maven-repo";
 
   inherit version src;
 
-  nativeBuildInputs = [ maven ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = [maven] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
   installPhase = ''
     mkdir -p $out
@@ -22,7 +28,7 @@ stdenv.mkDerivation rec {
       mvn -Dmaven.repo.local=$out dependency:get -Dartifact=io.grpc:protoc-gen-grpc-java:1.16.0:exe:$arch
     done
 
-    if ${ lib.boolToString stdenv.isLinux }
+    if ${lib.boolToString stdenv.isLinux}
     then
       autoPatchelf $out
     fi
@@ -37,8 +43,9 @@ stdenv.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = if stdenv.isLinux
+  outputHash =
+    if stdenv.isLinux
     then "12f0q3444qw6y4f6qsa9540a0fz4cgi844zzi8z1phqn3k4dnl6v"
     else "0bjbwiv17cary1isxca0m2hsvgs1i5fh18z247h1hky73lnhbrz8";
-
-} // lib.optionalAttrs stdenv.isLinux { dontAutoPatchelf = true; }
+}
+// lib.optionalAttrs stdenv.isLinux {dontAutoPatchelf = true;}

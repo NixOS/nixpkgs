@@ -1,10 +1,16 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Foundation }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libiconv,
+  Foundation,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "dua";
   version = "2.17.0";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv Foundation];
 
   src = fetchFromGitHub {
     owner = "Byron";
@@ -25,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A tool to conveniently learn about the disk usage of directories, fast!";
     homepage = "https://github.com/Byron/dua-cli";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ killercup ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [killercup];
   };
 }

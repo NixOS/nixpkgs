@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "ox";
   version = "0.2.7";
@@ -18,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/curlpipe/ox";
     changelog = "https://github.com/curlpipe/ox/releases/tag/${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
   };
 }

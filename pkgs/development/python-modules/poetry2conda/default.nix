@@ -1,14 +1,14 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, toml
-, poetry
-, poetry-semver
-, pyyaml
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  toml,
+  poetry,
+  poetry-semver,
+  pyyaml,
 }:
-
 buildPythonApplication rec {
   pname = "poetry2conda";
   version = "0.3.0";
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     sha256 = "sha256-UqNoEGgStvqtxhYwExk7wO4SvATaM2kGaFbB5ViJa7U=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [poetry];
 
   propagatedBuildInputs = [
     poetry-semver
@@ -39,6 +39,6 @@ buildPythonApplication rec {
     description = "A script to convert a Python project declared on a pyproject.toml to a conda environment";
     homepage = "https://github.com/dojeda/poetry2conda";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

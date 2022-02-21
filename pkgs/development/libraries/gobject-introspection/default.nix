@@ -1,36 +1,36 @@
-{ lib, stdenv
-, fetchurl
-, glib
-, flex
-, bison
-, meson
-, ninja
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, docbook_xml_dtd_45
-, pkg-config
-, libffi
-, python3
-, cctools
-, cairo
-, gnome
-, substituteAll
-, nixStoreDir ? builtins.storeDir
-, x11Support ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  flex,
+  bison,
+  meson,
+  ninja,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  docbook_xml_dtd_45,
+  pkg-config,
+  libffi,
+  python3,
+  cctools,
+  cairo,
+  gnome,
+  substituteAll,
+  nixStoreDir ? builtins.storeDir,
+  x11Support ? true,
 }:
-
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
-
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
   version = "1.70.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = ["out" "dev" "devdoc" "man"];
   outputBin = "dev";
 
   src = fetchurl {
@@ -38,31 +38,33 @@ stdenv.mkDerivation rec {
     sha256 = "0jpwraip7pwl9bf9s59am3r7074p34fasvfb5ym1fb8hwc34jawh";
   };
 
-  patches = [
-    # Make g-ir-scanner put absolute path to GIR files it generates
-    # so that programs can just dlopen them without having to muck
-    # with LD_LIBRARY_PATH environment variable.
-    (substituteAll {
-      src = ./absolute_shlib_path.patch;
-      inherit nixStoreDir;
-    })
-    # Fix build with meson 0.61.0
-    (fetchurl {
-      url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/827494d6415b696a98fa195cbd883b50cc893bfc.patch";
-      sha256 = "sha256-imVWzU760FRsX+eXREQDQ6mDcmzZ5ASLT9rBf4oyBGQ=";
-    })
-    (fetchurl {
-      url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/effb1e09dee263cdac4ec593e8caf316e6f01fe2.patch";
-      sha256 = "sha256-o7a0qDT5IYcYcz8toeZu+nPj3SwS52sNgmxgzsmlp4Q=";
-    })
-  ] ++ lib.optionals x11Support [
-    # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
-    # https://github.com/NixOS/nixpkgs/issues/34080
-    (substituteAll {
-      src = ./absolute_gir_path.patch;
-      cairoLib = "${lib.getLib cairo}/lib";
-    })
-  ];
+  patches =
+    [
+      # Make g-ir-scanner put absolute path to GIR files it generates
+      # so that programs can just dlopen them without having to muck
+      # with LD_LIBRARY_PATH environment variable.
+      (substituteAll {
+        src = ./absolute_shlib_path.patch;
+        inherit nixStoreDir;
+      })
+      # Fix build with meson 0.61.0
+      (fetchurl {
+        url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/827494d6415b696a98fa195cbd883b50cc893bfc.patch";
+        sha256 = "sha256-imVWzU760FRsX+eXREQDQ6mDcmzZ5ASLT9rBf4oyBGQ=";
+      })
+      (fetchurl {
+        url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/effb1e09dee263cdac4ec593e8caf316e6f01fe2.patch";
+        sha256 = "sha256-o7a0qDT5IYcYcz8toeZu+nPj3SwS52sNgmxgzsmlp4Q=";
+      })
+    ]
+    ++ lib.optionals x11Support [
+      # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
+      # https://github.com/NixOS/nixpkgs/issues/34080
+      (substituteAll {
+        src = ./absolute_gir_path.patch;
+        cairoLib = "${lib.getLib cairo}/lib";
+      })
+    ];
 
   nativeBuildInputs = [
     meson
@@ -130,9 +132,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
-    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [lovek323]);
     platforms = platforms.unix;
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [gpl2 lgpl2];
 
     longDescription = ''
       GObject introspection is a middleware layer between C libraries (using

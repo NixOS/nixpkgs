@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "elfcat";
   version = "0.1.7";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "ELF visualizer, generates HTML files from ELF binaries.";
     homepage = "https://github.com/ruslashev/elfcat";
     license = licenses.zlib;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
   };
 }

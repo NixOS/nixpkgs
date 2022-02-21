@@ -1,7 +1,7 @@
-{ lib
-, python3
+{
+  lib,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
   version = "0.9.4";

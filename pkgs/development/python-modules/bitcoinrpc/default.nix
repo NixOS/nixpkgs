@@ -1,13 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, orjson
-, httpx
-, typing-extensions
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  orjson,
+  httpx,
+  typing-extensions,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "bitcoinrpc";
   version = "0.5.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Bitcoin JSON-RPC client";
     homepage = "https://github.com/bibajz/bitcoin-python-async-rpc";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

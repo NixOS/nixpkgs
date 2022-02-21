@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, texinfo, texLive, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  texinfo,
+  texLive,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "asdf";
   version = "2.26";
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Standard software-system definition library for Common Lisp";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
   };
 }

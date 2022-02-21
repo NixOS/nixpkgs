@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "libdynd";
   version = "0.7.2";
@@ -25,9 +29,9 @@ stdenv.mkDerivation rec {
     "-Wno-error=deprecated-copy"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
   outputDoc = "dev";
 
   meta = with lib; {

@@ -1,8 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk3, fribidi
-, libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
-, boost, libxslt, goffice, wrapGAppsHook, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk3,
+  fribidi,
+  libpng,
+  popt,
+  libgsf,
+  enchant,
+  wv,
+  librsvg,
+  bzip2,
+  libjpeg,
+  perl,
+  boost,
+  libxslt,
+  goffice,
+  wrapGAppsHook,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "abiword";
   version = "3.0.5";
@@ -14,11 +31,24 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [pkg-config wrapGAppsHook];
 
   buildInputs = [
-    gtk3 librsvg bzip2 fribidi libpng popt
-    libgsf enchant wv libjpeg perl boost libxslt goffice gnome.adwaita-icon-theme
+    gtk3
+    librsvg
+    bzip2
+    fribidi
+    libpng
+    popt
+    libgsf
+    enchant
+    wv
+    libjpeg
+    perl
+    boost
+    libxslt
+    goffice
+    gnome.adwaita-icon-theme
   ];
 
   meta = with lib; {
@@ -26,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.abisource.com/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ylwghst sna ];
+    maintainers = with maintainers; [pSub ylwghst sna];
   };
 }

@@ -1,12 +1,12 @@
 # This module contains the basic configuration for building a NixOS
 # tarball for the sheevaplug.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   # A dummy /etc/nixos/configuration.nix in the booted CD that
   # rebuilds the CD's configuration (and allows the configuration to
   # be modified, of course, providing a true live CD).  Problem is
@@ -14,30 +14,30 @@ let
   # expression language doesn't allow us to query the expression being
   # evaluated.  So we'll just hope for the best.
   dummyConfiguration = pkgs.writeText "configuration.nix"
-    ''
-      { config, pkgs, ... }:
+  ''
+    { config, pkgs, ... }:
 
-      {
-        # Add your own options below and run "nixos-rebuild switch".
-        # E.g.,
-        #   services.openssh.enable = true;
-      }
-    '';
+    {
+      # Add your own options below and run "nixos-rebuild switch".
+      # E.g.,
+      #   services.openssh.enable = true;
+    }
+  '';
 
-
-  pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
+  pkgs2storeContents = l:
+    map (x: {
+      object = x;
+      symlink = "none";
+    })
+    l;
 
   # A clue for the kernel loading
   kernelParams = pkgs.writeText "kernel-params.txt" ''
     Kernel Parameters:
       init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
   '';
-
-
-in
-
-{
-  imports = [ ./system-tarball.nix ];
+in {
+  imports = [./system-tarball.nix];
 
   # Disable some other stuff we don't need.
   security.sudo.enable = false;
@@ -48,93 +48,90 @@ in
 
   # Include some utilities that are useful for installing or repairing
   # the system.
-  environment.systemPackages =
-    [ pkgs.w3m # needed for the manual anyway
-      pkgs.ddrescue
-      pkgs.ccrypt
-      pkgs.cryptsetup # needed for dm-crypt volumes
+  environment.systemPackages = [
+    pkgs.w3m # needed for the manual anyway
+    pkgs.ddrescue
+    pkgs.ccrypt
+    pkgs.cryptsetup # needed for dm-crypt volumes
 
-      # Some networking tools.
-      pkgs.sshfs-fuse
-      pkgs.socat
-      pkgs.screen
-      pkgs.wpa_supplicant # !!! should use the wpa module
+    # Some networking tools.
+    pkgs.sshfs-fuse
+    pkgs.socat
+    pkgs.screen
+    pkgs.wpa_supplicant # !!! should use the wpa module
 
-      # Hardware-related tools.
-      pkgs.sdparm
-      pkgs.hdparm
-      pkgs.dmraid
+    # Hardware-related tools.
+    pkgs.sdparm
+    pkgs.hdparm
+    pkgs.dmraid
 
-      # Tools to create / manipulate filesystems.
-      pkgs.btrfs-progs
+    # Tools to create / manipulate filesystems.
+    pkgs.btrfs-progs
 
-      # Some compression/archiver tools.
-      pkgs.unzip
-      pkgs.zip
-      pkgs.xz
-      pkgs.dar # disk archiver
+    # Some compression/archiver tools.
+    pkgs.unzip
+    pkgs.zip
+    pkgs.xz
+    pkgs.dar # disk archiver
 
-      # Some editors.
-      pkgs.nvi
-      pkgs.bvi # binary editor
-      pkgs.joe
-    ];
+    # Some editors.
+    pkgs.nvi
+    pkgs.bvi # binary editor
+    pkgs.joe
+  ];
 
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
   system.boot.loader.kernelFile = "uImage";
 
-  boot.initrd.availableKernelModules =
-    [ "mvsdio" "reiserfs" "ext3" "ums-cypress" "rtc_mv" "ext4" ];
+  boot.initrd.availableKernelModules = ["mvsdio" "reiserfs" "ext3" "ums-cypress" "rtc_mv" "ext4"];
 
-  boot.postBootCommands =
-    ''
-      mkdir -p /mnt
+  boot.postBootCommands = ''
+    mkdir -p /mnt
 
-      cp ${dummyConfiguration} /etc/nixos/configuration.nix
-    '';
+    cp ${dummyConfiguration} /etc/nixos/configuration.nix
+  '';
 
-  boot.initrd.extraUtilsCommands =
-    ''
-      copy_bin_and_libs ${pkgs.util-linux}/sbin/hwclock
-    '';
+  boot.initrd.extraUtilsCommands = ''
+    copy_bin_and_libs ${pkgs.util-linux}/sbin/hwclock
+  '';
 
-  boot.initrd.postDeviceCommands =
-    ''
-      hwclock -s
-    '';
+  boot.initrd.postDeviceCommands = ''
+    hwclock -s
+  '';
 
-  boot.kernelParams =
-    [
-      "selinux=0"
-      "console=tty1"
-      # "console=ttyS0,115200n8"  # serial console
-    ];
+  boot.kernelParams = [
+    "selinux=0"
+    "console=tty1"
+    # "console=ttyS0,115200n8"  # serial console
+  ];
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_4;
 
-  boot.supportedFilesystems = [ "reiserfs" ];
+  boot.supportedFilesystems = ["reiserfs"];
 
-  /* fake entry, just to have a happy stage-1. Users
-     may boot without having stage-1 though */
-  fileSystems.fake =
-    { mountPoint = "/";
-      device = "/dev/something";
-    };
+  /*
+   fake entry, just to have a happy stage-1. Users
+   may boot without having stage-1 though
+   */
+  fileSystems.fake = {
+    mountPoint = "/";
+    device = "/dev/something";
+  };
 
   services.getty = {
     # Some more help text.
     helpLine = ''
       Log in as "root" with an empty password.  ${
-        if config.services.xserver.enable then
-          "Type `start xserver' to start\nthe graphical user interface."
+        if config.services.xserver.enable
+        then "Type `start xserver' to start\nthe graphical user interface."
         else ""
       }
     '';
   };
 
   # Setting vesa, we don't get the nvidia driver, which can't work in arm.
-  services.xserver.videoDrivers = [ "vesa" ];
+  services.xserver.videoDrivers = ["vesa"];
 
   documentation.nixos.enable = false;
 
@@ -144,15 +141,18 @@ in
 
   # To speed up further installation of packages, include the complete stdenv
   # in the Nix store of the tarball.
-  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ];
+  tarball.storeContents = pkgs2storeContents [pkgs.stdenv];
   tarball.contents = [
-    { source = kernelParams;
+    {
+      source = kernelParams;
       target = "/kernelparams.txt";
     }
-    { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+    {
+      source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
       target = "/boot/" + config.system.boot.loader.kernelFile;
     }
-    { source = pkgs.ubootSheevaplug;
+    {
+      source = pkgs.ubootSheevaplug;
       target = "/boot/uboot";
     }
   ];

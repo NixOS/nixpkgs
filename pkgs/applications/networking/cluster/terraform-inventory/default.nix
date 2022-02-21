@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub}:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "terraform-inventory";
   version = "0.7-pre";
@@ -7,7 +10,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/adammck/terraform-inventory";
 
-  subPackages = [ "./" ];
+  subPackages = ["./"];
 
   src = fetchFromGitHub {
     inherit rev;
@@ -22,6 +25,6 @@ buildGoPackage rec {
     homepage = "https://github.com/adammck/terraform-inventory";
     description = "Terraform state to ansible inventory adapter";
     license = licenses.mit;
-    maintainers = with maintainers; [ htr ];
+    maintainers = with maintainers; [htr];
   };
 }

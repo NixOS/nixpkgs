@@ -1,7 +1,7 @@
-{ lib
-, python2
+{
+  lib,
+  python2,
 }:
-
 python2.pkgs.buildPythonApplication rec {
   pname = "bitbucket-cli";
   version = "0.5.1";
@@ -21,7 +21,7 @@ python2.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Bitbucket command line interface";
     homepage = "https://bitbucket.org/zhemao/bitbucket-cli";
-    maintainers = with maintainers; [ refnil ];
+    maintainers = with maintainers; [refnil];
     license = licenses.bsd2;
   };
 }

@@ -1,12 +1,14 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with (import ./param-lib.nix lib);
-
-let
+with (import ./param-lib.nix lib); let
   cfg = config.services.strongswan-swanctl;
   swanctlParams = import ./swanctl-params.nix lib;
-in  {
+in {
   options.services.strongswan-swanctl = {
     enable = mkEnableOption "strongswan-swanctl service";
 
@@ -31,9 +33,9 @@ in  {
   };
 
   config = mkIf cfg.enable {
-
     assertions = [
-      { assertion = !config.services.strongswan.enable;
+      {
+        assertion = !config.services.strongswan.enable;
         message = "cannot enable both services.strongswan and services.strongswan-swanctl. Choose either one.";
       }
     ];
@@ -61,9 +63,9 @@ in  {
 
     systemd.services.strongswan-swanctl = {
       description = "strongSwan IPsec IKEv1/IKEv2 daemon using swanctl";
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network-online.target" ];
-      path     = with pkgs; [ kmod iproute2 iptables util-linux ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
+      path = with pkgs; [kmod iproute2 iptables util-linux];
       environment = {
         STRONGSWAN_CONF = pkgs.writeTextFile {
           name = "strongswan.conf";
@@ -71,13 +73,13 @@ in  {
         };
         SWANCTL_DIR = "/etc/swanctl";
       };
-      restartTriggers = [ config.environment.etc."swanctl/swanctl.conf".source ];
+      restartTriggers = [config.environment.etc."swanctl/swanctl.conf".source];
       serviceConfig = {
-        ExecStart     = "${cfg.package}/sbin/charon-systemd";
-        Type          = "notify";
+        ExecStart = "${cfg.package}/sbin/charon-systemd";
+        Type = "notify";
         ExecStartPost = "${cfg.package}/sbin/swanctl --load-all --noprompt";
-        ExecReload    = "${cfg.package}/sbin/swanctl --reload";
-        Restart       = "on-abnormal";
+        ExecReload = "${cfg.package}/sbin/swanctl --reload";
+        Restart = "on-abnormal";
       };
     };
   };

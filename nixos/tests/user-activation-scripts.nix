@@ -1,6 +1,6 @@
-import ./make-test-python.nix ({ lib, ... }: {
+import ./make-test-python.nix ({lib, ...}: {
   name = "user-activation-scripts";
-  meta = with lib.maintainers; { maintainers = [ chkno ]; };
+  meta = with lib.maintainers; {maintainers = [chkno];};
 
   machine = {
     system.userActivationScripts.foo = "mktemp ~/user-activation-ran.XXXXXX";

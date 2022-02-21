@@ -1,13 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "aresponses";
   version = "2.1.5";
@@ -53,7 +53,6 @@ buildPythonPackage rec {
     description = "Asyncio testing server";
     homepage = "https://github.com/circleup/aresponses";
     license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
 }
-

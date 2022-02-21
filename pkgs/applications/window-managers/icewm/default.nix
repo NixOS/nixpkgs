@@ -1,49 +1,49 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, asciidoc
-, cmake
-, expat
-, fontconfig
-, freetype
-, fribidi
-, gdk-pixbuf
-, gdk-pixbuf-xlib
-, gettext
-, giflib
-, glib
-, imlib2
-, libICE
-, libSM
-, libX11
-, libXcomposite
-, libXdamage
-, libXdmcp
-, libXext
-, libXfixes
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libjpeg
-, libpng
-, libpthreadstubs
-, libsndfile
-, libtiff
-, libxcb
-, mkfontdir
-, pcre
-, perl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  asciidoc,
+  cmake,
+  expat,
+  fontconfig,
+  freetype,
+  fribidi,
+  gdk-pixbuf,
+  gdk-pixbuf-xlib,
+  gettext,
+  giflib,
+  glib,
+  imlib2,
+  libICE,
+  libSM,
+  libX11,
+  libXcomposite,
+  libXdamage,
+  libXdmcp,
+  libXext,
+  libXfixes,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libjpeg,
+  libpng,
+  libpthreadstubs,
+  libsndfile,
+  libtiff,
+  libxcb,
+  mkfontdir,
+  pcre,
+  perl,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "icewm";
   version = "2.9.4";
 
   src = fetchFromGitHub {
-    owner  = "ice-wm";
+    owner = "ice-wm";
     repo = pname;
     rev = version;
     hash = "sha256-ne2lqo9CAhGgC8dd9R03zhFXy9nPBQR0NcfAY0DeVj4=";
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
       transparency support, a simple session manager and a system tray.
     '';
     license = licenses.lgpl2Only;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

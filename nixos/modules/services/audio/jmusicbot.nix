@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-  cfg = config.services.jmusicbot;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.jmusicbot;
+in {
   options = {
     services.jmusicbot = {
       enable = mkEnableOption "jmusicbot, a Discord music bot that's easy to set up and run yourself";
@@ -30,19 +32,21 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.jmusicbot = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
       description = "Discord music bot that's easy to set up and run yourself!";
-      serviceConfig = mkMerge [{
-        ExecStart = "${cfg.package}/bin/JMusicBot";
-        WorkingDirectory = cfg.stateDir;
-        Restart = "always";
-        RestartSec = 20;
-        DynamicUser = true;
-      }
-        (mkIf (cfg.stateDir == "/var/lib/jmusicbot") { StateDirectory = "jmusicbot"; })];
+      serviceConfig = mkMerge [
+        {
+          ExecStart = "${cfg.package}/bin/JMusicBot";
+          WorkingDirectory = cfg.stateDir;
+          Restart = "always";
+          RestartSec = 20;
+          DynamicUser = true;
+        }
+        (mkIf (cfg.stateDir == "/var/lib/jmusicbot") {StateDirectory = "jmusicbot";})
+      ];
     };
   };
 
-  meta.maintainers = with maintainers; [ SuperSandro2000 ];
+  meta.maintainers = with maintainers; [SuperSandro2000];
 }

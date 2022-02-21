@@ -1,12 +1,15 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "confd";
   version = "0.16.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/kelseyhightower/confd";
-  subPackages = [ "./" ];
+  subPackages = ["./"];
 
   src = fetchFromGitHub {
     inherit rev;
@@ -19,6 +22,6 @@ buildGoPackage rec {
     description = "Manage local application configuration files using templates and data from etcd or consul";
     homepage = "https://github.com/kelseyhightower/confd";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.zimbatm ];
+    maintainers = [lib.maintainers.zimbatm];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, libxml2, openssl, readline, gawk }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  openssl,
+  readline,
+  gawk,
+}:
 stdenv.mkDerivation rec {
   pname = "virtuoso-opensource";
   version = "6.1.6";
@@ -9,15 +16,19 @@ stdenv.mkDerivation rec {
     sha256 = "0dx0lp7cngdchi0772hp93zzn6sdap7z8s3vay3mzb9xgf0sdgy6";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
-  buildInputs = [ libxml2 openssl readline gawk ];
+  buildInputs = [libxml2 openssl readline gawk];
 
   CPP = "${stdenv.cc}/bin/gcc -E";
 
   configureFlags = [
-    "--enable-shared" "--disable-all-vads" "--with-readline=${readline.dev}"
-    "--disable-hslookup" "--disable-wbxml2" "--without-iodbc"
+    "--enable-shared"
+    "--disable-all-vads"
+    "--with-readline=${readline.dev}"
+    "--disable-hslookup"
+    "--disable-wbxml2"
+    "--without-iodbc"
     "--enable-openssl=${openssl.dev}"
   ];
 

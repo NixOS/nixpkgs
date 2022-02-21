@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, atom
-, ply
-, kiwisolver
-, qtpy
-, sip_4
-, cppy
-, bytecode
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  atom,
+  ply,
+  kiwisolver,
+  qtpy,
+  sip_4,
+  cppy,
+  bytecode,
 }:
-
 buildPythonPackage rec {
   pname = "enaml";
   version = "0.14.1";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nucleic/enaml";
     description = "Declarative User Interfaces for Python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ raboof ];
+    maintainers = with maintainers; [raboof];
   };
 }

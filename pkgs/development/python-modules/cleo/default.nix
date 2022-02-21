@@ -1,6 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, clikit }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  clikit,
+}:
 buildPythonPackage rec {
   pname = "cleo";
   version = "0.8.1";
@@ -23,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdispater/cleo";
     description = "Allows you to create beautiful and testable command-line interfaces";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [jakewaksbaum];
   };
 }

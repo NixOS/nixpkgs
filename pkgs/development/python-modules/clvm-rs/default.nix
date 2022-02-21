@@ -1,12 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, pythonOlder
-, openssl
-, perl
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  pythonOlder,
+  openssl,
+  perl,
 }:
-
 buildPythonPackage rec {
   pname = "clvm_rs";
   version = "0.1.15";
@@ -32,16 +32,18 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = [
-    perl # used by openssl-sys to configure
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [
+      perl # used by openssl-sys to configure
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
-  pythonImportsCheck = [ "clvm_rs" ];
+  pythonImportsCheck = ["clvm_rs"];
 
   meta = with lib; {
     homepage = "https://chialisp.com/";

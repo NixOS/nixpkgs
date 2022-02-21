@@ -1,33 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, duet
-, matplotlib
-, networkx
-, numpy
-, pandas
-, requests
-, scipy
-, sortedcontainers
-, sympy
-, tqdm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  duet,
+  matplotlib,
+  networkx,
+  numpy,
+  pandas,
+  requests,
+  scipy,
+  sortedcontainers,
+  sympy,
+  tqdm,
+  typing-extensions
   # Contrib requirements
-, withContribRequires ? false
-, autoray ? null
-, opt-einsum
-, ply
-, pylatex ? null
-, pyquil ? null
-, quimb ? null
+  ,
+  withContribRequires ? false,
+  autoray ? null,
+  opt-einsum,
+  ply,
+  pylatex ? null,
+  pyquil ? null,
+  quimb ? null
   # test inputs
-, pytestCheckHook
-, freezegun
-, pytest-asyncio
+  ,
+  pytestCheckHook,
+  freezegun,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "cirq-core";
   version = "0.13.1";
@@ -66,26 +68,28 @@ buildPythonPackage rec {
       --replace "numpy~=1.16" "numpy"
   '';
 
-  propagatedBuildInputs = [
-    duet
-    matplotlib
-    networkx
-    numpy
-    pandas
-    requests
-    scipy
-    sortedcontainers
-    sympy
-    tqdm
-    typing-extensions
-  ] ++ lib.optionals withContribRequires [
-    autoray
-    opt-einsum
-    ply
-    pylatex
-    pyquil
-    quimb
-  ];
+  propagatedBuildInputs =
+    [
+      duet
+      matplotlib
+      networkx
+      numpy
+      pandas
+      requests
+      scipy
+      sortedcontainers
+      sympy
+      tqdm
+      typing-extensions
+    ]
+    ++ lib.optionals withContribRequires [
+      autoray
+      opt-einsum
+      ply
+      pylatex
+      pyquil
+      quimb
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -107,6 +111,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/quantumlib/cirq";
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger fab ];
+    maintainers = with maintainers; [drewrisinger fab];
   };
 }

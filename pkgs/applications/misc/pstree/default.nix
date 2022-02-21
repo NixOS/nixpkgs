@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "pstree";
   version = "2.39";
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Show the set of running processes as a tree";
     homepage = "http://www.thp.uni-duisburg.de/pstree/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.c0bw3b ];
+    maintainers = [maintainers.c0bw3b];
     platforms = platforms.unix;
     priority = 5; # Lower than psmisc also providing pstree on Linux platforms
   };

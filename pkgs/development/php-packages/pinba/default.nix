@@ -1,5 +1,8 @@
-{ buildPecl, lib, fetchFromGitHub }:
-
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+}:
 buildPecl {
   pname = "pinba";
   version = "1.1.2";

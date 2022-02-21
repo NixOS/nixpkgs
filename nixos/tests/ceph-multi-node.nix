@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
-
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   cfg = {
     clusterId = "066ae264-2a5d-4729-8001-6ad265f50b03";
     monA = {
@@ -26,19 +28,26 @@ let
       uuid = "ea999274-13d0-4dd5-9af9-ad25a324f72f";
     };
   };
-  generateCephConfig = { daemonConfig }: {
-    enable = true;
-    global = {
-      fsid = cfg.clusterId;
-      monHost = cfg.monA.ip;
-      monInitialMembers = cfg.monA.name;
-    };
-  } // daemonConfig;
+  generateCephConfig = {daemonConfig}:
+    {
+      enable = true;
+      global = {
+        fsid = cfg.clusterId;
+        monHost = cfg.monA.ip;
+        monInitialMembers = cfg.monA.name;
+      };
+    }
+    // daemonConfig;
 
-  generateHost = { pkgs, cephConfig, networkConfig, ... }: {
+  generateHost = {
+    pkgs,
+    cephConfig,
+    networkConfig,
+    ...
+  }: {
     virtualisation = {
-      emptyDiskImages = [ 20480 ];
-      vlans = [ 1 ];
+      emptyDiskImages = [20480];
+      vlans = [1];
     };
 
     networking = networkConfig;
@@ -51,7 +60,7 @@ let
       netcat-openbsd
     ];
 
-    boot.kernelModules = [ "xfs" ];
+    boot.kernelModules = ["xfs"];
 
     services.ceph = cephConfig;
   };
@@ -59,46 +68,67 @@ let
   networkMonA = {
     dhcpcd.enable = false;
     interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-      { address = cfg.monA.ip; prefixLength = 24; }
+      {
+        address = cfg.monA.ip;
+        prefixLength = 24;
+      }
     ];
     firewall = {
-      allowedTCPPorts = [ 6789 3300 ];
-      allowedTCPPortRanges = [ { from = 6800; to = 7300; } ];
+      allowedTCPPorts = [6789 3300];
+      allowedTCPPortRanges = [
+        {
+          from = 6800;
+          to = 7300;
+        }
+      ];
     };
   };
-  cephConfigMonA = generateCephConfig { daemonConfig = {
-    mon = {
-      enable = true;
-      daemons = [ cfg.monA.name ];
+  cephConfigMonA = generateCephConfig {
+    daemonConfig = {
+      mon = {
+        enable = true;
+        daemons = [cfg.monA.name];
+      };
+      mgr = {
+        enable = true;
+        daemons = [cfg.monA.name];
+      };
     };
-    mgr = {
-      enable = true;
-      daemons = [ cfg.monA.name ];
-    };
-  }; };
+  };
 
   networkOsd = osd: {
     dhcpcd.enable = false;
     interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-      { address = osd.ip; prefixLength = 24; }
+      {
+        address = osd.ip;
+        prefixLength = 24;
+      }
     ];
     firewall = {
-      allowedTCPPortRanges = [ { from = 6800; to = 7300; } ];
+      allowedTCPPortRanges = [
+        {
+          from = 6800;
+          to = 7300;
+        }
+      ];
     };
   };
 
-  cephConfigOsd = osd: generateCephConfig { daemonConfig = {
-    osd = {
-      enable = true;
-      daemons = [ osd.name ];
+  cephConfigOsd = osd:
+    generateCephConfig {
+      daemonConfig = {
+        osd = {
+          enable = true;
+          daemons = [osd.name];
+        };
+      };
     };
-  }; };
 
   # Following deployment is based on the manual deployment described here:
   # https://docs.ceph.com/docs/master/install/manual-deployment/
   # For other ways to deploy a ceph cluster, look at the documentation at
   # https://docs.ceph.com/docs/master/
-  testscript = { ... }: ''
+  testscript = {...}: ''
     start_all()
 
     monA.wait_for_unit("network.target")
@@ -219,14 +249,30 @@ let
 in {
   name = "basic-multi-node-ceph-cluster";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lejonet ];
+    maintainers = [lejonet];
   };
 
   nodes = {
-    monA = generateHost { pkgs = pkgs; cephConfig = cephConfigMonA; networkConfig = networkMonA; };
-    osd0 = generateHost { pkgs = pkgs; cephConfig = cephConfigOsd cfg.osd0; networkConfig = networkOsd cfg.osd0; };
-    osd1 = generateHost { pkgs = pkgs; cephConfig = cephConfigOsd cfg.osd1; networkConfig = networkOsd cfg.osd1; };
-    osd2 = generateHost { pkgs = pkgs; cephConfig = cephConfigOsd cfg.osd2; networkConfig = networkOsd cfg.osd2; };
+    monA = generateHost {
+      pkgs = pkgs;
+      cephConfig = cephConfigMonA;
+      networkConfig = networkMonA;
+    };
+    osd0 = generateHost {
+      pkgs = pkgs;
+      cephConfig = cephConfigOsd cfg.osd0;
+      networkConfig = networkOsd cfg.osd0;
+    };
+    osd1 = generateHost {
+      pkgs = pkgs;
+      cephConfig = cephConfigOsd cfg.osd1;
+      networkConfig = networkOsd cfg.osd1;
+    };
+    osd2 = generateHost {
+      pkgs = pkgs;
+      cephConfig = cephConfigOsd cfg.osd2;
+      networkConfig = networkOsd cfg.osd2;
+    };
   };
 
   testScript = testscript;

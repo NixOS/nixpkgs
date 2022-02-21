@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   version = "0.9.2";
   pname = "tayga";
 
   src = fetchurl {
-    url= "http://www.litech.org/${pname}/${pname}-${version}.tar.bz2";
+    url = "http://www.litech.org/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "1700y121lhvpna49bjpssb7jq1abj9qw5wxgjn8gzp6jm4kpj7rb";
   };
 
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.litech.org/tayga";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [_0x4A6F];
     platforms = platforms.linux;
   };
 }

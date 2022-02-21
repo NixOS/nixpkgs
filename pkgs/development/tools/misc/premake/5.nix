@@ -1,43 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, Foundation, readline }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Foundation,
+  readline,
+}:
 with lib;
+  stdenv.mkDerivation rec {
+    pname = "premake5";
+    version = "5.0.0-alpha12";
 
-stdenv.mkDerivation rec {
-  pname = "premake5";
-  version = "5.0.0-alpha12";
+    src = fetchFromGitHub {
+      owner = "premake";
+      repo = "premake-core";
+      rev = "v${version}";
+      sha256 = "1h3hr96pdz94njn4bg02ldcz0k5j1x017d8svc7fdyvl2b77nqzf";
+    };
 
-  src = fetchFromGitHub {
-    owner = "premake";
-    repo = "premake-core";
-    rev = "v${version}";
-    sha256 = "1h3hr96pdz94njn4bg02ldcz0k5j1x017d8svc7fdyvl2b77nqzf";
-  };
+    buildInputs = optionals stdenv.isDarwin [Foundation readline];
 
-  buildInputs = optionals stdenv.isDarwin [ Foundation readline ];
-
-  patchPhase = optional stdenv.isDarwin ''
-    substituteInPlace premake5.lua \
-      --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5
-  '';
-
-  buildPhase =
-    if stdenv.isDarwin then ''
-       make -f Bootstrap.mak osx
-    '' else ''
-       make -f Bootstrap.mak linux
+    patchPhase = optional stdenv.isDarwin ''
+      substituteInPlace premake5.lua \
+        --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5
     '';
 
-  installPhase = ''
-    install -Dm755 bin/release/premake5 $out/bin/premake5
-  '';
+    buildPhase =
+      if stdenv.isDarwin
+      then
+        ''
+          make -f Bootstrap.mak osx
+        ''
+      else
+        ''
+          make -f Bootstrap.mak linux
+        '';
 
-  premake_cmd = "premake5";
-  setupHook = ./setup-hook.sh;
+    installPhase = ''
+      install -Dm755 bin/release/premake5 $out/bin/premake5
+    '';
 
-  meta = {
-    homepage = "https://premake.github.io";
-    description = "A simple build configuration and project generation tool using lua";
-    license = lib.licenses.bsd3;
-    platforms = platforms.darwin ++ platforms.linux;
-  };
-}
+    premake_cmd = "premake5";
+    setupHook = ./setup-hook.sh;
+
+    meta = {
+      homepage = "https://premake.github.io";
+      description = "A simple build configuration and project generation tool using lua";
+      license = lib.licenses.bsd3;
+      platforms = platforms.darwin ++ platforms.linux;
+    };
+  }

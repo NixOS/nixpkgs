@@ -1,5 +1,12 @@
-{ lib, fetchgit, python3, intltool, gtk3, gobject-introspection, gnome }:
-
+{
+  lib,
+  fetchgit,
+  python3,
+  intltool,
+  gtk3,
+  gobject-introspection,
+  gnome,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "onioncircuits";
   version = "0.5";
@@ -10,9 +17,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "13mqif9b9iajpkrl9ijspdnvy82kxhprxd5mw3njk68rcn4z2pcm";
   };
 
-  nativeBuildInputs = [ intltool ];
-  buildInputs = [ intltool gtk3 gobject-introspection ];
-  propagatedBuildInputs =  with python3.pkgs; [ stem distutils_extra pygobject3 ];
+  nativeBuildInputs = [intltool];
+  buildInputs = [intltool gtk3 gobject-introspection];
+  propagatedBuildInputs = with python3.pkgs; [stem distutils_extra pygobject3];
 
   postFixup = ''
     wrapProgram "$out/bin/onioncircuits" \
@@ -24,7 +31,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://tails.boum.org";
     description = "GTK application to display Tor circuits and streams";
     license = licenses.gpl3;
-    maintainers = [ ];
+    maintainers = [];
   };
 }
-

@@ -1,10 +1,16 @@
-{ lib, stdenv, fetchurl
-, fltk
-, openssl
-, libjpeg, libpng
-, perl
-, libXcursor, libXi, libXinerama }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fltk,
+  openssl,
+  libjpeg,
+  libpng,
+  perl,
+  libXcursor,
+  libXi,
+  libXinerama,
+}:
 stdenv.mkDerivation rec {
   version = "3.0.5";
   pname = "dillo";
@@ -14,10 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "12ql8n1lypv3k5zqgwjxlw1md90ixz3ag6j1gghfnhjq3inf26yv";
   };
 
-  buildInputs = with lib;
-  [ perl fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
+  buildInputs = with lib; [perl fltk openssl libjpeg libpng libXcursor libXi libXinerama];
 
-  configureFlags = [ "--enable-ssl" ];
+  configureFlags = ["--enable-ssl"];
 
   meta = with lib; {
     homepage = "https://www.dillo.org/";
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Dillo is a small, fast web browser, tailored for older machines.
     '';
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

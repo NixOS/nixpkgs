@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper, installShellFiles
-, python3, sqlite
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  python3,
+  sqlite,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tuptime";
   version = "5.1.0";
@@ -15,11 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6N4dqgLOhWqVR8GqlBUxHWy10AHBZ4aZbdkw5SOxxBQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram $out/share/tuptime/db-tuptime-migrate-4.0-to-5.0.sh \
-      --prefix PATH : "${lib.makeBinPath [ sqlite ]}"
+      --prefix PATH : "${lib.makeBinPath [sqlite]}"
   '';
 
   passthru.tests = nixosTests.tuptime;
@@ -43,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rfrail3/tuptime";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.evils ];
+    maintainers = [maintainers.evils];
   };
 }

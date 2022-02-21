@@ -1,4 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, ... }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  ...
+}:
 buildPythonPackage rec {
   pname = "pygtrie";
   version = "2.4.2";
@@ -10,6 +15,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mina86/pygtrie";
     description = "Trie data structure implementation";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kmein ];
+    maintainers = with lib.maintainers; [kmein];
   };
 }

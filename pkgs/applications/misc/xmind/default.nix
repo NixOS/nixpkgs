@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
-
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchurl,
+  gtk2,
+  jre,
+  libXtst,
+  makeWrapper,
+  makeDesktopItem,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "xmind";
   version = "8-update8";
@@ -17,15 +27,15 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  patches = [ ./java-env-config-fixes.patch ];
+  patches = [./java-env-config-fixes.patch];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontBuild = true;
   dontPatchELF = true;
   dontStrip = true;
 
-  libPath = lib.makeLibraryPath [ gtk2 libXtst ];
+  libPath = lib.makeLibraryPath [gtk2 libXtst];
 
   desktopItem = makeDesktopItem {
     name = "XMind";
@@ -38,7 +48,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = let
-    targetDir = if stdenv.hostPlatform.system == "i686-linux"
+    targetDir =
+      if stdenv.hostPlatform.system == "i686-linux"
       then "XMind_i386"
       else "XMind_amd64";
   in ''
@@ -87,6 +98,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.xmind.net/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ];
+    maintainers = with maintainers; [michalrus];
   };
 }

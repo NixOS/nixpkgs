@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, beets, pythonPackages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  beets,
+  pythonPackages,
+}:
 pythonPackages.buildPythonApplication rec {
   pname = "beets-alternatives";
   version = "unstable-2021-02-01";
@@ -16,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
       --replace "addopts = --cov --cov-report=term --cov-report=html" ""
   '';
 
-  nativeBuildInputs = [ beets ];
+  nativeBuildInputs = [beets];
 
   checkInputs = with pythonPackages; [
     pytestCheckHook
@@ -26,7 +30,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     description = "Beets plugin to manage external files";
     homepage = "https://github.com/geigerzaehler/beets-alternatives";
-    maintainers = with maintainers; [ aszlig lovesegfault ];
+    maintainers = with maintainers; [aszlig lovesegfault];
     license = licenses.mit;
   };
 }

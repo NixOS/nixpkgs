@@ -1,18 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
-, xapian, glib, gmime3, texinfo, emacs, guile
-, gtk3, webkitgtk, libsoup, icu
-, makeWrapper
-, withMug ? false
-, batchSize ? null }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sqlite,
+  pkg-config,
+  autoreconfHook,
+  pmccabe,
+  xapian,
+  glib,
+  gmime3,
+  texinfo,
+  emacs,
+  guile,
+  gtk3,
+  webkitgtk,
+  libsoup,
+  icu,
+  makeWrapper,
+  withMug ? false,
+  batchSize ? null,
+}:
 stdenv.mkDerivation rec {
   pname = "mu";
   version = "1.6.10";
 
   src = fetchFromGitHub {
-    owner  = "djcb";
-    repo   = "mu";
-    rev    = version;
+    owner = "djcb";
+    repo = "mu";
+    rev = version;
     sha256 = "1uJB8QdR0JgWlogb1cdUicz+LLtYQpAvYJjwcRjXt+E=";
   };
 
@@ -21,14 +36,22 @@ stdenv.mkDerivation rec {
       -e 's@(constexpr auto BatchSize).*@\1 = ${toString batchSize};@'
   '';
 
-  buildInputs = [
-    sqlite xapian glib gmime3 texinfo emacs libsoup icu
-  ]
+  buildInputs =
+    [
+      sqlite
+      xapian
+      glib
+      gmime3
+      texinfo
+      emacs
+      libsoup
+      icu
+    ]
     # Workaround for https://github.com/djcb/mu/issues/1641
     ++ lib.optional (!stdenv.isDarwin) guile
-    ++ lib.optionals withMug [ gtk3 webkitgtk ];
+    ++ lib.optionals withMug [gtk3 webkitgtk];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook pmccabe makeWrapper ];
+  nativeBuildInputs = [pkg-config autoreconfHook pmccabe makeWrapper];
 
   enableParallelBuilding = true;
 
@@ -39,15 +62,17 @@ stdenv.mkDerivation rec {
   '';
 
   # Make sure included scripts can find their dependencies & optionally install mug
-  postInstall = ''
-    wrapProgram "$out/bin/mu" \
-      --prefix LD_LIBRARY_PATH : "$out/lib" \
-      --prefix GUILE_LOAD_PATH : "$out/share/guile/site/2.2"
-  '' + lib.optionalString withMug ''
-    for f in mug ; do
-      install -m755 toys/$f/$f $out/bin/$f
-    done
-  '';
+  postInstall =
+    ''
+      wrapProgram "$out/bin/mu" \
+        --prefix LD_LIBRARY_PATH : "$out/lib" \
+        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/2.2"
+    ''
+    + lib.optionalString withMug ''
+      for f in mug ; do
+        install -m755 toys/$f/$f $out/bin/$f
+      done
+    '';
 
   doCheck = true;
 
@@ -56,7 +81,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/${version}";
-    maintainers = with maintainers; [ antono chvp peterhoeg ];
+    maintainers = with maintainers; [antono chvp peterhoeg];
     platforms = platforms.mesaPlatforms;
   };
 }

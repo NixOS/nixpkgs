@@ -1,20 +1,22 @@
-{ lib, stdenv
-, meson
-, ninja
-, pkg-config
-, gettext
-, fetchFromGitLab
-, python3Packages
-, libpwquality
-, wrapGAppsHook4
-, gtk4
-, glib
-, gdk-pixbuf
-, gobject-introspection
-, desktop-file-utils
-, appstream-glib
-, libadwaita }:
-
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  fetchFromGitLab,
+  python3Packages,
+  libpwquality,
+  wrapGAppsHook4,
+  gtk4,
+  glib,
+  gdk-pixbuf,
+  gobject-introspection,
+  desktop-file-utils,
+  appstream-glib,
+  libadwaita,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
   version = "6.1";
@@ -47,14 +49,16 @@ python3Packages.buildPythonApplication rec {
     libadwaita
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    pygobject3
-    construct
-    pykeepass
-    pyotp
-  ] ++ [
-    libpwquality # using the python bindings
-  ];
+  propagatedBuildInputs = with python3Packages;
+    [
+      pygobject3
+      construct
+      pykeepass
+      pyotp
+    ]
+    ++ [
+      libpwquality # using the python bindings
+    ];
 
   postPatch = ''
     substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache";
@@ -73,7 +77,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.gnome.org/World/secrets";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [mvnetbiz];
   };
 }
-

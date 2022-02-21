@@ -1,5 +1,13 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 mkDerivation rec {
   pname = "corepaint";
   version = "4.3.0";
@@ -26,7 +34,7 @@ mkDerivation rec {
     description = "A paint app from the C Suite";
     homepage = "https://gitlab.com/cubocore/coreapps/corepaint";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

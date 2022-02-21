@@ -1,7 +1,15 @@
-{ buildPythonApplication, click, fetchPypi, hypothesis, mypy, pytest
-, pytest-cov, pytest-runner, lib, stringcase
+{
+  buildPythonApplication,
+  click,
+  fetchPypi,
+  hypothesis,
+  mypy,
+  pytest,
+  pytest-cov,
+  pytest-runner,
+  lib,
+  stringcase,
 }:
-
 buildPythonApplication rec {
   pname = "zfs-replicate";
   version = "1.2.3";
@@ -37,6 +45,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/alunduil/zfs-replicate";
     description = "ZFS Snapshot Replication";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ alunduil ];
+    maintainers = with maintainers; [alunduil];
   };
 }

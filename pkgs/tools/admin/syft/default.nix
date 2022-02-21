@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "syft";
   version = "0.37.10";
@@ -24,9 +28,9 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-gIcPxSzWzldR9UX4iB2fkwc0BfATT1B+Nge+sGefmj8=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   ldflags = [
     "-s"
@@ -58,7 +62,7 @@ buildGoModule rec {
       (SBOM) from container images and filesystems. Exceptional for
       vulnerability detection when used with a scanner tool like Grype.
     '';
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jk ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [jk];
   };
 }

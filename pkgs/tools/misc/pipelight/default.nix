@@ -1,64 +1,72 @@
-{ lib, stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU, libGL, wine-staging }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  cabextract,
+  curl,
+  gnupg,
+  libX11,
+  libGLU,
+  libGL,
+  wine-staging,
+}: let
   wine_custom = wine-staging;
 
   mozillaPluginPath = "/lib/mozilla/plugins";
+in
+  stdenv.mkDerivation rec {
+    version = "0.2.8.2";
 
+    pname = "pipelight";
 
-in stdenv.mkDerivation rec {
+    src = fetchurl {
+      url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";
+      sha256 = "1kyy6knkr42k34rs661r0f5sf6l1s2jdbphdg89n73ynijqmzjhk";
+    };
 
-  version = "0.2.8.2";
+    buildInputs = [wine_custom libX11 libGLU libGL curl];
 
-  pname = "pipelight";
+    NIX_CFLAGS_COMPILE = ["-fpermissive"];
 
-  src = fetchurl {
-    url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";
-    sha256 = "1kyy6knkr42k34rs661r0f5sf6l1s2jdbphdg89n73ynijqmzjhk";
-  };
+    patches = [
+      ./pipelight.patch
+      ./wine-6.13-new-args.patch
+    ];
 
-  buildInputs = [ wine_custom libX11 libGLU libGL curl ];
+    configurePhase = ''
+      patchShebangs .
+      ./configure \
+        --prefix=$out \
+        --moz-plugin-path=$out/${mozillaPluginPath} \
+        --wine-path=${wine_custom} \
+        --gpg-exec=${gnupg}/bin/gpg \
+        --bash-interp=${bash}/bin/bash \
+        --downloader=${curl.bin}/bin/curl
+        $configureFlags
+    '';
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+    passthru = {
+      mozillaPlugin = mozillaPluginPath;
+      wine = wine_custom;
+    };
 
-  patches = [
-    ./pipelight.patch
-    ./wine-6.13-new-args.patch
-  ];
+    postInstall = ''
+      $out/bin/pipelight-plugin --create-mozilla-plugins
+    '';
 
-  configurePhase = ''
-    patchShebangs .
-    ./configure \
-      --prefix=$out \
-      --moz-plugin-path=$out/${mozillaPluginPath} \
-      --wine-path=${wine_custom} \
-      --gpg-exec=${gnupg}/bin/gpg \
-      --bash-interp=${bash}/bin/bash \
-      --downloader=${curl.bin}/bin/curl
-      $configureFlags
-  '';
+    preFixup = ''
+      substituteInPlace $out/share/pipelight/install-dependency \
+        --replace cabextract ${cabextract}/bin/cabextract
+    '';
 
-  passthru = {
-    mozillaPlugin = mozillaPluginPath;
-    wine = wine_custom;
-  };
+    enableParallelBuilding = true;
 
-  postInstall = ''
-    $out/bin/pipelight-plugin --create-mozilla-plugins
-  '';
-
-  preFixup = ''
-    substituteInPlace $out/share/pipelight/install-dependency \
-      --replace cabextract ${cabextract}/bin/cabextract
-  '';
-
-  enableParallelBuilding = true;
-
-  meta = {
-    homepage = "http://pipelight.net/";
-    license = with lib.licenses; [ mpl11 gpl2 lgpl21 ];
-    description = "A wrapper for using Windows plugins in Linux browsers";
-    maintainers = with lib.maintainers; [ skeidel ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
-  };
-}
+    meta = {
+      homepage = "http://pipelight.net/";
+      license = with lib.licenses; [mpl11 gpl2 lgpl21];
+      description = "A wrapper for using Windows plugins in Linux browsers";
+      maintainers = with lib.maintainers; [skeidel];
+      platforms = ["x86_64-linux" "i686-linux"];
+    };
+  }

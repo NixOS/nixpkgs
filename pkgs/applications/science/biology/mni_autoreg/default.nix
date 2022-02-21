@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, perlPackages, libminc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  perlPackages,
+  libminc,
+}:
 stdenv.mkDerivation rec {
   pname = "mni_autoreg";
   version = "unstable-2017-09-22";
@@ -11,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "0axl069nv57vmb2wvqq7s9v3bfxwspzmk37bxm4973ai1irgppjq";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ libminc ];
-  propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
+  nativeBuildInputs = [cmake makeWrapper];
+  buildInputs = [libminc];
+  propagatedBuildInputs = with perlPackages; [perl GetoptTabular MNI-Perllib];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
+  cmakeFlags = ["-DLIBMINC_DIR=${libminc}/lib/cmake"];
   # testing broken: './minc_wrapper: Permission denied' from Testing/ellipse0.mnc
 
   postFixup = ''
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BIC-MNI/mni_autoreg";
     description = "Tools for automated registration using the MINC image format";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
     platforms = platforms.unix;
     license = licenses.free;
   };

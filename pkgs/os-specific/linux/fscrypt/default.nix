@@ -1,7 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub, gnum4, pam, fscrypt-experimental }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gnum4,
+  pam,
+  fscrypt-experimental,
+}:
 # Don't use this for anything important yet!
-
 buildGoModule rec {
   pname = "fscrypt";
   version = "0.3.1";
@@ -23,8 +28,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ gnum4 ];
-  buildInputs = [ pam ];
+  nativeBuildInputs = [gnum4];
+  buildInputs = [pam];
 
   buildPhase = ''
     make
@@ -35,8 +40,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description =
-      "A high-level tool for the management of Linux filesystem encryption";
+    description = "A high-level tool for the management of Linux filesystem encryption";
     longDescription = ''
       This tool manages metadata, key generation, key wrapping, PAM integration,
       and provides a uniform interface for creating and modifying encrypted
@@ -46,6 +50,6 @@ buildGoModule rec {
     changelog = "https://github.com/google/fscrypt/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

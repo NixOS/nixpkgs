@@ -1,11 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.nix-serve;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.nix-serve;
+in {
   options = {
     services.nix-serve = {
       enable = mkEnableOption "nix-serve, the standalone Nix binary cache server";
@@ -60,16 +61,18 @@ in
   config = mkIf cfg.enable {
     systemd.services.nix-serve = {
       description = "nix-serve binary cache server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
-      path = [ config.nix.package.out pkgs.bzip2.bin ];
+      path = [config.nix.package.out pkgs.bzip2.bin];
       environment.NIX_REMOTE = "daemon";
 
       script = ''
-        ${lib.optionalString (cfg.secretKeyFile != null) ''
-          export NIX_SECRET_KEY_FILE="$CREDENTIALS_DIRECTORY/NIX_SECRET_KEY_FILE"
-        ''}
+        ${
+          lib.optionalString (cfg.secretKeyFile != null) ''
+            export NIX_SECRET_KEY_FILE="$CREDENTIALS_DIRECTORY/NIX_SECRET_KEY_FILE"
+          ''
+        }
         exec ${pkgs.nix-serve}/bin/nix-serve --listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}
       '';
 
@@ -80,12 +83,12 @@ in
         Group = "nix-serve";
         DynamicUser = true;
         LoadCredential = lib.optionalString (cfg.secretKeyFile != null)
-          "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
+        "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
       };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [cfg.port];
     };
   };
 }

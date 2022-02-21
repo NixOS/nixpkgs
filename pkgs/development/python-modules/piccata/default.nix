@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "piccata";
   version = "2.0.0";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Simple CoAP (RFC7252) toolkit";
     homepage = "https://github.com/NordicSemiconductor/piccata";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, libseccomp }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libseccomp,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "railcar";
   version = "1.0.4";
@@ -12,15 +16,21 @@ rustPlatform.buildRustPackage rec {
   };
 
   # Submitted upstream https://github.com/oracle/railcar/pull/44
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoPatches = [./cargo-lock.patch];
   cargoSha256 = "1zsch6gpbw96j5wa68ksbk4x6nbsl7dbvdhdprljpcyrwwkhz47x";
 
-  buildInputs = [ libseccomp ];
+  buildInputs = [libseccomp];
 
   meta = with lib; {
     description = "Rust implementation of the Open Containers Initiative oci-runtime";
     homepage = "https://github.com/oracle/railcar";
-    license = with licenses; [ asl20 /* or */ upl ];
-    maintainers = [ maintainers.spacekookie ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      upl
+    ];
+    maintainers = [maintainers.spacekookie];
   };
 }

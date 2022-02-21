@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, apacheHttpd, perl, nixosTests }:
-
+{
+  stdenv,
+  fetchurl,
+  apacheHttpd,
+  perl,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "mod_perl";
   version = "2.0.11";
@@ -14,7 +19,7 @@ stdenv.mkDerivation rec {
     ../../../../development/perl-modules/mod_perl2-PL_hash_seed.patch
   ];
 
-  buildInputs = [ apacheHttpd perl ];
+  buildInputs = [apacheHttpd perl];
   buildPhase = ''
     perl Makefile.PL \
       MP_APXS=${apacheHttpd.dev}/bin/apxs

@@ -1,20 +1,28 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "jitsi-meet";
   meta = with pkgs.lib; {
     maintainers = teams.jitsi.members;
   };
 
   nodes = {
-    client = { nodes, pkgs, ... }: {
+    client = {
+      nodes,
+      pkgs,
+      ...
+    }: {
     };
-    server = { config, pkgs, ... }: {
+    server = {
+      config,
+      pkgs,
+      ...
+    }: {
       services.jitsi-meet = {
         enable = true;
         hostName = "server";
       };
       services.jitsi-videobridge.openFirewall = true;
 
-      networking.firewall.allowedTCPPorts = [ 80 443 ];
+      networking.firewall.allowedTCPPorts = [80 443];
 
       services.nginx.virtualHosts.server = {
         enableACME = true;

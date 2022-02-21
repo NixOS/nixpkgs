@@ -1,16 +1,20 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.klipper;
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
-      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
+      if builtins.length l == 1
+      then generators.mkValueStringDefault {} (head l)
       else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
     mkKeyValue = generators.mkKeyValueDefault {} ":";
   };
-in
-{
+in {
   ##### interface
   options = {
     services.klipper = {
@@ -63,7 +67,7 @@ in
 
       settings = mkOption {
         type = format.type;
-        default = { };
+        default = {};
         description = ''
           Configuration for Klipper. See the <link xlink:href="https://www.klipper3d.org/Overview.html#configuration-and-tuning-guides">documentation</link>
           for supported values.
@@ -93,25 +97,32 @@ in
     };
 
     systemd.services.klipper = let
-      klippyArgs = "--input-tty=${cfg.inputTTY}"
+      klippyArgs =
+        "--input-tty=${cfg.inputTTY}"
         + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
     in {
       description = "Klipper 3D Printer Firmware";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
-      serviceConfig = {
-        ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
-        RuntimeDirectory = "klipper";
-        SupplementaryGroups = [ "dialout" ];
-        WorkingDirectory = "${cfg.package}/lib";
-      } // (if cfg.user != null then {
-        Group = cfg.group;
-        User = cfg.user;
-      } else {
-        DynamicUser = true;
-        User = "klipper";
-      });
+      serviceConfig =
+        {
+          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
+          RuntimeDirectory = "klipper";
+          SupplementaryGroups = ["dialout"];
+          WorkingDirectory = "${cfg.package}/lib";
+        }
+        // (if cfg.user != null
+        then
+          {
+            Group = cfg.group;
+            User = cfg.user;
+          }
+        else
+          {
+            DynamicUser = true;
+            User = "klipper";
+          });
     };
   };
 }

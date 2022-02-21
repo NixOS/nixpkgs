@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libxcb, xcbutil, xcb-util-cursor }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxcb,
+  xcbutil,
+  xcb-util-cursor,
+}:
 stdenv.mkDerivation rec {
   pname = "wmutils-core";
   version = "1.6";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Nv8ZTi3qVQyOkwyErjtE6/lLCubcLM2BRTY48r1HhHo=";
   };
 
-  buildInputs = [ libxcb xcbutil xcb-util-cursor ];
+  buildInputs = [libxcb xcbutil xcb-util-cursor];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Set of window manipulation tools";

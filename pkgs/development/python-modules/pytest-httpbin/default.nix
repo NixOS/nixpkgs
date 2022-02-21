@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpbin
-, pytest
-, pytestCheckHook
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpbin,
+  pytest,
+  pytestCheckHook,
+  requests,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-httpbin";
   version = "1.0.1";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Test your HTTP library against a local copy of httpbin.org";
     homepage = "https://github.com/kevin1024/pytest-httpbin";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

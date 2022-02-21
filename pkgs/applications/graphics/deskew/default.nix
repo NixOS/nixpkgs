@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libtiff, fpc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtiff,
+  fpc,
+}:
 stdenv.mkDerivation rec {
-
   pname = "deskew";
   version = "1.30";
 
@@ -12,8 +16,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-xghVOEMkQ/mXpOzJqMaT3SII7xneMNoFqRlqjtzmDnA=";
   };
 
-  nativeBuildInputs = [ fpc ];
-  buildInputs = [ libtiff ];
+  nativeBuildInputs = [fpc];
+  buildInputs = [libtiff];
 
   buildPhase = ''
     runHook preBuild
@@ -31,9 +35,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A command line tool for deskewing scanned text documents";
     homepage = "https://galfar.vevb.net/deskew";
-    license = with licenses; [ mit mpl11 ];
+    license = with licenses; [mit mpl11];
     maintainers = with maintainers; [ryantm];
     platforms = platforms.all;
   };
-
 }

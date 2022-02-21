@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "restrictedpython";
   version = "5.2";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Restricted execution environment for Python to run untrusted code";
     homepage = "https://github.com/zopefoundation/RestrictedPython";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ juaningan ];
+    maintainers = with maintainers; [juaningan];
   };
 }

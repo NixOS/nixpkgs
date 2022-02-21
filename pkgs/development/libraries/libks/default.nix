@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, libuuid
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  libuuid,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libks";
   version = "1.7.0";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
-    maintainers = with lib.maintainers; [ misuzu ];
+    maintainers = with lib.maintainers; [misuzu];
     platforms = platforms.linux;
     license = licenses.mit;
   };

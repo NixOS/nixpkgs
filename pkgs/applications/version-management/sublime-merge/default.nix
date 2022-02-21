@@ -1,6 +1,4 @@
-{ callPackage }:
-
-let
+{callPackage}: let
   common = opts: callPackage (import ./common.nix opts);
 in {
   sublime-merge = common {

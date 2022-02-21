@@ -1,5 +1,8 @@
-{ trivialBuild, lib, fetchurl }:
-
+{
+  trivialBuild,
+  lib,
+  fetchurl,
+}:
 trivialBuild rec {
   pname = "pod-mode";
   version = "1.04";
@@ -12,7 +15,7 @@ trivialBuild rec {
   meta = with lib; {
     description = "Major mode for editing .pod-files";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     platforms = platforms.all;
   };
 }

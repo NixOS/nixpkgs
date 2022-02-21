@@ -1,23 +1,27 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.teeworlds;
   register = cfg.register;
 
   teeworldsConf = pkgs.writeText "teeworlds.cfg" ''
     sv_port ${toString cfg.port}
-    sv_register ${if cfg.register then "1" else "0"}
+    sv_register ${
+      if cfg.register
+      then "1"
+      else "0"
+    }
     ${optionalString (cfg.name != null) "sv_name ${cfg.name}"}
     ${optionalString (cfg.motd != null) "sv_motd ${cfg.motd}"}
     ${optionalString (cfg.password != null) "password ${cfg.password}"}
     ${optionalString (cfg.rconPassword != null) "sv_rcon_password ${cfg.rconPassword}"}
     ${concatStringsSep "\n" cfg.extraOptions}
   '';
-
-in
-{
+in {
   options = {
     services.teeworlds = {
       enable = mkEnableOption "Teeworlds Server";
@@ -83,20 +87,20 @@ in
         description = ''
           Extra configuration lines for the <filename>teeworlds.cfg</filename>. See <link xlink:href="https://www.teeworlds.com/?page=docs&amp;wiki=server_settings">Teeworlds Documentation</link>.
         '';
-        example = [ "sv_map dm1" "sv_gametype dm" ];
+        example = ["sv_map dm1" "sv_gametype dm"];
       };
     };
   };
 
   config = mkIf cfg.enable {
     networking.firewall = mkIf cfg.openPorts {
-      allowedUDPPorts = [ cfg.port ];
+      allowedUDPPorts = [cfg.port];
     };
 
     systemd.services.teeworlds = {
       description = "Teeworlds Server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         DynamicUser = true;
@@ -110,7 +114,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
         RestrictNamespaces = true;
         SystemCallArchitectures = "native";
       };

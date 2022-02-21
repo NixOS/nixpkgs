@@ -1,14 +1,15 @@
 # /etc files related to networking, such as /etc/services.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.networking.resolvconf;
 
-  resolvconfOptions = cfg.extraOptions
+  resolvconfOptions =
+    cfg.extraOptions
     ++ optional cfg.dnsSingleRequest "single-request"
     ++ optional cfg.dnsExtensionMechanism "edns0";
 
@@ -18,33 +19,32 @@ let
       # a collision with an apparently unrelated environment
       # variable with the same name exported by dhcpcd.
       interface_order='lo lo[0-9]*'
-    '' + optionalString config.services.nscd.enable ''
+    ''
+    + optionalString config.services.nscd.enable ''
       # Invalidate the nscd cache whenever resolv.conf is
       # regenerated.
       libc_restart='/run/current-system/systemd/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
-    '' + optionalString (length resolvconfOptions > 0) ''
+    ''
+    + optionalString (length resolvconfOptions > 0) ''
       # Options as described in resolv.conf(5)
       resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
-    '' + optionalString cfg.useLocalResolver ''
+    ''
+    + optionalString cfg.useLocalResolver ''
       # This hosts runs a full-blown DNS resolver.
       name_servers='127.0.0.1'
-    '' + cfg.extraConfig;
-
-in
-
-{
+    ''
+    + cfg.extraConfig;
+in {
   imports = [
-    (mkRenamedOptionModule [ "networking" "dnsSingleRequest" ] [ "networking" "resolvconf" "dnsSingleRequest" ])
-    (mkRenamedOptionModule [ "networking" "dnsExtensionMechanism" ] [ "networking" "resolvconf" "dnsExtensionMechanism" ])
-    (mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
-    (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
-    (mkRemovedOptionModule [ "networking" "resolvconf" "useHostResolvConf" ] "This option was never used for anything anyways")
+    (mkRenamedOptionModule ["networking" "dnsSingleRequest"] ["networking" "resolvconf" "dnsSingleRequest"])
+    (mkRenamedOptionModule ["networking" "dnsExtensionMechanism"] ["networking" "resolvconf" "dnsExtensionMechanism"])
+    (mkRenamedOptionModule ["networking" "extraResolvconfConf"] ["networking" "resolvconf" "extraConfig"])
+    (mkRenamedOptionModule ["networking" "resolvconfOptions"] ["networking" "resolvconf" "extraOptions"])
+    (mkRemovedOptionModule ["networking" "resolvconf" "useHostResolvConf"] "This option was never used for anything anyways")
   ];
 
   options = {
-
     networking.resolvconf = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -90,7 +90,7 @@ in
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "ndots:1" "rotate" ];
+        example = ["ndots:1" "rotate"];
         description = ''
           Set the options in <filename>/etc/resolv.conf</filename>.
         '';
@@ -103,9 +103,7 @@ in
           Use local DNS server for resolving.
         '';
       };
-
     };
-
   };
 
   config = mkMerge [
@@ -113,7 +111,8 @@ in
       networking.resolvconf.enable = !(config.environment.etc ? "resolv.conf");
 
       environment.etc."resolvconf.conf".text =
-        if !cfg.enable then
+        if !cfg.enable
+        then
           # Force-stop any attempts to use resolvconf
           ''
             echo "resolvconf is disabled on this system but was used anyway:" >&2
@@ -124,15 +123,15 @@ in
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [ pkgs.openresolv ];
+      environment.systemPackages = [pkgs.openresolv];
 
       systemd.services.resolvconf = {
         description = "resolvconf update";
 
-        before = [ "network-pre.target" ];
-        wants = [ "network-pre.target" ];
-        wantedBy = [ "multi-user.target" ];
-        restartTriggers = [ config.environment.etc."resolvconf.conf".source ];
+        before = ["network-pre.target"];
+        wants = ["network-pre.target"];
+        wantedBy = ["multi-user.target"];
+        restartTriggers = [config.environment.etc."resolvconf.conf".source];
 
         serviceConfig = {
           Type = "oneshot";
@@ -140,8 +139,6 @@ in
           RemainAfterExit = true;
         };
       };
-
     })
   ];
-
 }

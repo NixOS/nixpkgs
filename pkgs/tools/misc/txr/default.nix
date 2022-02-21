@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, bison, flex, libffi, coreutils }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+  libffi,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   pname = "txr";
   version = "273";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-l0o60NktIsKn720kO8xzySQBMAVrfYhhWZ8L5K8QrUg=";
   };
 
-  nativeBuildInputs = [ bison flex ];
-  buildInputs = [ libffi ];
+  nativeBuildInputs = [bison flex];
+  buildInputs = [libffi];
 
   enableParallelBuilding = true;
 
@@ -44,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Programming language for convenient data munging";
     license = licenses.bsd2;
     homepage = "http://nongnu.org/txr";
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = with lib.maintainers; [dtzWill];
     platforms = platforms.linux; # Darwin fails although it should work AFAIK
   };
 }

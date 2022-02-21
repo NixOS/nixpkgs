@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "venta";
   version = "0.7.1";
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.pling.com/p/1386774/";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

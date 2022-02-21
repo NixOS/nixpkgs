@@ -1,6 +1,15 @@
-{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
-, pytest-runner, pytest, six, pyparsing, asn1ate }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  makeWrapper,
+  cmake,
+  pytest-runner,
+  pytest,
+  six,
+  pyparsing,
+  asn1ate,
+}:
 buildPythonApplication rec {
   pname = "asn2quickder";
   version = "1.3.0";
@@ -18,16 +27,16 @@ buildPythonApplication rec {
 
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [ makeWrapper cmake ];
-  checkInputs = [ pytest-runner pytest ];
+  nativeBuildInputs = [makeWrapper cmake];
+  checkInputs = [pytest-runner pytest];
 
-  propagatedBuildInputs = [ pyparsing asn1ate six ];
+  propagatedBuildInputs = [pyparsing asn1ate six];
 
   meta = with lib; {
     description = "An ASN.1 compiler with a backend for Quick DER";
     homepage = "https://github.com/vanrein/asn2quickder";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, docutils
-, libuuid
-, libscrypt
-, libsodium
-, keyutils
-, liburcu
-, zlib
-, libaio
-, zstd
-, lz4
-, python3Packages
-, udev
-, valgrind
-, nixosTests
-, fuse3
-, fuseSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  docutils,
+  libuuid,
+  libscrypt,
+  libsodium,
+  keyutils,
+  liburcu,
+  zlib,
+  libaio,
+  zstd,
+  lz4,
+  python3Packages,
+  udev,
+  valgrind,
+  nixosTests,
+  fuse3,
+  fuseSupport ? false,
 }:
-
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
   version = "unstable-2022-01-12";
@@ -39,22 +39,34 @@ stdenv.mkDerivation {
                 "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
-  nativeBuildInputs = [ pkg-config docutils python3Packages.python ];
+  nativeBuildInputs = [pkg-config docutils python3Packages.python];
 
-  buildInputs = [
-    libuuid libscrypt libsodium keyutils liburcu zlib libaio
-    zstd lz4 python3Packages.pytest udev valgrind
-  ] ++ lib.optional fuseSupport fuse3;
+  buildInputs =
+    [
+      libuuid
+      libscrypt
+      libsodium
+      keyutils
+      liburcu
+      zlib
+      libaio
+      zstd
+      lz4
+      python3Packages.pytest
+      udev
+      valgrind
+    ]
+    ++ lib.optional fuseSupport fuse3;
 
   doCheck = false; # needs bcachefs module loaded on builder
-  checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
-  checkInputs = [ valgrind ];
+  checkFlags = ["BCACHEFS_TEST_USE_VALGRIND=no"];
+  checkInputs = [valgrind];
 
   preCheck = lib.optionalString fuseSupport ''
     rm tests/test_fuse.py
   '';
 
-  installFlags = [ "PREFIX=${placeholder "out"}" ];
+  installFlags = ["PREFIX=${placeholder "out"}"];
 
   passthru.tests = {
     smoke-test = nixosTests.bcachefs;
@@ -64,7 +76,7 @@ stdenv.mkDerivation {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak chiiruno ];
+    maintainers = with maintainers; [davidak chiiruno];
     platforms = platforms.linux;
   };
 }

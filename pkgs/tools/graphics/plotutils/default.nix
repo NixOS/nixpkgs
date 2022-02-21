@@ -1,10 +1,13 @@
-{ fetchurl, lib, stdenv, libpng, autoreconfHook }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  libpng,
+  autoreconfHook,
+}:
 # debian splits this package into plotutils and libplot2c2
-
 # gentoo passes X, this package contains fonts
 # I'm only interested in making pstoedit convert to svg
-
 stdenv.mkDerivation rec {
   pname = "plotutils";
   version = "2.6";
@@ -14,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1arkyizn5wbgvbh53aziv3s6lmd3wm9lqzkhxb3hijlp1y124hjg";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libpng ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [libpng];
   patches = map fetchurl (import ./debian-patches.nix);
 
   preBuild = ''
@@ -23,9 +26,9 @@ stdenv.mkDerivation rec {
     make -C libplot xmi.h
   '';
 
-  configureFlags = [ "--enable-libplotter" ]; # required for pstoedit
+  configureFlags = ["--enable-libplotter"]; # required for pstoedit
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   doCheck = true;
 
@@ -34,26 +37,25 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Powerful C/C++ library for exporting 2D vector graphics";
 
-    longDescription =
-      '' The GNU plotutils package contains software for both programmers and
-         technical users.  Its centerpiece is libplot, a powerful C/C++
-         function library for exporting 2-D vector graphics in many file
-         formats, both vector and raster.  It can also do vector graphics
-         animations.
+    longDescription = ''      The GNU plotutils package contains software for both programmers and
+              technical users.  Its centerpiece is libplot, a powerful C/C++
+              function library for exporting 2-D vector graphics in many file
+              formats, both vector and raster.  It can also do vector graphics
+              animations.
 
-         libplot is device-independent in the sense that its API (application
-         programming interface) does not depend on the type of graphics file
-         to be exported.
+              libplot is device-independent in the sense that its API (application
+              programming interface) does not depend on the type of graphics file
+              to be exported.
 
-         Besides libplot, the package contains command-line programs for
-         plotting scientific data.  Many of them use libplot to export
-         graphics.
-      '';
+              Besides libplot, the package contains command-line programs for
+              plotting scientific data.  Many of them use libplot to export
+              graphics.
+    '';
 
     homepage = "https://www.gnu.org/software/plotutils/";
 
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [lib.maintainers.marcweber];
     platforms = lib.platforms.unix;
   };
 }

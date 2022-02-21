@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, warsow-engine, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  warsow-engine,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "warsow";
   version = "2.1.2";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "07y2airw5qg3s1bf1c63a6snjj22riz0mqhk62jmfm9nrarhavrc";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/share/warsow
@@ -32,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.warsow.net";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ astsmtl abbradar ];
+    maintainers = with maintainers; [astsmtl abbradar];
     platforms = warsow-engine.meta.platforms;
   };
 }

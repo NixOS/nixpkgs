@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "scheme-manpages-unstable";
   version = "2021-03-11";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Unix manual pages for R6RS and R7RS";
     homepage = "https://github.com/schemedoc/manpages";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     platforms = platforms.all;
   };
 }

@@ -1,4 +1,13 @@
-{lib, stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libXxf86vm,
+  libXext,
+  libX11,
+  libXrandr,
+  gcc,
+}:
 stdenv.mkDerivation {
   pname = "xflux";
   version = "unstable-2013-09-01";
@@ -35,6 +44,6 @@ stdenv.mkDerivation {
     homepage = "https://justgetflux.com/";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.paholg ];
+    maintainers = [lib.maintainers.paholg];
   };
 }

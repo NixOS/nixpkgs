@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "zsh-vi-mode";
   version = "0.8.5";
@@ -22,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jeffreytse/zsh-vi-mode";
     license = licenses.mit;
     description = "A better and friendly vi(vim) mode plugin for ZSH.";
-    maintainers = with maintainers; [ kyleondy ];
+    maintainers = with maintainers; [kyleondy];
   };
 }

@@ -1,13 +1,13 @@
-{ fetchFromGitHub
-, lib
-, Security
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  Security,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  stdenv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
   version = "3.8.0";
@@ -24,12 +24,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-F105SOFWEhFVGMmPOEdBZwhNHCYkRh1HI7fESzL2uQw=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [
-    openssl
-    protobuf
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs =
+    [
+      openssl
+      protobuf
+    ]
+    ++ lib.optionals stdenv.isDarwin [Security];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
@@ -56,6 +58,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pamplemousse pimeys ];
+    maintainers = with maintainers; [pamplemousse pimeys];
   };
 }

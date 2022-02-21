@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, texinfo
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  texinfo,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "guile-json";
   version = "4.7.0";
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config texinfo
+    pkg-config
+    texinfo
   ];
   buildInputs = [
     guile
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "JSON Bindings for GNU Guile";
     homepage = "https://savannah.nongnu.org/projects/guile-json";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    maintainers = with maintainers; [ethancedwards8];
     platforms = platforms.linux;
   };
 }

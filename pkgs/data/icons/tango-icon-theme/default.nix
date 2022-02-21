@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, iconnamingutils, imagemagick, librsvg
-, gtk/*any version*/, gnome-icon-theme, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  iconnamingutils,
+  imagemagick,
+  librsvg,
+  gtk
+  /*
+   any version
+   */
+  ,
+  gnome-icon-theme,
+  hicolor-icon-theme,
 }:
-
 stdenv.mkDerivation rec {
   name = "tango-icon-theme-0.8.90";
 
@@ -10,16 +23,16 @@ stdenv.mkDerivation rec {
     sha256 = "13n8cpml71w6zfm2jz5fa7r1z18qlzk4gv07r6n1in2p5l1xi63f";
   };
 
-  patches = [ ./rsvg-convert.patch ];
+  patches = [./rsvg-convert.patch];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ intltool iconnamingutils imagemagick librsvg ];
-  propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [intltool iconnamingutils imagemagick librsvg];
+  propagatedBuildInputs = [gnome-icon-theme hicolor-icon-theme];
   # still missing parent icon themes: cristalsvg
 
   dontDropIconThemeCache = true;
 
-  configureFlags = [ "--enable-png-creation" ];
+  configureFlags = ["--enable-png-creation"];
 
   postInstall = '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
 

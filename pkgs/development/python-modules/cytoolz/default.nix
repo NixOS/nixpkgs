@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pytestCheckHook
-, toolz
-, python
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pytestCheckHook,
+  toolz,
+  python,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "cytoolz";
   version = "0.11.2";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "ea23663153806edddce7e4153d1d407d62357c05120a4e8485bddf1bd5ab22b4";
   };
 
-  propagatedBuildInputs = [ toolz ];
+  propagatedBuildInputs = [toolz];
 
   # tests are located in cytoolz/tests, however we can't import cytoolz
   # from $PWD, as it will break relative imports
@@ -27,12 +27,12 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
     license = "licenses.bsd3";
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

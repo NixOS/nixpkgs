@@ -1,5 +1,17 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, fetchpatch, cmake, wrapGAppsHook, avahi, avahi-compat, openssl, gst_all_1, libplist }:
-
+{
+  lib,
+  stdenv,
+  pkg-config,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  wrapGAppsHook,
+  avahi,
+  avahi-compat,
+  openssl,
+  gst_all_1,
+  libplist,
+}:
 stdenv.mkDerivation rec {
   pname = "rpiplay";
   version = "unstable-2021-06-14";
@@ -43,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/FD-/RPiPlay";
     description = "An open-source implementation of an AirPlay mirroring server.";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mschneider ];
+    maintainers = with maintainers; [mschneider];
     platforms = platforms.unix;
   };
 }

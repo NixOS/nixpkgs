@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, impacket
-, netaddr
-, pypykatz
-, rich
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  impacket,
+  netaddr,
+  pypykatz,
+  rich,
 }:
-
 buildPythonPackage rec {
   pname = "lsassy";
   version = "3.1.1";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to extract data from Local Security Authority Subsystem Service (LSASS)";
     homepage = "https://github.com/Hackndo/lsassy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

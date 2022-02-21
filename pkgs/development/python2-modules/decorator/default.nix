@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "decorator";
   version = "4.4.2";
@@ -16,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/decorator";
     description = "Better living through Python with decorators";
     license = lib.licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

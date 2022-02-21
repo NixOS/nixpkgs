@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, pkg-config, wrapQtAppsHook
-, poppler, gnuplot
-, qmake, qtbase, qttools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  wrapQtAppsHook,
+  poppler,
+  gnuplot,
+  qmake,
+  qtbase,
+  qttools,
 }:
-
 # This package only builds ktikz without KDE integration because KDE4 is
 # deprecated and upstream does not (yet ?) support KDE5.
 # See historical versions of this file for building ktikz with KDE4.
-
 stdenv.mkDerivation rec {
   version = "0.12";
   pname = "qtikz";
@@ -17,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fhackenberger/ktikz";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.layus ];
+    maintainers = [maintainers.layus];
     longDescription = ''
       You will also need a working *tex installation in your PATH, containing at least `preview` and `pgf`.
     '';
@@ -43,10 +49,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config qttools qmake wrapQtAppsHook ];
+  nativeBuildInputs = [pkg-config qttools qmake wrapQtAppsHook];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
 
-  buildInputs = [ qtbase poppler ];
+  buildInputs = [qtbase poppler];
 
   qmakeFlags = [
     "DESKTOP_INSTALL_DIR=${placeholder "out"}/share/applications"
@@ -56,5 +62,5 @@ stdenv.mkDerivation rec {
     "QCOLLECTIONGENERATORCOMMAND=qhelpgenerator"
   ];
 
-  qtWrapperArgs = [ ''--prefix PATH : "${gnuplot}/bin"'' ];
+  qtWrapperArgs = [''--prefix PATH : "${gnuplot}/bin"''];
 }

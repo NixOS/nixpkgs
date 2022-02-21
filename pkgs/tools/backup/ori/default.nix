@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, boost, pkg-config, scons, util-linux, fuse, libevent, openssl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  pkg-config,
+  scons,
+  util-linux,
+  fuse,
+  libevent,
+  openssl,
+  zlib,
+}:
 stdenv.mkDerivation {
   version = "0.8.1";
   pname = "ori";
@@ -10,7 +21,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    boost pkg-config scons util-linux fuse libevent openssl zlib
+    boost
+    pkg-config
+    scons
+    util-linux
+    fuse
+    libevent
+    openssl
+    zlib
   ];
 
   buildPhase = ''

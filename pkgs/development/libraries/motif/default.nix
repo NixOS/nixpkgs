@@ -1,12 +1,25 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libtool
-, xlibsWrapper, xbitmaps, libXrender, libXmu, libXt
-, expat, libjpeg, libpng, libiconv
-, flex
-, libXp, libXau
-, demoSupport ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libtool,
+  xlibsWrapper,
+  xbitmaps,
+  libXrender,
+  libXmu,
+  libXt,
+  expat,
+  libjpeg,
+  libpng,
+  libiconv,
+  flex,
+  libXp,
+  libXau,
+  demoSupport ? false,
 }:
 # refer to the gentoo package
-
 stdenv.mkDerivation rec {
   pname = "motif";
   version = "2.3.8";
@@ -18,13 +31,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtool
-    xlibsWrapper xbitmaps libXrender libXmu libXt
-    expat libjpeg libpng libiconv
+    xlibsWrapper
+    xbitmaps
+    libXrender
+    libXmu
+    libXt
+    expat
+    libjpeg
+    libpng
+    libiconv
   ];
 
-  nativeBuildInputs = [ pkg-config flex ];
+  nativeBuildInputs = [pkg-config flex];
 
-  propagatedBuildInputs = [ libXp libXau ];
+  propagatedBuildInputs = [libXp libXau];
 
   prePatch = lib.optionalString (!demoSupport) ''
     sed '/^SUBDIRS =,^$/s/\<demos\>//' -i Makefile.{am,in}
@@ -46,7 +66,7 @@ stdenv.mkDerivation rec {
     homepage = "https://motif.ics.com";
     description = "Unix standard widget-toolkit and window-manager";
     platforms = platforms.unix;
-    license = with licenses; [ lgpl21Plus ];
-    maintainers = with maintainers; [ qyliss ];
+    license = with licenses; [lgpl21Plus];
+    maintainers = with maintainers; [qyliss];
   };
 }

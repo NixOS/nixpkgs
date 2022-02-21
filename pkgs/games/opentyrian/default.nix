@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, fetchzip, SDL, SDL_net }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  SDL,
+  SDL_net,
+}:
 stdenv.mkDerivation rec {
   pname = "opentyrian";
   version = "2.1.20130907";

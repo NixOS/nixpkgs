@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, django
-, redis
-, rq
-, sentry-sdk
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  django,
+  redis,
+  rq,
+  sentry-sdk,
 }:
-
 buildPythonPackage rec {
   pname = "django-rq";
   version = "2.5.1";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Simple app that provides django integration for RQ (Redis Queue)";
     homepage = "https://github.com/rq/django-rq";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

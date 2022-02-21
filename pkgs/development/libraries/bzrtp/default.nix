@@ -1,10 +1,11 @@
-{ bctoolbox
-, cmake
-, fetchFromGitLab
-, sqlite
-, lib, stdenv
+{
+  bctoolbox,
+  cmake,
+  fetchFromGitLab,
+  sqlite,
+  lib,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bzrtp";
   version = "5.1.0";
@@ -18,11 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GsHVuNXzLkbKUaHtnyXAr7bR9Emc55zcmKt3RGjCMtA=";
   };
 
-  buildInputs = [ bctoolbox sqlite ];
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [bctoolbox sqlite];
+  nativeBuildInputs = [cmake];
 
   # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+  cmakeFlags = ["-DENABLE_STATIC=NO"];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
@@ -31,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.linphone.org/BC/public/bzrtp";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

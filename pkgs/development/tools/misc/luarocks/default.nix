@@ -1,13 +1,20 @@
-{lib, stdenv, fetchFromGitHub
-, curl, makeWrapper, which, unzip
-, lua
-# for 'luarocks pack'
-, zip
-# some packages need to be compiled with cmake
-, cmake
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  makeWrapper,
+  which,
+  unzip,
+  lua
+  # for 'luarocks pack'
+  ,
+  zip
+  # some packages need to be compiled with cmake
+  ,
+  cmake,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "luarocks";
   version = "3.2.1";
@@ -19,7 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "0viiafmb8binksda79ah828q1dfnb6jsqlk7vyndl2xvx9yfn4y2";
   };
 
-  patches = [ ./darwin-3.1.3.patch ];
+  patches = [./darwin-3.1.3.patch];
 
   postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
     substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
@@ -38,9 +45,9 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
-  buildInputs = [ lua curl which ];
+  buildInputs = [lua curl which];
 
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
@@ -58,7 +65,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --cmd luarocks --zsh <($out/bin/luarocks completion zsh)
   '';
 
-  propagatedBuildInputs = [ zip unzip cmake ];
+  propagatedBuildInputs = [zip unzip cmake];
 
   # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;
@@ -73,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A package manager for Lua";
-    license = licenses.mit ;
+    license = licenses.mit;
     maintainers = with maintainers; [raskin teto];
     platforms = platforms.linux ++ platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";

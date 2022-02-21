@@ -1,15 +1,15 @@
-{ lib
-, ascii-magic
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, pytest-httpserver
-, pytestCheckHook
-, pythonOlder
-, requests
-, oauthlib
+{
+  lib,
+  ascii-magic,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  pytest-httpserver,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  oauthlib,
 }:
-
 buildPythonPackage rec {
   pname = "weconnect";
   version = "0.36.4";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the Volkswagen WeConnect Services";
     homepage = "https://github.com/tillsteinbach/WeConnect-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

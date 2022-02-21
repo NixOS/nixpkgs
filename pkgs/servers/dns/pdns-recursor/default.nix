@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, boost, nixosTests
-, openssl, systemd, lua, luajit, protobuf
-, enableProtoBuf ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  boost,
+  nixosTests,
+  openssl,
+  systemd,
+  lua,
+  luajit,
+  protobuf,
+  enableProtoBuf ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pdns-recursor";
   version = "4.6.0";
@@ -12,11 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "1wmwkw8x39rall3673cngz0vpgc1z5vx29qy5r6mkg5fk29ma1nz";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    boost openssl systemd
-    lua luajit
-  ] ++ lib.optional enableProtoBuf protobuf;
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [
+      boost
+      openssl
+      systemd
+      lua
+      luajit
+    ]
+    ++ lib.optional enableProtoBuf protobuf;
 
   configureFlags = [
     "--enable-reproducible"
@@ -34,9 +48,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;
     badPlatforms = [
-      "i686-linux"  # a 64-bit time_t is needed
+      "i686-linux" # a 64-bit time_t is needed
     ];
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [rnhmjoj];
   };
 }

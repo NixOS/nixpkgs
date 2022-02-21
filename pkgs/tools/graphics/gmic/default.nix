@@ -1,23 +1,24 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, ninja
-, pkg-config
-, opencv
-, openexr
-, graphicsmagick
-, fftw
-, zlib
-, libjpeg
-, libtiff
-, libpng
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  ninja,
+  pkg-config,
+  opencv,
+  openexr,
+  graphicsmagick,
+  fftw,
+  zlib,
+  libjpeg,
+  libtiff,
+  libpng,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gmic";
   version = "3.0.0";
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = ["out" "lib" "dev" "man"];
 
   src = fetchurl {
     url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";

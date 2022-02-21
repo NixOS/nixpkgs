@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, twisted, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  twisted,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "magic-wormhole-transit-relay";
   version = "0.2.1";
@@ -9,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "0ppsx2s1ysikns1h053x67z2zmficbn3y3kf52bzzslhd2s02j6b";
   };
 
-  propagatedBuildInputs = [ twisted ];
+  propagatedBuildInputs = [twisted];
 
-  checkInputs = [ mock ];
+  checkInputs = [mock];
 
   checkPhase = ''
     ${twisted}/bin/trial wormhole_transit_relay

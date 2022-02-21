@@ -1,25 +1,26 @@
-{ lib, stdenv
-, fetchFromGitLab
-, extra-cmake-modules
-, botan2
-, karchive
-, kauth
-, libdrm
-, hwdata
-, glxinfo
-, procps
-, util-linux
-, vulkan-tools
-, qtbase
-, qtcharts
-, qtquickcontrols2
-, qtsvg
-, qttools
-, qtxmlpatterns
-, wrapQtAppsHook
-} :
-
-stdenv.mkDerivation rec{
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  extra-cmake-modules,
+  botan2,
+  karchive,
+  kauth,
+  libdrm,
+  hwdata,
+  glxinfo,
+  procps,
+  util-linux,
+  vulkan-tools,
+  qtbase,
+  qtcharts,
+  qtquickcontrols2,
+  qtsvg,
+  qttools,
+  qtxmlpatterns,
+  wrapQtAppsHook,
+}:
+stdenv.mkDerivation rec {
   pname = "corectrl";
   version = "1.2.2";
 
@@ -51,9 +52,9 @@ stdenv.mkDerivation rec{
     qtxmlpatterns
   ];
 
-  cmakeFlags = [ "-DWITH_PCI_IDS_PATH=${hwdata}/share/hwdata/pci.ids" ];
+  cmakeFlags = ["-DWITH_PCI_IDS_PATH=${hwdata}/share/hwdata/pci.ids"];
 
-  runtimeDeps = [ hwdata glxinfo vulkan-tools util-linux procps ];
+  runtimeDeps = [hwdata glxinfo vulkan-tools util-linux procps];
   binPath = lib.makeBinPath runtimeDeps;
 
   dontWrapQtApps = true;
@@ -75,3 +76,4 @@ stdenv.mkDerivation rec{
   };
 }
 # TODO: report upstream that libdrm is not detected at configure time
+

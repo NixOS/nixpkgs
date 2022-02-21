@@ -1,12 +1,15 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
-, aiohttp
-, azure-common
-, azure-core
-, cryptography
-, msrest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  aiohttp,
+  azure-common,
+  azure-core,
+  cryptography,
+  msrest,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
   version = "4.4.0";
@@ -25,11 +28,11 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  pythonNamespaces = [ "azure.keyvault" ];
+  pythonNamespaces = ["azure.keyvault"];
 
   # requires relative paths to utilities in the mono-repo
   doCheck = false;
-  checkInputs = [ aiohttp pytestCheckHook ];
+  checkInputs = [aiohttp pytestCheckHook];
 
   pythonImportsCheck = [
     "azure"
@@ -43,6 +46,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Key Vault Keys Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

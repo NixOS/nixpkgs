@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage {
   pname = "git-codereview";
   version = "2020-01-15";
@@ -16,6 +19,6 @@ buildGoPackage {
     description = "Manage the code review process for Git changes using a Gerrit server";
     homepage = "https://golang.org/x/review/git-codereview";
     license = licenses.bsd3;
-    maintainers = [ maintainers.edef ];
+    maintainers = [maintainers.edef];
   };
 }

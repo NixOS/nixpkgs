@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, regex
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  regex,
 }:
-
 buildPythonPackage rec {
   pname = "lark";
   version = "1.0.0";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   # Optional import, but fixes some re known bugs & allows advanced regex features
-  propagatedBuildInputs = [ regex ];
+  propagatedBuildInputs = [regex];
 
   pythonImportsCheck = [
     "lark"
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://lark-parser.readthedocs.io/";
     changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fridh drewrisinger ];
+    maintainers = with maintainers; [fridh drewrisinger];
   };
 }

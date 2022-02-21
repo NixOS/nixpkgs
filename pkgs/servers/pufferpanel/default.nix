@@ -1,15 +1,15 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, pkgs
-, stdenv
-, fetchzip
-, jdk
-, nodejs
-, pathDeps ? [ ]
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  pkgs,
+  stdenv,
+  fetchzip,
+  jdk,
+  nodejs,
+  pathDeps ? [],
 }:
-
 buildGoModule rec {
   pname = "pufferpanel";
   version = "2.2.0";
@@ -26,13 +26,15 @@ buildGoModule rec {
   # Getting the frontend to build in the Nix environment fails even
   # with all the proper node_modules populated. To work around this,
   # we just download the built frontend and package that.
-  frontend = fetchzip {
-    url = "https://github.com/PufferPanel/PufferPanel/releases/download/v${version}/pufferpanel_${version}_linux_arm64.zip";
-    sha256 = "0phbf4asr0dns7if84crx05kfgr44yaxrbsbihdywbhh2mb16052";
-    stripRoot = false;
-  } + "/www";
+  frontend =
+    fetchzip {
+      url = "https://github.com/PufferPanel/PufferPanel/releases/download/v${version}/pufferpanel_${version}_linux_arm64.zip";
+      sha256 = "0phbf4asr0dns7if84crx05kfgr44yaxrbsbihdywbhh2mb16052";
+      stripRoot = false;
+    }
+    + "/www";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   vendorSha256 = "061l1sy0z3kd7rc2blqh333gy66nbadfxy9hyxgq07dszds4byys";
 
@@ -53,7 +55,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A free, open source game management panel";
     homepage = "https://www.pufferpanel.com/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ ckie ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [ckie];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, ffmpeg, libjpeg, libpng, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg,
+  libjpeg,
+  libpng,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "harvid";
   version = "0.8.3";
@@ -11,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "0l1plfsfh2ixhlzg3hqqvjj42z7g422718a9kgbh7b4p882n71x7";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ ffmpeg libjpeg libpng ];
+  buildInputs = [ffmpeg libjpeg libpng];
 
-  makeFlags = [ "DESTDIR=$(out)" "libdir=\"/lib\"" ];
+  makeFlags = ["DESTDIR=$(out)" "libdir=\"/lib\""];
 
   postInstall = ''
     mkdir -p $out/bin
@@ -25,8 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Decodes still images from movie files and serves them via HTTP";
+    description = "Decodes still images from movie files and serves them via HTTP";
     longDescription = ''
       harvid's intended use-case is to efficiently provide frame-accurate data
       and act as second level cache for rendering the video-timeline in Ardour,
@@ -37,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "http://x42.github.io/harvid";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mitchmindtree ];
+    maintainers = with maintainers; [mitchmindtree];
   };
 }

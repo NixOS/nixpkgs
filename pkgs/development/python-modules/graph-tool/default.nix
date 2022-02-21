@@ -1,10 +1,25 @@
-{ fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook
-, pkg-config, boost, expat, scipy, cgal, gmp, mpfr
-, gobject-introspection, pygobject3, gtk3, matplotlib, ncurses
-, buildPythonPackage
-, lib
+{
+  fetchurl,
+  python,
+  cairomm,
+  sparsehash,
+  pycairo,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  expat,
+  scipy,
+  cgal,
+  gmp,
+  mpfr,
+  gobject-introspection,
+  pygobject3,
+  gtk3,
+  matplotlib,
+  ncurses,
+  buildPythonPackage,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "graph-tool";
   format = "other";
@@ -23,8 +38,8 @@ buildPythonPackage rec {
     "--enable-openmp"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [ncurses];
 
   propagatedBuildInputs = [
     boost
@@ -49,8 +64,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for manipulation and statistical analysis of graphs";
-    homepage    = "https://graph-tool.skewed.de/";
-    license     = licenses.gpl3;
-    maintainers = [ maintainers.joelmo ];
+    homepage = "https://graph-tool.skewed.de/";
+    license = licenses.gpl3;
+    maintainers = [maintainers.joelmo];
   };
 }

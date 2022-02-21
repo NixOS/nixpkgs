@@ -1,8 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
-
 buildOctavePackage rec {
   pname = "cgi";
   version = "0.1.2";
@@ -15,7 +15,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/cgi/index.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Common Gateway Interface for Octave";
   };
 }

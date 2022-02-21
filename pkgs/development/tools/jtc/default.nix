@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "jtc";
   version = "1.76";
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "JSON manipulation and transformation tool";
     homepage = "https://github.com/ldn-softdev/jtc";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     platforms = platforms.all;
   };
 }

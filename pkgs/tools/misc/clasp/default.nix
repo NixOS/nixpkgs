@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "clasp";
   version = "3.1.4";
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Answer set solver for (extended) normal and disjunctive logic programs";
     homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;
-    maintainers = [ maintainers.hakuch ];
+    maintainers = [maintainers.hakuch];
     license = licenses.gpl2Plus;
   };
 }

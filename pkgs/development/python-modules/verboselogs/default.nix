@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "verboselogs";
   version = "1.7";
@@ -15,12 +20,12 @@ buildPythonPackage rec {
   checkPhase = ''
     PATH=$PATH:$out/bin pytest . -k "not test_pylint_plugin"
   '';
-  checkInputs = [ pytest mock ];
+  checkInputs = [pytest mock];
 
   meta = with lib; {
     description = "Verbose logging for Python's logging module";
     homepage = "https://github.com/xolox/python-verboselogs";
     license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    maintainers = with maintainers; [eyjhb];
   };
 }

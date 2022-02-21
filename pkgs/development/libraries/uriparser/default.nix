@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, gtest }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gtest,
+}:
 stdenv.mkDerivation rec {
   pname = "uriparser";
   version = "0.9.6";
@@ -10,13 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "9ce4c3f151e78579f23937b44abecb428126863ad02e594e115e882353de905b";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  cmakeFlags = [
-    "-DURIPARSER_BUILD_DOCS=OFF"
-  ] ++ lib.optional (!doCheck) "-DURIPARSER_BUILD_TESTS=OFF";
+  cmakeFlags =
+    [
+      "-DURIPARSER_BUILD_DOCS=OFF"
+    ]
+    ++ lib.optional (!doCheck) "-DURIPARSER_BUILD_TESTS=OFF";
 
-  checkInputs = [ gtest ];
+  checkInputs = [gtest];
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with lib; {
@@ -28,6 +35,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bosu ];
+    maintainers = with maintainers; [bosu];
   };
 }

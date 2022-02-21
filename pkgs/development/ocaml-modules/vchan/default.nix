@@ -1,9 +1,20 @@
-{ lib, buildDunePackage, fetchurl
-, ppx_cstruct, ppx_sexp_conv, ounit, io-page-unix
-, lwt, cstruct, io-page, mirage-flow, xenstore, xenstore_transport
-, sexplib, cmdliner
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_cstruct,
+  ppx_sexp_conv,
+  ounit,
+  io-page-unix,
+  lwt,
+  cstruct,
+  io-page,
+  mirage-flow,
+  xenstore,
+  xenstore_transport,
+  sexplib,
+  cmdliner,
 }:
-
 buildDunePackage rec {
   pname = "vchan";
   version = "6.0.0";
@@ -42,6 +53,6 @@ buildDunePackage rec {
     description = "Xen Vchan implementation";
     homepage = "https://github.com/mirage/ocaml-vchan";
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

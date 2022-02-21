@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "giflib";
   version = "4.1.6";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v9b7ywz7qg8hli0s9vv1b8q9xxb2xvqq2mg1zpr73xwqpcwxhg1";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "A library for reading and writing gif images";
@@ -18,4 +21,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

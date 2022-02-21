@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libusb1 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
+}:
 stdenv.mkDerivation rec {
   pname = "whsniff";
   version = "1.3";
@@ -11,14 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "000l5vk9c0332m35lndk8892ivdr445lgg25hmq1lajn24cash5w";
   };
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [libusb1];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://github.com/homewsn/whsniff";
     description = "Packet sniffer for 802.15.4 wireless networks";
-    maintainers = with maintainers; [ snicket2100 ];
+    maintainers = with maintainers; [snicket2100];
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };

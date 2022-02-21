@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mono,
+  libmediainfo,
+  sqlite,
+  curl,
+  chromaprint,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "lidarr";
   version = "0.8.1.2135";
@@ -9,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eJX6t19D2slX68fXSMd/Vix3XSgCVylK+Wd8VH9jsuI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -20,16 +29,21 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/Lidarr \
       --add-flags "$out/bin/Lidarr.exe" \
-      --prefix PATH : ${lib.makeBinPath [ chromaprint ]} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-          curl sqlite libmediainfo ]}
+      --prefix PATH : ${lib.makeBinPath [chromaprint]} \
+      --prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        curl
+        sqlite
+        libmediainfo
+      ]
+    }
   '';
 
   meta = with lib; {
     description = "A Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ];
+    maintainers = [maintainers.etu];
     platforms = platforms.all;
   };
 }

@@ -1,5 +1,9 @@
-{ buildPythonPackage, fetchPypi, lib, pytest }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "pytest-pythonpath";
   version = "0.7.4";
@@ -9,18 +13,17 @@ buildPythonPackage rec {
     sha256 = "sha256-ZOGVsjqPjAxjH7Fogtmtb6QTftHylh3dFdUgZc1DXbY=";
   };
 
-  buildInputs = [ pytest ];
-  checkInputs = [ pytest ];
+  buildInputs = [pytest];
+  checkInputs = [pytest];
 
   checkPhase = ''
     pytest
   '';
 
   meta = with lib; {
-    description =
-      "Pytest plugin for adding to the PYTHONPATH from command line or configs";
+    description = "Pytest plugin for adding to the PYTHONPATH from command line or configs";
     homepage = "https://github.com/bigsassy/pytest-pythonpath";
-    maintainers = with maintainers; [ cript0nauta ];
+    maintainers = with maintainers; [cript0nauta];
     license = licenses.mit;
   };
 }

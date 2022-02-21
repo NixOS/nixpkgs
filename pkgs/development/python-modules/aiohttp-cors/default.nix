@@ -1,7 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, typing ? null, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  typing ? null,
+  aiohttp,
 }:
-
 buildPythonPackage rec {
   pname = "aiohttp-cors";
   version = "0.7.0";
@@ -13,8 +17,9 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  propagatedBuildInputs = [ aiohttp ]
-  ++ lib.optional (pythonOlder "3.5") typing;
+  propagatedBuildInputs =
+    [aiohttp]
+    ++ lib.optional (pythonOlder "3.5") typing;
 
   # Requires network access
   doCheck = false;
@@ -23,6 +28,6 @@ buildPythonPackage rec {
     description = "CORS support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp-cors";
     license = licenses.asl20;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

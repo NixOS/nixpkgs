@@ -1,5 +1,8 @@
-{ lib, python, systemd }:
-
+{
+  lib,
+  python,
+  systemd,
+}:
 python.pkgs.buildPythonPackage rec {
   pname = "pystemd";
   version = "0.8.0";
@@ -10,15 +13,15 @@ python.pkgs.buildPythonPackage rec {
 
   disabled = python.pythonOlder "3.4";
 
-  buildInputs = [ systemd ];
+  buildInputs = [systemd];
 
-  checkInputs = with python.pkgs; [ pytest mock ];
+  checkInputs = with python.pkgs; [pytest mock];
   checkPhase = "pytest tests";
 
   meta = with lib; {
     description = "A thin Cython-based wrapper on top of libsystemd, focused on exposing the dbus API via sd-bus in an automated and easy to consume way.";
     homepage = "https://github.com/facebookincubator/pystemd/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
   };
 }

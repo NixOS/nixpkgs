@@ -1,5 +1,8 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
-
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "spdx-license-list-data";
   version = "3.15";
@@ -23,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Various data formats for the SPDX License List";
     homepage = "https://github.com/spdx/license-list-data";
     license = licenses.cc0;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
     platforms = platforms.all;
   };
 }

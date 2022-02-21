@@ -1,12 +1,18 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   port = 5000;
 in {
   name = "osrm-backend";
-  meta.maintainers = [ lib.maintainers.erictapen ];
+  meta.maintainers = [lib.maintainers.erictapen];
 
-  machine = { config, pkgs, ... }:{
-
+  machine = {
+    config,
+    pkgs,
+    ...
+  }: {
     services.osrm = {
       enable = true;
       inherit port;
@@ -15,7 +21,7 @@ in {
         osrm-data = pkgs.stdenv.mkDerivation {
           name = "osrm-data";
 
-          buildInputs = [ pkgs.osrm-backend ];
+          buildInputs = [pkgs.osrm-backend];
 
           # This is a pbf file of monaco, downloaded at 2019-01-04 from
           # http://download.geofabrik.de/europe/monaco-latest.osm.pbf
@@ -39,7 +45,7 @@ in {
       in "${osrm-data}/${filename}.osrm";
     };
 
-    environment.systemPackages = [ pkgs.jq ];
+    environment.systemPackages = [pkgs.jq];
   };
 
   testScript = let

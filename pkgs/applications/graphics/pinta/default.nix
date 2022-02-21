@@ -1,13 +1,13 @@
-{ lib
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, glibcLocales
-, gtk3
-, intltool
-, wrapGAppsHook
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  glibcLocales,
+  gtk3,
+  intltool,
+  wrapGAppsHook,
 }:
-
 buildDotnetModule rec {
   pname = "Pinta";
   version = "2.0.2";
@@ -17,7 +17,7 @@ buildDotnetModule rec {
     wrapGAppsHook
   ];
 
-  runtimeDeps = [ gtk3 ];
+  runtimeDeps = [gtk3];
   buildInputs = runtimeDeps;
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
@@ -77,7 +77,7 @@ buildDotnetModule rec {
     homepage = "https://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
     license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [thiagokokada];
     platforms = with platforms; linux;
     mainProgram = "pinta";
   };

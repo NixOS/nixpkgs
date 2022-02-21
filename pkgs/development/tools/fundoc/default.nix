@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "fundoc";
   version = "0.4.1";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Language agnostic documentation generator";
     homepage = "https://github.com/csssr/fundoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

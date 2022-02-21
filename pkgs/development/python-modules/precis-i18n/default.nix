@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "precis-i18n";
   version = "1.0.4";
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/byllyfish/precis_i18n";
     description = "Internationalized usernames and passwords";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

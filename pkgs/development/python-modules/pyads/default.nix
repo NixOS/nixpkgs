@@ -1,11 +1,11 @@
-{ lib
-, adslib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  adslib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyads";
   version = "3.3.9";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Python wrapper for TwinCAT ADS library";
     homepage = "https://github.com/MrLeeh/pyads";
     license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    maintainers = with maintainers; [jamiemagee];
   };
 }

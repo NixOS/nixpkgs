@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "dpic";
   version = "2021.11.01";
@@ -10,14 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   # The prefix passed to configure is not used.
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = ["DESTDIR=$(out)"];
 
   meta = with lib; {
     description = "An implementation of the pic little language for creating drawings";
     homepage = "https://ece.uwaterloo.ca/~aplevich/dpic/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ aespinosa ];
+    maintainers = with maintainers; [aespinosa];
     platforms = platforms.all;
   };
 }
-

@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, desktop-file-utils
-, appstream-glib
-, python3Packages
-, glib
-, gtk3
-, libhandy
-, gobject-introspection
-, gst_all_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  desktop-file-utils,
+  appstream-glib,
+  python3Packages,
+  glib,
+  gtk3,
+  libhandy,
+  gobject-introspection,
+  gst_all_1,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "blanket";
   version = "0.5.0";
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/rafaelmardojai/blanket";
     description = "Listen to different sounds";
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

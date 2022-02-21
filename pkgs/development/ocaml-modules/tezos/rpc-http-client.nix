@@ -1,10 +1,10 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-rpc-http
-, resto-cohttp-client
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-rpc-http,
+  resto-cohttp-client,
 }:
-
 buildDunePackage {
   pname = "tezos-rpc-http-client";
   inherit (tezos-stdlib) version useDune2;
@@ -17,7 +17,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: library of auto-documented RPCs (http client)";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: library of auto-documented RPCs (http client)";
+    };
 }

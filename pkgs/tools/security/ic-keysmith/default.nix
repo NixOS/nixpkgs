@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "keysmith";
   version = "1.6.0";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "Hierarchical Deterministic Key Derivation for the Internet Computer";
     homepage = "https://github.com/dfinity/keysmith";
     license = licenses.mit;
-    maintainers = with maintainers; [ imalison ];
+    maintainers = with maintainers; [imalison];
   };
 }

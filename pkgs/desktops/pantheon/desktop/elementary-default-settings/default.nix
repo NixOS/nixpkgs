@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, nixos-artwork
-, glib
-, pkg-config
-, dbus
-, polkit
-, accountsservice
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  nixos-artwork,
+  glib,
+  pkg-config,
+  dbus,
+  polkit,
+  accountsservice,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
   version = "6.0.2";

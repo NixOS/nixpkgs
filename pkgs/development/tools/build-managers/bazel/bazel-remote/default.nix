@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "bazel-remote";
   version = "2.3.3";

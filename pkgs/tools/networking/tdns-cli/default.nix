@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "tdns-cli";
   version = "0.0.5";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "DNS tool that aims to replace dig and nsupdate";
     homepage = "https://github.com/rotty/tdns-cli";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [astro];
   };
 }

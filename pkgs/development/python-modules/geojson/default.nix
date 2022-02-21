@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, glibcLocales }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+}:
 buildPythonPackage rec {
   pname = "geojson";
   version = "2.5.0";
@@ -12,12 +16,12 @@ buildPythonPackage rec {
   };
 
   LC_ALL = "en_US.UTF-8";
-  checkInputs = [ glibcLocales ];
+  checkInputs = [glibcLocales];
 
   meta = {
     homepage = "https://github.com/frewsxcv/python-geojson";
     description = "Python bindings and utilities for GeoJSON";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = with lib.maintainers; [oxzi];
   };
 }

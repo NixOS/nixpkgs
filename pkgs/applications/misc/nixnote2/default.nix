@@ -1,6 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub, boost
-, qtbase, qtwebkit, poppler, qmake, hunspell, html-tidy}:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  boost,
+  qtbase,
+  qtwebkit,
+  poppler,
+  qmake,
+  hunspell,
+  html-tidy,
+}:
 mkDerivation rec {
   pname = "nixnote2";
   version = "2.0.2";
@@ -12,9 +21,9 @@ mkDerivation rec {
     sha256 = "0cfq95mxvcgby66r61gclm1a2c6zck5aln04xmg2q8kg6p9d31fr";
   };
 
-  buildInputs = [ boost qtbase qtwebkit poppler hunspell ];
+  buildInputs = [boost qtbase qtwebkit poppler hunspell];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [qmake];
 
   postPatch = ''
     # Fix location of poppler-qt5.h
@@ -37,7 +46,7 @@ mkDerivation rec {
     description = "An unofficial client of Evernote";
     homepage = "http://www.nixnote.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ htr ];
+    maintainers = with maintainers; [htr];
     platforms = platforms.linux;
   };
 }

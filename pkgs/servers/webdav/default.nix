@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "webdav";
   version = "4.1.1";
@@ -17,6 +21,6 @@ buildGoModule rec {
     description = "Simple WebDAV server";
     homepage = "https://github.com/hacdias/webdav";
     license = licenses.mit;
-    maintainers = with maintainers; [ pmy ];
+    maintainers = with maintainers; [pmy];
   };
 }

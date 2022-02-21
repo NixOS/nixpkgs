@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, crystal, makeWrapper, nix-prefetch-git }:
-
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  makeWrapper,
+  nix-prefetch-git,
+}:
 crystal.buildCrystalPackage rec {
   pname = "crystal2nix";
   version = "0.1.1";
@@ -15,11 +20,11 @@ crystal.buildCrystalPackage rec {
 
   shardsFile = ./shards.nix;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram $out/bin/crystal2nix \
-      --prefix PATH : ${lib.makeBinPath [ nix-prefetch-git ]}
+      --prefix PATH : ${lib.makeBinPath [nix-prefetch-git]}
   '';
 
   # temporarily off. We need the checks to execute the wrapped binary
@@ -31,6 +36,6 @@ crystal.buildCrystalPackage rec {
   meta = with lib; {
     description = "Utility to convert Crystal's shard.lock files to a Nix file";
     license = licenses.mit;
-    maintainers = with maintainers; [ manveru peterhoeg ];
+    maintainers = with maintainers; [manveru peterhoeg];
   };
 }

@@ -1,7 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage
-, psutil
-, pytest }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  psutil,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "PyPrind";
   version = "2.11.3";
@@ -11,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "e37dcab6e1a9c8e0a7f0fce65fde7a79e2deda1c75aa015910a49e2137b54cbf";
   };
 
-  buildInputs = [ psutil ];
+  buildInputs = [psutil];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     py.test tests
@@ -23,6 +26,6 @@ buildPythonPackage rec {
     description = "Python Progress Bar and Percent Indicator Utility";
     homepage = "https://github.com/rasbt/pyprind";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [jfrankenau];
   };
 }

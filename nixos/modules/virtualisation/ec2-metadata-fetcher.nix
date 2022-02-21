@@ -1,4 +1,8 @@
-{ curl, targetRoot, wgetExtraOptions }:
+{
+  curl,
+  targetRoot,
+  wgetExtraOptions,
+}:
 # Note: be very cautious about dependencies, each dependency grows
 # the closure of the initrd. Ideally we would not even require curl,
 # but there is no reasonable way to send an HTTP PUT request without

@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, isPy27
-, pytestCheckHook
-, autoconf
-, automake
-, cmake
-, gcc
-, libtool
-, perl
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  isPy27,
+  pytestCheckHook,
+  autoconf,
+  automake,
+  cmake,
+  gcc,
+  libtool,
+  perl,
+  simplejson,
 }:
-
 buildPythonPackage rec {
   pname = "awslambdaric";
   version = "2.0.0";
@@ -38,23 +38,23 @@ buildPythonPackage rec {
       --replace 'simplejson==3' 'simplejson~=3'
   '';
 
-  propagatedBuildInputs = [ simplejson ];
+  propagatedBuildInputs = [simplejson];
 
-  nativeBuildInputs = [ autoconf automake cmake libtool perl ];
+  nativeBuildInputs = [autoconf automake cmake libtool perl];
 
-  buildInputs = [ gcc ];
+  buildInputs = [gcc];
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "awslambdaric" "runtime_client" ];
+  pythonImportsCheck = ["awslambdaric" "runtime_client"];
 
   meta = with lib; {
     description = "AWS Lambda Runtime Interface Client for Python";
     homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [austinbutler];
     platforms = platforms.linux;
   };
 }

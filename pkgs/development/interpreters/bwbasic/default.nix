@@ -1,5 +1,10 @@
-{ lib, stdenv, dos2unix, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  dos2unix,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "bwbasic";
   version = "3.20";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w9r4cl7z1lh52c1jpjragbspi1qn0zb7jhcsldav4gdnzxfw67f";
   };
 
-  nativeBuildInputs = [ dos2unix unzip ];
+  nativeBuildInputs = [dos2unix unzip];
 
   unpackPhase = ''
     unzip $src
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
     chmod +x configure
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -30,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Bywater BASIC Interpreter";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ irenes ];
+    maintainers = with maintainers; [irenes];
     platforms = platforms.all;
     homepage = "https://sourceforge.net/projects/bwbasic/";
   };

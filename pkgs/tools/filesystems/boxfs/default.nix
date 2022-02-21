@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, curl, fuse, libxml2, pkg-config }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  fuse,
+  libxml2,
+  pkg-config,
+}: let
   srcs = {
     boxfs2 = fetchFromGitHub {
       sha256 = "10af1l3sjnh25shmq5gdnpyqk4vrq7i1zklv4csf1n2nrahln8j8";
@@ -21,43 +27,46 @@ let
       owner = "vincenthz";
     };
   };
-in stdenv.mkDerivation {
-  pname = "boxfs";
-  version = "2-20150109";
+in
+  stdenv.mkDerivation {
+    pname = "boxfs";
+    version = "2-20150109";
 
-  src = srcs.boxfs2;
+    src = srcs.boxfs2;
 
-  prePatch = with srcs; ''
-    substituteInPlace Makefile --replace "git pull" "true"
-    cp -a --no-preserve=mode ${libapp} libapp
-    cp -a --no-preserve=mode ${libjson} libjson
-  '';
-  patches = [ ./work-around-API-borkage.patch ];
-
-  buildInputs = [ curl fuse libxml2 ];
-  nativeBuildInputs = [ pkg-config ];
-
-  buildFlags = [
-    "static"
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ] ++ lib.optional stdenv.isDarwin "CFLAGS=-D_BSD_SOURCE";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    install boxfs boxfs-init $out/bin
-  '';
-
-  meta = with lib; {
-    description = "FUSE file system for box.com accounts";
-    longDescription = ''
-      Store files on box.com (an account is required). The first time you run
-      boxfs, you will need to complete the authentication (oauth2) process and
-      grant access to your box.com account. Just follow the instructions on
-      the terminal and in your browser. When you've done using your files,
-      unmount the file system with `fusermount -u mountpoint`.
+    prePatch = with srcs; ''
+      substituteInPlace Makefile --replace "git pull" "true"
+      cp -a --no-preserve=mode ${libapp} libapp
+      cp -a --no-preserve=mode ${libjson} libjson
     '';
-    homepage = "https://github.com/drotiro/boxfs2";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-  };
-}
+    patches = [./work-around-API-borkage.patch];
+
+    buildInputs = [curl fuse libxml2];
+    nativeBuildInputs = [pkg-config];
+
+    buildFlags =
+      [
+        "static"
+        "CC=${stdenv.cc.targetPrefix}cc"
+      ]
+      ++ lib.optional stdenv.isDarwin "CFLAGS=-D_BSD_SOURCE";
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install boxfs boxfs-init $out/bin
+    '';
+
+    meta = with lib; {
+      description = "FUSE file system for box.com accounts";
+      longDescription = ''
+        Store files on box.com (an account is required). The first time you run
+        boxfs, you will need to complete the authentication (oauth2) process and
+        grant access to your box.com account. Just follow the instructions on
+        the terminal and in your browser. When you've done using your files,
+        unmount the file system with `fusermount -u mountpoint`.
+      '';
+      homepage = "https://github.com/drotiro/boxfs2";
+      license = licenses.gpl3;
+      platforms = platforms.unix;
+    };
+  }

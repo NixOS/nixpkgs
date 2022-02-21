@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, gettext
-, python3
-, desktop-file-utils
-, rustPlatform
-, pkg-config
-, glib
-, libadwaita
-, libhandy
-, gtk4
-, openssl
-, alsa-lib
-, libpulseaudio
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  gettext,
+  python3,
+  desktop-file-utils,
+  rustPlatform,
+  pkg-config,
+  glib,
+  libadwaita,
+  libhandy,
+  gtk4,
+  openssl,
+  alsa-lib,
+  libpulseaudio,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "spot";
   version = "0.3.1";
@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar tomfitzhenry ];
+    maintainers = with maintainers; [jtojnar tomfitzhenry];
   };
 }

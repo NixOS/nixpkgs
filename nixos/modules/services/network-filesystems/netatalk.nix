@@ -1,15 +1,16 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.netatalk;
-  settingsFormat = pkgs.formats.ini { };
+  settingsFormat = pkgs.formats.ini {};
   afpConfFile = settingsFormat.generate "afp.conf" cfg.settings;
 in {
   options = {
     services.netatalk = {
-
       enable = mkEnableOption "the Netatalk AFP fileserver";
 
       port = mkOption {
@@ -20,9 +21,9 @@ in {
 
       settings = mkOption {
         inherit (settingsFormat) type;
-        default = { };
+        default = {};
         example = {
-          Global = { "uam list" = "uams_guest.so"; };
+          Global = {"uam list" = "uams_guest.so";};
           Homes = {
             path = "afp-data";
             "basedir regex" = "/home";
@@ -48,20 +49,18 @@ in {
           <manvolnum>5</manvolnum></citerefentry>. for more information.
         '';
       };
-
     };
   };
 
   imports = (map (option:
-    mkRemovedOptionModule [ "services" "netatalk" option ]
+    mkRemovedOptionModule ["services" "netatalk" option]
     "This option was removed in favor of `services.netatalk.settings`.") [
-      "extraConfig"
-      "homes"
-      "volumes"
-    ]);
+    "extraConfig"
+    "homes"
+    "volumes"
+  ]);
 
   config = mkIf cfg.enable {
-
     services.netatalk.settings.Global = {
       "afp port" = toString cfg.port;
       "extmap file" = "${pkgs.writeText "extmap.conf" cfg.extmap}";
@@ -69,12 +68,11 @@ in {
 
     systemd.services.netatalk = {
       description = "Netatalk AFP fileserver for Macintosh clients";
-      unitConfig.Documentation =
-        "man:afp.conf(5) man:netatalk(8) man:afpd(8) man:cnid_metad(8) man:cnid_dbd(8)";
-      after = [ "network.target" "avahi-daemon.service" ];
-      wantedBy = [ "multi-user.target" ];
+      unitConfig.Documentation = "man:afp.conf(5) man:netatalk(8) man:afpd(8) man:cnid_metad(8) man:cnid_dbd(8)";
+      after = ["network.target" "avahi-daemon.service"];
+      wantedBy = ["multi-user.target"];
 
-      path = [ pkgs.netatalk ];
+      path = [pkgs.netatalk];
 
       serviceConfig = {
         Type = "forking";
@@ -85,13 +83,10 @@ in {
         ExecStop = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         Restart = "always";
         RestartSec = 1;
-        StateDirectory = [ "netatalk/CNID" ];
+        StateDirectory = ["netatalk/CNID"];
       };
-
     };
 
     security.pam.services.netatalk.unixAuth = true;
-
   };
-
 }

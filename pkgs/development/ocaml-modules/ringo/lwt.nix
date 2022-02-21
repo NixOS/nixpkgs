@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, ringo, lwt }:
-
+{
+  lib,
+  buildDunePackage,
+  ringo,
+  lwt,
+}:
 buildDunePackage {
   pname = "ringo-lwt";
   inherit (ringo) version src doCheck useDune2;
@@ -11,7 +15,9 @@ buildDunePackage {
     lwt
   ];
 
-  meta = ringo.meta // {
-    description = "Lwt-wrappers for Ringo caches";
-  };
+  meta =
+    ringo.meta
+    // {
+      description = "Lwt-wrappers for Ringo caches";
+    };
 }

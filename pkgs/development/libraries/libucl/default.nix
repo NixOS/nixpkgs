@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, curl
-, lua
-, openssl
-, features ? {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  curl,
+  lua,
+  openssl,
+  features ? {
     urls = false;
     # Upstream enables regex by default
     regex = true;
@@ -13,46 +15,46 @@
     signatures = false;
     lua = false;
     utils = false;
-  }
-}:
-
-let
+  },
+}: let
   featureDeps = {
-    urls = [ curl ];
-    signatures = [ openssl ];
-    lua = [ lua ];
+    urls = [curl];
+    signatures = [openssl];
+    lua = [lua];
   };
 in
-stdenv.mkDerivation rec {
-  pname = "libucl";
-  version = "0.8.1";
+  stdenv.mkDerivation rec {
+    pname = "libucl";
+    version = "0.8.1";
 
-  src = fetchFromGitHub {
-    owner = "vstakhov";
-    repo = pname;
-    rev = version;
-    sha256 = "1h52ldxankyhbbm1qbqz1f2q0j03c1b4mig7343bs3mc6fpm18gf";
-  };
+    src = fetchFromGitHub {
+      owner = "vstakhov";
+      repo = pname;
+      rev = version;
+      sha256 = "1h52ldxankyhbbm1qbqz1f2q0j03c1b4mig7343bs3mc6fpm18gf";
+    };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+    nativeBuildInputs = [pkg-config autoreconfHook];
 
-  buildInputs = with lib;
-    concatLists (
-      mapAttrsToList (feat: enabled:
-        optionals enabled (featureDeps."${feat}" or [])
-      ) features
-    );
+    buildInputs = with lib;
+      concatLists (
+        mapAttrsToList (
+          feat: enabled:
+            optionals enabled (featureDeps."${feat}" or [])
+        )
+        features
+      );
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
-  configureFlags = with lib;
-    mapAttrsToList (feat: enabled: strings.enableFeature enabled feat) features;
+    configureFlags = with lib;
+      mapAttrsToList (feat: enabled: strings.enableFeature enabled feat) features;
 
-  meta = with lib; {
-    description = "Universal configuration library parser";
-    homepage = "https://github.com/vstakhov/libucl";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jpotier ];
-  };
-}
+    meta = with lib; {
+      description = "Universal configuration library parser";
+      homepage = "https://github.com/vstakhov/libucl";
+      license = licenses.bsd2;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [jpotier];
+    };
+  }

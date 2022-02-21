@@ -1,29 +1,27 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.keybase;
-
 in {
-
   ###### interface
 
   options = {
-
     services.keybase = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
         description = "Whether to start the Keybase service.";
       };
-
     };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     # Upstream: https://github.com/keybase/client/blob/master/packaging/linux/systemd/keybase.service
     systemd.user.services.keybase = {
       description = "Keybase service";
@@ -39,9 +37,9 @@ in {
         Restart = "on-failure";
         PrivateTmp = true;
       };
-      wantedBy = [ "default.target" ];
+      wantedBy = ["default.target"];
     };
 
-    environment.systemPackages = [ pkgs.keybase ];
+    environment.systemPackages = [pkgs.keybase];
   };
 }

@@ -1,14 +1,14 @@
-{ fetchFromGitHub
-, lib
-, gobject-introspection
-, gtk3
-, python3Packages
-, wrapGAppsHook
-, gdk-pixbuf
-, libappindicator
-, librsvg
+{
+  fetchFromGitHub,
+  lib,
+  gobject-introspection,
+  gtk3,
+  python3Packages,
+  wrapGAppsHook,
+  gdk-pixbuf,
+  libappindicator,
+  librsvg,
 }:
-
 # Although we copy in the udev rules here, you probably just want to use
 # logitech-udev-rules instead of adding this to services.udev.packages on NixOS
 python3Packages.buildPythonApplication rec {
@@ -22,8 +22,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1yqxk6nfxc1xhk59qbz9m3wqkxv446g17pazvanpavriiysjzbrs";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gdk-pixbuf ];
-  buildInputs = [ libappindicator librsvg ];
+  nativeBuildInputs = [wrapGAppsHook gdk-pixbuf];
+  buildInputs = [libappindicator librsvg];
 
   propagatedBuildInputs = with python3Packages; [
     gobject-introspection
@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://pwr-solaar.github.io/Solaar/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ spinus ysndr ];
+    maintainers = with maintainers; [spinus ysndr];
     platforms = platforms.linux;
   };
 }

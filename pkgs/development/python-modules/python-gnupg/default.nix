@@ -1,7 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, gnupg }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gnupg,
+}:
 buildPythonPackage rec {
-  pname   = "python-gnupg";
+  pname = "python-gnupg";
   version = "0.4.8";
 
   src = fetchPypi {
@@ -20,9 +24,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A wrapper for the Gnu Privacy Guard";
-    homepage    = "https://pypi.python.org/pypi/python-gnupg";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.unix;
+    homepage = "https://pypi.python.org/pypi/python-gnupg";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [copumpkin];
+    platforms = platforms.unix;
   };
 }

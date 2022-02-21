@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pydevccu
-, pytest-aiohttp
-, pytestCheckHook
-, python-slugify
-, pythonOlder
-, voluptuous
-, websocket-client
-, xmltodict
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pydevccu,
+  pytest-aiohttp,
+  pytestCheckHook,
+  python-slugify,
+  pythonOlder,
+  voluptuous,
+  websocket-client,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "hahomematic";
   version = "0.35.0";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with HomeMatic devices";
     homepage = "https://github.com/danielperna84/hahomematic";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv
-, fetchFromGitHub
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nordzy-cursor-theme";
   version = "0.1.0";

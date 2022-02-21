@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, zlib, lcms2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libpng,
+  zlib,
+  lcms2,
+}:
 stdenv.mkDerivation rec {
   pname = "pngquant";
   version = "2.17.0";
@@ -14,10 +21,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  configureFlags = lib.optionals (!stdenv.hostPlatform.isx86) [ "--disable-sse" ];
+  configureFlags = lib.optionals (!stdenv.hostPlatform.isx86) ["--disable-sse"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpng zlib lcms2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libpng zlib lcms2];
 
   doCheck = true;
 
@@ -26,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "A tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
     changelog = "https://github.com/kornelski/pngquant/raw/${version}/CHANGELOG";
     platforms = platforms.unix;
-    license = with licenses; [ gpl3Plus hpnd bsd2 ];
-    maintainers = [ maintainers.volth ];
+    license = with licenses; [gpl3Plus hpnd bsd2];
+    maintainers = [maintainers.volth];
   };
 }

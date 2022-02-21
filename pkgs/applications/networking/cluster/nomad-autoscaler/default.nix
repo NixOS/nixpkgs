@@ -1,6 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, buildEnv }:
-
-let
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  buildEnv,
+}: let
   package = buildGoModule rec {
     pname = "nomad-autoscaler";
     version = "0.3.5";
@@ -93,18 +96,20 @@ let
       description = "Autoscaling daemon for Nomad";
       homepage = "https://github.com/hashicorp/nomad-autoscaler";
       license = licenses.mpl20;
-      maintainers = with maintainers; [ jonringer ];
+      maintainers = with maintainers; [jonringer];
     };
   };
 
   plugins = let
-      plugins = builtins.filter (n: !(lib.elem n [ "out" "bin" ])) package.outputs;
-    in lib.genAttrs plugins (output: package.${output});
+    plugins = builtins.filter (n: !(lib.elem n ["out" "bin"])) package.outputs;
+  in
+    lib.genAttrs plugins (output: package.${output});
 
   # Intended to be used as: (nomad-autoscaler.withPlugins (ps: [ ps.aws_asg ps.nomad_target ])
-  withPlugins = f: buildEnv {
-    name = "nomad-autoscaler-env";
-    paths = [ package.bin ] ++ f plugins;
-  };
+  withPlugins = f:
+    buildEnv {
+      name = "nomad-autoscaler-env";
+      paths = [package.bin] ++ f plugins;
+    };
 in
   package

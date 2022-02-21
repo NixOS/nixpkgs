@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, sqlite
-, libtiff
-, curl
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  sqlite,
+  libtiff,
+  curl,
+  gtest,
 }:
-
 stdenv.mkDerivation rec {
   pname = "proj";
   version = "8.2.1";
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-tnaIqYKgYHY1Tg33jsKYn9QL8YUobgXKbQsodoCXNys=";
   };
 
-  outputs = [ "out" "dev"];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ sqlite libtiff curl ];
+  buildInputs = [sqlite libtiff curl];
 
-  checkInputs = [ gtest ];
+  checkInputs = [gtest];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://proj.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vbgl dotlambda ];
+    maintainers = with maintainers; [vbgl dotlambda];
   };
 }

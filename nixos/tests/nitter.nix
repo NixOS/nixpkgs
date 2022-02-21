@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "nitter";
-  meta.maintainers = with pkgs.lib.maintainers; [ erdnaxe ];
+  meta.maintainers = with pkgs.lib.maintainers; [erdnaxe];
 
   nodes.machine = {
     services.nitter.enable = true;

@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "posix";
   version = "2017-11-18";
 
@@ -19,6 +20,6 @@ build-idris-package  {
   meta = {
     description = "System POSIX bindings for Idris.";
     homepage = "https://github.com/idris-hackers/idris-posix";
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

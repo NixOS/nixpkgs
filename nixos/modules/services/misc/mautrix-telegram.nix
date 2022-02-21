@@ -1,15 +1,16 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   dataDir = "/var/lib/mautrix-telegram";
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
   settingsFormat = pkgs.formats.json {};
   settingsFileUnsubstituted = settingsFormat.generate "mautrix-telegram-config-unsubstituted.json" cfg.settings;
   settingsFile = "${dataDir}/config.json";
-
 in {
   options = {
     services.mautrix-telegram = {
@@ -29,7 +30,7 @@ in {
 
           bridge = {
             permissions."*" = "relaybot";
-            relaybot.whitelist = [ ];
+            relaybot.whitelist = [];
             double_puppet_server_map = {};
             login_shared_secret_map = {};
           };
@@ -56,7 +57,7 @@ in {
             # log to console/systemd instead of file
             root = {
               level = "INFO";
-              handlers = [ "console" ];
+              handlers = ["console"];
             };
           };
         };
@@ -122,33 +123,35 @@ in {
     systemd.services.mautrix-telegram = {
       description = "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge.";
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
-      after = [ "network-online.target" ] ++ cfg.serviceDependencies;
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"] ++ cfg.serviceDependencies;
+      after = ["network-online.target"] ++ cfg.serviceDependencies;
 
-      preStart = ''
-        # Not all secrets can be passed as environment variable (yet)
-        # https://github.com/tulir/mautrix-telegram/issues/584
-        [ -f ${settingsFile} ] && rm -f ${settingsFile}
-        old_umask=$(umask)
-        umask 0177
-        ${pkgs.envsubst}/bin/envsubst \
-          -o ${settingsFile} \
-          -i ${settingsFileUnsubstituted}
-        umask $old_umask
+      preStart =
+        ''
+          # Not all secrets can be passed as environment variable (yet)
+          # https://github.com/tulir/mautrix-telegram/issues/584
+          [ -f ${settingsFile} ] && rm -f ${settingsFile}
+          old_umask=$(umask)
+          umask 0177
+          ${pkgs.envsubst}/bin/envsubst \
+            -o ${settingsFile} \
+            -i ${settingsFileUnsubstituted}
+          umask $old_umask
 
-        # generate the appservice's registration file if absent
-        if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
-            --generate-registration \
-            --base-config='${pkgs.mautrix-telegram}/${pkgs.mautrix-telegram.pythonModule.sitePackages}/mautrix_telegram/example-config.yaml' \
-            --config='${settingsFile}' \
-            --registration='${registrationFile}'
-        fi
-      '' + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
-        # run automatic database init and migration scripts
-        ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
-      '';
+          # generate the appservice's registration file if absent
+          if [ ! -f '${registrationFile}' ]; then
+            ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
+              --generate-registration \
+              --base-config='${pkgs.mautrix-telegram}/${pkgs.mautrix-telegram.pythonModule.sitePackages}/mautrix_telegram/example-config.yaml' \
+              --config='${settingsFile}' \
+              --registration='${registrationFile}'
+          fi
+        ''
+        + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
+          # run automatic database init and migration scripts
+          ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
+        '';
 
       serviceConfig = {
         Type = "simple";
@@ -173,9 +176,9 @@ in {
         '';
       };
 
-      restartTriggers = [ settingsFileUnsubstituted ];
+      restartTriggers = [settingsFileUnsubstituted];
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien vskilet ];
+  meta.maintainers = with maintainers; [pacien vskilet];
 }

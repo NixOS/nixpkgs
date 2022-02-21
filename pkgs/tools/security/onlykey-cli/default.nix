@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-cli";
   version = "1.2.5";
@@ -23,12 +25,12 @@ python3Packages.buildPythonApplication rec {
 
   # Requires having the physical onlykey (a usb security key)
   doCheck = false;
-  pythonImportsCheck = [ "onlykey.cli" ];
+  pythonImportsCheck = ["onlykey.cli"];
 
   meta = with lib; {
     description = "OnlyKey client and command-line tool";
     homepage = "https://github.com/trustcrypto/python-onlykey";
     license = licenses.mit;
-    maintainers = with maintainers; [ ranfdev ];
+    maintainers = with maintainers; [ranfdev];
   };
 }

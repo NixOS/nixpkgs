@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "minica";
   version = "1.0.2";
@@ -27,7 +30,7 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/jsha/minica/";
     license = licenses.mit;
-    maintainers = with maintainers; [ m1cr0man ];
+    maintainers = with maintainers; [m1cr0man];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

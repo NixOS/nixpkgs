@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "sabyenc";
   version = "3.3.6";
@@ -16,7 +19,6 @@ buildPythonPackage rec {
     description = "Python yEnc package optimized for use within SABnzbd";
     homepage = "https://github.com/sabnzbd/sabyenc/";
     license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.georgewhewell ];
+    maintainers = [lib.maintainers.georgewhewell];
   };
-
 }

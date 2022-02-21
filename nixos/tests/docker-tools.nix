@@ -1,13 +1,12 @@
 # this test creates a simple GNU image with docker tools and sees if it executes
-
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lnl7 roberth ];
+    maintainers = [lnl7 roberth];
   };
 
   nodes = {
-    docker = { ... }: {
+    docker = {...}: {
       virtualisation = {
         diskSize = 2048;
         docker.enable = true;
@@ -315,7 +314,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
                 + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
             ).strip()
-            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64"}"
+            == "${
+      if pkgs.system == "aarch64-linux"
+      then "amd64"
+      else "arm64"
+    }"
         )
 
     with subtest("buildLayeredImage doesn't dereference /nix/store symlink layers"):

@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub, buildGoPackage
-, makeWrapper, nix-prefetch-scripts }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
+  makeWrapper,
+  nix-prefetch-scripts,
+}:
 buildGoPackage rec {
   pname = "dep2nix";
   version = "unstable-2019-04-02";
@@ -29,6 +33,6 @@ buildGoPackage rec {
     description = "Convert `Gopkg.lock` files from golang dep into `deps.nix`";
     license = licenses.bsd3;
     homepage = "https://github.com/nixcloud/dep2nix";
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

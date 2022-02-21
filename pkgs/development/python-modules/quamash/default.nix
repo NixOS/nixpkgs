@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pytest, isPy3k, pyqt5, pyqt ? pyqt5
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  isPy3k,
+  pyqt5,
+  pyqt ? pyqt5,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "quamash";
   version = "0.6.1";
@@ -25,17 +30,17 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ pyqt ];
+  propagatedBuildInputs = [pyqt];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   checkPhase = ''
-     pytest -k 'test_qthreadexec.py' # the others cause the test execution to be aborted, I think because of asyncio
+    pytest -k 'test_qthreadexec.py' # the others cause the test execution to be aborted, I think because of asyncio
   '';
 
   meta = with lib; {
     description = "Implementation of the PEP 3156 event-loop (asyncio) api using the Qt Event-Loop";
     homepage = "https://github.com/harvimt/quamash";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ borisbabic ];
+    maintainers = with maintainers; [borisbabic];
   };
 }

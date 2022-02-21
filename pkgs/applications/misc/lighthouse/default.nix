@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, libX11, libxcb, cairo, gtk2, pango, python27, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libX11,
+  libxcb,
+  cairo,
+  gtk2,
+  pango,
+  python27,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   name = "lighthouse-${date}";
   date = "2016-07-20";
@@ -11,14 +20,20 @@ stdenv.mkDerivation rec {
     repo = "lighthouse";
     rev = "d1813ef8e2aca9f6b3609b1e0c6d1d5ee683281a";
     sha256 = "0v6ylm49f1b44zwq1y1gqxp2csyqblplr24ajllc2q3r0sc9m1ys";
-   };
+  };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    libX11 libxcb cairo gtk2 pango python27 python3
+    libX11
+    libxcb
+    cairo
+    gtk2
+    pango
+    python27
+    python3
   ];
 
-  makeFlags = [ "PREFIX=\${out}" ];
+  makeFlags = ["PREFIX=\${out}"];
 
   preFixup = "chmod +x $out/share/lighthouse/.config/lighthouse/google.py";
 
@@ -28,8 +43,7 @@ stdenv.mkDerivation rec {
     description = "A simple flexible popup dialog to run on X";
     homepage = "https://github.com/emgram769/lighthouse";
     license = licenses.mit;
-    maintainers = with maintainers; [ ramkromberg ];
+    maintainers = with maintainers; [ramkromberg];
     platforms = platforms.linux;
   };
-
 }

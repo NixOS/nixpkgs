@@ -1,13 +1,13 @@
-{ resholvePackage
-, lib
-, fetchFromGitHub
-, bash
-, coreutils
-, gnugrep
-, ncurses
-, doInstallCheck ? true
+{
+  resholvePackage,
+  lib,
+  fetchFromGitHub,
+  bash,
+  coreutils,
+  gnugrep,
+  ncurses,
+  doInstallCheck ? true,
 }:
-
 resholvePackage rec {
   pname = "bats";
   version = "1.5.0";
@@ -29,14 +29,14 @@ resholvePackage rec {
 
   solutions = {
     bats = {
-      scripts = [ "bin/bats" ];
+      scripts = ["bin/bats"];
       interpreter = "${bash}/bin/bash";
-      inputs = [ bash coreutils gnugrep ];
+      inputs = [bash coreutils gnugrep];
       fake = {
-        external = [ "greadlink" ];
+        external = ["greadlink"];
       };
       fix = {
-        "$BATS_ROOT" = [ "${placeholder "out"}" ];
+        "$BATS_ROOT" = ["${placeholder "out"}"];
       };
       keep = {
         "${placeholder "out"}/libexec/bats-core/bats" = true;
@@ -45,7 +45,7 @@ resholvePackage rec {
   };
 
   inherit doInstallCheck;
-  installCheckInputs = [ ncurses ];
+  installCheckInputs = [ncurses];
   installCheckPhase = ''
     # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
     sed -i '/test works even if PATH is reset/a skip' test/bats.bats
@@ -59,7 +59,7 @@ resholvePackage rec {
   meta = with lib; {
     homepage = "https://github.com/bats-core/bats-core";
     description = "Bash Automated Testing System";
-    maintainers = with maintainers; [ abathur ];
+    maintainers = with maintainers; [abathur];
     license = licenses.mit;
     platforms = platforms.unix;
   };

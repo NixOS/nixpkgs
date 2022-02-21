@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, perl, libunwind, buildPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  libunwind,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "strace";
   version = "5.16";
@@ -9,20 +15,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3H2yMP8+V8JJgwupSsqyuGLaH8qsVUF+m4UEGoM8ooU=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
+  nativeBuildInputs = [perl];
 
   # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
   # The build will silently fall back and -k will not work on RISC-V.
-  buildInputs = [ libunwind ]; # support -k
+  buildInputs = [libunwind]; # support -k
 
-  configureFlags = [ "--enable-mpers=check" ];
+  configureFlags = ["--enable-mpers=check"];
 
   meta = with lib; {
     homepage = "https://strace.io/";
     description = "A system call tracer for Linux";
-    license =  with licenses; [ lgpl21Plus gpl2Plus ]; # gpl2Plus is for the test suite
+    license = with licenses; [lgpl21Plus gpl2Plus]; # gpl2Plus is for the test suite
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ma27 qyliss ];
+    maintainers = with maintainers; [globin ma27 qyliss];
   };
 }

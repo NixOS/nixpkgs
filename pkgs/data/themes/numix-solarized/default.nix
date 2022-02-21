@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, python3, sassc, glib, gdk-pixbuf, inkscape, gtk-engine-murrine }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  sassc,
+  glib,
+  gdk-pixbuf,
+  inkscape,
+  gtk-engine-murrine,
+}:
 stdenv.mkDerivation rec {
   pname = "numix-solarized-gtk-theme";
   version = "20210831";
@@ -11,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "1q8qhpw0hfv625sm626zp4vbz2106b0g5m11ygk87s6kbxrfg6lr";
   };
 
-  nativeBuildInputs = [ python3 sassc glib gdk-pixbuf inkscape ];
+  nativeBuildInputs = [python3 sassc glib gdk-pixbuf inkscape];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [gtk-engine-murrine];
 
   postPatch = ''
     patchShebangs .
@@ -42,6 +51,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/Ferdi265/numix-solarized-gtk-theme/releases";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.offline ];
+    maintainers = [maintainers.offline];
   };
 }

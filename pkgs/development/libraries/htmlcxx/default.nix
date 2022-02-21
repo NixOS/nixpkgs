@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "htmlcxx";
   version = "0.86";
@@ -9,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hgmyiad3qgbpf2dvv2jygzj6jpz4dl3n8ds4nql68a4l9g2nm07";
   };
 
-  buildInputs = [ libiconv ];
-  patches = [ ./ptrdiff.patch ];
+  buildInputs = [libiconv];
+  patches = [./ptrdiff.patch];
 
   meta = with lib; {
     homepage = "http://htmlcxx.sourceforge.net/";

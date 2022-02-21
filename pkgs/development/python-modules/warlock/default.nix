@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, jsonpatch
-, jsonschema
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  jsonpatch,
+  jsonschema,
+  six,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "warlock";
   version = "1.3.3";
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Python object model built on JSON schema and JSON patch";
     homepage = "https://github.com/bcwaldon/warlock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

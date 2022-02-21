@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   sqlcipher-signal = pkgs.writeShellScriptBin "sqlcipher" ''
     set -eu
 
@@ -13,12 +11,10 @@ let
 in {
   name = "signal-desktop";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ flokli primeos ];
+    maintainers = [flokli primeos];
   };
 
-  machine = { ... }:
-
-  {
+  machine = {...}: {
     imports = [
       ./common/user-account.nix
       ./common/x11.nix
@@ -27,13 +23,16 @@ in {
     services.xserver.enable = true;
     test-support.displayManager.auto.user = "alice";
     environment.systemPackages = with pkgs; [
-      signal-desktop file sqlite sqlcipher-signal
+      signal-desktop
+      file
+      sqlite
+      sqlcipher-signal
     ];
   };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
   in ''
     start_all()

@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pyparsing
-, tables
-, cython
-, python
-, sympy
-, meshio
-, mpi4py
-, psutil
-, openssh
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  matplotlib,
+  pyparsing,
+  tables,
+  cython,
+  python,
+  sympy,
+  meshio,
+  mpi4py,
+  psutil,
+  openssh,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "sfepy";
   version = "2021.4";
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://sfepy.org/";
     description = "Simple Finite Elements in Python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    maintainers = with maintainers; [wd15];
   };
 }

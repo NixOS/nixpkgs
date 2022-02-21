@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, six
-, decorator
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  six,
+  decorator,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   version = "1.1.5";
   pname = "pytest-relaxed";
@@ -24,11 +24,11 @@ buildPythonPackage rec {
       --replace "pytest>=3,<5" "pytest>=3"
   '';
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
-  propagatedBuildInputs = [ six decorator ];
+  propagatedBuildInputs = [six decorator];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   # lots of assertion errors mainly around decorator
   doCheck = false;
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://pytest-relaxed.readthedocs.io/";
     description = "Relaxed test discovery/organization for pytest";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

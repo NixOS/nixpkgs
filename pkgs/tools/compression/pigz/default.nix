@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, zlib, util-linux }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  util-linux,
+}:
 stdenv.mkDerivation rec {
   pname = "pigz";
   version = "2.6";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ zlib ] ++ lib.optional stdenv.isLinux util-linux;
+  buildInputs = [zlib] ++ lib.optional stdenv.isLinux util-linux;
 
-  makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"];
 
   doCheck = stdenv.isLinux;
   checkTarget = "tests";
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zlib.net/pigz/";
     description = "A parallel implementation of gzip for multi-core machines";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.zlib;
     platforms = platforms.unix;
   };

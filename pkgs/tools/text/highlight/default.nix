@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkg-config, swig, perl, gcc }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  getopt,
+  lua,
+  boost,
+  pkg-config,
+  swig,
+  perl,
+  gcc,
+}: let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
     version = "4.1";
@@ -14,20 +23,23 @@ let
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = [ pkg-config swig perl ]
+    nativeBuildInputs =
+      [pkg-config swig perl]
       ++ lib.optional stdenv.isDarwin gcc;
 
-    buildInputs = [ getopt lua boost ];
+    buildInputs = [getopt lua boost];
 
-    postPatch = ''
-      substituteInPlace src/makefile \
-        --replace "shell pkg-config" "shell $PKG_CONFIG"
-      substituteInPlace makefile \
-        --replace 'gzip' 'gzip -n'
-    '' + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace src/makefile \
-          --replace 'CXX=g++' 'CXX=clang++'
-    '';
+    postPatch =
+      ''
+        substituteInPlace src/makefile \
+          --replace "shell pkg-config" "shell $PKG_CONFIG"
+        substituteInPlace makefile \
+          --replace 'gzip' 'gzip -n'
+      ''
+      + lib.optionalString stdenv.cc.isClang ''
+        substituteInPlace src/makefile \
+            --replace 'CXX=g++' 'CXX=clang++'
+      '';
 
     preConfigure = ''
       makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/ CXX=$CXX AR=$AR"
@@ -53,10 +65,10 @@ let
       description = "Source code highlighting tool";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
       platforms = platforms.unix;
-      maintainers = with maintainers; [ willibutz ];
+      maintainers = with maintainers; [willibutz];
     };
   };
-
 in
-  if stdenv.isDarwin then self
+  if stdenv.isDarwin
+  then self
   else perl.pkgs.toPerlModule self

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchgit, mlton }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  mlton,
+}:
 stdenv.mkDerivation {
   pname = "ceptre";
   version = "unstable-2016-11-27";
@@ -10,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "174pxfnw3qyn2w8qxmx45fa68iddf106mkfi0kcmyqxzsc9jprh8";
   };
 
-  nativeBuildInputs = [ mlton ];
+  nativeBuildInputs = [mlton];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -20,7 +24,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A linear logic programming language for modeling generative interactive systems";
     homepage = "https://github.com/chrisamaphone/interactive-lp";
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.unix;
   };
 }

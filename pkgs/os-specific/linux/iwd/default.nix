@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, ell
-, coreutils
-, docutils
-, readline
-, openssl
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  ell,
+  coreutils,
+  docutils,
+  readline,
+  openssl,
+  python3Packages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "iwd";
   version = "1.20";
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GcqmMqrZSgvSrsY8FJbPynNWTzSi5A6kmyq+xJ+2i3Y=";
   };
 
-  outputs = [ "out" "man" ]
+  outputs =
+    ["out" "man"]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  checkInputs = [ openssl ];
+  checkInputs = [openssl];
 
   # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
   # which doesn't cross-compile.
@@ -64,14 +66,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''
-    mkdir -p $out/share
-    cp -a doc $out/share/
-    cp -a README AUTHORS TODO $out/share/doc/
-  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    mkdir -p $test/bin
-    cp -a test/* $test/bin/
-  '';
+  postInstall =
+    ''
+      mkdir -p $out/share
+      cp -a doc $out/share/
+      cp -a README AUTHORS TODO $out/share/doc/
+    ''
+    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+      mkdir -p $test/bin
+      cp -a test/* $test/bin/
+    '';
 
   preFixup = ''
     wrapPythonPrograms
@@ -91,6 +95,6 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
+    maintainers = with maintainers; [dtzWill fpletz maxeaubrey];
   };
 }

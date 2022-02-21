@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.lnd;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.lnd;
+in {
   port = 9092;
   extraOpts = {
     lndHost = mkOption {
@@ -41,6 +42,6 @@ in
         ${concatStringsSep " \\\n  " cfg.extraFlags}
     '';
     LogsDirectory = "prometheus-lnd-exporter";
-    ReadOnlyPaths = [ cfg.lndTlsPath cfg.lndMacaroonDir ];
+    ReadOnlyPaths = [cfg.lndTlsPath cfg.lndMacaroonDir];
   };
 }

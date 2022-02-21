@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, janet }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  janet,
+}: let
   platformFiles = {
     aarch64-darwin = "macos_config.janet";
     aarch64-linux = "linux_config.janet";
@@ -9,51 +12,52 @@ let
   };
 
   platformFile = platformFiles.${stdenv.hostPlatform.system};
-
 in
-stdenv.mkDerivation rec {
-  pname = "jpm";
-  version = "0.0.2";
+  stdenv.mkDerivation rec {
+    pname = "jpm";
+    version = "0.0.2";
 
-  src = fetchFromGitHub {
-    owner = "janet-lang";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-nv+vkDjEY711L+C5ibw48DUSNqq2UJiFC2i5LntuBNM=";
-  };
+    src = fetchFromGitHub {
+      owner = "janet-lang";
+      repo = pname;
+      rev = version;
+      sha256 = "sha256-nv+vkDjEY711L+C5ibw48DUSNqq2UJiFC2i5LntuBNM=";
+    };
 
-  # `auto-shebangs true` gives us a shebang line that points to janet inside the
-  # jpm bin folder
-  postPatch = ''
-    substituteInPlace configs/${platformFile} \
-      --replace 'auto-shebang true' 'auto-shebang false' \
-      --replace /usr/local $out
-  '';
+    # `auto-shebangs true` gives us a shebang line that points to janet inside the
+    # jpm bin folder
+    postPatch = ''
+      substituteInPlace configs/${platformFile} \
+        --replace 'auto-shebang true' 'auto-shebang false' \
+        --replace /usr/local $out
+    '';
 
-  dontConfigure = true;
+    dontConfigure = true;
 
-  buildInputs = [ janet ];
+    buildInputs = [janet];
 
-  dontBuild = true;
+    dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/{lib/janet,share/man/man1}
+      mkdir -p $out/{lib/janet,share/man/man1}
 
-    janet bootstrap.janet configs/${platformFile}
+      janet bootstrap.janet configs/${platformFile}
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  doInstallCheck = true;
+    doInstallCheck = true;
 
-  installCheckPhase = ''
-    $out/bin/jpm help
-  '';
+    installCheckPhase = ''
+      $out/bin/jpm help
+    '';
 
-  meta = janet.meta // {
-    description = "Janet Project Manager for the Janet programming language";
-    platforms = lib.attrNames platformFiles;
-  };
-}
+    meta =
+      janet.meta
+      // {
+        description = "Janet Project Manager for the Janet programming language";
+        platforms = lib.attrNames platformFiles;
+      };
+  }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, zlib, gmp, ecm }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  gmp,
+  ecm,
+}:
 stdenv.mkDerivation rec {
   pname = "msieve";
   version = "1.53";
@@ -9,12 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "1d1vv7j4rh3nnxsmvafi73qy7lw7n3akjlm5pjl3m936yapvmz65";
   };
 
-  buildInputs = [ zlib gmp ecm ];
+  buildInputs = [zlib gmp ecm];
 
-  ECM = if ecm == null then "0" else "1";
+  ECM =
+    if ecm == null
+    then "0"
+    else "1";
 
   # Doesn't hurt Linux but lets clang-based platforms like Darwin work fine too
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "all" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "all"];
 
   installPhase = ''
     mkdir -p $out/bin/
@@ -25,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "A C library implementing a suite of algorithms to factor large integers";
     license = lib.licenses.publicDomain;
     homepage = "http://msieve.sourceforge.net/";
-    maintainers = [ lib.maintainers.roconnor ];
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    maintainers = [lib.maintainers.roconnor];
+    platforms = ["x86_64-linux"] ++ lib.platforms.darwin;
   };
 }

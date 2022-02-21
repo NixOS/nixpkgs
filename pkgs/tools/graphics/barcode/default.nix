@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   version = "0.99";
   pname = "barcode";
@@ -16,11 +20,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "GNU barcode generator";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux; # Maybe other non-darwin Unix
     downloadPage = "https://ftp.gnu.org/gnu/barcode/";
     homepage = "https://www.gnu.org/software/barcode/";

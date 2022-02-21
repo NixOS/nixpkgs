@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "smu";
   version = "1.5";
@@ -22,7 +25,6 @@ stdenv.mkDerivation rec {
     description = "simple markup - markdown like syntax";
     homepage = "https://github.com/Gottox/smu";
     license = licenses.mit;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }
-

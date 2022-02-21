@@ -1,13 +1,14 @@
-{ build-idris-package
-, fetchFromGitHub
-, pruviloj
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  pruviloj,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "software_foundations";
   version = "2017-11-04";
 
-  idrisDeps = [ pruviloj ];
+  idrisDeps = [pruviloj];
 
   src = fetchFromGitHub {
     owner = "idris-hackers";
@@ -19,6 +20,6 @@ build-idris-package  {
   meta = {
     description = "Code for Software Foundations in Idris";
     homepage = "https://github.com/idris-hackers/software-foundations";
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

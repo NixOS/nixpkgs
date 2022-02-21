@@ -1,11 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.jellyfin;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.jellyfin;
+in {
   options = {
     services.jellyfin = {
       enable = mkEnableOption "Jellyfin Media Server";
@@ -46,8 +47,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.jellyfin = {
       description = "Jellyfin Media Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = rec {
         User = cfg.user;
@@ -84,7 +85,7 @@ in
 
         RestrictNamespaces = true;
         # AF_NETLINK needed because Jellyfin monitors the network connection
-        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_NETLINK" "AF_INET" "AF_INET6"];
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
 
@@ -92,7 +93,13 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@setuid"
         ];
       };
     };
@@ -110,11 +117,10 @@ in
 
     networking.firewall = mkIf cfg.openFirewall {
       # from https://jellyfin.org/docs/general/networking/index.html
-      allowedTCPPorts = [ 8096 8920 ];
-      allowedUDPPorts = [ 1900 7359 ];
+      allowedTCPPorts = [8096 8920];
+      allowedUDPPorts = [1900 7359];
     };
-
   };
 
-  meta.maintainers = with lib.maintainers; [ minijackson ];
+  meta.maintainers = with lib.maintainers; [minijackson];
 }

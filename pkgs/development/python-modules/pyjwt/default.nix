@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, ecdsa
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  ecdsa,
+  pytest-cov,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyjwt";
   version = "2.3.0";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "jwt" ];
+  pythonImportsCheck = ["jwt"];
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";
     homepage = "https://github.com/jpadilla/pyjwt";
     license = licenses.mit;
-    maintainers = with maintainers; [ prikhi ];
+    maintainers = with maintainers; [prikhi];
   };
 }

@@ -1,30 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, libxml2
-, gnome
-, dconf
-, nautilus
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, vte
-, gettext
-, which
-, libuuid
-, vala
-, desktop-file-utils
-, itstool
-, wrapGAppsHook
-, pcre2
-, libxslt
-, docbook-xsl-nons
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  libxml2,
+  gnome,
+  dconf,
+  nautilus,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  vte,
+  gettext,
+  which,
+  libuuid,
+  vala,
+  desktop-file-utils,
+  itstool,
+  wrapGAppsHook,
+  pcre2,
+  libxslt,
+  docbook-xsl-nons,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
   version = "3.42.2";

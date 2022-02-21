@@ -1,31 +1,31 @@
-{ lib
-, ansi
-, buildPythonApplication
-, colorlog
-, daemonize
-, deepmerge
-, dulwich
-, fetchFromGitHub
-, flask
-, glibcLocales
-, hypchat
-, irc
-, jinja2
-, markdown
-, mock
-, pyasn1
-, pyasn1-modules
-, pygments
-, pygments-markdown-lexer
-, pyopenssl
-, pytestCheckHook
-, requests
-, slackclient
-, sleekxmpp
-, telegram
-, webtest
+{
+  lib,
+  ansi,
+  buildPythonApplication,
+  colorlog,
+  daemonize,
+  deepmerge,
+  dulwich,
+  fetchFromGitHub,
+  flask,
+  glibcLocales,
+  hypchat,
+  irc,
+  jinja2,
+  markdown,
+  mock,
+  pyasn1,
+  pyasn1-modules,
+  pygments,
+  pygments-markdown-lexer,
+  pyopenssl,
+  pytestCheckHook,
+  requests,
+  slackclient,
+  sleekxmpp,
+  telegram,
+  webtest,
 }:
-
 buildPythonApplication rec {
   pname = "errbot";
   version = "6.1.7";
@@ -39,7 +39,7 @@ buildPythonApplication rec {
 
   LC_ALL = "en_US.utf8";
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [glibcLocales];
 
   propagatedBuildInputs = [
     ansi
@@ -70,7 +70,7 @@ buildPythonApplication rec {
   ];
 
   # Slack backend test has an import issue
-  pytestFlagsArray = [ "--ignore=tests/backend_tests/slack_test.py" ];
+  pytestFlagsArray = ["--ignore=tests/backend_tests/slack_test.py"];
 
   disabledTests = [
     "backup"
@@ -78,12 +78,12 @@ buildPythonApplication rec {
     "plugin_cycle"
   ];
 
-  pythonImportsCheck = [ "errbot" ];
+  pythonImportsCheck = ["errbot"];
 
   meta = with lib; {
     description = "Chatbot designed to be simple to extend with plugins written in Python";
     homepage = "http://errbot.io/";
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [fpletz globin];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     # flaky on darwin, "RuntimeError: can't start new thread"

@@ -1,13 +1,15 @@
-{ config, lib, options, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}: let
   cfg = config.services.parsedmarc;
   opt = options.services.parsedmarc;
   ini = pkgs.formats.ini {};
-in
-{
+in {
   options.services.parsedmarc = {
-
     enable = lib.mkEnableOption ''
       parsedmarc, a DMARC report monitoring service
     '';
@@ -257,7 +259,10 @@ in
             hosts = lib.mkOption {
               default = [];
               type = with lib.types; listOf str;
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              apply = x:
+                if x == []
+                then null
+                else lib.concatStringsSep "," x;
               description = ''
                 A list of Elasticsearch hosts to push parsed reports
                 to.
@@ -304,7 +309,10 @@ in
             hosts = lib.mkOption {
               default = [];
               type = with lib.types; listOf str;
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              apply = x:
+                if x == []
+                then null
+                else lib.concatStringsSep "," x;
               description = ''
                 A list of Apache Kafka hosts to publish parsed reports
                 to.
@@ -355,16 +363,12 @@ in
               '';
             };
           };
-
         };
-
       };
     };
-
   };
 
   config = lib.mkIf cfg.enable {
-
     services.elasticsearch.enable = lib.mkDefault cfg.provision.elasticsearch;
 
     services.geoipupdate = lib.mkIf cfg.provision.geoIp {
@@ -381,7 +385,7 @@ in
 
     services.dovecot2 = lib.mkIf cfg.provision.localMail.enable {
       enable = true;
-      protocols = [ "imap" ];
+      protocols = ["imap"];
     };
 
     services.postfix = lib.mkIf cfg.provision.localMail.enable {
@@ -402,50 +406,50 @@ in
 
       provision = {
         enable = cfg.provision.grafana.datasource || cfg.provision.grafana.dashboard;
-        datasources =
-          let
-            pkgVer = lib.getVersion config.services.elasticsearch.package;
-            esVersion =
-              if lib.versionOlder pkgVer "7" then
-                "60"
-              else if lib.versionOlder pkgVer "8" then
-                "70"
-              else
-                throw "When provisioning parsedmarc grafana datasources: unknown Elasticsearch version.";
-          in
-            lib.mkIf cfg.provision.grafana.datasource [
-              {
-                name = "dmarc-ag";
-                type = "elasticsearch";
-                access = "proxy";
-                url = "localhost:9200";
-                jsonData = {
-                  timeField = "date_range";
-                  inherit esVersion;
-                };
-              }
-              {
-                name = "dmarc-fo";
-                type = "elasticsearch";
-                access = "proxy";
-                url = "localhost:9200";
-                jsonData = {
-                  timeField = "date_range";
-                  inherit esVersion;
-                };
-              }
-            ];
-        dashboards = lib.mkIf cfg.provision.grafana.dashboard [{
-          name = "parsedmarc";
-          options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
-        }];
+        datasources = let
+          pkgVer = lib.getVersion config.services.elasticsearch.package;
+          esVersion =
+            if lib.versionOlder pkgVer "7"
+            then "60"
+            else if lib.versionOlder pkgVer "8"
+            then "70"
+            else throw "When provisioning parsedmarc grafana datasources: unknown Elasticsearch version.";
+        in
+          lib.mkIf cfg.provision.grafana.datasource [
+            {
+              name = "dmarc-ag";
+              type = "elasticsearch";
+              access = "proxy";
+              url = "localhost:9200";
+              jsonData = {
+                timeField = "date_range";
+                inherit esVersion;
+              };
+            }
+            {
+              name = "dmarc-fo";
+              type = "elasticsearch";
+              access = "proxy";
+              url = "localhost:9200";
+              jsonData = {
+                timeField = "date_range";
+                inherit esVersion;
+              };
+            }
+          ];
+        dashboards = lib.mkIf cfg.provision.grafana.dashboard [
+          {
+            name = "parsedmarc";
+            options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
+          }
+        ];
       };
     };
 
     services.parsedmarc.settings = lib.mkMerge [
       (lib.mkIf cfg.provision.elasticsearch {
         elasticsearch = {
-          hosts = [ "localhost:9200" ];
+          hosts = ["localhost:9200"];
           ssl = false;
         };
       })
@@ -461,73 +465,72 @@ in
       })
     ];
 
-    systemd.services.parsedmarc =
-      let
-        # Remove any empty attributes from the config, i.e. empty
-        # lists, empty attrsets and null. This makes it possible to
-        # list interesting options in `settings` without them always
-        # ending up in the resulting config.
-        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! builtins.elem v [ null [] {} ])) cfg.settings;
-        parsedmarcConfig = ini.generate "parsedmarc.ini" filteredConfig;
-        mkSecretReplacement = file:
-          lib.optionalString (file != null) ''
-            replace-secret '${file}' '${file}' /run/parsedmarc/parsedmarc.ini
-          '';
-      in
-        {
-          wantedBy = [ "multi-user.target" ];
-          after = [ "postfix.service" "dovecot2.service" "elasticsearch.service" ];
-          path = with pkgs; [ replace-secret openssl shadow ];
-          serviceConfig = {
-            ExecStartPre = let
-              startPreFullPrivileges = ''
-                set -o errexit -o pipefail -o nounset -o errtrace
-                shopt -s inherit_errexit
+    systemd.services.parsedmarc = let
+      # Remove any empty attributes from the config, i.e. empty
+      # lists, empty attrsets and null. This makes it possible to
+      # list interesting options in `settings` without them always
+      # ending up in the resulting config.
+      filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: !builtins.elem v [null [] {}])) cfg.settings;
+      parsedmarcConfig = ini.generate "parsedmarc.ini" filteredConfig;
+      mkSecretReplacement = file:
+        lib.optionalString (file != null) ''
+          replace-secret '${file}' '${file}' /run/parsedmarc/parsedmarc.ini
+        '';
+    in {
+      wantedBy = ["multi-user.target"];
+      after = ["postfix.service" "dovecot2.service" "elasticsearch.service"];
+      path = with pkgs; [replace-secret openssl shadow];
+      serviceConfig = {
+        ExecStartPre = let
+          startPreFullPrivileges =
+            ''
+              set -o errexit -o pipefail -o nounset -o errtrace
+              shopt -s inherit_errexit
 
-                umask u=rwx,g=,o=
-                cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
-                chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
-                ${mkSecretReplacement cfg.settings.smtp.password}
-                ${mkSecretReplacement cfg.settings.imap.password}
-                ${mkSecretReplacement cfg.settings.elasticsearch.password}
-                ${mkSecretReplacement cfg.settings.kafka.password}
-              '' + lib.optionalString cfg.provision.localMail.enable ''
-                openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
-                replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
-                echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
-                cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
-              '';
-            in
-              "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
-            Type = "simple";
-            User = "parsedmarc";
-            Group = "parsedmarc";
-            DynamicUser = true;
-            RuntimeDirectory = "parsedmarc";
-            RuntimeDirectoryMode = 0700;
-            CapabilityBoundingSet = "";
-            PrivateDevices = true;
-            PrivateMounts = true;
-            PrivateUsers = true;
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            ProtectHome = true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectProc = "invisible";
-            ProcSubset = "pid";
-            SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
-            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-            RestrictRealtime = true;
-            RestrictNamespaces = true;
-            MemoryDenyWriteExecute = true;
-            LockPersonality = true;
-            SystemCallArchitectures = "native";
-            ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
-          };
-        };
+              umask u=rwx,g=,o=
+              cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
+              chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
+              ${mkSecretReplacement cfg.settings.smtp.password}
+              ${mkSecretReplacement cfg.settings.imap.password}
+              ${mkSecretReplacement cfg.settings.elasticsearch.password}
+              ${mkSecretReplacement cfg.settings.kafka.password}
+            ''
+            + lib.optionalString cfg.provision.localMail.enable ''
+              openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
+              replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
+              echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
+              cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
+            '';
+        in "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
+        Type = "simple";
+        User = "parsedmarc";
+        Group = "parsedmarc";
+        DynamicUser = true;
+        RuntimeDirectory = "parsedmarc";
+        RuntimeDirectoryMode = 0700;
+        CapabilityBoundingSet = "";
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6"];
+        RestrictRealtime = true;
+        RestrictNamespaces = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
+        SystemCallArchitectures = "native";
+        ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
+      };
+    };
 
     users.users.${cfg.provision.localMail.recipientName} = lib.mkIf cfg.provision.localMail.enable {
       isNormalUser = true;
@@ -538,5 +541,5 @@ in
   # Don't edit the docbook xml directly, edit the md and generate it:
   # `pandoc parsedmarc.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > parsedmarc.xml`
   meta.doc = ./parsedmarc.xml;
-  meta.maintainers = [ lib.maintainers.talyz ];
+  meta.maintainers = [lib.maintainers.talyz];
 }

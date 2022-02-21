@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitLab, isPy3k, pytest, baseline }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  isPy3k,
+  pytest,
+  baseline,
+}:
 buildPythonPackage rec {
   pname = "plum-py";
   version = "0.4.0";
@@ -17,13 +23,13 @@ buildPythonPackage rec {
       --replace 'if sys.version_info < (3, 7):' 'if True:'
   '';
 
-  checkInputs = [ pytest baseline ];
+  checkInputs = [pytest baseline];
   checkPhase = "pytest tests";
 
   meta = with lib; {
     description = "Classes and utilities for packing/unpacking bytes";
     homepage = "https://plum-py.readthedocs.io/en/latest/index.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ dnr ];
+    maintainers = with maintainers; [dnr];
   };
 }

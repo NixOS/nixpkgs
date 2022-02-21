@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "go-task";
   version = "3.10.0";
@@ -15,12 +19,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  subPackages = [ "cmd/task" ];
+  subPackages = ["cmd/task"];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   postInstall = ''
@@ -33,6 +39,6 @@ buildGoModule rec {
     homepage = "https://taskfile.dev/";
     description = "A task runner / simpler Make alternative written in Go";
     license = licenses.mit;
-    maintainers = with maintainers; [ parasrah ];
+    maintainers = with maintainers; [parasrah];
   };
 }

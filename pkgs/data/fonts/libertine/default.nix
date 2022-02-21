@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, fontforge }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fontforge,
+}:
 stdenv.mkDerivation {
   name = "linux-libertine-5.3.0";
 
@@ -10,7 +14,7 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ fontforge ];
+  nativeBuildInputs = [fontforge];
 
   buildPhase = ''
     for i in *.sfd; do
@@ -41,7 +45,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Linux Libertine Fonts";
     homepage = "http://linuxlibertine.sf.net";
-    maintainers = [ maintainers.volth ];
+    maintainers = [maintainers.volth];
     license = licenses.ofl;
   };
 }

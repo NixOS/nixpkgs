@@ -1,17 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, python }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+}:
 stdenv.mkDerivation rec {
   name = "z3-${version}";
   version = "4.4.0";
 
   src = fetchFromGitHub {
-    owner  = "Z3Prover";
-    repo   = "z3";
-    rev    = "7f6ef0b6c0813f2e9e8f993d45722c0e5b99e152";
+    owner = "Z3Prover";
+    repo = "z3";
+    rev = "7f6ef0b6c0813f2e9e8f993d45722c0e5b99e152";
     sha256 = "1xllvq9fcj4cz34biq2a9dn2sj33bdgrzyzkj26hqw70wkzv1kzx";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [python];
   enableParallelBuilding = true;
 
   configurePhase = "python scripts/mk_make.py --prefix=$out && cd build";
@@ -33,9 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A high-performance theorem prover and SMT solver";
-    homepage    = "https://github.com/Z3Prover/z3";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.x86_64;
-    maintainers = with lib.maintainers; [ thoughtpolice ttuegel ];
+    homepage = "https://github.com/Z3Prover/z3";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [thoughtpolice ttuegel];
   };
 }

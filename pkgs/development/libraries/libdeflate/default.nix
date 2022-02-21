@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, fixDarwinDylibNames, pkgsStatic }:
-
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  fetchFromGitHub,
+  fixDarwinDylibNames,
+  pkgsStatic,
+}:
 stdenv.mkDerivation rec {
   pname = "libdeflate";
   version = "1.8";
@@ -22,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
-  makeFlags = lib.optional stdenv.hostPlatform.isStatic [ "DISABLE_SHARED=1"];
+  makeFlags = lib.optional stdenv.hostPlatform.isStatic ["DISABLE_SHARED=1"];
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -38,6 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/ebiggers/libdeflate";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej kaction ];
+    maintainers = with maintainers; [orivej kaction];
   };
 }

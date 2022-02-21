@@ -1,11 +1,9 @@
 # Test printing via CUPS.
-
-import ./make-test-python.nix ({pkgs, ... }:
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   printingServer = startWhenNeeded: {
     services.printing.enable = true;
     services.printing.startWhenNeeded = startWhenNeeded;
-    services.printing.listenAddresses = [ "*:631" ];
+    services.printing.listenAddresses = ["*:631"];
     services.printing.defaultShared = true;
     services.printing.extraConf = ''
       <Location />
@@ -13,38 +11,45 @@ let
         Allow from all
       </Location>
     '';
-    networking.firewall.allowedTCPPorts = [ 631 ];
+    networking.firewall.allowedTCPPorts = [631];
     # Add a HP Deskjet printer connected via USB to the server.
-    hardware.printers.ensurePrinters = [{
-      name = "DeskjetLocal";
-      deviceUri = "usb://foobar/printers/foobar";
-      model = "drv:///sample.drv/deskjet.ppd";
-    }];
+    hardware.printers.ensurePrinters = [
+      {
+        name = "DeskjetLocal";
+        deviceUri = "usb://foobar/printers/foobar";
+        model = "drv:///sample.drv/deskjet.ppd";
+      }
+    ];
   };
   printingClient = startWhenNeeded: {
     services.printing.enable = true;
     services.printing.startWhenNeeded = startWhenNeeded;
     # Add printer to the client as well, via IPP.
-    hardware.printers.ensurePrinters = [{
-      name = "DeskjetRemote";
-      deviceUri = "ipp://${if startWhenNeeded then "socketActivatedServer" else "serviceServer"}/printers/DeskjetLocal";
-      model = "drv:///sample.drv/deskjet.ppd";
-    }];
+    hardware.printers.ensurePrinters = [
+      {
+        name = "DeskjetRemote";
+        deviceUri = "ipp://${
+          if startWhenNeeded
+          then "socketActivatedServer"
+          else "serviceServer"
+        }/printers/DeskjetLocal";
+        model = "drv:///sample.drv/deskjet.ppd";
+      }
+    ];
     hardware.printers.ensureDefaultPrinter = "DeskjetRemote";
   };
-
 in {
   name = "printing";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ domenkozar eelco matthewbauer ];
+    maintainers = [domenkozar eelco matthewbauer];
   };
 
   nodes = {
-    socketActivatedServer = { ... }: (printingServer true);
-    serviceServer = { ... }: (printingServer false);
+    socketActivatedServer = {...}: (printingServer true);
+    serviceServer = {...}: (printingServer false);
 
-    socketActivatedClient = { ... }: (printingClient true);
-    serviceClient = { ... }: (printingClient false);
+    socketActivatedClient = {...}: (printingClient true);
+    serviceClient = {...}: (printingClient false);
   };
 
   testScript = ''

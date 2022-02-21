@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, libsodium
-, cffi
-, hypothesis
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  libsodium,
+  cffi,
+  hypothesis,
 }:
-
 buildPythonPackage rec {
   pname = "pynacl";
   version = "1.5.0";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Python binding to the Networking and Cryptography (NaCl) library";
     homepage = "https://github.com/pyca/pynacl/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

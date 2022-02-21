@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin, glib, json-glib, nss, nspr
-, libsecret
-} :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  pidgin,
+  glib,
+  json-glib,
+  nss,
+  nspr,
+  libsecret,
+}:
 stdenv.mkDerivation rec {
   pname = "pidgin-opensteamworks";
   version = "1.7.2";
@@ -24,7 +32,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    pidgin glib json-glib nss nspr libsecret
+    pidgin
+    glib
+    json-glib
+    nss
+    nspr
+    libsecret
   ];
 
   meta = with lib; {
@@ -32,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ arobyn ];
+    maintainers = with maintainers; [arobyn];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchgit, fetchpatch, ocamlPackages, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchpatch,
+  ocamlPackages,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "virt-top";
   version = "1.0.9";
@@ -18,8 +24,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = with ocamlPackages; [ ocaml findlib ocaml_extlib ocaml_libvirt gettext-stub curses csv xml-light ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = with ocamlPackages; [ocaml findlib ocaml_extlib ocaml_libvirt gettext-stub curses csv xml-light];
 
   buildPhase = "make opt";
 
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "A top-like utility for showing stats of virtualized domains";
     homepage = "https://people.redhat.com/~rjones/virt-top/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    maintainers = [maintainers.volth];
     platforms = platforms.linux;
   };
 }

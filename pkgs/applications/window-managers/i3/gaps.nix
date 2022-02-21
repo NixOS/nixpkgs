@@ -1,6 +1,9 @@
-{ fetchFromGitHub, lib, i3 }:
-
-i3.overrideAttrs (oldAttrs : rec {
+{
+  fetchFromGitHub,
+  lib,
+  i3,
+}:
+i3.overrideAttrs (oldAttrs: rec {
   pname = "i3-gaps";
   version = "4.20.1";
 
@@ -13,10 +16,10 @@ i3.overrideAttrs (oldAttrs : rec {
 
   meta = with lib; {
     description = "A fork of the i3 tiling window manager with some additional features";
-    homepage    = "https://github.com/Airblader/i3";
-    maintainers = with maintainers; [ fmthoma ];
-    license     = licenses.bsd3;
-    platforms   = platforms.linux ++ platforms.netbsd ++ platforms.openbsd;
+    homepage = "https://github.com/Airblader/i3";
+    maintainers = with maintainers; [fmthoma];
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.netbsd ++ platforms.openbsd;
 
     longDescription = ''
       Fork of i3wm, a tiling window manager primarily targeted at advanced users

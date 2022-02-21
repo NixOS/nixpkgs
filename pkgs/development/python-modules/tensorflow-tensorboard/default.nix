@@ -1,26 +1,25 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, numpy
-, wheel
-, werkzeug
-, protobuf
-, grpcio
-, markdown
-, absl-py
-, google-auth-oauthlib
-, setuptools
-, tensorboard-data-server
-, tensorboard-plugin-wit
-, tensorboard-plugin-profile
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  numpy,
+  wheel,
+  werkzeug,
+  protobuf,
+  grpcio,
+  markdown,
+  absl-py,
+  google-auth-oauthlib,
+  setuptools,
+  tensorboard-data-server,
+  tensorboard-plugin-wit,
+  tensorboard-plugin-profile,
 }:
-
 # tensorflow/tensorboard is built from a downloaded wheel, because
 # https://github.com/tensorflow/tensorboard/issues/719 blocks
 # buildBazelPackage.
-
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
   version = "2.6.0";
@@ -85,6 +84,6 @@ buildPythonPackage rec {
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

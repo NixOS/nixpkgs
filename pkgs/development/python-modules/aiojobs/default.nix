@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, pytestCheckHook
-, pytest-aiohttp
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiohttp,
+  pytestCheckHook,
+  pytest-aiohttp,
+  pygments,
 }:
-
 buildPythonPackage rec {
   pname = "aiojobs";
   version = "1.0.0";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Jobs scheduler for managing background task (asyncio)";
     homepage = "https://github.com/aio-libs/aiojobs";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [cmcdragonkai];
   };
 }

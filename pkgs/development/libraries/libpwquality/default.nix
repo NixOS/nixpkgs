@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, perl, cracklib, python3, fetchpatch }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  perl,
+  cracklib,
+  python3,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "libpwquality";
   version = "1.4.2";
@@ -11,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0n4pjhm7wfivk0wizggaxq4y4mcxic876wcarjabkp5z9k14y36h";
   };
 
-  nativeBuildInputs = [ autoreconfHook perl python3 ];
-  buildInputs = [ cracklib ];
+  nativeBuildInputs = [autoreconfHook perl python3];
+  buildInputs = [cracklib];
 
   patches = lib.optional stdenv.hostPlatform.isStatic [
     (fetchpatch {

@@ -1,12 +1,12 @@
-{ lib
-, gccStdenv
-, fetchFromGitHub
-, autoreconfHook
-, xorgproto
-, libX11
-, libXpm
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  xorgproto,
+  libX11,
+  libXpm,
 }:
-
 gccStdenv.mkDerivation rec {
   pname = "0verkill";
   version = "unstable-2011-01-13";
@@ -18,22 +18,22 @@ gccStdenv.mkDerivation rec {
     sha256 = "WO7PN192HhcDl6iHIbVbH7MVMi1Tl2KyQbDa9DWRO6M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libX11 xorgproto libXpm ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [libX11 xorgproto libXpm];
 
-  configureFlags = [ "--with-x" ];
+  configureFlags = ["--with-x"];
 
   preAutoreconf = ''
     autoupdate
   '';
 
-  hardeningDisable = [ "all" ]; # Someday the upstream will update the code...
+  hardeningDisable = ["all"]; # Someday the upstream will update the code...
 
   meta = with lib; {
     homepage = "https://github.com/hackndev/0verkill";
     description = "ASCII-ART bloody 2D action deathmatch-like game";
     license = with licenses; gpl2Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, docopt, anytree
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  docopt,
+  anytree,
 }:
-
 buildPythonApplication rec {
-
   pname = "catcli";
   version = "0.8.0";
 
@@ -16,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "1hkgf692h3akdxiwhzm3vqibh1ps661qllilf55nyk109cx79gna";
   };
 
-  propagatedBuildInputs = [ docopt anytree ];
+  propagatedBuildInputs = [docopt anytree];
 
   postPatch = "patchShebangs . ";
 
@@ -24,7 +24,7 @@ buildPythonApplication rec {
     description = "The command line catalog tool for your offline data";
     homepage = "https://github.com/deadc0de6/catcli";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ petersjt014 ];
+    maintainers = with maintainers; [petersjt014];
     platforms = platforms.all;
   };
 }

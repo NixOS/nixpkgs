@@ -1,7 +1,22 @@
-{ stdenv, lib, fetchsvn, autoreconfHook,
-  autoconf, automake, libtool, flex, perl, check, pkg-config, python3,
-  version, rev, sha256, maps, arch }:
-
+{
+  stdenv,
+  lib,
+  fetchsvn,
+  autoreconfHook,
+  autoconf,
+  automake,
+  libtool,
+  flex,
+  perl,
+  check,
+  pkg-config,
+  python3,
+  version,
+  rev,
+  sha256,
+  maps,
+  arch,
+}:
 stdenv.mkDerivation rec {
   pname = "crossfire-server";
   version = "r${toString rev}";
@@ -12,8 +27,8 @@ stdenv.mkDerivation rec {
     rev = rev;
   };
 
-  nativeBuildInputs = [ autoconf automake libtool flex perl check pkg-config python3 ];
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = [autoconf automake libtool flex perl check pkg-config python3];
+  hardeningDisable = ["format"];
 
   preConfigure = ''
     ln -s ${arch} lib/arch
@@ -21,7 +36,7 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  configureFlags = [ "--with-python=${python3}" ];
+  configureFlags = ["--with-python=${python3}"];
 
   postInstall = ''
     ln -s ${maps} "$out/share/crossfire/maps"
@@ -32,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "http://crossfire.real-time.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    maintainers = with maintainers; [ToxicFrog];
   };
 }

@@ -1,8 +1,8 @@
-{ gccStdenv
-, lib
-, fetchurl
+{
+  gccStdenv,
+  lib,
+  fetchurl,
 }:
-
 gccStdenv.mkDerivation rec {
   pname = "mslink";
   version = "1.3";
@@ -27,7 +27,7 @@ gccStdenv.mkDerivation rec {
     description = "Create Windows Shortcut Files (.LNK) without using Windows";
     homepage = "http://www.mamachine.org/mslink/index.en.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
     platforms = platforms.unix;
   };
 }

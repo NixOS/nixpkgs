@@ -1,19 +1,46 @@
-{ lib, stdenv, fetchpatch, fetchurl, fetchzip
-# build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python3
-, cmake
-# libjulia dependencies
-, libunwind, readline, utf8proc, zlib
-# standard library dependencies
-, curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
-# linear algebra
-, blas, lapack, arpack
-# Darwin frameworks
-, CoreServices, ApplicationServices
-}:
-
-
-let
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  fetchzip
+  # build tools
+  ,
+  gfortran,
+  m4,
+  makeWrapper,
+  patchelf,
+  perl,
+  which,
+  python3,
+  cmake
+  # libjulia dependencies
+  ,
+  libunwind,
+  readline,
+  utf8proc,
+  zlib
+  # standard library dependencies
+  ,
+  curl,
+  fftwSinglePrec,
+  fftw,
+  gmp,
+  libgit2,
+  mpfr,
+  openlibm,
+  openspecfun,
+  pcre2
+  # linear algebra
+  ,
+  blas,
+  lapack,
+  arpack
+  # Darwin frameworks
+  ,
+  CoreServices,
+  ApplicationServices,
+}: let
   majorVersion = "1";
   minorVersion = "0";
   maintenanceVersion = "4";
@@ -64,67 +91,85 @@ let
   };
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
+  stdenv.mkDerivation rec {
+    pname = "julia";
+    inherit version;
 
-stdenv.mkDerivation rec {
-  pname = "julia";
-  inherit version;
+    src = fetchzip {
+      url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+      sha256 = src_sha256;
+    };
 
-  src = fetchzip {
-    url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = src_sha256;
-  };
+    nativeBuildInputs = [cmake curl gfortran m4 makeWrapper patchelf perl python3 which];
+    # cmake is only used to build the bundled deps
+    dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [ cmake curl gfortran m4 makeWrapper patchelf perl python3 which ];
-  # cmake is only used to build the bundled deps
-  dontUseCmakeConfigure = true;
+    # We assert that compatible blas and lapack are used.
+    buildInputs = assert (blas.isILP64 == lapack.isILP64);
+      [
+        arpack
+        fftw
+        fftwSinglePrec
+        gmp
+        libgit2
+        libunwind
+        mpfr
+        pcre2.dev
+        blas
+        lapack
+        openlibm
+        openspecfun
+        readline
+        utf8proc
+        zlib
+      ]
+      ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
 
-  # We assert that compatible blas and lapack are used.
-  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
-    pcre2.dev blas lapack openlibm openspecfun readline utf8proc
-    zlib
-  ]
-  ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
-  ;
+    patches = [
+      ./patches/1.0/use-system-utf8proc-julia-1.0.patch
+    ];
 
-  patches = [
-    ./patches/1.0/use-system-utf8proc-julia-1.0.patch
-  ];
+    postPatch = ''
+      patchShebangs . contrib
+      for i in backtrace cmdlineargs; do
+        mv test/$i.jl{,.off}
+        touch test/$i.jl
+      done
+      rm stdlib/Sockets/test/runtests.jl && touch stdlib/Sockets/test/runtests.jl
+      rm stdlib/Distributed/test/runtests.jl && touch stdlib/Distributed/test/runtests.jl
+      sed -e 's/Invalid Content-Type:/invalid Content-Type:/g' -i ./stdlib/LibGit2/test/libgit2.jl
+      sed -e 's/Failed to resolve /failed to resolve /g' -i ./stdlib/LibGit2/test/libgit2.jl
+    '';
+    prePatch = ''
+      mkdir deps/srccache
+      cp "${dsfmt}" "./deps/srccache/dsfmt-${dsfmtVersion}.tar.gz"
+      cp "${rmath-julia}" "./deps/srccache/Rmath-julia-${rmathVersion}.tar.gz"
+      cp "${libuv}" "./deps/srccache/libuv-${libuvVersion}.tar.gz"
+      cp "${virtualenv}" "./deps/srccache/virtualenv-${virtualenvVersion}.tar.gz"
+      cp "${libwhich}" "./deps/srccache/libwhich-${libwhichVersion}.tar.gz"
+      cp "${llvm}" "./deps/srccache/llvm-${llvmVersion}.src.tar.xz"
+      cp "${suitesparse}" "./deps/srccache/SuiteSparse-${suitesparseVersion}.tar.gz"
+    '';
 
-  postPatch = ''
-    patchShebangs . contrib
-    for i in backtrace cmdlineargs; do
-      mv test/$i.jl{,.off}
-      touch test/$i.jl
-    done
-    rm stdlib/Sockets/test/runtests.jl && touch stdlib/Sockets/test/runtests.jl
-    rm stdlib/Distributed/test/runtests.jl && touch stdlib/Distributed/test/runtests.jl
-    sed -e 's/Invalid Content-Type:/invalid Content-Type:/g' -i ./stdlib/LibGit2/test/libgit2.jl
-    sed -e 's/Failed to resolve /failed to resolve /g' -i ./stdlib/LibGit2/test/libgit2.jl
-  '';
-  prePatch = ''
-    mkdir deps/srccache
-    cp "${dsfmt}" "./deps/srccache/dsfmt-${dsfmtVersion}.tar.gz"
-    cp "${rmath-julia}" "./deps/srccache/Rmath-julia-${rmathVersion}.tar.gz"
-    cp "${libuv}" "./deps/srccache/libuv-${libuvVersion}.tar.gz"
-    cp "${virtualenv}" "./deps/srccache/virtualenv-${virtualenvVersion}.tar.gz"
-    cp "${libwhich}" "./deps/srccache/libwhich-${libwhichVersion}.tar.gz"
-    cp "${llvm}" "./deps/srccache/llvm-${llvmVersion}.src.tar.xz"
-    cp "${suitesparse}" "./deps/srccache/SuiteSparse-${suitesparseVersion}.tar.gz"
-  '';
-
-  makeFlags =
-    let
+    makeFlags = let
       arch = lib.head (lib.splitString "-" stdenv.system);
-      march = {
-        x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
-        i686 = "pentium4";
-        aarch64 = "armv8-a";
-      }.${arch}
-              or (throw "unsupported architecture: ${arch}");
+      march =
+        {
+          x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
+          i686 = "pentium4";
+          aarch64 = "armv8-a";
+        }
+        .${arch}
+        or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
-      cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; aarch64 = "generic"; }.${arch}
-                  or (throw "unsupported architecture: ${arch}");
+      cpuTarget =
+        {
+          x86_64 = "x86-64";
+          i686 = "pentium4";
+          aarch64 = "generic";
+        }
+        .${arch}
+        or (throw "unsupported architecture: ${arch}");
     in [
       "ARCH=${arch}"
       "MARCH=${march}"
@@ -134,7 +179,11 @@ stdenv.mkDerivation rec {
       "SHELL=${stdenv.shell}"
 
       (lib.optionalString (!stdenv.isDarwin) "USE_SYSTEM_BLAS=1")
-      "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
+      "USE_BLAS64=${
+        if blas.isILP64
+        then "1"
+        else "0"
+      }"
 
       "USE_SYSTEM_LAPACK=1"
 
@@ -160,48 +209,61 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_ZLIB=1"
     ];
 
-  LD_LIBRARY_PATH = assert (blas.isILP64 == lapack.isILP64); (lib.makeLibraryPath [
-    arpack fftw fftwSinglePrec gmp libgit2 mpfr blas lapack openlibm
-    openspecfun pcre2
-  ]);
+    LD_LIBRARY_PATH = assert (blas.isILP64 == lapack.isILP64); (lib.makeLibraryPath [
+      arpack
+      fftw
+      fftwSinglePrec
+      gmp
+      libgit2
+      mpfr
+      blas
+      lapack
+      openlibm
+      openspecfun
+      pcre2
+    ]);
 
-  doCheck = !stdenv.isDarwin;
-  checkTarget = "testall";
-  # Julia's tests require read/write access to $HOME
-  preCheck = ''
-    export HOME="$NIX_BUILD_TOP"
-  '';
+    doCheck = !stdenv.isDarwin;
+    checkTarget = "testall";
+    # Julia's tests require read/write access to $HOME
+    preCheck = ''
+      export HOME="$NIX_BUILD_TOP"
+    '';
 
-  preBuild = ''
-    sed -e '/^install:/s@[^ ]*/doc/[^ ]*@@' -i Makefile
-    sed -e '/[$](DESTDIR)[$](docdir)/d' -i Makefile
-    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
-  '';
+    preBuild = ''
+      sed -e '/^install:/s@[^ ]*/doc/[^ ]*@@' -i Makefile
+      sed -e '/[$](DESTDIR)[$](docdir)/d' -i Makefile
+      export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+    '';
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
-  postInstall = ''
-    # Symlink shared libraries from LD_LIBRARY_PATH into lib/julia,
-    # as using a wrapper with LD_LIBRARY_PATH causes segmentation
-    # faults when program returns an error:
-    #   $ julia -e 'throw(Error())'
-    find $(echo $LD_LIBRARY_PATH | sed 's|:| |g') -maxdepth 1 -name '*.${if stdenv.isDarwin then "dylib" else "so"}*' | while read lib; do
-      if [[ ! -e $out/lib/julia/$(basename $lib) ]]; then
-        ln -sv $lib $out/lib/julia/$(basename $lib)
-      fi
-    done
-  '';
+    postInstall = ''
+      # Symlink shared libraries from LD_LIBRARY_PATH into lib/julia,
+      # as using a wrapper with LD_LIBRARY_PATH causes segmentation
+      # faults when program returns an error:
+      #   $ julia -e 'throw(Error())'
+      find $(echo $LD_LIBRARY_PATH | sed 's|:| |g') -maxdepth 1 -name '*.${
+        if stdenv.isDarwin
+        then "dylib"
+        else "so"
+      }*' | while read lib; do
+        if [[ ! -e $out/lib/julia/$(basename $lib) ]]; then
+          ln -sv $lib $out/lib/julia/$(basename $lib)
+        fi
+      done
+    '';
 
-  passthru = {
-    inherit majorVersion minorVersion maintenanceVersion;
-    site = "share/julia/site/v${majorVersion}.${minorVersion}";
-  };
+    passthru = {
+      inherit majorVersion minorVersion maintenanceVersion;
+      site = "share/julia/site/v${majorVersion}.${minorVersion}";
+    };
 
-  meta = {
-    description = "High-level performance-oriented dynamical language for technical computing";
-    homepage = "https://julialang.org/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raskin rob garrison ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
-  };
-}
+    meta = {
+      description = "High-level performance-oriented dynamical language for technical computing";
+      homepage = "https://julialang.org/";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [raskin rob garrison];
+      platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux"];
+    };
+  }

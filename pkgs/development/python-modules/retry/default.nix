@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, decorator
-, py
-, mock
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  decorator,
+  py,
+  mock,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "retry";
   version = "0.9.2";

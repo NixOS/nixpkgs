@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, cups
-, dpkg
-, a2ps, ghostscript, gnugrep, gnused, coreutils, file, perl, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  cups,
+  dpkg,
+  a2ps,
+  ghostscript,
+  gnugrep,
+  gnused,
+  coreutils,
+  file,
+  perl,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hll2390dw-cups";
   version = "4.0.0-1";
@@ -15,8 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "0w8rxh1sa5amxr87qmzs4m2p06b1b36wn2q127mg427sbkh1rwni";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cups ghostscript dpkg a2ps ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [cups ghostscript dpkg a2ps];
 
   dontUnpack = true;
 
@@ -44,9 +54,14 @@ stdenv.mkDerivation rec {
     ; do
       #substituteInPlace $f \
       wrapProgram $f \
-        --prefix PATH : ${lib.makeBinPath [
-          coreutils ghostscript gnugrep gnused
-        ]}
+        --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        ghostscript
+        gnugrep
+        gnused
+      ]
+    }
     done
 
     mkdir -p $out/lib/cups/filter/
@@ -56,16 +71,15 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/brother/Printers/HLL2390DW/cupswrapper/brother-HLL2390DW-cups-en.ppd $out/share/cups/model/
 
     wrapProgram $out/opt/brother/Printers/HLL2390DW/lpd/lpdfilter \
-      --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
-    '';
+      --prefix PATH ":" ${lib.makeBinPath [ghostscript a2ps file gnused gnugrep coreutils which]}
+  '';
 
   meta = with lib; {
     homepage = "http://www.brother.com/";
     description = "Brother HL-L2390DW combined print driver";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us_ot&lang=en&prod=hll2390dw_us&os=128";
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [maintainers.samueldr];
   };
 }
-

@@ -1,19 +1,22 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.statsd;
 
   isBuiltinBackend = name:
-    builtins.elem name [ "graphite" "console" "repeater" ];
+    builtins.elem name ["graphite" "console" "repeater"];
 
   backendsToPackages = let
     mkMap = list: name:
-      if isBuiltinBackend name then list
-      else list ++ [ pkgs.nodePackages.${name} ];
-  in foldl mkMap [];
+      if isBuiltinBackend name
+      then list
+      else list ++ [pkgs.nodePackages.${name}];
+  in
+    foldl mkMap [];
 
   configFile = pkgs.writeText "statsd.conf" ''
     {
@@ -22,13 +25,16 @@ let
       mgmt_address: "${cfg.mgmt_address}",
       mgmt_port: "${toString cfg.mgmt_port}",
       backends: [${
-        concatMapStringsSep "," (name:
+      concatMapStringsSep "," (
+        name:
           if (isBuiltinBackend name)
           then ''"./backends/${name}"''
           else ''"${name}"''
-        ) cfg.backends}],
-      ${optionalString (cfg.graphiteHost!=null) ''graphiteHost: "${cfg.graphiteHost}",''}
-      ${optionalString (cfg.graphitePort!=null) ''graphitePort: "${toString cfg.graphitePort}",''}
+      )
+      cfg.backends
+    }],
+      ${optionalString (cfg.graphiteHost != null) ''graphiteHost: "${cfg.graphiteHost}",''}
+      ${optionalString (cfg.graphitePort != null) ''graphitePort: "${toString cfg.graphitePort}",''}
       console: {
         prettyprint: false
       },
@@ -42,20 +48,15 @@ let
 
   deps = pkgs.buildEnv {
     name = "statsd-runtime-deps";
-    pathsToLink = [ "/lib" ];
+    pathsToLink = ["/lib"];
     ignoreCollisions = true;
 
     paths = backendsToPackages cfg.backends;
   };
-
-in
-
-{
-
+in {
   ###### interface
 
   options.services.statsd = {
-
     enable = mkEnableOption "statsd";
 
     listenAddress = mkOption {
@@ -113,17 +114,16 @@ in
       default = "";
       type = types.nullOr types.str;
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     assertions = map (backend: {
-      assertion = !isBuiltinBackend backend -> hasAttrByPath [ backend ] pkgs.nodePackages;
+      assertion = !isBuiltinBackend backend -> hasAttrByPath [backend] pkgs.nodePackages;
       message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
-    }) cfg.backends;
+    })
+    cfg.backends;
 
     users.users.statsd = {
       uid = config.ids.uids.statsd;
@@ -132,7 +132,7 @@ in
 
     systemd.services.statsd = {
       description = "Statsd Server";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       environment = {
         NODE_PATH = "${deps}/lib/node_modules";
       };
@@ -142,8 +142,6 @@ in
       };
     };
 
-    environment.systemPackages = [ pkgs.statsd ];
-
+    environment.systemPackages = [pkgs.statsd];
   };
-
 }

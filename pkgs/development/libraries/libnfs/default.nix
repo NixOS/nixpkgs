@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "libnfs";
   version = "4.0.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i27wd4zvhjz7620q043p4d4mkx8zv2yz9adm1byin47dynahyda";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=tautological-compare";
 
@@ -19,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NFS client library";
-    homepage    = "https://github.com/sahlberg/libnfs";
-    license     = with licenses; [ lgpl2 bsd2 gpl3 ];
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/sahlberg/libnfs";
+    license = with licenses; [lgpl2 bsd2 gpl3];
+    maintainers = with maintainers; [peterhoeg];
+    platforms = platforms.unix;
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, xmltodict
-, ifaddr
-, requests
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  xmltodict,
+  ifaddr,
+  requests
   # Test dependencies
-, pytestCheckHook
-, mock
-, requests-mock
+  ,
+  pytestCheckHook,
+  mock,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "pysonos";
   version = "0.0.54";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "A SoCo fork with fixes for Home Assistant";
     homepage = "https://github.com/amelchio/pysonos";
     license = licenses.mit;
-    maintainers = with maintainers; [ juaningan ];
+    maintainers = with maintainers; [juaningan];
   };
 }

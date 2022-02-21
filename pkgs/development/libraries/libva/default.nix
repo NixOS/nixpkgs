@@ -1,27 +1,40 @@
-{ stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
-, libdrm
-, minimal ? false, libva-minimal
-, libX11, libXext, libXfixes, wayland, libffi, libGL
-, mesa
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  libdrm,
+  minimal ? false,
+  libva-minimal,
+  libX11,
+  libXext,
+  libXfixes,
+  wayland,
+  libffi,
+  libGL,
+  mesa,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libva" + lib.optionalString minimal "minimal";
   version = "2.13.0";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "libva";
-    rev    = version;
+    owner = "intel";
+    repo = "libva";
+    rev = version;
     sha256 = "0vsvli3xc0gqqp06p7wkm973lhr7c5qgnyz5jfjmf8kv75rajazp";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = ["dev" "out"];
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
+  nativeBuildInputs = [meson pkg-config ninja wayland-scanner];
 
-  buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
+  buildInputs =
+    [libdrm]
+    ++ lib.optionals (!minimal) [libva-minimal libX11 libXext libXfixes wayland libffi libGL];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   mesonFlags = [
@@ -40,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://01.org/linuxmedia/vaapi";
     changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, cpio, findutils, gzip, makeWrapper, util-linux }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  cpio,
+  findutils,
+  gzip,
+  makeWrapper,
+  util-linux,
+}:
 stdenv.mkDerivation rec {
   pname = "abootimg";
   version = "0.6";
@@ -12,8 +21,8 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ util-linux ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [util-linux];
 
   postPatch = ''
     cat <<EOF > version.h
@@ -27,10 +36,10 @@ stdenv.mkDerivation rec {
     install -D -m444 ./debian/abootimg.1 $out/share/man/man1/abootimg.1;
 
     install -D -m 755 abootimg-pack-initrd $out/bin
-    wrapProgram $out/bin/abootimg-pack-initrd --prefix PATH : ${lib.makeBinPath [ coreutils cpio findutils gzip ]}
+    wrapProgram $out/bin/abootimg-pack-initrd --prefix PATH : ${lib.makeBinPath [coreutils cpio findutils gzip]}
 
     install -D -m 755 abootimg-unpack-initrd $out/bin
-    wrapProgram $out/bin/abootimg-unpack-initrd --prefix PATH : ${lib.makeBinPath [ cpio gzip ]}
+    wrapProgram $out/bin/abootimg-unpack-initrd --prefix PATH : ${lib.makeBinPath [cpio gzip]}
   '';
 
   meta = with lib; {
@@ -38,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "Manipulate Android Boot Images";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.flokli ];
+    maintainers = [maintainers.flokli];
   };
 }

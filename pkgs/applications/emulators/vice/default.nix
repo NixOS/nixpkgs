@@ -1,28 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
-, flex
-, perl
-, libpng
-, giflib
-, libjpeg
-, alsa-lib
-, readline
-, libGLU
-, libGL
-, libXaw
-, pkg-config
-, gtk2
-, SDL
-, SDL_image
-, autoreconfHook
-, makeDesktopItem
-, dos2unix
-, xa
-, file
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+  perl,
+  libpng,
+  giflib,
+  libjpeg,
+  alsa-lib,
+  readline,
+  libGLU,
+  libGL,
+  libXaw,
+  pkg-config,
+  gtk2,
+  SDL,
+  SDL_image,
+  autoreconfHook,
+  makeDesktopItem,
+  dos2unix,
+  xa,
+  file,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vice";
   version = "3.6.1";
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     xa
   ];
   dontDisableStatic = true;
-  configureFlags = [ "--enable-fullscreen" "--enable-gnomeui" "--disable-pdf-docs" ];
+  configureFlags = ["--enable-fullscreen" "--enable-gnomeui" "--disable-pdf-docs"];
 
   desktopItem = makeDesktopItem {
     name = "vice";
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     description = "Commodore 64, 128 and other emulators";
     homepage = "https://vice-emu.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [lib.maintainers.sander];
     platforms = lib.platforms.linux;
   };
 }

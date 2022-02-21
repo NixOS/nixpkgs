@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bomutils";
   version = "0.2";
@@ -23,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "Open source tools to create bill-of-materials files used in macOS installers";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
   };
 }

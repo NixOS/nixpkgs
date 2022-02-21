@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "kconfiglib";
   version = "14.1.0";
@@ -16,6 +19,6 @@ buildPythonPackage rec {
     description = "A flexible Python 2/3 Kconfig implementation and library";
     homepage = "https://github.com/ulfalizer/Kconfiglib";
     license = licenses.isc;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
   };
 }

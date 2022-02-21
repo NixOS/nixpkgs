@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ipfs-migrator";
   version = "1.7.1";
@@ -15,13 +18,13 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Migrations for the filesystem repository of ipfs clients";
     homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ elitak ];
+    maintainers = with maintainers; [elitak];
   };
 }

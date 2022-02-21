@@ -1,10 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, which
-, wrapQtAppsHook
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  which,
+  wrapQtAppsHook,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "sasview";
   version = "5.0.4";
@@ -51,12 +51,12 @@ python3.pkgs.buildPythonApplication rec {
     unittest-xml-reporting
   ];
 
-  pytestFlagsArray = [ "test" ];
+  pytestFlagsArray = ["test"];
 
   meta = with lib; {
     homepage = "https://www.sasview.org";
     description = "Fitting and data analysis for small angle scattering data";
-    maintainers = with maintainers; [ rprospero ];
+    maintainers = with maintainers; [rprospero];
     license = licenses.bsd3;
   };
 }

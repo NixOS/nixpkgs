@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "dcrd";
   version = "1.5.2";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." "cmd/dcrctl" "cmd/promptsecret" ];
+  subPackages = ["." "cmd/dcrctl" "cmd/promptsecret"];
 
   meta = {
     homepage = "https://decred.org";
     description = "Decred daemon in Go (golang)";
-    license = with lib.licenses; [ isc ];
-    maintainers = with lib.maintainers; [ juaningan ];
+    license = with lib.licenses; [isc];
+    maintainers = with lib.maintainers; [juaningan];
   };
 }

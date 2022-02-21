@@ -1,5 +1,11 @@
-{ lib, stdenv, which, coreutils, fetchzip, qt4 }:
-
+{
+  lib,
+  stdenv,
+  which,
+  coreutils,
+  fetchzip,
+  qt4,
+}:
 stdenv.mkDerivation rec {
   pname = "qxt";
   version = "0.6.2";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zmqfn0h8cpky7wgaaxlfh0l89r9r0isi87587kaicyap7a6kxwz";
   };
 
-  buildInputs = [ qt4 which ];
+  buildInputs = [qt4 which];
 
   patchPhase = ''
     patchShebangs configure
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ forkk ];
+    maintainers = with lib.maintainers; [forkk];
     broken = true;
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "tuigreet";
   version = "0.7.2";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "Graphical console greter for greetd";
     homepage = "https://github.com/apognu/tuigreet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ivar ];
+    maintainers = with maintainers; [luc65r ivar];
     platforms = platforms.linux;
   };
 }

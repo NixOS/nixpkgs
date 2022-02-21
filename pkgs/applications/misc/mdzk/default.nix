@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "mdzk";
   version = "0.5.0";
@@ -13,13 +18,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-uJ00tGiKtcYghFUh0fcYg4nZc/o8yhvlVs+6/aRNY5s=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [CoreServices];
 
   meta = with lib; {
     description = "Plain text Zettelkasten based on mdBook";
     homepage = "https://github.com/mdzk-rs/mdzk/";
     changelog = "https://github.com/mdzk-rs/mdzk/blob/main/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ bryanasdev000 ratsclub ];
+    maintainers = with maintainers; [bryanasdev000 ratsclub];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "zfsbackup";
   version = "unstable-2020-09-30";
@@ -20,6 +23,6 @@ buildGoPackage rec {
     description = "Backup ZFS snapshots to cloud storage such as Google, Amazon, Azure, etc";
     homepage = "https://github.com/someone1/zfsbackup-go";
     license = licenses.mit;
-    maintainers = [ maintainers.xfix ];
+    maintainers = [maintainers.xfix];
   };
 }

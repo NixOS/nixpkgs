@@ -1,13 +1,13 @@
-{ lib
-, aspell
-, aspellDicts
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  aspell,
+  aspellDicts,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
-
 buildPythonPackage rec {
   pname = "aspell-python";
   version = "1.15";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Python wrapper for aspell (C extension and Python version)";
     homepage = "https://github.com/WojciechMula/aspell-python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

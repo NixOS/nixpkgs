@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 buildPythonPackage rec {
   pname = "pygtail";
   version = "0.8.0";

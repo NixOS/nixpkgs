@@ -1,5 +1,14 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, fetchpatch, glib, glib-networking, libgtop, gnome }:
-
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  fetchpatch,
+  glib,
+  glib-networking,
+  libgtop,
+  gnome,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
   version = "unstable-2021-09-07";
@@ -52,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Display system informations in gnome shell status bar";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ andersk ];
+    maintainers = with maintainers; [andersk];
     homepage = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet";
   };
 }

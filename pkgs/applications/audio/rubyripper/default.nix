@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, ruby, cdparanoia, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ruby,
+  cdparanoia,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   version = "0.6.2";
   pname = "rubyripper";
@@ -9,9 +16,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  configureFlags = [ "--enable-cli" ];
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ruby cdparanoia ];
+  configureFlags = ["--enable-cli"];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [ruby cdparanoia];
   postInstall = ''
     wrapProgram "$out/bin/rrip_cli" \
       --prefix PATH : "${ruby}/bin" \

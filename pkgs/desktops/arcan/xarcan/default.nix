@@ -1,41 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, arcan
-, audit
-, dbus
-, libepoxy
-, fontutil
-, libGL
-, libX11
-, libXau
-, libXdmcp
-, libXfont2
-, libdrm
-, libgcrypt
-, libmd
-, libselinux
-, libtirpc
-, libxcb
-, libxkbfile
-, libxshmfence
-, mesa
-, meson
-, nettle
-, ninja
-, openssl
-, pixman
-, pkg-config
-, systemd
-, xcbutil
-, xcbutilwm
-, xkbcomp
-, xkeyboard_config
-, xorgproto
-, xtrans
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  arcan,
+  audit,
+  dbus,
+  libepoxy,
+  fontutil,
+  libGL,
+  libX11,
+  libXau,
+  libXdmcp,
+  libXfont2,
+  libdrm,
+  libgcrypt,
+  libmd,
+  libselinux,
+  libtirpc,
+  libxcb,
+  libxkbfile,
+  libxshmfence,
+  mesa,
+  meson,
+  nettle,
+  ninja,
+  openssl,
+  pixman,
+  pkg-config,
+  systemd,
+  xcbutil,
+  xcbutilwm,
+  xkbcomp,
+  xkeyboard_config,
+  xorgproto,
+  xtrans,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xarcan";
   version = "0.6.0+unstable=2021-06-14";
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
       allows running an X session as a window under Arcan.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }

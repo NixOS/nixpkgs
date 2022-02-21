@@ -1,7 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgs, lib, nodejs-14_x, nodePackages, pkg-config, libjpeg
-, pixman, cairo, pango }:
-
-let
+{
+  stdenv,
+  fetchFromGitHub,
+  pkgs,
+  lib,
+  nodejs-14_x,
+  nodePackages,
+  pkg-config,
+  libjpeg,
+  pixman,
+  cairo,
+  pango,
+}: let
   nodejs = nodejs-14_x;
   # No official version ever released
   src = fetchFromGitHub {
@@ -15,36 +24,36 @@ let
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
+in
+  myNodePackages.package.override {
+    pname = "mx-puppet-discord";
+    version = "2021-08-01";
 
-in myNodePackages.package.override {
-  pname = "mx-puppet-discord";
-  version = "2021-08-01";
+    inherit src;
 
-  inherit src;
+    nativeBuildInputs = [nodePackages.node-pre-gyp pkg-config];
+    buildInputs = [libjpeg pixman cairo pango];
 
-  nativeBuildInputs = [ nodePackages.node-pre-gyp pkg-config ];
-  buildInputs = [ libjpeg pixman cairo pango ];
+    postInstall = ''
+      # Patch shebangs in node_modules, otherwise the webpack build fails with interpreter problems
+      patchShebangs --build "$out/lib/node_modules/mx-puppet-discord/node_modules/"
+      # compile Typescript sources
+      npm run build
 
-  postInstall = ''
-    # Patch shebangs in node_modules, otherwise the webpack build fails with interpreter problems
-    patchShebangs --build "$out/lib/node_modules/mx-puppet-discord/node_modules/"
-    # compile Typescript sources
-    npm run build
+      # Make an executable to run the server
+      mkdir -p $out/bin
+      cat <<EOF > $out/bin/mx-puppet-discord
+      #!/bin/sh
+      exec ${nodejs}/bin/node $out/lib/node_modules/mx-puppet-discord/build/index.js "\$@"
+      EOF
+      chmod +x $out/bin/mx-puppet-discord
+    '';
 
-    # Make an executable to run the server
-    mkdir -p $out/bin
-    cat <<EOF > $out/bin/mx-puppet-discord
-    #!/bin/sh
-    exec ${nodejs}/bin/node $out/lib/node_modules/mx-puppet-discord/build/index.js "\$@"
-    EOF
-    chmod +x $out/bin/mx-puppet-discord
-  '';
-
-  meta = with lib; {
-    description = "A discord puppeting bridge for matrix";
-    license = licenses.asl20;
-    homepage = "https://github.com/matrix-discord/mx-puppet-discord";
-    maintainers = with maintainers; [ expipiplus1 ];
-    platforms = platforms.unix;
-  };
-}
+    meta = with lib; {
+      description = "A discord puppeting bridge for matrix";
+      license = licenses.asl20;
+      homepage = "https://github.com/matrix-discord/mx-puppet-discord";
+      maintainers = with maintainers; [expipiplus1];
+      platforms = platforms.unix;
+    };
+  }

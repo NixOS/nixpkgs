@@ -1,17 +1,17 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.programs.zsh.autosuggestions;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.programs.zsh.autosuggestions;
+in {
   imports = [
-    (mkRenamedOptionModule [ "programs" "zsh" "enableAutosuggestions" ] [ "programs" "zsh" "autosuggestions" "enable" ])
+    (mkRenamedOptionModule ["programs" "zsh" "enableAutosuggestions"] ["programs" "zsh" "autosuggestions" "enable"])
   ];
 
   options.programs.zsh.autosuggestions = {
-
     enable = mkEnableOption "zsh-autosuggestions";
 
     highlightStyle = mkOption {
@@ -22,7 +22,7 @@ in
     };
 
     strategy = mkOption {
-      type = types.enum [ "history" "match_prev_cmd" ];
+      type = types.enum ["history" "match_prev_cmd"];
       default = "history";
       description = ''
         Set ZSH_AUTOSUGGEST_STRATEGY to choose the strategy for generating suggestions.
@@ -53,11 +53,9 @@ in
         }
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
-
     programs.zsh.interactiveShellInit = ''
       source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
@@ -67,6 +65,5 @@ in
 
       ${concatStringsSep "\n" (mapAttrsToList (key: value: ''export ${key}="${value}"'') cfg.extraConfig)}
     '';
-
   };
 }

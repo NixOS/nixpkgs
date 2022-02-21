@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, srt
-, bc
-, pkg-config
-, perl
-, openssl_3_0
-, zlib
-, ffmpeg
-, libvpx
-, libopus
-, libuuid
-, srtp
-, jemalloc
-, pcre2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  srt,
+  bc,
+  pkg-config,
+  perl,
+  openssl_3_0,
+  zlib,
+  ffmpeg,
+  libvpx,
+  libopus,
+  libuuid,
+  srtp,
+  jemalloc,
+  pcre2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
   version = "0.12.11";
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
   makeFlags = "release CONFIG_LIBRARY_PATHS= CONFIG_PKG_PATHS= GLOBAL_CC=$(CC) GLOBAL_CXX=$(CXX) GLOBAL_LD=$(CXX) SHELL=${stdenv.shell}";
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ bc pkg-config perl ];
-  buildInputs = [ openssl_3_0 srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid ];
+  nativeBuildInputs = [bc pkg-config perl];
+  buildInputs = [openssl_3_0 srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid];
 
   preBuild = ''
     patchShebangs core/colorg++
@@ -52,9 +53,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open-source streaming video service with sub-second latency";
-    homepage    = "https://ovenmediaengine.com";
-    license     = licenses.gpl2Only;
-    maintainers = with maintainers; [ lukegb ];
-    platforms   = [ "x86_64-linux" ];
+    homepage = "https://ovenmediaengine.com";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [lukegb];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libusb1 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb1,
+}:
 stdenv.mkDerivation rec {
   pname = "rkflashtool";
   version = "5.1";
@@ -14,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mkcy3yyfaddhzg524hjnhvmwdmdfzbavib8d9p5y38pcqy8xgdp";
   };
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [libusb1];
 
   preBuild = ''
     cp $versionh version.h
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/rkflashtool/";
     description = "Tools for flashing Rockchip devices";
     platforms = platforms.linux;
-    maintainers = [ maintainers.viric ];
+    maintainers = [maintainers.viric];
     license = licenses.bsd2;
   };
 }

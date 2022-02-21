@@ -1,5 +1,11 @@
-{lib, stdenv, fetchgit, gettext, python2, elfutils}:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  gettext,
+  python2,
+  elfutils,
+}:
 stdenv.mkDerivation {
   pname = "libsystemtap";
   version = "3.2";
@@ -13,7 +19,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ gettext python2 elfutils ];
+  nativeBuildInputs = [gettext python2 elfutils];
 
   installPhase = ''
     mkdir -p $out/include
@@ -25,6 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://sourceware.org/systemtap/";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ lib.maintainers.farlion ];
+    maintainers = [lib.maintainers.farlion];
   };
 }

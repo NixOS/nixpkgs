@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, regex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  regex,
 }:
-
 buildPythonPackage rec {
   pname = "somajo";
   version = "2.2.0";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Tokenizer and sentence splitter for German and English web texts";
     homepage = "https://github.com/tsproisl/SoMaJo";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

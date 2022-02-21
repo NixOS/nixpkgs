@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchzip, libtool, pkg-config, ncurses, unibilium }:
-
+{
+  stdenv,
+  lib,
+  fetchzip,
+  libtool,
+  pkg-config,
+  ncurses,
+  unibilium,
+}:
 stdenv.mkDerivation rec {
   pname = "libtermkey";
 
@@ -10,11 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "02dks6bj7n23lj005yq41azf95wh3hapmgc2lzyh12vigkjh67rg";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ]
+  makeFlags =
+    ["PREFIX=$(out)"]
     ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
-  nativeBuildInputs = [ libtool pkg-config ];
-  buildInputs = [ ncurses unibilium ];
+  nativeBuildInputs = [libtool pkg-config];
+  buildInputs = [ncurses unibilium];
 
   meta = with lib; {
     description = "Terminal keypress reading library";

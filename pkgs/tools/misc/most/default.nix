@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, slang, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  slang,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "most";
   version = "5.1.0";
@@ -14,7 +19,7 @@ stdenv.mkDerivation rec {
     ./parallel-make.patch
   ];
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   makeFlags = [
     "DOC_DIR=${placeholder "doc"}/share/doc/most"
@@ -27,9 +32,9 @@ stdenv.mkDerivation rec {
       -e "s|/bin/rm|rm|"
   '';
 
-  configureFlags = [ "--with-slang=${slang.dev}" ];
+  configureFlags = ["--with-slang=${slang.dev}"];
 
-  buildInputs = [ slang ncurses ];
+  buildInputs = [slang ncurses];
 
   enableParallelBuilding = true;
 

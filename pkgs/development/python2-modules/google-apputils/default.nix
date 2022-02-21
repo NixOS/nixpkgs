@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytz
-, gflags
-, python-dateutil
-, mox
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pytz,
+  gflags,
+  python-dateutil,
+  mox,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "google-apputils";
   version = "0.4.2";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sed -i '/ez_setup/d' setup.py
   '';
 
-  propagatedBuildInputs = [ pytz gflags python-dateutil mox ];
+  propagatedBuildInputs = [pytz gflags python-dateutil mox];
 
   checkPhase = ''
     ${python.executable} setup.py google_test
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Google Application Utilities for Python";
     homepage = "https://github.com/google/google-apputils";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

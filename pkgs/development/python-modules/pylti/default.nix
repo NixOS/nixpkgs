@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httplib2
-, oauth
-, oauth2
-, semantic-version
-, flask
-, httpretty
-, oauthlib
-, pyflakes
-, pytest
-, pytestcache
-, pytest-cov
-, covCore
-, pytest-flakes
-, sphinx
-, mock
-, chalice
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httplib2,
+  oauth,
+  oauth2,
+  semantic-version,
+  flask,
+  httpretty,
+  oauthlib,
+  pyflakes,
+  pytest,
+  pytestcache,
+  pytest-cov,
+  covCore,
+  pytest-flakes,
+  sphinx,
+  mock,
+  chalice,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "PyLTI";
   version = "0.7.0";
@@ -31,10 +31,20 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "mock==1.0.1" "mock"
   '';
 
-  propagatedBuildInputs = [ httplib2 oauth oauth2 semantic-version ];
+  propagatedBuildInputs = [httplib2 oauth oauth2 semantic-version];
   checkInputs = [
-    flask httpretty oauthlib pyflakes pytest pytestcache pytest-cov covCore
-    pytest-flakes sphinx mock chalice
+    flask
+    httpretty
+    oauthlib
+    pyflakes
+    pytest
+    pytestcache
+    pytest-cov
+    covCore
+    pytest-flakes
+    sphinx
+    mock
+    chalice
   ];
 
   src = fetchPypi {
@@ -46,6 +56,6 @@ buildPythonPackage rec {
     description = "Implementation of IMS LTI interface that works with edX";
     homepage = "https://github.com/mitodl/pylti";
     license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ layus ];
+    maintainers = with lib.maintainers; [layus];
   };
 }

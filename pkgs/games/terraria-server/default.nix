@@ -1,17 +1,23 @@
-{ stdenv, lib, file, fetchurl, autoPatchelfHook, unzip }:
-
+{
+  stdenv,
+  lib,
+  file,
+  fetchurl,
+  autoPatchelfHook,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "terraria-server";
   version = "1.4.3.2";
-  urlVersion = lib.replaceChars [ "." ] [ "" ] version;
+  urlVersion = lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
     url = "https://terraria.org/api/download/pc-dedicated-server/terraria-server-${urlVersion}.zip";
     sha256 = "sha256-/OClQTO9iBRQk3iTvYbjG1cCicKIBh+yi2OFpurJx8U=";
   };
 
-  buildInputs = [ file ];
-  nativeBuildInputs = [ autoPatchelfHook unzip ];
+  buildInputs = [file];
+  nativeBuildInputs = [autoPatchelfHook unzip];
 
   installPhase = ''
     runHook preInstall
@@ -27,8 +33,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://terraria.org";
     description = "Dedicated server for Terraria, a 2D action-adventure sandbox";
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ncfavier ];
+    maintainers = with maintainers; [ncfavier];
   };
 }

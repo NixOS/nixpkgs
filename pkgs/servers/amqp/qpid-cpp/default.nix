@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv, buildPythonPackage, qpid-python }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  python2,
+  boost,
+  libuuid,
+  ruby,
+  buildEnv,
+  buildPythonPackage,
+  qpid-python,
+}: let
   pname = "qpid-cpp";
   name = "${pname}-${version}";
   version = "1.39.0";
@@ -17,14 +27,14 @@ let
     description = "An AMQP message broker and a C++ messaging API";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cpages ];
+    maintainers = with maintainers; [cpages];
   };
 
   qpid-cpp = stdenv.mkDerivation {
     inherit src meta pname version;
 
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ boost libuuid ruby python2 ];
+    nativeBuildInputs = [cmake];
+    buildInputs = [boost libuuid ruby python2];
 
     # the subdir managementgen wants to install python stuff in ${python} and
     # the installation tries to create some folders in /var
@@ -41,7 +51,8 @@ let
       "-Wno-error=unused-function"
       "-Wno-error=ignored-qualifiers"
       "-Wno-error=catch-value"
-    ] ++ lib.optionals stdenv.cc.isGNU [
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
       "-Wno-error=deprecated-copy"
     ]);
   };
@@ -51,9 +62,10 @@ let
 
     sourceRoot = "${name}/management/python";
 
-    propagatedBuildInputs = [ qpid-python ];
+    propagatedBuildInputs = [qpid-python];
   };
-in buildEnv {
-  name = "${name}-env";
-  paths = [ qpid-cpp python-frontend ];
-}
+in
+  buildEnv {
+    name = "${name}-env";
+    paths = [qpid-cpp python-frontend];
+  }

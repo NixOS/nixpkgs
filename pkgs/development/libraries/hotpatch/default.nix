@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "hotpatch";
   version = "0.2";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   preConfigure = ''
     substituteInPlace test/loader.c \
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Hot patching executables on Linux using .so file injection";
     homepage = src.meta.homepage;
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [];
     platforms = ["i686-linux" "x86_64-linux"];
   };
 }

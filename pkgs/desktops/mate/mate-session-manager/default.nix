@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, xtrans, dbus-glib, systemd,
-  libSM, libXtst, gtk3, libepoxy, polkit, hicolor-icon-theme, mate,
-  wrapGAppsHook, fetchpatch, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  xtrans,
+  dbus-glib,
+  systemd,
+  libSM,
+  libXtst,
+  gtk3,
+  libepoxy,
+  polkit,
+  hicolor-icon-theme,
+  mate,
+  wrapGAppsHook,
+  fetchpatch,
+  mateUpdateScript,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mate-session-manager";
   version = "1.26.0";
@@ -46,14 +61,14 @@ stdenv.mkDerivation rec {
       --replace "Exec=mate-session" "Exec=$out/bin/mate-session"
   '';
 
-  passthru.providedSessions = [ "mate" ];
+  passthru.providedSessions = ["mate"];
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "MATE Desktop session manager";
     homepage = "https://github.com/mate-desktop/mate-session-manager";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [gpl2Plus lgpl2Plus];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

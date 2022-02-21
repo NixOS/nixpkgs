@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-
+{
+  lib,
+  fetchFromGitHub,
+}:
 fetchFromGitHub {
   name = "powerline-fonts-2018-11-11";
 
@@ -24,8 +26,8 @@ fetchFromGitHub {
     longDescription = ''
       Pre-patched and adjusted fonts for usage with the Powerline plugin.
     '';
-    license = with licenses; [ asl20 free ofl ];
+    license = with licenses; [asl20 free ofl];
     platforms = platforms.all;
-    maintainers = with maintainers; [ malyn ];
+    maintainers = with maintainers; [malyn];
   };
 }

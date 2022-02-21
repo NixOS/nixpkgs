@@ -1,12 +1,15 @@
-{ lib, stdenv, fetchurl, python27Packages, file }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python27Packages,
+  file,
+}: let
   inherit (python27Packages) python;
   requirements = (import ./requirements.nix {
     inherit lib fetchurl;
     pythonPackages = python27Packages;
   });
-
 in
   stdenv.mkDerivation rec {
     pname = "salut-a-toi";
@@ -18,14 +21,23 @@ in
     };
 
     buildInputs = with python27Packages;
-    [
-      python twisted urwid wxPython pygobject2
-      dbus-python wrapPython setuptools file
-      pycrypto pyxdg
-    ] ++  (with requirements; [
-      pyfeed
-      wokkel
-    ]);
+      [
+        python
+        twisted
+        urwid
+        wxPython
+        pygobject2
+        dbus-python
+        wrapPython
+        setuptools
+        file
+        pycrypto
+        pyxdg
+      ]
+      ++ (with requirements; [
+        pyfeed
+        wokkel
+      ]);
 
     configurePhase = ''
       sed -i "/use_setuptools/d" setup.py
@@ -54,7 +66,7 @@ in
       homepage = "http://sat.goffi.org/";
       description = "A multi-frontend XMPP client";
       platforms = platforms.linux;
-      maintainers = [ maintainers.raskin ];
+      maintainers = [maintainers.raskin];
       license = licenses.gpl3Plus;
     };
   }

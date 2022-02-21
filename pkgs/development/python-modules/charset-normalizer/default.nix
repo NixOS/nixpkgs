@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "charset-normalizer";
   version = "2.0.10";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Python module for encoding and language detection";
     homepage = "https://charset-normalizer.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

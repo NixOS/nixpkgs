@@ -1,19 +1,21 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.foldingathome;
 
   args =
     ["--team" "${toString cfg.team}"]
     ++ lib.optionals (cfg.user != null) ["--user" cfg.user]
-    ++ cfg.extraArgs
-    ;
-in
-{
+    ++ cfg.extraArgs;
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "foldingAtHome" ] [ "services" "foldingathome" ])
-    (mkRenamedOptionModule [ "services" "foldingathome" "nickname" ] [ "services" "foldingathome" "user" ])
-    (mkRemovedOptionModule [ "services" "foldingathome" "config" ] ''
+    (mkRenamedOptionModule ["services" "foldingAtHome"] ["services" "foldingathome"])
+    (mkRenamedOptionModule ["services" "foldingathome" "nickname"] ["services" "foldingathome" "user"])
+    (mkRemovedOptionModule ["services" "foldingathome" "config"] ''
       Use <literal>services.foldingathome.extraArgs instead<literal>
     '')
   ];
@@ -71,8 +73,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.foldingathome = {
       description = "Folding@home client";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       script = ''
         exec ${cfg.package}/bin/FAHClient ${lib.escapeShellArgs args}
       '';
@@ -86,6 +88,6 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [zimbatm];
   };
 }

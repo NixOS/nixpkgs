@@ -1,20 +1,27 @@
-args@{ pkgs, nextcloudVersion ? 22, ... }:
-
-(import ../make-test-python.nix ({ pkgs, ...}: let
+args @ {
+  pkgs,
+  nextcloudVersion ? 22,
+  ...
+}:
+(import ../make-test-python.nix ({pkgs, ...}: let
   adminpass = "hunter2";
   adminuser = "custom-admin-username";
 in {
   name = "nextcloud-with-postgresql-and-redis";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eqyiel ];
+    maintainers = [eqyiel];
   };
 
   nodes = {
     # The only thing the client needs to do is download a file.
-    client = { ... }: {};
+    client = {...}: {};
 
-    nextcloud = { config, pkgs, ... }: {
-      networking.firewall.allowedTCPPorts = [ 80 ];
+    nextcloud = {
+      config,
+      pkgs,
+      ...
+    }: {
+      networking.firewall.allowedTCPPorts = [80];
 
       services.nextcloud = {
         enable = true;
@@ -41,7 +48,7 @@ in {
         enable = true;
       };
 
-      systemd.services.nextcloud-setup= {
+      systemd.services.nextcloud-setup = {
         requires = ["postgresql.service"];
         after = [
           "postgresql.service"
@@ -50,9 +57,10 @@ in {
 
       services.postgresql = {
         enable = true;
-        ensureDatabases = [ "nextcloud" ];
+        ensureDatabases = ["nextcloud"];
         ensureUsers = [
-          { name = "nextcloud";
+          {
+            name = "nextcloud";
             ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
           }
         ];
@@ -99,4 +107,5 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
   '';
-})) args
+}))
+args

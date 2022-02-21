@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "ansicolor";
   version = "0.3.2";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/numerodix/ansicolor/";
     description = "A library to produce ansi color output and colored highlighting and diffing";
     license = licenses.asl20;
-    maintainers = with maintainers; [ andsild ];
+    maintainers = with maintainers; [andsild];
   };
 }

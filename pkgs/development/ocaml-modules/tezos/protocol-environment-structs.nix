@@ -1,11 +1,11 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-crypto
-, tezos-protocol-environment-packer
-, bls12-381-legacy
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-crypto,
+  tezos-protocol-environment-packer,
+  bls12-381-legacy,
 }:
-
 buildDunePackage {
   pname = "tezos-protocol-environment-structs";
   inherit (tezos-stdlib) version useDune2;
@@ -19,7 +19,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: restricted typing environment for the economic protocols";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: restricted typing environment for the economic protocols";
+    };
 }

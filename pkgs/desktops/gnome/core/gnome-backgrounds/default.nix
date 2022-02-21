@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gnome, gettext }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  gettext,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-backgrounds";
   version = "41.0";
@@ -10,7 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-backgrounds"; attrPath = "gnome.gnome-backgrounds"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-backgrounds";
+      attrPath = "gnome.gnome-backgrounds";
+    };
   };
 
   patches = [
@@ -20,7 +31,7 @@ stdenv.mkDerivation rec {
     ./stable-dir.patch
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext ];
+  nativeBuildInputs = [meson ninja pkg-config gettext];
 
   meta = with lib; {
     platforms = platforms.unix;

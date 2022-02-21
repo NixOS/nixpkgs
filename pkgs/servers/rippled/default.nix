@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchgit, fetchurl, git, cmake, pkg-config
-, openssl, boost, grpc, abseil-cpp, protobuf3_8, libnsl }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchurl,
+  git,
+  cmake,
+  pkg-config,
+  openssl,
+  boost,
+  grpc,
+  abseil-cpp,
+  protobuf3_8,
+  libnsl,
+}: let
   sqlite3 = fetchurl rec {
     url = "https://www.sqlite.org/2018/sqlite-amalgamation-3260000.zip";
     sha256 = "0vh9aa5dyvdwsyd8yp88ss300mv2c2m40z79z569lcxa6fqwlpfy";
@@ -114,54 +125,55 @@ let
     leaveDotGit = true;
     fetchSubmodules = false;
   };
-in stdenv.mkDerivation rec {
-  pname = "rippled";
-  version = "1.7.3";
+in
+  stdenv.mkDerivation rec {
+    pname = "rippled";
+    version = "1.7.3";
 
-  src = fetchgit {
-    url = "https://github.com/ripple/rippled.git";
-    rev = version;
-    sha256 = "008qzb138r2pi0cqj4d6d5f0grlb2gm87m8j0dj8b0giya22xv6s";
-    leaveDotGit = true;
-    fetchSubmodules = true;
-  };
+    src = fetchgit {
+      url = "https://github.com/ripple/rippled.git";
+      rev = version;
+      sha256 = "008qzb138r2pi0cqj4d6d5f0grlb2gm87m8j0dj8b0giya22xv6s";
+      leaveDotGit = true;
+      fetchSubmodules = true;
+    };
 
-  hardeningDisable = ["format"];
-  cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
+    hardeningDisable = ["format"];
+    cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
 
-  nativeBuildInputs = [ pkg-config cmake git ];
-  buildInputs = [ openssl openssl.dev boostSharedStatic grpc abseil-cpp protobuf3_8 libnsl ];
+    nativeBuildInputs = [pkg-config cmake git];
+    buildInputs = [openssl openssl.dev boostSharedStatic grpc abseil-cpp protobuf3_8 libnsl];
 
-  preConfigure = ''
-    export HOME=$PWD
+    preConfigure = ''
+      export HOME=$PWD
 
-    git config --global url."file://${rocksdb}".insteadOf "${rocksdb.url}"
-    git config --global url."file://${docca}".insteadOf "${docca.url}"
-    git config --global url."file://${lz4}".insteadOf "${lz4.url}"
-    git config --global url."file://${libarchive}".insteadOf "${libarchive.url}"
-    git config --global url."file://${soci}".insteadOf "${soci.url}"
-    git config --global url."file://${snappy}".insteadOf "${snappy.url}"
-    git config --global url."file://${nudb}".insteadOf "${nudb.url}"
-    git config --global url."file://${google-benchmark}".insteadOf "${google-benchmark.url}"
-    git config --global url."file://${google-test}".insteadOf "${google-test.url}"
-    git config --global url."file://${date}".insteadOf "${date.url}"
+      git config --global url."file://${rocksdb}".insteadOf "${rocksdb.url}"
+      git config --global url."file://${docca}".insteadOf "${docca.url}"
+      git config --global url."file://${lz4}".insteadOf "${lz4.url}"
+      git config --global url."file://${libarchive}".insteadOf "${libarchive.url}"
+      git config --global url."file://${soci}".insteadOf "${soci.url}"
+      git config --global url."file://${snappy}".insteadOf "${snappy.url}"
+      git config --global url."file://${nudb}".insteadOf "${nudb.url}"
+      git config --global url."file://${google-benchmark}".insteadOf "${google-benchmark.url}"
+      git config --global url."file://${google-test}".insteadOf "${google-test.url}"
+      git config --global url."file://${date}".insteadOf "${date.url}"
 
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "https://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "URL ${sqlite3.url}" "URL ${sqlite3}"
-  '';
+      substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
+      substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "https://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
+      substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
+      substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "URL ${sqlite3.url}" "URL ${sqlite3}"
+    '';
 
-  doCheck = true;
-  checkPhase = ''
-    ./rippled --unittest
-  '';
+    doCheck = true;
+    checkPhase = ''
+      ./rippled --unittest
+    '';
 
-  meta = with lib; {
-    description = "Ripple P2P payment network reference server";
-    homepage = "https://github.com/ripple/rippled";
-    maintainers = with maintainers; [ offline RaghavSood ];
-    license = licenses.isc;
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "Ripple P2P payment network reference server";
+      homepage = "https://github.com/ripple/rippled";
+      maintainers = with maintainers; [offline RaghavSood];
+      license = licenses.isc;
+      platforms = ["x86_64-linux"];
+    };
+  }

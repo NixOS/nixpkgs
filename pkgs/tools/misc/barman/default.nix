@@ -1,6 +1,7 @@
-{ fetchFromGitHub
-, lib
-, python3Packages
+{
+  fetchFromGitHub,
+  lib,
+  python3Packages,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "barman";
@@ -30,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://www.pgbarman.org/";
     description = "Backup and Recovery Manager for PostgreSQL";
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

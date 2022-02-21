@@ -1,6 +1,11 @@
-{composerEnv, fetchurl, fetchgit ? null, fetchhg ? null, fetchsvn ? null, noDev ? false}:
-
-let
+{
+  composerEnv,
+  fetchurl,
+  fetchgit ? null,
+  fetchhg ? null,
+  fetchsvn ? null,
+  noDev ? false,
+}: let
   packages = {
     "aws/aws-crt-php" = {
       targetDir = "";
@@ -1045,13 +1050,13 @@ let
   };
   devPackages = {};
 in
-composerEnv.buildPackage {
-  inherit packages devPackages noDev;
-  name = "bookstack";
-  src = ./.;
-  executable = false;
-  symlinkDependencies = false;
-  meta = {
-    license = "MIT";
-  };
-}
+  composerEnv.buildPackage {
+    inherit packages devPackages noDev;
+    name = "bookstack";
+    src = ./.;
+    executable = false;
+    symlinkDependencies = false;
+    meta = {
+      license = "MIT";
+    };
+  }

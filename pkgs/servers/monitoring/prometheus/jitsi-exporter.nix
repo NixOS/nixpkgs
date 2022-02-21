@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchgit, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "jitsiexporter";
   version = "0.2.18";
@@ -12,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) jitsi; };
+  passthru.tests = {inherit (nixosTests.prometheus-exporters) jitsi;};
 
   meta = with lib; {
     description = "Export Jitsi Videobridge metrics to Prometheus";
     homepage = "https://git.xsfx.dev/prometheus/jitsiexporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [petabyteboy];
   };
 }

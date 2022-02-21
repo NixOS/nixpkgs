@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, globalplatform, pcsclite, gppcscconnectionplugin
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  globalplatform,
+  pcsclite,
+  gppcscconnectionplugin,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gpshell";
   version = "1.4.4";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "19a77zvyf2vazbv17185s4pynhylk2ky8vhl4i8pg9zww29sicqi";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ globalplatform pcsclite ];
+  nativeBuildInputs = [pkg-config makeWrapper];
+  buildInputs = [globalplatform pcsclite];
 
   postFixup = ''
     wrapProgram "$out/bin/gpshell" --prefix LD_LIBRARY_PATH : "${gppcscconnectionplugin}/lib"

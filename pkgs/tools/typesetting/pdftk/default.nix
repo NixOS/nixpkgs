@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitLab, gradle, jre, perl, writeText, runtimeShell }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gradle,
+  jre,
+  perl,
+  writeText,
+  runtimeShell,
+}: let
   pname = "pdftk";
   version = "3.3.2";
 
@@ -15,7 +22,7 @@ let
     pname = "${pname}-deps";
     inherit src version;
 
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [gradle perl];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -37,59 +44,59 @@ let
 
   # Point to our local deps repo
   gradleInit = writeText "init.gradle" ''
-    logger.lifecycle 'Replacing Maven repositories with ${deps}...'
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
+      logger.lifecycle 'Replacing Maven repositories with ${deps}...'
+      gradle.projectsLoaded {
+        rootProject.allprojects {
+          buildscript {
+            repositories {
+              clear()
+              maven { url '${deps}' }
+            }
+          }
           repositories {
             clear()
             maven { url '${deps}' }
           }
         }
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
       }
+
+      settingsEvaluated { settings ->
+        settings.pluginManagement {
+          repositories {
+            maven { url '${deps}' }
+          }
+        }
     }
+  '';
+in
+  stdenv.mkDerivation rec {
+    inherit pname version src;
 
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          maven { url '${deps}' }
-        }
-      }
+    nativeBuildInputs = [gradle];
+
+    buildPhase = ''
+      export GRADLE_USER_HOME=$(mktemp -d)
+      gradle --offline --no-daemon --info --init-script ${gradleInit} shadowJar
+    '';
+
+    installPhase = ''
+      mkdir -p $out/{bin,share/pdftk,share/man/man1}
+      cp build/libs/pdftk-all.jar $out/share/pdftk
+
+      cat  << EOF > $out/bin/pdftk
+      #!${runtimeShell}
+      exec ${jre}/bin/java -jar "$out/share/pdftk/pdftk-all.jar" "\$@"
+      EOF
+      chmod a+x "$out/bin/pdftk"
+
+      cp ${src}/pdftk.1 $out/share/man/man1
+    '';
+
+    meta = with lib; {
+      description = "Command-line tool for working with PDFs";
+      homepage = "https://gitlab.com/pdftk-java/pdftk";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [raskin averelld];
+      platforms = platforms.unix;
+    };
   }
-  '';
-
-in stdenv.mkDerivation rec {
-  inherit pname version src;
-
-  nativeBuildInputs = [ gradle ];
-
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle --offline --no-daemon --info --init-script ${gradleInit} shadowJar
-  '';
-
-  installPhase = ''
-    mkdir -p $out/{bin,share/pdftk,share/man/man1}
-    cp build/libs/pdftk-all.jar $out/share/pdftk
-
-    cat  << EOF > $out/bin/pdftk
-    #!${runtimeShell}
-    exec ${jre}/bin/java -jar "$out/share/pdftk/pdftk-all.jar" "\$@"
-    EOF
-    chmod a+x "$out/bin/pdftk"
-
-    cp ${src}/pdftk.1 $out/share/man/man1
-  '';
-
-  meta = with lib; {
-    description = "Command-line tool for working with PDFs";
-    homepage = "https://gitlab.com/pdftk-java/pdftk";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin averelld ];
-    platforms = platforms.unix;
-  };
-}

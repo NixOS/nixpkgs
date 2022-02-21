@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libbfd
-, libnl
-, libpcap
-, ncurses
-, readline
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libbfd,
+  libnl,
+  libpcap,
+  ncurses,
+  readline,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dropwatch";
   version = "1.5.3";
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nhorman/dropwatch";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ c0bw3b ];
+    maintainers = with maintainers; [c0bw3b];
   };
 }

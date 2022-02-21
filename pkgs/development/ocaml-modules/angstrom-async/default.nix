@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, angstrom, async }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  angstrom,
+  async,
+}:
 buildDunePackage rec {
   pname = "angstrom-async";
 
@@ -7,13 +12,13 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.04.1";
 
-  propagatedBuildInputs = [ angstrom async ];
+  propagatedBuildInputs = [angstrom async];
 
   doCheck = true;
 
   meta = {
     inherit (angstrom.meta) homepage license;
     description = "Async support for Angstrom";
-    maintainers = with lib.maintainers; [ romildo ];
+    maintainers = with lib.maintainers; [romildo];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, efl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  efl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ecrire";
   version = "0.2.0";
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.enlightenment.org/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, flex, bison }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  flex,
+  bison,
+}:
 stdenv.mkDerivation rec {
   pname = "minizinc";
   version = "2.5.5";
 
-  nativeBuildInputs = [ cmake flex bison ];
+  nativeBuildInputs = [cmake flex bison];
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
@@ -26,6 +33,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.sheenobu ];
+    maintainers = [maintainers.sheenobu];
   };
 }

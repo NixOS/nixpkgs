@@ -1,15 +1,15 @@
-{ lib
-, callPackage
-, fetchPypi
-, buildPythonPackage
-, pytorch
-, pythonOlder
-, spacy
-, spacy-alignments
-, srsly
-, transformers
+{
+  lib,
+  callPackage,
+  fetchPypi,
+  buildPythonPackage,
+  pytorch,
+  pythonOlder,
+  spacy,
+  spacy-alignments,
+  srsly,
+  transformers,
 }:
-
 buildPythonPackage rec {
   pname = "spacy-transformers";
   version = "1.1.3";
@@ -36,14 +36,14 @@ buildPythonPackage rec {
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;
 
-  pythonImportsCheck = [ "spacy_transformers" ];
+  pythonImportsCheck = ["spacy_transformers"];
 
-  passthru.tests.annotation = callPackage ./annotation-test { };
+  passthru.tests.annotation = callPackage ./annotation-test {};
 
   meta = with lib; {
     description = "spaCy pipelines for pretrained BERT, XLNet and GPT-2";
     homepage = "https://github.com/explosion/spacy-transformers";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

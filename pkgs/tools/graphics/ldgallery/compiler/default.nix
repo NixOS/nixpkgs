@@ -1,7 +1,23 @@
 # generated with cabal2nix by ./generate.sh
-{ mkDerivation, aeson, base, cmdargs, containers, data-ordlist
-, directory, fetchgit, filepath, Glob, hpack, parallel-io, process
-, safe, lib, text, time, yaml
+{
+  mkDerivation,
+  aeson,
+  base,
+  cmdargs,
+  containers,
+  data-ordlist,
+  directory,
+  fetchgit,
+  filepath,
+  Glob,
+  hpack,
+  parallel-io,
+  process,
+  safe,
+  lib,
+  text,
+  time,
+  yaml,
 }:
 mkDerivation {
   pname = "ldgallery-compiler";
@@ -17,21 +33,57 @@ mkDerivation {
   isExecutable = true;
   enableSeparateDataOutput = true;
   libraryHaskellDepends = [
-    aeson base cmdargs containers data-ordlist directory filepath Glob
-    parallel-io process safe text time yaml
+    aeson
+    base
+    cmdargs
+    containers
+    data-ordlist
+    directory
+    filepath
+    Glob
+    parallel-io
+    process
+    safe
+    text
+    time
+    yaml
   ];
-  libraryToolDepends = [ hpack ];
+  libraryToolDepends = [hpack];
   executableHaskellDepends = [
-    aeson base cmdargs containers data-ordlist directory filepath Glob
-    parallel-io process safe text time yaml
+    aeson
+    base
+    cmdargs
+    containers
+    data-ordlist
+    directory
+    filepath
+    Glob
+    parallel-io
+    process
+    safe
+    text
+    time
+    yaml
   ];
   testHaskellDepends = [
-    aeson base cmdargs containers data-ordlist directory filepath Glob
-    parallel-io process safe text time yaml
+    aeson
+    base
+    cmdargs
+    containers
+    data-ordlist
+    directory
+    filepath
+    Glob
+    parallel-io
+    process
+    safe
+    text
+    time
+    yaml
   ];
   prePatch = "hpack";
   homepage = "https://ldgallery.pacien.org";
   description = "A static generator which turns a collection of tagged pictures into a searchable web gallery";
   license = lib.licenses.agpl3;
-  maintainers = with lib.maintainers; [ pacien ];
+  maintainers = with lib.maintainers; [pacien];
 }

@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "docx2python";
   version = "unstable-2020-11-15";
@@ -13,18 +17,19 @@ buildPythonPackage rec {
   };
 
   preCheck = "cd test"; # Tests require the `test/resources` folder to be accessible
-  checkInputs = [ pytestCheckHook ];
-  disabledTests = [ # asserts related to file deletions fail
+  checkInputs = [pytestCheckHook];
+  disabledTests = [
+    # asserts related to file deletions fail
     "test_docx2python.py"
     "test_docx_context.py"
     "test_google_docs.py"
   ];
-  pythonImportsCheck = [ "docx2python" ];
+  pythonImportsCheck = ["docx2python"];
 
   meta = with lib; {
     homepage = "https://github.com/ShayHill/docx2python";
     description = "Extract docx headers, footers, (formatted) text, footnotes, endnotes, properties, and images";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
     license = licenses.mit;
   };
 }

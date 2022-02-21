@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, gtest, fmt
-, cmake, ninja, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtest,
+  fmt,
+  cmake,
+  ninja,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ericw-tools";
   version = "0.18.1";
@@ -20,9 +25,9 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeBuildInputs = [ cmake ninja installShellFiles ];
+  nativeBuildInputs = [cmake ninja installShellFiles];
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = ["out" "doc" "man"];
   installPhase = ''
     runHook preInstall
 
@@ -43,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ericwa.github.io/ericw-tools/";
     description = "Map compile tools for Quake and Hexen 2";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [astro];
   };
 }

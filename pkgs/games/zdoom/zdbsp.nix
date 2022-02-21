@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip, cmake, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  cmake,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "zdbsp";
   version = "1.19";
@@ -26,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "ZDoom's internal node builder for DOOM maps";
     homepage = "https://zdoom.org/wiki/ZDBSP";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lassulus siraben ];
+    maintainers = with maintainers; [lassulus siraben];
     platforms = platforms.unix;
   };
 }

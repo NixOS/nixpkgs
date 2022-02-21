@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libclang
-, libffi
-, libxml2
-, llvm
-, sphinx
-, zlib
-, withManual ? true
-, withHTML ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libclang,
+  libffi,
+  libxml2,
+  llvm,
+  sphinx,
+  zlib,
+  withManual ? true,
+  withHTML ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "CastXML";
   version = "0.4.4";
@@ -23,12 +23,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-VtkMjZOcF5OAHkezlupXOpNwqUD1oKHdRbtG2FZBRL4=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    llvm.dev
-  ] ++ lib.optionals (withManual || withHTML) [
-    sphinx
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      llvm.dev
+    ]
+    ++ lib.optionals (withManual || withHTML) [
+      sphinx
+    ];
 
   buildInputs = [
     libclang
@@ -43,8 +45,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
-    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
-    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
+    "-DSPHINX_HTML=${
+      if withHTML
+      then "ON"
+      else "OFF"
+    }"
+    "-DSPHINX_MAN=${
+      if withManual
+      then "ON"
+      else "OFF"
+    }"
   ];
 
   # 97% tests passed, 97 tests failed out of 2881
@@ -62,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/CastXML/CastXML";
     description = "C-family Abstract Syntax Tree XML Output";
     license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

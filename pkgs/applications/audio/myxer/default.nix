@@ -1,13 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libpulseaudio
-, glib
-, pango
-, gtk3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libpulseaudio,
+  glib,
+  pango,
+  gtk3,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "myxer";
   version = "1.2.1";
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1cyh0nk627sgyr78rcnhj7af5jcahvjkiv5sz7xwqfdhvx5kqsk5";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libpulseaudio glib pango gtk3 ];
+  buildInputs = [libpulseaudio glib pango gtk3];
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modern Volume Mixer for PulseAudio";
     homepage = "https://github.com/Aurailus/Myxer";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ erin ];
+    maintainers = with maintainers; [erin];
     platforms = platforms.linux;
   };
 }

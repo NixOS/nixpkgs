@@ -1,20 +1,20 @@
-{ lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, gtk3
-, appstream-glib
-, desktop-file-utils
-, gobject-introspection
-, wrapGAppsHook
-, glib
-, gdk-pixbuf
-, pango
-, gettext
+{
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gtk3,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  wrapGAppsHook,
+  glib,
+  gdk-pixbuf,
+  pango,
+  gettext,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "drawing";
   version = "0.8.5";
@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "A free basic image editor, similar to Microsoft Paint, but aiming at the GNOME desktop";
     homepage = "https://maoschanz.github.io/drawing/";
-    maintainers = with maintainers; [ mothsart ];
+    maintainers = with maintainers; [mothsart];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, allegro }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  allegro,
+}:
 stdenv.mkDerivation rec {
   pname = "atanks";
   version = "6.6";
@@ -9,14 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vGse/J/H52JPrR2DUtcuknvg+6IWC7Jbtri9bGNwv0M=";
   };
 
-  buildInputs = [ allegro ];
+  buildInputs = [allegro];
 
-  makeFlags = [ "PREFIX=$(out)/" "INSTALL=install" "CXX=g++" ];
+  makeFlags = ["PREFIX=$(out)/" "INSTALL=install" "CXX=g++"];
 
   meta = with lib; {
     description = "Atomic Tanks ballistics game";
     homepage = "http://atanks.sourceforge.net/";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

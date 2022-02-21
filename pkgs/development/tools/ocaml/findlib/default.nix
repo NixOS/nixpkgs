@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  m4,
+  ncurses,
+  ocaml,
+  writeText,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml-findlib";
   version = "1.9.1";
@@ -10,22 +18,26 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [m4 ocaml];
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
-  patches = [ ./ldconf.patch ./install_topfind.patch ];
+  patches = [./ldconf.patch ./install_topfind.patch];
 
-  dontAddPrefix=true;
+  dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [];
 
   configureFlags = [
-      "-bindir" "${placeholder "out"}/bin"
-      "-mandir" "${placeholder "out"}/share/man"
-      "-sitelib" "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib"
-      "-config" "${placeholder "out"}/etc/findlib.conf"
+    "-bindir"
+    "${placeholder "out"}/bin"
+    "-mandir"
+    "${placeholder "out"}/share/man"
+    "-sitelib"
+    "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib"
+    "-config"
+    "${placeholder "out"}/etc/findlib.conf"
   ];
 
-  buildFlags = [ "all" "opt" ];
+  buildFlags = ["all" "opt"];
 
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {
@@ -64,5 +76,3 @@ stdenv.mkDerivation rec {
     ];
   };
 }
-
-

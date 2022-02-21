@@ -1,5 +1,9 @@
-{ fetchurl, lib, stdenv, libiconv }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "libidn";
   version = "1.38";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3gC4QPdXzTuxTdmiDVk2RzI13cugbUvC2oBGVLi78PY=";
   };
 
-  outputs = [ "bin" "dev" "out" "info" "devdoc" ];
+  outputs = ["bin" "dev" "out" "info" "devdoc"];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
@@ -38,6 +42,6 @@ stdenv.mkDerivation rec {
     repositories.git = "git://git.savannah.gnu.org/libidn.git";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lsix ];
+    maintainers = with lib.maintainers; [lsix];
   };
 }

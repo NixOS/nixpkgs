@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  pkg-config,
+  cppunit,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "librevenge";
   version = "0.0.4";
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kz8HKfBCZ8w1S5oCvD6a/vpVEqO90LRfFZ7hSj4zR7I=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     boost
     cppunit
@@ -19,7 +26,7 @@ stdenv.mkDerivation rec {
   # Clang and gcc-7 generate warnings, and
   # -Werror causes these warnings to be interpreted as errors
   # Simplest solution: disable -Werror
-  configureFlags = [ "--disable-werror" ];
+  configureFlags = ["--disable-werror"];
 
   # Fix an issue with boost 1.59
   # This is fixed upstream so please remove this when updating
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A base library for writing document import filters";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

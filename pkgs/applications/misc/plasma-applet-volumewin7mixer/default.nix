@@ -1,5 +1,13 @@
-{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, plasma-pa, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  extra-cmake-modules,
+  plasma-framework,
+  kwindowsystem,
+  plasma-pa,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "plasma-applet-volumewin7mixer";
   version = "26";
@@ -12,10 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   # Adds the CMakeLists.txt not provided by upstream
-  patches = [ ./cmake.patch ];
+  patches = [./cmake.patch];
   postPatch = "rm build";
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
-  buildInputs = [ plasma-framework kwindowsystem plasma-pa ];
+  nativeBuildInputs = [cmake extra-cmake-modules];
+  buildInputs = [plasma-framework kwindowsystem plasma-pa];
 
   dontWrapQtApps = true;
 
@@ -24,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Zren/plasma-applet-volumewin7mixer";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mdevlamynck ];
+    maintainers = with maintainers; [mdevlamynck];
   };
 }

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, gccmakedep, libX11, libXext, libXpm, imake, installShellFiles, ... }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gccmakedep,
+  libX11,
+  libXext,
+  libXpm,
+  imake,
+  installShellFiles,
+  ...
+}:
 stdenv.mkDerivation rec {
   pname = "mlvwm";
   version = "0.9.4";
@@ -11,9 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = [ gccmakedep libX11 libXext libXpm imake ];
+  buildInputs = [gccmakedep libX11 libXext libXpm imake];
 
   buildPhase = ''
     (cd man && xmkmf)
@@ -48,6 +58,6 @@ stdenv.mkDerivation rec {
       pre-Mac OS X Macintosh look and feel in its layout and window design.
     '';
     platforms = platforms.linux;
-    maintainers = [ maintainers.j0hax ];
+    maintainers = [maintainers.j0hax];
   };
 }

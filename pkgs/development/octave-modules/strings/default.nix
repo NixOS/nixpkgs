@@ -1,10 +1,10 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchurl
-, pcre
+{
+  buildOctavePackage,
+  stdenv,
+  lib,
+  fetchurl,
+  pcre,
 }:
-
 buildOctavePackage rec {
   pname = "strings";
   version = "1.2.0";
@@ -32,7 +32,7 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/strings/index.html";
     license = licenses.gpl3Plus;
     # Claims to have a freebsd license, but I found none.
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Additional functions for manipulation and analysis of strings";
     # Some pcre symbols claimed to be missing
     broken = stdenv.isDarwin;

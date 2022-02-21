@@ -1,11 +1,15 @@
-{ dos2unix, fetchurl, lib, stdenv }:
-
+{
+  dos2unix,
+  fetchurl,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "mkclean";
   version = "0.8.10";
 
-  hardeningDisable = [ "format" ];
-  nativeBuildInputs = [ dos2unix ];
+  hardeningDisable = ["format"];
+  nativeBuildInputs = [dos2unix];
 
   src = fetchurl {
     url = "mirror://sourceforge/matroska/${pname}-${version}.tar.bz2";
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Command line tool to clean and optimize Matroska (.mkv / .mka / .mks / .mk3d) and WebM (.webm / .weba) files that have already been muxed";
     homepage = "https://www.matroska.org";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ cawilliamson ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [cawilliamson];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

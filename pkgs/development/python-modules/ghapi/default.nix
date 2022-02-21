@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, fastcore
-, packaging
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  fastcore,
+  packaging,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "ghapi";
   version = "0.1.19";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to GitHub's API";
     homepage = "https://github.com/fastai/ghapi";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

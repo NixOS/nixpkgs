@@ -2,7 +2,11 @@ import ./make-test-python.nix {
   name = "nginx-etag";
 
   nodes = {
-    server = { pkgs, lib, ... }: {
+    server = {
+      pkgs,
+      lib,
+      ...
+    }: {
       networking.firewall.enable = false;
       services.nginx.enable = true;
       services.nginx.virtualHosts.server = {
@@ -36,10 +40,14 @@ import ./make-test-python.nix {
       };
     };
 
-    client = { pkgs, lib, ... }: {
+    client = {
+      pkgs,
+      lib,
+      ...
+    }: {
       environment.systemPackages = let
         testRunner = pkgs.writers.writePython3Bin "test-runner" {
-          libraries = [ pkgs.python3Packages.selenium ];
+          libraries = [pkgs.python3Packages.selenium];
         } ''
           import os
           import time
@@ -63,11 +71,11 @@ import ./make-test-python.nix {
           driver.find_element_by_xpath('//div[@foo="yay"]')
           open('/tmp/passed', 'w')
         '';
-      in [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
+      in [pkgs.firefox-unwrapped pkgs.geckodriver testRunner];
     };
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     inherit (nodes.server.config.system.build) toplevel;
     newSystem = "${toplevel}/specialisation/pass-checks";
   in ''

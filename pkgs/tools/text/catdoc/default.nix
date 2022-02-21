@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "catdoc";
   version = "0.95";
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
     rm -v INSTALL
   '';
 
-  configureFlags = [ "--disable-wordview" ];
+  configureFlags = ["--disable-wordview"];
 
   meta = with lib; {
     description = "MS-Word/Excel/PowerPoint to text converter";

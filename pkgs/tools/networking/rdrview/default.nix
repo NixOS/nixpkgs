@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libxml2, curl, libseccomp, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxml2,
+  curl,
+  libseccomp,
+  installShellFiles,
+}:
 stdenv.mkDerivation {
   pname = "rdrview";
   version = "unstable-2021-05-30";
@@ -11,8 +18,8 @@ stdenv.mkDerivation {
     sha256 = "02VC8r8PdcAfMYB0/NtbPnhsWatpLQc4mW4TmSE1+zk=";
   };
 
-  buildInputs = [ libxml2 curl libseccomp ];
-  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [libxml2 curl libseccomp];
+  nativeBuildInputs = [installShellFiles];
 
   installPhase = ''
     runHook preInstall
@@ -27,6 +34,6 @@ stdenv.mkDerivation {
     description = "Command line tool to extract main content from a webpage";
     homepage = "https://github.com/eafer/rdrview";
     license = licenses.asl20;
-    maintainers = with maintainers; [ djanatyn ];
+    maintainers = with maintainers; [djanatyn];
   };
 }

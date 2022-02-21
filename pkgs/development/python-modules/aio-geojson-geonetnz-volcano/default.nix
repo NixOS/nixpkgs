@@ -1,16 +1,16 @@
-{ lib
-, aio-geojson-client
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pytz
-, pythonOlder
+{
+  lib,
+  aio-geojson-client,
+  aiohttp,
+  aresponses,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytz,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-volcano";
   version = "0.7";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for accessing the GeoNet NZ Volcanic GeoJSON feeds";
     homepage = "https://github.com/exxamalte/pythonaio-geojson-geonetnz-volcano";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

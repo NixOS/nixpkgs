@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "pihole-exporter";
   version = "0.2.0";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "Prometheus exporter for PI-Hole's Raspberry PI ad blocker";
     homepage = "https://github.com/eko/pihole-exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

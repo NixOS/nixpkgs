@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, perl, zlib, buildPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  zlib,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   name = "${passthru.pname}-${passthru.version}";
 
@@ -26,8 +32,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "ranlib" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
     substituteInPlace Makefile --replace "STRIP=strip" "STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
   '';
-  nativeBuildInputs = [ perl zlib ];
-#  buildInputs = [ zlib ];
+  nativeBuildInputs = [perl zlib];
+  #  buildInputs = [ zlib ];
 
   meta = with lib; {
     description = "Hebrew spell checker";

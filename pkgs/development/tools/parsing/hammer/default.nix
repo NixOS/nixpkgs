@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchgit, glib, pkg-config, scons }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  glib,
+  pkg-config,
+  scons,
+}:
 stdenv.mkDerivation {
   pname = "hammer";
   version = "e7aa734";
@@ -10,8 +16,8 @@ stdenv.mkDerivation {
     rev = "47f34b81e4de834fd3537dd71928c4f3cdb7f533";
   };
 
-  nativeBuildInputs = [ pkg-config scons ];
-  buildInputs = [ glib ];
+  nativeBuildInputs = [pkg-config scons];
+  buildInputs = [glib];
 
   strictDeps = true;
 

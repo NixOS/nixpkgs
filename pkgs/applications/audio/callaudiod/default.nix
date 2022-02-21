@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, glib
-, alsa-lib
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  alsa-lib,
+  libpulseaudio,
 }:
-
 stdenv.mkDerivation rec {
   pname = "callaudiod";
   version = "0.1.3";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Daemon for dealing with audio routing during phone calls";
     homepage = "https://gitlab.com/mobian1/callaudiod";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pacman99 tomfitzhenry ];
+    maintainers = with maintainers; [pacman99 tomfitzhenry];
     platforms = platforms.linux;
   };
 }

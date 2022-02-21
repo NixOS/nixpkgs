@@ -1,25 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, python3
-, gtk4
-, glibmm_2_68
-, cairomm_1_16
-, pangomm_2_48
-, libepoxy
-, gnome
-, makeFontsConf
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  gtk4,
+  glibmm_2_68,
+  cairomm_1_16,
+  pangomm_2_48,
+  libepoxy,
+  gnome,
+  makeFontsConf,
+  xvfb-run,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtkmm";
   version = "4.6.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   # Tests require fontconfig.
   FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ ];
+    fontDirectories = [];
   };
 
   doCheck = true;
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gtkmm.org/";
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [raskin]);
     platforms = platforms.unix;
   };
 }

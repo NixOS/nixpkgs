@@ -1,13 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-
-, gtk3
-, curl
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  curl,
+  libxml2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "smooth";
   version = "0.9.9";
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "The smooth Class Library";
     license = licenses.artistic2;
     homepage = "http://www.smooth-project.org/";
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [shamilton];
     platforms = platforms.linux;
   };
 }

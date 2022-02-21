@@ -1,7 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, flex, bison, qt4, libX11, cmake, gperf, adms,
-ngspice, wrapGAppsHook,
-kernels ? [ ngspice ] }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  flex,
+  bison,
+  qt4,
+  libX11,
+  cmake,
+  gperf,
+  adms,
+  ngspice,
+  wrapGAppsHook,
+  kernels ? [ngspice],
+}:
 stdenv.mkDerivation rec {
   pname = "qucs-s";
   version = "0.0.22";
@@ -13,15 +24,15 @@ stdenv.mkDerivation rec {
     sha256 = "0rrq2ddridc09m6fixdmbngn42xmv8cmdf6r8zzn2s98fqib5qd6";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook cmake ];
-  buildInputs = [ flex bison qt4 libX11 gperf adms ] ++ kernels;
+  nativeBuildInputs = [wrapGAppsHook cmake];
+  buildInputs = [flex bison qt4 libX11 gperf adms] ++ kernels;
 
   preConfigure = ''
     # Make custom kernels avaible from qucs-s
     gappsWrapperArgs+=(--prefix PATH ":" ${lib.makeBinPath kernels})
   '';
 
-  QTDIR=qt4;
+  QTDIR = qt4;
 
   doInstallCheck = true;
   installCheck = ''
@@ -36,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ra3xdh.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mazurel ];
+    maintainers = with maintainers; [mazurel];
     platforms = with platforms; linux;
   };
 }

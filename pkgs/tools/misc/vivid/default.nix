@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "vivid";
   version = "0.8.0";
@@ -16,8 +19,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A generator for LS_COLORS with support for multiple color themes";
     homepage = "https://github.com/sharkdp/vivid";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ maintainers.dtzWill ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = [maintainers.dtzWill];
     platforms = platforms.unix;
   };
 }

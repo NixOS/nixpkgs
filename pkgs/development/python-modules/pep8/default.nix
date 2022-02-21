@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "pep8";
   version = "1.7.1";
@@ -19,7 +19,6 @@ buildPythonPackage rec {
     homepage = "https://pep8.readthedocs.org/";
     description = "Python style guide checker";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
-
 }

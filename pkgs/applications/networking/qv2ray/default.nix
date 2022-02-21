@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qttools
-, cmake
-, clang_8
-, grpc
-, protobuf
-, openssl
-, pkg-config
-, c-ares
-, abseil-cpp
-, libGL
-, zlib
-, curl
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  cmake,
+  clang_8,
+  grpc,
+  protobuf,
+  openssl,
+  pkg-config,
+  c-ares,
+  abseil-cpp,
+  libGL,
+  zlib,
+  curl,
 }:
-
 mkDerivation rec {
   pname = "qv2ray";
   version = "2.7.0";
@@ -71,7 +71,7 @@ mkDerivation rec {
     description = "An GUI frontend to v2ray";
     homepage = "https://qv2ray.github.io/en/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ poscat ];
+    maintainers = with maintainers; [poscat];
     platforms = platforms.all;
   };
 }

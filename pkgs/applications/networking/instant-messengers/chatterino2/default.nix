@@ -1,5 +1,17 @@
-{ mkDerivation, stdenv, lib, pkg-config, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl, wrapQtAppsHook }:
-
+{
+  mkDerivation,
+  stdenv,
+  lib,
+  pkg-config,
+  fetchFromGitHub,
+  qtbase,
+  qtsvg,
+  qtmultimedia,
+  qmake,
+  boost,
+  openssl,
+  wrapQtAppsHook,
+}:
 mkDerivation rec {
   pname = "chatterino2";
   version = "2.3.4";
@@ -10,8 +22,8 @@ mkDerivation rec {
     sha256 = "sha256-ZmUM56+YNH98J3XE/mWOOIfb0qBld2n4iuHpImbrU4o=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg qtmultimedia boost openssl ];
+  nativeBuildInputs = [qmake pkg-config wrapQtAppsHook];
+  buildInputs = [qtbase qtsvg qtmultimedia boost openssl];
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     mv bin/chatterino.app "$out/Applications/"
@@ -28,6 +40,6 @@ mkDerivation rec {
     changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rexim ];
+    maintainers = with maintainers; [rexim];
   };
 }

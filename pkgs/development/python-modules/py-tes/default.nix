@@ -1,15 +1,15 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  python-dateutil,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "py-tes";
   version = "0.4.2";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for the GA4GH Task Execution API";
     homepage = "https://github.com/ohsu-comp-bio/py-tes";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

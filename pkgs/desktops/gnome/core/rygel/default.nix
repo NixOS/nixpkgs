@@ -1,37 +1,38 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, libxml2
-, gobject-introspection
-, wrapGAppsHook
-, python3
-, glib
-, gssdp
-, gupnp
-, gupnp-av
-, gupnp-dlna
-, gst_all_1
-, libgee
-, libsoup
-, gtk3
-, libmediaart
-, sqlite
-, systemd
-, tracker
-, shared-mime-info
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  libxml2,
+  gobject-introspection,
+  wrapGAppsHook,
+  python3,
+  glib,
+  gssdp,
+  gupnp,
+  gupnp-av,
+  gupnp-dlna,
+  gst_all_1,
+  libgee,
+  libsoup,
+  gtk3,
+  libmediaart,
+  sqlite,
+  systemd,
+  tracker,
+  shared-mime-info,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rygel";
   version = "0.40.3";
 
   # TODO: split out lib
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -54,28 +55,30 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    glib
-    gssdp
-    gupnp
-    gupnp-av
-    gupnp-dlna
-    libgee
-    libsoup
-    gtk3
-    libmediaart
-    sqlite
-    systemd
-    tracker
-    shared-mime-info
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-editing-services
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ]);
+  buildInputs =
+    [
+      glib
+      gssdp
+      gupnp
+      gupnp-av
+      gupnp-dlna
+      libgee
+      libsoup
+      gtk3
+      libmediaart
+      sqlite
+      systemd
+      tracker
+      shared-mime-info
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-editing-services
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+    ]);
 
   mesonFlags = [
     "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"

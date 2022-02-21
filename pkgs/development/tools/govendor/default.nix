@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "govendor";
   version = "1.0.9";
@@ -17,6 +20,6 @@ buildGoPackage rec {
     homepage = "https://github.com/kardianos/govendor";
     description = "Go vendor tool that works with the standard vendor file";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

@@ -1,6 +1,7 @@
-{ fetchFromGitHub
-, lib
-, python3
+{
+  fetchFromGitHub,
+  lib,
+  python3,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "pypi-mirror";
@@ -13,12 +14,12 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1ci19bqyhig1s5myzw6klkiycd8k0lzhk3yqfx5fjirc2f0xpz5j";
   };
 
-  pythonImportsCheck = [ "pypi_mirror" ];
+  pythonImportsCheck = ["pypi_mirror"];
 
   meta = with lib; {
     description = "A script to create a partial PyPI mirror";
     homepage = "https://github.com/montag451/pypi-mirror";
     license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    maintainers = with maintainers; [kamadorueda];
   };
 }

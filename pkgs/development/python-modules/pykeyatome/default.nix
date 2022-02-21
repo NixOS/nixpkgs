@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fake-useragent
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, responses
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fake-useragent,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  responses,
+  simplejson,
 }:
-
 buildPythonPackage rec {
   pname = "pykeyatome";
   version = "1.4.1";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Python module to get data from Atome Key";
     homepage = "https://github.com/jugla/pyKeyAtome";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

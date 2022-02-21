@@ -1,18 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.clfswm;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.clfswm;
+in {
   options = {
     services.xserver.windowManager.clfswm = {
       enable = mkEnableOption "clfswm";
       package = mkOption {
-        type        = types.package;
-        default     = pkgs.lispPackages.clfswm;
+        type = types.package;
+        default = pkgs.lispPackages.clfswm;
         defaultText = literalExpression "pkgs.lispPackages.clfswm";
         description = ''
           clfswm package to use.
@@ -29,6 +29,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
 }

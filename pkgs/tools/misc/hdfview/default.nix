@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, ant, jdk, nettools, hdf4, hdf5, makeDesktopItem, copyDesktopItems }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ant,
+  jdk,
+  nettools,
+  hdf4,
+  hdf5,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 stdenv.mkDerivation rec {
   pname = "hdfview";
   version = "3.1.3";
@@ -10,13 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    ant jdk
-    nettools  # "hostname" required
+    ant
+    jdk
+    nettools # "hostname" required
     copyDesktopItems
   ];
 
-  HDFLIBS = (hdf4.override { javaSupport = true; }).out;
-  HDF5LIBS = (hdf5.override { javaSupport = true; }).out;
+  HDFLIBS = (hdf4.override {javaSupport = true;}).out;
+  HDF5LIBS = (hdf5.override {javaSupport = true;}).out;
 
   buildPhase = ''
     runHook preBuild

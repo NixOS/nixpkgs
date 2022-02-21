@@ -1,19 +1,19 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_deriving
-, bppsuite
-, alcotest
-, angstrom-unix
-, biocaml
-, core
-, gsl
-, lacaml
-, menhir
-, menhirLib
-, printbox-text
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_deriving,
+  bppsuite,
+  alcotest,
+  angstrom-unix,
+  biocaml,
+  core,
+  gsl,
+  lacaml,
+  menhir,
+  menhirLib,
+  printbox-text,
 }:
-
 buildDunePackage rec {
   pname = "phylogenetics";
   version = "0.0.0";
@@ -32,8 +32,8 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  checkInputs = [ alcotest bppsuite ];
-  buildInputs = [ menhir ];
+  checkInputs = [alcotest bppsuite];
+  buildInputs = [menhir];
   propagatedBuildInputs = [
     angstrom-unix
     biocaml
@@ -50,7 +50,7 @@ buildDunePackage rec {
   meta = with lib; {
     homepage = "https://github.com/biocaml/phylogenetics";
     description = "Algorithms and datastructures for phylogenetics";
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = [maintainers.bcdarwin];
     license = licenses.cecill-b;
   };
 }

@@ -1,5 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
   version = "3.2.18";
@@ -69,6 +72,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://flexget.com/";
     description = "Multipurpose automation tool for all of your media";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [marsam];
   };
 }

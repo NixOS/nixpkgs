@@ -1,29 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, freetype
-, cmake
-, static ? stdenv.hostPlatform.isStatic
-, libgcc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  freetype,
+  cmake,
+  static ? stdenv.hostPlatform.isStatic,
+  libgcc,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.3.14";
   pname = "graphite2";
 
   src = fetchurl {
-    url = "https://github.com/silnrsi/graphite/releases/download/"
+    url =
+      "https://github.com/silnrsi/graphite/releases/download/"
       + "${version}/graphite2-${version}.tgz";
     sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ freetype ]
+  nativeBuildInputs = [pkg-config cmake];
+  buildInputs =
+    [freetype]
     # On aarch64-darwin libgcc won't even build currently, and it doesn't seem needed.
-    ++ lib.optionals (with stdenv; !cc.isGNU && !(isDarwin && isAarch64)) [ libgcc ];
+    ++ lib.optionals (with stdenv; !cc.isGNU && !(isDarwin && isAarch64)) [libgcc];
 
-  patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
+  patches = lib.optionals stdenv.isDarwin [./macosx.patch];
 
   cmakeFlags = lib.optionals static [
     "-DBUILD_SHARED_LIBS=OFF"
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An advanced font engine";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.unix;
     license = licenses.lgpl21;
   };

@@ -1,5 +1,8 @@
-{ lib, python2Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python2Packages,
+  fetchFromGitHub,
+}:
 python2Packages.buildPythonPackage rec {
   pname = "poretools";
   version = "unstable-2016-07-10";

@@ -1,15 +1,15 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, schema
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  schema,
 }:
-
 buildPythonPackage rec {
   pname = "policy-sentry";
   version = "0.12.2";
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "policy_sentry" ];
+  pythonImportsCheck = ["policy_sentry"];
 
   meta = with lib; {
     description = "Python module for generating IAM least privilege policies";
     homepage = "https://github.com/salesforce/policy_sentry";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

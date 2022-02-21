@@ -1,19 +1,21 @@
-{ config, lib, pkgs, ...}:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.varnish;
 
-  commandLine = "-f ${pkgs.writeText "default.vcl" cfg.config}" +
-      optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([cfg.package] ++ cfg.extraModules)}' -r vmod_path";
-in
-{
+  commandLine =
+    "-f ${pkgs.writeText "default.vcl" cfg.config}"
+    + optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([cfg.package] ++ cfg.extraModules)}' -r vmod_path";
+in {
   options = {
     services.varnish = {
       enable = mkEnableOption "Varnish Server";
 
-      enableConfigCheck = mkEnableOption "checking the config during build time" // { default = true; };
+      enableConfigCheck = mkEnableOption "checking the config during build time" // {default = true;};
 
       package = mkOption {
         type = types.package;
@@ -66,15 +68,13 @@ in
         ";
       };
     };
-
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.varnish = {
       description = "Varnish";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       preStart = ''
         mkdir -p ${cfg.stateDir}
         chown -R varnish:varnish ${cfg.stateDir}
@@ -96,7 +96,7 @@ in
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
     system.extraDependencies = mkIf cfg.enableConfigCheck [

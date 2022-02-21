@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "besu";
   version = "21.10.8";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0yXi42vDinB6nuv5IGj1AhYGqMa2Rku0tNWQCO+AFPw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -24,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.hyperledger.org/projects/besu";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [mmahut];
   };
 }

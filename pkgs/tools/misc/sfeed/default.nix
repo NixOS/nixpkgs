@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchgit, ncurses }:
-
+{
+  stdenv,
+  lib,
+  fetchgit,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "sfeed";
   version = "1.2";
@@ -10,13 +14,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cx+mIVrY9tB5k1YnAHkpGahXVG6S+JBshJKkzEbcKZI=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
-  makeFlags = [ "RANLIB:=$(RANLIB)" "SFEED_CURSES_LDFLAGS:=-lncurses" ]
+  makeFlags =
+    ["RANLIB:=$(RANLIB)" "SFEED_CURSES_LDFLAGS:=-lncurses"]
     # use macOS's strlcat() and strlcpy() instead of vendored ones
     ++ lib.optional stdenv.isDarwin "COMPATOBJ:=";
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   # otherwise does not find SIGWINCH
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
@@ -32,7 +37,7 @@ stdenv.mkDerivation rec {
       items.
     '';
     license = licenses.isc;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [maintainers.matthiasbeyer];
     platforms = platforms.all;
   };
 }

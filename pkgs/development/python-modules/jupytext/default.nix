@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, GitPython
-, isort
-, jupyter-client
-, jupyter-packaging
-, jupyterlab
-, markdown-it-py
-, mdit-py-plugins
-, nbformat
-, notebook
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  GitPython,
+  isort,
+  jupyter-client,
+  jupyter-packaging,
+  jupyterlab,
+  markdown-it-py,
+  mdit-py-plugins,
+  nbformat,
+  notebook,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  toml,
 }:
-
 buildPythonPackage rec {
   pname = "jupytext";
   version = "1.13.7";
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
     license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [timokau];
   };
 }

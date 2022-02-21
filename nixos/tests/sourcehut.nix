@@ -1,10 +1,13 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   domain = "sourcehut.localdomain";
 
   # Note that wildcard certificates just under the TLD (eg. *.com)
   # would be rejected by clients like curl.
-  tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+  tls-cert = pkgs.runCommand "selfSignedCerts" {buildInputs = [pkgs.openssl];} ''
     openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 36500 \
       -subj '/CN=${domain}' -extensions v3_req \
       -addext 'subjectAltName = DNS:*.${domain}'
@@ -12,94 +15,99 @@ let
   '';
 
   images = {
-    nixos.unstable.x86_64 =
-      let
-        systemConfig = { pkgs, ... }: {
-          # passwordless ssh server
-          services.openssh = {
-            enable = true;
-            permitRootLogin = "yes";
-            extraConfig = "PermitEmptyPasswords yes";
+    nixos.unstable.x86_64 = let
+      systemConfig = {pkgs, ...}: {
+        # passwordless ssh server
+        services.openssh = {
+          enable = true;
+          permitRootLogin = "yes";
+          extraConfig = "PermitEmptyPasswords yes";
+        };
+
+        users = {
+          mutableUsers = false;
+          # build user
+          extraUsers."build" = {
+            isNormalUser = true;
+            uid = 1000;
+            extraGroups = ["wheel"];
+            password = "";
           };
+          users.root.password = "";
+        };
 
-          users = {
-            mutableUsers = false;
-            # build user
-            extraUsers."build" = {
-              isNormalUser = true;
-              uid = 1000;
-              extraGroups = [ "wheel" ];
-              password = "";
-            };
-            users.root.password = "";
-          };
+        security.sudo.wheelNeedsPassword = false;
+        nix.trustedUsers = ["root" "build"];
+        documentation.nixos.enable = false;
 
-          security.sudo.wheelNeedsPassword = false;
-          nix.trustedUsers = [ "root" "build" ];
-          documentation.nixos.enable = false;
-
-          # builds.sr.ht-image-specific network settings
-          networking = {
-            hostName = "build";
-            dhcpcd.enable = false;
-            defaultGateway.address = "10.0.2.2";
-            usePredictableInterfaceNames = false;
-            interfaces."eth0".ipv4.addresses = [{
+        # builds.sr.ht-image-specific network settings
+        networking = {
+          hostName = "build";
+          dhcpcd.enable = false;
+          defaultGateway.address = "10.0.2.2";
+          usePredictableInterfaceNames = false;
+          interfaces."eth0".ipv4.addresses = [
+            {
               address = "10.0.2.15";
               prefixLength = 25;
-            }];
-            enableIPv6 = false;
-            nameservers = [
-              # OpenNIC anycast
-              "185.121.177.177"
-              "169.239.202.202"
-              # Google
-              "8.8.8.8"
-            ];
-            firewall.allowedTCPPorts = [ 22 ];
-          };
+            }
+          ];
+          enableIPv6 = false;
+          nameservers = [
+            # OpenNIC anycast
+            "185.121.177.177"
+            "169.239.202.202"
+            # Google
+            "8.8.8.8"
+          ];
+          firewall.allowedTCPPorts = [22];
+        };
 
-          environment.systemPackages = [
-            pkgs.gitMinimal
-            #pkgs.mercurial
-            pkgs.curl
-            pkgs.gnupg
-          ];
-        };
-        qemuConfig = { pkgs, ... }: {
-          imports = [ systemConfig ];
-          fileSystems."/".device = "/dev/disk/by-label/nixos";
-          boot.initrd.availableKernelModules = [
-            "ahci"
-            "ehci_pci"
-            "sd_mod"
-            "usb_storage"
-            "usbhid"
-            "virtio_balloon"
-            "virtio_blk"
-            "virtio_pci"
-            "virtio_ring"
-            "xhci_pci"
-          ];
-          boot.loader = {
-            grub = {
-              version = 2;
-              device = "/dev/vda";
-            };
-            timeout = 0;
+        environment.systemPackages = [
+          pkgs.gitMinimal
+          #pkgs.mercurial
+          pkgs.curl
+          pkgs.gnupg
+        ];
+      };
+      qemuConfig = {pkgs, ...}: {
+        imports = [systemConfig];
+        fileSystems."/".device = "/dev/disk/by-label/nixos";
+        boot.initrd.availableKernelModules = [
+          "ahci"
+          "ehci_pci"
+          "sd_mod"
+          "usb_storage"
+          "usbhid"
+          "virtio_balloon"
+          "virtio_blk"
+          "virtio_pci"
+          "virtio_ring"
+          "xhci_pci"
+        ];
+        boot.loader = {
+          grub = {
+            version = 2;
+            device = "/dev/vda";
           };
+          timeout = 0;
         };
-        config = (import (pkgs.path + "/nixos/lib/eval-config.nix") {
-          inherit pkgs; modules = [ qemuConfig ];
+      };
+      config =
+        (import (pkgs.path + "/nixos/lib/eval-config.nix") {
+          inherit pkgs;
+          modules = [qemuConfig];
           system = "x86_64-linux";
-        }).config;
-      in
+        })
+        .config;
+    in
       import (pkgs.path + "/nixos/lib/make-disk-image.nix") {
         inherit pkgs lib config;
         diskSize = 16000;
         format = "qcow2-compressed";
         contents = [
-          { source = pkgs.writeText "gitconfig" ''
+          {
+            source = pkgs.writeText "gitconfig" ''
               [user]
                 name = builds.sr.ht
                 email = build@sr.ht
@@ -112,14 +120,17 @@ let
         ];
       };
   };
-
-in
-{
+in {
   name = "sourcehut";
 
-  meta.maintainers = [ pkgs.lib.maintainers.tomberek ];
+  meta.maintainers = [pkgs.lib.maintainers.tomberek];
 
-  machine = { config, pkgs, nodes, ... }: {
+  machine = {
+    config,
+    pkgs,
+    nodes,
+    ...
+  }: {
     # buildsrht needs space
     virtualisation.diskSize = 4 * 1024;
     virtualisation.memorySize = 2 * 1024;
@@ -171,8 +182,8 @@ in
       settings.webhooks.private-key = pkgs.writeText "webhook-key" "Ra3IjxgFiwG9jxgp4WALQIZw/BMYt30xWiOsqD0J7EA=";
     };
 
-    networking.firewall.allowedTCPPorts = [ 443 ];
-    security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
+    networking.firewall.allowedTCPPorts = [443];
+    security.pki.certificateFiles = ["${tls-cert}/cert.pem"];
     services.nginx = {
       enable = true;
       recommendedGzipSettings = true;

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   version = "0.13.1";
   pname = "liburcu";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MhPzPSuPcQ65IOsauyeewEv4rmNh9E8lE8KMINM2MIM=";
   };
 
-  checkInputs = [ perl ];
+  checkInputs = [perl];
 
   preCheck = "patchShebangs tests/unit";
   doCheck = true;
@@ -19,7 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lttng.org/urcu";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
-
 }

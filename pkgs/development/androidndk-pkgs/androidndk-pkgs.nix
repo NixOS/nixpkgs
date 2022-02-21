@@ -1,64 +1,68 @@
-{ lib, stdenv
-, makeWrapper
-, runCommand, wrapBintoolsWith, wrapCCWith
-, buildAndroidndk, androidndk, targetAndroidndkPkgs
-}:
-
-let
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  runCommand,
+  wrapBintoolsWith,
+  wrapCCWith,
+  buildAndroidndk,
+  androidndk,
+  targetAndroidndkPkgs,
+}: let
   # Mapping from a platform to information needed to unpack NDK stuff for that
   # platform.
   #
   # N.B. The Android NDK uses slightly different LLVM-style platform triples
   # than we do. We don't just use theirs because ours are less ambiguous and
   # some builds need that clarity.
-  ndkInfoFun = { config, ... }: {
-    x86_64-apple-darwin = {
-      double = "darwin-x86_64";
-    };
-    x86_64-unknown-linux-gnu = {
-      double = "linux-x86_64";
-    };
-    i686-unknown-linux-android = {
-      triple = "i686-linux-android";
-      arch = "x86";
-      toolchain = "x86";
-      gccVer = "4.9";
-    };
-    x86_64-unknown-linux-android = {
-      triple = "x86_64-linux-android";
-      arch = "x86_64";
-      toolchain = "x86_64";
-      gccVer = "4.9";
-    };
-    armv7a-unknown-linux-androideabi = {
-      arch = "arm";
-      triple = "arm-linux-androideabi";
-      toolchain = "arm-linux-androideabi";
-      gccVer = "4.9";
-    };
-    aarch64-unknown-linux-android = {
-      arch = "arm64";
-      triple = "aarch64-linux-android";
-      toolchain = "aarch64-linux-android";
-      gccVer = "4.9";
-    };
-  }.${config} or
-    (throw "Android NDK doesn't support ${config}, as far as we know");
+  ndkInfoFun = {config, ...}:
+    {
+      x86_64-apple-darwin = {
+        double = "darwin-x86_64";
+      };
+      x86_64-unknown-linux-gnu = {
+        double = "linux-x86_64";
+      };
+      i686-unknown-linux-android = {
+        triple = "i686-linux-android";
+        arch = "x86";
+        toolchain = "x86";
+        gccVer = "4.9";
+      };
+      x86_64-unknown-linux-android = {
+        triple = "x86_64-linux-android";
+        arch = "x86_64";
+        toolchain = "x86_64";
+        gccVer = "4.9";
+      };
+      armv7a-unknown-linux-androideabi = {
+        arch = "arm";
+        triple = "arm-linux-androideabi";
+        toolchain = "arm-linux-androideabi";
+        gccVer = "4.9";
+      };
+      aarch64-unknown-linux-android = {
+        arch = "arm64";
+        triple = "aarch64-linux-android";
+        toolchain = "aarch64-linux-android";
+        gccVer = "4.9";
+      };
+    }
+    .${config}
+    or (throw "Android NDK doesn't support ${config}, as far as we know");
 
   hostInfo = ndkInfoFun stdenv.hostPlatform;
   targetInfo = ndkInfoFun stdenv.targetPlatform;
 
   prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
-in
-
-rec {
+in rec {
   # Misc tools
   binaries = runCommand "ndk-toolchain-binutils" {
     pname = "ndk-toolchain-binutils";
     inherit (androidndk) version;
     isClang = true; # clang based cc, but bintools ld
-    nativeBuildInputs = [ makeWrapper ];
-    propagatedBuildInputs = [ androidndk ];
+    nativeBuildInputs = [makeWrapper];
+    propagatedBuildInputs = [androidndk];
   } ''
     mkdir -p $out/bin
 
@@ -84,10 +88,12 @@ rec {
   };
 
   clang = wrapCCWith {
-    cc = binaries // {
-      # for packages expecting libcompiler-rt, etc. to come from here (stdenv.cc.cc.lib)
-      lib = targetAndroidndkPkgs.libraries;
-    };
+    cc =
+      binaries
+      // {
+        # for packages expecting libcompiler-rt, etc. to come from here (stdenv.cc.cc.lib)
+        lib = targetAndroidndkPkgs.libraries;
+      };
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
@@ -108,6 +114,10 @@ rec {
     cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
     chmod +w $out/include
     cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}/* $out/include
-    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/${if hostInfo.arch == "x86_64" then "lib64" else "lib"} $out/lib
+    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/${
+      if hostInfo.arch == "x86_64"
+      then "lib64"
+      else "lib"
+    } $out/lib
   '';
 }

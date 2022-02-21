@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "grpcui";
   version = "1.2.0";
@@ -15,15 +18,15 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/grpcui" ];
+  subPackages = ["cmd/grpcui"];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
   meta = with lib; {
     description = "An interactive web UI for gRPC, along the lines of postman";
     homepage = "https://github.com/fullstorydev/grpcui";
     license = licenses.mit;
-    maintainers = with maintainers; [ pradyuman ];
+    maintainers = with maintainers; [pradyuman];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

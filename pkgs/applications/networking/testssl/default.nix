@@ -1,6 +1,15 @@
-{ stdenv, fetchFromGitHub, makeWrapper, lib
-, dnsutils, coreutils, openssl, nettools, util-linux, procps }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  lib,
+  dnsutils,
+  coreutils,
+  openssl,
+  nettools,
+  util-linux,
+  procps,
+}:
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
   version = "3.0.6";
@@ -12,13 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "016qpsb4dv9qb3ab3hmvk4vzf4ipr3xgmzv2cx46pxxsj0gnigd8";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   buildInputs = [
     coreutils # for printf
-    dnsutils  # for dig
-    nettools  # for hostname
-    openssl   # for openssl
-    procps    # for ps
+    dnsutils # for dig
+    nettools # for hostname
+    openssl # for openssl
+    procps # for ps
     util-linux # for hexdump
   ];
 
@@ -43,6 +52,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://testssl.sh/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [etu];
   };
 }

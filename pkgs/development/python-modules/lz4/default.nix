@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# native inputs
-, pkgconfig
-, setuptools-scm
-
-# tests
-, psutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder
+  # native inputs
+  ,
+  pkgconfig,
+  setuptools-scm
+  # tests
+  ,
+  psutil,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "python-lz4";
   version = "3.1.12";
@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

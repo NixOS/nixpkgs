@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, curl, libmrss, podofo, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  libmrss,
+  podofo,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "offrss";
   version = "1.3";
@@ -9,18 +16,22 @@ stdenv.mkDerivation rec {
     cp offrss $out/bin
   '';
 
-  buildInputs = [ curl libmrss ]
+  buildInputs =
+    [curl libmrss]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
     ++ lib.optional (!stdenv.isLinux) libiconv;
 
-  configurePhase = ''
-    substituteInPlace Makefile \
-      --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
-  '' + lib.optionalString (!stdenv.isLinux) ''
-    sed 's/#EXTRA/EXTRA/' -i Makefile
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    sed 's/^PDF/#PDF/' -i Makefile
-  '';
+  configurePhase =
+    ''
+      substituteInPlace Makefile \
+        --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
+    ''
+    + lib.optionalString (!stdenv.isLinux) ''
+      sed 's/#EXTRA/EXTRA/' -i Makefile
+    ''
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed 's/^PDF/#PDF/' -i Makefile
+    '';
 
   src = fetchurl {
     url = "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-${version}.tar.gz";
@@ -31,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "http://vicerveza.homeunix.net/~viric/cgi-bin/offrss";
     description = "Offline RSS/Atom reader";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [viric];
     platforms = lib.platforms.linux;
   };
 }

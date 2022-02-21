@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "nexia";
   version = "0.9.13";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Nexia thermostats";
     homepage = "https://github.com/bdraco/nexia";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

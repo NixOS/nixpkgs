@@ -1,32 +1,36 @@
-{ stdenv, makeWrapper, haskellPackages, packages ? (pkgs: [])
-}:
+{
+  stdenv,
+  makeWrapper,
+  haskellPackages,
+  packages ? (pkgs: []),
+}: let
+  defaultPkgs = pkgs: [
+    pkgs.show
+    pkgs.simple-reflect
+    pkgs.QuickCheck
+    pkgs.mtl
+  ];
+  env = haskellPackages.ghcWithPackages
+  (pkgs: defaultPkgs pkgs ++ packages pkgs);
+  libDir = "${env}/lib/ghc-${env.version}";
+in
+  stdenv.mkDerivation {
+    name = "mueval-env";
 
-let defaultPkgs = pkgs: [ pkgs.show
-                          pkgs.simple-reflect
-                          pkgs.QuickCheck
-                          pkgs.mtl
-                        ];
-    env = haskellPackages.ghcWithPackages
-           (pkgs: defaultPkgs pkgs ++ packages pkgs);
-    libDir = "${env}/lib/ghc-${env.version}";
+    inherit (haskellPackages) mueval;
 
-in stdenv.mkDerivation {
-  name = "mueval-env";
+    nativeBuildInputs = [makeWrapper];
 
-  inherit (haskellPackages) mueval;
+    buildCommand = ''
+      mkdir -p $out/bin
 
-  nativeBuildInputs = [ makeWrapper ];
+      makeWrapper $mueval/bin/mueval $out/bin/mueval \
+        --prefix PATH ":" "$out/bin"
 
-  buildCommand = ''
-    mkdir -p $out/bin
+      makeWrapper $mueval/bin/mueval-core $out/bin/mueval \
+        --set "NIX_GHC_LIBDIR" "${libDir}"
 
-    makeWrapper $mueval/bin/mueval $out/bin/mueval \
-      --prefix PATH ":" "$out/bin"
+    '';
 
-    makeWrapper $mueval/bin/mueval-core $out/bin/mueval \
-      --set "NIX_GHC_LIBDIR" "${libDir}"
-
-  '';
-
-  passthru = { inherit defaultPkgs; };
-}
+    passthru = {inherit defaultPkgs;};
+  }

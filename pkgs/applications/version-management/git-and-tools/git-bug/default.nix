@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "git-bug";
   version = "0.7.2"; # the `rev` below pins the version of the source to get
@@ -32,6 +35,6 @@ buildGoModule rec {
     description = "Distributed bug tracker embedded in Git";
     homepage = "https://github.com/MichaelMure/git-bug";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ royneary ];
+    maintainers = with maintainers; [royneary];
   };
 }

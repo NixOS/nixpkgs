@@ -1,16 +1,16 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "pvo";
   version = "0.2.2";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Python module to interact with the PVOutput API";
     homepage = "https://github.com/frenck/python-pvoutput";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

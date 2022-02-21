@@ -1,16 +1,25 @@
-{ lib, stdenv, unzip, fetchurl, electron, makeWrapper, geogebra }:
-let
+{
+  lib,
+  stdenv,
+  unzip,
+  fetchurl,
+  electron,
+  makeWrapper,
+  geogebra,
+}: let
   pname = "geogebra";
   version = "6-0-676-0";
 
   srcIcon = geogebra.srcIcon;
   desktopItem = geogebra.desktopItem;
 
-  meta = with lib; geogebra.meta // {
-    license = licenses.geogebra;
-    maintainers = with maintainers; [ voidless sikmir ];
-    platforms = with platforms; linux ++ darwin;
-  };
+  meta = with lib;
+    geogebra.meta
+    // {
+      license = licenses.geogebra;
+      maintainers = with maintainers; [voidless sikmir];
+      platforms = with platforms; linux ++ darwin;
+    };
 
   linuxPkg = stdenv.mkDerivation {
     inherit pname version meta;
@@ -60,7 +69,7 @@ let
 
     dontUnpack = true;
 
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [unzip];
 
     installPhase = ''
       install -dm755 $out/Applications
@@ -68,6 +77,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
-then darwinPkg
-else linuxPkg
+  if stdenv.isDarwin
+  then darwinPkg
+  else linuxPkg

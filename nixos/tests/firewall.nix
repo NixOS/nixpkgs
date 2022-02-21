@@ -1,39 +1,35 @@
 # Test the firewall module.
-
-import ./make-test-python.nix ( { pkgs, ... } : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "firewall";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [eelco];
   };
 
-  nodes =
-    { walled =
-        { ... }:
-        { networking.firewall.enable = true;
-          networking.firewall.logRefusedPackets = true;
-          services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
-        };
-
-      # Dummy configuration to check whether firewall.service will be honored
-      # during system activation. This only needs to be different to the
-      # original walled configuration so that there is a change in the service
-      # file.
-      walled2 =
-        { ... }:
-        { networking.firewall.enable = true;
-          networking.firewall.rejectPackets = true;
-        };
-
-      attacker =
-        { ... }:
-        { services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
-          networking.firewall.enable = false;
-        };
+  nodes = {
+    walled = {...}: {
+      networking.firewall.enable = true;
+      networking.firewall.logRefusedPackets = true;
+      services.httpd.enable = true;
+      services.httpd.adminAddr = "foo@example.org";
     };
 
-  testScript = { nodes, ... }: let
+    # Dummy configuration to check whether firewall.service will be honored
+    # during system activation. This only needs to be different to the
+    # original walled configuration so that there is a change in the service
+    # file.
+    walled2 = {...}: {
+      networking.firewall.enable = true;
+      networking.firewall.rejectPackets = true;
+    };
+
+    attacker = {...}: {
+      services.httpd.enable = true;
+      services.httpd.adminAddr = "foo@example.org";
+      networking.firewall.enable = false;
+    };
+  };
+
+  testScript = {nodes, ...}: let
     newSystem = nodes.walled2.config.system.build.toplevel;
   in ''
     start_all()

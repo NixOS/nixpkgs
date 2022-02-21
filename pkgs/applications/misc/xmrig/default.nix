@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl, hwloc
-, donateLevel ? 0
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libuv,
+  libmicrohttpd,
+  openssl,
+  hwloc,
+  donateLevel ? 0,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xmrig";
   version = "6.16.4";
@@ -13,12 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hfdKhTUGoVN4DIURO+e3MOSpsL6GWxOV3LItd0nA51Y=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libuv libmicrohttpd openssl hwloc ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libuv libmicrohttpd openssl hwloc];
 
   inherit donateLevel;
 
-  patches = [ ./donate-level.patch ];
+  patches = [./donate-level.patch];
   postPatch = ''
     substituteAllInPlace src/donate.h
   '';
@@ -31,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ fpletz kim0 ];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
+    maintainers = with maintainers; [fpletz kim0];
   };
 }

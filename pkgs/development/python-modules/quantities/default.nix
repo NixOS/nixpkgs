@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "quantities";
   version = "0.13.0";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     "test_fix"
   ];
 
-  pythonImportsCheck = [ "quantities" ];
+  pythonImportsCheck = ["quantities"];
 
   meta = with lib; {
     description = "Quantities is designed to handle arithmetic and conversions of physical quantities";
     homepage = "https://python-quantities.readthedocs.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "pgf";
   version = "3.0.0";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kj769hyp4z2zmdv3f8xv443wcfqn5nkkbzxzqgfxjizlz81aav7";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   # Multiple files problem
   unpackPhase = ''

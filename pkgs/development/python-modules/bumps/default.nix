@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, six}:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+}:
 buildPythonPackage rec {
   pname = "bumps";
   version = "0.8.1";
@@ -18,7 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://www.reflectometry.org/danse/software.html";
     description = "Data fitting with bayesian uncertainty analysis";
-    maintainers = with maintainers; [ rprospero ];
+    maintainers = with maintainers; [rprospero];
     license = licenses.publicDomain;
   };
 }

@@ -1,5 +1,10 @@
-{ lib, fetchurl, desktop-file-utils, file, python3Packages }:
-
+{
+  lib,
+  fetchurl,
+  desktop-file-utils,
+  file,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "mimeo";
   version = "2021.11";
@@ -9,9 +14,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1fi8svn4hg2hmvv28j026sks1hc0v8wh974g7ixcwfcg2xda6c4p";
   };
 
-  buildInputs = [ file desktop-file-utils ];
+  buildInputs = [file desktop-file-utils];
 
-  propagatedBuildInputs = [ python3Packages.pyxdg ];
+  propagatedBuildInputs = [python3Packages.pyxdg];
 
   preConfigure = ''
     substituteInPlace Mimeo.py \
@@ -31,8 +36,8 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Open files by MIME-type or file name using regular expressions";
     homepage = "https://xyne.dev/projects/mimeo/";
-    license = [ licenses.gpl2 ];
-    maintainers = [ maintainers.rycee ];
+    license = [licenses.gpl2];
+    maintainers = [maintainers.rycee];
     platforms = platforms.unix;
   };
 }

@@ -1,11 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, coverage
-, mock
-, pytest
-, pytest-cov
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  coverage,
+  mock,
+  pytest,
+  pytest-cov,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "gunicorn";
   version = "20.1.0";
@@ -16,9 +19,9 @@ buildPythonPackage rec {
     sha256 = "e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [setuptools];
 
-  checkInputs = [ pytest mock pytest-cov coverage ];
+  checkInputs = [pytest mock pytest-cov coverage];
 
   prePatch = ''
     substituteInPlace requirements_test.txt --replace "==" ">=" \
@@ -30,7 +33,7 @@ buildPythonPackage rec {
     $out/bin/gunicorn --help > /dev/null
   '';
 
-  pythonImportsCheck = [ "gunicorn" ];
+  pythonImportsCheck = ["gunicorn"];
 
   meta = with lib; {
     homepage = "https://github.com/benoitc/gunicorn";

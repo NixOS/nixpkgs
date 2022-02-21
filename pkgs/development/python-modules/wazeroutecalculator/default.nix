@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "wazeroutecalculator";
   version = "0.15";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Calculate actual route time and distance with Waze API";
     homepage = "https://github.com/kovacsbalu/WazeRouteCalculator";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

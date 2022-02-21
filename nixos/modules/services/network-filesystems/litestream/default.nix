@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.litestream;
   settingsFormat = pkgs.formats.yaml {};
-in
-{
+in {
   options.services.litestream = {
     enable = mkEnableOption "litestream";
 
@@ -69,7 +70,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
     environment.etc = {
       "litestream.yml" = {
         source = settingsFormat.generate "litestream-config.yaml" cfg.settings;
@@ -78,8 +79,8 @@ in
 
     systemd.services.litestream = {
       description = "Litestream";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
       serviceConfig = {
         EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/litestream replicate";

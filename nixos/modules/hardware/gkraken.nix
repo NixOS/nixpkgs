@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.hardware.gkraken;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.hardware.gkraken;
+in {
   options.hardware.gkraken = {
     enable = mkEnableOption "gkraken's udev rules for NZXT AIO liquid coolers";
   };

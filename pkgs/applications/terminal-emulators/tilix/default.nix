@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, meson
-, ninja
-, python3
-, pkg-config
-, ldc
-, dconf
-, dbus
-, gsettings-desktop-schemas
-, desktop-file-utils
-, gettext
-, gtkd
-, libsecret
-, glib
-, wrapGAppsHook
-, libunwind
-, appstream
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  ninja,
+  python3,
+  pkg-config,
+  ldc,
+  dconf,
+  dbus,
+  gsettings-desktop-schemas,
+  desktop-file-utils,
+  gettext,
+  gtkd,
+  libsecret,
+  glib,
+  wrapGAppsHook,
+  libunwind,
+  appstream,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tilix";
   version = "1.9.4";
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
     homepage = "https://gnunn1.github.io/tilix-web";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [midchildan];
     platforms = platforms.linux;
   };
 }

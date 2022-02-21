@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, python-dotenv }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  python-dotenv,
+}:
 buildPythonPackage rec {
   pname = "pytest-dotenv";
   version = "0.5.2";
@@ -9,15 +14,15 @@ buildPythonPackage rec {
     sha256 = "LcbDrG2HZMccbSgE6QLQ/4EPoZaS6V/hOK78mxqnNzI=";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ python-dotenv ];
+  buildInputs = [pytest];
+  propagatedBuildInputs = [python-dotenv];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   meta = with lib; {
     description = "A pytest plugin that parses environment files before running tests";
     homepage = "https://github.com/quiqua/pytest-dotenv";
     license = licenses.mit;
-    maintainers = with maintainers; [ cleeyv ];
+    maintainers = with maintainers; [cleeyv];
   };
 }

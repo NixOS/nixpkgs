@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, hypothesis
-, numpy
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  hypothesis,
+  numpy,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "blis";
   version = "0.7.6";
@@ -23,7 +23,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
   ];
-
 
   checkInputs = [
     hypothesis

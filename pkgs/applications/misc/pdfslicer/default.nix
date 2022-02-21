@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gettext
-, intltool
-, pkg-config
-, wrapGAppsHook
-, gtkmm3
-, libuuid
-, poppler
-, qpdf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  intltool,
+  pkg-config,
+  wrapGAppsHook,
+  gtkmm3,
+  libuuid,
+  poppler,
+  qpdf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pdfslicer";
   version = "1.8.8";
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "A simple application to extract, merge, rotate and reorder pages of PDF documents";
     homepage = "https://junrrein.github.io/pdfslicer/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, cocotb-bus
-, pytestCheckHook
-, swig
-, verilog
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  cocotb-bus,
+  pytestCheckHook,
+  swig,
+  verilog,
 }:
-
 buildPythonPackage rec {
   pname = "cocotb";
   version = "1.6.2";
@@ -23,9 +23,9 @@ buildPythonPackage rec {
     sha256 = "sha256-SY+1727DbWMg6CnmHw8k/VP0dwBRYszn+YyyvZXgvUs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  buildInputs = [ setuptools ];
+  buildInputs = [setuptools];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
   '';
 
-  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
+  checkInputs = [cocotb-bus pytestCheckHook swig verilog];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ matthuszagh ];
+    maintainers = with maintainers; [matthuszagh];
     broken = stdenv.isDarwin;
   };
 }

@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-
-# buildtime
-, setuptools-scm
-
-# runtime
-, ldap
-, django
-
-# tests
-, python
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27
+  # buildtime
+  ,
+  setuptools-scm
+  # runtime
+  ,
+  ldap,
+  django
+  # tests
+  ,
+  python,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "django-auth-ldap";
   version = "4.0.0";
@@ -46,13 +46,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "django_auth_ldap" ];
+  pythonImportsCheck = ["django_auth_ldap"];
 
   meta = with lib; {
     description = "Django authentication backend that authenticates against an LDAP service";
     homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ mmai ];
+    maintainers = with maintainers; [mmai];
     platforms = platforms.linux;
   };
 }

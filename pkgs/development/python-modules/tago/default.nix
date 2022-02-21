@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, promise
-, python-socketio
-, pythonOlder
-, requests
-, websockets
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  promise,
+  python-socketio,
+  pythonOlder,
+  requests,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "tago";
   version = "3.0.0";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python module for interacting with Tago.io";
     homepage = "https://github.com/tago-io/tago-sdk-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

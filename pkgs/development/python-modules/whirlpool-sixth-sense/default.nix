@@ -1,15 +1,15 @@
-{ lib
-, aioconsole
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, websockets
+{
+  lib,
+  aioconsole,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "whirlpool-sixth-sense";
   version = "unstable-2021-08-22";
@@ -36,12 +36,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "whirlpool" ];
+  pythonImportsCheck = ["whirlpool"];
 
   meta = with lib; {
     description = "Python library for Whirlpool 6th Sense appliances";
     homepage = "https://github.com/abmantis/whirlpool-sixth-sense/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

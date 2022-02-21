@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, perl, systemd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  perl,
+  systemd,
+}:
 stdenv.mkDerivation rec {
   pname = "triggerhappy";
   version = "0.5.0";
@@ -11,10 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "0gb1qhrxwq7i5abd408d01a2dpf28nr1fph1fg7w7n0i5i1nnk90";
   };
 
-  nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ systemd ];
+  nativeBuildInputs = [pkg-config perl];
+  buildInputs = [systemd];
 
-  makeFlags = [ "PREFIX=$(out)" "BINDIR=$(out)/bin" ];
+  makeFlags = ["PREFIX=$(out)" "BINDIR=$(out)/bin"];
 
   postInstall = ''
     install -D -m 644 -t "$out/etc/triggerhappy/triggers.d" "triggerhappy.conf.examples"
@@ -31,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wertarbyte/triggerhappy/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau taha ];
+    maintainers = with maintainers; [jfrankenau taha];
   };
 }

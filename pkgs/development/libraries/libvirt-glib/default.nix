@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, gettext
-, gtk-doc
-, docbook-xsl-nons
-, vala
-, libcap_ng
-, libvirt
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  gettext,
+  gtk-doc,
+  docbook-xsl-nons,
+  vala,
+  libcap_ng,
+  libvirt,
+  libxml2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libvirt-glib";
   version = "4.0.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchurl {
     url = "https://libvirt.org/sources/glib/${pname}-${version}.tar.xz";

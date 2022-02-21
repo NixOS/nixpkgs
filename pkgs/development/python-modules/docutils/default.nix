@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, python
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "docutils";
   version = "0.17.1";
@@ -17,9 +17,11 @@ buildPythonPackage rec {
 
   # Only Darwin needs LANG, but we could set it in general.
   # It's done here conditionally to prevent mass-rebuilds.
-  checkPhase = lib.optionalString (isPy3k && stdenv.isDarwin) ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" '' + ''
-    ${python.interpreter} test/alltests.py
-  '';
+  checkPhase =
+    lib.optionalString (isPy3k && stdenv.isDarwin) ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" ''
+    + ''
+      ${python.interpreter} test/alltests.py
+    '';
 
   # Create symlinks lacking a ".py" suffix, many programs depend on these names
   postFixup = ''
@@ -31,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Documentation Utilities";
     homepage = "http://docutils.sourceforge.net/";
-    license = with licenses; [ publicDomain bsd2 psfl gpl3Plus ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with licenses; [publicDomain bsd2 psfl gpl3Plus];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

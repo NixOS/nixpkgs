@@ -1,5 +1,5 @@
 let
-  pkgs = import ../../../../.. { };
+  pkgs = import ../../../../.. {};
 
   src = pkgs.fetchgit {
     url = "https://github.com/nix-community/emacs2nix.git";
@@ -8,16 +8,14 @@ let
     sha256 = "sha256-qnOYDYHAQ+r5eegKP9GqHz5R2ig96B2W7M+uYa1ti9M=";
   };
 in
-pkgs.mkShell {
+  pkgs.mkShell {
+    packages = [
+      pkgs.bash
+    ];
 
-  packages = [
-    pkgs.bash
-  ];
+    EMACS2NIX = src;
 
-  EMACS2NIX = src;
-
-  shellHook = ''
-    export PATH=$PATH:${src}
-  '';
-
-}
+    shellHook = ''
+      export PATH=$PATH:${src}
+    '';
+  }

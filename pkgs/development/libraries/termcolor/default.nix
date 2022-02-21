@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "termcolor";
   version = "2.0.0";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-W0hB+lFJ2sm7DsbOzITOtjJuntSM55BfwUunOOS4RcA=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  cmakeFlags = [ "-DTERMCOLOR_TESTS=ON" ];
+  cmakeFlags = ["-DTERMCOLOR_TESTS=ON"];
 
   doCheck = true;
 
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ikalnytskyi/termcolor";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
   };
 }

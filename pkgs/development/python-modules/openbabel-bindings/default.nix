@@ -1,12 +1,16 @@
-{ lib, openbabel, python, buildPythonPackage }:
-
+{
+  lib,
+  openbabel,
+  python,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "openbabel";
   version = "3.1.1";
 
   src = "${openbabel}/lib/python${python.sourceVersion.major}.${python.sourceVersion.minor}/site-packages";
 
-  nativeBuildInputs = [ openbabel ];
+  nativeBuildInputs = [openbabel];
 
   # these env variables are used by the bindings to find libraries
   # they need to be included explicitly in your nix-shell for
@@ -16,12 +20,12 @@ buildPythonPackage rec {
   LD_LIBRARY_PATH = "${openbabel}/lib";
 
   doCheck = false;
-  pythonImportsCheck = [ "openbabel" ];
+  pythonImportsCheck = ["openbabel"];
 
   meta = with lib; {
     homepage = "http://openbabel.org/wiki/Main_Page";
     description = "Python bindings for openbabel";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ danielbarter ];
+    maintainers = with maintainers; [danielbarter];
   };
 }

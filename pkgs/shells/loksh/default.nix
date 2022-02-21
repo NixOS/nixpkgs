@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, meson
-, ninja
-, pkg-config
-, ncurses
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  pkg-config,
+  ncurses,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "loksh";
   version = "7.0";
@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
     description = "Linux port of OpenBSD's ksh";
     homepage = "https://github.com/dimkr/loksh";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ cameronnemo ];
+    maintainers = with maintainers; [cameronnemo];
     platforms = platforms.linux;
   };
 }
-

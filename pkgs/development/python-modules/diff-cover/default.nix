@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchPypi
-, jinja2
-, jinja2_pluralize
-, pluggy
-, pycodestyle
-, pyflakes
-, pygments
-, pylint
-, pytest-datadir
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  fetchPypi,
+  jinja2,
+  jinja2_pluralize,
+  pluggy,
+  pycodestyle,
+  pyflakes,
+  pygments,
+  pylint,
+  pytest-datadir,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
 }:
-
 buildPythonPackage rec {
   pname = "diff-cover";
   version = "6.4.4";
@@ -62,6 +62,6 @@ buildPythonPackage rec {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dzabraev ];
+    maintainers = with maintainers; [dzabraev];
   };
 }

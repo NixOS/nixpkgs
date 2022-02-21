@@ -1,5 +1,8 @@
-{ lib, buildPythonApplication, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+}:
 buildPythonApplication rec {
   pname = "ophis";
   version = "unstable-2019-04-13";
@@ -24,6 +27,6 @@ buildPythonApplication rec {
       Entertainment System, the Atari 2600, and the Commodore 64.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

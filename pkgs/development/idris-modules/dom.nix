@@ -1,15 +1,16 @@
-{ build-idris-package
-, fetchFromGitHub
-, idrisscript
-, html
-, xhr
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  idrisscript,
+  html,
+  xhr,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "dom";
   version = "2017-04-22";
 
-  idrisDeps = [ idrisscript html xhr ];
+  idrisDeps = [idrisscript html xhr];
 
   src = fetchFromGitHub {
     owner = "pierrebeaucamp";
@@ -22,6 +23,6 @@ build-idris-package  {
     description = "Idris library to interact with the DOM";
     homepage = "https://github.com/pierrebeaucamp/idris-dom";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

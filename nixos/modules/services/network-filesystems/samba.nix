@@ -1,27 +1,33 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  smbToString = x: if builtins.typeOf x == "bool"
-                   then boolToString x
-                   else toString x;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  smbToString = x:
+    if builtins.typeOf x == "bool"
+    then boolToString x
+    else toString x;
 
   cfg = config.services.samba;
 
   samba = cfg.package;
 
-  shareConfig = name:
-    let share = getAttr name cfg.shares; in
-    "[${name}]\n " + (smbToString (
-       map
-         (key: "${key} = ${smbToString (getAttr key share)}\n")
-         (attrNames share)
+  shareConfig = name: let
+    share = getAttr name cfg.shares;
+  in
+    "[${name}]\n "
+    + (smbToString (
+      map
+      (key: "${key} = ${smbToString (getAttr key share)}\n")
+      (attrNames share)
     ));
 
   configFile = pkgs.writeText "smb.conf"
-    (if cfg.configText != null then cfg.configText else
+  (if cfg.configText != null
+  then cfg.configText
+  else
     ''
       [global]
       security = ${cfg.securityType}
@@ -36,47 +42,42 @@ let
   # This may include nss_ldap, needed for samba if it has to use ldap.
   nssModulesPath = config.system.nssModules.path;
 
-  daemonService = appName: args:
-    { description = "Samba Service Daemon ${appName}";
+  daemonService = appName: args: {
+    description = "Samba Service Daemon ${appName}";
 
-      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
-      requiredBy = [ "samba.target" ];
-      partOf = [ "samba.target" ];
+    after = [(mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service")];
+    requiredBy = ["samba.target"];
+    partOf = ["samba.target"];
 
-      environment = {
-        LD_LIBRARY_PATH = nssModulesPath;
-        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-      };
-
-      serviceConfig = {
-        ExecStart = "${samba}/sbin/${appName} --foreground --no-process-group ${args}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        LimitNOFILE = 16384;
-        PIDFile = "/run/${appName}.pid";
-        Type = "notify";
-        NotifyAccess = "all"; #may not do anything...
-      };
-      unitConfig.RequiresMountsFor = "/var/lib/samba";
-
-      restartTriggers = [ configFile ];
+    environment = {
+      LD_LIBRARY_PATH = nssModulesPath;
+      LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
     };
 
-in
+    serviceConfig = {
+      ExecStart = "${samba}/sbin/${appName} --foreground --no-process-group ${args}";
+      ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      LimitNOFILE = 16384;
+      PIDFile = "/run/${appName}.pid";
+      Type = "notify";
+      NotifyAccess = "all"; #may not do anything...
+    };
+    unitConfig.RequiresMountsFor = "/var/lib/samba";
 
-{
+    restartTriggers = [configFile];
+  };
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
-    (mkRemovedOptionModule [ "services" "samba" "syncPasswordsByPam" ] "This option has been removed by upstream, see https://bugzilla.samba.org/show_bug.cgi?id=10669#c10")
+    (mkRemovedOptionModule ["services" "samba" "defaultShare"] "")
+    (mkRemovedOptionModule ["services" "samba" "syncPasswordsByPam"] "This option has been removed by upstream, see https://bugzilla.samba.org/show_bug.cgi?id=10669#c10")
   ];
 
   ###### interface
 
   options = {
-
     # !!! clean up the descriptions.
 
     services.samba = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -133,7 +134,7 @@ in
 
       invalidUsers = mkOption {
         type = types.listOf types.str;
-        default = [ "root" ];
+        default = ["root"];
         description = ''
           List of users who are denied to login via Samba.
         '';
@@ -194,59 +195,58 @@ in
           }
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkMerge
-    [ { assertions =
-          [ { assertion = cfg.nsswins -> cfg.enableWinbindd;
-              message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
-            }
-          ];
-        # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc."samba/smb.conf".source = mkOptionDefault (
-          if cfg.enable then configFile
-          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
-        );
-      }
+  [
+    {
+      assertions = [
+        {
+          assertion = cfg.nsswins -> cfg.enableWinbindd;
+          message = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
+        }
+      ];
+      # Always provide a smb.conf to shut up programs like smbclient and smbspool.
+      environment.etc."samba/smb.conf".source = mkOptionDefault (
+        if cfg.enable
+        then configFile
+        else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
+      );
+    }
 
-      (mkIf cfg.enable {
+    (mkIf cfg.enable {
+      system.nssModules = optional cfg.nsswins samba;
+      system.nssDatabases.hosts = optional cfg.nsswins "wins";
 
-        system.nssModules = optional cfg.nsswins samba;
-        system.nssDatabases.hosts = optional cfg.nsswins "wins";
-
-        systemd = {
-          targets.samba = {
-            description = "Samba Server";
-            after = [ "network.target" ];
-            wantedBy = [ "multi-user.target" ];
-          };
-          # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
-          # for correct use with systemd
-          services = {
-            samba-smbd = daemonService "smbd" "";
-            samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
-            samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
-          };
-          tmpfiles.rules = [
-            "d /var/lock/samba - - - - -"
-            "d /var/log/samba - - - - -"
-            "d /var/cache/samba - - - - -"
-            "d /var/lib/samba/private - - - - -"
-          ];
+      systemd = {
+        targets.samba = {
+          description = "Samba Server";
+          after = ["network.target"];
+          wantedBy = ["multi-user.target"];
         };
+        # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
+        # for correct use with systemd
+        services = {
+          samba-smbd = daemonService "smbd" "";
+          samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
+          samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
+        };
+        tmpfiles.rules = [
+          "d /var/lock/samba - - - - -"
+          "d /var/log/samba - - - - -"
+          "d /var/cache/samba - - - - -"
+          "d /var/lib/samba/private - - - - -"
+        ];
+      };
 
-        security.pam.services.samba = {};
-        environment.systemPackages = [ cfg.package ];
+      security.pam.services.samba = {};
+      environment.systemPackages = [cfg.package];
 
-        networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 139 445 ];
-        networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];
-      })
-    ];
-
+      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [139 445];
+      networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [137 138];
+    })
+  ];
 }

@@ -1,5 +1,8 @@
-{ lib, appleDerivation', stdenvNoCC }:
-
+{
+  lib,
+  appleDerivation',
+  stdenvNoCC,
+}:
 appleDerivation' stdenvNoCC {
   installPhase = ''
     mkdir -p $out/include/CommonCrypto
@@ -35,8 +38,8 @@ appleDerivation' stdenvNoCC {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    maintainers = with maintainers; [copumpkin];
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

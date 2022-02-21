@@ -1,19 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, scdoc
-, gnome-builder
-, gnused
-, glib
-, libgee
-, json-glib
-, jsonrpc-glib
-, vala
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  gnome-builder,
+  gnused,
+  glib,
+  libgee,
+  json-glib,
+  jsonrpc-glib,
+  vala,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vala-language-server";
   version = "0.48.4";
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Code Intelligence for Vala & Genie";
     homepage = "https://github.com/Prince781/vala-language-server";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ andreasfelix ];
+    maintainers = with maintainers; [andreasfelix];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,8 @@
-{ substituteAll, unzip, zip }:
-
+{
+  substituteAll,
+  unzip,
+  zip,
+}:
 substituteAll {
   name = "canonicalize-jar";
   src = ./canonicalize-jar.sh;

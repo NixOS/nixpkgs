@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, meson
-, ninja
-, buildPythonPackage
-, pytestCheckHook
-, pkg-config
-, cairo
-, python
+{
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  buildPythonPackage,
+  pytestCheckHook,
+  pkg-config,
+  cairo,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pycairo";
   version = "1.18.2";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python 2 bindings for cairo";
     homepage = "https://pycairo.readthedocs.io/";
-    license = with licenses; [ lgpl21Only mpl11 ];
+    license = with licenses; [lgpl21Only mpl11];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

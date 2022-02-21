@@ -1,33 +1,33 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, alsa-lib
-, kguiaddons
-, kwindowsystem
-, libXdamage
-, libdbusmenu
-, liblxqt
-, libpulseaudio
-, libqtxdg
-, libstatgrab
-, libsysstat
-, lm_sensors
-, lxmenu-data
-, lxqt-build-tools
-, lxqt-globalkeys
-, lxqtUpdateScript
-, menu-cache
-, pcre
-, qtbase
-, qtsvg
-, qttools
-, qtx11extras
-, solid
-, xorg
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  kguiaddons,
+  kwindowsystem,
+  libXdamage,
+  libdbusmenu,
+  liblxqt,
+  libpulseaudio,
+  libqtxdg,
+  libstatgrab,
+  libsysstat,
+  lm_sensors,
+  lxmenu-data,
+  lxqt-build-tools,
+  lxqt-globalkeys,
+  lxqtUpdateScript,
+  menu-cache,
+  pcre,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  solid,
+  xorg,
 }:
-
 mkDerivation rec {
   pname = "lxqt-panel";
   version = "1.0.0";
@@ -70,13 +70,13 @@ mkDerivation rec {
     xorg.libpthreadstubs
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-panel";
     description = "The LXQt desktop panel";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

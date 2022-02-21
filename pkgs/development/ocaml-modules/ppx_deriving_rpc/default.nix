@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, rpclib, alcotest, ppxlib, ppx_deriving, yojson }:
-
+{
+  lib,
+  buildDunePackage,
+  rpclib,
+  alcotest,
+  ppxlib,
+  ppx_deriving,
+  yojson,
+}:
 buildDunePackage rec {
   pname = "ppx_deriving_rpc";
 
@@ -7,15 +14,15 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [ ppxlib rpclib ppx_deriving ];
+  propagatedBuildInputs = [ppxlib rpclib ppx_deriving];
 
-  checkInputs = [ alcotest yojson ];
+  checkInputs = [alcotest yojson];
   doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-rpc";
     description = "Ppx deriver for ocaml-rpc";
     license = licenses.isc;
-    maintainers = [ maintainers.vyorkin ];
+    maintainers = [maintainers.vyorkin];
   };
 }

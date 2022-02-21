@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, openssl
-, zlib
-, busybox
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  openssl,
+  zlib,
+  busybox,
 }:
-
 stdenv.mkDerivation rec {
   pname = "abuild";
   version = "3.7.0";
@@ -47,8 +47,7 @@ stdenv.mkDerivation rec {
     description = "Alpine Linux build tools";
     homepage = "https://gitlab.alpinelinux.org/alpine/abuild";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
     platforms = platforms.unix;
   };
-
 }

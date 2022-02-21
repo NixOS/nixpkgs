@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, rustPlatform
-, pkg-config
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "fedigroups";
   version = "0.4.4";
@@ -25,16 +25,18 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     homepage = "https://git.ondrovo.com/MightyPork/group-actor#fedi-groups";
     downloadPage = "https://git.ondrovo.com/MightyPork/group-actor/releases";
     description = "An approximation of groups usable with Fediverse software that implements the Mastodon client API";
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }

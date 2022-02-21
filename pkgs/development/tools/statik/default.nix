@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "statik";
   version = "0.1.7";
@@ -14,7 +17,7 @@ buildGoModule rec {
   vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
 
   # Avoid building example
-  subPackages = [ "." "fs" ];
+  subPackages = ["." "fs"];
   # Tests are checking that the files embeded are preserving
   # their meta data like dates etc, but it assumes to be in 2048
   # which is not the case once entered the nix store
@@ -24,6 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/rakyll/statik";
     description = "Embed files into a Go executable ";
     license = licenses.asl20;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [chiiruno];
   };
 }

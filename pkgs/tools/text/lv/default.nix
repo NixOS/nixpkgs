@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "lv";
   version = "4.51";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0yf3idz1qspyff1if41xjpqqcaqa8q8icslqlnz0p9dj36gmm5l3";
   };
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = ["prefix=${placeholder "out"}"];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   configurePhase = ''
     mkdir -p build
@@ -28,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://web.archive.org/web/20160310122517/www.ff.iij4u.or.jp/~nrt/lv/";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ kayhide ];
+    maintainers = with maintainers; [kayhide];
   };
 }

@@ -1,6 +1,10 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.hound;
 in {
   options = {
@@ -31,8 +35,8 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [ ];
-        example = [ "dialout" ];
+        default = [];
+        example = ["dialout"];
         description = ''
           List of extra groups that the "hound" user should be a part of.
         '';
@@ -107,21 +111,20 @@ in {
 
     systemd.services.hound = {
       description = "Hound Code Search";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
         ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
-        ExecStart = "${cfg.package}/bin/houndd" +
-                    " -addr ${cfg.listen}" +
-                    " -conf ${pkgs.writeText "hound.json" cfg.config}";
-
+        ExecStart =
+          "${cfg.package}/bin/houndd"
+          + " -addr ${cfg.listen}"
+          + " -conf ${pkgs.writeText "hound.json" cfg.config}";
       };
-      path = [ pkgs.git pkgs.mercurial pkgs.openssh ];
+      path = [pkgs.git pkgs.mercurial pkgs.openssh];
     };
   };
-
 }

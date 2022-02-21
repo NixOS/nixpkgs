@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "robustirc-bridge";
   version = "1.8";
@@ -23,6 +27,6 @@ buildGoModule rec {
     description = "Bridge to robustirc.net-IRC-Network";
     homepage = "https://robustirc.net/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.hax404 ];
+    maintainers = [maintainers.hax404];
   };
 }

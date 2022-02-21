@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, branca
-, jinja2
-, nbconvert
-, numpy
-, pandas
-, pillow
-, requests
-, selenium
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  branca,
+  jinja2,
+  nbconvert,
+  numpy,
+  pandas,
+  pillow,
+  requests,
+  selenium,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "folium";
   version = "0.12.1.post1";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
     homepage = "https://github.com/python-visualization/folium";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fridh ];
+    license = with lib.licenses; [mit];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

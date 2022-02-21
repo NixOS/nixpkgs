@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, python3, makeWrapper }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  makeWrapper,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "headphones";
   version = "0.6.0-alpha.1";
@@ -14,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   dontBuild = true;
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/headphones
@@ -27,8 +31,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Automatic music downloader for SABnzbd";
-    license     = licenses.gpl3;
-    homepage    = "https://github.com/rembo10/headphones";
-    maintainers = with lib.maintainers; [ rembo10 ];
+    license = licenses.gpl3;
+    homepage = "https://github.com/rembo10/headphones";
+    maintainers = with lib.maintainers; [rembo10];
   };
 }

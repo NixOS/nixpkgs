@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 buildDunePackage rec {
   pname = "facile";
   version = "1.1.4";

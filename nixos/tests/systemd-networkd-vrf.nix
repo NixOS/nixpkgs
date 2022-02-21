@@ -1,12 +1,16 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 in {
   name = "systemd-networkd-vrf";
-  meta.maintainers = with lib.maintainers; [ ma27 ];
+  meta.maintainers = with lib.maintainers; [ma27];
 
   nodes = {
-    client = { pkgs, ... }: {
-      virtualisation.vlans = [ 1 2 ];
+    client = {pkgs, ...}: {
+      virtualisation.vlans = [1 2];
 
       networking = {
         useDHCP = false;
@@ -38,14 +42,24 @@ in {
           matchConfig.Name = "vrf1";
           networkConfig.IPForward = "yes";
           routes = [
-            { routeConfig = { Destination = "192.168.1.2"; Metric = 100; }; }
+            {
+              routeConfig = {
+                Destination = "192.168.1.2";
+                Metric = 100;
+              };
+            }
           ];
         };
         networks."10-vrf2" = {
           matchConfig.Name = "vrf2";
           networkConfig.IPForward = "yes";
           routes = [
-            { routeConfig = { Destination = "192.168.2.3"; Metric = 100; }; }
+            {
+              routeConfig = {
+                Destination = "192.168.2.3";
+                Metric = 100;
+              };
+            }
           ];
         };
 
@@ -70,15 +84,15 @@ in {
       };
     };
 
-    node1 = { pkgs, ... }: {
-      virtualisation.vlans = [ 1 ];
+    node1 = {pkgs, ...}: {
+      virtualisation.vlans = [1];
       networking = {
         useDHCP = false;
         useNetworkd = true;
       };
 
       services.openssh.enable = true;
-      users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+      users.users.root.openssh.authorizedKeys.keys = [snakeOilPublicKey];
 
       systemd.network = {
         enable = true;
@@ -94,8 +108,8 @@ in {
       };
     };
 
-    node2 = { pkgs, ... }: {
-      virtualisation.vlans = [ 2 ];
+    node2 = {pkgs, ...}: {
+      virtualisation.vlans = [2];
       networking = {
         useDHCP = false;
         useNetworkd = true;
@@ -115,8 +129,8 @@ in {
       };
     };
 
-    node3 = { pkgs, ... }: {
-      virtualisation.vlans = [ 2 ];
+    node3 = {pkgs, ...}: {
+      virtualisation.vlans = [2];
       networking = {
         useDHCP = false;
         useNetworkd = true;
@@ -163,19 +177,19 @@ in {
     # are intentional as the output is compared against the raw `iproute2`-output.
     # editorconfig-checker-disable
     client_ipv4_table = """
-    192.168.1.2 dev vrf1 proto static metric 100 
+    192.168.1.2 dev vrf1 proto static metric 100
     192.168.2.3 dev vrf2 proto static metric 100
     """.strip()
     vrf1_table = """
-    broadcast 192.168.1.0 dev eth1 proto kernel scope link src 192.168.1.1 
-    192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1 
-    local 192.168.1.1 dev eth1 proto kernel scope host src 192.168.1.1 
+    broadcast 192.168.1.0 dev eth1 proto kernel scope link src 192.168.1.1
+    192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1
+    local 192.168.1.1 dev eth1 proto kernel scope host src 192.168.1.1
     broadcast 192.168.1.255 dev eth1 proto kernel scope link src 192.168.1.1
     """.strip()
     vrf2_table = """
-    broadcast 192.168.2.0 dev eth2 proto kernel scope link src 192.168.2.1 
-    192.168.2.0/24 dev eth2 proto kernel scope link src 192.168.2.1 
-    local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1 
+    broadcast 192.168.2.0 dev eth2 proto kernel scope link src 192.168.2.1
+    192.168.2.0/24 dev eth2 proto kernel scope link src 192.168.2.1
+    local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1
     broadcast 192.168.2.255 dev eth2 proto kernel scope link src 192.168.2.1
     """.strip()
     # editorconfig-checker-enable

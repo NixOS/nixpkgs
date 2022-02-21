@@ -1,5 +1,7 @@
-{ roundcubePlugin, fetchFromGitHub }:
-
+{
+  roundcubePlugin,
+  fetchFromGitHub,
+}:
 roundcubePlugin rec {
   pname = "persistent_login";
   version = "5.2.0";

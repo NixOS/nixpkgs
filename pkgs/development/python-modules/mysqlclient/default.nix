@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, libmysqlclient }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libmysqlclient,
+}:
 buildPythonPackage rec {
   pname = "mysqlclient";
   version = "2.1.0";
@@ -24,6 +28,6 @@ buildPythonPackage rec {
     description = "Python interface to MySQL";
     homepage = "https://github.com/PyMySQL/mysqlclient-python";
     license = licenses.gpl1;
-    maintainers = with maintainers; [ y0no ];
+    maintainers = with maintainers; [y0no];
   };
 }

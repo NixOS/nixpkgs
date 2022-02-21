@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, jsonschema, six, pytest, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyyaml,
+  jsonschema,
+  six,
+  pytest,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "swagger-spec-validator";
   version = "2.7.4";
@@ -30,8 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Yelp/swagger_spec_validator";
     license = licenses.asl20;
     description = "Validation of Swagger specifications";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [vanschelven];
   };
 }
-
-

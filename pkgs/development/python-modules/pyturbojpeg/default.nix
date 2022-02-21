@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, libjpeg_turbo
-, numpy
-, python
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  libjpeg_turbo,
+  numpy,
+  python,
+  substituteAll,
 }:
-
 buildPythonPackage rec {
   pname = "pyturbojpeg";
   version = "1.6.5";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "A Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";
     homepage = "https://github.com/lilohuang/PyTurboJPEG";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, configobj
-, fetchpatch
-, fetchPypi
-, importlib-resources
-, pandas
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, tables
-, traits
-, traitsui
+{
+  lib,
+  buildPythonPackage,
+  configobj,
+  fetchpatch,
+  fetchPypi,
+  importlib-resources,
+  pandas,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  tables,
+  traits,
+  traitsui,
 }:
-
 buildPythonPackage rec {
   pname = "apptools";
   version = "5.1.0";
@@ -34,13 +34,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    configobj
-    traits
-    traitsui
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      configobj
+      traits
+      traitsui
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   checkInputs = [
     tables
@@ -59,7 +61,6 @@ buildPythonPackage rec {
     "apptools/io/h5/tests/test_table_node.py"
   ];
 
-
   pythonImportsCheck = [
     "apptools"
   ];
@@ -68,6 +69,6 @@ buildPythonPackage rec {
     description = "Set of packages that Enthought has found useful in creating a number of applications";
     homepage = "https://github.com/enthought/apptools";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [knedlsepp];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ghostscript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ghostscript,
+}:
 stdenv.mkDerivation rec {
   pname = "hmetis";
   version = "1.5";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "e835a098c046e9c26cecb8addfea4d18ff25214e49585ffd87038e72819be7e1";
   };
 
-  nativeBuildInputs = [ ghostscript ];
+  nativeBuildInputs = [ghostscript];
 
   binaryFiles = "hmetis khmetis shmetis";
 
@@ -37,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "hMETIS is a set of programs for partitioning hypergraphs";
     homepage = "http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview";
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

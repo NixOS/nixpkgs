@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cheroot
-, fetchPypi
-, jaraco_collections
-, more-itertools
-, objgraph
-, pathpy
-, portend
-, pytest-forked
-, pytest-services
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, requests-toolbelt
-, routes
-, setuptools-scm
-, simplejson
-, zc_lockfile
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cheroot,
+  fetchPypi,
+  jaraco_collections,
+  more-itertools,
+  objgraph,
+  pathpy,
+  portend,
+  pytest-forked,
+  pytest-services,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests-toolbelt,
+  routes,
+  setuptools-scm,
+  simplejson,
+  zc_lockfile,
 }:
-
 buildPythonPackage rec {
   pname = "cherrypy";
   version = "18.6.1";
@@ -70,15 +70,17 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    # Keyboard interrupt ends test suite run
-    "KeyboardInterrupt"
-    # daemonize and autoreload tests have issue with sockets within sandbox
-    "daemonize"
-    "Autoreload"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_block"
-  ];
+  disabledTests =
+    [
+      # Keyboard interrupt ends test suite run
+      "KeyboardInterrupt"
+      # daemonize and autoreload tests have issue with sockets within sandbox
+      "daemonize"
+      "Autoreload"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_block"
+    ];
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [
     "cherrypy/test/test_config_server.py"
@@ -94,6 +96,6 @@ buildPythonPackage rec {
     description = "Object-oriented HTTP framework";
     homepage = "https://www.cherrypy.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

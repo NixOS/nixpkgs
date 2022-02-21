@@ -1,25 +1,22 @@
 # /etc files related to networking, such as /etc/services.
-
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.networking;
   opt = options.networking;
 
-  localhostMultiple = any (elem "localhost") (attrValues (removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]));
-
-in
-
-{
+  localhostMultiple = any (elem "localhost") (attrValues (removeAttrs cfg.hosts ["127.0.0.1" "::1"]));
+in {
   imports = [
-    (mkRemovedOptionModule [ "networking" "hostConf" ] "Use environment.etc.\"host.conf\" instead.")
+    (mkRemovedOptionModule ["networking" "hostConf"] "Use environment.etc.\"host.conf\" instead.")
   ];
 
   options = {
-
     networking.hosts = lib.mkOption {
       type = types.attrsOf (types.listOf types.str);
       example = literalExpression ''
@@ -66,7 +63,6 @@ in
     };
 
     networking.proxy = {
-
       default = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -149,27 +145,31 @@ in
   };
 
   config = {
-
-    assertions = [{
-      assertion = !localhostMultiple;
-      message = ''
-        `networking.hosts` maps "localhost" to something other than "127.0.0.1"
-        or "::1". This will break some applications. Please use
-        `networking.extraHosts` if you really want to add such a mapping.
-      '';
-    }];
+    assertions = [
+      {
+        assertion = !localhostMultiple;
+        message = ''
+          `networking.hosts` maps "localhost" to something other than "127.0.0.1"
+          or "::1". This will break some applications. Please use
+          `networking.extraHosts` if you really want to add such a mapping.
+        '';
+      }
+    ];
 
     # These entries are required for "hostname -f" and to resolve both the
     # hostname and FQDN correctly:
     networking.hosts = let
-      hostnames = # Note: The FQDN (canonical hostname) has to come first:
+      hostnames =
+        # Note: The FQDN (canonical hostname) has to come first:
         optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
         ++ optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
-    in {
-      "127.0.0.2" = hostnames;
-    } // optionalAttrs cfg.enableIPv6 {
-      "::1" = hostnames;
-    };
+    in
+      {
+        "127.0.0.2" = hostnames;
+      }
+      // optionalAttrs cfg.enableIPv6 {
+        "::1" = hostnames;
+      };
 
     networking.hostFiles = let
       # Note: localhostHosts has to appear first in /etc/hosts so that 127.0.0.1
@@ -180,20 +180,22 @@ in
         127.0.0.1 localhost
         ${optionalString cfg.enableIPv6 "::1 localhost"}
       '';
-      stringHosts =
-        let
-          oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip} + "\n";
-          allToString = set: concatMapStrings (oneToString set) (attrNames set);
-        in pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != []) cfg.hosts));
+      stringHosts = let
+        oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip} + "\n";
+        allToString = set: concatMapStrings (oneToString set) (attrNames set);
+      in
+        pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != []) cfg.hosts));
       extraHosts = pkgs.writeText "extra-hosts" cfg.extraHosts;
-    in mkBefore [ localhostHosts stringHosts extraHosts ];
+    in
+      mkBefore [localhostHosts stringHosts extraHosts];
 
     environment.etc =
-      { # /etc/services: TCP/UDP port assignments.
+      {
+        # /etc/services: TCP/UDP port assignments.
         services.source = pkgs.iana-etc + "/etc/services";
 
         # /etc/protocols: IP protocol numbers.
-        protocols.source  = pkgs.iana-etc + "/etc/protocols";
+        protocols.source = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
         hosts.source = pkgs.concatText "hosts" cfg.hostFiles;
@@ -205,33 +207,37 @@ in
         "host.conf".text = ''
           multi on
         '';
-
-      } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
+      }
+      // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
         # /etc/rpc: RPC program numbers.
         rpc.source = pkgs.stdenv.cc.libc.out + "/etc/rpc";
       };
 
-      networking.proxy.envVars =
-        optionalAttrs (cfg.proxy.default != null) {
-          # other options already fallback to proxy.default
-          no_proxy = "127.0.0.1,localhost";
-        } // optionalAttrs (cfg.proxy.httpProxy != null) {
-          http_proxy  = cfg.proxy.httpProxy;
-        } // optionalAttrs (cfg.proxy.httpsProxy != null) {
-          https_proxy = cfg.proxy.httpsProxy;
-        } // optionalAttrs (cfg.proxy.rsyncProxy != null) {
-          rsync_proxy = cfg.proxy.rsyncProxy;
-        } // optionalAttrs (cfg.proxy.ftpProxy != null) {
-          ftp_proxy   = cfg.proxy.ftpProxy;
-        } // optionalAttrs (cfg.proxy.allProxy != null) {
-          all_proxy   = cfg.proxy.allProxy;
-        } // optionalAttrs (cfg.proxy.noProxy != null) {
-          no_proxy    = cfg.proxy.noProxy;
-        };
+    networking.proxy.envVars =
+      optionalAttrs (cfg.proxy.default != null) {
+        # other options already fallback to proxy.default
+        no_proxy = "127.0.0.1,localhost";
+      }
+      // optionalAttrs (cfg.proxy.httpProxy != null) {
+        http_proxy = cfg.proxy.httpProxy;
+      }
+      // optionalAttrs (cfg.proxy.httpsProxy != null) {
+        https_proxy = cfg.proxy.httpsProxy;
+      }
+      // optionalAttrs (cfg.proxy.rsyncProxy != null) {
+        rsync_proxy = cfg.proxy.rsyncProxy;
+      }
+      // optionalAttrs (cfg.proxy.ftpProxy != null) {
+        ftp_proxy = cfg.proxy.ftpProxy;
+      }
+      // optionalAttrs (cfg.proxy.allProxy != null) {
+        all_proxy = cfg.proxy.allProxy;
+      }
+      // optionalAttrs (cfg.proxy.noProxy != null) {
+        no_proxy = cfg.proxy.noProxy;
+      };
 
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
-
   };
-
 }

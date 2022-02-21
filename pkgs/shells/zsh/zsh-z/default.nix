@@ -1,5 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-z";
   version = "unstable-2021-02-15";
@@ -23,6 +26,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/agkozak/zsh-z";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.evalexpr ];
+    maintainers = [maintainers.evalexpr];
   };
 }

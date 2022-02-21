@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "pwdsafety";
   version = "0.1.4";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Command line tool checking password safety";
     homepage = "https://github.com/edoardottt/pwdsafety";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

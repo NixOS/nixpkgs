@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "bibata-cursors-translucent";
   version = "1.1.1";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Silicasandwhich/Bibata_Cursor_Translucent";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill AdsonCicilioti ];
+    maintainers = with maintainers; [dtzWill AdsonCicilioti];
   };
 }

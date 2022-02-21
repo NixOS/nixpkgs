@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "cogapp";
   version = "3.3.0";
@@ -16,6 +19,6 @@ buildPythonPackage rec {
     description = "A code generator for executing Python snippets in source files";
     homepage = "https://nedbatchelder.com/code/cog";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [lovek323];
   };
 }

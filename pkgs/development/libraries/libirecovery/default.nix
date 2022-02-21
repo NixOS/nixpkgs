@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config
-, libusb1
-, readline
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  libtool,
+  pkg-config,
+  libusb1,
+  readline,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libirecovery";
   version = "1.0.0";
@@ -14,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p9ncqnz5kb7qisw00ynvasw1hax5qx241h9nwppi2g544i9lbnr";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     autoconf
@@ -49,6 +55,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     # Upstream description says it works on more platforms, but packager hasn't tried that yet
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [nh2];
   };
 }

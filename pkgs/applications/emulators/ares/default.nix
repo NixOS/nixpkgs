@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, gtksourceview3
-, libXv
-, openal
-, libpulseaudio
-, libao
-, udev
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  gtksourceview3,
+  libXv,
+  openal,
+  libpulseaudio,
+  libao,
+  udev,
+  SDL2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ares";
   version = "126";
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ares.dev";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     license = licenses.isc;
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with maintainers; [Madouura];
     platforms = platforms.all;
   };
 }

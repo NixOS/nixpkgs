@@ -1,9 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, readline
-, withReadline ? true
-, enableEmu ? true
-, enableSpy ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  readline,
+  withReadline ? true,
+  enableEmu ? true,
+  enableSpy ? true,
 }:
-
 stdenv.mkDerivation {
   pname = "ngadmin";
   version = "unstable-2020-10-05";
@@ -16,7 +20,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs =
-    [ autoreconfHook ]
+    [autoreconfHook]
     ++ lib.optional withReadline readline;
   enableParallelBuilding = true;
   configureFlags = with lib;
@@ -28,6 +32,6 @@ stdenv.mkDerivation {
     description = "Netgear switch (NSDP) administration tool";
     homepage = "https://www.netgeek.ovh/wiki/projets:ngadmin";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.astro ];
+    maintainers = [maintainers.astro];
   };
 }

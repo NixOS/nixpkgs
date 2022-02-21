@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ocaml }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+}:
 stdenv.mkDerivation rec {
   pname = "obuild";
   version = "0.1.10";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dqWP9rwWmr7i3O29v/kipJL01B3qQozaToOFCdfTWZU=";
   };
 
-  buildInputs = [ ocaml ];
+  buildInputs = [ocaml];
 
   buildPhase = ''
     patchShebangs ./bootstrap
@@ -25,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/ocaml-obuild/obuild";
-    platforms = ocaml.meta.platforms or [ ];
+    platforms = ocaml.meta.platforms or [];
     description = "Simple package build system for OCaml";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [volth];
   };
 }

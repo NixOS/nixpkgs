@@ -1,10 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, libv4l
-, fltk
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  libv4l,
+  fltk,
 }:
-
 buildOctavePackage rec {
   pname = "image-acquisition";
   version = "0.2.2";
@@ -22,7 +22,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/image-acquisition/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Functions to capture images from connected devices";
     longDescription = ''
       The Octave-forge Image Aquisition package provides functions to

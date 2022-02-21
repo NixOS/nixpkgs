@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "newversion";
   version = "1.8.2";
@@ -26,11 +26,13 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      packaging
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -43,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PEP 440 version manager";
     homepage = "https://github.com/vemel/newversion";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

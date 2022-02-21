@@ -1,10 +1,13 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "curlie";
   version = "1.6.7";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "rs";
     repo = pname;
     rev = "v${version}";
@@ -18,7 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
     homepage = "https://curlie.io/";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
     license = licenses.mit;
   };
 }

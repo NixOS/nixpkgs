@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip rec {
   name = "undefined-medium-1.0";
 

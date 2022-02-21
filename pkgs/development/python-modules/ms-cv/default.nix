@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "ms-cv";
   version = "0.1.1";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Correlation vector implementation in python";
     homepage = "https://github.com/OpenXbox/ms_cv";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  linuxHeaders,
+}:
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
   version = "3.0.9";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "HGN2CKJ76FzgKkOsU5pLMsRl7hEGMcZ8Loa2YP0P558=";
   };
 
-  buildInputs = [ linuxHeaders ];
+  buildInputs = [linuxHeaders];
 
-  makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = ["KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"];
 
   installPhase = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}"
@@ -35,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
-    maintainers = [ maintainers.blanky0230 ];
+    maintainers = [maintainers.blanky0230];
   };
 }

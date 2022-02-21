@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   version = "0.3.0";
   pname = "undervolt";
@@ -22,6 +25,6 @@ python3Packages.buildPythonApplication rec {
       target (CPU will throttle when this temperature is reached).
     '';
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "clash";
   version = "1.6.0";
@@ -23,6 +26,6 @@ buildGoModule rec {
     description = "A rule-based tunnel in Go";
     homepage = "https://github.com/Dreamacro/clash";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ contrun Br1ght0ne ];
+    maintainers = with maintainers; [contrun Br1ght0ne];
   };
 }

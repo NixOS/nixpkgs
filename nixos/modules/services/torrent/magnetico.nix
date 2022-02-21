@@ -1,45 +1,53 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.magnetico;
 
   dataDir = "/var/lib/magnetico";
 
   credFile = with cfg.web;
     if credentialsFile != null
-      then credentialsFile
-      else pkgs.writeText "magnetico-credentials"
-        (concatStrings (mapAttrsToList
-          (user: hash: "${user}:${hash}\n")
-          cfg.web.credentials));
+    then credentialsFile
+    else
+      pkgs.writeText "magnetico-credentials"
+      (concatStrings (mapAttrsToList
+      (user: hash: "${user}:${hash}\n")
+      cfg.web.credentials));
 
   # default options in magneticod/main.go
   dbURI = concatStrings
-    [ "sqlite3://${dataDir}/database.sqlite3"
-      "?_journal_mode=WAL"
-      "&_busy_timeout=3000"
-      "&_foreign_keys=true"
-    ];
+  [
+    "sqlite3://${dataDir}/database.sqlite3"
+    "?_journal_mode=WAL"
+    "&_busy_timeout=3000"
+    "&_foreign_keys=true"
+  ];
 
-  crawlerArgs = with cfg.crawler; escapeShellArgs
-    ([ "--database=${dbURI}"
-       "--indexer-addr=${address}:${toString port}"
-       "--indexer-max-neighbors=${toString maxNeighbors}"
-       "--leech-max-n=${toString maxLeeches}"
-     ] ++ extraOptions);
+  crawlerArgs = with cfg.crawler;
+    escapeShellArgs
+    ([
+      "--database=${dbURI}"
+      "--indexer-addr=${address}:${toString port}"
+      "--indexer-max-neighbors=${toString maxNeighbors}"
+      "--leech-max-n=${toString maxLeeches}"
+    ]
+    ++ extraOptions);
 
-  webArgs = with cfg.web; escapeShellArgs
-    ([ "--database=${dbURI}"
-       (if (cfg.web.credentialsFile != null || cfg.web.credentials != { })
-         then "--credentials=${toString credFile}"
-         else "--no-auth")
-       "--addr=${address}:${toString port}"
-     ] ++ extraOptions);
-
+  webArgs = with cfg.web;
+    escapeShellArgs
+    ([
+      "--database=${dbURI}"
+      (if (cfg.web.credentialsFile != null || cfg.web.credentials != {})
+      then "--credentials=${toString credFile}"
+      else "--no-auth")
+      "--addr=${address}:${toString port}"
+    ]
+    ++ extraOptions);
 in {
-
   ###### interface
 
   options.services.magnetico = {
@@ -163,13 +171,11 @@ in {
         Extra command line arguments to pass to magneticow.
       '';
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users.magnetico = {
       description = "Magnetico daemons user";
       group = "magnetico";
@@ -179,42 +185,39 @@ in {
 
     systemd.services.magneticod = {
       description = "Magnetico DHT crawler";
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
-        User      = "magnetico";
-        Restart   = "on-failure";
+        User = "magnetico";
+        Restart = "on-failure";
         ExecStart = "${pkgs.magnetico}/bin/magneticod ${crawlerArgs}";
       };
     };
 
     systemd.services.magneticow = {
       description = "Magnetico web interface";
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" "magneticod.service"];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target" "magneticod.service"];
 
       serviceConfig = {
-        User           = "magnetico";
+        User = "magnetico";
         StateDirectory = "magnetico";
-        Restart        = "on-failure";
-        ExecStart      = "${pkgs.magnetico}/bin/magneticow ${webArgs}";
+        Restart = "on-failure";
+        ExecStart = "${pkgs.magnetico}/bin/magneticow ${webArgs}";
       };
     };
 
-    assertions =
-    [
+    assertions = [
       {
-        assertion = cfg.web.credentialsFile == null || cfg.web.credentials == { };
+        assertion = cfg.web.credentialsFile == null || cfg.web.credentials == {};
         message = ''
           The options services.magnetico.web.credentialsFile and
           services.magnetico.web.credentials are mutually exclusives.
         '';
       }
     ];
-
   };
 
-  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
-
+  meta.maintainers = with lib.maintainers; [rnhmjoj];
 }

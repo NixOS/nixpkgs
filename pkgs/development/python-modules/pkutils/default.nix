@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
-, semver
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  pythonOlder,
+  semver,
 }:
-
 buildPythonPackage rec {
   pname = "pkutils";
   version = "2.0.0";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "A Python packaging utility library";
     homepage = "https://github.com/reubano/pkutils/";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

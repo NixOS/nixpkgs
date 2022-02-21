@@ -1,8 +1,12 @@
-{ lib, stdenv, cmake, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "marl";
-  version = "1.0.0";  # Based on marl's CHANGES.md
+  version = "1.0.0"; # Based on marl's CHANGES.md
 
   src = fetchFromGitHub {
     owner = "google";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     rev = "40209e952f5c1f3bc883d2b7f53b274bd454ca53";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   # Turn on the flag to install after building the library.
   cmakeFlags = ["-DMARL_INSTALL=ON"];
@@ -21,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A hybrid thread / fiber task scheduler written in C++ 11";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = with maintainers; [ breakds ];
+    maintainers = with maintainers; [breakds];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
   version = "0.21.10.24";
@@ -11,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "01is32lk6prwhajvlmgn3xs4fcpmiqivizcqkj9k80jx6mqjifzs";
   };
 
-  propagatedBuildInputs = [ python3Packages.psutil ];
+  propagatedBuildInputs = [python3Packages.psutil];
 
   checkInputs = with python3Packages; [
     mock
@@ -43,7 +46,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";
     description = "Command line tool for the desktop trash can";
-    maintainers = [ maintainers.rycee ];
+    maintainers = [maintainers.rycee];
     platforms = platforms.unix;
     license = licenses.gpl2;
     mainProgram = "trash";

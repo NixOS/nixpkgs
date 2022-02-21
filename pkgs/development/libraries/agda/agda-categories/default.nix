@@ -1,5 +1,9 @@
-{ lib, mkDerivation, fetchFromGitHub, standard-library }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  standard-library,
+}:
 mkDerivation rec {
   version = "0.1.7.1";
   pname = "agda-categories";
@@ -18,13 +22,13 @@ mkDerivation rec {
       --replace 'standard-library-1.7' 'standard-library-1.7.1'
   '';
 
-  buildInputs = [ standard-library ];
+  buildInputs = [standard-library];
 
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "A new Categories library";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice turion ];
+    maintainers = with maintainers; [alexarice turion];
   };
 }

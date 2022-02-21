@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-, pyopenssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  pyopenssl,
 }:
-
 buildPythonPackage rec {
   pname = "netio";
   version = "1.0.6";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Module for interacting with NETIO devices";
     homepage = "https://github.com/netioproducts/PyNetio";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

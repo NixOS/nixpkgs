@@ -1,5 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
   version = "0.17.2";
@@ -19,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "A hackable, minimal, fast TUI file explorer";
     homepage = "https://github.com/sayanarijit/xplr";
     license = licenses.mit;
-    maintainers = with maintainers; [ sayanarijit suryasr007 ];
+    maintainers = with maintainers; [sayanarijit suryasr007];
   };
 }

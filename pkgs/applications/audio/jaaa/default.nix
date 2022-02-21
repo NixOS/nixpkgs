@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, alsa-lib, libclthreads, libclxclient, libX11, libXft, libXrender, fftwFloat, libjack2, zita-alsa-pcmi }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  libclthreads,
+  libclxclient,
+  libX11,
+  libXft,
+  libXrender,
+  fftwFloat,
+  libjack2,
+  zita-alsa-pcmi,
+}:
 stdenv.mkDerivation rec {
   pname = "jaaa";
   version = "0.9.2";
@@ -10,7 +22,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsa-lib libclthreads libclxclient libX11 libXft libXrender fftwFloat libjack2 zita-alsa-pcmi
+    alsa-lib
+    libclthreads
+    libclxclient
+    libX11
+    libXft
+    libXrender
+    fftwFloat
+    libjack2
+    zita-alsa-pcmi
   ];
 
   makeFlags = [
@@ -26,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     description = "JACK and ALSA Audio Analyser";
     license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
   };
 }

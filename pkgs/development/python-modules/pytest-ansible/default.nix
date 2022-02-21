@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ansible
-, pytest
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ansible,
+  pytest,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-ansible";
   version = "2.2.4";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     sed -i "s/'setuptools-markdown'//g" setup.py
   '';
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
   # requires pandoc < 2.0
   # buildInputs = [ setuptools-markdown ];
-  checkInputs =  [ mock ];
-  propagatedBuildInputs = [ ansible ];
+  checkInputs = [mock];
+  propagatedBuildInputs = [ansible];
 
   # tests not included with release, even on github
   doCheck = false;
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jlaska/pytest-ansible";
     description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

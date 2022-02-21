@@ -1,14 +1,14 @@
-{ pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   metadataFetcher = import ./openstack-metadata-fetcher.nix {
     targetRoot = "/";
     wgetExtraOptions = "--retry-connrefused";
   };
-in
-{
+in {
   imports = [
     ../profiles/qemu-guest.nix
     ../profiles/headless.nix
@@ -25,7 +25,7 @@ in
     };
 
     boot.growPartition = true;
-    boot.kernelParams = [ "console=ttyS0" ];
+    boot.kernelParams = ["console=ttyS0"];
     boot.loader.grub.device = "/dev/vda";
     boot.loader.timeout = 0;
 
@@ -40,12 +40,12 @@ in
     networking.hostName = mkDefault "";
 
     systemd.services.openstack-init = {
-      path = [ pkgs.wget ];
+      path = [pkgs.wget];
       description = "Fetch Metadata on startup";
-      wantedBy = [ "multi-user.target" ];
-      before = [ "apply-ec2-data.service" "amazon-init.service"];
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      before = ["apply-ec2-data.service" "amazon-init.service"];
+      wants = ["network-online.target"];
+      after = ["network-online.target"];
       script = metadataFetcher;
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;

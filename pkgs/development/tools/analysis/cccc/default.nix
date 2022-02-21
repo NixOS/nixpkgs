@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "cccc";
   version = "3.1.4";
@@ -9,15 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "1gsdzzisrk95kajs3gfxks3bjvfd9g680fin6a9pjrism2lyrcr7";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  patches = [ ./cccc.patch ];
+  patches = [./cccc.patch];
 
   preConfigure = ''
     substituteInPlace install/install.mak --replace /usr/local/bin $out/bin
     substituteInPlace install/install.mak --replace MKDIR=mkdir "MKDIR=mkdir -p"
   '';
-  buildFlags = [ "CCC=c++" "LD=c++" ];
+  buildFlags = ["CCC=c++" "LD=c++"];
 
   meta = {
     description = "C and C++ Code Counter";
@@ -29,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cccc.sourceforge.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.linquize ];
+    maintainers = [lib.maintainers.linquize];
   };
 }

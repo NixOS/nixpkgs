@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, perl, xkeyboard_config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  perl,
+  xkeyboard_config,
+}:
 stdenv.mkDerivation rec {
   pname = "ckbcomp";
   version = "1.207";
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pT9dA2sRTozVAYA8VKPlL+AU8r9FABHXp6Pbqa8aSTo=";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   patchPhase = ''
     substituteInPlace Keyboard/ckbcomp --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
@@ -30,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Compiles a XKB keyboard description to a keymap suitable for loadkeys";
     homepage = "https://salsa.debian.org/installer-team/console-setup";
     license = licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = with lib.maintainers; [dezgeg];
     platforms = platforms.unix;
   };
 }

@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, isPy3k
-, cython
-, numpy
-, toml
-, pytest
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  isPy3k,
+  cython,
+  numpy,
+  toml,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "finalfusion";
   version = "0.7.1";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for using finalfusion, word2vec, and fastText word embeddings";
     homepage = "https://github.com/finalfusion/finalfusion-python/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.all;
     license = licenses.blueOak100;
   };

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "ofxtools";
   version = "0.8.20";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1s3fhhmj1acnmqglh39003db0bi451m4hcrkcpyrkqf5m32lslz8";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   # override $HOME directory:
   #   error: [Errno 13] Permission denied: '/homeless-shelter'
   checkPhase = ''

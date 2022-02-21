@@ -1,5 +1,4 @@
-{ fetchzip }:
-
+{fetchzip}:
 fetchzip {
   name = "libguestfs-appliance-1.40.1";
   url = "http://download.libguestfs.org/binaries/appliance/appliance-1.40.1.tar.xz";

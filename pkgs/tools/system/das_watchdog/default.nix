@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchgit, libgtop, xmessage, which, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libgtop,
+  xmessage,
+  which,
+  pkg-config,
+}:
 stdenv.mkDerivation {
   pname = "das_watchdog";
   version = "unstable-2015-09-12";
@@ -10,8 +17,8 @@ stdenv.mkDerivation {
     sha256 = "02y1vfb3wh4908xjj1kpyf8kgxk29x8dw7yl3pnl220qz2gi99vr";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libgtop xmessage which ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libgtop xmessage which];
 
   installPhase = ''
     mkdir -p $out/bin/
@@ -27,7 +34,7 @@ stdenv.mkDerivation {
       won't hang the machine.";
     '';
     license = licenses.free;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
   };
 }

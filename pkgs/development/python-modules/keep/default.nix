@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, PyGithub
-, terminaltables
-, click
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  PyGithub,
+  terminaltables,
+  click,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "keep";
   version = "2.10.1";
@@ -25,13 +25,13 @@ buildPythonPackage rec {
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "keep" ];
+  pythonImportsCheck = ["keep"];
 
   meta = with lib; {
     homepage = "https://github.com/orkohunter/keep";
     description = "A Meta CLI toolkit: Personal shell command keeper and snippets manager";
     platforms = platforms.all;
     license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ris];
   };
 }

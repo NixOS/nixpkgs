@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, nettools
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  nettools,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pytap2";
   version = "2.2.0";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Object-oriented wrapper around the Linux Tun/Tap device";
     homepage = "https://github.com/johnthagen/pytap2";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
     platforms = platforms.linux;
   };
 }

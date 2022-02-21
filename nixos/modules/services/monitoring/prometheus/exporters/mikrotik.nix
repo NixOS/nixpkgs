@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.mikrotik;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.mikrotik;
+in {
   port = 9436;
   extraOpts = {
     configFile = mkOption {
@@ -49,10 +50,11 @@ in
     };
   };
   serviceOpts = let
-    configFile = if cfg.configFile != null
-                 then cfg.configFile
-                 else "${pkgs.writeText "mikrotik-exporter.yml" (builtins.toJSON cfg.configuration)}";
-    in {
+    configFile =
+      if cfg.configFile != null
+      then cfg.configFile
+      else "${pkgs.writeText "mikrotik-exporter.yml" (builtins.toJSON cfg.configuration)}";
+  in {
     serviceConfig = {
       # -port is misleading name, it actually accepts address too
       ExecStart = ''

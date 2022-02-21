@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, enableStatic ? true
-, enableShared ? !stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  enableStatic ? true,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libexecinfo";
   version = "1.1";
@@ -26,28 +29,31 @@ stdenv.mkDerivation rec {
     ./30-linux-makefile.patch
   ];
 
-  makeFlags = [ "CC:=$(CC)" "AR:=$(AR)" ];
-  hardeningEnable = [ "stackprotector" ];
+  makeFlags = ["CC:=$(CC)" "AR:=$(AR)"];
+  hardeningEnable = ["stackprotector"];
 
   buildFlags =
-      lib.optional enableStatic "static"
-   ++ lib.optional enableShared "dynamic";
+    lib.optional enableStatic "static"
+    ++ lib.optional enableShared "dynamic";
 
-  patchFlags = [ "-p0" ];
+  patchFlags = ["-p0"];
 
-  installPhase = ''
-    install -Dm644 execinfo.h stacktraverse.h -t $out/include
-  '' + lib.optionalString enableShared ''
-    install -Dm755 libexecinfo.so.1 -t $out/lib
-    ln -s $out/lib/libexecinfo.so{.1,}
-  '' + lib.optionalString enableStatic ''
-    install -Dm755 libexecinfo.a -t $out/lib
-  '';
+  installPhase =
+    ''
+      install -Dm644 execinfo.h stacktraverse.h -t $out/include
+    ''
+    + lib.optionalString enableShared ''
+      install -Dm755 libexecinfo.so.1 -t $out/lib
+      ln -s $out/lib/libexecinfo.so{.1,}
+    ''
+    + lib.optionalString enableStatic ''
+      install -Dm755 libexecinfo.a -t $out/lib
+    '';
 
   meta = with lib; {
     description = "Quick-n-dirty BSD licensed clone of the GNU libc backtrace facility";
     license = licenses.bsd2;
     homepage = "https://www.freshports.org/devel/libexecinfo";
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromSourcehut, installShellFiles, lua }:
-
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  installShellFiles,
+  lua,
+}:
 stdenv.mkDerivation rec {
   pname = "fennel";
   version = "1.0.0";
@@ -11,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HhxFTWC1gBY76pQzhn6EdgYHpYQr9zkUox0r4YC7mTQ=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = [ lua ];
+  buildInputs = [lua];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   postInstall = ''
     installManPage fennel.1
@@ -26,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fennel-lang.org/";
     license = licenses.mit;
     platforms = lua.meta.platforms;
-    maintainers = [ maintainers.maaslalani ];
+    maintainers = [maintainers.maaslalani];
   };
 }

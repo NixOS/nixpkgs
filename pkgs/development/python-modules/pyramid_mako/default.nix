@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, webtest
-, pyramid
-, Mako
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  webtest,
+  pyramid,
+  Mako,
 }:
-
 buildPythonPackage rec {
   pname = "pyramid_mako";
   version = "1.1.0";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ webtest ];
-  propagatedBuildInputs = [ pyramid Mako ];
+  buildInputs = [webtest];
+  propagatedBuildInputs = [pyramid Mako];
 
   meta = with lib; {
     homepage = "https://github.com/Pylons/pyramid_mako";

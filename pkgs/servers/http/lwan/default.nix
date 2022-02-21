@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, cmake, jemalloc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  zlib,
+  cmake,
+  jemalloc,
+}:
 stdenv.mkDerivation rec {
   pname = "lwan";
   version = "0.4";
@@ -11,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z8kiuZHLEupCKFrj8guiu9fTG7s+5KiQ6x0pg9iMy0c=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ jemalloc zlib ];
+  buildInputs = [jemalloc zlib];
 
   meta = with lib; {
     description = "Lightweight high-performance multi-threaded web server";
@@ -29,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lwan.ws/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

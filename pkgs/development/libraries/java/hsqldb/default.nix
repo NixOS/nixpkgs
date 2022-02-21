@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "hsqldb";
   version = "2.6.1";
@@ -10,23 +16,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cixyEwjEt68UOotd1TcJNyVUxTRDx4XyfyYg9k6kRtQ=";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [unzip makeWrapper];
+  buildInputs = [jre];
 
   installPhase = ''
-    runHook preInstall
+     runHook preInstall
 
-    mkdir -p $out/lib $out/bin
-    cp -R hsqldb/lib/*.jar $out/lib
+     mkdir -p $out/lib $out/bin
+     cp -R hsqldb/lib/*.jar $out/lib
 
-    makeWrapper ${jre}/bin/java $out/bin/hsqldb --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.server.Server"
-    makeWrapper ${jre}/bin/java $out/bin/runServer --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.server.Server"
-    makeWrapper ${jre}/bin/java $out/bin/runManagerSwing --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing"
-    makeWrapper ${jre}/bin/java $out/bin/runWebServer --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.server.WebServer"
-    makeWrapper ${jre}/bin/java $out/bin/runManager --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.util.DatabaseManager"
-    makeWrapper ${jre}/bin/java $out/bin/sqltool --add-flags "-jar $out/lib/sqltool.jar"
+     makeWrapper ${jre}/bin/java $out/bin/hsqldb --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.server.Server"
+     makeWrapper ${jre}/bin/java $out/bin/runServer --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.server.Server"
+     makeWrapper ${jre}/bin/java $out/bin/runManagerSwing --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing"
+     makeWrapper ${jre}/bin/java $out/bin/runWebServer --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.server.WebServer"
+     makeWrapper ${jre}/bin/java $out/bin/runManager --add-flags "-classpath $out/lib/hsqldb.jar org.hsqldb.util.DatabaseManager"
+     makeWrapper ${jre}/bin/java $out/bin/sqltool --add-flags "-jar $out/lib/sqltool.jar"
 
-   runHook postInstall
+    runHook postInstall
   '';
 
   meta = with lib; {

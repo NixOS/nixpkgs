@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule {
   pname = "go-libp2p-daemon";
   version = "0.3.0";
@@ -18,6 +21,6 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/libp2p/go-libp2p-daemon";
     license = licenses.mit;
-    maintainers = with maintainers; [ fare ];
+    maintainers = with maintainers; [fare];
   };
 }

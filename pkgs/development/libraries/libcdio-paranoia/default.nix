@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libcdio, pkg-config,
-  libiconv, IOKit, DiskArbitration}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libcdio,
+  pkg-config,
+  libiconv,
+  IOKit,
+  DiskArbitration,
+}:
 stdenv.mkDerivation rec {
   pname = "libcdio-paranoia";
   version = "0.94+2";
@@ -12,9 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "1wjgmmaca4baw7k5c3vdap9hnjc49ciagi5kvpvync3aqfmdvkha";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libcdio ] ++
-    lib.optionals stdenv.isDarwin [ libiconv IOKit DiskArbitration ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs =
+    [libcdio]
+    ++ lib.optionals stdenv.isDarwin [libiconv IOKit DiskArbitration];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin DiskArbitration;
 
@@ -31,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = "https://github.com/rocky/libcdio-paranoia";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

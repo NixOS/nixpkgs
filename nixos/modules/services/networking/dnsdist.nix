@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.dnsdist;
   configFile = pkgs.writeText "dnsdist.conf" ''
     setLocal('${cfg.listenAddress}:${toString cfg.listenPort}')
@@ -35,18 +37,18 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.packages = [ pkgs.dnsdist ];
+    systemd.packages = [pkgs.dnsdist];
 
     systemd.services.dnsdist = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       startLimitIntervalSec = 0;
       serviceConfig = {
         DynamicUser = true;
 
         # upstream overrides for better nixos compatibility
-        ExecStartPre = [ "" "${pkgs.dnsdist}/bin/dnsdist --check-config --config ${configFile}" ];
-        ExecStart = [ "" "${pkgs.dnsdist}/bin/dnsdist --supervised --disable-syslog --config ${configFile}" ];
+        ExecStartPre = ["" "${pkgs.dnsdist}/bin/dnsdist --check-config --config ${configFile}"];
+        ExecStart = ["" "${pkgs.dnsdist}/bin/dnsdist --supervised --disable-syslog --config ${configFile}"];
       };
     };
   };

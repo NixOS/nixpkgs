@@ -1,13 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, cairo
-, gobject-introspection
-, gtk3
-, gtk-layer-shell
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  gobject-introspection,
+  gtk3,
+  gtk-layer-shell,
 }:
-
 buildGoModule rec {
   pname = "nwg-drawer";
   version = "0.1.11";
@@ -21,15 +21,15 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-HyrjquJ91ddkyS8JijHd9HjtfwSQykXCufa2wzl8RNk=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ cairo gobject-introspection gtk3 gtk-layer-shell ];
+  buildInputs = [cairo gobject-introspection gtk3 gtk-layer-shell];
 
   meta = with lib; {
     description = "Application drawer for sway Wayland compositor";
     homepage = "https://github.com/nwg-piotr/nwg-drawer";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ plabadens ];
+    maintainers = with maintainers; [plabadens];
   };
 }

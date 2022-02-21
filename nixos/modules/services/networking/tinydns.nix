@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
 
   options = {
@@ -30,7 +32,7 @@ with lib;
   ###### implementation
 
   config = mkIf config.services.tinydns.enable {
-    environment.systemPackages = [ pkgs.djbdns ];
+    environment.systemPackages = [pkgs.djbdns];
 
     users.users.tinydns = {
       isSystemUser = true;
@@ -40,9 +42,9 @@ with lib;
 
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = with pkgs; [ daemontools djbdns ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      path = with pkgs; [daemontools djbdns];
       preStart = ''
         rm -rf /var/lib/tinydns
         tinydns-conf tinydns tinydns /var/lib/tinydns ${config.services.tinydns.ip}

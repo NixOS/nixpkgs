@@ -1,10 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, mock, responses, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  mock,
+  responses,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "tunigo";
   version = "1.0.0";
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
   src = fetchFromGitHub {
     owner = "trygveaa";
@@ -13,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
   };
 
-  checkInputs = [ mock responses pytest ];
+  checkInputs = [mock responses pytest];
 
   checkPhase = ''
     py.test

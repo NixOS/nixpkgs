@@ -1,23 +1,20 @@
-{ lib
-, callPackage
-
-, fetchFromGitLab
-
-, appstream
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-
-, glib
-, gtk3
-, libhandy
-, listparser ? callPackage ./listparser.nix { }
-, webkitgtk
-, python3
+{
+  lib,
+  callPackage,
+  fetchFromGitLab,
+  appstream,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  glib,
+  gtk3,
+  libhandy,
+  listparser ? callPackage ./listparser.nix {},
+  webkitgtk,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-feeds";
   version = "0.16.2";

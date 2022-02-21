@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, libxml2
-, desktop-file-utils
-, wrapGAppsHook
-, glib
-, gtk3
-, libgtop
-, libdazzle
-, gnome
-, tracker
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  libxml2,
+  desktop-file-utils,
+  wrapGAppsHook,
+  glib,
+  gtk3,
+  libgtop,
+  libdazzle,
+  gnome,
+  tracker,
+  libhandy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-usage";
   version = "3.38.1";

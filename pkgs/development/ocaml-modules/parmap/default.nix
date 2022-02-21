@@ -1,5 +1,9 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  dune-configurator,
+}:
 buildDunePackage rec {
   pname = "parmap";
   version = "1.2.4";
@@ -23,6 +27,6 @@ buildDunePackage rec {
     downloadPage = "https://github.com/rdicosmo/parmap";
     homepage = "https://rdicosmo.github.io/parmap";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

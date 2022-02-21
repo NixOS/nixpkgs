@@ -1,10 +1,10 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "tornado";
   version = "5.1.1";

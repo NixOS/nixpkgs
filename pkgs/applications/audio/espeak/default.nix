@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, portaudio }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  portaudio,
+}:
 stdenv.mkDerivation rec {
   pname = "espeak";
   version = "1.48.04";
@@ -9,19 +14,24 @@ stdenv.mkDerivation rec {
     sha256 = "0n86gwh9pw0jqqpdz7mxggllfr8k0r7pc67ayy7w5z6z79kig6mz";
   };
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ portaudio ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [portaudio];
 
   patches = [
     ./gcc6.patch
   ];
 
-  prePatch = ''
-    sed -e s,/bin/ln,ln,g -i src/Makefile
-    sed -e 's,^CXXFLAGS=-O2,CXXFLAGS=-O2 -D PATH_ESPEAK_DATA=\\\"$(DATADIR)\\\",' -i src/Makefile
-  '' + (if portaudio.api_version == 19 then ''
-    cp src/portaudio19.h src/portaudio.h
-  '' else "");
+  prePatch =
+    ''
+      sed -e s,/bin/ln,ln,g -i src/Makefile
+      sed -e 's,^CXXFLAGS=-O2,CXXFLAGS=-O2 -D PATH_ESPEAK_DATA=\\\"$(DATADIR)\\\",' -i src/Makefile
+    ''
+    + (if portaudio.api_version == 19
+    then
+      ''
+        cp src/portaudio19.h src/portaudio.h
+      ''
+    else "");
 
   configurePhase = ''
     cd src

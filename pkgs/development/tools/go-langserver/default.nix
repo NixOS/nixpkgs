@@ -1,11 +1,14 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "go-langserver";
   version = "2.0.0";
 
   goPackagePath = "github.com/sourcegraph/go-langserver";
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -18,7 +21,7 @@ buildGoPackage rec {
     description = "A Go language server protocol server";
     homepage = "https://github.com/sourcegraph/go-langserver";
     license = licenses.mit;
-    maintainers = with maintainers; [ johnchildren ];
+    maintainers = with maintainers; [johnchildren];
     platforms = platforms.unix;
   };
 }

@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wrapGAppsHook, python3
-, gettext, gnome, glib, gtk3, libgnome-games-support, gdk-pixbuf }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  python3,
+  gettext,
+  gnome,
+  glib,
+  gtk3,
+  libgnome-games-support,
+  gdk-pixbuf,
+}:
 stdenv.mkDerivation rec {
   pname = "atomix";
   version = "3.34.0";
@@ -10,8 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "0h909a4mccf160hi0aimyicqhq2b0gk1dmqp7qwf87qghfrw6m00";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext wrapGAppsHook python3 ];
-  buildInputs = [ glib gtk3 gdk-pixbuf libgnome-games-support gnome.adwaita-icon-theme ];
+  nativeBuildInputs = [meson ninja pkg-config gettext wrapGAppsHook python3];
+  buildInputs = [glib gtk3 gdk-pixbuf libgnome-games-support gnome.adwaita-icon-theme];
 
   postPatch = ''
     chmod +x meson_post_install.py

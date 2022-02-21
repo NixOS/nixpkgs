@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "ssh-to-age";
   version = "1.0.1";
@@ -25,7 +28,7 @@ buildGoModule rec {
     description = "Convert ssh private keys in ed25519 format to age keys";
     homepage = "https://github.com/Mic92/ssh-to-age";
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [mic92];
     platforms = platforms.unix;
   };
 }

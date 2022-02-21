@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, openssl
-, pkg-config
-, CoreServices
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  CoreServices,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "devserver";
   version = "0.4.0";
@@ -16,9 +16,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-UcrLzsALwl0zqNRMS1kTTXsR6wN8XDd5Iq+yrudh6M4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = [openssl] ++ lib.optional stdenv.isDarwin CoreServices;
 
   cargoSha256 = "sha256-XlrQ6CvjeWnzvfaeNbe8FtMXMVSQNLxDVIEjyHm57Js=";
 
@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     description = "An extremely tiny tool to serve a static folder locally";
     homepage = "https://github.com/kettle11/devserver";
     license = licenses.zlib;
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with maintainers; [nickhu];
   };
 }

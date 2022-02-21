@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ytt";
   version = "0.40.0";
@@ -12,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = [ "cmd/ytt" ];
+  subPackages = ["cmd/ytt"];
 
   meta = with lib; {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";
     homepage = "https://get-ytt.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ brodes ];
+    maintainers = with maintainers; [brodes];
   };
 }

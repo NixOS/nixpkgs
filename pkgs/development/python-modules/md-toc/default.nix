@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fpyutils
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fpyutils,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "md-toc";
   version = "8.1.1";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Table of contents generator for Markdown";
     homepage = "https://docs.franco.net.eu.org/md-toc/";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

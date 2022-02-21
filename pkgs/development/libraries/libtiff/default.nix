@@ -1,17 +1,15 @@
-{ lib, stdenv
-, fetchurl
-
-, autoreconfHook
-, pkg-config
-
-, libdeflate
-, libjpeg
-, xz
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libdeflate,
+  libjpeg,
+  xz,
+  zlib,
 }:
-
 #FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
-
 stdenv.mkDerivation rec {
   pname = "libtiff";
   version = "4.3.0";
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
     mv VERSION VERSION.txt
   '';
 
-  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+  outputs = ["bin" "dev" "dev_private" "out" "man" "doc"];
 
   postFixup = ''
     moveToOutput include/tif_dir.h $dev_private
@@ -43,11 +41,11 @@ stdenv.mkDerivation rec {
 
   # If you want to change to a different build system, please make
   # sure cross-compilation works first!
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs = [libjpeg xz zlib]; #TODO: opengl support (bogus configure detection)
 
-  buildInputs = [ libdeflate ];
+  buildInputs = [libdeflate];
 
   enableParallelBuilding = true;
 
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/v${version}.html";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     license = licenses.libtiff;
     platforms = platforms.unix;
   };

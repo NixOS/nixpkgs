@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, openssl, libp11, pam }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  libp11,
+  pam,
+}:
 stdenv.mkDerivation rec {
   pname = "pam_p11";
   version = "0.3.1";
@@ -11,14 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "1caidy18rq5zk82d51x8vwidmkhwmanf3qm25x1yrdlbhxv6m7lk";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ pam openssl libp11 ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [pam openssl libp11];
 
   meta = with lib; {
     homepage = "https://github.com/OpenSC/pam_p11";
     description = "Authentication with PKCS#11 modules";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sb0 ];
+    maintainers = with maintainers; [sb0];
   };
 }

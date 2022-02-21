@@ -1,10 +1,13 @@
-{ lib, stdenv, unzip, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  unzip,
+  fetchurl,
+}:
 # Upstream changes files in-place, to update:
 # 1. Check latest version at http://www.un4seen.com/
 # 2. Update `version`s and `sha256` sums.
 # See also http://www.un4seen.com/forum/?topic=18614.0
-
 let
   allBass = {
     bass = {
@@ -30,39 +33,41 @@ let
     };
   };
 
-  dropBass = name: bass: stdenv.mkDerivation {
-    pname = "lib${name}";
-    inherit (bass) version;
+  dropBass = name: bass:
+    stdenv.mkDerivation {
+      pname = "lib${name}";
+      inherit (bass) version;
 
-    src = fetchurl {
-      url = "https://www.un4seen.com/files/${bass.urlpath}";
-      inherit (bass) sha256;
-    };
-    unpackCmd = ''
-      mkdir out
-      ${unzip}/bin/unzip $curSrc -d out
-    '';
+      src = fetchurl {
+        url = "https://www.un4seen.com/files/${bass.urlpath}";
+        inherit (bass) sha256;
+      };
+      unpackCmd = ''
+        mkdir out
+        ${unzip}/bin/unzip $curSrc -d out
+      '';
 
-    lpropagatedBuildInputs = [ unzip ];
-    dontBuild = true;
-    installPhase =
-      let so =
-            if bass.so ? ${stdenv.hostPlatform.system} then bass.so.${stdenv.hostPlatform.system}
-            else throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
+      lpropagatedBuildInputs = [unzip];
+      dontBuild = true;
+      installPhase = let
+        so =
+          if bass.so ? ${stdenv.hostPlatform.system}
+          then bass.so.${stdenv.hostPlatform.system}
+          else throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
       in ''
         mkdir -p $out/{lib,include}
         install -m644 -t $out/lib/ ${so}
         install -m644 -t $out/include/ ${bass.h}
       '';
 
-    meta = with lib; {
-      description = "Shareware audio library";
-      homepage = "https://www.un4seen.com/";
-      license = licenses.unfreeRedistributable;
-      platforms = builtins.attrNames bass.so;
-      # until upstream has stable URLs, this package is prone to always being broken
-      broken = true;
+      meta = with lib; {
+        description = "Shareware audio library";
+        homepage = "https://www.un4seen.com/";
+        license = licenses.unfreeRedistributable;
+        platforms = builtins.attrNames bass.so;
+        # until upstream has stable URLs, this package is prone to always being broken
+        broken = true;
+      };
     };
-  };
-
-in lib.mapAttrs dropBass allBass
+in
+  lib.mapAttrs dropBass allBass

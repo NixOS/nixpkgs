@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromBitbucket
-, pythonOlder
-, certifi
-, chardet
-, idna
-, nose
-, requests
-, six
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromBitbucket,
+  pythonOlder,
+  certifi,
+  chardet,
+  idna,
+  nose,
+  requests,
+  six,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "youless-api";
   version = "0.16";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for YouLess sensors";
     homepage = "https://pypi.org/project/youless-api/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

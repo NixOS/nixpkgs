@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchzip
-, buildDocs ? false, tex
+{
+  lib,
+  stdenv,
+  fetchzip,
+  buildDocs ? false,
+  tex,
 }:
-
 stdenv.mkDerivation rec {
   pname = "asl";
   version = "142-bld211";
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Sbm16JX7kC/7Ws7YgNBUXNqOCl6u+RXgfNjTODhCzSM=";
   };
 
-  nativeBuildInputs = lib.optionals buildDocs [ tex ];
+  nativeBuildInputs = lib.optionals buildDocs [tex];
 
   postPatch = lib.optionalString (!buildDocs) ''
     substituteInPlace Makefile --replace "all: binaries docs" "all: binaries"
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
       are used in workstations and PCs.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }
@@ -51,3 +52,4 @@ stdenv.mkDerivation rec {
 # TODO: customize TeX input
 # TODO: report upstream about `mkdir -p .objdir/`
 # TODO: suggest upstream about building docs as an option
+

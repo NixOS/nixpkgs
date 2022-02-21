@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, autoPatchelfHook
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
 }:
-
 buildDotnetModule rec {
   pname = "inklecate";
   version = "1.0.0";
@@ -17,12 +17,15 @@ buildDotnetModule rec {
     sha256 = "00lagmwsbxap5mgnw4gndpavmv3xsgincdaq1zvw7fkc3vn3pxqc";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ stdenv.cc.cc.lib ];
+  nativeBuildInputs = [autoPatchelfHook];
+  buildInputs = [stdenv.cc.cc.lib];
 
   projectFile = "inklecate/inklecate.csproj";
-  nugetDeps = if stdenv.isDarwin then ./deps-darwin.nix else ./deps-linux.nix;
-  executables = [ "inklecate" ];
+  nugetDeps =
+    if stdenv.isDarwin
+    then ./deps-darwin.nix
+    else ./deps-linux.nix;
+  executables = ["inklecate"];
 
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
@@ -38,6 +41,6 @@ buildDotnetModule rec {
     license = licenses.mit;
     platforms = platforms.unix;
     badPlatforms = platforms.aarch64;
-    maintainers = with maintainers; [ shreerammodi ];
+    maintainers = with maintainers; [shreerammodi];
   };
 }

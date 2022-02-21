@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "timescaledb-tune";
   version = "0.12.0";
@@ -14,12 +17,12 @@ buildGoModule rec {
   vendorSha256 = "sha256-n2jrg9FiR/gSrbds/QVV8Duf7BTEs36yYi4F3Ve+d0E=";
 
   # Temporary fix of bug: https://github.com/timescale/timescaledb-tune/issues/95
-  patches = [ ./fixMinMaxConn.diff ];
+  patches = [./fixMinMaxConn.diff];
 
   meta = with lib; {
     description = "A tool for tuning your TimescaleDB for better performance";
     homepage = "https://github.com/timescale/timescaledb-tune";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [marsam];
   };
 }

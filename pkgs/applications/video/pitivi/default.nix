@@ -1,24 +1,24 @@
-{ lib
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, python3
-, wrapGAppsHook
-, python3Packages
-, gst_all_1
-, gtk3
-, gobject-introspection
-, libpeas
-, librsvg
-, gnome
-, libnotify
-, gsound
-, meson
-, ninja
-, gsettings-desktop-schemas
+{
+  lib,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  python3,
+  wrapGAppsHook,
+  python3Packages,
+  gst_all_1,
+  gtk3,
+  gobject-introspection,
+  libpeas,
+  librsvg,
+  gnome,
+  libnotify,
+  gsound,
+  meson,
+  ninja,
+  gsettings-desktop-schemas,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "pitivi";
   version = "2021.05";
@@ -47,26 +47,28 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    gobject-introspection
-    gtk3
-    libpeas
-    librsvg
-    gnome.gnome-desktop
-    gsound
-    gnome.adwaita-icon-theme
-    gsettings-desktop-schemas
-    libnotify
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-editing-services
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-    gst-devtools
-  ]);
+  buildInputs =
+    [
+      gobject-introspection
+      gtk3
+      libpeas
+      librsvg
+      gnome.gnome-desktop
+      gsound
+      gnome.adwaita-icon-theme
+      gsettings-desktop-schemas
+      libnotify
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-editing-services
+      gst-plugins-base
+      (gst-plugins-good.override {gtkSupport = true;})
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+      gst-devtools
+    ]);
 
   pythonPath = with python3Packages; [
     pygobject3

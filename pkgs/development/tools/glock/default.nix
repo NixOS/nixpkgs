@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "glock";
   version = "20160816-${lib.strings.substring 0 7 rev}";
@@ -20,6 +23,6 @@ buildGoPackage rec {
     homepage = "https://github.com/robfig/glock";
     description = "A command-line tool to lock Go dependencies to specific revisions";
     license = licenses.mit;
-    maintainers = [ maintainers.rushmorem ];
+    maintainers = [maintainers.rushmorem];
   };
 }

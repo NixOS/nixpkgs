@@ -1,5 +1,10 @@
-{fetchurl, lib, stdenv, flex, db}:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  flex,
+  db,
+}:
 stdenv.mkDerivation rec {
   pname = "bogofilter";
   version = "1.2.4";
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
   # FIXME: We would need `pax' as a "propagated build input" (for use
   # by the `bf_tar' script) but we don't have it currently.
 
-  buildInputs = [ flex db ];
+  buildInputs = [flex db];
 
   doCheck = false; # needs "y" tool
 

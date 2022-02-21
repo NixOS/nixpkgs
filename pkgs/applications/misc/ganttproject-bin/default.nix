@@ -1,22 +1,29 @@
-{ lib, stdenv, fetchzip, makeDesktopItem, makeWrapper
-, jre
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeDesktopItem,
+  makeWrapper,
+  jre,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ganttproject-bin";
   version = "2.8.10";
 
-  src = let build = "r2364"; in fetchzip {
-    sha256 = "0cclgyqv4f9pjsdlh93cqvgbzrp8ajvrpc2xszs03sknqz2kdh7r";
-    url = "https://dl.ganttproject.biz/ganttproject-${version}/"
+  src = let
+    build = "r2364";
+  in
+    fetchzip {
+      sha256 = "0cclgyqv4f9pjsdlh93cqvgbzrp8ajvrpc2xszs03sknqz2kdh7r";
+      url =
+        "https://dl.ganttproject.biz/ganttproject-${version}/"
         + "ganttproject-${version}-${build}.zip";
-  };
+    };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   installPhase = let
-
     desktopItem = makeDesktopItem {
       name = "ganttproject";
       exec = "ganttproject";
@@ -30,7 +37,6 @@ stdenv.mkDerivation rec {
     javaOptions = [
       "-Dawt.useSystemAAFontSettings=on"
     ];
-
   in ''
     mkdir -pv "$out/share/ganttproject"
     cp -rv *  "$out/share/ganttproject"
@@ -53,6 +59,6 @@ stdenv.mkDerivation rec {
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.vidbina ];
+    maintainers = [maintainers.vidbina];
   };
 }

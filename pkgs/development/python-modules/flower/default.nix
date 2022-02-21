@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, celery
-, humanize
-, mock
-, pytz
-, tornado
-, prometheus-client
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  celery,
+  humanize,
+  mock,
+  pytz,
+  tornado,
+  prometheus-client,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "flower";
   version = "1.0.0";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Celery Flower";
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    maintainers = with maintainers; [arnoldfarkas];
   };
 }

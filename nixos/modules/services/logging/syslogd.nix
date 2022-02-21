@@ -1,13 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.syslogd;
 
   syslogConf = pkgs.writeText "syslog.conf" ''
-    ${if (cfg.tty != "") then "kern.warning;*.err;authpriv.none /dev/${cfg.tty}" else ""}
+    ${
+      if (cfg.tty != "")
+      then "kern.warning;*.err;authpriv.none /dev/${cfg.tty}"
+      else ""
+    }
     ${cfg.defaultConfig}
     ${cfg.extraConfig}
   '';
@@ -26,16 +31,11 @@ let
 
     *.*;mail.none;local1.none    -/var/log/messages
   '';
-
-in
-
-{
+in {
   ###### interface
 
   options = {
-
     services.syslogd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -84,47 +84,42 @@ in
 
       extraParams = mkOption {
         type = types.listOf types.str;
-        default = [ ];
-        example = [ "-m 0" ];
+        default = [];
+        example = ["-m 0"];
         description = ''
           Additional parameters passed to <command>syslogd</command>.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !config.services.rsyslogd.enable;
+        message = "rsyslogd conflicts with syslogd";
+      }
+    ];
 
-    assertions =
-      [ { assertion = !config.services.rsyslogd.enable;
-          message = "rsyslogd conflicts with syslogd";
-        }
-      ];
-
-    environment.systemPackages = [ pkgs.sysklogd ];
+    environment.systemPackages = [pkgs.sysklogd];
 
     services.syslogd.extraParams = optional cfg.enableNetworkInput "-r";
 
     # FIXME: restarting syslog seems to break journal logging.
-    systemd.services.syslog =
-      { description = "Syslog Daemon";
+    systemd.services.syslog = {
+      description = "Syslog Daemon";
 
-        requires = [ "syslog.socket" ];
+      requires = ["syslog.socket"];
 
-        wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
-        serviceConfig =
-          { ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
-            # Prevent syslogd output looping back through journald.
-            StandardOutput = "null";
-          };
+      serviceConfig = {
+        ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+        # Prevent syslogd output looping back through journald.
+        StandardOutput = "null";
       };
-
+    };
   };
-
 }

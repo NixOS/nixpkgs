@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, fastjsonschema
-, fetchFromGitHub
-, fetchpatch
-, future-typing
-, inflection
-, mypy
-, orjson
-, pandas
-, pendulum
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fastjsonschema,
+  fetchFromGitHub,
+  fetchpatch,
+  future-typing,
+  inflection,
+  mypy,
+  orjson,
+  pandas,
+  pendulum,
+  poetry-core,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "typical";
   version = "2.8.0";
@@ -35,15 +35,17 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    inflection
-    pendulum
-    fastjsonschema
-    orjson
-    future-typing
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      inflection
+      pendulum
+      fastjsonschema
+      orjson
+      future-typing
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      typing-extensions
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -83,6 +85,6 @@ buildPythonPackage rec {
     description = "Python library for runtime analysis, inference and validation of Python types";
     homepage = "https://python-typical.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ kfollesdal ];
+    maintainers = with maintainers; [kfollesdal];
   };
 }

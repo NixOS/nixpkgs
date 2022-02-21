@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, bubblewrap
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  bubblewrap,
+  makeWrapper,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "pipr";
   version = "0.0.16";
@@ -18,16 +18,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-SLOiX8z8LuQ9VA/lg0lOhqs85MGs0vmeP74cS6sgghI=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   postFixup = ''
-    wrapProgram "$out/bin/pipr" --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
+    wrapProgram "$out/bin/pipr" --prefix PATH : ${lib.makeBinPath [bubblewrap]}
   '';
 
   meta = with lib; {
     description = "A commandline-tool to interactively write shell pipelines";
     homepage = "https://github.com/ElKowar/pipr";
     license = licenses.mit;
-    maintainers = with maintainers; [ elkowar ];
+    maintainers = with maintainers; [elkowar];
     platforms = platforms.all;
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pam
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pam,
 }:
-
 buildPythonPackage rec {
   pname = "python-pam";
   version = "1.8.4";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Python pam module supporting py3 (and py2)";
     homepage = "https://github.com/FirefighterBlu3/python-pam";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar mkg20001 ];
+    maintainers = with maintainers; [abbradar mkg20001];
   };
 }

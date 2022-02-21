@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  file,
+  intltool,
+  glib,
+  gtk3,
+  libxklavier,
+  wrapGAppsHook,
+  gnome,
+}:
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
   version = "3.26.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

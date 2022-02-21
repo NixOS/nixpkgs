@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "dendropy";
   version = "4.5.1";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Python library for phylogenetic computing";
     homepage = "https://dendropy.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ unode ];
+    maintainers = with maintainers; [unode];
   };
 }

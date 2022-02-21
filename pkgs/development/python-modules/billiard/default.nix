@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, case
-, psutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  case,
+  psutil,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "billiard";
   version = "3.6.4.0";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Python multiprocessing fork with improvements and bugfixes";
     homepage = "https://github.com/celery/billiard";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "popeye";
   version = "0.9.8";
@@ -12,7 +15,8 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/derailed/popeye/cmd.version=${version}"
     "-X github.com/derailed/popeye/cmd.commit=${version}"
   ];
@@ -31,7 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/derailed/popeye";
     changelog = "https://github.com/derailed/popeye/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    maintainers = [maintainers.bryanasdev000];
     platforms = platforms.linux;
   };
 }

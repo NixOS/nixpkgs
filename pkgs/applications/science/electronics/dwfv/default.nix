@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "dwfv";
   version = "0.4.1";
@@ -15,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     description = "A simple digital waveform viewer with vi-like key bindings";
     homepage = "https://github.com/psurply/dwfv";
     license = licenses.mit;
-    maintainers = with maintainers; [ newam ];
+    maintainers = with maintainers; [newam];
   };
 }

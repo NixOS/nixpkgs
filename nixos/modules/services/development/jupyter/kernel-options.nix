@@ -1,11 +1,7 @@
 # Options that can be used for creating a jupyter kernel.
-{lib }:
-
-with lib;
-
-{
+{lib}:
+with lib; {
   options = {
-
     displayName = mkOption {
       type = types.str;
       default = "";

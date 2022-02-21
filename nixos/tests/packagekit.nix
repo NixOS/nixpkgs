@@ -1,11 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "packagekit";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ peterhoeg ];
+    maintainers = [peterhoeg];
   };
 
-  machine = { ... }: {
-    environment.systemPackages = with pkgs; [ dbus ];
+  machine = {...}: {
+    environment.systemPackages = with pkgs; [dbus];
     services.packagekit = {
       enable = true;
     };

@@ -1,21 +1,21 @@
-{ stdenv
-, lib
-, fetchurl
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, systemd
-, glib
-, dbus
-, libnl
-, python2Packages
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  systemd,
+  glib,
+  dbus,
+  libnl,
+  python2Packages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "neard";
   version = "0.18";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/network/nfc/neard.git/snapshot/neard-${version}.tar.gz";
@@ -29,14 +29,16 @@ stdenv.mkDerivation rec {
     python2Packages.wrapPython
   ];
 
-  buildInputs = [
-    systemd
-    glib
-    dbus
-    libnl
-  ] ++ (with python2Packages; [
-    python
-  ]);
+  buildInputs =
+    [
+      systemd
+      glib
+      dbus
+      libnl
+    ]
+    ++ (with python2Packages; [
+      python
+    ]);
 
   pythonPath = with python2Packages; [
     pygobject2
@@ -70,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "Near Field Communication manager";
     homepage = "https://01.org/linux-nfc";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jtojnar tstrobel ];
+    maintainers = with maintainers; [jtojnar tstrobel];
     platforms = platforms.unix;
   };
 }

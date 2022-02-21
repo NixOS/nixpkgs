@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, libuuid
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libuuid,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
   version = "1.16";
@@ -13,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/wDQxsN1sji56zfcvqx02iciYnyxjIbL85bNaRwrHYw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libuuid ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libuuid];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = ["DESTDIR=$(out)" "PREFIX="];
 
   # To omit the hostnqn and hostid files that are impure and should be unique
   # for each target host:
-  installTargets = [ "install-spec" ];
+  installTargets = ["install-spec"];
 
   meta = with lib; {
     inherit (src.meta) homepage; # https://nvmexpress.org/
@@ -35,6 +38,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [mic92];
   };
 }

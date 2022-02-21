@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jupyterhub
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jupyterhub,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "batchspawner";
   version = "1.1.0";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # tests require a job scheduler e.g. slurm, pbs, etc.
   doCheck = false;
 
-  pythonImportsCheck = [ "batchspawner" ];
+  pythonImportsCheck = ["batchspawner"];
 
   meta = with lib; {
     description = "A spawner for Jupyterhub to spawn notebooks using batch resource managers";
     homepage = "https://jupyter.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

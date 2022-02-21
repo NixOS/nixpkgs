@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, git
-, nodejs
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  git,
+  nodejs,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
   version = "3.1.20220217190813";
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [veprbl];
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, substituteAll
-, graphvizPkgs
-, graphviz
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  substituteAll,
+  graphvizPkgs,
+  graphviz,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "objgraph";
   version = "3.5.0";
@@ -27,14 +27,13 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ graphviz ];
+  propagatedBuildInputs = [graphviz];
 
-  checkInputs = [ mock ];
+  checkInputs = [mock];
 
   meta = with lib; {
     description = "Draws Python object reference graphs with graphviz";
     homepage = "https://mg.pov.lt/objgraph/";
     license = licenses.mit;
   };
-
 }

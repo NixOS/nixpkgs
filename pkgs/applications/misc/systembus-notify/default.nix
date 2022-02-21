@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, systemd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  systemd,
+}:
 stdenv.mkDerivation rec {
   pname = "systembus-notify";
   version = "1.1";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pdn45rfpwhrf20hs87qmk2j8sr7ab8161f81019wnypnb1q2fsv";
   };
 
-  buildInputs = [ systemd ];
+  buildInputs = [systemd];
 
   installPhase = ''
     runHook preInstall

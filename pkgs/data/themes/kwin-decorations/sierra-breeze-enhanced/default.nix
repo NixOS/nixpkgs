@@ -1,12 +1,12 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, wrapQtAppsHook
-, kwin
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  wrapQtAppsHook,
+  kwin,
+  lib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sierra-breeze-enhanced";
   version = "1.0.3";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kqbfn1jqsbii3hqcqlb93x8cg8dyh5mf66i9r237w41knks5mnw";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
-  buildInputs = [ kwin ];
+  nativeBuildInputs = [cmake extra-cmake-modules wrapQtAppsHook];
+  buildInputs = [kwin];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=$out"
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kupiqu/SierraBreezeEnhanced";
     changelog = "https://github.com/kupiqu/SierraBreezeEnhanced/releases/tag/V${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ flexagoon ];
+    maintainers = with maintainers; [flexagoon];
   };
 }

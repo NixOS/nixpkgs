@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "gshhg-gmt";
   version = "2.3.7";
@@ -25,7 +28,6 @@ stdenv.mkDerivation rec {
       Mapping Tools.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ tviti ];
+    maintainers = with maintainers; [tviti];
   };
-
 }

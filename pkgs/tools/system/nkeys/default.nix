@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "nkeys";
   version = "0.3.0";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Public-key signature system for NATS";
     homepage = "https://github.com/nats-io/nkeys";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "ipaddr";
   version = "2.2.0";
@@ -19,5 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/ipaddr-py";
     license = licenses.asl20;
   };
-
 }

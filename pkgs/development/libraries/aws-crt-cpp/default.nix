@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-auth
-, aws-c-cal
-, aws-c-common
-, aws-c-compression
-, aws-c-event-stream
-, aws-c-http
-, aws-c-io
-, aws-c-mqtt
-, aws-c-s3
-, aws-checksums
-, cmake
-, s2n-tls
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aws-c-auth,
+  aws-c-cal,
+  aws-c-common,
+  aws-c-compression,
+  aws-c-event-stream,
+  aws-c-http,
+  aws-c-io,
+  aws-c-mqtt,
+  aws-c-s3,
+  aws-checksums,
+  cmake,
+  s2n-tls,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
   version = "0.17.8";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "awslabs";
@@ -71,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-crt-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
   };
 }

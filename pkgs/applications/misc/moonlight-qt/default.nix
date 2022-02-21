@@ -1,23 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, pkg-config
-, qmake
-, qtquickcontrols2
-, SDL2
-, SDL2_ttf
-, libva
-, libvdpau
-, libxkbcommon
-, alsa-lib
-, libpulseaudio
-, openssl
-, libopus
-, ffmpeg
-, wayland
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  pkg-config,
+  qmake,
+  qtquickcontrols2,
+  SDL2,
+  SDL2_ttf,
+  libva,
+  libvdpau,
+  libxkbcommon,
+  alsa-lib,
+  libpulseaudio,
+  openssl,
+  libopus,
+  ffmpeg,
+  wayland,
 }:
-
 stdenv.mkDerivation rec {
   pname = "moonlight-qt";
   version = "3.2.0";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Play your PC games on almost any device";
     homepage = "https://moonlight-stream.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [luc65r];
     platforms = platforms.all;
   };
 }

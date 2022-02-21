@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, vala
-, gtk3, glib, gtk-layer-shell
-, dbus, dbus-glib, librsvg
-, gobject-introspection, gdk-pixbuf, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gtk3,
+  glib,
+  gtk-layer-shell,
+  dbus,
+  dbus-glib,
+  librsvg,
+  gobject-introspection,
+  gdk-pixbuf,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "avizo";
   # Note: remove the 'use-sysconfig' patch on the next update
@@ -17,9 +28,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0BJodJ6WaHhuSph2D1AC+DMafctgiSCyaZ8MFn89AA8=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config vala gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [meson ninja pkg-config vala gobject-introspection wrapGAppsHook];
 
-  buildInputs = [ dbus dbus-glib gdk-pixbuf glib gtk-layer-shell gtk3 librsvg ];
+  buildInputs = [dbus dbus-glib gdk-pixbuf glib gtk-layer-shell gtk3 librsvg];
 
   patches = [
     # Remove on next update
@@ -39,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/misterdanb/avizo";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.berbiche ];
+    maintainers = [maintainers.berbiche];
   };
 }

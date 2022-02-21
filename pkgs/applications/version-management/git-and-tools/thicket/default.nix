@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, crystal
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
 }:
-
 crystal.buildCrystalPackage rec {
   pname = "thicket";
   version = "0.1.5";
@@ -26,6 +26,6 @@ crystal.buildCrystalPackage rec {
     description = "A better one-line git log";
     homepage = "https://github.com/taylorthurlow/thicket";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
   };
 }

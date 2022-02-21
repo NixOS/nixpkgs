@@ -1,6 +1,16 @@
-{ stdenv, lib, git, openssl, makeWrapper, buildPythonApplication, pytestCheckHook, ps
-, fetchPypi, fetchFromGitLab, sudo }:
-
+{
+  stdenv,
+  lib,
+  git,
+  openssl,
+  makeWrapper,
+  buildPythonApplication,
+  pytestCheckHook,
+  ps,
+  fetchPypi,
+  fetchFromGitLab,
+  sudo,
+}:
 buildPythonApplication rec {
   pname = "pmbootstrap";
   version = "1.41.0";
@@ -20,7 +30,7 @@ buildPythonApplication rec {
 
   pmb_test = "${repo}/test";
 
-  checkInputs = [ pytestCheckHook git openssl ps sudo ];
+  checkInputs = [pytestCheckHook git openssl ps sudo];
 
   # Add test dependency in PATH
   preCheck = "export PYTHONPATH=$PYTHONPATH:${pmb_test}";
@@ -86,13 +96,13 @@ buildPythonApplication rec {
     "test_version"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
+  makeWrapperArgs = ["--prefix PATH : ${lib.makeBinPath [git openssl]}"];
 
   meta = with lib; {
     description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
     # https://github.com/NixOS/nixpkgs/pull/146576#issuecomment-974267651
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

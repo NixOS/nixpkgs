@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchzip, libnet }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libnet,
+}:
 stdenv.mkDerivation rec {
   pname = "arpoison";
   version = "0.7";
 
-  buildInputs = [ libnet ];
+  buildInputs = [libnet];
 
   src = fetchzip {
     url = "http://www.arpoison.net/arpoison-${version}.tar.gz";
@@ -23,8 +27,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "UNIX arp cache update utility";
     homepage = "http://www.arpoison.net/";
-    license = with licenses; [ gpl2 ];
-    maintainers = [ maintainers.michalrus ];
+    license = with licenses; [gpl2];
+    maintainers = [maintainers.michalrus];
     platforms = platforms.unix;
   };
 }

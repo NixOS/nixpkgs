@@ -1,33 +1,32 @@
-args@
-{ version
-, sha256
-, url ? ""
-, name ? ""
-, developerProgram ? false
-, runPatches ? []
-, addOpenGLRunpath
-, alsa-lib
-, expat
-, fetchurl
-, fontconfig
-, freetype
-, gcc
-, gdk-pixbuf
-, glib
-, glibc
-, gtk2
-, lib
-, makeWrapper
-, ncurses5
-, perl
-, python27
-, requireFile
-, stdenv
-, unixODBC
-, xorg
-, zlib
+args @ {
+  version,
+  sha256,
+  url ? "",
+  name ? "",
+  developerProgram ? false,
+  runPatches ? [],
+  addOpenGLRunpath,
+  alsa-lib,
+  expat,
+  fetchurl,
+  fontconfig,
+  freetype,
+  gcc,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gtk2,
+  lib,
+  makeWrapper,
+  ncurses5,
+  perl,
+  python27,
+  requireFile,
+  stdenv,
+  unixODBC,
+  xorg,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cudatoolkit";
   inherit version runPatches;
@@ -36,7 +35,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   src =
-    if developerProgram then
+    if developerProgram
+    then
       requireFile {
         message = ''
           This nix expression requires that ${args.name} is already part of the store.
@@ -51,14 +51,29 @@ stdenv.mkDerivation rec {
         inherit (args) url sha256;
       };
 
-  outputs = [ "out" "lib" "doc" ];
+  outputs = ["out" "lib" "doc"];
 
-  nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
-  buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+  nativeBuildInputs = [perl makeWrapper addOpenGLRunpath];
+  buildInputs = [gdk-pixbuf]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsa-lib
+    ncurses5
+    expat
+    python27
+    zlib
+    glibc
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXext
+    gtk2
+    glib
+    fontconfig
+    freetype
+    unixODBC
+    alsa-lib
   ];
 
   rpath = "${lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
@@ -66,116 +81,133 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     sh $src --keep --noexec
 
-    ${lib.optionalString (lib.versionOlder version "10.1") ''
-      cd pkg/run_files
-      sh cuda-linux*.run --keep --noexec
-      sh cuda-samples*.run --keep --noexec
-      mv pkg ../../$(basename $src)
-      cd ../..
-      rm -rf pkg
+    ${
+      lib.optionalString (lib.versionOlder version "10.1") ''
+        cd pkg/run_files
+        sh cuda-linux*.run --keep --noexec
+        sh cuda-samples*.run --keep --noexec
+        mv pkg ../../$(basename $src)
+        cd ../..
+        rm -rf pkg
 
-      for patch in $runPatches; do
-        sh $patch --keep --noexec
-        mv pkg $(basename $patch)
-      done
-    ''}
+        for patch in $runPatches; do
+          sh $patch --keep --noexec
+          mv pkg $(basename $patch)
+        done
+      ''
+    }
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir $out
-    ${lib.optionalString (lib.versionOlder version "10.1") ''
-    cd $(basename $src)
-    export PERL5LIB=.
-    perl ./install-linux.pl --prefix="$out"
-    cd ..
-    for patch in $runPatches; do
-      cd $(basename $patch)
-      perl ./install_patch.pl --silent --accept-eula --installdir="$out"
-      cd ..
-    done
-    ''}
-    ${lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
-      cd pkg/builds/cuda-toolkit
-      mv * $out/
-    ''}
-    ${lib.optionalString (lib.versionAtLeast version "11") ''
-      mkdir -p $out/bin $out/lib64 $out/include $doc
-      for dir in pkg/builds/* pkg/builds/cuda_nvcc/nvvm pkg/builds/cuda_cupti/extras/CUPTI; do
-        if [ -d $dir/bin ]; then
-          mv $dir/bin/* $out/bin
-        fi
-        if [ -d $dir/doc ]; then
-          (cd $dir/doc && find . -type d -exec mkdir -p $doc/\{} \;)
-          (cd $dir/doc && find . \( -type f -o -type l \) -exec mv \{} $doc/\{} \;)
-        fi
-        if [ -L $dir/include ] || [ -d $dir/include ]; then
-          (cd $dir/include && find . -type d -exec mkdir -p $out/include/\{} \;)
-          (cd $dir/include && find . \( -type f -o -type l \) -exec mv \{} $out/include/\{} \;)
-        fi
-        if [ -L $dir/lib64 ] || [ -d $dir/lib64 ]; then
-          (cd $dir/lib64 && find . -type d -exec mkdir -p $out/lib64/\{} \;)
-          (cd $dir/lib64 && find . \( -type f -o -type l \) -exec mv \{} $out/lib64/\{} \;)
-        fi
-      done
-      mv pkg/builds/cuda_nvcc/nvvm $out/nvvm
-    ''}
+  installPhase =
+    ''
+      runHook preInstall
+      mkdir $out
+      ${
+        lib.optionalString (lib.versionOlder version "10.1") ''
+          cd $(basename $src)
+          export PERL5LIB=.
+          perl ./install-linux.pl --prefix="$out"
+          cd ..
+          for patch in $runPatches; do
+            cd $(basename $patch)
+            perl ./install_patch.pl --silent --accept-eula --installdir="$out"
+            cd ..
+          done
+        ''
+      }
+      ${
+        lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
+          cd pkg/builds/cuda-toolkit
+          mv * $out/
+        ''
+      }
+      ${
+        lib.optionalString (lib.versionAtLeast version "11") ''
+          mkdir -p $out/bin $out/lib64 $out/include $doc
+          for dir in pkg/builds/* pkg/builds/cuda_nvcc/nvvm pkg/builds/cuda_cupti/extras/CUPTI; do
+            if [ -d $dir/bin ]; then
+              mv $dir/bin/* $out/bin
+            fi
+            if [ -d $dir/doc ]; then
+              (cd $dir/doc && find . -type d -exec mkdir -p $doc/\{} \;)
+              (cd $dir/doc && find . \( -type f -o -type l \) -exec mv \{} $doc/\{} \;)
+            fi
+            if [ -L $dir/include ] || [ -d $dir/include ]; then
+              (cd $dir/include && find . -type d -exec mkdir -p $out/include/\{} \;)
+              (cd $dir/include && find . \( -type f -o -type l \) -exec mv \{} $out/include/\{} \;)
+            fi
+            if [ -L $dir/lib64 ] || [ -d $dir/lib64 ]; then
+              (cd $dir/lib64 && find . -type d -exec mkdir -p $out/lib64/\{} \;)
+              (cd $dir/lib64 && find . \( -type f -o -type l \) -exec mv \{} $out/lib64/\{} \;)
+            fi
+          done
+          mv pkg/builds/cuda_nvcc/nvvm $out/nvvm
+        ''
+      }
 
-    rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
+      rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
-    ${lib.optionalString (lib.versionOlder version "10.1") ''
-    # let's remove the 32-bit libraries, they confuse the lib64->lib mover
-    rm -rf $out/lib
-    ''}
+      ${
+        lib.optionalString (lib.versionOlder version "10.1") ''
+          # let's remove the 32-bit libraries, they confuse the lib64->lib mover
+          rm -rf $out/lib
+        ''
+      }
 
-    # Remove some cruft.
-    ${lib.optionalString ((lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1"))
-      "rm $out/bin/uninstall*"}
+      # Remove some cruft.
+      ${
+        lib.optionalString ((lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1"))
+        "rm $out/bin/uninstall*"
+      }
 
-    # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
-    if [ -d "$out"/cuda-samples ]; then
-        mv "$out"/cuda-samples "$out"/samples
-    fi
+      # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
+      if [ -d "$out"/cuda-samples ]; then
+          mv "$out"/cuda-samples "$out"/samples
+      fi
 
-    # Change the #error on GCC > 4.9 to a #warning.
-    sed -i $out/include/host_config.h -e 's/#error\(.*unsupported GNU version\)/#warning\1/'
+      # Change the #error on GCC > 4.9 to a #warning.
+      sed -i $out/include/host_config.h -e 's/#error\(.*unsupported GNU version\)/#warning\1/'
 
-    # Fix builds with newer glibc version
-    sed -i "1 i#define _BITS_FLOATN_H" "$out/include/host_defines.h"
+      # Fix builds with newer glibc version
+      sed -i "1 i#define _BITS_FLOATN_H" "$out/include/host_defines.h"
 
-    # Ensure that cmake can find CUDA.
-    mkdir -p $out/nix-support
-    echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
+      # Ensure that cmake can find CUDA.
+      mkdir -p $out/nix-support
+      echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
 
-    # Set the host compiler to be used by nvcc for CMake-based projects:
-    # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
-    echo "cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'" >> $out/nix-support/setup-hook
+      # Set the host compiler to be used by nvcc for CMake-based projects:
+      # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+      echo "cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'" >> $out/nix-support/setup-hook
 
-    # Move some libraries to the lib output so that programs that
-    # depend on them don't pull in this entire monstrosity.
-    mkdir -p $lib/lib
-    mv -v $out/lib64/libcudart* $lib/lib/
+      # Move some libraries to the lib output so that programs that
+      # depend on them don't pull in this entire monstrosity.
+      mkdir -p $lib/lib
+      mv -v $out/lib64/libcudart* $lib/lib/
 
-    # Remove OpenCL libraries as they are provided by ocl-icd and driver.
-    rm -f $out/lib64/libOpenCL*
-    ${lib.optionalString (lib.versionAtLeast version "10.1" && (lib.versionOlder version "11")) ''
-      mv $out/lib64 $out/lib
-      mv $out/extras/CUPTI/lib64/libcupti* $out/lib
-    ''}
+      # Remove OpenCL libraries as they are provided by ocl-icd and driver.
+      rm -f $out/lib64/libOpenCL*
+      ${
+        lib.optionalString (lib.versionAtLeast version "10.1" && (lib.versionOlder version "11")) ''
+          mv $out/lib64 $out/lib
+          mv $out/extras/CUPTI/lib64/libcupti* $out/lib
+        ''
+      }
 
-    # Set compiler for NVCC.
-    wrapProgram $out/bin/nvcc \
-      --prefix PATH : ${gcc}/bin
+      # Set compiler for NVCC.
+      wrapProgram $out/bin/nvcc \
+        --prefix PATH : ${gcc}/bin
 
-    # nvprof do not find any program to profile if LD_LIBRARY_PATH is not set
-    wrapProgram $out/bin/nvprof \
-      --prefix LD_LIBRARY_PATH : $out/lib
-  '' + lib.optionalString (lib.versionOlder version "8.0") ''
-    # Hack to fix building against recent Glibc/GCC.
-    echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
-  '' + ''
-    runHook postInstall
-  '';
+      # nvprof do not find any program to profile if LD_LIBRARY_PATH is not set
+      wrapProgram $out/bin/nvprof \
+        --prefix LD_LIBRARY_PATH : $out/lib
+    ''
+    + lib.optionalString (lib.versionOlder version "8.0") ''
+      # Hack to fix building against recent Glibc/GCC.
+      echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   postInstall = ''
     for b in nvvp ${lib.optionalString (lib.versionOlder version "11") "nsight"}; do
@@ -239,8 +271,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A compiler for NVIDIA GPUs, math libraries, and tools";
     homepage = "https://developer.nvidia.com/cuda-toolkit";
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     license = licenses.unfree;
   };
 }
-

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, jre
-, wget
-, which
-, gnused
-, gawk
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  wget,
+  which,
+  gnused,
+  gawk,
+  coreutils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nextflow";
   version = "21.10.6";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l9hi51vrhvfx3px2pxw7lp4h21n8ks50x4icfk3hbgl2hwf7fvx";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre wget which gnused gawk coreutils ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre wget which gnused gawk coreutils];
 
   dontUnpack = true;
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nextflow.io/";
     changelog = "https://github.com/nextflow-io/nextflow/releases";
     license = licenses.asl20;
-    maintainers = [ maintainers.Etjean ];
+    maintainers = [maintainers.Etjean];
     mainProgram = "nextflow";
     platforms = platforms.unix;
   };

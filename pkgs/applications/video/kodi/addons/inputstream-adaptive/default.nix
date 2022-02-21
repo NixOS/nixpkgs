@@ -1,4 +1,16 @@
-{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, expat, glib, nspr, nss, gtest }:
+{
+  stdenv,
+  lib,
+  rel,
+  addonDir,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  expat,
+  glib,
+  nspr,
+  nss,
+  gtest,
+}:
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
@@ -11,13 +23,15 @@ buildKodiBinaryAddon rec {
     sha256 = "sha256-YYIPPxM8zVIugqLz0YntVZt1N+dReH+7V1Lkeif2wIY=";
   };
 
-  extraNativeBuildInputs = [ gtest ];
+  extraNativeBuildInputs = [gtest];
 
-  extraBuildInputs = [ expat ];
+  extraBuildInputs = [expat];
 
-  extraRuntimeDependencies = [ glib nspr nss stdenv.cc.cc.lib ];
+  extraRuntimeDependencies = [glib nspr nss stdenv.cc.cc.lib];
 
-  extraInstallPhase = let n = namespace; in ''
+  extraInstallPhase = let
+    n = namespace;
+  in ''
     ln -s $out/lib/addons/${n}/libssd_wv.so $out/${addonDir}/${n}/libssd_wv.so
   '';
 

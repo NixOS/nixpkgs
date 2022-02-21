@@ -1,19 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python3Packages
-, dnsmasq
-, getent
-, kmod
-, lxc
-, iproute2
-, iptables
-, nftables
-, util-linux
-, which
-, xclip
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  dnsmasq,
+  getent,
+  kmod,
+  lxc,
+  iproute2,
+  iptables,
+  nftables,
+  util-linux,
+  which,
+  xclip,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
   version = "1.2.0";
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
 
     cp -ra data $out/${python3Packages.python.sitePackages}/data
     wrapProgram $out/${python3Packages.python.sitePackages}/data/scripts/waydroid-net.sh \
-       --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 iptables nftables ]}
+       --prefix PATH ":" ${lib.makeBinPath [dnsmasq getent iproute2 iptables nftables]}
 
     mkdir -p $out/share/waydroid/gbinder.d
     cp gbinder/anbox.conf $out/share/waydroid/gbinder.d/anbox.conf
@@ -55,17 +55,19 @@ python3Packages.buildPythonApplication rec {
     cp -a waydroid.py $out/${python3Packages.python.sitePackages}/waydroid.py
     ln -s $out/${python3Packages.python.sitePackages}/waydroid.py $out/bin/waydroid
 
-    wrapPythonProgramsIn $out/${python3Packages.python.sitePackages} "${lib.concatStringsSep " " [
-      "$out"
-      python3Packages.gbinder-python
-      python3Packages.pygobject3
-      python3Packages.pyclip
-      kmod
-      lxc
-      util-linux
-      which
-      xclip
-    ]}"
+    wrapPythonProgramsIn $out/${python3Packages.python.sitePackages} "${
+      lib.concatStringsSep " " [
+        "$out"
+        python3Packages.gbinder-python
+        python3Packages.pygobject3
+        python3Packages.pyclip
+        kmod
+        lxc
+        util-linux
+        which
+        xclip
+      ]
+    }"
   '';
 
   meta = with lib; {
@@ -73,6 +75,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/waydroid/waydroid";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    maintainers = with maintainers; [mcaju];
   };
 }

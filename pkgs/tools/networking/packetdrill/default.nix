@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, flex, cmake, libpcap }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  bison,
+  flex,
+  cmake,
+  libpcap,
+}:
 stdenv.mkDerivation rec {
   pname = "packetdrill";
   version = "unstable-2020-08-22";
@@ -28,8 +37,8 @@ stdenv.mkDerivation rec {
     "-Wno-error=stringop-truncation"
     "-Wno-error=address-of-packed-member"
   ];
-  nativeBuildInputs = [ bison flex cmake libpcap ];
-  buildInputs = [ libpcap ];
+  nativeBuildInputs = [bison flex cmake libpcap];
+  buildInputs = [libpcap];
 
   installPhase = ''
     install -m 0755 -t $out/bin -D \
@@ -46,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/packetdrill";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dmjio cleverca22 ];
+    maintainers = with lib.maintainers; [dmjio cleverca22];
   };
 }

@@ -1,25 +1,25 @@
-{ lib
-, aiohttp
-, aiohttp-jinja2
-, aiohttp-remotes
-, aiohttp-swagger
-, buildPythonPackage
-, clickclick
-, decorator
-, fetchFromGitHub
-, flask
-, inflection
-, jsonschema
-, openapi-spec-validator
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, swagger-ui-bundle
-, testfixtures
+{
+  lib,
+  aiohttp,
+  aiohttp-jinja2,
+  aiohttp-remotes,
+  aiohttp-swagger,
+  buildPythonPackage,
+  clickclick,
+  decorator,
+  fetchFromGitHub,
+  flask,
+  inflection,
+  jsonschema,
+  openapi-spec-validator,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  swagger-ui-bundle,
+  testfixtures,
 }:
-
 buildPythonPackage rec {
   pname = "connexion";
   version = "2.11.2";
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     description = "Swagger/OpenAPI First framework on top of Flask";
     homepage = "https://github.com/zalando/connexion/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = with maintainers; [elohmeier];
   };
 }

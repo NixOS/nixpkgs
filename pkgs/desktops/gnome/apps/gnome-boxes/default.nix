@@ -1,58 +1,59 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, wrapGAppsHook
-, pkg-config
-, gettext
-, itstool
-, libvirt-glib
-, glib
-, gobject-introspection
-, libxml2
-, gtk3
-, gtksourceview4
-, gtk-vnc
-, freerdp
-, libvirt
-, spice-gtk
-, python3
-, appstream-glib
-, spice-protocol
-, libhandy
-, libsoup
-, libosinfo
-, systemd
-, tracker
-, tracker-miners
-, vala
-, libcap
-, yajl
-, gmp
-, gdbm
-, cyrus_sasl
-, gnome
-, librsvg
-, desktop-file-utils
-, mtools
-, cdrkit
-, libcdio
-, libusb1
-, libarchive
-, acl
-, libgudev
-, libsecret
-, libcap_ng
-, numactl
-, libapparmor
-, json-glib
-, webkitgtk
-, vte
-, glib-networking
-, qemu-utils
-, qemu
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  wrapGAppsHook,
+  pkg-config,
+  gettext,
+  itstool,
+  libvirt-glib,
+  glib,
+  gobject-introspection,
+  libxml2,
+  gtk3,
+  gtksourceview4,
+  gtk-vnc,
+  freerdp,
+  libvirt,
+  spice-gtk,
+  python3,
+  appstream-glib,
+  spice-protocol,
+  libhandy,
+  libsoup,
+  libosinfo,
+  systemd,
+  tracker,
+  tracker-miners,
+  vala,
+  libcap,
+  yajl,
+  gmp,
+  gdbm,
+  cyrus_sasl,
+  gnome,
+  librsvg,
+  desktop-file-utils,
+  mtools,
+  cdrkit,
+  libcdio,
+  libusb1,
+  libarchive,
+  acl,
+  libgudev,
+  libsecret,
+  libcap_ng,
+  numactl,
+  libapparmor,
+  json-glib,
+  webkitgtk,
+  vte,
+  glib-networking,
+  qemu-utils,
+  qemu,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
   version = "41.3";
@@ -122,7 +123,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils qemu ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [mtools cdrkit libcdio qemu-utils qemu]}")
   '';
 
   postPatch = ''

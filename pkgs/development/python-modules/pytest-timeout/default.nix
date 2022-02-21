@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytestCheckHook
-, pexpect
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytestCheckHook,
+  pexpect,
+  pytest-cov,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-timeout";
   version = "2.0.2";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-timeout/";
     changelog = "https://github.com/pytest-dev/pytest-timeout/#changelog";
     license = licenses.mit;
-    maintainers = with maintainers; [ makefu costrouc ];
+    maintainers = with maintainers; [makefu costrouc];
   };
 }

@@ -1,19 +1,19 @@
 /*
-
-Configuration files are linked to /etc/fonts/conf.d/
-
-This module generates a package containing configuration files and link it in /etc/fonts.
-
-Fontconfig reads files in folder name / file name order, so the number prepended to the configuration file name decide the order of parsing.
-Low number means high priority.
-
-*/
-
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+ 
+ Configuration files are linked to /etc/fonts/conf.d/
+ 
+ This module generates a package containing configuration files and link it in /etc/fonts.
+ 
+ Fontconfig reads files in folder name / file name order, so the number prepended to the configuration file name decide the order of parsing.
+ Low number means high priority.
+ */
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.fonts.fontconfig;
 
   fcBool = x: "<bool>" + (boolToString x) + "</bool>";
@@ -21,31 +21,38 @@ let
 
   # configuration file to read fontconfig cache
   # priority 0
-  cacheConf  = makeCacheConf {};
+  cacheConf = makeCacheConf {};
 
   # generate the font cache setting file
   # When cross-compiling, we can’t generate the cache, so we skip the
   # <cachedir> part. fontconfig still works but is a little slower in
   # looking things up.
-  makeCacheConf = { }:
-    let
-      makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
-      cache     = makeCache pkgs.fontconfig;
-      cache32   = makeCache pkgs.pkgsi686Linux.fontconfig;
-    in
+  makeCacheConf = {}: let
+    makeCache = fontconfig:
+      pkgs.makeFontsCache {
+        inherit fontconfig;
+        fontDirectories = config.fonts.fonts;
+      };
+    cache = makeCache pkgs.fontconfig;
+    cache32 = makeCache pkgs.pkgsi686Linux.fontconfig;
+  in
     pkgs.writeText "fc-00-nixos-cache.conf" ''
       <?xml version='1.0'?>
       <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
         <!-- Font directories -->
         ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
-        ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
-        <!-- Pre-generated font caches -->
-        <cachedir>${cache}</cachedir>
-        ${optionalString (pkgs.stdenv.isx86_64 && cfg.cache32Bit) ''
-          <cachedir>${cache32}</cachedir>
-        ''}
-        ''}
+        ${
+        optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
+          <!-- Pre-generated font caches -->
+          <cachedir>${cache}</cachedir>
+          ${
+            optionalString (pkgs.stdenv.isx86_64 && cfg.cache32Bit) ''
+              <cachedir>${cache32}</cachedir>
+            ''
+          }
+        ''
+      }
       </fontconfig>
     '';
 
@@ -86,36 +93,39 @@ let
 
   # default fonts configuration file
   # priority 52
-  defaultFontsConf =
-    let genDefault = fonts: name:
+  defaultFontsConf = let
+    genDefault = fonts: name:
       optionalString (fonts != []) ''
         <alias binding="same">
           <family>${name}</family>
           <prefer>
-          ${concatStringsSep ""
+          ${
+          concatStringsSep ""
           (map (font: ''
             <family>${font}</family>
-          '') fonts)}
+          '')
+          fonts)
+        }
           </prefer>
         </alias>
       '';
-    in
+  in
     pkgs.writeText "fc-52-nixos-default-fonts.conf" ''
-    <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
-    <fontconfig>
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+      <fontconfig>
 
-      <!-- Default fonts -->
-      ${genDefault cfg.defaultFonts.sansSerif "sans-serif"}
+        <!-- Default fonts -->
+        ${genDefault cfg.defaultFonts.sansSerif "sans-serif"}
 
-      ${genDefault cfg.defaultFonts.serif     "serif"}
+        ${genDefault cfg.defaultFonts.serif "serif"}
 
-      ${genDefault cfg.defaultFonts.monospace "monospace"}
+        ${genDefault cfg.defaultFonts.monospace "monospace"}
 
-      ${genDefault cfg.defaultFonts.emoji "emoji"}
+        ${genDefault cfg.defaultFonts.emoji "emoji"}
 
-    </fontconfig>
-  '';
+      </fontconfig>
+    '';
 
   # bitmap font options
   # priority 53
@@ -124,16 +134,18 @@ let
     <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
-    ${optionalString (!cfg.allowBitmaps) ''
-    <!-- Reject bitmap fonts -->
-    <selectfont>
-      <rejectfont>
-        <pattern>
-          <patelt name="scalable"><bool>false</bool></patelt>
-        </pattern>
-      </rejectfont>
-    </selectfont>
-    ''}
+    ${
+      optionalString (!cfg.allowBitmaps) ''
+        <!-- Reject bitmap fonts -->
+        <selectfont>
+          <rejectfont>
+            <pattern>
+              <patelt name="scalable"><bool>false</bool></patelt>
+            </pattern>
+          </rejectfont>
+        </selectfont>
+      ''
+    }
 
     <!-- Use embedded bitmaps in fonts like Calibri? -->
     <match target="font">
@@ -190,14 +202,18 @@ let
     ln -s ${renderConf}       $dst/10-nixos-rendering.conf
 
     # 50-user.conf
-    ${optionalString (!cfg.includeUserConf) ''
-    rm $dst/50-user.conf
-    ''}
+    ${
+      optionalString (!cfg.includeUserConf) ''
+        rm $dst/50-user.conf
+      ''
+    }
 
     # local.conf (indirect priority 51)
-    ${optionalString (cfg.localConf != "") ''
-    ln -s ${localConf}        $dst/../local.conf
-    ''}
+    ${
+      optionalString (cfg.localConf != "") ''
+        ln -s ${localConf}        $dst/../local.conf
+      ''
+    }
 
     # 52-nixos-default-fonts.conf
     ln -s ${defaultFontsConf} $dst/52-nixos-default-fonts.conf
@@ -205,44 +221,46 @@ let
     # 53-no-bitmaps.conf
     ln -s ${rejectBitmaps} $dst/53-no-bitmaps.conf
 
-    ${optionalString (!cfg.allowType1) ''
-    # 53-nixos-reject-type1.conf
-    ln -s ${rejectType1} $dst/53-nixos-reject-type1.conf
-    ''}
+    ${
+      optionalString (!cfg.allowType1) ''
+        # 53-nixos-reject-type1.conf
+        ln -s ${rejectType1} $dst/53-nixos-reject-type1.conf
+      ''
+    }
   '';
 
   # Package with configuration files
   # this merge all the packages in the fonts.fontconfig.confPackages list
   fontconfigEtc = pkgs.buildEnv {
-    name  = "fontconfig-etc";
+    name = "fontconfig-etc";
     paths = cfg.confPackages;
     ignoreCollisions = true;
   };
-in
-{
-  imports = [
-    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "allowBitmaps" ] [ "fonts" "fontconfig" "allowBitmaps" ])
-    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "allowType1" ] [ "fonts" "fontconfig" "allowType1" ])
-    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ] [ "fonts" "fontconfig" "useEmbeddedBitmaps" ])
-    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "forceAutohint" ] [ "fonts" "fontconfig" "forceAutohint" ])
-    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ] [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ])
-    (mkRemovedOptionModule [ "fonts" "fontconfig" "hinting" "style" ] "")
-    (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
-    (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
-    (mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
-  ] ++ lib.forEach [ "enable" "substitutions" "preset" ]
-     (opt: lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
-       The fonts.fontconfig.ultimate module and configuration is obsolete.
-       The repository has since been archived and activity has ceased.
-       https://github.com/bohoomil/fontconfig-ultimate/issues/171.
-       No action should be needed for font configuration, as the fonts.fontconfig
-       module is already used by default.
-     '');
+in {
+  imports =
+    [
+      (mkRenamedOptionModule ["fonts" "fontconfig" "ultimate" "allowBitmaps"] ["fonts" "fontconfig" "allowBitmaps"])
+      (mkRenamedOptionModule ["fonts" "fontconfig" "ultimate" "allowType1"] ["fonts" "fontconfig" "allowType1"])
+      (mkRenamedOptionModule ["fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps"] ["fonts" "fontconfig" "useEmbeddedBitmaps"])
+      (mkRenamedOptionModule ["fonts" "fontconfig" "ultimate" "forceAutohint"] ["fonts" "fontconfig" "forceAutohint"])
+      (mkRenamedOptionModule ["fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap"] ["fonts" "fontconfig" "renderMonoTTFAsBitmap"])
+      (mkRemovedOptionModule ["fonts" "fontconfig" "hinting" "style"] "")
+      (mkRemovedOptionModule ["fonts" "fontconfig" "forceAutohint"] "")
+      (mkRemovedOptionModule ["fonts" "fontconfig" "renderMonoTTFAsBitmap"] "")
+      (mkRemovedOptionModule ["fonts" "fontconfig" "dpi"] "Use display server-specific options")
+    ]
+    ++ lib.forEach ["enable" "substitutions" "preset"]
+    (opt:
+      lib.mkRemovedOptionModule ["fonts" "fontconfig" "ultimate" "${opt}"] ''
+        The fonts.fontconfig.ultimate module and configuration is obsolete.
+        The repository has since been archived and activity has ceased.
+        https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+        No action should be needed for font configuration, as the fonts.fontconfig
+        module is already used by default.
+      '');
 
   options = {
-
     fonts = {
-
       fontconfig = {
         enable = mkOption {
           type = types.bool;
@@ -258,8 +276,8 @@ in
 
         confPackages = mkOption {
           internal = true;
-          type     = with types; listOf path;
-          default  = [ ];
+          type = with types; listOf path;
+          default = [];
           description = ''
             Fontconfig configuration packages.
           '';
@@ -362,7 +380,6 @@ in
         };
 
         subpixel = {
-
           rgba = mkOption {
             default = "rgb";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
@@ -388,7 +405,6 @@ in
               <literal>none</literal>.
             '';
           };
-
         };
 
         cache32Bit = mkOption {
@@ -422,16 +438,13 @@ in
           default = false;
           description = "Use embedded bitmaps in fonts like Calibri.";
         };
-
       };
-
     };
-
   };
   config = mkMerge [
     (mkIf cfg.enable {
-      environment.systemPackages    = [ pkgs.fontconfig ];
-      environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
+      environment.systemPackages = [pkgs.fontconfig];
+      environment.etc.fonts.source = "${fontconfigEtc}/etc/fonts/";
       security.apparmor.includes."abstractions/fonts" = ''
         # fonts.conf
         r ${pkg.out}/etc/fonts/fonts.conf,
@@ -446,14 +459,18 @@ in
         r ${renderConf},
 
         # 50-user.conf
-        ${optionalString cfg.includeUserConf ''
-        r ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf,
-        ''}
+        ${
+          optionalString cfg.includeUserConf ''
+            r ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf,
+          ''
+        }
 
         # local.conf (indirect priority 51)
-        ${optionalString (cfg.localConf != "") ''
-        r ${localConf},
-        ''}
+        ${
+          optionalString (cfg.localConf != "") ''
+            r ${localConf},
+          ''
+        }
 
         # 52-nixos-default-fonts.conf
         r ${defaultFontsConf},
@@ -461,15 +478,16 @@ in
         # 53-no-bitmaps.conf
         r ${rejectBitmaps},
 
-        ${optionalString (!cfg.allowType1) ''
-        # 53-nixos-reject-type1.conf
-        r ${rejectType1},
-        ''}
+        ${
+          optionalString (!cfg.allowType1) ''
+            # 53-nixos-reject-type1.conf
+            r ${rejectType1},
+          ''
+        }
       '';
     })
     (mkIf cfg.enable {
-      fonts.fontconfig.confPackages = [ confPkg ];
+      fonts.fontconfig.confPackages = [confPkg];
     })
   ];
-
 }

@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, buildDunePackage, cppo, logs, ptime, uri }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  cppo,
+  logs,
+  ptime,
+  uri,
+}:
 buildDunePackage rec {
   pname = "caqti";
   version = "1.5.1";
@@ -14,13 +21,13 @@ buildDunePackage rec {
     sha256 = "1vl61kdyj89whc3mh4k9bis6rbj9x2scf6hnv9afyalp4j65sqx1";
   };
 
-  buildInputs = [ cppo ];
-  propagatedBuildInputs = [ logs ptime uri ];
+  buildInputs = [cppo];
+  propagatedBuildInputs = [logs ptime uri];
 
   meta = {
     description = "Unified interface to relational database libraries";
     license = "LGPL-3.0-or-later WITH OCaml-LGPL-linking-exception";
-    maintainers = with lib.maintainers; [ bcc32 ];
+    maintainers = with lib.maintainers; [bcc32];
     homepage = "https://github.com/paurkedal/ocaml-caqti";
   };
 }

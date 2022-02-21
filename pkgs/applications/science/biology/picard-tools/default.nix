@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, jre, makeWrapper}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "picard-tools";
   version = "2.26.10";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hKBWRmzyMVXiEmsz/eYbVIUhezZdSJnBvcgv6ShPI5U=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   dontUnpack = true;
 
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Tools for high-throughput sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF";
     license = licenses.mit;
     homepage = "https://broadinstitute.github.io/picard/";
-    maintainers = with maintainers; [ jbedo ];
+    maintainers = with maintainers; [jbedo];
     platforms = platforms.all;
   };
 }

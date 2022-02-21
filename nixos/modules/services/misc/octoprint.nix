@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.octoprint;
 
   baseConfig = {
@@ -20,15 +21,11 @@ let
   pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
 
   package = pkgs.octoprint;
-
-in
-{
+in {
   ##### interface
 
   options = {
-
     services.octoprint = {
-
       enable = mkEnableOption "OctoPrint, web interface for 3D printers";
 
       host = mkOption {
@@ -78,15 +75,12 @@ in
         default = {};
         description = "Extra options which are added to OctoPrint's YAML configuration file.";
       };
-
     };
-
   };
 
   ##### implementation
 
   config = mkIf cfg.enable {
-
     users.users = optionalAttrs (cfg.user == "octoprint") {
       octoprint = {
         group = cfg.group;
@@ -104,9 +98,9 @@ in
 
     systemd.services.octoprint = {
       description = "OctoPrint, web interface for 3D printers";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ pluginsEnv ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      path = [pluginsEnv];
 
       preStart = ''
         if [ -e "${cfg.stateDir}/config.yaml" ]; then
@@ -127,7 +121,5 @@ in
         ];
       };
     };
-
   };
-
 }

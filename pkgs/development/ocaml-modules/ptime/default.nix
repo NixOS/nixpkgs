@@ -1,7 +1,15 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml
-, jsooSupport ? true
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  result,
+  js_of_ocaml,
+  jsooSupport ? true,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.8.5";
   pname = "ocaml${ocaml.version}-ptime";
@@ -11,11 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "1fxq57xy1ajzfdnvv5zfm7ap2nf49znw5f9gbi4kb9vds942ij27";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg ]
+  nativeBuildInputs = [ocaml findlib ocamlbuild];
+  buildInputs =
+    [findlib topkg]
     ++ lib.optional jsooSupport js_of_ocaml;
 
-  propagatedBuildInputs = [ result ];
+  propagatedBuildInputs = [result];
 
   buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
 
@@ -37,6 +46,6 @@ stdenv.mkDerivation rec {
       Ptime is not a calendar library.
     '';
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ sternenseemann ];
+    maintainers = with lib.maintainers; [sternenseemann];
   };
 }

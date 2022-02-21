@@ -1,10 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, autoPatchelfHook
-, fuse, packer
-, maven, jdk, jre, makeWrapper, glib, wrapGAppsHook
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  fuse,
+  packer,
+  maven,
+  jdk,
+  jre,
+  makeWrapper,
+  glib,
+  wrapGAppsHook,
+}: let
   pname = "cryptomator";
   version = "1.5.15";
 
@@ -27,7 +34,7 @@ let
     name = "cryptomator-${version}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk maven ];
+    nativeBuildInputs = [jdk maven];
 
     buildPhase = ''
       cd main
@@ -46,46 +53,46 @@ let
     outputHashMode = "recursive";
     outputHash = "195ysv9l861y9d1lvmvi7wmk172ynlba9n233blpaigq88cjn208";
   };
+in
+  stdenv.mkDerivation rec {
+    inherit pname version src;
 
-in stdenv.mkDerivation rec {
-  inherit pname version src;
+    buildPhase = ''
+      cd main
+      mvn -Prelease package --offline -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
+    '';
 
-  buildPhase = ''
-    cd main
-    mvn -Prelease package --offline -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
-  '';
+    installPhase = ''
+      mkdir -p $out/bin/ $out/usr/share/cryptomator/libs/
 
-  installPhase = ''
-    mkdir -p $out/bin/ $out/usr/share/cryptomator/libs/
+      cp buildkit/target/libs/* buildkit/target/linux-libs/* $out/usr/share/cryptomator/libs/
 
-    cp buildkit/target/libs/* buildkit/target/linux-libs/* $out/usr/share/cryptomator/libs/
+      makeWrapper ${jre}/bin/java $out/bin/cryptomator \
+        --add-flags "-classpath '$out/usr/share/cryptomator/libs/*'" \
+        --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
+        --add-flags "-Dcryptomator.ipcPortPath='~/.config/Cryptomator/ipcPort.bin'" \
+        --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
+        --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
+        --add-flags "-Djdk.gtk.version=3" \
+        --add-flags "-Xss20m" \
+        --add-flags "-Xmx512m" \
+        --add-flags "org.cryptomator.launcher.Cryptomator" \
+        --prefix PATH : "$out/usr/share/cryptomator/libs/:${lib.makeBinPath [jre glib]}" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [fuse]}" \
+        --set JAVA_HOME "${jre.home}"
 
-    makeWrapper ${jre}/bin/java $out/bin/cryptomator \
-      --add-flags "-classpath '$out/usr/share/cryptomator/libs/*'" \
-      --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
-      --add-flags "-Dcryptomator.ipcPortPath='~/.config/Cryptomator/ipcPort.bin'" \
-      --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
-      --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
-      --add-flags "-Djdk.gtk.version=3" \
-      --add-flags "-Xss20m" \
-      --add-flags "-Xmx512m" \
-      --add-flags "org.cryptomator.launcher.Cryptomator" \
-      --prefix PATH : "$out/usr/share/cryptomator/libs/:${lib.makeBinPath [ jre glib ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse ]}" \
-      --set JAVA_HOME "${jre.home}"
+      # install desktop entry and icons
+      cp -r ${icons}/resources/appimage/AppDir/usr/* $out/
+    '';
 
-    # install desktop entry and icons
-    cp -r ${icons}/resources/appimage/AppDir/usr/* $out/
-  '';
+    nativeBuildInputs = [autoPatchelfHook maven makeWrapper wrapGAppsHook jdk];
+    buildInputs = [fuse packer jre glib];
 
-  nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];
-  buildInputs = [ fuse packer jre glib ];
-
-  meta = with lib; {
-    description = "Free client-side encryption for your cloud files";
-    homepage = "https://cryptomator.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bachp ];
-    platforms = platforms.linux;
-  };
-}
+    meta = with lib; {
+      description = "Free client-side encryption for your cloud files";
+      homepage = "https://cryptomator.org";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [bachp];
+      platforms = platforms.linux;
+    };
+  }

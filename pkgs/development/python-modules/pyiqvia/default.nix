@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, aiohttp
-, aresponses
-, backoff
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  aiohttp,
+  aresponses,
+  backoff,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyiqvia";
   version = "2021.11.0";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
       https://flustar.com and more).
     '';
     homepage = "https://github.com/bachya/pyiqvia";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

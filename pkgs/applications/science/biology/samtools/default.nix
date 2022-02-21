@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, htslib, perl, ncurses ? null }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  zlib,
+  htslib,
+  perl,
+  ncurses ? null,
+}:
 stdenv.mkDerivation rec {
   pname = "samtools";
   version = "1.13";
@@ -18,11 +26,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [perl];
 
-  buildInputs = [ zlib ncurses htslib ];
+  buildInputs = [zlib ncurses htslib];
 
-  configureFlags = [ "--with-htslib=${htslib}" ]
+  configureFlags =
+    ["--with-htslib=${htslib}"]
     ++ lib.optional (ncurses == null) "--without-curses";
 
   preCheck = ''
@@ -38,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "http://www.htslib.org/";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mimame unode ];
+    maintainers = with maintainers; [mimame unode];
   };
 }

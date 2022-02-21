@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "steam-acf";
   version = "0.1.0";
@@ -16,8 +19,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tool to convert Steam .acf files to JSON";
     homepage = "https://github.com/chisui/acf";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ chisui ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [chisui];
     mainProgram = "acf";
   };
 }

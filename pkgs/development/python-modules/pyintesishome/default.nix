@@ -1,9 +1,9 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "pyintesishome";
   version = "1.8.1";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pyintesishome" ];
+  pythonImportsCheck = ["pyintesishome"];
 
   meta = with lib; {
     description = "Python interface for IntesisHome devices";
     homepage = "https://github.com/jnimmo/pyIntesisHome";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

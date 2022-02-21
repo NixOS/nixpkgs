@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, cffi
-, brotli
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  cffi,
+  brotli,
 }:
-
 buildPythonPackage rec {
   pname = "brotlicffi";
   version = "1.0.9.2";
@@ -37,12 +37,12 @@ buildPythonPackage rec {
   # Test data is not available, only when using libbortli git checkout
   doCheck = false;
 
-  pythonImportsCheck = [ "brotlicffi" ];
+  pythonImportsCheck = ["brotlicffi"];
 
   meta = with lib; {
     description = "Python CFFI bindings to the Brotli library";
     homepage = "https://github.com/python-hyper/brotlicffi";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

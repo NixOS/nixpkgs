@@ -1,5 +1,12 @@
-{lib, stdenv, fetchFromGitHub, rebar, erlang, opencl-headers, ocl-icd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rebar,
+  erlang,
+  opencl-headers,
+  ocl-icd,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.4";
   pname = "cl";
@@ -11,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gwkjl305a0231hz3k0w448dsgbgdriaq764sizs5qfn59nzvinz";
   };
 
-  buildInputs = [ erlang rebar opencl-headers ocl-icd ];
+  buildInputs = [erlang rebar opencl-headers ocl-icd];
 
   buildPhase = ''
     rebar compile

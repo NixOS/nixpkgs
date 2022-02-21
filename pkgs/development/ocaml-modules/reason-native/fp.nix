@@ -1,6 +1,4 @@
-{ reason, ... }:
-
-{
+{reason, ...}: {
   pname = "fp";
 
   buildInputs = [

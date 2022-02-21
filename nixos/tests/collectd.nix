@@ -1,22 +1,19 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "collectd";
-  meta = { };
+  meta = {};
 
-  machine =
-    { pkgs, ... }:
-
-    {
-      services.collectd = {
-        enable = true;
-        plugins = {
-          rrdtool = ''
-            DataDir "/var/lib/collectd/rrd"
-          '';
-          load = "";
-        };
+  machine = {pkgs, ...}: {
+    services.collectd = {
+      enable = true;
+      plugins = {
+        rrdtool = ''
+          DataDir "/var/lib/collectd/rrd"
+        '';
+        load = "";
       };
-      environment.systemPackages = [ pkgs.rrdtool ];
     };
+    environment.systemPackages = [pkgs.rrdtool];
+  };
 
   testScript = ''
     machine.wait_for_unit("collectd.service")

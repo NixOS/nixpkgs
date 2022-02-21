@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, coverage
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  coverage,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "py-radix";
   version = "0.10.0";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   };
 
   doCheck = true;
-  checkInputs = [ coverage nose ];
+  checkInputs = [coverage nose];
 
   meta = with lib; {
     description = "Python radix tree for IPv4 and IPv6 prefix matching";
     homepage = "https://github.com/mjschultz/py-radix";
-    license = with licenses; [ isc bsdOriginal ];
-    maintainers = with maintainers; [ mkg ];
+    license = with licenses; [isc bsdOriginal];
+    maintainers = with maintainers; [mkg];
   };
 }

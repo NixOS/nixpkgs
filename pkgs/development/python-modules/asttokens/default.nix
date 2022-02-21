@@ -1,12 +1,12 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, six
-, astroid
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  six,
+  astroid,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "asttokens";
   version = "2.0.5";
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     "test_slices"
   ];
 
-  pythonImportsCheck = [ "asttokens" ];
+  pythonImportsCheck = ["asttokens"];
 
   meta = with lib; {
     homepage = "https://github.com/gristlabs/asttokens";
     description = "Annotate Python AST trees with source text and token information";
     license = licenses.asl20;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

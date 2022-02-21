@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.virtualisation.hypervGuest;
-
 in {
   options = {
     virtualisation.hypervGuest = {
@@ -28,17 +29,22 @@ in {
   config = mkIf cfg.enable {
     boot = {
       initrd.kernelModules = [
-        "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"
+        "hv_balloon"
+        "hv_netvsc"
+        "hv_storvsc"
+        "hv_utils"
+        "hv_vmbus"
       ];
 
-      initrd.availableKernelModules = [ "hyperv_keyboard" ];
+      initrd.availableKernelModules = ["hyperv_keyboard"];
 
       kernelParams = [
-        "video=hyperv_fb:${cfg.videoMode}" "elevator=noop"
+        "video=hyperv_fb:${cfg.videoMode}"
+        "elevator=noop"
       ];
     };
 
-    environment.systemPackages = [ config.boot.kernelPackages.hyperv-daemons.bin ];
+    environment.systemPackages = [config.boot.kernelPackages.hyperv-daemons.bin];
 
     # enable hotadding cpu/memory
     services.udev.packages = lib.singleton (pkgs.writeTextFile {
@@ -54,12 +60,12 @@ in {
     });
 
     systemd = {
-      packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
+      packages = [config.boot.kernelPackages.hyperv-daemons.lib];
 
-      services.hv-vss.unitConfig.ConditionPathExists = [ "/dev/vmbus/hv_vss" ];
+      services.hv-vss.unitConfig.ConditionPathExists = ["/dev/vmbus/hv_vss"];
 
       targets.hyperv-daemons = {
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
       };
     };
   };

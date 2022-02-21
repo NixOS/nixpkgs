@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, intltool
-, gtk, pkg-config, flex }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  intltool,
+  gtk,
+  pkg-config,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "galculator";
   version = "2.1.4";
@@ -13,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q0hb62f266709ncyq96bpx4a40a1i6dc5869byvd7x285sx1c2w";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool pkg-config ];
-  buildInputs = [ gtk flex ];
+  nativeBuildInputs = [autoreconfHook intltool pkg-config];
+  buildInputs = [gtk flex];
 
   meta = with lib; {
     description = "A GTK 2/3 algebraic and RPN calculator";
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://galculator.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

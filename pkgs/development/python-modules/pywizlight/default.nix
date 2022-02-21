@@ -1,13 +1,13 @@
-{ lib
-, asyncio-dgram
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asyncio-dgram,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pywizlight";
   version = "0.5.10";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     description = "Python connector for WiZ light bulbs";
     homepage = "https://github.com/sbidy/pywizlight";
     changelog = "https://github.com/sbidy/pywizlight/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

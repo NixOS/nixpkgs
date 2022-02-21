@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtk3, libmpc, libxml2, mpfr, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  gtk3,
+  libmpc,
+  libxml2,
+  mpfr,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-calc";
   version = "1.26.0";
@@ -25,12 +37,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "Calculator for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = [ licenses.gpl2Plus ];
+    license = [licenses.gpl2Plus];
     platforms = platforms.linux;
     maintainers = teams.mate.members;
   };

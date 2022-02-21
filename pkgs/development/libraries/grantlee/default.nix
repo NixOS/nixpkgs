@@ -1,10 +1,15 @@
-{ lib, stdenv, fetchurl, qt4, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qt4,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "grantlee";
   version = "0.5.1";
 
-# Upstream download server has country code firewall, so I made a mirror.
+  # Upstream download server has country code firewall, so I made a mirror.
   src = fetchurl {
     urls = [
       "http://downloads.grantlee.org/grantlee-${version}.tar.gz"
@@ -13,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1b501xbimizmbmysl1j5zgnp48qw0r2r7lhgmxvzhzlv9jzhj60r";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [qt4];
 
   meta = {
     description = "Qt4 port of Django template system";

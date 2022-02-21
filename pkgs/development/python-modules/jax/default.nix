@@ -1,17 +1,17 @@
-{ lib
-, absl-py
-, buildPythonPackage
-, fetchFromGitHub
-, jaxlib
-, numpy
-, opt-einsum
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
-, scipy
-, typing-extensions
+{
+  lib,
+  absl-py,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jaxlib,
+  numpy,
+  opt-einsum,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
+  scipy,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "jax";
   version = "0.3.1";
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Differentiate, compile, and transform Numpy code";
     homepage = "https://github.com/google/jax";
     license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    maintainers = with maintainers; [samuela];
   };
 }

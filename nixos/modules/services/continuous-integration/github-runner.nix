@@ -1,6 +1,10 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.github-runner;
   svcName = "github-runner";
   systemdDir = "${svcName}/${cfg.name}";
@@ -12,8 +16,7 @@ let
   logsDir = "%L/${systemdDir}";
   # Name of file stored in service state directory
   currentConfigTokenFilename = ".current-token";
-in
-{
+in {
   options.services.github-runner = {
     enable = mkOption {
       default = false;
@@ -81,7 +84,7 @@ in
         Changing this option triggers a new runner registration.
       '';
       example = literalExpression ''[ "nixos" ]'';
-      default = [ ];
+      default = [];
     };
 
     replace = mkOption {
@@ -99,7 +102,7 @@ in
       description = ''
         Extra packages to add to <literal>PATH</literal> of the service to make them available to workflows.
       '';
-      default = [ ];
+      default = [];
     };
 
     package = mkOption {
@@ -123,24 +126,27 @@ in
     systemd.services.${svcName} = {
       description = "GitHub Actions runner";
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [ "network.target" "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"];
+      after = ["network.target" "network-online.target"];
 
       environment = {
         HOME = runtimeDir;
         RUNNER_ROOT = runtimeDir;
       };
 
-      path = (with pkgs; [
-        bash
-        coreutils
-        git
-        gnutar
-        gzip
-      ]) ++ [
-        config.nix.package
-      ] ++ cfg.extraPackages;
+      path =
+        (with pkgs; [
+          bash
+          coreutils
+          git
+          gnutar
+          gzip
+        ])
+        ++ [
+          config.nix.package
+        ]
+        ++ cfg.extraPackages;
 
       serviceConfig = rec {
         ExecStart = "${cfg.package}/bin/runsvc.sh";
@@ -152,16 +158,16 @@ in
         #   the service user.
         # - Configure the runner using the new token file. When finished, delete it.
         # - Set up the directory structure by creating the necessary symlinks.
-        ExecStartPre =
-          let
-            # Wrapper script which expects the full path of the state, runtime and logs
-            # directory as arguments. Overrides the respective systemd variables to provide
-            # unambiguous directory names. This becomes relevant, for example, if the
-            # caller overrides any of the StateDirectory=, RuntimeDirectory= or LogDirectory=
-            # to contain more than one directory. This causes systemd to set the respective
-            # environment variables with the path of all of the given directories, separated
-            # by a colon.
-            writeScript = name: lines: pkgs.writeShellScript "${svcName}-${name}.sh" ''
+        ExecStartPre = let
+          # Wrapper script which expects the full path of the state, runtime and logs
+          # directory as arguments. Overrides the respective systemd variables to provide
+          # unambiguous directory names. This becomes relevant, for example, if the
+          # caller overrides any of the StateDirectory=, RuntimeDirectory= or LogDirectory=
+          # to contain more than one directory. This causes systemd to set the respective
+          # environment variables with the path of all of the given directories, separated
+          # by a colon.
+          writeScript = name: lines:
+            pkgs.writeShellScript "${svcName}-${name}.sh" ''
               set -euo pipefail
 
               STATE_DIRECTORY="$1"
@@ -170,85 +176,85 @@ in
 
               ${lines}
             '';
-            currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
-            runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" ] cfg;
-            newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
-            newConfigTokenFilename = ".new-token";
-            runnerCredFiles = [
-              ".credentials"
-              ".credentials_rsaparams"
-              ".runner"
-            ];
-            unconfigureRunner = writeScript "unconfigure" ''
-              differs=
-              # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
-              ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
-              # Also trigger a registration if the token content changed
-              ${pkgs.diffutils}/bin/diff -q \
-                "$STATE_DIRECTORY"/${currentConfigTokenFilename} \
-                ${escapeShellArg cfg.tokenFile} \
-                >/dev/null 2>&1 || differs=1
+          currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
+          runnerRegistrationConfig = getAttrs ["name" "tokenFile" "url" "runnerGroup" "extraLabels"] cfg;
+          newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
+          newConfigTokenFilename = ".new-token";
+          runnerCredFiles = [
+            ".credentials"
+            ".credentials_rsaparams"
+            ".runner"
+          ];
+          unconfigureRunner = writeScript "unconfigure" ''
+            differs=
+            # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
+            ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
+            # Also trigger a registration if the token content changed
+            ${pkgs.diffutils}/bin/diff -q \
+              "$STATE_DIRECTORY"/${currentConfigTokenFilename} \
+              ${escapeShellArg cfg.tokenFile} \
+              >/dev/null 2>&1 || differs=1
 
-              if [[ -n "$differs" ]]; then
-                echo "Config has changed, removing old runner state."
-                echo "The old runner will still appear in the GitHub Actions UI." \
-                  "You have to remove it manually."
-                find "$STATE_DIRECTORY/" -mindepth 1 -delete
+            if [[ -n "$differs" ]]; then
+              echo "Config has changed, removing old runner state."
+              echo "The old runner will still appear in the GitHub Actions UI." \
+                "You have to remove it manually."
+              find "$STATE_DIRECTORY/" -mindepth 1 -delete
 
-                # Copy the configured token file to the state dir and allow the service user to read the file
-                install --mode=666 ${escapeShellArg cfg.tokenFile} "$STATE_DIRECTORY/${newConfigTokenFilename}"
-                # Also copy current file to allow for a diff on the next start
-                install --mode=600 ${escapeShellArg cfg.tokenFile} "$STATE_DIRECTORY/${currentConfigTokenFilename}"
-              fi
-            '';
-            configureRunner = writeScript "configure" ''
-              if [[ -e "$STATE_DIRECTORY/${newConfigTokenFilename}" ]]; then
-                echo "Configuring GitHub Actions Runner"
+              # Copy the configured token file to the state dir and allow the service user to read the file
+              install --mode=666 ${escapeShellArg cfg.tokenFile} "$STATE_DIRECTORY/${newConfigTokenFilename}"
+              # Also copy current file to allow for a diff on the next start
+              install --mode=600 ${escapeShellArg cfg.tokenFile} "$STATE_DIRECTORY/${currentConfigTokenFilename}"
+            fi
+          '';
+          configureRunner = writeScript "configure" ''
+            if [[ -e "$STATE_DIRECTORY/${newConfigTokenFilename}" ]]; then
+              echo "Configuring GitHub Actions Runner"
 
-                token=$(< "$STATE_DIRECTORY"/${newConfigTokenFilename})
-                RUNNER_ROOT="$STATE_DIRECTORY" ${cfg.package}/bin/config.sh \
-                  --unattended \
-                  --disableupdate \
-                  --work "$RUNTIME_DIRECTORY" \
-                  --url ${escapeShellArg cfg.url} \
-                  --token "$token" \
-                  --labels ${escapeShellArg (concatStringsSep "," cfg.extraLabels)} \
-                  --name ${escapeShellArg cfg.name} \
-                  ${optionalString cfg.replace "--replace"} \
-                  ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
+              token=$(< "$STATE_DIRECTORY"/${newConfigTokenFilename})
+              RUNNER_ROOT="$STATE_DIRECTORY" ${cfg.package}/bin/config.sh \
+                --unattended \
+                --disableupdate \
+                --work "$RUNTIME_DIRECTORY" \
+                --url ${escapeShellArg cfg.url} \
+                --token "$token" \
+                --labels ${escapeShellArg (concatStringsSep "," cfg.extraLabels)} \
+                --name ${escapeShellArg cfg.name} \
+                ${optionalString cfg.replace "--replace"} \
+                ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
 
-                # Move the automatically created _diag dir to the logs dir
-                mkdir -p  "$STATE_DIRECTORY/_diag"
-                cp    -r  "$STATE_DIRECTORY/_diag/." "$LOGS_DIRECTORY/"
-                rm    -rf "$STATE_DIRECTORY/_diag/"
+              # Move the automatically created _diag dir to the logs dir
+              mkdir -p  "$STATE_DIRECTORY/_diag"
+              cp    -r  "$STATE_DIRECTORY/_diag/." "$LOGS_DIRECTORY/"
+              rm    -rf "$STATE_DIRECTORY/_diag/"
 
-                # Cleanup token from config
-                rm "$STATE_DIRECTORY/${newConfigTokenFilename}"
+              # Cleanup token from config
+              rm "$STATE_DIRECTORY/${newConfigTokenFilename}"
 
-                # Symlink to new config
-                ln -s '${newConfigPath}' "${currentConfigPath}"
-              fi
-            '';
-            setupRuntimeDir = writeScript "setup-runtime-dirs" ''
-              # Link _diag dir
-              ln -s "$LOGS_DIRECTORY" "$RUNTIME_DIRECTORY/_diag"
+              # Symlink to new config
+              ln -s '${newConfigPath}' "${currentConfigPath}"
+            fi
+          '';
+          setupRuntimeDir = writeScript "setup-runtime-dirs" ''
+            # Link _diag dir
+            ln -s "$LOGS_DIRECTORY" "$RUNTIME_DIRECTORY/_diag"
 
-              # Link the runner credentials to the runtime dir
-              ln -s "$STATE_DIRECTORY"/{${lib.concatStringsSep "," runnerCredFiles}} "$RUNTIME_DIRECTORY/"
-            '';
-          in
-          map (x: "${x} ${escapeShellArgs [ stateDir runtimeDir logsDir ]}") [
+            # Link the runner credentials to the runtime dir
+            ln -s "$STATE_DIRECTORY"/{${lib.concatStringsSep "," runnerCredFiles}} "$RUNTIME_DIRECTORY/"
+          '';
+        in
+          map (x: "${x} ${escapeShellArgs [stateDir runtimeDir logsDir]}") [
             "+${unconfigureRunner}" # runs as root
             configureRunner
             setupRuntimeDir
           ];
 
         # Contains _diag
-        LogsDirectory = [ systemdDir ];
+        LogsDirectory = [systemdDir];
         # Default RUNNER_ROOT which contains ephemeral Runner data
-        RuntimeDirectory = [ systemdDir ];
+        RuntimeDirectory = [systemdDir];
         # Home of persistent runner data, e.g., credentials
-        StateDirectory = [ systemdDir ];
+        StateDirectory = [systemdDir];
         StateDirectoryMode = "0700";
         WorkingDirectory = runtimeDir;
 

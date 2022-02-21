@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchpatch
-, appstream-glib
-, desktop-file-utils
-, fwupd
-, gettext
-, glib
-, gtk3
-, libsoup
-, libxmlb
-, meson
-, ninja
-, pkg-config
-, systemd
-, help2man
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  appstream-glib,
+  desktop-file-utils,
+  fwupd,
+  gettext,
+  glib,
+  gtk3,
+  libsoup,
+  libxmlb,
+  meson,
+  ninja,
+  pkg-config,
+  systemd,
+  help2man,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-firmware-updater";
   version = "3.34.0";

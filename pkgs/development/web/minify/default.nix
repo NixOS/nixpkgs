@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "minify";
   version = "2.10.0";
@@ -15,7 +18,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.Version=${version}"];
 
   meta = with lib; {
     description = "Minifiers for web formats";

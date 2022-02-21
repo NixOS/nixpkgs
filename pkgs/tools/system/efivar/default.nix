@@ -1,10 +1,17 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, fetchurl, pkg-config, popt }:
-
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  fetchurl,
+  pkg-config,
+  popt,
+}:
 stdenv.mkDerivation rec {
   pname = "efivar";
   version = "37";
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = ["bin" "out" "dev" "man"];
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
@@ -45,9 +52,9 @@ stdenv.mkDerivation rec {
     "-flto-partition=none"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ popt ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [popt];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
   makeFlags = [
     "prefix=$(out)"

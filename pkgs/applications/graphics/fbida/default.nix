@@ -1,27 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, libjpeg
-, libexif
-, giflib
-, libtiff
-, libpng
-, libwebp
-, libdrm
-, pkg-config
-, freetype
-, fontconfig
-, which
-, imagemagick
-, curl
-, sane-backends
-, libXpm
-, libepoxy
-, poppler
-, mesa
-, lirc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjpeg,
+  libexif,
+  giflib,
+  libtiff,
+  libpng,
+  libwebp,
+  libdrm,
+  pkg-config,
+  freetype,
+  fontconfig,
+  which,
+  imagemagick,
+  curl,
+  sane-backends,
+  libXpm,
+  libepoxy,
+  poppler,
+  mesa,
+  lirc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fbida";
   version = "2.14";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [pkg-config which];
   buildInputs = [
     libexif
     libjpeg
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     mesa
   ];
 
-  makeFlags = [ "prefix=$(out)" "verbose=yes" "STRIP=" "JPEG_VER=62" ];
+  makeFlags = ["prefix=$(out)" "verbose=yes" "STRIP=" "JPEG_VER=62"];
 
   postPatch = ''
     sed -e 's@ cpp\>@ gcc -E -@' -i GNUmakefile
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "Image viewing and manipulation programs including fbi, fbgs, ida, exiftran and thumbnail.cgi";
     homepage = "https://www.kraxel.org/blog/linux/fbida/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   pname = "hid-nintendo";
   version = "3.2";
@@ -23,15 +27,15 @@ stdenv.mkDerivation rec {
     "M=$(sourceRoot)"
   ];
 
-  buildFlags = [ "modules" ];
-  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
-  installTargets = [ "modules_install" ];
+  buildFlags = ["modules"];
+  installFlags = ["INSTALL_MOD_PATH=${placeholder "out"}"];
+  installTargets = ["modules_install"];
 
   meta = with lib; {
     description = "A Nintendo HID kernel module";
     homepage = "https://github.com/nicman23/dkms-hid-nintendo";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rencire ];
+    maintainers = [maintainers.rencire];
     platforms = platforms.linux;
     broken = versionOlder kernel.version "4.14";
   };

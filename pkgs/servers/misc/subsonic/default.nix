@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "subsonic";
   version = "6.1.6";
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://subsonic.org";
     description = "Personal media streamer";
     license = licenses.unfree;
-    maintainers = with maintainers; [ telotortium ];
+    maintainers = with maintainers; [telotortium];
     platforms = platforms.unix;
   };
 }

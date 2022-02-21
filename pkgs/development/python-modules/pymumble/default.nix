@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, lib
-, opuslib
-, protobuf
-, pytestCheckHook
-, pycrypto
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  lib,
+  opuslib,
+  protobuf,
+  pytestCheckHook,
+  pycrypto,
 }:
-
 buildPythonPackage rec {
   pname = "pymumble";
   version = "1.6.1";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot.";
     homepage = "https://github.com/azlux/pymumble";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ thelegy infinisil ];
+    maintainers = with maintainers; [thelegy infinisil];
   };
 }

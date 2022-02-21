@@ -1,31 +1,31 @@
-{ fetchFromGitHub
-, cinnamon-desktop
-, cinnamon-settings-daemon
-, cinnamon-translations
-, dbus-glib
-, docbook_xsl
-, docbook_xml_dtd_412
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, libcanberra
-, libxslt
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, python3
-, lib
-, stdenv
-, systemd
-, wrapGAppsHook
-, xapps
-, xmlto
-, xorg
-, libexecinfo
-, pango
+{
+  fetchFromGitHub,
+  cinnamon-desktop,
+  cinnamon-settings-daemon,
+  cinnamon-translations,
+  dbus-glib,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  glib,
+  gsettings-desktop-schemas,
+  gtk3,
+  libcanberra,
+  libxslt,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  lib,
+  stdenv,
+  systemd,
+  wrapGAppsHook,
+  xapps,
+  xmlto,
+  xorg,
+  libexecinfo,
+  pango,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
   version = "5.2.0";

@@ -1,17 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, flex
-, bison
-, xmlto
-, docbook_xsl
-, docbook_xml_dtd_44
-, swig
-, perl
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  flex,
+  bison,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_44,
+  swig,
+  perl,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "comedilib";
   version = "0.12.0";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Linux-Comedi";
     repo = "comedilib";
-    rev = "r${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "r${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "0kfs2dw62vjz8j7fgsxq6ky8r8kca726gyklbm6kljvgfh47lyfw";
   };
 
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = ["out" "dev" "man" "doc"];
 
   meta = with lib; {
     description = "The Linux Control and Measurement Device Interface Library";
     homepage = "https://github.com/Linux-Comedi/comedilib";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.doronbehar ];
+    maintainers = [maintainers.doronbehar];
     platforms = platforms.linux;
   };
 }

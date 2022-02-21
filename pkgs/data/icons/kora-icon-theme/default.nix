@@ -1,10 +1,17 @@
-{ lib, stdenv, fetchFromGitHub , gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
-
-stdenv.mkDerivation rec  {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  adwaita-icon-theme,
+  breeze-icons,
+  hicolor-icon-theme,
+}:
+stdenv.mkDerivation rec {
   pname = "kora-icon-theme";
   version = "1.5.0";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
@@ -39,8 +46,8 @@ stdenv.mkDerivation rec  {
   meta = with lib; {
     description = "An SVG icon theme in four variants";
     homepage = "https://github.com/bikass/kora";
-    license = with licenses; [ gpl3Only ];
+    license = with licenses; [gpl3Only];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [bloomvdomino];
   };
 }

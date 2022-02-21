@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, pciutils, python2}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pciutils,
+  python2,
+}:
 stdenv.mkDerivation rec {
   version = "1.30";
   pname = "x86info";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
     sed -i 's/-Werror -Wall//' Makefile
   '';
 
-  buildInputs = [ pciutils python2 ];
+  buildInputs = [pciutils python2];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -25,14 +30,13 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Identification utility for the x86 series of processors";
-    longDescription =
-    ''
+    longDescription = ''
       x86info will identify all Intel/AMD/Centaur/Cyrix/VIA CPUs. It leverages
       the cpuid kernel module where possible.  it supports parsing model specific
       registers (MSRs) via the msr kernel module.  it will approximate processor
       frequency, and identify the cache sizes and layout.
     '';
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = ["i686-linux" "x86_64-linux"];
     license = lib.licenses.gpl2;
     homepage = "http://codemonkey.org.uk/projects/x86info/";
     maintainers = with lib.maintainers; [jcumming];

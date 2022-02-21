@@ -1,7 +1,7 @@
 import ../make-test-python.nix {
-  machine = { pkgs, ... }: {
-    imports = [ ../../modules/profiles/minimal.nix ];
-    environment.systemPackages = [ pkgs.lorri ];
+  machine = {pkgs, ...}: {
+    imports = [../../modules/profiles/minimal.nix];
+    environment.systemPackages = [pkgs.lorri];
   };
 
   testScript = ''

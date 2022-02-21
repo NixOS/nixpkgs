@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, coreutils }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.2";
   pname = "light";
@@ -10,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "1a70zcf88ifsnwll486aicjnh48zisdf8f7vi34ihw61kdadsq9s";
   };
 
-  configureFlags = [ "--with-udev" ];
+  configureFlags = ["--with-udev"];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   # ensure udev rules can find the commands used
   postPatch = ''
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "GNU/Linux application to control backlights";
     homepage = "https://haikarainen.github.io/light/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ puffnfresh dtzWill ];
+    maintainers = with lib.maintainers; [puffnfresh dtzWill];
     platforms = lib.platforms.linux;
   };
 }

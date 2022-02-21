@@ -1,25 +1,27 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub
   # Python Inputs
-, fastdtw
-, numpy
-, pandas
-, psutil
-, qiskit-terra
-, qiskit-optimization
-, scikit-learn
-, scipy
-, quandl
-, yfinance
+  ,
+  fastdtw,
+  numpy,
+  pandas,
+  psutil,
+  qiskit-terra,
+  qiskit-optimization,
+  scikit-learn,
+  scipy,
+  quandl,
+  yfinance
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pytest-timeout
-, qiskit-aer
+  ,
+  pytestCheckHook,
+  ddt,
+  pytest-timeout,
+  qiskit-aer,
 }:
-
 buildPythonPackage rec {
   pname = "qiskit-finance";
   version = "0.3.0";
@@ -53,7 +55,7 @@ buildPythonPackage rec {
     qiskit-aer
   ];
 
-  pythonImportsCheck = [ "qiskit_finance" ];
+  pythonImportsCheck = ["qiskit_finance"];
   disabledTests = [
     # Fail due to approximation error, ~1-2%
     "test_application"
@@ -73,6 +75,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

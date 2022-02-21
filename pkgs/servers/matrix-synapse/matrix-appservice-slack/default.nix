@@ -1,5 +1,11 @@
-{ pkgs, nodejs, stdenv, fetchFromGitHub, lib, ... }:
-let
+{
+  pkgs,
+  nodejs,
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  ...
+}: let
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-slack";
@@ -12,21 +18,21 @@ let
     inherit (stdenv.hostPlatform) system;
   };
 in
-nodePackages.package.override {
-  pname = "matrix-appservice-slack";
+  nodePackages.package.override {
+    pname = "matrix-appservice-slack";
 
-  inherit src;
+    inherit src;
 
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [pkgs.makeWrapper];
 
-  postInstall = ''
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-slack" \
-    --add-flags "$out/lib/node_modules/matrix-appservice-slack/lib/app.js"
-  '';
+    postInstall = ''
+      makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-slack" \
+      --add-flags "$out/lib/node_modules/matrix-appservice-slack/lib/app.js"
+    '';
 
-  meta = with lib; {
-    description = "A Matrix <--> Slack bridge";
-    maintainers = with maintainers; [ beardhatcode ];
-    license = licenses.asl20;
-  };
-}
+    meta = with lib; {
+      description = "A Matrix <--> Slack bridge";
+      maintainers = with maintainers; [beardhatcode];
+      license = licenses.asl20;
+    };
+  }

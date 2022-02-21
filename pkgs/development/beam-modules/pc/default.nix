@@ -1,5 +1,7 @@
-{ lib, buildHex }:
-
+{
+  lib,
+  buildHex,
+}:
 buildHex {
   name = "pc";
   version = "1.12.0";

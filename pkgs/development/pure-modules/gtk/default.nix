@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, pure, pure-ffi, gtk2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+  pure-ffi,
+  gtk2,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-gtk";
   version = "0.13";
@@ -9,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "e659ff1bc5809ce35b810f8ac3fb7e8cadaaef13996537d8632e2f86ed76d203";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure pure-ffi gtk2 ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure pure-ffi gtk2];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -19,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-gtk.html";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

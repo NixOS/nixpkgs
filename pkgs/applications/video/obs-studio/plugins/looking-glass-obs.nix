@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libbfd, SDL2, obs-studio
-, looking-glass-client }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libbfd,
+  SDL2,
+  obs-studio,
+  looking-glass-client,
+}:
 stdenv.mkDerivation {
   pname = "looking-glass-obs";
   version = looking-glass-client.version;
@@ -9,8 +16,8 @@ stdenv.mkDerivation {
 
   sourceRoot = "source/obs";
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio libbfd SDL2 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [obs-studio libbfd SDL2];
 
   NIX_CFLAGS_COMPILE = "-mavx";
 
@@ -23,7 +30,7 @@ stdenv.mkDerivation {
     description = "Plugin for OBS Studio for efficient capturing of looking-glass";
     homepage = "https://looking-glass.io/docs/stable/obs/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ babbaj ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [babbaj];
+    platforms = ["x86_64-linux"];
   };
 }

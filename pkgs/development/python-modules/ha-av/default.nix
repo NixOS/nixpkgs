@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pkg-config
-, ffmpeg_4
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pkg-config,
+  ffmpeg_4,
 }:
-
 buildPythonPackage rec {
   pname = "ha-av";
   version = "8.0.4rc1";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/ha-av/";
     description = "Pythonic bindings for FFmpeg's libraries";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

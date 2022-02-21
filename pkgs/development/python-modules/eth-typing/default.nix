@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, pytest }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "eth-typing";
   version = "3.0.0";
@@ -20,7 +25,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     pytest .
@@ -30,6 +35,6 @@ buildPythonPackage rec {
     description = "Common type annotations for Ethereum Python packages";
     homepage = "https://github.com/ethereum/eth-typing";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    maintainers = with lib.maintainers; [jluttine];
   };
 }

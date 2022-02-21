@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "qpid-python";
   version = "0.32";
@@ -22,5 +22,4 @@ buildPythonPackage rec {
     description = "Python client implementation and AMQP conformance tests for Apache Qpid";
     license = licenses.asl20;
   };
-
 }

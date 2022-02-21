@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "random2";
   version = "1.0.1";
@@ -29,5 +29,4 @@ buildPythonPackage rec {
     description = "Python 3 compatible Python 2 `random` Module";
     license = licenses.psfl;
   };
-
 }

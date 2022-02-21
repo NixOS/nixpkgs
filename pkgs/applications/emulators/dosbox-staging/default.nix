@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_net
-, alsa-lib
-, copyDesktopItems
-, fluidsynth
-, gtest
-, libGL
-, libGLU
-, libogg
-, libpng
-, libslirp
-, makeDesktopItem
-, makeWrapper
-, meson
-, libmt32emu
-, ninja
-, opusfile
-, pkg-config
-, libpulseaudio
-, glib
-, libjack2
-, libsndfile
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_net,
+  alsa-lib,
+  copyDesktopItems,
+  fluidsynth,
+  gtest,
+  libGL,
+  libGLU,
+  libogg,
+  libpng,
+  libslirp,
+  makeDesktopItem,
+  makeWrapper,
+  meson,
+  libmt32emu,
+  ninja,
+  opusfile,
+  pkg-config,
+  libpulseaudio,
+  glib,
+  libjack2,
+  libsndfile,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dosbox-staging";
   version = "0.78.1";
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
     opusfile
   ];
 
-   NIX_CFLAGS_COMPILE = [
-     "-I${SDL2_net}/include/SDL2"
-   ];
+  NIX_CFLAGS_COMPILE = [
+    "-I${SDL2_net}/include/SDL2"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -104,9 +104,10 @@ stdenv.mkDerivation rec {
       practices.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ joshuafern AndersonTorres ];
+    maintainers = with maintainers; [joshuafern AndersonTorres];
     platforms = platforms.unix;
     priority = 101;
   };
 }
 # TODO: report upstream about not finding SDL2_net
+

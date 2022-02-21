@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
-, cheroot
-, dbutils, mysqlclient, pymysql, mysql-connector, psycopg2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  cheroot,
+  dbutils,
+  mysqlclient,
+  pymysql,
+  mysql-connector,
+  psycopg2,
 }:
-
 buildPythonPackage rec {
   version = "0.62";
   pname = "web.py";
@@ -12,14 +19,14 @@ buildPythonPackage rec {
     sha256 = "5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e";
   };
 
-  propagatedBuildInputs = [ cheroot ];
+  propagatedBuildInputs = [cheroot];
 
   # requires multiple running databases
   doCheck = false;
 
-  pythonImportsCheck = [ "web" ];
+  pythonImportsCheck = ["web"];
 
-  checkInputs = [ pytestCheckHook dbutils mysqlclient pymysql mysql-connector psycopg2 ];
+  checkInputs = [pytestCheckHook dbutils mysqlclient pymysql mysql-connector psycopg2];
 
   meta = with lib; {
     description = "Makes web apps";
@@ -29,7 +36,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://webpy.org/";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ layus SuperSandro2000 ];
+    maintainers = with maintainers; [layus SuperSandro2000];
   };
-
 }

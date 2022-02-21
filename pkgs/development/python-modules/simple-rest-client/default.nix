@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, python-slugify
-, python-status
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytestCheckHook,
+  python-slugify,
+  python-status,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "simple-rest-client";
   version = "1.1.2";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple REST client for Python";
     homepage = "https://github.com/allisson/python-simple-rest-client";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

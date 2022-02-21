@@ -1,19 +1,19 @@
-{ lib
-, aenum
-, aiodns
-, aiohttp
-, buildPythonPackage
-, cchardet
-, fetchFromGitHub
-, pyopenssl
-, pythonOlder
-, pytz
-, related
-, requests
-, uonet-request-signer-hebe
-, yarl
+{
+  lib,
+  aenum,
+  aiodns,
+  aiohttp,
+  buildPythonPackage,
+  cchardet,
+  fetchFromGitHub,
+  pyopenssl,
+  pythonOlder,
+  pytz,
+  related,
+  requests,
+  uonet-request-signer-hebe,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "vulcan-api";
   version = "2.0.3";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Python library for UONET+ e-register API";
     homepage = "https://vulcan-api.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

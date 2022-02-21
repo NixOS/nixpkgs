@@ -1,99 +1,118 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with builtins;
-with lib;
-let
+with lib; let
   cfg = config.services.gitlab-runner;
   hasDocker = config.virtualisation.docker.enable;
   hashedServices = mapAttrs'
-    (name: service: nameValuePair
-      "${name}_${config.networking.hostName}_${
-        substring 0 12
-        (hashString "md5" (unsafeDiscardStringContext (toJSON service)))}"
-      service)
-    cfg.services;
+  (name: service:
+    nameValuePair
+    "${name}_${config.networking.hostName}_${
+      substring 0 12
+      (hashString "md5" (unsafeDiscardStringContext (toJSON service)))
+    }"
+    service)
+  cfg.services;
   configPath = "$HOME/.gitlab-runner/config.toml";
   configureScript = pkgs.writeShellScriptBin "gitlab-runner-configure" (
-    if (cfg.configFile != null) then ''
-      mkdir -p $(dirname ${configPath})
-      cp ${cfg.configFile} ${configPath}
-      # make config file readable by service
-      chown -R --reference=$HOME $(dirname ${configPath})
-    '' else ''
-      export CONFIG_FILE=${configPath}
+    if (cfg.configFile != null)
+    then
+      ''
+        mkdir -p $(dirname ${configPath})
+        cp ${cfg.configFile} ${configPath}
+        # make config file readable by service
+        chown -R --reference=$HOME $(dirname ${configPath})
+      ''
+    else
+      ''
+        export CONFIG_FILE=${configPath}
 
-      mkdir -p $(dirname ${configPath})
+        mkdir -p $(dirname ${configPath})
 
-      # remove no longer existing services
-      gitlab-runner verify --delete
+        # remove no longer existing services
+        gitlab-runner verify --delete
 
-      # current and desired state
-      NEEDED_SERVICES=$(echo ${concatStringsSep " " (attrNames hashedServices)} | tr " " "\n")
-      REGISTERED_SERVICES=$(gitlab-runner list 2>&1 | grep 'Executor' | awk '{ print $1 }')
+        # current and desired state
+        NEEDED_SERVICES=$(echo ${concatStringsSep " " (attrNames hashedServices)} | tr " " "\n")
+        REGISTERED_SERVICES=$(gitlab-runner list 2>&1 | grep 'Executor' | awk '{ print $1 }')
 
-      # difference between current and desired state
-      NEW_SERVICES=$(grep -vxF -f <(echo "$REGISTERED_SERVICES") <(echo "$NEEDED_SERVICES") || true)
-      OLD_SERVICES=$(grep -vxF -f <(echo "$NEEDED_SERVICES") <(echo "$REGISTERED_SERVICES") || true)
+        # difference between current and desired state
+        NEW_SERVICES=$(grep -vxF -f <(echo "$REGISTERED_SERVICES") <(echo "$NEEDED_SERVICES") || true)
+        OLD_SERVICES=$(grep -vxF -f <(echo "$NEEDED_SERVICES") <(echo "$REGISTERED_SERVICES") || true)
 
-      # register new services
-      ${concatStringsSep "\n" (mapAttrsToList (name: service: ''
-        if echo "$NEW_SERVICES" | grep -xq ${name}; then
-          bash -c ${escapeShellArg (concatStringsSep " \\\n " ([
-            "set -a && source ${service.registrationConfigFile} &&"
-            "gitlab-runner register"
-            "--non-interactive"
-            "--name ${name}"
-            "--executor ${service.executor}"
-            "--limit ${toString service.limit}"
-            "--request-concurrency ${toString service.requestConcurrency}"
-            "--maximum-timeout ${toString service.maximumTimeout}"
-          ] ++ service.registrationFlags
-            ++ optional (service.buildsDir != null)
-            "--builds-dir ${service.buildsDir}"
-            ++ optional (service.cloneUrl != null)
-            "--clone-url ${service.cloneUrl}"
-            ++ optional (service.preCloneScript != null)
-            "--pre-clone-script ${service.preCloneScript}"
-            ++ optional (service.preBuildScript != null)
-            "--pre-build-script ${service.preBuildScript}"
-            ++ optional (service.postBuildScript != null)
-            "--post-build-script ${service.postBuildScript}"
-            ++ optional (service.tagList != [ ])
-            "--tag-list ${concatStringsSep "," service.tagList}"
-            ++ optional service.runUntagged
-            "--run-untagged"
-            ++ optional service.protected
-            "--access-level ref_protected"
-            ++ optional service.debugTraceDisabled
-            "--debug-trace-disabled"
-            ++ map (e: "--env ${escapeShellArg e}") (mapAttrsToList (name: value: "${name}=${value}") service.environmentVariables)
-            ++ optionals (hasPrefix "docker" service.executor) (
-              assert (
-                assertMsg (service.dockerImage != null)
-                  "dockerImage option is required for ${service.executor} executor (${name})");
-              [ "--docker-image ${service.dockerImage}" ]
-              ++ optional service.dockerDisableCache
-              "--docker-disable-cache"
-              ++ optional service.dockerPrivileged
-              "--docker-privileged"
-              ++ map (v: "--docker-volumes ${escapeShellArg v}") service.dockerVolumes
-              ++ map (v: "--docker-extra-hosts ${escapeShellArg v}") service.dockerExtraHosts
-              ++ map (v: "--docker-allowed-images ${escapeShellArg v}") service.dockerAllowedImages
-              ++ map (v: "--docker-allowed-services ${escapeShellArg v}") service.dockerAllowedServices
-            )
-          ))} && sleep 1 || exit 1
-        fi
-      '') hashedServices)}
+        # register new services
+        ${
+          concatStringsSep "\n" (mapAttrsToList (name: service: ''
+            if echo "$NEW_SERVICES" | grep -xq ${name}; then
+              bash -c ${
+              escapeShellArg (concatStringsSep " \\\n " (
+                [
+                  "set -a && source ${service.registrationConfigFile} &&"
+                  "gitlab-runner register"
+                  "--non-interactive"
+                  "--name ${name}"
+                  "--executor ${service.executor}"
+                  "--limit ${toString service.limit}"
+                  "--request-concurrency ${toString service.requestConcurrency}"
+                  "--maximum-timeout ${toString service.maximumTimeout}"
+                ]
+                ++ service.registrationFlags
+                ++ optional (service.buildsDir != null)
+                "--builds-dir ${service.buildsDir}"
+                ++ optional (service.cloneUrl != null)
+                "--clone-url ${service.cloneUrl}"
+                ++ optional (service.preCloneScript != null)
+                "--pre-clone-script ${service.preCloneScript}"
+                ++ optional (service.preBuildScript != null)
+                "--pre-build-script ${service.preBuildScript}"
+                ++ optional (service.postBuildScript != null)
+                "--post-build-script ${service.postBuildScript}"
+                ++ optional (service.tagList != [])
+                "--tag-list ${concatStringsSep "," service.tagList}"
+                ++ optional service.runUntagged
+                "--run-untagged"
+                ++ optional service.protected
+                "--access-level ref_protected"
+                ++ optional service.debugTraceDisabled
+                "--debug-trace-disabled"
+                ++ map (e: "--env ${escapeShellArg e}") (mapAttrsToList (name: value: "${name}=${value}") service.environmentVariables)
+                ++ optionals (hasPrefix "docker" service.executor) (
+                  assert (
+                    assertMsg (service.dockerImage != null)
+                    "dockerImage option is required for ${service.executor} executor (${name})"
+                  );
+                    ["--docker-image ${service.dockerImage}"]
+                    ++ optional service.dockerDisableCache
+                    "--docker-disable-cache"
+                    ++ optional service.dockerPrivileged
+                    "--docker-privileged"
+                    ++ map (v: "--docker-volumes ${escapeShellArg v}") service.dockerVolumes
+                    ++ map (v: "--docker-extra-hosts ${escapeShellArg v}") service.dockerExtraHosts
+                    ++ map (v: "--docker-allowed-images ${escapeShellArg v}") service.dockerAllowedImages
+                    ++ map (v: "--docker-allowed-services ${escapeShellArg v}") service.dockerAllowedServices
+                )
+              ))
+            } && sleep 1 || exit 1
+            fi
+          '')
+          hashedServices)
+        }
 
-      # unregister old services
-      for NAME in $(echo "$OLD_SERVICES")
-      do
-        [ ! -z "$NAME" ] && gitlab-runner unregister \
-          --name "$NAME" && sleep 1
-      done
+        # unregister old services
+        for NAME in $(echo "$OLD_SERVICES")
+        do
+          [ ! -z "$NAME" ] && gitlab-runner unregister \
+            --name "$NAME" && sleep 1
+        done
 
-      # update global options
-      remarshal --if toml --of json ${configPath} \
-        | jq -cM ${escapeShellArg (concatStringsSep " | " [
+        # update global options
+        remarshal --if toml --of json ${configPath} \
+          | jq -cM ${
+          escapeShellArg (concatStringsSep " | " [
             ".check_interval = ${toJSON cfg.checkInterval}"
             ".concurrent = ${toJSON cfg.concurrent}"
             ".sentry_dsn = ${toJSON cfg.sentryDSN}"
@@ -103,19 +122,20 @@ let
             ".session_server.session_timeout = ${toJSON cfg.sessionServer.sessionTimeout}"
             "del(.[] | nulls)"
             "del(.session_server[] | nulls)"
-          ])} \
-        | remarshal --if json --of toml \
-        | sponge ${configPath}
+          ])
+        } \
+          | remarshal --if json --of toml \
+          | sponge ${configPath}
 
-      # make config file readable by service
-      chown -R --reference=$HOME $(dirname ${configPath})
-    '');
+        # make config file readable by service
+        chown -R --reference=$HOME $(dirname ${configPath})
+      ''
+  );
   startScript = pkgs.writeShellScriptBin "gitlab-runner-start" ''
     export CONFIG_FILE=${configPath}
     exec gitlab-runner run --working-directory $HOME
   '';
-in
-{
+in {
   options.services.gitlab-runner = {
     enable = mkEnableOption "Gitlab Runner";
     configFile = mkOption {
@@ -202,7 +222,7 @@ in
           };
         };
       };
-      default = { };
+      default = {};
       example = literalExpression ''
         {
           listenAddress = "0.0.0.0:8093";
@@ -240,14 +260,14 @@ in
     };
     extraPackages = mkOption {
       type = types.listOf types.package;
-      default = [ ];
+      default = [];
       description = ''
         Extra packages to add to PATH for the gitlab-runner process.
       '';
     };
     services = mkOption {
       description = "GitLab Runner services.";
-      default = { };
+      default = {};
       example = literalExpression ''
         {
           # runner for building in docker via host's nix-daemon
@@ -346,8 +366,8 @@ in
           };
           registrationFlags = mkOption {
             type = types.listOf types.str;
-            default = [ ];
-            example = [ "--docker-helper-image my/gitlab-runner-helper" ];
+            default = [];
+            example = ["--docker-helper-image my/gitlab-runner-helper"];
             description = ''
               Extra command-line flags passed to
               <literal>gitlab-runner register</literal>.
@@ -357,8 +377,8 @@ in
           };
           environmentVariables = mkOption {
             type = types.attrsOf types.str;
-            default = { };
-            example = { NAME = "value"; };
+            default = {};
+            example = {NAME = "value";};
             description = ''
               Custom environment variables injected to build environment.
               For secrets you can use <option>registrationConfigFile</option>
@@ -399,8 +419,8 @@ in
           };
           dockerVolumes = mkOption {
             type = types.listOf types.str;
-            default = [ ];
-            example = [ "/var/run/docker.sock:/var/run/docker.sock" ];
+            default = [];
+            example = ["/var/run/docker.sock:/var/run/docker.sock"];
             description = ''
               Bind-mount a volume and create it
               if it doesn't exist prior to mounting.
@@ -422,24 +442,24 @@ in
           };
           dockerExtraHosts = mkOption {
             type = types.listOf types.str;
-            default = [ ];
-            example = [ "other-host:127.0.0.1" ];
+            default = [];
+            example = ["other-host:127.0.0.1"];
             description = ''
               Add a custom host-to-IP mapping.
             '';
           };
           dockerAllowedImages = mkOption {
             type = types.listOf types.str;
-            default = [ ];
-            example = [ "ruby:*" "python:*" "php:*" "my.registry.tld:5000/*:*" ];
+            default = [];
+            example = ["ruby:*" "python:*" "php:*" "my.registry.tld:5000/*:*"];
             description = ''
               Whitelist allowed images.
             '';
           };
           dockerAllowedServices = mkOption {
             type = types.listOf types.str;
-            default = [ ];
-            example = [ "postgres:9" "redis:*" "mysql:*" ];
+            default = [];
+            example = ["postgres:9" "redis:*" "mysql:*"];
             description = ''
               Whitelist allowed services.
             '';
@@ -469,7 +489,7 @@ in
           };
           tagList = mkOption {
             type = types.listOf types.str;
-            default = [ ];
+            default = [];
             description = ''
               Tag list.
             '';
@@ -526,47 +546,55 @@ in
     };
   };
   config = mkIf cfg.enable {
-    warnings = (mapAttrsToList
+    warnings =
+      (mapAttrsToList
       (n: v: "services.gitlab-runner.services.${n}.`registrationConfigFile` points to a file in Nix Store. You should use quoted absolute path to prevent this.")
       (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services))
-    ++ optional (cfg.configFile != null) "services.gitlab-runner.`configFile` is deprecated, please use services.gitlab-runner.`services`.";
-    environment.systemPackages = [ cfg.package ];
+      ++ optional (cfg.configFile != null) "services.gitlab-runner.`configFile` is deprecated, please use services.gitlab-runner.`services`.";
+    environment.systemPackages = [cfg.package];
     systemd.services.gitlab-runner = {
       description = "Gitlab Runner";
-      documentation = [ "https://docs.gitlab.com/runner/" ];
-      after = [ "network.target" ]
+      documentation = ["https://docs.gitlab.com/runner/"];
+      after =
+        ["network.target"]
         ++ optional hasDocker "docker.service";
       requires = optional hasDocker "docker.service";
-      wantedBy = [ "multi-user.target" ];
-      environment = config.networking.proxy.envVars // {
-        HOME = "/var/lib/gitlab-runner";
-      };
-      path = with pkgs; [
-        bash
-        gawk
-        jq
-        moreutils
-        remarshal
-        util-linux
-        cfg.package
-      ] ++ cfg.extraPackages;
+      wantedBy = ["multi-user.target"];
+      environment =
+        config.networking.proxy.envVars
+        // {
+          HOME = "/var/lib/gitlab-runner";
+        };
+      path = with pkgs;
+        [
+          bash
+          gawk
+          jq
+          moreutils
+          remarshal
+          util-linux
+          cfg.package
+        ]
+        ++ cfg.extraPackages;
       reloadIfChanged = true;
-      serviceConfig = {
-        # Set `DynamicUser` under `systemd.services.gitlab-runner.serviceConfig`
-        # to `lib.mkForce false` in your configuration to run this service as root.
-        # You can also set `User` and `Group` options to run this service as desired user.
-        # Make sure to restart service or changes won't apply.
-        DynamicUser = true;
-        StateDirectory = "gitlab-runner";
-        SupplementaryGroups = optional hasDocker "docker";
-        ExecStartPre = "!${configureScript}/bin/gitlab-runner-configure";
-        ExecStart = "${startScript}/bin/gitlab-runner-start";
-        ExecReload = "!${configureScript}/bin/gitlab-runner-configure";
-      } // optionalAttrs (cfg.gracefulTermination) {
-        TimeoutStopSec = "${cfg.gracefulTimeout}";
-        KillSignal = "SIGQUIT";
-        KillMode = "process";
-      };
+      serviceConfig =
+        {
+          # Set `DynamicUser` under `systemd.services.gitlab-runner.serviceConfig`
+          # to `lib.mkForce false` in your configuration to run this service as root.
+          # You can also set `User` and `Group` options to run this service as desired user.
+          # Make sure to restart service or changes won't apply.
+          DynamicUser = true;
+          StateDirectory = "gitlab-runner";
+          SupplementaryGroups = optional hasDocker "docker";
+          ExecStartPre = "!${configureScript}/bin/gitlab-runner-configure";
+          ExecStart = "${startScript}/bin/gitlab-runner-start";
+          ExecReload = "!${configureScript}/bin/gitlab-runner-configure";
+        }
+        // optionalAttrs (cfg.gracefulTermination) {
+          TimeoutStopSec = "${cfg.gracefulTimeout}";
+          KillSignal = "SIGQUIT";
+          KillMode = "process";
+        };
     };
     # Enable docker if `docker` executor is used in any service
     virtualisation.docker.enable = mkIf (
@@ -574,8 +602,8 @@ in
     ) (mkDefault true);
   };
   imports = [
-    (mkRenamedOptionModule [ "services" "gitlab-runner" "packages" ] [ "services" "gitlab-runner" "extraPackages" ] )
-    (mkRemovedOptionModule [ "services" "gitlab-runner" "configOptions" ] "Use services.gitlab-runner.services option instead" )
-    (mkRemovedOptionModule [ "services" "gitlab-runner" "workDir" ] "You should move contents of workDir (if any) to /var/lib/gitlab-runner" )
+    (mkRenamedOptionModule ["services" "gitlab-runner" "packages"] ["services" "gitlab-runner" "extraPackages"])
+    (mkRemovedOptionModule ["services" "gitlab-runner" "configOptions"] "Use services.gitlab-runner.services option instead")
+    (mkRemovedOptionModule ["services" "gitlab-runner" "workDir"] "You should move contents of workDir (if any) to /var/lib/gitlab-runner")
   ];
 }

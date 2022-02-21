@@ -1,12 +1,12 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, struct
-, statistics
-, lapack
-, blas
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  struct,
+  statistics,
+  lapack,
+  blas,
 }:
-
 buildOctavePackage rec {
   pname = "optim";
   version = "1.6.1";
@@ -28,9 +28,9 @@ buildOctavePackage rec {
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/optim/index.html";
-    license = with licenses; [ gpl3Plus publicDomain ];
+    license = with licenses; [gpl3Plus publicDomain];
     # Modified BSD code seems removed
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Non-linear optimization toolkit";
   };
 }

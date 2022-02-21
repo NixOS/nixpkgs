@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gcc
-, wirelesstools
-, isPy27
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gcc,
+  wirelesstools,
+  isPy27,
+  isPyPy,
 }:
-
 buildPythonPackage rec {
   pname = "basiciw";
   version = "0.2.2";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
     sha256 = "1ajmflvvlkflrcmqmkrx0zaira84z8kv4ssb2jprfwvjh8vfkysb";
   };
 
-  buildInputs = [ gcc ];
-  propagatedBuildInputs = [ wirelesstools ];
+  buildInputs = [gcc];
+  propagatedBuildInputs = [wirelesstools];
 
   meta = {
     description = "Get info about wireless interfaces using libiw";

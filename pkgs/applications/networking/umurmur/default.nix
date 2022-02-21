@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, protobufc, libconfig }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  openssl,
+  protobufc,
+  libconfig,
+}:
 stdenv.mkDerivation rec {
   pname = "umurmur";
   version = "0.2.20";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jp5+NbGmT90ksffvpLYIX2q5cPeVidDCYMPvLHCiP68=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl protobufc libconfig ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [openssl protobufc libconfig];
 
   configureFlags = [
     "--with-ssl=openssl"

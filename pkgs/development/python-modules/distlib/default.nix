@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "distlib";
   version = "0.3.4";
@@ -17,7 +20,6 @@ buildPythonPackage rec {
     description = "Low-level components of distutils2/packaging";
     homepage = "https://distlib.readthedocs.io";
     license = licenses.psfl;
-    maintainers = with maintainers; [ lnl7 ];
+    maintainers = with maintainers; [lnl7];
   };
 }
-

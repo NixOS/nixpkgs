@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, astropy
-, astropy-helpers
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  astropy,
+  astropy-helpers,
+  pillow,
 }:
-
 buildPythonPackage rec {
   pname = "pyavm";
   version = "0.9.5";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
   '';
 
-  pythonImportsCheck = [ "pyavm" ];
+  pythonImportsCheck = ["pyavm"];
 
   meta = with lib; {
     description = "Simple pure-python AVM meta-data handling";
     homepage = "https://astrofrog.github.io/pyavm/";
     license = licenses.mit;
-    maintainers = with maintainers; [ smaret ];
+    maintainers = with maintainers; [smaret];
   };
 }

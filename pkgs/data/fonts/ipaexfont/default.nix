@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "ipaexfont-004.01";
 
@@ -23,6 +25,6 @@ fetchzip {
     '';
     homepage = "https://moji.or.jp/ipafont/";
     license = licenses.ipa;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

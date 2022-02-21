@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, bokeh
-, buildPythonPackage
-, cloudpickle
-, distributed
-, fetchFromGitHub
-, fetchpatch
-, fsspec
-, jinja2
-, numpy
-, packaging
-, pandas
-, partd
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toolz
-, withExtraComplete ? false
+{
+  lib,
+  stdenv,
+  bokeh,
+  buildPythonPackage,
+  cloudpickle,
+  distributed,
+  fetchFromGitHub,
+  fetchpatch,
+  fsspec,
+  jinja2,
+  numpy,
+  packaging,
+  pandas,
+  partd,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  toolz,
+  withExtraComplete ? false,
 }:
-
 buildPythonPackage rec {
   pname = "dask";
   version = "2022.01.0";
@@ -36,21 +36,23 @@ buildPythonPackage rec {
 ";
   };
 
-  propagatedBuildInputs = [
-    cloudpickle
-    fsspec
-    packaging
-    partd
-    pyyaml
-    toolz
-    pandas
-    jinja2
-    bokeh
-    numpy
-  ] ++ lib.optionals (withExtraComplete) [
-    # infinite recursion between distributed and dask
-    distributed
-  ];
+  propagatedBuildInputs =
+    [
+      cloudpickle
+      fsspec
+      packaging
+      partd
+      pyyaml
+      toolz
+      pandas
+      jinja2
+      bokeh
+      numpy
+    ]
+    ++ lib.optionals (withExtraComplete) [
+      # infinite recursion between distributed and dask
+      distributed
+    ];
 
   doCheck = true;
 
@@ -80,17 +82,19 @@ buildPythonPackage rec {
     "-m 'not network'"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # this test requires features of python3Packages.psutil that are
-    # blocked in sandboxed-builds
-    "test_auto_blocksize_csv"
-  ] ++ [
-    # A deprecation warning from newer sqlalchemy versions makes these tests
-    # to fail https://github.com/dask/dask/issues/7406
-    "test_sql"
-    # Test interrupt fails intermittently https://github.com/dask/dask/issues/2192
-    "test_interrupt"
-  ];
+  disabledTests =
+    lib.optionals stdenv.isDarwin [
+      # this test requires features of python3Packages.psutil that are
+      # blocked in sandboxed-builds
+      "test_auto_blocksize_csv"
+    ]
+    ++ [
+      # A deprecation warning from newer sqlalchemy versions makes these tests
+      # to fail https://github.com/dask/dask/issues/7406
+      "test_sql"
+      # Test interrupt fails intermittently https://github.com/dask/dask/issues/2192
+      "test_interrupt"
+    ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -110,6 +114,6 @@ buildPythonPackage rec {
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    maintainers = with maintainers; [fridh];
   };
 }

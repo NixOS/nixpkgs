@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, unasync
-, boto3
-, botocore
-, requests
-, aiohttp
-, pyquery
-, loguru
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  unasync,
+  boto3,
+  botocore,
+  requests,
+  aiohttp,
+  pyquery,
+  loguru,
 }:
-
 buildPythonPackage rec {
   pname = "pyhiveapi";
   version = "0.5.1";
@@ -52,12 +52,12 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pythonImportsCheck = [ "pyhiveapi" ];
+  pythonImportsCheck = ["pyhiveapi"];
 
   meta = with lib; {
     description = "Python library to interface with the Hive API";
     homepage = "https://github.com/Pyhass/Pyhiveapi";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

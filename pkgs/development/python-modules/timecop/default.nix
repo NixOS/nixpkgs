@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "timecop";
   version = "0.5.0dev";
@@ -18,6 +21,6 @@ buildPythonPackage rec {
     description = "A port of the most excellent TimeCop Ruby Gem for Python";
     homepage = "https://github.com/bluekelp/pytimecop";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zakame ];
+    maintainers = with maintainers; [zakame];
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, substituteAll
-, pkg-config
-, meson
-, ninja
-, gnu-efi
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  substituteAll,
+  pkg-config,
+  meson,
+  ninja,
+  gnu-efi,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fwupd-efi";
   version = "1.2";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ maxeaubrey ];
+    maintainers = with maintainers; [maxeaubrey];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl, cstruct }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+}:
 buildDunePackage rec {
   pname = "mirage-random";
   version = "2.0.0";
@@ -11,12 +15,12 @@ buildDunePackage rec {
     sha256 = "0qj41d5smkkkbjwsnz71bhhj94d2cwv53rf3j4rhky0pqbkidnv1";
   };
 
-  propagatedBuildInputs = [ cstruct ];
+  propagatedBuildInputs = [cstruct];
 
   meta = {
     description = "Random signatures for MirageOS";
     homepage = "https://github.com/mirage/mirage-random";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
   version = "0.10.1";
@@ -14,29 +14,32 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-ZgLg+pIdTBxMNXgFFL8jCbQa444pkgtnSx+QjMqQhag=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    cached-property
-    chardet
-    click
-    colorama
-    configparser
-    diff-cover
-    jinja2
-    oyaml
-    pathspec
-    pytest
-    regex
-    tblib
-    toml
-    tqdm
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    backports.cached-property
-    importlib_metadata
-  ];
+  propagatedBuildInputs = with python3.pkgs;
+    [
+      appdirs
+      cached-property
+      chardet
+      click
+      colorama
+      configparser
+      diff-cover
+      jinja2
+      oyaml
+      pathspec
+      pytest
+      regex
+      tblib
+      toml
+      tqdm
+      typing-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      dataclasses
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      backports.cached-property
+      importlib_metadata
+    ];
 
   checkInputs = with python3.pkgs; [
     hypothesis
@@ -64,7 +67,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "SQL linter and auto-formatter";
     homepage = "https://www.sqlfluff.com/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

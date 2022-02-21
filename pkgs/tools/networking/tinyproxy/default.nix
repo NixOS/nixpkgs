@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl, withDebug ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  perl,
+  withDebug ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "tinyproxy";
   version = "1.11.0";
@@ -12,15 +18,15 @@ stdenv.mkDerivation rec {
   };
 
   # perl is needed for man page generation.
-  nativeBuildInputs = [ autoreconfHook perl ];
+  nativeBuildInputs = [autoreconfHook perl];
 
-  configureFlags = lib.optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
+  configureFlags = lib.optionals withDebug ["--enable-debug"]; # Enable debugging support code and methods.
 
   meta = with lib; {
     homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.carlosdagos ];
+    maintainers = [maintainers.carlosdagos];
   };
 }

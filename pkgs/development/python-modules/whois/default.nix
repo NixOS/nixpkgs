@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, inetutils
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  inetutils,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "whois";
   version = "0.9.14";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module/library for retrieving WHOIS information";
     homepage = "https://github.com/DannyCork/python-whois/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

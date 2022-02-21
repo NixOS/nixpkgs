@@ -1,10 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, instrument-control
-, arduino-core-unwrapped
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  instrument-control,
+  arduino-core-unwrapped,
 }:
-
 buildOctavePackage rec {
   pname = "arduino";
   version = "0.7.0";
@@ -26,7 +26,7 @@ buildOctavePackage rec {
     name = "Octave Arduino Toolkit";
     homepage = "https://octave.sourceforge.io/arduino/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Basic Octave implementation of the matlab arduino extension, allowing communication to a programmed arduino board to control its hardware";
   };
 }

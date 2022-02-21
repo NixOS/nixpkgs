@@ -1,10 +1,9 @@
-{ runtimeShell
-, symlinkJoin
-, writeShellScriptBin
-, npush
-}:
-
-let
+{
+  runtimeShell,
+  symlinkJoin,
+  writeShellScriptBin,
+  npush,
+}: let
   runScript = writeShellScriptBin "run-npush" ''
     set -euo pipefail
     CWD=$(pwd)
@@ -21,11 +20,11 @@ let
     exec "${npush}/bin/npush"
   '';
 in
-symlinkJoin {
-  name = "run-npush-${npush.version}";
+  symlinkJoin {
+    name = "run-npush-${npush.version}";
 
-  paths = [
-    npush
-    runScript
-  ];
-}
+    paths = [
+      npush
+      runScript
+    ];
+  }

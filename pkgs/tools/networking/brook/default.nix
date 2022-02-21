@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "brook";
   version = "20210701";
@@ -16,8 +19,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/txthinking/brook";
     description = "A cross-platform Proxy/VPN software";
-    license = with licenses; [ gpl3Only ];
+    license = with licenses; [gpl3Only];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [xrelkd];
   };
 }

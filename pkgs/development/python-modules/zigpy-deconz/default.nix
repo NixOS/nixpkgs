@@ -1,14 +1,14 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, zigpy
+{
+  lib,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytestCheckHook,
+  zigpy,
 }:
-
 buildPythonPackage rec {
   pname = "zigpy-deconz";
   version = "0.14.0";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Library which communicates with Deconz radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-deconz";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [etu mvnetbiz];
     platforms = platforms.linux;
   };
 }

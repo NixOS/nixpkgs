@@ -1,7 +1,7 @@
-{ lib
-, python3
+{
+  lib,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta-server";
   version = "8.3.3";

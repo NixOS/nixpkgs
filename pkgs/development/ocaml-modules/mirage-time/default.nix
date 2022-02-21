@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl, ocaml_lwt }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml_lwt,
+}:
 buildDunePackage rec {
   minimumOCamlVersion = "4.06";
 
@@ -13,12 +17,12 @@ buildDunePackage rec {
     sha256 = "1w6mm4g7fc19cs0ncs0s9fsnb1k1s04qqzs9bsqvq8ngsb90cbh0";
   };
 
-  propagatedBuildInputs = [ ocaml_lwt ];
+  propagatedBuildInputs = [ocaml_lwt];
 
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage-time";
     description = "Time operations for MirageOS";
     license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    maintainers = with maintainers; [sternenseemann];
   };
 }

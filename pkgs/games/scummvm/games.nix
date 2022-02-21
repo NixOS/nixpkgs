@@ -1,34 +1,51 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, unzip, writeText
-, scummvm, runtimeShell }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeDesktopItem,
+  unzip,
+  writeText,
+  scummvm,
+  runtimeShell,
+}: let
+  desktopItem = name: short: long: description:
+    makeDesktopItem {
+      categories = "Game;AdventureGame;";
+      comment = description;
+      desktopName = long;
+      exec = "@out@/bin/${short}";
+      genericName = description;
+      icon = "scummvm";
+      name = name;
+    };
 
-let
-  desktopItem = name: short: long: description: makeDesktopItem {
-    categories  = "Game;AdventureGame;";
-    comment     = description;
-    desktopName = long;
-    exec        = "@out@/bin/${short}";
-    genericName = description;
-    icon        = "scummvm";
-    name        = name;
-  };
+  run = name: short: code:
+    writeText "${short}.sh" ''
+      #!${runtimeShell} -eu
 
-  run = name: short: code: writeText "${short}.sh" ''
-    #!${runtimeShell} -eu
+      exec ${scummvm}/bin/scummvm \
+        --path=@out@/share/${name} \
+        --fullscreen \
+        ${code}
+    '';
 
-    exec ${scummvm}/bin/scummvm \
-      --path=@out@/share/${name} \
-      --fullscreen \
-      ${code}
-  '';
-
-  generic = { plong, pshort, pcode, description, version, files, docs ? [ "readme.txt" ], ... } @attrs:
-    let
-      attrs' = builtins.removeAttrs attrs [ "plong" "pshort" "pcode" "description" "docs" "files" "version" ];
-      pname = lib.replaceStrings [ " " ":" ] [ "-" "" ] (lib.toLower plong);
-    in stdenv.mkDerivation ({
+  generic = {
+    plong,
+    pshort,
+    pcode,
+    description,
+    version,
+    files,
+    docs ? ["readme.txt"],
+    ...
+  } @ attrs: let
+    attrs' = builtins.removeAttrs attrs ["plong" "pshort" "pcode" "description" "docs" "files" "version"];
+    pname = lib.replaceStrings [" " ":"] ["-" ""] (lib.toLower plong);
+  in
+    stdenv.mkDerivation ({
       name = "${pname}-${version}";
 
-      nativeBuildInputs = [ unzip ];
+      nativeBuildInputs = [unzip];
 
       dontBuild = true;
       dontFixup = true;
@@ -54,12 +71,12 @@ let
       meta = with lib; {
         homepage = "https://www.scummvm.org";
         license = licenses.free; # refer to the readme for exact wording
-        maintainers = with maintainers; [ peterhoeg ];
+        maintainers = with maintainers; [peterhoeg];
         inherit description;
         inherit (scummvm.meta) platforms;
       };
-    } // attrs');
-
+    }
+    // attrs');
 in {
   beneath-a-steel-sky = generic rec {
     plong = "Beneath a Steel Sky";
@@ -71,7 +88,7 @@ in {
       url = "mirror://sourceforge/scummvm/${pshort}-cd-${version}.zip";
       sha256 = "14s5jz67kavm8l15gfm5xb7pbpn8azrv460mlxzzvdpa02a9n82k";
     };
-    files = [ "sky.*" ];
+    files = ["sky.*"];
   };
 
   broken-sword-25 = generic rec {
@@ -85,8 +102,8 @@ in {
       sha256 = "0ivj1vflfpih5bs5a902mab88s4d77fwm3ya3fk7pammzc8gjqzz";
     };
     sourceRoot = ".";
-    docs = [ "README" "license-original.txt" ];
-    files = [ "data.b25c" ];
+    docs = ["README" "license-original.txt"];
+    files = ["data.b25c"];
   };
 
   drascula-the-vampire-strikes-back = generic rec {
@@ -96,18 +113,18 @@ in {
     description = "Spanish 2D classic point & click style adventure with tons of humor and an easy interface";
     version = "1.0";
     # srcs = {
-      src = fetchurl {
-        url = "mirror://sourceforge/scummvm/${pshort}-${version}.zip";
-        sha256 = "1pj29rpb754sn6a56f8brfv6f2m1p5qgaqik7d68pfi2bb5zccdp";
-      };
-      # audio = fetchurl {
-        # url = "mirror://sourceforge/scummvm/${pshort}-audio-flac-2.0.zip";
-        # sha256 = "1zmqhrby8f5sj1qy6xjdgkvk9wyhr3nw8ljrrl58fmxb83x1rryw";
-      # };
+    src = fetchurl {
+      url = "mirror://sourceforge/scummvm/${pshort}-${version}.zip";
+      sha256 = "1pj29rpb754sn6a56f8brfv6f2m1p5qgaqik7d68pfi2bb5zccdp";
+    };
+    # audio = fetchurl {
+    # url = "mirror://sourceforge/scummvm/${pshort}-audio-flac-2.0.zip";
+    # sha256 = "1zmqhrby8f5sj1qy6xjdgkvk9wyhr3nw8ljrrl58fmxb83x1rryw";
+    # };
     # };
     sourceRoot = ".";
-    docs = [ "readme.txt" "drascula.doc" ];
-    files = [ "Packet.001" ];
+    docs = ["readme.txt" "drascula.doc"];
+    files = ["Packet.001"];
   };
 
   dreamweb = generic rec {
@@ -121,8 +138,8 @@ in {
       sha256 = "0hh1p3rd7s0ckvri14lc6wdry9vv0vn4h4744v2n4zg63j8i6vsa";
     };
     sourceRoot = ".";
-    docs = [ "license.txt" ];
-    files = [ "DREAMWEB.*" "SPEECH" "track01.flac" ];
+    docs = ["license.txt"];
+    files = ["DREAMWEB.*" "SPEECH" "track01.flac"];
   };
 
   flight-of-the-amazon-queen = generic rec {
@@ -136,7 +153,7 @@ in {
       sha256 = "1a6q71q1dl9vvw2qqsxk5h1sv0gaqy6236zr5905w2is01gdsp52";
     };
     sourceRoot = ".";
-    files = [ "*.1c" ];
+    files = ["*.1c"];
   };
 
   lure-of-the-temptress = generic rec {
@@ -149,7 +166,7 @@ in {
       url = "mirror://sourceforge/scummvm/lure-${version}.zip";
       sha256 = "0201i70qcs1m797kvxjx3ygkhg6kcl5yf49sihba2ga8l52q45zk";
     };
-    docs = [ "README" "*.txt" "*.pdf" "*.PDF" ];
-    files = [ "*.vga" ];
+    docs = ["README" "*.txt" "*.pdf" "*.PDF"];
+    files = ["*.vga"];
   };
 }

@@ -1,5 +1,11 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  gerbil-unstable,
+  gerbil-support,
+  gambit-support,
+}:
 gerbil-support.gerbilPackage {
   pname = "gerbil-crypto";
   version = "unstable-2020-08-01";
@@ -19,9 +25,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil Crypto: Extra Cryptographic Primitives for Gerbil";
-    homepage    = "https://github.com/fare/gerbil-crypto";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    homepage = "https://github.com/fare/gerbil-crypto";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [fare];
   };
 }

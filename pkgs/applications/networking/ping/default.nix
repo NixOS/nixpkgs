@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, glib
-, gtk3
-, gtksourceview
-, json-glib
-, libsoup
-, libgee
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  python3,
+  glib,
+  gtk3,
+  gtksourceview,
+  json-glib,
+  libsoup,
+  libgee,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ping";
   version = "0.6.0";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A helpful tool that lets you debug what part of your API is causing you issues";
     homepage = "https://github.com/jeremyvaartjes/ping";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [xiorcale] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3;
     mainProgram = "com.github.jeremyvaartjes.ping";

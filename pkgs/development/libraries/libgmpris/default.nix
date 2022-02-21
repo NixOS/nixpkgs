@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, glib
-, gobject-introspection
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  glib,
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libgmpris";
   version = "2.2.1-8";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-iyKNmg6sf+mxlY/4vt5lKdrKfJzkoCYU2j1O8uwk8K4=";
   };
 
-  nativeBuildInputs = [ pkg-config gobject-introspection ];
+  nativeBuildInputs = [pkg-config gobject-introspection];
 
-  buildInputs = [ glib ];
+  buildInputs = [glib];
 
   postInstall = ''
     mkdir -p $out/share/doc/${pname}
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sonarnerd.net/src/";
     description = "GMPRIS GDBus bindings GDBus bindings generated from the GMPRIS XML spec files";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

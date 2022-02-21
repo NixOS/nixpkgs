@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, pybind11
-, pythonOlder
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  pybind11,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "chiabip158";
   version = "1.1";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-2iQeiQl/CLq2zwo/mUKBwIwV5wlNYUdUfENGNxeDMU8=";
   };
 
-  nativeBuildInputs = [ cmake setuptools-scm ];
+  nativeBuildInputs = [cmake setuptools-scm];
 
-  buildInputs = [ pybind11 ];
+  buildInputs = [pybind11];
 
   checkInputs = [
     pytestCheckHook

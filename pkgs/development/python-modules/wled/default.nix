@@ -1,18 +1,18 @@
-{ lib
-, aiohttp
-, awesomeversion
-, backoff
-, buildPythonPackage
-, cachetools
-, fetchFromGitHub
-, poetry-core
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  poetry-core,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "wled";
   version = "0.13.0";
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "Asynchronous Python client for WLED";
     homepage = "https://github.com/frenck/python-wled";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

@@ -1,21 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.sks;
   sksPkg = cfg.package;
   dbConfig = pkgs.writeText "DB_CONFIG" ''
     ${cfg.extraDbConfig}
   '';
-
 in {
-  meta.maintainers = with maintainers; [ primeos calbrecht jcumming ];
+  meta.maintainers = with maintainers; [primeos calbrecht jcumming];
 
   options = {
-
     services.sks = {
-
       enable = mkEnableOption ''
         SKS (synchronizing key server for OpenPGP) and start the database
         server. You need to create "''${dataDir}/dump/*.gpg" for the initial
@@ -57,7 +56,7 @@ in {
       };
 
       hkpAddress = mkOption {
-        default = [ "127.0.0.1" "::1" ];
+        default = ["127.0.0.1" "::1"];
         type = types.listOf types.str;
         description = ''
           Domain names, IPv4 and/or IPv6 addresses to listen on for HKP
@@ -90,7 +89,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     users = {
       users.sks = {
         isSystemUser = true;
@@ -99,22 +97,24 @@ in {
         createHome = true;
         group = "sks";
         useDefaultShell = true;
-        packages = [ sksPkg pkgs.db ];
+        packages = [sksPkg pkgs.db];
       };
-      groups.sks = { };
+      groups.sks = {};
     };
 
     systemd.services = let
-      hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'" ;
+      hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'";
       hkpPort = builtins.toString cfg.hkpPort;
     in {
       sks-db = {
         description = "SKS database server";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = ["network.target"];
+        wantedBy = ["multi-user.target"];
         preStart = ''
-          ${lib.optionalString (cfg.webroot != null)
-            "ln -sfT \"${cfg.webroot}\" web"}
+          ${
+            lib.optionalString (cfg.webroot != null)
+            "ln -sfT \"${cfg.webroot}\" web"
+          }
           mkdir -p dump
           ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
           ${sksPkg}/bin/sks cleandb || true

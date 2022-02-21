@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "hashi-ui";
   version = "1.3.8";
@@ -19,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jippi/hashi-ui";
     description = "A modern user interface for hashicorp Consul & Nomad";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ numkem ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [numkem];
     license = licenses.mit;
   };
 }

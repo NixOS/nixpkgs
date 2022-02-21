@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "xlsx2csv";
   version = "0.7.8";
@@ -16,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dilshod/xlsx2csv";
     description = "Convert xlsx to csv";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [jb55];
   };
 }

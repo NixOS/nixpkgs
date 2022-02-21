@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "scmpuff";
   version = "0.3.0";
@@ -18,7 +21,7 @@ buildGoPackage rec {
     description = "Add numbered shortcuts to common git commands";
     homepage = "https://github.com/mroth/scmpuff";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
-    platforms = concatLists (with platforms; [ linux darwin windows ]);
+    maintainers = with maintainers; [cpcloud];
+    platforms = concatLists (with platforms; [linux darwin windows]);
   };
 }

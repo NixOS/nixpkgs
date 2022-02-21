@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, zlib, bzip2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  bzip2,
+}:
 stdenv.mkDerivation rec {
   pname = "cbc";
   version = "2.10.4";
@@ -13,20 +18,20 @@ stdenv.mkDerivation rec {
   };
 
   # or-tools has a hard dependency on Cbc static libraries, so we build both
-  configureFlags = [ "-C" "--enable-static" ];
+  configureFlags = ["-C" "--enable-static"];
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  buildInputs = [ zlib bzip2 ];
+  buildInputs = [zlib bzip2];
 
   # FIXME: move share/coin/Data to a separate output?
 
   meta = {
     homepage = "https://projects.coin-or.org/Cbc";
     license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [lib.maintainers.eelco];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     description = "A mixed integer programming solver";
   };

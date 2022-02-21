@@ -1,35 +1,35 @@
-{ lib
-, buildPythonPackage
-, cachecontrol
-, cachy
-, cleo
-, clikit
-, crashtest
-, dataclasses
-, entrypoints
-, fetchFromGitHub
-, fetchpatch
-, html5lib
-, httpretty
-, importlib-metadata
-, intreehooks
-, keyring
-, lockfile
-, packaging
-, pexpect
-, pkginfo
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, requests
-, requests-toolbelt
-, shellingham
-, tomlkit
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  cachecontrol,
+  cachy,
+  cleo,
+  clikit,
+  crashtest,
+  dataclasses,
+  entrypoints,
+  fetchFromGitHub,
+  fetchpatch,
+  html5lib,
+  httpretty,
+  importlib-metadata,
+  intreehooks,
+  keyring,
+  lockfile,
+  packaging,
+  pexpect,
+  pkginfo,
+  poetry-core,
+  pytest-mock,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  shellingham,
+  tomlkit,
+  virtualenv,
 }:
-
 buildPythonPackage rec {
   pname = "poetry";
   version = "1.1.12";
@@ -56,30 +56,33 @@ buildPythonPackage rec {
     intreehooks
   ];
 
-  propagatedBuildInputs = [
-    cachecontrol
-    cachy
-    cleo
-    clikit
-    crashtest
-    entrypoints
-    html5lib
-    keyring
-    lockfile
-    packaging
-    pexpect
-    pkginfo
-    poetry-core
-    requests
-    requests-toolbelt
-    shellingham
-    tomlkit
-    virtualenv
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      cachecontrol
+      cachy
+      cleo
+      clikit
+      crashtest
+      entrypoints
+      html5lib
+      keyring
+      lockfile
+      packaging
+      pexpect
+      pkginfo
+      poetry-core
+      requests
+      requests-toolbelt
+      shellingham
+      tomlkit
+      virtualenv
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      dataclasses
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
@@ -100,24 +103,26 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTests = [
-    # touches network
-    "git"
-    "solver"
-    "load"
-    "vcs"
-    "prereleases_if_they_are_compatible"
-    "test_executor"
-    # requires git history to work correctly
-    "default_with_excluded_data"
-    # toml ordering has changed
-    "lock"
-    # fs permission errors
-    "test_builder_should_execute_build_scripts"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [
-    # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
-    "test_info_setup_complex_pep517_error"
-  ];
+  disabledTests =
+    [
+      # touches network
+      "git"
+      "solver"
+      "load"
+      "vcs"
+      "prereleases_if_they_are_compatible"
+      "test_executor"
+      # requires git history to work correctly
+      "default_with_excluded_data"
+      # toml ordering has changed
+      "lock"
+      # fs permission errors
+      "test_builder_should_execute_build_scripts"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.10") [
+      # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
+      "test_info_setup_complex_pep517_error"
+    ];
 
   patches = [
     # The following patch addresses a minor incompatibility with
@@ -138,6 +143,6 @@ buildPythonPackage rec {
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [jakewaksbaum];
   };
 }

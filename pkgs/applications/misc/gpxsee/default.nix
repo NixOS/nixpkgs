@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qttools, qttranslations, qtlocation, wrapQtAppsHook, substituteAll }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  qttranslations,
+  qtlocation,
+  wrapQtAppsHook,
+  substituteAll,
+}:
 stdenv.mkDerivation rec {
   pname = "gpxsee";
   version = "10.4";
@@ -17,9 +26,9 @@ stdenv.mkDerivation rec {
     inherit qttranslations;
   });
 
-  buildInputs = [ qtlocation ];
+  buildInputs = [qtlocation];
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [qmake qttools wrapQtAppsHook];
 
   preConfigure = ''
     lrelease gpxsee.pro
@@ -39,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gpxsee.org/";
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ womfoo sikmir ];
+    maintainers = with maintainers; [womfoo sikmir];
     platforms = platforms.unix;
   };
 }

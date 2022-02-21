@@ -1,16 +1,17 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, setuptools-scm
-, xorg
-, python
-, mock
-, nose
-, pytestCheckHook
-, util-linux
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  setuptools-scm,
+  xorg,
+  python,
+  mock,
+  nose,
+  pytestCheckHook,
+  util-linux,
 }:
-
 buildPythonPackage rec {
   pname = "xlib";
   version = "0.31";
@@ -22,9 +23,9 @@ buildPythonPackage rec {
     sha256 = "155p9xhsk01z9vdml74h07svlqy6gljnx9c6qbydcr14lwghwn06";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [ xorg.libX11 ];
-  propagatedBuildInputs = [ six ];
+  nativeBuildInputs = [setuptools-scm];
+  buildInputs = [xorg.libX11];
+  propagatedBuildInputs = [six];
 
   doCheck = !stdenv.isDarwin;
   checkInputs = [
@@ -46,5 +47,4 @@ buildPythonPackage rec {
     homepage = "http://python-xlib.sourceforge.net/";
     license = licenses.gpl2Plus;
   };
-
 }

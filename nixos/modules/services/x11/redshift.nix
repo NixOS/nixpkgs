@@ -1,28 +1,29 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.redshift;
   lcfg = config.location;
-
 in {
-
   imports = [
-    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
-        in if value == null then
-          throw "services.redshift.latitude is set to null, you can remove this"
-          else builtins.fromJSON value))
-    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
-        in if value == null then
-          throw "services.redshift.longitude is set to null, you can remove this"
-          else builtins.fromJSON value))
-    (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
+    (mkChangedOptionModule ["services" "redshift" "latitude"] ["location" "latitude"]
+    (config: let
+      value = getAttrFromPath ["services" "redshift" "latitude"] config;
+    in
+      if value == null
+      then throw "services.redshift.latitude is set to null, you can remove this"
+      else builtins.fromJSON value))
+    (mkChangedOptionModule ["services" "redshift" "longitude"] ["location" "longitude"]
+    (config: let
+      value = getAttrFromPath ["services" "redshift" "longitude"] config;
+    in
+      if value == null
+      then throw "services.redshift.longitude is set to null, you can remove this"
+      else builtins.fromJSON value))
+    (mkRenamedOptionModule ["services" "redshift" "provider"] ["location" "provider"])
   ];
 
   options.services.redshift = {
@@ -94,7 +95,7 @@ in {
     extraOptions = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "-v" "-m randr" ];
+      example = ["-v" "-m randr"];
       description = ''
         Additional command-line arguments to pass to
         <command>redshift</command>.
@@ -104,23 +105,22 @@ in {
 
   config = mkIf cfg.enable {
     # needed so that .desktop files are installed, which geoclue cares about
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     services.geoclue2.appConfig.redshift = {
       isAllowed = true;
       isSystem = true;
     };
 
-    systemd.user.services.redshift =
-    let
-      providerString = if lcfg.provider == "manual"
+    systemd.user.services.redshift = let
+      providerString =
+        if lcfg.provider == "manual"
         then "${toString lcfg.latitude}:${toString lcfg.longitude}"
         else lcfg.provider;
-    in
-    {
+    in {
       description = "Redshift colour temperature adjuster";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
+      partOf = ["graphical-session.target"];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}${cfg.executable} \
@@ -134,5 +134,4 @@ in {
       };
     };
   };
-
 }

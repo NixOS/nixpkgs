@@ -1,5 +1,8 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
-
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2-thirdparty";
   version = "0.10.0";
@@ -21,6 +24,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Icinga/icinga-php-thirdparty";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = with lib.maintainers; [das_j];
   };
 }

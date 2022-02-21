@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-, enableModTool ? true
-, removeReferencesTo
-, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  enableModTool ? true,
+  removeReferencesTo,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "volk";
   # Version 2.5.1 seems to cause a build issue for aarch64-darwin, see:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = lib.optionals (!enableModTool) [ "-DENABLE_MODTOOL=OFF" ];
+  cmakeFlags = lib.optionals (!enableModTool) ["-DENABLE_MODTOOL=OFF"];
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)
   '';
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "http://libvolk.org/";
     description = "The Vector Optimized Library of Kernels";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
     platforms = platforms.all;
   };
 }

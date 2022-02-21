@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, wxGTK, autoconf, automake, libtool, python2, gettext }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  wxGTK,
+  autoconf,
+  automake,
+  libtool,
+  python2,
+  gettext,
+}:
 stdenv.mkDerivation rec {
   pname = "wxHexEditor";
   version = "0.24";
@@ -11,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "08xnhaif8syv1fa0k6lc3jm7yg2k50b02lyds8w0jyzh4xi5crqj";
   };
 
-  buildInputs = [ wxGTK autoconf automake libtool python2 gettext ];
+  buildInputs = [wxGTK autoconf automake libtool python2 gettext];
 
   preConfigure = "patchShebangs .";
 
@@ -29,7 +39,7 @@ stdenv.mkDerivation rec {
     ./missing-semicolon.patch
   ];
 
-  makeFlags = [ "OPTFLAGS=-fopenmp" ];
+  makeFlags = ["OPTFLAGS=-fopenmp"];
 
   meta = {
     description = "Hex Editor / Disk Editor for Huge Files or Devices";

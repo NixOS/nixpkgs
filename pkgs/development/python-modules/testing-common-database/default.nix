@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi  }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "testing.common.database";
   version = "2.0.3";
@@ -16,6 +19,6 @@ buildPythonPackage rec {
     description = "utilities for testing.* packages";
     homepage = "https://github.com/tk0miya/testing.common.database";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

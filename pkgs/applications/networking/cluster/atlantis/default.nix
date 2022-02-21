@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "atlantis";
   version = "0.16.1";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     homepage = "https://github.com/runatlantis/atlantis";
     description = "Terraform Pull Request Automation";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jpotier ];
+    maintainers = with maintainers; [jpotier];
   };
 }

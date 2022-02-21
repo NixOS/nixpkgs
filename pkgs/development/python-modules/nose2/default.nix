@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
-, pythonOlder
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
+  pythonOlder,
+  coverage,
 }:
-
 buildPythonPackage rec {
   pname = "nose2";
   version = "0.11.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Test runner for Python";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

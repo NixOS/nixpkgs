@@ -1,7 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "nocaselist";
   version = "1.0.4";
@@ -23,6 +25,6 @@ buildPythonPackage rec {
     description = "A case-insensitive list for Python";
     homepage = "https://github.com/pywbem/nocaselist";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
   };
 }

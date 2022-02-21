@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
+}:
 stdenv.mkDerivation rec {
   pname = "lombok";
   version = "1.18.22";
@@ -9,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7O8VgUEdeoLMBCgWZ+4LrF18ClqudM/DhDA5bJHDGDE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  outputs = [ "out" "bin" ];
+  outputs = ["out" "bin"];
 
   buildCommand = ''
     mkdir -p $out/share/java
@@ -27,6 +32,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     homepage = "https://projectlombok.org/";
-    maintainers = [ lib.maintainers.CrystalGamma ];
+    maintainers = [lib.maintainers.CrystalGamma];
   };
 }

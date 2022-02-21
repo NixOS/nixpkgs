@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.unit;
 
   configFile = pkgs.writeText "unit.json" cfg.config;
-
 in {
   options = {
     services.unit = {
@@ -81,8 +82,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
@@ -91,8 +91,8 @@ in {
 
     systemd.services.unit = {
       description = "Unit App Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       preStart = ''
         [ ! -e '${cfg.stateDir}/conf.json' ] || rm -f '${cfg.stateDir}/conf.json'
       '';
@@ -114,7 +114,7 @@ in {
         RuntimeDirectory = "unit";
         RuntimeDirectoryMode = "0750";
         # Access write directories
-        ReadWritePaths = [ cfg.stateDir cfg.logDir ];
+        ReadWritePaths = [cfg.stateDir cfg.logDir];
         # Security
         NoNewPrivileges = true;
         # Sandboxing
@@ -129,7 +129,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6"];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
@@ -148,8 +148,7 @@ in {
     };
 
     users.groups = optionalAttrs (cfg.group == "unit") {
-      unit = { };
+      unit = {};
     };
-
   };
 }

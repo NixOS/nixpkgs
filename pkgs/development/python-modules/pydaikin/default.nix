@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromBitbucket
-, freezegun
-, netifaces
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromBitbucket,
+  freezegun,
+  netifaces,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "pydaikin";
   version = "2.7.0";
@@ -38,12 +38,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pydaikin" ];
+  pythonImportsCheck = ["pydaikin"];
 
   meta = with lib; {
     description = "Python Daikin HVAC appliances interface";
     homepage = "https://bitbucket.org/mustang51/pydaikin";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

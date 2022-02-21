@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pytestCheckHook
-, pythonOlder
-, requests
-, retrying
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  retrying,
 }:
-
 buildPythonPackage rec {
   pname = "meross-iot";
   version = "0.4.4.4";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interact with Meross devices";
     homepage = "https://github.com/albertogeniola/MerossIot";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

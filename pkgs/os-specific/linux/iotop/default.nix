@@ -1,5 +1,9 @@
-{ lib, fetchurl, python3Packages, fetchpatch }:
-
+{
+  lib,
+  fetchurl,
+  python3Packages,
+  fetchpatch,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "iotop";
   version = "0.6";
@@ -22,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     description = "A tool to find out the processes doing the most IO";
     homepage = "http://guichaz.free.fr/iotop";
     license = licenses.gpl2;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
   };
 }

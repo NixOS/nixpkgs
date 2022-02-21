@@ -1,5 +1,17 @@
-{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config, libxml2, gd, glib, getopt, libxslt, nix, bash}:
-
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+  gd,
+  glib,
+  getopt,
+  libxslt,
+  nix,
+  bash,
+}:
 stdenv.mkDerivation {
   pname = "libnixxml";
   version = "unstable-2020-06-25";
@@ -28,7 +40,7 @@ stdenv.mkDerivation {
     mkdir -p config
   '';
 
-  configureFlags = [ "--with-gd" "--with-glib" ];
+  configureFlags = ["--with-gd" "--with-glib"];
   CFLAGS = "-Wall";
 
   strictDeps = true;
@@ -55,7 +67,7 @@ stdenv.mkDerivation {
     description = "XML-based Nix-friendly data integration library";
     homepage = "https://github.com/svanderburg/libnixxml";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomberek ];
+    maintainers = with maintainers; [tomberek];
     platforms = platforms.unix;
   };
 }

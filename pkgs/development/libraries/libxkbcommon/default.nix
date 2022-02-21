@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, bison
-, doxygen
-, xkeyboard_config
-, libxcb
-, libxml2
-, python3
-, libX11
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  bison,
+  doxygen,
+  xkeyboard_config,
+  libxcb,
+  libxml2,
+  python3,
+  libX11
   # To enable the "interactive-wayland" subcommand of xkbcli. This is the
   # wayland equivalent of `xev` on X11.
-, withWaylandTools ? stdenv.isLinux
-, wayland
-, wayland-protocols
-, wayland-scanner
+  ,
+  withWaylandTools ? stdenv.isLinux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
   version = "1.3.1";
@@ -28,14 +29,16 @@ stdenv.mkDerivation rec {
     sha256 = "0d4jzq0zv1xmng0z0q5lb4rz03ikgxdwi68k3r70ac16gb911ixk";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
+  depsBuildBuild = [pkg-config];
+  nativeBuildInputs =
+    [meson ninja pkg-config bison doxygen]
     ++ lib.optional withWaylandTools wayland-scanner;
-  buildInputs = [ xkeyboard_config libxcb libxml2 ]
-    ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
-  checkInputs = [ python3 ];
+  buildInputs =
+    [xkeyboard_config libxcb libxml2]
+    ++ lib.optionals withWaylandTools [wayland wayland-protocols];
+  checkInputs = [python3];
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://xkbcommon.org";
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ttuegel ];
+    maintainers = with maintainers; [primeos ttuegel];
     platforms = with platforms; unix;
   };
 }

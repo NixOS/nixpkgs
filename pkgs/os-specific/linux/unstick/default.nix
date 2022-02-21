@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, libseccomp }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libseccomp,
+}:
 stdenv.mkDerivation rec {
   pname = "unstick";
   version = "0.1.0";
@@ -13,14 +20,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ libseccomp ];
+  nativeBuildInputs = [meson ninja pkg-config];
+  buildInputs = [libseccomp];
 
   meta = {
     homepage = "https://github.com/kwohlfahrt/unstick";
     description = "Silently eats chmod commands forbidden by Nix";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ kwohlfahrt ];
+    maintainers = with lib.maintainers; [kwohlfahrt];
   };
 }

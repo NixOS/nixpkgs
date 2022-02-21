@@ -1,15 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.autorandr;
-
 in {
-
   options = {
-
     services.autorandr = {
       enable = mkEnableOption "handling of hotplug and sleep events by autorandr";
 
@@ -23,19 +21,17 @@ in {
         '';
       };
     };
-
   };
 
   config = mkIf cfg.enable {
+    services.udev.packages = [pkgs.autorandr];
 
-    services.udev.packages = [ pkgs.autorandr ];
-
-    environment.systemPackages = [ pkgs.autorandr ];
+    environment.systemPackages = [pkgs.autorandr];
 
     systemd.services.autorandr = {
-      wantedBy = [ "sleep.target" ];
+      wantedBy = ["sleep.target"];
       description = "Autorandr execution hook";
-      after = [ "sleep.target" ];
+      after = ["sleep.target"];
 
       startLimitIntervalSec = 5;
       startLimitBurst = 1;
@@ -46,8 +42,7 @@ in {
         KillMode = "process";
       };
     };
-
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = with maintainers; [];
 }

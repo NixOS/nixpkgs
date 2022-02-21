@@ -1,23 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.lambdabot;
 
   rc = builtins.toFile "script.rc" cfg.script;
-
-in
-
-{
-
+in {
   ### configuration
 
   options = {
-
     services.lambdabot = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -36,19 +31,16 @@ in
         default = "";
         description = "Lambdabot script";
       };
-
     };
-
   };
 
   ### implementation
 
   config = mkIf cfg.enable {
-
     systemd.services.lambdabot = {
       description = "Lambdabot daemon";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       # Workaround for https://github.com/lambdabot/lambdabot/issues/117
       script = ''
         mkdir -p ~/.lambdabot
@@ -63,7 +55,7 @@ in
       '';
       serviceConfig = {
         User = "lambdabot";
-        RuntimeDirectory = [ "lambdabot" ];
+        RuntimeDirectory = ["lambdabot"];
       };
     };
 
@@ -76,7 +68,5 @@ in
     };
 
     users.groups.lambdabot.gid = config.ids.gids.lambdabot;
-
   };
-
 }

@@ -1,14 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "enlightenment";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ romildo ];
+    maintainers = [romildo];
   };
 
-  machine = { ... }:
-  {
-    imports = [ ./common/user-account.nix ];
+  machine = {...}: {
+    imports = [./common/user-account.nix];
     services.xserver.enable = true;
     services.xserver.desktopManager.enlightenment.enable = true;
     services.xserver.displayManager = {
@@ -19,7 +17,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
       };
     };
     hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
-    environment.systemPackages = [ pkgs.xdotool ];
+    environment.systemPackages = [pkgs.xdotool];
     services.acpid.enable = true;
     services.connman.enable = true;
     services.connman.package = pkgs.connmanMinimal;
@@ -27,7 +25,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
   in ''
     with subtest("Ensure x starts"):

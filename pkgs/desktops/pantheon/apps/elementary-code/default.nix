@@ -1,32 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, appstream
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, polkit
-, python3
-, vala
-, wrapGAppsHook
-, editorconfig-core-c
-, elementary-icon-theme
-, granite
-, gtk3
-, gtksourceview4
-, gtkspell3
-, libgee
-, libgit2-glib
-, libhandy
-, libpeas
-, libsoup
-, vte
-, ctags
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  appstream,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  python3,
+  vala,
+  wrapGAppsHook,
+  editorconfig-core-c,
+  elementary-icon-theme,
+  granite,
+  gtk3,
+  gtksourceview4,
+  gtkspell3,
+  libgee,
+  libgit2-glib,
+  libhandy,
+  libpeas,
+  libsoup,
+  vte,
+  ctags,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-code";
   version = "6.1.0";
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   # ctags needed in path by outline plugin
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ ctags ]}"
+      --prefix PATH : "${lib.makeBinPath [ctags]}"
     )
   '';
 

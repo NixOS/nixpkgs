@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, nose
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  nose,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "archinfo";
   version = "9.1.11752";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Classes with architecture-specific information";
     homepage = "https://github.com/angr/archinfo";
-    license = with licenses; [ bsd2 ];
-    maintainers = [ maintainers.fab ];
+    license = with licenses; [bsd2];
+    maintainers = [maintainers.fab];
   };
 }

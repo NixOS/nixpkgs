@@ -1,5 +1,8 @@
-{ lib, config, ... }: {
-
+{
+  lib,
+  config,
+  ...
+}: {
   options.value = lib.mkOption {
     type = lib.types.anything;
   };
@@ -11,13 +14,12 @@
   config = lib.mkMerge [
     {
       value.single-lambda = x: x;
-      value.multiple-lambdas = x: { inherit x; };
-      value.merging-lambdas = x: { inherit x; };
+      value.multiple-lambdas = x: {inherit x;};
+      value.merging-lambdas = x: {inherit x;};
     }
     {
-      value.multiple-lambdas = x: [ x ];
-      value.merging-lambdas = y: { inherit y; };
+      value.multiple-lambdas = x: [x];
+      value.merging-lambdas = y: {inherit y;};
     }
   ];
-
 }

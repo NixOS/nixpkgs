@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, opensp, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  opensp,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "openjade";
   version = "1.3.2";
@@ -9,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "1l92sfvx1f0wmkbvzv1385y1gb3hh010xksi1iyviyclrjb7jb8x";
   };
 
-  patches = [ ./msggen.patch ];
+  patches = [./msggen.patch];
 
-  buildInputs = [ opensp perl ];
+  buildInputs = [opensp perl];
 
   configureFlags = [
     "--enable-spincludedir=${opensp}/include/OpenSP"

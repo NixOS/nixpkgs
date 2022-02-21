@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "LazyLimiter";
   version = "0.3.2";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "10xdydwmsnkx8hzsm74pa546yahp29wifydbc48yywv3sfj5anm7";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [faust2jaqt faust2lv2];
 
   buildPhase = ''
     faust2jaqt -vec -time -t 99999 LazyLimiter.dsp
@@ -28,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "A fast yet clean lookahead limiter for jack and lv2";
     homepage = "https://magnetophon.github.io/LazyLimiter/";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
   };
 }

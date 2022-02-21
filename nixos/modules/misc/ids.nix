@@ -1,6 +1,5 @@
 # This module defines the global list of uids and gids.  We keep a
 # central list to prevent id collisions.
-
 # IMPORTANT!
 # We only add static uids and gids for services where it is not feasible
 # to change uids/gids on service start, in example a service with a lot of
@@ -8,15 +7,10 @@
 # DynamicUser option and does not need a uid/gid allocation at all.
 # Systemd can also change ownership of service directories using the
 # RuntimeDirectory/StateDirectory options.
-
-{ lib, ... }:
-
-let
+{lib, ...}: let
   inherit (lib) types;
-in
-{
+in {
   options = {
-
     ids.uids = lib.mkOption {
       internal = true;
       description = ''
@@ -32,12 +26,9 @@ in
       '';
       type = types.attrsOf types.int;
     };
-
   };
 
-
   config = {
-
     ids.uids = {
       root = 0;
       #wheel = 1; # unused
@@ -111,7 +102,7 @@ in
       postgres = 71;
       #vboxusers = 72; # unused
       #vboxsf = 73; # unused
-      smbguest = 74;  # unused
+      smbguest = 74; # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
@@ -290,7 +281,7 @@ in
       postgrey = 258;
       hound = 259;
       leaps = 260;
-      ipfs  = 261;
+      ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14
       # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
@@ -434,7 +425,7 @@ in
       postgres = 71;
       vboxusers = 72;
       vboxsf = 73;
-      smbguest = 74;  # unused
+      smbguest = 74; # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
@@ -671,7 +662,5 @@ in
       nixbld = 30000;
       nogroup = 65534;
     };
-
   };
-
 }

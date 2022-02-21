@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "fritzconnection";
   version = "1.9.1";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kbr/fritzconnection";
     changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/changes.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda valodim ];
+    maintainers = with maintainers; [dotlambda valodim];
   };
 }

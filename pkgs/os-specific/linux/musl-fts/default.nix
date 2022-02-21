@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "musl-fts";
   version = "1.2.7";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "Azw5qrz6OKDcpYydE6jXzVxSM5A8oYWAztrHr+O/DOE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   enableParallelBuilding = true;
 
@@ -20,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "An implementation of fts(3) for musl-libc";
     platforms = platforms.linux;
     license = licenses.bsd3;
-    maintainers = [ maintainers.pjjw ];
+    maintainers = [maintainers.pjjw];
   };
 }

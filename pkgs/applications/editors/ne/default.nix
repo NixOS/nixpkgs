@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, texinfo, texlive, perl, ghostscript }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  texinfo,
+  texlive,
+  perl,
+  ghostscript,
+}:
 stdenv.mkDerivation rec {
   pname = "ne";
   version = "3.3.1";
@@ -16,10 +24,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/makefile --replace "-lcurses" "-lncurses"
   '';
 
-  nativeBuildInputs = [ texlive.combined.scheme-medium texinfo perl ghostscript ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [texlive.combined.scheme-medium texinfo perl ghostscript];
+  buildInputs = [ncurses];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     description = "The nice editor";

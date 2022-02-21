@@ -1,6 +1,15 @@
-{ lib, fetchurl, pkg-config, libxml2, libxslt, intltool, gnome
-, python3Packages, fetchpatch, bash }:
-
+{
+  lib,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  libxslt,
+  intltool,
+  gnome,
+  python3Packages,
+  fetchpatch,
+  bash,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "gnome-doc-utils";
   version = "0.20.10";
@@ -25,11 +34,11 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ intltool pkg-config libxslt.dev ];
-  buildInputs = [ libxml2 libxslt bash ];
-  propagatedBuildInputs = [ python3Packages.libxml2 ];
+  nativeBuildInputs = [intltool pkg-config libxslt.dev];
+  buildInputs = [libxml2 libxslt bash];
+  propagatedBuildInputs = [python3Packages.libxml2];
 
-  configureFlags = [ "--disable-scrollkeeper" ];
+  configureFlags = ["--disable-scrollkeeper"];
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -40,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Collection of documentation utilities for the GNOME project";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-doc-utils";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [gpl2Plus lgpl2Plus];
     platforms = platforms.all;
   };
 }

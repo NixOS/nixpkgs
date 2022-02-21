@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, click
-, pytestCheckHook
-, shellingham
-, pytest-xdist
-, pytest-sugar
-, coverage
-, mypy
-, black
-, isort
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  pytestCheckHook,
+  shellingham,
+  pytest-xdist,
+  pytest-sugar,
+  coverage,
+  mypy,
+  black,
+  isort,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "typer";
   version = "0.4.0";
@@ -49,12 +49,12 @@ buildPythonPackage rec {
     "test_install_completion"
   ];
 
-  pythonImportsCheck = [ "typer" ];
+  pythonImportsCheck = ["typer"];
 
   meta = with lib; {
     description = "Python library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ winpat ];
+    maintainers = with maintainers; [winpat];
   };
 }

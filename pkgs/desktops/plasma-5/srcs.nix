@@ -1,8 +1,9 @@
 # DO NOT EDIT! This file is generated automatically.
 # Command: ./maintainers/scripts/fetch-kde-qt.sh pkgs/desktops/plasma-5
-{ fetchurl, mirror }:
-
 {
+  fetchurl,
+  mirror,
+}: {
   bluedevil = {
     version = "5.23.5";
     src = fetchurl {

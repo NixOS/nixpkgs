@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, glib
-, i2c-tools
-, udev
-, kmod
-, libgudev
-, libusb1
-, libdrm
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  i2c-tools,
+  udev,
+  kmod,
+  libgudev,
+  libusb1,
+  libdrm,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ddcutil";
   version = "1.2.2";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hbd2ybpqmm96icg387vr57dqkdbc20vyimqjq5yx0sdlp4ikzi7";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   buildInputs = [
     glib
@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
     description = "Query and change Linux monitor settings using DDC/CI and USB";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [rnhmjoj];
   };
 }
-

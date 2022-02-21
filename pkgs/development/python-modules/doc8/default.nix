@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, chardet
-, docutils
-, fetchPypi
-, pbr
-, pygments
-, pytestCheckHook
-, pythonOlder
-, restructuredtext_lint
-, setuptools-scm
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  docutils,
+  fetchPypi,
+  pbr,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  restructuredtext_lint,
+  setuptools-scm,
+  stevedore,
 }:
-
 buildPythonPackage rec {
   pname = "doc8";
   version = "0.10.1";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Style checker for Sphinx (or other) RST documentation";
     homepage = "https://github.com/pycqa/doc8";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

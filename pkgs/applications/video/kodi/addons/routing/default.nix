@@ -1,4 +1,9 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "routing";
   namespace = "script.module.routing";

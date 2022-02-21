@@ -1,8 +1,5 @@
-{ pkgs, ... }:
-
-with pkgs;
-
-{
+{pkgs, ...}:
+with pkgs; {
   pass-audit = callPackage ./audit {
     pythonPackages = python3Packages;
   };

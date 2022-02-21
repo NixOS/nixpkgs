@@ -1,14 +1,15 @@
-{ stdenv
-, fetchurl
-, lib
-, autoPatchelfHook
-, wrapQtAppsHook
-, libbsd
-, python27
-, gmpxx
-, ncurses5
-, gnustep
-, libffi
+{
+  stdenv,
+  fetchurl,
+  lib,
+  autoPatchelfHook,
+  wrapQtAppsHook,
+  libbsd,
+  python27,
+  gmpxx,
+  ncurses5,
+  gnustep,
+  libffi,
 }:
 stdenv.mkDerivation rec {
   pname = "hopper";

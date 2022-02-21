@@ -1,9 +1,11 @@
 # Fusion Inventory daemon.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.fusionInventory;
 
   configFile = pkgs.writeText "fusion_inventory.conf" ''
@@ -13,15 +15,11 @@ let
 
     ${cfg.extraConfig}
   '';
-
 in {
-
   ###### interface
 
   options = {
-
     services.fusionInventory = {
-
       enable = mkEnableOption "Fusion Inventory Agent";
 
       servers = mkOption {
@@ -41,11 +39,9 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users.fusion-inventory = {
       description = "FusionInventory user";
       isSystemUser = true;
@@ -53,7 +49,7 @@ in {
 
     systemd.services.fusion-inventory = {
       description = "Fusion Inventory Agent";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         ExecStart = "${pkgs.fusionInventory}/bin/fusioninventory-agent --conf-file=${configFile} --daemon --no-fork";

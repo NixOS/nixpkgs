@@ -1,9 +1,28 @@
-{ lib, stdenv, fetchFromGitHub
-, asciidoctor, autoreconfHook, pkg-config
-, boost, libctemplate, libmaxminddb, libpcap, libtins, openssl, protobuf, xz, zlib
-, cbor-diag, cddl, diffutils, file, mktemp, netcat, tcpdump, wireshark-cli
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asciidoctor,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  libctemplate,
+  libmaxminddb,
+  libpcap,
+  libtins,
+  openssl,
+  protobuf,
+  xz,
+  zlib,
+  cbor-diag,
+  cddl,
+  diffutils,
+  file,
+  mktemp,
+  netcat,
+  tcpdump,
+  wireshark-cli,
 }:
-
 stdenv.mkDerivation rec {
   pname = "compactor";
   version = "1.2.0";
@@ -62,10 +81,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools to capture DNS traffic and record it in C-DNS files";
-    homepage    = "https://dns-stats.org/";
-    changelog   = "https://github.com/dns-stats/${pname}/raw/${version}/ChangeLog.txt";
-    license     = licenses.mpl20;
-    maintainers = with maintainers; [ fdns ];
-    platforms   = platforms.unix;
+    homepage = "https://dns-stats.org/";
+    changelog = "https://github.com/dns-stats/${pname}/raw/${version}/ChangeLog.txt";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [fdns];
+    platforms = platforms.unix;
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  gmp,
+  gcc,
+}:
 stdenv.mkDerivation rec {
   pname = "mkcl";
   version = "1.1.11";
@@ -20,11 +27,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  propagatedBuildInputs = [ gmp ];
+  propagatedBuildInputs = [gmp];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   configureFlags = [
     "GMP_CFLAGS=-I${lib.getDev gmp}/include"
@@ -32,14 +39,14 @@ stdenv.mkDerivation rec {
   ];
 
   # tinycc configure flags copied from the tinycc derivation.
-  postConfigure = ''(
-    cd contrib/tinycc
-    ./configure --cc=cc \
-      --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
-      --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
-      --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
-      --libpaths=${lib.getLib stdenv.cc.libc}/lib
-  )'';
+  postConfigure = ''    (
+        cd contrib/tinycc
+        ./configure --cc=cc \
+          --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
+          --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
+          --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
+          --libpaths=${lib.getLib stdenv.cc.libc}/lib
+      )'';
 
   postInstall = ''
     wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin"
@@ -52,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://common-lisp.net/project/mkcl/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tohl ];
+    maintainers = with maintainers; [tohl];
   };
 }

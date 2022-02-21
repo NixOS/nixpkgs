@@ -1,50 +1,41 @@
 # GNOME Settings Daemon
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.gnome.gnome-settings-daemon;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.gnome.gnome-settings-daemon;
+in {
   meta = {
     maintainers = teams.gnome.members;
   };
 
   imports = [
     (mkRemovedOptionModule
-      ["services" "gnome3" "gnome-settings-daemon" "package"]
-      "")
+    ["services" "gnome3" "gnome-settings-daemon" "package"]
+    "")
 
     # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-settings-daemon" "enable" ]
-      [ "services" "gnome" "gnome-settings-daemon" "enable" ]
+    (
+      mkRenamedOptionModule
+      ["services" "gnome3" "gnome-settings-daemon" "enable"]
+      ["services" "gnome" "gnome-settings-daemon" "enable"]
     )
   ];
 
   ###### interface
 
   options = {
-
     services.gnome.gnome-settings-daemon = {
-
       enable = mkEnableOption "GNOME Settings Daemon";
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     environment.systemPackages = [
       pkgs.gnome.gnome-settings-daemon
     ];
@@ -64,7 +55,5 @@ in
     systemd.user.targets."gnome-session-x11-services-ready".wants = [
       "org.gnome.SettingsDaemon.XSettings.service"
     ];
-
   };
-
 }

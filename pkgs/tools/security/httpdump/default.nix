@@ -1,9 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, libpcap
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  libpcap,
 }:
-
 buildGoModule rec {
   pname = "httpdump";
   version = "20210126-${lib.strings.substring 0 7 rev}";
@@ -18,12 +18,12 @@ buildGoModule rec {
 
   vendorSha256 = "0lb1p63lzn1ngj54bar9add7w0azvgcq3azhv9c5glk3ykv9c3iy";
 
-  propagatedBuildInputs = [ libpcap ];
+  propagatedBuildInputs = [libpcap];
 
   meta = with lib; {
     description = "Parse and display HTTP traffic from network device or pcap file";
     homepage = "https://github.com/hsiafan/httpdump";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd2];
+    maintainers = with maintainers; [fab];
   };
 }

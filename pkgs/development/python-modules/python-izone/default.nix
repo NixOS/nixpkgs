@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, netifaces
-, pytest-aio
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  netifaces,
+  pytest-aio,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "python-izone";
   version = "1.2.4";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python interface to the iZone airconditioner controller";
     homepage = "https://github.com/Swamp-Ig/pizone";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

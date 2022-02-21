@@ -1,5 +1,9 @@
-{ buildGoModule, fetchFromGitHub, stdenv, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  lib,
+}:
 buildGoModule rec {
   pname = "fly";
   version = "7.6.0";
@@ -15,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "fly" ];
+  subPackages = ["fly"];
 
   ldflags = [
     "-X github.com/concourse/concourse.Version=${version}"
@@ -31,6 +35,6 @@ buildGoModule rec {
     description = "A command line interface to Concourse CI";
     homepage = "https://concourse-ci.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ivanbrennan ];
+    maintainers = with maintainers; [ivanbrennan];
   };
 }

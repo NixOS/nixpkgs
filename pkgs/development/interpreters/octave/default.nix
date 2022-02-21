@@ -1,87 +1,97 @@
-{ stdenv
-, pkgs
-, lib
-# Note: either stdenv.mkDerivation or, for octaveFull, the qt-5 mkDerivation
-# with wrapQtAppsHook (comes from libsForQt5.callPackage)
-, mkDerivation
-, fetchurl
-, gfortran
-, ncurses
-, perl
-, flex
-, texinfo
-, qhull
-, libsndfile
-, portaudio
-, libX11
-, graphicsmagick
-, pcre
-, pkg-config
-, libGL
-, libGLU
-, fltk
-# Both are needed for discrete Fourier transform
-, fftw
-, fftwSinglePrec
-, zlib
-, curl
-, blas, lapack
-# These two should use the same lapack and blas as the above
-, qrupdate, arpack, suitesparse ? null
-# If set to true, the above 5 deps are overriden to use the blas and lapack
-# with 64 bit indexes support. If all are not compatible, the build will fail.
-, use64BitIdx ? false
-, libwebp
-, gl2ps
-, ghostscript ? null
-, hdf5 ? null
-, glpk ? null
-, gnuplot ? null
-# - Include support for GNU readline:
-, enableReadline ? true
-, readline ? null
-# - Build Java interface:
-, enableJava ? true
-, jdk ? null
-, python ? null
-, overridePlatforms ? null
-, sundials ? null
-# - Packages required for building extra packages.
-, newScope
-, callPackage
-, makeSetupHook
-, makeWrapper
-# - Build Octave Qt GUI:
-, enableQt ? false
-, qtbase ? null
-, qtsvg ? null
-, qtscript ? null
-, qscintilla ? null
-, qttools ? null
-# - JIT compiler for loops:
-, enableJIT ? false
-, llvm ? null
-, libiconv
-, darwin
-}:
-
-let
-
+{
+  stdenv,
+  pkgs,
+  lib
+  # Note: either stdenv.mkDerivation or, for octaveFull, the qt-5 mkDerivation
+  # with wrapQtAppsHook (comes from libsForQt5.callPackage)
+  ,
+  mkDerivation,
+  fetchurl,
+  gfortran,
+  ncurses,
+  perl,
+  flex,
+  texinfo,
+  qhull,
+  libsndfile,
+  portaudio,
+  libX11,
+  graphicsmagick,
+  pcre,
+  pkg-config,
+  libGL,
+  libGLU,
+  fltk
+  # Both are needed for discrete Fourier transform
+  ,
+  fftw,
+  fftwSinglePrec,
+  zlib,
+  curl,
+  blas,
+  lapack
+  # These two should use the same lapack and blas as the above
+  ,
+  qrupdate,
+  arpack,
+  suitesparse ? null
+  # If set to true, the above 5 deps are overriden to use the blas and lapack
+  # with 64 bit indexes support. If all are not compatible, the build will fail.
+  ,
+  use64BitIdx ? false,
+  libwebp,
+  gl2ps,
+  ghostscript ? null,
+  hdf5 ? null,
+  glpk ? null,
+  gnuplot ? null
+  # - Include support for GNU readline:
+  ,
+  enableReadline ? true,
+  readline ? null
+  # - Build Java interface:
+  ,
+  enableJava ? true,
+  jdk ? null,
+  python ? null,
+  overridePlatforms ? null,
+  sundials ? null
+  # - Packages required for building extra packages.
+  ,
+  newScope,
+  callPackage,
+  makeSetupHook,
+  makeWrapper
+  # - Build Octave Qt GUI:
+  ,
+  enableQt ? false,
+  qtbase ? null,
+  qtsvg ? null,
+  qtscript ? null,
+  qscintilla ? null,
+  qttools ? null
+  # - JIT compiler for loops:
+  ,
+  enableJIT ? false,
+  llvm ? null,
+  libiconv,
+  darwin,
+}: let
   # Not always evaluated
-  blas' = if use64BitIdx then
-    blas.override {
-      isILP64 = true;
-    }
-  else
-    blas
-  ;
-  lapack' = if use64BitIdx then
-    lapack.override {
-      isILP64 = true;
-    }
-  else
-    lapack
-  ;
+  blas' =
+    if use64BitIdx
+    then
+      blas.override {
+        isILP64 = true;
+      }
+    else blas;
+  lapack' =
+    if use64BitIdx
+    then
+      lapack.override {
+        isILP64 = true;
+      }
+    else lapack;
   qrupdate' = qrupdate.override {
     # If use64BitIdx is false, this override doesn't evaluate to a new
     # derivation, as blas and lapack are not overriden.
@@ -93,14 +103,14 @@ let
     lapack = lapack';
   };
   # Not always suitesparse is required at all
-  suitesparse' = if suitesparse != null then
-    suitesparse.override {
-      blas = blas';
-      lapack = lapack';
-    }
-  else
-    null
-  ;
+  suitesparse' =
+    if suitesparse != null
+    then
+      suitesparse.override {
+        blas = blas';
+        lapack = lapack';
+      }
+    else null;
 
   octavePackages = import ../../../top-level/octave-packages.nix {
     inherit pkgs;
@@ -122,63 +132,63 @@ let
       sha256 = "sha256-tI8z1Pzq85TPvqc6jIUAAJNtg6QXOaJPdWi1sKezms0=";
     };
 
-    buildInputs = [
-      readline
-      ncurses
-      perl
-      flex
-      qhull
-      graphicsmagick
-      pcre
-      fltk
-      zlib
-      curl
-      blas'
-      lapack'
-      libsndfile
-      fftw
-      fftwSinglePrec
-      portaudio
-      qrupdate'
-      arpack'
-      libwebp
-      gl2ps
-    ]
-    ++ lib.optionals enableQt [
-      qtbase
-      qtsvg
-      qscintilla
-    ]
-    ++ lib.optionals (ghostscript != null) [ ghostscript ]
-    ++ lib.optionals (hdf5 != null) [ hdf5 ]
-    ++ lib.optionals (glpk != null) [ glpk ]
-    ++ lib.optionals (suitesparse != null) [ suitesparse' ]
-    ++ lib.optionals (enableJava) [ jdk ]
-    ++ lib.optionals (sundials != null) [ sundials ]
-    ++ lib.optionals (gnuplot != null) [ gnuplot ]
-    ++ lib.optionals (python != null) [ python ]
-    ++ lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ]
-    ++ lib.optionals stdenv.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Accelerate
-      darwin.apple_sdk.frameworks.Cocoa
-    ]
-    ;
-    nativeBuildInputs = [
-      pkg-config
-      gfortran
-      # Listed here as well because it's outputs are split
-      fftw
-      fftwSinglePrec
-      texinfo
-    ]
-    ++ lib.optionals (sundials != null) [ sundials ]
-    ++ lib.optionals enableJIT [ llvm ]
-    ++ lib.optionals enableQt [
-      qtscript
-      qttools
-    ]
-    ;
+    buildInputs =
+      [
+        readline
+        ncurses
+        perl
+        flex
+        qhull
+        graphicsmagick
+        pcre
+        fltk
+        zlib
+        curl
+        blas'
+        lapack'
+        libsndfile
+        fftw
+        fftwSinglePrec
+        portaudio
+        qrupdate'
+        arpack'
+        libwebp
+        gl2ps
+      ]
+      ++ lib.optionals enableQt [
+        qtbase
+        qtsvg
+        qscintilla
+      ]
+      ++ lib.optionals (ghostscript != null) [ghostscript]
+      ++ lib.optionals (hdf5 != null) [hdf5]
+      ++ lib.optionals (glpk != null) [glpk]
+      ++ lib.optionals (suitesparse != null) [suitesparse']
+      ++ lib.optionals (enableJava) [jdk]
+      ++ lib.optionals (sundials != null) [sundials]
+      ++ lib.optionals (gnuplot != null) [gnuplot]
+      ++ lib.optionals (python != null) [python]
+      ++ lib.optionals (!stdenv.isDarwin) [libGL libGLU libX11]
+      ++ lib.optionals stdenv.isDarwin [
+        libiconv
+        darwin.apple_sdk.frameworks.Accelerate
+        darwin.apple_sdk.frameworks.Cocoa
+      ];
+    nativeBuildInputs =
+      [
+        pkg-config
+        gfortran
+        # Listed here as well because it's outputs are split
+        fftw
+        fftwSinglePrec
+        texinfo
+      ]
+      ++ lib.optionals (sundials != null) [sundials]
+      ++ lib.optionals enableJIT [llvm]
+      ++ lib.optionals enableQt [
+        qtscript
+        qttools
+      ];
 
     doCheck = !stdenv.isDarwin;
 
@@ -188,19 +198,24 @@ let
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
 
     # See https://savannah.gnu.org/bugs/?50339
-    F77_INTEGER_8_FLAG = if use64BitIdx then "-fdefault-integer-8" else "";
+    F77_INTEGER_8_FLAG =
+      if use64BitIdx
+      then "-fdefault-integer-8"
+      else "";
 
-    configureFlags = [
-      "--with-blas=blas"
-      "--with-lapack=lapack"
-      (if use64BitIdx then "--enable-64" else "--disable-64")
-    ]
-    ++ lib.optionals stdenv.isDarwin [ "--enable-link-all-dependencies" ]
-    ++ lib.optionals enableReadline [ "--enable-readline" ]
-    ++ lib.optionals stdenv.isDarwin [ "--with-x=no" ]
-    ++ lib.optionals enableQt [ "--with-qt=5" ]
-    ++ lib.optionals enableJIT [ "--enable-jit" ]
-    ;
+    configureFlags =
+      [
+        "--with-blas=blas"
+        "--with-lapack=lapack"
+        (if use64BitIdx
+        then "--enable-64"
+        else "--disable-64")
+      ]
+      ++ lib.optionals stdenv.isDarwin ["--enable-link-all-dependencies"]
+      ++ lib.optionals enableReadline ["--enable-readline"]
+      ++ lib.optionals stdenv.isDarwin ["--with-x=no"]
+      ++ lib.optionals enableQt ["--with-qt=5"]
+      ++ lib.optionals enableJIT ["--enable-jit"];
 
     # Keep a copy of the octave tests detailed results in the output
     # derivation, because someone may care
@@ -226,7 +241,7 @@ let
         inherit octavePackages wrapOctave;
         inherit (octavePackages) computeRequiredOctavePackages;
       };
-      withPackages = import ./with-packages.nix { inherit buildEnv octavePackages; };
+      withPackages = import ./with-packages.nix {inherit buildEnv octavePackages;};
       pkgs = octavePackages;
       interpreter = "${self}/bin/octave";
     };
@@ -234,14 +249,15 @@ let
     meta = {
       homepage = "https://www.gnu.org/software/octave/";
       license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [ raskin doronbehar ];
+      maintainers = with lib.maintainers; [raskin doronbehar];
       description = "Scientific Programming Language";
       # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
       broken = enableJIT;
-      platforms = if overridePlatforms == null then
-        (lib.platforms.linux ++ lib.platforms.darwin)
-      else overridePlatforms;
+      platforms =
+        if overridePlatforms == null
+        then (lib.platforms.linux ++ lib.platforms.darwin)
+        else overridePlatforms;
     };
   };
-
-in self
+in
+  self

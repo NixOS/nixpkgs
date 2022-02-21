@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "first";
   version = "2.0.2";
@@ -15,6 +18,6 @@ buildPythonPackage rec {
     description = "The function you always missed in Python";
     homepage = "https://github.com/hynek/first/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

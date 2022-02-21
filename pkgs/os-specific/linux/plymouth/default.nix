@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchFromGitLab
-, pkg-config
-, autoreconfHook
-, libxslt
-, docbook-xsl-nons
-, gettext
-, gtk3
-, systemd
-, pango
-, cairo
-, libdrm
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitLab,
+  pkg-config,
+  autoreconfHook,
+  libxslt,
+  docbook-xsl-nons,
+  gettext,
+  gtk3,
+  systemd,
+  pango,
+  cairo,
+  libdrm,
 }:
-
 stdenv.mkDerivation rec {
   pname = "plymouth";
   version = "unstable-2021-10-18";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       configure.ac
   '';
 
-  configurePlatforms = [ "host" ];
+  configurePlatforms = ["host"];
 
   configureFlags = [
     "--enable-documentation"
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
     description = "Boot splash and boot logger";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu teams.gnome.members ];
+    maintainers = [maintainers.goibhniu teams.gnome.members];
     platforms = platforms.linux;
   };
 }

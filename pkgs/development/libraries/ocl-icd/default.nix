@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ruby
-, opencl-headers
-, addOpenGLRunpath
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  opencl-headers,
+  addOpenGLRunpath,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ocl-icd";
   version = "2.3.1";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ruby
   ];
 
-  buildInputs = [ opencl-headers ];
+  buildInputs = [opencl-headers];
 
   configureFlags = [
     "--enable-custom-vendordir=/run/opengl-driver/etc/OpenCL/vendors"
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "OpenCL ICD Loader for ${opencl-headers.name}";
-    homepage    = "https://github.com/OCL-dev/ocl-icd";
-    license     = licenses.bsd2;
+    homepage = "https://github.com/OCL-dev/ocl-icd";
+    license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
   };
 }

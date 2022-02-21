@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, amtk
-, gnome
-, gobject-introspection
-, gtk3
-, gtksourceview4
-, icu
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  amtk,
+  gnome,
+  gobject-introspection,
+  gtk3,
+  gtksourceview4,
+  icu,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tepl";
   version = "6.00.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
-    maintainers = teams.gnome.members ++ [ maintainers.manveru ];
+    maintainers = teams.gnome.members ++ [maintainers.manveru];
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
   };

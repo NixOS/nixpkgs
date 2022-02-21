@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, urllib3
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  urllib3,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "python-opendata-transport";
   version = "0.3.0";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for interacting with transport.opendata.ch";
     homepage = "https://github.com/home-assistant-ecosystem/python-opendata-transport";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

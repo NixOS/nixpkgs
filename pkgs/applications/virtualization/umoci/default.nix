@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, go-md2man
-, installShellFiles
-, bash
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  go-md2man,
+  installShellFiles,
+  bash,
 }:
-
 buildGoModule rec {
   pname = "umoci";
   version = "0.4.7";
@@ -21,9 +21,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
-  nativeBuildInputs = [ go-md2man installShellFiles ];
+  nativeBuildInputs = [go-md2man installShellFiles];
 
   postInstall = ''
     substituteInPlace Makefile --replace \
@@ -36,7 +36,7 @@ buildGoModule rec {
     description = "umoci modifies Open Container images";
     homepage = "https://umo.ci";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zokrezyl ];
+    maintainers = with maintainers; [zokrezyl];
     platforms = platforms.unix;
   };
 }

@@ -1,15 +1,15 @@
-{ stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, gettext
-, lib
-, libiconv
-, libtool
-, libusb1
-, pkg-config
+{
+  stdenv,
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  gettext,
+  lib,
+  libiconv,
+  libtool,
+  libusb1,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libmtp";
   version = "1.1.19";
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libmtp";
     repo = "libmtp";
-    rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    rev = "libmtp-${builtins.replaceStrings ["."] ["-"] version}";
     sha256 = "sha256-o8JKoKVNpU/nHTDnKJpa8FlXt37fZnTf45WBTCxLyTs=";
   };
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = ["bin" "dev" "out"];
 
   nativeBuildInputs = [
     autoconf
@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ libiconv ];
+  buildInputs = [libiconv];
 
-  propagatedBuildInputs = [ libusb1 ];
+  propagatedBuildInputs = [libusb1];
 
   preConfigure = "./autogen.sh";
 
-  configureFlags = [ "--with-udev=${placeholder "out"}/lib/udev" ];
+  configureFlags = ["--with-udev=${placeholder "out"}/lib/udev"];
 
   enableParallelBuilding = true;
 
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

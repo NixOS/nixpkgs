@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "mmake";
   version = "1.2.0";
@@ -23,8 +26,8 @@ buildGoPackage rec {
       functionality,  such   as  user-friendly  help   output,  remote
       includes,  and   eventually  more.   It  otherwise  acts   as  a
       pass-through to standard make.
-      '';
+    '';
     license = licenses.mit;
-    maintainers = [ maintainers.gabesoft ];
+    maintainers = [maintainers.gabesoft];
   };
 }

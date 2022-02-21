@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, curl, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  libxml2,
+}:
 stdenv.mkDerivation {
   pname = "libs3";
   version = "unstable-2018-12-03";
@@ -11,9 +16,9 @@ stdenv.mkDerivation {
     sha256 = "1ahf08hc7ql3fazfmlyj9vrhq7cvarsmgn2v8149y63zr1fl61hs";
   };
 
-  buildInputs = [ curl libxml2 ];
+  buildInputs = [curl libxml2];
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = ["DESTDIR=$(out)"];
 
   meta = with lib; {
     homepage = "https://github.com/bji/libs3";

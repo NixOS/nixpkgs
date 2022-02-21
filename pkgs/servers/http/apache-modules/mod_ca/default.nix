@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, apacheHttpd, openssl, openldap, apr, aprutil }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  apacheHttpd,
+  openssl,
+  openldap,
+  apr,
+  aprutil,
+}:
 stdenv.mkDerivation rec {
   pname = "mod_ca";
   version = "0.2.2";
@@ -9,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gs66br3aig749rzifxn6j1rz2kps4hc4jppscly48lypgyygy8s";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ apacheHttpd openssl openldap apr aprutil ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [apacheHttpd openssl openldap apr aprutil];
 
   # Note that configureFlags and installFlags are inherited by
   # the various submodules.
@@ -30,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://redwax.eu";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dirkx ];
+    maintainers = with maintainers; [dirkx];
   };
 }

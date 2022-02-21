@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake
-, libtool, flex, libevent, hwloc, munge, zlib, pandoc
-} :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  autoconf,
+  automake,
+  libtool,
+  flex,
+  libevent,
+  hwloc,
+  munge,
+  zlib,
+  pandoc,
+}:
 stdenv.mkDerivation rec {
   pname = "pmix";
   version = "3.2.3";
@@ -18,9 +29,9 @@ stdenv.mkDerivation rec {
     patchShebangs ./config
   '';
 
-  nativeBuildInputs = [ pandoc perl autoconf automake libtool flex ];
+  nativeBuildInputs = [pandoc perl autoconf automake libtool flex];
 
-  buildInputs = [ libevent hwloc munge zlib ];
+  buildInputs = [libevent hwloc munge zlib];
 
   configureFlags = [
     "--with-libevent=${libevent.dev}"
@@ -38,8 +49,7 @@ stdenv.mkDerivation rec {
     description = "Process Management Interface for HPC environments";
     homepage = "https://openpmix.github.io/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    maintainers = [maintainers.markuskowa];
     platforms = platforms.linux;
   };
 }
-

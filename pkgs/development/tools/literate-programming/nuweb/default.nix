@@ -1,7 +1,10 @@
-{lib, stdenv, fetchurl, tex}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tex,
+}:
 stdenv.mkDerivation rec {
-
   pname = "nuweb";
   version = "1.60";
 
@@ -10,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "08xmwq48biy2c1fr8wnyknyvqs9jfsj42cb7fw638xqv35f0xxvl";
   };
 
-  buildInputs = [ tex ];
+  buildInputs = [tex];
 
   patchPhase = ''
     sed -ie 's|nuweb -r|./nuweb -r|' Makefile
@@ -31,8 +34,9 @@ stdenv.mkDerivation rec {
     description = "A simple literate programming tool";
     homepage = "http://nuweb.sourceforge.net";
     license = licenses.free;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: nuweb.el Emacs integration
+

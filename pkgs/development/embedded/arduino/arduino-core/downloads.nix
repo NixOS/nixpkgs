@@ -1,6 +1,7 @@
-{ fetchurl
-, optionalAttrs
-, system
+{
+  fetchurl,
+  optionalAttrs,
+  system,
 }:
 # This file preloads all the archives which Arduino's build/build.xml
 # would otherwise try to download itself. When updating this for a new
@@ -116,7 +117,6 @@
     sha256 = "sha256-kAxIhYQ8P2ULTzQwi6bUXXEXJ53mKNgQxuwX3QYhNoQ=";
   };
 }
-
 // optionalAttrs (system == "x86_64-linux") {
   "build/arduino-builder-linux64-1.6.1.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-linux64-1.6.1.tar.bz2";
@@ -135,7 +135,6 @@
     sha256 = "1ylz4pfa9np0nn0w9igmmm3sr8hz3na04n7cv8ia3hzz84jfwida";
   };
 }
-
 // optionalAttrs (system == "i686-linux") {
   "build/arduino-builder-linux32-1.6.1.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-linux32-1.6.1.tar.bz2";
@@ -154,7 +153,6 @@
     sha256 = "1cl79019ldsq0sc3fd4pm0vx2kqcklld7w03hdcj99y7zgb5jzry";
   };
 }
-
 // optionalAttrs (system == "x86_64-darwin") {
   "build/arduino-builder-macosx-1.6.1-signed.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-macosx-1.6.1-signed.tar.bz2";
@@ -177,7 +175,6 @@
     sha256 = "1ims951z7ajprqms7yd8ll83c79n7krhd9ljw30yn61f6jk46x82";
   };
 }
-
 // optionalAttrs (system == "aarch64-linux") {
   "build/arduino-builder-linuxaarch64-1.6.1.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-linuxaarch64-1.6.1.tar.bz2";
@@ -196,7 +193,6 @@
     sha256 = "04s1is2w8xhvc7lg0lmyk0yjsnar2l2gdc6ig7lkgb7zgkrxhpl3";
   };
 }
-
 // optionalAttrs (builtins.match "armv[67]l-linux" system != null) {
   "build/arduino-builder-linuxarm-1.6.1.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-linuxarm-1.6.1.tar.bz2";

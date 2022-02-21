@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, typing-extensions
-, mypy
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  typing-extensions,
+  mypy,
 }:
-
 buildPythonPackage rec {
   pname = "pandas-stubs";
   version = "1.2.0.39";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [ "pandas" ];
-  checkInputs = [ mypy ];
+  pythonImportsCheck = ["pandas"];
+  checkInputs = [mypy];
   checkPhase = ''
     mypy --config-file mypy.ini third_party/3/pandas tests/snippets
   '';
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Type annotations for Pandas";
     homepage = "https://github.com/VirtusLab/pandas-stubs";
     license = licenses.mit;
-    maintainers = [ maintainers.malo ];
+    maintainers = [maintainers.malo];
   };
 }

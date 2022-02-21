@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, fetchPypi
-, jmespath
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  jmespath,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pysma";
   version = "0.6.10";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with SMA Solar's WebConnect";
     homepage = "https://github.com/kellerza/pysma";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

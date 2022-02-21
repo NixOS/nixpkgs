@@ -1,5 +1,11 @@
-{lib, stdenv, fetchurl, libxml2, openssl, bzip2}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  openssl,
+  bzip2,
+}:
 stdenv.mkDerivation rec {
   pname = "dclib";
   version = "0.3.7";
@@ -15,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Peer-to-Peer file sharing client";
     homepage = "http://dcgui.berlios.de";
     platforms = platforms.linux;
-    license = [ licenses.openssl licenses.gpl2 ];
+    license = [licenses.openssl licenses.gpl2];
   };
 }

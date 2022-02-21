@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   options.programs.browserpass.enable = mkEnableOption "Browserpass native messaging host";
 
   config = mkIf config.programs.browserpass.enable {

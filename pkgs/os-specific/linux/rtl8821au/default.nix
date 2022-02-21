@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+  nukeReferences,
+}:
 stdenv.mkDerivation rec {
   pname = "rtl8821au";
   version = "${kernel.version}-unstable-2021-11-05";
@@ -11,12 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "0d90zd45b8934wxy51q1x39lx4n3i28zjm6jcq98wkm4lypgphxv";
   };
 
-  nativeBuildInputs = [ bc nukeReferences ];
+  nativeBuildInputs = [bc nukeReferences];
   buildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = ["pic" "format"];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -40,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "rtl8821AU and rtl8812AU chipset driver with firmware";
     homepage = "https://github.com/morrownr/8821au";
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ plchldr ];
+    platforms = ["x86_64-linux" "i686-linux"];
+    maintainers = with maintainers; [plchldr];
   };
 }

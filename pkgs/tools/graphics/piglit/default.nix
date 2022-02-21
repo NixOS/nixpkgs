@@ -1,23 +1,23 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, cmake
-, freeglut
-, libGL
-, libGLU
-, libglvnd
-, makeWrapper
-, ninja
-, pkg-config
-, python3
-, waffle
-, wayland
-, libX11
-, libXrender
-, libxcb
-, libxkbcommon
+{
+  stdenv,
+  fetchFromGitLab,
+  lib,
+  cmake,
+  freeglut,
+  libGL,
+  libGLU,
+  libglvnd,
+  makeWrapper,
+  ninja,
+  pkg-config,
+  python3,
+  waffle,
+  wayland,
+  libX11,
+  libXrender,
+  libxcb,
+  libxkbcommon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "piglit";
   version = "unstable-2020-10-23";
@@ -39,10 +39,11 @@ stdenv.mkDerivation rec {
     libXrender
     libxcb
     libxkbcommon
-    (python3.withPackages (ps: with ps; [
-      Mako
-      numpy
-    ]))
+    (python3.withPackages (ps:
+      with ps; [
+        Mako
+        numpy
+      ]))
     waffle
     wayland
   ];
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/piglit \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libglvnd ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL libglvnd]} \
       --prefix PATH : "${waffle}/bin"
   '';
 
@@ -72,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/mesa/piglit";
     license = licenses.free; # custom license. See COPYING in the source repo.
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with maintainers; [Flakebi];
   };
 }

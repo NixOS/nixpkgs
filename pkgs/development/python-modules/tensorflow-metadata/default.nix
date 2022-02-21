@@ -1,10 +1,10 @@
-{ absl-py
-, buildPythonPackage
-, fetchFromGitHub
-, googleapis-common-protos
-, lib
+{
+  absl-py,
+  buildPythonPackage,
+  fetchFromGitHub,
+  googleapis-common-protos,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "tensorflow-metadata";
   version = "1.5.0";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Standard representations for metadata that are useful when training machine learning models with TensorFlow";
     homepage = "https://github.com/tensorflow/metadata";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

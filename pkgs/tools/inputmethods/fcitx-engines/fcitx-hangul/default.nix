@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, cmake, fcitx, libhangul, gettext, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  fcitx,
+  libhangul,
+  gettext,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "fcitx-hangul";
   version = "0.3.1";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ds4071ljq620w7vnprm2jl8zqqkw7qsxvzbjapqak4jarczvmbd";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ fcitx libhangul gettext ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [fcitx libhangul gettext];
 
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \
@@ -21,11 +29,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-hangul";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-hangul/";
-    description   = "Fcitx Wrapper for hangul";
-    license       = licenses.gpl2;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/fcitx/fcitx-hangul";
+    downloadPage = "http://download.fcitx-im.org/fcitx-hangul/";
+    description = "Fcitx Wrapper for hangul";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ericsagnes];
   };
 }

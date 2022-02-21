@@ -1,17 +1,16 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
-
-  cfg = config.services.gitDaemon;
-
-in
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.gitDaemon;
+in {
   ###### interface
 
   options = {
     services.gitDaemon = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -56,7 +55,7 @@ in
       repositories = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "/srv/git" "/home/user/git/repo2" ];
+        example = ["/srv/git" "/home/user/git/repo2"];
         description = ''
           A whitelist of paths of git repositories, or directories containing repositories
           all of which would be published. Paths must not end in "/".
@@ -96,14 +95,12 @@ in
         default = "git";
         description = "Group under which Git daemon would be running.";
       };
-
     };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users = optionalAttrs (cfg.user == "git") {
       git = {
         uid = config.ids.uids.git;
@@ -117,15 +114,16 @@ in
     };
 
     systemd.services.git-daemon = {
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      script = "${pkgs.git}/bin/git daemon --reuseaddr "
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
+      script =
+        "${pkgs.git}/bin/git daemon --reuseaddr "
         + (optionalString (cfg.basePath != "") "--base-path=${cfg.basePath} ")
         + (optionalString (cfg.listenAddress != "") "--listen=${cfg.listenAddress} ")
         + "--port=${toString cfg.port} --user=${cfg.user} --group=${cfg.group} ${cfg.options} "
-        + "--verbose " + (optionalString cfg.exportAll "--export-all ")  + concatStringsSep " " cfg.repositories;
+        + "--verbose "
+        + (optionalString cfg.exportAll "--export-all ")
+        + concatStringsSep " " cfg.repositories;
     };
-
   };
-
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, jre, ctags, makeWrapper, coreutils, git, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  ctags,
+  makeWrapper,
+  coreutils,
+  git,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "opengrok";
   version = "1.0";
@@ -10,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0h4rwfh8m41b7ij931gcbmkihri25m48373qf6ig0714s66xwc4i";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out
@@ -18,7 +27,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/OpenGrok --replace "/bin/uname" "${coreutils}/bin/uname"
     substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!${runtimeShell}"
     wrapProgram $out/bin/OpenGrok \
-      --prefix PATH : "${lib.makeBinPath [ ctags git ]}" \
+      --prefix PATH : "${lib.makeBinPath [ctags git]}" \
       --set JAVA_HOME "${jre}" \
       --set OPENGROK_TOMCAT_BASE "/var/tomcat"
   '';
@@ -27,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "Source code search and cross reference engine";
     homepage = "https://opengrok.github.io/OpenGrok/";
     license = licenses.cddl;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, atk, glibmm, pkg-config, gnome, meson, ninja, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  atk,
+  glibmm,
+  pkg-config,
+  gnome,
+  meson,
+  ninja,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "atkmm";
   version = "2.28.2";
@@ -9,11 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oLtJdlzszCk6ssZzW6EAQxgH04T/oUwuvTDgeZP9L6Q=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  propagatedBuildInputs = [ atk glibmm ];
+  propagatedBuildInputs = [atk glibmm];
 
-  nativeBuildInputs = [ pkg-config meson python3 ninja ];
+  nativeBuildInputs = [pkg-config meson python3 ninja];
 
   doCheck = true;
 

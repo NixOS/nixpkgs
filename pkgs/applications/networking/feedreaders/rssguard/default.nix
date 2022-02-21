@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook, wrapQtAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtwebengine,
+  qttools,
+  wrapGAppsHook,
+  wrapQtAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "rssguard";
   version = "4.1.2";
@@ -11,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aG7Wkn2CHe7Dumskd0+DMja95lzvBWnFXACSqfU7Ow0=";
   };
 
-  buildInputs =  [ qtwebengine qttools ];
-  nativeBuildInputs = [ qmake wrapGAppsHook wrapQtAppsHook ];
-  qmakeFlags = [ "CONFIG+=release" ];
+  buildInputs = [qtwebengine qttools];
+  nativeBuildInputs = [qmake wrapGAppsHook wrapQtAppsHook];
+  qmakeFlags = ["CONFIG+=release"];
 
   meta = with lib; {
     description = "Simple RSS/Atom feed reader with online synchronization";
@@ -25,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/martinrotter/rssguard";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

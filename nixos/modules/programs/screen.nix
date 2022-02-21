@@ -1,16 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkOption mkIf types;
   cfg = config.programs.screen;
-in
-
-{
+in {
   ###### interface
 
   options = {
     programs.screen = {
-
       screenrc = mkOption {
         default = "";
         description = ''
@@ -26,8 +26,7 @@ in
   config = mkIf (cfg.screenrc != "") {
     environment.etc.screenrc.text = cfg.screenrc;
 
-    environment.systemPackages = [ pkgs.screen ];
+    environment.systemPackages = [pkgs.screen];
     security.pam.services.screen = {};
   };
-
 }

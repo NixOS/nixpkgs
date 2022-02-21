@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "empty-files";
   version = "0.0.3";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # cyclic dependency with approvaltests
   doCheck = false;
 
-  pythonImportsCheck = [ "empty_files" ];
+  pythonImportsCheck = ["empty_files"];
 
   meta = with lib; {
     description = "Null Object pattern for files";
     homepage = "https://github.com/approvals/EmptyFiles.Python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

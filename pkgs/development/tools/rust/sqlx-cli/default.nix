@@ -1,5 +1,15 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, SystemConfiguration, CoreFoundation, Security, libiconv }:
-
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  SystemConfiguration,
+  CoreFoundation,
+  Security,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
   version = "0.5.10";
@@ -14,17 +24,17 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-9+I4mi7w1WK2NkmN65EtC52KtSZR9GjrHCPE9w82IXw=";
 
   doCheck = false;
-  cargoBuildFlags = [ "-p sqlx-cli" ];
+  cargoBuildFlags = ["-p sqlx-cli"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration CoreFoundation Security libiconv ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    lib.optionals stdenv.isLinux [openssl]
+    ++ lib.optionals stdenv.isDarwin [SystemConfiguration CoreFoundation Security libiconv];
 
   meta = with lib; {
-    description =
-      "SQLx's associated command-line utility for managing databases, migrations, and enabling offline mode with sqlx::query!() and friends.";
+    description = "SQLx's associated command-line utility for managing databases, migrations, and enabling offline mode with sqlx::query!() and friends.";
     homepage = "https://github.com/launchbadge/sqlx";
     license = licenses.asl20;
-    maintainers = with maintainers; [ greizgh ];
+    maintainers = with maintainers; [greizgh];
   };
 }

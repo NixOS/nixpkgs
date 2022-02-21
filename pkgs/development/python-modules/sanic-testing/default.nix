@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, httpx
-, pytest-asyncio
-, sanic
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  httpx,
+  pytest-asyncio,
+  sanic,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "sanic-testing";
   version = "0.8.2";
@@ -43,12 +43,12 @@ buildPythonPackage rec {
   doCheck = sanic != null;
   dontUsePythonImportsCheck = sanic == null;
 
-  pythonImportsCheck = [ "sanic_testing" ];
+  pythonImportsCheck = ["sanic_testing"];
 
   meta = with lib; {
     description = "Core testing clients for the Sanic web framework";
     homepage = "https://github.com/sanic-org/sanic-testing";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = with maintainers; [AluisioASG];
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, colorclass
-, easygui
-, fetchFromGitHub
-, msoffcrypto-tool
-, olefile
-, pcodedmp
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  colorclass,
+  easygui,
+  fetchFromGitHub,
+  msoffcrypto-tool,
+  olefile,
+  pcodedmp,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "oletools";
   version = "0.60";
@@ -56,7 +56,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tool to analyze MS OLE2 files and MS Office documents";
     homepage = "https://github.com/decalage2/oletools";
-    license = with licenses; [ bsd2 /* and */ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [
+      bsd2
+      /*
+       and
+       */
+      mit
+    ];
+    maintainers = with maintainers; [fab];
   };
 }

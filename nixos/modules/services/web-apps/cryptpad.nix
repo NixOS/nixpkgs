@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.cryptpad;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.cryptpad;
+in {
   options.services.cryptpad = {
     enable = mkEnableOption "the Cryptpad service";
 
@@ -35,8 +36,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.cryptpad = {
       description = "Cryptpad Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
       serviceConfig = {
         DynamicUser = true;
         Environment = [

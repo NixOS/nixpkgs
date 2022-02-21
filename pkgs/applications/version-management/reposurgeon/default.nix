@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, makeWrapper, buildGoModule, git
-, asciidoctor, ruby
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  buildGoModule,
+  git,
+  asciidoctor,
+  ruby,
 }:
-
 buildGoModule rec {
   pname = "reposurgeon";
   version = "4.26";
@@ -13,9 +19,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-QpgRCnsOOZujE405dCe+PYg/zNkqnrfZFfbBFo7adjY=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  nativeBuildInputs = [ asciidoctor ruby ];
+  nativeBuildInputs = [asciidoctor ruby];
 
   postBuild = ''
     patchShebangs .
@@ -30,7 +36,7 @@ buildGoModule rec {
     description = "A tool for editing version-control repository history";
     license = lib.licenses.bsd3;
     homepage = "http://www.catb.org/esr/reposurgeon/";
-    maintainers = with lib.maintainers; [ dfoxfranke ];
+    maintainers = with lib.maintainers; [dfoxfranke];
     platforms = lib.platforms.all;
   };
 }

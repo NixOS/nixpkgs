@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
   version = "0.5.13";
@@ -24,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     description = "An upgraded ctrl-r for Bash whose history results make sense for what you're working on right now";
     changelog = "https://github.com/cantino/mcfly/raw/v${version}/CHANGELOG.txt";
     license = licenses.mit;
-    maintainers = [ maintainers.melkor333 ];
+    maintainers = [maintainers.melkor333];
   };
 }

@@ -1,10 +1,12 @@
 # NixOS module for Buildbot Worker.
-
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.buildbot-worker;
   opt = options.services.buildbot-worker;
 
@@ -41,11 +43,9 @@ let
                numcpus=numcpus, allow_shutdown=allow_shutdown)
     s.setServiceParent(application)
   '';
-
 in {
   options = {
     services.buildbot-worker = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -136,7 +136,7 @@ in {
       };
 
       packages = mkOption {
-        default = with pkgs; [ git ];
+        default = with pkgs; [git];
         defaultText = literalExpression "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
@@ -148,7 +148,7 @@ in {
     services.buildbot-worker.workerPassFile = mkDefault (pkgs.writeText "buildbot-worker-password" cfg.workerPass);
 
     users.groups = optionalAttrs (cfg.group == "bbworker") {
-      bbworker = { };
+      bbworker = {};
     };
 
     users.users = optionalAttrs (cfg.user == "bbworker") {
@@ -165,19 +165,23 @@ in {
 
     systemd.services.buildbot-worker = {
       description = "Buildbot Worker.";
-      after = [ "network.target" "buildbot-master.service" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target" "buildbot-master.service"];
+      wantedBy = ["multi-user.target"];
       path = cfg.packages;
-      environment.PYTHONPATH = "${python.withPackages (p: [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${python.withPackages (p: [cfg.package])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}/info"
-        ${optionalString (cfg.hostMessage != null) ''
-          ln -sf "${pkgs.writeText "buildbot-worker-host" cfg.hostMessage}" "${cfg.buildbotDir}/info/host"
-        ''}
-        ${optionalString (cfg.adminMessage != null) ''
-          ln -sf "${pkgs.writeText "buildbot-worker-admin" cfg.adminMessage}" "${cfg.buildbotDir}/info/admin"
-        ''}
+        ${
+          optionalString (cfg.hostMessage != null) ''
+            ln -sf "${pkgs.writeText "buildbot-worker-host" cfg.hostMessage}" "${cfg.buildbotDir}/info/host"
+          ''
+        }
+        ${
+          optionalString (cfg.adminMessage != null) ''
+            ln -sf "${pkgs.writeText "buildbot-worker-admin" cfg.adminMessage}" "${cfg.buildbotDir}/info/admin"
+          ''
+        }
       '';
 
       serviceConfig = {
@@ -189,10 +193,8 @@ in {
         # NOTE: call twistd directly with stdout logging for systemd
         ExecStart = "${python.pkgs.twisted}/bin/twistd --nodaemon --pidfile= --logfile - --python ${tacFile}";
       };
-
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
-
+  meta.maintainers = with lib.maintainers; [];
 }

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, jre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "zxing";
   version = "3.1.0";

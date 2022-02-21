@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
 buildPythonPackage rec {
   pname = "plac";
@@ -21,6 +22,6 @@ buildPythonPackage rec {
     description = "Parsing the Command Line the Easy Way";
     homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

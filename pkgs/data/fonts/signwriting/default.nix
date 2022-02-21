@@ -1,5 +1,8 @@
-{ lib, runCommand, fetchurl }:
-
+{
+  lib,
+  runCommand,
+  fetchurl,
+}:
 runCommand "signwriting-1.1.4" {
   src1 = fetchurl {
     url = "https://github.com/Slevinski/signwriting_2010_fonts/raw/61c8e7123a1168657b5d34d85266a637f67b9d2b/fonts/SignWriting%202010.ttf";
@@ -20,7 +23,7 @@ runCommand "signwriting-1.1.4" {
   meta = with lib; {
     homepage = "https://github.com/Slevinski/signwriting_2010_fonts";
     description = "Typeface for written sign languages";
-    maintainers = with maintainers; [ mathnerd314 ];
+    maintainers = with maintainers; [mathnerd314];
     license = licenses.ofl;
     platforms = platforms.all;
   };

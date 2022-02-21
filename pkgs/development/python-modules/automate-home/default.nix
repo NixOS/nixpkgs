@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, APScheduler
-, hiredis
-, aioredis
-, ephem
-, pytz
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  APScheduler,
+  hiredis,
+  aioredis,
+  ephem,
+  pytz,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "automate-home";
   version = "0.9.1";
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Python module to automate (home) devices";
     homepage = "https://github.com/majamassarini/automate-home";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

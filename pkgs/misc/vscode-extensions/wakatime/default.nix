@@ -1,7 +1,7 @@
-{ lib
-, vscode-utils }:
-
-let
+{
+  lib,
+  vscode-utils,
+}: let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 in
   buildVscodeMarketplaceExtension {

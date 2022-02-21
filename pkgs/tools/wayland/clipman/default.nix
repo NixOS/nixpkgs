@@ -1,10 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, wl-clipboard
-, makeWrapper
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  wl-clipboard,
+  makeWrapper,
 }:
-
 buildGoModule rec {
   pname = "clipman";
   version = "1.6.1";
@@ -20,18 +20,18 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram $out/bin/clipman \
-      --prefix PATH : ${lib.makeBinPath [ wl-clipboard ]}
+      --prefix PATH : ${lib.makeBinPath [wl-clipboard]}
   '';
 
   meta = with lib; {
     homepage = "https://github.com/yory8/clipman";
     description = "A simple clipboard manager for Wayland";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
     platforms = platforms.linux;
   };
 }

@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, cairo
-, libX11
-, libjack2
-, liblo
-, libsigcxx
-, zita-resampler
-, fftwFloat
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  libX11,
+  libjack2,
+  liblo,
+  libsigcxx,
+  zita-resampler,
+  fftwFloat,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xtuner";
   version = "1.0";
@@ -22,10 +23,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo libX11 libjack2 liblo libsigcxx zita-resampler fftwFloat ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [cairo libX11 libjack2 liblo libsigcxx zita-resampler fftwFloat];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   enableParallelBuilding = true;
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/brummer10/XTuner";
     description = "Tuner for Jack Audio Connection Kit";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [magnetophon];
     platforms = platforms.linux;
   };
 }

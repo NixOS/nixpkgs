@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "shellingham";
   version = "1.4.0";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "shellingham" ];
+  pythonImportsCheck = ["shellingham"];
 
   meta = with lib; {
     description = "Tool to detect the surrounding shell";
     homepage = "https://github.com/sarugaku/shellingham";
     license = licenses.isc;
-    maintainers = with maintainers; [ mbode ];
+    maintainers = with maintainers; [mbode];
   };
 }

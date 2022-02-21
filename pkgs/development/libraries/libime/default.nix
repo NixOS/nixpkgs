@@ -1,14 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, boost
-, python3
-, fcitx5
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  boost,
+  python3,
+  fcitx5,
+}: let
   table = fetchurl {
     url = "https://download.fcitx-im.org/data/table.tar.gz";
     sha256 = "1dw7mgbaidv3vqy0sh8dbfv8631d2zwv5mlb7npf69a1f8y0b5k1";
@@ -24,40 +24,40 @@ let
     sha256 = "sha256-MAWX5vf3n3iEgP1mXeige/6QInBItafjn0D0OmKpgd8=";
   };
 in
-stdenv.mkDerivation rec {
-  pname = "libime";
-  version = "1.0.11";
+  stdenv.mkDerivation rec {
+    pname = "libime";
+    version = "1.0.11";
 
-  src = fetchFromGitHub {
-    owner = "fcitx";
-    repo = "libime";
-    rev = version;
-    sha256 = "sha256-0yo0D9Yxn7tx1HtEaQvWCDwpWxnRVa1rIGK/mC4G8CI=";
-    fetchSubmodules = true;
-  };
+    src = fetchFromGitHub {
+      owner = "fcitx";
+      repo = "libime";
+      rev = version;
+      sha256 = "sha256-0yo0D9Yxn7tx1HtEaQvWCDwpWxnRVa1rIGK/mC4G8CI=";
+      fetchSubmodules = true;
+    };
 
-  prePatch = ''
-    ln -s ${table} data/$(stripHash ${table})
-    ln -s ${arpa} data/$(stripHash ${arpa})
-    ln -s ${dict} data/$(stripHash ${dict})
-  '';
+    prePatch = ''
+      ln -s ${table} data/$(stripHash ${table})
+      ln -s ${arpa} data/$(stripHash ${arpa})
+      ln -s ${dict} data/$(stripHash ${dict})
+    '';
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    python3
-  ];
+    nativeBuildInputs = [
+      cmake
+      extra-cmake-modules
+      python3
+    ];
 
-  buildInputs = [
-    boost
-    fcitx5
-  ];
+    buildInputs = [
+      boost
+      fcitx5
+    ];
 
-  meta = with lib; {
-    description = "A library to support generic input method implementation";
-    homepage = "https://github.com/fcitx/libime";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
-  };
-}
+    meta = with lib; {
+      description = "A library to support generic input method implementation";
+      homepage = "https://github.com/fcitx/libime";
+      license = licenses.lgpl21Plus;
+      maintainers = with maintainers; [poscat];
+      platforms = platforms.linux;
+    };
+  }

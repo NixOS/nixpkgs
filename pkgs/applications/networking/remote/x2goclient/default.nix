@@ -1,6 +1,20 @@
-{ lib, fetchurl, cups, libssh, libXpm, nx-libs, openldap, openssh
-, mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkg-config }:
-
+{
+  lib,
+  fetchurl,
+  cups,
+  libssh,
+  libXpm,
+  nx-libs,
+  openldap,
+  openssh,
+  mkDerivation,
+  qtbase,
+  qtsvg,
+  qtx11extras,
+  qttools,
+  phonon,
+  pkg-config,
+}:
 mkDerivation rec {
   pname = "x2goclient";
   version = "4.1.2.2";
@@ -10,28 +24,40 @@ mkDerivation rec {
     sha256 = "yZUyZ8QPpnEZrZanO6yx8mYZbaIFnwzc0bjVGZQh0So=";
   };
 
-  buildInputs = [ cups libssh libXpm nx-libs openldap openssh
-                  qtbase qtsvg qtx11extras qttools phonon pkg-config ];
+  buildInputs = [
+    cups
+    libssh
+    libXpm
+    nx-libs
+    openldap
+    openssh
+    qtbase
+    qtsvg
+    qtx11extras
+    qttools
+    phonon
+    pkg-config
+  ];
 
   postPatch = ''
-     substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
-     substituteInPlace Makefile \
-       --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
-       --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
-       --replace "qmake-qt4" "${qtbase.dev}/bin/qmake" \
-       --replace "-o root -g root" ""
+    substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
+    substituteInPlace Makefile \
+      --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
+      --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
+      --replace "qmake-qt4" "${qtbase.dev}/bin/qmake" \
+      --replace "-o root -g root" ""
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man" ];
+  makeFlags = ["PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man"];
 
-  installTargets = [ "install_client" "install_man" ];
+  installTargets = ["install_client" "install_man"];
 
-  qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" ];
+  qtWrapperArgs = ["--suffix PATH : ${nx-libs}/bin:${openssh}/libexec"];
 
   meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
     homepage = "http://x2go.org/";
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

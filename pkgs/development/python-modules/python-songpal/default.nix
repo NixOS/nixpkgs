@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, async-upnp-client
-, attrs
-, click
-, importlib-metadata
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  aiohttp,
+  async-upnp-client,
+  attrs,
+  click,
+  importlib-metadata,
 }:
-
 buildPythonPackage rec {
   pname = "python-songpal";
   version = "0.14";
@@ -40,12 +40,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "songpal" ];
+  pythonImportsCheck = ["songpal"];
 
   meta = with lib; {
     description = "Python library for interfacing with Sony's Songpal devices";
     homepage = "https://github.com/rytilahti/python-songpal";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

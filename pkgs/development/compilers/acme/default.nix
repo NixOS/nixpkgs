@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchsvn }:
-
+{
+  lib,
+  stdenv,
+  fetchsvn,
+}:
 stdenv.mkDerivation rec {
   pname = "acme";
   version = "unstable-2021-02-14";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "code-0-r${src.rev}/src";
 
-  makeFlags = [ "BINDIR=$(out)/bin" ];
+  makeFlags = ["BINDIR=$(out)/bin"];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/acme-crossass/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
   };
 }

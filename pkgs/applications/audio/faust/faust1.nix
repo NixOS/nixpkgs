@@ -1,14 +1,12 @@
-{ lib, stdenv
-, coreutils
-, fetchurl
-, makeWrapper
-, pkg-config
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
 }:
-
-with lib.strings;
-
-let
-
+with lib.strings; let
   version = "0.9.90";
 
   src = fetchurl {
@@ -21,7 +19,7 @@ let
     downloadPage = "https://sourceforge.net/projects/faudiostream/files/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon pmahoney ];
+    maintainers = with maintainers; [magnetophon pmahoney];
   };
 
   faust = stdenv.mkDerivation {
@@ -30,7 +28,7 @@ let
 
     inherit src;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
 
     passthru = {
       inherit wrap wrapWithBuildEnv;
@@ -72,37 +70,38 @@ let
       done
     '';
 
-    meta = meta // {
-      description = "A functional programming language for realtime audio signal processing";
-      longDescription = ''
-        FAUST (Functional Audio Stream) is a functional programming
-        language specifically designed for real-time signal processing
-        and synthesis. FAUST targets high-performance signal processing
-        applications and audio plug-ins for a variety of platforms and
-        standards.
-        The Faust compiler translates DSP specifications into very
-        efficient C++ code. Thanks to the notion of architecture,
-        FAUST programs can be easily deployed on a large variety of
-        audio platforms and plugin formats (jack, alsa, ladspa, maxmsp,
-        puredata, csound, supercollider, pure, vst, coreaudio) without
-        any change to the FAUST code.
+    meta =
+      meta
+      // {
+        description = "A functional programming language for realtime audio signal processing";
+        longDescription = ''
+          FAUST (Functional Audio Stream) is a functional programming
+          language specifically designed for real-time signal processing
+          and synthesis. FAUST targets high-performance signal processing
+          applications and audio plug-ins for a variety of platforms and
+          standards.
+          The Faust compiler translates DSP specifications into very
+          efficient C++ code. Thanks to the notion of architecture,
+          FAUST programs can be easily deployed on a large variety of
+          audio platforms and plugin formats (jack, alsa, ladspa, maxmsp,
+          puredata, csound, supercollider, pure, vst, coreaudio) without
+          any change to the FAUST code.
 
-        This package has just the compiler, libraries, and headers.
-        Install faust2* for specific faust2appl scripts.
-      '';
-    };
-
+          This package has just the compiler, libraries, and headers.
+          Install faust2* for specific faust2appl scripts.
+        '';
+      };
   };
 
   # Default values for faust2appl.
-  faust2ApplBase =
-    { baseName
-    , dir ? "tools/faust2appls"
-    , scripts ? [ baseName ]
-    , ...
-    }@args:
-
-    args // {
+  faust2ApplBase = {
+    baseName,
+    dir ? "tools/faust2appls",
+    scripts ? [baseName],
+    ...
+  } @ args:
+    args
+    // {
       name = "${baseName}-${version}";
 
       inherit src;
@@ -130,9 +129,11 @@ let
         done
       '';
 
-      meta = meta // {
-        description = "The ${baseName} script, part of faust functional programming language for realtime audio signal processing";
-      };
+      meta =
+        meta
+        // {
+          description = "The ${baseName} script, part of faust functional programming language for realtime audio signal processing";
+        };
     };
 
   # Some 'faust2appl' scripts, such as faust2alsa, run faust to
@@ -151,17 +152,16 @@ let
   #
   # The build input 'faust' is automatically added to the
   # propagatedBuildInputs.
-  wrapWithBuildEnv =
-    { baseName
-    , propagatedBuildInputs ? [ ]
-    , ...
-    }@args:
+  wrapWithBuildEnv = {
+    baseName,
+    propagatedBuildInputs ? [],
+    ...
+  } @ args:
+    stdenv.mkDerivation ((faust2ApplBase args)
+    // {
+      nativeBuildInputs = [pkg-config makeWrapper];
 
-    stdenv.mkDerivation ((faust2ApplBase args) // {
-
-      nativeBuildInputs = [ pkg-config makeWrapper ];
-
-      propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
+      propagatedBuildInputs = [faust] ++ propagatedBuildInputs;
 
       postFixup = ''
 
@@ -182,26 +182,22 @@ let
   # simply need to be wrapped with some dependencies on PATH.
   #
   # The build input 'faust' is automatically added to the PATH.
-  wrap =
-    { baseName
-    , runtimeInputs ? [ ]
-    , ...
-    }@args:
-
-    let
-
-      runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
-
-    in stdenv.mkDerivation ((faust2ApplBase args) // {
-
-      nativeBuildInputs = [ makeWrapper ];
+  wrap = {
+    baseName,
+    runtimeInputs ? [],
+    ...
+  } @ args: let
+    runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([faust] ++ runtimeInputs));
+  in
+    stdenv.mkDerivation ((faust2ApplBase args)
+    // {
+      nativeBuildInputs = [makeWrapper];
 
       postFixup = ''
         for script in "$out"/bin/*; do
           wrapProgram "$script" --prefix PATH : "${runtimePath}"
         done
       '';
-
     });
-
-in faust
+in
+  faust

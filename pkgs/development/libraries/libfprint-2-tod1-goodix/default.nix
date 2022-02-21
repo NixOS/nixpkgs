@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchgit, libfprint-tod }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  libfprint-tod,
+}:
 stdenv.mkDerivation {
   pname = "libfprint-2-tod1-goodix";
   version = "0.0.6";
@@ -11,7 +16,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     patchelf \
-      --set-rpath ${lib.makeLibraryPath [ libfprint-tod ]} \
+      --set-rpath ${lib.makeLibraryPath [libfprint-tod]} \
       usr/lib/x86_64-linux-gnu/libfprint-2/tod-1/libfprint-tod-goodix-53xc-0.0.6.so
 
     ldd usr/lib/x86_64-linux-gnu/libfprint-2/tod-1/libfprint-tod-goodix-53xc-0.0.6.so
@@ -32,6 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://git.launchpad.net/~oem-solutions-engineers/libfprint-2-tod1-goodix/+git/libfprint-2-tod1-goodix/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ grahamc ];
+    maintainers = with maintainers; [grahamc];
   };
 }

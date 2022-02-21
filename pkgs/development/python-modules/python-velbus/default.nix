@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
 }:
-
 buildPythonPackage rec {
   pname = "python-velbus";
   version = "2.1.4";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # Project has not tests
   doCheck = false;
 
-  pythonImportsCheck = [ "velbus" ];
+  pythonImportsCheck = ["velbus"];
 
   meta = with lib; {
     description = "Python library to control the Velbus home automation system";
     homepage = "https://github.com/thomasdelaet/python-velbus";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

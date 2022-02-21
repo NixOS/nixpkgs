@@ -1,21 +1,21 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, poetry-core
-, gobject-introspection
-, pango
-, gtksourceview4
-, wrapGAppsHook
-, makeDesktopItem
-, copyDesktopItems
-, gaphas
-, generic
-, pycairo
-, pygobject3
-, python
-, tinycss2
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  poetry-core,
+  gobject-introspection,
+  pango,
+  gtksourceview4,
+  wrapGAppsHook,
+  makeDesktopItem,
+  copyDesktopItems,
+  gaphas,
+  generic,
+  pycairo,
+  pygobject3,
+  python,
+  tinycss2,
 }:
-
 buildPythonApplication rec {
   pname = "gaphor";
   version = "2.6.5";
@@ -28,13 +28,16 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    poetry-core copyDesktopItems gobject-introspection wrapGAppsHook
+    poetry-core
+    copyDesktopItems
+    gobject-introspection
+    wrapGAppsHook
   ];
 
   # Setting gobject-introspection on booth nativeBuildInputs and
   # buildInputs because of #56943. This recognizes pango, avoiding
   # a "ValueError: Namespace PangoCairo not available".
-  buildInputs = [ gobject-introspection gtksourceview4 pango ];
+  buildInputs = [gobject-introspection gtksourceview4 pango];
 
   propagatedBuildInputs = [
     gaphas
@@ -58,9 +61,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple modeling tool written in Python";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
     homepage = "https://github.com/gaphor/gaphor";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

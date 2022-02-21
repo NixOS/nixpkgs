@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchFromGitLab
-, meson, ninja, pkg-config, scdoc
-, mesa, lz4, zstd, ffmpeg, libva
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  mesa,
+  lz4,
+  zstd,
+  ffmpeg,
+  libva,
 }:
-
 stdenv.mkDerivation rec {
   pname = "waypipe";
   version = "0.8.2";
@@ -16,11 +25,15 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  depsBuildBuild = [pkg-config];
+  nativeBuildInputs = [meson ninja pkg-config scdoc];
   buildInputs = [
     # Optional dependencies:
-    mesa lz4 zstd ffmpeg libva
+    mesa
+    lz4
+    zstd
+    ffmpeg
+    libva
   ];
 
   meta = with lib; {
@@ -34,6 +47,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${version}";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

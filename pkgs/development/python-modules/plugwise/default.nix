@@ -1,22 +1,22 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, crcmod
-, defusedxml
-, fetchFromGitHub
-, jsonpickle
-, munch
-, mypy
-, pyserial
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pytz
-, semver
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  crcmod,
+  defusedxml,
+  fetchFromGitHub,
+  jsonpickle,
+  munch,
+  mypy,
+  pyserial,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  semver,
 }:
-
 buildPythonPackage rec {
   pname = "plugwise";
   version = "0.16.5";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "plugwise" ];
+  pythonImportsCheck = ["plugwise"];
 
   __darwinAllowLocalNetworking = true;
 
@@ -65,7 +65,7 @@ buildPythonPackage rec {
       packets. It provides support for KNX/IP routing and tunneling devices.
     '';
     homepage = "https://github.com/plugwise/python-plugwise";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

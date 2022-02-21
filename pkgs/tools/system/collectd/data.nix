@@ -1,5 +1,7 @@
-{ stdenv, collectd }:
-
+{
+  stdenv,
+  collectd,
+}:
 stdenv.mkDerivation {
   pname = "collectd-data";
   inherit (collectd) meta src version;

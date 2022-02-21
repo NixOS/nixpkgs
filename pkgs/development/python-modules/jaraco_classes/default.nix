@@ -1,9 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, setuptools-scm
-, more-itertools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  setuptools-scm,
+  more-itertools,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "jaraco.classes";
   version = "3.1.1";
@@ -16,15 +19,15 @@ buildPythonPackage rec {
     sha256 = "0wzrcsxi9gb65inayg0drm08iaw37jm1lqxhz3860i6pwjh503pr";
   };
 
-  pythonNamespaces = [ "jaraco" ];
+  pythonNamespaces = ["jaraco"];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  propagatedBuildInputs = [ more-itertools ];
+  propagatedBuildInputs = [more-itertools];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     description = "Utility functions for Python class constructs";

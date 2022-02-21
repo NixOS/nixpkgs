@@ -1,14 +1,14 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, future
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pyyaml
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "related";
   version = "0.7.2";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Nested Object Models in Python";
     homepage = "https://github.com/genomoncology/related";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

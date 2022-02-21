@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl,   alsa-lib, libjack2, fftwFloat, libclthreads, libclxclient, libX11,  libXft, zita-alsa-pcmi, }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  libjack2,
+  fftwFloat,
+  libclthreads,
+  libclxclient,
+  libX11,
+  libXft,
+  zita-alsa-pcmi,
+}:
 stdenv.mkDerivation rec {
   version = "0.9.4";
   pname = "japa";
@@ -9,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-t9wlZr+pE5u6yTpATWDQseC/rf4TFbtG0X9tnTdkB8I=";
   };
 
-  buildInputs = [ alsa-lib libjack2 fftwFloat libclthreads libclxclient libX11 libXft zita-alsa-pcmi ];
+  buildInputs = [alsa-lib libjack2 fftwFloat libclthreads libclxclient libX11 libXft zita-alsa-pcmi];
 
   preConfigure = ''
     cd ./source/
@@ -24,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "A 'perceptual' or 'psychoacoustic' audio spectrum analyser for JACK and ALSA";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
     platforms = lib.platforms.linux;
   };
 }

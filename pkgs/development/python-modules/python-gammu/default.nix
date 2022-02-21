@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub
   #, pytestCheckHook
-, pythonOlder
-, pkg-config
-, gammu
+  ,
+  pythonOlder,
+  pkg-config,
+  gammu,
 }:
-
 buildPythonPackage rec {
   pname = "python-gammu";
   version = "3.2.4";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for Gammu";
     homepage = "https://github.com/gammu/python-gammu/";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl2Plus];
+    maintainers = with maintainers; [fab];
   };
 }

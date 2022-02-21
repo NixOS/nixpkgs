@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  pyyaml,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "saneyaml";

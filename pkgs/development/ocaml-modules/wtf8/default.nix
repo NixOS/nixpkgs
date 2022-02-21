@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 buildDunePackage rec {
   pname = "wtf8";
   version = "1.0.2";
@@ -17,6 +20,6 @@ buildDunePackage rec {
     homepage = "https://github.com/flowtype/ocaml-wtf8";
     description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates.";
     license = licenses.mit;
-    maintainers = [ maintainers.eqyiel ];
+    maintainers = [maintainers.eqyiel];
   };
 }

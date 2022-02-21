@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiofiles";
   version = "0.8.0";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "File support for asyncio";
     homepage = "https://github.com/Tinche/aiofiles";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ fridh ];
+    license = with lib.licenses; [asl20];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

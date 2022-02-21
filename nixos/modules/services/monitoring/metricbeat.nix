@@ -1,7 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-let
-  inherit (lib)
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit
+    (lib)
     attrValues
     literalExpression
     mkEnableOption
@@ -12,13 +16,9 @@ let
   cfg = config.services.metricbeat;
 
   settingsFormat = pkgs.formats.yaml {};
-
-in
-{
+in {
   options = {
-
     services.metricbeat = {
-
       enable = mkEnableOption "metricbeat";
 
       package = mkOption {
@@ -45,7 +45,7 @@ in
           See <link xlink:href="https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html"/>.
         '';
         default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
+        type = types.attrsOf (types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
           options = {
             module = mkOption {
@@ -76,7 +76,6 @@ in
         type = types.submodule {
           freeformType = settingsFormat.type;
           options = {
-
             name = mkOption {
               type = types.str;
               default = "";
@@ -112,12 +111,10 @@ in
           Configuration for metricbeat. See <link xlink:href="https://www.elastic.co/guide/en/beats/metricbeat/current/configuring-howto-metricbeat.html"/> for supported values.
         '';
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-
     assertions = [
       {
         # empty modules would cause a failure at runtime
@@ -130,7 +127,7 @@ in
 
     systemd.services.metricbeat = {
       description = "metricbeat metrics shipper";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/metricbeat \

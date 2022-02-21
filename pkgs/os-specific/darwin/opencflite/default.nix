@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, icu, libuuid, tzdata }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  icu,
+  libuuid,
+  tzdata,
+}:
 stdenv.mkDerivation rec {
   pname = "opencflite";
   version = "476.19.0";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jgmzs0ycl930hmzcvx0ykryik56704yw62w394q1q3xw5kkjn9v";
   };
 
-  configureFlags = [ "--with-uuid=${libuuid.dev}" ];
-  buildInputs = [ icu tzdata.dev ];
+  configureFlags = ["--with-uuid=${libuuid.dev}"];
+  buildInputs = [icu tzdata.dev];
   enableParallelBuilding = true;
 
   meta = {

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "openvpn_exporter-unstable";
   version = "0.3.0";
@@ -18,6 +21,6 @@ buildGoModule rec {
     description = "Prometheus exporter for OpenVPN";
     broken = true;
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [fpletz globin];
   };
 }

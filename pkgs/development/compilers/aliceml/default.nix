@@ -1,5 +1,29 @@
-{lib, stdenv, gcc, glibc, fetchurl, fetchgit, libtool, autoconf, automake, file, gnumake, which, zsh, m4, pkg-config, perl, gnome2, gtk2, pango, sqlite, libxml2, zlib, gmp, smlnj }:
-
+{
+  lib,
+  stdenv,
+  gcc,
+  glibc,
+  fetchurl,
+  fetchgit,
+  libtool,
+  autoconf,
+  automake,
+  file,
+  gnumake,
+  which,
+  zsh,
+  m4,
+  pkg-config,
+  perl,
+  gnome2,
+  gtk2,
+  pango,
+  sqlite,
+  libxml2,
+  zlib,
+  gmp,
+  smlnj,
+}:
 stdenv.mkDerivation {
   pname = "aliceml";
   version = "1.4-7d44dc8e";
@@ -17,17 +41,33 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    stdenv gcc glibc
-    libtool gnumake autoconf automake
-    file which zsh m4 gtk2 zlib gmp
-    gnome2.libgnomecanvas pango sqlite
-    libxml2 pkg-config perl smlnj
+    stdenv
+    gcc
+    glibc
+    libtool
+    gnumake
+    autoconf
+    automake
+    file
+    which
+    zsh
+    m4
+    gtk2
+    zlib
+    gmp
+    gnome2.libgnomecanvas
+    pango
+    sqlite
+    libxml2
+    pkg-config
+    perl
+    smlnj
   ];
 
   makePatch = ./make.patch;
   seamPatch = ./seam.patch;
 
-  phases = [ "unpackPhase" "patchPhase" "configurePhase" "buildPhase" ];
+  phases = ["unpackPhase" "patchPhase" "configurePhase" "buildPhase"];
 
   patchPhase = ''
     sed -i -e "s@wget ..GECODE_URL. -O - | tar xz@tar xf $gecodeSrc@" make/Makefile
@@ -52,7 +92,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://www.ps.uni-saarland.de/alice/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.doublec ];
+    maintainers = [lib.maintainers.doublec];
     broken = true;
   };
 }

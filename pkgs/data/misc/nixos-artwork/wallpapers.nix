@@ -1,31 +1,35 @@
-{ lib, stdenv, fetchurl }:
-
-let
-  mkNixBackground = { name, src, description }:
-
-  let
+{
+  lib,
+  stdenv,
+  fetchurl,
+}: let
+  mkNixBackground = {
+    name,
+    src,
+    description,
+  }: let
     pkg = stdenv.mkDerivation {
       inherit name src;
 
       dontUnpack = true;
 
       installPhase = ''
-        # GNOME
-        mkdir -p $out/share/backgrounds/nixos
-        ln -s $src $out/share/backgrounds/nixos/${src.name}
+                # GNOME
+                mkdir -p $out/share/backgrounds/nixos
+                ln -s $src $out/share/backgrounds/nixos/${src.name}
 
-        # TODO: is this path still needed?
-        mkdir -p $out/share/artwork/gnome
-        ln -s $src $out/share/artwork/gnome/${src.name}
+                # TODO: is this path still needed?
+                mkdir -p $out/share/artwork/gnome
+                ln -s $src $out/share/artwork/gnome/${src.name}
 
-        # KDE
-        mkdir -p $out/share/wallpapers/${name}/contents/images
-        ln -s $src $out/share/wallpapers/${name}/contents/images/${src.name}
-        cat >>$out/share/wallpapers/${name}/metadata.desktop <<_EOF
-[Desktop Entry]
-Name=${name}
-X-KDE-PluginInfo-Name=${name}
-_EOF
+                # KDE
+                mkdir -p $out/share/wallpapers/${name}/contents/images
+                ln -s $src $out/share/wallpapers/${name}/contents/images/${src.name}
+                cat >>$out/share/wallpapers/${name}/metadata.desktop <<_EOF
+        [Desktop Entry]
+        Name=${name}
+        X-KDE-PluginInfo-Name=${name}
+        _EOF
       '';
 
       passthru = {
@@ -40,12 +44,9 @@ _EOF
         platforms = platforms.all;
       };
     };
-in pkg;
-
-in
-
-rec {
-
+  in
+    pkg;
+in rec {
   dracula = mkNixBackground {
     name = "dracula-2020-07-02";
     description = "Nix background based on the Dracula color palette";
@@ -155,5 +156,4 @@ rec {
       sha256 = "116337wv81xfg0g0bsylzzq2b7nbj6hjyh795jfc9mvzarnalwd3";
     };
   };
-
 }

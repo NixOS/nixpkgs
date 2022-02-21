@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.mpdscribble;
   mpdCfg = config.services.mpd;
   mpdOpt = options.services.mpd;
@@ -65,18 +68,18 @@ let
   preStart = pkgs.writeShellScript "mpdscribble-pre-start" ''
     cp -f "${cfgTemplate}" "${cfgFile}"
     ${replaceSecret cfg.passwordFile "{{MPD_PASSWORD}}" cfgFile}
-    ${concatStringsSep "\n" (mapAttrsToList (secname: cfg:
-      replaceSecret cfg.passwordFile "{{${secname}_PASSWORD}}" cfgFile)
-      cfg.endpoints)}
+    ${
+      concatStringsSep "\n" (mapAttrsToList (secname: cfg:
+        replaceSecret cfg.passwordFile "{{${secname}_PASSWORD}}" cfgFile)
+      cfg.endpoints)
+    }
   '';
 
   localMpd = (cfg.host == "localhost" || cfg.host == "127.0.0.1");
-
 in {
   ###### interface
 
   options.services.mpdscribble = {
-
     enable = mkEnableOption "mpdscribble";
 
     proxy = mkOption {
@@ -105,10 +108,9 @@ in {
     };
 
     host = mkOption {
-      default = (if mpdCfg.network.listenAddress != "any" then
-        mpdCfg.network.listenAddress
-      else
-        "localhost");
+      default = (if mpdCfg.network.listenAddress != "any"
+      then mpdCfg.network.listenAddress
+      else "localhost");
       defaultText = literalExpression ''
         if config.${mpdOpt.network.listenAddress} != "any"
         then config.${mpdOpt.network.listenAddress}
@@ -121,13 +123,15 @@ in {
     };
 
     passwordFile = mkOption {
-      default = if localMpd then
-        (findFirst
+      default =
+        if localMpd
+        then
+          (findFirst
           (c: any (x: x == "read") c.permissions)
-          { passwordFile = null; }
-          mpdCfg.credentials).passwordFile
-      else
-        null;
+          {passwordFile = null;}
+          mpdCfg.credentials)
+          .passwordFile
+        else null;
       defaultText = literalDocBook ''
         The first password file with read access configured for MPD when using a local instance,
         otherwise <literal>null</literal>.
@@ -151,13 +155,12 @@ in {
 
     endpoints = mkOption {
       type = (let
-        endpoint = { name, ... }: {
+        endpoint = {name, ...}: {
           options = {
             url = mkOption {
               type = types.str;
               default = endpointUrls.${name} or "";
-              description =
-                "The url endpoint where the scrobble API is listening.";
+              description = "The url endpoint where the scrobble API is listening.";
             };
             username = mkOption {
               type = types.str;
@@ -167,13 +170,13 @@ in {
             };
             passwordFile = mkOption {
               type = types.nullOr types.str;
-              description =
-                "File containing the password, either as MD5SUM or cleartext.";
+              description = "File containing the password, either as MD5SUM or cleartext.";
             };
           };
         };
-      in types.attrsOf (types.submodule endpoint));
-      default = { };
+      in
+        types.attrsOf (types.submodule endpoint));
+      default = {};
       example = {
         "last.fm" = {
           username = "foo";
@@ -187,16 +190,15 @@ in {
         }" the url is set automatically.
       '';
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
     systemd.services.mpdscribble = {
-      after = [ "network.target" ] ++ (optional localMpd "mpd.service");
+      after = ["network.target"] ++ (optional localMpd "mpd.service");
       description = "mpdscribble mpd scrobble client";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "mpdscribble";
@@ -204,10 +206,8 @@ in {
         RuntimeDirectoryMode = "700";
         # TODO use LoadCredential= instead of running preStart with full privileges?
         ExecStartPre = "+${preStart}";
-        ExecStart =
-          "${pkgs.mpdscribble}/bin/mpdscribble --no-daemon --conf ${cfgFile}";
+        ExecStart = "${pkgs.mpdscribble}/bin/mpdscribble --no-daemon --conf ${cfgFile}";
       };
     };
   };
-
 }

@@ -1,18 +1,20 @@
-{ lib, stdenv, fetchurl
-, fetchpatch
-, autoconf
-, automake
-, pkg-config
-, zlib
-, libpng
-, libjpeg ? null
-, libwebp ? null
-, libtiff ? null
-, libXpm ? null
-, fontconfig
-, freetype
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoconf,
+  automake,
+  pkg-config,
+  zlib,
+  libpng,
+  libjpeg ? null,
+  libwebp ? null,
+  libtiff ? null,
+  libXpm ? null,
+  fontconfig,
+  freetype,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gd";
   version = "2.3.3";
@@ -23,14 +25,15 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # included in > 2.3.3
+    (fetchpatch {
+      # included in > 2.3.3
       name = "restore-GD_FLIP.patch";
       url = "https://github.com/libgd/libgd/commit/f4bc1f5c26925548662946ed7cfa473c190a104a.diff";
       sha256 = "XRXR3NOkbEub3Nybaco2duQk0n8vxif5mTl2AUacn9w=";
     })
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   configureFlags =
     [
@@ -39,12 +42,12 @@ stdenv.mkDerivation rec {
     # -pthread gets passed to clang, causing warnings
     ++ lib.optional stdenv.isDarwin "--enable-werror=no";
 
-  nativeBuildInputs = [ autoconf automake pkg-config ];
+  nativeBuildInputs = [autoconf automake pkg-config];
 
-  buildInputs = [ zlib fontconfig freetype ];
-  propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
+  buildInputs = [zlib fontconfig freetype];
+  propagatedBuildInputs = [libpng libjpeg libwebp libtiff libXpm];
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = ["bin" "dev" "out"];
 
   postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
 

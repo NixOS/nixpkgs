@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  stdenv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "krill";
   version = "0.9.4";
@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256:0ksh68giq3yd8k7vynxdl13ccysl6i5ag2nz9nknbnrvpv201c88";
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [openssl] ++ lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [pkg-config];
 
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/NLnetLabs/krill";
     changelog = "https://github.com/NLnetLabs/krill/blob/v${version}/Changelog.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ steamwalker ];
+    maintainers = with maintainers; [steamwalker];
   };
 }

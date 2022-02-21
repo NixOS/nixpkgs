@@ -1,11 +1,14 @@
 # This test runs PowerDNS authoritative server with the
 # generic MySQL backend (gmysql) to connect to a
 # MariaDB server using UNIX sockets authentication.
-
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "powerdns";
 
-  nodes.server = { ... }: {
+  nodes.server = {...}: {
     services.powerdns.enable = true;
     services.powerdns.extraConfig = ''
       launch=gmysql
@@ -15,15 +18,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     services.mysql = {
       enable = true;
       package = pkgs.mariadb;
-      ensureDatabases = [ "powerdns" ];
+      ensureDatabases = ["powerdns"];
       ensureUsers = lib.singleton
-        { name = "pdns";
-          ensurePermissions = { "powerdns.*" = "ALL PRIVILEGES"; };
-        };
+      {
+        name = "pdns";
+        ensurePermissions = {"powerdns.*" = "ALL PRIVILEGES";};
+      };
     };
 
-    environment.systemPackages = with pkgs;
-      [ dnsutils powerdns mariadb ];
+    environment.systemPackages = with pkgs; [dnsutils powerdns mariadb];
   };
 
   testScript = ''

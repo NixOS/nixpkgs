@@ -1,9 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-let
-  inherit (lib)
-    maintainers types mkEnableOption mkOption mkIf
-    literalExpression escapeShellArg escapeShellArgs;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit
+    (lib)
+    maintainers
+    types
+    mkEnableOption
+    mkOption
+    mkIf
+    literalExpression
+    escapeShellArg
+    escapeShellArgs
+    ;
   cfg = config.services.mtr-exporter;
 in {
   options = {
@@ -53,15 +64,15 @@ in {
           -schedule '@every ${toString cfg.interval}s' \
           -bind ${escapeShellArg cfg.address}:${toString cfg.port} \
           -- \
-          ${escapeShellArgs (cfg.mtrFlags ++ [ cfg.target ])}
+          ${escapeShellArgs (cfg.mtrFlags ++ [cfg.target])}
       '';
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "network.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["network.target"];
+      after = ["network.target"];
       serviceConfig = {
         Restart = "on-failure";
         # Hardening
-        CapabilityBoundingSet = [ "" ];
+        CapabilityBoundingSet = [""];
         DynamicUser = true;
         LockPersonality = true;
         ProcSubset = "pid";
@@ -83,5 +94,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ jakubgs ];
+  meta.maintainers = with maintainers; [jakubgs];
 }

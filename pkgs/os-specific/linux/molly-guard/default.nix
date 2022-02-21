@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, dpkg, busybox, systemd }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  busybox,
+  systemd,
+}:
 stdenv.mkDerivation rec {
   pname = "molly-guard";
   version = "0.7.2";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k6b1hn8lc4rj9n036imsl7s9lqj6ny3acdhnbnamsdkkndmxrw7";
   };
 
-  buildInputs = [ dpkg ];
+  buildInputs = [dpkg];
 
   sourceRoot = ".";
 
@@ -32,10 +38,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Attempts to prevent you from accidentally shutting down or rebooting machines";
-    homepage    = "https://salsa.debian.org/debian/molly-guard";
-    license     = licenses.artistic2;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ DerTim1 ];
-    priority    = -10;
+    homepage = "https://salsa.debian.org/debian/molly-guard";
+    license = licenses.artistic2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [DerTim1];
+    priority = -10;
   };
 }

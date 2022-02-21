@@ -1,8 +1,8 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "ineffassign-unstable";
   version = "2018-09-09";
@@ -23,7 +23,7 @@ buildGoPackage rec {
     description = "Detect ineffectual assignments in Go code";
     homepage = "https://github.com/gordonklaus/ineffassign";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

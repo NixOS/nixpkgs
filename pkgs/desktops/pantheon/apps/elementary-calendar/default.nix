@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook
-, clutter
-, elementary-icon-theme
-, evolution-data-server
-, folks
-, geoclue2
-, geocode-glib
-, granite
-, gtk3
-, libchamplain
-, libgee
-, libhandy
-, libical
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  appstream-glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook,
+  clutter,
+  elementary-icon-theme,
+  evolution-data-server,
+  folks,
+  geoclue2,
+  geocode-glib,
+  granite,
+  gtk3,
+  libchamplain,
+  libgee,
+  libhandy,
+  libical,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
   version = "6.1.0";

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, xcbuildHook, Foundation, AddressBook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xcbuildHook,
+  Foundation,
+  AddressBook,
+}:
 stdenv.mkDerivation {
   version = "1.1a-3";
   pname = "contacts";
@@ -11,8 +17,8 @@ stdenv.mkDerivation {
     hash = "sha256-Li/c5uf9rfpuU+hduuSm7EmhVwIIkS72dqzmN+0cE3A=";
   };
 
-  nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ Foundation AddressBook ];
+  nativeBuildInputs = [xcbuildHook];
+  buildInputs = [Foundation AddressBook];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,7 +29,7 @@ stdenv.mkDerivation {
     description = "Access contacts from the Mac address book from command-line";
     homepage = "http://www.gnufoo.org/contacts/contacts.html";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with maintainers; [jwiegley];
     platforms = platforms.darwin;
     hydraPlatforms = platforms.darwin;
   };

@@ -1,9 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, six
-, pytest
-, python-dateutil
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  pytest,
+  python-dateutil,
 }:
-
 buildPythonPackage rec {
   version = "0.8.1";
   pname = "javaproperties";
@@ -16,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "16rcdw5gd4a21v2xb1j166lc9z2dqcv68gqvk5mvpnm0x6nwadgp";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
-  checkInputs = [ python-dateutil pytest ];
+  checkInputs = [python-dateutil pytest];
   checkPhase = ''
     rm tox.ini
     pytest -k 'not dumps and not time' --ignore=test/test_propclass.py
@@ -28,6 +30,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure API Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

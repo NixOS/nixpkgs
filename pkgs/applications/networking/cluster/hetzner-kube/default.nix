@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "hetzner-kube";
   version = "0.5.1";
@@ -43,7 +47,7 @@ buildGoModule rec {
     description = "A CLI tool for provisioning Kubernetes clusters on Hetzner Cloud";
     homepage = "https://github.com/xetys/hetzner-kube";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ eliasp ];
+    maintainers = with lib.maintainers; [eliasp];
     platforms = lib.platforms.unix;
   };
 }

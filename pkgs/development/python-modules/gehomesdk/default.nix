@@ -1,16 +1,16 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchPypi
-, humanize
-, lxml
-, pythonOlder
-, requests
-, slixmpp
-, websockets
+{
+  lib,
+  aiohttp,
+  bidict,
+  buildPythonPackage,
+  fetchPypi,
+  humanize,
+  lxml,
+  pythonOlder,
+  requests,
+  slixmpp,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "gehomesdk";
   version = "0.4.23";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Python SDK for GE smart appliances";
     homepage = "https://github.com/simbaja/gehome";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,13 +1,18 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
-, pipInstallHook, writeText
-, blessed
-, docutils
-, libcxx
-, llvm
-, pytestCheckHook
-, typesentry
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pipInstallHook,
+  writeText,
+  blessed,
+  docutils,
+  libcxx,
+  llvm,
+  pytestCheckHook,
+  typesentry,
 }:
-
 buildPythonPackage rec {
   pname = "datatable";
   version = "0.11.0";
@@ -37,9 +42,9 @@ buildPythonPackage rec {
     python ci/ext.py wheel
   '';
 
-  propagatedBuildInputs = [ typesentry blessed ];
-  buildInputs = [ llvm pipInstallHook ];
-  checkInputs = [ docutils pytestCheckHook ];
+  propagatedBuildInputs = [typesentry blessed];
+  buildInputs = [llvm pipInstallHook];
+  checkInputs = [docutils pytestCheckHook];
 
   LLVM = llvm;
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
@@ -60,12 +65,12 @@ buildPythonPackage rec {
     "test_cast_huge_to_str"
     "test_create_large_string_column"
   ];
-  pythonImportsCheck = [ "datatable" ];
+  pythonImportsCheck = ["datatable"];
 
   meta = with lib; {
     description = "data.table for Python";
     homepage = "https://github.com/h2oai/datatable";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

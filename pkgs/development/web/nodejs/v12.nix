@@ -1,6 +1,11 @@
-{ callPackage, icu68, python2, lib, stdenv, enableNpm ? true }:
-
-let
+{
+  callPackage,
+  icu68,
+  python2,
+  lib,
+  stdenv,
+  enableNpm ? true,
+}: let
   buildNodejs = callPackage ./nodejs.nix {
     icu = icu68;
     python = python2;

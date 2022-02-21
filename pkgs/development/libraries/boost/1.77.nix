@@ -1,6 +1,11 @@
-{ callPackage, fetchurl, fetchpatch, ... } @ args:
-
-callPackage ./generic.nix (args // rec {
+{
+  callPackage,
+  fetchurl,
+  fetchpatch,
+  ...
+} @ args:
+callPackage ./generic.nix (args
+// rec {
   version = "1.77.0";
 
   src = fetchurl {
@@ -12,4 +17,3 @@ callPackage ./generic.nix (args // rec {
     sha256 = "sha256-/J+F/AMOIzFCkIJBr3qEbmBjCqc4jeml+vsfOiaECFQ=";
   };
 })
-

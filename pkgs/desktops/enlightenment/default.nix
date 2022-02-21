@@ -1,16 +1,18 @@
-{ callPackage, pkgs }:
 {
+  callPackage,
+  pkgs,
+}: {
   #### CORE EFL
-  efl = callPackage ./efl { };
+  efl = callPackage ./efl {};
 
   #### WINDOW MANAGER
-  enlightenment = callPackage ./enlightenment { };
+  enlightenment = callPackage ./enlightenment {};
 
   #### APPLICATIONS
-  econnman = callPackage ./econnman { };
-  ecrire = callPackage ./ecrire { };
-  ephoto = callPackage ./ephoto { };
-  evisum = callPackage ./evisum { };
-  rage = callPackage ./rage { };
-  terminology = callPackage ./terminology { };
+  econnman = callPackage ./econnman {};
+  ecrire = callPackage ./ecrire {};
+  ephoto = callPackage ./ephoto {};
+  evisum = callPackage ./evisum {};
+  rage = callPackage ./rage {};
+  terminology = callPackage ./terminology {};
 }

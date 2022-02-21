@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, validatePkgConfig }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  validatePkgConfig,
+}:
 stdenv.mkDerivation rec {
   pname = "urdfdom-headers";
   version = "1.0.5";
@@ -19,13 +25,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake validatePkgConfig ];
+  nativeBuildInputs = [cmake validatePkgConfig];
 
   meta = with lib; {
     description = "URDF (U-Robot Description Format) headers provides core data structure headers for URDF";
     homepage = "https://github.com/ros/urdfdom_headers";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [lopsided98];
     platforms = platforms.all;
   };
 }

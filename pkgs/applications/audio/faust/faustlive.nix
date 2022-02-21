@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, llvm_10, qt5, qrencode, libmicrohttpd, libjack2, alsa-lib, faust, curl
-, bc, coreutils, which, libsndfile, pkg-config, libxcb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  llvm_10,
+  qt5,
+  qrencode,
+  libmicrohttpd,
+  libjack2,
+  alsa-lib,
+  faust,
+  curl,
+  bc,
+  coreutils,
+  which,
+  libsndfile,
+  pkg-config,
+  libxcb,
 }:
-
 stdenv.mkDerivation rec {
   pname = "faustlive";
   version = "2.5.5";
@@ -14,14 +28,25 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [pkg-config qt5.wrapQtAppsHook];
 
   buildInputs = [
-    llvm_10 qt5.qtbase qrencode libmicrohttpd libjack2 alsa-lib faust curl
-    bc coreutils which libsndfile libxcb
+    llvm_10
+    qt5.qtbase
+    qrencode
+    libmicrohttpd
+    libjack2
+    alsa-lib
+    faust
+    curl
+    bc
+    coreutils
+    which
+    libsndfile
+    libxcb
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postPatch = "cd Build";
 
@@ -41,6 +66,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://faust.grame.fr/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [magnetophon];
   };
 }

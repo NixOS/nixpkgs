@@ -1,33 +1,33 @@
 /*
-
-  This file is for NixOS-specific options and configs.
-
-  Code that is shared with nix-darwin goes in common.nix.
-
-*/
-
-{ pkgs, config, lib, ... }:
-let
+ 
+ This file is for NixOS-specific options and configs.
+ 
+ Code that is shared with nix-darwin goes in common.nix.
+ */
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkIf mkDefault;
 
   cfg = config.services.hercules-ci-agent;
 
   command = "${cfg.package}/bin/hercules-ci-agent --config ${cfg.tomlFile}";
   testCommand = "${command} --test-configuration";
-
-in
-{
+in {
   imports = [
     ./common.nix
-    (lib.mkRenamedOptionModule [ "services" "hercules-ci-agent" "user" ] [ "systemd" "services" "hercules-ci-agent" "serviceConfig" "User" ])
+    (lib.mkRenamedOptionModule ["services" "hercules-ci-agent" "user"] ["systemd" "services" "hercules-ci-agent" "serviceConfig" "User"])
   ];
 
   config = mkIf cfg.enable {
     systemd.services.hercules-ci-agent = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      path = [ config.nix.package ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
+      wants = ["network-online.target"];
+      path = [config.nix.package];
       startLimitBurst = 30 * 1000000; # practically infinite
       serviceConfig = {
         User = "hercules-ci-agent";
@@ -41,10 +41,10 @@ in
     # Changes in the secrets do not affect the unit in any way that would cause
     # a restart, which is currently necessary to reload the secrets.
     systemd.paths.hercules-ci-agent-restart-files = {
-      wantedBy = [ "hercules-ci-agent.service" ];
+      wantedBy = ["hercules-ci-agent.service"];
       pathConfig = {
         Unit = "hercules-ci-agent-restarter.service";
-        PathChanged = [ cfg.settings.clusterJoinTokenPath cfg.settings.binaryCachesPath ];
+        PathChanged = [cfg.settings.clusterJoinTokenPath cfg.settings.binaryCachesPath];
       };
     };
     systemd.services.hercules-ci-agent-restarter = {
@@ -67,22 +67,20 @@ in
 
     # Trusted user allows simplified configuration and better performance
     # when operating in a cluster.
-    nix.settings.trusted-users = [ config.systemd.services.hercules-ci-agent.serviceConfig.User ];
+    nix.settings.trusted-users = [config.systemd.services.hercules-ci-agent.serviceConfig.User];
     services.hercules-ci-agent = {
       settings = {
         nixUserIsTrusted = true;
-        labels =
-          let
-            mkIfNotNull = x: mkIf (x != null) x;
-          in
-          {
-            nixos.configurationRevision = mkIfNotNull config.system.configurationRevision;
-            nixos.release = config.system.nixos.release;
-            nixos.label = mkIfNotNull config.system.nixos.label;
-            nixos.codeName = config.system.nixos.codeName;
-            nixos.tags = config.system.nixos.tags;
-            nixos.systemName = mkIfNotNull config.system.name;
-          };
+        labels = let
+          mkIfNotNull = x: mkIf (x != null) x;
+        in {
+          nixos.configurationRevision = mkIfNotNull config.system.configurationRevision;
+          nixos.release = config.system.nixos.release;
+          nixos.label = mkIfNotNull config.system.nixos.label;
+          nixos.codeName = config.system.nixos.codeName;
+          nixos.tags = config.system.nixos.tags;
+          nixos.systemName = mkIfNotNull config.system.name;
+        };
       };
     };
 
@@ -94,8 +92,8 @@ in
       isSystemUser = true;
     };
 
-    users.groups.hercules-ci-agent = { };
+    users.groups.hercules-ci-agent = {};
   };
 
-  meta.maintainers = [ lib.maintainers.roberth ];
+  meta.maintainers = [lib.maintainers.roberth];
 }

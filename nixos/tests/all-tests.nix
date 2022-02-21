@@ -1,4 +1,8 @@
-{ system, pkgs, callTest }:
+{
+  system,
+  pkgs,
+  callTest,
+}:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leafs.
 # The tests not supported by `system` will be replaced with `{}`, so that
@@ -6,18 +10,18 @@
 # where said tests are unsupported.
 # Example callTest that just extracts the derivation from the test:
 #   callTest = t: t.test;
-
-with pkgs.lib;
-
-let
+with pkgs.lib; let
   discoverTests = val:
-    if !isAttrs val then val
-    else if hasAttr "test" val then callTest val
+    if !isAttrs val
+    then val
+    else if hasAttr "test" val
+    then callTest val
     else mapAttrs (n: s: discoverTests s) val;
   handleTest = path: args:
-    discoverTests (import path ({ inherit system pkgs; } // args));
+    discoverTests (import path ({inherit system pkgs;} // args));
   handleTestOn = systems: path: args:
-    if elem system systems then handleTest path args
+    if elem system systems
+    then handleTest path args
     else {};
 
   nixosLib = import ../lib {
@@ -25,9 +29,8 @@ let
     # about it, so we enable the feature flag.
     featureFlags.minimalModules = {};
   };
-  evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
-in
-{
+  evalMinimalConfig = module: nixosLib.evalModules {modules = [module];};
+in {
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
   adguardhome = handleTest ./adguardhome.nix {};
@@ -41,7 +44,7 @@ in
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
   avahi = handleTest ./avahi.nix {};
-  avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
+  avahi-with-resolved = handleTest ./avahi.nix {networkd = true;};
   babeld = handleTest ./babeld.nix {};
   bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
@@ -68,10 +71,10 @@ in
   cage = handleTest ./cage.nix {};
   cagebreak = handleTest ./cagebreak.nix {};
   calibre-web = handleTest ./calibre-web.nix {};
-  cassandra_2_1 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_2_1; };
-  cassandra_2_2 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_2_2; };
-  cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
-  cassandra_3_11 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_11; };
+  cassandra_2_1 = handleTest ./cassandra.nix {testPackage = pkgs.cassandra_2_1;};
+  cassandra_2_2 = handleTest ./cassandra.nix {testPackage = pkgs.cassandra_2_2;};
+  cassandra_3_0 = handleTest ./cassandra.nix {testPackage = pkgs.cassandra_3_0;};
+  cassandra_3_11 = handleTest ./cassandra.nix {testPackage = pkgs.cassandra_3_11;};
   ceph-multi-node = handleTestOn ["x86_64-linux"] ./ceph-multi-node.nix {};
   ceph-single-node = handleTestOn ["x86_64-linux"] ./ceph-single-node.nix {};
   ceph-single-node-bluestore = handleTestOn ["x86_64-linux"] ./ceph-single-node-bluestore.nix {};
@@ -143,7 +146,7 @@ in
   env = handleTest ./env.nix {};
   ergo = handleTest ./ergo.nix {};
   ergochat = handleTest ./ergochat.nix {};
-  etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
+  etc = pkgs.callPackage ../modules/system/etc/test.nix {inherit evalMinimalConfig;};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   etebase-server = handleTest ./etebase-server.nix {};
@@ -152,9 +155,9 @@ in
   fcitx = handleTest ./fcitx {};
   fenics = handleTest ./fenics.nix {};
   ferm = handleTest ./ferm.nix {};
-  firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
-  firefox-esr    = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr; }; # used in `tested` job
-  firefox-esr-91 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-91; };
+  firefox = handleTest ./firefox.nix {firefoxPackage = pkgs.firefox;};
+  firefox-esr = handleTest ./firefox.nix {firefoxPackage = pkgs.firefox-esr;}; # used in `tested` job
+  firefox-esr-91 = handleTest ./firefox.nix {firefoxPackage = pkgs.firefox-esr-91;};
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
@@ -189,9 +192,9 @@ in
   grocy = handleTest ./grocy.nix {};
   grub = handleTest ./grub.nix {};
   gvisor = handleTest ./gvisor.nix {};
-  hadoop.all = handleTestOn [ "x86_64-linux" ] ./hadoop/hadoop.nix {};
-  hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
-  hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
+  hadoop.all = handleTestOn ["x86_64-linux"] ./hadoop/hadoop.nix {};
+  hadoop.hdfs = handleTestOn ["x86_64-linux"] ./hadoop/hdfs.nix {};
+  hadoop.yarn = handleTestOn ["x86_64-linux"] ./hadoop/yarn.nix {};
   haka = handleTest ./haka.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
@@ -208,7 +211,7 @@ in
   hitch = handleTest ./hitch {};
   hledger-web = handleTest ./hledger-web.nix {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
-  hockeypuck = handleTest ./hockeypuck.nix { };
+  hockeypuck = handleTest ./hockeypuck.nix {};
   home-assistant = handleTest ./home-assistant.nix {};
   hostname = handleTest ./hostname.nix {};
   hound = handleTest ./hound.nix {};
@@ -258,7 +261,7 @@ in
   krb5 = discoverTests (import ./krb5 {});
   ksm = handleTest ./ksm.nix {};
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
-  latestKernel.login = handleTest ./login.nix { latestKernel = true; };
+  latestKernel.login = handleTest ./login.nix {latestKernel = true;};
   leaps = handleTest ./leaps.nix {};
   libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
@@ -323,9 +326,12 @@ in
   nagios = handleTest ./nagios.nix {};
   nano = handleTest ./nano.nix {};
   nar-serve = handleTest ./nar-serve.nix {};
-  nat.firewall = handleTest ./nat.nix { withFirewall = true; };
-  nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
-  nat.standalone = handleTest ./nat.nix { withFirewall = false; };
+  nat.firewall = handleTest ./nat.nix {withFirewall = true;};
+  nat.firewall-conntrack = handleTest ./nat.nix {
+    withFirewall = true;
+    withConntrackHelpers = true;
+  };
+  nat.standalone = handleTest ./nat.nix {withFirewall = false;};
   nats = handleTest ./nats.nix {};
   navidrome = handleTest ./navidrome.nix {};
   ncdns = handleTest ./ncdns.nix {};
@@ -333,16 +339,16 @@ in
   nebula = handleTest ./nebula.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
-  networking.networkd = handleTest ./networking.nix { networkd = true; };
-  networking.scripted = handleTest ./networking.nix { networkd = false; };
+  networking.networkd = handleTest ./networking.nix {networkd = true;};
+  networking.scripted = handleTest ./networking.nix {networkd = false;};
   specialisation = handleTest ./specialisation.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
   nextcloud = handleTest ./nextcloud {};
   nexus = handleTest ./nexus.nix {};
   # TODO: Test nfsv3 + Kerberos
-  nfs3 = handleTest ./nfs { version = 3; };
-  nfs4 = handleTest ./nfs { version = 4; };
+  nfs3 = handleTest ./nfs {version = 3;};
+  nfs4 = handleTest ./nfs {version = 4;};
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = handleTest ./nginx.nix {};
   nginx-auth = handleTest ./nginx-auth.nix {};
@@ -356,7 +362,7 @@ in
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};
   nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
-  nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
+  nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix {inherit evalMinimalConfig;};
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
   noto-fonts = handleTest ./noto-fonts.nix {};
@@ -395,15 +401,15 @@ in
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   php = handleTest ./php {};
-  php74 = handleTest ./php { php = pkgs.php74; };
-  php80 = handleTest ./php { php = pkgs.php80; };
-  php81 = handleTest ./php { php = pkgs.php81; };
+  php74 = handleTest ./php {php = pkgs.php74;};
+  php80 = handleTest ./php {php = pkgs.php80;};
+  php81 = handleTest ./php {php = pkgs.php81;};
   pict-rs = handleTest ./pict-rs.nix {};
   pinnwand = handleTest ./pinnwand.nix {};
   plasma5 = handleTest ./plasma5.nix {};
   plasma5-systemd-start = handleTest ./plasma5-systemd-start.nix {};
   plausible = handleTest ./plausible.nix {};
-  pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix {};
+  pleroma = handleTestOn ["x86_64-linux" "aarch64-linux"] ./pleroma.nix {};
   plikd = handleTest ./plikd.nix {};
   plotinus = handleTest ./plotinus.nix {};
   podgrab = handleTest ./podgrab.nix {};

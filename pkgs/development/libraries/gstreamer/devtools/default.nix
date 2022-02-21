@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, cairo
-, meson
-, ninja
-, pkg-config
-, gstreamer
-, gst-plugins-base
-, python3
-, gobject-introspection
-, json-glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cairo,
+  meson,
+  ninja,
+  pkg-config,
+  gstreamer,
+  gst-plugins-base,
+  python3,
+  gobject-introspection,
+  json-glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gst-devtools";
   version = "1.20.0";
@@ -47,11 +48,13 @@ stdenv.mkDerivation rec {
     gst-plugins-base
   ];
 
-  mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-Dintrospection=disabled"
+    ];
 
   meta = with lib; {
     description = "Integration testing infrastructure for the GStreamer framework";

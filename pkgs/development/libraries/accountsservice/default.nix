@@ -1,27 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, substituteAll
-, pkg-config
-, glib
-, shadow
-, gobject-introspection
-, polkit
-, systemd
-, coreutils
-, meson
-, dbus
-, ninja
-, python3
-, gettext
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  substituteAll,
+  pkg-config,
+  glib,
+  shadow,
+  gobject-introspection,
+  polkit,
+  systemd,
+  coreutils,
+  meson,
+  dbus,
+  ninja,
+  python3,
+  gettext,
 }:
-
 stdenv.mkDerivation rec {
   pname = "accountsservice";
   version = "0.6.55";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "D-Bus interface for user account query and manipulation";
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, capstone, libbfd, libelf, libiberty, readline }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  capstone,
+  libbfd,
+  libelf,
+  libiberty,
+  readline,
+}:
 stdenv.mkDerivation {
   pname = "wcc-unstable";
   version = "2018-04-05";
@@ -12,7 +20,7 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ capstone libbfd libelf libiberty readline ];
+  buildInputs = [capstone libbfd libelf libiberty readline];
 
   postPatch = ''
     sed -i src/wsh/include/libwitch/wsh.h src/wsh/scripts/INDEX \
@@ -21,7 +29,7 @@ stdenv.mkDerivation {
     sed -i -e '/stropts.h>/d' src/wsh/include/libwitch/wsh.h
   '';
 
-  installFlags = [ "DESTDIR=$(out)" ];
+  installFlags = ["DESTDIR=$(out)"];
 
   preInstall = ''
     mkdir -p $out/usr/bin
@@ -45,7 +53,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/endrazine/wcc";
     description = "Witchcraft compiler collection: tools to convert and script ELF files";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ orivej ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [orivej];
   };
 }

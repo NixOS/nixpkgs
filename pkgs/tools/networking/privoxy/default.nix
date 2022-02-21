@@ -1,12 +1,17 @@
-{ lib, stdenv
-, nixosTests
-, fetchurl, autoreconfHook
-, zlib, pcre, w3m, man
-, openssl, brotli
+{
+  lib,
+  stdenv,
+  nixosTests,
+  fetchurl,
+  autoreconfHook,
+  zlib,
+  pcre,
+  w3m,
+  man,
+  openssl,
+  brotli,
 }:
-
 stdenv.mkDerivation rec {
-
   pname = "privoxy";
   version = "3.0.33";
 
@@ -15,12 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BLEE5w2sYVYbndEQaEslD6/IwT2+Q3pg+uGN3ZqIH64=";
   };
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = ["pie"];
 
-  nativeBuildInputs = [ autoreconfHook w3m man ];
-  buildInputs = [ zlib pcre openssl brotli ];
+  nativeBuildInputs = [autoreconfHook w3m man];
+  buildInputs = [zlib pcre openssl brotli];
 
-  makeFlags = [ "STRIP=" ];
+  makeFlags = ["STRIP="];
   configureFlags = [
     "--with-openssl"
     "--with-brotli"
@@ -41,7 +46,6 @@ stdenv.mkDerivation rec {
     # GPLv2 (or later). See https://www.privoxy.org/user-manual/copyright.html
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = [];
   };
-
 }

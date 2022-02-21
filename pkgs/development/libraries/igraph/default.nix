@@ -1,24 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, arpack
-, bison
-, blas
-, cmake
-, flex
-, fop
-, glpk
-, gmp
-, lapack
-, libxml2
-, libxslt
-, pkg-config
-, python3
-, sourceHighlight
-, suitesparse
-, xmlto
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  arpack,
+  bison,
+  blas,
+  cmake,
+  flex,
+  fop,
+  glpk,
+  gmp,
+  lapack,
+  libxml2,
+  libxslt,
+  pkg-config,
+  python3,
+  sourceHighlight,
+  suitesparse,
+  xmlto,
 }:
-
 stdenv.mkDerivation rec {
   pname = "igraph";
   version = "0.9.6";
@@ -34,16 +34,18 @@ stdenv.mkDerivation rec {
   # tools/getversion.sh. Instead, we're going to put the version directly
   # where igraph wants, and then let autoreconfHook do the rest of the
   # bootstrap. ~ C.
-  postPatch = ''
-    echo "${version}" > IGRAPH_VERSION
-  '' + lib.optionalString stdenv.isAarch64 ''
-    # https://github.com/igraph/igraph/issues/1694
-    substituteInPlace tests/CMakeLists.txt \
-      --replace "igraph_scg_grouping3" "" \
-      --replace "igraph_scg_semiprojectors2" ""
-  '';
+  postPatch =
+    ''
+      echo "${version}" > IGRAPH_VERSION
+    ''
+    + lib.optionalString stdenv.isAarch64 ''
+      # https://github.com/igraph/igraph/issues/1694
+      substituteInPlace tests/CMakeLists.txt \
+        --replace "igraph_scg_grouping3" "" \
+        --replace "igraph_scg_semiprojectors2" ""
+    '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
   nativeBuildInputs = [
     bison
@@ -85,11 +87,16 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # needed to find libigraph, and liblas on darwin
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ blas ]}:$PWD/src"
-  '' else ''
-    export LD_LIBRARY_PATH="$PWD/src"
-  '';
+  preCheck =
+    if stdenv.isDarwin
+    then
+      ''
+        export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [blas]}:$PWD/src"
+      ''
+    else
+      ''
+        export LD_LIBRARY_PATH="$PWD/src"
+      '';
 
   postInstall = ''
     mkdir -p "$out/share"
@@ -105,6 +112,6 @@ stdenv.mkDerivation rec {
     homepage = "https://igraph.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
+    maintainers = with maintainers; [MostAwesomeDude dotlambda];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "dominate";
   version = "2.6.0";
@@ -15,6 +19,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Knio/dominate/";
     description = "Dominate is a Python library for creating and manipulating HTML documents using an elegant DOM API";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

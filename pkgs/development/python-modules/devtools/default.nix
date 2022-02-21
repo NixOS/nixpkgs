@@ -1,14 +1,14 @@
-{ lib
-, asttokens
-, buildPythonPackage
-, executing
-, fetchFromGitHub
-, pygments
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asttokens,
+  buildPythonPackage,
+  executing,
+  fetchFromGitHub,
+  pygments,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "devtools";
   version = "0.8.0";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Python's missing debug print command and other development tools";
     homepage = "https://python-devtools.helpmanual.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jdahm ];
+    maintainers = with maintainers; [jdahm];
   };
 }

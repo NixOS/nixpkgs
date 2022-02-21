@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
   version = "2.1.2.5";
@@ -27,7 +29,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/C0D3D3V/Moodle-Downloader-2";
-    maintainers = [ maintainers.kmein ];
+    maintainers = [maintainers.kmein];
     description = "A Moodle downloader that downloads course content fast from Moodle";
     license = licenses.gpl3Plus;
   };

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "tinyssh";
   version = "20220101";
@@ -23,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tinyssh.org";
     license = licenses.publicDomain;
     platforms = platforms.unix;
-    maintainers = [ maintainers.kaction ];
+    maintainers = [maintainers.kaction];
   };
 }

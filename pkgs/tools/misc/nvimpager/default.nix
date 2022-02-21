@@ -1,9 +1,14 @@
-{ fetchFromGitHub
-, lib, stdenv
-, ncurses, neovim, procps
-, scdoc, lua51Packages, util-linux
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  ncurses,
+  neovim,
+  procps,
+  scdoc,
+  lua51Packages,
+  util-linux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nvimpager";
   version = "0.10.4";
@@ -19,17 +24,17 @@ stdenv.mkDerivation rec {
     ncurses # for tput
     procps # for nvim_get_proc() which uses ps(1)
   ];
-  nativeBuildInputs = [ scdoc ];
+  nativeBuildInputs = [scdoc];
 
-  makeFlags = [ "PREFIX=$(out)" ];
-  buildFlags = [ "nvimpager.configured" "nvimpager.1" ];
+  makeFlags = ["PREFIX=$(out)"];
+  buildFlags = ["nvimpager.configured" "nvimpager.1"];
   preBuild = ''
     patchShebangs nvimpager
     substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
-    '';
+  '';
 
   doCheck = true;
-  checkInputs = [ lua51Packages.busted util-linux neovim ];
+  checkInputs = [lua51Packages.busted util-linux neovim];
   checkPhase = ''
     runHook preCheck
     script -c "busted --lpath './?.lua' test"
@@ -46,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lucc/nvimpager";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.lucc ];
+    maintainers = [maintainers.lucc];
   };
 }

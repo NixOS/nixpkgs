@@ -1,8 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "taskwarrior-tui";
   version = "0.18.5";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A terminal user interface for taskwarrior ";
     homepage = "https://github.com/kdheepak/taskwarrior-tui";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [matthiasbeyer];
   };
 }

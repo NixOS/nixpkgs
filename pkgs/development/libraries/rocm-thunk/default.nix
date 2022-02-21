@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, writeScript
-, cmake
-, pkg-config
-, libdrm
-, numactl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeScript,
+  cmake,
+  pkg-config,
+  libdrm,
+  numactl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rocm-thunk";
   version = "4.5.2";
@@ -22,9 +23,9 @@ stdenv.mkDerivation rec {
     export cmakeFlags="$cmakeFlags "
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ libdrm numactl ];
+  buildInputs = [libdrm numactl];
 
   postInstall = ''
     cp -r $src/include $out
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Radeon open compute thunk interface";
     homepage = "https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface";
-    license = with licenses; [ bsd2 mit ];
-    maintainers = with maintainers; [ lovesegfault ];
+    license = with licenses; [bsd2 mit];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

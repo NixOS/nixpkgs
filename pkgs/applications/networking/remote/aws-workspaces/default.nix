@@ -1,8 +1,23 @@
-{ stdenv, lib
-, makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  dpkg,
+  fetchurl,
+  autoPatchelfHook,
+  curl,
+  libkrb5,
+  lttng-ust,
+  libpulseaudio,
+  gtk3,
+  openssl_1_1,
+  icu,
+  webkitgtk,
+  librsvg,
+  gdk-pixbuf,
+  libsoup,
+  glib-networking,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
   version = "4.0.1.1302";
@@ -66,7 +81,7 @@ stdenv.mkDerivation rec {
     description = "Client for Amazon WorkSpaces, a managed, secure Desktop-as-a-Service (DaaS) solution";
     homepage = "https://clients.amazonworkspaces.com";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ]; # TODO Mac support
-    maintainers = [ maintainers.mausch ];
+    platforms = ["x86_64-linux"]; # TODO Mac support
+    maintainers = [maintainers.mausch];
   };
 }

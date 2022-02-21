@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "enzyme";
   version = "0.4.1";

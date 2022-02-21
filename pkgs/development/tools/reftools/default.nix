@@ -1,8 +1,8 @@
-{ buildGoModule
-, lib
-, fetchFromGitHub
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "reftools-unstable";
   version = "2019-12-21";
@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "Refactoring tools for Go";
     homepage = "https://github.com/davidrjenni/reftools";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

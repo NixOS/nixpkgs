@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchurl
-, perl, gmp, mpfr, flint, boost
-, bliss, ppl, singular, cddlib, lrs, nauty
-, ninja, ant, openjdk
-, perlPackages
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  gmp,
+  mpfr,
+  flint,
+  boost,
+  bliss,
+  ppl,
+  singular,
+  cddlib,
+  lrs,
+  nauty,
+  ninja,
+  ant,
+  openjdk,
+  perlPackages,
+  makeWrapper,
 }:
-
 # polymake compiles its own version of sympol and atint because we
 # don't have those packages. other missing optional dependencies:
 # javaview, libnormaliz, scip, soplex, jreality.
-
 stdenv.mkDerivation rec {
   pname = "polymake";
   version = "4.6";
@@ -21,19 +33,36 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QjpE3e8R6uqEV6sV3V2G3beovMbJuxF3b54pWNfc+dA=";
   };
 
-  buildInputs = [
-    perl gmp mpfr flint boost
-    bliss ppl singular cddlib lrs nauty
-    openjdk
-  ] ++ (with perlPackages; [
-    JSON TermReadLineGnu TermReadKey XMLSAX
-  ]);
+  buildInputs =
+    [
+      perl
+      gmp
+      mpfr
+      flint
+      boost
+      bliss
+      ppl
+      singular
+      cddlib
+      lrs
+      nauty
+      openjdk
+    ]
+    ++ (with perlPackages; [
+      JSON
+      TermReadLineGnu
+      TermReadKey
+      XMLSAX
+    ]);
 
   nativeBuildInputs = [
-    makeWrapper ninja ant perl
+    makeWrapper
+    ninja
+    ant
+    perl
   ];
 
-  ninjaFlags = [ "-C" "build/Opt" ];
+  ninjaFlags = ["-C" "build/Opt"];
 
   postInstall = ''
     for i in "$out"/bin/*; do

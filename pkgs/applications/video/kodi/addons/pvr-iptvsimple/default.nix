@@ -1,8 +1,15 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub
-, xz, pugixml, zlib
-, inputstream-adaptive, inputstream-ffmpegdirect, inputstream-rtmp
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  xz,
+  pugixml,
+  zlib,
+  inputstream-adaptive,
+  inputstream-ffmpegdirect,
+  inputstream-rtmp,
 }:
-
 buildKodiBinaryAddon rec {
   pname = "pvr-iptvsimple";
   namespace = "pvr.iptvsimple";

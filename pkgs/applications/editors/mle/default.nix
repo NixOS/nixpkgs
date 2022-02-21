@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, termbox, pcre, uthash, lua5_3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  termbox,
+  pcre,
+  uthash,
+  lua5_3,
+}:
 stdenv.mkDerivation rec {
   pname = "mle";
   version = "1.4.3";
@@ -18,17 +25,17 @@ stdenv.mkDerivation rec {
     patchShebangs tests/*
   '';
 
-  buildInputs = [ termbox pcre uthash lua5_3 ];
+  buildInputs = [termbox pcre uthash lua5_3];
 
   doCheck = true;
 
-  installFlags = [ "prefix=${placeholder "out"}" ];
+  installFlags = ["prefix=${placeholder "out"}"];
 
   meta = with lib; {
     description = "Small, flexible terminal-based text editor";
     homepage = "https://github.com/adsr/mle";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ adsr ];
+    maintainers = with maintainers; [adsr];
   };
 }

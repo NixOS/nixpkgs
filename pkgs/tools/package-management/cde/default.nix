@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "cde";
   version = "0.1";
@@ -34,9 +37,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/usnistgov/corr-CDE";
     description = "A packaging tool for building portable packages";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.rlupton20 ];
+    maintainers = [maintainers.rlupton20];
     platforms = platforms.linux;
     # error: architecture aarch64 is not supported by strace
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = ["aarch64-linux"];
   };
 }

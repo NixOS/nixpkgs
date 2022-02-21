@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, pillow
-, poetry-core
-, pytest-benchmark
-, pytest-mypy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchgit,
+  pillow,
+  poetry-core,
+  pytest-benchmark,
+  pytest-mypy,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pixelmatch";
   version = "0.2.3";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Pixel-level image comparison library";
     homepage = "https://github.com/whtsky/pixelmatch-py";
     license = licenses.isc;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [petabyteboy];
   };
 }

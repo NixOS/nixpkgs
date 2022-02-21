@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, gnum4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gnum4,
 }:
-
 stdenv.mkDerivation rec {
   pname = "suitesparse-graphblas";
   version = "6.1.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "DrTimothyAldenDavis";

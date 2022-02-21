@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "q-text-as-data";
   version = "2.0.19";
@@ -35,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "http://harelba.github.io/q/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.taneb ];
+    maintainers = [maintainers.taneb];
     platforms = platforms.all;
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matplotlib
-, pytestCheckHook
-, numpy
-, pandas
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  matplotlib,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  pythonOlder,
+  scipy,
 }:
-
 buildPythonPackage rec {
   pname = "seaborn";
   version = "0.11.2";
@@ -42,14 +42,14 @@ buildPythonPackage rec {
     "test_bivariate_kde_norm"
   ];
 
-  pythonImportsCheck= [
+  pythonImportsCheck = [
     "seaborn"
   ];
 
   meta = with lib; {
     description = "Statisitical data visualization";
     homepage = "https://seaborn.pydata.org/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fridh ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fridh];
   };
 }

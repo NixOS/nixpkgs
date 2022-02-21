@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "canvas";
   version = "2017-11-09";
 
@@ -18,6 +19,6 @@ build-idris-package  {
   meta = {
     description = "Idris FFI binding for html5 canvas 2d api";
     homepage = "https://github.com/JinWuZhao/idriscanvas";
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

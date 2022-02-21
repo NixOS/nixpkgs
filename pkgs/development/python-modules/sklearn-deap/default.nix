@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, numpy, scipy, deap, scikit-learn, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  numpy,
+  scipy,
+  deap,
+  scikit-learn,
+  python,
+}:
 buildPythonPackage rec {
   pname = "sklearn-deap";
   version = "0.2.3";
@@ -20,7 +29,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ numpy scipy deap scikit-learn ];
+  propagatedBuildInputs = [numpy scipy deap scikit-learn];
 
   checkPhase = ''
     ${python.interpreter} test.py
@@ -30,9 +39,8 @@ buildPythonPackage rec {
     description = "Use evolutionary algorithms instead of gridsearch in scikit-learn";
     homepage = "https://github.com/rsteca/sklearn-deap";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
     # broken by scikit-learn 0.24.1
     broken = true;
   };
 }
-

@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libGL, SDL2, libGLU }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libGL,
+  SDL2,
+  libGLU,
+}:
 stdenv.mkDerivation rec {
   pname = "recastai";
   # use latest revision for the CMake build process and OpenMW
@@ -13,15 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QP3lMMFR6fiKQTksAkRL6X9yaoVz2xt4QSIP9g6piww=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ libGL SDL2 libGLU ];
+  buildInputs = [libGL SDL2 libGLU];
 
   meta = with lib; {
     homepage = "https://github.com/recastnavigation/recastnavigation";
     description = "Navigation-mesh Toolset for Games";
     license = licenses.zlib;
-    maintainers = with maintainers; [ marius851000 ];
+    maintainers = with maintainers; [marius851000];
     platforms = platforms.all;
   };
 }

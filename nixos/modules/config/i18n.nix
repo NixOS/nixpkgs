@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
 
   options = {
-
     i18n = {
       glibcLocales = mkOption {
         type = types.path;
@@ -43,7 +44,10 @@ with lib;
       extraLocaleSettings = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        example = { LC_MESSAGES = "en_US.UTF-8"; LC_TIME = "de_DE.UTF-8"; };
+        example = {
+          LC_MESSAGES = "en_US.UTF-8";
+          LC_TIME = "de_DE.UTF-8";
+        };
         description = ''
           A set of additional system-wide locale settings other than
           <literal>LANG</literal> which can be configured with
@@ -63,24 +67,22 @@ with lib;
           xlink:href="https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED"/>.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = {
-
     environment.systemPackages =
       # We increase the priority a little, so that plain glibc in systemPackages can't win.
       optional (config.i18n.supportedLocales != []) (lib.setPrio (-1) config.i18n.glibcLocales);
 
     environment.sessionVariables =
-      { LANG = config.i18n.defaultLocale;
+      {
+        LANG = config.i18n.defaultLocale;
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-      } // config.i18n.extraLocaleSettings;
+      }
+      // config.i18n.extraLocaleSettings;
 
     systemd.globalEnvironment = mkIf (config.i18n.supportedLocales != []) {
       LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
@@ -88,10 +90,9 @@ with lib;
 
     # ‘/etc/locale.conf’ is used by systemd.
     environment.etc."locale.conf".source = pkgs.writeText "locale.conf"
-      ''
-        LANG=${config.i18n.defaultLocale}
-        ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings)}
-      '';
-
+    ''
+      LANG=${config.i18n.defaultLocale}
+      ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings)}
+    '';
   };
 }

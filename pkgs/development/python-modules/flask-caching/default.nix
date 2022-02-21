@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytestCheckHook, pytest-cov, pytest-xprocess, pytestcache }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  flask,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-xprocess,
+  pytestcache,
+}:
 buildPythonPackage rec {
   pname = "Flask-Caching";
   version = "1.10.1";
@@ -10,9 +19,9 @@ buildPythonPackage rec {
     sha256 = "cf19b722fcebc2ba03e4ae7c55b532ed53f0cbf683ce36fafe5e881789a01c00";
   };
 
-  propagatedBuildInputs = [ flask ];
+  propagatedBuildInputs = [flask];
 
-  checkInputs = [ pytestCheckHook pytest-cov pytest-xprocess pytestcache ];
+  checkInputs = [pytestCheckHook pytest-cov pytest-xprocess pytestcache];
 
   disabledTests = [
     # backend_cache relies on pytest-cache, which is a stale package from 2013

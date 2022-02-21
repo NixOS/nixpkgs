@@ -1,16 +1,16 @@
-{ lib
-, fetchFromGitHub
-, bash
-, autoconf
-, automake
-, libtool
-, pkg-config
-, libcangjie
-, sqlite
-, buildPythonPackage
-, cython
+{
+  lib,
+  fetchFromGitHub,
+  bash,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  libcangjie,
+  sqlite,
+  buildPythonPackage,
+  cython,
 }:
-
 buildPythonPackage {
   pname = "pycangjie";
   version = "unstable-2015-05-03";
@@ -23,8 +23,8 @@ buildPythonPackage {
     sha256 = "sha256-sS0Demzm89WtEIN4Efz0OTsUQ/c3gIX+/koekQGOca4=";
   };
 
-  nativeBuildInputs = [ pkg-config libtool autoconf automake cython ];
-  buildInputs = [ libcangjie sqlite ];
+  nativeBuildInputs = [pkg-config libtool autoconf automake cython];
+  buildInputs = [libcangjie sqlite];
 
   preConfigure = ''
     find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
@@ -39,7 +39,7 @@ buildPythonPackage {
     description = "Python wrapper to libcangjie";
     homepage = "http://cangjians.github.io/projects/pycangjie/";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.linquize ];
+    maintainers = [maintainers.linquize];
     platforms = platforms.all;
   };
 }

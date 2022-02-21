@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, beets, pythonPackages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  beets,
+  pythonPackages,
+}:
 pythonPackages.buildPythonApplication rec {
   pname = "beets-extrafiles";
   version = "unstable-2020-12-13";
@@ -17,9 +21,9 @@ pythonPackages.buildPythonApplication rec {
     sed -i -e 's/mediafile~=0.6.0/mediafile>=0.6.0/' setup.py
   '';
 
-  nativeBuildInputs = [ beets ];
+  nativeBuildInputs = [beets];
 
-  propagatedBuildInputs = with pythonPackages; [ mediafile ];
+  propagatedBuildInputs = with pythonPackages; [mediafile];
 
   preCheck = ''
     HOME=$TEMPDIR

@@ -1,6 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, django, ply }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  django,
+  ply,
+}:
 buildPythonPackage rec {
   pname = "djangoql";
   version = "0.17.1";
@@ -10,9 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-TwU9ASjij0EpJuLakCc19L3Lq1wI1Dvk3+/XR/yi6W4=";
   };
 
-  propagatedBuildInputs = [ ply ];
+  propagatedBuildInputs = [ply];
 
-  checkInputs = [ django ];
+  checkInputs = [django];
 
   checkPhase = ''
     export PYTHONPATH=test_project:$PYTHONPATH
@@ -23,6 +28,6 @@ buildPythonPackage rec {
     description = "Advanced search language for Django";
     homepage = "https://github.com/ivelum/djangoql";
     license = licenses.mit;
-    maintainers = with maintainers; [ earvstedt ];
+    maintainers = with maintainers; [earvstedt];
   };
 }

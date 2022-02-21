@@ -1,14 +1,15 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.lxd-image-server;
   format = pkgs.formats.toml {};
 
   location = "/var/www/simplestreams";
-in
-{
+in {
   options = {
     services.lxd-image-server = {
       enable = mkEnableOption "lxd-image-server";
@@ -70,8 +71,8 @@ in
       ];
 
       systemd.services.lxd-image-server = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wantedBy = ["multi-user.target"];
+        after = ["network.target"];
 
         description = "LXD Image Server";
 
@@ -87,7 +88,7 @@ in
           LogsDirectory = "lxd-image-server";
           RuntimeDirectory = "lxd-image-server";
           ExecReload = "${pkgs.lxd-image-server}/bin/lxd-image-server reload";
-          ReadWritePaths = [ location ];
+          ReadWritePaths = [location];
         };
       };
     })

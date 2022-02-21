@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, glib
-, ronn
-, curl
-, id3lib
-, libxml2
-, glibcLocales
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  ronn,
+  curl,
+  id3lib,
+  libxml2,
+  glibcLocales,
 }:
-
 stdenv.mkDerivation rec {
   pname = "castget";
   version = "2.0.0";
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
     export LC_ALL="en_US.UTF-8";
   '';
 
-  buildInputs = [ glib curl id3lib libxml2 ];
+  buildInputs = [glib curl id3lib libxml2];
   nativeBuildInputs = [
     ronn
     # See comment on locale above
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
       primarily intended for automatic, unattended downloading of podcasts.
     '';
     homepage = "https://castget.johndal.com/";
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

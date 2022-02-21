@@ -1,26 +1,35 @@
-{ stdenv, fetchFromGitHub, gmp, bison, perl, ncurses, readline, coreutils, pkg-config
-, lib
-, autoreconfHook
-, buildPackages
-, sharutils
-, file
-, flint
-, ntl
-, cddlib
-, gfan
-, lrcalc
-, doxygen
-, graphviz
-, latex2html
-# upstream generates docs with texinfo 4. later versions of texinfo
-# use letters instead of numbers for post-appendix chapters, and we
-# want it to match the upstream format because sage depends on it.
-, texinfo4
-, texlive
-, enableDocs ? true
-, enableGfanlib ? true
+{
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  bison,
+  perl,
+  ncurses,
+  readline,
+  coreutils,
+  pkg-config,
+  lib,
+  autoreconfHook,
+  buildPackages,
+  sharutils,
+  file,
+  flint,
+  ntl,
+  cddlib,
+  gfan,
+  lrcalc,
+  doxygen,
+  graphviz,
+  latex2html
+  # upstream generates docs with texinfo 4. later versions of texinfo
+  # use letters instead of numbers for post-appendix chapters, and we
+  # want it to match the upstream format because sage depends on it.
+  ,
+  texinfo4,
+  texlive,
+  enableDocs ? true,
+  enableGfanlib ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "singular";
   version = "4.3.0";
@@ -42,14 +51,17 @@ stdenv.mkDerivation rec {
     forceFetchGit = true;
   };
 
-  configureFlags = [
-    "--with-ntl=${ntl}"
-    "--disable-pyobject-module"
-  ] ++ lib.optionals enableDocs [
-    "--enable-doc-build"
-  ] ++ lib.optionals enableGfanlib [
-    "--enable-gfanlib"
-  ];
+  configureFlags =
+    [
+      "--with-ntl=${ntl}"
+      "--disable-pyobject-module"
+    ]
+    ++ lib.optionals enableDocs [
+      "--enable-doc-build"
+    ]
+    ++ lib.optionals enableGfanlib [
+      "--enable-gfanlib"
+    ];
 
   prePatch = ''
     # don't let the tests depend on `hostname`
@@ -61,34 +73,38 @@ stdenv.mkDerivation rec {
   # For reference (last checked on commit 75f460d):
   # https://github.com/Singular/Singular/blob/spielwiese/doc/Building-Singular-from-source.md
   # https://github.com/Singular/Singular/blob/spielwiese/doc/external-packages-dynamic-modules.md
-  buildInputs = [
-    # necessary
-    gmp
-    # by upstream recommended but optional
-    ncurses
-    readline
-    ntl
-    flint
-    lrcalc
-    gfan
-  ] ++ lib.optionals enableGfanlib [
-    cddlib
-  ];
+  buildInputs =
+    [
+      # necessary
+      gmp
+      # by upstream recommended but optional
+      ncurses
+      readline
+      ntl
+      flint
+      lrcalc
+      gfan
+    ]
+    ++ lib.optionals enableGfanlib [
+      cddlib
+    ];
 
-  nativeBuildInputs = [
-    bison
-    perl
-    pkg-config
-    autoreconfHook
-    sharutils # needed for regress.cmd install checks
-  ] ++ lib.optionals enableDocs [
-    doxygen
-    graphviz
-    latex2html
-    texinfo4
-    texlive.combined.scheme-small
-  ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs =
+    [
+      bison
+      perl
+      pkg-config
+      autoreconfHook
+      sharutils # needed for regress.cmd install checks
+    ]
+    ++ lib.optionals enableDocs [
+      doxygen
+      graphviz
+      latex2html
+      texinfo4
+      texlive.combined.scheme-small
+    ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
   preAutoreconf = ''
     find . -type f -readable -writable -exec sed \
@@ -102,29 +118,34 @@ stdenv.mkDerivation rec {
 
   doCheck = true; # very basic checks, does not test any libraries
 
-  installPhase = ''
-    make install
-  '' + lib.optionalString enableDocs ''
-    # Sage uses singular.info, which is not installed by default
-    mkdir -p $out/share/info
-    cp doc/singular.info $out/share/info
-  '' + ''
-    # Make sure patchelf picks up the right libraries
-    rm -rf libpolys factory resources omalloc Singular
-  '';
+  installPhase =
+    ''
+      make install
+    ''
+    + lib.optionalString enableDocs ''
+      # Sage uses singular.info, which is not installed by default
+      mkdir -p $out/share/info
+      cp doc/singular.info $out/share/info
+    ''
+    + ''
+      # Make sure patchelf picks up the right libraries
+      rm -rf libpolys factory resources omalloc Singular
+    '';
 
   # singular tests are a bit complicated, see
   # https://github.com/Singular/Singular/tree/spielwiese/Tst
   # https://www.singular.uni-kl.de/forum/viewtopic.php?f=10&t=2773
-  testsToRun = [
-    "Old/universal.lst"
-    "Buch/buch.lst"
-    "Plural/short.lst"
-    "Old/factor.tst"
-  ] ++ lib.optionals enableGfanlib [
-    # tests that require gfanlib
-    "Short/ok_s.lst"
-  ];
+  testsToRun =
+    [
+      "Old/universal.lst"
+      "Buch/buch.lst"
+      "Plural/short.lst"
+      "Old/factor.tst"
+    ]
+    ++ lib.optionals enableGfanlib [
+      # tests that require gfanlib
+      "Short/ok_s.lst"
+    ];
 
   # simple test to make sure singular starts and finds its libraries
   doInstallCheck = true;

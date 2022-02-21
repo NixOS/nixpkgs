@@ -1,17 +1,17 @@
-{ buildPythonPackage
-, chex
-, cloudpickle
-, dill
-, dm-tree
-, fetchFromGitHub
-, jaxlib
-, jmp
-, lib
-, pytestCheckHook
-, tabulate
-, tensorflow
+{
+  buildPythonPackage,
+  chex,
+  cloudpickle,
+  dill,
+  dm-tree,
+  fetchFromGitHub,
+  jaxlib,
+  jmp,
+  lib,
+  pytestCheckHook,
+  tabulate,
+  tensorflow,
 }:
-
 buildPythonPackage rec {
   pname = "dm-haiku";
   version = "0.0.5";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Haiku is a simple neural network library for JAX developed by some of the authors of Sonnet.";
     homepage = "https://github.com/deepmind/dm-haiku";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

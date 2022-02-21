@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, curl, cmake, nlohmann_json }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  cmake,
+  nlohmann_json,
+}:
 stdenv.mkDerivation {
   pname = "cpp-ipfs-api";
   version = "2017-01-04";
@@ -11,9 +17,9 @@ stdenv.mkDerivation {
     sha256 = "1z6gbd7npg4pd9wmdyzcp9h12sg84d7a43c69pp4lzqkyqg8pz1g";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ curl ];
-  propagatedBuildInputs = [ nlohmann_json ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [curl];
+  propagatedBuildInputs = [nlohmann_json];
 
   meta = with lib; {
     description = "IPFS C++ API client library";

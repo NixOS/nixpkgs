@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, xorg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libpng,
+  xorg,
+}:
 stdenv.mkDerivation rec {
   pname = "xcur2png";
   version = "0.7.1";
@@ -27,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Convert X cursors to PNG images";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

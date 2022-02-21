@@ -1,11 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, pybtex, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  pybtex,
+  six,
+}:
 buildPythonPackage rec {
   version = "1.0.1";
   pname = "pybtex-docutils";
 
   doCheck = false;
-  buildInputs = [ docutils pybtex six ];
+  buildInputs = [docutils pybtex six];
 
   src = fetchPypi {
     inherit pname version;

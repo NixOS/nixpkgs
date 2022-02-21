@@ -1,25 +1,27 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.lighttpd.cgit;
-  pathPrefix = if stringLength cfg.subdir == 0 then "" else "/" + cfg.subdir;
-  configFile = pkgs.writeText "cgitrc"
-    ''
-      # default paths to static assets
-      css=${pathPrefix}/cgit.css
-      logo=${pathPrefix}/cgit.png
-      favicon=${pathPrefix}/favicon.ico
-
-      # user configuration
-      ${cfg.configText}
-    '';
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.lighttpd.cgit;
+  pathPrefix =
+    if stringLength cfg.subdir == 0
+    then ""
+    else "/" + cfg.subdir;
+  configFile = pkgs.writeText "cgitrc"
+  ''
+    # default paths to static assets
+    css=${pathPrefix}/cgit.css
+    logo=${pathPrefix}/cgit.png
+    favicon=${pathPrefix}/favicon.ico
 
+    # user configuration
+    ${cfg.configText}
+  '';
+in {
   options.services.lighttpd.cgit = {
-
     enable = mkOption {
       default = false;
       type = types.bool;
@@ -56,16 +58,14 @@ in
         http://git.zx2c4.com/cgit/tree/cgitrc.5.txt
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
-
     # make the cgitrc manpage available
-    environment.systemPackages = [ pkgs.cgit ];
+    environment.systemPackages = [pkgs.cgit];
 
     # declare module dependencies
-    services.lighttpd.enableModules = [ "mod_cgi" "mod_alias" "mod_setenv" ];
+    services.lighttpd.enableModules = ["mod_cgi" "mod_alias" "mod_setenv"];
 
     services.lighttpd.extraConfig = ''
       $HTTP["url"] =~ "^/${cfg.subdir}" {
@@ -87,7 +87,5 @@ in
       mkdir -p /var/cache/cgit
       chown lighttpd:lighttpd /var/cache/cgit
     '';
-
   };
-
 }

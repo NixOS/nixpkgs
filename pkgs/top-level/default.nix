@@ -1,51 +1,45 @@
-/* This function composes the Nix Packages collection. It:
-
-     1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
-
-     2. Applies the final stage to the given `config` if it is a function
-
-     3. Defaults to no non-standard config and no cross-compilation target
-
-     4. Uses the above to infer the default standard environment's (stdenv's)
-        stages if no stdenv's are provided
-
-     5. Folds the stages to yield the final fully booted package set for the
-        chosen stdenv
-
-   Use `impure.nix` to also infer the `system` based on the one on which
-   evaluation is taking place, and the configuration from environment variables
-   or dot-files. */
-
-{ # The system packages will be built on. See the manual for the
+/*
+ This function composes the Nix Packages collection. It:
+ 
+   1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
+ 
+   2. Applies the final stage to the given `config` if it is a function
+ 
+   3. Defaults to no non-standard config and no cross-compilation target
+ 
+   4. Uses the above to infer the default standard environment's (stdenv's)
+      stages if no stdenv's are provided
+ 
+   5. Folds the stages to yield the final fully booted package set for the
+      chosen stdenv
+ 
+ Use `impure.nix` to also infer the `system` based on the one on which
+ evaluation is taking place, and the configuration from environment variables
+ or dot-files.
+ */
+{
+  # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
   # `*Platform`s.
-  localSystem
-
-, # The system packages will ultimately be run on.
-  crossSystem ? localSystem
-
-, # Allow a configuration attribute set to be passed in as an argument.
-  config ? {}
-
-, # List of overlays layers used to extend Nixpkgs.
-  overlays ? []
-
-, # List of overlays to apply to target packages only.
-  crossOverlays ? []
-
-, # A function booting the final package set for a specific standard
+  localSystem,
+  # The system packages will ultimately be run on.
+  crossSystem ? localSystem,
+  # Allow a configuration attribute set to be passed in as an argument.
+  config ? {},
+  # List of overlays layers used to extend Nixpkgs.
+  overlays ? [],
+  # List of overlays to apply to target packages only.
+  crossOverlays ? [],
+  # A function booting the final package set for a specific standard
   # environment. See below for the arguments given to that function, the type of
   # list it returns.
-  stdenvStages ? import ../stdenv
-
-, # Ignore unexpected args.
+  stdenvStages ? import ../stdenv,
+  # Ignore unexpected args.
   ...
-} @ args:
-
-let # Rename the function arguments
+} @ args: let
+  # Rename the function arguments
   config0 = config;
   crossSystem0 = crossSystem;
-
 in let
   lib = import ../../lib;
 
@@ -53,10 +47,11 @@ in let
 
   checked =
     throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
-    lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
+    lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r)
+    overlays
     throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list."
-    lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
-    ;
+    lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r)
+    crossOverlays;
 
   localSystem = lib.systems.elaborate args.localSystem;
 
@@ -71,13 +66,13 @@ in let
   # { pkgs, ... } : { /* the config */ }
   config1 =
     if lib.isFunction config0
-    then config0 { inherit pkgs; }
+    then config0 {inherit pkgs;}
     else config0;
 
   configEval = lib.evalModules {
     modules = [
       ./config.nix
-      ({ options, ... }: {
+      ({options, ...}: {
         _file = "nixpkgs.config";
         # filter-out known options, FIXME: remove this eventually
         config = builtins.intersectAttrs options config1;
@@ -87,7 +82,7 @@ in let
 
   # take all the rest as-is
   config = lib.showWarnings configEval.config.warnings
-    (config1 // builtins.removeAttrs configEval.config [ "_module" ]);
+  (config1 // builtins.removeAttrs configEval.config ["_module"]);
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
@@ -118,16 +113,18 @@ in let
 
   # Partially apply some arguments for building bootstraping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
-  allPackages = newArgs: import ./stage.nix ({
-    inherit lib nixpkgsFun;
-  } // newArgs);
+  allPackages = newArgs:
+    import ./stage.nix ({
+      inherit lib nixpkgsFun;
+    }
+    // newArgs);
 
-  boot = import ../stdenv/booter.nix { inherit lib allPackages; };
+  boot = import ../stdenv/booter.nix {inherit lib allPackages;};
 
   stages = stdenvStages {
     inherit lib localSystem crossSystem config overlays crossOverlays;
   };
 
   pkgs = boot stages;
-
-in checked pkgs
+in
+  checked pkgs

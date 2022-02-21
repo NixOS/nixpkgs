@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, yara
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  yara,
 }:
-
 buildPythonPackage rec {
   pname = "yara-python";
   version = "4.1.3";
@@ -28,14 +28,14 @@ buildPythonPackage rec {
     "--dynamic-linking"
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  pytestFlagsArray = ["tests.py"];
 
-  pythonImportsCheck = [ "yara" ];
+  pythonImportsCheck = ["yara"];
 
   meta = with lib; {
     description = "Python interface for YARA";
     homepage = "https://github.com/VirusTotal/yara-python";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

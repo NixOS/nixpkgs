@@ -1,5 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "epr";
   version = "2.3.0b";
@@ -15,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     description = "CLI Epub Reader";
     homepage = "https://github.com/wustho/epr";
     license = licenses.mit;
-    maintainers = [ maintainers.Br1ght0ne ];
+    maintainers = [maintainers.Br1ght0ne];
     platforms = platforms.all;
   };
 }

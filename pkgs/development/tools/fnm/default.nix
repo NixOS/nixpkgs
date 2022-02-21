@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, DiskArbitration
-, Foundation
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  DiskArbitration,
+  Foundation,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "fnm";
   version = "1.31.0";
@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-8A6MKDeyuk0bzyoDydcOy4LzyYe/S+x+ZJMTOo59UA8=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [DiskArbitration Foundation Security];
 
   cargoSha256 = "sha256-oiGYkRqxN6e5EG6EDQalIK0tOekyIVQ+GhxCKK0Sd3g=";
 
@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     description = "Fast and simple Node.js version manager";
     homepage = "https://github.com/Schniz/fnm";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kidonng ];
+    maintainers = with maintainers; [kidonng];
   };
 }

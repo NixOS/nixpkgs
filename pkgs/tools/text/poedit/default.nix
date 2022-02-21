@@ -1,7 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK31-gtk3,
-  boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
-  nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  gettext,
+  pkg-config,
+  wxGTK31-gtk3,
+  boost,
+  icu,
+  lucenepp,
+  asciidoc,
+  libxslt,
+  xmlto,
+  gtk3,
+  gtkspell3,
+  pugixml,
+  nlohmann_json,
+  hicolor-icon-theme,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "poedit";
   version = "3.0.1";
@@ -13,12 +32,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PBAOCAO3OrBE7lOho7nJNEpqwds7XiblN/f+GonrXHA=";
   };
 
-  nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
-    libxslt xmlto boost libtool pkg-config ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    asciidoc
+    wrapGAppsHook
+    libxslt
+    xmlto
+    boost
+    libtool
+    pkg-config
+  ];
 
-  buildInputs = [ lucenepp nlohmann_json wxGTK31-gtk3 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
+  buildInputs = [lucenepp nlohmann_json wxGTK31-gtk3 icu pugixml gtk3 gtkspell3 hicolor-icon-theme];
 
-  propagatedBuildInputs = [ gettext ];
+  propagatedBuildInputs = [gettext];
 
   preConfigure = "
     patchShebangs bootstrap
@@ -34,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ gettext ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [gettext]}")
   '';
 
   enableParallelBuilding = true;
@@ -44,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.poedit.net/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dasj19 ];
+    maintainers = with maintainers; [dasj19];
   };
 }

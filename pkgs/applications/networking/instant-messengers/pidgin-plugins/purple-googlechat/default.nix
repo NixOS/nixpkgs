@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pidgin, glib, json-glib, protobuf, protobufc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pidgin,
+  glib,
+  json-glib,
+  protobuf,
+  protobufc,
+}:
 stdenv.mkDerivation {
   pname = "purple-googlechat";
   version = "unstable-2021-10-18";
@@ -11,8 +19,8 @@ stdenv.mkDerivation {
     sha256 = "sha256-iTYVgYI9+6rqqBl5goeEAXpK8FgHDv0MmPsV/82reWA=";
   };
 
-  nativeBuildInputs = [ protobufc ];
-  buildInputs = [ pidgin glib json-glib protobuf ];
+  nativeBuildInputs = [protobufc];
+  buildInputs = [pidgin glib json-glib protobuf];
 
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
@@ -22,6 +30,6 @@ stdenv.mkDerivation {
     description = "Native Google Chat support for pidgin";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

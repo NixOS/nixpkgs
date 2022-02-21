@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, moltenvk, vulkan-headers, spirv-headers, vulkan-loader }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  moltenvk,
+  vulkan-headers,
+  spirv-headers,
+  vulkan-loader,
+}:
 #TODO: unstable
-
 stdenv.mkDerivation rec {
   pname = "vkd3d";
   version = "1.2";
@@ -11,8 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "0szr1lw3xbgi9qjm13d1q4gyzzwv8i5wfxiwjg6dmwphrc7h6jxh";
   };
 
-  buildInputs = [ vulkan-headers spirv-headers ]
-    ++ [ (if stdenv.isDarwin then moltenvk else vulkan-loader) ];
+  buildInputs =
+    [vulkan-headers spirv-headers]
+    ++ [
+      (if stdenv.isDarwin
+      then moltenvk
+      else vulkan-loader)
+    ];
 
   enableParallelBuilding = true;
 
@@ -21,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://source.winehq.org/git/vkd3d.git";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = [ maintainers.marius851000 ];
+    maintainers = [maintainers.marius851000];
   };
 }

@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_interface, cffi
-, sphinx, manuel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope_interface,
+  cffi,
+  sphinx,
+  manuel,
 }:
-
 buildPythonPackage rec {
   pname = "persistent";
   version = "4.7.0";
 
-  nativeBuildInputs = [ sphinx manuel ];
-  propagatedBuildInputs = [ zope_interface cffi ];
+  nativeBuildInputs = [sphinx manuel];
+  propagatedBuildInputs = [zope_interface cffi];
 
   src = fetchPypi {
     inherit pname version;

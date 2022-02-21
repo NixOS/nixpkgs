@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, zlib
-, cunit
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  zlib,
+  cunit,
 }:
 stdenv.mkDerivation rec {
   pname = "dcap";
@@ -18,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pNLEN1YLQGMJNuv8n6bec3qONbwNOYbYDDvkwuP5AR4=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [autoconf automake libtool];
+  buildInputs = [zlib];
 
   preConfigure = ''
     patchShebangs bootstrap.sh
@@ -28,9 +29,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ cunit ];
+  checkInputs = [cunit];
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = ["bin" "dev" "out" "man" "doc"];
 
   meta = with lib; {
     description = "dCache access protocol client library";
@@ -39,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Only;
     platforms = platforms.all;
     mainProgram = "dccp";
-    maintainers = with maintainers; [ ShamrockLee ];
+    maintainers = with maintainers; [ShamrockLee];
   };
 }

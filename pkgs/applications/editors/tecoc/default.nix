@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, ncurses
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tecoc";
   version = "unstable-2020-11-03";
@@ -15,19 +15,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JooLvoh9CxLHLOXXxE7zA7R9yglr9BGUwX4nrw2/vIw=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
-  makefile = if stdenv.hostPlatform.isDarwin
-             then "makefile.osx"
-             else if stdenv.hostPlatform.isFreeBSD
-             then "makefile.bsd"
-             else if stdenv.hostPlatform.isOpenBSD
-             then "makefile.bsd"
-             else if stdenv.hostPlatform.isWindows
-             then "makefile.win"
-             else "makefile.linux"; # I think Linux is a safe default...
+  makefile =
+    if stdenv.hostPlatform.isDarwin
+    then "makefile.osx"
+    else if stdenv.hostPlatform.isFreeBSD
+    then "makefile.bsd"
+    else if stdenv.hostPlatform.isOpenBSD
+    then "makefile.bsd"
+    else if stdenv.hostPlatform.isWindows
+    then "makefile.win"
+    else "makefile.linux"; # I think Linux is a safe default...
 
-  makeFlags = [ "CC=${stdenv.cc}/bin/cc" "-C src/" ];
+  makeFlags = ["CC=${stdenv.cc}/bin/cc" "-C src/"];
 
   preInstall = ''
     install -d $out/bin $out/share/doc/${pname}-${version} $out/lib/teco/macros
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
     license = {
       url = "https://github.com/blakemcbride/TECOC/tree/master/doc/readme-1st.txt";
     };
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.unix;
   };
 }

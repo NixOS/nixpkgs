@@ -1,29 +1,29 @@
-{ lib
-, arrow
-, buildPythonPackage
-, colour
-, email_validator
-, enum34
-, fetchPypi
-, flask
-, flask_sqlalchemy
-, flask-babelex
-, flask-mongoengine
-, geoalchemy2
-, isPy27
-, mongoengine
-, pillow
-, psycopg2
-, pymongo
-, pytestCheckHook
-, shapely
-, sqlalchemy
-, sqlalchemy-citext
-, sqlalchemy-utils
-, wtf-peewee
-, wtforms
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  colour,
+  email_validator,
+  enum34,
+  fetchPypi,
+  flask,
+  flask_sqlalchemy,
+  flask-babelex,
+  flask-mongoengine,
+  geoalchemy2,
+  isPy27,
+  mongoengine,
+  pillow,
+  psycopg2,
+  pymongo,
+  pytestCheckHook,
+  shapely,
+  sqlalchemy,
+  sqlalchemy-citext,
+  sqlalchemy-utils,
+  wtf-peewee,
+  wtforms,
 }:
-
 buildPythonPackage rec {
   pname = "flask-admin";
   version = "1.6.0";
@@ -35,12 +35,14 @@ buildPythonPackage rec {
     sha256 = "1209qhm51d4z66mbw55cmkzqvr465shnws2m2l2zzpxhnxwzqks2";
   };
 
-  propagatedBuildInputs = [
-    flask
-    wtforms
-  ] ++ lib.optionals isPy27 [
-    enum34
-  ];
+  propagatedBuildInputs =
+    [
+      flask
+      wtforms
+    ]
+    ++ lib.optionals isPy27 [
+      enum34
+    ];
 
   checkInputs = [
     arrow
@@ -82,6 +84,6 @@ buildPythonPackage rec {
     description = "Simple and extensible admin interface framework for Flask";
     homepage = "https://github.com/flask-admin/flask-admin/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchgit, python3, cmake, jq, libX11, libXext, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  python3,
+  cmake,
+  jq,
+  libX11,
+  libXext,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "swiftshader";
   version = "2020-11-06";
@@ -10,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gz2zflfacxf34s78djddf93brn9kyxj4byc4p2ip1pin43lh2lg";
   };
 
-  nativeBuildInputs = [ cmake python3 jq ];
-  buildInputs = [ libX11 libXext zlib ];
+  nativeBuildInputs = [cmake python3 jq];
+  buildInputs = [libX11 libXext zlib];
 
   # Make sure we include the drivers and icd files in the output as the cmake
   # generated install command only puts in the spirv-tools stuff.
@@ -51,13 +60,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "A high-performance CPU-based implementation of the Vulkan, OpenGL ES, and Direct3D 9 graphics APIs";
+    description = "A high-performance CPU-based implementation of the Vulkan, OpenGL ES, and Direct3D 9 graphics APIs";
     homepage = "https://opensource.google/projects/swiftshader";
     license = licenses.asl20;
     # Should be possible to support Darwin by changing the install phase with
     # 's/Linux/Darwin/' and 's/so/dylib/' or something similar.
-    platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" "mipsel-linux" ];
-    maintainers = with maintainers; [ expipiplus1 ];
+    platforms = ["i686-linux" "x86_64-linux" "armv7l-linux" "mipsel-linux"];
+    maintainers = with maintainers; [expipiplus1];
   };
 }

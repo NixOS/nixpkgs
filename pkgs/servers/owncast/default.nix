@@ -1,5 +1,15 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, bash, which, ffmpeg, makeWrapper, coreutils, ... }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  bash,
+  which,
+  ffmpeg,
+  makeWrapper,
+  coreutils,
+  ...
+}:
 buildGoModule rec {
   pname = "owncast";
   version = "0.0.10";
@@ -13,9 +23,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-NARHYeOVT7sxfL1BdJc/CPCgHNZzjWE7kACJvrEC71Y=";
 
-  propagatedBuildInputs = [ ffmpeg ];
+  propagatedBuildInputs = [ffmpeg];
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [makeWrapper];
 
   preInstall = ''
     mkdir -p $out
@@ -23,7 +33,6 @@ buildGoModule rec {
   '';
 
   postInstall = let
-
     setupScript = ''
       [ ! -d "$PWD/webroot" ] && (
         ${coreutils}/bin/cp --no-preserve=mode -r "${placeholder "out"}/webroot" "$PWD"
@@ -36,7 +45,7 @@ buildGoModule rec {
   in ''
     wrapProgram $out/bin/owncast \
       --run '${setupScript}' \
-      --prefix PATH : ${lib.makeBinPath [ bash which ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [bash which ffmpeg]}
   '';
 
   installCheckPhase = ''
@@ -52,7 +61,6 @@ buildGoModule rec {
     homepage = "https://owncast.online";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ MayNiklas ];
+    maintainers = with maintainers; [MayNiklas];
   };
-
 }

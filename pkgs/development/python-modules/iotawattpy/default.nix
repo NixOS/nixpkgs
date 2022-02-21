@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httpx
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httpx,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "iotawattpy";
   version = "0.1.0";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # https://github.com/gtdiehl/iotawattpy/issues/14
   doCheck = false;
 
-  pythonImportsCheck = [ "iotawattpy" ];
+  pythonImportsCheck = ["iotawattpy"];
 
   meta = with lib; {
     description = "Python interface for the IoTaWatt device";
     homepage = "https://github.com/gtdiehl/iotawattpy";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

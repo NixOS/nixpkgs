@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "htmlq";
   version = "0.4.0";
@@ -13,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-r9EnQQPGpPIcNYb1eqGrMnRdh0snIa5iVsTYTI+YErY=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
 
   doCheck = false;
 
@@ -21,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     description = "Like jq, but for HTML";
     homepage = "https://github.com/mgdm/htmlq";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben nerdypepper ];
+    maintainers = with maintainers; [siraben nerdypepper];
   };
 }

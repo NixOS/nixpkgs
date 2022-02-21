@@ -1,41 +1,41 @@
-{ apache-beam
-, attrs
-, beautifulsoup4
-, buildPythonPackage
-, dill
-, dm-tree
-, fetchFromGitHub
-, ffmpeg
-, future
-, imagemagick
-, importlib-resources
-, jinja2
-, langdetect
-, lib
-, matplotlib
-, mwparserfromhell
-, networkx
-, nltk
-, numpy
-, opencv4
-, pandas
-, pillow
-, promise
-, protobuf
-, pycocotools
-, pydub
-, pytestCheckHook
-, requests
-, scikitimage
-, scipy
-, six
-, tensorflow
-, tensorflow-metadata
-, termcolor
-, tifffile
-, tqdm
+{
+  apache-beam,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  dill,
+  dm-tree,
+  fetchFromGitHub,
+  ffmpeg,
+  future,
+  imagemagick,
+  importlib-resources,
+  jinja2,
+  langdetect,
+  lib,
+  matplotlib,
+  mwparserfromhell,
+  networkx,
+  nltk,
+  numpy,
+  opencv4,
+  pandas,
+  pillow,
+  promise,
+  protobuf,
+  pycocotools,
+  pydub,
+  pytestCheckHook,
+  requests,
+  scikitimage,
+  scipy,
+  six,
+  tensorflow,
+  tensorflow-metadata,
+  termcolor,
+  tifffile,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
   version = "4.4.0";
@@ -136,6 +136,6 @@ buildPythonPackage rec {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

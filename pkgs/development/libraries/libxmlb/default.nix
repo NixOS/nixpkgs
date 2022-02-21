@@ -1,23 +1,24 @@
-{ lib, stdenv
-, fetchFromGitHub
-, docbook_xml_dtd_43
-, docbook_xsl
-, glib
-, gobject-introspection
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, python3
-, shared-mime-info
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  glib,
+  gobject-introspection,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  shared-mime-info,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libxmlb";
   version = "0.3.1";
 
-  outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
+  outputs = ["out" "lib" "dev" "devdoc" "installedTests"];
 
   src = fetchFromGitHub {
     owner = "hughsie";
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    (python3.withPackages (pkgs: with pkgs; [ setuptools ]))
+    (python3.withPackages (pkgs: with pkgs; [setuptools]))
     shared-mime-info
   ];
 
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "A library to help create and query binary XML blobs";
     homepage = "https://github.com/hughsie/libxmlb";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

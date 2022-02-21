@@ -1,8 +1,16 @@
-{ stdenv, lib, fetchurl
-, autoreconfHook, libtool, pkg-config
-, gtk2, glib, cups, gettext, openssl
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+  libtool,
+  pkg-config,
+  gtk2,
+  glib,
+  cups,
+  gettext,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtklp";
   version = "1.3.4";
@@ -45,8 +53,7 @@ stdenv.mkDerivation rec {
     description = "A graphical frontend for CUPS";
     homepage = "https://gtklp.sirtobi.com";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ caadar ];
+    maintainers = with maintainers; [caadar];
     platforms = platforms.unix;
   };
-
 }

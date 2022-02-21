@@ -1,10 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, nix
-, git
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  nix,
+  git,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "nixpkgs-review";
   version = "2.6.4";
@@ -17,7 +17,10 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ nix git ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [nix git]}"
   ];
 
   doCheck = false;
@@ -26,6 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 SuperSandro2000 ];
+    maintainers = with maintainers; [mic92 SuperSandro2000];
   };
 }

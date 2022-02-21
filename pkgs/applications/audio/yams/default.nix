@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "yams";
   version = "0.7.3";
@@ -24,6 +27,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/Berulacks/yams";
     description = "Last.FM scrobbler for MPD";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ccellado ];
+    maintainers = with maintainers; [ccellado];
   };
 }

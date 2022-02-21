@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
-, numpy
-, scipy
-, scikit-learn
-, pandas
-, tqdm
-, slicer
-, numba
-, matplotlib
-, nose
-, ipython
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytestCheckHook,
+  numpy,
+  scipy,
+  scikit-learn,
+  pandas,
+  tqdm,
+  slicer,
+  numba,
+  matplotlib,
+  nose,
+  ipython,
 }:
-
 buildPythonPackage rec {
   pname = "shap";
   version = "0.40.0";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     # when importing the local copy the extension is not found
     rm -r shap
   '';
-  checkInputs = [ pytestCheckHook matplotlib nose ipython ];
+  checkInputs = [pytestCheckHook matplotlib nose ipython];
   # Those tests access the network
   disabledTests = [
     "test_kernel_shap_with_a1a_sparse_zero_background"
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     description = "A unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
     license = licenses.mit;
-    maintainers = with maintainers; [ evax ];
+    maintainers = with maintainers; [evax];
     platforms = platforms.unix;
     # ModuleNotFoundError: No module named 'sklearn.ensemble.iforest'
     broken = true;

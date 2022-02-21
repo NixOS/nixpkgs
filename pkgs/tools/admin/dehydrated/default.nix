@@ -1,4 +1,17 @@
-{ lib, stdenv, coreutils, curl, diffutils, gawk, gnugrep, gnused, openssl, makeWrapper, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  coreutils,
+  curl,
+  diffutils,
+  gawk,
+  gnugrep,
+  gnused,
+  openssl,
+  makeWrapper,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "dehydrated";
   version = "0.7.0";
@@ -10,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "09jhmkjvnj98zbf92qwdr5rr7pc6v63xzyk2fbi177r7szb2yg09";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
   installPhase = ''
     installManPage docs/man/dehydrated.1
@@ -22,14 +35,14 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp -a dehydrated $out/bin
-    wrapProgram "$out/bin/dehydrated" --prefix PATH : "${lib.makeBinPath [ openssl coreutils gnused gnugrep diffutils curl gawk ]}"
-    '';
+    wrapProgram "$out/bin/dehydrated" --prefix PATH : "${lib.makeBinPath [openssl coreutils gnused gnugrep diffutils curl gawk]}"
+  '';
 
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Letsencrypt/acme client implemented as a shell-script";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.pstn ];
+    maintainers = [maintainers.pstn];
   };
 }

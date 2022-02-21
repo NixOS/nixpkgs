@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, gnustep
-, bzip2
-, zlib
-, icu
-, openssl
-, wavpack
-, xcbuildHook
-, Foundation
-, AppKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  gnustep,
+  bzip2,
+  zlib,
+  icu,
+  openssl,
+  wavpack,
+  xcbuildHook,
+  Foundation,
+  AppKit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "unar";
   version = "1.10.7";
@@ -26,29 +26,35 @@ stdenv.mkDerivation rec {
   };
 
   postPatch =
-    if stdenv.isDarwin then ''
-      substituteInPlace "./XADMaster.xcodeproj/project.pbxproj" \
-        --replace "libstdc++.6.dylib" "libc++.1.dylib"
-    '' else ''
-      for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
-        substituteInPlace $f \
-          --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
-          --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
-          --replace "-DGNU_RUNTIME=1" "" \
-          --replace "-fgnu-runtime" "-fobjc-nonfragile-abi"
-      done
+    if stdenv.isDarwin
+    then
+      ''
+        substituteInPlace "./XADMaster.xcodeproj/project.pbxproj" \
+          --replace "libstdc++.6.dylib" "libc++.1.dylib"
+      ''
+    else
+      ''
+        for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
+          substituteInPlace $f \
+            --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
+            --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
+            --replace "-DGNU_RUNTIME=1" "" \
+            --replace "-fgnu-runtime" "-fobjc-nonfragile-abi"
+        done
 
-      # we need to build inside this directory as well, so we have to make it writeable
-      chmod +w ../UniversalDetector -R
-    '';
+        # we need to build inside this directory as well, so we have to make it writeable
+        chmod +w ../UniversalDetector -R
+      '';
 
-  buildInputs = [ bzip2 icu openssl wavpack zlib ] ++
-    lib.optionals stdenv.isLinux [ gnustep.base ] ++
-    lib.optionals stdenv.isDarwin [ Foundation AppKit ];
+  buildInputs =
+    [bzip2 icu openssl wavpack zlib]
+    ++ lib.optionals stdenv.isLinux [gnustep.base]
+    ++ lib.optionals stdenv.isDarwin [Foundation AppKit];
 
-  nativeBuildInputs = [ installShellFiles ] ++
-    lib.optionals stdenv.isLinux [ gnustep.make ] ++
-    lib.optionals stdenv.isDarwin [ xcbuildHook ];
+  nativeBuildInputs =
+    [installShellFiles]
+    ++ lib.optionals stdenv.isLinux [gnustep.make]
+    ++ lib.optionals stdenv.isDarwin [xcbuildHook];
 
   xcbuildFlags = lib.optionals stdenv.isDarwin [
     "-target unar"
@@ -92,7 +98,7 @@ stdenv.mkDerivation rec {
       ADF, DMS, LZX, PowerPacker, LBR, Squeeze, Crunch, and other old formats.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ peterhoeg thiagokokada ];
+    maintainers = with maintainers; [peterhoeg thiagokokada];
     platforms = platforms.unix;
   };
 }

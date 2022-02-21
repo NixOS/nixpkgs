@@ -1,18 +1,19 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, dconf
-, telepathy-glib
-, python3
-, libxslt
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  dconf,
+  telepathy-glib,
+  python3,
+  libxslt,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "telepathy-mission-control";
   version = "5.16.6";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = ["out" "lib" "dev"];
 
   src = fetchurl {
     url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "An account manager and channel dispatcher for the Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.unix;
   };
 }

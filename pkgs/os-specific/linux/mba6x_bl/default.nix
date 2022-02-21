@@ -1,5 +1,9 @@
-{ fetchFromGitHub, kernel, lib, stdenv }:
-
+{
+  fetchFromGitHub,
+  kernel,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation {
   pname = "mba6x_bl";
   version = "unstable-2016-12-08";
@@ -12,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -26,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/patjak/mba6x_bl";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.simonvandel ];
+    maintainers = [maintainers.simonvandel];
   };
 }

@@ -1,31 +1,36 @@
-{ lib
-, callPackage
-, nixosTests
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, rpmextract
-, openssl
-, zlib
-, lvm2  # LVM image backup and restore functions (optional)
-, acl  # EXT2/EXT3/XFS ACL support (optional)
-, gnugrep
-, procps
-, jdk8  # Java GUI (needed for `enableGui`)
-, buildEnv
-, makeWrapper
-, enableGui ? false  # enables Java GUI `dsmj`
-# path to `dsm.sys` configuration files
-, dsmSysCli ? "/etc/tsm-client/cli.dsm.sys"
-, dsmSysApi ? "/etc/tsm-client/api.dsm.sys"
+{
+  lib,
+  callPackage,
+  nixosTests,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  rpmextract,
+  openssl,
+  zlib,
+  lvm2
+  # LVM image backup and restore functions (optional)
+  ,
+  acl
+  # EXT2/EXT3/XFS ACL support (optional)
+  ,
+  gnugrep,
+  procps,
+  jdk8
+  # Java GUI (needed for `enableGui`)
+  ,
+  buildEnv,
+  makeWrapper,
+  enableGui ? false
+  # enables Java GUI `dsmj`
+  # path to `dsm.sys` configuration files
+  ,
+  dsmSysCli ? "/etc/tsm-client/cli.dsm.sys",
+  dsmSysApi ? "/etc/tsm-client/api.dsm.sys",
 }:
-
-
 # For an explanation of optional packages
 # (features provided by them, version limits), see
 # https://www.ibm.com/support/pages/node/660813#Version%208.1
-
-
 # IBM Tivoli Storage Manager Client uses a system-wide
 # client system-options file `dsm.sys` and expects it
 # to be located in a directory within the package.
@@ -46,8 +51,6 @@
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
 # https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=solaris-set-api-environment-variables
-
-
 # The newest version of TSM client should be discoverable by
 # going to the `downloadPage` (see `meta` below).
 # Find the "Backup-archive client" table on that page.
@@ -63,17 +66,14 @@
 # In the directory listing to show up, pick the big `.tar` file.
 #
 # (as of 2021-12-18)
-
-
 let
-
   meta = {
     homepage = "https://www.ibm.com/products/data-protection-and-recovery";
     downloadPage = "https://www.ibm.com/support/pages/ibm-spectrum-protect-downloads-latest-fix-packs-and-interim-fixes";
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     mainProgram = "dsmc";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.yarny ];
+    maintainers = [lib.maintainers.yarny];
     description = "IBM Spectrum Protect (Tivoli Storage Manager) CLI and API";
     longDescription = ''
       IBM Spectrum Protect (Tivoli Storage Manager) provides
@@ -95,14 +95,16 @@ let
     test-gui = nixosTests.tsm-client-gui;
   };
 
-  mkSrcUrl = version:
-    let
-      major = lib.versions.major version;
-      minor = lib.versions.minor version;
-      patch = lib.versions.patch version;
-      fixup = lib.lists.elemAt (lib.versions.splitVersion version) 3;
-    in
-      "https://public.dhe.ibm.com/storage/tivoli-storage-management/${if fixup=="0" then "maintenance" else "patches"}/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
+  mkSrcUrl = version: let
+    major = lib.versions.major version;
+    minor = lib.versions.minor version;
+    patch = lib.versions.patch version;
+    fixup = lib.lists.elemAt (lib.versions.splitVersion version) 3;
+  in "https://public.dhe.ibm.com/storage/tivoli-storage-management/${
+    if fixup == "0"
+    then "maintenance"
+    else "patches"
+  }/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
@@ -161,45 +163,45 @@ let
     '';
   };
 
-  binPath = lib.makeBinPath ([ acl gnugrep procps ]
-    ++ lib.optional enableGui jdk8);
-
+  binPath = lib.makeBinPath ([acl gnugrep procps]
+  ++ lib.optional enableGui jdk8);
 in
-
-buildEnv {
-  name = "tsm-client-${unwrapped.version}";
-  meta = meta // lib.attrsets.optionalAttrs enableGui {
-    mainProgram = "dsmj";
-  };
-  passthru = passthru // { inherit unwrapped; };
-  paths = [ unwrapped ];
-  nativeBuildInputs = [ makeWrapper ];
-  pathsToLink = [
-    "/"
-    "/bin"
-    "/opt/tivoli/tsm/client/ba/bin"
-    "/opt/tivoli/tsm/client/api/bin64"
-  ];
-  # * Provide top-level symlinks `dsm_dir` and `dsmi_dir`
-  #   to the so-called "installation directories"
-  # * Add symlinks to the "installation directories"
-  #   that point to the `dsm.sys` configuration files
-  # * Drop the Java GUI executable unless `enableGui` is set
-  # * Create wrappers for the command-line interface to
-  #   prepare `PATH` and `DSM_DIR` environment variables
-  postBuild = ''
-    ln --symbolic --no-target-directory opt/tivoli/tsm/client/ba/bin $out/dsm_dir
-    ln --symbolic --no-target-directory opt/tivoli/tsm/client/api/bin64 $out/dsmi_dir
-    ln --symbolic --no-target-directory "${dsmSysCli}" $out/dsm_dir/dsm.sys
-    ln --symbolic --no-target-directory "${dsmSysApi}" $out/dsmi_dir/dsm.sys
-    ${lib.optionalString (!enableGui) "rm $out/bin/dsmj"}
-    for bin in $out/bin/*
-    do
-      target=$(readlink "$bin")
-      rm "$bin"
-      makeWrapper "$target" "$bin" \
-        --prefix PATH : "$out/dsm_dir:${binPath}" \
-        --set DSM_DIR $out/dsm_dir
-    done
-  '';
-}
+  buildEnv {
+    name = "tsm-client-${unwrapped.version}";
+    meta =
+      meta
+      // lib.attrsets.optionalAttrs enableGui {
+        mainProgram = "dsmj";
+      };
+    passthru = passthru // {inherit unwrapped;};
+    paths = [unwrapped];
+    nativeBuildInputs = [makeWrapper];
+    pathsToLink = [
+      "/"
+      "/bin"
+      "/opt/tivoli/tsm/client/ba/bin"
+      "/opt/tivoli/tsm/client/api/bin64"
+    ];
+    # * Provide top-level symlinks `dsm_dir` and `dsmi_dir`
+    #   to the so-called "installation directories"
+    # * Add symlinks to the "installation directories"
+    #   that point to the `dsm.sys` configuration files
+    # * Drop the Java GUI executable unless `enableGui` is set
+    # * Create wrappers for the command-line interface to
+    #   prepare `PATH` and `DSM_DIR` environment variables
+    postBuild = ''
+      ln --symbolic --no-target-directory opt/tivoli/tsm/client/ba/bin $out/dsm_dir
+      ln --symbolic --no-target-directory opt/tivoli/tsm/client/api/bin64 $out/dsmi_dir
+      ln --symbolic --no-target-directory "${dsmSysCli}" $out/dsm_dir/dsm.sys
+      ln --symbolic --no-target-directory "${dsmSysApi}" $out/dsmi_dir/dsm.sys
+      ${lib.optionalString (!enableGui) "rm $out/bin/dsmj"}
+      for bin in $out/bin/*
+      do
+        target=$(readlink "$bin")
+        rm "$bin"
+        makeWrapper "$target" "$bin" \
+          --prefix PATH : "$out/dsm_dir:${binPath}" \
+          --set DSM_DIR $out/dsm_dir
+      done
+    '';
+  }

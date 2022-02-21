@@ -1,12 +1,11 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, ocaml
-
-, ounit
-, zarith
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ocaml,
+  ounit,
+  zarith,
 }:
-
 buildDunePackage rec {
   pname = "rfc7748";
   version = "1.0";
@@ -22,11 +21,11 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.05";
 
-  propagatedBuildInputs = [ zarith ];
+  propagatedBuildInputs = [zarith];
 
   # the tests fail for 4.05
   doCheck = lib.versionAtLeast ocaml.version "4.06";
-  checkInputs = [ ounit ];
+  checkInputs = [ounit];
 
   meta = {
     homepage = "https://github.com/burgerdev/ocaml-rfc7748";
@@ -38,6 +37,6 @@ buildDunePackage rec {
       to use and hard to misuse.
     '';
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fufexan ];
+    maintainers = with lib.maintainers; [fufexan];
   };
 }

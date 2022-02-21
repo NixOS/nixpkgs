@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, requests
-, six
-, tox
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  requests,
+  six,
+  tox,
+  pytest,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pushover-complete";
   version = "1.1.1";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [ pytest tox ];
+  checkInputs = [pytest tox];
 
   # Fails also on their travis right now:
   # - https://travis-ci.org/scolby33/pushover_complete/builds?utm_medium=notification&utm_source=github_status
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "A Python package for interacting with *all* aspects of the Pushover API";
     homepage = "https://github.com/scolby33/pushover_complete";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

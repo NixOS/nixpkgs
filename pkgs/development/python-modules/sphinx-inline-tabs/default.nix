@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
 }:
-
 buildPythonPackage rec {
   pname = "sphinx-inline-tabs";
   version = "2022.01.02.beta11";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
   # no tests, see https://github.com/pradyunsg/sphinx-inline-tabs/issues/6
   doCheck = false;
 
-  pythonImportsCheck = [ "sphinx_inline_tabs" ];
+  pythonImportsCheck = ["sphinx_inline_tabs"];
 
   meta = with lib; {
     description = "Add inline tabbed content to your Sphinx documentation";
     homepage = "https://github.com/pradyunsg/sphinx-inline-tabs";
     license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

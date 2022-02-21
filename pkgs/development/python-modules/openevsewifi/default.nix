@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "openevsewifi";
   version = "1.1.0";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for communicating with the wifi module from OpenEVSE";
     homepage = "https://github.com/miniconfig/python-openevse-wifi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

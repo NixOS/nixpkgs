@@ -1,7 +1,7 @@
-{ recurseIntoAttrs
-, callPackage
+{
+  recurseIntoAttrs,
+  callPackage,
 }:
-
 recurseIntoAttrs rec {
   optifine-latest = optifine_1_18_1;
 

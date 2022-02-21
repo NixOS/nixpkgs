@@ -1,21 +1,21 @@
-{ buildPythonPackage
-, cloudpickle
-, dm-haiku
-, einops
-, fetchFromGitHub
-, flax
-, hypothesis
-, jaxlib
-, keras
-, lib
-, poetry-core
-, pytestCheckHook
-, pyyaml
-, rich
-, tensorflow
-, treeo
+{
+  buildPythonPackage,
+  cloudpickle,
+  dm-haiku,
+  einops,
+  fetchFromGitHub,
+  flax,
+  hypothesis,
+  jaxlib,
+  keras,
+  lib,
+  poetry-core,
+  pytestCheckHook,
+  pyyaml,
+  rich,
+  tensorflow,
+  treeo,
 }:
-
 buildPythonPackage rec {
   pname = "treex";
   version = "0.6.9";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  buildInputs = [ jaxlib ];
+  buildInputs = [jaxlib];
 
   propagatedBuildInputs = [
     einops
@@ -72,6 +72,6 @@ buildPythonPackage rec {
     description = "Pytree Module system for Deep Learning in JAX";
     homepage = "https://github.com/cgarciae/treex";
     license = licenses.mit;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

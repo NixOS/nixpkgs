@@ -1,30 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, nixosTests
-, substituteAll
-, autoreconfHook
-, pkg-config
-, libxml2
-, glib
-, pipewire
-, flatpak
-, gsettings-desktop-schemas
-, acl
-, dbus
-, fuse
-, libportal
-, geoclue2
-, json-glib
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  nixosTests,
+  substituteAll,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+  glib,
+  pipewire,
+  flatpak,
+  gsettings-desktop-schemas,
+  acl,
+  dbus,
+  fuse,
+  libportal,
+  geoclue2,
+  json-glib,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
   version = "1.10.1";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = ["out" "installedTests"];
 
   src = fetchFromGitHub {
     owner = "flatpak";
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, libjack2, mesa, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  cairo,
+  lv2,
+  libjack2,
+  mesa,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "stone-phaser";
   version = "0.1.2";
@@ -12,9 +21,13 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    xorg.libX11 cairo lv2 libjack2 mesa
+    xorg.libX11
+    cairo
+    lv2
+    libjack2
+    mesa
   ];
 
   postPatch = ''
@@ -22,12 +35,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./dpf/utils/generate-ttl.sh
   '';
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://github.com/jpcima/stone-phaser";
     description = "A classic analog phaser effect, made with DPF and Faust";
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
     license = licenses.boost;
   };

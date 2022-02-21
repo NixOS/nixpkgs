@@ -1,9 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, gcc-arm-embedded, binutils-arm-embedded, ruby
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gcc-arm-embedded,
+  binutils-arm-embedded,
+  ruby,
 }:
-
 stdenv.mkDerivation rec {
-
   pname = "inav";
   version = "2.0.0-rc2";
 
@@ -15,7 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded binutils-arm-embedded
+    gcc-arm-embedded
+    binutils-arm-embedded
     ruby
   ];
 
@@ -49,8 +53,7 @@ stdenv.mkDerivation rec {
     description = "Navigation-enabled flight control software";
     homepage = "https://inavflight.github.io";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ elitak ];
+    maintainers = with maintainers; [elitak];
     broken = true;
   };
-
 }

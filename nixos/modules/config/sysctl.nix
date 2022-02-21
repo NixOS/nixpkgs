@@ -1,25 +1,19 @@
-{ config, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  ...
+}:
+with lib; let
   sysctlOption = mkOptionType {
     name = "sysctl option value";
-    check = val:
-      let
-        checkType = x: isBool x || isString x || isInt x || x == null;
-      in
-        checkType val || (val._type or "" == "override" && checkType val.content);
+    check = val: let
+      checkType = x: isBool x || isString x || isInt x || x == null;
+    in
+      checkType val || (val._type or "" == "override" && checkType val.content);
     merge = loc: defs: mergeOneOption loc (filterOverrides defs);
   };
-
-in
-
-{
-
+in {
   options = {
-
     boot.kernel.sysctl = mkOption {
       default = {};
       example = literalExpression ''
@@ -37,20 +31,24 @@ in
         (signifying the option will not appear at all).
       '';
     };
-
   };
 
   config = {
-
     environment.etc."sysctl.d/60-nixos.conf".text =
-      concatStrings (mapAttrsToList (n: v:
-        optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
-      ) config.boot.kernel.sysctl);
+      concatStrings (mapAttrsToList (
+        n: v:
+          optionalString (v != null) "${n}=${
+            if v == false
+            then "0"
+            else toString v
+          }\n"
+      )
+      config.boot.kernel.sysctl);
 
-    systemd.services.systemd-sysctl =
-      { wantedBy = [ "multi-user.target" ];
-        restartTriggers = [ config.environment.etc."sysctl.d/60-nixos.conf".source ];
-      };
+    systemd.services.systemd-sysctl = {
+      wantedBy = ["multi-user.target"];
+      restartTriggers = [config.environment.etc."sysctl.d/60-nixos.conf".source];
+    };
 
     # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
     # users as these make it easier to exploit kernel vulnerabilities.
@@ -58,6 +56,5 @@ in
 
     # Disable YAMA by default to allow easy debugging.
     boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkDefault 0;
-
   };
 }

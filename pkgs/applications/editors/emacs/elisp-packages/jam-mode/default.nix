@@ -1,8 +1,8 @@
-{ lib
-, trivialBuild
-, fetchurl
+{
+  lib,
+  trivialBuild,
+  fetchurl,
 }:
-
 trivialBuild rec {
   pname = "jam-mode";
   version = "0.3";
@@ -23,7 +23,7 @@ trivialBuild rec {
   meta = with lib; {
     description = "An Emacs major mode for editing Jam files";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     platforms = platforms.all;
   };
 }

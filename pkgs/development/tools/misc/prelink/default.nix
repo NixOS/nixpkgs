@@ -1,11 +1,17 @@
-{ lib, stdenv, fetchurl, libelf }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libelf,
+}:
 stdenv.mkDerivation rec {
   pname = "prelink";
   version = "20130503";
 
   buildInputs = [
-    libelf stdenv.cc.libc (lib.getOutput "static" stdenv.cc.libc)
+    libelf
+    stdenv.cc.libc
+    (lib.getOutput "static" stdenv.cc.libc)
   ];
 
   src = fetchurl {

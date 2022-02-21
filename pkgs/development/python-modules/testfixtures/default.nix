@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, sybil
-, twisted
-, zope_component
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  sybil,
+  twisted,
+  zope_component,
 }:
-
 buildPythonPackage rec {
   pname = "testfixtures";
   version = "6.18.3";
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     description = "Collection of helpers and mock objects for unit tests and doc tests";
     homepage = "https://github.com/Simplistix/testfixtures";
     license = licenses.mit;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [siriobalmelli];
   };
 }

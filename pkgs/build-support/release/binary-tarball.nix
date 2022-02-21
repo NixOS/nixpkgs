@@ -1,21 +1,22 @@
-/* This function builds a binary tarball.  The resulting binaries are
-   usually only useful if they are don't have any runtime dependencies
-   on any paths in the Nix store, since those aren't distributed in
-   the tarball.  For instance, the binaries should be statically
-   linked: they can't depend on dynamic libraries in the store
-   (including Glibc).
-
-   The binaries are built and installed with a prefix of /usr/local by
-   default.  They are installed by setting DESTDIR to a temporary
-   directory, so the Makefile of the package should support DESTDIR.
-*/
-
-{ src, stdenv
-, name ? "binary-tarball"
-, ... } @ args:
-
+/*
+ This function builds a binary tarball.  The resulting binaries are
+ usually only useful if they are don't have any runtime dependencies
+ on any paths in the Nix store, since those aren't distributed in
+ the tarball.  For instance, the binaries should be statically
+ linked: they can't depend on dynamic libraries in the store
+ (including Glibc).
+ 
+ The binaries are built and installed with a prefix of /usr/local by
+ default.  They are installed by setting DESTDIR to a temporary
+ directory, so the Makefile of the package should support DESTDIR.
+ */
+{
+  src,
+  stdenv,
+  name ? "binary-tarball",
+  ...
+} @ args:
 stdenv.mkDerivation (
-
   {
     # Also run a `make check'.
     doCheck = true;
@@ -26,11 +27,13 @@ stdenv.mkDerivation (
 
     postPhases = "finalPhase";
   }
-
-  // args //
-
-  {
-    name = name + (if src ? version then "-" + src.version else "");
+  // args
+  // {
+    name =
+      name
+      + (if src ? version
+      then "-" + src.version
+      else "");
 
     postHook = ''
       mkdir -p $out/nix-support
@@ -70,9 +73,12 @@ stdenv.mkDerivation (
       test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
     '';
 
-    meta = (if args ? meta then args.meta else {}) // {
-      description = "Build of a generic binary distribution";
-    };
-
+    meta =
+      (if args ? meta
+      then args.meta
+      else {})
+      // {
+        description = "Build of a generic binary distribution";
+      };
   }
 )

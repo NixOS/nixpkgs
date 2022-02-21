@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, async-timeout
-, aioresponses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  aiohttp,
+  async-timeout,
+  aioresponses,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "foobot-async";
   version = "1.0.0";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "foobot_async" ];
+  pythonImportsCheck = ["foobot_async"];
 
   meta = with lib; {
     description = "API Client for Foobot Air Quality Monitoring devices";
     homepage = "https://github.com/reefab/foobot_async";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

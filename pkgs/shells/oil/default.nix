@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, withReadline ? true, readline }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  withReadline ? true,
+  readline,
+}:
 stdenv.mkDerivation rec {
   pname = "oil";
   version = "0.9.7";
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
     ];
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lheckemann alva ];
+    maintainers = with lib.maintainers; [lheckemann alva];
     changelog = "https://www.oilshell.org/release/${version}/changelog.html";
   };
 

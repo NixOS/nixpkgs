@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  language ? "en_US",
+}: let
   pname = "geogebra";
   version = "5-0-680-0";
 
@@ -27,8 +35,8 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ sikmir ];
-    license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
+    maintainers = with maintainers; [sikmir];
+    license = with licenses; [gpl3 cc-by-nc-sa-30 geogebra];
     platforms = with platforms; linux ++ darwin;
     hydraPlatforms = [];
   };
@@ -46,7 +54,7 @@ let
       sha256 = "0gdvajf220pm1w3nxi2fymxjx2vl978pz7ffn5gr72cx8f2956lm";
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
 
     installPhase = ''
       install -D geogebra/* -t "$out/libexec/geogebra/"
@@ -79,7 +87,7 @@ let
 
     dontUnpack = true;
 
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [unzip];
 
     installPhase = ''
       install -dm755 $out/Applications
@@ -87,6 +95,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
-then darwinPkg
-else linuxPkg
+  if stdenv.isDarwin
+  then darwinPkg
+  else linuxPkg

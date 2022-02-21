@@ -1,8 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "svls";
   version = "0.1.27";
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "SystemVerilog language server";
     homepage = "https://github.com/dalance/svls";
     license = licenses.mit;
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [trepetti];
   };
 }

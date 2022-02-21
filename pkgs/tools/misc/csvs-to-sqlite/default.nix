@@ -1,6 +1,8 @@
-{ lib, python3, fetchFromGitHub }:
-
-let
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}: let
   # csvs-to-sqlite is currently not compatible with Click 8. See the following
   # https://github.com/simonw/csvs-to-sqlite/issues/80
   #
@@ -8,38 +10,39 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       # Use click 7
-      click = self.callPackage ../../../development/python2-modules/click/default.nix { };
+      click = self.callPackage ../../../development/python2-modules/click/default.nix {};
     };
   };
-in with python.pkgs; buildPythonApplication rec {
-  pname = "csvs-to-sqlite";
-  version = "1.2";
-  disabled = !isPy3k;
+in
+  with python.pkgs;
+    buildPythonApplication rec {
+      pname = "csvs-to-sqlite";
+      version = "1.2";
+      disabled = !isPy3k;
 
-  src = fetchFromGitHub {
-    owner = "simonw";
-    repo = pname;
-    rev = version;
-    sha256 = "0p99cg76d3s7jxvigh5ad04dzhmr6g62qzzh4i6h7x9aiyvdhvk4";
-  };
+      src = fetchFromGitHub {
+        owner = "simonw";
+        repo = pname;
+        rev = version;
+        sha256 = "0p99cg76d3s7jxvigh5ad04dzhmr6g62qzzh4i6h7x9aiyvdhvk4";
+      };
 
-  propagatedBuildInputs = [
-    click
-    dateparser
-    pandas
-    py-lru-cache
-    six
-  ];
+      propagatedBuildInputs = [
+        click
+        dateparser
+        pandas
+        py-lru-cache
+        six
+      ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+      checkInputs = [
+        pytestCheckHook
+      ];
 
-  meta = with lib; {
-    description = "Convert CSV files into a SQLite database";
-    homepage = "https://github.com/simonw/csvs-to-sqlite";
-    license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
-  };
-
-}
+      meta = with lib; {
+        description = "Convert CSV files into a SQLite database";
+        homepage = "https://github.com/simonw/csvs-to-sqlite";
+        license = licenses.asl20;
+        maintainers = [maintainers.costrouc];
+      };
+    }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, python
-, mock
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  python,
+  mock,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-console-scripts";
   version = "1.2.2";
@@ -24,9 +24,9 @@ buildPythonPackage rec {
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  checkInputs = [ mock pytestCheckHook ];
+  checkInputs = [mock pytestCheckHook];
 
   meta = with lib; {
     description = "Pytest plugin for testing console scripts";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/kvas-it/pytest-console-scripts";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = with maintainers; [AluisioASG];
   };
 }

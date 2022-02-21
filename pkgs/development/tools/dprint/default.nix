@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchCrate, rustPlatform, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
   version = "0.22.0";
@@ -11,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-KQLoF0yvlZaQIn50WlmlfHsIYjgca6odCnhmWG2au2U=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
 
   # Tests fail because they expect a test WASM plugin. Tests already run for
   # every commit upstream on GitHub Actions
@@ -27,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/dprint/dprint/releases/tag/${version}";
     homepage = "https://dprint.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ khushraj ];
+    maintainers = with maintainers; [khushraj];
   };
 }

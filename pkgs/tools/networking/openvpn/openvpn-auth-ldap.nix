@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gnustep
-, re2c
-, openldap
-, openssl
-, openvpn
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gnustep,
+  re2c,
+  openldap,
+  openssl,
+  openvpn,
 }:
-
 stdenv.mkDerivation rec {
   pname = "openvpn-auth-ldap";
   version = "2.0.4";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       licenses.asl20
       licenses.bsd3
     ];
-    maintainers = [ maintainers.benley ];
+    maintainers = [maintainers.benley];
     platforms = platforms.unix;
   };
 }

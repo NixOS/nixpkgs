@@ -1,21 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.eternal-terminal;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.eternal-terminal;
+in {
   ###### interface
 
   options = {
-
     services.eternal-terminal = {
-
       enable = mkEnableOption "Eternal Terminal server";
 
       port = mkOption {
@@ -57,31 +52,36 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
     # We need to ensure the et package is fully installed because
     # the (remote) et client runs the `etterminal` binary when it
     # connects.
-    environment.systemPackages = [ pkgs.eternal-terminal ];
+    environment.systemPackages = [pkgs.eternal-terminal];
 
     systemd.services = {
       eternal-terminal = {
         description = "Eternal Terminal server.";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wantedBy = ["multi-user.target"];
+        after = ["network.target"];
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${pkgs.eternal-terminal}/bin/etserver --daemon --cfgfile=${pkgs.writeText "et.cfg" ''
-            ; et.cfg : Config file for Eternal Terminal
-            ;
+          ExecStart = "${pkgs.eternal-terminal}/bin/etserver --daemon --cfgfile=${
+            pkgs.writeText "et.cfg" ''
+              ; et.cfg : Config file for Eternal Terminal
+              ;
 
-            [Networking]
-            port = ${toString cfg.port}
+              [Networking]
+              port = ${toString cfg.port}
 
-            [Debug]
-            verbose = ${toString cfg.verbosity}
-            silent = ${if cfg.silent then "1" else "0"}
-            logsize = ${toString cfg.logSize}
-          ''}";
+              [Debug]
+              verbose = ${toString cfg.verbosity}
+              silent = ${
+                if cfg.silent
+                then "1"
+                else "0"
+              }
+              logsize = ${toString cfg.logSize}
+            ''
+          }";
           Restart = "on-failure";
           KillMode = "process";
         };
@@ -90,6 +90,6 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

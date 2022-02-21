@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, bash
-, coreutils
-, eventlet
-, fasteners
-, fixtures
-, iana-etc
-, libredirect
-, oslo-config
-, oslo-utils
-, oslotest
-, pbr
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  bash,
+  coreutils,
+  eventlet,
+  fasteners,
+  fixtures,
+  iana-etc,
+  libredirect,
+  oslo-config,
+  oslo-utils,
+  oslotest,
+  pbr,
+  stestr,
 }:
-
 buildPythonPackage rec {
   pname = "oslo-concurrency";
   version = "4.5.0";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "oslo_concurrency" ];
+  pythonImportsCheck = ["oslo_concurrency"];
 
   meta = with lib; {
     description = "Oslo Concurrency library";

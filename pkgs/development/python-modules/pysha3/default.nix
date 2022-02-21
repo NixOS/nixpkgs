@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+}:
 buildPythonPackage rec {
   pname = "pysha3";
   version = "1.0.2";

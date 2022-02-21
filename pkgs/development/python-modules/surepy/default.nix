@@ -1,21 +1,21 @@
-{ lib
-, aiodns
-, aiohttp
-, async-timeout
-, attrs
-, brotlipy
-, buildPythonPackage
-, cchardet
-, click
-, colorama
-, fetchFromGitHub
-, halo
-, poetry-core
-, pythonOlder
-, requests
-, rich
+{
+  lib,
+  aiodns,
+  aiohttp,
+  async-timeout,
+  attrs,
+  brotlipy,
+  buildPythonPackage,
+  cchardet,
+  click,
+  colorama,
+  fetchFromGitHub,
+  halo,
+  poetry-core,
+  pythonOlder,
+  requests,
+  rich,
 }:
-
 buildPythonPackage rec {
   pname = "surepy";
   version = "0.7.2";
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interact with the Sure Petcare API";
     homepage = "https://github.com/benleb/surepy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

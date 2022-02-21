@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
-
 buildPythonPackage {
   pname = "chevron";
   version = "0.13.1";
@@ -24,6 +24,6 @@ buildPythonPackage {
     homepage = "https://github.com/noahmorrison/chevron";
     description = "A python implementation of the mustache templating language";
     license = licenses.mit;
-    maintainers = with maintainers; [ dhkl ];
+    maintainers = with maintainers; [dhkl];
   };
 }

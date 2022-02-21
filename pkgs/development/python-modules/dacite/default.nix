@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "dacite";
   version = "1.6.0";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Python helper to create data classes from dictionaries";
     homepage = "https://github.com/konradhalas/dacite";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

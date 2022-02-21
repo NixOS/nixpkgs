@@ -1,20 +1,20 @@
-{ stdenv
-, fetchFromGitHub
-, rustc
-, cargo
-, rustPlatform
-, pkg-config
-, dbus
-, glib
-, cairo
-, pango
-, atk
-, lib
-, gdk-pixbuf
-, gtk3
+{
+  stdenv,
+  fetchFromGitHub,
+  rustc,
+  cargo,
+  rustPlatform,
+  pkg-config,
+  dbus,
+  glib,
+  cairo,
+  pango,
+  atk,
+  lib,
+  gdk-pixbuf,
+  gtk3,
 }:
-
-rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
+rustPlatform.buildRustPackage.override {stdenv = stdenv;} rec {
   pname = "popsicle";
   version = "unstable-2021-12-20";
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
 
   cargoSha256 = "1c54wxyrfxk5chnjhxw6vaznm7ff9dkx1rxlgp417jfygiwijjs4";
 
-  nativeBuildInputs = [ gtk3 pkg-config ];
+  nativeBuildInputs = [gtk3 pkg-config];
 
   buildInputs = [
     gtk3
@@ -66,8 +66,8 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   meta = with lib; {
     description = "Multiple USB File Flasher";
     homepage = "https://github.com/pop-os/popsicle";
-    maintainers = with maintainers; [ _13r0ck ];
+    maintainers = with maintainers; [_13r0ck];
     license = licenses.mit;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = ["aarch64-linux" "x86_64-linux"];
   };
 }

@@ -1,17 +1,17 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "i3wm";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ aszlig ];
+    maintainers = [aszlig];
   };
 
-  machine = { lib, ... }: {
-    imports = [ ./common/x11.nix ./common/user-account.nix ];
+  machine = {lib, ...}: {
+    imports = [./common/x11.nix ./common/user-account.nix];
     test-support.displayManager.auto.user = "alice";
     services.xserver.displayManager.defaultSession = lib.mkForce "none+i3";
     services.xserver.windowManager.i3.enable = true;
   };
 
-  testScript = { ... }: ''
+  testScript = {...}: ''
     with subtest("ensure x starts"):
         machine.wait_for_x()
         machine.wait_for_file("/home/alice/.Xauthority")

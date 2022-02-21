@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, boost, libpng, libiconv
-, libjpeg, zlib, openssl, libwebp, catch2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  boost,
+  libpng,
+  libiconv,
+  libjpeg,
+  zlib,
+  openssl,
+  libwebp,
+  catch2,
+}:
 stdenv.mkDerivation rec {
   pname = "arc_unpacker";
   version = "unstable-2021-05-17";
@@ -15,9 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "1xxrc9nww0rla3yh10z6glv05ax4rynwwbd0cdvkp7gyqzrv97xp";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper catch2 ];
-  buildInputs = [ boost libpng libjpeg zlib openssl libwebp ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [cmake makeWrapper catch2];
+  buildInputs =
+    [boost libpng libjpeg zlib openssl libwebp]
+    ++ lib.optionals stdenv.isDarwin [libiconv];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
@@ -52,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "A tool to extract files from visual novel archives";
     homepage = "https://github.com/vn-tools/arc_unpacker";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [midchildan];
     platforms = platforms.all;
   };
 }

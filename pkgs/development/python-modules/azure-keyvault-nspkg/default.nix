@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-
-# pythonPackages
-, azure-nspkg
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib
+  # pythonPackages
+  ,
+  azure-nspkg,
 }:
-
 buildPythonPackage rec {
   pname = "azure-keyvault-nspkg";
   version = "1.0.0";

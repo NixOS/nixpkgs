@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, gettext, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "nudoku";
   version = "2.1.0";
@@ -25,8 +33,8 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace 0.19 0.20
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config gettext ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [autoreconfHook pkg-config gettext];
+  buildInputs = [ncurses];
 
   configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-nls";
 
@@ -35,7 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "http://jubalh.github.io/nudoku/";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }
-

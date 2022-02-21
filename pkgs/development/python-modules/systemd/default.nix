@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, systemd, pkg-config }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  systemd,
+  pkg-config,
+}:
 buildPythonPackage rec {
   pname = "systemd";
   version = "234";
@@ -11,8 +16,8 @@ buildPythonPackage rec {
     sha256 = "1fakw7qln44mfd6pj4kqsgyrhkc6cyr653id34kv0rdnb1bvysrz";
   };
 
-  buildInputs = [ systemd ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [systemd];
+  nativeBuildInputs = [pkg-config];
 
   doCheck = false;
 

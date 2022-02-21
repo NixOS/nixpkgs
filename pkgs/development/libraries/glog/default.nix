@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, gflags, perl }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  gflags,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "glog";
   version = "0.5.0";
@@ -22,9 +29,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  propagatedBuildInputs = [ gflags ];
+  propagatedBuildInputs = [gflags];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -35,13 +42,13 @@ stdenv.mkDerivation rec {
 
   # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ perl ];
+  checkInputs = [perl];
 
   meta = with lib; {
     homepage = "https://github.com/google/glog";
     license = licenses.bsd3;
     description = "Library for application-level logging";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nh2 r-burns ];
+    maintainers = with maintainers; [nh2 r-burns];
   };
 }

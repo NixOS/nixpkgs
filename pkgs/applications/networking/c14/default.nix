@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "c14-cli";
   version = "0.3";
@@ -17,6 +20,6 @@ buildGoPackage rec {
     description = "C14 is designed for data archiving & long-term backups";
     homepage = "https://www.online.net/en/storage/c14-cold-storage";
     license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux ];
+    maintainers = with maintainers; [apeyroux];
   };
 }

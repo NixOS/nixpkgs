@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "visitor";
   version = "0.1.3";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mbr/visitor";
     description = "A tiny pythonic visitor implementation";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

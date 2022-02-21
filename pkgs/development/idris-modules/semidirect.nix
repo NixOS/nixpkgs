@@ -1,14 +1,15 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, patricia
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  patricia,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "semidirect";
   version = "2018-07-02";
 
-  idrisDeps = [ contrib patricia ];
+  idrisDeps = [contrib patricia];
 
   src = fetchFromGitHub {
     owner = "clayrat";
@@ -20,6 +21,6 @@ build-idris-package  {
   meta = {
     description = "Semidirect products in Idris";
     homepage = "https://github.com/clayrat/idris-semidirect";
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, cython
-, pytestCheckHook
-, unittest2
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  cython,
+  pytestCheckHook,
+  unittest2,
 }:
-
 buildPythonPackage rec {
   pname = "pyclipper";
   version = "1.3.0";
@@ -22,13 +22,13 @@ buildPythonPackage rec {
     cython
   ];
 
-  checkInputs = [ pytestCheckHook unittest2 ];
-  pythonImportsCheck = [ "pyclipper" ];
+  checkInputs = [pytestCheckHook unittest2];
+  pythonImportsCheck = ["pyclipper"];
 
   meta = with lib; {
     description = "Cython wrapper for clipper library";
-    homepage    = "https://github.com/fonttools/pyclipper";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ matthuszagh ];
+    homepage = "https://github.com/fonttools/pyclipper";
+    license = licenses.mit;
+    maintainers = with maintainers; [matthuszagh];
   };
 }

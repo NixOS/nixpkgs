@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, pure, libiodbc }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+  libiodbc,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-odbc";
   version = "0.10";
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "1907e9ebca11cc68762cf7046084b31e9e2bf056df85c40ccbcbe9f02221ff8d";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure libiodbc ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure libiodbc];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -19,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-odbc.html";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

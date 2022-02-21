@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "dingz";
   version = "0.5.0";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for interacting with Dingz devices";
     homepage = "https://github.com/home-assistant-ecosystem/python-dingz";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,11 @@
-{ buildGoPackage, fetchFromGitHub, libusb1, pkg-config, lib, libiconv }:
-
+{
+  buildGoPackage,
+  fetchFromGitHub,
+  libusb1,
+  pkg-config,
+  lib,
+  libiconv,
+}:
 buildGoPackage rec {
   pname = "aws-okta";
   version = "1.0.11";
@@ -13,12 +19,12 @@ buildGoPackage rec {
     sha256 = "sha256-1cprKpIFgM3+lUEHNvda34nJTH4Ch3LtTRq/Dp6QBQ8=";
   };
 
-  tags = [ "release" ];
+  tags = ["release"];
 
-  ldflags = [ "-X main.Version=${version}" ];
+  ldflags = ["-X main.Version=${version}"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1  libiconv ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libusb1 libiconv];
 
   meta = with lib; {
     description = "aws-vault like tool for Okta authentication";

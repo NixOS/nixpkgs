@@ -1,15 +1,16 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.cfdyndns;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.cfdyndns;
+in {
   imports = [
     (mkRemovedOptionModule
-      [ "services" "cfdyndns" "apikey" ]
-      "Use services.cfdyndns.apikeyFile instead.")
+    ["services" "cfdyndns" "apikey"]
+    "Use services.cfdyndns.apikeyFile instead.")
   ];
 
   options = {
@@ -34,7 +35,7 @@ in
 
       records = mkOption {
         default = [];
-        example = [ "host.tld" ];
+        example = ["host.tld"];
         type = types.listOf types.str;
         description = ''
           The records to update in CloudFlare.
@@ -46,8 +47,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.cfdyndns = {
       description = "CloudFlare Dynamic DNS Client";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       startAt = "*:0/5";
       serviceConfig = {
         Type = "simple";
@@ -55,13 +56,15 @@ in
         Group = config.ids.gids.cfdyndns;
       };
       environment = {
-        CLOUDFLARE_EMAIL="${cfg.email}";
-        CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
+        CLOUDFLARE_EMAIL = "${cfg.email}";
+        CLOUDFLARE_RECORDS = "${concatStringsSep "," cfg.records}";
       };
       script = ''
-        ${optionalString (cfg.apikeyFile != null) ''
-          export CLOUDFLARE_APIKEY="$(cat ${escapeShellArg cfg.apikeyFile})"
-        ''}
+        ${
+          optionalString (cfg.apikeyFile != null) ''
+            export CLOUDFLARE_APIKEY="$(cat ${escapeShellArg cfg.apikeyFile})"
+          ''
+        }
         ${pkgs.cfdyndns}/bin/cfdyndns
       '';
     };

@@ -1,8 +1,9 @@
-{ fetchFromGitHub
-, lib, stdenv
-, perl
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  perl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "doona";
   version = "unstable-2019-03-08";
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0x9irwrw5x2ia6ch6gshadrlqrgdi1ivkadmr7j4m75k04a7nvz1";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -31,6 +32,6 @@ stdenv.mkDerivation rec {
       BED is a program which is designed to check daemons for potential buffer overflows, format string bugs etc.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pamplemousse ];
+    maintainers = with maintainers; [pamplemousse];
   };
 }

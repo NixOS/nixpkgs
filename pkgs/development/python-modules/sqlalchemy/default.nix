@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, pythonOlder
-, greenlet
-, importlib-metadata
-, mock
-, pysqlite ? null
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  pythonOlder,
+  greenlet,
+  importlib-metadata,
+  mock,
+  pysqlite ? null,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "SQLAlchemy";
   version = "1.4.31";
@@ -20,16 +20,20 @@ buildPythonPackage rec {
     sha256 = "sha256-WCtZ0eV4CkR6raIrRh5QtASp3AV2jaHYc2itgZBGhBg=";
   };
 
-  propagatedBuildInputs = [
-    greenlet
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      greenlet
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-  ] ++ lib.optional (!isPy3k) pysqlite;
+  checkInputs =
+    [
+      pytestCheckHook
+      mock
+    ]
+    ++ lib.optional (!isPy3k) pysqlite;
 
   postInstall = ''
     sed -e 's:--max-worker-restart=5::g' -i setup.cfg

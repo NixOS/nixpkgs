@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, gcc, valgrind }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  gcc,
+  valgrind,
+}:
 # gcc and valgrind are not strict dependencies, they could be made
 # optional. They are here because plm can only help you learn C if you
 # have them installed.
@@ -12,8 +20,8 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}.jar";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre gcc valgrind ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre gcc valgrind];
 
   dontUnpack = true;
 
@@ -33,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Free cross-platform programming exerciser";
     homepage = "http://people.irisa.fr/Martin.Quinson/Teaching/PLM/";
     license = licenses.gpl3;
-    maintainers = [ ];
+    maintainers = [];
     platforms = lib.platforms.all;
   };
 }

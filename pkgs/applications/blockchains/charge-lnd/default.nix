@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "charge-lnd";
   version = "0.2.4";
@@ -34,6 +37,6 @@ python3Packages.buildPythonApplication rec {
     description = "Simple policy-based fee manager for lightning network daemon";
     homepage = "https://github.com/accumulator/charge-lnd";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mmilata ];
+    maintainers = with maintainers; [mmilata];
   };
 }

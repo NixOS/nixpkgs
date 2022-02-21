@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python2,
+}:
 stdenv.mkDerivation rec {
   pname = "philter";
   version = "1.1";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Mail sorter for Maildirs";
     homepage = "http://philter.sourceforge.net";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.all;
     license = licenses.gpl2;
   };

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "libjson";
   version = "7.6.1";
@@ -7,9 +11,9 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/libjson/libjson_${version}.zip";
     sha256 = "0xkk5qc7kjcdwz9l04kmiz1nhmi7iszl3k165phf53h3a4wpl9h7";
   };
-  patches = [ ./install-fix.patch ];
-  nativeBuildInputs = [ unzip ];
-  makeFlags = [ "prefix=$(out)" ];
+  patches = [./install-fix.patch];
+  nativeBuildInputs = [unzip];
+  makeFlags = ["prefix=$(out)"];
   preInstall = "mkdir -p $out/lib";
 
   meta = with lib; {

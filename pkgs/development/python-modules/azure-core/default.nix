@@ -1,19 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, aiodns
-, aiohttp
-, flask
-, mock
-, msrest
-, pytest
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, requests
-, six
-, trio
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  aiodns,
+  aiohttp,
+  flask,
+  mock,
+  msrest,
+  pytest,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  requests,
+  six,
+  trio,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   version = "1.21.1";
   pname = "azure-core";
@@ -49,9 +52,9 @@ buildPythonPackage rec {
     export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  pytestFlagsArray = ["tests/"];
   # disable tests which touch network
-  disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];
+  disabledTests = ["aiohttp" "multipart_send" "response" "request" "timeout"];
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"
@@ -66,6 +69,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

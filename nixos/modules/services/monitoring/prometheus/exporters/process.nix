@@ -1,12 +1,13 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
   cfg = config.services.prometheus.exporters.process;
   configFile = pkgs.writeText "process-exporter.yaml" (builtins.toJSON cfg.settings);
-in
-{
+in {
   port = 9256;
   extraOpts = {
     settings.process_names = mkOption {

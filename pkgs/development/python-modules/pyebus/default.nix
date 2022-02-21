@@ -1,12 +1,12 @@
-{ lib
-, anytree
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, poetry-core
-, pythonOlder
+{
+  lib,
+  anytree,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  poetry-core,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyebus";
   version = "1.4.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Pythonic Interface to EBUS Daemon (ebusd)";
     homepage = "https://github.com/c0fec0de/pyebus";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,17 +1,36 @@
-{ lib, stdenv, fetchurl, unzip, jre, jre8 }:
-
-let
-  common = { pname, version, src, description, java ? jre
-           , prog ? null, jar ? null, license ? lib.licenses.mpl20 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  jre,
+  jre8,
+}: let
+  common = {
+    pname,
+    version,
+    src,
+    description,
+    java ? jre,
+    prog ? null,
+    jar ? null,
+    license ? lib.licenses.mpl20,
+  }:
     stdenv.mkDerivation {
       name = "${pname}-${version}";
       inherit pname version src;
 
-      nativeBuildInputs = [ unzip ];
+      nativeBuildInputs = [unzip];
 
       buildCommand = let
-        prog' = if prog == null then pname else prog;
-        jar' = if jar == null then pname else jar;
+        prog' =
+          if prog == null
+          then pname
+          else prog;
+        jar' =
+          if jar == null
+          then pname
+          else jar;
       in ''
         unzip $src -d $out
         mkdir -p $out/bin $out/share $out/share/java
@@ -29,11 +48,10 @@ let
       meta = with lib; {
         inherit description license;
         homepage = "http://saxon.sourceforge.net/";
-        maintainers = with maintainers; [ rvl ];
+        maintainers = with maintainers; [rvl];
         platforms = platforms.all;
       };
     };
-
 in {
   saxon = common {
     pname = "saxon";

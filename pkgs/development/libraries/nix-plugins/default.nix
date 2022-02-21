@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, nix, cmake, pkg-config, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix,
+  cmake,
+  pkg-config,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "nix-plugins";
   version = "8.0.0";
@@ -11,9 +18,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-Zz8cPHK4w0qimYu6III6XfiKVQIzEMMV9P6ER5fveZY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ nix boost ];
+  buildInputs = [nix boost];
 
   meta = {
     description = "Collection of miscellaneous plugins for the nix expression language";

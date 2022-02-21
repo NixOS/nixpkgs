@@ -1,15 +1,15 @@
-{ lib
-, blinker
-, buildPythonPackage
-, fetchPypi
-, flask
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, semantic-version
-, werkzeug
+{
+  lib,
+  blinker,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  semantic-version,
+  werkzeug,
 }:
-
 buildPythonPackage rec {
   pname = "flask-login";
   version = "0.5.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "User session management for Flask";
     homepage = "https://github.com/maxcountryman/flask-login";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zydis";
   version = "3.2.1";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://zydis.re/";
     description = "Fast and lightweight x86/x86-64 disassembler library";
     license = licenses.mit;
-    maintainers = with maintainers; [ jbcrail AndersonTorres ];
+    maintainers = with maintainers; [jbcrail AndersonTorres];
     platforms = platforms.all;
   };
 }

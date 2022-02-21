@@ -1,11 +1,13 @@
-{ buildPythonPackage, lib, fetchPypi
-, networkx
-, numpy
-, pint
-, pydantic
-, pytestCheckHook
-} :
-
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  networkx,
+  numpy,
+  pint,
+  pydantic,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "qcelemental";
   version = "0.24.0";
@@ -22,7 +24,7 @@ buildPythonPackage rec {
     networkx
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   doCheck = true;
 
@@ -30,6 +32,6 @@ buildPythonPackage rec {
     description = "Periodic table, physical constants, and molecule parsing for quantum chemistry";
     homepage = "http://docs.qcarchive.molssi.org/projects/qcelemental/en/latest/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [maintainers.sheepforce];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pyparsing
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "bibtexparser";
   version = "1.2.0";
@@ -43,7 +43,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bibtex parser for Python";
     homepage = "https://github.com/sciunto-org/python-bibtexparser";
-    license = with licenses; [ lgpl3Only /* or */ bsd3 ];
-    maintainers = with maintainers; [ fridh ];
+    license = with licenses; [
+      lgpl3Only
+      /*
+       or
+       */
+      bsd3
+    ];
+    maintainers = with maintainers; [fridh];
   };
 }

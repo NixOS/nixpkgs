@@ -1,28 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, gettext
-, glib
-, gtk3
-, libwnck
-, libgee
-, libgtop
-, libhandy
-, sassc
-, udisks2
-, wrapGAppsHook
-, libX11
-, libXext
-, libXNVCtrl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  python3,
+  gettext,
+  glib,
+  gtk3,
+  libwnck,
+  libgee,
+  libgtop,
+  libhandy,
+  sassc,
+  udisks2,
+  wrapGAppsHook,
+  libX11,
+  libXext,
+  libXNVCtrl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "monitor";
   version = "0.12.0";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   # https://github.com/stsdc/monitor/issues/292
   NIX_LDFLAGS = "-lXext";
 
-  mesonFlags = [ "-Dindicator-wingpanel=enabled" ];
+  mesonFlags = ["-Dindicator-wingpanel=enabled"];
 
   postPatch = ''
     chmod +x meson/post_install.py
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
       section in the NixOS manual.
     '';
     homepage = "https://github.com/stsdc/monitor";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [xiorcale] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3;
     mainProgram = "com.github.stsdc.monitor";

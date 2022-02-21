@@ -1,8 +1,10 @@
-{ lib, buildDunePackage, fetchurl
-, seq
-, stdlib-shims
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  seq,
+  stdlib-shims,
 }:
-
 buildDunePackage rec {
   pname = "ptmap";
   version = "2.0.5";
@@ -14,16 +16,16 @@ buildDunePackage rec {
     sha256 = "1apk61fc1y1g7x3m3c91fnskvxp6i0vk5nxwvipj56k7x2pzilgb";
   };
 
-  propagatedBuildInputs = [ seq ];
+  propagatedBuildInputs = [seq];
 
   doCheck = true;
 
-  checkInputs = [ stdlib-shims ];
+  checkInputs = [stdlib-shims];
 
   meta = {
     homepage = "https://www.lri.fr/~filliatr/software.en.html";
     description = "Maps over integers implemented as Patricia trees";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [volth];
   };
 }

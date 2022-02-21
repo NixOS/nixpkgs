@@ -1,20 +1,20 @@
-{ lib
-, buildPythonApplication
-, click
-, fetchPypi
-, git
-, httpretty
-, qrcode
-, pygments
-, pyopenssl
-, pytestCheckHook
-, requests
-, rollbar
-, stripe
-, pythonOlder
-, sure
+{
+  lib,
+  buildPythonApplication,
+  click,
+  fetchPypi,
+  git,
+  httpretty,
+  qrcode,
+  pygments,
+  pyopenssl,
+  pytestCheckHook,
+  requests,
+  rollbar,
+  stripe,
+  pythonOlder,
+  sure,
 }:
-
 buildPythonApplication rec {
   pname = "gigalixir";
   version = "1.2.5";
@@ -63,6 +63,6 @@ buildPythonApplication rec {
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

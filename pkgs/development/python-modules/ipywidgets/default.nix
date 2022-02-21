@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, nose
-, pytest
-, mock
-, ipython
-, ipykernel
-, jupyterlab-widgets
-, traitlets
-, notebook
-, widgetsnbextension
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  nose,
+  pytest,
+  mock,
+  ipython,
+  ipykernel,
+  jupyterlab-widgets,
+  traitlets,
+  notebook,
+  widgetsnbextension,
 }:
-
 buildPythonPackage rec {
   pname = "ipywidgets";
   version = "7.6.5";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # Tests are not distributed
   # doCheck = false;
 
-  buildInputs = [ nose pytest mock ];
+  buildInputs = [nose pytest mock];
   propagatedBuildInputs = [
     ipython
     ipykernel
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "IPython HTML widgets for Jupyter";
     homepage = "http://ipython.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

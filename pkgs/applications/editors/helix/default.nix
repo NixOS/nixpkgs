@@ -1,5 +1,9 @@
-{ fetchFromGitHub, lib, rustPlatform, makeWrapper }:
-
+{
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  makeWrapper,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "helix";
   version = "0.6.0";
@@ -14,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-/EATU7HsGNB35YOBp8sofbPd1nl4d3Ggj1ay3QuHkCI=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     mkdir -p $out/lib
@@ -29,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
     mainProgram = "hx";
-    maintainers = with maintainers; [ yusdacra ];
+    maintainers = with maintainers; [yusdacra];
   };
 }

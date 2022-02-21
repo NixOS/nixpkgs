@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, karton-core
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  karton-core,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "karton-asciimagic";
   version = "1.1.0";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "karton.asciimagic" ];
+  pythonImportsCheck = ["karton.asciimagic"];
 
   meta = with lib; {
     description = "Decoders for ascii-encoded executables for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-asciimagic";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

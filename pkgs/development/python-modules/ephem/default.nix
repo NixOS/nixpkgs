@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "ephem";
   version = "4.1.3";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Compute positions of the planets and stars";
     homepage = "https://github.com/brandon-rhodes/pyephem";
     license = licenses.mit;
-    maintainers = with maintainers; [ chrisrosset ];
+    maintainers = with maintainers; [chrisrosset];
   };
 }

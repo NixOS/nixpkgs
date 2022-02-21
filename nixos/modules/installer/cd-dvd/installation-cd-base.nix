@@ -1,22 +1,24 @@
 # This module contains the basic configuration for building a NixOS
 # installation CD.
-
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
 {
-  imports =
-    [ ./iso-image.nix
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; {
+  imports = [
+    ./iso-image.nix
 
-      # Profiles of this basic installation CD.
-      ../../profiles/all-hardware.nix
-      ../../profiles/base.nix
-      ../../profiles/installation-device.nix
-    ];
+    # Profiles of this basic installation CD.
+    ../../profiles/all-hardware.nix
+    ../../profiles/base.nix
+    ../../profiles/installation-device.nix
+  ];
 
   # Adds terminus_font for people with HiDPI displays
-  console.packages = options.console.packages.default ++ [ pkgs.terminus_font ];
+  console.packages = options.console.packages.default ++ [pkgs.terminus_font];
 
   # ISO naming.
   isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
@@ -32,7 +34,7 @@ with lib;
 
   # An installation media cannot tolerate a host config defined file
   # system layout on a fresh machine, before it has been formatted.
-  swapDevices = mkImageMediaOverride [ ];
+  swapDevices = mkImageMediaOverride [];
   fileSystems = mkImageMediaOverride config.lib.isoFileSystems;
 
   boot.postBootCommands = ''

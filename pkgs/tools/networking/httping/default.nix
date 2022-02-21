@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, gettext, libintl, ncurses, openssl
-, fftw ? null }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  gettext,
+  libintl,
+  ncurses,
+  openssl,
+  fftw ? null,
+}:
 stdenv.mkDerivation rec {
   pname = "httping";
   version = "2.5";
@@ -19,8 +27,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ fftw libintl ncurses openssl ];
-  nativeBuildInputs = [ gettext ];
+  buildInputs = [fftw libintl ncurses openssl];
+  nativeBuildInputs = [gettext];
 
   makeFlags = [
     "DESTDIR=$(out)"

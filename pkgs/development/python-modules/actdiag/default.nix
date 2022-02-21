@@ -1,13 +1,13 @@
-{ lib
-, blockdiag
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  blockdiag,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "actdiag";
   version = "3.0.0";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
+    maintainers = with maintainers; [bjornfor SuperSandro2000];
   };
 }

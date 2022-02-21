@@ -1,5 +1,8 @@
-{lib, stdenv, fetchFromGitHub}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "uftrace";
   version = "0.11";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   postUnpack = ''
-        patchShebangs .
+    patchShebangs .
   '';
 
   meta = {

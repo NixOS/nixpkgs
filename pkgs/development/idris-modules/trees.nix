@@ -1,14 +1,15 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, bi
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  bi,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "trees";
   version = "2018-03-19";
 
-  idrisDeps = [ contrib bi ];
+  idrisDeps = [contrib bi];
 
   src = fetchFromGitHub {
     owner = "clayrat";
@@ -20,6 +21,6 @@ build-idris-package  {
   meta = {
     description = "Trees in Idris";
     homepage = "https://github.com/clayrat/idris-trees";
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

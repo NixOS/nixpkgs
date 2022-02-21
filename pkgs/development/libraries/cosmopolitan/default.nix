@@ -1,5 +1,10 @@
-{ lib, gcc9Stdenv, fetchFromGitHub, runCommand, cosmopolitan }:
-
+{
+  lib,
+  gcc9Stdenv,
+  fetchFromGitHub,
+  runCommand,
+  cosmopolitan,
+}:
 gcc9Stdenv.mkDerivation rec {
   pname = "cosmopolitan";
   version = "0.3";
@@ -52,7 +57,7 @@ gcc9Stdenv.mkDerivation rec {
   '';
 
   passthru.tests = lib.optional (gcc9Stdenv.buildPlatform == gcc9Stdenv.hostPlatform) {
-    hello = runCommand "hello-world" { } ''
+    hello = runCommand "hello-world" {} ''
       printf 'main() { printf("hello world\\n"); }\n' >hello.c
       ${gcc9Stdenv.cc}/bin/gcc -g -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone -o hello.com.dbg hello.c \
         -fuse-ld=bfd -Wl,-T,${cosmopolitan}/lib/ape.lds \
@@ -61,7 +66,7 @@ gcc9Stdenv.mkDerivation rec {
       ./hello.com
       printf "test successful" > $out
     '';
-    cosmoc = runCommand "cosmoc-hello" { } ''
+    cosmoc = runCommand "cosmoc-hello" {} ''
       printf 'main() { printf("hello world\\n"); }\n' >hello.c
       ${cosmopolitan}/bin/cosmoc hello.c
       ./a.out
@@ -75,6 +80,6 @@ gcc9Stdenv.mkDerivation rec {
     platforms = platforms.x86_64;
     badPlatforms = platforms.darwin;
     license = licenses.isc;
-    maintainers = with maintainers; [ lourkeur tomberek ];
+    maintainers = with maintainers; [lourkeur tomberek];
   };
 }

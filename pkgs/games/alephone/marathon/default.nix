@@ -1,5 +1,7 @@
-{ alephone, fetchurl }:
-
+{
+  alephone,
+  fetchurl,
+}:
 alephone.makeWrapper rec {
   pname = "marathon";
   desktopName = "Marathon";
@@ -20,5 +22,4 @@ alephone.makeWrapper rec {
     '';
     homepage = "https://alephone.lhowon.org/games/marathon.html";
   };
-
 }

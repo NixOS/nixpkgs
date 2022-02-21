@@ -1,8 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "sof-firmware";
   version = "2.0";
@@ -28,8 +28,8 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
-    license = with licenses; [ bsd3 isc ];
-    maintainers = with maintainers; [ lblasc evenbrenden hmenke ];
+    license = with licenses; [bsd3 isc];
+    maintainers = with maintainers; [lblasc evenbrenden hmenke];
     platforms = with platforms; linux;
   };
 }

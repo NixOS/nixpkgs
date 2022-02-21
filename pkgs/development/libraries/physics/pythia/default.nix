@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, boost, fastjet, hepmc, lhapdf, rsync, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  fastjet,
+  hepmc,
+  lhapdf,
+  rsync,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "pythia";
   version = "8.306";
@@ -9,21 +18,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c0gDtyKxwbU8jPLw08MHR8gPwt3l4LoUG8k5fa03qPY=";
   };
 
-  nativeBuildInputs = [ rsync ];
-  buildInputs = [ boost fastjet hepmc zlib lhapdf ];
+  nativeBuildInputs = [rsync];
+  buildInputs = [boost fastjet hepmc zlib lhapdf];
 
   preConfigure = ''
     patchShebangs ./configure
   '';
 
-  configureFlags = [
-    "--enable-shared"
-    "--with-lhapdf6=${lhapdf}"
-  ] ++ (if lib.versions.major hepmc.version == "3" then [
-    "--with-hepmc3=${hepmc}"
-  ] else [
-    "--with-hepmc2=${hepmc}"
-  ]);
+  configureFlags =
+    [
+      "--enable-shared"
+      "--with-lhapdf6=${lhapdf}"
+    ]
+    ++ (if lib.versions.major hepmc.version == "3"
+    then
+      [
+        "--with-hepmc3=${hepmc}"
+      ]
+    else
+      [
+        "--with-hepmc2=${hepmc}"
+      ]);
 
   enableParallelBuilding = true;
 
@@ -32,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     homepage = "https://pythia.org";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [veprbl];
   };
 }

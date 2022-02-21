@@ -1,9 +1,9 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-base
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-base,
 }:
-
 buildDunePackage {
   pname = "tezos-workers";
   inherit (tezos-stdlib) version useDune2;
@@ -15,7 +15,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: worker library";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: worker library";
+    };
 }

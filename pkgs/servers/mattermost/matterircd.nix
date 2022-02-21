@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "matterircd";
   version = "0.25.0";
@@ -17,7 +20,7 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
     description = "Minimal IRC server bridge to Mattermost";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
     platforms = platforms.unix;
   };
 }

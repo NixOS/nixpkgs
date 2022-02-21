@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libgcrypt, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libgcrypt,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "libotr";
   version = "4.1.1";
@@ -9,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1x8rliydhbibmzwdbyr7pd7n87m2jmxnqkpvaalnf4154hj1hfwb";
   };
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = ["bin" "out" "dev"];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  propagatedBuildInputs = [ libgcrypt ];
+  nativeBuildInputs = [autoreconfHook];
+  propagatedBuildInputs = [libgcrypt];
 
   meta = with lib; {
     homepage = "http://www.cypherpunks.ca/otr/";

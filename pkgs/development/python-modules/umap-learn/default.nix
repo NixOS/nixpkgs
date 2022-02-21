@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, numpy
-, scikit-learn
-, scipy
-, numba
-, pynndescent
-, tensorflow
-, tqdm
-, pytestCheckHook
-, keras
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  numpy,
+  scikit-learn,
+  scipy,
+  numba,
+  pynndescent,
+  tensorflow,
+  tqdm,
+  pytestCheckHook,
+  keras,
 }:
-
 buildPythonPackage rec {
   pname = "umap-learn";
   version = "0.5.2";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

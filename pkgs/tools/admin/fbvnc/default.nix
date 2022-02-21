@@ -1,4 +1,8 @@
-{lib, stdenv, fetchFromGitHub}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "fbvnc";

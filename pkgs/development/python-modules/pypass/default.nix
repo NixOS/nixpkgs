@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, click
-, colorama
-, enum34
-, fetchPypi
-, git
-, gnugrep
-, gnupg
-, nose
-, pbr
-, pexpect
-, pythonAtLeast
-, pythonOlder
-, substituteAll
-, tree
-, xclip
+{
+  lib,
+  buildPythonPackage,
+  click,
+  colorama,
+  enum34,
+  fetchPypi,
+  git,
+  gnugrep,
+  gnupg,
+  nose,
+  pbr,
+  pexpect,
+  pythonAtLeast,
+  pythonOlder,
+  substituteAll,
+  tree,
+  xclip,
 }:
-
 # NOTE: pypass can also be used as an application, but probably the most
 # important usecase is as a library. So, let's use buildPythonPackage and
 # support any Python version instead of defining it as an application with
@@ -47,15 +47,17 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "enum34" ""
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
-  propagatedBuildInputs = [
-    click
-    colorama
-    pexpect
-  ] ++ lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs =
+    [
+      click
+      colorama
+      pexpect
+    ]
+    ++ lib.optional (pythonOlder "3.4") enum34;
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   # Configuration so that the tests work
   preCheck = ''
@@ -79,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aviau/python-pass";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

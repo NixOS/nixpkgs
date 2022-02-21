@@ -1,51 +1,52 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchgit
-, SDL2
-, cmake
-, espeak
-, ffmpeg
-, file
-, freetype
-, harfbuzz
-, leptonica
-, libGL
-, libX11
-, libXau
-, libXcomposite
-, libXdmcp
-, libXfixes
-, libdrm
-, libffi
-, libusb1
-, libuvc
-, libvlc
-, libvncserver
-, libxcb
-, libxkbcommon
-, lua
-, luajit
-, makeWrapper
-, mesa
-, openal
-, pkg-config
-, sqlite
-, tesseract
-, valgrind
-, wayland
-, wayland-protocols
-, xcbutil
-, xcbutilwm
-, xz
-, buildManPages ? true, ruby
-, useBuiltinLua ? true
-, useStaticFreetype ? false
-, useStaticLibuvc ? false
-, useStaticOpenAL ? true
-, useStaticSqlite ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchgit,
+  SDL2,
+  cmake,
+  espeak,
+  ffmpeg,
+  file,
+  freetype,
+  harfbuzz,
+  leptonica,
+  libGL,
+  libX11,
+  libXau,
+  libXcomposite,
+  libXdmcp,
+  libXfixes,
+  libdrm,
+  libffi,
+  libusb1,
+  libuvc,
+  libvlc,
+  libvncserver,
+  libxcb,
+  libxkbcommon,
+  lua,
+  luajit,
+  makeWrapper,
+  mesa,
+  openal,
+  pkg-config,
+  sqlite,
+  tesseract,
+  valgrind,
+  wayland,
+  wayland-protocols,
+  xcbutil,
+  xcbutilwm,
+  xz,
+  buildManPages ? true,
+  ruby,
+  useBuiltinLua ? true,
+  useStaticFreetype ? false,
+  useStaticLibuvc ? false,
+  useStaticOpenAL ? true,
+  useStaticSqlite ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
   version = "0.6.1";
@@ -57,13 +58,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-2do4+6KB0AAcJk22mN0IA/e/bPaeGipLjI4RSTPqLBg=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    pkg-config
-  ] ++ lib.optionals buildManPages [
-    ruby
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      makeWrapper
+      pkg-config
+    ]
+    ++ lib.optionals buildManPages [
+      ruby
+    ];
 
   buildInputs = [
     SDL2
@@ -111,8 +114,13 @@ stdenv.mkDerivation rec {
 
   # Emulate external/git/clone.sh
   postUnpack = let
-    inherit (import ./clone-sources.nix { inherit fetchFromGitHub fetchgit; })
-      letoram-openal-src freetype-src libuvc-src luajit-src;
+    inherit
+      (import ./clone-sources.nix {inherit fetchFromGitHub fetchgit;})
+      letoram-openal-src
+      freetype-src
+      libuvc-src
+      luajit-src
+      ;
   in
     ''
       pushd $sourceRoot/external/git/
@@ -132,8 +140,8 @@ stdenv.mkDerivation rec {
     + (lib.optionalString useBuiltinLua ''
       cp -a ${luajit-src}/ luajit
       chmod --recursive 744 luajit
-    '') +
-    ''
+    '')
+    + ''
       popd
     '';
 
@@ -159,12 +167,36 @@ stdenv.mkDerivation rec {
     "-DDISTR_TAG=Nixpkgs"
     "-DENGINE_BUILDTAG=${version}"
     "-DHYBRID_SDL=on"
-    "-DBUILTIN_LUA=${if useBuiltinLua then "on" else "off"}"
-    "-DDISABLE_JIT=${if useBuiltinLua then "on" else "off"}"
-    "-DSTATIC_FREETYPE=${if useStaticFreetype then "on" else "off"}"
-    "-DSTATIC_LIBUVC=${if useStaticLibuvc then "on" else "off"}"
-    "-DSTATIC_OPENAL=${if useStaticOpenAL then "on" else "off"}"
-    "-DSTATIC_SQLite3=${if useStaticSqlite then "on" else "off"}"
+    "-DBUILTIN_LUA=${
+      if useBuiltinLua
+      then "on"
+      else "off"
+    }"
+    "-DDISABLE_JIT=${
+      if useBuiltinLua
+      then "on"
+      else "off"
+    }"
+    "-DSTATIC_FREETYPE=${
+      if useStaticFreetype
+      then "on"
+      else "off"
+    }"
+    "-DSTATIC_LIBUVC=${
+      if useStaticLibuvc
+      then "on"
+      else "off"
+    }"
+    "-DSTATIC_OPENAL=${
+      if useStaticOpenAL
+      then "on"
+      else "off"
+    }"
+    "-DSTATIC_SQLite3=${
+      if useStaticSqlite
+      then "on"
+      else "off"
+    }"
     "../src"
   ];
 
@@ -181,8 +213,8 @@ stdenv.mkDerivation rec {
       e.g. game development, real-time streaming video, monitoring and
       surveillance, up to and including desktop compositors and window managers.
     '';
-    license = with licenses; [ bsd3 gpl2Plus lgpl2Plus ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with licenses; [bsd3 gpl2Plus lgpl2Plus];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

@@ -1,10 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, odpic }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  odpic,
+}:
 buildPythonPackage rec {
   pname = "cx_Oracle";
   version = "8.3.0";
 
-  buildInputs = [ odpic ];
+  buildInputs = [odpic];
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +27,6 @@ buildPythonPackage rec {
     description = "Python interface to Oracle";
     homepage = "https://oracle.github.io/python-cx_Oracle";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ y0no ];
+    maintainers = with maintainers; [y0no];
   };
 }

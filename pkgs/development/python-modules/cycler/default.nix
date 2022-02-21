@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, nose
-, six
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  coverage,
+  nose,
+  six,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "cycler";
   version = "0.11.0";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
     sha256 = "9c87405839a19696e837b3b818fed3f5f69f16f1eec1a1ad77e043dcea9c772f";
   };
 
-  checkInputs = [ coverage nose ];
-  propagatedBuildInputs = [ six ];
+  checkInputs = [coverage nose];
+  propagatedBuildInputs = [six];
 
   checkPhase = ''
     ${python.interpreter} run_tests.py
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Composable style cycles";
     homepage = "https://github.com/matplotlib/cycler";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchzip, buildDunePackage }:
-
+{
+  lib,
+  fetchzip,
+  buildDunePackage,
+}:
 buildDunePackage rec {
   pname = "nonstd";
   version = "0.0.3";
@@ -17,6 +20,6 @@ buildDunePackage rec {
     homepage = "https://bitbucket.org/smondet/nonstd";
     description = "Non-standard mini-library";
     license = licenses.isc;
-    maintainers = [ maintainers.alexfmpe ];
+    maintainers = [maintainers.alexfmpe];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "utf8cpp";
   version = "3.2.1";
@@ -16,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   # Tests fail on darwin, probably due to a bug in the test framework:
   # https://github.com/nemtrif/utfcpp/issues/84
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nemtrif/utfcpp";
     description = "UTF-8 with C++ in a Portable Way";
     license = licenses.boost;
-    maintainers = with maintainers; [ jobojeha ];
+    maintainers = with maintainers; [jobojeha];
     platforms = platforms.all;
   };
 }

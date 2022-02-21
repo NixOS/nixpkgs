@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, virtualenv
-, pytest-runner
-, pytest-virtualenv
-, twisted
-, pathlib2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  virtualenv,
+  pytest-runner,
+  pytest-virtualenv,
+  twisted,
+  pathlib2,
 }:
-
 buildPythonPackage rec {
   pname = "setuptools_trial";
   version = "0.6.0";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
     sha256 = "14220f8f761c48ba1e2526f087195077cf54fad7098b382ce220422f0ff59b12";
   };
 
-  buildInputs = [ pytest virtualenv pytest-runner pytest-virtualenv ];
-  propagatedBuildInputs = [ twisted pathlib2 ];
+  buildInputs = [pytest virtualenv pytest-runner pytest-virtualenv];
+  propagatedBuildInputs = [twisted pathlib2];
 
   postPatch = ''
     sed -i '12,$d' tests/test_main.py
@@ -32,7 +32,6 @@ buildPythonPackage rec {
     description = "Setuptools plugin that makes unit tests execute with trial instead of pyunit.";
     homepage = "https://github.com/rutsky/setuptools-trial";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ryansydnor ];
+    maintainers = with maintainers; [ryansydnor];
   };
-
 }

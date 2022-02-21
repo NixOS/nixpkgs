@@ -1,5 +1,8 @@
-{ lib, perlPackages, fetchurl }:
-
+{
+  lib,
+  perlPackages,
+  fetchurl,
+}:
 perlPackages.buildPerlPackage {
   pname = "Graph-Easy";
   version = "0.76";
@@ -12,6 +15,6 @@ perlPackages.buildPerlPackage {
     description = "Render/convert graphs in/from various formats";
     license = licenses.gpl1;
     platforms = platforms.unix;
-    maintainers = [ maintainers.jensbin ];
+    maintainers = [maintainers.jensbin];
   };
 }

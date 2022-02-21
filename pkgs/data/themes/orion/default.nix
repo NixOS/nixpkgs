@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gtk-engine-murrine }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk-engine-murrine,
+}:
 stdenv.mkDerivation rec {
   pname = "orion";
   version = "1.5";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1116yawv3fspkiq1ykk2wj0gza3l04b5nhldy0bayzjaj0y6fd89";
   };
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [gtk-engine-murrine];
 
   installPhase = ''
     mkdir -p $out/share/themes/orion

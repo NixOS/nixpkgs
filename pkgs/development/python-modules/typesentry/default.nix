@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, colorama
-, pytest
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  colorama,
+  pytest,
+  pytest-cov,
 }:
-
 buildPythonPackage {
   pname = "typesentry";
   version = "0.2.7";
@@ -18,8 +18,8 @@ buildPythonPackage {
     sha256 = "0z615f9dxaab3bay3v27j7q99qm6l6q8xv872yvsp87sxj7apfki";
   };
 
-  propagatedBuildInputs = [ colorama ];
-  checkInputs = [ pytest pytest-cov ];
+  propagatedBuildInputs = [colorama];
+  checkInputs = [pytest pytest-cov];
   checkPhase = ''
     pytest
   '';
@@ -28,6 +28,6 @@ buildPythonPackage {
     description = "Python 2.7 & 3.5+ runtime type-checker";
     homepage = "https://github.com/h2oai/typesentry";
     license = licenses.asl20;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

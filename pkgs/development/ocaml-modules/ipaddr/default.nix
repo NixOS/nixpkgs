@@ -1,20 +1,26 @@
-{ lib, buildDunePackage
-, macaddr, domain-name, stdlib-shims
-, ounit, ppx_sexp_conv
+{
+  lib,
+  buildDunePackage,
+  macaddr,
+  domain-name,
+  stdlib-shims,
+  ounit,
+  ppx_sexp_conv,
 }:
-
 buildDunePackage rec {
   pname = "ipaddr";
 
   inherit (macaddr) version src useDune2 minimumOCamlVersion;
 
-  propagatedBuildInputs = [ macaddr domain-name stdlib-shims ];
+  propagatedBuildInputs = [macaddr domain-name stdlib-shims];
 
-  checkInputs = [ ppx_sexp_conv ounit ];
+  checkInputs = [ppx_sexp_conv ounit];
   doCheck = true;
 
-  meta = macaddr.meta // {
-    description = "A library for manipulation of IP (and MAC) address representations ";
-    maintainers = with lib.maintainers; [ alexfmpe ericbmerritt ];
-  };
+  meta =
+    macaddr.meta
+    // {
+      description = "A library for manipulation of IP (and MAC) address representations ";
+      maintainers = with lib.maintainers; [alexfmpe ericbmerritt];
+    };
 }

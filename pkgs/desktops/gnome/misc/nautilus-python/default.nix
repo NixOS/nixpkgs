@@ -1,24 +1,24 @@
-{ stdenv
-, lib
-, substituteAll
-, fetchurl
-, pkg-config
-, which
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, python3
-, ncurses
-, nautilus
-, gtk3
-, gnome
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchurl,
+  pkg-config,
+  which,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  python3,
+  ncurses,
+  nautilus,
+  gtk3,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nautilus-python";
   version = "1.2.3";
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

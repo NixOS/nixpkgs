@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_net }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  SDL2,
+  SDL2_net,
+}:
 stdenv.mkDerivation rec {
   pname = "maelstrom";
   version = "3.0.7";
@@ -10,9 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   # this fixes a typedef compilation error with gcc-3.x
-  patches = [ ./fix-compilation.patch ];
+  patches = [./fix-compilation.patch];
 
-  buildInputs = [ SDL2 SDL2_net ];
+  buildInputs = [SDL2 SDL2_net];
 
   postInstall = ''
     mkdir -p $out/bin
@@ -34,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "An arcade-style game resembling Asteroids";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ tmountain ];
+    maintainers = with maintainers; [tmountain];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libX11 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "xosview2";
   version = "2.3.2";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
   # The software failed to buid with this enabled; it seemed tests were not implemented
   doCheck = false;
 
-  buildInputs = [ libX11 ];
+  buildInputs = [libX11];
 
   meta = with lib; {
     description = "Lightweight program that gathers information from your operating system and displays it in graphical form";
@@ -34,8 +38,8 @@ stdenv.mkDerivation rec {
       monitor what is going on.
     '';
     homepage = "http://xosview.sourceforge.net/index.html";
-    license = with licenses; [ gpl2 bsdOriginal ];
-    maintainers = [ maintainers.SeanZicari ];
+    license = with licenses; [gpl2 bsdOriginal];
+    maintainers = [maintainers.SeanZicari];
     platforms = platforms.all;
   };
 }

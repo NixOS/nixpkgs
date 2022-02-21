@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "charm";
   version = "0.9.2";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X=main.Version=${version}"];
 
   meta = with lib; {
     description = "Manage your charm account on the CLI";
     homepage = "https://github.com/charmbracelet/charm";
     license = licenses.mit;
-    maintainers = with maintainers; [ penguwin ];
+    maintainers = with maintainers; [penguwin];
   };
 }

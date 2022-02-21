@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, perlPackages, mutt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perlPackages,
+  mutt,
+}:
 stdenv.mkDerivation {
   pname = "grepm";
   version = "0.6";
@@ -11,7 +16,7 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  buildInputs = [ perlPackages.grepmail mutt ];
+  buildInputs = [perlPackages.grepmail mutt];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -28,6 +33,6 @@ stdenv.mkDerivation {
     homepage = "http://www.barsnick.net/sw/grepm.html";
     license = licenses.free;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

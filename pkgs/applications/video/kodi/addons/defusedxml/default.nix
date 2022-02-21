@@ -1,5 +1,9 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
-
+{
+  lib,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "defusedxml";
   namespace = "script.module.defusedxml";

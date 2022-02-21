@@ -1,19 +1,19 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, logutils
-, Mako
-, webtest
-, pythonOlder
-, pytestCheckHook
-, genshi
-, gunicorn
-, jinja2
-, six
-, sqlalchemy
-, virtualenv
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  logutils,
+  Mako,
+  webtest,
+  pythonOlder,
+  pytestCheckHook,
+  genshi,
+  gunicorn,
+  jinja2,
+  six,
+  sqlalchemy,
+  virtualenv,
 }:
-
 buildPythonPackage rec {
   pname = "pecan";
   version = "1.4.1";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "WSGI object-dispatching web framework";
     homepage = "https://www.pecanpy.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ applePrincess ];
+    maintainers = with maintainers; [applePrincess];
   };
 }

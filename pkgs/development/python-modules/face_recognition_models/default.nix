@@ -1,5 +1,9 @@
-{ buildPythonPackage, lib, fetchPypi, setuptools }:
-
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  setuptools,
+}:
 buildPythonPackage rec {
   pname = "face_recognition_models";
   version = "0.3.0";
@@ -12,12 +16,12 @@ buildPythonPackage rec {
   # no module named `tests` as no tests are available
   doCheck = false;
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [setuptools];
 
   meta = with lib; {
     homepage = "https://github.com/ageitgey/face_recognition_models";
     license = licenses.cc0;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
     description = "Trained models for the face_recognition python library";
   };
 }

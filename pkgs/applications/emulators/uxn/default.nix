@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  SDL2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "uxn";
   version = "0.pre+unstable=2021-08-30";
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "An assembler and emulator for the Uxn stack machine";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

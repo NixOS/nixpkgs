@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, winacl
-, prompt-toolkit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  winacl,
+  prompt-toolkit,
 }:
-
 buildPythonPackage rec {
   pname = "aiowinreg";
   version = "0.0.7";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # Project doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aiowinreg" ];
+  pythonImportsCheck = ["aiowinreg"];
 
   meta = with lib; {
     description = "Python module to parse the registry hive";
     homepage = "https://github.com/skelsec/aiowinreg";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

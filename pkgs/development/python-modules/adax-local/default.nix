@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, async-timeout
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  async-timeout,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "adax-local";
   version = "0.1.4";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for local access to Adax";
     homepage = "https://github.com/Danielhiversen/pyAdaxLocal";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

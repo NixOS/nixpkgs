@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
+}:
 stdenv.mkDerivation rec {
   pname = "greenfoot";
   version = "3.7.0";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K9faU3ZarcR4g8riHpoZYVH0sXtueqfm3Fo+sZAHJA8=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   unpackPhase = ''
     ar xf $src
@@ -32,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "A simple integrated development environment for Java";
     homepage = "https://www.greenfoot.org/";
     license = licenses.gpl2ClasspathPlus;
-    maintainers = [ maintainers.chvp ];
+    maintainers = [maintainers.chvp];
     platforms = platforms.unix;
   };
 }

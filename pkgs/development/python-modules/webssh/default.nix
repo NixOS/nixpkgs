@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, paramiko
-, pytestCheckHook
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  paramiko,
+  pytestCheckHook,
+  tornado,
 }:
-
 buildPythonPackage rec {
   pname = "webssh";
   version = "1.5.3";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Web based SSH client";
     homepage = "https://github.com/huashengdun/webssh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = with maintainers; [davidtwco];
   };
 }

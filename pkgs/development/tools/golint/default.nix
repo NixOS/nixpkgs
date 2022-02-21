@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchgit }:
-
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+}:
 buildGoModule rec {
   pname = "lint";
   version = "20201208-${lib.strings.substring 0 7 rev}";
@@ -23,6 +26,6 @@ buildGoModule rec {
     homepage = "https://golang.org";
     description = "Linter for Go source code";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jhillyerd tomberek ];
+    maintainers = with maintainers; [jhillyerd tomberek];
   };
 }

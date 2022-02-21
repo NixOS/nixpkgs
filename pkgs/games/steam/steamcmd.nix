@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl, steam-run, bash, coreutils
-, steamRoot ? "~/.local/share/Steam"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  steam-run,
+  bash,
+  coreutils,
+  steamRoot ? "~/.local/share/Steam",
 }:
-
 stdenv.mkDerivation {
   pname = "steamcmd";
   version = "20180104"; # According to steamcmd_linux.tar.gz mtime
@@ -18,7 +23,7 @@ stdenv.mkDerivation {
     sourceRoot=.
   '';
 
-  buildInputs = [ bash steam-run ];
+  buildInputs = [bash steam-run];
 
   dontBuild = true;
 
@@ -41,6 +46,6 @@ stdenv.mkDerivation {
     homepage = "https://developer.valvesoftware.com/wiki/SteamCMD";
     platforms = platforms.linux;
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ tadfisher ];
+    maintainers = with maintainers; [tadfisher];
   };
 }

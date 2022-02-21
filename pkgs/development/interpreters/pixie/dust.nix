@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, pixie, rlwrap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pixie,
+  rlwrap,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dust";
   version = "0-91";
@@ -13,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "09n57b6haxwask9m8vimv42ikczf7lgfc7m9izjrcqgs0padvfzc";
   };
 
-  buildInputs = [ pixie ];
+  buildInputs = [pixie];
 
-  patches = [ ./make-paths-configurable.patch ];
+  patches = [./make-paths-configurable.patch];
 
   configurePhase = ''
     pixiePath="${pixie}/bin/pixie" \
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Provides tooling around pixie, e.g. a nicer repl, running tests and fetching dependencies";
     homepage = src.meta.homepage;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.lgpl3;
     platforms = platforms.unix;
   };

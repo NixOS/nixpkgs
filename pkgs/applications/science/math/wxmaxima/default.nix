@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook
-, cmake
-, gettext
-, maxima
-, wxGTK
-, gnome
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook,
+  cmake,
+  gettext,
+  maxima,
+  wxGTK,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wxmaxima";
   version = "21.11.0";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Cross platform GUI for the computer algebra system Maxima";
     license = licenses.gpl2;
     homepage = "https://wxmaxima-developers.github.io/wxmaxima/";
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
     platforms = platforms.linux;
   };
 }

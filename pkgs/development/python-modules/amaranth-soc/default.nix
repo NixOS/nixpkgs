@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, amaranth
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  amaranth,
+  setuptools,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "amaranth-soc";
   version = "unstable-2021-12-10";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
     sha256 = "dMip82L7faUn16RDeG3NgMv0nougpwTwDWLX0doD2YA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ setuptools amaranth ];
+  nativeBuildInputs = [setuptools-scm];
+  propagatedBuildInputs = [setuptools amaranth];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "System on Chip toolkit for Amaranth HDL";
     homepage = "https://github.com/amaranth-lang/amaranth-soc";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ emily thoughtpolice ];
+    maintainers = with maintainers; [emily thoughtpolice];
   };
 }

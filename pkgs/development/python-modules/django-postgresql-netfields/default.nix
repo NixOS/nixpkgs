@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, django
-, netaddr
-, six
-, fetchFromGitHub
-# required for tests
-#, djangorestframework
-#, psycopg2
-#, unittest2
+{
+  lib,
+  buildPythonPackage,
+  django,
+  netaddr,
+  six,
+  fetchFromGitHub
+  # required for tests
+  #, djangorestframework
+  #, psycopg2
+  #, unittest2
 }:
-
 buildPythonPackage rec {
   version = "1.2.2";
   pname = "django-postgresql-netfields";
@@ -26,13 +26,13 @@ buildPythonPackage rec {
 
   # keeping the dependencies below as comment for reference
   # checkPhase = ''
-    # python manage.py test
+  # python manage.py test
   # '';
 
   # buildInputs = [
-    # djangorestframework
-    # psycopg2
-    # unittest2
+  # djangorestframework
+  # psycopg2
+  # unittest2
   # ];
 
   propagatedBuildInputs = [

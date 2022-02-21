@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsa-lib, gtk3
-, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg-utils
-, libepoxy, gdk-pixbuf, gnome, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  SDL2,
+  alsa-lib,
+  gtk3,
+  makeWrapper,
+  libGLU,
+  libGL,
+  libarchive,
+  libao,
+  unzip,
+  xdg-utils,
+  libepoxy,
+  gdk-pixbuf,
+  gnome,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.47";
   pname = "nestopia";
@@ -17,7 +32,7 @@ stdenv.mkDerivation rec {
   # nondeterministic failures when creating directories
   enableParallelBuilding = false;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   buildInputs = [
     SDL2
@@ -25,7 +40,8 @@ stdenv.mkDerivation rec {
     libepoxy
     gtk3
     gdk-pixbuf
-    libGLU libGL
+    libGLU
+    libGL
     libarchive
     libao
     xdg-utils
@@ -45,10 +61,10 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-     for f in $out/bin/*; do
-       wrapProgram $f \
-         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
-     done
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
+    done
   '';
 
   patches = [
@@ -66,7 +82,6 @@ stdenv.mkDerivation rec {
     description = "NES emulator with a focus on accuracy";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ MP2E ];
+    maintainers = with lib.maintainers; [MP2E];
   };
 }
-

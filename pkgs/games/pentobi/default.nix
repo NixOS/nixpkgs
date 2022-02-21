@@ -1,7 +1,20 @@
-{ lib, mkDerivation, appstream, fetchFromGitHub, cmake, gettext, libxslt, librsvg, itstool
-, qtbase, qtquickcontrols2, qtsvg, qttools, qtwebview, docbook_xsl
+{
+  lib,
+  mkDerivation,
+  appstream,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  libxslt,
+  librsvg,
+  itstool,
+  qtbase,
+  qtquickcontrols2,
+  qtsvg,
+  qttools,
+  qtwebview,
+  docbook_xsl,
 }:
-
 mkDerivation rec {
   version = "20.0";
   pname = "pentobi";
@@ -13,8 +26,8 @@ mkDerivation rec {
     sha256 = "sha256-DQM3IJ0pRkX4OsrjZGROg50LfKb621UnpvtqSjxchz8=";
   };
 
-  nativeBuildInputs = [ cmake docbook_xsl qttools ];
-  buildInputs = [ appstream qtbase qtsvg qtquickcontrols2 qtwebview itstool librsvg ];
+  nativeBuildInputs = [cmake docbook_xsl qttools];
+  buildInputs = [appstream qtbase qtsvg qtquickcontrols2 qtwebview itstool librsvg];
 
   patchPhase = ''
     substituteInPlace pentobi_thumbnailer/CMakeLists.txt --replace "/manpages" "/share/xml/docbook-xsl/manpages/"
@@ -32,7 +45,7 @@ mkDerivation rec {
     description = "A computer opponent for the board game Blokus";
     homepage = "https://pentobi.sourceforge.io";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

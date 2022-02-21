@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, runtimeShell, python3Packages, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  runtimeShell,
+  python3Packages,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "argbash";
 
@@ -21,9 +28,9 @@ stdenv.mkDerivation rec {
       --replace '/bin/bash' "${runtimeShell}"
   '';
 
-  nativeBuildInputs = [ autoconf python3Packages.docutils makeWrapper ];
+  nativeBuildInputs = [autoconf python3Packages.docutils makeWrapper];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
     wrapProgram $out/bin/argbash \
@@ -34,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Bash argument parsing code generator";
     homepage = "https://argbash.io/";
     license = licenses.free; # custom license.  See LICENSE in source repo.
-    maintainers = with maintainers; [ rencire ];
+    maintainers = with maintainers; [rencire];
   };
 }

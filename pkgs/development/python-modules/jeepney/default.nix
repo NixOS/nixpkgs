@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, async-timeout
-, dbus
-, pytest
-, pytest-trio
-, pytest-asyncio
-, testpath
-, trio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  async-timeout,
+  dbus,
+  pytest,
+  pytest-trio,
+  pytest-asyncio,
+  testpath,
+  trio,
 }:
-
 buildPythonPackage rec {
   pname = "jeepney";
   version = "0.7.1";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/takluyver/jeepney";
     description = "Pure Python DBus interface";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

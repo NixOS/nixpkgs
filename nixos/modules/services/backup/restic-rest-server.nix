@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.restic.server;
-in
 {
-  meta.maintainers = [ maintainers.bachp ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.restic.server;
+in {
+  meta.maintainers = [maintainers.bachp];
 
   options.services.restic.server = {
     enable = mkEnableOption "Restic REST Server";
@@ -68,8 +69,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.restic-rest-server = {
       description = "Restic REST Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/rest-server \
@@ -85,7 +86,7 @@ in
         Group = "restic";
 
         # Security hardening
-        ReadWritePaths = [ cfg.dataDir ];
+        ReadWritePaths = [cfg.dataDir];
         PrivateTmp = true;
         ProtectSystem = "strict";
         ProtectKernelTunables = true;
@@ -96,7 +97,7 @@ in
     };
 
     systemd.tmpfiles.rules = mkIf cfg.privateRepos [
-        "f ${cfg.dataDir}/.htpasswd 0700 restic restic -"
+      "f ${cfg.dataDir}/.htpasswd 0700 restic restic -"
     ];
 
     users.users.restic = {

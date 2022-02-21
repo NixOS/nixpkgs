@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, curl, openssl, fuse, libxml2, json_c, file }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  curl,
+  openssl,
+  fuse,
+  libxml2,
+  json_c,
+  file,
+}:
 stdenv.mkDerivation rec {
   pname = "hubicfuse";
   version = "3.0.1";
@@ -20,8 +31,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl openssl fuse libxml2 json_c file ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [curl openssl fuse libxml2 json_c file];
   postInstall = ''
     install hubic_token $out/bin
     mkdir -p $out/sbin
@@ -33,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "FUSE-based filesystem to access hubic cloud storage";
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = [ maintainers.jpierre03 ];
+    maintainers = [maintainers.jpierre03];
   };
 }

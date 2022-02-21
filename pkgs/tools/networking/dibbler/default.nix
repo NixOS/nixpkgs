@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "dibbler";
   version = "1.0.1";
@@ -20,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://klub.com.pl/dhcpv6/";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

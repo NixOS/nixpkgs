@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, guile, curl, substituteAll }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  guile,
+  curl,
+  substituteAll,
+}:
 stdenv.mkDerivation rec {
   pname = "akku";
   version = "1.1.0";
@@ -19,16 +27,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [ guile ];
+  buildInputs = [guile];
 
   # Use a dummy package index to boostrap Akku
   preBuild = ''
     touch bootstrap.db
   '';
 
-  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+  makeFlags = ["GUILE_AUTO_COMPILE=0"];
 
   meta = with lib; {
     homepage = "https://akkuscm.org/";
@@ -36,6 +44,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/akkuscm/akku/-/raw/v${version}/NEWS.md";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [marsam];
   };
 }

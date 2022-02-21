@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "repoze.lru";
   version = "0.7";
@@ -16,7 +16,6 @@ buildPythonPackage rec {
     description = "A tiny LRU cache implementation and decorator";
     homepage = "http://www.repoze.org/";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
-
 }

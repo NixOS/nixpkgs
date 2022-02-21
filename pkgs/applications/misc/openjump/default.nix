@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper
-, coreutils, gawk, which, gnugrep, findutils
-, jdk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  coreutils,
+  gawk,
+  which,
+  gnugrep,
+  findutils,
+  jdk,
 }:
-
 stdenv.mkDerivation {
   pname = "openjump";
   version = "1.15";
@@ -18,7 +26,7 @@ stdenv.mkDerivation {
     cd $out; unzip $src
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [makeWrapper unzip];
 
   installPhase = ''
     dir=$(echo $out/OpenJUMP-*)

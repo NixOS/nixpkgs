@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, cmake
-, symengine
-, pytest
-, sympy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  cmake,
+  symengine,
+  pytest,
+  sympy,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "symengine";
   version = "0.9.0";
@@ -29,11 +29,11 @@ buildPythonPackage rec {
       --replace "SET(CYTHON_BIN cython" "SET(CYTHON_BIN ${cython}/bin/cython"
   '';
 
-  nativeBuildUnputs = [ cmake ];
+  nativeBuildUnputs = [cmake];
 
-  buildInputs = [ cython ];
+  buildInputs = [cython];
 
-  checkInputs = [ pytest sympy ];
+  checkInputs = [pytest sympy];
 
   setupPyBuildFlags = [
     "--symengine-dir=${symengine}/"
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Python library providing wrappers to SymEngine";
     homepage = "https://github.com/symengine/symengine.py";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

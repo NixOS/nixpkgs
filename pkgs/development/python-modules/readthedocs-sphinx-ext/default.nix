@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pytest
-, mock
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pytest,
+  mock,
+  sphinx,
 }:
-
 buildPythonPackage rec {
   pname = "readthedocs-sphinx-ext";
   version = "2.1.4";
@@ -16,9 +16,9 @@ buildPythonPackage rec {
     sha256 = "2ba023376057c6ba5d07b4fd016ec1d526f1b4fc5ad7a7ce7f0ed8a91dc54bbe";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
-  checkInputs = [ pytest mock sphinx ];
+  checkInputs = [pytest mock sphinx];
 
   checkPhase = ''
     py.test

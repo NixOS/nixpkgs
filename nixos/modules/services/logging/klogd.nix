@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
 
   options = {
-
     services.klogd.enable = mkOption {
       type = types.bool;
       default = versionOlder (getVersion config.boot.kernelPackages.kernel) "3.5";
@@ -18,21 +19,19 @@ with lib;
         older kernel.
       '';
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.klogd.enable {
     systemd.services.klogd = {
       description = "Kernel Log Daemon";
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.sysklogd ];
+      wantedBy = ["multi-user.target"];
+      path = [pkgs.sysklogd];
       unitConfig.ConditionVirtualization = "!systemd-nspawn";
       script =
-        "klogd -c 1 -2 -n " +
-        "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";
+        "klogd -c 1 -2 -n "
+        + "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";
     };
   };
 }

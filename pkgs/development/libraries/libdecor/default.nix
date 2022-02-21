@@ -1,18 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, pkg-config
-, meson
-, ninja
-, wayland
-, wayland-protocols
-, wayland-scanner
-, cairo
-, dbus
-, pango
-, libxkbcommon
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  pkg-config,
+  meson,
+  ninja,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  cairo,
+  dbus,
+  pango,
+  libxkbcommon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libdecor";
   version = "0.1.0";
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "Client-side decorations library for Wayland clients";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
   };
 }

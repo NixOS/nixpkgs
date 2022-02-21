@@ -1,6 +1,7 @@
-{ python3Packages, fetchFromGitHub }:
-
-rec {
+{
+  python3Packages,
+  fetchFromGitHub,
+}: rec {
   ansible = ansible_2_12;
 
   ansible_2_12 = python3Packages.toPythonApplication python3Packages.ansible-core;

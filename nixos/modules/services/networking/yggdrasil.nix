@@ -1,12 +1,15 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   keysPath = "/var/lib/yggdrasil/keys.json";
 
   cfg = config.services.yggdrasil;
-  configProvided = cfg.config != { };
+  configProvided = cfg.config != {};
   configFileProvided = cfg.configFile != null;
-
 in {
   options = with types; {
     services.yggdrasil = {
@@ -85,7 +88,7 @@ in {
       denyDhcpcdInterfaces = mkOption {
         type = listOf str;
         default = [];
-        example = [ "tap*" ];
+        example = ["tap*"];
         description = ''
           Disable the DHCP client for any interface whose name matches
           any of the shell glob patterns in this list.  Use this
@@ -108,16 +111,18 @@ in {
         will retain the same IPv6 address when the service is
         restarted. Keys are stored at ${keysPath}.
       '';
-
     };
   };
 
-  config = mkIf cfg.enable (let binYggdrasil = cfg.package + "/bin/yggdrasil";
+  config = mkIf cfg.enable (let
+    binYggdrasil = cfg.package + "/bin/yggdrasil";
   in {
-    assertions = [{
-      assertion = config.networking.enableIPv6;
-      message = "networking.enableIPv6 must be true for yggdrasil to work";
-    }];
+    assertions = [
+      {
+        assertion = config.networking.enableIPv6;
+        message = "networking.enableIPv6 must be true for yggdrasil to work";
+      }
+    ];
 
     system.activationScripts.yggdrasil = mkIf cfg.persistentKeys ''
       if [ ! -e ${keysPath} ]
@@ -132,32 +137,32 @@ in {
 
     systemd.services.yggdrasil = {
       description = "Yggdrasil Network Service";
-      bindsTo = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      bindsTo = ["network-online.target"];
+      after = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
 
       preStart =
-        (if configProvided || configFileProvided || cfg.persistentKeys then
+        (if configProvided || configFileProvided || cfg.persistentKeys
+        then
           "echo "
-
           + (lib.optionalString configProvided
-            "'${builtins.toJSON cfg.config}'")
+          "'${builtins.toJSON cfg.config}'")
           + (lib.optionalString configFileProvided "$(cat ${cfg.configFile})")
           + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
           + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
-        else
-          "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf";
+        else "${binYggdrasil} -genconf")
+        + " > /run/yggdrasil/yggdrasil.conf";
 
       serviceConfig = {
-        ExecStart =
-          "${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf";
+        ExecStart = "${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
 
         Group = cfg.group;
         RuntimeDirectory = "yggdrasil";
         RuntimeDirectoryMode = "0750";
-        BindReadOnlyPaths = lib.optional configFileProvided cfg.configFile
+        BindReadOnlyPaths =
+          lib.optional configFileProvided cfg.configFile
           ++ lib.optional cfg.persistentKeys keysPath;
 
         # TODO: as of yggdrasil 0.3.8 and systemd 243, yggdrasil fails
@@ -189,13 +194,13 @@ in {
     };
 
     networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
-    networking.firewall.allowedUDPPorts = mkIf cfg.openMulticastPort [ 9001 ];
+    networking.firewall.allowedUDPPorts = mkIf cfg.openMulticastPort [9001];
 
     # Make yggdrasilctl available on the command line.
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   });
   meta = {
     doc = ./yggdrasil.xml;
-    maintainers = with lib.maintainers; [ gazally ehmry ];
+    maintainers = with lib.maintainers; [gazally ehmry];
   };
 }

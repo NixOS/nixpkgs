@@ -1,5 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  hicolor-icon-theme,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "Whitesur-icon-theme";
   version = "2021-11-08";
@@ -11,9 +16,9 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "LZ0GLJFUUvzsPhU2sBkfy5mPpQHuPzYhbumwFKnogoA=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [gtk3];
 
-  buildInputs = [ hicolor-icon-theme ];
+  buildInputs = [hicolor-icon-theme];
 
   dontDropIconThemeCache = true;
 
@@ -46,7 +51,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ icy-thought ];
+    maintainers = with maintainers; [icy-thought];
   };
-
 }

@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, boost, cairo, lv2, pkg-config }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  boost,
+  cairo,
+  lv2,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "quadrafuzz";
   version = "0.1.1";
@@ -16,10 +23,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./dpf/utils/generate-ttl.sh
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
-    boost cairo lv2
+    boost
+    cairo
+    lv2
   ];
 
   makeFlags = [
@@ -36,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jpcima/quadrafuzz";
     description = "Multi-band fuzz distortion plugin";
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
   };

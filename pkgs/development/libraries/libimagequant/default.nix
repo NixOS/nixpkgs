@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "libimagequant";
   version = "2.17.0";
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
-  configureFlags = lib.optionals (!stdenv.hostPlatform.isx86) [ "--disable-sse" ];
+  configureFlags = lib.optionals (!stdenv.hostPlatform.isx86) ["--disable-sse"];
 
   meta = with lib; {
     homepage = "https://pngquant.org/lib/";
@@ -23,6 +26,6 @@ stdenv.mkDerivation rec {
     longDescription = "Small, portable C library for high-quality conversion of RGBA images to 8-bit indexed-color (palette) images.";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ma9e marsam ];
+    maintainers = with maintainers; [ma9e marsam];
   };
 }

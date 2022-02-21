@@ -1,21 +1,21 @@
-{ lib
-, fetchurl
-, fetchFromGitLab
-, python3
-, appstream-glib
-, desktop-file-utils
-, glib
-, gtk3
-, libxml2
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, gobject-introspection
-, libhandy
-, librsvg
+{
+  lib,
+  fetchurl,
+  fetchFromGitLab,
+  python3,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  gtk3,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  gobject-introspection,
+  libhandy,
+  librsvg,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "banking";
   version = "0.3.0";
@@ -62,6 +62,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Banking application for small screens";
     homepage = "https://tabos.gitlab.io/projects/banking/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

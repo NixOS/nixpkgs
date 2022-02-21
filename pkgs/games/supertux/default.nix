@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, SDL2, SDL2_image , curl
-, libogg, libvorbis, libGLU, libGL, openal, boost, glew
-, libpng, freetype, glm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  curl,
+  libogg,
+  libvorbis,
+  libGLU,
+  libGL,
+  openal,
+  boost,
+  glew,
+  libpng,
+  freetype,
+  glm,
 }:
-
 stdenv.mkDerivation rec {
   pname = "supertux";
   version = "0.6.3";
@@ -12,13 +27,25 @@ stdenv.mkDerivation rec {
     sha256 = "1xkr3ka2sxp5s0spp84iv294i29s1vxqzazb6kmjc0n415h0x57p";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [pkg-config cmake];
 
-  buildInputs = [ SDL2 SDL2_image curl libogg libvorbis libGLU libGL openal boost glew
-    libpng freetype glm
+  buildInputs = [
+    SDL2
+    SDL2_image
+    curl
+    libogg
+    libvorbis
+    libGLU
+    libGL
+    openal
+    boost
+    glew
+    libpng
+    freetype
+    glm
   ];
 
-  cmakeFlags = [ "-DENABLE_BOOST_STATIC_LIBS=OFF" ];
+  cmakeFlags = ["-DENABLE_BOOST_STATIC_LIBS=OFF"];
 
   postInstall = ''
     mkdir $out/bin
@@ -29,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Classic 2D jump'n run sidescroller game";
     homepage = "http://supertux.github.io/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = with platforms; linux;
   };
 }

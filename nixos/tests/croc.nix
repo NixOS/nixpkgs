@@ -1,13 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-let
-  client = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.croc ];
+import ./make-test-python.nix ({pkgs, ...}: let
+  client = {pkgs, ...}: {
+    environment.systemPackages = [pkgs.croc];
   };
   pass = pkgs.writeText "pass" "PassRelay";
 in {
   name = "croc";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ hax404 julm ];
+    maintainers = [hax404 julm];
   };
 
   nodes = {

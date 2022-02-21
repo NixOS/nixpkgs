@@ -1,23 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "vend";
 
   /*
-  This package is used to generate vendor folders for
-  packages that use the `runVend` option with `buildGoModule`.
-
-  Do not update this package without checking that the vendorSha256
-  hashes of packages using the `runVend` option are unchanged
-  or updating their vendorSha256 hashes if necessary.
-  */
+   This package is used to generate vendor folders for
+   packages that use the `runVend` option with `buildGoModule`.
+   
+   Do not update this package without checking that the vendorSha256
+   hashes of packages using the `runVend` option are unchanged
+   or updating their vendorSha256 hashes if necessary.
+   */
   version = "1.0.2";
   # Disable the bot
   # nixpkgs-update: no auto update
 
   # Disable `mod tidy`, patch was refused upstream
   # https://github.com/nomad-software/vend/pull/9
-  patches = [ ./remove_tidy.patch ];
+  patches = [./remove_tidy.patch];
 
   src = fetchFromGitHub {
     owner = "nomad-software";
@@ -31,7 +34,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/nomad-software/vend";
     description = "A utility which vendors go code including c dependencies";
-    maintainers = with maintainers; [ c00w mic92 zowoq ];
+    maintainers = with maintainers; [c00w mic92 zowoq];
     license = licenses.mit;
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "memstream";
   version = "0.1";
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.piumarta.com/software/memstream/";
     description = "memstream.c is an implementation of the POSIX function open_memstream() for BSD and BSD-like operating systems";
     license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [veprbl];
     platforms = platforms.unix;
   };
 }

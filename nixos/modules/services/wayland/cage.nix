@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.cage;
 in {
   options.services.cage.enable = mkEnableOption "cage kiosk service";
@@ -33,7 +35,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     # The service is partially based off of the one provided in the
     # cage wiki at
     # https://github.com/Hjdskes/cage/wiki/Starting-Cage-on-boot-with-systemd.
@@ -46,10 +47,10 @@ in {
         "systemd-logind.service"
         "getty@tty1.service"
       ];
-      before = [ "graphical.target" ];
-      wants = [ "dbus.socket" "systemd-logind.service" "plymouth-quit.service"];
-      wantedBy = [ "graphical.target" ];
-      conflicts = [ "getty@tty1.service" ];
+      before = ["graphical.target"];
+      wants = ["dbus.socket" "systemd-logind.service" "plymouth-quit.service"];
+      wantedBy = ["graphical.target"];
+      conflicts = ["getty@tty1.service"];
 
       restartIfChanged = false;
       unitConfig.ConditionPathExists = "/dev/tty1";
@@ -91,11 +92,10 @@ in {
 
     hardware.opengl.enable = mkDefault true;
 
-    systemd.targets.graphical.wants = [ "cage-tty1.service" ];
+    systemd.targets.graphical.wants = ["cage-tty1.service"];
 
     systemd.defaultUnit = "graphical.target";
   };
 
-  meta.maintainers = with lib.maintainers; [ matthewbauer ];
-
+  meta.maintainers = with lib.maintainers; [matthewbauer];
 }

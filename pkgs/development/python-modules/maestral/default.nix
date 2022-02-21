@@ -1,13 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, python
-, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
-, importlib-metadata
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  python,
+  click,
+  desktop-notifier,
+  dropbox,
+  fasteners,
+  keyring,
+  keyrings-alt,
+  packaging,
+  pathspec,
+  Pyro5,
+  requests,
+  setuptools,
+  sdnotify,
+  survey,
+  watchdog,
+  importlib-metadata,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "maestral";
   version = "1.5.2";
@@ -20,29 +33,37 @@ buildPythonPackage rec {
     sha256 = "sha256-nFXgvFLw6ru/Sw3+LoZ7V09dyn0L21We/Dlwib2gZB8=";
   };
 
-  propagatedBuildInputs = [
-    click
-    desktop-notifier
-    dropbox
-    fasteners
-    keyring
-    keyrings-alt
-    packaging
-    pathspec
-    Pyro5
-    requests
-    setuptools
-    sdnotify
-    survey
-    watchdog
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      click
+      desktop-notifier
+      dropbox
+      fasteners
+      keyring
+      keyrings-alt
+      packaging
+      pathspec
+      Pyro5
+      requests
+      setuptools
+      sdnotify
+      survey
+      watchdog
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/lib/${python.libPrefix}/site-packages"
   ];
 
   checkInputs = [
@@ -62,12 +83,12 @@ buildPythonPackage rec {
     "test_cased_path_candidates"
   ];
 
-  pythonImportsCheck = [ "maestral" ];
+  pythonImportsCheck = ["maestral"];
 
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     platforms = platforms.unix;
     homepage = "https://maestral.app";
   };

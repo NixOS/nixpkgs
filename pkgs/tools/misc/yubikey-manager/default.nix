@@ -1,5 +1,12 @@
-{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps }:
-
+{
+  python3Packages,
+  fetchFromGitHub,
+  lib,
+  yubikey-personalization,
+  libu2f-host,
+  libusb1,
+  procps,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
   version = "4.0.8";
@@ -19,10 +26,10 @@ python3Packages.buildPythonPackage rec {
       --replace 'pkill' '${procps}/bin/pkill'
   '';
 
-  nativeBuildInputs = with python3Packages; [ poetry-core ];
+  nativeBuildInputs = with python3Packages; [poetry-core];
 
-  propagatedBuildInputs =
-    with python3Packages; [
+  propagatedBuildInputs = with python3Packages;
+    [
       click
       cryptography
       pyscard
@@ -30,15 +37,18 @@ python3Packages.buildPythonPackage rec {
       pyopenssl
       six
       fido2
-    ] ++ [
+    ]
+    ++ [
       libu2f-host
       libusb1
       yubikey-personalization
     ];
 
   makeWrapperArgs = [
-    "--prefix" "LD_LIBRARY_PATH" ":"
-    (lib.makeLibraryPath [ libu2f-host libusb1 yubikey-personalization ])
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [libu2f-host libusb1 yubikey-personalization])
   ];
 
   postInstall = ''
@@ -53,7 +63,7 @@ python3Packages.buildPythonPackage rec {
       --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
   '';
 
-  checkInputs = with python3Packages; [ pytestCheckHook makefun ];
+  checkInputs = with python3Packages; [pytestCheckHook makefun];
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";
@@ -61,6 +71,6 @@ python3Packages.buildPythonPackage rec {
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley lassulus pinpox ];
+    maintainers = with maintainers; [benley lassulus pinpox];
   };
 }

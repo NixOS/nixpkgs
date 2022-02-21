@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonpointer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jsonpointer,
 }:
-
 buildPythonPackage rec {
   pname = "jsonpatch";
   version = "1.32";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   # test files are missing
   doCheck = false;
-  propagatedBuildInputs = [ jsonpointer ];
+  propagatedBuildInputs = [jsonpointer];
 
   meta = {
     description = "Library to apply JSON Patches according to RFC 6902";

@@ -1,8 +1,13 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, rustfmt, writeTextFile
-, runtimeShell
-, bash
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  clang,
+  rustfmt,
+  writeTextFile,
+  runtimeShell,
+  bash,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
   version = "0.59.2";
@@ -18,15 +23,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-RKZY5vf6CSFaKweuuNkeFF0ZXlSUibAkcL/YhkE0MoQ=";
 
-  buildInputs = [ clang.cc.lib ];
+  buildInputs = [clang.cc.lib];
 
   preConfigure = ''
     export LIBCLANG_PATH="${clang.cc.lib}/lib"
   '';
 
   doCheck = true;
-  checkInputs =
-    let fakeRustup = writeTextFile {
+  checkInputs = let
+    fakeRustup = writeTextFile {
       name = "fake-rustup";
       executable = true;
       destination = "/bin/rustup";
@@ -47,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs .
   '';
 
-  passthru = { inherit clang; };
+  passthru = {inherit clang;};
 
   meta = with lib; {
     description = "Automatically generates Rust FFI bindings to C (and some C++) libraries";
@@ -56,8 +61,8 @@ rustPlatform.buildRustPackage rec {
       rust ffi declarations.
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
-    license = with licenses; [ bsd3 ];
+    license = with licenses; [bsd3];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ johntitor ralith ];
+    maintainers = with maintainers; [johntitor ralith];
   };
 }

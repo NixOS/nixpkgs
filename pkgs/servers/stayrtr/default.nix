@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, stayrtr
-, testVersion
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  stayrtr,
+  testVersion,
 }:
-
 buildGoModule rec {
   pname = "stayrtr";
   version = "0.3.0";
@@ -31,6 +31,6 @@ buildGoModule rec {
     description = "Simple RPKI-To-Router server. (Hard fork of GoRTR)";
     homepage = "https://github.com/bgp/stayrtr/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [_0x4A6F];
   };
 }

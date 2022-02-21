@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, python3, pkg-config, imagemagick, wafHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  pkg-config,
+  imagemagick,
+  wafHook,
+}:
 stdenv.mkDerivation rec {
   pname = "blockhash";
   version = "0.3.2";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0x3lvhnkb4c3pyq6p81qnnqimz35wpippiac506dgjx3b1848v35";
   };
 
-  nativeBuildInputs = [ python3 pkg-config wafHook ];
-  buildInputs = [ imagemagick ];
+  nativeBuildInputs = [python3 pkg-config wafHook];
+  buildInputs = [imagemagick];
 
   strictDeps = true;
 
@@ -24,7 +31,7 @@ stdenv.mkDerivation rec {
       Fan Gu and Xiamu Niu.
     '';
     license = licenses.mit;
-    maintainers = [ maintainers.infinisil ];
+    maintainers = [maintainers.infinisil];
     platforms = platforms.unix;
   };
 }

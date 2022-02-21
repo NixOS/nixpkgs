@@ -1,16 +1,16 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, metar
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  metar,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-cov,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pynws";
   version = "1.3.2";
@@ -36,12 +36,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pynws" ];
+  pythonImportsCheck = ["pynws"];
 
   meta = with lib; {
     description = "Python library to retrieve data from NWS/NOAA";
     homepage = "https://github.com/MatthewFlamm/pynws";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

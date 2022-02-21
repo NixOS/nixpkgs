@@ -1,14 +1,14 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, autopep8
-, flake8
-, jinja2
-, pylint
-, pyyaml
-, six
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  autopep8,
+  flake8,
+  jinja2,
+  pylint,
+  pyyaml,
+  six,
 }:
-
 buildPythonApplication rec {
   pname = "cmake-format";
   version = "0.6.13";
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     sha256 = "0kmggnfbv6bba75l3zfzqwk0swi90brjka307m2kcz2w35kr8jvn";
   };
 
-  propagatedBuildInputs = [ autopep8 flake8 jinja2 pylint pyyaml six ];
+  propagatedBuildInputs = [autopep8 flake8 jinja2 pylint pyyaml six];
 
   doCheck = false;
 
@@ -30,7 +30,7 @@ buildPythonApplication rec {
     description = "Source code formatter for cmake listfiles";
     homepage = "https://github.com/cheshirekow/cmake_format";
     license = licenses.gpl3;
-    maintainers = [ maintainers.tobim ];
+    maintainers = [maintainers.tobim];
     platforms = platforms.all;
   };
 }

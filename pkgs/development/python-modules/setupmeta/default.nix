@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, mock
-, pep440
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  mock,
+  pep440,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "setupmeta";
   version = "3.3.0";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Python module to simplify setup.py files";
     homepage = "https://github.com/codrsquad/setupmeta";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

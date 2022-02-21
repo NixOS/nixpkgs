@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, bson
-, pytest
-, pytest-cov
-, pytest-runner
-, pytestCheckHook
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  bson,
+  pytest,
+  pytest-cov,
+  pytest-runner,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "pymarshal";
   version = "2.2.0";
@@ -40,12 +40,12 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pytestFlagsArray = [ "test" ];
+  pytestFlagsArray = ["test"];
 
   meta = {
     description = "Python data serialization library";
     homepage = "https://github.com/stargateaudio/pymarshal";
-    maintainers = with lib.maintainers; [ yuu ];
+    maintainers = with lib.maintainers; [yuu];
     license = lib.licenses.bsd2;
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, openssl, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  aws-c-common,
+  openssl,
+  Security,
+}:
 stdenv.mkDerivation rec {
   pname = "aws-c-cal";
   version = "0.5.12";
@@ -11,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KzuaT9c1l9Uhyj6IEy8JfDYzEYI2OcUkq+KRDoJx+Cc=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ aws-c-common openssl ];
+  buildInputs = [aws-c-common openssl];
 
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [Security];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -26,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-c-cal";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

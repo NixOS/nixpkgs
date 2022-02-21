@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi,
-  six, pytest, pytest-runner, pytest-cov, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pytest,
+  pytest-runner,
+  pytest-cov,
+  coverage,
 }:
 buildPythonPackage rec {
   pname = "libais";
@@ -13,8 +20,8 @@ buildPythonPackage rec {
   # data files missing
   doCheck = false;
 
-  checkInputs = [ pytest pytest-runner pytest-cov coverage ];
-  propagatedBuildInputs = [ six ];
+  checkInputs = [pytest pytest-runner pytest-cov coverage];
+  propagatedBuildInputs = [six];
 
   meta = with lib; {
     homepage = "https://github.com/schwehr/libais";

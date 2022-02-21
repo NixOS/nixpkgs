@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "lefthook";
   version = "0.7.7";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "Fast and powerful Git hooks manager for any type of projects";
     homepage = "https://github.com/Arkweid/lefthook";
     license = licenses.mit;
-    maintainers = with maintainers; [ rencire ];
+    maintainers = with maintainers; [rencire];
   };
 }

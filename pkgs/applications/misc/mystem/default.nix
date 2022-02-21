@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "mystem";
   version = "3.1";
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Morphological analysis of Russian text";
     homepage = "https://yandex.ru/dev/mystem/";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [abbradar];
+    platforms = ["x86_64-linux"];
   };
 }

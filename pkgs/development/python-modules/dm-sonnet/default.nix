@@ -1,21 +1,20 @@
-{ lib
-, fetchFromGitHub
-, bazel_0_26
-, buildBazelPackage
-, buildPythonPackage
-, git
-, python
-, six
-, absl-py
-, semantic-version
-, contextlib2
-, wrapt
-, tensorflow
-, tensorflow-probability
-, tensorflow-estimator
-}:
-
-let
+{
+  lib,
+  fetchFromGitHub,
+  bazel_0_26,
+  buildBazelPackage,
+  buildPythonPackage,
+  git,
+  python,
+  six,
+  absl-py,
+  semantic-version,
+  contextlib2,
+  wrapt,
+  tensorflow,
+  tensorflow-probability,
+  tensorflow-estimator,
+}: let
   version = "1.33";
 
   # first build all binaries and generate setup.py using bazel
@@ -56,36 +55,36 @@ let
       '';
     };
   };
+  # now use pip to install the package prepared by bazel
+in
+  buildPythonPackage {
+    pname = "dm-sonnet";
+    inherit version;
 
-# now use pip to install the package prepared by bazel
-in buildPythonPackage {
-  pname = "dm-sonnet";
-  inherit version;
+    src = bazel-build;
 
-  src = bazel-build;
+    propagatedBuildInputs = [
+      six
+      absl-py
+      semantic-version
+      contextlib2
+      wrapt
+      tensorflow
+      tensorflow-probability
+      tensorflow-estimator
+    ];
 
-  propagatedBuildInputs = [
-    six
-    absl-py
-    semantic-version
-    contextlib2
-    wrapt
-    tensorflow
-    tensorflow-probability
-    tensorflow-estimator
-  ];
+    # not sure how to properly run the real test suite -- through bazel?
+    checkPhase = ''
+      ${python.interpreter} -c "import sonnet"
+    '';
 
-  # not sure how to properly run the real test suite -- through bazel?
-  checkPhase = ''
-    ${python.interpreter} -c "import sonnet"
-  '';
-
-  meta = with lib; {
-    description = "TensorFlow-based neural network library";
-    homepage = "https://sonnet.dev";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
-    broken = true; # depends on older TensorFlow version than is currently packaged
-  };
-}
+    meta = with lib; {
+      description = "TensorFlow-based neural network library";
+      homepage = "https://sonnet.dev";
+      license = licenses.asl20;
+      maintainers = with maintainers; [timokau];
+      platforms = platforms.linux;
+      broken = true; # depends on older TensorFlow version than is currently packaged
+    };
+  }

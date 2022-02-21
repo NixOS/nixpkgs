@@ -1,11 +1,13 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
-
-{
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "botamusique";
-  meta.maintainers = with lib.maintainers; [ hexa ];
+  meta.maintainers = with lib.maintainers; [hexa];
 
   nodes = {
-    machine = { config, ... }: {
+    machine = {config, ...}: {
       services.murmur = {
         enable = true;
         registerName = "NixOS tests";

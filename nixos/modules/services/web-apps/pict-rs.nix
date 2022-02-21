@@ -1,10 +1,13 @@
-{ lib, pkgs, config, ... }:
-with lib;
-let
-  cfg = config.services.pict-rs;
-in
 {
-  meta.maintainers = with maintainers; [ happysalada ];
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.services.pict-rs;
+in {
+  meta.maintainers = with maintainers; [happysalada];
   # Don't edit the docbook xml directly, edit the md and generate it:
   # `pandoc pict-rs.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > pict-rs.xml`
   meta.doc = ./pict-rs.xml;
@@ -39,7 +42,7 @@ in
         PICTRS_PATH = cfg.dataDir;
         PICTRS_ADDR = "${cfg.address}:${toString cfg.port}";
       };
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "pict-rs";

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "iperf";
   version = "2.1.4";
@@ -9,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1yflnj2ni988nm0p158q8lnkiq2gn2chmvsglyn2gqmqhwp3jaq6";
   };
 
-  hardeningDisable = [ "format" ];
-  configureFlags = [ "--enable-fastsampling" ];
+  hardeningDisable = ["format"];
+  configureFlags = ["--enable-fastsampling"];
 
   postInstall = ''
     mv $out/bin/iperf $out/bin/iperf2

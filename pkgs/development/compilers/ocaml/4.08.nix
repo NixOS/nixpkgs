@@ -8,5 +8,5 @@ import ./generic.nix {
   dontStrip = true;
 
   # Breaks build with Clang
-  hardeningDisable = [ "strictoverflow" ];
+  hardeningDisable = ["strictoverflow"];
 }

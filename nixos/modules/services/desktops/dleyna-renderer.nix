@@ -1,9 +1,11 @@
 # dleyna-renderer service.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
   options = {
     services.dleyna-renderer = {
@@ -18,11 +20,10 @@ with lib;
     };
   };
 
-
   ###### implementation
   config = mkIf config.services.dleyna-renderer.enable {
-    environment.systemPackages = [ pkgs.dleyna-renderer ];
+    environment.systemPackages = [pkgs.dleyna-renderer];
 
-    services.dbus.packages = [ pkgs.dleyna-renderer ];
+    services.dbus.packages = [pkgs.dleyna-renderer];
   };
 }

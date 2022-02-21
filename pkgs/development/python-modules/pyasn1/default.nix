@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "pyasn1";
   version = "0.4.8";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     description = "ASN.1 tools for Python";
     homepage = "http://pyasn1.sourceforge.net/";
     license = "mBSD";
-    platforms = platforms.unix;  # arbitrary choice
+    platforms = platforms.unix; # arbitrary choice
   };
 }

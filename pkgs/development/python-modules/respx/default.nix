@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpcore
-, httpx
-, flask
-, pytest-asyncio
-, pytestCheckHook
-, starlette
-, trio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpcore,
+  httpx,
+  flask,
+  pytest-asyncio,
+  pytestCheckHook,
+  starlette,
+  trio,
 }:
-
 buildPythonPackage rec {
   pname = "respx";
   version = "0.19.1";
@@ -43,12 +43,12 @@ buildPythonPackage rec {
     "test_pass_through"
   ];
 
-  pythonImportsCheck = [ "respx" ];
+  pythonImportsCheck = ["respx"];
 
   meta = with lib; {
     description = "Python library for mocking HTTPX";
     homepage = "https://lundberg.github.io/respx/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, nodejs
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  nodejs,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "bqn";
   version = "0.pre+date=2021-12-13";
@@ -16,9 +16,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-iAlDXGlHTeI6+r/QKFiBHhj5A+FgUy7JFrCpAwpyVQU=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = [ nodejs ];
+  buildInputs = [nodejs];
 
   patches = [
     # Creates a @libbqn@ substitution variable, to be filled in the fixupPhase
@@ -57,8 +57,9 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/mlochbaum/BQN/";
     description = "The original BQN implementation in Javascript";
     license = licenses.isc;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }
 # TODO: install docs and other stuff
+

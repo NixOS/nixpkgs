@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "bibtool";
   version = "2.68";
@@ -10,9 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   # Perl for running test suite.
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
-  installTargets = [ "install" "install.man" ];
+  installTargets = ["install" "install.man"];
 
   doCheck = true;
   checkTarget = "test";
@@ -22,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = [ maintainers.rycee ];
+    maintainers = [maintainers.rycee];
   };
 }

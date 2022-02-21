@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, premake5 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  premake5,
+}:
 stdenv.mkDerivation rec {
   pname = "otfcc";
   version = "0.10.4";
@@ -11,14 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "1nrkzpqklfpqsccji4ans40rj88l80cv7dpxwx4g577xrvk13a0f";
   };
 
-  nativeBuildInputs = [ premake5 ];
+  nativeBuildInputs = [premake5];
 
   patches = [
     ./fix-aarch64.patch
     ./move-makefiles.patch
   ];
 
-  buildFlags = lib.optional stdenv.isAarch64 [ "config=release_arm" ];
+  buildFlags = lib.optional stdenv.isAarch64 ["config=release_arm"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -32,7 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/caryll/otfcc";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jfrankenau ttuegel ];
+    maintainers = with maintainers; [jfrankenau ttuegel];
   };
-
 }

@@ -1,5 +1,9 @@
-{ lib, mkDerivation, fetchFromGitHub, standard-library }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  standard-library,
+}:
 mkDerivation rec {
   pname = "generic";
   version = "0.1.0.2";
@@ -23,11 +27,10 @@ mkDerivation rec {
   meta = with lib; {
     # Remove if a version compatible with agda 2.6.2 is made
     broken = true;
-    description =
-      "A library for doing generic programming in Agda";
+    description = "A library for doing generic programming in Agda";
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice turion ];
+    maintainers = with maintainers; [alexarice turion];
   };
 }

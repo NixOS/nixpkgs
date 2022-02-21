@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, xlibsWrapper, libXmu, libXi
-, OpenGL
-, enableEGL ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  libGLU,
+  xlibsWrapper,
+  libXmu,
+  libXi,
+  OpenGL,
+  enableEGL ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "glew";
   version = "2.2.0";
@@ -12,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = ["bin" "out" "dev"];
 
   patches = [
     # https://github.com/nigels-com/glew/pull/342
@@ -22,14 +30,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ xlibsWrapper libXmu libXi ];
-  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+  nativeBuildInputs = [cmake];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [xlibsWrapper libXmu libXi];
+  propagatedBuildInputs =
+    if stdenv.isDarwin
+    then [OpenGL]
+    else [libGLU]; # GL/glew.h includes GL/glu.h
 
   cmakeDir = "cmake";
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optional enableEGL "-DGLEW_EGL=ON";
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+    ]
+    ++ lib.optional enableEGL "-DGLEW_EGL=ON";
 
   postInstall = ''
     moveToOutput lib/cmake "''${!outputDev}"
@@ -47,11 +60,17 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An OpenGL extension loading library for C/C++";
     homepage = "http://glew.sourceforge.net/";
-    license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
+    license = with licenses; [
+      /*
+       modified bsd
+       */
+      free
+      mit
+      gpl2Only
+    ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
     platforms = with platforms;
-      if enableEGL then
-        subtractLists darwin mesaPlatforms
-      else
-        mesaPlatforms;
+      if enableEGL
+      then subtractLists darwin mesaPlatforms
+      else mesaPlatforms;
   };
 }

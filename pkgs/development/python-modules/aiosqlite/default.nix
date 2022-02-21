@@ -1,12 +1,12 @@
-{ lib
-, aiounittest
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytestCheckHook
-, typing-extensions
+{
+  lib,
+  aiounittest,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytestCheckHook,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "aiosqlite";
   version = "0.17.0";
@@ -24,14 +24,14 @@ buildPythonPackage rec {
   ];
 
   # tests are not pick-up automatically by the hook
-  pytestFlagsArray = [ "aiosqlite/tests/*.py" ];
+  pytestFlagsArray = ["aiosqlite/tests/*.py"];
 
-  pythonImportsCheck = [ "aiosqlite" ];
+  pythonImportsCheck = ["aiosqlite"];
 
   meta = with lib; {
     description = "Asyncio bridge to the standard sqlite3 module";
     homepage = "https://github.com/jreese/aiosqlite";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

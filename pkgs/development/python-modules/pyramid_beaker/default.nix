@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, beaker, pyramid }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  beaker,
+  pyramid,
+}:
 buildPythonPackage rec {
   pname = "pyramid_beaker";
   version = "0.8";
@@ -14,15 +20,15 @@ buildPythonPackage rec {
     py.test -k 'not test_includeme' pyramid_beaker/tests.py
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
-  propagatedBuildInputs = [ beaker pyramid ];
+  propagatedBuildInputs = [beaker pyramid];
 
   meta = with lib; {
     description = "Beaker session factory backend for Pyramid";
     homepage = "https://docs.pylonsproject.org/projects/pyramid_beaker/en/latest/";
     # idk, see https://github.com/Pylons/pyramid_beaker/blob/master/LICENSE.txt
     # license = licenses.mpl20;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-play";
   version = "0.5.0";
@@ -23,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     description = "Run your rust code without setting up cargo";
     homepage = "https://github.com/fanzeyi/cargo-play";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

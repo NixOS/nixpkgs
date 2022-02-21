@@ -1,5 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+}:
 buildNimPackage rec {
   pname = "vmath";
   version = "1.1.1";
@@ -14,9 +17,10 @@ buildNimPackage rec {
   doCheck = true;
 
   meta = with lib;
-    src.meta // {
+    src.meta
+    // {
       description = "Math vector library for graphical things";
-      license = [ licenses.mit ];
-      maintainers = [ maintainers.ehmry ];
+      license = [licenses.mit];
+      maintainers = [maintainers.ehmry];
     };
 }

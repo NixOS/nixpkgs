@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, antlr4-python3-runtime
-, igraph
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  antlr4-python3-runtime,
+  igraph,
+  pygments,
 }:
-
 buildPythonPackage rec {
   pname = "explorerscript";
   version = "0.1.1";
@@ -26,13 +26,13 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ antlr4-python3-runtime igraph ];
-  checkInputs = [ pygments ];
+  propagatedBuildInputs = [antlr4-python3-runtime igraph];
+  checkInputs = [pygments];
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/explorerscript";
     description = "A programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.mit;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [xfix];
   };
 }

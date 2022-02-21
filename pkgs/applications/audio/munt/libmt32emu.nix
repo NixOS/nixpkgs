@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libmt32emu";
   version = "2.5.3";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
-    rev = "${pname}_${lib.replaceChars [ "." ] [ "_" ] version}";
+    rev = "${pname}_${lib.replaceChars ["."] ["_"] version}";
     hash = "sha256-n5VV5Swh1tOVQGT3urEKl64A/w7cY95/0y5wC5ZuLm4=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     cmake
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://munt.sourceforge.net/";
     description = "A library to emulate Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
-    license = with licenses; [ lgpl21Plus ];
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = with licenses; [lgpl21Plus];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.unix; # Not tested on ReactOS yet :)
   };
 }

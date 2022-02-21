@@ -1,44 +1,51 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.avahi;
 
-  yesNo = yes : if yes then "yes" else "no";
+  yesNo = yes:
+    if yes
+    then "yes"
+    else "no";
 
-  avahiDaemonConf = with cfg; pkgs.writeText "avahi-daemon.conf" ''
-    [server]
-    ${# Users can set `networking.hostName' to the empty string, when getting
-      # a host name from DHCP.  In that case, let Avahi take whatever the
-      # current host name is; setting `host-name' to the empty string in
-      # `avahi-daemon.conf' would be invalid.
-      optionalString (hostName != "") "host-name=${hostName}"}
-    browse-domains=${concatStringsSep ", " browseDomains}
-    use-ipv4=${yesNo ipv4}
-    use-ipv6=${yesNo ipv6}
-    ${optionalString (interfaces!=null) "allow-interfaces=${concatStringsSep "," interfaces}"}
-    ${optionalString (domainName!=null) "domain-name=${domainName}"}
-    allow-point-to-point=${yesNo allowPointToPoint}
-    ${optionalString (cacheEntriesMax!=null) "cache-entries-max=${toString cacheEntriesMax}"}
+  avahiDaemonConf = with cfg;
+    pkgs.writeText "avahi-daemon.conf" ''
+      [server]
+      ${
+        # Users can set `networking.hostName' to the empty string, when getting
+        # a host name from DHCP.  In that case, let Avahi take whatever the
+        # current host name is; setting `host-name' to the empty string in
+        # `avahi-daemon.conf' would be invalid.
+        optionalString (hostName != "") "host-name=${hostName}"
+      }
+      browse-domains=${concatStringsSep ", " browseDomains}
+      use-ipv4=${yesNo ipv4}
+      use-ipv6=${yesNo ipv6}
+      ${optionalString (interfaces != null) "allow-interfaces=${concatStringsSep "," interfaces}"}
+      ${optionalString (domainName != null) "domain-name=${domainName}"}
+      allow-point-to-point=${yesNo allowPointToPoint}
+      ${optionalString (cacheEntriesMax != null) "cache-entries-max=${toString cacheEntriesMax}"}
 
-    [wide-area]
-    enable-wide-area=${yesNo wideArea}
+      [wide-area]
+      enable-wide-area=${yesNo wideArea}
 
-    [publish]
-    disable-publishing=${yesNo (!publish.enable)}
-    disable-user-service-publishing=${yesNo (!publish.userServices)}
-    publish-addresses=${yesNo (publish.userServices || publish.addresses)}
-    publish-hinfo=${yesNo publish.hinfo}
-    publish-workstation=${yesNo publish.workstation}
-    publish-domain=${yesNo publish.domain}
+      [publish]
+      disable-publishing=${yesNo (!publish.enable)}
+      disable-user-service-publishing=${yesNo (!publish.userServices)}
+      publish-addresses=${yesNo (publish.userServices || publish.addresses)}
+      publish-hinfo=${yesNo publish.hinfo}
+      publish-workstation=${yesNo publish.workstation}
+      publish-domain=${yesNo publish.domain}
 
-    [reflector]
-    enable-reflector=${yesNo reflector}
-    ${extraConfig}
-  '';
-in
-{
+      [reflector]
+      enable-reflector=${yesNo reflector}
+      ${extraConfig}
+    '';
+in {
   options.services.avahi = {
     enable = mkOption {
       type = types.bool;
@@ -71,8 +78,8 @@ in
 
     browseDomains = mkOption {
       type = types.listOf types.str;
-      default = [ ];
-      example = [ "0pointer.de" "zeroconf.org" ];
+      default = [];
+      example = ["0pointer.de" "zeroconf.org"];
       description = ''
         List of non-local DNS domains to be browsed.
       '';
@@ -112,7 +119,7 @@ in
     allowPointToPoint = mkOption {
       type = types.bool;
       default = false;
-      description= ''
+      description = ''
         Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
         latencies with such links and opens a potential security hole by allowing mDNS access from Internet
         connections.
@@ -240,35 +247,45 @@ in
 
     system.nssModules = optional cfg.nssmdns pkgs.nssmdns;
     system.nssDatabases.hosts = optionals cfg.nssmdns (mkMerge [
-      (mkBefore [ "mdns_minimal [NOTFOUND=return]" ]) # before resolve
-      (mkAfter [ "mdns" ]) # after dns
+      (mkBefore ["mdns_minimal [NOTFOUND=return]"]) # before resolve
+      (mkAfter ["mdns"]) # after dns
     ]);
 
-    environment.systemPackages = [ pkgs.avahi ];
+    environment.systemPackages = [pkgs.avahi];
 
-    environment.etc = (mapAttrs' (n: v: nameValuePair
-      "avahi/services/${n}.service"
-      { ${if types.path.check v then "source" else "text"} = v; }
-    ) cfg.extraServiceFiles);
+    environment.etc = (mapAttrs' (
+      n: v:
+        nameValuePair
+        "avahi/services/${n}.service"
+        {
+          ${
+            if types.path.check v
+            then "source"
+            else "text"
+          } =
+            v;
+        }
+    )
+    cfg.extraServiceFiles);
 
     systemd.sockets.avahi-daemon = {
       description = "Avahi mDNS/DNS-SD Stack Activation Socket";
-      listenStreams = [ "/run/avahi-daemon/socket" ];
-      wantedBy = [ "sockets.target" ];
+      listenStreams = ["/run/avahi-daemon/socket"];
+      wantedBy = ["sockets.target"];
     };
 
-    systemd.tmpfiles.rules = [ "d /run/avahi-daemon - avahi avahi -" ];
+    systemd.tmpfiles.rules = ["d /run/avahi-daemon - avahi avahi -"];
 
     systemd.services.avahi-daemon = {
       description = "Avahi mDNS/DNS-SD Stack";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "avahi-daemon.socket" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["avahi-daemon.socket"];
 
       # Make NSS modules visible so that `avahi_nss_support ()' can
       # return a sensible value.
       environment.LD_LIBRARY_PATH = config.system.nssModules.path;
 
-      path = [ pkgs.coreutils pkgs.avahi ];
+      path = [pkgs.coreutils pkgs.avahi];
 
       serviceConfig = {
         NotifyAccess = "main";
@@ -279,8 +296,8 @@ in
     };
 
     services.dbus.enable = true;
-    services.dbus.packages = [ pkgs.avahi ];
+    services.dbus.packages = [pkgs.avahi];
 
-    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 5353 ];
+    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [5353];
   };
 }

@@ -1,9 +1,14 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  boolToStr = value: if value then "on" else "off";
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  boolToStr = value:
+    if value
+    then "on"
+    else "off";
   cfg = config.vmware;
 
   subformats = [
@@ -13,12 +18,11 @@ let
     "twoGbMaxExtentFlat"
     "streamOptimized"
   ];
-
 in {
   options = {
     vmware = {
       baseImageSize = mkOption {
-        type = with types; either (enum [ "auto" ]) int;
+        type = with types; either (enum ["auto"]) int;
         default = "auto";
         example = 2048;
         description = ''

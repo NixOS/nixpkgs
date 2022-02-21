@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, Security
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  Security,
+  libiconv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "grex";
   version = "1.3.0";
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-NMz35jgd7XPemVdA8nol2H6cgWD3yEPh0FEMPw8kgKQ=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -30,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     description = "A command-line tool for generating regular expressions from user-provided test cases";
     homepage = "https://github.com/pemistahl/grex";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

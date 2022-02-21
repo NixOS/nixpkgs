@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, db, gtk2, bzip2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  db,
+  gtk2,
+  bzip2,
+}:
 stdenv.mkDerivation rec {
   pname = "jigdo";
   version = "0.7.3";
@@ -17,15 +23,15 @@ stdenv.mkDerivation rec {
     ./sizewidth.patch
   ];
 
-  buildInputs = [ db gtk2 bzip2 ];
+  buildInputs = [db gtk2 bzip2];
 
-  configureFlags = [ "--without-libdb" ];
+  configureFlags = ["--without-libdb"];
 
   meta = with lib; {
     description = "Download utility that can fetch files from several sources simultaneously";
     homepage = "http://atterer.org/jigdo/";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, selenium
-, six
-, flask
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  selenium,
+  six,
+  flask,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "splinter";
   version = "0.17.0";
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     "tests/test_zopetestbrowser.py"
   ];
 
-  pythonImportsCheck = [ "splinter" ];
+  pythonImportsCheck = ["splinter"];
 
   meta = with lib; {
     description = "Browser abstraction for web acceptance testing";
     homepage = "https://github.com/cobrateam/splinter";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

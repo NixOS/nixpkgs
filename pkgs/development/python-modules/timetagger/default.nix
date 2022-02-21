@@ -1,12 +1,12 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, pytestCheckHook
-, requests
-, pytest
-, pythonOlder
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  pytest,
+  pythonOlder,
 }:
-
 python3Packages.buildPythonPackage rec {
   pname = "timetagger";
   version = "22.2.2";
@@ -45,6 +45,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://timetagger.app";
     license = licenses.gpl3Only;
     description = "Tag your time, get the insight";
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
   };
 }

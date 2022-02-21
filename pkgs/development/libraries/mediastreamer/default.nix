@@ -1,36 +1,36 @@
-{ alsa-lib
-, bctoolbox
-, bzrtp
-, cmake
-, doxygen
-, fetchFromGitLab
-, ffmpeg
-, glew
-, gsm
-, intltool
-, lib
-, libGL
-, libGLU
-, libX11
-, libXext
-, libXv
-, libmatroska
-, libopus
-, libpcap
-, libpulseaudio
-, libtheora
-, libupnp
-, libv4l
-, libvpx
-, ortp
-, pkg-config
-, python3
-, SDL
-, speex
-, srtp
-, stdenv
+{
+  alsa-lib,
+  bctoolbox,
+  bzrtp,
+  cmake,
+  doxygen,
+  fetchFromGitLab,
+  ffmpeg,
+  glew,
+  gsm,
+  intltool,
+  lib,
+  libGL,
+  libGLU,
+  libX11,
+  libXext,
+  libXv,
+  libmatroska,
+  libopus,
+  libpcap,
+  libpulseaudio,
+  libtheora,
+  libupnp,
+  libv4l,
+  libvpx,
+  ortp,
+  pkg-config,
+  python3,
+  SDL,
+  speex,
+  srtp,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
   version = "4.5.15";
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+  cmakeFlags = ["-DENABLE_STATIC=NO"];
 
   NIX_CFLAGS_COMPILE = toString [
     "-DGIT_VERSION=\"v${version}\""
@@ -106,6 +106,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

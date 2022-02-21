@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ace
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ace,
 }:
-
 stdenv.mkDerivation rec {
   pname = "yarp";
   version = "2.3.70.2";
@@ -11,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mphh899niy30xbjjwi9xpsliq8mladfldbbbjfngdrqfhiray1a";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ ace ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [ace];
 
   cmakeFlags = [
     "-DYARP_COMPILE_UNMAINTAINED:BOOL=ON"
@@ -30,7 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "http://yarp.it";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nico202 ];
+    maintainers = [lib.maintainers.nico202];
   };
 }
-

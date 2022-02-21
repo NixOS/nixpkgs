@@ -1,23 +1,23 @@
-{ lib
-, fetchurl
-, nix-update-script
-, python3Packages
-, gdk-pixbuf
-, glib
-, gnome
-, gobject-introspection
-, gtk3
-, wrapGAppsHook
-, webkitgtk
-, libnotify
-, keybinder3
-, libappindicator
-, intltool
-, wmctrl
-, xvfb-run
-, librsvg
+{
+  lib,
+  fetchurl,
+  nix-update-script,
+  python3Packages,
+  gdk-pixbuf,
+  glib,
+  gnome,
+  gobject-introspection,
+  gtk3,
+  wrapGAppsHook,
+  webkitgtk,
+  libnotify,
+  keybinder3,
+  libappindicator,
+  intltool,
+  wmctrl,
+  xvfb-run,
+  librsvg,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
   version = "5.12.1";
@@ -109,7 +109,7 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
      "''${gappsWrapperArgs[@]}"
-     --prefix PATH : "${lib.makeBinPath [ wmctrl ]}"
+     --prefix PATH : "${lib.makeBinPath [wmctrl]}"
     )
   '';
 
@@ -119,12 +119,11 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-
   meta = with lib; {
     description = "A fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse ];
+    maintainers = with maintainers; [aaronjanse];
   };
 }

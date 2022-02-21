@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "fierce";
   version = "1.5.0";
@@ -35,6 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "DNS reconnaissance tool for locating non-contiguous IP space";
     homepage = "https://github.com/mschwager/fierce";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ c0bw3b ];
+    maintainers = with maintainers; [c0bw3b];
   };
 }

@@ -1,9 +1,14 @@
-/* Build a channel tarball. These contain, in addition to the nixpkgs
+/*
+   Build a channel tarball. These contain, in addition to the nixpkgs
  * expressions themselves, files that indicate the version of nixpkgs
  * that they represent.
  */
-{ pkgs, nixpkgs, version, versionSuffix }:
-
+{
+  pkgs,
+  nixpkgs,
+  version,
+  versionSuffix,
+}:
 pkgs.releaseTools.makeSourceTarball {
   name = "nixos-channel";
 
@@ -12,7 +17,7 @@ pkgs.releaseTools.makeSourceTarball {
   officialRelease = false; # FIXME: fix this in makeSourceTarball
   inherit version versionSuffix;
 
-  buildInputs = [ pkgs.nix ];
+  buildInputs = [pkgs.nix];
 
   distPhase = ''
     rm -rf .git

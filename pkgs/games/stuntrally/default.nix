@@ -1,21 +1,21 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, boost
-, ogre
-, mygui
-, ois
-, SDL2
-, libvorbis
-, pkg-config
-, makeWrapper
-, enet
-, libXcursor
-, bullet
-, openal
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  boost,
+  ogre,
+  mygui,
+  ois,
+  SDL2,
+  libvorbis,
+  pkg-config,
+  makeWrapper,
+  enet,
+  libXcursor,
+  bullet,
+  openal,
 }:
-
 stdenv.mkDerivation rec {
   pname = "stunt-rally";
   version = "2.6.1";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ln -s ${tracks} data/tracks
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
   buildInputs = [
     boost
     ogre
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
     homepage = "http://stuntrally.tuxfamily.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.linux;
   };
 }

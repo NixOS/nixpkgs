@@ -1,7 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, pyyaml, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pyyaml,
+  hypothesis,
 }:
-
 buildPythonPackage rec {
   pname = "yamlloader";
   version = "1.1.0";
@@ -29,6 +33,6 @@ buildPythonPackage rec {
     description = "A case-insensitive list for Python";
     homepage = "https://github.com/Phynix/yamlloader";
     license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
   };
 }

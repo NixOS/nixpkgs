@@ -1,6 +1,11 @@
-{ lib, fetchzip, buildPythonApplication, python3Packages
-  , desktop-file-utils, freecell-solver }:
-
+{
+  lib,
+  fetchzip,
+  buildPythonApplication,
+  python3Packages,
+  desktop-file-utils,
+  freecell-solver,
+}:
 buildPythonApplication rec {
   pname = "PySolFC";
   version = "2.6.4";
@@ -16,16 +21,20 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    tkinter six random2
+    tkinter
+    six
+    random2
     # optional :
-    pygame freecell-solver pillow
+    pygame
+    freecell-solver
+    pillow
   ];
 
   patches = [
     ./pysolfc-datadir.patch
   ];
 
-  nativeBuildInputs = [ desktop-file-utils ];
+  nativeBuildInputs = [desktop-file-utils];
   postPatch = ''
     desktop-file-edit --set-key Icon --set-value ${placeholder "out"}/share/icons/pysol01.png data/pysol.desktop
     desktop-file-edit --set-key Comment --set-value "${meta.description}" data/pysol.desktop
@@ -43,6 +52,6 @@ buildPythonApplication rec {
     description = "A collection of more than 1000 solitaire card games";
     homepage = "https://pysolfc.sourceforge.io";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ kierdavis ];
+    maintainers = with maintainers; [kierdavis];
   };
 }

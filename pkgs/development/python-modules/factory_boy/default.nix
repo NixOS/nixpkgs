@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, django
-, faker
-, fetchPypi
-, flask
-, flask_sqlalchemy
-, mongoengine
-, pytestCheckHook
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  django,
+  faker,
+  fetchPypi,
+  flask,
+  flask_sqlalchemy,
+  mongoengine,
+  pytestCheckHook,
+  sqlalchemy,
 }:
-
 buildPythonPackage rec {
   pname = "factory-boy";
   version = "3.2.1";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package to create factories for complex objects";
     homepage = "https://github.com/rbarrois/factory_boy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

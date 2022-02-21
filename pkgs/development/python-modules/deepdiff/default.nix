@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, ordered-set
-, clevercsv
-, jsonpickle
-, numpy
-, pytestCheckHook
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  ordered-set,
+  clevercsv,
+  jsonpickle,
+  numpy,
+  pytestCheckHook,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "deepdiff";
   version = "5.6.0";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Deep Difference and Search of any Python object/data";
     homepage = "https://github.com/seperman/deepdiff";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

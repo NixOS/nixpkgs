@@ -1,8 +1,8 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "snallygaster";
   version = "0.0.12";
@@ -33,6 +33,6 @@ python3Packages.buildPythonApplication rec {
     description = "Tool to scan for secret files on HTTP servers";
     homepage = "https://github.com/hannob/snallygaster";
     license = licenses.cc0;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

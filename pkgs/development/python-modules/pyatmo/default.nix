@@ -1,19 +1,19 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, oauthlib
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests_oauthlib
-, requests-mock
-, setuptools-scm
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  oauthlib,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests_oauthlib,
+  requests-mock,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pyatmo";
   version = "6.2.4";
@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "Simple API to access Netatmo weather station data";
     homepage = "https://github.com/jabesq/pyatmo";
     license = licenses.mit;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [delroth];
   };
 }

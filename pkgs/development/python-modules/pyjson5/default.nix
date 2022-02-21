@@ -1,5 +1,9 @@
-{ buildPythonPackage, lib, nose, fetchFromGitHub }:
-
+{
+  buildPythonPackage,
+  lib,
+  nose,
+  fetchFromGitHub,
+}:
 buildPythonPackage rec {
   pname = "pyjson5";
   version = "0.8.5";
@@ -12,7 +16,7 @@ buildPythonPackage rec {
   };
 
   doCheck = true;
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     nosetests
   '';
@@ -21,6 +25,6 @@ buildPythonPackage rec {
     description = "Python implementation of the JSON5 data format";
     license = licenses.asl20;
     homepage = "https://github.com/dpranke/pyjson5";
-    maintainers = with maintainers; [ isgy ];
+    maintainers = with maintainers; [isgy];
   };
 }

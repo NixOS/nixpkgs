@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "HeapDict";
   version = "1.0.1";
@@ -15,6 +19,6 @@ buildPythonPackage rec {
     description = "a heap with decrease-key and increase-key operations.";
     homepage = "http://stutzbachenterprises.com";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    maintainers = with maintainers; [teh];
   };
 }

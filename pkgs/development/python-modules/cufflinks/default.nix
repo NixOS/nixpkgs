@@ -1,16 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi
-, chart-studio
-, colorlover
-, ipython
-, ipywidgets
-, pytest
-, nose
-, numpy
-, pandas
-, six
-, statsmodels
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chart-studio,
+  colorlover,
+  ipython,
+  ipywidgets,
+  pytest,
+  nose,
+  numpy,
+  pandas,
+  six,
+  statsmodels,
 }:
-
 buildPythonPackage rec {
   pname = "cufflinks";
   version = "0.17.3";
@@ -31,7 +33,7 @@ buildPythonPackage rec {
     statsmodels
   ];
 
-  checkInputs = [ pytest nose ];
+  checkInputs = [pytest nose];
 
   # ignore tests which are incompatible with pandas>=1.0
   # https://github.com/santosjorge/cufflinks/issues/236
@@ -43,6 +45,6 @@ buildPythonPackage rec {
     description = "Productivity Tools for Plotly + Pandas";
     homepage = "https://github.com/santosjorge/cufflinks";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [globin];
   };
 }

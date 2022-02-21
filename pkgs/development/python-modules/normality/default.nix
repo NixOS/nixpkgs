@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, text-unidecode
-, chardet
-, banal
-, PyICU
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  text-unidecode,
+  chardet,
+  banal,
+  PyICU,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "normality";

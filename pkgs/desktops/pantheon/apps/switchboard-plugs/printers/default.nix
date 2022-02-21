@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, cups
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  granite,
+  gtk3,
+  cups,
+  switchboard,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-printers";
   version = "2.1.10";
@@ -62,5 +62,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
   };
-
 }

@@ -1,9 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, systemd
-, boost, libsodium, libedit, re2
-, net-snmp, lua, protobuf, openssl, zlib, h2o
-, nghttp2, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  systemd,
+  boost,
+  libsodium,
+  libedit,
+  re2,
+  net-snmp,
+  lua,
+  protobuf,
+  openssl,
+  zlib,
+  h2o,
+  nghttp2,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dnsdist";
   version = "1.7.0";
@@ -19,8 +32,8 @@ stdenv.mkDerivation rec {
     ./disable-network-tests.patch
   ];
 
-  nativeBuildInputs = [ pkg-config protobuf ];
-  buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o nghttp2 ];
+  nativeBuildInputs = [pkg-config protobuf];
+  buildInputs = [systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o nghttp2];
 
   configureFlags = [
     "--with-libsodium"
@@ -47,6 +60,6 @@ stdenv.mkDerivation rec {
     description = "DNS Loadbalancer";
     homepage = "https://dnsdist.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

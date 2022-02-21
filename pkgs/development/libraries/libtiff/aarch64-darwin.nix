@@ -1,15 +1,14 @@
-{ lib, stdenv
-, fetchurl
-
-, pkg-config
-, cmake
-
-, libdeflate
-, libjpeg
-, xz
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  libdeflate,
+  libjpeg,
+  xz,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libtiff";
   version = "4.2.0";
@@ -22,9 +21,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional stdenv.isDarwin "-DCMAKE_SKIP_BUILD_RPATH=OFF";
 
   # FreeImage needs this patch
-  patches = [ ./headers-cmake.patch ];
+  patches = [./headers-cmake.patch];
 
-  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+  outputs = ["bin" "dev" "dev_private" "out" "man" "doc"];
 
   postFixup = ''
     moveToOutput include/tif_dir.h $dev_private
@@ -32,11 +31,11 @@ stdenv.mkDerivation rec {
     moveToOutput include/tiffiop.h $dev_private
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs = [libjpeg xz zlib]; #TODO: opengl support (bogus configure detection)
 
-  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
+  buildInputs = [libdeflate]; # TODO: move all propagatedBuildInputs to buildInputs.
 
   enableParallelBuilding = true;
 

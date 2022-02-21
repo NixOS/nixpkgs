@@ -1,13 +1,13 @@
-{ lib
-, bundlerApp
-, makeWrapper
-, curl
+{
+  lib,
+  bundlerApp,
+  makeWrapper,
+  curl,
 }:
-
 bundlerApp {
   pname = "wpscan";
   gemdir = ./.;
-  exes = [ "wpscan" ];
+  exes = ["wpscan"];
 
   buildInputs = [
     makeWrapper
@@ -15,7 +15,7 @@ bundlerApp {
 
   postBuild = ''
     wrapProgram "$out/bin/wpscan" \
-      --prefix PATH : ${lib.makeBinPath [ curl ]}
+      --prefix PATH : ${lib.makeBinPath [curl]}
   '';
 
   passthru.updateScript = ./update.sh;
@@ -24,7 +24,7 @@ bundlerApp {
     description = "Black box WordPress vulnerability scanner";
     homepage = "https://wpscan.org/";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ nyanloutre manveru ];
+    maintainers = with maintainers; [nyanloutre manveru];
     platforms = platforms.unix;
   };
 }

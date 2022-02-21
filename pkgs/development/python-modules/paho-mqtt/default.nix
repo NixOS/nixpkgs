@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
-, mock
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pytestCheckHook,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "paho-mqtt";
   version = "1.6.1";
@@ -26,11 +26,13 @@ buildPythonPackage rec {
       --replace "--pylama" ""
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ] ++ lib.optional (!isPy3k) [
-    mock
-  ];
+  checkInputs =
+    [
+      pytestCheckHook
+    ]
+    ++ lib.optional (!isPy3k) [
+      mock
+    ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -42,6 +44,6 @@ buildPythonPackage rec {
     description = "MQTT version 3.1.1 client class";
     homepage = "https://eclipse.org/paho";
     license = licenses.epl10;
-    maintainers = with maintainers; [ mog dotlambda ];
+    maintainers = with maintainers; [mog dotlambda];
   };
 }

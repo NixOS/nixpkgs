@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, glib
-, pkg-config
-, wrapGAppsHook
-, gtk3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  glib,
+  pkg-config,
+  wrapGAppsHook,
+  gtk3,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "image-roll";
   version = "1.4.1";
@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-pyeJ7WmtkbQjbek/rRh2UKFQ5o006Rf7phZ1yl2s4wA=";
 
-  nativeBuildInputs = [ glib pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [glib pkg-config wrapGAppsHook];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [gtk3];
 
   postInstall = ''
     install -Dm444 src/resources/com.github.weclaw1.ImageRoll.desktop -t $out/share/applications/
@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     description = "Simple and fast GTK image viewer with basic image manipulation tools";
     homepage = "https://github.com/weclaw1/image-roll";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "isodate";
   version = "0.6.1";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "SMWIHefosKDWSMsCTIBi3ITnuEDtgehkx2FP08Envek=";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s src/isodate/tests
@@ -25,5 +25,4 @@ buildPythonPackage rec {
     homepage = "http://cheeseshop.python.org/pypi/isodate";
     license = licenses.bsd0;
   };
-
 }

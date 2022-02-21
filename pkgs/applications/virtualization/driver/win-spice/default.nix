@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl, p7zip, win-virtio }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  p7zip,
+  win-virtio,
+}: let
   version_usbdk = "1.0.22";
   src_usbdk_x86 = fetchurl {
     url = "https://www.spice-space.org/download/windows/UsbDk/UsbDk_${version_usbdk}_x86.msi";
@@ -27,33 +31,31 @@ let
     sha256 = "1x2wcvld531kv17a4ks7sh67nhzxzv7nkhpx391n5vj6d12i8g3i";
   };
 in
+  stdenv.mkDerivation {
+    # use version number of qxlwddm as qxlwddm is the most important component
+    pname = "win-spice";
+    version = version_qxlwddm;
 
-stdenv.mkDerivation  {
-  # use version number of qxlwddm as qxlwddm is the most important component
-  pname = "win-spice";
-  version = version_qxlwddm;
+    dontUnpack = true;
 
-  dontUnpack = true;
+    buildPhase = ''
+      runHook preBuild
 
-  buildPhase = ''
-    runHook preBuild
+      mkdir -p usbdk/x86 usbdk/amd64
+      (cd usbdk/x86; ${p7zip}/bin/7z x -y ${src_usbdk_x86})
+      (cd usbdk/amd64; ${p7zip}/bin/7z x -y ${src_usbdk_amd64})
 
-    mkdir -p usbdk/x86 usbdk/amd64
-    (cd usbdk/x86; ${p7zip}/bin/7z x -y ${src_usbdk_x86})
-    (cd usbdk/amd64; ${p7zip}/bin/7z x -y ${src_usbdk_amd64})
+      mkdir -p vdagent/x86 vdagent/amd64
+      (cd vdagent/x86; ${p7zip}/bin/7z x -y ${src_vdagent_x86}; mv vdagent-win-${version_vdagent}-x86/* .; rm -r vdagent-win-${version_vdagent}-x86)
+      (cd vdagent/amd64; ${p7zip}/bin/7z x -y ${src_vdagent_amd64}; mv vdagent-win-${version_vdagent}-x64/* .; rm -r vdagent-win-${version_vdagent}-x64)
 
-    mkdir -p vdagent/x86 vdagent/amd64
-    (cd vdagent/x86; ${p7zip}/bin/7z x -y ${src_vdagent_x86}; mv vdagent-win-${version_vdagent}-x86/* .; rm -r vdagent-win-${version_vdagent}-x86)
-    (cd vdagent/amd64; ${p7zip}/bin/7z x -y ${src_vdagent_amd64}; mv vdagent-win-${version_vdagent}-x64/* .; rm -r vdagent-win-${version_vdagent}-x64)
+      mkdir -p qxlwddm
+      (cd qxlwddm; ${p7zip}/bin/7z x -y ${src_qxlwddm}; cd w10)
 
-    mkdir -p qxlwddm
-    (cd qxlwddm; ${p7zip}/bin/7z x -y ${src_qxlwddm}; cd w10)
+      runHook postBuild
+    '';
 
-    runHook postBuild
-  '';
-
-  installPhase =
-    let
+    installPhase = let
       copy_qxl = arch: version: "mkdir -p $out/${arch}/qxl; cp qxlwddm/${version}/${arch}/* $out/${arch}/qxl/. \n";
       copy_usbdk = arch: "mkdir -p $out/${arch}/usbdk; cp usbdk/${arch}/* $out/${arch}/usbdk/. \n";
       copy_vdagent = arch: "mkdir -p $out/${arch}/vdagent; cp vdagent/${arch}/* $out/${arch}/vdagent/. \n";
@@ -68,11 +70,11 @@ stdenv.mkDerivation  {
       runHook postInstall
     '';
 
-  meta = with lib; {
-    description = "Windows SPICE Drivers";
-    homepage = "https://www.spice-space.org/";
-    license = [ licenses.asl20 ]; # See https://github.com/vrozenfe/qxl-dod
-    maintainers = [ maintainers.tstrobel ];
-    platforms = platforms.linux;
-  };
-}
+    meta = with lib; {
+      description = "Windows SPICE Drivers";
+      homepage = "https://www.spice-space.org/";
+      license = [licenses.asl20]; # See https://github.com/vrozenfe/qxl-dod
+      maintainers = [maintainers.tstrobel];
+      platforms = platforms.linux;
+    };
+  }

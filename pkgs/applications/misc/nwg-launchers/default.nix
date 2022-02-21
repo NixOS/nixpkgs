@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, gtkmm3
-, meson
-, ninja
-, nlohmann_json
-, pkg-config
-, swaylock
-, makeWrapper
-, gtk-layer-shell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtkmm3,
+  meson,
+  ninja,
+  nlohmann_json,
+  pkg-config,
+  swaylock,
+  makeWrapper,
+  gtk-layer-shell,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nwg-launchers";
   version = "0.6.3";
@@ -46,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nwg-piotr/nwg-launchers";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [bbigras];
   };
 }

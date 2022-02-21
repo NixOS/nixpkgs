@@ -1,8 +1,14 @@
 # TODO check that no license information gets lost
-{ callPackage, config, lib, vimUtils, vim, darwin, llvmPackages, luaPackages }:
-
-let
-
+{
+  callPackage,
+  config,
+  lib,
+  vimUtils,
+  vim,
+  darwin,
+  llvmPackages,
+  luaPackages,
+}: let
   inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix vimGenDocHook;
 
   inherit (lib) extends;
@@ -10,12 +16,13 @@ let
   initialPackages = self: {
     # Convert derivation to a vim plugin.
     toVimPlugin = drv:
-      drv.overrideAttrs(oldAttrs: {
-
-        nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ vimGenDocHook ];
-        passthru = (oldAttrs.passthru or {}) // {
-          vimPlugin = true;
-        };
+      drv.overrideAttrs (oldAttrs: {
+        nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [vimGenDocHook];
+        passthru =
+          (oldAttrs.passthru or {})
+          // {
+            vimPlugin = true;
+          };
       });
   };
 
@@ -35,13 +42,18 @@ let
     inherit llvmPackages luaPackages;
   };
 
-  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else final: prev: {};
+  aliases =
+    if (config.allowAliases or true)
+    then (import ./aliases.nix lib)
+    else final: prev: {};
 
   extensible-self = lib.makeExtensible
-    (extends aliases
-      (extends overrides
-        (extends plugins initialPackages)
-      )
-    );
+  (
+    extends aliases
+    (
+      extends overrides
+      (extends plugins initialPackages)
+    )
+  );
 in
   extensible-self

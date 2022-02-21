@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pydsdl
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pydsdl,
+  pyyaml,
 }:
-
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "nunavut";
   version = "1.6.2";
 
@@ -42,7 +42,7 @@
       authors to generate code, schemas, metadata, documentation, etc.
     '';
     homepage = "https://nunavut.readthedocs.io/";
-    maintainers = with maintainers; [ wucke13 ];
-    license = with licenses; [ bsd3 mit ];
+    maintainers = with maintainers; [wucke13];
+    license = with licenses; [bsd3 mit];
   };
 }

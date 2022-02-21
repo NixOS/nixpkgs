@@ -1,29 +1,31 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.powerdns-admin;
 
-  configText = ''
-    ${cfg.config}
-  ''
-  + optionalString (cfg.secretKeyFile != null) ''
-    with open('${cfg.secretKeyFile}') as file:
-      SECRET_KEY = file.read()
-  ''
-  + optionalString (cfg.saltFile != null) ''
-    with open('${cfg.saltFile}') as file:
-      SALT = file.read()
-  '';
-in
-{
+  configText =
+    ''
+      ${cfg.config}
+    ''
+    + optionalString (cfg.secretKeyFile != null) ''
+      with open('${cfg.secretKeyFile}') as file:
+        SECRET_KEY = file.read()
+    ''
+    + optionalString (cfg.saltFile != null) ''
+      with open('${cfg.saltFile}') as file:
+        SALT = file.read()
+    '';
+in {
   options.services.powerdns-admin = {
     enable = mkEnableOption "the PowerDNS web interface";
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       example = literalExpression ''
         [ "-b" "127.0.0.1:8000" ]
       '';
@@ -71,8 +73,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.powerdns-admin = {
       description = "PowerDNS web interface";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
 
       environment.FLASK_CONF = builtins.toFile "powerdns-admin-config.py" configText;
       environment.PYTHONPATH = pkgs.powerdns-admin.pythonPath;
@@ -87,15 +89,16 @@ in
         Group = "powerdnsadmin";
 
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        BindReadOnlyPaths = [
-          "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
-          "-/etc/hosts"
-          "-/etc/localtime"
-        ]
-        ++ (optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
-        ++ (optional (cfg.saltFile != null) cfg.saltFile);
+        BindReadOnlyPaths =
+          [
+            "/nix/store"
+            "-/etc/resolv.conf"
+            "-/etc/nsswitch.conf"
+            "-/etc/hosts"
+            "-/etc/localtime"
+          ]
+          ++ (optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
+          ++ (optional (cfg.saltFile != null) cfg.saltFile);
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
@@ -121,7 +124,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6" "AF_UNIX"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -139,7 +142,7 @@ in
       };
     };
 
-    users.groups.powerdnsadmin = { };
+    users.groups.powerdnsadmin = {};
     users.users.powerdnsadmin = {
       description = "PowerDNS web interface user";
       isSystemUser = true;

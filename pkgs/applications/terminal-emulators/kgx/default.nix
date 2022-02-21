@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, genericBranding ? false
-, fetchFromGitLab
-, gettext
-, gnome
-, libgtop
-, gtk3
-, libhandy
-, pcre2
-, vte
-, appstream-glib
-, desktop-file-utils
-, git
-, meson
-, ninja
-, pkg-config
-, python3
-, sassc
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  genericBranding ? false,
+  fetchFromGitLab,
+  gettext,
+  gnome,
+  libgtop,
+  gtk3,
+  libhandy,
+  pcre2,
+  vte,
+  appstream-glib,
+  desktop-file-utils,
+  git,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  sassc,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation {
   pname = "kgx";
   version = "unstable-2021-03-13";
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     description = "Simple user-friendly terminal emulator for the GNOME desktop";
     homepage = "https://gitlab.gnome.org/ZanderBrown/kgx";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [zhaofengli];
     platforms = platforms.linux;
   };
 }

@@ -1,6 +1,13 @@
-{ fetchFromGitHub, lib, stdenv, ffmpeg, cmake, libpng, pkg-config, libjpeg
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  ffmpeg,
+  cmake,
+  libpng,
+  pkg-config,
+  libjpeg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ffmpegthumbnailer";
   version = "unstable-2021-09-02";
@@ -12,11 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "1ysfq3g74b8ivivrdpfi4vm23d3cyc3rfla5i6y8q9aycis9xv6q";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ffmpeg libpng libjpeg ];
-  cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [ffmpeg libpng libjpeg];
+  cmakeFlags = ["-DENABLE_THUMBNAILER=ON"];
 
-  meta = with lib;  {
+  meta = with lib; {
     homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
     description = "A lightweight video thumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video
@@ -29,7 +36,6 @@ stdenv.mkDerivation rec {
     ";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.jagajaga ];
+    maintainers = [maintainers.jagajaga];
   };
-
 }

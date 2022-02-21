@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "gpx";
   version = "2.6.8";
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   src = fetchFromGitHub {
     owner = "markwal";
@@ -18,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/markwal/GPX/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.leo60228 ];
+    maintainers = [lib.maintainers.leo60228];
   };
 }

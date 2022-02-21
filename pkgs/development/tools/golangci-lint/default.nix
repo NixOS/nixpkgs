@@ -1,5 +1,9 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "golangci-lint";
   version = "1.44.2";
@@ -15,12 +19,16 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/golangci-lint" ];
+  subPackages = ["cmd/golangci-lint"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" "-X main.date=19700101-00:00:00"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=v${version}"
+    "-X main.date=19700101-00:00:00"
   ];
 
   postInstall = ''
@@ -34,6 +42,6 @@ buildGoModule rec {
     description = "Fast linters Runner for Go";
     homepage = "https://golangci-lint.run/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ anpryl manveru mic92 ];
+    maintainers = with maintainers; [anpryl manveru mic92];
   };
 }

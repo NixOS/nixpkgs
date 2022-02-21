@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   version = "0.2.15";
   pname = "sccache";
@@ -13,10 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1f42cqaqnjwi9k4ihqil6z2dqh5dnf76x54gk7mndzkrfg3rl573";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [openssl] ++ lib.optional stdenv.isDarwin Security;
 
-  buildFeatures = lib.optionals (!stdenv.isDarwin) [ "dist-client" "dist-server" ];
+  buildFeatures = lib.optionals (!stdenv.isDarwin) ["dist-client" "dist-server"];
 
   # Tests fail because of client server setup which is not possible inside the pure environment,
   # see https://github.com/mozilla/sccache/issues/460
@@ -25,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Ccache with Cloud Storage";
     homepage = "https://github.com/mozilla/sccache";
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
     license = licenses.asl20;
   };
 }

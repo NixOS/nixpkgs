@@ -1,14 +1,46 @@
-{ stdenv, lib, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
-, setJavaClassPath
-, headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
-}:
-
-let
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bash,
+  pkg-config,
+  autoconf,
+  cpio,
+  file,
+  which,
+  unzip,
+  zip,
+  perl,
+  cups,
+  freetype,
+  alsa-lib,
+  libjpeg,
+  giflib,
+  libpng,
+  zlib,
+  lcms2,
+  libX11,
+  libICE,
+  libXrender,
+  libXext,
+  libXt,
+  libXtst,
+  libXi,
+  libXinerama,
+  libXcursor,
+  libXrandr,
+  fontconfig,
+  openjdk11-bootstrap,
+  setJavaClassPath,
+  headless ? false,
+  enableJavaFX ? openjfx.meta.available,
+  openjfx,
+  enableGnome2 ? true,
+  gtk3,
+  gnome_vfs,
+  glib,
+  GConf,
+}: let
   major = "11";
   minor = "0";
   update = "12";
@@ -25,42 +57,75 @@ let
       sha256 = "0s8g6gj5vhm7hbp05cqaxasjrkwr41fm634qim8q6slklm4pkkli";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf unzip ];
-    buildInputs = [
-      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
-      libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
-    ];
+    nativeBuildInputs = [pkg-config autoconf unzip];
+    buildInputs =
+      [
+        cpio
+        file
+        which
+        zip
+        perl
+        zlib
+        cups
+        freetype
+        alsa-lib
+        libjpeg
+        giflib
+        libpng
+        zlib
+        lcms2
+        libX11
+        libICE
+        libXrender
+        libXext
+        libXtst
+        libXt
+        libXtst
+        libXi
+        libXinerama
+        libXcursor
+        libXrandr
+        fontconfig
+        openjdk11-bootstrap
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        gtk3
+        gnome_vfs
+        GConf
+        glib
+      ];
 
-    patches = [
-      ./fix-java-home-jdk10.patch
-      ./read-truststore-from-env-jdk10.patch
-      ./currency-date-range-jdk10.patch
-      ./increase-javadoc-heap.patch
-      ./fix-library-path-jdk11.patch
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      ./swing-use-gtk-jdk10.patch
-    ];
+    patches =
+      [
+        ./fix-java-home-jdk10.patch
+        ./read-truststore-from-env-jdk10.patch
+        ./currency-date-range-jdk10.patch
+        ./increase-javadoc-heap.patch
+        ./fix-library-path-jdk11.patch
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        ./swing-use-gtk-jdk10.patch
+      ];
 
     preConfigure = ''
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
     '';
 
-    configureFlags = [
-      "--with-boot-jdk=${openjdk11-bootstrap.home}"
-      "--with-version-pre="
-      "--enable-unlimited-crypto"
-      "--with-native-debug-symbols=internal"
-      "--with-libjpeg=system"
-      "--with-giflib=system"
-      "--with-libpng=system"
-      "--with-zlib=system"
-      "--with-lcms=system"
-      "--with-stdc++lib=dynamic"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
+    configureFlags =
+      [
+        "--with-boot-jdk=${openjdk11-bootstrap.home}"
+        "--with-version-pre="
+        "--enable-unlimited-crypto"
+        "--with-native-debug-symbols=internal"
+        "--with-libjpeg=system"
+        "--with-giflib=system"
+        "--with-libpng=system"
+        "--with-zlib=system"
+        "--with-lcms=system"
+        "--with-stdc++lib=dynamic"
+      ]
+      ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
       ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
@@ -69,9 +134,17 @@ let
     NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lfontconfig"
+      "-lcups"
+      "-lXinerama"
+      "-lXrandr"
+      "-lmagic"
+    ]
+    ++ lib.optionals (!headless && enableGnome2) [
+      "-lgtk-3"
+      "-lgio-2.0"
+      "-lgnomevfs-2"
+      "-lgconf-2"
     ]);
 
     # -j flag is explicitly rejected by the build system:
@@ -80,7 +153,7 @@ let
     # still runs in parallel.
     enableParallelBuilding = false;
 
-    buildFlags = [ "all" ];
+    buildFlags = ["all"];
 
     installPhase = ''
       mkdir -p $out/lib
@@ -101,9 +174,11 @@ let
 
       # Remove crap from the installation.
       rm -rf $out/lib/openjdk/demo
-      ${lib.optionalString headless ''
-        rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
-      ''}
+      ${
+        lib.optionalString headless ''
+          rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
+        ''
+      }
 
       ln -s $out/lib/openjdk/bin $out/bin
     '';
@@ -141,7 +216,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk11-bootstrap ];
+    disallowedReferences = [openjdk11-bootstrap];
 
     meta = import ./meta.nix lib;
 
@@ -151,4 +226,5 @@ let
       inherit gtk3;
     };
   };
-in openjdk
+in
+  openjdk

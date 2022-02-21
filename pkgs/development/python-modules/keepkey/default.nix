@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, ecdsa
-, hidapi
-, libusb1
-, mnemonic
-, protobuf
-, pytest
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  ecdsa,
+  hidapi,
+  libusb1,
+  mnemonic,
+  protobuf,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "keepkey";
   version = "7.2.1";
@@ -20,9 +20,9 @@ buildPythonPackage rec {
     sha256 = "00hqppdj3s9y25x4ad59y8axq94dd4chhw9zixq32sdrd9v8z55a";
   };
 
-  propagatedBuildInputs = [ ecdsa hidapi libusb1 mnemonic protobuf ];
+  propagatedBuildInputs = [ecdsa hidapi libusb1 mnemonic protobuf];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   # tests requires hardware
   doCheck = false;
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "KeepKey Python client";
     homepage = "https://github.com/keepkey/python-keepkey";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ np ];
+    maintainers = with maintainers; [np];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, m4, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m4,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "autoconf";
   version = "2.64";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j3jdjpf5ly39dlp0bg70h72nzqr059k0x8iqxvaxf106chpgn9j";
   };
 
-  buildInputs = [ m4 perl ];
+  buildInputs = [m4 perl];
 
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for

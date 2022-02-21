@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.gocd-server;
   opt = options.services.gocd-server;
 in {
@@ -27,9 +30,9 @@ in {
       };
 
       extraGroups = mkOption {
-        default = [ ];
+        default = [];
         type = types.listOf types.str;
-        example = [ "wheel" "docker" ];
+        example = ["wheel" "docker"];
         description = ''
           List of extra groups that the "gocd-server" user should be a part of.
         '';
@@ -69,7 +72,7 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
+        default = [pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix];
         defaultText = literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
@@ -129,7 +132,7 @@ in {
       };
 
       extraOptions = mkOption {
-        default = [ ];
+        default = [];
         type = types.listOf types.str;
         example = [
           "-X debug"
@@ -148,7 +151,7 @@ in {
       };
 
       environment = mkOption {
-        default = { };
+        default = {};
         type = with types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the gocd-server process.
@@ -179,19 +182,19 @@ in {
 
     systemd.services.gocd-server = {
       description = "GoCD Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
-      environment =
-        let
-          selectedSessionVars =
-            lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
-              config.environment.sessionVariables;
-        in
-          selectedSessionVars //
-            { NIX_REMOTE = "daemon";
-            } //
-            cfg.environment;
+      environment = let
+        selectedSessionVars =
+          lib.filterAttrs (n: v: builtins.elem n ["NIX_PATH"])
+          config.environment.sessionVariables;
+      in
+        selectedSessionVars
+        // {
+          NIX_REMOTE = "daemon";
+        }
+        // cfg.environment;
 
       path = cfg.packages;
 

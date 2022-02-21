@@ -1,11 +1,25 @@
-{ config, lib, stdenv, fetchurl, fetchpatch, zlib, pkg-config, mpg123, libogg, libvorbis, portaudio, libsndfile, flac
-, usePulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
-
+{
+  config,
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  zlib,
+  pkg-config,
+  mpg123,
+  libogg,
+  libvorbis,
+  portaudio,
+  libsndfile,
+  flac,
+  usePulseAudio ? config.pulseaudio or stdenv.isLinux,
+  libpulseaudio,
+}:
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
   version = "0.5.11";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = ["out" "lib" "dev"];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
@@ -24,9 +38,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib mpg123 libogg libvorbis portaudio libsndfile flac ]
-  ++ lib.optional usePulseAudio libpulseaudio;
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [zlib mpg123 libogg libvorbis portaudio libsndfile flac]
+    ++ lib.optional usePulseAudio libpulseaudio;
 
   configureFlags = lib.optional (!usePulseAudio) "--without-pulseaudio";
 
@@ -36,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "A cross-platform command-line based module file player";
     homepage = "https://lib.openmpt.org/libopenmpt/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.unix;
   };
 }

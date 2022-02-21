@@ -1,8 +1,16 @@
-{ lib, fetchFromGitHub, fetchurl, symlinkJoin, buildGoModule, runCommand, makeWrapper, nixosTests
-, v2ray-geoip, v2ray-domain-list-community, assets ? [ v2ray-geoip v2ray-domain-list-community ]
-}:
-
-let
+{
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  symlinkJoin,
+  buildGoModule,
+  runCommand,
+  makeWrapper,
+  nixosTests,
+  v2ray-geoip,
+  v2ray-domain-list-community,
+  assets ? [v2ray-geoip v2ray-domain-list-community],
+}: let
   version = "4.44.0";
 
   src = fetchFromGitHub {
@@ -42,28 +50,27 @@ let
     meta = {
       homepage = "https://www.v2fly.org/en_US/";
       description = "A platform for building proxies to bypass network restrictions";
-      license = with lib.licenses; [ mit ];
-      maintainers = with lib.maintainers; [ servalcatty ];
+      license = with lib.licenses; [mit];
+      maintainers = with lib.maintainers; [servalcatty];
     };
   };
+in
+  runCommand "v2ray-${version}" {
+    inherit src version;
+    inherit (core) meta;
 
-in runCommand "v2ray-${version}" {
-  inherit src version;
-  inherit (core) meta;
+    nativeBuildInputs = [makeWrapper];
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  passthru = {
-    inherit core;
-    updateScript = ./update.sh;
-    tests = {
-      simple-vmess-proxy-test = nixosTests.v2ray;
+    passthru = {
+      inherit core;
+      updateScript = ./update.sh;
+      tests = {
+        simple-vmess-proxy-test = nixosTests.v2ray;
+      };
     };
-  };
-
-} ''
-  for file in ${core}/bin/*; do
-    makeWrapper "$file" "$out/bin/$(basename "$file")" \
-      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}/share/v2ray
-  done
-''
+  } ''
+    for file in ${core}/bin/*; do
+      makeWrapper "$file" "$out/bin/$(basename "$file")" \
+        --set-default V2RAY_LOCATION_ASSET ${assetsDrv}/share/v2ray
+    done
+  ''

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.baget;
 
   defaultConfig = {
@@ -49,9 +50,7 @@ let
 
   configFormat = pkgs.formats.json {};
   configFile = configFormat.generate "appsettings.json" configAttrs;
-
-in
-{
+in {
   options.services.baget = {
     enable = mkEnableOption "BaGet NuGet-compatible server";
 
@@ -122,13 +121,12 @@ in
   # implementation
 
   config = mkIf cfg.enable {
-
     systemd.services.baget = {
       description = "BaGet server";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [ "network.target" "network-online.target" ];
-      path = [ pkgs.jq ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"];
+      after = ["network.target" "network-online.target"];
+      path = [pkgs.jq];
       serviceConfig = {
         WorkingDirectory = "/var/lib/baget";
         DynamicUser = true;
@@ -156,8 +154,8 @@ in
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
+        SystemCallFilter = ["@system-service" "~@privileged"];
       };
       script = ''
         jq --slurpfile apiKeys <(jq -R . "$CREDENTIALS_DIRECTORY/api_key") '.ApiKey = $apiKeys[0]' ${configFile} > appsettings.json
@@ -165,6 +163,5 @@ in
         exec ${pkgs.baget}/bin/BaGet
       '';
     };
-
   };
 }

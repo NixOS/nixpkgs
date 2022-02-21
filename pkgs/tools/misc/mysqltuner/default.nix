@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "mysqltuner";
   version = "1.8.3";
@@ -16,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/share' "$out/share"
   '';
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   installPhase = ''
     runHook preInstall
@@ -31,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "Make recommendations for increased performance and stability of MariaDB/MySQL";
     homepage = "https://github.com/major/MySQLTuner-perl";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ peterhoeg shamilton ];
+    maintainers = with maintainers; [peterhoeg shamilton];
   };
 }

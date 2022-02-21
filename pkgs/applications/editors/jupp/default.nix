@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, gpm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  gpm,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jupp";
   version = "40";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       because these behave better overall.
     '';
     license = licenses.gpl1Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

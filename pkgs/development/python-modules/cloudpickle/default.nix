@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytest,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "cloudpickle";
   version = "2.0.0";
@@ -10,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "5cd02f3b417a783ba84a4ec3e290ff7929009fe51f6405423cfccfadd43ba4a4";
   };
 
-  buildInputs = [ pytest mock ];
+  buildInputs = [pytest mock];
 
   # See README for tests invocation
   checkPhase = ''
@@ -23,6 +29,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
-    license = with licenses; [ bsd3 ];
+    license = with licenses; [bsd3];
   };
 }

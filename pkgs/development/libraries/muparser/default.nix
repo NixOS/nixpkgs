@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, unzip, setfile}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  setfile,
+}:
 stdenv.mkDerivation rec {
   pname = "muparser";
   version = "2.2.3";
@@ -10,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "00l92k231yb49wijzkspa2l58mapn6vh2dlxnlg0pawjjfv33s6z";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
   buildInputs = lib.optionals stdenv.isDarwin [setfile];
 
   meta = {

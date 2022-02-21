@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "python-fsutil";
   version = "0.6.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Module with file-system utilities";
     homepage = "https://github.com/fabiocaccamo/python-fsutil";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

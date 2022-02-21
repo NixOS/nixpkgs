@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, black
-, toml
-, pytestCheckHook
-, python-language-server
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  black,
+  toml,
+  pytestCheckHook,
+  python-language-server,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "pyls-black";
   version = "0.4.7";
@@ -21,14 +21,14 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  propagatedBuildInputs = [ black toml python-language-server ];
+  propagatedBuildInputs = [black toml python-language-server];
 
   meta = with lib; {
     homepage = "https://github.com/rupert/pyls-black";
     description = "Black plugin for the Python Language Server";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

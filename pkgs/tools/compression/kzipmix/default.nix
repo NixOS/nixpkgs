@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "kzipmix";
   version = "20200115";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "A tool that aggressively optimizes the sizes of Zip archives";
     license = licenses.unfree;
     homepage = "http://advsys.net/ken/utils.htm";
-    maintainers = [ maintainers.sander ];
+    maintainers = [maintainers.sander];
   };
 }

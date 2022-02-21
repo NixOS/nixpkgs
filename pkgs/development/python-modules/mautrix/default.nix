@@ -1,7 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel-yaml, CommonMark, lxml, aiosqlite
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  pythonOlder,
+  sqlalchemy,
+  ruamel-yaml,
+  CommonMark,
+  lxml,
+  aiosqlite,
 }:
-
 buildPythonPackage rec {
   pname = "mautrix";
   version = "0.14.10";
@@ -27,12 +35,12 @@ buildPythonPackage rec {
   # no tests available
   doCheck = false;
 
-  pythonImportsCheck = [ "mautrix" ];
+  pythonImportsCheck = ["mautrix"];
 
   meta = with lib; {
     homepage = "https://github.com/tulir/mautrix-python";
     description = "A Python 3 asyncio Matrix framework.";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans ];
+    maintainers = with maintainers; [nyanloutre ma27 sumnerevans];
   };
 }

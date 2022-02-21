@@ -1,36 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
-
-# build time
-, autoreconfHook
-, flex
-, bison
-, perl
-, pkg-config
-, texinfo
-
-# runtime
-, c-ares
-, json_c
-, libcap
-, libelf
-, libunwind
-, libyang
-, net-snmp
-, openssl
-, pam
-, pcre2
-, python3
-, readline
-
-# tests
-, nettools
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages
+  # build time
+  ,
+  autoreconfHook,
+  flex,
+  bison,
+  perl,
+  pkg-config,
+  texinfo
+  # runtime
+  ,
+  c-ares,
+  json_c,
+  libcap,
+  libelf,
+  libunwind,
+  libyang,
+  net-snmp,
+  openssl,
+  pam,
+  pcre2,
+  python3,
+  readline
+  # tests
+  ,
+  nettools,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "frr";
   version = "8.1";
@@ -61,21 +61,23 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [
-    c-ares
-    json_c
-    libelf
-    libunwind
-    libyang
-    net-snmp
-    openssl
-    pam
-    pcre2
-    python3
-    readline
-  ] ++ lib.optionals stdenv.isLinux [
-    libcap
-  ];
+  buildInputs =
+    [
+      c-ares
+      json_c
+      libelf
+      libunwind
+      libyang
+      net-snmp
+      openssl
+      pam
+      pcre2
+      python3
+      readline
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libcap
+    ];
 
   configureFlags = [
     "--sysconfdir=/etc/frr"
@@ -103,7 +105,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = { inherit (nixosTests) frr; };
+  passthru.tests = {inherit (nixosTests) frr;};
 
   meta = with lib; {
     description = "FRR BGP/OSPF/ISIS/RIP/RIPNG routing daemon suite";
@@ -130,8 +132,8 @@ stdenv.mkDerivation rec {
       private clouds.
     '';
     homepage = "https://frrouting.org/";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [gpl2Plus lgpl21Plus];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ woffs ];
+    maintainers = with maintainers; [woffs];
   };
 }

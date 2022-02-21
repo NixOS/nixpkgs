@@ -1,17 +1,17 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, curio
-, fetchFromGitHub
-, flask
-, pytest-asyncio
-, pytest-trio
-, pythonOlder
-, pytestCheckHook
-, trio
-, yarl
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  flask,
+  pytest-asyncio,
+  pytest-trio,
+  pythonOlder,
+  pytestCheckHook,
+  trio,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "python-socks";
   version = "2.0.3";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Core proxy client (SOCKS4, SOCKS5, HTTP) functionality for Python";
     homepage = "https://github.com/romis2012/python-socks";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

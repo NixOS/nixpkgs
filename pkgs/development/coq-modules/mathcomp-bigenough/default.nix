@@ -1,25 +1,38 @@
-{ coq, mkCoqDerivation, mathcomp, lib, version ? null }:
+{
+  coq,
+  mkCoqDerivation,
+  mathcomp,
+  lib,
+  version ? null,
+}:
+with lib;
+  mkCoqDerivation {
+    namePrefix = ["coq" "mathcomp"];
+    pname = "bigenough";
+    owner = "math-comp";
 
-with lib; mkCoqDerivation {
+    release = {
+      "1.0.0".sha256 = "10g0gp3hk7wri7lijkrqna263346wwf6a3hbd4qr9gn8hmsx70wg";
+      "1.0.1".sha256 = "sha256:02f4dv4rz72liciwxb2k7acwx6lgqz4381mqyq5854p3nbyn06aw";
+    };
+    inherit version;
+    defaultVersion = with versions;
+      switch coq.version [
+        {
+          case = range "8.10" "8.15";
+          out = "1.0.1";
+        }
+        {
+          case = range "8.5" "8.14";
+          out = "1.0.0";
+        }
+      ]
+      null;
 
-  namePrefix = [ "coq" "mathcomp" ];
-  pname = "bigenough";
-  owner = "math-comp";
+    propagatedBuildInputs = [mathcomp.ssreflect];
 
-  release = {
-    "1.0.0".sha256 = "10g0gp3hk7wri7lijkrqna263346wwf6a3hbd4qr9gn8hmsx70wg";
-    "1.0.1".sha256 = "sha256:02f4dv4rz72liciwxb2k7acwx6lgqz4381mqyq5854p3nbyn06aw";
-  };
-  inherit version;
-  defaultVersion = with versions; switch coq.version [
-    { case = range "8.10" "8.15"; out = "1.0.1"; }
-    { case = range "8.5"  "8.14"; out = "1.0.0"; }
-  ] null;
-
-  propagatedBuildInputs = [ mathcomp.ssreflect ];
-
-  meta = {
-    description = "A small library to do epsilon - N reasonning";
-    license = licenses.cecill-b;
-  };
-}
+    meta = {
+      description = "A small library to do epsilon - N reasonning";
+      license = licenses.cecill-b;
+    };
+  }

@@ -1,5 +1,7 @@
-{ stdenvNoCC, fetchurl }:
-
+{
+  stdenvNoCC,
+  fetchurl,
+}:
 stdenvNoCC.mkDerivation {
   pname = "darwin-stubs";
   version = "10.12";

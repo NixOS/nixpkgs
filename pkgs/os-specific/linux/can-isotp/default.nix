@@ -1,10 +1,14 @@
-{ lib, stdenv, kernel, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  kernel,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "can-isotp";
   version = "20200910";
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   src = fetchFromGitHub {
     owner = "hartkopp";
@@ -31,6 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/hartkopp/can-isotp";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.evck ];
+    maintainers = [maintainers.evck];
   };
 }

@@ -1,30 +1,37 @@
-{ stdenvNoCC, gx, gx-go, go, cacert }:
+{
+  stdenvNoCC,
+  gx,
+  gx-go,
+  go,
+  cacert,
+}: {
+  name,
+  src,
+  sha256,
+}:
+  stdenvNoCC.mkDerivation {
+    name = "${name}-gxdeps";
+    inherit src;
 
-{ name, src, sha256 }:
+    nativeBuildInputs = [cacert go gx gx-go];
 
-stdenvNoCC.mkDerivation {
-  name = "${name}-gxdeps";
-  inherit src;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = sha256;
 
-  nativeBuildInputs = [ cacert go gx gx-go ];
+    dontConfigure = true;
+    doCheck = false;
+    doInstallCheck = false;
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = sha256;
+    buildPhase = ''
+      export GOPATH=$(pwd)/vendor
+      mkdir -p vendor
+      gx install
+    '';
 
-  dontConfigure = true;
-  doCheck = false;
-  doInstallCheck = false;
+    installPhase = ''
+      mv vendor $out
+    '';
 
-  buildPhase = ''
-    export GOPATH=$(pwd)/vendor
-    mkdir -p vendor
-    gx install
-  '';
-
-  installPhase = ''
-    mv vendor $out
-  '';
-
-  preferLocalBuild = true;
-}
+    preferLocalBuild = true;
+  }

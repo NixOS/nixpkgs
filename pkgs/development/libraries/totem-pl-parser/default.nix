@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, libxml2, gobject-introspection, gnome, glib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  libxml2,
+  gobject-introspection,
+  gnome,
+  glib,
+}:
 stdenv.mkDerivation rec {
   pname = "totem-pl-parser";
   version = "3.26.6";
@@ -17,9 +28,9 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config gettext glib gobject-introspection ];
-  buildInputs = [ libxml2 glib ];
+  depsBuildBuild = [pkg-config];
+  nativeBuildInputs = [meson ninja pkg-config gettext glib gobject-introspection];
+  buildInputs = [libxml2 glib];
 
   mesonFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dintrospection=false"

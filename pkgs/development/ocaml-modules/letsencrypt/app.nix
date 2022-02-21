@@ -1,24 +1,25 @@
-{ lib
-, buildDunePackage
-, letsencrypt
-, letsencrypt-dns
-, cmdliner
-, cohttp-lwt-unix
-, logs
-, fmt
-, lwt
-, mirage-crypto-rng
-, ptime
-, bos
-, fpath
-, randomconv
-, cstruct
+{
+  lib,
+  buildDunePackage,
+  letsencrypt,
+  letsencrypt-dns,
+  cmdliner,
+  cohttp-lwt-unix,
+  logs,
+  fmt,
+  lwt,
+  mirage-crypto-rng,
+  ptime,
+  bos,
+  fpath,
+  randomconv,
+  cstruct,
 }:
-
 buildDunePackage {
   pname = "letsencrypt-app";
 
-  inherit (letsencrypt)
+  inherit
+    (letsencrypt)
     src
     version
     useDune2
@@ -41,7 +42,9 @@ buildDunePackage {
     cstruct
   ];
 
-  meta = letsencrypt.meta // {
-    description = "An ACME client implementation of the ACME protocol (RFC 8555) for OCaml";
-  };
+  meta =
+    letsencrypt.meta
+    // {
+      description = "An ACME client implementation of the ACME protocol (RFC 8555) for OCaml";
+    };
 }

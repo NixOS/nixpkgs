@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, typing-extensions
-, requests
-, yarl
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  typing-extensions,
+  requests,
+  yarl,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
 }:
-
 buildPythonPackage rec {
   pname = "transmission-rpc";
   version = "3.3.0";
@@ -44,12 +44,12 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "transmission_rpc" ];
+  pythonImportsCheck = ["transmission_rpc"];
 
   meta = with lib; {
     description = "Python module that implements the Transmission bittorent client RPC protocol";
     homepage = "https://github.com/Trim21/transmission-rpc";
     license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    maintainers = with maintainers; [eyjhb];
   };
 }

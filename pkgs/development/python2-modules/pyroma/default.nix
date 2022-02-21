@@ -1,7 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, docutils, pygments, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  pygments,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "pyroma";
   version = "2.6.1";
@@ -16,7 +20,7 @@ buildPythonPackage rec {
       --replace "pygments < 2.6" "pygments"
   '';
 
-  propagatedBuildInputs = [ docutils pygments setuptools ];
+  propagatedBuildInputs = [docutils pygments setuptools];
 
   meta = with lib; {
     description = "Test your project's packaging friendliness";

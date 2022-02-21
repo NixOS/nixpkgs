@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   fenicsScript = pkgs.writeScript "poisson.py" ''
     #!/usr/bin/env python
     from dolfin import *
@@ -25,25 +23,22 @@ let
     solve(a == L, u, bc)
     print(u)
   '';
-in
-{
+in {
   name = "fenics";
   meta = {
-    maintainers = with pkgs.lib.maintainers; [ knedlsepp ];
+    maintainers = with pkgs.lib.maintainers; [knedlsepp];
   };
 
   nodes = {
-    fenicsnode = { pkgs, ... }: {
+    fenicsnode = {pkgs, ...}: {
       environment.systemPackages = with pkgs; [
         gcc
-        (python3.withPackages (ps: with ps; [ fenics ]))
+        (python3.withPackages (ps: with ps; [fenics]))
       ];
     };
   };
-  testScript =
-    { nodes, ... }:
-    ''
-      start_all()
-      node1.succeed("${fenicsScript}")
-    '';
+  testScript = {nodes, ...}: ''
+    start_all()
+    node1.succeed("${fenicsScript}")
+  '';
 })

@@ -1,26 +1,26 @@
-{ stdenv
-, lib
-, fetchPypi
-, buildPythonPackage
-, cmake
-, python
-, zlib
-, ncurses
-, docutils
-, pygments
-, numpy
-, scipy
-, scikit-learn
-, spdlog
-, fmt
-, rapidjson
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  cmake,
+  python,
+  zlib,
+  ncurses,
+  docutils,
+  pygments,
+  numpy,
+  scipy,
+  scikit-learn,
+  spdlog,
+  fmt,
+  rapidjson,
 }:
-
 buildPythonPackage rec {
   pname = "vowpalwabbit";
   version = "9.0.1";
 
-  src = fetchPypi{
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-rDUgOjroY8S73+s+MWyBl86u+8XCH4O8KMCo9zUlqAs=";
   };
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   # As we disable configure via cmake, pass explicit global options to enable
   # spdlog and fmt packages
-  setupPyGlobalFlags = [ "--cmake-options=\"-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON\"" ];
+  setupPyGlobalFlags = ["--cmake-options=\"-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON\""];
 
   propagatedBuildInputs = [
     numpy
@@ -67,9 +67,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project.";
-    homepage    = "https://github.com/JohnLangford/vowpal_wabbit";
-    license     = licenses.bsd3;
-    broken      = stdenv.isAarch64;
-    maintainers = with maintainers; [ teh ];
+    homepage = "https://github.com/JohnLangford/vowpal_wabbit";
+    license = licenses.bsd3;
+    broken = stdenv.isAarch64;
+    maintainers = with maintainers; [teh];
   };
 }

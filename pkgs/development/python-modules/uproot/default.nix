@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, awkward
-, numpy
-, lz4
-, xxhash
-, zstandard
-, pytestCheckHook
-, scikit-hep-testdata
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  awkward,
+  numpy,
+  lz4,
+  xxhash,
+  zstandard,
+  pytestCheckHook,
+  scikit-hep-testdata,
 }:
-
 buildPythonPackage rec {
   pname = "uproot";
   version = "4.1.9";
@@ -50,12 +50,12 @@ buildPythonPackage rec {
     "tests/test_0088-read-with-http.py"
     "tests/test_0220-contiguous-byte-ranges-in-http.py"
   ];
-  pythonImportsCheck = [ "uproot" ];
+  pythonImportsCheck = ["uproot"];
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/uproot4";
     description = "ROOT I/O in pure Python and Numpy";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [veprbl];
   };
 }

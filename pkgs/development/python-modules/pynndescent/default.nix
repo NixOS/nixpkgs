@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, joblib
-, llvmlite
-, numba
-, scikit-learn
-, scipy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  joblib,
+  llvmlite,
+  numba,
+  scikit-learn,
+  scipy,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pynndescent";
   version = "0.5.6";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Nearest Neighbor Descent";
     homepage = "https://github.com/lmcinnes/pynndescent";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [mic92];
   };
 }

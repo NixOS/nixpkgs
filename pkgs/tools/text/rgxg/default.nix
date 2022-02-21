@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "rgxg";
   version = "0.1.2";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A C library and a command-line tool to generate (extended) regular expressions";
     license = licenses.zlib;
-    maintainers = with maintainers; [ hloeffler ];
+    maintainers = with maintainers; [hloeffler];
     homepage = "https://rgxg.github.io/";
   };
 }

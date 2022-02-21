@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, gettext
-, fcitx5
-, libhangul
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  gettext,
+  fcitx5,
+  libhangul,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fcitx5-hangul";
   version = "5.0.7";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Hangul wrapper for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-hangul";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [xrelkd];
     platforms = platforms.linux;
   };
 }

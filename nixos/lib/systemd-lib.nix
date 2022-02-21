@@ -1,13 +1,13 @@
-{ config, lib, pkgs }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+}:
+with lib; let
   cfg = config.systemd;
   lndir = "${pkgs.buildPackages.xorg.lndir}/bin/lndir";
 in rec {
-
-  shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
+  shellEscape = s: (replaceChars ["\\"] ["\\\\"] s);
 
   mkPathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
 
@@ -15,117 +15,135 @@ in rec {
   unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
 
   makeUnit = name: unit:
-    if unit.enable then
+    if unit.enable
+    then
       pkgs.runCommand "unit-${mkPathSafeName name}"
-        { preferLocalBuild = true;
-          allowSubstitutes = false;
-          inherit (unit) text;
-        }
-        ''
-          mkdir -p $out
-          echo -n "$text" > $out/${shellEscape name}
-        ''
+      {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        inherit (unit) text;
+      }
+      ''
+        mkdir -p $out
+        echo -n "$text" > $out/${shellEscape name}
+      ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
-        { preferLocalBuild = true;
-          allowSubstitutes = false;
-        }
-        ''
-          mkdir -p $out
-          ln -s /dev/null $out/${shellEscape name}
-        '';
+      {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+      }
+      ''
+        mkdir -p $out
+        ln -s /dev/null $out/${shellEscape name}
+      '';
 
   boolValues = [true false "yes" "no"];
 
   digits = map toString (range 0 9);
 
-  isByteFormat = s:
-    let
-      l = reverseList (stringToCharacters s);
-      suffix = head l;
-      nums = tail l;
-    in elem suffix (["K" "M" "G" "T"] ++ digits)
-      && all (num: elem num digits) nums;
+  isByteFormat = s: let
+    l = reverseList (stringToCharacters s);
+    suffix = head l;
+    nums = tail l;
+  in
+    elem suffix (["K" "M" "G" "T"] ++ digits)
+    && all (num: elem num digits) nums;
 
   assertByteFormat = name: group: attr:
-    optional (attr ? ${name} && ! isByteFormat attr.${name})
-      "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
+    optional (attr ? ${name} && !isByteFormat attr.${name})
+    "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
 
   hexChars = stringToCharacters "0123456789abcdefABCDEF";
 
-  isMacAddress = s: stringLength s == 17
-    && flip all (splitString ":" s) (bytes:
-      all (byte: elem byte hexChars) (stringToCharacters bytes)
+  isMacAddress = s:
+    stringLength s
+    == 17
+    && flip all (splitString ":" s) (
+      bytes:
+        all (byte: elem byte hexChars) (stringToCharacters bytes)
     );
 
   assertMacAddress = name: group: attr:
-    optional (attr ? ${name} && ! isMacAddress attr.${name})
-      "Systemd ${group} field `${name}' must be a valid mac address.";
+    optional (attr ? ${name} && !isMacAddress attr.${name})
+    "Systemd ${group} field `${name}' must be a valid mac address.";
 
   isPort = i: i >= 0 && i <= 65535;
 
   assertPort = name: group: attr:
-    optional (attr ? ${name} && ! isPort attr.${name})
-      "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number.";
+    optional (attr ? ${name} && !isPort attr.${name})
+    "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number.";
 
   assertValueOneOf = name: values: group: attr:
     optional (attr ? ${name} && !elem attr.${name} values)
-      "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
+    "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
   assertHasField = name: group: attr:
     optional (!(attr ? ${name}))
-      "Systemd ${group} field `${name}' must exist.";
+    "Systemd ${group} field `${name}' must exist.";
 
   assertRange = name: min: max: group: attr:
     optional (attr ? ${name} && !(min <= attr.${name} && max >= attr.${name}))
-      "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
+    "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
 
   assertMinimum = name: min: group: attr:
     optional (attr ? ${name} && attr.${name} < min)
-      "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";
+    "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";
 
-  assertOnlyFields = fields: group: attr:
-    let badFields = filter (name: ! elem name fields) (attrNames attr); in
-    optional (badFields != [ ])
-      "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
+  assertOnlyFields = fields: group: attr: let
+    badFields = filter (name: !elem name fields) (attrNames attr);
+  in
+    optional (badFields != [])
+    "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
 
   assertInt = name: group: attr:
     optional (attr ? ${name} && !isInt attr.${name})
-      "Systemd ${group} field `${name}' is not an integer";
+    "Systemd ${group} field `${name}' is not an integer";
 
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual
     # unit options might contain attributes from mkOverride and mkIf that we need to
     # convert into single values before checking them.
-    defs = mapAttrs (const (v:
-      if v._type or "" == "override" then v.content
-      else if v._type or "" == "if" then v.content
-      else v
-    )) attrs;
+    defs = mapAttrs (const (
+      v:
+        if v._type or "" == "override"
+        then v.content
+        else if v._type or "" == "if"
+        then v.content
+        else v
+    ))
+    attrs;
     errors = concatMap (c: c group defs) checks;
-  in if errors == [] then true
-     else builtins.trace (concatStringsSep "\n" errors) false;
+  in
+    if errors == []
+    then true
+    else builtins.trace (concatStringsSep "\n" errors) false;
 
   toOption = x:
-    if x == true then "true"
-    else if x == false then "false"
+    if x == true
+    then "true"
+    else if x == false
+    then "false"
     else toString x;
 
   attrsToSection = as:
     concatStrings (concatLists (mapAttrsToList (name: value:
       map (x: ''
-          ${name}=${toOption x}
-        '')
-        (if isList value then value else [value]))
-        as));
+        ${name}=${toOption x}
+      '')
+      (if isList value
+      then value
+      else [value]))
+    as));
 
   generateUnits = generateUnits' true;
 
   generateUnits' = allowCollisions: type: units: upstreamUnits: upstreamWants:
     pkgs.runCommand "${type}-units"
-      { preferLocalBuild = true;
-        allowSubstitutes = false;
-      } ''
+    {
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    } ''
       mkdir -p $out
 
       # Copy the upstream systemd units we're interested in.
@@ -189,13 +207,19 @@ in rec {
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
             ln -sfn /dev/null $out/$fn
           else
-            ${if allowCollisions then ''
-              mkdir -p $out/$fn.d
-              ln -s $i/$fn $out/$fn.d/overrides.conf
-            '' else ''
-              echo "Found multiple derivations configuring $fn!"
-              exit 1
-            ''}
+            ${
+        if allowCollisions
+        then
+          ''
+            mkdir -p $out/$fn.d
+            ln -s $i/$fn $out/$fn.d/overrides.conf
+          ''
+        else
+          ''
+            echo "Found multiple derivations configuring $fn!"
+            exit 1
+          ''
+      }
           fi
        else
           ln -fs $i/$fn $out/
@@ -203,36 +227,49 @@ in rec {
       done
 
       # Create service aliases from aliases option.
-      ${concatStrings (mapAttrsToList (name: unit:
+      ${
+        concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             ln -sfn '${name}' $out/'${name2}'
-          '') unit.aliases) units)}
+          '')
+          unit.aliases)
+        units)
+      }
 
       # Create .wants and .requires symlinks from the wantedBy and
       # requiredBy options.
-      ${concatStrings (mapAttrsToList (name: unit:
+      ${
+        concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
             ln -sfn '../${name}' $out/'${name2}.wants'/
-          '') unit.wantedBy) units)}
+          '')
+          unit.wantedBy)
+        units)
+      }
 
-      ${concatStrings (mapAttrsToList (name: unit:
+      ${
+        concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.requires'
             ln -sfn '../${name}' $out/'${name2}.requires'/
-          '') unit.requiredBy) units)}
+          '')
+          unit.requiredBy)
+        units)
+      }
 
-      ${optionalString (type == "system") ''
-        # Stupid misc. symlinks.
-        ln -s ${cfg.defaultUnit} $out/default.target
-        ln -s ${cfg.ctrlAltDelUnit} $out/ctrl-alt-del.target
-        ln -s rescue.target $out/kbrequest.target
+      ${
+        optionalString (type == "system") ''
+          # Stupid misc. symlinks.
+          ln -s ${cfg.defaultUnit} $out/default.target
+          ln -s ${cfg.ctrlAltDelUnit} $out/ctrl-alt-del.target
+          ln -s rescue.target $out/kbrequest.target
 
-        mkdir -p $out/getty.target.wants/
-        ln -s ../autovt@tty1.service $out/getty.target.wants/
+          mkdir -p $out/getty.target.wants/
+          ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-        ln -s ../remote-fs.target $out/multi-user.target.wants/
-      ''}
+          ln -s ../remote-fs.target $out/multi-user.target.wants/
+        ''
+      }
     ''; # */
-
 }

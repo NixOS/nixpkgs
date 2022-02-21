@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.evilwm;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.evilwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.evilwm.enable = mkEnableOption "evilwm";
@@ -20,6 +21,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.evilwm ];
+    environment.systemPackages = [pkgs.evilwm];
   };
 }

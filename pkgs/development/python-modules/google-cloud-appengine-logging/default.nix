@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, mock
-, proto-plus
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
   version = "1.1.0";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Appengine logging client library";
     homepage = "https://github.com/googleapis/python-appengine-logging";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

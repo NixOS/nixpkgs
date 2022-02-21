@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchhg, cmake, which, python3, osi, cplex }:
-
+{
+  stdenv,
+  lib,
+  fetchhg,
+  cmake,
+  which,
+  python3,
+  osi,
+  cplex,
+}:
 stdenv.mkDerivation {
   version = "19.12";
   pname = "fast-downward";
@@ -10,11 +18,11 @@ stdenv.mkDerivation {
     sha256 = "08m4k1mkx4sz7c2ab7xh7ip6b67zxv7kl68xrvwa83xw1yigqkna";
   };
 
-  nativeBuildInputs = [ cmake which ];
-  buildInputs = [ python3 python3.pkgs.wrapPython osi ];
+  nativeBuildInputs = [cmake which];
+  buildInputs = [python3 python3.pkgs.wrapPython osi];
 
   cmakeFlags =
-    lib.optional osi.withCplex [ "-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex" ];
+    lib.optional osi.withCplex ["-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex"];
 
   configurePhase = ''
     python build.py release
@@ -55,6 +63,6 @@ stdenv.mkDerivation {
     homepage = "https://www.fast-downward.org/";
     license = licenses.gpl3Plus;
     platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

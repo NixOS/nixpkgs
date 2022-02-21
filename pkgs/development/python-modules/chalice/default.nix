@@ -1,27 +1,27 @@
-{ lib
-, attrs
-, botocore
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, hypothesis
-, inquirer
-, jmespath
-, mock
-, mypy-extensions
-, pip
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, six
-, typing
-, watchdog
-, websocket-client
-, wheel
+{
+  lib,
+  attrs,
+  botocore,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  hypothesis,
+  inquirer,
+  jmespath,
+  mock,
+  mypy-extensions,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  six,
+  typing,
+  watchdog,
+  websocket-client,
+  wheel,
 }:
-
 buildPythonPackage rec {
   pname = "chalice";
   version = "1.26.4";
@@ -33,22 +33,24 @@ buildPythonPackage rec {
     sha256 = "sha256-Xn8OqeEihLxZS9QZtrhzau2zLg9SzQrrigK70PoImhU=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-    botocore
-    click
-    inquirer
-    jmespath
-    mypy-extensions
-    pip
-    pyyaml
-    setuptools
-    six
-    wheel
-    watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
-  ];
+  propagatedBuildInputs =
+    [
+      attrs
+      botocore
+      click
+      inquirer
+      jmespath
+      mypy-extensions
+      pip
+      pyyaml
+      setuptools
+      six
+      wheel
+      watchdog
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      typing
+    ];
 
   checkInputs = [
     hypothesis
@@ -91,12 +93,12 @@ buildPythonPackage rec {
     "test_endpoint_from_arn"
   ];
 
-  pythonImportsCheck = [ "chalice" ];
+  pythonImportsCheck = ["chalice"];
 
   meta = with lib; {
     description = "Python Serverless Microframework for AWS";
     homepage = "https://github.com/aws/chalice";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

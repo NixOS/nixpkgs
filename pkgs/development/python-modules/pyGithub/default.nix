@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, deprecated
-, fetchFromGitHub
-, pynacl
-, pyjwt
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  deprecated,
+  fetchFromGitHub,
+  pynacl,
+  pyjwt,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "PyGithub";
   version = "1.55";
@@ -31,13 +31,13 @@ buildPythonPackage rec {
 
   # Test suite makes REST calls against github.com
   doCheck = false;
-  pythonImportsCheck = [ "github" ];
+  pythonImportsCheck = ["github"];
 
   meta = with lib; {
     description = "Python library to access the GitHub API v3";
     homepage = "https://github.com/PyGithub/PyGithub";
     platforms = platforms.all;
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jhhuh ];
+    maintainers = with maintainers; [jhhuh];
   };
 }

@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pyvcd
-, jinja2
-, importlib-resources
-, importlib-metadata
-, git
-
-# for tests
-, pytestCheckHook
-, symbiyosys
-, yices
-, yosys
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pyvcd,
+  jinja2,
+  importlib-resources,
+  importlib-metadata,
+  git
+  # for tests
+  ,
+  pytestCheckHook,
+  symbiyosys,
+  yices,
+  yosys,
 }:
-
 buildPythonPackage rec {
   pname = "amaranth";
   version = "0.3";
@@ -31,20 +31,21 @@ buildPythonPackage rec {
     sha256 = "P9AG3t30eGeeCN5+t7mjhRoOWIGZVzWQji9eYXphjA0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}";
+  SETUPTOOLS_SCM_PRETEND_VERSION = "${realVersion}";
 
   nativeBuildInputs = [
     git
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    jinja2
-    pyvcd
-    setuptools
-  ] ++
-    lib.optional (pythonOlder "3.9") importlib-resources ++
-    lib.optional (pythonOlder "3.8") importlib-metadata;
+  propagatedBuildInputs =
+    [
+      jinja2
+      pyvcd
+      setuptools
+    ]
+    ++ lib.optional (pythonOlder "3.9") importlib-resources
+    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   checkInputs = [
     pytestCheckHook
@@ -59,12 +60,12 @@ buildPythonPackage rec {
       --replace "pyvcd~=0.2.2" "pyvcd"
   '';
 
-  pythonImportsCheck = [ "amaranth" ];
+  pythonImportsCheck = ["amaranth"];
 
   meta = with lib; {
     description = "A modern hardware definition language and toolchain based on Python";
     homepage = "https://amaranth-lang.org/docs/amaranth";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ emily thoughtpolice ];
+    maintainers = with maintainers; [emily thoughtpolice];
   };
 }

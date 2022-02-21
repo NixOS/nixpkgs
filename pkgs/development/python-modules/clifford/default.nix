@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h5py
-, ipython
-, numba
-, numpy
-, pytestCheckHook
-, scipy
-, sparse
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  h5py,
+  ipython,
+  numba,
+  numpy,
+  pytestCheckHook,
+  scipy,
+  sparse,
 }:
-
 buildPythonPackage rec {
   pname = "clifford";
   version = "1.4.0";
@@ -56,12 +56,12 @@ buildPythonPackage rec {
     "test_multivector_inverse.py"
   ];
 
-  pythonImportsCheck = [ "clifford" ];
+  pythonImportsCheck = ["clifford"];
 
   meta = with lib; {
     description = "Numerical Geometric Algebra Module";
     homepage = "https://clifford.readthedocs.io";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

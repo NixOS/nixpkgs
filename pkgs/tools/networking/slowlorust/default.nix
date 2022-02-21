@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "slowlorust";
   version = "0.1.1";
@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "Lightweight slowloris (HTTP DoS) tool";
     homepage = "https://github.com/MJVL/slowlorust";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,7 +1,24 @@
-{ stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
-, libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
-, libXdmcp, libXau, lib, openssl }:
-
+{
+  stdenv,
+  fetchzip,
+  jam,
+  unzip,
+  libX11,
+  libXxf86vm,
+  libXrandr,
+  libXinerama,
+  libXrender,
+  libXext,
+  libtiff,
+  libjpeg,
+  libpng,
+  libXScrnSaver,
+  writeText,
+  libXdmcp,
+  libXau,
+  lib,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "argyllcms";
   version = "2.3.0";
@@ -13,7 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UNjCcqJgbRSox55OP3pLdKFHY0NPLHEq3nwqvxWre7U=";
   };
 
-  nativeBuildInputs = [ jam unzip ];
+  nativeBuildInputs = [jam unzip];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Jambase \
@@ -98,11 +115,22 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libtiff libjpeg libpng libX11 libXxf86vm libXrandr libXinerama libXext
-    libXrender libXScrnSaver libXdmcp libXau openssl
+    libtiff
+    libjpeg
+    libpng
+    libX11
+    libXxf86vm
+    libXrandr
+    libXinerama
+    libXext
+    libXrender
+    libXScrnSaver
+    libXdmcp
+    libXau
+    openssl
   ];
 
-  buildFlags = [ "all" ];
+  buildFlags = ["all"];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

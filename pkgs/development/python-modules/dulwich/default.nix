@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, certifi
-, fastimport
-, fetchPypi
-, gevent
-, geventhttpclient
-, git
-, glibcLocales
-, gpgme
-, mock
-, pkgs
-, urllib3
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  certifi,
+  fastimport,
+  fetchPypi,
+  gevent,
+  geventhttpclient,
+  git,
+  glibcLocales,
+  gpgme,
+  mock,
+  pkgs,
+  urllib3,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   version = "0.20.32";
   pname = "dulwich";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.dulwich.io/";
     changelog = "https://github.com/dulwich/dulwich/blob/dulwich-${version}/NEWS";
-    license = with licenses; [ asl20 gpl2Plus ];
-    maintainers = with maintainers; [ koral ];
+    license = with licenses; [asl20 gpl2Plus];
+    maintainers = with maintainers; [koral];
   };
 }

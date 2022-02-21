@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "double-conversion";
   version = "3.2.0";
@@ -11,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Vvzjg+UOgegkH8x2vtNU1TS01k5O4ilRJjD7F+BmVmU=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
 
   # Case sensitivity issue
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -25,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/double-conversion";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

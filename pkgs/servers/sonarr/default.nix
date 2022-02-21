@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mono,
+  libmediainfo,
+  sqlite,
+  curl,
+  makeWrapper,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "sonarr";
   version = "3.0.6.1342";
@@ -9,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6RMthsf60FJLDHB72QJkPeF7vXmjBgcqKujO0IOjVIk=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -18,8 +27,13 @@ stdenv.mkDerivation rec {
     cp -r * $out/bin/
     makeWrapper "${mono}/bin/mono" $out/bin/NzbDrone \
       --add-flags "$out/bin/Sonarr.exe" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-          curl sqlite libmediainfo ]}
+      --prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        curl
+        sqlite
+        libmediainfo
+      ]
+    }
 
     runHook postInstall
   '';
@@ -33,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Smart PVR for newsgroup and bittorrent users";
     homepage = "https://sonarr.tv/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fadenb purcell ];
+    maintainers = with lib.maintainers; [fadenb purcell];
     platforms = lib.platforms.all;
   };
 }

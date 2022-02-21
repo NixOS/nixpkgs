@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "pexif";
   version = "0.15";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "http://www.benno.id.au/code/pexif/";
     license = licenses.mit;
   };
-
 }

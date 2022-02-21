@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "nose-cover3";
   version = "0.1.0";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1la4hhc1yszjpcchvkqk5xmzlb2g1b3fgxj9wwc58qc549whlcc1";
   };
 
-  propagatedBuildInputs = [ nose ];
+  propagatedBuildInputs = [nose];
 
   # No tests included
   doCheck = false;
@@ -23,5 +23,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/ask/nosecover3";
     license = licenses.lgpl21;
   };
-
 }

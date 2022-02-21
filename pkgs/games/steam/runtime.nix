@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl
-
-# for update script
-, writeShellScript, curl, nix-update
+{
+  lib,
+  stdenv,
+  fetchurl
+  # for update script
+  ,
+  writeShellScript,
+  curl,
+  nix-update,
 }:
-
 stdenv.mkDerivation rec {
-
   pname = "steam-runtime";
   # from https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt
   version = "0.20211102.0";
@@ -32,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "The official runtime used by Steam";
     homepage = "https://github.com/ValveSoftware/steam-runtime";
     license = licenses.unfreeRedistributable; # Includes NVIDIA CG toolkit
-    maintainers = with maintainers; [ hrdinka abbradar ];
+    maintainers = with maintainers; [hrdinka abbradar];
   };
 }

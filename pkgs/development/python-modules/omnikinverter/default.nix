@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "omnikinverter";
   version = "0.7.0";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for the Omnik Inverter";
     homepage = "https://github.com/klaasnicolaas/python-omnikinverter";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

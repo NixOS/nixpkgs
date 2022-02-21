@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "python-mimeparse";
   version = "1.6.0";
@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "A module provides basic functions for parsing mime-type names and matching them against a list of media-ranges";
     homepage = "https://github.com/dbtsai/python-mimeparse";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

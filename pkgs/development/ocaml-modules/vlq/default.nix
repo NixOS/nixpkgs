@@ -1,7 +1,9 @@
-{ lib, buildDunePackage, fetchurl
-, dune-configurator
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  dune-configurator,
 }:
-
 buildDunePackage rec {
   pname = "vlq";
   version = "0.2.1";
@@ -13,13 +15,12 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [ dune-configurator ];
+  buildInputs = [dune-configurator];
 
   meta = {
     description = "encoding variable-length quantities, in particular base64";
     license = lib.licenses.mit;
     homepage = "https://github.com/flowtype/ocaml-vlq";
-    maintainers = [ lib.maintainers.nomeata ];
+    maintainers = [lib.maintainers.nomeata];
   };
-
 }

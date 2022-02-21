@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchurl
-, qmake4Hook
-, qt4
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qmake4Hook,
+  qt4,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "qremotecontrol-server";
   version = "2.4.1";
@@ -14,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "07hzc9959a56b49jgmcv8ry8b9sppklvqs9kns3qjj3v9d22nbrp";
   };
 
-  nativeBuildInputs = [ qmake4Hook ];
-  buildInputs = [ qt4 xorg.libXtst ];
+  nativeBuildInputs = [qmake4Hook];
+  buildInputs = [qt4 xorg.libXtst];
 
   postPatch = ''
     substituteInPlace QRemoteControl-Server.pro \
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     homepage = "https://qremote.org/";
     downloadPage = "https://qremote.org/download.php#Download";
     description = "Remote control your desktop from your mobile";
@@ -43,4 +44,3 @@ stdenv.mkDerivation rec {
     '';
   };
 }
-

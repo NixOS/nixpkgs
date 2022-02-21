@@ -1,4 +1,11 @@
-{lib, stdenv, autoreconfHook, fetchurl, gmp, blas}:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchurl,
+  gmp,
+  blas,
+}:
 stdenv.mkDerivation rec {
   pname = "iml";
   version = "1.0.5";

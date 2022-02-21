@@ -1,12 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.sanoid;
 
   datasetSettingsType = with types;
-    (attrsOf (nullOr (oneOf [ str int bool (listOf str) ]))) // {
+    (attrsOf (nullOr (oneOf [str int bool (listOf str)])))
+    // {
       description = "dataset/template options";
     };
 
@@ -51,11 +54,12 @@ let
   datasetOptions = rec {
     use_template = mkOption {
       description = "Names of the templates to use for this dataset.";
-      type = types.listOf (types.str // {
+      type = types.listOf (types.str
+      // {
         check = (types.enum (attrNames cfg.templates)).check;
         description = "configured template name";
       });
-      default = [ ];
+      default = [];
     };
     useTemplate = use_template;
 
@@ -66,7 +70,7 @@ let
         recursively in an atomic way without the possibility to
         override settings for child datasets.
       '';
-      type = with types; oneOf [ bool (enum [ "zfs" ]) ];
+      type = with types; oneOf [bool (enum ["zfs"])];
       default = false;
     };
 
@@ -83,32 +87,33 @@ let
 
   # Function to build "zfs allow" and "zfs unallow" commands for the
   # filesystems we've delegated permissions to.
-  buildAllowCommand = zfsAction: permissions: dataset: lib.escapeShellArgs [
-    # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-    "-+/run/booted-system/sw/bin/zfs"
-    zfsAction
-    "sanoid"
-    (concatStringsSep "," permissions)
-    dataset
-  ];
+  buildAllowCommand = zfsAction: permissions: dataset:
+    lib.escapeShellArgs [
+      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+      "-+/run/booted-system/sw/bin/zfs"
+      zfsAction
+      "sanoid"
+      (concatStringsSep "," permissions)
+      dataset
+    ];
 
-  configFile =
-    let
-      mkValueString = v:
-        if builtins.isList v then concatStringsSep "," v
-        else generators.mkValueStringDefault { } v;
+  configFile = let
+    mkValueString = v:
+      if builtins.isList v
+      then concatStringsSep "," v
+      else generators.mkValueStringDefault {} v;
 
-      mkKeyValue = k: v:
-        if v == null then ""
-        else if k == "processChildrenOnly" then ""
-        else if k == "useTemplate" then ""
-        else generators.mkKeyValueDefault { inherit mkValueString; } "=" k v;
-    in
-    generators.toINI { inherit mkKeyValue; } cfg.settings;
-
-in
-{
-
+    mkKeyValue = k: v:
+      if v == null
+      then ""
+      else if k == "processChildrenOnly"
+      then ""
+      else if k == "useTemplate"
+      then ""
+      else generators.mkKeyValueDefault {inherit mkValueString;} "=" k v;
+  in
+    generators.toINI {inherit mkKeyValue;} cfg.settings;
+in {
   # Interface
 
   options.services.sanoid = {
@@ -128,13 +133,17 @@ in
     };
 
     datasets = mkOption {
-      type = types.attrsOf (types.submodule ({ config, options, ... }: {
+      type = types.attrsOf (types.submodule ({
+        config,
+        options,
+        ...
+      }: {
         freeformType = datasetSettingsType;
         options = commonOptions // datasetOptions;
-        config.use_template = mkAliasDefinitions (mkDefault options.useTemplate or { });
-        config.process_children_only = mkAliasDefinitions (mkDefault options.processChildrenOnly or { });
+        config.use_template = mkAliasDefinitions (mkDefault options.useTemplate or {});
+        config.process_children_only = mkAliasDefinitions (mkDefault options.processChildrenOnly or {});
       }));
-      default = { };
+      default = {};
       description = "Datasets to snapshot.";
     };
 
@@ -143,7 +152,7 @@ in
         freeformType = datasetSettingsType;
         options = commonOptions;
       });
-      default = { };
+      default = {};
       description = "Templates for datasets.";
     };
 
@@ -158,8 +167,8 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [ ];
-      example = [ "--verbose" "--readonly" "--debug" ];
+      default = [];
+      example = ["--verbose" "--readonly" "--debug"];
       description = ''
         Extra arguments to pass to sanoid. See
         <link xlink:href="https://github.com/jimsalterjrs/sanoid/#sanoid-command-line-options"/>
@@ -179,14 +188,15 @@ in
     systemd.services.sanoid = {
       description = "Sanoid snapshot service";
       serviceConfig = {
-        ExecStartPre = (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ]) datasets);
-        ExecStopPost = (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ]) datasets);
+        ExecStartPre = (map (buildAllowCommand "allow" ["snapshot" "mount" "destroy"]) datasets);
+        ExecStopPost = (map (buildAllowCommand "unallow" ["snapshot" "mount" "destroy"]) datasets);
         ExecStart = lib.escapeShellArgs ([
           "${pkgs.sanoid}/bin/sanoid"
           "--cron"
           "--configdir"
           (pkgs.writeTextDir "sanoid.conf" configFile)
-        ] ++ cfg.extraArgs);
+        ]
+        ++ cfg.extraArgs);
         User = "sanoid";
         Group = "sanoid";
         DynamicUser = true;
@@ -195,10 +205,10 @@ in
       };
       # Prevents missing snapshots during DST changes
       environment.TZ = "UTC";
-      after = [ "zfs.target" ];
+      after = ["zfs.target"];
       startAt = cfg.interval;
     };
   };
 
-  meta.maintainers = with maintainers; [ lopsided98 ];
+  meta.maintainers = with maintainers; [lopsided98];
 }

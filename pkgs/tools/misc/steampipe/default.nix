@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "steampipe";
   version = "0.12.2";
@@ -17,7 +21,7 @@ buildGoModule rec {
   # tests are failing for no obvious reasons
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   ldflags = [
     "-s"
@@ -36,6 +40,6 @@ buildGoModule rec {
     homepage = "https://steampipe.io/";
     description = "select * from cloud;";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ hardselius ];
+    maintainers = with maintainers; [hardselius];
   };
 }

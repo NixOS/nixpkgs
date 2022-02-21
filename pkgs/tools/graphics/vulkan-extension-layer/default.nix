@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, writeText, vulkan-headers, jq }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  writeText,
+  vulkan-headers,
+  jq,
+}:
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
   version = "1.2.198.0";
@@ -12,9 +19,9 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-g674rw8lXyP1WUoJmbRRL7s+1Yxs00sR04+hTQ3l3dE=";
     });
 
-  nativeBuildInputs = [ cmake jq ];
+  nativeBuildInputs = [cmake jq];
 
-  buildInputs = [ vulkan-headers ];
+  buildInputs = [vulkan-headers];
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
@@ -35,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KhronosGroup/Vulkan-ExtensionLayer/";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [expipiplus1];
   };
 }

@@ -1,11 +1,13 @@
-{ lib, pkgs, config, ... }:
-
-with lib;
-
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.wiki-js;
 
-  format = pkgs.formats.json { };
+  format = pkgs.formats.json {};
 
   configFile = format.generate "wiki-js.yml" cfg.settings;
 in {
@@ -53,7 +55,7 @@ in {
           db = {
             type = mkOption {
               default = "postgres";
-              type = types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
+              type = types.enum ["postgres" "mysql" "mariadb" "mssql"];
               description = ''
                 Database driver to use for persistence. Please note that <literal>sqlite</literal>
                 is currently not supported as the build process for it is currently not implemented
@@ -79,18 +81,20 @@ in {
 
           logLevel = mkOption {
             default = "info";
-            type = types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
+            type = types.enum ["error" "warn" "info" "verbose" "debug" "silly"];
             description = ''
               Define how much detail is supposed to be logged at runtime.
             '';
           };
 
-          offline = mkEnableOption "offline mode" // {
-            description = ''
-              Disable latest file updates and enable
-              <link xlink:href="https://docs.requarks.io/install/sideload">sideloading</link>.
-            '';
-          };
+          offline =
+            mkEnableOption "offline mode"
+            // {
+              description = ''
+                Disable latest file updates and enable
+                <link xlink:href="https://docs.requarks.io/install/sideload">sideloading</link>.
+              '';
+            };
         };
       };
       description = ''
@@ -113,10 +117,10 @@ in {
     services.wiki-js.settings.dataPath = "/var/lib/${cfg.stateDirectoryName}";
     systemd.services.wiki-js = {
       description = "A modern and powerful wiki app built on Node.js";
-      documentation = [ "https://docs.requarks.io/" ];
-      wantedBy = [ "multi-user.target" ];
+      documentation = ["https://docs.requarks.io/"];
+      wantedBy = ["multi-user.target"];
 
-      path = with pkgs; [ coreutils ];
+      path = with pkgs; [coreutils];
       preStart = ''
         ln -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml
         ln -sf ${pkgs.wiki-js}/server /var/lib/${cfg.stateDirectoryName}
@@ -135,5 +139,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ ma27 ];
+  meta.maintainers = with maintainers; [ma27];
 }

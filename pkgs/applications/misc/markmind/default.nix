@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+}:
 stdenv.mkDerivation rec {
   pname = "markmind";
   version = "1.3.1";
@@ -18,7 +24,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -42,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Mind map and outliner editor";
     homepage = "https://github.com/MarkMindCkm/Mark-Mind";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

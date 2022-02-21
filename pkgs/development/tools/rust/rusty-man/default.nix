@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromSourcehut }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromSourcehut,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rusty-man";
   version = "0.5.0";
@@ -18,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~ireas/rusty-man";
     changelog = "https://git.sr.ht/~ireas/rusty-man/tree/v${version}/item/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

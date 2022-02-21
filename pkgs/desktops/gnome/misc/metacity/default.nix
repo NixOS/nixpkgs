@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, gettext
-, glib
-, gnome
-, gsettings-desktop-schemas
-, gtk3
-, xorg
-, libcanberra-gtk3
-, libgtop
-, libstartup_notification
-, libxml2
-, pkg-config
-, substituteAll
-, wrapGAppsHook
-, zenity
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  glib,
+  gnome,
+  gsettings-desktop-schemas,
+  gtk3,
+  xorg,
+  libcanberra-gtk3,
+  libgtop,
+  libstartup_notification,
+  libxml2,
+  pkg-config,
+  substituteAll,
+  wrapGAppsHook,
+  zenity,
 }:
-
 stdenv.mkDerivation rec {
   pname = "metacity";
   version = "3.42.0";

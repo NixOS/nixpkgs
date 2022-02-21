@@ -1,58 +1,66 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}: {
+  channel,
+  version,
+  sha256,
+  vendorSha256,
+}:
+  buildGoModule rec {
+    pname = "linkerd-${channel}";
+    inherit version vendorSha256;
 
-{ channel, version, sha256, vendorSha256 }:
+    src = fetchFromGitHub {
+      owner = "linkerd";
+      repo = "linkerd2";
+      rev = "${channel}-${version}";
+      inherit sha256;
+    };
 
-buildGoModule rec {
-  pname = "linkerd-${channel}";
-  inherit version vendorSha256;
+    subPackages = ["cli"];
 
-  src = fetchFromGitHub {
-    owner = "linkerd";
-    repo = "linkerd2";
-    rev = "${channel}-${version}";
-    inherit sha256;
-  };
+    preBuild = ''
+      env GOFLAGS="" go generate ./pkg/charts/static
+      env GOFLAGS="" go generate ./jaeger/static
+      env GOFLAGS="" go generate ./multicluster/static
+      env GOFLAGS="" go generate ./viz/static
+    '';
 
-  subPackages = [ "cli" ];
+    tags = [
+      "prod"
+    ];
 
-  preBuild = ''
-    env GOFLAGS="" go generate ./pkg/charts/static
-    env GOFLAGS="" go generate ./jaeger/static
-    env GOFLAGS="" go generate ./multicluster/static
-    env GOFLAGS="" go generate ./viz/static
-  '';
+    ldflags = [
+      "-s"
+      "-w"
+      "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
+    ];
 
-  tags = [
-    "prod"
-  ];
+    nativeBuildInputs = [installShellFiles];
 
-  ldflags = [
-    "-s" "-w"
-    "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
-  ];
+    postInstall = ''
+      mv $out/bin/cli $out/bin/linkerd
+      installShellCompletion --cmd linkerd \
+        --bash <($out/bin/linkerd completion bash) \
+        --zsh <($out/bin/linkerd completion zsh) \
+        --fish <($out/bin/linkerd completion fish)
+    '';
 
-  nativeBuildInputs = [ installShellFiles ];
+    doInstallCheck = true;
+    installCheckPhase = ''
+      $out/bin/linkerd version --client | grep ${src.rev} > /dev/null
+    '';
 
-  postInstall = ''
-    mv $out/bin/cli $out/bin/linkerd
-    installShellCompletion --cmd linkerd \
-      --bash <($out/bin/linkerd completion bash) \
-      --zsh <($out/bin/linkerd completion zsh) \
-      --fish <($out/bin/linkerd completion fish)
-  '';
+    passthru.updateScript = (./. + "/update-${channel}.sh");
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/linkerd version --client | grep ${src.rev} > /dev/null
-  '';
-
-  passthru.updateScript = (./. + "/update-${channel}.sh");
-
-  meta = with lib; {
-    description = "A simple Kubernetes service mesh that improves security, observability and reliability";
-    downloadPage = "https://github.com/linkerd/linkerd2/";
-    homepage = "https://linkerd.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih bryanasdev000 ];
-  };
-}
+    meta = with lib; {
+      description = "A simple Kubernetes service mesh that improves security, observability and reliability";
+      downloadPage = "https://github.com/linkerd/linkerd2/";
+      homepage = "https://linkerd.io/";
+      license = licenses.asl20;
+      maintainers = with maintainers; [Gonzih bryanasdev000];
+    };
+  }

@@ -1,12 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let inherit (pkgs) writeScript; in
-
-let
- pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  inherit (pkgs) writeScript;
+in let
+  pkgs2storeContents = l:
+    map (x: {
+      object = x;
+      symlink = "none";
+    })
+    l;
 in {
   # Docker image config.
   imports = [
@@ -32,27 +38,27 @@ in {
     ];
 
     # Some container managers like lxc need these
-    extraCommands =
-      let script = writeScript "extra-commands.sh" ''
-            rm etc
-            mkdir -p proc sys dev etc
-          '';
-      in script;
+    extraCommands = let
+      script = writeScript "extra-commands.sh" ''
+        rm etc
+        mkdir -p proc sys dev etc
+      '';
+    in
+      script;
   };
 
   boot.isContainer = true;
-  boot.postBootCommands =
-    ''
-      # After booting, register the contents of the Nix store in the Nix
-      # database.
-      if [ -f /nix-path-registration ]; then
-        ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration &&
-        rm /nix-path-registration
-      fi
+  boot.postBootCommands = ''
+    # After booting, register the contents of the Nix store in the Nix
+    # database.
+    if [ -f /nix-path-registration ]; then
+      ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration &&
+      rm /nix-path-registration
+    fi
 
-      # nixos-rebuild also requires a "system" profile
-      ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-    '';
+    # nixos-rebuild also requires a "system" profile
+    ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+  '';
 
   # Install new init script
   system.activationScripts.installInitScript = ''

@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, autoreconfHook
-, pkg-config
-, perl
-, unittest-cpp
-, xa
-, libgcrypt
-, libexsid
-, docSupport ? true
-, doxygen
-, graphviz
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  autoreconfHook,
+  pkg-config,
+  perl,
+  unittest-cpp,
+  xa,
+  libgcrypt,
+  libexsid,
+  docSupport ? true,
+  doxygen,
+  graphviz,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
   version = "2.3.1";
@@ -40,29 +40,33 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config perl xa ]
-    ++ lib.optionals docSupport [ doxygen graphviz ];
+  nativeBuildInputs =
+    [autoreconfHook pkg-config perl xa]
+    ++ lib.optionals docSupport [doxygen graphviz];
 
-  buildInputs = [ libgcrypt libexsid ];
+  buildInputs = [libgcrypt libexsid];
 
   doCheck = true;
 
-  checkInputs = [ unittest-cpp ];
+  checkInputs = [unittest-cpp];
 
   enableParallelBuilding = true;
 
-  installTargets = [ "install" ]
-    ++ lib.optionals docSupport [ "doc" ];
+  installTargets =
+    ["install"]
+    ++ lib.optionals docSupport ["doc"];
 
-  outputs = [ "out" ]
-    ++ lib.optionals docSupport [ "doc" ];
+  outputs =
+    ["out"]
+    ++ lib.optionals docSupport ["doc"];
 
-  configureFlags = [
-    "--enable-hardsid"
-    "--with-gcrypt"
-    "--with-exsid"
-  ]
-  ++ lib.optional doCheck "--enable-tests";
+  configureFlags =
+    [
+      "--enable-hardsid"
+      "--with-gcrypt"
+      "--with-exsid"
+    ]
+    ++ lib.optional doCheck "--enable-tests";
 
   postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
@@ -84,8 +88,8 @@ stdenv.mkDerivation rec {
       C64 system and the SID chips.
     '';
     homepage = "https://github.com/libsidplayfp/libsidplayfp";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ ramkromberg OPNA2608 ];
+    license = with licenses; [gpl2Plus];
+    maintainers = with maintainers; [ramkromberg OPNA2608];
     platforms = platforms.all;
   };
 }

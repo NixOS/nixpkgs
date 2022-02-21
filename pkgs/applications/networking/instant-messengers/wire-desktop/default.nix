@@ -1,35 +1,39 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, lib
-, udev
-, wrapGAppsHook
-, cpio
-, xar
-, libdbusmenu
-}:
-
-let
-
+{
+  atomEnv,
+  autoPatchelfHook,
+  dpkg,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  lib,
+  udev,
+  wrapGAppsHook,
+  cpio,
+  xar,
+  libdbusmenu,
+}: let
   inherit (stdenv.hostPlatform) system;
 
   throwSystem = throw "Unsupported system: ${system}";
 
   pname = "wire-desktop";
 
-  version = {
-    x86_64-darwin = "3.26.4145";
-    x86_64-linux = "3.26.2941";
-  }.${system} or throwSystem;
+  version =
+    {
+      x86_64-darwin = "3.26.4145";
+      x86_64-linux = "3.26.2941";
+    }
+    .${system}
+    or throwSystem;
 
-  sha256 = {
-    x86_64-darwin = "1ck74a9z2mrwmljrqm347bqhjiaf1v0bf1jfnp58cqngh5ygqnf2";
-    x86_64-linux = "01gy84gr0gw5ap7hpy72azaf6hlzac7vxkn5cgad5sfbyzxgjgc9";
-  }.${system} or throwSystem;
+  sha256 =
+    {
+      x86_64-darwin = "1ck74a9z2mrwmljrqm347bqhjiaf1v0bf1jfnp58cqngh5ygqnf2";
+      x86_64-linux = "01gy84gr0gw5ap7hpy72azaf6hlzac7vxkn5cgad5sfbyzxgjgc9";
+    }
+    .${system}
+    or throwSystem;
 
   meta = with lib; {
     description = "A modern, secure messenger for everyone";
@@ -62,8 +66,9 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://wire-app.wire.com/linux/debian/pool/main/"
-      + "Wire-${version}_amd64.deb";
+      url =
+        "https://wire-app.wire.com/linux/debian/pool/main/"
+        + "Wire-${version}_amd64.deb";
       inherit sha256;
     };
 
@@ -132,8 +137,9 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://github.com/wireapp/wire-desktop/releases/download/"
-          + "macos%2F${version}/Wire.pkg";
+      url =
+        "https://github.com/wireapp/wire-desktop/releases/download/"
+        + "macos%2F${version}/Wire.pkg";
       inherit sha256;
     };
 
@@ -168,8 +174,7 @@ let
       runHook postInstall
     '';
   };
-
 in
-if stdenv.isDarwin
-then darwin
-else linux
+  if stdenv.isDarwin
+  then darwin
+  else linux

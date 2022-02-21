@@ -1,4 +1,10 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, requests }:
+{
+  lib,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+}:
 buildKodiAddon rec {
   pname = "requests-cache";
   namespace = "script.module.requests-cache";

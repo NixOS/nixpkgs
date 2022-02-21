@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "bytecode";
   version = "0.13.0";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "bytecode" ];
+  pythonImportsCheck = ["bytecode"];
 
   meta = with lib; {
     homepage = "https://github.com/vstinner/bytecode";
     description = "Python module to generate and modify bytecode";
     license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    maintainers = with maintainers; [raboof];
   };
 }

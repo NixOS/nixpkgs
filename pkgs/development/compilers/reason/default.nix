@@ -1,7 +1,22 @@
-{ lib, callPackage, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
-, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
+{
+  lib,
+  callPackage,
+  stdenv,
+  makeWrapper,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  dune_2,
+  fix,
+  menhir,
+  menhirLib,
+  menhirSdk,
+  merlin-extend,
+  ppxlib,
+  utop,
+  cppo,
+  ppx_derivers,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-reason";
   version = "3.7.0";
@@ -36,7 +51,7 @@ stdenv.mkDerivation rec {
     ppx_derivers
   ];
 
-  buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
+  buildFlags = ["build"]; # do not "make tests" before reason lib is installed
 
   installPhase = ''
     dune install --prefix=$out --libdir=$OCAMLFIND_DESTDIR
@@ -47,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    hello = callPackage ./tests/hello { };
+    hello = callPackage ./tests/hello {};
   };
 
   meta = with lib; {
@@ -56,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
     inherit (ocaml.meta) platforms;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

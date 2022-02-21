@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libusb-compat-0_1
-, readline
-, libewf
-, perl
-, zlib
-, openssl
-, libuv
-, file
-, libzip
-, lz4
-, xxHash
-, meson
-, cmake
-, ninja
-, capstone
-, tree-sitter
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libusb-compat-0_1,
+  readline,
+  libewf,
+  perl,
+  zlib,
+  openssl,
+  libuv,
+  file,
+  libzip,
+  lz4,
+  xxHash,
+  meson,
+  cmake,
+  ninja,
+  capstone,
+  tree-sitter,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rizin";
   version = "0.3.4";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "-Duse_sys_tree_sitter=enabled"
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja cmake (python3.withPackages (ps: [ ps.setuptools ])) ];
+  nativeBuildInputs = [pkg-config meson ninja cmake (python3.withPackages (ps: [ps.setuptools]))];
 
   # meson's find_library seems to not use our compiler wrapper if static paraemter
   # is either true/false... We work around by also providing LIBRARY_PATH
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     description = "UNIX-like reverse engineering framework and command-line toolset.";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ raskin makefu mic92 ];
+    maintainers = with lib.maintainers; [raskin makefu mic92];
     platforms = with lib.platforms; linux;
   };
 }

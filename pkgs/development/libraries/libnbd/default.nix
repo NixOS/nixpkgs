@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, bash-completion
-, pkg-config
-, perl
-, libxml2
-, fuse
-, gnutls
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash-completion,
+  pkg-config,
+  perl,
+  libxml2,
+  fuse,
+  gnutls,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libnbd";
   version = "1.9.5";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
+  installFlags = ["bashcompdir=$(out)/share/bash-completion/completions"];
 
   meta = with lib; {
     homepage = "https://gitlab.com/nbdkit/libnbd";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       - Shell (nbdsh) for command line and scripting.
     '';
     license = with licenses; lgpl21Plus;
-    maintainers = with maintainers; [ AndersonTorres humancalico ];
+    maintainers = with maintainers; [AndersonTorres humancalico];
     platforms = with platforms; linux;
   };
 }

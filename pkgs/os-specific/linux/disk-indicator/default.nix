@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchgit, libX11 }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libX11,
+}:
 stdenv.mkDerivation {
   pname = "disk-indicator";
   version = "unstable-2014-05-19";
@@ -10,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "10jx6mx9qarn21p2l2jayxkn1gmqhvck1wymgsr4jmbwxl8ra5kd";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [libX11];
 
   patchPhase = ''
     substituteInPlace ./makefile --replace "COMPILER=c99" "COMPILER=gcc -std=c99"
@@ -21,7 +25,7 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = ["fortify"];
 
   installPhase = ''
     mkdir -p "$out/bin"

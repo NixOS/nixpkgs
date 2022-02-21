@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "0.2";
   pname = "snore";
@@ -11,13 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EOwbRqtQEuGZ+aeCBNVfLUq4m/bFWJTvMDM6a+y74qc=";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     description = "sleep with feedback";
     homepage = "https://github.com/clamiax/snore";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     platforms = platforms.unix;
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, freezegun
-, pillow
-, pytestCheckHook
-, python-dateutil
-, text-unidecode
-, ukpostcodeparser
-, validators
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  freezegun,
+  pillow,
+  pytestCheckHook,
+  python-dateutil,
+  text-unidecode,
+  ukpostcodeparser,
+  validators,
 }:
-
 buildPythonPackage rec {
   pname = "faker";
   version = "11.3.0";
@@ -37,12 +37,12 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--ignore=tests/providers/test_ssn.py"
   ];
-  pythonImportsCheck = [ "faker" ];
+  pythonImportsCheck = ["faker"];
 
   meta = with lib; {
     description = "Python library for generating fake user data";
     homepage = "http://faker.rtfd.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [lovek323];
   };
 }

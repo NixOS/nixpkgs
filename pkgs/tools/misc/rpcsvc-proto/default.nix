@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, buildPackages }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "rpcsvc-proto";
   version = "1.4.3";
@@ -11,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DXRLEpOanWcxCSTC8OxEw5SWKpgFz7oTPukzfnPrAOk=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
+  nativeBuildInputs = [autoreconfHook];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace rpcsvc/Makefile.am \
@@ -30,6 +35,6 @@ stdenv.mkDerivation rec {
       `libtirpc` and this package instead.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

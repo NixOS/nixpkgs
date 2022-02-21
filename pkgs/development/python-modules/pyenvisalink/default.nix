@@ -1,12 +1,12 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, colorlog
-, fetchPypi
-, pyserial
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  colorlog,
+  fetchPypi,
+  pyserial,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyenvisalink";
   version = "4.4";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface for Envisalink 2DS/3 Alarm API";
     homepage = "https://github.com/Cinntax/pyenvisalink";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

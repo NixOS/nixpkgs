@@ -1,8 +1,26 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, pkg-config, cmake, glib, boost, libsigrok
-, libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
-, pcre, librevisa, python3, qtbase, qtsvg
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  cmake,
+  glib,
+  boost,
+  libsigrok,
+  libsigrokdecode,
+  libserialport,
+  libzip,
+  udev,
+  libusb1,
+  libftdi1,
+  glibmm,
+  pcre,
+  librevisa,
+  python3,
+  qtbase,
+  qtsvg,
 }:
-
 mkDerivation rec {
   pname = "pulseview";
   version = "0.4.1";
@@ -12,12 +30,24 @@ mkDerivation rec {
     sha256 = "0bvgmkgz37n2bi9niskpl05hf7rsj1lj972fbrgnlz25s4ywxrwy";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   buildInputs = [
-    glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
-    pcre librevisa python3
-    qtbase qtsvg
+    glib
+    boost
+    libsigrok
+    libsigrokdecode
+    libserialport
+    libzip
+    udev
+    libusb1
+    libftdi1
+    glibmm
+    pcre
+    librevisa
+    python3
+    qtbase
+    qtsvg
   ];
 
   patches = [
@@ -33,7 +63,7 @@ mkDerivation rec {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
     platforms = platforms.linux;
   };
 }

@@ -1,6 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, substituteAll
-, ipcalc, iproute2, util-linux, coreutils, ethtool, gnugrep, gnused, nvme-cli }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  substituteAll,
+  ipcalc,
+  iproute2,
+  util-linux,
+  coreutils,
+  ethtool,
+  gnugrep,
+  gnused,
+  nvme-cli,
+}:
 stdenv.mkDerivation rec {
   pname = "google-guest-configs";
   version = "20211116.00";
@@ -12,9 +24,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0SRu6p/DsHNNI20mkXJitt/Ee5S2ooiy5hNmD+ndecM=";
   };
 
-  binDeps = lib.makeBinPath [ coreutils util-linux gnugrep gnused ethtool ipcalc iproute2 ];
+  binDeps = lib.makeBinPath [coreutils util-linux gnugrep gnused ethtool ipcalc iproute2];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontConfigure = true;
   dontBuild = true;
@@ -47,6 +59,6 @@ stdenv.mkDerivation rec {
     description = "Linux Guest Environment for Google Compute Engine";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

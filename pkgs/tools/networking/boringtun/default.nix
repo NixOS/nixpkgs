@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "boringtun";
   version = "0.3.0";
@@ -22,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     description = "Userspace WireGuard® implementation in Rust";
     homepage = "https://github.com/cloudflare/boringtun";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ xrelkd marsam ];
+    maintainers = with maintainers; [xrelkd marsam];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

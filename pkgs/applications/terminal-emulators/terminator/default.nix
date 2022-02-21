@@ -1,16 +1,16 @@
-{ lib
-, fetchFromGitHub
-, python3
-, keybinder3
-, intltool
-, file
-, gtk3
-, gobject-introspection
-, libnotify
-, wrapGAppsHook
-, vte
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  keybinder3,
+  intltool,
+  file,
+  gtk3,
+  gobject-introspection,
+  libnotify,
+  wrapGAppsHook,
+  vte,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
   version = "2.1.1";
@@ -72,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/gnome-terminator/terminator";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
     platforms = platforms.linux;
   };
 }

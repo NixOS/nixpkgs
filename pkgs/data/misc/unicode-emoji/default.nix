@@ -1,22 +1,25 @@
-{ lib
-, fetchurl
-, symlinkJoin
-}:
-
-let
+{
+  lib,
+  fetchurl,
+  symlinkJoin,
+}: let
   version = "12.1";
 
-  fetchData = { file, sha256 }: fetchurl {
-    url = "https://www.unicode.org/Public/emoji/${version}/${file}";
-    inherit sha256;
-    downloadToTemp = true;
-    recursiveHash = true;
-    postFetch = ''
-      installDir="$out/share/unicode/emoji"
-      mkdir -p "$installDir"
-      mv "$downloadedFile" "$installDir/${file}"
-    '';
-  };
+  fetchData = {
+    file,
+    sha256,
+  }:
+    fetchurl {
+      url = "https://www.unicode.org/Public/emoji/${version}/${file}";
+      inherit sha256;
+      downloadToTemp = true;
+      recursiveHash = true;
+      postFetch = ''
+        installDir="$out/share/unicode/emoji"
+        mkdir -p "$installDir"
+        mv "$downloadedFile" "$installDir/${file}"
+      '';
+    };
 
   srcs = {
     emoji-data = fetchData {
@@ -41,18 +44,17 @@ let
     };
   };
 in
+  symlinkJoin rec {
+    name = "unicode-emoji-${version}";
 
-symlinkJoin rec {
-  name = "unicode-emoji-${version}";
+    paths = lib.attrValues srcs;
 
-  paths = lib.attrValues srcs;
+    passthru = srcs;
 
-  passthru = srcs;
-
-  meta = with lib; {
-    description = "Unicode Emoji Data Files";
-    homepage = "https://home.unicode.org/emoji/";
-    license = licenses.unicode-dfs-2016;
-    platforms = platforms.all;
-  };
-}
+    meta = with lib; {
+      description = "Unicode Emoji Data Files";
+      homepage = "https://home.unicode.org/emoji/";
+      license = licenses.unicode-dfs-2016;
+      platforms = platforms.all;
+    };
+  }

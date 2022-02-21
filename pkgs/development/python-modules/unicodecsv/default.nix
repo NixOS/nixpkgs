@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "0.14.1";
   pname = "unicodecsv";
@@ -18,7 +18,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Drop-in replacement for Python2's stdlib csv module, with unicode support";
     homepage = "https://github.com/jdunck/python-unicodecsv";
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [koral];
   };
-
 }

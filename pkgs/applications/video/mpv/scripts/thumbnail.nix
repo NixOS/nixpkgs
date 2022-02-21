@@ -1,5 +1,9 @@
-{ fetchFromGitHub, lib, python3, stdenvNoCC }:
-
+{
+  fetchFromGitHub,
+  lib,
+  python3,
+  stdenvNoCC,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "mpv_thumbnail_script";
   version = "unstable-2020-01-16";
@@ -11,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "0dgfrb8ypc5vlq35kzn423fm6l6348ivl85vb6j3ccc9a51xprw3";
   };
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [python3];
 
   postPatch = ''
     patchShebangs concat_files.py
@@ -31,6 +35,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/theamm/mpv_thumbnail_script";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

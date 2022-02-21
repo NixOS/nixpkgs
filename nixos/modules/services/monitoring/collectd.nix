@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.collectd;
 
   unvalidated_conf = pkgs.writeText "collectd-unvalidated.conf" ''
@@ -16,28 +18,37 @@ let
       NotifyLevel "OKAY"
     </Plugin>
 
-    ${concatStrings (mapAttrsToList (plugin: pluginConfig: ''
-      LoadPlugin ${plugin}
-      <Plugin "${plugin}">
-      ${pluginConfig}
-      </Plugin>
-    '') cfg.plugins)}
+    ${
+      concatStrings (mapAttrsToList (plugin: pluginConfig: ''
+        LoadPlugin ${plugin}
+        <Plugin "${plugin}">
+        ${pluginConfig}
+        </Plugin>
+      '')
+      cfg.plugins)
+    }
 
-    ${concatMapStrings (f: ''
-      Include "${f}"
-    '') cfg.include}
+    ${
+      concatMapStrings (f: ''
+        Include "${f}"
+      '')
+      cfg.include
+    }
 
     ${cfg.extraConfig}
   '';
 
-  conf = if cfg.validateConfig then
-    pkgs.runCommand "collectd.conf" {} ''
-      echo testing ${unvalidated_conf}
-      # collectd -t fails if BaseDir does not exist.
-      sed '1s/^BaseDir.*$/BaseDir "."/' ${unvalidated_conf} > collectd.conf
-      ${package}/bin/collectd -t -C collectd.conf
-      cp ${unvalidated_conf} $out
-    '' else unvalidated_conf;
+  conf =
+    if cfg.validateConfig
+    then
+      pkgs.runCommand "collectd.conf" {} ''
+        echo testing ${unvalidated_conf}
+        # collectd -t fails if BaseDir does not exist.
+        sed '1s/^BaseDir.*$/BaseDir "."/' ${unvalidated_conf} > collectd.conf
+        ${package}/bin/collectd -t -C collectd.conf
+        cp ${unvalidated_conf} $out
+      ''
+    else unvalidated_conf;
 
   package =
     if cfg.buildMinimalPackage
@@ -45,9 +56,8 @@ let
     else cfg.package;
 
   minimalPackage = cfg.package.override {
-    enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
+    enabledPlugins = ["syslog"] ++ builtins.attrNames cfg.plugins;
   };
-
 in {
   options.services.collectd = with types; {
     enable = mkEnableOption "collectd agent";
@@ -113,7 +123,11 @@ in {
 
     plugins = mkOption {
       default = {};
-      example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
+      example = {
+        cpu = "";
+        memory = "";
+        network = "Server 192.168.1.1 25826";
+      };
       description = ''
         Attribute set of plugin names to plugin config segments
       '';
@@ -127,7 +141,6 @@ in {
       '';
       type = lines;
     };
-
   };
 
   config = mkIf cfg.enable {
@@ -137,8 +150,8 @@ in {
 
     systemd.services.collectd = {
       description = "Collectd Monitoring Agent";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         ExecStart = "${package}/sbin/collectd -C ${conf} -f";

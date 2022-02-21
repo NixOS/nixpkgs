@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
 }:
-
 stdenv.mkDerivation {
   pname = "mutest";
   version = "unstable-2019-08-26";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "ebassi";
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
     homepage = "https://ebassi.github.io/mutest/mutest.md.html";
     description = "A BDD testing framework for C, inspired by Mocha";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.all;
   };
 }

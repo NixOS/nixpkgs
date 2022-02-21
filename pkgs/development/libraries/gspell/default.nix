@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, libxml2
-, autoreconfHook
-, gtk-doc
-, glib
-, gtk3
-, enchant2
-, icu
-, vala
-, gobject-introspection
-, gnome
-, gtk-mac-integration
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  autoreconfHook,
+  gtk-doc,
+  glib,
+  gtk3,
+  enchant2,
+  icu,
+  vala,
+  gobject-introspection,
+  gnome,
+  gtk-mac-integration,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gspell";
   version = "1.9.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
   outputBin = "dev";
 
   src = fetchurl {
@@ -40,13 +41,15 @@ stdenv.mkDerivation rec {
     gtk-doc
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    icu
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gtk-mac-integration
-  ];
+  buildInputs =
+    [
+      glib
+      gtk3
+      icu
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gtk-mac-integration
+    ];
 
   propagatedBuildInputs = [
     # required for pkg-config

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, git, gnugrep, gnused, makeWrapper, inotify-tools }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  git,
+  gnugrep,
+  gnused,
+  makeWrapper,
+  inotify-tools,
+}:
 stdenv.mkDerivation rec {
   pname = "git-sync";
   version = "unstable-2021-07-14";
@@ -11,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PuYREW5NBkYF1tlcLTbOI8570nvHn5ifN8OIInfNNxI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontBuild = true;
 
@@ -20,13 +29,14 @@ stdenv.mkDerivation rec {
     cp -a git-* $out/bin/
   '';
 
-  wrapperPath = with lib; makeBinPath [
-    inotify-tools
-    coreutils
-    git
-    gnugrep
-    gnused
-  ];
+  wrapperPath = with lib;
+    makeBinPath [
+      inotify-tools
+      coreutils
+      git
+      gnugrep
+      gnused
+    ];
 
   postFixup = ''
     wrap_path="${wrapperPath}":$out/bin
@@ -41,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A script to automatically synchronize a git repository";
     homepage = "https://github.com/simonthum/git-sync";
-    maintainers = with lib.maintainers; [ imalison ];
+    maintainers = with lib.maintainers; [imalison];
     license = lib.licenses.cc0;
     platforms = with lib.platforms; unix;
   };

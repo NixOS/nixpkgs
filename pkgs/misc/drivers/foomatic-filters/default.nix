@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchpatch, fetchurl, pkg-config, perl, cups, dbus, enscript }:
-
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  pkg-config,
+  perl,
+  cups,
+  dbus,
+  enscript,
+}:
 stdenv.mkDerivation rec {
   pname = "foomatic-filters";
   version = "4.0.17";
@@ -9,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qrkgbm5jay2r7sh9qbyf0aiyrsl1mdc844hxf7fhw95a0zfbqm2";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ perl cups dbus enscript ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [perl cups dbus enscript];
 
   patches = [
     (fetchpatch {
@@ -20,12 +29,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure =
-    ''
-      substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
-    '';
+  preConfigure = ''
+    substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
+  '';
 
-  installTargets = [ "install-cups" ];
+  installTargets = ["install-cups"];
 
   installFlags = [
     "CUPS_FILTERS=$(out)/lib/cups/filter"
@@ -34,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Foomatic printing filters";
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

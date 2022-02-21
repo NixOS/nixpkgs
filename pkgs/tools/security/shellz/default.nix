@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "shellz";
   version = "1.6.0";
@@ -25,6 +25,6 @@ buildGoModule rec {
     description = "Utility to manage your SSH, telnet, kubernetes, winrm, web or any custom shell";
     homepage = "https://github.com/evilsocket/shellz";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

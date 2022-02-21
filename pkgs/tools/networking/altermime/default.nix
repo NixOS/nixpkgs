@@ -1,5 +1,8 @@
-{ lib, gccStdenv, fetchurl }:
-
+{
+  lib,
+  gccStdenv,
+  fetchurl,
+}:
 gccStdenv.mkDerivation rec {
   pname = "altermime";
   version = "0.3.11";
@@ -24,7 +27,7 @@ gccStdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MIME alteration tool";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.all;
     license.fullName = "alterMIME LICENSE";
     downloadPage = "https://pldaniels.com/altermime/";

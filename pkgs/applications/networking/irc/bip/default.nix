@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, bison, flex, autoconf, automake, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  bison,
+  flex,
+  autoconf,
+  automake,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "bip";
   version = "0.8.9";
@@ -11,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q942g9lyd8pjvqimv547n6vik5759r9npw3ws3bdj4ixxqhz59w";
   };
 
-  buildInputs = [ bison flex autoconf automake openssl ];
+  buildInputs = [bison flex autoconf automake openssl];
 
   # includes an important security patch
   patches = [

@@ -1,7 +1,19 @@
-{ lib, mkXfceDerivation, exo, librsvg, dbus-glib, libepoxy, gtk3, libXdamage
-, libstartup_notification, libxfce4ui, libxfce4util, libwnck
-, libXpresent, xfconf }:
-
+{
+  lib,
+  mkXfceDerivation,
+  exo,
+  librsvg,
+  dbus-glib,
+  libepoxy,
+  gtk3,
+  libXdamage,
+  libstartup_notification,
+  libxfce4ui,
+  libxfce4util,
+  libwnck,
+  libXpresent,
+  xfconf,
+}:
 mkXfceDerivation {
   category = "xfce";
   pname = "xfwm4";
@@ -9,7 +21,7 @@ mkXfceDerivation {
 
   sha256 = "sha256-CwRJk+fqu3iC4Vb6fKGOIZZk2hxTqYF3sNvm6WKqHdI=";
 
-  nativeBuildInputs = [ exo librsvg ];
+  nativeBuildInputs = [exo librsvg];
 
   buildInputs = [
     dbus-glib
@@ -26,6 +38,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Window manager for Xfce";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

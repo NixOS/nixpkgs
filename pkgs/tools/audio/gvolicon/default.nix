@@ -1,5 +1,16 @@
-{ lib, stdenv, makeWrapper, alsa-lib, pkg-config, fetchgit, gtk3, gnome, gdk-pixbuf, librsvg, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  alsa-lib,
+  pkg-config,
+  fetchgit,
+  gtk3,
+  gnome,
+  gdk-pixbuf,
+  librsvg,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation {
   pname = "gvolicon";
   version = "unstable-2014-04-28";
@@ -10,13 +21,18 @@ stdenv.mkDerivation {
     sha256 = "1sr9wyy7w898vq63yd003yp3k66hd4vm8b0qsm9zvmwmpiz4wvln";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    makeWrapper alsa-lib gtk3 gdk-pixbuf gnome.adwaita-icon-theme
-    librsvg wrapGAppsHook
+    makeWrapper
+    alsa-lib
+    gtk3
+    gdk-pixbuf
+    gnome.adwaita-icon-theme
+    librsvg
+    wrapGAppsHook
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE";
 
@@ -25,6 +41,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Unia/gvolicon";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.bennofs ];
+    maintainers = [lib.maintainers.bennofs];
   };
 }

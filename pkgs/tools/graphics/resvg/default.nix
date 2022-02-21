@@ -1,5 +1,10 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, libiconv }:
-
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
   version = "0.21.0";
@@ -13,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-EdbyaVrHjjVUNmQM96VKCeU3ss1G/N4OZxFMLvFgRqY=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
 
   doCheck = false;
 
@@ -22,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/RazrFalcon/resvg";
     changelog = "https://github.com/RazrFalcon/resvg/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

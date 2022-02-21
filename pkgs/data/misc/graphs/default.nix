@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "graphs";
   version = "20210214";

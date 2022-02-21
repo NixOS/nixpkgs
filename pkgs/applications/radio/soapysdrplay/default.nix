@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, soapysdr, sdrplay }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  soapysdr,
+  sdrplay,
+}:
 stdenv.mkDerivation {
   name = "soapysdr-sdrplay3";
   version = "20210425";
@@ -11,9 +18,9 @@ stdenv.mkDerivation {
     sha256 = "0rrylp3ikrva227hjy60v4n6d6yvdavjsad9kszw9s948mwiashi";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ soapysdr sdrplay ];
+  buildInputs = [soapysdr sdrplay];
 
   cmakeFlags = [
     "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/"
@@ -23,7 +30,7 @@ stdenv.mkDerivation {
     description = "Soapy SDR module for SDRplay";
     homepage = "https://github.com/pothosware/SoapySDRPlay3";
     license = licenses.mit;
-    maintainers = [ maintainers.pmenke ];
+    maintainers = [maintainers.pmenke];
     platforms = platforms.linux;
   };
 }

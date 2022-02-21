@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "backports-datetime-fromisoformat";
   version = "1.0.0";
@@ -12,12 +15,12 @@ buildPythonPackage rec {
   # no tests in pypi package
   doCheck = false;
 
-  pythonImportsCheck = [ "backports.datetime_fromisoformat" ];
+  pythonImportsCheck = ["backports.datetime_fromisoformat"];
 
   meta = with lib; {
     description = "Backport of Python 3.7's datetime.fromisoformat";
     homepage = "https://github.com/movermeyer/backports.datetime_fromisoformat";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
 }:
-
 buildPythonPackage rec {
   pname = "tlsh";
   version = "4.10.0";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-9Vkj7a5xU/coFyM/8i8JB0DdnbgDAEMOjmmMF8ckKuE=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   # no test data
   doCheck = false;
@@ -30,5 +30,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     platforms = platforms.unix;
   };
-
 }

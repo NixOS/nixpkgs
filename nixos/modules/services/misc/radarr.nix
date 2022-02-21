@@ -1,12 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.radarr;
-
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.radarr;
+in {
   options = {
     services.radarr = {
       enable = mkEnableOption "Radarr";
@@ -44,8 +44,8 @@ in
 
     systemd.services.radarr = {
       description = "Radarr";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "simple";
@@ -57,7 +57,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 7878 ];
+      allowedTCPPorts = [7878];
     };
 
     users.users = mkIf (cfg.user == "radarr") {

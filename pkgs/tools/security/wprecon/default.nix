@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "wprecon";
   version = "1.6.3a";
@@ -21,8 +21,8 @@ buildGoModule rec {
     homepage = "https://github.com/blackbinn/wprecon";
     # License Zero Noncommercial Public License 2.0.1
     # https://github.com/blackbinn/wprecon/blob/master/LICENSE
-    license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [unfree];
+    maintainers = with maintainers; [fab];
     broken = true; # build fails, missing tag
   };
 }

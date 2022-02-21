@@ -1,35 +1,47 @@
-{ lib, stdenv, fetchurl, intltool, gtk3, gnome, librsvg, pkg-config, pango, atk, gtk2
-, gdk-pixbuf, hicolor-icon-theme }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  gtk3,
+  gnome,
+  librsvg,
+  pkg-config,
+  pango,
+  atk,
+  gtk2,
+  gdk-pixbuf,
+  hicolor-icon-theme,
+}: let
   pname = "gnome-themes-extra";
   version = "3.28";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+in
+  stdenv.mkDerivation rec {
+    name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "06aqg9asq2vqi9wr29bs4v8z2bf4manhbhfghf4nvw01y2zs0jvw";
-  };
-
-  passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
+    src = fetchurl {
+      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+      sha256 = "06aqg9asq2vqi9wr29bs4v8z2bf4manhbhfghf4nvw01y2zs0jvw";
     };
-  };
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ gtk3 librsvg pango atk gtk2 gdk-pixbuf ];
-  propagatedBuildInputs = [ gnome.adwaita-icon-theme hicolor-icon-theme ];
+    passthru = {
+      updateScript = gnome.updateScript {
+        packageName = pname;
+      };
+    };
 
-  dontDropIconThemeCache = true;
+    nativeBuildInputs = [pkg-config intltool];
+    buildInputs = [gtk3 librsvg pango atk gtk2 gdk-pixbuf];
+    propagatedBuildInputs = [gnome.adwaita-icon-theme hicolor-icon-theme];
 
-  postInstall = ''
-    gtk-update-icon-cache "$out"/share/icons/HighContrast
-  '';
+    dontDropIconThemeCache = true;
 
-  meta = with lib; {
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members;
-  };
-}
+    postInstall = ''
+      gtk-update-icon-cache "$out"/share/icons/HighContrast
+    '';
+
+    meta = with lib; {
+      platforms = platforms.linux;
+      maintainers = teams.gnome.members;
+    };
+  }

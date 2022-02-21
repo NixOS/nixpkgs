@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, nose
-, matplotlib
-, nibabel
-, numpy
-, scipy
-, sympy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  nose,
+  matplotlib,
+  nibabel,
+  numpy,
+  scipy,
+  sympy,
+  python,
 }:
-
 buildPythonPackage rec {
   version = "0.5.0";
   pname = "nipy";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
     sha256 = "a8a2c97ce854fece4aced5a6394b9fdca5846150ad6d2a36b86590924af3c848";
   };
 
-  buildInputs = lib.optional doCheck [ nose ];
-  propagatedBuildInputs = [ matplotlib nibabel numpy scipy sympy ];
+  buildInputs = lib.optional doCheck [nose];
+  propagatedBuildInputs = [matplotlib nibabel numpy scipy sympy];
 
   checkPhase = ''    # wants to be run in a different directory
     mkdir nosetests
@@ -45,5 +45,4 @@ buildPythonPackage rec {
     description = "Software for structural and functional neuroimaging analysis";
     license = licenses.bsd3;
   };
-
 }

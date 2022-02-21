@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, packaging
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  packaging,
+  pytestCheckHook,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "openwrt-luci-rpc";
   version = "1.1.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "openwrt_luci_rpc" ];
+  pythonImportsCheck = ["openwrt_luci_rpc"];
 
   meta = with lib; {
     description = "Python module for interacting with the OpenWrt Luci RPC interface";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/fbradyirl/openwrt-luci-rpc";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matt-snider ];
+    maintainers = with maintainers; [matt-snider];
   };
 }

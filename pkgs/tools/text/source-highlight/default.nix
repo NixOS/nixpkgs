@@ -1,10 +1,15 @@
-{ lib, stdenv, fetchpatch, fetchurl, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "source-highlight";
   version = "3.1.9";
 
-  outputs = [ "out" "doc" "dev" ];
+  outputs = ["out" "doc" "dev"];
 
   src = fetchurl {
     url = "mirror://gnu/src-highlite/${pname}-${version}.tar.gz";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "http://git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=904949c9026cb772dc93fbe0947a252ef47127f4";
       sha256 = "1wnj0jmkmrwjww7qk9dvfxh8h06jdn7mi8v2fvwh95b6x87z5l47";
-      excludes = [ "ChangeLog" ];
+      excludes = ["ChangeLog"];
     })
 
     # Upstream fix for clang-13 and gcc-12 test support
@@ -35,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  buildInputs = [ boost ];
+  buildInputs = [boost];
 
   configureFlags = [
     "--with-boost=${boost.out}"
@@ -58,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/src-highlite/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

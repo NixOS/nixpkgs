@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "datree";
   version = "0.15.16";
@@ -24,7 +27,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "CLI tool to ensure K8s manifests and Helm charts follow best practices as well as your organization’s policies";
     homepage = "https://datree.io/";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.jceb ];
+    license = [licenses.asl20];
+    maintainers = [maintainers.jceb];
   };
 }

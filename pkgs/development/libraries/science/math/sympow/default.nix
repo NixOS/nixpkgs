@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchFromGitLab
-, makeWrapper
-, which
-, autoconf
-, help2man
-, file
-, pari
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  makeWrapper,
+  which,
+  autoconf,
+  help2man,
+  file,
+  pari,
 }:
-
 stdenv.mkDerivation rec {
   version = "2.023.6";
   pname = "sympow";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "132l0xv00ld1svvv9wh99wfra4zzjv2885h2sq0dsl98wiyvi5zl";
   };
 
-  patches = [ ./clean-extra-logfile-output-from-pari.patch ];
+  patches = [./clean-extra-logfile-output-from-pari.patch];
 
   postUnpack = ''
     patchShebangs .

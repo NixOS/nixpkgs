@@ -1,9 +1,24 @@
-{ lib, stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, makeWrapper, ruby
-, quartz-wm, fontconfig, xlsfonts, xfontsel
-, ttf_bitstream_vera, freefont_ttf, liberation_ttf
-, shell ? "${bashInteractive}/bin/bash"
+{
+  lib,
+  stdenv,
+  buildEnv,
+  makeFontsConf,
+  gnused,
+  writeScript,
+  xorg,
+  bashInteractive,
+  xterm,
+  makeWrapper,
+  ruby,
+  quartz-wm,
+  fontconfig,
+  xlsfonts,
+  xfontsel,
+  ttf_bitstream_vera,
+  freefont_ttf,
+  liberation_ttf,
+  shell ? "${bashInteractive}/bin/bash",
 }:
-
 # ------------
 # Installation
 # ------------
@@ -29,13 +44,11 @@
 #   if [ "$(uname)" = "Darwin" -a -n "$NIX_LINK" -a -f $NIX_LINK/etc/X11/fonts.conf ]; then
 #     export FONTCONFIG_FILE=$NIX_LINK/etc/X11/fonts.conf
 #   fi
-
 # A note about dependencies:
 # Xquartz wants to exec XQuartz.app, XQuartz.app wants to exec xstart, and
 # xstart wants to exec Xquartz, so we must bundle all three to prevent a cycle.
 # Coincidentally, this also makes it trivial to install launch agents/daemons
 # that point into the user's profile.
-
 let
   installer = writeScript "xquartz-install" ''
     NIX_LINK=$HOME/.nix-profile
@@ -70,10 +83,12 @@ let
     xorg.fontcursormisc
   ];
   fontsConf = makeFontsConf {
-    fontDirectories = fontDirs ++ [
-      "/Library/Fonts"
-      "~/Library/Fonts"
-    ];
+    fontDirectories =
+      fontDirs
+      ++ [
+        "/Library/Fonts"
+        "~/Library/Fonts"
+      ];
   };
   fonts = import ./system-fonts.nix {
     inherit stdenv xorg fontDirs;
@@ -81,113 +96,161 @@ let
   # any X related programs expected to be available via $PATH
   env = buildEnv {
     name = "xquartz-env";
-    pathsToLink = [ "/bin" ];
+    pathsToLink = ["/bin"];
     paths = with xorg; [
       # non-xorg
-      quartz-wm xterm fontconfig
+      quartz-wm
+      xterm
+      fontconfig
       # xorg
-      xlsfonts xfontsel
-      bdftopcf fontutil iceauth libXpm lndir luit makedepend mkfontdir
-      mkfontscale sessreg setxkbmap smproxy twm x11perf xauth xbacklight xclock
-      xcmsdb xcursorgen xdm xdpyinfo xdriinfo xev xeyes xfs xgamma xhost
-      xinput xkbcomp xkbevd xkbutils xkill xlsatoms xlsclients xmessage xmodmap
-      xpr xprop xrandr xrdb xrefresh xset xsetroot xvinfo xwd xwininfo xwud
+      xlsfonts
+      xfontsel
+      bdftopcf
+      fontutil
+      iceauth
+      libXpm
+      lndir
+      luit
+      makedepend
+      mkfontdir
+      mkfontscale
+      sessreg
+      setxkbmap
+      smproxy
+      twm
+      x11perf
+      xauth
+      xbacklight
+      xclock
+      xcmsdb
+      xcursorgen
+      xdm
+      xdpyinfo
+      xdriinfo
+      xev
+      xeyes
+      xfs
+      xgamma
+      xhost
+      xinput
+      xkbcomp
+      xkbevd
+      xkbutils
+      xkill
+      xlsatoms
+      xlsclients
+      xmessage
+      xmodmap
+      xpr
+      xprop
+      xrandr
+      xrdb
+      xrefresh
+      xset
+      xsetroot
+      xvinfo
+      xwd
+      xwininfo
+      xwud
     ];
   };
-in stdenv.mkDerivation {
-  pname = "xquartz";
-  version = lib.getVersion xorg.xorgserver;
+in
+  stdenv.mkDerivation {
+    pname = "xquartz";
+    version = lib.getVersion xorg.xorgserver;
 
-  nativeBuildInputs = [ ruby makeWrapper ];
+    nativeBuildInputs = [ruby makeWrapper];
 
-  unpackPhase = "sourceRoot=.";
+    unpackPhase = "sourceRoot=.";
 
-  dontBuild = true;
+    dontBuild = true;
 
-  installPhase = ''
-    cp -rT ${xorg.xinit} $out
-    chmod -R u+w $out
-    cp -rT ${xorg.xorgserver} $out
-    chmod -R u+w $out
+    installPhase = ''
+      cp -rT ${xorg.xinit} $out
+      chmod -R u+w $out
+      cp -rT ${xorg.xorgserver} $out
+      chmod -R u+w $out
 
-    cp ${installer} $out/bin/xquartz-install
+      cp ${installer} $out/bin/xquartz-install
 
-    rm -rf $out/LaunchAgents $out/LaunchDaemons
+      rm -rf $out/LaunchAgents $out/LaunchDaemons
 
-    fontsConfPath=$out/etc/X11/fonts.conf
-    cp ${fontsConf} $fontsConfPath
+      fontsConfPath=$out/etc/X11/fonts.conf
+      cp ${fontsConf} $fontsConfPath
 
-    cp ${./startx} $out/bin/startx
-    substituteInPlace $out/bin/startx \
-      --replace "@shell@"             "${stdenv.shell}" \
-      --replace "@PATH@"              "$out/bin:${env}" \
-      --replace "@XAUTH@"             "${xorg.xauth}/bin/xauth" \
-      --replace "@FONT_CACHE@"        "$out/bin/font_cache" \
-      --replace "@PRIVILEGED_STARTX@" "$out/lib/X11/xinit/privileged_startx" \
-      --replace "@DEFAULT_SERVER@"    "$out/bin/Xquartz" \
-      --replace "@DEFAULT_CLIENT@"    "${xterm}/bin/xterm" \
-      --replace "@XINIT@"             "$out/bin/xinit" \
-      --replace "@XINITRC@"           "$out/etc/X11/xinit/xinitrc" \
-      --replace "@FONTCONFIG_FILE@"   "$fontsConfPath"
+      cp ${./startx} $out/bin/startx
+      substituteInPlace $out/bin/startx \
+        --replace "@shell@"             "${stdenv.shell}" \
+        --replace "@PATH@"              "$out/bin:${env}" \
+        --replace "@XAUTH@"             "${xorg.xauth}/bin/xauth" \
+        --replace "@FONT_CACHE@"        "$out/bin/font_cache" \
+        --replace "@PRIVILEGED_STARTX@" "$out/lib/X11/xinit/privileged_startx" \
+        --replace "@DEFAULT_SERVER@"    "$out/bin/Xquartz" \
+        --replace "@DEFAULT_CLIENT@"    "${xterm}/bin/xterm" \
+        --replace "@XINIT@"             "$out/bin/xinit" \
+        --replace "@XINITRC@"           "$out/etc/X11/xinit/xinitrc" \
+        --replace "@FONTCONFIG_FILE@"   "$fontsConfPath"
 
-    wrapProgram $out/bin/Xquartz \
-      --set XQUARTZ_X11 $out/Applications/XQuartz.app/Contents/MacOS/X11
+      wrapProgram $out/bin/Xquartz \
+        --set XQUARTZ_X11 $out/Applications/XQuartz.app/Contents/MacOS/X11
 
-    defaultStartX="$out/bin/startx -- $out/bin/Xquartz"
+      defaultStartX="$out/bin/startx -- $out/bin/Xquartz"
 
-    ruby ${./patch_plist.rb} \
-      ${lib.escapeShellArg (builtins.toXML {
-        XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
-        XQUARTZ_DEFAULT_SHELL  = shell;
-        XQUARTZ_DEFAULT_STARTX = "@STARTX@";
-        FONTCONFIG_FILE        = "@FONTCONFIG_FILE@";
-      })} \
-      $out/Applications/XQuartz.app/Contents/Info.plist
-    substituteInPlace $out/Applications/XQuartz.app/Contents/Info.plist \
-      --replace "@STARTX@"          "$defaultStartX" \
-      --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
+      ruby ${./patch_plist.rb} \
+        ${
+        lib.escapeShellArg (builtins.toXML {
+          XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
+          XQUARTZ_DEFAULT_SHELL = shell;
+          XQUARTZ_DEFAULT_STARTX = "@STARTX@";
+          FONTCONFIG_FILE = "@FONTCONFIG_FILE@";
+        })
+      } \
+        $out/Applications/XQuartz.app/Contents/Info.plist
+      substituteInPlace $out/Applications/XQuartz.app/Contents/Info.plist \
+        --replace "@STARTX@"          "$defaultStartX" \
+        --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
 
-    mkdir -p $out/lib/X11/xinit/privileged_startx.d
-    cp ${./privileged} $out/lib/X11/xinit/privileged_startx.d/privileged
-    substituteInPlace $out/lib/X11/xinit/privileged_startx.d/privileged \
-      --replace "@shell@"           "${stdenv.shell}" \
-      --replace "@PATH@"            "$out/bin:${env}" \
-      --replace "@FONTCONFIG_FILE@" "$fontsConfPath" \
-      --replace "@FONT_CACHE@"      "$out/bin/font_cache"
+      mkdir -p $out/lib/X11/xinit/privileged_startx.d
+      cp ${./privileged} $out/lib/X11/xinit/privileged_startx.d/privileged
+      substituteInPlace $out/lib/X11/xinit/privileged_startx.d/privileged \
+        --replace "@shell@"           "${stdenv.shell}" \
+        --replace "@PATH@"            "$out/bin:${env}" \
+        --replace "@FONTCONFIG_FILE@" "$fontsConfPath" \
+        --replace "@FONT_CACHE@"      "$out/bin/font_cache"
 
-    cp ${./font_cache} $out/bin/font_cache
-    substituteInPlace $out/bin/font_cache \
-      --replace "@shell@"           "${stdenv.shell}" \
-      --replace "@PATH@"            "$out/bin:${env}" \
-      --replace "@ENCODINGSDIR@"    "${xorg.encodings}/share/fonts/X11/encodings" \
-      --replace "@MKFONTDIR@"       "${xorg.mkfontdir}/bin/mkfontdir" \
-      --replace "@MKFONTSCALE@"     "${xorg.mkfontscale}/bin/mkfontscale" \
-      --replace "@FC_CACHE@"        "${fontconfig.bin}/bin/fc-cache" \
-      --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
+      cp ${./font_cache} $out/bin/font_cache
+      substituteInPlace $out/bin/font_cache \
+        --replace "@shell@"           "${stdenv.shell}" \
+        --replace "@PATH@"            "$out/bin:${env}" \
+        --replace "@ENCODINGSDIR@"    "${xorg.encodings}/share/fonts/X11/encodings" \
+        --replace "@MKFONTDIR@"       "${xorg.mkfontdir}/bin/mkfontdir" \
+        --replace "@MKFONTSCALE@"     "${xorg.mkfontscale}/bin/mkfontscale" \
+        --replace "@FC_CACHE@"        "${fontconfig.bin}/bin/fc-cache" \
+        --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
 
-    cp ${./xinitrc} $out/etc/X11/xinit/xinitrc
-    substituteInPlace $out/etc/X11/xinit/xinitrc \
-      --replace "@shell@"           "${stdenv.shell}" \
-      --replace "@PATH@"            "$out/bin:${env}" \
-      --replace "@XSET@"            "${xorg.xset}/bin/xset" \
-      --replace "@XMODMAP@"         "${xorg.xmodmap}/bin/xmodmap" \
-      --replace "@XRDB@"            "${xorg.xrdb}/bin/xrdb" \
-      --replace "@SYSTEM_FONTS@"    "${fonts}/share/X11-fonts/" \
-      --replace "@QUARTZ_WM@"       "${quartz-wm}/bin/quartz-wm" \
-      --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
+      cp ${./xinitrc} $out/etc/X11/xinit/xinitrc
+      substituteInPlace $out/etc/X11/xinit/xinitrc \
+        --replace "@shell@"           "${stdenv.shell}" \
+        --replace "@PATH@"            "$out/bin:${env}" \
+        --replace "@XSET@"            "${xorg.xset}/bin/xset" \
+        --replace "@XMODMAP@"         "${xorg.xmodmap}/bin/xmodmap" \
+        --replace "@XRDB@"            "${xorg.xrdb}/bin/xrdb" \
+        --replace "@SYSTEM_FONTS@"    "${fonts}/share/X11-fonts/" \
+        --replace "@QUARTZ_WM@"       "${quartz-wm}/bin/quartz-wm" \
+        --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
 
-    cp ${./X11} $out/Applications/XQuartz.app/Contents/MacOS/X11
-    substituteInPlace $out/Applications/XQuartz.app/Contents/MacOS/X11 \
-      --replace "@shell@"           "${stdenv.shell}" \
-      --replace "@DEFAULT_SHELL@"   "${shell}" \
-      --replace "@DEFAULT_STARTX@"  "$defaultStartX" \
-      --replace "@DEFAULT_CLIENT@"  "${xterm}/bin/xterm" \
-      --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
-  '';
+      cp ${./X11} $out/Applications/XQuartz.app/Contents/MacOS/X11
+      substituteInPlace $out/Applications/XQuartz.app/Contents/MacOS/X11 \
+        --replace "@shell@"           "${stdenv.shell}" \
+        --replace "@DEFAULT_SHELL@"   "${shell}" \
+        --replace "@DEFAULT_STARTX@"  "$defaultStartX" \
+        --replace "@DEFAULT_CLIENT@"  "${xterm}/bin/xterm" \
+        --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
+    '';
 
-  meta = with lib; {
-    platforms   = platforms.darwin;
-    maintainers = with maintainers; [ cstrahan ];
-    license     = licenses.mit;
-  };
-}
+    meta = with lib; {
+      platforms = platforms.darwin;
+      maintainers = with maintainers; [cstrahan];
+      license = licenses.mit;
+    };
+  }

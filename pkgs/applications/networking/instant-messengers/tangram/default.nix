@@ -1,8 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, appstream-glib, desktop-file-utils, gdk-pixbuf
-, gettext, gjs, glib, gobject-introspection, gsettings-desktop-schemas, gtk3
-, hicolor-icon-theme, meson, ninja, pkg-config, python3, webkitgtk, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  gjs,
+  glib,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk3,
+  hicolor-icon-theme,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  webkitgtk,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tangram";
   version = "1.3.2";
@@ -15,7 +31,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ gdk-pixbuf gjs glib gsettings-desktop-schemas gtk3 webkitgtk ];
+  buildInputs = [gdk-pixbuf gjs glib gsettings-desktop-schemas gtk3 webkitgtk];
 
   nativeBuildInputs = [
     appstream-glib
@@ -51,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sonnyp/Tangram";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [austinbutler];
   };
 }

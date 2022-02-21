@@ -7,9 +7,8 @@ let
     builtins.trace "Attribute named '${name}' does not match any option declaration." values;
 in
   with (pkgs.lib);
-
-  finalReferenceOptionSets
+    finalReferenceOptionSets
     (mergeOptionSets noOption)
     pkgs
     # List of main configurations.
-    [ config.configB config.configC ]
+    [config.configB config.configC]

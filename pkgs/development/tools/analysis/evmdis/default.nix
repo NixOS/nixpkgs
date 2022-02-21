@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage {
   pname = "evmdis-unstable";
   version = "2018-03-23";
@@ -15,7 +18,7 @@ buildGoPackage {
   meta = with lib; {
     homepage = "https://github.com/Arachnid/evmdis";
     description = "Ethereum EVM disassembler";
-    license = [ licenses.asl20 ];
-    maintainers = with maintainers; [ asymmetric ];
+    license = [licenses.asl20];
+    maintainers = with maintainers; [asymmetric];
   };
 }

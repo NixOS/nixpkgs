@@ -1,15 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.mini;
 
   miniGreeterConf = pkgs.writeText "lightdm-mini-greeter.conf"
-    ''
+  ''
     [greeter]
     user = ${cfg.user}
     show-password-label = true
@@ -44,14 +45,10 @@ let
     password-border-width = 2px
 
     ${cfg.extraConfig}
-    '';
-
-in
-{
+  '';
+in {
   options = {
-
     services.xserver.displayManager.lightdm.greeters.mini = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -80,13 +77,10 @@ in
           configuration file.
         '';
       };
-
     };
-
   };
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
-
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
@@ -95,6 +89,5 @@ in
     };
 
     environment.etc."lightdm/lightdm-mini-greeter.conf".source = miniGreeterConf;
-
   };
 }

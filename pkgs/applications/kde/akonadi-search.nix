@@ -1,20 +1,36 @@
 {
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  akonadi, akonadi-mime, kcalendarcore, kcmutils, kcontacts, kcoreaddons, kmime,
-  krunner, qtbase, xapian
+  mkDerivation,
+  lib,
+  kdepimTeam,
+  extra-cmake-modules,
+  kdoctools,
+  akonadi,
+  akonadi-mime,
+  kcalendarcore,
+  kcmutils,
+  kcontacts,
+  kcoreaddons,
+  kmime,
+  krunner,
+  qtbase,
+  xapian,
 }:
-
 mkDerivation {
   pname = "akonadi-search";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [gpl2 lgpl21 fdl12];
     maintainers = kdepimTeam;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kcmutils krunner xapian ];
+  nativeBuildInputs = [extra-cmake-modules kdoctools];
+  buildInputs = [kcmutils krunner xapian];
   propagatedBuildInputs = [
-    akonadi akonadi-mime kcalendarcore kcontacts kcoreaddons kmime qtbase
+    akonadi
+    akonadi-mime
+    kcalendarcore
+    kcontacts
+    kcoreaddons
+    kmime
+    qtbase
   ];
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 }

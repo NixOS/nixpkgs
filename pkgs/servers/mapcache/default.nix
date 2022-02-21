@@ -1,8 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, apacheHttpd, apr, aprutil, curl, db, fcgi, gdal, geos
-, libgeotiff, libjpeg, libpng, libtiff, pcre, pixman, proj, sqlite, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  apacheHttpd,
+  apr,
+  aprutil,
+  curl,
+  db,
+  fcgi,
+  gdal,
+  geos,
+  libgeotiff,
+  libjpeg,
+  libpng,
+  libtiff,
+  pcre,
+  pixman,
+  proj,
+  sqlite,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mapcache";
   version = "1.10.0";
@@ -10,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = pname;
-    rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    rev = "rel-${lib.replaceStrings ["."] ["-"] version}";
     sha256 = "sha256-HrvcJAf0a6tu8AKKuW5TaCtqPMgzH21fGMBxIfUzdgY=";
   };
 
@@ -53,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mapserver.org/mapcache/";
     changelog = "https://www.mapserver.org/development/changelog/mapcache/";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = platforms.unix;
   };
 }

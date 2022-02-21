@@ -1,21 +1,24 @@
-import ./make-test-python.nix ({ pkgs, ... }: let
-  inherit (import ./ssh-keys.nix pkgs)
-    snakeOilPrivateKey snakeOilPublicKey;
+import ./make-test-python.nix ({pkgs, ...}: let
+  inherit
+    (import ./ssh-keys.nix pkgs)
+    snakeOilPrivateKey
+    snakeOilPublicKey
+    ;
 
-  commonConfig = { pkgs, ... }: {
-    virtualisation.emptyDiskImages = [ 2048 ];
-    boot.supportedFilesystems = [ "zfs" ];
-    environment.systemPackages = [ pkgs.parted ];
+  commonConfig = {pkgs, ...}: {
+    virtualisation.emptyDiskImages = [2048];
+    boot.supportedFilesystems = ["zfs"];
+    environment.systemPackages = [pkgs.parted];
   };
 in {
   name = "sanoid";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lopsided98 ];
+    maintainers = [lopsided98];
   };
 
   nodes = {
-    source = { ... }: {
-      imports = [ commonConfig ];
+    source = {...}: {
+      imports = [commonConfig];
       networking.hostId = "daa82e91";
 
       programs.ssh.extraConfig = ''
@@ -33,8 +36,8 @@ in {
 
           autosnap = true;
         };
-        datasets."pool/sanoid".use_template = [ "test" ];
-        extraArgs = [ "--verbose" ];
+        datasets."pool/sanoid".use_template = ["test"];
+        extraArgs = ["--verbose"];
       };
 
       services.syncoid = {
@@ -44,19 +47,19 @@ in {
           # Sync snapshot taken by sanoid
           "pool/sanoid" = {
             target = "root@target:pool/sanoid";
-            extraArgs = [ "--no-sync-snap" "--create-bookmark" ];
+            extraArgs = ["--no-sync-snap" "--create-bookmark"];
           };
           # Take snapshot and sync
           "pool/syncoid".target = "root@target:pool/syncoid";
         };
       };
     };
-    target = { ... }: {
-      imports = [ commonConfig ];
+    target = {...}: {
+      imports = [commonConfig];
       networking.hostId = "dcf39d36";
 
       services.openssh.enable = true;
-      users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+      users.users.root.openssh.authorizedKeys.keys = [snakeOilPublicKey];
     };
   };
 

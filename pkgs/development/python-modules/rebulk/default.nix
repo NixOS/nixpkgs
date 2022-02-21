@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytest-runner, six, regex}:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytest-runner,
+  six,
+  regex,
+}:
 buildPythonPackage rec {
   pname = "rebulk";
   version = "3.1.0";
@@ -11,8 +18,8 @@ buildPythonPackage rec {
 
   # Some kind of trickery with imports that doesn't work.
   doCheck = false;
-  buildInputs = [ pytest pytest-runner ];
-  propagatedBuildInputs = [ six regex ];
+  buildInputs = [pytest pytest-runner];
+  propagatedBuildInputs = [six regex];
 
   meta = with lib; {
     homepage = "https://github.com/Toilal/rebulk/";

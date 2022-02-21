@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, scdoc }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  scdoc,
+}:
 buildGoModule rec {
   pname = "shfmt";
   version = "3.4.3";
@@ -13,11 +18,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-ZYsQ+wE+G7xNrBN29npSxxPCz9+Wb/RsBzM5uwJkhO8=";
 
-  subPackages = [ "cmd/shfmt" ];
+  subPackages = ["cmd/shfmt"];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [installShellFiles scdoc];
 
   postBuild = ''
     scdoc < cmd/shfmt/shfmt.1.scd > shfmt.1
@@ -32,6 +37,6 @@ buildGoModule rec {
       You can feed it standard input, any number of files or any number of directories to recurse into.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [zowoq SuperSandro2000];
   };
 }

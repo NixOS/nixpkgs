@@ -1,7 +1,16 @@
-{lib, stdenv, fetchurl
-, libxml2, libxslt, curl
-, libvorbis, libtheora, speex, libkate, libopus }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  libxslt,
+  curl,
+  libvorbis,
+  libtheora,
+  speex,
+  libkate,
+  libopus,
+}:
 stdenv.mkDerivation rec {
   pname = "icecast";
   version = "2.4.4";
@@ -11,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "0i2d9rhav0x6js2qhjf5iy6j2a7f0d11ail0lfv40hb1kygrgda9";
   };
 
-  buildInputs = [ libxml2 libxslt curl libvorbis libtheora speex libkate libopus ];
+  buildInputs = [libxml2 libxslt curl libvorbis libtheora speex libkate libopus];
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = ["pie"];
 
   meta = {
     description = "Server software for streaming multimedia";
@@ -29,8 +38,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.icecast.org";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ jcumming ];
+    maintainers = with lib.maintainers; [jcumming];
     platforms = with lib.platforms; unix;
   };
 }
-

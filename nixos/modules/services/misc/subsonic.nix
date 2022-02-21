@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.subsonic;
   opt = options.services.subsonic;
 in {
@@ -95,7 +98,7 @@ in {
 
       transcoders = mkOption {
         type = types.listOf types.path;
-        default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
+        default = ["${pkgs.ffmpeg.bin}/bin/ffmpeg"];
         defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
         description = ''
           List of paths to transcoder executables that should be accessible
@@ -109,8 +112,8 @@ in {
   config = mkIf cfg.enable {
     systemd.services.subsonic = {
       description = "Personal media streamer";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       script = ''
         ${pkgs.jre8}/bin/java -Xmx${toString cfg.maxMemory}m \
           -Dsubsonic.home=${cfg.home} \

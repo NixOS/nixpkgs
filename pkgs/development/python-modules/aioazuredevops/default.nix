@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, aiohttp
-, click
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  aiohttp,
+  click,
 }:
-
 buildPythonPackage rec {
   pname = "aioazuredevops";
   version = "1.4.3";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Get data from the Azure DevOps API";
     homepage = "https://github.com/timmo001/aioazuredevops";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

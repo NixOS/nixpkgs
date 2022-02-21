@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.virtlyst;
   stateDir = "/var/lib/virtlyst";
 
@@ -25,11 +26,7 @@ let
     cutelyst.* = true
     virtlyst.* = true
   '';
-
-in
-
-{
-
+in {
   options.services.virtlyst = {
     enable = mkEnableOption "Virtlyst libvirt web interface";
 
@@ -58,7 +55,7 @@ in
     };
 
     systemd.services.virtlyst = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       environment = {
         VIRTLYST_ADMIN_PASSWORD = cfg.adminPassword;
       };
@@ -69,5 +66,4 @@ in
       };
     };
   };
-
 }

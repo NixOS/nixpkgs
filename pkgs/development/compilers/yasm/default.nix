@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, buildPackages}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "yasm";
   version = "1.3.0";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gv0slmm0qpq91za3v2v9glff3il594x5xsrbgab7xcmnh0ndkix";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
   meta = with lib; {
     homepage = "http://www.tortall.net/projects/yasm/";

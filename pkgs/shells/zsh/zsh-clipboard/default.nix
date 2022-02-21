@@ -1,5 +1,7 @@
-{ stdenv, lib }:
-
+{
+  stdenv,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "zsh-clipboard";
   version = "1.0";
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
       Behaviour of these keys should not be changed.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bb2020 ];
+    maintainers = with maintainers; [bb2020];
     platforms = platforms.unix;
   };
 }

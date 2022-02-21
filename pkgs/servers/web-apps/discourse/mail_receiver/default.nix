@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, ruby, makeWrapper, replace }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ruby,
+  makeWrapper,
+  replace,
+}:
 stdenv.mkDerivation rec {
   pname = "discourse-mail-receiver";
   version = "4.0.7";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0grifm5qyqazq63va3w26xjqnxwmfixhx0fx0zy7kd39378wwa6i";
   };
 
-  nativeBuildInputs = [ replace ];
-  buildInputs = [ ruby makeWrapper ];
+  nativeBuildInputs = [replace];
+  buildInputs = [ruby makeWrapper];
 
   dontBuild = true;
 
@@ -31,9 +37,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.discourse.org/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ talyz ];
+    maintainers = with maintainers; [talyz];
     license = licenses.mit;
     description = "A helper program which receives incoming mail for Discourse";
   };
-
 }

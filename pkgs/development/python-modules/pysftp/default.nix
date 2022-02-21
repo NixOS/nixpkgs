@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, paramiko
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  paramiko,
 }:
-
 buildPythonPackage rec {
   pname = "pysftp";
   version = "0.2.9";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0jl5qix5cxzrv4lb8rfpjkpcghbkacnxkb006ikn7mkl5s05mxgv";
   };
 
-  propagatedBuildInputs = [ paramiko ];
+  propagatedBuildInputs = [paramiko];
 
   meta = with lib; {
     homepage = "https://bitbucket.org/dundeemt/pysftp";
@@ -27,5 +27,4 @@ buildPythonPackage rec {
       Book, in the docs, to see what pysftp can do for you.
     '';
   };
-
 }

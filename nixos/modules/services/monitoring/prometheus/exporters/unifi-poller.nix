@@ -1,20 +1,21 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
   cfg = config.services.prometheus.exporters.unifi-poller;
 
   configFile = pkgs.writeText "prometheus-unifi-poller-exporter.json" (generators.toJSON {} {
-    poller = { inherit (cfg.log) debug quiet; };
-    unifi = { inherit (cfg) controllers; };
+    poller = {inherit (cfg.log) debug quiet;};
+    unifi = {inherit (cfg) controllers;};
     influxdb.disable = true;
     prometheus = {
       http_listen = "${cfg.listenAddress}:${toString cfg.port}";
       report_errors = cfg.log.prometheusErrors;
     };
   });
-
 in {
   port = 9130;
 

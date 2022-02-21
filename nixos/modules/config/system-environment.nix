@@ -1,19 +1,15 @@
 # This module defines a system-wide environment that will be
 # initialised by pam_env (that is, not only in shells).
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.environment;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.environment;
+in {
   options = {
-
     environment.sessionVariables = mkOption {
       default = {};
       description = ''
@@ -33,12 +29,18 @@ in
         <code>@{HOME}</code>.
       '';
       type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
+      apply = mapAttrs (n: v:
+        if isList v
+        then concatStringsSep ":" v
+        else v);
     };
 
     environment.profileRelativeSessionVariables = mkOption {
       type = types.attrsOf (types.listOf types.str);
-      example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
+      example = {
+        PATH = ["/bin"];
+        MANPATH = ["/man" "/share/man"];
+      };
       description = ''
         Attribute set of environment variable used in the global
         environment. These variables will be set by PAM early in the
@@ -61,16 +63,17 @@ in
         <code>@{HOME}</code>.
       '';
     };
-
   };
 
   config = {
     environment.etc."pam/environment".text = let
       suffixedVariables =
-        flip mapAttrs cfg.profileRelativeSessionVariables (envVar: suffixes:
-          flip concatMap cfg.profiles (profile:
-            map (suffix: "${profile}${suffix}") suffixes
-          )
+        flip mapAttrs cfg.profileRelativeSessionVariables (
+          envVar: suffixes:
+            flip concatMap cfg.profiles (
+              profile:
+                map (suffix: "${profile}${suffix}") suffixes
+            )
         );
 
       # We're trying to use the same syntax for PAM variables and env variables.
@@ -78,27 +81,25 @@ in
       # equivalent PAM variable.
       replaceEnvVars = replaceStrings ["$HOME" "$USER"] ["@{HOME}" "@{PAM_USER}"];
 
-      pamVariable = n: v:
-        ''${n}   DEFAULT="${concatStringsSep ":" (map replaceEnvVars (toList v))}"'';
+      pamVariable = n: v: ''${n}   DEFAULT="${concatStringsSep ":" (map replaceEnvVars (toList v))}"'';
 
       pamVariables =
         concatStringsSep "\n"
         (mapAttrsToList pamVariable
         (zipAttrsWith (n: concatLists)
-          [
-            # Make sure security wrappers are prioritized without polluting
-            # shell environments with an extra entry. Sessions which depend on
-            # pam for its environment will otherwise have eg. broken sudo. In
-            # particular Gnome Shell sometimes fails to source a proper
-            # environment from a shell.
-            { PATH = [ config.security.wrapperDir ]; }
+        [
+          # Make sure security wrappers are prioritized without polluting
+          # shell environments with an extra entry. Sessions which depend on
+          # pam for its environment will otherwise have eg. broken sudo. In
+          # particular Gnome Shell sometimes fails to source a proper
+          # environment from a shell.
+          {PATH = [config.security.wrapperDir];}
 
-            (mapAttrs (n: toList) cfg.sessionVariables)
-            suffixedVariables
-          ]));
+          (mapAttrs (n: toList) cfg.sessionVariables)
+          suffixedVariables
+        ]));
     in ''
       ${pamVariables}
     '';
   };
-
 }

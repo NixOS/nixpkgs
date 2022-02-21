@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}: let
   version = "1.13.0";
   jarName = "bfg-${version}.jar";
   mavenUrl = "mirror://maven/com/madgag/bfg/${version}/${jarName}";
@@ -15,8 +19,8 @@ in
       sha256 = "1kn84rsvms1v5l1j2xgrk7dc7mnsmxkc6sqd94mnim22vnwvl8mz";
     };
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ jre ];
+    nativeBuildInputs = [makeWrapper];
+    buildInputs = [jre];
 
     dontUnpack = true;
 
@@ -42,9 +46,8 @@ in
         beautiful (can use Scala instead of bash to script customizations).
       '';
       license = licenses.gpl3;
-      maintainers = [ maintainers.changlinli ];
+      maintainers = [maintainers.changlinli];
       platforms = platforms.unix;
       downloadPage = "https://mvnrepository.com/artifact/com.madgag/bfg/${version}";
     };
-
   }

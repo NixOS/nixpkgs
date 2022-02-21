@@ -1,13 +1,21 @@
 import ./make-test-python.nix {
   nodes = {
-    private = { config, pkgs, ... }: {
+    private = {
+      config,
+      pkgs,
+      ...
+    }: {
       services.thelounge = {
         enable = true;
-        plugins = [ pkgs.theLoungePlugins.themes.solarized ];
+        plugins = [pkgs.theLoungePlugins.themes.solarized];
       };
     };
 
-    public = { config, pkgs, ... }: {
+    public = {
+      config,
+      pkgs,
+      ...
+    }: {
       services.thelounge = {
         enable = true;
         public = true;

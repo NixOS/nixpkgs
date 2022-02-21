@@ -1,5 +1,14 @@
-{ lib, stdenv, git, xdg-utils, gnugrep, fetchFromGitHub, installShellFiles, makeWrapper, pandoc }:
-
+{
+  lib,
+  stdenv,
+  git,
+  xdg-utils,
+  gnugrep,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  pandoc,
+}:
 stdenv.mkDerivation rec {
   pname = "git-open";
   version = "2.1.0";
@@ -11,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "11n46bngvca5wbdbfcxzjhjbfdbad7sgf7h9gf956cb1q8swsdm0";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper pandoc ];
+  nativeBuildInputs = [installShellFiles makeWrapper pandoc];
 
   buildPhase = ''
     # marked-man is broken and severly outdated.
@@ -26,7 +35,7 @@ stdenv.mkDerivation rec {
     cp git-open $out/bin
     installManPage git-open.1
     wrapProgram $out/bin/git-open \
-      --prefix PATH : "${lib.makeBinPath [ git xdg-utils gnugrep ]}"
+      --prefix PATH : "${lib.makeBinPath [git xdg-utils gnugrep]}"
   '';
 
   meta = with lib; {
@@ -34,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "Open the GitHub page or website for a repository in your browser";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jlesquembre SuperSandro2000 ];
+    maintainers = with maintainers; [jlesquembre SuperSandro2000];
   };
 }

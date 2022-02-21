@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, gtkmm2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gtkmm2,
+}:
 stdenv.mkDerivation rec {
   pname = "nitrogen";
   version = "1.6.1";
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0zc3fl1mbhq0iyndy4ysmy8vv5c7xwf54rbgamzfhfvsgdq160pl";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ glib gtkmm2 ];
+  buildInputs = [glib gtkmm2];
 
   patchPhase = ''
     patchShebangs data/icon-theme-installer
@@ -28,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/l3ib/nitrogen";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.auntie ];
+    maintainers = [lib.maintainers.auntie];
   };
 }

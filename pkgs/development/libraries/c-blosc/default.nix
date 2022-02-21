@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "c-blosc";
   version = "1.21.1";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6SKEyciwDOxcbO8chvmxrLCxLkc93zxo6eH0c/lRyT8=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "A blocking, shuffling and loss-less compression library";

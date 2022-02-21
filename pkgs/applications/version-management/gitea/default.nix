@@ -1,82 +1,80 @@
-{ lib
-, buildGoPackage
-, fetchurl
-, makeWrapper
-, git
-, bash
-, gzip
-, openssh
-, pam
-, sqliteSupport ? true
-, pamSupport ? true
-, nixosTests
+{
+  lib,
+  buildGoPackage,
+  fetchurl,
+  makeWrapper,
+  git,
+  bash,
+  gzip,
+  openssh,
+  pam,
+  sqliteSupport ? true,
+  pamSupport ? true,
+  nixosTests,
 }:
-
 with lib;
+  buildGoPackage rec {
+    pname = "gitea";
+    version = "1.16.1";
 
-buildGoPackage rec {
-  pname = "gitea";
-  version = "1.16.1";
+    # not fetching directly from the git repo, because that lacks several vendor files for the web UI
+    src = fetchurl {
+      url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
+      sha256 = "sha256-CaJ6Br8Sy+8GuoI8UWxsn3oGEp6R3X5kvl9vDKZB1bc=";
+    };
 
-  # not fetching directly from the git repo, because that lacks several vendor files for the web UI
-  src = fetchurl {
-    url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "sha256-CaJ6Br8Sy+8GuoI8UWxsn3oGEp6R3X5kvl9vDKZB1bc=";
-  };
+    unpackPhase = ''
+      mkdir source/
+      tar xvf $src -C source/
+    '';
 
-  unpackPhase = ''
-    mkdir source/
-    tar xvf $src -C source/
-  '';
+    sourceRoot = "source";
 
-  sourceRoot = "source";
+    patches = [
+      ./static-root-path.patch
+    ];
 
-  patches = [
-    ./static-root-path.patch
-  ];
+    postPatch = ''
+      patchShebangs .
+      substituteInPlace modules/setting/setting.go --subst-var data
+    '';
 
-  postPatch = ''
-    patchShebangs .
-    substituteInPlace modules/setting/setting.go --subst-var data
-  '';
+    nativeBuildInputs = [makeWrapper];
 
-  nativeBuildInputs = [ makeWrapper ];
+    buildInputs = optional pamSupport pam;
 
-  buildInputs = optional pamSupport pam;
-
-  preBuild =
-    let
-      tags = optional pamSupport "pam"
+    preBuild = let
+      tags =
+        optional pamSupport "pam"
         ++ optional sqliteSupport "sqlite sqlite_unlock_notify";
       tagsString = concatStringsSep " " tags;
-    in
-    ''
+    in ''
       export buildFlagsArray=(
         -tags="${tagsString}"
         -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
       )
     '';
 
-  outputs = [ "out" "data" ];
+    outputs = ["out" "data"];
 
-  postInstall = ''
-    mkdir $data
-    cp -R ./go/src/${goPackagePath}/{public,templates,options} $data
-    mkdir -p $out
-    cp -R ./go/src/${goPackagePath}/options/locale $out/locale
+    postInstall = ''
+      mkdir $data
+      cp -R ./go/src/${goPackagePath}/{public,templates,options} $data
+      mkdir -p $out
+      cp -R ./go/src/${goPackagePath}/options/locale $out/locale
 
-    wrapProgram $out/bin/gitea \
-      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
-  '';
+      wrapProgram $out/bin/gitea \
+        --prefix PATH : ${makeBinPath [bash git gzip openssh]}
+    '';
 
-  goPackagePath = "code.gitea.io/gitea";
+    goPackagePath = "code.gitea.io/gitea";
 
-  passthru.tests.gitea = nixosTests.gitea;
+    passthru.tests.gitea = nixosTests.gitea;
 
-  meta = {
-    description = "Git with a cup of tea";
-    homepage = "https://gitea.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
-  };
-}
+    meta = {
+      description = "Git with a cup of tea";
+      homepage = "https://gitea.io";
+      license = licenses.mit;
+      maintainers = with maintainers; [disassembler kolaente ma27 techknowlogick];
+    };
+  }

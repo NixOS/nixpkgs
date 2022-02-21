@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libevent }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libevent,
+}:
 stdenv.mkDerivation rec {
   pname = "libevhtp";
   version = "unstable-2021-04-28";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1rf0jcy2lf8jbzpkhfgv289hc8zdy5zs6sn36k4vlqvilginxiid";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ libevent ];
+  buildInputs = [libevent];
 
   cmakeFlags = [
     "-DEVHTP_DISABLE_SSL=ON"
@@ -24,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Create extremely-fast and secure embedded HTTP servers with ease";
     homepage = "https://github.com/criticalstack/libevhtp";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ greizgh schmittlauch ];
+    maintainers = with maintainers; [greizgh schmittlauch];
   };
 }

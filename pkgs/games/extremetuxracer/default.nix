@@ -1,9 +1,26 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, freeglut, freetype
-, sfml, libXi
-, libXmu, libXext, libXt, libSM, libICE
-, libpng, pkg-config, gettext, intltool
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGLU,
+  libGL,
+  libX11,
+  xorgproto,
+  tcl,
+  freeglut,
+  freetype,
+  sfml,
+  libXi,
+  libXmu,
+  libXext,
+  libXt,
+  libSM,
+  libICE,
+  libpng,
+  pkg-config,
+  gettext,
+  intltool,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.8.1";
   pname = "extremetuxracer";
@@ -14,13 +31,27 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGLU libGL libX11 xorgproto tcl freeglut freetype
-    sfml libXi
-    libXmu libXext libXt libSM libICE
-    libpng pkg-config gettext intltool
+    libGLU
+    libGL
+    libX11
+    xorgproto
+    tcl
+    freeglut
+    freetype
+    sfml
+    libXi
+    libXmu
+    libXext
+    libXt
+    libSM
+    libICE
+    libpng
+    pkg-config
+    gettext
+    intltool
   ];
 
-  configureFlags = [ "--with-tcl=${tcl}/lib" ];
+  configureFlags = ["--with-tcl=${tcl}/lib"];
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE"
@@ -33,7 +64,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/extremetuxracer/";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
     platforms = with lib.platforms; linux;
   };
 }

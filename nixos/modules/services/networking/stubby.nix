@@ -1,28 +1,28 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.stubby;
-  settingsFormat = pkgs.formats.yaml { };
+  settingsFormat = pkgs.formats.yaml {};
   confFile = settingsFormat.generate "stubby.yml" cfg.settings;
 in {
-  imports = map (x:
-    (mkRemovedOptionModule [ "services" "stubby" x ]
-      "Stubby configuration moved to services.stubby.settings.")) [
-        "authenticationMode"
-        "fallbackProtocols"
-        "idleTimeout"
-        "listenAddresses"
-        "queryPaddingBlocksize"
-        "roundRobinUpstreams"
-        "subnetPrivate"
-        "upstreamServers"
-      ];
+  imports = map (x: (mkRemovedOptionModule ["services" "stubby" x]
+  "Stubby configuration moved to services.stubby.settings.")) [
+    "authenticationMode"
+    "fallbackProtocols"
+    "idleTimeout"
+    "listenAddresses"
+    "queryPaddingBlocksize"
+    "roundRobinUpstreams"
+    "subnetPrivate"
+    "upstreamServers"
+  ];
 
   options = {
     services.stubby = {
-
       enable = mkEnableOption "Stubby DNS resolver";
 
       settings = mkOption {
@@ -54,27 +54,28 @@ in {
         type = types.bool;
         description = "Enable or disable debug level logging.";
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion =
-        (cfg.settings.resolution_type or "") == "GETDNS_RESOLUTION_STUB";
-      message = ''
-        services.stubby.settings.resolution_type must be set to "GETDNS_RESOLUTION_STUB".
-        Is services.stubby.settings unset?
-      '';
-    }];
+    assertions = [
+      {
+        assertion =
+          (cfg.settings.resolution_type or "") == "GETDNS_RESOLUTION_STUB";
+        message = ''
+          services.stubby.settings.resolution_type must be set to "GETDNS_RESOLUTION_STUB".
+          Is services.stubby.settings unset?
+        '';
+      }
+    ];
 
     services.stubby.settings.appdata_dir = "/var/cache/stubby";
 
     systemd.services.stubby = {
       description = "Stubby local DNS resolver";
-      after = [ "network.target" ];
-      before = [ "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      before = ["nss-lookup.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "notify";

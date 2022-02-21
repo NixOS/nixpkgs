@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonApplication }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonApplication,
+}:
 buildPythonApplication rec {
   pname = "py65";
   version = "1.1.0";
@@ -20,6 +23,6 @@ buildPythonApplication rec {
       for interacting with the simulated 6502-based system.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

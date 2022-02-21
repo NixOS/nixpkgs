@@ -1,13 +1,13 @@
-{ callPackage
-, cmake
-, fetchFromGitHub
-, lib
-, protobuf
-, python3
-, stdenv
-, buildPackages
+{
+  callPackage,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  protobuf,
+  python3,
+  stdenv,
+  buildPackages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nanopb";
   version = "0.4.5";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "0cjfkwwzi018kc0b7lia7z2jdfgibqc99mf8rvj2xq2pfapp9kf1";
   };
 
-  nativeBuildInputs = [ cmake python3 python3.pkgs.wrapPython ];
+  nativeBuildInputs = [cmake python3 python3.pkgs.wrapPython];
 
-  pythonPath = with python3.pkgs; [ python3.pkgs.protobuf six ];
+  pythonPath = with python3.pkgs; [python3.pkgs.protobuf six];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON" # generate $out/lib/libprotobuf-nanopb.so{.0,}
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Protocol Buffers with small code size";
     homepage = "https://jpa.kapsi.fi/nanopb/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
 
     longDescription = ''
       Nanopb is a small code-size Protocol Buffers implementation in ansi C. It

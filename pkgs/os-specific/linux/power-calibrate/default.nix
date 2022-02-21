@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "power-calibrate";
   version = "0.01.34";
@@ -22,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/power-calibrate";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

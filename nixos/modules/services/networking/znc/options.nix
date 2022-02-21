@@ -1,14 +1,13 @@
-{ lib, config, ... }:
-
-with lib;
-
-let
-
+{
+  lib,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.znc;
 
   networkOpts = {
     options = {
-
       server = mkOption {
         type = types.str;
         example = "irc.libera.chat";
@@ -43,7 +42,7 @@ let
 
       modules = mkOption {
         type = types.listOf types.str;
-        default = [ "simple_away" ];
+        default = ["simple_away"];
         example = literalExpression ''[ "simple_away" "sasl" ]'';
         description = ''
           ZNC network modules to load.
@@ -53,7 +52,7 @@ let
       channels = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "nixos" ];
+        example = ["nixos"];
         description = ''
           IRC channels to join.
         '';
@@ -86,14 +85,9 @@ let
       };
     };
   };
-
-in
-
-{
-
+in {
   options = {
     services.znc = {
-
       useLegacyConfig = mkOption {
         default = true;
         type = types.bool;
@@ -117,8 +111,8 @@ in
       confOptions = {
         modules = mkOption {
           type = types.listOf types.str;
-          default = [ "webadmin" "adminlog" ];
-          example = [ "partyline" "webadmin" "adminlog" "log" ];
+          default = ["webadmin" "adminlog"];
+          example = ["partyline" "webadmin" "adminlog" "log"];
           description = ''
             A list of modules to include in the `znc.conf` file.
           '';
@@ -126,8 +120,8 @@ in
 
         userModules = mkOption {
           type = types.listOf types.str;
-          default = [ "chansaver" "controlpanel" ];
-          example = [ "chansaver" "controlpanel" "fish" "push" ];
+          default = ["chansaver" "controlpanel"];
+          example = ["chansaver" "controlpanel" "fish" "push"];
           description = ''
             A list of user modules to include in the `znc.conf` file.
           '';
@@ -143,7 +137,7 @@ in
         };
 
         networks = mkOption {
-          default = { };
+          default = {};
           type = with types; attrsOf (submodule networkOpts);
           description = ''
             IRC networks to connect the user to.
@@ -222,12 +216,10 @@ in
           '';
         };
       };
-
     };
   };
 
   config = mkIf cfg.useLegacyConfig {
-
     services.znc.config = let
       c = cfg.confOptions;
       # defaults here should override defaults set in the non-legacy part
@@ -251,11 +243,16 @@ in
         Network = mapAttrs (name: net: {
           LoadModule = mkDefault net.modules;
           Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
-          Chan = optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = mkDefault {}; } //
-            listToAttrs (map (n: nameValuePair "#${n}" (mkDefault {})) net.channels);
-          extraConfig = if net.extraConf == "" then mkDefault null else net.extraConf;
-        }) c.networks;
-        extraConfig = [ c.passBlock ];
+          Chan =
+            optionalAttrs net.hasBitlbeeControlChannel {"&bitlbee" = mkDefault {};}
+            // listToAttrs (map (n: nameValuePair "#${n}" (mkDefault {})) net.channels);
+          extraConfig =
+            if net.extraConf == ""
+            then mkDefault null
+            else net.extraConf;
+        })
+        c.networks;
+        extraConfig = [c.passBlock];
       };
       extraConfig = optional (c.extraZncConf != "") c.extraZncConf;
     };

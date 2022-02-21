@@ -1,16 +1,15 @@
-{ writeShellScript
-, nix-prefetch-git
-, formats
-, lib
-, curl
-, jq
-, xe
-, src
+{
+  writeShellScript,
+  nix-prefetch-git,
+  formats,
+  lib,
+  curl,
+  jq,
+  xe,
+  src,
 }:
-
 # Grammar list:
 # https://github.com/tree-sitter/tree-sitter/blob/master/docs/index.md
-
 let
   # Grammars we want to fetch from the tree-sitter github orga
   knownTreeSitterOrgGrammarRepos = [
@@ -310,38 +309,33 @@ let
     };
   };
 
-  allGrammars =
-    let
-      treeSitterOrgaGrammars =
-        lib.listToAttrs (map
-          (repo:
-            {
-              name = repo;
-              value = {
-                orga = "tree-sitter";
-                inherit repo;
-              };
-            })
-          knownTreeSitterOrgGrammarRepos);
-
-    in
+  allGrammars = let
+    treeSitterOrgaGrammars =
+      lib.listToAttrs (map
+      (repo: {
+        name = repo;
+        value = {
+          orga = "tree-sitter";
+          inherit repo;
+        };
+      })
+      knownTreeSitterOrgGrammarRepos);
+  in
     mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
 
   # TODO: move to lib
-  mergeAttrsUnique = left: right:
-    let intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right); in
-    assert
-    lib.assertMsg (intersect == [ ])
-      (lib.concatStringsSep "\n" [
-        "mergeAttrsUnique: keys in attrset overlapping:"
-        "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
-        "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
-      ]);
-    left // right;
+  mergeAttrsUnique = left: right: let
+    intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right);
+  in
+    assert lib.assertMsg (intersect == [])
+    (lib.concatStringsSep "\n" [
+      "mergeAttrsUnique: keys in attrset overlapping:"
+      "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
+      "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
+    ]);
+      left // right;
 
-
-
-  jsonFile = name: val: (formats.json { }).generate name val;
+  jsonFile = name: val: (formats.json {}).generate name val;
 
   # check the tree-sitter orga repos
   checkTreeSitterRepos = writeShellScript "get-grammars.sh" ''
@@ -362,89 +356,105 @@ let
   urlEscape = x: x;
 
   # generic bash script to find the latest github release for a repo
-  latestGithubRelease = { orga, repo }: writeShellScript "latest-github-release" ''
-    set -euo pipefail
+  latestGithubRelease = {
+    orga,
+    repo,
+  }:
+    writeShellScript "latest-github-release" ''
+      set -euo pipefail
 
-    args=( '--silent' )
-    if [ -n "''${GITHUB_TOKEN:-}" ]; then
-      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
-    fi
-    args+=( "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest" )
+      args=( '--silent' )
+      if [ -n "''${GITHUB_TOKEN:-}" ]; then
+        args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
+      fi
+      args+=( "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest" )
 
-    res=$(${curl}/bin/curl "''${args[@]}")
+      res=$(${curl}/bin/curl "''${args[@]}")
 
-    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2
-    fi
-    release="$(printf "%s" "$res" | ${jq}/bin/jq -r '.tag_name')"
-    # github sometimes returns an empty list even tough there are releases
-    if [ "$release" = "null" ]; then
-      echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2
-      release="HEAD"
-    fi
-    echo "$release"
-  '';
+      if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
+        echo "rate limited" >&2
+      fi
+      release="$(printf "%s" "$res" | ${jq}/bin/jq -r '.tag_name')"
+      # github sometimes returns an empty list even tough there are releases
+      if [ "$release" = "null" ]; then
+        echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2
+        release="HEAD"
+      fi
+      echo "$release"
+    '';
 
   # find the latest repos of a github organization
-  latestGithubRepos = { orga }: writeShellScript "latest-github-repos" ''
-    set -euo pipefail
+  latestGithubRepos = {orga}:
+    writeShellScript "latest-github-repos" ''
+      set -euo pipefail
 
-    args=( '--silent' )
-    if [ -n "''${GITHUB_TOKEN:-}" ]; then
-      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
-    fi
-    args+=( 'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100' )
+      args=( '--silent' )
+      if [ -n "''${GITHUB_TOKEN:-}" ]; then
+        args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
+      fi
+      args+=( 'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100' )
 
-    res=$(${curl}/bin/curl "''${args[@]}")
+      res=$(${curl}/bin/curl "''${args[@]}")
 
-    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2
-      exit 1
-    elif [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "Bad credentials" ]]; then
-      echo "bad credentials" >&2
-      exit 1
-    fi
+      if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
+        echo "rate limited" >&2
+        exit 1
+      elif [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "Bad credentials" ]]; then
+        echo "bad credentials" >&2
+        exit 1
+      fi
 
-    printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
-      || echo "failed $res"
-  '';
+      printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
+        || echo "failed $res"
+    '';
 
   # update one tree-sitter grammar repo and print their nix-prefetch-git output
-  updateGrammar = { orga, repo }: writeShellScript "update-grammar.sh" ''
-    set -euo pipefail
-    latest="$(${latestGithubRelease { inherit orga repo; }})"
-    echo "Fetching latest release ($latest) of ${repo} …" >&2
-    ${nix-prefetch-git}/bin/nix-prefetch-git \
-      --quiet \
-      --no-deepClone \
-      --url "https://github.com/${urlEscape orga}/${urlEscape repo}" \
-      --rev "$latest"
-  '';
+  updateGrammar = {
+    orga,
+    repo,
+  }:
+    writeShellScript "update-grammar.sh" ''
+      set -euo pipefail
+      latest="$(${latestGithubRelease {inherit orga repo;}})"
+      echo "Fetching latest release ($latest) of ${repo} …" >&2
+      ${nix-prefetch-git}/bin/nix-prefetch-git \
+        --quiet \
+        --no-deepClone \
+        --url "https://github.com/${urlEscape orga}/${urlEscape repo}" \
+        --rev "$latest"
+    '';
 
   foreachSh = attrs: f:
     lib.concatMapStringsSep "\n" f
-      (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
+    (lib.mapAttrsToList (k: v: {name = k;} // v) attrs);
 
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
     echo "fetching list of grammars" 1>&2
-    treeSitterRepos=$(${latestGithubRepos { orga = "tree-sitter"; }})
+    treeSitterRepos=$(${latestGithubRepos {orga = "tree-sitter";}})
     echo "checking the tree-sitter repo list against the grammars we know" 1>&2
     printf '%s' "$treeSitterRepos" | ${checkTreeSitterRepos}
     outputDir="${toString ./.}/grammars"
     echo "writing files to $outputDir" 1>&2
     mkdir -p "$outputDir"
-    ${foreachSh allGrammars
-      ({name, orga, repo}: ''${updateGrammar { inherit orga repo; }} > $outputDir/${name}.json'')}
+    ${
+      foreachSh allGrammars
+      ({
+        name,
+        orga,
+        repo,
+      }: ''${updateGrammar {inherit orga repo;}} > $outputDir/${name}.json'')
+    }
     ( echo "{ lib }:"
       echo "{"
-      ${foreachSh allGrammars
-        ({name, ...}: ''
-           # indentation hack
-             printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
+      ${
+      foreachSh allGrammars
+      ({name, ...}: ''
+        # indentation hack
+          printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')
+    }
       echo "}" ) \
       > "$outputDir/default.nix"
   '';
-
 in
-update-all-grammars
+  update-all-grammars

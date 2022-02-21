@@ -1,5 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "fluidd";
   version = "1.16.2";
@@ -10,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "1qwj25xvvxvm1fxx216nn2gp7js4d682mm3l4s7ns90fc5ygvc8i";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   dontConfigure = true;
   dontBuild = true;
@@ -29,6 +33,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Klipper web interface";
     homepage = "https://docs.fluidd.xyz";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [zhaofengli];
   };
 }

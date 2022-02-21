@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "viw";
   version = "unstable-20171029";
@@ -11,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0bnkh57v01zay6ggk0rbddaf75i48h8z06xsv33wfbjldclaljp1";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-  checkFlags = [ "test-command" "test-buffer" "test-state" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
+  checkFlags = ["test-command" "test-buffer" "test-state"];
 
   installPhase = ''
     install -Dm 755 -t $out/bin viw
@@ -25,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "VI Worsened, a fun and light clone of VI";
     homepage = "https://github.com/lpan/viw";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

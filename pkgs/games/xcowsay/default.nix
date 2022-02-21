@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config
-, dbus, dbus-glib, gtk3, gdk-pixbuf, librsvg
-, fortune
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  dbus,
+  dbus-glib,
+  gtk3,
+  gdk-pixbuf,
+  librsvg,
+  fortune,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xcowsay";
   version = "1.6";
@@ -19,9 +27,9 @@ stdenv.mkDerivation rec {
     gdk-pixbuf # loading cow images
     librsvg # dreaming SVG images
   ];
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [makeWrapper pkg-config];
 
-  configureFlags = [ "--enable-dbus" ];
+  configureFlags = ["--enable-dbus"];
 
   postInstall = ''
     for tool in xcowdream xcowsay xcowthink xcowfortune; do
@@ -34,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.doof.me.uk/xcowsay";
     description = "Tool to display a cute cow and messages";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [das_j];
   };
 }

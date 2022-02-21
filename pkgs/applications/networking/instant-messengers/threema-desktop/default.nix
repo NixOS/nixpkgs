@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, glibc, gtk3, libxshmfence, mesa, nss }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  alsa-lib,
+  glibc,
+  gtk3,
+  libxshmfence,
+  mesa,
+  nss,
+}:
 stdenv.mkDerivation rec {
   pname = "threema-desktop";
   version = "1.0.3";
@@ -18,7 +30,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ alsa-lib glibc gtk3 libxshmfence mesa nss ];
+  buildInputs = [alsa-lib glibc gtk3 libxshmfence mesa nss];
 
   dontBuild = true;
   dontConfigure = true;
@@ -48,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Desktop client for Threema, a privacy-focused end-to-end encrypted mobile messenger";
     homepage = "https://threema.ch";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

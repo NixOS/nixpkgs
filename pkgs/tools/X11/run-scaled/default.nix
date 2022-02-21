@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, bc, xorgserver, xpra, xrandr }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bc,
+  xorgserver,
+  xpra,
+  xrandr,
+}:
 stdenv.mkDerivation {
   version = "unstable-2018-06-03";
   pname = "run-scaled";
@@ -11,19 +19,19 @@ stdenv.mkDerivation {
     sha256 = "1ma4ax7ydq4xvyzrc4zapihmf7v3d9zl9mbi8bgpps7nlgz544ys";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin
     cp run_scaled $out/bin
     wrapProgram $out/bin/run_scaled --prefix PATH ":" \
-      ${lib.makeBinPath [ bc xorgserver xpra xrandr ]}
+      ${lib.makeBinPath [bc xorgserver xpra xrandr]}
   '';
 
   meta = with lib; {
     description = "Run an X application scaled via xpra";
     homepage = "https://github.com/kaueraal/run_scaled";
-    maintainers = [ maintainers.snaar ];
+    maintainers = [maintainers.snaar];
     license = licenses.bsd3;
     platforms = platforms.unix;
   };

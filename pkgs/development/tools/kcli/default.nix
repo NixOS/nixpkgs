@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kcli";
   version = "1.8.3";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "A kafka command line browser";
     homepage = "https://github.com/cswank/kcli";
     license = licenses.mit;
-    maintainers = with maintainers; [ cswank ];
+    maintainers = with maintainers; [cswank];
   };
 }

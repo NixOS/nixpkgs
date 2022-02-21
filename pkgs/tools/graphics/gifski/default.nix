@@ -1,5 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
   version = "1.6.4";
@@ -13,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-kG0svhytDzm2dc//8WTFm1sI3WS0Ny9yhYTSMoXnt8I=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";
     homepage = "https://gif.ski/";
     license = licenses.agpl3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

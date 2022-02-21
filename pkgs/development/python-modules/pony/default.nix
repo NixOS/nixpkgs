@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pony";
   version = "0.7.16";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Library for advanced object-relational mapping";
     homepage = "https://ponyorm.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ d-goldin xvapx ];
+    maintainers = with maintainers; [d-goldin xvapx];
   };
 }

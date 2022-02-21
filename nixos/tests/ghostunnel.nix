@@ -1,14 +1,14 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   nodes = {
-    backend = { pkgs, ... }: {
+    backend = {pkgs, ...}: {
       services.nginx.enable = true;
       services.nginx.virtualHosts."backend".root = pkgs.runCommand "webroot" {} ''
         mkdir $out
         echo hi >$out/hi.txt
       '';
-      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.firewall.allowedTCPPorts = [80];
     };
-    service = { ... }: {
+    service = {...}: {
       services.ghostunnel.enable = true;
       services.ghostunnel.servers."plain-old" = {
         listen = "0.0.0.0:443";
@@ -27,9 +27,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         allowCN = ["client"];
         unsafeTarget = true;
       };
-      networking.firewall.allowedTCPPorts = [ 443 1443 ];
+      networking.firewall.allowedTCPPorts = [443 1443];
     };
-    client = { pkgs, ... }: {
+    client = {pkgs, ...}: {
       environment.systemPackages = [
         pkgs.curl
       ];

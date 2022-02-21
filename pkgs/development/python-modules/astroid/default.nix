@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, isPyPy
-, lazy-object-proxy
-, wrapt
-, typing-extensions
-, typed-ast
-, pytestCheckHook
-, setuptools-scm
-, pylint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  isPyPy,
+  lazy-object-proxy,
+  wrapt,
+  typing-extensions,
+  typed-ast,
+  pytestCheckHook,
+  setuptools-scm,
+  pylint,
 }:
-
 buildPythonPackage rec {
   pname = "astroid";
   version = "2.9.3"; # Check whether the version is compatible with pylint
@@ -31,12 +31,15 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    lazy-object-proxy
-    wrapt
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ] ++ lib.optional (!isPyPy && pythonOlder "3.8") typed-ast;
+  propagatedBuildInputs =
+    [
+      lazy-object-proxy
+      wrapt
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      typing-extensions
+    ]
+    ++ lib.optional (!isPyPy && pythonOlder "3.8") typed-ast;
 
   checkInputs = [
     pytestCheckHook
@@ -56,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

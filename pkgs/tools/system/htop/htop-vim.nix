@@ -1,5 +1,8 @@
-{ lib, htop, fetchFromGitHub }:
-
+{
+  lib,
+  htop,
+  fetchFromGitHub,
+}:
 htop.overrideAttrs (oldAttrs: rec {
   pname = "htop-vim";
   version = "unstable-2021-10-11";
@@ -16,7 +19,7 @@ htop.overrideAttrs (oldAttrs: rec {
     homepage = "https://github.com/KoffeinFlummi/htop-vim";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [thiagokokada];
     mainProgram = "htop";
   };
 })

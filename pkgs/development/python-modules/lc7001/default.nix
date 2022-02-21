@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pythonOlder
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  pythonOlder,
+  poetry-core,
 }:
-
 buildPythonPackage rec {
   pname = "lc7001";
   version = "1.0.5";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Python module for interacting with Legrand LC7001";
     homepage = "https://github.com/rtyle/lc7001";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

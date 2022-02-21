@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, marshmallow
-, sqlalchemy
-, pytest-lazy-fixture
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  marshmallow,
+  sqlalchemy,
+  pytest-lazy-fixture,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
   version = "0.27.0";
@@ -37,5 +37,4 @@ buildPythonPackage rec {
     description = "SQLAlchemy integration with marshmallow";
     license = licenses.mit;
   };
-
 }

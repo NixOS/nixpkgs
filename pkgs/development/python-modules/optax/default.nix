@@ -1,14 +1,14 @@
-{ absl-py
-, buildPythonPackage
-, chex
-, dm-haiku
-, fetchFromGitHub
-, jaxlib
-, lib
-, numpy
-, pytestCheckHook
+{
+  absl-py,
+  buildPythonPackage,
+  chex,
+  dm-haiku,
+  fetchFromGitHub,
+  jaxlib,
+  lib,
+  numpy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "optax";
   # As of 2022-01-06, the latest stable version (0.1.0) has broken tests that are fixed
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "1q8cxc42a5xais2ll1l238cnn3l7w28savhgiz0lg01ilz2ysbli";
   };
 
-  buildInputs = [ jaxlib ];
+  buildInputs = [jaxlib];
 
   propagatedBuildInputs = [
     absl-py
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Optax is a gradient processing and optimization library for JAX.";
     homepage = "https://github.com/deepmind/optax";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

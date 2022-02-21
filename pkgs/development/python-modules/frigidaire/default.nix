@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, certifi
-, chardet
-, fetchFromGitHub
-, idna
-, pythonOlder
-, requests
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  chardet,
+  fetchFromGitHub,
+  idna,
+  pythonOlder,
+  requests,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "frigidaire";
   version = "0.18.4";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for the Frigidaire devices";
     homepage = "https://github.com/bm1549/frigidaire";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "threejs-sage";
   version = "r122";

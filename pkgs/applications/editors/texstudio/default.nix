@@ -1,6 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtscript, qtsvg,
-  wrapQtAppsHook, poppler, zlib, pkg-config }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qtscript,
+  qtsvg,
+  wrapQtAppsHook,
+  poppler,
+  zlib,
+  pkg-config,
+}:
 mkDerivation rec {
   pname = "texstudio";
   version = "4.2.1";
@@ -12,14 +22,14 @@ mkDerivation rec {
     sha256 = "sha256-EUcYQKc/vxOg6E5ZIpWJezLEppOru79s+slO7e/+kAU=";
   };
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];
-  buildInputs = [ qtbase qtscript qtsvg poppler zlib ];
+  nativeBuildInputs = [qmake wrapQtAppsHook pkg-config];
+  buildInputs = [qtbase qtscript qtsvg poppler zlib];
 
-  qmakeFlags = [ "NO_APPDATA=True" ];
+  qmakeFlags = ["NO_APPDATA=True"];
 
   meta = with lib; {
     description = "TeX and LaTeX editor";
-    longDescription=''
+    longDescription = ''
       Fork of TeXMaker, this editor is a full fledged IDE for
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.
@@ -28,6 +38,6 @@ mkDerivation rec {
     changelog = "https://github.com/texstudio-org/texstudio/blob/${version}/utilities/manual/CHANGELOG.txt";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ajs124 cfouche ];
+    maintainers = with maintainers; [ajs124 cfouche];
   };
 }

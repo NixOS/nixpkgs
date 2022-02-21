@@ -1,6 +1,11 @@
-{ fetchFromGitHub, lib, stdenv, fontforge, perl, perlPackages }:
-
-let
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  fontforge,
+  perl,
+  perlPackages,
+}: let
   version = "2.37";
 
   meta = {
@@ -35,7 +40,7 @@ let
       sha256 = "1xknlg2h287dx34v2n5r33bpcl4biqf0cv7nak657rjki7s0k4bk";
     };
 
-    buildFlags = [ "full-ttf" ];
+    buildFlags = ["full-ttf"];
 
     preBuild = "patchShebangs scripts";
 
@@ -52,14 +57,15 @@ let
     '';
     inherit meta;
   };
-in stdenv.mkDerivation {
-  pname = "dejavu-fonts";
-  inherit version;
-  buildCommand = ''
-    install -m444 -Dt $out/share/fonts/truetype ${full-ttf}/share/fonts/truetype/*.ttf
-    ln -s --relative --force --target-directory=$out/share/fonts/truetype ${minimal}/share/fonts/truetype/DejaVuSans.ttf
-  '';
-  inherit meta;
+in
+  stdenv.mkDerivation {
+    pname = "dejavu-fonts";
+    inherit version;
+    buildCommand = ''
+      install -m444 -Dt $out/share/fonts/truetype ${full-ttf}/share/fonts/truetype/*.ttf
+      ln -s --relative --force --target-directory=$out/share/fonts/truetype ${minimal}/share/fonts/truetype/DejaVuSans.ttf
+    '';
+    inherit meta;
 
-  passthru = { inherit minimal full-ttf; };
-}
+    passthru = {inherit minimal full-ttf;};
+  }

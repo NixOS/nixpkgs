@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "gsctl";
   version = "0.15.4";
@@ -9,7 +12,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "giantswarm";
     repo = pname;
-    rev  = version;
+    rev = version;
     sha256 = "0s5bli08wfd9xszx3kc90k51vlgjc00r0qg4mikb6qdc4pxpgsxj";
   };
 
@@ -17,6 +20,6 @@ buildGoPackage rec {
     description = "The Giant Swarm command line interface";
     homepage = "https://github.com/giantswarm/gsctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ joesalisbury ];
+    maintainers = with maintainers; [joesalisbury];
   };
 }

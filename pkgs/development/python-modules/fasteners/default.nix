@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, monotonic
-, diskcache
-, more-itertools
-, testtools
-, isPy3k
-, nose
-, futures ? null
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  monotonic,
+  diskcache,
+  more-itertools,
+  testtools,
+  isPy3k,
+  nose,
+  futures ? null,
 }:
-
 buildPythonPackage rec {
   pname = "fasteners";
   version = "0.16.3";
@@ -25,14 +25,16 @@ buildPythonPackage rec {
     monotonic
   ];
 
-  checkInputs = [
-    diskcache
-    more-itertools
-    testtools
-    nose
-  ] ++ lib.optionals (!isPy3k) [
-    futures
-  ];
+  checkInputs =
+    [
+      diskcache
+      more-itertools
+      testtools
+      nose
+    ]
+    ++ lib.optionals (!isPy3k) [
+      futures
+    ];
 
   checkPhase = ''
     nosetests
@@ -43,5 +45,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/harlowja/fasteners";
     license = licenses.asl20;
   };
-
 }

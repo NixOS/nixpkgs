@@ -1,6 +1,11 @@
-{ qtModule, qtbase, qtdeclarative, qtsvg, hunspell  }:
-
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
+  hunspell,
+}:
 qtModule {
   pname = "qtvirtualkeyboard";
-  qtInputs = [ qtbase qtdeclarative qtsvg hunspell ];
+  qtInputs = [qtbase qtdeclarative qtsvg hunspell];
 }

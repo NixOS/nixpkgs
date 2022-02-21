@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "disfetch";
   version = "3.6";
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/q60/disfetch";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vel ];
+    maintainers = with maintainers; [vel];
   };
 }

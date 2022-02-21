@@ -1,7 +1,10 @@
-{ stdenv, lib, fetchurl
-, ocaml, findlib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-stdcompat";
   version = "18";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:01y67rndjlzfp5zq0gbqpg9skqq2hfbvhbq9lfhhk5xidr98sfj8";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ocaml findlib];
   # build fails otherwise
   enableParallelBuilding = false;
 
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/thierry-martinez/stdcompat";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     inherit (ocaml.meta) platforms;
   };
 }

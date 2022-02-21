@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "foremost";
   version = "1.5.7";
@@ -9,13 +12,13 @@ stdenv.mkDerivation rec {
     url = "http://foremost.sourceforge.net/pkg/${pname}-${version}.tar.gz";
   };
 
-  patches = [ ./makefile.patch ];
+  patches = [./makefile.patch];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   preInstall = ''
     mkdir -p $out/{bin,share/man/man8}

@@ -1,5 +1,9 @@
-{ lib, fetchurl, python2Packages, makeDesktopItem }:
-
+{
+  lib,
+  fetchurl,
+  python2Packages,
+  makeDesktopItem,
+}:
 python2Packages.buildPythonApplication rec {
   pname = "winpdb";
   version = "1.4.8";
@@ -10,7 +14,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "0vkpd24r40j928vc04c721innv0168sbllg97v4zw10adm24d8fs";
   };
 
-  propagatedBuildInputs = [ python2Packages.wxPython ];
+  propagatedBuildInputs = [python2Packages.wxPython];
 
   desktopItem = makeDesktopItem {
     name = "winpdb";
@@ -50,6 +54,6 @@ python2Packages.buildPythonApplication rec {
     homepage = "http://winpdb.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

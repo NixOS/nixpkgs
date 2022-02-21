@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, pure, freeglut, libGLU, libGL, xlibsWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+  freeglut,
+  libGLU,
+  libGL,
+  xlibsWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-gl";
   version = "0.9";
@@ -9,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "edd594222f89ae372067eda6679a37488986b9739b5b79b4a25ac48255d31bba";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure freeglut libGLU libGL xlibsWrapper ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure freeglut libGLU libGL xlibsWrapper];
   makeFlags = [
     "libdir=${placeholder "out"}/lib"
     "prefix=${placeholder "out"}/"
@@ -22,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-gl.html";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

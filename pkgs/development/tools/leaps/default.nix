@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "leaps";
   version = "0.9.0";
@@ -19,7 +22,7 @@ buildGoPackage rec {
     description = "A pair programming tool and library written in Golang";
     homepage = "https://github.com/jeffail/leaps/";
     license = "MIT";
-    maintainers = with lib.maintainers; [ qknight ];
+    maintainers = with lib.maintainers; [qknight];
     platforms = lib.platforms.unix;
   };
 }

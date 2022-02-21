@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, proj
-, pythonOlder
-, substituteAll
-, cython
-, pytestCheckHook
-, mock
-, certifi
-, numpy
-, shapely
-, pandas
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  proj,
+  pythonOlder,
+  substituteAll,
+  cython,
+  pytestCheckHook,
+  mock,
+  certifi,
+  numpy,
+  shapely,
+  pandas,
+  xarray,
 }:
-
 buildPythonPackage rec {
   pname = "pyproj";
   version = "3.3.0";
@@ -36,11 +36,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ cython ];
-  buildInputs = [ proj ];
+  nativeBuildInputs = [cython];
+  buildInputs = [proj];
 
   propagatedBuildInputs = [
-     certifi
+    certifi
   ];
 
   checkInputs = [
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to PROJ.4 library";
     homepage = "https://github.com/pyproj4/pyproj";
-    license = with lib.licenses; [ isc ];
-    maintainers = with lib.maintainers; [ lsix ];
+    license = with lib.licenses; [isc];
+    maintainers = with lib.maintainers; [lsix];
   };
 }

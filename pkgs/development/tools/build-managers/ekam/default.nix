@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, capnproto }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  capnproto,
+}:
 stdenv.mkDerivation {
   pname = "ekam";
   version = "unstable-2021-09-18";
@@ -62,6 +66,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/capnproto/ekam";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = [ maintainers.garrison ];
+    maintainers = [maintainers.garrison];
   };
 }

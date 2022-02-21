@@ -1,18 +1,18 @@
-{ lib
-, aiohttp
-, authcaptureproxy
-, backoff
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, wrapt
+{
+  lib,
+  aiohttp,
+  authcaptureproxy,
+  backoff,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  wrapt,
 }:
-
 buildPythonPackage rec {
   pname = "teslajsonpy";
   version = "1.7.0";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to work with Tesla API";
     homepage = "https://github.com/zabuldon/teslajsonpy";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

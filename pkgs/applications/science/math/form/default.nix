@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, gmp, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  zlib,
+}:
 stdenv.mkDerivation {
   version = "4.2.1";
   pname = "form";
@@ -10,13 +15,13 @@ stdenv.mkDerivation {
     sha256 = "0a0smc10gm85vxd85942n5azy88w5qs5avbqrw0lw0yb9injswpj";
   };
 
-  buildInputs = [ gmp zlib ];
+  buildInputs = [gmp zlib];
 
   meta = with lib; {
     description = "The FORM project for symbolic manipulation of very big expressions";
     homepage = "https://www.nikhef.nl/~form/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.veprbl ];
+    maintainers = [maintainers.veprbl];
     platforms = platforms.unix;
   };
 }

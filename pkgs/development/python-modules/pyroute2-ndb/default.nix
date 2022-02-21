@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyroute2-core,
 }:
-
 buildPythonPackage rec {
   pname = "pyroute2-ndb";
   version = "0.6.5";
@@ -21,13 +21,13 @@ buildPythonPackage rec {
   # pyroute2 sub-modules have no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pr2modules.ndb" ];
+  pythonImportsCheck = ["pr2modules.ndb"];
 
   meta = with lib; {
     description = "NDB module for pyroute2";
     homepage = "https://github.com/svinota/pyroute2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
     platforms = platforms.unix;
   };
 }

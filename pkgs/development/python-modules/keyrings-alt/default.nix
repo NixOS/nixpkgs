@@ -1,7 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
-, pytest, backports_unittest-mock, keyring, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  isPy27,
+  six,
+  pytest,
+  backports_unittest-mock,
+  keyring,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "keyrings.alt";
   version = "4.1.0";
@@ -17,10 +25,10 @@ buildPythonPackage rec {
       --replace "--flake8" ""
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ six ];
+  nativeBuildInputs = [setuptools-scm];
+  propagatedBuildInputs = [six];
 
-  checkInputs = [ pytest keyring ] ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;
+  checkInputs = [pytest keyring] ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;
 
   # heavily relies on importing tests from keyring package
   doCheck = false;
@@ -36,6 +44,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     description = "Alternate keyring implementations";
     homepage = "https://github.com/jaraco/keyrings.alt";
-    maintainers = with maintainers; [ nyarly ];
+    maintainers = with maintainers; [nyarly];
   };
 }

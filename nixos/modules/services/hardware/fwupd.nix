@@ -1,10 +1,11 @@
 # fwupd daemon.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.fwupd;
 
   customEtc = {
@@ -23,30 +24,33 @@ let
     };
   };
 
-  originalEtc =
-    let
-      mkEtcFile = n: nameValuePair n { source = "${cfg.package}/etc/${n}"; };
-    in listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
-  extraTrustedKeys =
-    let
-      mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
-      mkEtcFile = p: nameValuePair (mkName p) { source = p; };
-    in listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
+  originalEtc = let
+    mkEtcFile = n: nameValuePair n {source = "${cfg.package}/etc/${n}";};
+  in
+    listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
+  extraTrustedKeys = let
+    mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
+    mkEtcFile = p: nameValuePair (mkName p) {source = p;};
+  in
+    listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
 
   # We cannot include the file in $out and rely on filesInstalledToEtc
   # to install it because it would create a cyclic dependency between
   # the outputs. We also need to enable the remote,
   # which should not be done by default.
-  testRemote = if cfg.enableTestRemote then {
-    "fwupd/remotes.d/fwupd-tests.conf" = {
-      source = pkgs.runCommand "fwupd-tests-enabled.conf" {} ''
-        sed "s,^Enabled=false,Enabled=true," \
-        "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
-      '';
-    };
-  } else {};
+  testRemote =
+    if cfg.enableTestRemote
+    then
+      {
+        "fwupd/remotes.d/fwupd-tests.conf" = {
+          source = pkgs.runCommand "fwupd-tests-enabled.conf" {} ''
+            sed "s,^Enabled=false,Enabled=true," \
+            "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
+          '';
+        };
+      }
+    else {};
 in {
-
   ###### interface
   options = {
     services.fwupd = {
@@ -62,7 +66,7 @@ in {
       disabledDevices = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
+        example = ["2082b5e0-7a64-478a-b1b2-e3404fab6dad"];
         description = ''
           Allow disabling specific devices by their GUID
         '';
@@ -71,7 +75,7 @@ in {
       disabledPlugins = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "udev" ];
+        example = ["udev"];
         description = ''
           Allow disabling specific plugins
         '';
@@ -107,8 +111,8 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "fwupd" "blacklistDevices"] [ "services" "fwupd" "disabledDevices" ])
-    (mkRenamedOptionModule [ "services" "fwupd" "blacklistPlugins"] [ "services" "fwupd" "disabledPlugins" ])
+    (mkRenamedOptionModule ["services" "fwupd" "blacklistDevices"] ["services" "fwupd" "disabledDevices"])
+    (mkRenamedOptionModule ["services" "fwupd" "blacklistPlugins"] ["services" "fwupd" "disabledPlugins"])
   ];
 
   ###### implementation
@@ -116,16 +120,16 @@ in {
     # Disable test related plug-ins implicitly so that users do not have to care about them.
     services.fwupd.disabledPlugins = cfg.package.defaultDisabledPlugins;
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     # customEtc overrides some files from the package
     environment.etc = originalEtc // customEtc // extraTrustedKeys // testRemote;
 
-    services.dbus.packages = [ cfg.package ];
+    services.dbus.packages = [cfg.package];
 
-    services.udev.packages = [ cfg.package ];
+    services.udev.packages = [cfg.package];
 
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [cfg.package];
   };
 
   meta = {

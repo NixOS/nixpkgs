@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchhg, cmake, glib, gst_all_1, makeWrapper, pkg-config
-, python2, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchhg,
+  cmake,
+  glib,
+  gst_all_1,
+  makeWrapper,
+  pkg-config,
+  python2,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  sqlite,
+  zlib,
+  runtimeShell,
 }:
-
 stdenv.mkDerivation {
   pname = "retrofe";
   version = "0.6.169";
@@ -12,13 +26,22 @@ stdenv.mkDerivation {
     sha256 = "0cvsg07ff0fdqh5zgiv2fs7s6c98hn150kpxmpw5fn6jilaszwkm";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config python2 ];
+  nativeBuildInputs = [cmake makeWrapper pkg-config python2];
 
-  buildInputs = [
-    glib gst_all_1.gstreamer SDL2 SDL2_image SDL2_mixer SDL2_ttf sqlite zlib
-  ] ++ (with gst_all_1; [ gst-libav gst-plugins-base gst-plugins-good ]);
+  buildInputs =
+    [
+      glib
+      gst_all_1.gstreamer
+      SDL2
+      SDL2_image
+      SDL2_mixer
+      SDL2_ttf
+      sqlite
+      zlib
+    ]
+    ++ (with gst_all_1; [gst-libav gst-plugins-base gst-plugins-good]);
 
-  patches = [ ./include-paths.patch ];
+  patches = [./include-paths.patch];
 
   configurePhase = ''
     cmake RetroFE/Source -BRetroFE/Build -DCMAKE_BUILD_TYPE=Release \
@@ -72,7 +95,7 @@ stdenv.mkDerivation {
     description = "A frontend for arcade cabinets and media PCs";
     homepage = "http://retrofe.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hrdinka ];
+    maintainers = with maintainers; [hrdinka];
     platforms = with platforms; linux;
   };
 }

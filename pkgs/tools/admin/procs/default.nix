@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  Security,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "procs";
   version = "0.12.1";
@@ -13,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-BChYzSnM9jnLioRhRDez6XOjJwGrU+giV4Ld3rp/57M=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -22,13 +29,13 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion procs.{bash,fish} --zsh _procs
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [Security libiconv];
 
   meta = with lib; {
     description = "A modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dalance Br1ght0ne SuperSandro2000 ];
+    maintainers = with maintainers; [dalance Br1ght0ne SuperSandro2000];
   };
 }

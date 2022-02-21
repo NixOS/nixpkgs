@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.vnstat;
 in {
   options.services.vnstat = {
@@ -10,8 +12,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-
-    environment.systemPackages = [ pkgs.vnstat ];
+    environment.systemPackages = [pkgs.vnstat];
 
     users = {
       groups.vnstatd = {};
@@ -25,9 +26,9 @@ in {
 
     systemd.services.vnstat = {
       description = "vnStat network traffic monitor";
-      path = [ pkgs.coreutils ];
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      path = [pkgs.coreutils];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       documentation = [
         "man:vnstatd(1)"
         "man:vnstat(1)"
@@ -56,5 +57,5 @@ in {
     };
   };
 
-  meta.maintainers = [ maintainers.evils ];
+  meta.maintainers = [maintainers.evils];
 }

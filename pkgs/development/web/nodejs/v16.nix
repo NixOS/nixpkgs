@@ -1,6 +1,10 @@
-{ callPackage, fetchpatch, openssl, python3, enableNpm ? true }:
-
-let
+{
+  callPackage,
+  fetchpatch,
+  openssl,
+  python3,
+  enableNpm ? true,
+}: let
   buildNodejs = callPackage ./nodejs.nix {
     inherit openssl;
     python = python3;

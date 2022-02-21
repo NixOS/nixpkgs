@@ -1,38 +1,36 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, rustPlatform
-, pkg-config
-, glib
-, libshumate
-, gst_all_1
-, gtk4
-, libadwaita
-, llvmPackages
-, glibc
-, pipewire
-, wayland
-, wrapGAppsHook4
-, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  rustPlatform,
+  pkg-config,
+  glib,
+  libshumate,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  llvmPackages,
+  glibc,
+  pipewire,
+  wayland,
+  wrapGAppsHook4,
+  desktop-file-utils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ashpd-demo";
   version = "0.2.2";
 
-  src =
-    let
-      share = fetchFromGitHub {
-        owner = "bilelmoussaoui";
-        repo = "ashpd";
-        rev = version;
-        sha256 = "9O6XqM4oys/hXgztQQ8tTobJV8U52db/VY6FlTMUvGY=";
-      };
-    in
-    "${share}/ashpd-demo";
+  src = let
+    share = fetchFromGitHub {
+      owner = "bilelmoussaoui";
+      repo = "ashpd";
+      rev = version;
+      sha256 = "9O6XqM4oys/hXgztQQ8tTobJV8U52db/VY6FlTMUvGY=";
+    };
+  in "${share}/ashpd-demo";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
@@ -78,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Tool for playing with XDG desktop portals";
     homepage = "https://github.com/bilelmoussaoui/ashpd/tree/master/ashpd-demo";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

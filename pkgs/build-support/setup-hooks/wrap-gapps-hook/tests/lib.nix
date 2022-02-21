@@ -1,17 +1,18 @@
-{ runCommand
-}:
-
-rec {
-  runTest = name: body: runCommand name { } ''
-    set -o errexit
-    ${body}
-    touch $out
-  '';
+{runCommand}: rec {
+  runTest = name: body:
+    runCommand name {} ''
+      set -o errexit
+      ${body}
+      touch $out
+    '';
 
   skip = cond: text:
-    if cond then ''
-      echo "Skipping test $name" > /dev/stderr
-    '' else text;
+    if cond
+    then
+      ''
+        echo "Skipping test $name" > /dev/stderr
+      ''
+    else text;
 
   fail = text: ''
     echo "FAIL: $name: ${text}" > /dev/stderr

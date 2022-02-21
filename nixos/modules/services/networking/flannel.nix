@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.flannel;
 
   networkConfig = filterAttrs (n: v: v != null) {
@@ -145,26 +147,29 @@ in {
   config = mkIf cfg.enable {
     systemd.services.flannel = {
       description = "Flannel Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      environment = {
-        FLANNELD_PUBLIC_IP = cfg.publicIp;
-        FLANNELD_IFACE = cfg.iface;
-      } // optionalAttrs (cfg.storageBackend == "etcd") {
-        FLANNELD_ETCD_ENDPOINTS = concatStringsSep "," cfg.etcd.endpoints;
-        FLANNELD_ETCD_KEYFILE = cfg.etcd.keyFile;
-        FLANNELD_ETCD_CERTFILE = cfg.etcd.certFile;
-        FLANNELD_ETCD_CAFILE = cfg.etcd.caFile;
-        ETCDCTL_CERT_FILE = cfg.etcd.certFile;
-        ETCDCTL_KEY_FILE = cfg.etcd.keyFile;
-        ETCDCTL_CA_FILE = cfg.etcd.caFile;
-        ETCDCTL_PEERS = concatStringsSep "," cfg.etcd.endpoints;
-      } // optionalAttrs (cfg.storageBackend == "kubernetes") {
-        FLANNELD_KUBE_SUBNET_MGR = "true";
-        FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
-        NODE_NAME = cfg.nodeName;
-      };
-      path = [ pkgs.iptables ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      environment =
+        {
+          FLANNELD_PUBLIC_IP = cfg.publicIp;
+          FLANNELD_IFACE = cfg.iface;
+        }
+        // optionalAttrs (cfg.storageBackend == "etcd") {
+          FLANNELD_ETCD_ENDPOINTS = concatStringsSep "," cfg.etcd.endpoints;
+          FLANNELD_ETCD_KEYFILE = cfg.etcd.keyFile;
+          FLANNELD_ETCD_CERTFILE = cfg.etcd.certFile;
+          FLANNELD_ETCD_CAFILE = cfg.etcd.caFile;
+          ETCDCTL_CERT_FILE = cfg.etcd.certFile;
+          ETCDCTL_KEY_FILE = cfg.etcd.keyFile;
+          ETCDCTL_CA_FILE = cfg.etcd.caFile;
+          ETCDCTL_PEERS = concatStringsSep "," cfg.etcd.endpoints;
+        }
+        // optionalAttrs (cfg.storageBackend == "kubernetes") {
+          FLANNELD_KUBE_SUBNET_MGR = "true";
+          FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
+          NODE_NAME = cfg.nodeName;
+        };
+      path = [pkgs.iptables];
       preStart = optionalString (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"
         until ${pkgs.etcd}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'

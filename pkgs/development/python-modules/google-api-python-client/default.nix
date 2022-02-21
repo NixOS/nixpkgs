@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, google-auth-httplib2
-, google-api-core
-, httplib2
-, uritemplate
-, oauth2client
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-auth-httplib2,
+  google-api-core,
+  httplib2,
+  uritemplate,
+  oauth2client,
+  setuptools,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "google-api-python-client";
   version = "2.35.0";
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/google-api-python-client";
     changelog = "https://github.com/googleapis/google-api-python-client/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

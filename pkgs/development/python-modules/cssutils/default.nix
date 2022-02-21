@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, pythonOlder
-, fetchpatch
-, fetchPypi
-, setuptools-scm
-, toml
-, importlib-metadata
-, cssselect
-, lxml
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  pythonOlder,
+  fetchpatch,
+  fetchPypi,
+  setuptools-scm,
+  toml,
+  importlib-metadata,
+  cssselect,
+  lxml,
+  mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "cssutils";
   version = "2.3.0";
@@ -48,25 +48,27 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # access network
-    "test_parseUrl"
-    "encutils"
-    "website.logging"
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    # AttributeError: module 'importlib.resources' has no attribute 'files'
-    "test_parseFile"
-    "test_parseString"
-    "test_combine"
-  ];
+  disabledTests =
+    [
+      # access network
+      "test_parseUrl"
+      "encutils"
+      "website.logging"
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      # AttributeError: module 'importlib.resources' has no attribute 'files'
+      "test_parseFile"
+      "test_parseString"
+      "test_combine"
+    ];
 
-  pythonImportsCheck = [ "cssutils" ];
+  pythonImportsCheck = ["cssutils"];
 
   meta = with lib; {
     description = "A CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
     changelog = "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

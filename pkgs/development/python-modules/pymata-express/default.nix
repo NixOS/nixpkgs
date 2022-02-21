@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pymata-express";
   version = "1.21";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pymata_express" ];
+  pythonImportsCheck = ["pymata_express"];
 
   meta = with lib; {
     description = "Python Asyncio Arduino Firmata Client";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
       hardware remotely over a serial link.
     '';
     homepage = "https://mryslab.github.io/pymata-express/";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [agpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

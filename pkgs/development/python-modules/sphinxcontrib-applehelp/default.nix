@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "sphinxcontrib-applehelp";
   version = "1.0.2";

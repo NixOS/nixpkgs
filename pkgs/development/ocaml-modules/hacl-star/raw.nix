@@ -1,5 +1,14 @@
-{ lib, which, stdenv, fetchzip, ocaml, findlib, hacl-star, ctypes, cppo }:
-
+{
+  lib,
+  which,
+  stdenv,
+  fetchzip,
+  ocaml,
+  findlib,
+  hacl-star,
+  ctypes,
+  cppo,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-hacl-star-raw";
   version = "0.4.5";
@@ -47,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Auto-generated low-level OCaml bindings for EverCrypt/HACL*";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
     platforms = ocaml.meta.platforms;
   };
 }

@@ -1,11 +1,14 @@
-{ lib, stdenv
-, makeWrapper
-, makeDesktopItem, copyDesktopItems
-, fetchFromGitHub
-, pkg-config
-, SDL2, SDL2_image
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  fetchFromGitHub,
+  pkg-config,
+  SDL2,
+  SDL2_image,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sdlpop";
   version = "1.22";
@@ -17,11 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "1yy5r1r0hv0xggk8qd8bwk2zy7abpv89nikq4flqgi53fc5q9xl7";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [pkg-config makeWrapper copyDesktopItems];
 
-  buildInputs = [ SDL2 SDL2_image ];
+  buildInputs = [SDL2 SDL2_image];
 
-  makeFlags = [ "-C" "src" ];
+  makeFlags = ["-C" "src"];
 
   preBuild = ''
     substituteInPlace src/Makefile \
@@ -51,20 +54,22 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItems = [ (makeDesktopItem {
-    name = "sdlpop";
-    icon = "sdlpop";
-    exec = "prince";
-    desktopName = "SDLPoP";
-    comment = "An open-source port of Prince of Persia";
-    categories = "Game;AdventureGame;";
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "sdlpop";
+      icon = "sdlpop";
+      exec = "prince";
+      desktopName = "SDLPoP";
+      comment = "An open-source port of Prince of Persia";
+      categories = "Game;AdventureGame;";
+    })
+  ];
 
   meta = with lib; {
     description = "Open-source port of Prince of Persia";
     homepage = "https://github.com/NagyD/SDLPoP";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ iblech ];
+    maintainers = with maintainers; [iblech];
     platforms = platforms.unix;
   };
 }

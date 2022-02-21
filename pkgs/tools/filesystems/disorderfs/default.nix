@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, attr, asciidoc }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  attr,
+  asciidoc,
+}:
 stdenv.mkDerivation rec {
   pname = "disorderfs";
   version = "0.5.11";
@@ -9,16 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KqAMKVUykCgVdNyjacZjpVXqVdeob76v0iOuSd4TNIY=";
   };
 
-  nativeBuildInputs = [ pkg-config asciidoc ];
+  nativeBuildInputs = [pkg-config asciidoc];
 
-  buildInputs = [ fuse attr ];
+  buildInputs = [fuse attr];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "An overlay FUSE filesystem that introduces non-determinism into filesystem metadata";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

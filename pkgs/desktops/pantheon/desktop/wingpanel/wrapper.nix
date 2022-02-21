@@ -1,60 +1,64 @@
-{ lib
-, wrapGAppsHook
-, glib
-, stdenv
-, xorg
-, wingpanel
-, wingpanelIndicators
-, switchboard-with-plugs
-, indicators ? null
+{
+  lib,
+  wrapGAppsHook,
+  glib,
+  stdenv,
+  xorg,
+  wingpanel,
+  wingpanelIndicators,
+  switchboard-with-plugs,
+  indicators ? null
   # Only useful to disable for development testing.
-, useDefaultIndicators ? true
-}:
-
-let
+  ,
+  useDefaultIndicators ? true,
+}: let
   selectedIndicators =
-    if indicators == null then wingpanelIndicators
+    if indicators == null
+    then wingpanelIndicators
     else indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
 in
-stdenv.mkDerivation rec {
-  name = "${wingpanel.name}-with-indicators";
+  stdenv.mkDerivation rec {
+    name = "${wingpanel.name}-with-indicators";
 
-  src = null;
+    src = null;
 
-  paths = [
-    wingpanel
-  ] ++ selectedIndicators;
+    paths =
+      [
+        wingpanel
+      ]
+      ++ selectedIndicators;
 
-  passAsFile = [ "paths" ];
+    passAsFile = ["paths"];
 
-  nativeBuildInputs = [
-    glib
-    wrapGAppsHook
-  ];
+    nativeBuildInputs = [
+      glib
+      wrapGAppsHook
+    ];
 
-  buildInputs = lib.forEach selectedIndicators (x: x.buildInputs)
-    ++ selectedIndicators;
+    buildInputs =
+      lib.forEach selectedIndicators (x: x.buildInputs)
+      ++ selectedIndicators;
 
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
+    dontUnpack = true;
+    dontConfigure = true;
+    dontBuild = true;
 
-  preferLocalBuild = true;
-  allowSubstitutes = false;
+    preferLocalBuild = true;
+    allowSubstitutes = false;
 
-  installPhase = ''
-    mkdir -p $out
-    for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
-    done
-  '';
+    installPhase = ''
+      mkdir -p $out
+      for i in $(cat $pathsPath); do
+        ${xorg.lndir}/bin/lndir -silent $i $out
+      done
+    '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set WINGPANEL_INDICATORS_PATH "$out/lib/wingpanel"
-      --set SWITCHBOARD_PLUGS_PATH "${switchboard-with-plugs}/lib/switchboard"
-    )
-  '';
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --set WINGPANEL_INDICATORS_PATH "$out/lib/wingpanel"
+        --set SWITCHBOARD_PLUGS_PATH "${switchboard-with-plugs}/lib/switchboard"
+      )
+    '';
 
-  inherit (wingpanel) meta;
-}
+    inherit (wingpanel) meta;
+  }

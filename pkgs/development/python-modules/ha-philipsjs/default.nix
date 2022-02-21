@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, httpx
-, pytest-aiohttp
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, respx
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  httpx,
+  pytest-aiohttp,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
 }:
-
 buildPythonPackage rec {
   pname = "ha-philipsjs";
   version = "2.7.6";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python library to interact with Philips TVs with jointSPACE API";
     homepage = "https://github.com/danielperna84/ha-philipsjs";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

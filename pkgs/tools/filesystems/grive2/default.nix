@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, yajl, cmake, libgcrypt, curl, expat, boost, libiberty }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  yajl,
+  cmake,
+  libgcrypt,
+  curl,
+  expat,
+  boost,
+  libiberty,
+}:
 stdenv.mkDerivation rec {
   version = "0.5.1";
   pname = "grive2";
@@ -7,13 +18,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vitalif";
     repo = "grive2";
-    rev =  "v${version}";
+    rev = "v${version}";
     sha256 = "1kv34ys8qarjsxpb1kd8dp7b3b4ycyiwjzd6mg97d3jk7405g6nm";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ libgcrypt yajl curl expat stdenv boost libiberty ];
+  buildInputs = [libgcrypt yajl curl expat stdenv boost libiberty];
 
   meta = with lib; {
     description = "A console Google Drive client";
@@ -21,5 +32,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
-
 }

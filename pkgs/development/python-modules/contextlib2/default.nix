@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "contextlib2";
   version = "21.6.0";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Backports and enhancements for the contextlib module";
     homepage = "https://contextlib2.readthedocs.org/";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

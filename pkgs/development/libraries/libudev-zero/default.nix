@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "libudev-zero";
   version = "1.0.0";
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   # Just let the installPhase build stuff, because there's no
   # non-install target that builds everything anyway.
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/illiliti/libudev-zero";
     description = "Daemonless replacement for libudev";
-    maintainers = with maintainers; [ qyliss shamilton ];
+    maintainers = with maintainers; [qyliss shamilton];
     license = licenses.isc;
     platforms = platforms.linux;
   };

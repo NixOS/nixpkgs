@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchPypi
-, nose
-, pytz
-, setuptools-scm
-, six
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchPypi,
+  nose,
+  pytz,
+  setuptools-scm,
+  six,
+  sqlalchemy,
 }:
-
 buildPythonPackage rec {
   pname = "pygtfs";
   version = "0.1.6";
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     nose
   ];
 
-  pythonImportsCheck = [ "pygtfs" ];
+  pythonImportsCheck = ["pygtfs"];
 
   meta = with lib; {
     description = "Python module for GTFS";
     homepage = "https://github.com/jarondl/pygtfs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

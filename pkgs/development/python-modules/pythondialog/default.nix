@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "pythondialog";
   version = "3.5.3";
@@ -23,5 +23,4 @@ buildPythonPackage rec {
     homepage = "http://pythondialog.sourceforge.net/";
     license = licenses.lgpl3;
   };
-
 }

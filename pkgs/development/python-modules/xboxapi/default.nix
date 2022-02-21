@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "xboxapi";
   version = "2.0.1";
@@ -16,16 +16,16 @@ buildPythonPackage rec {
     sha256 = "10mhvallkwf5lw91hj5rv16sziqhhjq7sgcgr28sqqnlgjnyazdd";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "xboxapi" ];
+  pythonImportsCheck = ["xboxapi"];
 
   meta = with lib; {
     description = "Python XBOX One API wrapper";
     homepage = "https://github.com/mKeRix/xboxapi-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

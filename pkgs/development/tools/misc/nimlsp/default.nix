@@ -1,5 +1,10 @@
-{ lib, nimPackages, fetchFromGitHub, srcOnly, nim }:
-
+{
+  lib,
+  nimPackages,
+  fetchFromGitHub,
+  srcOnly,
+  nim,
+}:
 nimPackages.buildNimPackage rec {
   pname = "nimlsp";
   version = "0.4.0";
@@ -12,7 +17,7 @@ nimPackages.buildNimPackage rec {
     sha256 = "sha256-eih8JmofLFXkidanRocjtA6wv84HkA1bi0M4dxkiDr4=";
   };
 
-  buildInputs = with nimPackages; [ jsonschema ];
+  buildInputs = with nimPackages; [jsonschema];
 
   nimFlags = [
     "--threads:on"
@@ -20,13 +25,13 @@ nimPackages.buildNimPackage rec {
     "-d:tempDir=/tmp"
   ];
 
-  nimDefines = [ "nimcore" "nimsuggest" "debugCommunication" "debugLogging" ];
+  nimDefines = ["nimcore" "nimsuggest" "debugCommunication" "debugLogging"];
 
   meta = with lib; {
     description = "Language Server Protocol implementation for Nim";
     homepage = "https://github.com/PMunch/nimlsp";
     license = licenses.mit;
     platforms = nim.meta.platforms;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

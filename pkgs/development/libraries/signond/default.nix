@@ -1,5 +1,10 @@
-{ mkDerivation, lib, fetchFromGitLab, qmake, doxygen }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qmake,
+  doxygen,
+}:
 mkDerivation rec {
   pname = "signond";
   version = "8.60";
@@ -24,7 +29,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.com/accounts-sso/signond";
     description = "Signon Daemon for Qt";
-    maintainers = with maintainers; [ freezeboy  ];
+    maintainers = with maintainers; [freezeboy];
     platforms = platforms.linux;
   };
 }

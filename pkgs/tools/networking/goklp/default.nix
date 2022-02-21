@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "goklp";
   version = "1.6";
@@ -18,7 +21,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Golang OpenSSH Keys Ldap Provider for AuthorizedKeysCommand";
     homepage = "https://github.com/AppliedTrust/goklp";
-    maintainers = with maintainers; [ disassembler ];
+    maintainers = with maintainers; [disassembler];
     license = licenses.bsd2;
   };
 }

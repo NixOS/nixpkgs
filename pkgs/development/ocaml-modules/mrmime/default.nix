@@ -1,30 +1,30 @@
-{ afl-persistent
-, alcotest
-, angstrom
-, base64
-, bigarray-compat
-, bigarray-overlap
-, bigstringaf
-, buildDunePackage
-, emile
-, fetchzip
-, fmt
-, fpath
-, hxd
-, ipaddr
-, jsonm
-, ke
-, lib
-, mirage-crypto-rng
-, pecu
-, prettym
-, ptime
-, rosetta
-, rresult
-, unstrctrd
-, uutf
+{
+  afl-persistent,
+  alcotest,
+  angstrom,
+  base64,
+  bigarray-compat,
+  bigarray-overlap,
+  bigstringaf,
+  buildDunePackage,
+  emile,
+  fetchzip,
+  fmt,
+  fpath,
+  hxd,
+  ipaddr,
+  jsonm,
+  ke,
+  lib,
+  mirage-crypto-rng,
+  pecu,
+  prettym,
+  ptime,
+  rosetta,
+  rresult,
+  unstrctrd,
+  uutf,
 }:
-
 buildDunePackage rec {
   pname = "mrmime";
   version = "0.5.0";
@@ -69,6 +69,6 @@ buildDunePackage rec {
     description = "Parser and generator of mail in OCaml";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/mrmime";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

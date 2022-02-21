@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, mock
-, pytest-xdist, covCore, glibcLocales }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytest-cov,
+  mock,
+  pytest-xdist,
+  covCore,
+  glibcLocales,
+}:
 buildPythonPackage rec {
   pname = "dyn";
   version = "1.8.1";
@@ -10,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "e112149d48b4500c18b3cfb6e0e6e780bb5aa0e56ff87cac412280200b9ec8bf";
   };
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [glibcLocales];
 
   checkInputs = [
     pytest
@@ -22,7 +30,7 @@ buildPythonPackage rec {
   # Disable checks because they are not stateless and require internet access.
   doCheck = false;
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "Dynect dns lib";

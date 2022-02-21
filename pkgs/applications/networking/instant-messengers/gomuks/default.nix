@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, substituteAll
-, buildGoModule
-, fetchFromGitHub
-, makeDesktopItem
-, makeWrapper
-, libnotify
-, olm
-, pulseaudio
-, sound-theme-freedesktop
+{
+  lib,
+  stdenv,
+  substituteAll,
+  buildGoModule,
+  fetchFromGitHub,
+  makeDesktopItem,
+  makeWrapper,
+  libnotify,
+  olm,
+  pulseaudio,
+  sound-theme-freedesktop,
 }:
-
 buildGoModule rec {
   pname = "gomuks";
   version = "0.2.4";
@@ -26,8 +26,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ olm ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [olm];
 
   # Upstream issue: https://github.com/tulir/gomuks/issues/260
   patches = lib.optional stdenv.isLinux (substituteAll {
@@ -49,14 +49,14 @@ buildGoModule rec {
     }/* $out/
     substituteAllInPlace $out/share/applications/*
     wrapProgram $out/bin/gomuks \
-      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}"
+      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [libnotify pulseaudio])}"
   '';
 
   meta = with lib; {
     homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ chvp emily ];
+    maintainers = with maintainers; [chvp emily];
     platforms = platforms.unix;
   };
 }

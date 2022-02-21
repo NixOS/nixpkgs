@@ -1,1 +1,1 @@
-{ pkgs, ... }: pkgs.nixos-option
+{pkgs, ...}: pkgs.nixos-option

@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zxing-cpp";
   version = "1.2.0";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       formats.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

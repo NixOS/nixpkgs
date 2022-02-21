@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchzip
-, cmake
-, libtirpc
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchzip,
+  cmake,
+  libtirpc,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "teapot";
   version = "2.3.0";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   # By no known reason libtirpc is not detected
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  NIX_CFLAGS_COMPILE = ["-I${libtirpc.dev}/include/tirpc"];
+  NIX_LDFLAGS = ["-ltirpc"];
 
   cmakeConfigureFlags = [
     "-DENABLE_HELP=OFF"
@@ -65,9 +65,10 @@ stdenv.mkDerivation rec {
       systems.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: patch/fix FLTK building
 # TODO: add documentation from
+

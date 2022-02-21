@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, keystoneauth1
-, openssl
-, oslo-config
-, oslo-serialization
-, pbr
-, requests-mock
-, stestr
-, testresources
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  keystoneauth1,
+  openssl,
+  oslo-config,
+  oslo-serialization,
+  pbr,
+  requests-mock,
+  stestr,
+  testresources,
+  testscenarios,
 }:
-
 buildPythonPackage rec {
   pname = "python-keystoneclient";
   version = "4.4.0";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "keystoneclient" ];
+  pythonImportsCheck = ["keystoneclient"];
 
   meta = with lib; {
     description = "Client Library for OpenStack Identity";

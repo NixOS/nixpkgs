@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromBitbucket
-, autoreconfHook
-, m4ri
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  autoreconfHook,
+  m4ri,
 }:
-
 stdenv.mkDerivation rec {
   version = "20200115";
   pname = "m4rie";

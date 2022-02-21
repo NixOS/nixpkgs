@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, lld, llvm }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeScript,
+  cmake,
+  clang,
+  rocm-device-libs,
+  lld,
+  llvm,
+}:
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
   version = "4.5.2";
@@ -13,9 +22,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/lib/comgr";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ clang rocm-device-libs lld llvm ];
+  buildInputs = [clang rocm-device-libs lld llvm];
 
   cmakeFlags = [
     "-DCLANG=${clang}/bin/clang"
@@ -47,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "APIs for compiling and inspecting AMDGPU code objects";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, unidecode, regex, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unidecode,
+  regex,
+  python,
+}:
 buildPythonPackage rec {
   pname = "awesome-slugify";
   version = "1.6.5";
@@ -18,10 +24,10 @@ buildPythonPackage rec {
     ./slugify_filename_test.patch # fixes broken test by new unidecode
   ];
 
-  propagatedBuildInputs = [ unidecode regex ];
+  propagatedBuildInputs = [unidecode regex];
 
   checkPhase = ''
-      ${python.interpreter} -m unittest discover
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {
@@ -29,6 +35,6 @@ buildPythonPackage rec {
     description = "Python flexible slugify function";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

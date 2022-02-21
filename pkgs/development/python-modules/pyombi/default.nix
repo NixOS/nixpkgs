@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pyombi";
   version = "0.1.10";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pyombi" ];
+  pythonImportsCheck = ["pyombi"];
 
   meta = with lib; {
     description = "Python module to retrieve information from Ombi";
     homepage = "https://github.com/larssont/pyombi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "step-cli";
   version = "0.18.1";
@@ -31,7 +31,7 @@ buildGoModule rec {
     description = "A zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";
     homepage = "https://smallstep.com/cli/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [xfix];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "step";
   };

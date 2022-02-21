@@ -1,16 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, bison
-, git
-, python2
-, rake
-, ruby
-, libGL
-, libuv
-, libX11
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  git,
+  python2,
+  rake,
+  ruby,
+  libGL,
+  libuv,
+  libX11,
+}: let
   mgem-list = fetchFromGitHub {
     owner = "mruby";
     repo = "mgem-list";
@@ -53,57 +53,57 @@ let
     sha256 = "003glxgxifk4ixl12sy4gn9bhwvgb79b4wga549ic79isgv81w2d";
   };
 in
-stdenv.mkDerivation rec {
-  pname = "mruby-zest";
-  version = "3.0.5";
+  stdenv.mkDerivation rec {
+    pname = "mruby-zest";
+    version = "3.0.5";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = "${pname}-build";
-    rev = version;
-    sha256 = "0fxljrgamgz2rm85mclixs00b0f2yf109jc369039n1vf0l5m57d";
-    fetchSubmodules = true;
-  };
+    src = fetchFromGitHub {
+      owner = pname;
+      repo = "${pname}-build";
+      rev = version;
+      sha256 = "0fxljrgamgz2rm85mclixs00b0f2yf109jc369039n1vf0l5m57d";
+      fetchSubmodules = true;
+    };
 
-  nativeBuildInputs = [ bison git python2 rake ruby ];
-  buildInputs = [ libGL libuv libX11 ];
+    nativeBuildInputs = [bison git python2 rake ruby];
+    buildInputs = [libGL libuv libX11];
 
-  patches = [
-    ./force-gcc-as-linker.patch
-    ./system-libuv.patch
-  ];
+    patches = [
+      ./force-gcc-as-linker.patch
+      ./system-libuv.patch
+    ];
 
-  # Add missing dependencies of deps/mruby-dir-glob/mrbgem.rake
-  # Should be fixed in next release, see bcadb0a5490bd6d599f1a0e66ce09b46363c9dae
-  postPatch = ''
-    mkdir -p mruby/build/mrbgems
-    ln -s ${mgem-list} mruby/build/mrbgems/mgem-list
-    ln -s ${mruby-dir} mruby/build/mrbgems/mruby-dir
-    ln -s ${mruby-errno} mruby/build/mrbgems/mruby-errno
-    ln -s ${mruby-file-stat} mruby/build/mrbgems/mruby-file-stat
-    ln -s ${mruby-process} mruby/build/mrbgems/mruby-process
-    ln -s ${mruby-pack} mruby/build/mrbgems/mruby-pack
-  '';
+    # Add missing dependencies of deps/mruby-dir-glob/mrbgem.rake
+    # Should be fixed in next release, see bcadb0a5490bd6d599f1a0e66ce09b46363c9dae
+    postPatch = ''
+      mkdir -p mruby/build/mrbgems
+      ln -s ${mgem-list} mruby/build/mrbgems/mgem-list
+      ln -s ${mruby-dir} mruby/build/mrbgems/mruby-dir
+      ln -s ${mruby-errno} mruby/build/mrbgems/mruby-errno
+      ln -s ${mruby-file-stat} mruby/build/mrbgems/mruby-file-stat
+      ln -s ${mruby-process} mruby/build/mrbgems/mruby-process
+      ln -s ${mruby-pack} mruby/build/mrbgems/mruby-pack
+    '';
 
-  installTargets = [ "pack" ];
+    installTargets = ["pack"];
 
-  postInstall = ''
-    ln -s "$out/zest" "$out/zyn-fusion"
-    cp -a package/{font,libzest.so,schema,zest} "$out"
+    postInstall = ''
+      ln -s "$out/zest" "$out/zyn-fusion"
+      cp -a package/{font,libzest.so,schema,zest} "$out"
 
-    # mruby-widget-lib/src/api.c requires MainWindow.qml as part of a
-    # sanity check, even though qml files are compiled into the binary
-    # https://github.com/mruby-zest/mruby-zest-build/tree/3.0.5/src/mruby-widget-lib/src/api.c#L99-L116
-    # https://github.com/mruby-zest/mruby-zest-build/tree/3.0.5/linux-pack.sh#L17-L18
-    mkdir -p "$out/qml"
-    touch "$out/qml/MainWindow.qml"
-  '';
+      # mruby-widget-lib/src/api.c requires MainWindow.qml as part of a
+      # sanity check, even though qml files are compiled into the binary
+      # https://github.com/mruby-zest/mruby-zest-build/tree/3.0.5/src/mruby-widget-lib/src/api.c#L99-L116
+      # https://github.com/mruby-zest/mruby-zest-build/tree/3.0.5/linux-pack.sh#L17-L18
+      mkdir -p "$out/qml"
+      touch "$out/qml/MainWindow.qml"
+    '';
 
-  meta = with lib; {
-    description = "The Zest Framework used in ZynAddSubFX's UI";
-    homepage = "https://github.com/mruby-zest";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.all;
-  };
-}
+    meta = with lib; {
+      description = "The Zest Framework used in ZynAddSubFX's UI";
+      homepage = "https://github.com/mruby-zest";
+      license = licenses.lgpl21;
+      maintainers = with maintainers; [kira-bruneau];
+      platforms = platforms.all;
+    };
+  }

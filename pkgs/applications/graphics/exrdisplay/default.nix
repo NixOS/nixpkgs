@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, fltk, openexr, libGLU, libGL, ctl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fltk,
+  openexr,
+  libGLU,
+  libGL,
+  ctl,
+}:
 stdenv.mkDerivation rec {
   pname = "openexr_viewers";
   version = "2.2.1";
@@ -17,8 +26,8 @@ stdenv.mkDerivation rec {
     make LDFLAGS="`fltk-config --ldflags` -lGL -lfltk_gl"
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openexr fltk libGLU libGL ctl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [openexr fltk libGLU libGL ctl];
 
   meta = {
     description = "Application for viewing OpenEXR images on a display at various exposure settings";

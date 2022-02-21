@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "go-jsonnet";
   version = "0.18.0";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/jsonnet" "cmd/jsonnetfmt" ];
+  subPackages = ["cmd/jsonnet" "cmd/jsonnetfmt"];
 
   meta = with lib; {
     description = "An implementation of Jsonnet in pure Go";
     homepage = "https://github.com/google/go-jsonnet";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nshalman ];
+    maintainers = with maintainers; [nshalman];
   };
 }

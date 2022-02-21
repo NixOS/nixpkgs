@@ -1,6 +1,11 @@
-{ lib, mkDerivation, fetchFromGitHub, extra-cmake-modules
-, kwindowsystem, plasma-framework }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  extra-cmake-modules,
+  kwindowsystem,
+  plasma-framework,
+}:
 mkDerivation rec {
   pname = "plasma-applet-caffeine-plus";
   version = "1.4";
@@ -13,10 +18,11 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    kwindowsystem plasma-framework
+    kwindowsystem
+    plasma-framework
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [extra-cmake-modules];
 
   cmakeFlags = [
     "-Wno-dev"
@@ -25,7 +31,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Disable screensaver and auto suspend";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;
   };

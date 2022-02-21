@@ -1,9 +1,18 @@
-{ lib, buildDunePackage, fetchurl
-, lwt, mirage-time, mirage-clock, mirage-net
-, cstruct, ipaddr, macaddr, mirage-profile
-, duration, logs
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  lwt,
+  mirage-time,
+  mirage-clock,
+  mirage-net,
+  cstruct,
+  ipaddr,
+  macaddr,
+  mirage-profile,
+  duration,
+  logs,
 }:
-
 buildDunePackage rec {
   pname = "mirage-vnetif";
   version = "0.5.0";
@@ -35,6 +44,6 @@ buildDunePackage rec {
     description = "Virtual network interface and software switch for Mirage";
     homepage = "https://github.com/mirage/${pname}";
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

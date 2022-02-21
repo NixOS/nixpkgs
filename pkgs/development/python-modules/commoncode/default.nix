@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, attrs
-, beautifulsoup4
-, buildPythonPackage
-, click
-, fetchPypi
-, intbitset
-, pytest-xdist
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, requests
-, saneyaml
-, setuptools-scm
-, text-unidecode
-, typing
+{
+  lib,
+  stdenv,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  intbitset,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  saneyaml,
+  setuptools-scm,
+  text-unidecode,
+  typing,
 }:
-
 buildPythonPackage rec {
   pname = "commoncode";
   version = "30.0.0";
@@ -35,17 +35,19 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    beautifulsoup4
-    click
-    intbitset
-    requests
-    saneyaml
-    text-unidecode
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
-  ];
+  propagatedBuildInputs =
+    [
+      attrs
+      beautifulsoup4
+      click
+      intbitset
+      requests
+      saneyaml
+      text-unidecode
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      typing
+    ];
 
   checkInputs = [
     pytestCheckHook

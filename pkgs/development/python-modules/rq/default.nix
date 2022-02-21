@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy27, click, redis }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy27,
+  click,
+  redis,
+}:
 buildPythonPackage rec {
   pname = "rq";
   version = "1.10.1";
@@ -15,15 +21,14 @@ buildPythonPackage rec {
   # test require a running redis rerver, which is something we can't do yet
   doCheck = false;
 
-  pythonImportsCheck = [ "rq" ];
+  pythonImportsCheck = ["rq"];
 
-  propagatedBuildInputs = [ click redis ];
+  propagatedBuildInputs = [click redis];
 
   meta = with lib; {
     description = "A simple, lightweight library for creating background jobs, and processing them";
     homepage = "https://github.com/nvie/rq/";
-    maintainers = with maintainers; [ mrmebelman ];
+    maintainers = with maintainers; [mrmebelman];
     license = licenses.bsd2;
   };
 }
-

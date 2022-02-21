@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, boost
-, libusb1
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  boost,
+  libusb1,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cc-tool";
   version = "unstable-2020-05-19";
@@ -17,8 +18,8 @@ stdenv.mkDerivation rec {
     hash = "sha256:1f78j498fdd36xbci57jkgh25gq14g3b6xmp76imdpar0jkpyljv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ boost libusb1 ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [boost libusb1];
 
   postPatch = ''
     substituteInPlace udev/90-cc-debugger.rules \
@@ -37,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dashesy/cc-tool";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.CRTified ];
+    maintainers = [maintainers.CRTified];
   };
 }

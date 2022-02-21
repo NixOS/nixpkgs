@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, jdk, jre, ant }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  jre,
+  ant,
+}:
 stdenv.mkDerivation rec {
   pname = "freemind";
   version = "1.0.1";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "06c6pm7hpwh9hbmyah3lj2wp1g957x8znfwc5cwygsi7dc98b0h1";
   };
 
-  buildInputs = [ jdk ant ];
+  buildInputs = [jdk ant];
 
   preConfigure = ''
     chmod +x check_for_duplicate_resources.sh

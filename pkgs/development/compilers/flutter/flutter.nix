@@ -1,45 +1,44 @@
-{ pname
-, version
-, patches
-, dart
-, src
-}:
-
-{ bash
-, buildFHSUserEnv
-, cacert
-, git
-, runCommand
-, stdenv
-, lib
-, alsa-lib
-, dbus
-, expat
-, libpulseaudio
-, libuuid
-, libX11
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXfixes
-, libXrender
-, libXtst
-, libXi
-, libXext
-, libGL
-, nspr
-, nss
-, systemd
-, which
-, callPackage
-}:
-let
+{
+  pname,
+  version,
+  patches,
+  dart,
+  src,
+}: {
+  bash,
+  buildFHSUserEnv,
+  cacert,
+  git,
+  runCommand,
+  stdenv,
+  lib,
+  alsa-lib,
+  dbus,
+  expat,
+  libpulseaudio,
+  libuuid,
+  libX11,
+  libxcb,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXfixes,
+  libXrender,
+  libXtst,
+  libXi,
+  libXext,
+  libGL,
+  nspr,
+  nss,
+  systemd,
+  which,
+  callPackage,
+}: let
   drvName = "flutter-${version}";
   flutter = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
 
-    buildInputs = [ git ];
+    buildInputs = [git];
 
     inherit src patches version;
 
@@ -85,7 +84,7 @@ let
     '';
 
     doInstallCheck = true;
-    installCheckInputs = [ which ];
+    installCheckInputs = [which];
     installCheckPhase = ''
       runHook preInstallCheck
 
@@ -104,7 +103,7 @@ let
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [
       # Flutter only use these certificates
-      (runCommand "fedoracert" { } ''
+      (runCommand "fedoracert" {} ''
         mkdir -p $out/etc/pki/tls/
         ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
       '')
@@ -145,46 +144,45 @@ let
         systemd
       ];
   };
+in let
+  self = (self:
+    runCommand drvName
+    {
+      startScript = ''
+        #!${bash}/bin/bash
+        export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
+        export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
+        ${fhsEnv}/bin/${drvName}-fhs-env ${flutter}/bin/flutter --no-version-check "$@"
+      '';
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+      passthru = {
+        unwrapped = flutter;
+        inherit dart;
+        mkFlutterApp = callPackage ../../../build-support/flutter {
+          flutter = self;
+        };
+      };
+      meta = with lib; {
+        description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
+        longDescription = ''
+          Flutter is Google’s UI toolkit for building beautiful,
+          natively compiled applications for mobile, web, and desktop from a single codebase.
+        '';
+        homepage = "https://flutter.dev";
+        license = licenses.bsd3;
+        platforms = ["x86_64-linux"];
+        maintainers = with maintainers; [babariviere ericdallo];
+      };
+    } ''
+      mkdir -p $out/bin
 
+      mkdir -p $out/bin/cache/
+      ln -sf ${dart} $out/bin/cache/dart-sdk
+
+      echo -n "$startScript" > $out/bin/${pname}
+      chmod +x $out/bin/${pname}
+    '')
+  self;
 in
-let
-self = (self:
-runCommand drvName
-{
-  startScript = ''
-    #!${bash}/bin/bash
-    export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
-    ${fhsEnv}/bin/${drvName}-fhs-env ${flutter}/bin/flutter --no-version-check "$@"
-  '';
-  preferLocalBuild = true;
-  allowSubstitutes = false;
-  passthru = {
-    unwrapped = flutter;
-    inherit dart;
-    mkFlutterApp = callPackage ../../../build-support/flutter {
-      flutter = self;
-    };
-  };
-  meta = with lib; {
-    description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
-    longDescription = ''
-      Flutter is Google’s UI toolkit for building beautiful,
-      natively compiled applications for mobile, web, and desktop from a single codebase.
-    '';
-    homepage = "https://flutter.dev";
-    license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ babariviere ericdallo ];
-  };
-} ''
-  mkdir -p $out/bin
-
-  mkdir -p $out/bin/cache/
-  ln -sf ${dart} $out/bin/cache/dart-sdk
-
-  echo -n "$startScript" > $out/bin/${pname}
-  chmod +x $out/bin/${pname}
-'') self;
-in
-self
+  self

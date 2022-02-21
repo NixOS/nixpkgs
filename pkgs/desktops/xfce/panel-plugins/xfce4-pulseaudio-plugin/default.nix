@@ -1,20 +1,20 @@
-{ lib
-, mkXfceDerivation
-, automakeAddFlags
-, dbus-glib
-, dbus
-, exo
-, gtk3
-, libpulseaudio
-, libnotify
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
-, keybinder3
-, glib
+{
+  lib,
+  mkXfceDerivation,
+  automakeAddFlags,
+  dbus-glib,
+  dbus,
+  exo,
+  gtk3,
+  libpulseaudio,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
+  keybinder3,
+  glib,
 }:
-
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
@@ -46,6 +46,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Adjust the audio volume of the PulseAudio sound system";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

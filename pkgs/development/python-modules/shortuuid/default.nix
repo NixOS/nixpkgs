@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, django
-, pep8
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  django,
+  pep8,
 }:
-
 buildPythonPackage rec {
   pname = "shortuuid";
   version = "1.0.8";
@@ -26,7 +26,6 @@ buildPythonPackage rec {
     description = "A generator library for concise, unambiguous and URL-safe UUIDs";
     homepage = "https://github.com/stochastic-technologies/shortuuid/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ zagy ];
+    maintainers = with maintainers; [zagy];
   };
-
 }

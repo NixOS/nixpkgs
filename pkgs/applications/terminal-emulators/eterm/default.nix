@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, imlib2
-, libX11
-, libXaw
-, libXext
-, libast
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  imlib2,
+  libX11,
+  libXaw,
+  libXext,
+  libast,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "eterm";
   version = "0.9.6-unstable=2020-03-03";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mej/Eterm"; # http://www.eterm.org is gone
     description = "Terminal emulator";
     license = licenses.bsd2;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
     knownVulnerabilities = [
       "Usage of ANSI escape sequences causes unexpected newline-termination, leading to unexpected command execution (https://www.openwall.com/lists/oss-security/2021/05/17/1)"

@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pass, rofi, coreutils, util-linux, xdotool, gnugrep
-, libnotify, pwgen, findutils, gawk, gnused, xclip, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pass,
+  rofi,
+  coreutils,
+  util-linux,
+  xdotool,
+  gnugrep,
+  libnotify,
+  pwgen,
+  findutils,
+  gawk,
+  gnused,
+  xclip,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rofi-pass";
   version = "2.0.2";
@@ -13,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "131jpcwyyzgzjn9lx4k1zn95pd68pjw4i41jfzcp9z9fnazyln5n";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontBuild = true;
 
@@ -25,20 +39,21 @@ stdenv.mkDerivation rec {
     cp -a config.example $out/share/doc/rofi-pass/config.example
   '';
 
-  wrapperPath = with lib; makeBinPath [
-    coreutils
-    findutils
-    gawk
-    gnugrep
-    gnused
-    libnotify
-    (pass.withExtensions (ext: [ ext.pass-otp ]))
-    pwgen
-    rofi
-    util-linux
-    xclip
-    xdotool
-  ];
+  wrapperPath = with lib;
+    makeBinPath [
+      coreutils
+      findutils
+      gawk
+      gnugrep
+      gnused
+      libnotify
+      (pass.withExtensions (ext: [ext.pass-otp]))
+      pwgen
+      rofi
+      util-linux
+      xclip
+      xdotool
+    ];
 
   fixupPhase = ''
     patchShebangs $out/bin

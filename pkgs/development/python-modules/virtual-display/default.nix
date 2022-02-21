@@ -1,10 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, EasyProcess }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  EasyProcess,
+}:
 buildPythonPackage rec {
   pname = "PyVirtualDisplay";
   version = "3.0";
 
-  propagatedBuildInputs = [ EasyProcess ];
+  propagatedBuildInputs = [EasyProcess];
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +22,6 @@ buildPythonPackage rec {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";
     homepage = "https://github.com/ponty/pyvirtualdisplay";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ layus ];
+    maintainers = with maintainers; [layus];
   };
 }

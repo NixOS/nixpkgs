@@ -1,18 +1,17 @@
-{ stdenv
-, perl
-, pkg-config
-, curl
-, nix
-, libsodium
-, boost
-, autoreconfHook
-, autoconf-archive
-, nlohmann_json
-
-, version
-, src
+{
+  stdenv,
+  perl,
+  pkg-config,
+  curl,
+  nix,
+  libsodium,
+  boost,
+  autoreconfHook,
+  autoconf-archive,
+  nlohmann_json,
+  version,
+  src,
 }:
-
 stdenv.mkDerivation {
   pname = "nix-perl";
   inherit version src;

@@ -1,5 +1,12 @@
-{ fetchFromGitHub, lib, pkg-config, rustPlatform, stdenv, openssl, Security }:
-
+{
+  fetchFromGitHub,
+  lib,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  openssl,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "oha";
   version = "0.5.0";
@@ -15,7 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
 
-  buildInputs = lib.optional stdenv.isLinux openssl
+  buildInputs =
+    lib.optional stdenv.isLinux openssl
     ++ lib.optional stdenv.isDarwin Security;
 
   # tests don't work inside the sandbox
@@ -25,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
     homepage = "https://github.com/hatoo/oha";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

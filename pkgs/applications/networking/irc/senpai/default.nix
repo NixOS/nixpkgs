@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromSourcehut, installShellFiles, scdoc }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  installShellFiles,
+  scdoc,
+}:
 buildGoModule rec {
   pname = "senpai";
   version = "unstable-2021-12-14";
@@ -32,6 +37,6 @@ buildGoModule rec {
     description = "Your everyday IRC student";
     homepage = "https://ellidri.org/senpai";
     license = licenses.isc;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [malvo];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, CoreServices, CoreFoundation, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  CoreServices,
+  CoreFoundation,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   version = "1.1";
   pname = "qgrep";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices CoreFoundation ];
+  buildInputs = lib.optionals stdenv.isDarwin [CoreServices CoreFoundation];
 
   postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace Makefile \
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Fast regular expression grep for source code with incremental index updates";
     homepage = "https://github.com/zeux/qgrep";
     license = licenses.mit;
-    maintainers = [ maintainers.yrashk ];
+    maintainers = [maintainers.yrashk];
     platforms = platforms.all;
   };
 }

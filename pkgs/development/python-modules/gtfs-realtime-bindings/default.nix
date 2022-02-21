@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, protobuf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  protobuf,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "gtfs-realtime-bindings";
   version = "0.0.7";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # Tests are not shipped, only a tarball for Java is present
   doCheck = false;
 
-  pythonImportsCheck = [ "google.transit" ];
+  pythonImportsCheck = ["google.transit"];
 
   meta = with lib; {
     description = "Python bindings generated from the GTFS Realtime protocol buffer spec";
     homepage = "https://github.com/andystewart999/TransportNSW";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

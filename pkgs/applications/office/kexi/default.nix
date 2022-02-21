@@ -1,12 +1,38 @@
 {
-  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools,
-  boost, qttools, qtwebkit,
-  breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
-  kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
-  kwidgetsaddons, kxmlgui,
-  kdb, kproperty, kreport, lcms2, libmysqlclient, marble, postgresql
+  mkDerivation,
+  lib,
+  fetchurl,
+  fetchpatch,
+  extra-cmake-modules,
+  kdoctools,
+  boost,
+  qttools,
+  qtwebkit,
+  breeze-icons,
+  karchive,
+  kcodecs,
+  kcompletion,
+  kconfig,
+  kconfigwidgets,
+  kcoreaddons,
+  kcrash,
+  kguiaddons,
+  ki18n,
+  kiconthemes,
+  kitemviews,
+  kio,
+  ktexteditor,
+  ktextwidgets,
+  kwidgetsaddons,
+  kxmlgui,
+  kdb,
+  kproperty,
+  kreport,
+  lcms2,
+  libmysqlclient,
+  marble,
+  postgresql,
 }:
-
 mkDerivation rec {
   pname = "kexi";
   version = "3.2.0";
@@ -16,17 +42,39 @@ mkDerivation rec {
     sha256 = "1zy1q7q9rfdaws3rwf3my22ywkn6g747s3ixfcg9r80mm2g3z0bs";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [extra-cmake-modules kdoctools];
 
   buildInputs = [
-    boost qttools qtwebkit
-    breeze-icons karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
-    kcrash kguiaddons ki18n kiconthemes kitemviews kio ktexteditor ktextwidgets
-    kwidgetsaddons kxmlgui
-    kdb kproperty kreport lcms2 libmysqlclient marble postgresql
+    boost
+    qttools
+    qtwebkit
+    breeze-icons
+    karchive
+    kcodecs
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kcrash
+    kguiaddons
+    ki18n
+    kiconthemes
+    kitemviews
+    kio
+    ktexteditor
+    ktextwidgets
+    kwidgetsaddons
+    kxmlgui
+    kdb
+    kproperty
+    kreport
+    lcms2
+    libmysqlclient
+    marble
+    postgresql
   ];
 
-  propagatedUserEnvPkgs = [ kproperty ];
+  propagatedUserEnvPkgs = [kproperty];
 
   patches = [
     # Changes in Qt 5.13 mean that QDate isn't exported from certain places,
@@ -50,8 +98,8 @@ mkDerivation rec {
       making it easy to share data and design.
     '';
     homepage = "http://kexi-project.org/";
-    maintainers = with maintainers; [ zraexy ];
+    maintainers = with maintainers; [zraexy];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [gpl2 lgpl2];
   };
 }

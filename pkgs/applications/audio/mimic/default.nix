@@ -1,7 +1,19 @@
-{ config, lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config, makeWrapper
-, alsa-lib, alsa-plugins, libtool, icu, pcre2
-, pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
-
+{
+  config,
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  alsa-lib,
+  alsa-plugins,
+  libtool,
+  icu,
+  pcre2,
+  pulseaudioSupport ? config.pulseaudio or false,
+  libpulseaudio,
+}:
 stdenv.mkDerivation rec {
   pname = "mimic";
   version = "1.3.0.1";
@@ -19,13 +31,15 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    alsa-lib
-    alsa-plugins
-    libtool
-    icu
-    pcre2
-  ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs =
+    [
+      alsa-lib
+      alsa-plugins
+      libtool
+      icu
+      pcre2
+    ]
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
   postInstall = ''
     wrapProgram $out/bin/mimic \
@@ -37,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mimic.mycroft.ai/";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.noneucat ];
+    maintainers = [lib.maintainers.noneucat];
   };
 }

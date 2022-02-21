@@ -1,23 +1,23 @@
-{ lib
-, bibtexparser
-, buildPythonPackage
-, cdcs
-, datamodeldict
-, fetchPypi
-, habanero
-, ipywidgets
-, lxml
-, matplotlib
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, requests
-, scipy
-, unidecode
-, xmltodict
+{
+  lib,
+  bibtexparser,
+  buildPythonPackage,
+  cdcs,
+  datamodeldict,
+  fetchPypi,
+  habanero,
+  ipywidgets,
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  scipy,
+  unidecode,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   version = "0.3.2";
   pname = "potentials";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Python API database tools for accessing the NIST Interatomic Potentials Repository";
     homepage = "https://github.com/usnistgov/potentials";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

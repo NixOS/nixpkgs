@@ -1,18 +1,15 @@
 # Derivation prototype, used by maturin and setuptools-rust
 # passthrough tests.
-
-{ lib
-, fetchFromGitHub
-, python
-, rustPlatform
-
-, nativeBuildInputs
-
-, buildAndTestSubdir ? null
-, format ? "pyproject"
-, preConfigure ? ""
+{
+  lib,
+  fetchFromGitHub,
+  python,
+  rustPlatform,
+  nativeBuildInputs,
+  buildAndTestSubdir ? null,
+  format ? "pyproject",
+  preConfigure ? "",
 }:
-
 python.pkgs.buildPythonPackage rec {
   pname = "word-count";
   version = "0.13.2";
@@ -30,16 +27,16 @@ python.pkgs.buildPythonPackage rec {
     hash = "sha256-u3L9nXHKILznyZTgxdvZyOCQZFZhuADrtI7zXYQzrbE=";
   };
 
-  patches = [ ./Cargo.lock.patch ];
+  patches = [./Cargo.lock.patch];
 
   inherit buildAndTestSubdir format nativeBuildInputs preConfigure;
 
-  pythonImportsCheck = [ "word_count" ];
+  pythonImportsCheck = ["word_count"];
 
   meta = with lib; {
     description = "PyO3 word count example";
     homepage = "https://github.com/PyO3/pyo3";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

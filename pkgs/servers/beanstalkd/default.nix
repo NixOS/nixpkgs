@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   version = "1.12";
   pname = "beanstalkd";
@@ -11,11 +16,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-HChpVZ02l08CObrb4+ZEjBiXeQMMYi6zhSWUTDxuEao=";
   };
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = ["fortify"];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installManPage doc/beanstalkd.1
@@ -29,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://kr.github.io/beanstalkd/";
     description = "A simple, fast work queue";
     license = licenses.mit;
-    maintainers = [ maintainers.zimbatm ];
+    maintainers = [maintainers.zimbatm];
     platforms = platforms.all;
   };
 }

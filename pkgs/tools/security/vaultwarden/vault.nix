@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "vaultwarden-vault";
   version = "2.25.0";
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dani-garcia/bw_web_builds";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ msteen mic92 ];
+    maintainers = with maintainers; [msteen mic92];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, zip, unzip, firefox, bash }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zip,
+  unzip,
+  firefox,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "slimerjs";
   version = "1.0.0";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     rev = version;
   };
 
-  buildInputs = [ zip ];
-  nativeBuildInputs = [ unzip ];
+  buildInputs = [zip];
+  nativeBuildInputs = [unzip];
 
   preConfigure = ''
     test -d src && cd src
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Gecko-based programmatically-driven browser";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
   };
 }

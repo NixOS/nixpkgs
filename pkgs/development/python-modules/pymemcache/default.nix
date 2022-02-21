@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pymemcache";
   version = "3.5.0";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     "TestClientSocketConnect"
   ];
 
-  pythonImportsCheck = [ "pymemcache" ];
+  pythonImportsCheck = ["pymemcache"];
 
   meta = with lib; {
     description = "Python memcached client";
     homepage = "https://pymemcache.readthedocs.io/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

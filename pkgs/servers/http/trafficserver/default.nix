@@ -1,52 +1,55 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchpatch
-, makeWrapper
-, nixosTests
-, pkg-config
-, file
-, linuxHeaders
-, openssl
-, pcre
-, perlPackages
-, python3
-, xz
-, zlib
-# recommended dependencies
-, withHwloc ? true
-, hwloc
-, withCurl ? true
-, curl
-, withCurses ? true
-, ncurses
-, withCap ? stdenv.isLinux
-, libcap
-, withUnwind ? stdenv.isLinux
-, libunwind
-# optional dependencies
-, withBrotli ? false
-, brotli
-, withCjose ? false
-, cjose
-, withGeoIP ? false
-, geoip
-, withHiredis ? false
-, hiredis
-, withImageMagick ? false
-, imagemagick
-, withJansson ? false
-, jansson
-, withKyotoCabinet ? false
-, kyotocabinet
-, withLuaJIT ? false
-, luajit
-, withMaxmindDB ? false
-, libmaxminddb
-# optional features
-, enableWCCP ? false
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchpatch,
+  makeWrapper,
+  nixosTests,
+  pkg-config,
+  file,
+  linuxHeaders,
+  openssl,
+  pcre,
+  perlPackages,
+  python3,
+  xz,
+  zlib
+  # recommended dependencies
+  ,
+  withHwloc ? true,
+  hwloc,
+  withCurl ? true,
+  curl,
+  withCurses ? true,
+  ncurses,
+  withCap ? stdenv.isLinux,
+  libcap,
+  withUnwind ? stdenv.isLinux,
+  libunwind
+  # optional dependencies
+  ,
+  withBrotli ? false,
+  brotli,
+  withCjose ? false,
+  cjose,
+  withGeoIP ? false,
+  geoip,
+  withHiredis ? false,
+  hiredis,
+  withImageMagick ? false,
+  imagemagick,
+  withJansson ? false,
+  jansson,
+  withKyotoCabinet ? false,
+  kyotocabinet,
+  withLuaJIT ? false,
+  luajit,
+  withMaxmindDB ? false,
+  libmaxminddb
+  # optional features
+  ,
+  enableWCCP ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "trafficserver";
   version = "9.1.1";
@@ -80,47 +83,53 @@ stdenv.mkDerivation rec {
   #
   # [1]: https://github.com/apache/trafficserver/pull/5617
   # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
-  nativeBuildInputs = [ makeWrapper pkg-config file python3 ]
-    ++ (with perlPackages; [ perl ExtUtilsMakeMaker ])
-    ++ lib.optionals stdenv.isLinux [ linuxHeaders ];
+  nativeBuildInputs =
+    [makeWrapper pkg-config file python3]
+    ++ (with perlPackages; [perl ExtUtilsMakeMaker])
+    ++ lib.optionals stdenv.isLinux [linuxHeaders];
 
-  buildInputs = [
-    openssl
-    pcre
-    perlPackages.perl
-  ] ++ lib.optional withBrotli brotli
-  ++ lib.optional withCap libcap
-  ++ lib.optional withCjose cjose
-  ++ lib.optional withCurl curl
-  ++ lib.optional withGeoIP geoip
-  ++ lib.optional withHiredis hiredis
-  ++ lib.optional withHwloc hwloc
-  ++ lib.optional withImageMagick imagemagick
-  ++ lib.optional withJansson jansson
-  ++ lib.optional withKyotoCabinet kyotocabinet
-  ++ lib.optional withCurses ncurses
-  ++ lib.optional withLuaJIT luajit
-  ++ lib.optional withUnwind libunwind
-  ++ lib.optional withMaxmindDB libmaxminddb;
+  buildInputs =
+    [
+      openssl
+      pcre
+      perlPackages.perl
+    ]
+    ++ lib.optional withBrotli brotli
+    ++ lib.optional withCap libcap
+    ++ lib.optional withCjose cjose
+    ++ lib.optional withCurl curl
+    ++ lib.optional withGeoIP geoip
+    ++ lib.optional withHiredis hiredis
+    ++ lib.optional withHwloc hwloc
+    ++ lib.optional withImageMagick imagemagick
+    ++ lib.optional withJansson jansson
+    ++ lib.optional withKyotoCabinet kyotocabinet
+    ++ lib.optional withCurses ncurses
+    ++ lib.optional withLuaJIT luajit
+    ++ lib.optional withUnwind libunwind
+    ++ lib.optional withMaxmindDB libmaxminddb;
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  postPatch = ''
-    patchShebangs \
-      iocore/aio/test_AIO.sample \
-      src/traffic_via/test_traffic_via \
-      src/traffic_logstats/tests \
-      tools/check-unused-dependencies
+  postPatch =
+    ''
+      patchShebangs \
+        iocore/aio/test_AIO.sample \
+        src/traffic_via/test_traffic_via \
+        src/traffic_logstats/tests \
+        tools/check-unused-dependencies
 
-    substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace configure \
-      --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
-  '' + lib.optionalString stdenv.isDarwin ''
-    # 'xcrun leaks' probably requires non-free XCode
-    substituteInPlace iocore/net/test_certlookup.cc \
-      --replace 'xcrun leaks' 'true'
-  '';
+      substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace configure \
+        --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # 'xcrun leaks' probably requires non-free XCode
+      substituteInPlace iocore/net/test_certlookup.cc \
+        --replace 'xcrun leaks' 'true'
+    '';
 
   configureFlags = [
     "--enable-layout=NixOS"
@@ -148,8 +157,8 @@ stdenv.mkDerivation rec {
     install -Dm644 rc/trafficserver.service $out/lib/systemd/system/trafficserver.service
 
     wrapProgram $out/bin/tspush \
-      --set PERL5LIB '${with perlPackages; makePerlPath [ URI ]}' \
-      --prefix PATH : "${lib.makeBinPath [ file ]}"
+      --set PERL5LIB '${with perlPackages; makePerlPath [URI]}' \
+      --prefix PATH : "${lib.makeBinPath [file]}"
 
     find "$out" -name '*.la' -delete
 
@@ -185,7 +194,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   enableParallelBuilding = true;
 
-  passthru.tests = { inherit (nixosTests) trafficserver; };
+  passthru.tests = {inherit (nixosTests) trafficserver;};
 
   meta = with lib; {
     homepage = "https://trafficserver.apache.org";
@@ -201,7 +210,7 @@ stdenv.mkDerivation rec {
       large intranets by maximizing existing and available bandwidth.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [midchildan];
     platforms = platforms.unix;
   };
 }

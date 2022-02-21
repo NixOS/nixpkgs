@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, jdk11, gradle_6, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk11,
+  gradle_6,
+  makeDesktopItem,
+  copyDesktopItems,
+  perl,
+  writeText,
+  runtimeShell,
+  makeWrapper,
+  glib,
+  wrapGAppsHook,
+}: let
   gradle = gradle_6;
 
   pname = "scenebuilder";
@@ -16,7 +29,7 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk11 perl gradle ];
+    nativeBuildInputs = [jdk11 perl gradle];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
@@ -72,44 +85,44 @@ let
     mimeType = "application/java;application/java-vm;application/java-archive";
     categories = "Development";
   };
+in
+  stdenv.mkDerivation rec {
+    inherit pname src version;
 
-in stdenv.mkDerivation rec {
-  inherit pname src version;
+    nativeBuildInputs = [jdk11 gradle makeWrapper glib wrapGAppsHook];
 
-  nativeBuildInputs = [ jdk11 gradle makeWrapper glib wrapGAppsHook ];
+    dontWrapGApps = true; # prevent double wrapping
 
-  dontWrapGApps = true; # prevent double wrapping
+    buildPhase = ''
+      runHook preBuild
 
-  buildPhase = ''
-    runHook preBuild
+      export GRADLE_USER_HOME=$(mktemp -d)
+      gradle -PVERSION=${version} --offline --no-daemon --info --init-script ${gradleInit} build -x test
 
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle -PVERSION=${version} --offline --no-daemon --info --init-script ${gradleInit} build -x test
-
-    runHook postBuild
+      runHook postBuild
     '';
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/bin $out/share/{${pname},icons/hicolor/128x128/apps}
-    cp app/build/libs/SceneBuilder-${version}-all.jar $out/share/${pname}/${pname}.jar
-    cp app/build/resources/main/com/oracle/javafx/scenebuilder/app/SB_Logo.png $out/share/icons/hicolor/128x128/apps/scenebuilder.png
+      mkdir -p $out/bin $out/share/{${pname},icons/hicolor/128x128/apps}
+      cp app/build/libs/SceneBuilder-${version}-all.jar $out/share/${pname}/${pname}.jar
+      cp app/build/resources/main/com/oracle/javafx/scenebuilder/app/SB_Logo.png $out/share/icons/hicolor/128x128/apps/scenebuilder.png
 
-    runHook postInstall
-  '';
-
-  postFixup = ''
-    makeWrapper ${jdk11}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar" "''${gappsWrapperArgs[@]}"
+      runHook postInstall
     '';
 
-  desktopItems = [ desktopItem ];
+    postFixup = ''
+      makeWrapper ${jdk11}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar" "''${gappsWrapperArgs[@]}"
+    '';
 
-  meta = with lib; {
-    description = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    homepage = "https://gluonhq.com/products/scene-builder/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wirew0rm ];
-    platforms = platforms.all;
-  };
-}
+    desktopItems = [desktopItem];
+
+    meta = with lib; {
+      description = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
+      homepage = "https://gluonhq.com/products/scene-builder/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [wirew0rm];
+      platforms = platforms.all;
+    };
+  }

@@ -1,8 +1,10 @@
-{ stdenv
-, lib
-, fetchgit
-, autoreconfHook
-, optimize ? false # impure hardware optimizations
+{
+  stdenv,
+  lib,
+  fetchgit,
+  autoreconfHook,
+  optimize ? false
+  # impure hardware optimizations
 }:
 stdenv.mkDerivation rec {
   pname = "gf2x";

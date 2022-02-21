@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "lazydocker";
   version = "0.13";
@@ -13,12 +16,12 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/jesseduffield/lazydocker";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "A simple terminal UI for both docker and docker-compose";
     homepage = "https://github.com/jesseduffield/lazydocker";
     license = licenses.mit;
-    maintainers = with maintainers; [ das-g Br1ght0ne ];
+    maintainers = with maintainers; [das-g Br1ght0ne];
   };
 }

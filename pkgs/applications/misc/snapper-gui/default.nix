@@ -1,8 +1,15 @@
-{ lib, fetchFromGitHub, python3, python3Packages
-, gnome, gtk3, wrapGAppsHook, gtksourceview3, snapper
-, gobject-introspection
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  python3Packages,
+  gnome,
+  gtk3,
+  wrapGAppsHook,
+  gtksourceview3,
+  snapper,
+  gobject-introspection,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "snapper-gui";
   version = "2020-10-20";
@@ -14,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "13j4spbi9pxg69zifzai8ifk4207sn0vwh6vjqryi0snd5sylh7h";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [wrapGAppsHook];
 
   buildInputs = [
     python3
@@ -44,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ricardomv/snapper-gui";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ahuzik ];
+    maintainers = with maintainers; [ahuzik];
   };
 }

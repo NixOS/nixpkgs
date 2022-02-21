@@ -1,8 +1,13 @@
-{ lib, buildDunePackage, fetchurl
-, ocaml, dune-configurator, cmdliner
-, lwt, withLwt ? lib.versionAtLeast ocaml.version "4.07"
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml,
+  dune-configurator,
+  cmdliner,
+  lwt,
+  withLwt ? lib.versionAtLeast ocaml.version "4.07",
 }:
-
 buildDunePackage rec {
   pname = "hxd";
   version = "0.3.1";
@@ -37,6 +42,6 @@ buildDunePackage rec {
     description = "Hexdump in OCaml";
     homepage = "https://github.com/dinosaure/hxd";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

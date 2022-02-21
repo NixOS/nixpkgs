@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "genext2fs";
   version = "1.4.1";
@@ -20,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "A tool to generate ext2 filesystem images without requiring root privileges";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "twinkly-client";
   version = "0.0.3";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate with Twinkly LED strings";
     homepage = "https://github.com/dr1rrb/py-twinkly-client";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

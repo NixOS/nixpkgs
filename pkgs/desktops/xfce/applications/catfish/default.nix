@@ -1,8 +1,18 @@
-{ lib, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg-utils, dconf, gtk3, python3Packages, xfconf,
-  wrapGAppsHook
+{
+  lib,
+  fetchurl,
+  file,
+  which,
+  intltool,
+  gobject-introspection,
+  findutils,
+  xdg-utils,
+  dconf,
+  gtk3,
+  python3Packages,
+  xfconf,
+  wrapGAppsHook,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
   version = "4.16.3";
@@ -62,6 +72,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

@@ -1,5 +1,9 @@
-{ lib, xorg, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  xorg,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "go-sct";
   version = "20180605-${lib.strings.substring 0 7 rev}";
@@ -16,12 +20,12 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildInputs = [ xorg.libX11 xorg.libXrandr ];
+  buildInputs = [xorg.libX11 xorg.libXrandr];
 
   meta = with lib; {
     description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
     license = licenses.mit;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [cstrahan];
     platforms = platforms.linux ++ platforms.windows;
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, meson
-, ninja
-, openssl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libsrtp";
   version = "2.4.2";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6FAkfxC7Tg7uIAmTmRt5Sn8/YofILfpe7Y4pSaq8XL8=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     meson
@@ -42,7 +42,11 @@ stdenv.mkDerivation rec {
     "-Dcrypto-library=openssl"
     "-Dcrypto-library-kdf=disabled"
     "-Ddoc=disabled"
-    "-Dtests=${if doCheck then "enabled" else "disabled"}"
+    "-Dtests=${
+      if doCheck
+      then "enabled"
+      else "disabled"
+    }"
   ];
 
   doCheck = true;
@@ -52,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "Secure RTP (SRTP) Reference Implementation";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
   };
 }

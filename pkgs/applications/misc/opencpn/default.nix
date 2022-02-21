@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk2, wxGTK30, libpulseaudio, curl,
-  gettext, glib, portaudio }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  gtk2,
+  wxGTK30,
+  libpulseaudio,
+  curl,
+  gettext,
+  glib,
+  portaudio,
+}:
 stdenv.mkDerivation rec {
   pname = "opencpn-unstable";
   version = "2019-11-21";
@@ -12,9 +23,16 @@ stdenv.mkDerivation rec {
     sha256 = "0yiqahkzwcbzgabc5xgxmwlngapkfiaqyva3mwz29xj0c5lg2bdk";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ gtk2 wxGTK30 libpulseaudio curl gettext
-                  glib portaudio ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [
+    gtk2
+    wxGTK30
+    libpulseaudio
+    curl
+    gettext
+    glib
+    portaudio
+  ];
 
   cmakeFlags = [
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
@@ -23,8 +41,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A concise ChartPlotter/Navigator";
-    maintainers = [ lib.maintainers.kragniz ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [lib.maintainers.kragniz];
+    platforms = ["x86_64-linux"];
     license = lib.licenses.gpl2;
     homepage = "https://opencpn.org/";
   };

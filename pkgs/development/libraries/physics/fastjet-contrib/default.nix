@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, fastjet }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fastjet,
+}:
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
   version = "1.046";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cgavrH/rIHXZn7sDa7NRPTKy2sOvMDQQJjmGNUeT7s8=";
   };
 
-  buildInputs = [ fastjet ];
+  buildInputs = [fastjet];
 
   postPatch = ''
     for f in Makefile.in */Makefile; do
@@ -34,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Third party extensions for FastJet";
     homepage = "http://fastjet.fr/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [veprbl];
     platforms = platforms.unix;
   };
 }

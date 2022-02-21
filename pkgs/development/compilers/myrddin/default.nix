@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, bison
-, binutils
-, binutils-unwrapped
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  bison,
+  binutils,
+  binutils-unwrapped,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "myrddin";
   version = "0.3.1";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for b in $out/bin/*; do
-        wrapProgram $b --prefix PATH : $out/bin:${lib.makeBinPath [ binutils ]}
+        wrapProgram $b --prefix PATH : $out/bin:${lib.makeBinPath [binutils]}
     done
   '';
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Systems language that is both powerful and fun to use";
     homepage = "https://myrlang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [luc65r];
     platforms = platforms.all;
   };
 }

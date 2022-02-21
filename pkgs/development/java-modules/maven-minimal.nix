@@ -1,16 +1,17 @@
-{ lib, pkgs }:
-
+{
+  lib,
+  pkgs,
+}:
 with lib;
-with pkgs.javaPackages;
-
-let
-  collections = import ./collections.nix { inherit pkgs; };
-  fetchMaven = pkgs.callPackage ./m2install.nix { };
-  plugins = import ./mavenPlugins.nix { inherit pkgs; };
-  poms = import ./poms.nix { inherit fetchMaven; };
+with pkgs.javaPackages; let
+  collections = import ./collections.nix {inherit pkgs;};
+  fetchMaven = pkgs.callPackage ./m2install.nix {};
+  plugins = import ./mavenPlugins.nix {inherit pkgs;};
+  poms = import ./poms.nix {inherit fetchMaven;};
 in {
   # Maven needs all of these to function
-  mavenMinimal = flatten
+  mavenMinimal =
+    flatten
     collections.mavenLibs_2_0_6
     ++ collections.mavenLibs_2_0_9
     ++ collections.mavenLibs_2_2_1
@@ -67,14 +68,16 @@ in {
       plexusUtils_3_0_5
       plexusUtils_3_0_8
       xbeanReflect_3_4
-    ] ++ (with plugins; [
+    ]
+    ++ (with plugins; [
       mavenClean_2_5
       mavenCompiler_3_1
       mavenInstall_2_4
       mavenJar_2_4
       mavenResources_2_6
       mavenSurefire_2_12_4
-    ]) ++ (with poms; [
+    ])
+    ++ (with poms; [
       apache_3
       apache_4
       apache_5

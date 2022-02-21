@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, libcst
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  libcst,
+  mock,
+  proto-plus,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
   version = "2.7.2";
@@ -19,9 +19,9 @@ buildPythonPackage rec {
     sha256 = "sha256-h/lmrrT8fu1YLDYF6s856EAB8+k7CMFfIMGZPDxC7Ys=";
   };
 
-  propagatedBuildInputs = [ google-api-core grpc-google-iam-v1 libcst proto-plus ];
+  propagatedBuildInputs = [google-api-core grpc-google-iam-v1 libcst proto-plus];
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [mock pytestCheckHook pytest-asyncio];
 
   disabledTests = [
     # requires credentials
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Cloud Tasks API API client library";
     homepage = "https://github.com/googleapis/python-tasks";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

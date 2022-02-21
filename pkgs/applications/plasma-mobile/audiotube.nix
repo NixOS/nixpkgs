@@ -1,18 +1,16 @@
-{ lib
-, mkDerivation
-, fetchpatch
-
-, extra-cmake-modules
-
-, kcoreaddons
-, kcrash
-, ki18n
-, kirigami2
-, qtmultimedia
-, qtquickcontrols2
-, python3Packages
+{
+  lib,
+  mkDerivation,
+  fetchpatch,
+  extra-cmake-modules,
+  kcoreaddons,
+  kcrash,
+  ki18n,
+  kirigami2,
+  qtmultimedia,
+  qtquickcontrols2,
+  python3Packages,
 }:
-
 mkDerivation rec {
   pname = "audiotube";
 
@@ -55,7 +53,7 @@ mkDerivation rec {
     description = "Client for YouTube Music";
     homepage = "https://invent.kde.org/plasma-mobile/audiotube";
     # https://invent.kde.org/plasma-mobile/audiotube/-/tree/c503d0607a3386112beaa9cf990ab85fe33ef115/LICENSES
-    license = with licenses; [ bsd2 cc0 gpl2Only gpl3Only ];
-    maintainers = with maintainers; [ samueldr ];
+    license = with licenses; [bsd2 cc0 gpl2Only gpl3Only];
+    maintainers = with maintainers; [samueldr];
   };
 }

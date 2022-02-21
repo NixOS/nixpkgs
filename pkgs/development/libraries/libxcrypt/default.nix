@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
   version = "4.4.18";
@@ -16,7 +24,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config perl ];
+  nativeBuildInputs = [autoconf automake libtool pkg-config perl];
 
   doCheck = true;
 
@@ -24,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
     homepage = "https://github.com/besser82/libxcrypt/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ dottedmag ];
+    maintainers = with maintainers; [dottedmag];
     license = licenses.lgpl21Plus;
   };
 }

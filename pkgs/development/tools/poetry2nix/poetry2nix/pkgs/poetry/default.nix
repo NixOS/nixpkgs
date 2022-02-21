@@ -1,15 +1,13 @@
-{ lib
-, poetry2nix
-, python
-, fetchFromGitHub
-, projectDir ? ./.
-, pyproject ? projectDir + "/pyproject.toml"
-, poetrylock ? projectDir + "/poetry.lock"
+{
+  lib,
+  poetry2nix,
+  python,
+  fetchFromGitHub,
+  projectDir ? ./.,
+  pyproject ? projectDir + "/pyproject.toml",
+  poetrylock ? projectDir + "/poetry.lock",
 }:
-
-
 poetry2nix.mkPoetryApplication {
-
   inherit python;
 
   inherit projectDir pyproject poetrylock;
@@ -52,6 +50,6 @@ poetry2nix.mkPoetryApplication {
 
   meta = with lib; {
     inherit (python.meta) platforms;
-    maintainers = with maintainers; [ adisbladis jakewaksbaum ];
+    maintainers = with maintainers; [adisbladis jakewaksbaum];
   };
 }

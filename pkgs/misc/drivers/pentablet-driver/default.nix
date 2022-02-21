@@ -1,13 +1,25 @@
-{ lib, stdenv, mkDerivation, fetchzip, autoPatchelfHook, libusb1, libX11, libXtst, qtbase, libglvnd }:
-
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchzip,
+  autoPatchelfHook,
+  libusb1,
+  libX11,
+  libXtst,
+  qtbase,
+  libglvnd,
+}:
 mkDerivation rec {
   pname = "pentablet-driver";
   version = "1.2.13.1";
 
-  src = fetchzip {
-    url = "https://download01.xp-pen.com/file/2020/04/Linux_Pentablet_V${version}.tar.gz(20200428).zip";
-    sha256 = "1r423hcpi26v82pzl59br1zw5vablikclqsy6mcqi0v5p84hfrdd";
-  } + /Linux_Pentablet_V1.2.13.1.tar.gz;
+  src =
+    fetchzip {
+      url = "https://download01.xp-pen.com/file/2020/04/Linux_Pentablet_V${version}.tar.gz(20200428).zip";
+      sha256 = "1r423hcpi26v82pzl59br1zw5vablikclqsy6mcqi0v5p84hfrdd";
+    }
+    + /Linux_Pentablet_V1.2.13.1.tar.gz;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -32,7 +44,7 @@ mkDerivation rec {
     homepage = "https://www.xp-pen.com/download-46.html";
     description = "Driver for XP-PEN Pentablet drawing tablets";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ivar ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [ivar];
   };
 }

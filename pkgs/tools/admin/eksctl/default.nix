@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "eksctl";
   version = "0.84.0";
@@ -15,9 +19,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/eksctl" ];
+  subPackages = ["cmd/eksctl"];
 
-  tags = [ "netgo" "release" ];
+  tags = ["netgo" "release"];
 
   ldflags = [
     "-s"
@@ -26,7 +30,7 @@ buildGoModule rec {
     "-X github.com/weaveworks/eksctl/pkg/version.buildDate=19700101-00:00:00"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -39,6 +43,6 @@ buildGoModule rec {
     description = "A CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd Chili-Man ];
+    maintainers = with maintainers; [xrelkd Chili-Man];
   };
 }

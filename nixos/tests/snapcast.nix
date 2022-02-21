@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   port = 10004;
   tcpPort = 10005;
   httpPort = 10080;
@@ -9,7 +7,7 @@ let
 in {
   name = "snapcast";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ hexa ];
+    maintainers = [hexa];
   };
 
   nodes = {
@@ -40,10 +38,10 @@ in {
           };
         };
       };
-      environment.systemPackages = [ pkgs.snapcast ];
+      environment.systemPackages = [pkgs.snapcast];
     };
     client = {
-      environment.systemPackages = [ pkgs.snapcast ];
+      environment.systemPackages = [pkgs.snapcast];
     };
   };
 

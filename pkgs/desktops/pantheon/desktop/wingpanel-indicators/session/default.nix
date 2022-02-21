@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, wingpanel
-, accountsservice
-, libgee
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  fetchpatch,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  granite,
+  wingpanel,
+  accountsservice,
+  libgee,
+  libhandy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-session";
   version = "2.3.0";

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+}:
 stdenv.mkDerivation {
   pname = "scite";
   version = "5.0.2";
@@ -9,8 +14,8 @@ stdenv.mkDerivation {
     sha256 = "00n2gr915f7kvp2250dzn6n0p6lhr6qdlm1m7y2xi6qrrky0bpan";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gtk2];
   sourceRoot = "scintilla/gtk";
 
   buildPhase = ''
@@ -30,6 +35,6 @@ stdenv.mkDerivation {
     description = "SCIntilla based Text Editor";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.rszibele ];
+    maintainers = [maintainers.rszibele];
   };
 }

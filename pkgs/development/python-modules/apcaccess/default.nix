@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "apcaccess";
   version = "0.0.13";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Library offers programmatic access to the status information provided by apcupsd over its Network Information Server";
     homepage = "https://github.com/flyte/apcaccess";
     license = licenses.mit;
-    maintainers = with maintainers; [ uvnikita ];
+    maintainers = with maintainers; [uvnikita];
   };
 }

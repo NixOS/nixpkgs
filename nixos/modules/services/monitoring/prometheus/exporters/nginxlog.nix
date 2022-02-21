@@ -1,8 +1,10 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
   cfg = config.services.prometheus.exporters.nginxlog;
 in {
   port = 9117;
@@ -44,8 +46,8 @@ in {
       ExecStart = ''
         ${pkgs.prometheus-nginxlog-exporter}/bin/prometheus-nginxlog-exporter -config-file ${completeConfig}
       '';
-      Restart="always";
-      ProtectSystem="full";
+      Restart = "always";
+      ProtectSystem = "full";
     };
   };
 }

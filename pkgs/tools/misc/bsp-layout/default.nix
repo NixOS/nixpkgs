@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, lib, bspwm, makeWrapper, git, bc }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  bspwm,
+  makeWrapper,
+  git,
+  bc,
+}:
 stdenv.mkDerivation rec {
   pname = "bsp-layout";
   version = "unstable-2021-05-10";
@@ -11,10 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "1wqlzbz7l9vz37gin2zckrnxkkabnd7x5mi9pb0x96w4yhld5mx6";
   };
 
-  nativeBuildInputs = [ makeWrapper git bc ];
-  buildInputs = [ bspwm ];
+  nativeBuildInputs = [makeWrapper git bc];
+  buildInputs = [bspwm];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
     substituteInPlace $out/bin/bsp-layout --replace 'bc ' '${bc}/bin/bc '
@@ -24,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Manage layouts in bspwm";
     homepage = "https://github.com/phenax/bsp-layout";
     license = licenses.mit;
-    maintainers = with maintainers; [ devins2518 ];
+    maintainers = with maintainers; [devins2518];
     platforms = platforms.linux;
   };
 }

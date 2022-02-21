@@ -1,12 +1,10 @@
-{ config
-, lib
-, pkgs
-, options
+{
+  config,
+  lib,
+  pkgs,
+  options,
 }:
-
-with lib;
-
-let
+with lib; let
   cfg = config.services.prometheus.exporters.kea;
 in {
   port = 9547;
@@ -33,7 +31,7 @@ in {
           --port ${toString cfg.port} \
           ${concatStringsSep " \\n" cfg.controlSocketPaths}
       '';
-      SupplementaryGroups = [ "kea" ];
+      SupplementaryGroups = ["kea"];
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data
         "AF_UNIX"

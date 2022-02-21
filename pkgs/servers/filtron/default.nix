@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "filtron";
   version = "0.2.0";
@@ -20,7 +23,7 @@ buildGoModule rec {
     description = "Reverse HTTP proxy to filter requests by different rules.";
     homepage = "https://github.com/asciimoo/filtron";
     license = licenses.agpl3;
-    maintainers = [ maintainers.dasj19 ];
+    maintainers = [maintainers.dasj19];
     platforms = platforms.linux;
   };
 }

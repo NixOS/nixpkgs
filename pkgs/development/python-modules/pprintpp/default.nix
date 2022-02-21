@@ -1,5 +1,12 @@
-{ lib, fetchpatch, buildPythonPackage, fetchPypi, python, nose, parameterized }:
-
+{
+  lib,
+  fetchpatch,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  nose,
+  parameterized,
+}:
 buildPythonPackage rec {
   pname = "pprintpp";
   version = "0.4.0";
@@ -16,7 +23,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ nose parameterized ];
+  checkInputs = [nose parameterized];
   checkPhase = ''
     ${python.interpreter} test.py
   '';
@@ -25,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wolever/pprintpp";
     description = "A drop-in replacement for pprint that's actually pretty";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [jakewaksbaum];
   };
 }

@@ -1,18 +1,18 @@
-{ fetchurl
-, lib
-, stdenv
-, cmake
-, netcdf
-, openjpeg
-, libpng
-, gfortran
-, perl
-, enablePython ? false
-, pythonPackages
-, enablePosixThreads ? false
-, enableOpenMPThreads ? false
+{
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  netcdf,
+  openjpeg,
+  libpng,
+  gfortran,
+  perl,
+  enablePython ? false,
+  pythonPackages,
+  enablePosixThreads ? false,
+  enableOpenMPThreads ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "eccodes";
   version = "2.24.2";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/FindOpenJPEG.cmake --replace openjpeg-2.1 ${openjpeg.incDir}
   '';
 
-  nativeBuildInputs = [ cmake gfortran perl ];
+  nativeBuildInputs = [cmake gfortran perl];
 
   buildInputs = [
     netcdf
@@ -40,25 +40,39 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
+    "-DENABLE_PYTHON=${
+      if enablePython
+      then "ON"
+      else "OFF"
+    }"
     "-DENABLE_PNG=ON"
-    "-DENABLE_ECCODES_THREADS=${if enablePosixThreads then "ON" else "OFF"}"
-    "-DENABLE_ECCODES_OMP_THREADS=${if enableOpenMPThreads then "ON" else "OFF"}"
+    "-DENABLE_ECCODES_THREADS=${
+      if enablePosixThreads
+      then "ON"
+      else "OFF"
+    }"
+    "-DENABLE_ECCODES_OMP_THREADS=${
+      if enableOpenMPThreads
+      then "ON"
+      else "OFF"
+    }"
   ];
 
   doCheck = true;
 
   # Only do tests that don't require downloading 120MB of testdata
-  checkPhase = lib.optionalString (stdenv.isDarwin) ''
-    substituteInPlace "tests/include.sh" --replace "set -ea" "set -ea; export DYLD_LIBRARY_PATH=$(pwd)/lib"
-  '' + ''
-    ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
-  '';
+  checkPhase =
+    lib.optionalString (stdenv.isDarwin) ''
+      substituteInPlace "tests/include.sh" --replace "set -ea" "set -ea; export DYLD_LIBRARY_PATH=$(pwd)/lib"
+    ''
+    + ''
+      ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
+    '';
 
   meta = with lib; {
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [knedlsepp];
     platforms = platforms.unix;
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
   };

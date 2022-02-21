@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme, faba-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk3,
+  moka-icon-theme,
+  faba-icon-theme,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "faba-mono-icons";
   version = "2016-04-30";
@@ -37,6 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     # moka-icon-theme dependency is restricted to linux
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

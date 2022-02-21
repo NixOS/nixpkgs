@@ -1,12 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-
-, boca
-, smooth
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boca,
+  smooth,
+  systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "freac";
   version = "1.1.6";
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "The fre:ac audio converter project";
     license = licenses.gpl2Plus;
     homepage = "https://www.freac.org/";
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [shamilton];
     platforms = platforms.linux;
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest
-, pythonOlder
-, setuptoolsBuildHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest,
+  pythonOlder,
+  setuptoolsBuildHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-socket";
   version = "0.5.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Pytest Plugin to disable socket calls during tests";
     homepage = "https://github.com/miketheman/pytest-socket";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

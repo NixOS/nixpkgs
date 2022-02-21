@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "certifi";
   version = "2021.10.08";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "certifi" ];
+  pythonImportsCheck = ["certifi"];
 
   meta = with lib; {
     homepage = "https://github.com/certifi/python-certifi";
     description = "Python package for providing Mozilla's CA Bundle";
     license = licenses.isc;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [koral];
   };
 }

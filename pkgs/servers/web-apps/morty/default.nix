@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchgit }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchgit,
+}:
 buildGoPackage rec {
   pname = "morty";
   version = "0.2.0";
@@ -16,7 +19,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/asciimoo/morty";
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
     license = licenses.agpl3;
     description = "Privacy aware web content sanitizer proxy as a service";
     longDescription = ''
@@ -37,6 +40,6 @@ buildGoPackage rec {
       * No Caching/Etag
       * Supports GET/POST forms and IFrames
       * Optional HMAC URL verifier key to prevent service abuse
-'';
-   };
+    '';
+  };
 }

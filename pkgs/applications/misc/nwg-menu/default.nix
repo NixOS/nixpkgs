@@ -1,8 +1,16 @@
-{ lib, fetchFromGitHub
-, buildGoModule, pkg-config, wrapGAppsHook, gobject-introspection
-, gtk-layer-shell, gtk3, pango, gdk-pixbuf, atk
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  wrapGAppsHook,
+  gobject-introspection,
+  gtk-layer-shell,
+  gtk3,
+  pango,
+  gdk-pixbuf,
+  atk,
 }:
-
 buildGoModule rec {
   pname = "nwg-menu";
   version = "0.1.1";
@@ -18,8 +26,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildInputs = [ atk gtk3 gdk-pixbuf gtk-layer-shell pango ];
-  nativeBuildInputs = [ pkg-config wrapGAppsHook gobject-introspection ];
+  buildInputs = [atk gtk3 gdk-pixbuf gtk-layer-shell pango];
+  nativeBuildInputs = [pkg-config wrapGAppsHook gobject-introspection];
 
   prePatch = ''
     for file in main.go tools.go; do
@@ -41,6 +49,6 @@ buildGoModule rec {
     description = "MenuStart plugin for nwg-panel";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ berbiche ];
+    maintainers = with maintainers; [berbiche];
   };
 }

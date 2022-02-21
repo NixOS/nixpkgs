@@ -1,28 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, pkg-config
-, makeWrapper
-, zlib
-, libX11
-, libXrandr
-, libXinerama
-, libXcursor
-, libXi
-, libXext
-, libGLU
-, alsa-lib
-, fontconfig
-, AVFoundation
-, Carbon
-, Cocoa
-, CoreAudio
-, Kernel
-, OpenGL
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  zlib,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+  libXi,
+  libXext,
+  libGLU,
+  alsa-lib,
+  fontconfig,
+  AVFoundation,
+  Carbon,
+  Cocoa,
+  CoreAudio,
+  Kernel,
+  OpenGL,
 }:
-
 stdenv.mkDerivation rec {
   pname = "foxotron";
   version = "2021-08-13";
@@ -35,11 +35,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0cnLHTZMeh8ilP0iXaMpFgKQAkizy/FimxXFDbH0b2w=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  nativeBuildInputs = [cmake pkg-config makeWrapper];
 
-  buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXrandr libXinerama libXcursor libXi libXext alsa-lib fontconfig libGLU ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AVFoundation Carbon Cocoa CoreAudio Kernel OpenGL ];
+  buildInputs =
+    [zlib]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [libX11 libXrandr libXinerama libXcursor libXi libXext alsa-lib fontconfig libGLU]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [AVFoundation Carbon Cocoa CoreAudio Kernel OpenGL];
 
   installPhase = ''
     runHook preInstall
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Gargaj/Foxotron";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.all;
   };
 }

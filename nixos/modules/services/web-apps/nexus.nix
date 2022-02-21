@@ -1,14 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.nexus;
-
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.nexus;
+in {
   options = {
     services.nexus = {
       enable = mkEnableOption "Sonatype Nexus3 OSS service";
@@ -115,9 +113,9 @@ in
     systemd.services.nexus = {
       description = "Sonatype Nexus3";
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
-      path = [ cfg.home ];
+      path = [cfg.home];
 
       environment = {
         NEXUS_USER = cfg.user;
@@ -152,5 +150,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ironpinguin ];
+  meta.maintainers = with lib.maintainers; [ironpinguin];
 }

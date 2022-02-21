@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "tinycbor";
   version = "0.6.0";
@@ -11,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1ph1cmsh4hm6ikd3bs45mnv9zmniyrvp2rrg8qln204kr6fngfcd";
   };
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = ["prefix=$(out)"];
 
   meta = with lib; {
     description = "Concise Binary Object Representation (CBOR) Library";
     homepage = "https://github.com/intel/tinycbor";
     license = licenses.mit;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }

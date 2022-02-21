@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchurl, which, cctools }:
-
-let
-  generic = { version, sha256 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  cctools,
+}: let
+  generic = {
+    version,
+    sha256,
+  }:
     stdenv.mkDerivation rec {
       pname = "miniupnpc";
       inherit version;
@@ -11,13 +18,13 @@ let
         inherit sha256;
       };
 
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [ which cctools ];
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [which cctools];
 
       patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
       doCheck = !stdenv.isFreeBSD;
 
-      makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
+      makeFlags = ["PREFIX=$(out)" "INSTALLPREFIX=$(out)"];
 
       postInstall = ''
         chmod +x "$out"/lib/libminiupnpc${stdenv.hostPlatform.extensions.sharedLibrary}

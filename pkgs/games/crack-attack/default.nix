@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, freeglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  freeglut,
+  SDL,
+  SDL_mixer,
+  libGLU,
+  libGL,
+  libXi,
+  libXmu,
+}:
 stdenv.mkDerivation rec {
   pname = "crack-attack";
   version = "1.1.14";
@@ -20,10 +32,10 @@ stdenv.mkDerivation rec {
     "--datadir=${placeholder "out"}/share"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 freeglut SDL SDL_mixer libGLU libGL libXi libXmu ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gtk2 freeglut SDL SDL_mixer libGLU libGL libXi libXmu];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
   enableParallelBuilding = true;
 
   meta = {
@@ -31,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/crack-attack/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.piotr ];
+    maintainers = [lib.maintainers.piotr];
   };
 }

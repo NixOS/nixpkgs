@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
 }:
-
 buildPythonPackage rec {
   pname = "pynrrd";
   version = "0.4.2";
@@ -15,12 +15,12 @@ buildPythonPackage rec {
     sha256 = "1wn3ara3i19fi1y9a5j4imyczpa6dkkzd5djggxg4kkl1ff9awrj";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [numpy];
 
   meta = with lib; {
     homepage = "https://github.com/mhe/pynrrd";
     description = "Simple pure-Python reader for NRRD files";
     license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

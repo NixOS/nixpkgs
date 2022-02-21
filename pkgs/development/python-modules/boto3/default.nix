@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, botocore
-, jmespath
-, s3transfer
-, futures ? null
-, docutils
-, nose
-, mock
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  botocore,
+  jmespath,
+  s3transfer,
+  futures ? null,
+  docutils,
+  nose,
+  mock,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "boto3";
   version = "1.20.35"; # N.B: if you change this, change botocore and awscli to a matching version
@@ -20,8 +20,8 @@ buildPythonPackage rec {
     sha256 = "42dd9fcb9e033ab19c9dfaeaba745ef9d2db6efe4e9f1e1f547b3e3e0b1f4a82";
   };
 
-  propagatedBuildInputs = [ botocore jmespath s3transfer ] ++ lib.optionals (!isPy3k) [ futures ];
-  checkInputs = [ docutils nose mock ];
+  propagatedBuildInputs = [botocore jmespath s3transfer] ++ lib.optionals (!isPy3k) [futures];
+  checkInputs = [docutils nose mock];
 
   checkPhase = ''
     runHook preCheck
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   # Network access
   doCheck = false;
 
-  pythonImportsCheck = [ "boto3" ];
+  pythonImportsCheck = ["boto3"];
 
   meta = {
     homepage = "https://github.com/boto/boto3";

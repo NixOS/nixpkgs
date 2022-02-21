@@ -1,7 +1,9 @@
-{lib, fetchurl, buildGoPackage}:
-
+{
+  lib,
+  fetchurl,
+  buildGoPackage,
+}:
 buildGoPackage rec {
-
   pname = "harmonist";
   version = "0.4.1";
 

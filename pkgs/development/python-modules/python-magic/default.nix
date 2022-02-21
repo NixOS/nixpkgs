@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, file
-, glibcLocales
+{
+  lib,
+  stdenv,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
+  file,
+  glibcLocales,
 }:
-
 buildPythonPackage rec {
   pname = "python-magic";
   version = "0.4.25";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ glibcLocales ];
+  checkInputs = [glibcLocales];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" ${python.interpreter} test/test.py
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "A python interface to the libmagic file type identification library";
     homepage = "https://github.com/ahupp/python-magic";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

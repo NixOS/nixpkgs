@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, jsonrpc-base
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  jsonrpc-base,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
   version = "3.1.1";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "A JSON-RPC websocket client library for asyncio";
     homepage = "https://github.com/emlove/jsonrpc-websocket";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

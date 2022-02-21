@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "dugong";
   version = "3.8.1";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "dugong" ];
+  pythonImportsCheck = ["dugong"];
 
   meta = with lib; {
     description = "HTTP 1.1 client designed for REST-ful APIs";
     homepage = "https://github.com/python-dugong/python-dugong/";
-    license = with licenses; [ psfl asl20 ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [psfl asl20];
+    maintainers = with maintainers; [];
   };
 }

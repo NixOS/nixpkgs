@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, graphviz
-, xdg-utils
-, makeFontsConf
-, freefont_ttf
-, mock
-, pytest
-, pytest-mock
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  substituteAll,
+  graphviz,
+  xdg-utils,
+  makeFontsConf,
+  freefont_ttf,
+  mock,
+  pytest,
+  pytest-mock,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "graphviz";
   version = "0.19.1";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   # Fontconfig error: Cannot load default config file
   FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
+    fontDirectories = [freefont_ttf];
   };
 
   checkInputs = [
@@ -62,7 +62,6 @@ buildPythonPackage rec {
     description = "Simple Python interface for Graphviz";
     homepage = "https://github.com/xflr6/graphviz";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
-
 }

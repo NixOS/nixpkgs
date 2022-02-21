@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, poetry
-, rich
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  poetry,
+  rich,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   version = "0.2.0";
   pname = "pipenv-poetry-migrate";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-  substituteInPlace pyproject.toml --replace 'rich = "^9.6.1"' 'rich = ">9"'
+    substituteInPlace pyproject.toml --replace 'rich = "^9.6.1"' 'rich = ">9"'
   '';
 
   checkInputs = [
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "This is simple migration script, migrate pipenv to poetry";
     homepage = "https://github.com/yhino/pipenv-poetry-migrate";
     license = licenses.asl20;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [gador];
   };
 }

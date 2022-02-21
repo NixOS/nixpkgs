@@ -1,5 +1,13 @@
-{ lib, fetchgit, SDL, stdenv, libogg, libvorbis, libmad, xdelta }:
-
+{
+  lib,
+  fetchgit,
+  SDL,
+  stdenv,
+  libogg,
+  libvorbis,
+  libmad,
+  xdelta,
+}:
 stdenv.mkDerivation rec {
   pname = "uhexen2";
   version = "1.5.9";
@@ -10,7 +18,7 @@ stdenv.mkDerivation rec {
     rev = "4ef664bc41e3998b0d2a55ff1166dadf34c936be";
   };
 
-  buildInputs = [ SDL libogg libvorbis libmad xdelta ];
+  buildInputs = [SDL libogg libvorbis libmad xdelta];
 
   preBuild = ''
     makeFiles=(
@@ -60,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://uhexen2.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ xdhampus ];
+    maintainers = with maintainers; [xdhampus];
     platforms = platforms.all;
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "cayley";
   version = "0.7.5";
@@ -22,7 +25,7 @@ buildGoPackage rec {
   meta = {
     homepage = "https://github.com/cayleygraph/cayley";
     description = "A graph database inspired by Freebase and Knowledge Graph";
-    maintainers = with lib.maintainers; [ sigma ];
+    maintainers = with lib.maintainers; [sigma];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };

@@ -1,6 +1,4 @@
-{ fetchurl }:
-
-{
+{fetchurl}: {
   "0049fd8a61e04257b6dcb37217d4d603cd74cc6b" = fetchurl {
     url = "http://cdn.unrealengine.com/dependencies/2716009-3335bc961a4d42e9ac0bd72e7491e442/0049fd8a61e04257b6dcb37217d4d603cd74cc6b";
     sha256 = "1dcyxixgqsw4lcwg9066q39yghhppfp85yyi4r4drq5j5rg3dgb1";

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, aiobotocore
-, fsspec
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  aiobotocore,
+  fsspec,
 }:
-
 buildPythonPackage rec {
   pname = "s3fs";
   version = "2022.1.0";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
   # pythonPackages.
   doCheck = false;
 
-  pythonImportsCheck = [ "s3fs" ];
+  pythonImportsCheck = ["s3fs"];
 
   meta = with lib; {
     homepage = "https://github.com/dask/s3fs/";
     description = "A Pythonic file interface for S3";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    maintainers = with maintainers; [teh];
   };
 }

@@ -1,5 +1,9 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "prism";
   version = "0.1.1";
@@ -17,6 +21,6 @@ buildGoModule rec {
     description = "An RTMP stream recaster/splitter";
     homepage = "https://github.com/muesli/prism";
     license = licenses.mit;
-    maintainers = with maintainers; [ paperdigits ];
+    maintainers = with maintainers; [paperdigits];
   };
 }

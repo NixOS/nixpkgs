@@ -1,21 +1,30 @@
-{ lib, fetchFromGitHub, mkDerivation
-, pkg-config, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsa-lib, libv4l, libXrandr
-, ffmpeg
+{
+  lib,
+  fetchFromGitHub,
+  mkDerivation,
+  pkg-config,
+  qtbase,
+  qttools,
+  qmake,
+  qtmultimedia,
+  qtx11extras,
+  alsa-lib,
+  libv4l,
+  libXrandr,
+  ffmpeg,
 }:
-
 mkDerivation rec {
-
   pname = "vokoscreen";
   version = "2.5.8-beta";
 
   src = fetchFromGitHub {
-    owner   = "vkohaupt";
-    repo    = "vokoscreen";
-    rev     = version;
-    sha256  = "1a85vbsi53mhzva49smqwcs61c51wv3ic410nvb9is9nlsbifwan";
+    owner = "vkohaupt";
+    repo = "vokoscreen";
+    rev = version;
+    sha256 = "1a85vbsi53mhzva49smqwcs61c51wv3ic410nvb9is9nlsbifwan";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [pkg-config qmake];
   buildInputs = [
     alsa-lib
     libv4l
@@ -47,7 +56,7 @@ mkDerivation rec {
       videoconferences, etc.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.league ];
+    maintainers = [maintainers.league];
     platforms = platforms.linux;
   };
 }

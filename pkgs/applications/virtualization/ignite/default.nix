@@ -1,15 +1,15 @@
-{ lib
-, cni-plugins
-, buildGoModule
-, firecracker
-, containerd
-, runc
-, makeWrapper
-, fetchFromGitHub
-, git
+{
+  lib,
+  cni-plugins,
+  buildGoModule,
+  firecracker,
+  containerd,
+  runc,
+  makeWrapper,
+  fetchFromGitHub,
+  git,
 }:
-
-buildGoModule rec{
+buildGoModule rec {
   pname = "ignite";
   version = "0.10.0";
 
@@ -59,7 +59,7 @@ buildGoModule rec{
 
   postInstall = ''
     for prog in hack ignite ignited ignite-spawn; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ cni-plugins firecracker containerd runc ]}
+        wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [cni-plugins firecracker containerd runc]}
     done
   '';
 
@@ -67,6 +67,6 @@ buildGoModule rec{
     description = "Ignite a Firecracker microVM";
     homepage = "https://github.com/weaveworks/ignite";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tfmoraes ];
+    maintainers = with maintainers; [tfmoraes];
   };
 }

@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, asciidoc, docbook_xml_dtd_45, docbook_xsl
-, coreutils, cvs, diffutils, findutils, git, python3, rsync
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  asciidoc,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  coreutils,
+  cvs,
+  diffutils,
+  findutils,
+  git,
+  python3,
+  rsync,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cvs-fast-export";
   version = "1.59";
@@ -12,8 +24,8 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ makeWrapper asciidoc ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [makeWrapper asciidoc];
+  buildInputs = [python3];
 
   postPatch = ''
     patchShebangs .
@@ -28,16 +40,22 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/cvssync --prefix PATH : ${lib.makeBinPath [ rsync ]}
-    wrapProgram $out/bin/cvsconvert --prefix PATH : $out/bin:${lib.makeBinPath [
-      coreutils cvs diffutils findutils git
-    ]}
+    wrapProgram $out/bin/cvssync --prefix PATH : ${lib.makeBinPath [rsync]}
+    wrapProgram $out/bin/cvsconvert --prefix PATH : $out/bin:${
+      lib.makeBinPath [
+        coreutils
+        cvs
+        diffutils
+        findutils
+        git
+      ]
+    }
   '';
 
   meta = with lib; {
     description = "Export an RCS or CVS history as a fast-import stream";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dfoxfranke ];
+    maintainers = with maintainers; [dfoxfranke];
     homepage = "http://www.catb.org/esr/cvs-fast-export/";
     platforms = platforms.unix;
   };

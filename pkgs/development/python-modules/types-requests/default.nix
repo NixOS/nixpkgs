@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, types-urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  types-urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "types-requests";
   version = "2.27.10";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Typing stubs for requests";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

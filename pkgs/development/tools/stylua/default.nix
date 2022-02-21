@@ -1,11 +1,11 @@
-{ fetchFromGitHub
-, lib
-, rustPlatform
-, stdenvNoCC
-, lua52Support ? true
-, luauSupport ? false
+{
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  stdenvNoCC,
+  lua52Support ? true,
+  luauSupport ? false,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
   version = "0.12.3";
@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-njZTD6O67v787Z1tJ7G0QzxJLhqU2sfpOVw6r4woE9s=";
 
-  buildFeatures = lib.optional lua52Support "lua52"
+  buildFeatures =
+    lib.optional lua52Support "lua52"
     ++ lib.optional luauSupport "luau";
 
   # test_standard fails on darwin
@@ -30,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/johnnymorganz/stylua";
     changelog = "https://github.com/johnnymorganz/stylua/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

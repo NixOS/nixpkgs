@@ -1,8 +1,8 @@
 import ./make-test-python.nix {
   name = "postfix";
 
-  machine = { pkgs, ... }: {
-    imports = [ common/user-account.nix ];
+  machine = {pkgs, ...}: {
+    imports = [common/user-account.nix];
     services.postfix = {
       enable = true;
       enableSubmissions = true;
@@ -30,8 +30,7 @@ import ./make-test-python.nix {
         if not success:
           sys.exit(1)
       '';
-
-    in [ checkConfig ];
+    in [checkConfig];
   };
 
   testScript = ''

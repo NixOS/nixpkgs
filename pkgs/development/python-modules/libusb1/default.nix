@@ -1,5 +1,11 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, libusb1, pytestCheckHook }:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  libusb1,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "libusb1";
   version = "3.0.0";
@@ -15,18 +21,18 @@ buildPythonPackage rec {
       "'${libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [libusb1];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   pytestFlagsArray = [
     "usb1/testUSB1.py"
   ];
 
   meta = with lib; {
-    homepage    = "https://github.com/vpelletier/python-libusb1";
+    homepage = "https://github.com/vpelletier/python-libusb1";
     description = "Python ctype-based wrapper around libusb1";
-    license     = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ prusnak rnhmjoj ];
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [prusnak rnhmjoj];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "log4shell-detector";
   version = "unstable-2021-12-16";
@@ -35,6 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Detector for Log4Shell exploitation attempts";
     homepage = "https://github.com/Neo23x0/log4shell-detector";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

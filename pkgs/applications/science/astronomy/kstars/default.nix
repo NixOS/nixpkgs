@@ -1,17 +1,35 @@
 {
-  lib, mkDerivation, extra-cmake-modules, fetchurl,
-
-  kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
-
-
-  qtx11extras, qtwebsockets, qtkeychain, libsecret,
-
-  eigen, zlib,
-
-  cfitsio, indi-full, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
+  lib,
+  mkDerivation,
+  extra-cmake-modules,
+  fetchurl,
+  kconfig,
+  kdoctools,
+  kguiaddons,
+  ki18n,
+  kinit,
+  kiconthemes,
+  kio,
+  knewstuff,
+  kplotting,
+  kwidgetsaddons,
+  kxmlgui,
+  knotifyconfig,
+  qtx11extras,
+  qtwebsockets,
+  qtkeychain,
+  libsecret,
+  eigen,
+  zlib,
+  cfitsio,
+  indi-full,
+  xplanet,
+  libnova,
+  libraw,
+  gsl,
+  wcslib,
+  stellarsolver,
 }:
-
 mkDerivation rec {
   pname = "kstars";
   version = "3.5.7";
@@ -21,16 +39,37 @@ mkDerivation rec {
     sha256 = "sha256-qo8SLum46BM0QzGR6rJ2w2ERK53Lm8+N+ghR6HoQDQY=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [extra-cmake-modules kdoctools];
   buildInputs = [
-    kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
-    knewstuff kplotting kwidgetsaddons kxmlgui knotifyconfig
+    kconfig
+    kdoctools
+    kguiaddons
+    ki18n
+    kinit
+    kiconthemes
+    kio
+    knewstuff
+    kplotting
+    kwidgetsaddons
+    kxmlgui
+    knotifyconfig
 
-    qtx11extras qtwebsockets qtkeychain libsecret
+    qtx11extras
+    qtwebsockets
+    qtkeychain
+    libsecret
 
-    eigen zlib
+    eigen
+    zlib
 
-    cfitsio indi-full xplanet libnova libraw gsl wcslib stellarsolver
+    cfitsio
+    indi-full
+    xplanet
+    libnova
+    libraw
+    gsl
+    wcslib
+    stellarsolver
   ];
 
   cmakeFlags = [
@@ -48,6 +87,6 @@ mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timput hjones2199 ];
+    maintainers = with maintainers; [timput hjones2199];
   };
 }

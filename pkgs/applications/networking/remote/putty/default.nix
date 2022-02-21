@@ -1,7 +1,17 @@
-{ stdenv, lib, fetchurl, autoconf, automake, pkg-config, libtool
-, gtk2, halibut, ncurses, perl, darwin
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoconf,
+  automake,
+  pkg-config,
+  libtool,
+  gtk2,
+  halibut,
+  ncurses,
+  perl,
+  darwin,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.76";
   pname = "putty";
@@ -17,28 +27,40 @@ stdenv.mkDerivation rec {
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
-    perl mkfiles.pl
-    ( cd doc ; make );
-    ./mkauto.sh
-    cd unix
-  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
-    cd windows
-  '';
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isUnix ''
+      perl mkfiles.pl
+      ( cd doc ; make );
+      ./mkauto.sh
+      cd unix
+    ''
+    + lib.optionalString stdenv.hostPlatform.isWindows ''
+      cd windows
+    '';
 
   TOOLPATH = stdenv.cc.targetPrefix;
-  makefile = if stdenv.hostPlatform.isWindows then "Makefile.mgw" else null;
+  makefile =
+    if stdenv.hostPlatform.isWindows
+    then "Makefile.mgw"
+    else null;
 
-  installPhase = if stdenv.hostPlatform.isWindows then ''
-    for exe in *.exe; do
-       install -D $exe $out/bin/$exe
-    done
-  '' else null;
+  installPhase =
+    if stdenv.hostPlatform.isWindows
+    then
+      ''
+        for exe in *.exe; do
+           install -D $exe $out/bin/$exe
+        done
+      ''
+    else null;
 
-  nativeBuildInputs = [ autoconf automake halibut libtool perl pkg-config ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
-    gtk2 ncurses
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  nativeBuildInputs = [autoconf automake halibut libtool perl pkg-config];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isUnix [
+      gtk2
+      ncurses
+    ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
   meta = with lib; {

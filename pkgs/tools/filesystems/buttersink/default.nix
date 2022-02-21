@@ -1,5 +1,7 @@
-{ lib, python2 }:
-
+{
+  lib,
+  python2,
+}:
 python2.pkgs.buildPythonApplication rec {
   pname = "buttersink";
   version = "0.6.9";
@@ -9,7 +11,7 @@ python2.pkgs.buildPythonApplication rec {
     sha256 = "a797b6e92ad2acdf41e033c1368ab365aa268f4d8458b396a5770fa6c2bc3f54";
   };
 
-  propagatedBuildInputs = with python2.pkgs; [ boto crcmod psutil ];
+  propagatedBuildInputs = with python2.pkgs; [boto crcmod psutil];
 
   # No tests implemented
   doCheck = false;

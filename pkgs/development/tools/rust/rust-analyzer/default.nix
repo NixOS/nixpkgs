@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, CoreServices
-, cmake
-, libiconv
-, useMimalloc ? false
-, doCheck ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+  cmake,
+  libiconv,
+  useMimalloc ? false,
+  doCheck ? true,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
   version = "2022-01-31";
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A modular compiler frontend for the Rust language";
     homepage = "https://rust-analyzer.github.io";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ oxalica ];
+    license = with licenses; [mit asl20];
+    maintainers = with maintainers; [oxalica];
   };
 }

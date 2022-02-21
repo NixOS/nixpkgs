@@ -1,14 +1,17 @@
 # pipewire example session manager.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   json = pkgs.formats.json {};
   cfg = config.services.pipewire.media-session;
-  enable32BitAlsaPlugins = cfg.alsa.support32Bit
-                           && pkgs.stdenv.isx86_64
-                           && pkgs.pkgsi686Linux.pipewire != null;
+  enable32BitAlsaPlugins =
+    cfg.alsa.support32Bit
+    && pkgs.stdenv.isx86_64
+    && pkgs.pkgsi686Linux.pipewire != null;
 
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module
@@ -26,7 +29,6 @@ let
     v4l2-monitor = recursiveUpdate defaults.v4l2-monitor cfg.config.v4l2-monitor;
   };
 in {
-
   meta = {
     maintainers = teams.freedesktop.members;
     # uses attributes of the linked package
@@ -94,15 +96,15 @@ in {
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    systemd.packages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
+    systemd.packages = [cfg.package];
 
     # Enable either system or user units.
     systemd.services.pipewire-media-session.enable = config.services.pipewire.systemWide;
     systemd.user.services.pipewire-media-session.enable = !config.services.pipewire.systemWide;
 
-    systemd.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
-    systemd.user.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
+    systemd.services.pipewire-media-session.wantedBy = ["pipewire.service"];
+    systemd.user.services.pipewire-media-session.wantedBy = ["pipewire.service"];
 
     environment.etc."pipewire/media-session.d/media-session.conf" = {
       source = json.generate "media-session.conf" configs.media-session;

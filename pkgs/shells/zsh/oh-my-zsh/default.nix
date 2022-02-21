@@ -1,9 +1,22 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts
-, git, nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  writeScript,
+  common-updater-scripts,
+  git,
+  nix,
+  nixfmt,
+  jq,
+  coreutils,
+  gnused,
+  curl,
+  cacert,
+}:
 stdenv.mkDerivation rec {
   version = "2022-01-18";
   pname = "oh-my-zsh";
@@ -71,7 +84,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) oh-my-zsh; };
+    tests = {inherit (nixosTests) oh-my-zsh;};
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
@@ -119,6 +132,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ohmyz.sh/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nequissimus ];
+    maintainers = with maintainers; [nequissimus];
   };
 }

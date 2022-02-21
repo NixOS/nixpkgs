@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, expat }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  expat,
+}:
 stdenv.mkDerivation rec {
   pname = "rnv";
   version = "1.7.11";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rlxrkkkp8b5j6lyvnd9z1d85grmwwmdggkxq6yl226nwkqj1faa";
   };
 
-  buildInputs = [ expat ];
+  buildInputs = [expat];
 
   meta = with lib; {
     description = "Relax NG Compact Syntax validator";

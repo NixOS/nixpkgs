@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, python3
-, glib
-, jansson
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  python3,
+  glib,
+  jansson,
 }:
-
 stdenv.mkDerivation rec {
   version = "3.2.0";
   pname = "libsearpc";
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "A simple and easy-to-use C language RPC framework based on GObject System";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ greizgh ];
+    maintainers = with maintainers; [greizgh];
   };
 }

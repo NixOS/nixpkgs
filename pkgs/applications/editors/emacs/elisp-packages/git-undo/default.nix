@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, emacs
-, trivialBuild
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  emacs,
+  trivialBuild,
 }:
-
 trivialBuild {
   pname = "git-undo";
   version = "0.pre+unstable=2019-12-21";
@@ -20,7 +20,7 @@ trivialBuild {
     homepage = "https://github.com/jwiegley/git-undo-el";
     description = "Revert region to most recent Git-historical version";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leungbk ];
+    maintainers = with maintainers; [leungbk];
     inherit (emacs.meta) platforms;
   };
 }

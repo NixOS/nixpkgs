@@ -1,7 +1,15 @@
-{ lib, stdenvNoCC, fetchurl, qemu, expect, writeScript, writeScriptBin, ncurses, bash, coreutils }:
-
-let
-
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  qemu,
+  expect,
+  writeScript,
+  writeScriptBin,
+  ncurses,
+  bash,
+  coreutils,
+}: let
   # We execute all OpenWatcom binaries in qemu-user, because otherwise
   # some binaries (most notably the installer itself and wlib) fail to
   # use the stat() systemcall. The failure mode is that it returns
@@ -82,42 +90,41 @@ let
     expect "completed successfully"
     send "\n"
   '';
-
 in
-stdenvNoCC.mkDerivation rec {
-  pname = "open-watcom-bin";
-  version = "1.9";
-  name = "${pname}-unwrapped-${version}";
+  stdenvNoCC.mkDerivation rec {
+    pname = "open-watcom-bin";
+    version = "1.9";
+    name = "${pname}-unwrapped-${version}";
 
-  src = fetchurl {
-    url = "http://ftp.openwatcom.org/install/open-watcom-c-linux-${version}";
-    sha256 = "1wzkvc6ija0cjj5mcyjng5b7hnnc5axidz030c0jh05pgvi4nj7p";
-  };
+    src = fetchurl {
+      url = "http://ftp.openwatcom.org/install/open-watcom-c-linux-${version}";
+      sha256 = "1wzkvc6ija0cjj5mcyjng5b7hnnc5axidz030c0jh05pgvi4nj7p";
+    };
 
-  nativeBuildInputs = [ wrapInPlace performInstall ];
+    nativeBuildInputs = [wrapInPlace performInstall];
 
-  dontUnpack = true;
-  dontConfigure = true;
+    dontUnpack = true;
+    dontConfigure = true;
 
-  buildPhase = ''
-    cp ${src} install-bin-unwrapped
-    wrapInPlace install-bin-unwrapped
-  '';
+    buildPhase = ''
+      cp ${src} install-bin-unwrapped
+      wrapInPlace install-bin-unwrapped
+    '';
 
-  installPhase = ''
-    performInstall ./install-bin-unwrapped
+    installPhase = ''
+      performInstall ./install-bin-unwrapped
 
-    for e in $(find $out/binl -type f -executable); do
-      echo "Wrapping $e"
-      wrapInPlace "$e"
-    done
-  '';
+      for e in $(find $out/binl -type f -executable); do
+        echo "Wrapping $e"
+        wrapInPlace "$e"
+      done
+    '';
 
-  meta = with lib; {
-    description = "A C/C++ Compiler (binary distribution)";
-    homepage = "http://www.openwatcom.org/";
-    license = licenses.watcom;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ maintainers.blitz ];
-  };
-}
+    meta = with lib; {
+      description = "A C/C++ Compiler (binary distribution)";
+      homepage = "http://www.openwatcom.org/";
+      license = licenses.watcom;
+      platforms = ["x86_64-linux" "i686-linux"];
+      maintainers = [maintainers.blitz];
+    };
+  }

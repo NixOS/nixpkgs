@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, libsecret }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  libsecret,
+}:
 buildGoModule rec {
   pname = "protonmail-bridge";
   version = "2.1.1";
@@ -13,9 +18,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-n+WwkNHT+/CrC4vWIVHqYs2a8Qe/LNc0L3uoPZWDTts=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libsecret ];
+  buildInputs = [libsecret];
 
   buildPhase = ''
     runHook preBuild
@@ -39,7 +44,7 @@ buildGoModule rec {
     changelog = "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
     downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lightdiscord ];
+    maintainers = with maintainers; [lightdiscord];
     description = "Use your ProtonMail account with your local e-mail client";
     longDescription = ''
       An application that runs on your computer in the background and seamlessly encrypts

@@ -1,109 +1,122 @@
-{ config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  utils,
+  modules,
+  baseModules,
+  extraModules,
+  modulesPath,
+  ...
+}:
+with lib; let
   cfg = config.documentation;
   allOpts = options;
 
-  /* Modules for which to show options even when not imported. */
-  extraDocModules = [ ../virtualisation/qemu-vm.nix ];
+  /*
+   Modules for which to show options even when not imported.
+   */
+  extraDocModules = [../virtualisation/qemu-vm.nix];
 
-  canCacheDocs = m:
-    let
-      f = import m;
-      instance = f (mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (functionArgs f));
-    in
-      cfg.nixos.options.splitBuild
-        && builtins.isPath m
-        && isFunction f
-        && instance ? options
-        && instance.meta.buildDocsInSandbox or true;
+  canCacheDocs = m: let
+    f = import m;
+    instance = f (mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (functionArgs f));
+  in
+    cfg.nixos.options.splitBuild
+    && builtins.isPath m
+    && isFunction f
+    && instance ? options
+    && instance.meta.buildDocsInSandbox or true;
 
-  docModules =
-    let
-      p = partition canCacheDocs (baseModules ++ extraDocModules);
-    in
-      {
-        lazy = p.right;
-        eager = p.wrong ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
-      };
+  docModules = let
+    p = partition canCacheDocs (baseModules ++ extraDocModules);
+  in {
+    lazy = p.right;
+    eager = p.wrong ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
+  };
 
   manual = import ../../doc/manual rec {
     inherit pkgs config;
     version = config.system.nixos.release;
     revision = "release-${version}";
     extraSources = cfg.nixos.extraModuleSources;
-    options =
-      let
-        scrubbedEval = evalModules {
-          modules = [ {
-            _module.check = false;
-          } ] ++ docModules.eager;
-          specialArgs = {
-            pkgs = scrubDerivations "pkgs" pkgs;
-            # allow access to arbitrary options for eager modules, eg for getting
-            # option types from lazy modules
-            options = allOpts;
-            inherit modulesPath utils;
-          };
+    options = let
+      scrubbedEval = evalModules {
+        modules =
+          [
+            {
+              _module.check = false;
+            }
+          ]
+          ++ docModules.eager;
+        specialArgs = {
+          pkgs = scrubDerivations "pkgs" pkgs;
+          # allow access to arbitrary options for eager modules, eg for getting
+          # option types from lazy modules
+          options = allOpts;
+          inherit modulesPath utils;
         };
-        scrubDerivations = namePrefix: pkgSet: mapAttrs
-          (name: value:
-            let wholeName = "${namePrefix}.${name}"; in
-            if isAttrs value then
+      };
+      scrubDerivations = namePrefix: pkgSet:
+        mapAttrs
+        (
+          name: value: let
+            wholeName = "${namePrefix}.${name}";
+          in
+            if isAttrs value
+            then
               scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
+              // (optionalAttrs (isDerivation value) {outPath = "\${${wholeName}}";})
             else value
-          )
-          pkgSet;
-      in scrubbedEval.options;
-    baseOptionsJSON =
-      let
-        filter =
-          builtins.filterSource
-            (n: t:
-              (t == "directory" -> baseNameOf n != "tests")
-              && (t == "file" -> hasSuffix ".nix" n)
-            );
-      in
-        pkgs.runCommand "lazy-options.json" {
-          libPath = filter "${toString pkgs.path}/lib";
-          pkgsLibPath = filter "${toString pkgs.path}/pkgs/pkgs-lib";
-          nixosPath = filter "${toString pkgs.path}/nixos";
-          modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
-        } ''
-          export NIX_STORE_DIR=$TMPDIR/store
-          export NIX_STATE_DIR=$TMPDIR/state
-          ${pkgs.buildPackages.nix}/bin/nix-instantiate \
-            --show-trace \
-            --eval --json --strict \
-            --argstr libPath "$libPath" \
-            --argstr pkgsLibPath "$pkgsLibPath" \
-            --argstr nixosPath "$nixosPath" \
-            --arg modules "[ $modules ]" \
-            --argstr stateVersion "${options.system.stateVersion.default}" \
-            --argstr release "${config.system.nixos.release}" \
-            $nixosPath/lib/eval-cacheable-options.nix > $out \
-            || {
-              echo -en "\e[1;31m"
-              echo 'Cacheable portion of option doc build failed.'
-              echo 'Usually this means that an option attribute that ends up in documentation (eg' \
-                '`default` or `description`) depends on the restricted module arguments' \
-                '`config` or `pkgs`.'
-              echo
-              echo 'Rebuild your configuration with `--show-trace` to find the offending' \
-                'location. Remove the references to restricted arguments (eg by escaping' \
-                'their antiquotations or adding a `defaultText`) or disable the sandboxed' \
-                'build for the failing module by setting `meta.buildDocsInSandbox = false`.'
-              echo -en "\e[0m"
-              exit 1
-            } >&2
-        '';
+        )
+        pkgSet;
+    in
+      scrubbedEval.options;
+    baseOptionsJSON = let
+      filter =
+        builtins.filterSource
+        (
+          n: t:
+            (t == "directory" -> baseNameOf n != "tests")
+            && (t == "file" -> hasSuffix ".nix" n)
+        );
+    in
+      pkgs.runCommand "lazy-options.json" {
+        libPath = filter "${toString pkgs.path}/lib";
+        pkgsLibPath = filter "${toString pkgs.path}/pkgs/pkgs-lib";
+        nixosPath = filter "${toString pkgs.path}/nixos";
+        modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
+      } ''
+        export NIX_STORE_DIR=$TMPDIR/store
+        export NIX_STATE_DIR=$TMPDIR/state
+        ${pkgs.buildPackages.nix}/bin/nix-instantiate \
+          --show-trace \
+          --eval --json --strict \
+          --argstr libPath "$libPath" \
+          --argstr pkgsLibPath "$pkgsLibPath" \
+          --argstr nixosPath "$nixosPath" \
+          --arg modules "[ $modules ]" \
+          --argstr stateVersion "${options.system.stateVersion.default}" \
+          --argstr release "${config.system.nixos.release}" \
+          $nixosPath/lib/eval-cacheable-options.nix > $out \
+          || {
+            echo -en "\e[1;31m"
+            echo 'Cacheable portion of option doc build failed.'
+            echo 'Usually this means that an option attribute that ends up in documentation (eg' \
+              '`default` or `description`) depends on the restricted module arguments' \
+              '`config` or `pkgs`.'
+            echo
+            echo 'Rebuild your configuration with `--show-trace` to find the offending' \
+              'location. Remove the references to restricted arguments (eg by escaping' \
+              'their antiquotations or adding a `defaultText`) or disable the sandboxed' \
+              'build for the failing module by setting `meta.buildDocsInSandbox = false`.'
+            echo -en "\e[0m"
+            exit 1
+          } >&2
+      '';
     inherit (cfg.nixos.options) warningsAreErrors;
   };
-
 
   nixos-help = let
     helpScript = pkgs.writeShellScriptBin "nixos-help" ''
@@ -131,28 +144,23 @@ let
       exec = "nixos-help";
       categories = "System";
     };
-
-    in pkgs.symlinkJoin {
+  in
+    pkgs.symlinkJoin {
       name = "nixos-help";
       paths = [
         helpScript
         desktopItem
       ];
     };
-
-in
-
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
-    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
-    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkRenamedOptionModule ["programs" "info" "enable"] ["documentation" "info" "enable"])
+    (mkRenamedOptionModule ["programs" "man" "enable"] ["documentation" "man" "enable"])
+    (mkRenamedOptionModule ["services" "nixosManual" "enable"] ["documentation" "nixos" "enable"])
   ];
 
   options = {
-
     documentation = {
-
       enable = mkOption {
         type = types.bool;
         default = true;
@@ -276,7 +284,7 @@ in
 
       nixos.extraModuleSources = mkOption {
         type = types.listOf (types.either types.path types.str);
-        default = [ ];
+        default = [];
         description = ''
           Which extra NixOS module paths the generated NixOS's documentation should strip
           from options.
@@ -286,9 +294,7 @@ in
           [ pkgs.customModules ]
         '';
       };
-
     };
-
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -306,14 +312,14 @@ in
     # The actual implementation for this lives in man-db.nix or mandoc.nix,
     # depending on which backend is active.
     (mkIf cfg.man.enable {
-      environment.pathsToLink = [ "/share/man" ];
-      environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
+      environment.pathsToLink = ["/share/man"];
+      environment.extraOutputsToInstall = ["man"] ++ optional cfg.dev.enable "devman";
     })
 
     (mkIf cfg.info.enable {
-      environment.systemPackages = [ pkgs.texinfoInteractive ];
-      environment.pathsToLink = [ "/share/info" ];
-      environment.extraOutputsToInstall = [ "info" ] ++ optional cfg.dev.enable "devinfo";
+      environment.systemPackages = [pkgs.texinfoInteractive];
+      environment.pathsToLink = ["/share/info"];
+      environment.extraOutputsToInstall = ["info"] ++ optional cfg.dev.enable "devinfo";
       environment.extraSetup = ''
         if [ -w $out/share/info ]; then
           shopt -s nullglob
@@ -325,22 +331,21 @@ in
     })
 
     (mkIf cfg.doc.enable {
-      environment.pathsToLink = [ "/share/doc" ];
-      environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
+      environment.pathsToLink = ["/share/doc"];
+      environment.extraOutputsToInstall = ["doc"] ++ optional cfg.dev.enable "devdoc";
     })
 
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
-      environment.systemPackages = []
+      environment.systemPackages =
+        []
         ++ optional cfg.man.enable manual.manpages
-        ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
+        ++ optionals cfg.doc.enable [manual.manualHTML nixos-help];
 
       services.getty.helpLine = mkIf cfg.doc.enable (
-          "\nRun 'nixos-help' for the NixOS manual."
+        "\nRun 'nixos-help' for the NixOS manual."
       );
     })
-
   ]);
-
 }

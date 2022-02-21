@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, aiocontextvars
-, buildPythonPackage
-, colorama
-, fetchpatch
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  aiocontextvars,
+  buildPythonPackage,
+  colorama,
+  fetchpatch,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "loguru";
   version = "0.6.0";
@@ -34,18 +34,20 @@ buildPythonPackage rec {
     "tests/test_multiprocessing.py"
   ];
 
-  disabledTests = [
-    "test_time_rotation_reopening"
-    "test_file_buffering"
-    # Tests are failing with Python 3.10
-    "test_exception_others"
-    ""
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_rotation_and_retention"
-    "test_rotation_and_retention_timed_file"
-    "test_renaming"
-    "test_await_complete_inheritance"
-  ];
+  disabledTests =
+    [
+      "test_time_rotation_reopening"
+      "test_file_buffering"
+      # Tests are failing with Python 3.10
+      "test_exception_others"
+      ""
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_rotation_and_retention"
+      "test_rotation_and_retention_timed_file"
+      "test_renaming"
+      "test_await_complete_inheritance"
+    ];
 
   pythonImportsCheck = [
     "loguru"
@@ -55,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Delgan/loguru";
     description = "Python logging made (stupidly) simple";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum rmcgibbo ];
+    maintainers = with maintainers; [jakewaksbaum rmcgibbo];
   };
 }

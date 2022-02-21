@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchzip, perl, pkg-config, libbson
-, openssl, which, zlib, snappy
+{
+  lib,
+  stdenv,
+  fetchzip,
+  perl,
+  pkg-config,
+  libbson,
+  openssl,
+  which,
+  zlib,
+  snappy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mongoc";
   version = "1.8.0";
@@ -11,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vnnk3pwbcmwva1010bl111kdcdx3yb2w7j7a78hhvrm1k9r1wp8";
   };
 
-  nativeBuildInputs = [ pkg-config which perl ];
-  buildInputs = [ openssl zlib ];
-  propagatedBuildInputs = [ libbson snappy ];
+  nativeBuildInputs = [pkg-config which perl];
+  buildInputs = [openssl zlib];
+  propagatedBuildInputs = [libbson snappy];
 
   enableParallelBuilding = true;
 

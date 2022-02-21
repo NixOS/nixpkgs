@@ -1,71 +1,69 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.postgresqlBackup;
 
-  postgresqlBackupService = db: dumpCmd:
-    let
-      compressSuffixes = {
-        "none" = "";
-        "gzip" = ".gz";
-        "zstd" = ".zstd";
-      };
-      compressSuffix = getAttr cfg.compression compressSuffixes;
+  postgresqlBackupService = db: dumpCmd: let
+    compressSuffixes = {
+      "none" = "";
+      "gzip" = ".gz";
+      "zstd" = ".zstd";
+    };
+    compressSuffix = getAttr cfg.compression compressSuffixes;
 
-      compressCmd = getAttr cfg.compression {
-        "none" = "cat";
-        "gzip" = "${pkgs.gzip}/bin/gzip -c";
-        "zstd" = "${pkgs.zstd}/bin/zstd -c";
-      };
-
-      mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
-      curFile = mkSqlPath "" compressSuffix;
-      prevFile = mkSqlPath ".prev" compressSuffix;
-      prevFiles = map (mkSqlPath ".prev") (attrValues compressSuffixes);
-      inProgressFile = mkSqlPath ".in-progress" compressSuffix;
-    in {
-      enable = true;
-
-      description = "Backup of ${db} database(s)";
-
-      requires = [ "postgresql.service" ];
-
-      path = [ pkgs.coreutils config.services.postgresql.package ];
-
-      script = ''
-        set -e -o pipefail
-
-        umask 0077 # ensure backup is only readable by postgres user
-
-        if [ -e ${curFile} ]; then
-          rm -f ${toString prevFiles}
-          mv ${curFile} ${prevFile}
-        fi
-
-        ${dumpCmd} \
-          | ${compressCmd} \
-          > ${inProgressFile}
-
-        mv ${inProgressFile} ${curFile}
-      '';
-
-      serviceConfig = {
-        Type = "oneshot";
-        User = "postgres";
-      };
-
-      startAt = cfg.startAt;
+    compressCmd = getAttr cfg.compression {
+      "none" = "cat";
+      "gzip" = "${pkgs.gzip}/bin/gzip -c";
+      "zstd" = "${pkgs.zstd}/bin/zstd -c";
     };
 
-in {
+    mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
+    curFile = mkSqlPath "" compressSuffix;
+    prevFile = mkSqlPath ".prev" compressSuffix;
+    prevFiles = map (mkSqlPath ".prev") (attrValues compressSuffixes);
+    inProgressFile = mkSqlPath ".in-progress" compressSuffix;
+  in {
+    enable = true;
 
+    description = "Backup of ${db} database(s)";
+
+    requires = ["postgresql.service"];
+
+    path = [pkgs.coreutils config.services.postgresql.package];
+
+    script = ''
+      set -e -o pipefail
+
+      umask 0077 # ensure backup is only readable by postgres user
+
+      if [ -e ${curFile} ]; then
+        rm -f ${toString prevFiles}
+        mv ${curFile} ${prevFile}
+      fi
+
+      ${dumpCmd} \
+        | ${compressCmd} \
+        > ${inProgressFile}
+
+      mv ${inProgressFile} ${curFile}
+    '';
+
+    serviceConfig = {
+      Type = "oneshot";
+      User = "postgres";
+    };
+
+    startAt = cfg.startAt;
+  };
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
-       A systemd timer is now used instead of cron.
-       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+    (mkRemovedOptionModule ["services" "postgresqlBackup" "period"] ''
+      A systemd timer is now used instead of cron.
+      The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
   ];
 
@@ -131,15 +129,16 @@ in {
         '';
       };
     };
-
   };
 
   config = mkMerge [
     {
-      assertions = [{
-        assertion = cfg.backupAll -> cfg.databases == [];
-        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
-      }];
+      assertions = [
+        {
+          assertion = cfg.backupAll -> cfg.databases == [];
+          message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+        }
+      ];
     }
     (mkIf cfg.enable {
       systemd.tmpfiles.rules = [
@@ -151,14 +150,12 @@ in {
         postgresqlBackupService "all" "pg_dumpall";
     })
     (mkIf (cfg.enable && !cfg.backupAll) {
-      systemd.services = listToAttrs (map (db:
-        let
-          cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
-        in {
-          name = "postgresqlBackup-${db}";
-          value = postgresqlBackupService db cmd;
-        }) cfg.databases);
+      systemd.services = listToAttrs (map (db: let
+        cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
+      in {
+        name = "postgresqlBackup-${db}";
+        value = postgresqlBackupService db cmd;
+      }) cfg.databases);
     })
   ];
-
 }

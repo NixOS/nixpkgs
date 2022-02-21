@@ -1,16 +1,18 @@
-{ buildPythonPackage, lib
-, cython, libseccomp
+{
+  buildPythonPackage,
+  lib,
+  cython,
+  libseccomp,
 }:
-
 buildPythonPackage rec {
-  pname   = "libseccomp";
+  pname = "libseccomp";
   version = libseccomp.version;
-  src     = libseccomp.pythonsrc;
+  src = libseccomp.pythonsrc;
 
   VERSION_RELEASE = version; # used by build system
 
-  nativeBuildInputs = [ cython ];
-  buildInputs = [ libseccomp ];
+  nativeBuildInputs = [cython];
+  buildInputs = [libseccomp];
 
   unpackCmd = "tar xf $curSrc";
   doInstallCheck = true;
@@ -23,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for libseccomp";
-    license     = with licenses; [ lgpl21 ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = with licenses; [lgpl21];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

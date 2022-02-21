@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libevent, libpcap, libnet, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  libevent,
+  libpcap,
+  libnet,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "sslsplit";
   version = "0.5.5";
@@ -11,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p43z9ln5rbc76v0j1k3r4nhvfw71hq8jzsallb54z9hvwfvqp3l";
   };
 
-  buildInputs = [ openssl libevent libpcap libnet zlib ];
+  buildInputs = [openssl libevent libpcap libnet zlib];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -25,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Transparent SSL/TLS interception";
     homepage = "https://www.roe.ch/SSLsplit";
     platforms = platforms.all;
-    maintainers = with maintainers; [ contrun ];
-    license = with licenses; [ bsd2 mit unlicense free ];
+    maintainers = with maintainers; [contrun];
+    license = with licenses; [bsd2 mit unlicense free];
   };
 }

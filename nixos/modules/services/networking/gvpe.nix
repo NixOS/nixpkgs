@@ -1,45 +1,47 @@
 # GNU Virtual Private Ethernet
-
-{config, pkgs, lib, ...}:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib) mkOption mkIf types;
 
   cfg = config.services.gvpe;
 
-  finalConfig = if cfg.configFile != null then
-    cfg.configFile
-  else if cfg.configText != null then
-    pkgs.writeTextFile {
-      name = "gvpe.conf";
-      text = cfg.configText;
-    }
-  else
-    throw "You must either specify contents of the config file or the config file itself for GVPE";
+  finalConfig =
+    if cfg.configFile != null
+    then cfg.configFile
+    else if cfg.configText != null
+    then
+      pkgs.writeTextFile {
+        name = "gvpe.conf";
+        text = cfg.configText;
+      }
+    else throw "You must either specify contents of the config file or the config file itself for GVPE";
 
-  ifupScript = if cfg.ipAddress == null || cfg.subnet == null then
-     throw "Specify IP address and subnet (with mask) for GVPE"
-   else if cfg.nodename == null then
-     throw "You must set node name for GVPE"
-   else
-   (pkgs.writeTextFile {
-    name = "gvpe-if-up";
-    text = ''
-      #! /bin/sh
+  ifupScript =
+    if cfg.ipAddress == null || cfg.subnet == null
+    then throw "Specify IP address and subnet (with mask) for GVPE"
+    else if cfg.nodename == null
+    then throw "You must set node name for GVPE"
+    else
+      (pkgs.writeTextFile {
+        name = "gvpe-if-up";
+        text = ''
+          #! /bin/sh
 
-      export PATH=$PATH:${pkgs.iproute2}/sbin
+          export PATH=$PATH:${pkgs.iproute2}/sbin
 
-      ip link set $IFNAME up
-      ip address add ${cfg.ipAddress} dev $IFNAME
-      ip route add ${cfg.subnet} dev $IFNAME
+          ip link set $IFNAME up
+          ip address add ${cfg.ipAddress} dev $IFNAME
+          ip route add ${cfg.subnet} dev $IFNAME
 
-      ${cfg.customIFSetup}
-    '';
-    executable = true;
-  });
-in
-
-{
+          ${cfg.customIFSetup}
+        '';
+        executable = true;
+      });
+in {
   options = {
     services.gvpe = {
       enable = lib.mkEnableOption "gvpe";
@@ -47,7 +49,7 @@ in
       nodename = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description =''
+        description = ''
           GVPE node name
         '';
       };
@@ -107,8 +109,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.gvpe = {
       description = "GNU Virtual Private Ethernet node";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       preStart = ''
         mkdir -p /var/gvpe
@@ -119,7 +121,8 @@ in
         cp ${ifupScript} /var/gvpe/if-up
       '';
 
-      script = "${pkgs.gvpe}/sbin/gvpe -c /var/gvpe -D ${cfg.nodename} "
+      script =
+        "${pkgs.gvpe}/sbin/gvpe -c /var/gvpe -D ${cfg.nodename} "
         + " ${cfg.nodename}.pid-file=/var/gvpe/gvpe.pid"
         + " ${cfg.nodename}.if-up=if-up"
         + " &> /var/log/gvpe";

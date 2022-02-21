@@ -1,18 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, dbus
-, libpulseaudio
-, notmuch
-, openssl
-, ethtool
-, lm_sensors
-, iw
-, iproute2
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  dbus,
+  libpulseaudio,
+  notmuch,
+  openssl,
+  ethtool,
+  lm_sensors,
+  iw,
+  iproute2,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
   version = "0.21.5";
@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-QUecTmw8pWqrTdcstbXoFf53dFfwFN51tQ7ngUzkyV0=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [pkg-config makeWrapper];
 
-  buildInputs = [ dbus libpulseaudio notmuch openssl lm_sensors ];
+  buildInputs = [dbus libpulseaudio notmuch openssl lm_sensors];
 
   buildFeatures = [
     "notmuch"
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/i3status-rs --prefix PATH : ${lib.makeBinPath [ iproute2 ethtool iw ]}
+    wrapProgram $out/bin/i3status-rs --prefix PATH : ${lib.makeBinPath [iproute2 ethtool iw]}
   '';
 
   # Currently no tests are implemented, so we avoid building the package twice
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = "https://github.com/greshake/i3status-rust";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ backuitist globin ma27 ];
+    maintainers = with maintainers; [backuitist globin ma27];
     platforms = platforms.linux;
   };
 }

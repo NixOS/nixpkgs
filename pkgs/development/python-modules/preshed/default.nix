@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, murmurhash
-, pytest
-, cython
-, cymem
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  murmurhash,
+  pytest,
+  cython,
+  cymem,
+  python,
 }:
 buildPythonPackage rec {
   pname = "preshed";
@@ -34,6 +35,6 @@ buildPythonPackage rec {
     description = "Cython hash tables that assume keys are pre-hashed";
     homepage = "https://github.com/explosion/preshed";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

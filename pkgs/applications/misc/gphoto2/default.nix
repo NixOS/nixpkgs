@@ -1,13 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, gettext
-, libexif
-, libgphoto2
-, libjpeg
-, libtool
-, popt
-, readline
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  libexif,
+  libgphoto2,
+  libjpeg,
+  libtool,
+  popt,
+  readline,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gphoto2";
   version = "2.5.28";
@@ -45,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.gphoto.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.jcumming ];
+    maintainers = [maintainers.jcumming];
   };
 }

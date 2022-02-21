@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "dura";
   version = "0.1.0";
@@ -35,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tkellogg/dura";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ drupol ];
+    maintainers = with maintainers; [drupol];
   };
 }

@@ -1,70 +1,66 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, libsndfile
-, libtool
-, makeWrapper
-, perlPackages
-, xorg
-, libcap
-, alsa-lib
-, glib
-, dconf
-, avahi
-, libjack2
-, libasyncns
-, lirc
-, dbus
-, sbc
-, bluez5
-, udev
-, openssl
-, fftwFloat
-, soxr
-, speexdsp
-, systemd
-, webrtc-audio-processing
-, gtk3
-, tdb
-, orc
-, check
-, gettext
-, gst_all_1
-, libopenaptx
-
-, x11Support ? true
-
-, # Whether to support the JACK sound system as a backend.
-  jackaudioSupport ? false
-
-, airtunesSupport ? true
-
-, bluetoothSupport ? true
-
-, remoteControlSupport ? true
-
-, zeroconfSupport ? true
-
-, # Whether to build only the library.
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  libsndfile,
+  libtool,
+  makeWrapper,
+  perlPackages,
+  xorg,
+  libcap,
+  alsa-lib,
+  glib,
+  dconf,
+  avahi,
+  libjack2,
+  libasyncns,
+  lirc,
+  dbus,
+  sbc,
+  bluez5,
+  udev,
+  openssl,
+  fftwFloat,
+  soxr,
+  speexdsp,
+  systemd,
+  webrtc-audio-processing,
+  gtk3,
+  tdb,
+  orc,
+  check,
+  gettext,
+  gst_all_1,
+  libopenaptx,
+  x11Support ? true,
+  # Whether to support the JACK sound system as a backend.
+  jackaudioSupport ? false,
+  airtunesSupport ? true,
+  bluetoothSupport ? true,
+  remoteControlSupport ? true,
+  zeroconfSupport ? true,
+  # Whether to build only the library.
   libOnly ? false
-
-# Building from Git source
-, fromGit ? true
-
-, CoreServices
-, AudioUnit
-, Cocoa
+  # Building from Git source
+  ,
+  fromGit ? true,
+  CoreServices,
+  AudioUnit,
+  Cocoa,
 }:
-
 stdenv.mkDerivation rec {
-  pname = "${if libOnly then "lib" else ""}pulseaudio-hsphfpd";
+  pname = "${
+    if libOnly
+    then "lib"
+    else ""
+  }pulseaudio-hsphfpd";
   version = "13.99.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/288
   src = fetchFromGitLab {
@@ -101,65 +97,76 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional stdenv.isLinux libcap;
 
-  buildInputs = [
-    libopenaptx
-    fftwFloat
-    libsndfile
-    libtool
-    orc
-    soxr
-    speexdsp
-    tdb
-    sbc
-    gst_all_1.gst-plugins-base
-  ] ++ lib.optionals bluetoothSupport [
-    bluez5
-  ] ++ lib.optionals stdenv.isLinux [
-    dbus
-    glib
-    gtk3
-    libasyncns
-  ] ++ lib.optionals stdenv.isDarwin [
-    AudioUnit
-    Cocoa
-    CoreServices
-  ] ++ lib.optionals (!libOnly) (
-    lib.optionals x11Support [
-      xorg.libXi
-      xorg.libXtst
-      xorg.xlibsWrapper
-    ] ++ lib.optionals stdenv.isLinux [
-      alsa-lib
-      systemd
-      udev
-    ] ++ lib.optional airtunesSupport openssl
-    ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optional remoteControlSupport lirc
-    ++ lib.optional zeroconfSupport avahi
-    ++ [ webrtc-audio-processing ]
-  );
+  buildInputs =
+    [
+      libopenaptx
+      fftwFloat
+      libsndfile
+      libtool
+      orc
+      soxr
+      speexdsp
+      tdb
+      sbc
+      gst_all_1.gst-plugins-base
+    ]
+    ++ lib.optionals bluetoothSupport [
+      bluez5
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      dbus
+      glib
+      gtk3
+      libasyncns
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AudioUnit
+      Cocoa
+      CoreServices
+    ]
+    ++ lib.optionals (!libOnly) (
+      lib.optionals x11Support [
+        xorg.libXi
+        xorg.libXtst
+        xorg.xlibsWrapper
+      ]
+      ++ lib.optionals stdenv.isLinux [
+        alsa-lib
+        systemd
+        udev
+      ]
+      ++ lib.optional airtunesSupport openssl
+      ++ lib.optional jackaudioSupport libjack2
+      ++ lib.optional remoteControlSupport lirc
+      ++ lib.optional zeroconfSupport avahi
+      ++ [webrtc-audio-processing]
+    );
 
-  mesonFlags = [
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "-Daccess_group=audio"
-    "-Dbashcompletiondir=${placeholder "out"}/share/bash-completions/completions"
-    "-Dman=false" # TODO: needs xmltoman; also doesn't check for this
-    "-Dsysconfdir_install=${placeholder "out"}/etc"
-    "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
-    "-Dzshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-Dasyncns=disabled"
-    "-Ddbus=disabled"
-    "-Dglib=disabled"
-    "-Dgsettings=disabled"
-    "-Dgtk=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux || libOnly) [
-    "-Dalsa=disabled"
-    "-Dsystemd=disabled"
-    "-Dudev=disabled"
-  ] ++ lib.optional libOnly "-Dwebrtc-aec=disabled"
+  mesonFlags =
+    [
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      "-Daccess_group=audio"
+      "-Dbashcompletiondir=${placeholder "out"}/share/bash-completions/completions"
+      "-Dman=false" # TODO: needs xmltoman; also doesn't check for this
+      "-Dsysconfdir_install=${placeholder "out"}/etc"
+      "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+      "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+      "-Dzshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
+    ]
+    ++ lib.optionals (!stdenv.isLinux) [
+      "-Dasyncns=disabled"
+      "-Ddbus=disabled"
+      "-Dglib=disabled"
+      "-Dgsettings=disabled"
+      "-Dgtk=disabled"
+    ]
+    ++ lib.optionals (!stdenv.isLinux || libOnly) [
+      "-Dalsa=disabled"
+      "-Dsystemd=disabled"
+      "-Dudev=disabled"
+    ]
+    ++ lib.optional libOnly "-Dwebrtc-aec=disabled"
     ++ lib.optional (!x11Support) "-Dx11=disabled"
     ++ lib.optional (!bluetoothSupport) "-Dbluez5=false"
     ++ lib.optional (!airtunesSupport) "-Dopenssl=disabled"
@@ -184,12 +191,14 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreServices -framework Cocoa -framework AudioUnit";
 
-  postInstall = ''
-    moveToOutput lib/cmake "$dev"
-    rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
-  '' + lib.optionalString libOnly ''
-    rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-  '';
+  postInstall =
+    ''
+      moveToOutput lib/cmake "$dev"
+      rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+    ''
+    + lib.optionalString libOnly ''
+      rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
+    '';
 
   preFixup = lib.optionalString (stdenv.isLinux && !libOnly) ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
@@ -205,7 +214,7 @@ stdenv.mkDerivation rec {
     description = "A featureful, general-purpose sound server";
     homepage = "http://www.pulseaudio.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [lovek323];
     platforms = platforms.unix;
     longDescription = ''
       PulseAudio is a sound system for POSIX OSes, meaning that it is

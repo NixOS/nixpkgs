@@ -1,10 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "nose-pattern-exclude";
   version = "0.1.3";
 
-  propagatedBuildInputs = [ nose ];
+  propagatedBuildInputs = [nose];
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +22,6 @@ buildPythonPackage rec {
     description = "Exclude specific files and directories from nosetests runs";
     homepage = "https://github.com/jakubroztocil/nose-pattern-exclude";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

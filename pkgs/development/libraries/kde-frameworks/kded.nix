@@ -1,18 +1,30 @@
 {
-  mkDerivation, propagate, wrapGAppsHook,
-  extra-cmake-modules, kdoctools,
-  gsettings-desktop-schemas, kconfig, kcoreaddons, kcrash, kdbusaddons,
-  kservice, qtbase,
+  mkDerivation,
+  propagate,
+  wrapGAppsHook,
+  extra-cmake-modules,
+  kdoctools,
+  gsettings-desktop-schemas,
+  kconfig,
+  kcoreaddons,
+  kcrash,
+  kdbusaddons,
+  kservice,
+  qtbase,
 }:
-
 mkDerivation {
   name = "kded";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [extra-cmake-modules kdoctools wrapGAppsHook];
   buildInputs = [
-    gsettings-desktop-schemas kconfig kcoreaddons kcrash kdbusaddons
-    kservice qtbase
+    gsettings-desktop-schemas
+    kconfig
+    kcoreaddons
+    kcrash
+    kdbusaddons
+    kservice
+    qtbase
   ];
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
   setupHook = propagate "out";
   dontWrapGApps = true;
   preFixup = ''

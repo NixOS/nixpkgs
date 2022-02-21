@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, mock
-, pbr
-, pyyaml
-, setuptools
-, six
-, multi_key_dict
-, testscenarios
-, requests
-, unittest2
-, requests-mock
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pbr,
+  pyyaml,
+  setuptools,
+  six,
+  multi_key_dict,
+  testscenarios,
+  requests,
+  unittest2,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "python-jenkins";
   version = "1.7.0";
@@ -30,10 +30,10 @@ buildPythonPackage rec {
       --replace test_jenkins_open_no_timeout dont_test_jenkins_open_no_timeout
   '';
 
-  buildInputs = [ mock ];
-  propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
+  buildInputs = [mock];
+  propagatedBuildInputs = [pbr pyyaml setuptools six multi_key_dict requests];
 
-  checkInputs = [ unittest2 testscenarios requests-mock ];
+  checkInputs = [unittest2 testscenarios requests-mock];
   checkPhase = ''
     unit2
   '';
@@ -42,7 +42,6 @@ buildPythonPackage rec {
     description = "Python bindings for the remote Jenkins API";
     homepage = "https://pypi.python.org/pypi/python-jenkins";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
-
 }

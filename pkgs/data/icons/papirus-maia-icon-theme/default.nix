@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtk3, breeze-icons, gnome-icon-theme, papirus-icon-theme, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtk3,
+  breeze-icons,
+  gnome-icon-theme,
+  papirus-icon-theme,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "papirus-maia-icon-theme";
   version = "2019-07-26";
@@ -40,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Ste74/papirus-maia-icon-theme";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

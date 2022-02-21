@@ -1,17 +1,17 @@
 # Note: this is rakshasa's version of libtorrent, used mainly by rtorrent.
 # *Do not* mistake it by libtorrent-rasterbar, used by Deluge, qbitttorent etc.
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf-archive
-, autoreconfHook
-, cppunit
-, libsigcxx
-, openssl
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  cppunit,
+  libsigcxx,
+  openssl,
+  pkg-config,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rakshasa-libtorrent";
   version = "0.13.8+date=2021-08-07";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rakshasa/libtorrent";
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ebzzry codyopel ];
+    maintainers = with maintainers; [ebzzry codyopel];
     platforms = platforms.unix;
   };
 }

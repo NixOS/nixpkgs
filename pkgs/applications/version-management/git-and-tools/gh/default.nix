@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "gh";
   version = "2.5.1";
@@ -13,7 +17,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-tJg/vekGUYP4q1ZP5UV3+lXv6bht4doVV3IaGH+4uf8=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   # upstream unsets these to handle cross but it breaks our build
   postPatch = ''
@@ -47,6 +51,6 @@ buildGoModule rec {
     homepage = "https://cli.github.com/";
     changelog = "https://github.com/cli/cli/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [zowoq];
   };
 }

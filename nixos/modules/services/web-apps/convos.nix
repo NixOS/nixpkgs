@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.convos;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.convos;
+in {
   options.services.convos = {
     enable = mkEnableOption "Convos";
     listenPort = mkOption {
@@ -35,11 +36,14 @@ in
   config = mkIf cfg.enable {
     systemd.services.convos = {
       description = "Convos Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
       environment = {
         CONVOS_HOME = "%S/convos";
-        CONVOS_REVERSE_PROXY = if cfg.reverseProxy then "1" else "0";
+        CONVOS_REVERSE_PROXY =
+          if cfg.reverseProxy
+          then "1"
+          else "0";
         MOJO_LISTEN = "http://${toString cfg.listenAddress}:${toString cfg.listenPort}";
       };
       serviceConfig = {
@@ -62,7 +66,7 @@ in
         LockPersonality = true;
         RestrictRealtime = true;
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6"];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
         SystemCallFilter = "@system-service";
         SystemCallArchitectures = "native";
         CapabilityBoundingSet = "";

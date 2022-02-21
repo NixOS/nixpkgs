@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, pysocks
-, pythonOlder
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geojson,
+  pysocks,
+  pythonOlder,
+  requests,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyowm";
   version = "3.3.0";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Python wrapper around the OpenWeatherMap web API";
     homepage = "https://pyowm.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

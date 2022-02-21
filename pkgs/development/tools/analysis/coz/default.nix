@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, libelfin
-, ncurses
-, python3
-, python3Packages
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libelfin,
+  ncurses,
+  python3,
+  python3Packages,
+  makeWrapper,
 }:
 stdenv.mkDerivation rec {
   pname = "coz";
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libelfin
-    (python3.withPackages (p: [ p.docutils ]))
+    (python3.withPackages (p: [p.docutils]))
   ];
 
   installPhase = ''
@@ -51,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/plasma-umass/coz";
     description = "Profiler based on casual profiling";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [zimbatm];
   };
 }

@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, jq, nix, makeWrapper }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  jq,
+  nix,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "terranix";
   version = "2.5.3";
@@ -11,14 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Jhq0pkyF1KWJ6HgeWLoRfIxo7QHvOwwXzsIxZQgQtK4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/{bin,core,modules,lib}
     mv bin core modules lib share $out/
 
     wrapProgram $out/bin/terranix-doc-json \
-      --prefix PATH : ${lib.makeBinPath [ jq nix ]}
+      --prefix PATH : ${lib.makeBinPath [jq nix]}
   '';
 
   meta = with lib; {
@@ -26,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://terranix.org";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mrVanDalo ];
+    maintainers = with maintainers; [mrVanDalo];
   };
 }

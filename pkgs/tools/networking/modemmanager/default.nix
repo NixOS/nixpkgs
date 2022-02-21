@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchurl
-, glib, udev, libgudev, polkit, ppp, gettext, pkg-config, python3
-, libmbim, libqmi, systemd, vala, gobject-introspection, dbus
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  udev,
+  libgudev,
+  polkit,
+  ppp,
+  gettext,
+  pkg-config,
+  python3,
+  libmbim,
+  libqmi,
+  systemd,
+  vala,
+  gobject-introspection,
+  dbus,
 }:
-
 stdenv.mkDerivation rec {
   pname = "modemmanager";
   version = "1.18.4";
@@ -12,12 +26,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EfuXD2Pi2ojfS22HWeTuZJlExRUkS5eb9Qp6bfHX8Zk=";
   };
 
-  nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];
+  nativeBuildInputs = [vala gobject-introspection gettext pkg-config];
 
-  buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
+  buildInputs = [glib udev libgudev polkit ppp libmbim libqmi systemd];
 
   installCheckInputs = [
-    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3
+    python3
+    python3.pkgs.dbus-python
+    python3.pkgs.pygobject3
   ];
 
   configureFlags = [

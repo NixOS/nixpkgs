@@ -1,5 +1,8 @@
-{ lib, fetchFromGitLab, buildDunePackage }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+}:
 buildDunePackage rec {
   pname = "menhirLib";
   version = "20211128";
@@ -23,7 +26,7 @@ buildDunePackage rec {
       to OCaml code.  Menhir was designed and implemented by François Pottier
       and Yann Régis-Gianas.
     '';
-    license = with licenses; [ lgpl2Only ];
-    maintainers = with maintainers; [ vbgl ];
+    license = with licenses; [lgpl2Only];
+    maintainers = with maintainers; [vbgl];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, yara
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  yara,
 }:
-
 buildGoModule rec {
   pname = "spyre";
   version = "1.2.4";
@@ -29,7 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "YARA-based IOC scanner";
     homepage = "https://github.com/spyre-project/spyre";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [lgpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

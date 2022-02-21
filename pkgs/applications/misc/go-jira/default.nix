@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "go-jira";
   version = "1.0.28";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "Simple command line client for Atlassian's Jira service written in Go";
     homepage = "https://github.com/go-jira/jira";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos timstott ];
+    maintainers = with maintainers; [carlosdagos timstott];
   };
 }

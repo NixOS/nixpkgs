@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, perlPackages
-, flac
-, faad2
-, sox
-, lame
-, monkeysAudio
-, wavpack
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  perlPackages,
+  flac,
+  faad2,
+  sox,
+  lame,
+  monkeysAudio,
+  wavpack,
 }:
-
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
   version = "7.9.2";
@@ -72,7 +72,6 @@ perlPackages.buildPerlPackage rec {
     perlPackages.YAMLLibYAML
   ];
 
-
   prePatch = ''
     mkdir CPAN_used
     # slimserver doesn't work with current DBIx/SQL versions, use bundled copies
@@ -100,10 +99,10 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     cp -r . $out
     wrapProgram $out/slimserver.pl \
-      --prefix PATH : "${lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
+      --prefix PATH : "${lib.makeBinPath [lame flac faad2 sox monkeysAudio wavpack]}"
   '';
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
   meta = with lib; {
     homepage = "https://github.com/Logitech/slimserver";
@@ -111,7 +110,7 @@ perlPackages.buildPerlPackage rec {
     # the firmware is not under a free license!
     # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt
     license = licenses.unfree;
-    maintainers = [ maintainers.phile314 ];
+    maintainers = [maintainers.phile314];
     platforms = platforms.unix;
   };
 }

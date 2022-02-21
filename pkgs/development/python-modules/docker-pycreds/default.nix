@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+}:
 buildPythonPackage rec {
   pname = "docker-pycreds";
   version = "0.4.0";
@@ -12,7 +16,7 @@ buildPythonPackage rec {
   # require docker-credential-helpers binaries
   doCheck = false;
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   meta = with lib; {
     description = "Python bindings for the docker credentials store API.";

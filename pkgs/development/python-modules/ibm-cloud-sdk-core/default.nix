@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, requests
-, responses
-, tox
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyjwt,
+  pytestCheckHook,
+  python-dateutil,
+  requests,
+  responses,
+  tox,
 }:
-
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
   version = "3.14.0";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin lheckemann ];
+    maintainers = with maintainers; [globin lheckemann];
   };
 }

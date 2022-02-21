@@ -1,31 +1,31 @@
-{ lib
-, Babel
-, buildPythonPackage
-, colorama
-, cssselect
-, feedparser
-, fetchFromGitLab
-, gdata
-, gnupg
-, google-api-python-client
-, html2text
-, libyaml
-, lxml
-, mechanize
-, nose
-, pdfminer
-, pillow
-, prettytable
-, pyqt5
-, python-dateutil
-, pythonOlder
-, pyyaml
-, requests
-, simplejson
-, termcolor
-, unidecode
+{
+  lib,
+  Babel,
+  buildPythonPackage,
+  colorama,
+  cssselect,
+  feedparser,
+  fetchFromGitLab,
+  gdata,
+  gnupg,
+  google-api-python-client,
+  html2text,
+  libyaml,
+  lxml,
+  mechanize,
+  nose,
+  pdfminer,
+  pillow,
+  prettytable,
+  pyqt5,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  simplejson,
+  termcolor,
+  unidecode,
 }:
-
 buildPythonPackage rec {
   pname = "woob";
   version = "3.0";
@@ -90,6 +90,6 @@ buildPythonPackage rec {
     description = "Collection of applications and APIs to interact with websites";
     homepage = "https://woob.tech";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ DamienCassou ];
+    maintainers = with maintainers; [DamienCassou];
   };
 }

@@ -1,9 +1,9 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "maddy";
-  meta = with pkgs.lib.maintainers; { maintainers = [ onny ]; };
+  meta = with pkgs.lib.maintainers; {maintainers = [onny];};
 
   nodes = {
-    server = { ... }: {
+    server = {...}: {
       services.maddy = {
         enable = true;
         hostname = "server";
@@ -12,9 +12,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
     };
 
-    client = { ... }: {
+    client = {...}: {
       environment.systemPackages = [
-        (pkgs.writers.writePython3Bin "send-testmail" { } ''
+        (pkgs.writers.writePython3Bin "send-testmail" {} ''
           import smtplib
           from email.mime.text import MIMEText
 
@@ -26,7 +26,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
               smtp.login('postmaster@server', 'test')
               smtp.sendmail('postmaster@server', 'postmaster@server', msg.as_string())
         '')
-        (pkgs.writers.writePython3Bin "test-imap" { } ''
+        (pkgs.writers.writePython3Bin "test-imap" {} ''
           import imaplib
 
           with imaplib.IMAP4('server') as imap:

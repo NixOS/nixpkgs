@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libversion
-, pkg-config
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libversion,
+  pkg-config,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "libversion";
   version = "1.2.4";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Python bindings for libversion, which provides fast, powerful and correct generic version string comparison algorithm";
     homepage = "https://github.com/repology/py-libversion";
     license = licenses.mit;
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with maintainers; [ryantm];
   };
 }

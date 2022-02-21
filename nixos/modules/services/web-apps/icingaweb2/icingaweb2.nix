@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: with lib; let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.icingaweb2;
   fpm = config.services.phpfpm.pools.${poolName};
   poolName = "icingaweb2";
@@ -9,7 +15,7 @@
     };
   };
 in {
-  meta.maintainers = with maintainers; [ das_j ];
+  meta.maintainers = with maintainers; [das_j];
 
   options.services.icingaweb2 = with types; {
     enable = mkEnableOption "the icingaweb2 web interface";
@@ -18,14 +24,14 @@ in {
       type = str;
       default = poolName;
       description = ''
-         Name of existing PHP-FPM pool that is used to run Icingaweb2.
-         If not specified, a pool will automatically created with default values.
+        Name of existing PHP-FPM pool that is used to run Icingaweb2.
+        If not specified, a pool will automatically created with default values.
       '';
     };
 
     libraryPaths = mkOption {
       type = attrsOf package;
-      default = { };
+      default = {};
       description = ''
         Libraries to add to the Icingaweb2 library path.
         The name of the attribute is the name of the library, the value
@@ -178,9 +184,13 @@ in {
       ${poolName} = {
         user = "icingaweb2";
         phpEnv = {
-          ICINGAWEB_LIBDIR = toString (pkgs.linkFarm "icingaweb2-libdir" (mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths));
+          ICINGAWEB_LIBDIR = toString (pkgs.linkFarm "icingaweb2-libdir" (mapAttrsToList (name: path: {inherit name path;}) cfg.libraryPaths));
         };
-        phpPackage = pkgs.php.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
+        phpPackage = pkgs.php.withExtensions ({
+          enabled,
+          all,
+        }:
+          [all.imagick] ++ enabled);
         phpOptions = ''
           date.timezone = "${cfg.timezone}"
         '';
@@ -202,7 +212,7 @@ in {
       thirdparty = pkgs.icingaweb2-thirdparty;
     };
 
-    systemd.services."phpfpm-${poolName}".serviceConfig.ReadWritePaths = [ "/etc/icingaweb2" ];
+    systemd.services."phpfpm-${poolName}".serviceConfig.ReadWritePaths = ["/etc/icingaweb2"];
 
     services.nginx = {
       enable = true;
@@ -234,10 +244,11 @@ in {
 
     # /etc/icingaweb2
     environment.etc = let
-      doModule = name: optionalAttrs (cfg.modules.${name}.enable) { "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}"; };
-    in {}
+      doModule = name: optionalAttrs (cfg.modules.${name}.enable) {"icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}";};
+    in
+      {}
       # Module packages
-      // (mapAttrs' (k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }) cfg.modulePackages)
+      // (mapAttrs' (k: v: nameValuePair "icingaweb2/enabledModules/${k}" {source = v;}) cfg.modulePackages)
       # Built-in modules
       // doModule "doc"
       // doModule "migrate"
@@ -245,11 +256,11 @@ in {
       // doModule "test"
       // doModule "translation"
       # Configs
-      // optionalAttrs (cfg.generalConfig != null) { "icingaweb2/config.ini".text = generators.toINI {} (defaultConfig // cfg.generalConfig); }
-      // optionalAttrs (cfg.resources != null) { "icingaweb2/resources.ini".text = generators.toINI {} cfg.resources; }
-      // optionalAttrs (cfg.authentications != null) { "icingaweb2/authentication.ini".text = generators.toINI {} cfg.authentications; }
-      // optionalAttrs (cfg.groupBackends != null) { "icingaweb2/groups.ini".text = generators.toINI {} cfg.groupBackends; }
-      // optionalAttrs (cfg.roles != null) { "icingaweb2/roles.ini".text = generators.toINI {} cfg.roles; };
+      // optionalAttrs (cfg.generalConfig != null) {"icingaweb2/config.ini".text = generators.toINI {} (defaultConfig // cfg.generalConfig);}
+      // optionalAttrs (cfg.resources != null) {"icingaweb2/resources.ini".text = generators.toINI {} cfg.resources;}
+      // optionalAttrs (cfg.authentications != null) {"icingaweb2/authentication.ini".text = generators.toINI {} cfg.authentications;}
+      // optionalAttrs (cfg.groupBackends != null) {"icingaweb2/groups.ini".text = generators.toINI {} cfg.groupBackends;}
+      // optionalAttrs (cfg.roles != null) {"icingaweb2/roles.ini".text = generators.toINI {} cfg.roles;};
 
     # User and group
     users.groups.icingaweb2 = {};

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isl
-, pybind11
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isl,
+  pybind11,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "islpy";
   version = "2021.1";
@@ -23,17 +23,17 @@ buildPythonPackage rec {
       --replace "\"pytest>=2\"," ""
   '';
 
-  buildInputs = [ isl pybind11 ];
-  propagatedBuildInputs = [ six ];
+  buildInputs = [isl pybind11];
+  propagatedBuildInputs = [six];
 
   preCheck = "mv islpy islpy.hidden";
-  checkInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "islpy" ];
+  checkInputs = [pytestCheckHook];
+  pythonImportsCheck = ["islpy"];
 
   meta = with lib; {
     description = "Python wrapper around isl, an integer set library";
     homepage = "https://github.com/inducer/islpy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

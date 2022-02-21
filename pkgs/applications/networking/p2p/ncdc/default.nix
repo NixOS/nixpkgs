@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, zlib, bzip2, sqlite, pkg-config, glib, gnutls }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+  zlib,
+  bzip2,
+  sqlite,
+  pkg-config,
+  glib,
+  gnutls,
+}:
 stdenv.mkDerivation rec {
   pname = "ncdc";
   version = "1.22.1";
@@ -18,14 +29,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses zlib bzip2 sqlite glib gnutls ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [ncurses zlib bzip2 sqlite glib gnutls];
 
   meta = with lib; {
     description = "Modern and lightweight direct connect client with a friendly ncurses interface";
     homepage = "https://dev.yorhel.nl/ncdc";
     license = licenses.mit;
     platforms = platforms.linux; # arbitrary
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ehmry];
   };
 }

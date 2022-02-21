@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, perl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "surfraw";
   version = "2.3.0";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
     "--disable-opensearch"
   ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [perl];
 
   meta = {
     description = "Provides a fast unix command line interface to a variety of popular WWW search engines and other artifacts of power";

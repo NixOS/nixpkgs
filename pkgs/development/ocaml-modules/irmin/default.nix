@@ -1,8 +1,19 @@
-{ lib, buildDunePackage
-, astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
-, repr, ppx_irmin, bheap, uutf
+{
+  lib,
+  buildDunePackage,
+  astring,
+  digestif,
+  fmt,
+  jsonm,
+  logs,
+  ocaml_lwt,
+  ocamlgraph,
+  uri,
+  repr,
+  ppx_irmin,
+  bheap,
+  uutf,
 }:
-
 buildDunePackage {
   pname = "irmin";
 
@@ -29,7 +40,9 @@ buildDunePackage {
   # circular dependency on irmin-mem
   doCheck = false;
 
-  meta = ppx_irmin.meta // {
-    description = "A distributed database built on the same principles as Git";
-  };
+  meta =
+    ppx_irmin.meta
+    // {
+      description = "A distributed database built on the same principles as Git";
+    };
 }

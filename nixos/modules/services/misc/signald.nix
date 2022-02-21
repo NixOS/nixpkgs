@@ -1,12 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.signald;
   dataDir = "/var/lib/signald";
   defaultUser = "signald";
-in
-{
+in {
   options.services.signald = {
     enable = mkEnableOption "the signald service";
 
@@ -38,14 +40,14 @@ in
     };
 
     users.groups = optionalAttrs (cfg.group == defaultUser) {
-      ${defaultUser} = { };
+      ${defaultUser} = {};
     };
 
     systemd.services.signald = {
       description = "A daemon for interacting with the Signal Private Messenger";
-      wants = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = ["network.target"];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         User = cfg.user;
@@ -90,12 +92,12 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6" "AF_UNIX"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
+        SystemCallFilter = ["@system-service" "~@privileged @resources @setuid @keyring"];
         TemporaryFileSystem = "/:ro";
         # Does not work well with the temporary root
         #UMask = "0066";

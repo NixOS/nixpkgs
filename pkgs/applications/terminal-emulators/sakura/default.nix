@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glib
-, gtk3
-, makeWrapper
-, pcre2
-, perl
-, pkg-config
-, vte
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glib,
+  gtk3,
+  makeWrapper,
+  pcre2,
+  perl,
+  pkg-config,
+  vte,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sakura";
   version = "3.8.4";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dabisu";
     repo = pname;
-    rev = "SAKURA_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "SAKURA_${lib.replaceStrings ["."] ["_"] version}";
     hash = "sha256-Sqo1gyCvCMlEv1rYqw6P3Dmu10osi/KqB7/WlgTTNAc=";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       options. No more no less.
     '';
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astsmtl codyopel AndersonTorres ];
+    maintainers = with maintainers; [astsmtl codyopel AndersonTorres];
     platforms = platforms.linux;
- };
+  };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchgit, patches ? null }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  patches ? null,
+}:
 stdenv.mkDerivation {
   pname = "quark";
   version = "unstable-2021-02-22";
@@ -12,15 +16,15 @@ stdenv.mkDerivation {
 
   inherit patches;
 
-  makeFlags = [ "CC:=$(CC)" ];
+  makeFlags = ["CC:=$(CC)"];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Extremely small and simple HTTP GET/HEAD-only web server for static content";
     homepage = "http://tools.suckless.org/quark";
     license = licenses.isc;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = platforms.linux;
   };
 }

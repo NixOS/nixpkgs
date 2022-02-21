@@ -1,16 +1,16 @@
-{ lib
-, nixosTests
-, buildPythonApplication
-, cloud-utils
-, dmidecode
-, fetchFromGitHub
-, iproute2
-, openssh
-, python3
-, shadow
-, systemd
+{
+  lib,
+  nixosTests,
+  buildPythonApplication,
+  cloud-utils,
+  dmidecode,
+  fetchFromGitHub,
+  iproute2,
+  openssh,
+  python3,
+  shadow,
+  systemd,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
   version = "21.4";
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "09413qz9y2csvhjb4krjnkfj97vlykx79j912p27jjcrg82f1nib";
   };
 
-  patches = [ ./0001-add-nixos-support.patch ];
+  patches = [./0001-add-nixos-support.patch];
 
   prePatch = ''
     substituteInPlace setup.py \
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   postInstall = ''
     install -D -m755 ./tools/write-ssh-key-fingerprints $out/libexec/write-ssh-key-fingerprints
     for i in $out/libexec/*; do
-      wrapProgram $i --prefix PATH : "${lib.makeBinPath [ openssh ]}"
+      wrapProgram $i --prefix PATH : "${lib.makeBinPath [openssh]}"
     done
   '';
 
@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest ]}/bin"
+    "--prefix PATH : ${lib.makeBinPath [dmidecode cloud-utils.guest]}/bin"
   ];
 
   disabledTests = [
@@ -123,8 +123,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
-    license = with licenses; [ asl20 gpl3Plus ];
-    maintainers = with maintainers; [ madjar phile314 ];
+    license = with licenses; [asl20 gpl3Plus];
+    maintainers = with maintainers; [madjar phile314];
     platforms = platforms.all;
   };
 }

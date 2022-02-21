@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pybind11
-, pytestCheckHook
-, python-dateutil
-, doxygen
-, python
-, pelican
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pybind11,
+  pytestCheckHook,
+  python-dateutil,
+  doxygen,
+  python,
+  pelican,
+  matplotlib,
 }:
-
 buildPythonPackage rec {
   pname = "pytomlpp";
   version = "1.0.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "sha256-QyjIJCSgiSKjqMBvCbOlWYx6rBbKIoDvXez2YnYaPUo=";
   };
 
-  buildInputs = [ pybind11 ];
+  buildInputs = [pybind11];
 
   checkInputs = [
     pytestCheckHook
@@ -42,12 +42,12 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  pythonImportsCheck = [ "pytomlpp" ];
+  pythonImportsCheck = ["pytomlpp"];
 
   meta = with lib; {
     description = "A python wrapper for tomlplusplus";
     homepage = "https://github.com/bobfang1992/pytomlpp";
     license = licenses.mit;
-    maintainers = with maintainers; [ evils ];
+    maintainers = with maintainers; [evils];
   };
 }

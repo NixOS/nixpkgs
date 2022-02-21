@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "reparser";
   version = "1.4.3";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "reparser" ];
+  pythonImportsCheck = ["reparser"];
 
   meta = with lib; {
     description = "Simple regex-based lexer/parser for inline markup";
     homepage = "https://github.com/xmikos/reparser";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

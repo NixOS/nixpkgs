@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hpack
-, hyperframe
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hpack,
+  hyperframe,
+  pytestCheckHook,
+  hypothesis,
 }:
-
 buildPythonPackage rec {
   pname = "h2";
   version = "4.1.0";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "https://github.com/python-hyper/h2";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

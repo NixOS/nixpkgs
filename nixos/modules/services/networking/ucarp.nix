@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.networking.ucarp;
 
   ucarpExec = concatStringsSep " " (
@@ -160,8 +162,8 @@ in {
     systemd.services.ucarp = {
       description = "ucarp, userspace implementation of CARP";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         Type = "exec";
@@ -179,5 +181,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ oxzi ];
+  meta.maintainers = with lib.maintainers; [oxzi];
 }

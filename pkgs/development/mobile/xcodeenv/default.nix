@@ -1,6 +1,7 @@
-{ stdenv, lib }:
-
-rec {
+{
+  stdenv,
+  lib,
+}: rec {
   composeXcodeWrapper = import ./compose-xcodewrapper.nix {
     inherit stdenv;
   };

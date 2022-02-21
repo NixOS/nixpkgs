@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ragel, python3
-, coreutils, gnused, util-linux, fetchpatch
-, boost
-, withStatic ? false # build only shared libs by default, build static+shared if true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ragel,
+  python3,
+  coreutils,
+  gnused,
+  util-linux,
+  fetchpatch,
+  boost,
+  withStatic ? false
+  # build only shared libs by default, build static+shared if true
 }:
-
 # NOTICE: pkg-config, pcap and pcre intentionally omitted from build inputs
 #         pcap used only in examples, pkg-config used only to check for pcre
 #         which is fixed 8.41 version requirement (nixpkgs have 8.42+, and
 #         I not see any reason (for now) to backport 8.41.
-
 stdenv.mkDerivation rec {
   pname = "hyperscan";
   version = "5.4.0";
@@ -20,22 +28,27 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  buildInputs = [ boost ];
+  buildInputs = [boost];
   nativeBuildInputs = [
-    cmake ragel python3
+    cmake
+    ragel
+    python3
     # Consider simply using busybox for these
     # Need at least: rev, sed, cut, nm
-    coreutils gnused util-linux
+    coreutils
+    gnused
+    util-linux
   ];
 
-  cmakeFlags = [
-    "-DFAT_RUNTIME=ON"
-    "-DBUILD_AVX512=ON"
-  ]
-  ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
-  ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
+  cmakeFlags =
+    [
+      "-DFAT_RUNTIME=ON"
+      "-DBUILD_AVX512=ON"
+    ]
+    ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
+    ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
 
   patches = [
     (fetchpatch {
@@ -68,8 +81,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.hyperscan.io/";
-    maintainers = with maintainers; [ avnik ];
-    platforms = [ "x86_64-linux" ]; # can't find nm on darwin ; might build on aarch64 but untested
+    maintainers = with maintainers; [avnik];
+    platforms = ["x86_64-linux"]; # can't find nm on darwin ; might build on aarch64 but untested
     license = licenses.bsd3;
   };
 }

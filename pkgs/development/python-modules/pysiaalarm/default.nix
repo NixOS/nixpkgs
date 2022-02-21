@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, dataclasses-json
-, pycryptodome
-, setuptools-scm
-, pytest-asyncio
-, pytest-cases
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  dataclasses-json,
+  pycryptodome,
+  setuptools-scm,
+  pytest-asyncio,
+  pytest-cases,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pysiaalarm";
   version = "3.0.2";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Python package for creating a client that talks with SIA-based alarm systems";
     homepage = "https://github.com/eavanvalkenburg/pysiaalarm";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

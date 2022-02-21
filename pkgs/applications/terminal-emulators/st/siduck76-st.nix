@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, harfbuzz
-, libX11
-, libXext
-, libXft
-, ncurses
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  harfbuzz,
+  libX11,
+  libXext,
+  libXft,
+  ncurses,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "siduck76-st";
   version = "0.pre+unstable=2021-08-20";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/siduck76/st";
     description = "A fork of st with many add-ons";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

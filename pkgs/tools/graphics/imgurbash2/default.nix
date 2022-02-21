@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, bash, curl, xsel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  curl,
+  xsel,
+}:
 stdenv.mkDerivation rec {
   pname = "imgurbash2";
   version = "3.2";
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "A shell script that uploads images to imgur";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
     homepage = "https://github.com/ram-on/imgurbash2";
   };
 }

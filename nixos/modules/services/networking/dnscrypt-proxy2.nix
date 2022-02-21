@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }: with lib;
-
-let
-  cfg = config.services.dnscrypt-proxy2;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.dnscrypt-proxy2;
+in {
   options.services.dnscrypt-proxy2 = {
     enable = mkEnableOption "dnscrypt-proxy2";
 
@@ -46,14 +48,20 @@ in
       type = types.path;
       default = pkgs.runCommand "dnscrypt-proxy.toml" {
         json = builtins.toJSON cfg.settings;
-        passAsFile = [ "json" ];
+        passAsFile = ["json"];
       } ''
-        ${if cfg.upstreamDefaults then ''
-          ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy2.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
-          ${pkgs.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
-        '' else ''
-          cp $jsonPath config.json
-        ''}
+        ${
+          if cfg.upstreamDefaults
+          then
+            ''
+              ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy2.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+              ${pkgs.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
+            ''
+          else
+            ''
+              cp $jsonPath config.json
+            ''
+        }
         ${pkgs.remarshal}/bin/json2toml < config.json > $out
       '';
       defaultText = literalDocBook "TOML file generated from <option>services.dnscrypt-proxy2.settings</option>";
@@ -61,8 +69,7 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    networking.nameservers = lib.mkDefault [ "127.0.0.1" ];
+    networking.nameservers = lib.mkDefault ["127.0.0.1"];
 
     systemd.services.dnscrypt-proxy2 = {
       description = "DNSCrypt-proxy client";

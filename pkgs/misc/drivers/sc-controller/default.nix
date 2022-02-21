@@ -1,32 +1,46 @@
-{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
-, pytestCheckHook
-, gtk3, gobject-introspection, libappindicator-gtk3, librsvg
-, evdev, pygobject3, pylibacl, bluez, vdf
-, linuxHeaders
-, libX11, libXext, libXfixes, libusb1, udev
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  wrapGAppsHook,
+  pytestCheckHook,
+  gtk3,
+  gobject-introspection,
+  libappindicator-gtk3,
+  librsvg,
+  evdev,
+  pygobject3,
+  pylibacl,
+  bluez,
+  vdf,
+  linuxHeaders,
+  libX11,
+  libXext,
+  libXfixes,
+  libusb1,
+  udev,
 }:
-
 buildPythonApplication rec {
   pname = "sc-controller";
   version = "0.4.8.6";
 
   src = fetchFromGitHub {
-    owner  = "Ryochan7";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "Ryochan7";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1fgizgzm79zl9r2kkwvh1gf9lnxaix15283xxk6bz843inr8b88k";
   };
 
   # see https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [wrapGAppsHook];
 
-  buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
+  buildInputs = [gtk3 gobject-introspection libappindicator-gtk3 librsvg];
 
-  propagatedBuildInputs = [ evdev pygobject3 pylibacl vdf ];
+  propagatedBuildInputs = [evdev pygobject3 pylibacl vdf];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
@@ -34,7 +48,7 @@ buildPythonApplication rec {
     substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 udev bluez ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [libX11 libXext libXfixes libusb1 udev bluez];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
@@ -50,11 +64,11 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/Ryochan7/sc-controller";
+    homepage = "https://github.com/Ryochan7/sc-controller";
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ orivej rnhmjoj ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [orivej rnhmjoj];
   };
 }

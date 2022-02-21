@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, networkx
-, nose
-, numpy
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  networkx,
+  nose,
+  numpy,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "colormath";
   version = "3.0.0";
@@ -17,15 +17,15 @@ buildPythonPackage rec {
     sha256 = "1nqf5wy8ikx2g684khzvjc4iagkslmbsxxwilbv4jpaznr9lahdl";
   };
 
-  propagatedBuildInputs = [ networkx numpy ];
+  propagatedBuildInputs = [networkx numpy];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = "nosetests";
 
   meta = with lib; {
     description = "Color math and conversion library";
     homepage = "https://github.com/gtaylor/python-colormath";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ jonathanreeve ];
+    maintainers = with maintainers; [jonathanreeve];
   };
 }

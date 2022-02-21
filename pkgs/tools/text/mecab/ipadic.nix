@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, mecab-nodic }:
-
+{
+  stdenv,
+  fetchurl,
+  mecab-nodic,
+}:
 stdenv.mkDerivation {
   pname = "mecab-ipadic";
   version = "2.7.0-20070801";
@@ -10,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "08rmkvj0f0x6jq0axrjw2y5nam0mavv6x77dp9v4al0wi1ym4bxn";
   };
 
-  buildInputs = [ mecab-nodic ];
+  buildInputs = [mecab-nodic];
 
   configurePhase = ''
     ./configure --with-dicdir="$out"

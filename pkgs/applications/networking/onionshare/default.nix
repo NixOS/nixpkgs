@@ -1,30 +1,29 @@
-{ lib
-, stdenv
-, buildPythonApplication
-, substituteAll
-, fetchFromGitHub
-, isPy3k
-, colorama
-, flask
-, flask-httpauth
-, flask-socketio
-, cepa
-, psutil
-, pyqt5
-, pycrypto
-, pynacl
-, pyside2
-, pytestCheckHook
-, qrcode
-, qt5
-, requests
-, unidecode
-, tor
-, obfs4
-, snowflake
-}:
-
-let
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  substituteAll,
+  fetchFromGitHub,
+  isPy3k,
+  colorama,
+  flask,
+  flask-httpauth,
+  flask-socketio,
+  cepa,
+  psutil,
+  pyqt5,
+  pycrypto,
+  pynacl,
+  pyside2,
+  pytestCheckHook,
+  qrcode,
+  qt5,
+  requests,
+  unidecode,
+  tor,
+  obfs4,
+  snowflake,
+}: let
   version = "2.5";
   src = fetchFromGitHub {
     owner = "onionshare";
@@ -54,14 +53,12 @@ let
     homepage = "https://onionshare.org/";
 
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [lourkeur];
   };
 
   # TODO: package meek https://support.torproject.org/glossary/meek/
   meek = "/meek-not-available";
-
-in
-rec {
+in rec {
   onionshare = buildPythonApplication {
     pname = "onionshare-cli";
     inherit version meta;
@@ -102,14 +99,16 @@ rec {
       export HOME="$(mktemp -d)"
     '';
 
-    disabledTests = [
-      "test_get_tor_paths_linux"  # expects /usr instead of /nix/store
-    ] ++ lib.optionals stdenv.isDarwin [
-      # on darwin (and only on darwin) onionshare attempts to discover
-      # user's *real* homedir via /etc/passwd, making it more painful
-      # to fake
-      "test_receive_mode_webhook"
-    ];
+    disabledTests =
+      [
+        "test_get_tor_paths_linux" # expects /usr instead of /nix/store
+      ]
+      ++ lib.optionals stdenv.isDarwin [
+        # on darwin (and only on darwin) onionshare attempts to discover
+        # user's *real* homedir via /etc/passwd, making it more painful
+        # to fake
+        "test_receive_mode_webhook"
+      ];
   };
 
   onionshare-gui = buildPythonApplication {
@@ -134,7 +133,7 @@ rec {
       qrcode
     ];
 
-    nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+    nativeBuildInputs = [qt5.wrapQtAppsHook];
 
     preFixup = ''
       wrapQtApp $out/bin/onionshare
@@ -142,6 +141,6 @@ rec {
 
     doCheck = false;
 
-    pythonImportsCheck = [ "onionshare" ];
+    pythonImportsCheck = ["onionshare"];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, pyyaml
-, PyGithub
-, python
+{
+  lib,
+  fetchFromSourcehut,
+  buildPythonPackage,
+  srht,
+  pyyaml,
+  PyGithub,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "dispatchsrht";
   version = "0.15.34";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  pythonImportsCheck = [ "dispatchsrht" ];
+  pythonImportsCheck = ["dispatchsrht"];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/dispatch.sr.ht";
     description = "Task dispatcher and service integration tool for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

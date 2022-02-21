@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "django-js-asset";
   version = "unstable-2021-06-07";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Script tag with additional attributes for django.forms.Media";
     homepage = "https://github.com/matthiask/django-js-asset";
-    maintainers = with maintainers; [ hexa ];
-    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [hexa];
+    license = with licenses; [bsd3];
   };
 }

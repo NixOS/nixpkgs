@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, copyDesktopItems, makeDesktopItem, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "logisim-evolution";
   version = "3.7.2";
@@ -11,7 +19,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems unzip ];
+  nativeBuildInputs = [makeWrapper copyDesktopItems unzip];
 
   desktopItems = [
     (makeDesktopItem {
@@ -42,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/logisim-evolution/logisim-evolution";
     description = "Digital logic designer and simulator";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

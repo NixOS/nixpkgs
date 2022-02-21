@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl, gnome }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  glibmm,
+  perl,
+  gnome,
+}:
 stdenv.mkDerivation rec {
   pname = "libxml++";
   version = "3.0.1";
@@ -9,13 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "19kik79fmg61nv0by0a5f9wchrcfjwzvih4v2waw01hqflhqvp0r";
   };
 
-  outputs = [ "out" "dev" "doc" "devdoc" ];
+  outputs = ["out" "dev" "doc" "devdoc"];
 
-  nativeBuildInputs = [ pkg-config perl ];
+  nativeBuildInputs = [pkg-config perl];
 
-  buildInputs = [ glibmm ];
+  buildInputs = [glibmm];
 
-  propagatedBuildInputs = [ libxml2 ];
+  propagatedBuildInputs = [libxml2];
 
   postFixup = ''
     substituteInPlace $dev/lib/pkgconfig/libxml++-3.0.pc \
@@ -36,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "C++ wrapper for the libxml2 XML parser library, version 3";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ loskutov ];
+    maintainers = with maintainers; [loskutov];
   };
 }

@@ -1,11 +1,11 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, qtcharts
-, qtsvg
-, qmake
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtcharts,
+  qtsvg,
+  qmake,
 }:
-
 mkDerivation rec {
   pname = "ldutils";
   version = "1.10";
@@ -26,16 +26,16 @@ mkDerivation rec {
     qmake
   ];
 
-  qmakeFlags = [ "ldutils.pro" ];
+  qmakeFlags = ["ldutils.pro"];
 
-  LDUTILS_LIB=placeholder "out";
-  LDUTILS_INCLUDE=placeholder "out";
+  LDUTILS_LIB = placeholder "out";
+  LDUTILS_INCLUDE = placeholder "out";
 
   meta = with lib; {
     description = "Headers and link library for other ldutils projects";
     homepage = "https://gitlab.com/ldutils-projects/ldutils";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sohalt ];
+    maintainers = with maintainers; [sohalt];
     platforms = platforms.linux;
   };
 }

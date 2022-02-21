@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkgs }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkgs,
+}:
 # To make use of this derivation, use
 # `programs.zsh.interactiveShellInit = "source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh";`
-
 stdenv.mkDerivation rec {
   pname = "zsh-nix-shell";
   version = "0.4.0";
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ aw ];
+    maintainers = with maintainers; [aw];
   };
 }

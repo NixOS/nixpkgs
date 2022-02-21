@@ -1,19 +1,19 @@
-{ lib
-, fetchFromGitHub
-, docutils
-, gettext
-, glibcLocales
-, glib-networking
-, gobject-introspection
-, gtk3
-, python3
-, python3Packages
-, steam-run-native
-, unzip
-, webkitgtk
-, wrapGAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  docutils,
+  gettext,
+  glibcLocales,
+  glib-networking,
+  gobject-introspection,
+  gtk3,
+  python3,
+  python3Packages,
+  steam-run-native,
+  unzip,
+  webkitgtk,
+  wrapGAppsHook,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
   version = "1.1.0";
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
     downloadPage = "https://github.com/sharkwouter/minigalaxy/releases";
     description = "A simple GOG client for Linux";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ srapenne ];
+    maintainers = with maintainers; [srapenne];
     platforms = platforms.linux;
   };
 }

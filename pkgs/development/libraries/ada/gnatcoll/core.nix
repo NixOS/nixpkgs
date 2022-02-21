@@ -1,12 +1,12 @@
-{ stdenv
-, lib
-, gnat
-, gprbuild
-, fetchFromGitHub
-, xmlada
-, which
+{
+  stdenv,
+  lib,
+  gnat,
+  gprbuild,
+  fetchFromGitHub,
+  xmlada,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnatcoll-core";
   version = "22.0.0";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AdaCore/gnatcoll-core";
     description = "GNAT Components Collection - Core packages";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
     platforms = platforms.all;
   };
 }

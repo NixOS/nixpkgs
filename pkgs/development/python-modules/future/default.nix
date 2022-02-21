@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "future";
   version = "0.18.2";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://python-future.org";
     downloadPage = "https://github.com/PythonCharmers/python-future/releases";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ prikhi ];
+    license = with lib.licenses; [mit];
+    maintainers = with lib.maintainers; [prikhi];
   };
 }

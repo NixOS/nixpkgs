@@ -1,19 +1,20 @@
-{ lib, stdenv
-, fetchurl
-, aspell
-, pkg-config
-, glib
-, hunspell
-, hspell
-, nuspell
-, unittest-cpp
+{
+  lib,
+  stdenv,
+  fetchurl,
+  aspell,
+  pkg-config,
+  glib,
+  hunspell,
+  hspell,
+  nuspell,
+  unittest-cpp,
 }:
-
 stdenv.mkDerivation rec {
   pname = "enchant";
   version = "2.3.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "Generic spell checking library";
     homepage = "https://abiword.github.io/enchant/";
     license = licenses.lgpl21Plus; # with extra provision for non-free checkers
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.unix;
   };
 }

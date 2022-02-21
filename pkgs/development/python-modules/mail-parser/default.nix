@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, python, pythonOlder, glibcLocales, fetchFromGitHub, ipaddress, six, simplejson }:
-
+{
+  lib,
+  buildPythonPackage,
+  python,
+  pythonOlder,
+  glibcLocales,
+  fetchFromGitHub,
+  ipaddress,
+  six,
+  simplejson,
+}:
 buildPythonPackage rec {
   pname = "mail-parser";
   version = "3.15.0";
@@ -14,8 +23,8 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.utf-8";
 
-  nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ simplejson six ] ++ lib.optional (pythonOlder "3.3") ipaddress;
+  nativeBuildInputs = [glibcLocales];
+  propagatedBuildInputs = [simplejson six] ++ lib.optional (pythonOlder "3.3") ipaddress;
 
   # Taken from .travis.yml
   checkPhase = ''
@@ -30,6 +39,6 @@ buildPythonPackage rec {
     description = "A mail parser for python 2 and 3";
     homepage = "https://github.com/SpamScope/mail-parser";
     license = licenses.asl20;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

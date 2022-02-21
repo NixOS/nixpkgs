@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ligolo-ng";
   version = "0.3.2";
@@ -15,7 +18,7 @@ buildGoModule rec {
     export CGO_ENABLED=0
   '';
 
-  ldflags = [ "-s" "-w" "-extldflags '-static'" ];
+  ldflags = ["-s" "-w" "-extldflags '-static'"];
 
   vendorSha256 = "sha256-BoAEmgN+ufzT1vp7mzPzYcfdXKJVWaZq/fzA90e+z8M=";
 
@@ -26,6 +29,6 @@ buildGoModule rec {
     description = "A tunneling/pivoting tool that uses a TUN interface";
     platforms = platforms.linux;
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = with maintainers; [elohmeier];
   };
 }

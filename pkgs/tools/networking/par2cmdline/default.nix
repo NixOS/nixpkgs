@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "par2cmdline";
   version = "0.8.1";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "11mx8q29cr0sryd11awab7y4mhqgbamb1ss77rffjj6in8pb4hdk";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   meta = with lib; {
     homepage = "https://github.com/Parchive/par2cmdline";
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
       any kind of file.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.muflax ];
+    maintainers = [maintainers.muflax];
     platforms = platforms.all;
   };
 }

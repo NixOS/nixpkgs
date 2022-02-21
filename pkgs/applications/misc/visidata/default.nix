@@ -1,27 +1,30 @@
-{ stdenv
-, lib
-, buildPythonApplication
-, fetchFromGitHub
-, python-dateutil
-, pandas
-, requests
-, lxml
-, openpyxl
-, xlrd
-, h5py
-, odfpy
-, psycopg2
-, pyshp
-, fonttools
-, pyyaml
-, pdfminer
-, vobject
-, tabulate
-, wcwidth
-, zstandard
-, setuptools
-, git
-, withPcap ? true, dpkt, dnslib
+{
+  stdenv,
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  python-dateutil,
+  pandas,
+  requests,
+  lxml,
+  openpyxl,
+  xlrd,
+  h5py,
+  odfpy,
+  psycopg2,
+  pyshp,
+  fonttools,
+  pyyaml,
+  pdfminer,
+  vobject,
+  tabulate,
+  wcwidth,
+  zstandard,
+  setuptools,
+  git,
+  withPcap ? true,
+  dpkt,
+  dnslib,
 }:
 buildPythonApplication rec {
   pname = "visidata";
@@ -34,36 +37,38 @@ buildPythonApplication rec {
     sha256 = "1lcx444yrzmcvix977cgaf18lfrf9yrn2r14ln7knx8ghc15vkqb";
   };
 
-  propagatedBuildInputs = [
-    # from visidata/requirements.txt
-    # packages not (yet) present in nixpkgs are commented
-    python-dateutil
-    pandas
-    requests
-    lxml
-    openpyxl
-    xlrd
-    h5py
-    psycopg2
-    pyshp
-    #mapbox-vector-tile
-    #pypng
-    fonttools
-    #sas7bdat
-    #xport
-    #savReaderWriter
-    pyyaml
-    #namestand
-    #datapackage
-    pdfminer
-    #tabula
-    vobject
-    tabulate
-    wcwidth
-    zstandard
-    odfpy
-    setuptools
-  ] ++ lib.optionals withPcap [ dpkt dnslib ];
+  propagatedBuildInputs =
+    [
+      # from visidata/requirements.txt
+      # packages not (yet) present in nixpkgs are commented
+      python-dateutil
+      pandas
+      requests
+      lxml
+      openpyxl
+      xlrd
+      h5py
+      psycopg2
+      pyshp
+      #mapbox-vector-tile
+      #pypng
+      fonttools
+      #sas7bdat
+      #xport
+      #savReaderWriter
+      pyyaml
+      #namestand
+      #datapackage
+      pdfminer
+      #tabula
+      vobject
+      tabulate
+      wcwidth
+      zstandard
+      odfpy
+      setuptools
+    ]
+    ++ lib.optionals withPcap [dpkt dnslib];
 
   checkInputs = [
     git
@@ -90,7 +95,7 @@ buildPythonApplication rec {
   meta = {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ raskin markus1189 ];
+    maintainers = with lib.maintainers; [raskin markus1189];
     homepage = "http://visidata.org/";
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };

@@ -1,18 +1,18 @@
-{ lib
-, acme
-, aiohttp
-, asynctest
-, atomicwrites
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pycognito
-, pytest-aiohttp
-, pytestCheckHook
-, snitun
-, warrant
+{
+  lib,
+  acme,
+  aiohttp,
+  asynctest,
+  atomicwrites,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycognito,
+  pytest-aiohttp,
+  pytestCheckHook,
+  snitun,
+  warrant,
 }:
-
 buildPythonPackage rec {
   pname = "hass-nabucasa";
   version = "0.52.0";
@@ -47,12 +47,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "hass_nabucasa" ];
+  pythonImportsCheck = ["hass_nabucasa"];
 
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
     description = "Python module for the Home Assistant cloud integration";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    maintainers = with maintainers; [Scriptkiddi];
   };
 }

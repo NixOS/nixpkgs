@@ -1,5 +1,8 @@
-{ fetchFromGitHub, openttd, ... }:
-
+{
+  fetchFromGitHub,
+  openttd,
+  ...
+}:
 openttd.overrideAttrs (oldAttrs: rec {
   pname = "openttd-jgrpp";
   version = "0.44.0";

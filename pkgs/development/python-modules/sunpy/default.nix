@@ -1,34 +1,34 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, asdf
-, astropy
-, setuptools-scm
-, astropy-helpers
-, astropy-extension-helpers
-, beautifulsoup4
-, drms
-, glymur
-, h5netcdf
-, hypothesis
-, matplotlib
-, numpy
-, pandas
-, parfive
-, pytestCheckHook
-, pytest-astropy
-, pytest-mock
-, python-dateutil
-, scikitimage
-, scipy
-, sqlalchemy
-, towncrier
-, tqdm
-, zeep
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  asdf,
+  astropy,
+  setuptools-scm,
+  astropy-helpers,
+  astropy-extension-helpers,
+  beautifulsoup4,
+  drms,
+  glymur,
+  h5netcdf,
+  hypothesis,
+  matplotlib,
+  numpy,
+  pandas,
+  parfive,
+  pytestCheckHook,
+  pytest-astropy,
+  pytest-mock,
+  python-dateutil,
+  scikitimage,
+  scipy,
+  sqlalchemy,
+  towncrier,
+  tqdm,
+  zeep,
 }:
-
 buildPythonPackage rec {
   pname = "sunpy";
   version = "3.1.3";
@@ -129,6 +129,6 @@ buildPythonPackage rec {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

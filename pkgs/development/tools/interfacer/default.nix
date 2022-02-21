@@ -1,8 +1,8 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "interfacer-unstable";
   version = "2018-08-31";
@@ -25,7 +25,7 @@ buildGoPackage rec {
     description = "A linter that suggests interface types";
     homepage = "https://github.com/mvdan/interfacer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

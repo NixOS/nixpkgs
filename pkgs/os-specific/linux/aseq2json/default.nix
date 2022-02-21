@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, alsa-lib, glib, json-glib }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  glib,
+  json-glib,
+}:
 stdenv.mkDerivation {
   pname = "aseq2json";
   version = "unstable-2018-04-28";
@@ -11,8 +18,8 @@ stdenv.mkDerivation {
   };
   sourceRoot = "source/aseq2json";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib glib json-glib ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [alsa-lib glib json-glib];
 
   installPhase = ''
     install -D --target-directory "$out/bin" aseq2json
@@ -22,7 +29,7 @@ stdenv.mkDerivation {
     description = "Listens for MIDI events on the Alsa sequencer and outputs as JSON to stdout";
     homepage = "https://github.com/google/midi-dump-tools";
     license = licenses.asl20;
-    maintainers = [ maintainers.queezle ];
+    maintainers = [maintainers.queezle];
     platforms = platforms.linux;
   };
 }

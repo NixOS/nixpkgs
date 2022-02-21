@@ -1,42 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, callPackage
-, autoreconfHook, texinfo, libffi
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  autoreconfHook,
+  texinfo,
+  libffi,
+}: let
+  swig = callPackage ./swig.nix {};
+  bootForth = callPackage ./boot-forth.nix {};
+in
+  stdenv.mkDerivation rec {
+    pname = "gforth";
+    version = "0.7.9_20220127";
 
-let
-  swig = callPackage ./swig.nix { };
-  bootForth = callPackage ./boot-forth.nix { };
-in stdenv.mkDerivation rec {
+    src = fetchFromGitHub {
+      owner = "forthy42";
+      repo = "gforth";
+      rev = version;
+      sha256 = "sha256-3+ObHhsPvW44UFiN0GWOhwo7aiqhjwxNY8hw2Wv4MK0=";
+    };
 
-  pname = "gforth";
-  version = "0.7.9_20220127";
+    nativeBuildInputs = [
+      autoreconfHook
+      texinfo
+      bootForth
+      swig
+    ];
+    buildInputs = [
+      libffi
+    ];
 
-  src = fetchFromGitHub {
-    owner = "forthy42";
-    repo = "gforth";
-    rev = version;
-    sha256 = "sha256-3+ObHhsPvW44UFiN0GWOhwo7aiqhjwxNY8hw2Wv4MK0=";
-  };
+    passthru = {inherit bootForth;};
 
-  nativeBuildInputs = [
-    autoreconfHook texinfo bootForth swig
-  ];
-  buildInputs = [
-    libffi
-  ];
+    configureFlags = lib.optional stdenv.isDarwin ["--build=x86_64-apple-darwin"];
 
-  passthru = { inherit bootForth; };
+    postInstall = ''
+      mkdir -p $out/share/emacs/site-lisp
+      cp gforth.el $out/share/emacs/site-lisp/
+    '';
 
-  configureFlags = lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
-
-  postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp gforth.el $out/share/emacs/site-lisp/
-  '';
-
-  meta = {
-    description = "The Forth implementation of the GNU project";
-    homepage = "https://github.com/forthy42/gforth";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.all;
-  };
-}
+    meta = {
+      description = "The Forth implementation of the GNU project";
+      homepage = "https://github.com/forthy42/gforth";
+      license = lib.licenses.gpl3;
+      platforms = lib.platforms.all;
+    };
+  }

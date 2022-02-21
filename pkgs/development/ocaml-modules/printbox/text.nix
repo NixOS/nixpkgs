@@ -1,14 +1,21 @@
-{ buildDunePackage, printbox, uucp, uutf, mdx }:
-
+{
+  buildDunePackage,
+  printbox,
+  uucp,
+  uutf,
+  mdx,
+}:
 buildDunePackage {
   pname = "printbox-text";
   inherit (printbox) src version useDune2 doCheck;
 
-  propagatedBuildInputs = [ printbox uucp uutf ];
+  propagatedBuildInputs = [printbox uucp uutf];
 
-  checkInputs = [ mdx.bin ];
+  checkInputs = [mdx.bin];
 
-  meta = printbox.meta // {
-    description = "Text renderer for printbox, using unicode edges";
-  };
+  meta =
+    printbox.meta
+    // {
+      description = "Text renderer for printbox, using unicode edges";
+    };
 }

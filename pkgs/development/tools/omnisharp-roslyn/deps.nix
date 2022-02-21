@@ -1,4 +1,4 @@
-{ fetchurl }: [
+{fetchurl}: [
   {
     pname = "cake.scripting.abstractions";
     version = "0.8.1";

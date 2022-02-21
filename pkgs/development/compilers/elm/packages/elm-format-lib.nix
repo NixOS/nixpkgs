@@ -1,9 +1,33 @@
-{ mkDerivation, ansi-terminal, ansi-wl-pprint, array, avh4-lib
-, base, bimap, binary, bytestring, containers, directory
-, elm-format-markdown, elm-format-test-lib, fetchgit, filepath
-, indents, json, lib, mtl, optparse-applicative, parsec, process
-, relude, split, tasty, tasty-discover, tasty-hspec, tasty-hunit
-, text
+{
+  mkDerivation,
+  ansi-terminal,
+  ansi-wl-pprint,
+  array,
+  avh4-lib,
+  base,
+  bimap,
+  binary,
+  bytestring,
+  containers,
+  directory,
+  elm-format-markdown,
+  elm-format-test-lib,
+  fetchgit,
+  filepath,
+  indents,
+  json,
+  lib,
+  mtl,
+  optparse-applicative,
+  parsec,
+  process,
+  relude,
+  split,
+  tasty,
+  tasty-discover,
+  tasty-hspec,
+  tasty-hunit,
+  text,
 }:
 mkDerivation {
   pname = "elm-format-lib";
@@ -16,17 +40,55 @@ mkDerivation {
   };
   postUnpack = "sourceRoot+=/elm-format-lib; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
-    ansi-terminal ansi-wl-pprint array avh4-lib base bimap binary
-    bytestring containers directory elm-format-markdown filepath
-    indents json mtl optparse-applicative parsec process relude text
+    ansi-terminal
+    ansi-wl-pprint
+    array
+    avh4-lib
+    base
+    bimap
+    binary
+    bytestring
+    containers
+    directory
+    elm-format-markdown
+    filepath
+    indents
+    json
+    mtl
+    optparse-applicative
+    parsec
+    process
+    relude
+    text
   ];
   testHaskellDepends = [
-    ansi-terminal ansi-wl-pprint array avh4-lib base bimap binary
-    bytestring containers directory elm-format-markdown
-    elm-format-test-lib filepath indents json mtl optparse-applicative
-    parsec process relude split tasty tasty-hspec tasty-hunit text
+    ansi-terminal
+    ansi-wl-pprint
+    array
+    avh4-lib
+    base
+    bimap
+    binary
+    bytestring
+    containers
+    directory
+    elm-format-markdown
+    elm-format-test-lib
+    filepath
+    indents
+    json
+    mtl
+    optparse-applicative
+    parsec
+    process
+    relude
+    split
+    tasty
+    tasty-hspec
+    tasty-hunit
+    text
   ];
-  testToolDepends = [ tasty-discover ];
+  testToolDepends = [tasty-discover];
   doHaddock = false;
   description = "Common code used by elm-format and elm-refactor";
   license = lib.licenses.bsd3;

@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, qmake
-, wrapQtAppsHook
-, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "zegrapher";
   version = "3.1.1";
@@ -31,6 +33,6 @@ stdenv.mkDerivation rec {
       sequences, parametric equations and data on the plane.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

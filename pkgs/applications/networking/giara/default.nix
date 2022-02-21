@@ -1,21 +1,21 @@
-{ lib
-, fetchFromGitLab
-, fetchpatch
-, meson
-, gobject-introspection
-, pkg-config
-, ninja
-, python3
-, wrapGAppsHook4
-, gtk4
-, gdk-pixbuf
-, webkitgtk
-, gtksourceview5
-, glib-networking
-, libadwaita
-, appstream
+{
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  meson,
+  gobject-introspection,
+  pkg-config,
+  ninja,
+  python3,
+  wrapGAppsHook4,
+  gtk4,
+  gdk-pixbuf,
+  webkitgtk,
+  gtksourceview5,
+  glib-networking,
+  libadwaita,
+  appstream,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "giara";
   version = "1.0";
@@ -78,7 +78,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
-    maintainers = with maintainers; [ dasj19 ];
+    maintainers = with maintainers; [dasj19];
     homepage = "https://gitlab.gnome.org/World/giara";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

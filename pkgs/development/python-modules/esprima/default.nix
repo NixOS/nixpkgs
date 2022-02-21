@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "esprima";
   version = "4.0.1";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Python parser for standard-compliant ECMAScript";
     homepage = "https://github.com/Kronuz/esprima-python";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

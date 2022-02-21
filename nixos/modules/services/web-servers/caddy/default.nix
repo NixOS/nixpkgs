@@ -1,53 +1,53 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.caddy;
 
   virtualHosts = attrValues cfg.virtualHosts;
   acmeVHosts = filter (hostOpts: hostOpts.useACMEHost != null) virtualHosts;
 
-  mkVHostConf = hostOpts:
-    let
-      sslCertDir = config.security.acme.certs.${hostOpts.useACMEHost}.directory;
-    in
-      ''
-        ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
-          bind ${concatStringsSep " " hostOpts.listenAddresses}
-          ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
-          log {
-            ${hostOpts.logFormat}
-          }
+  mkVHostConf = hostOpts: let
+    sslCertDir = config.security.acme.certs.${hostOpts.useACMEHost}.directory;
+  in ''
+    ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
+      bind ${concatStringsSep " " hostOpts.listenAddresses}
+      ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
+      log {
+        ${hostOpts.logFormat}
+      }
 
-          ${hostOpts.extraConfig}
-        }
-      '';
+      ${hostOpts.extraConfig}
+    }
+  '';
 
-  configFile =
-    let
-      Caddyfile = pkgs.writeText "Caddyfile" ''
-        {
-          ${cfg.globalConfig}
-        }
-        ${cfg.extraConfig}
-      '';
+  configFile = let
+    Caddyfile = pkgs.writeText "Caddyfile" ''
+      {
+        ${cfg.globalConfig}
+      }
+      ${cfg.extraConfig}
+    '';
 
-      Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; } ''
-        ${cfg.package}/bin/caddy fmt ${Caddyfile} > $out
-      '';
-    in
-      if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile;
+    Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" {nativeBuildInputs = [cfg.package];} ''
+      ${cfg.package}/bin/caddy fmt ${Caddyfile} > $out
+    '';
+  in
+    if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
+    then Caddyfile-formatted
+    else Caddyfile;
 
   acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
-in
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "caddy" "agree" ] "this option is no longer necessary for Caddy 2")
-    (mkRenamedOptionModule [ "services" "caddy" "ca" ] [ "services" "caddy" "acmeCA" ])
-    (mkRenamedOptionModule [ "services" "caddy" "config" ] [ "services" "caddy" "extraConfig" ])
+    (mkRemovedOptionModule ["services" "caddy" "agree"] "this option is no longer necessary for Caddy 2")
+    (mkRenamedOptionModule ["services" "caddy" "ca"] ["services" "caddy" "acmeCA"])
+    (mkRenamedOptionModule ["services" "caddy" "config"] ["services" "caddy" "extraConfig"])
   ];
 
   # interface
@@ -220,7 +220,7 @@ in
     };
 
     virtualHosts = mkOption {
-      type = with types; attrsOf (submodule (import ./vhost-options.nix { inherit cfg; }));
+      type = with types; attrsOf (submodule (import ./vhost-options.nix {inherit cfg;}));
       default = {};
       example = literalExpression ''
         {
@@ -260,21 +260,24 @@ in
         certificates.
       '';
     };
-
   };
 
   # implementation
   config = mkIf cfg.enable {
-
-    assertions = [
-      { assertion = cfg.adapter != "caddyfile" -> cfg.configFile != configFile;
-        message = "Any value other than 'caddyfile' is only valid when providing your own `services.caddy.configFile`";
-      }
-    ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
-      cert = config.security.acme.certs.${name};
-      groups = config.users.groups;
-    }) acmeHosts;
+    assertions =
+      [
+        {
+          assertion = cfg.adapter != "caddyfile" -> cfg.configFile != configFile;
+          message = "Any value other than 'caddyfile' is only valid when providing your own `services.caddy.configFile`";
+        }
+      ]
+      ++ map (name:
+        mkCertOwnershipAssertion {
+          inherit (cfg) group user;
+          cert = config.security.acme.certs.${name};
+          groups = config.users.groups;
+        })
+      acmeHosts;
 
     services.caddy.extraConfig = concatMapStringsSep "\n" mkVHostConf virtualHosts;
     services.caddy.globalConfig = ''
@@ -285,30 +288,30 @@ in
       }
     '';
 
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [cfg.package];
     systemd.services.caddy = {
       wants = map (hostOpts: "acme-finished-${hostOpts.useACMEHost}.target") acmeVHosts;
       after = map (hostOpts: "acme-selfsigned-${hostOpts.useACMEHost}.service") acmeVHosts;
       before = map (hostOpts: "acme-${hostOpts.useACMEHost}.service") acmeVHosts;
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
 
       serviceConfig = {
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
-        ExecStart = [ "" "${cfg.package}/bin/caddy run --config ${cfg.configFile} --adapter ${cfg.adapter} ${optionalString cfg.resume "--resume"}" ];
-        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${cfg.configFile} --adapter ${cfg.adapter}" ];
+        ExecStart = ["" "${cfg.package}/bin/caddy run --config ${cfg.configFile} --adapter ${cfg.adapter} ${optionalString cfg.resume "--resume"}"];
+        ExecReload = ["" "${cfg.package}/bin/caddy reload --config ${cfg.configFile} --adapter ${cfg.adapter}"];
 
         ExecStartPre = "${cfg.package}/bin/caddy validate --config ${cfg.configFile} --adapter ${cfg.adapter}";
         User = cfg.user;
         Group = cfg.group;
         ReadWriteDirectories = cfg.dataDir;
-        StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
-        LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
+        StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") ["caddy"];
+        LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") ["caddy"];
         Restart = "on-abnormal";
-        SupplementaryGroups = mkIf (length acmeVHosts != 0) [ "acme" ];
+        SupplementaryGroups = mkIf (length acmeVHosts != 0) ["acme"];
 
         # TODO: attempt to upstream these options
         NoNewPrivileges = true;
@@ -329,11 +332,9 @@ in
       caddy.gid = config.ids.gids.caddy;
     };
 
-    security.acme.certs =
-      let
-        reloads = map (useACMEHost: nameValuePair useACMEHost { reloadServices = [ "caddy.service" ]; }) acmeHosts;
-      in
-        listToAttrs reloads;
-
+    security.acme.certs = let
+      reloads = map (useACMEHost: nameValuePair useACMEHost {reloadServices = ["caddy.service"];}) acmeHosts;
+    in
+      listToAttrs reloads;
   };
 }

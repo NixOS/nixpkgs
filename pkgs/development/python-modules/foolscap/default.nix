@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pyopenssl
-, pytestCheckHook
-, service-identity
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pyopenssl,
+  pytestCheckHook,
+  service-identity,
+  twisted,
 }:
-
 buildPythonPackage rec {
   pname = "foolscap";
   version = "21.7.0";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     "src/foolscap/test/test_connection.py"
   ];
 
-  pythonImportsCheck = [ "foolscap" ];
+  pythonImportsCheck = ["foolscap"];
 
   meta = with lib; {
     description = "RPC protocol for Python that follows the distributed object-capability model";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/warner/foolscap";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

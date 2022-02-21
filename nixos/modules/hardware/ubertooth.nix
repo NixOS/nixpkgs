@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.hardware.ubertooth;
 
   ubertoothPkg = pkgs.ubertooth.override {
@@ -21,9 +23,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ ubertoothPkg ];
+    environment.systemPackages = [ubertoothPkg];
 
-    services.udev.packages = [ ubertoothPkg ];
+    services.udev.packages = [ubertoothPkg];
     users.groups.${cfg.group} = {};
   };
 }

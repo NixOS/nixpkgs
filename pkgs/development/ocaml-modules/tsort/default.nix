@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub, containers }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  containers,
+}:
 buildDunePackage rec {
   pname = "tsort";
   useDune2 = true;
@@ -11,12 +15,12 @@ buildDunePackage rec {
     sha256 = "0i67ys5p5i8q9p0nhkq4pjg9jav8dy0fiy975a365j7m6bhrwgc1";
   };
 
-  propagatedBuildInputs = [ containers ];
+  propagatedBuildInputs = [containers];
 
   meta = {
     description = "Easy to use and user-friendly topological sort";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gmp
-, autoreconfHook
-, texlive
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  autoreconfHook,
+  texlive,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cddlib";
   version = "0.94m";

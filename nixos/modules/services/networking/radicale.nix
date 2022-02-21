@@ -1,28 +1,29 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.radicale;
 
   format = pkgs.formats.ini {
-    listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault { });
+    listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {});
   };
 
-  pkg = if isNull cfg.package then
-    pkgs.radicale
-  else
-    cfg.package;
+  pkg =
+    if isNull cfg.package
+    then pkgs.radicale
+    else cfg.package;
 
-  confFile = if cfg.settings == { } then
-    pkgs.writeText "radicale.conf" cfg.config
-  else
-    format.generate "radicale.conf" cfg.settings;
+  confFile =
+    if cfg.settings == {}
+    then pkgs.writeText "radicale.conf" cfg.config
+    else format.generate "radicale.conf" cfg.settings;
 
   rightsFile = format.generate "radicale.rights" cfg.rights;
 
-  bindLocalhost = cfg.settings != { } && !hasAttrByPath [ "server" "hosts" ] cfg.settings;
-
+  bindLocalhost = cfg.settings != {} && !hasAttrByPath ["server" "hosts"] cfg.settings;
 in {
   options.services.radicale = {
     enable = mkEnableOption "Radicale CalDAV and CardDAV server";
@@ -31,7 +32,7 @@ in {
       description = "Radicale package to use.";
       # Default cannot be pkgs.radicale because non-null values suppress
       # warnings about incompatible configuration and storage formats.
-      type = with types; nullOr package // { inherit (package) description; };
+      type = with types; nullOr package // {inherit (package) description;};
       default = null;
       defaultText = literalExpression "pkgs.radicale";
     };
@@ -49,7 +50,7 @@ in {
 
     settings = mkOption {
       type = format.type;
-      default = { };
+      default = {};
       description = ''
         Configuration for Radicale. See
         <link xlink:href="https://radicale.org/3.0.html#documentation/configuration" />.
@@ -79,7 +80,7 @@ in {
         Setting this will also set <option>settings.rights.type</option> and
         <option>settings.rights.file</option> to approriate values.
       '';
-      default = { };
+      default = {};
       example = literalExpression ''
         root = {
           user = ".+";
@@ -109,7 +110,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.settings == { } || cfg.config == "";
+        assertion = cfg.settings == {} || cfg.config == "";
         message = ''
           The options services.radicale.config and services.radicale.settings
           are mutually exclusive.
@@ -117,28 +118,31 @@ in {
       }
     ];
 
-    warnings = optional (isNull cfg.package && versionOlder config.system.stateVersion "17.09") ''
-      The configuration and storage formats of your existing Radicale
-      installation might be incompatible with the newest version.
-      For upgrade instructions see
-      https://radicale.org/2.1.html#documentation/migration-from-1xx-to-2xx.
-      Set services.radicale.package to suppress this warning.
-    '' ++ optional (isNull cfg.package && versionOlder config.system.stateVersion "20.09") ''
-      The configuration format of your existing Radicale installation might be
-      incompatible with the newest version.  For upgrade instructions see
-      https://github.com/Kozea/Radicale/blob/3.0.6/NEWS.md#upgrade-checklist.
-      Set services.radicale.package to suppress this warning.
-    '' ++ optional (cfg.config != "") ''
-      The option services.radicale.config is deprecated.
-      Use services.radicale.settings instead.
-    '';
+    warnings =
+      optional (isNull cfg.package && versionOlder config.system.stateVersion "17.09") ''
+        The configuration and storage formats of your existing Radicale
+        installation might be incompatible with the newest version.
+        For upgrade instructions see
+        https://radicale.org/2.1.html#documentation/migration-from-1xx-to-2xx.
+        Set services.radicale.package to suppress this warning.
+      ''
+      ++ optional (isNull cfg.package && versionOlder config.system.stateVersion "20.09") ''
+        The configuration format of your existing Radicale installation might be
+        incompatible with the newest version.  For upgrade instructions see
+        https://github.com/Kozea/Radicale/blob/3.0.6/NEWS.md#upgrade-checklist.
+        Set services.radicale.package to suppress this warning.
+      ''
+      ++ optional (cfg.config != "") ''
+        The option services.radicale.config is deprecated.
+        Use services.radicale.settings instead.
+      '';
 
-    services.radicale.settings.rights = mkIf (cfg.rights != { }) {
+    services.radicale.settings.rights = mkIf (cfg.rights != {}) {
       type = "from_file";
       file = toString rightsFile;
     };
 
-    environment.systemPackages = [ pkg ];
+    environment.systemPackages = [pkg];
 
     users.users.radicale = {
       isSystemUser = true;
@@ -149,13 +153,16 @@ in {
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
-      after = [ "network.target" ];
-      requires = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      requires = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = concatStringsSep " " ([
-          "${pkg}/bin/radicale" "-C" confFile
-        ] ++ (
+          "${pkg}/bin/radicale"
+          "-C"
+          confFile
+        ]
+        ++ (
           map escapeShellArg cfg.extraArgs
         ));
         User = "radicale";
@@ -163,8 +170,8 @@ in {
         StateDirectory = "radicale/collections";
         StateDirectoryMode = "0750";
         # Hardening
-        CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [ "/dev/stdin" ];
+        CapabilityBoundingSet = [""];
+        DeviceAllow = ["/dev/stdin"];
         DevicePolicy = "strict";
         IPAddressAllow = mkIf bindLocalhost "localhost";
         IPAddressDeny = mkIf bindLocalhost "any";
@@ -185,20 +192,20 @@ in {
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         ReadWritePaths = lib.optional
-          (hasAttrByPath [ "storage" "filesystem_folder" ] cfg.settings)
-          cfg.settings.storage.filesystem_folder;
+        (hasAttrByPath ["storage" "filesystem_folder"] cfg.settings)
+        cfg.settings.storage.filesystem_folder;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
         UMask = "0027";
         WorkingDirectory = "/var/lib/radicale";
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa infinisil dotlambda ];
+  meta.maintainers = with lib.maintainers; [aneeshusa infinisil dotlambda];
 }

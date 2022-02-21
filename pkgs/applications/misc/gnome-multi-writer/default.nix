@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, appstream-glib
-, desktop-file-utils
-, gettext
-, glib
-, gnome
-, gtk3
-, gusb
-, libcanberra-gtk3
-, libgudev
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, polkit
-, udisks
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appstream-glib,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gnome,
+  gtk3,
+  gusb,
+  libcanberra-gtk3,
+  libgudev,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  polkit,
+  udisks,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-multi-writer";
   version = "3.35.90";

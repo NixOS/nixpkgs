@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libffi
-, llvm_6
-, doCheck ? false
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libffi,
+  llvm_6,
+  doCheck ? false,
+  perl,
 }:
-
 stdenv.mkDerivation {
   pname = "dale";
   version = "20181024";
@@ -19,11 +20,11 @@ stdenv.mkDerivation {
     sha256 = "0v4ajrzrqvf279kd7wsd9flrpsav57lzxlwwimk9vnfwh7xpzf9v";
   };
 
-  nativeBuildInputs = [ cmake pkg-config llvm_6.dev ];
-  buildInputs = [ libffi llvm_6 ];
+  nativeBuildInputs = [cmake pkg-config llvm_6.dev];
+  buildInputs = [libffi llvm_6];
 
   inherit doCheck;
-  checkInputs = [ perl ];
+  checkInputs = [perl];
 
   checkTarget = "tests";
 
@@ -35,8 +36,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/tomhrr/dale";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ amiloradovsky ];
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [amiloradovsky];
+    platforms = with platforms; ["i686-linux" "x86_64-linux"];
     # failed on Darwin: linker couldn't find the FFI lib
     # failed on AArch64: because LLVM 3.5 is failed there
   };

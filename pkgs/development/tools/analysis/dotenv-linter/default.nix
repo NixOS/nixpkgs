@@ -1,8 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "dotenv-linter";
   version = "3.2.0";
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Lightning-fast linter for .env files. Written in Rust";
     homepage = "https://dotenv-linter.github.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ humancalico ];
+    maintainers = with maintainers; [humancalico];
   };
 }

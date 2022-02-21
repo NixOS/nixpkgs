@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.psd;
 in {
   options.services.psd = with types; {
@@ -34,11 +36,11 @@ in {
           psd = {
             enable = true;
             description = "Profile Sync daemon";
-            wants = [ "psd-resync.service" ];
-            wantedBy = [ "default.target" ];
-            path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
+            wants = ["psd-resync.service"];
+            wantedBy = ["default.target"];
+            path = with pkgs; [rsync kmod gawk nettools util-linux profile-sync-daemon];
             unitConfig = {
-              RequiresMountsFor = [ "/home/" ];
+              RequiresMountsFor = ["/home/"];
             };
             serviceConfig = {
               Type = "oneshot";
@@ -51,11 +53,11 @@ in {
           psd-resync = {
             enable = true;
             description = "Timed profile resync";
-            after = [ "psd.service" ];
-            wants = [ "psd-resync.timer" ];
-            partOf = [ "psd.service" ];
-            wantedBy = [ "default.target" ];
-            path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
+            after = ["psd.service"];
+            wants = ["psd-resync.timer"];
+            partOf = ["psd.service"];
+            wantedBy = ["default.target"];
+            path = with pkgs; [rsync kmod gawk nettools util-linux profile-sync-daemon];
             serviceConfig = {
               Type = "oneshot";
               ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon resync";
@@ -65,7 +67,7 @@ in {
 
         timers.psd-resync = {
           description = "Timer for profile sync daemon - ${cfg.resyncTimer}";
-          partOf = [ "psd-resync.service" "psd.service" ];
+          partOf = ["psd-resync.service" "psd.service"];
 
           timerConfig = {
             OnUnitActiveSec = "${cfg.resyncTimer}";

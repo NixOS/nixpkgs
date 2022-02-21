@@ -1,6 +1,10 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.auto-cpufreq;
 in {
   options = {
@@ -10,14 +14,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.auto-cpufreq ];
+    environment.systemPackages = [pkgs.auto-cpufreq];
 
     systemd = {
-      packages = [ pkgs.auto-cpufreq ];
+      packages = [pkgs.auto-cpufreq];
       services.auto-cpufreq = {
         # Workaround for https://github.com/NixOS/nixpkgs/issues/81138
-        wantedBy = [ "multi-user.target" ];
-        path = with pkgs; [ bash coreutils ];
+        wantedBy = ["multi-user.target"];
+        path = with pkgs; [bash coreutils];
       };
     };
   };

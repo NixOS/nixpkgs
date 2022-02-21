@@ -1,14 +1,14 @@
-{ lib
-, bash
-, stdenv
-, lz4
-, ffmpeg-full
-, fetchFromGitHub
-, openssh
-, netcat
-, makeWrapper
+{
+  lib,
+  bash,
+  stdenv,
+  lz4,
+  ffmpeg-full,
+  fetchFromGitHub,
+  openssh,
+  netcat,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "restream";
   version = "1.2.0";
@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     description = "reMarkable screen sharing over SSH";
     homepage = "https://github.com/rien/reStream";
     license = licenses.mit;
-    maintainers = [ maintainers.cpcloud ];
+    maintainers = [maintainers.cpcloud];
   };
 }

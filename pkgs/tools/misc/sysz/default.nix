@@ -1,5 +1,11 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, fzf, gawk }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  fzf,
+  gawk,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "sysz";
   version = "1.4.3";
@@ -11,14 +17,14 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-X9vj6ILPUKFo/i50JNehM2GSDWfxTdroWGYJv765Cm4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
     install -Dm755 sysz $out/libexec/sysz
     makeWrapper $out/libexec/sysz $out/bin/sysz \
-      --prefix PATH : ${lib.makeBinPath [ fzf gawk ]}
+      --prefix PATH : ${lib.makeBinPath [fzf gawk]}
     runHook postInstall
   '';
 
@@ -26,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/joehillen/sysz";
     description = "A fzf terminal UI for systemctl";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ hleboulanger ];
+    maintainers = with maintainers; [hleboulanger];
     platforms = platforms.unix;
     changelog = "https://github.com/joehillen/sysz/blob/${version}/CHANGELOG.md";
   };

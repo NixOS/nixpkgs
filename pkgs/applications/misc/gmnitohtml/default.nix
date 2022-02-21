@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromSourcehut, scdoc, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  scdoc,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "gmnitohtml";
   version = "0.1.1";
@@ -12,10 +17,10 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-Cx8x8AISRVTA4Ufd73vOVky97LX23NkizHDingr/zVk=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   # Build and install the man pages
-  nativeBuildInputs = [ scdoc installShellFiles ];
+  nativeBuildInputs = [scdoc installShellFiles];
 
   postBuild = ''
     make gmnitohtml.1
@@ -41,6 +46,6 @@ buildGoModule rec {
       HTML to the standard output.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ jk sikmir ];
+    maintainers = with maintainers; [jk sikmir];
   };
 }

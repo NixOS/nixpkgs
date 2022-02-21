@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, karton-core
-, python
-, yara-python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  karton-core,
+  python,
+  yara-python,
 }:
-
 buildPythonPackage rec {
   pname = "karton-yaramatcher";
   version = "1.1.1";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "karton.yaramatcher" ];
+  pythonImportsCheck = ["karton.yaramatcher"];
 
   meta = with lib; {
     description = "File and analysis artifacts yara matcher for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-yaramatcher";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

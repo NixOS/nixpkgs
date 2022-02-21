@@ -1,5 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoPackage rec {
   pname = "nginx_exporter";
   version = "0.9.0";
@@ -19,13 +23,13 @@ buildGoPackage rec {
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) nginx; };
+  passthru.tests = {inherit (nixosTests.prometheus-exporters) nginx;};
 
   meta = with lib; {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz willibutz globin ];
+    maintainers = with maintainers; [benley fpletz willibutz globin];
     platforms = platforms.unix;
   };
 }

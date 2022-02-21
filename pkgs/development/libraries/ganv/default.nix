@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchgit, graphviz, gtk2, gtkmm2, pkg-config, python3, wafHook }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  graphviz,
+  gtk2,
+  gtkmm2,
+  pkg-config,
+  python3,
+  wafHook,
+}:
 stdenv.mkDerivation rec {
   pname = "ganv";
   version = "unstable-2019-12-30";
@@ -11,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "01znnalirbqxpz62fbw2c14c8xn117jc92xv6dhb3hln92k9x37f";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook python3 gtk2 ];
-  buildInputs = [ graphviz gtkmm2 ];
+  nativeBuildInputs = [pkg-config wafHook python3 gtk2];
+  buildInputs = [graphviz gtkmm2];
 
   strictDeps = true;
 
@@ -20,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "An interactive Gtk canvas widget for graph-based interfaces";
     homepage = "http://drobilla.net";
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
   };
-  }
+}

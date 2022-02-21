@@ -1,33 +1,34 @@
-{ lib, stdenv
-, fetchFromGitLab
-, pkg-config
-, vala
-, glib
-, meson
-, ninja
-, python3
-, libxslt
-, gtk3
-, webkitgtk
-, json-glib
-, librest
-, libsecret
-, gtk-doc
-, gobject-introspection
-, gettext
-, icu
-, glib-networking
-, libsoup
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, gnome
-, gcr
-, libkrb5
-, gvfs
-, dbus
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  vala,
+  glib,
+  meson,
+  ninja,
+  python3,
+  libxslt,
+  gtk3,
+  webkitgtk,
+  json-glib,
+  librest,
+  libsecret,
+  gtk-doc,
+  gobject-introspection,
+  gettext,
+  icu,
+  glib-networking,
+  libsoup,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  gnome,
+  gcr,
+  libkrb5,
+  gvfs,
+  dbus,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
   version = "3.40.1";
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-q4bLGOOGoGH/Et3hu7/372tjNMouX9ePTanIo0c4Jbw=";
   };
 
-  outputs = [ "out" "man" "dev" "devdoc" ];
+  outputs = ["out" "man" "dev" "devdoc"];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.

@@ -1,10 +1,13 @@
-{ lib, pkgs, config, ... }:
-with lib;
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.hledger-web;
 in {
   options.services.hledger-web = {
-
     enable = mkEnableOption "hledger-web service";
 
     serveApi = mkEnableOption "Serve only the JSON web API, without the web UI.";
@@ -63,7 +66,7 @@ in {
 
     journalFiles = mkOption {
       type = types.listOf types.str;
-      default = [ ".hledger.journal" ];
+      default = [".hledger.journal"];
       description = ''
         Paths to journal files relative to <option>services.hledger-web.stateDir</option>.
       '';
@@ -81,16 +84,14 @@ in {
     extraOptions = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "--forecast" ];
+      example = ["--forecast"];
       description = ''
         Extra command line arguments to pass to hledger-web.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
-
     users.users.hledger = {
       name = "hledger";
       group = "hledger";
@@ -102,25 +103,28 @@ in {
     users.groups.hledger = {};
 
     systemd.services.hledger-web = let
-      capabilityString = with cfg.capabilities; concatStringsSep "," (
-        (optional view "view")
-        ++ (optional add "add")
-        ++ (optional manage "manage")
-      );
-      serverArgs = with cfg; escapeShellArgs ([
-        "--serve"
-        "--host=${host}"
-        "--port=${toString port}"
-        "--capabilities=${capabilityString}"
-        (optionalString (cfg.baseUrl != null) "--base-url=${cfg.baseUrl}")
-        (optionalString (cfg.serveApi) "--serve-api")
-      ] ++ (map (f: "--file=${stateDir}/${f}") cfg.journalFiles)
+      capabilityString = with cfg.capabilities;
+        concatStringsSep "," (
+          (optional view "view")
+          ++ (optional add "add")
+          ++ (optional manage "manage")
+        );
+      serverArgs = with cfg;
+        escapeShellArgs ([
+          "--serve"
+          "--host=${host}"
+          "--port=${toString port}"
+          "--capabilities=${capabilityString}"
+          (optionalString (cfg.baseUrl != null) "--base-url=${cfg.baseUrl}")
+          (optionalString (cfg.serveApi) "--serve-api")
+        ]
+        ++ (map (f: "--file=${stateDir}/${f}") cfg.journalFiles)
         ++ extraOptions);
     in {
       description = "hledger-web - web-app for the hledger accounting tool.";
-      documentation = [ "https://hledger.org/hledger-web.html" ];
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      documentation = ["https://hledger.org/hledger-web.html"];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
       serviceConfig = mkMerge [
         {
           ExecStart = "${pkgs.hledger-web}/bin/hledger-web ${serverArgs}";
@@ -135,8 +139,7 @@ in {
         })
       ];
     };
-
   };
 
-  meta.maintainers = with lib.maintainers; [ marijanp erictapen ];
+  meta.maintainers = with lib.maintainers; [marijanp erictapen];
 }

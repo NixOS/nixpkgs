@@ -1,7 +1,9 @@
 # This file was generated and will be overwritten by ./generate.sh
-
-{ stdenv, fetchurl, lib }:
-
+{
+  stdenv,
+  fetchurl,
+  lib,
+}:
 stdenv.mkDerivation {
   name = "pythonMAJORMINOR-docs-TYPE-VERSION";
   src = fetchurl {
@@ -13,6 +15,6 @@ stdenv.mkDerivation {
     cp -R ./ $out/share/doc/pythonMAJORMINOR/TYPE
   '';
   meta = {
-    maintainers = [ ];
+    maintainers = [];
   };
 }

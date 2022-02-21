@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "semver-tool";
   version = "3.3.0";
@@ -27,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "semver bash implementation";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.qyliss ];
+    maintainers = [maintainers.qyliss];
   };
 }

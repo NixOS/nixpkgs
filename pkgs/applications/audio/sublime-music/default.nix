@@ -1,18 +1,20 @@
-{ fetchFromGitLab
-, lib
-, python3Packages
-, gobject-introspection
-, gtk3
-, pango
-, wrapGAppsHook
-, xvfb-run
-, chromecastSupport ? false
-, serverSupport ? false
-, keyringSupport ? true
-, notifySupport ? true, libnotify
-, networkSupport ? true, networkmanager
+{
+  fetchFromGitLab,
+  lib,
+  python3Packages,
+  gobject-introspection,
+  gtk3,
+  pango,
+  wrapGAppsHook,
+  xvfb-run,
+  chromecastSupport ? false,
+  serverSupport ? false,
+  keyringSupport ? true,
+  notifySupport ? true,
+  libnotify,
+  networkSupport ? true,
+  networkmanager,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
   version = "0.11.16";
@@ -31,31 +33,31 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    gtk3
-    pango
-  ]
-   ++ lib.optional notifySupport libnotify
-   ++ lib.optional networkSupport networkmanager
-  ;
+  buildInputs =
+    [
+      gtk3
+      pango
+    ]
+    ++ lib.optional notifySupport libnotify
+    ++ lib.optional networkSupport networkmanager;
 
-  propagatedBuildInputs = with python3Packages; [
-    bleach
-    dataclasses-json
-    deepdiff
-    fuzzywuzzy
-    mpv
-    peewee
-    pygobject3
-    python-Levenshtein
-    python-dateutil
-    requests
-    semver
-  ]
-   ++ lib.optional chromecastSupport PyChromecast
-   ++ lib.optional keyringSupport keyring
-   ++ lib.optional serverSupport bottle
-  ;
+  propagatedBuildInputs = with python3Packages;
+    [
+      bleach
+      dataclasses-json
+      deepdiff
+      fuzzywuzzy
+      mpv
+      peewee
+      pygobject3
+      python-Levenshtein
+      python-dateutil
+      requests
+      semver
+    ]
+    ++ lib.optional chromecastSupport PyChromecast
+    ++ lib.optional keyringSupport keyring
+    ++ lib.optional serverSupport bottle;
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
@@ -92,6 +94,6 @@ python3Packages.buildPythonApplication rec {
     description = "GTK3 Subsonic/Airsonic client";
     homepage = "https://sublimemusic.app/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ albakham sumnerevans ];
+    maintainers = with maintainers; [albakham sumnerevans];
   };
 }

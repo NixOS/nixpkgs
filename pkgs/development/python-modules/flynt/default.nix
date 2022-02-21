@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, astor
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  astor,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "flynt";
   version = "0.66";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-DV433wqLjF5k4g8J7rj5gZfaw+Y4/TDOoFKo3eKDjZ4=";
   };
 
-  propagatedBuildInputs = [ astor ];
+  propagatedBuildInputs = [astor];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     description = "command line tool to automatically convert a project's Python code from old format style strings into Python 3.6+'s f-strings";
     homepage = "https://github.com/ikamensh/flynt";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

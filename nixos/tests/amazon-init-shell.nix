@@ -4,37 +4,34 @@
 # exits.
 # Note that other tests verify that amazon-init can treat user-data as a nixos
 # configuration expression.
-
-{ system ? builtins.currentSystem,
+{
+  system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. {inherit system config;},
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix {inherit system pkgs;};
 with pkgs.lib;
-
-makeTest {
-  name = "amazon-init";
-  meta = with maintainers; {
-    maintainers = [ urbas ];
-  };
-  machine = { ... }:
-  {
-    imports = [ ../modules/profiles/headless.nix ../modules/virtualisation/amazon-init.nix ];
-    services.openssh.enable = true;
-    networking.hostName = "";
-    environment.etc."ec2-metadata/user-data" = {
-      text = ''
-        #!/usr/bin/bash
-
-        echo successful > /tmp/evidence
-      '';
+  makeTest {
+    name = "amazon-init";
+    meta = with maintainers; {
+      maintainers = [urbas];
     };
-  };
-  testScript = ''
-    # To wait until amazon-init terminates its run
-    unnamed.wait_for_unit("amazon-init.service")
+    machine = {...}: {
+      imports = [../modules/profiles/headless.nix ../modules/virtualisation/amazon-init.nix];
+      services.openssh.enable = true;
+      networking.hostName = "";
+      environment.etc."ec2-metadata/user-data" = {
+        text = ''
+          #!/usr/bin/bash
 
-    unnamed.succeed("grep -q successful /tmp/evidence")
-  '';
-}
+          echo successful > /tmp/evidence
+        '';
+      };
+    };
+    testScript = ''
+      # To wait until amazon-init terminates its run
+      unnamed.wait_for_unit("amazon-init.service")
+
+      unnamed.succeed("grep -q successful /tmp/evidence")
+    '';
+  }

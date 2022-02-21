@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "zope.dottedname";
   version = "4.3";
@@ -16,7 +16,6 @@ buildPythonPackage rec {
     homepage = "http://pypi.python.org/pypi/zope.dottedname";
     description = "Resolver for Python dotted names";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [goibhniu];
   };
-
 }

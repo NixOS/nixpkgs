@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, cmake
-, cppunit
-, curl
-, fuse
-, libkrb5
-, libuuid
-, libxml2
-, openssl
-, pkg-config
-, readline
-, systemd
-, zlib
-, enableTests ? true
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  cmake,
+  cppunit,
+  curl,
+  fuse,
+  libkrb5,
+  libuuid,
+  libxml2,
+  openssl,
+  pkg-config,
+  readline,
+  systemd,
+  zlib,
+  enableTests ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xrootd";
   version = "5.4.0";
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     sha256 = "A2yUz2KhuRBoo5lMpZwPLNCJlYQXqsZSBR+Knj+gWAk=";
   };
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = ["bin" "out" "dev" "man"];
 
   passthru.tests = lib.optionalAttrs enableTests {
-    test-runner = callPackage ./test-runner.nix { };
+    test-runner = callPackage ./test-runner.nix {};
   };
 
   nativeBuildInputs = [
@@ -40,22 +40,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    curl
-    libkrb5
-    libuuid
-    libxml2
-    openssl
-    readline
-    zlib
-  ]
-  ++ lib.optionals stdenv.isLinux [
-    fuse
-    systemd
-  ]
-  ++ lib.optionals enableTests [
-    cppunit
-  ];
+  buildInputs =
+    [
+      curl
+      libkrb5
+      libuuid
+      libxml2
+      openssl
+      readline
+      zlib
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      fuse
+      systemd
+    ]
+    ++ lib.optionals enableTests [
+      cppunit
+    ];
 
   preConfigure = ''
     patchShebangs genversion.sh
@@ -75,6 +76,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xrootd.slac.stanford.edu";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ShamrockLee ];
+    maintainers = with maintainers; [ShamrockLee];
   };
 }

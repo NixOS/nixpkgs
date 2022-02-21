@@ -1,15 +1,15 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "goconst";
   version = "1.4.0";
 
   goPackagePath = "github.com/jgautheron/goconst";
 
-  excludedPackages = [ "tests" ];
+  excludedPackages = ["tests"];
 
   src = fetchFromGitHub {
     owner = "jgautheron";
@@ -22,7 +22,7 @@ buildGoPackage rec {
     description = "Find in Go repeated strings that could be replaced by a constant";
     homepage = "https://github.com/jgautheron/goconst";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

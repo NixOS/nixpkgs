@@ -1,5 +1,8 @@
-{ fetchPypi, buildPythonPackage, lib }:
-
+{
+  fetchPypi,
+  buildPythonPackage,
+  lib,
+}:
 buildPythonPackage rec {
   version = "3.10.6";
   pname = "thespian";
@@ -20,6 +23,6 @@ buildPythonPackage rec {
     description = "Python Actor concurrency library";
     homepage = "http://thespianpy.com/";
     license = licenses.mit;
-    maintainers = [ maintainers.kquick ];
+    maintainers = [maintainers.kquick];
   };
 }

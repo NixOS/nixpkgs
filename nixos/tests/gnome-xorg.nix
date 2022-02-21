@@ -1,48 +1,50 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "gnome-xorg";
   meta = with lib; {
     maintainers = teams.gnome.members;
   };
 
-  machine = { nodes, ... }: let
+  machine = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
-  in
+  in {
+    imports = [./common/user-account.nix];
 
-    { imports = [ ./common/user-account.nix ];
+    services.xserver.enable = true;
 
-      services.xserver.enable = true;
-
-      services.xserver.displayManager = {
-        gdm.enable = true;
-        gdm.debug = true;
-        autoLogin = {
-          enable = true;
-          user = user.name;
-        };
+    services.xserver.displayManager = {
+      gdm.enable = true;
+      gdm.debug = true;
+      autoLogin = {
+        enable = true;
+        user = user.name;
       };
-
-      services.xserver.desktopManager.gnome.enable = true;
-      services.xserver.desktopManager.gnome.debug = true;
-      services.xserver.displayManager.defaultSession = "gnome-xorg";
-
-      systemd.user.services = {
-        "org.gnome.Shell@x11" = {
-          serviceConfig = {
-            ExecStart = [
-              # Clear the list before overriding it.
-              ""
-              # Eval API is now internal so Shell needs to run in unsafe mode.
-              # TODO: improve test driver so that it supports openqa-like manipulation
-              # that would allow us to drop this mess.
-              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
-            ];
-          };
-        };
-      };
-
     };
 
-  testScript = { nodes, ... }: let
+    services.xserver.desktopManager.gnome.enable = true;
+    services.xserver.desktopManager.gnome.debug = true;
+    services.xserver.displayManager.defaultSession = "gnome-xorg";
+
+    systemd.user.services = {
+      "org.gnome.Shell@x11" = {
+        serviceConfig = {
+          ExecStart = [
+            # Clear the list before overriding it.
+            ""
+            # Eval API is now internal so Shell needs to run in unsafe mode.
+            # TODO: improve test driver so that it supports openqa-like manipulation
+            # that would allow us to drop this mess.
+            "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+          ];
+        };
+      };
+    };
+  };
+
+  testScript = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
     uid = toString user.uid;
     bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";
@@ -66,30 +68,30 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     # Hopefully gnome-terminal's wm class
     wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
   in ''
-      with subtest("Login to GNOME Xorg with GDM"):
-          machine.wait_for_x()
-          # Wait for alice to be logged in"
-          machine.wait_for_unit("default.target", "${user.name}")
-          machine.wait_for_file("${xauthority}")
-          machine.succeed("xauth merge ${xauthority}")
-          # Check that logging in has given the user ownership of devices
-          assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
+    with subtest("Login to GNOME Xorg with GDM"):
+        machine.wait_for_x()
+        # Wait for alice to be logged in"
+        machine.wait_for_unit("default.target", "${user.name}")
+        machine.wait_for_file("${xauthority}")
+        machine.succeed("xauth merge ${xauthority}")
+        # Check that logging in has given the user ownership of devices
+        assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
 
-      with subtest("Wait for GNOME Shell"):
-          # correct output should be (true, 'false')
-          machine.wait_until_succeeds(
-              "${startingUp} | grep -q 'true,..false'"
-          )
+    with subtest("Wait for GNOME Shell"):
+        # correct output should be (true, 'false')
+        machine.wait_until_succeeds(
+            "${startingUp} | grep -q 'true,..false'"
+        )
 
-      with subtest("Open Gnome Terminal"):
-          machine.succeed(
-              "${gnomeTerminalCommand}"
-          )
-          # correct output should be (true, '"Gnome-terminal"')
-          machine.wait_until_succeeds(
-              "${wmClass} | grep -q  'true,...Gnome-terminal'"
-          )
-          machine.sleep(20)
-          machine.screenshot("screen")
-    '';
+    with subtest("Open Gnome Terminal"):
+        machine.succeed(
+            "${gnomeTerminalCommand}"
+        )
+        # correct output should be (true, '"Gnome-terminal"')
+        machine.wait_until_succeeds(
+            "${wmClass} | grep -q  'true,...Gnome-terminal'"
+        )
+        machine.sleep(20)
+        machine.screenshot("screen")
+  '';
 })

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, googleapis-common-protos
-, grpcio
-, protobuf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  googleapis-common-protos,
+  grpcio,
+  protobuf,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "grpcio-status";
   version = "1.43.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "GRPC Python status proto mapping";
     homepage = "https://github.com/grpc/grpc/tree/master/src/python/grpcio_status";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,8 +1,22 @@
-{ lib, autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, glibc, pango, gtk2, kcoreaddons, ki18n, kio, kservice
-, stdenv, runtimeShell, unzip
-}:
-
-let
+{
+  lib,
+  autoPatchelfHook,
+  bzip2,
+  cairo,
+  coreutils,
+  fetchurl,
+  gdk-pixbuf,
+  glibc,
+  pango,
+  gtk2,
+  kcoreaddons,
+  ki18n,
+  kio,
+  kservice,
+  stdenv,
+  runtimeShell,
+  unzip,
+}: let
   pname = "bcompare";
   version = "4.4.0.25886";
 
@@ -48,7 +62,7 @@ let
       ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/beyondcompare/libbz2.so.1.0
     '';
 
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = [autoPatchelfHook];
 
     buildInputs = [
       stdenv.cc.cc.lib
@@ -70,7 +84,7 @@ let
 
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [unzip];
 
     installPhase = ''
       mkdir -p $out/Applications/BCompare.app
@@ -87,10 +101,10 @@ let
     '';
     homepage = "https://www.scootersoftware.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ktor arkivm ];
+    maintainers = with maintainers; [ktor arkivm];
     platforms = builtins.attrNames srcs;
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+  if stdenv.isDarwin
+  then darwin
+  else linux

@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libxshmfence, mesa, nss }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  alsa-lib,
+  gtk3,
+  libxshmfence,
+  mesa,
+  nss,
+}:
 stdenv.mkDerivation rec {
   pname = "thedesk";
   version = "22.3.1";
@@ -16,7 +27,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
+  buildInputs = [alsa-lib gtk3 libxshmfence mesa nss];
 
   dontBuild = true;
   dontConfigure = true;
@@ -44,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Mastodon/Misskey Client for PC";
     homepage = "https://thedesk.top";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

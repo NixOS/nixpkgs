@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, wheel
-, flask
-, sanic
-, fastapi
-, uvicorn
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  wheel,
+  flask,
+  sanic,
+  fastapi,
+  uvicorn,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "json-logging";
   version = "1.3.0";
@@ -30,8 +30,19 @@ buildPythonPackage rec {
   ];
 
   # - Quart is not packaged for Nixpkgs.
-  checkInputs = [ wheel flask /*quart*/ sanic fastapi uvicorn requests pytestCheckHook ];
-  disabledTests = [ "quart" ];
+  checkInputs = [
+    wheel
+    flask
+    /*
+     quart
+     */
+    sanic
+    fastapi
+    uvicorn
+    requests
+    pytestCheckHook
+  ];
+  disabledTests = ["quart"];
   # Tests spawn servers and try to connect to them.
   __darwinAllowLocalNetworking = true;
 
@@ -42,6 +53,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bobbui/json-logging-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = with maintainers; [AluisioASG];
   };
 }

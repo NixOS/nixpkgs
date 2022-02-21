@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, xdg-utils }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  xdg-utils,
+}:
 stdenv.mkDerivation rec {
   pname = "anarchism";
   version = "15.3-1";
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
       social organization, and economics.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [davidak];
     platforms = with platforms; all;
   };
 }

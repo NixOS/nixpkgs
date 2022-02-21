@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, sane-backends
-, sane-frontends
-, libX11
-, gtk2
-, pkg-config
-, libpng
-, libusb-compat-0_1
-, gimpSupport ? false
-, gimp
+{
+  lib,
+  stdenv,
+  fetchurl,
+  sane-backends,
+  sane-frontends,
+  libX11,
+  gtk2,
+  pkg-config,
+  libpng,
+  libusb-compat-0_1,
+  gimpSupport ? false,
+  gimp,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xsane";
   version = "0.999";
@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
     chmod a+rX -R .
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libpng libusb-compat-0_1 sane-backends sane-frontends libX11 gtk2 ]
+  buildInputs =
+    [libpng libusb-compat-0_1 sane-backends sane-frontends libX11 gtk2]
     ++ lib.optional gimpSupport gimp;
 
   meta = with lib; {
@@ -36,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "Graphical scanning frontend for sane";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

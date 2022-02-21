@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  unittest2,
+  six,
+}:
 buildPythonPackage rec {
   pname = "logilab-common";
   version = "1.6.1";
@@ -10,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0h0b2vg2xpfbnynrkg2yki4zjpscm6wgm6nhaahb088v98zxqbrk";
   };
 
-  propagatedBuildInputs = [ unittest2 six ];
+  propagatedBuildInputs = [unittest2 six];
 
   # package supports 3.x but tests require egenix-mx-base which is python 2.x only
   # and is not currently in nixos

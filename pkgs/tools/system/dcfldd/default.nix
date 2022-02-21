@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "dcfldd";
   version = "1.3.4-1";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y6mwsvm75f5jzxsjjk0yhf8xnpmz6y8qvcxfandavx59lc3l57m";
   };
 
-  buildInputs = [ ];
+  buildInputs = [];
 
   meta = with lib; {
     description = "An enhanced version of GNU dd";
@@ -19,6 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight ];
+    maintainers = with maintainers; [qknight];
   };
 }

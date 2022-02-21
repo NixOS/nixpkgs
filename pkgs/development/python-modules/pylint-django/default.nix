@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, coverage
-, django
-, factory_boy
-, fetchFromGitHub
-, isPy3k
-, pylint-plugin-utils
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  coverage,
+  django,
+  factory_boy,
+  fetchFromGitHub,
+  isPy3k,
+  pylint-plugin-utils,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pylint-django";
   version = "2.5.0";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Pylint plugin to analyze Django applications";
     homepage = "https://github.com/PyCQA/pylint-django";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kamadorueda ];
+    maintainers = with maintainers; [kamadorueda];
   };
 }

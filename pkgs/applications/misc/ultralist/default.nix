@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ultralist";
   version = "1.7.0";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "Simple GTD-style todo list for the command line";
     homepage = "https://ultralist.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ uvnikita ];
+    maintainers = with maintainers; [uvnikita];
   };
 }

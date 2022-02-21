@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libgnomeui, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libgnomeui,
+  libxml2,
+}:
 stdenv.mkDerivation rec {
   pname = "verbiste";
 
@@ -10,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "02kzin3pky2q2jnihrch8y0hy043kqqmzxq8j741x80kl0j1qxkm";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libgnomeui libxml2 ];
+  buildInputs = [libgnomeui libxml2];
 
   enableParallelBuilding = true;
 
@@ -21,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "French and Italian verb conjugator";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

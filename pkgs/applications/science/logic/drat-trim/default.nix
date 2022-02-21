@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "drat-trim-unstable";
   version = "2020-06-05";
@@ -39,7 +42,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://www.cs.utexas.edu/~marijn/drat-trim/";
     license = licenses.mit;
-    maintainers = with maintainers; [ kini ];
+    maintainers = with maintainers; [kini];
     platforms = platforms.all;
   };
 }

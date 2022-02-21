@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, python2
-, unzip, makeWrapper }:
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python2,
+  unzip,
+  makeWrapper,
+}: let
   python' = python2.override {
     packageOverrides = self: super: {
       docker = self.buildPythonPackage rec {
@@ -14,14 +19,16 @@ let
           sha256 = "1awzpbrkh4fympqzddz5i3ml81b7f0i0nwkvbpmyxjjfqx6l0m4m";
         };
 
-        propagatedBuildInputs = with self; [
-          six
-          requests
-          websocket-client
-          ipaddress
-          docker_pycreds
-          uptime
-        ] ++ lib.optionals (self.pythonOlder "3.7") [ backports_ssl_match_hostname ];
+        propagatedBuildInputs = with self;
+          [
+            six
+            requests
+            websocket-client
+            ipaddress
+            docker_pycreds
+            uptime
+          ]
+          ++ lib.optionals (self.pythonOlder "3.7") [backports_ssl_match_hostname];
 
         # due to flake8
         doCheck = false;
@@ -36,76 +43,78 @@ let
       });
     };
   };
+in
+  stdenv.mkDerivation rec {
+    version = "5.11.2";
+    pname = "dd-agent";
 
-in stdenv.mkDerivation rec {
-  version = "5.11.2";
-  pname = "dd-agent";
+    src = fetchFromGitHub {
+      owner = "datadog";
+      repo = "dd-agent";
+      rev = version;
+      sha256 = "1iqxvgpsqibqw3vk79158l2pnb6y4pjhjp2d6724lm5rpz4825lx";
+    };
 
-  src = fetchFromGitHub {
-    owner  = "datadog";
-    repo   = "dd-agent";
-    rev    = version;
-    sha256 = "1iqxvgpsqibqw3vk79158l2pnb6y4pjhjp2d6724lm5rpz4825lx";
-  };
+    patches = [./40103-iostat-fix.patch];
 
-  patches = [ ./40103-iostat-fix.patch ];
+    nativeBuildInputs = [unzip];
+    buildInputs =
+      [
+        makeWrapper
+      ]
+      ++ (with python'.pkgs; [
+        requests
+        psycopg2
+        psutil
+        ntplib
+        simplejson
+        pyyaml
+        pymongo
+        python-etcd
+        consul
+        docker
+      ]);
+    propagatedBuildInputs = with python'.pkgs; [python tornado];
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [
-    makeWrapper
-  ] ++ (with python'.pkgs; [
-    requests
-    psycopg2
-    psutil
-    ntplib
-    simplejson
-    pyyaml
-    pymongo
-    python-etcd
-    consul
-    docker
-  ]);
-  propagatedBuildInputs = with python'.pkgs; [ python tornado ];
+    buildCommand = ''
+      mkdir -p $out/bin
+      cp -R $src $out/agent
+      chmod u+w -R $out
+      (cd $out/agent; patchPhase)
+      PYTHONPATH=$out/agent:$PYTHONPATH
+      ln -s $out/agent/agent.py $out/bin/dd-agent
+      ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
+      ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
 
-  buildCommand = ''
-    mkdir -p $out/bin
-    cp -R $src $out/agent
-    chmod u+w -R $out
-    (cd $out/agent; patchPhase)
-    PYTHONPATH=$out/agent:$PYTHONPATH
-    ln -s $out/agent/agent.py $out/bin/dd-agent
-    ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
-    ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
+      # Move out default conf.d so that /etc/dd-agent/conf.d is used
+      mv $out/agent/conf.d $out/agent/conf.d-system
 
-    # Move out default conf.d so that /etc/dd-agent/conf.d is used
-    mv $out/agent/conf.d $out/agent/conf.d-system
+      cat > $out/bin/dd-jmxfetch <<EOF
+      #!/usr/bin/env bash
+      exec ${python'.interpreter} $out/agent/jmxfetch.py $@
+      EOF
+      chmod a+x $out/bin/dd-jmxfetch
 
-    cat > $out/bin/dd-jmxfetch <<EOF
-    #!/usr/bin/env bash
-    exec ${python'.interpreter} $out/agent/jmxfetch.py $@
-    EOF
-    chmod a+x $out/bin/dd-jmxfetch
+      wrapProgram $out/bin/dd-forwarder \
+        --prefix PYTHONPATH : $PYTHONPATH
+      wrapProgram $out/bin/dd-agent \
+        --prefix PYTHONPATH : $PYTHONPATH
+      wrapProgram $out/bin/dogstatsd \
+        --prefix PYTHONPATH : $PYTHONPATH
+      wrapProgram $out/bin/dd-jmxfetch \
+        --prefix PYTHONPATH : $PYTHONPATH
 
-    wrapProgram $out/bin/dd-forwarder \
-      --prefix PYTHONPATH : $PYTHONPATH
-    wrapProgram $out/bin/dd-agent \
-      --prefix PYTHONPATH : $PYTHONPATH
-    wrapProgram $out/bin/dogstatsd \
-      --prefix PYTHONPATH : $PYTHONPATH
-    wrapProgram $out/bin/dd-jmxfetch \
-      --prefix PYTHONPATH : $PYTHONPATH
-
-    patchShebangs $out
-  '';
-
-  meta = {
-    description = ''
-      Event collector for the DataDog analysis service
-      -- v5 Python implementation
+      patchShebangs $out
     '';
-    homepage    = "https://www.datadoghq.com";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.all;
-    maintainers = with lib.maintainers; [ thoughtpolice domenkozar ];
-  };
-}
+
+    meta = {
+      description = ''
+        Event collector for the DataDog analysis service
+        -- v5 Python implementation
+      '';
+      homepage = "https://www.datadoghq.com";
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [thoughtpolice domenkozar];
+    };
+  }

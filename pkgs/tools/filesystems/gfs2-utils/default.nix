@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook, bison, flex, pkg-config
-, bzip2, check, ncurses, util-linux, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
+  bzip2,
+  check,
+  ncurses,
+  util-linux,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gfs2-utils";
   version = "3.4.1";
@@ -26,12 +36,12 @@ stdenv.mkDerivation rec {
     substituteInPlace gfs2/edit/gfs2hex.c --replace 'printw(title);' 'printw("%s",title);'
   '';
 
-  outputs = [ "bin" "doc" "out" "man" ];
+  outputs = ["bin" "doc" "out" "man"];
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
-  buildInputs = [ bzip2 ncurses util-linux zlib ];
+  nativeBuildInputs = [autoreconfHook bison flex pkg-config];
+  buildInputs = [bzip2 ncurses util-linux zlib];
 
-  checkInputs = [ check ];
+  checkInputs = [check];
   doCheck = true;
 
   enableParallelBuilding = true;
@@ -39,8 +49,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://pagure.io/gfs2-utils";
     description = "Tools for creating, checking and working with gfs2 filesystems";
-    maintainers = with maintainers; [ qyliss ];
-    license = [ licenses.gpl2Plus licenses.lgpl2Plus ];
+    maintainers = with maintainers; [qyliss];
+    license = [licenses.gpl2Plus licenses.lgpl2Plus];
     platforms = platforms.linux;
   };
 }

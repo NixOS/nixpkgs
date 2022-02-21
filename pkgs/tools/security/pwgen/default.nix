@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pwgen";
   version = "2.08";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Password generator which creates passwords which can be easily memorized by a human";
     homepage = "https://github.com/tytso/pwgen";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
     platforms = platforms.all;
   };
 }

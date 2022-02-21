@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook
-, elementary-icon-theme
-, glib
-, granite
-, gst_all_1
-, gtk3
-, libgda
-, libgee
-, libgpod
-, libhandy
-, libpeas
-, taglib
-, zeitgeist
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook,
+  elementary-icon-theme,
+  glib,
+  granite,
+  gst_all_1,
+  gtk3,
+  libgda,
+  libgee,
+  libgpod,
+  libhandy,
+  libpeas,
+  taglib,
+  zeitgeist,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-music";
   version = "5.1.1";
@@ -60,25 +60,27 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    elementary-icon-theme
-    glib
-    granite
-    gtk3
-    libgda
-    libgee
-    libgpod
-    libhandy
-    libpeas
-    taglib
-    zeitgeist
-  ] ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      elementary-icon-theme
+      glib
+      granite
+      gtk3
+      libgda
+      libgee
+      libgpod
+      libhandy
+      libpeas
+      taglib
+      zeitgeist
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gstreamer
+    ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

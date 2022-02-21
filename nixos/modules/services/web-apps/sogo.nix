@@ -1,4 +1,10 @@
-{ config, pkgs, lib, ... }: with lib; let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.sogo;
 
   preStart = pkgs.writeShellScriptBin "sogo-prestart" ''
@@ -6,16 +12,21 @@
     chown sogo:sogo /etc/sogo/sogo.conf
     chmod 640 /etc/sogo/sogo.conf
 
-    ${if (cfg.configReplaces != {}) then ''
-      # Insert secrets
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: ''export ${k}="$(cat "${v}" | tr -d '\n')"'') cfg.configReplaces)}
+    ${
+      if (cfg.configReplaces != {})
+      then
+        ''
+          # Insert secrets
+          ${concatStringsSep "\n" (mapAttrsToList (k: v: ''export ${k}="$(cat "${v}" | tr -d '\n')"'') cfg.configReplaces)}
 
-      ${pkgs.perl}/bin/perl -p ${concatStringsSep " " (mapAttrsToList (k: v: '' -e 's/${k}/''${ENV{"${k}"}}/g;' '') cfg.configReplaces)} /etc/sogo/sogo.conf.raw > /etc/sogo/sogo.conf
-    '' else ''
-      cp /etc/sogo/sogo.conf.raw /etc/sogo/sogo.conf
-    ''}
+          ${pkgs.perl}/bin/perl -p ${concatStringsSep " " (mapAttrsToList (k: v: ''-e 's/${k}/''${ENV{"${k}"}}/g;' '') cfg.configReplaces)} /etc/sogo/sogo.conf.raw > /etc/sogo/sogo.conf
+        ''
+      else
+        ''
+          cp /etc/sogo/sogo.conf.raw /etc/sogo/sogo.conf
+        ''
+    }
   '';
-
 in {
   options.services.sogo = with types; {
     enable = mkEnableOption "SOGo groupware";
@@ -67,7 +78,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.sogo ];
+    environment.systemPackages = [pkgs.sogo];
 
     environment.etc."sogo/sogo.conf.raw".text = ''
       {
@@ -88,9 +99,9 @@ in {
 
     systemd.services.sogo = {
       description = "SOGo groupware";
-      after = [ "postgresql.service" "mysql.service" "memcached.service" "openldap.service" "dovecot2.service" ];
-      wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ config.environment.etc."sogo/sogo.conf.raw".source ];
+      after = ["postgresql.service" "mysql.service" "memcached.service" "openldap.service" "dovecot2.service"];
+      wantedBy = ["multi-user.target"];
+      restartTriggers = [config.environment.etc."sogo/sogo.conf.raw".source];
 
       environment.LDAPTLS_CACERT = "/etc/ssl/certs/ca-certificates.crt";
 
@@ -129,7 +140,7 @@ in {
     systemd.services.sogo-tmpwatch = {
       description = "SOGo tmpwatch";
 
-      startAt = [ "hourly" ];
+      startAt = ["hourly"];
       script = ''
         SOGOSPOOL=/var/lib/sogo/spool
 
@@ -169,10 +180,10 @@ in {
     systemd.services.sogo-ealarms = {
       description = "SOGo email alarms";
 
-      after = [ "postgresql.service" "mysqld.service" "memcached.service" "openldap.service" "dovecot2.service" "sogo.service" ];
-      restartTriggers = [ config.environment.etc."sogo/sogo.conf.raw".source ];
+      after = ["postgresql.service" "mysqld.service" "memcached.service" "openldap.service" "dovecot2.service" "sogo.service"];
+      restartTriggers = [config.environment.etc."sogo/sogo.conf.raw".source];
 
-      startAt = [ "minutely" ];
+      startAt = ["minutely"];
 
       serviceConfig = {
         Type = "oneshot";

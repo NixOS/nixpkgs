@@ -1,5 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
   version = "6.15.5";
@@ -53,7 +56,7 @@ python3Packages.buildPythonApplication rec {
     "tests/test_linting.py"
   ];
 
-  pythonImportsCheck = [ "snakemake" ];
+  pythonImportsCheck = ["snakemake"];
 
   meta = with lib; {
     homepage = "https://snakemake.github.io";
@@ -66,6 +69,6 @@ python3Packages.buildPythonApplication rec {
       workflows are essentially Python scripts extended by declarative code to define
       rules. Rules describe how to create output files from input files.
     '';
-    maintainers = with maintainers; [ helkafen renatoGarcia veprbl ];
+    maintainers = with maintainers; [helkafen renatoGarcia veprbl];
   };
 }

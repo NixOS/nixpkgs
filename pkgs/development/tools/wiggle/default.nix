@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, groff }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  groff,
+}:
 stdenv.mkDerivation rec {
   pname = "wiggle";
   version = "1.3";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "18ilzr9sbal1j8p1d94ilm1j5blac5cngvcvjpdmgmpw6diy2ldf";
   };
 
-  buildInputs = [ ncurses groff ];
+  buildInputs = [ncurses groff];
 
   configurePhase = ''
     makeFlagsArray=( CFLAGS="-I. -O3"
@@ -39,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

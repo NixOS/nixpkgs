@@ -1,6 +1,8 @@
-
-{ lib, config, ... }:
-let
+{
+  lib,
+  config,
+  ...
+}: let
   inherit (lib) types;
 in {
   options = {
@@ -19,7 +21,7 @@ in {
   };
 
   config.fun = lib.mkMerge [
-    (input: lib.mkAfter [ input.a ])
-    (input: [ input.b ])
+    (input: lib.mkAfter [input.a])
+    (input: [input.b])
   ];
 }

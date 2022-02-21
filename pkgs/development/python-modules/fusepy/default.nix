@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "fusepy";
   version = "3.0.1";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1gg69qfi9pjcic3g98l8ya64rw2vc1bp8gsf76my6gglq8z7izvj";
   };
 
-  propagatedBuildInputs = [ pkgs.fuse ];
+  propagatedBuildInputs = [pkgs.fuse];
 
   # No tests included
   doCheck = false;
@@ -36,5 +36,4 @@ buildPythonPackage rec {
     license = licenses.isc;
     platforms = platforms.unix;
   };
-
 }

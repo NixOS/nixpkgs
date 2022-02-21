@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, pyjwt
-, pythonOlder
-, pytz
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  nose,
+  pyjwt,
+  pythonOlder,
+  pytz,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "twilio";
   version = "7.5.0";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

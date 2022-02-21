@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "environmental-override";
   version = "0.1.2";
@@ -15,12 +15,12 @@ buildPythonPackage rec {
   # No tests have been written for this library.
   doCheck = false;
 
-  pythonImportsCheck = [ "environmental_override" ];
+  pythonImportsCheck = ["environmental_override"];
 
   meta = {
     description = "Easily configure apps using simple environmental overrides";
     homepage = "https://github.com/coddingtonbear/environmental-override";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nathanruiz ];
+    maintainers = with lib.maintainers; [nathanruiz];
   };
 }

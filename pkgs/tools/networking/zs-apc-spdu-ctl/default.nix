@@ -1,12 +1,12 @@
-{ cmake
-, fetchFromGitHub
-, fping
-, lib
-, libowlevelzs
-, net-snmp
-, stdenv
+{
+  cmake,
+  fetchFromGitHub,
+  fping,
+  lib,
+  libowlevelzs,
+  net-snmp,
+  stdenv,
 }:
-
 # TODO: add a services entry for the /etc/zs-apc-spdu.conf file
 stdenv.mkDerivation rec {
   pname = "zs-apc-spdu-ctl";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "TMV9ETWBVeXq6tZ2e0CrvHBXoyKfOLCQurjBdf/iw/M=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libowlevelzs net-snmp ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libowlevelzs net-snmp];
 
   postPatch = ''
     substituteInPlace src/confent.cxx \
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "APC SPDU control utility";
     license = licenses.mit;
-    maintainers = with maintainers; [ zseri ];
+    maintainers = with maintainers; [zseri];
     platforms = platforms.linux;
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, colorlog
-, pyyaml
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  colorlog,
+  pyyaml,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "lupupy";
   version = "0.1.9";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to control Lupusec alarm control panels";
     homepage = "https://github.com/majuss/lupupy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

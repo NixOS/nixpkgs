@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchgit, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  python3,
+}:
 stdenv.mkDerivation {
   pname = "gnulib";
   version = "20210702";
@@ -14,7 +18,7 @@ stdenv.mkDerivation {
     patchShebangs gnulib-tool.py
   '';
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
   installPhase = ''
     mkdir -p $out/bin

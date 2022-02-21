@@ -1,6 +1,17 @@
-{ lib, fetchFromGitHub, python3Packages, intltool, glib, itstool
-, wrapGAppsHook, gobject-introspection, pango, gdk-pixbuf, atk, wafHook }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  intltool,
+  glib,
+  itstool,
+  wrapGAppsHook,
+  gobject-introspection,
+  pango,
+  gdk-pixbuf,
+  atk,
+  wafHook,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "hamster";
   version = "3.0.2";
@@ -57,6 +68,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://projecthamster.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.fabianhauser ];
+    maintainers = [maintainers.fabianhauser];
   };
 }

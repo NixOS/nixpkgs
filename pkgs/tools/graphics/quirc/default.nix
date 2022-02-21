@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, SDL_gfx, SDL, libjpeg, libpng, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL_gfx,
+  SDL,
+  libjpeg,
+  libpng,
+  pkg-config,
 }:
-
 stdenv.mkDerivation {
   pname = "quirc";
   version = "2020-04-16";
@@ -13,10 +19,10 @@ stdenv.mkDerivation {
     sha256 = "1kqqvcnxcaxdgls9sibw5pqjz3g1gys2v64i4kfqp8wfcgd9771q";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL SDL_gfx libjpeg libpng ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [SDL SDL_gfx libjpeg libpng];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
   NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL -I${SDL_gfx}/include/SDL";
 
   configurePhase = ''

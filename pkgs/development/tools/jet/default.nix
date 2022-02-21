@@ -1,5 +1,8 @@
-{ lib, buildGraalvmNativeImage, fetchurl }:
-
+{
+  lib,
+  buildGraalvmNativeImage,
+  fetchurl,
+}:
 buildGraalvmNativeImage rec {
   pname = "jet";
   version = "0.1.0";
@@ -30,6 +33,6 @@ buildGraalvmNativeImage rec {
     description = "CLI to transform between JSON, EDN and Transit, powered with a minimal query language";
     homepage = "https://github.com/borkdude/jet";
     license = licenses.epl10;
-    maintainers = with maintainers; [ ericdallo ];
+    maintainers = with maintainers; [ericdallo];
   };
 }

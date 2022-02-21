@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook}:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "ush";
   version = "3.1.0";
@@ -11,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-eL3vG3yS02enbLYorKvvYKbju9HInffUhrZgkodwhvo=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   disabledTestPaths = [
     # seems to be outdated?
@@ -22,6 +26,6 @@ buildPythonPackage rec {
     description = "Powerful API for invoking with external commands";
     homepage = "https://github.com/tarruda/python-ush";
     license = licenses.mit;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = with maintainers; [ckie];
   };
 }

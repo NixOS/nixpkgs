@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "svgbob";
   version = "0.6.5";
@@ -20,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "Convert your ascii diagram scribbles into happy little SVG";
     homepage = "https://github.com/ivanceras/svgbob";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

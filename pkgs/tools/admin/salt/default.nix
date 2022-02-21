@@ -1,12 +1,12 @@
-{ lib
-, python3
-, openssl
+{
+  lib,
+  python3,
+  openssl
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
-, extraInputs ? []
-}:
-
-let
+  ,
+  extraInputs ? [],
+}: let
   py = python3.override {
     packageOverrides = self: super: {
       # Incompatible with pyzmq 22
@@ -17,50 +17,52 @@ let
           sha256 = "CYwTxhmJE8KgaQI1+nTS5JFhdV9mtmO+rsiWUVVMx5w=";
         };
       });
-   };
+    };
   };
 in
-py.pkgs.buildPythonApplication rec {
-  pname = "salt";
-  version = "3004";
+  py.pkgs.buildPythonApplication rec {
+    pname = "salt";
+    version = "3004";
 
-  src = py.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "PVNWG8huAU3KLsPcmBB5vgTVXqBHiQyr3iXlsQv6WxM=";
-  };
+    src = py.pkgs.fetchPypi {
+      inherit pname version;
+      sha256 = "PVNWG8huAU3KLsPcmBB5vgTVXqBHiQyr3iXlsQv6WxM=";
+    };
 
-  propagatedBuildInputs = with py.pkgs; [
-    distro
-    jinja2
-    markupsafe
-    msgpack
-    psutil
-    pycryptodomex
-    pyyaml
-    pyzmq
-    requests
-    tornado
-  ] ++ extraInputs;
+    propagatedBuildInputs = with py.pkgs;
+      [
+        distro
+        jinja2
+        markupsafe
+        msgpack
+        psutil
+        pycryptodomex
+        pyyaml
+        pyzmq
+        requests
+        tornado
+      ]
+      ++ extraInputs;
 
-  patches = [ ./fix-libcrypto-loading.patch ];
+    patches = [./fix-libcrypto-loading.patch];
 
-  postPatch = ''
-    substituteInPlace "salt/utils/rsax931.py" \
-      --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
-    substituteInPlace requirements/base.txt \
-      --replace contextvars ""
-  '';
+    postPatch = ''
+      substituteInPlace "salt/utils/rsax931.py" \
+        --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
+      substituteInPlace requirements/base.txt \
+        --replace contextvars ""
+    '';
 
-  # The tests fail due to socket path length limits at the very least;
-  # possibly there are more issues but I didn't leave the test suite running
-  # as is it rather long.
-  doCheck = false;
+    # The tests fail due to socket path length limits at the very least;
+    # possibly there are more issues but I didn't leave the test suite running
+    # as is it rather long.
+    doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://saltproject.io/";
-    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
-    description = "Portable, distributed, remote execution and configuration management system";
-    maintainers = with maintainers; [ Flakebi ];
-    license = licenses.asl20;
-  };
-}
+    meta = with lib; {
+      homepage = "https://saltproject.io/";
+      changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
+      description = "Portable, distributed, remote execution and configuration management system";
+      maintainers = with maintainers; [Flakebi];
+      license = licenses.asl20;
+    };
+  }

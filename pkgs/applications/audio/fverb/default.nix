@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fverb";
   # no release yet: https://github.com/jpcima/fverb/issues/2
@@ -16,9 +17,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   postPatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A stereo variant of the reverberator by Jon Dattorro, for lv2";
     homepage = "https://github.com/jpcima/fverb";
     license = licenses.bsd2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms   = platforms.unix;
+    maintainers = [maintainers.magnetophon];
+    platforms = platforms.unix;
   };
 }

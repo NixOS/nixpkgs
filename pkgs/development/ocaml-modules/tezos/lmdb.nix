@@ -1,14 +1,13 @@
-{ lib
-, fetchFromGitLab
-, pkg-config
-, buildDunePackage
-, lmdb
-, rresult
-, cstruct
-, alcotest
-}:
-
-let
+{
+  lib,
+  fetchFromGitLab,
+  pkg-config,
+  buildDunePackage,
+  lmdb,
+  rresult,
+  cstruct,
+  alcotest,
+}: let
   version = "7.4";
   src = fetchFromGitLab {
     owner = "tezos";
@@ -17,33 +16,32 @@ let
     sha256 = "0sghc60xzr02pmmkr626pnhzrnczf7mki7qyxzzfn7rbbdbrf4wp";
   };
 in
+  buildDunePackage {
+    pname = "tezos-lmdb";
+    version = version;
+    src = "${src}/vendors/ocaml-lmdb";
 
-buildDunePackage {
-  pname = "tezos-lmdb";
-  version = version;
-  src = "${src}/vendors/ocaml-lmdb";
+    useDune2 = true;
 
-  useDune2 = true;
+    buildInputs = [
+      pkg-config
+    ];
 
-  buildInputs = [
-    pkg-config
-  ];
+    propagatedBuildInputs = [
+      rresult
+      lmdb
+    ];
 
-  propagatedBuildInputs = [
-    rresult
-    lmdb
-  ];
+    checkInputs = [
+      cstruct
+      alcotest
+    ];
 
-  checkInputs = [
-    cstruct
-    alcotest
-  ];
+    doCheck = false;
 
-  doCheck = false;
-
-  meta = {
-    description = "Legacy Tezos OCaml binding to LMDB (Consider ocaml-lmdb instead)";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.ulrikstrid ];
-  };
-}
+    meta = {
+      description = "Legacy Tezos OCaml binding to LMDB (Consider ocaml-lmdb instead)";
+      license = lib.licenses.isc;
+      maintainers = [lib.maintainers.ulrikstrid];
+    };
+  }

@@ -1,5 +1,8 @@
-{ fetchFromGitHub, lib, stdenv }:
-
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "symlinks";
   version = "1.4.3";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "EMWd7T/k4v1uvXe2QxhyPoQKUpKIUANE9AOwX461FgU=";
   };
 
-  buildFlags = [ "CC=${stdenv.cc}/bin/cc" ];
+  buildFlags = ["CC=${stdenv.cc}/bin/cc"];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man8
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Find and remedy problematic symbolic links on a system";
     homepage = "https://github.com/brandt/symlinks";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu ckauhaus ];
+    maintainers = with maintainers; [goibhniu ckauhaus];
     platforms = platforms.unix;
   };
 }

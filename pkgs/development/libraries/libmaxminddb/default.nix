@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libmaxminddb";
   version = "1.6.0";
@@ -14,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/maxmind/libmaxminddb";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = [maintainers.vcunat];
   };
 }

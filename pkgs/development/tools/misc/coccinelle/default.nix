@@ -1,5 +1,12 @@
-{ fetchurl, lib, stdenv, python3, ncurses, ocamlPackages, pkg-config }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  python3,
+  ncurses,
+  ocamlPackages,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "coccinelle";
   version = "1.1.0";
@@ -10,9 +17,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib menhir
-    ocaml_pcre parmap stdcompat
-    python3 ncurses pkg-config
+    ocaml
+    findlib
+    menhir
+    ocaml_pcre
+    parmap
+    stdcompat
+    python3
+    ncurses
+    pkg-config
   ];
 
   doCheck = false;
@@ -36,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "http://coccinelle.lip6.fr/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    maintainers = [lib.maintainers.thoughtpolice];
   };
 }

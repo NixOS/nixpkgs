@@ -1,5 +1,8 @@
-{ stdenv, protobuf, nanopb }:
-
+{
+  stdenv,
+  protobuf,
+  nanopb,
+}:
 stdenv.mkDerivation {
   name = "nanopb-test-simple-proto3";
   meta.timeout = 60;

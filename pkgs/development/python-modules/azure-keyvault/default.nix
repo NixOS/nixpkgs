@@ -1,9 +1,12 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
-, azure-keyvault-certificates
-, azure-keyvault-keys
-, azure-keyvault-secrets
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  azure-keyvault-certificates,
+  azure-keyvault-keys,
+  azure-keyvault-secrets,
 }:
-
 buildPythonPackage rec {
   pname = "azure-keyvault";
   version = "4.1.0";
@@ -34,6 +37,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Key Vault Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

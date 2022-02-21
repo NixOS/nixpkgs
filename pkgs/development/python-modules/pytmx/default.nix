@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pygame
-, pyglet
-, pysdl2
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygame,
+  pyglet,
+  pysdl2,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pytmx";
   version = "3.31";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bitcraft/PyTMX";
     description = "Python library to read Tiled Map Editor's TMX maps";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }

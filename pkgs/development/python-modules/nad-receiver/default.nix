@@ -1,10 +1,10 @@
-{ lib
-, pyserial
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  pyserial,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "nad-receiver";
   version = "0.3.0";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "nad_receiver" ];
+  pythonImportsCheck = ["nad_receiver"];
 
   meta = with lib; {
     description = "Python interface for NAD receivers";
     homepage = "https://github.com/joopert/nad_receiver";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

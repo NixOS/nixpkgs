@@ -1,9 +1,21 @@
-{ lib, mkDerivationWith, fetchurl, python3Packages
-, file, intltool, gobject-introspection, libgudev
-, udisks, gexiv2, gst_all_1, libnotify
-, exiftool, gdk-pixbuf, libmediainfo, vmtouch
+{
+  lib,
+  mkDerivationWith,
+  fetchurl,
+  python3Packages,
+  file,
+  intltool,
+  gobject-introspection,
+  libgudev,
+  udisks,
+  gexiv2,
+  gst_all_1,
+  libnotify,
+  exiftool,
+  gdk-pixbuf,
+  libmediainfo,
+  vmtouch,
 }:
-
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
   version = "0.9.18";
@@ -71,8 +83,8 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
       --set PYTHONPATH "$PYTHONPATH"
-      --prefix PATH : "${lib.makeBinPath [ exiftool vmtouch ]}"
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libmediainfo ]}"
+      --prefix PATH : "${lib.makeBinPath [exiftool vmtouch]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libmediainfo]}"
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
       "''${qtWrapperArgs[@]}"
     )
@@ -83,6 +95,6 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     homepage = "https://www.damonlynch.net/rapid/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [jfrankenau];
   };
 }

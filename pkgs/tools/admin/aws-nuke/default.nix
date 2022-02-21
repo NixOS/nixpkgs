@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "aws-nuke";
   version = "2.17.0";
@@ -25,12 +25,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Nuke a whole AWS account and delete all its resources";
     homepage = "https://github.com/rebuy-de/aws-nuke";
     license = licenses.mit;
-    maintainers = with maintainers; [ grahamc ];
+    maintainers = with maintainers; [grahamc];
   };
 }

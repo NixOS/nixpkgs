@@ -1,25 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, dbus
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, gitMinimal
-, glib
-, gst_all_1
-, gtk4
-, libadwaita
-, meson
-, ninja
-, openssl
-, pkg-config
-, python3
-, rustPlatform
-, sqlite
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  dbus,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  gitMinimal,
+  glib,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
+  python3,
+  rustPlatform,
+  sqlite,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "shortwave";
   version = "2.0.1";
@@ -53,20 +53,22 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    dbus
-    gdk-pixbuf
-    glib
-    gtk4
-    libadwaita
-    openssl
-    sqlite
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      dbus
+      gdk-pixbuf
+      glib
+      gtk4
+      libadwaita
+      openssl
+      sqlite
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
       Shortwave is a streaming audio player designed for the GNOME
       desktop. It is the successor to the older Gradio application.
     '';
-    maintainers = with maintainers; [ lasandell ];
+    maintainers = with maintainers; [lasandell];
     broken = true; # incompatible with latest libadwaita
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

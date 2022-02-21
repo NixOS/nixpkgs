@@ -1,8 +1,10 @@
-{ pkgs, config, lib, ... }:
-
-with lib;
-
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.programs.zmap;
 in {
   options.programs.zmap = {
@@ -10,7 +12,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.zmap ];
+    environment.systemPackages = [pkgs.zmap];
 
     environment.etc."zmap/blacklist.conf".source = "${pkgs.zmap}/etc/zmap/blacklist.conf";
     environment.etc."zmap/zmap.conf".source = "${pkgs.zmap}/etc/zmap.conf";

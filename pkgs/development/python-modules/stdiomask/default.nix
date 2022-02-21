@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "stdiomask";
   version = "0.0.6";
@@ -14,12 +14,12 @@ buildPythonPackage rec {
 
   # tests are not published: https://github.com/asweigart/stdiomask/issues/5
   doCheck = false;
-  pythonImportsCheck = [ "stdiomask" ];
+  pythonImportsCheck = ["stdiomask"];
 
   meta = with lib; {
     description = "Python module for masking passwords";
     homepage = "https://github.com/asweigart/stdiomask";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "mro-unicode-2013-05-25";
 
@@ -12,7 +14,7 @@ fetchzip {
   meta = with lib; {
     homepage = "https://github.com/phjamr/MroUnicode";
     description = "Unicode-compliant Mro font";
-    maintainers = with maintainers; [ mathnerd314 ];
+    maintainers = with maintainers; [mathnerd314];
     license = licenses.ofl;
     platforms = platforms.all;
   };

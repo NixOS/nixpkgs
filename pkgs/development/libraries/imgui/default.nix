@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "imgui";
   version = "1.87";
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Bloat-free Graphical User interface for C++ with minimal dependencies";
     homepage = "https://github.com/ocornut/imgui";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
     platforms = platforms.all;
   };
 }

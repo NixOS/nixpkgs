@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "kanit";
   version = "unstable-2020-06-16";
@@ -38,6 +41,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.toastal ];
+    maintainers = [maintainers.toastal];
   };
 }

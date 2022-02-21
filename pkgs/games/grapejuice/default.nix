@@ -1,21 +1,21 @@
-{ lib
-, fetchFromGitLab
-, gobject-introspection
-, python3Packages
-, gtk3
-, wrapGAppsHook
-, glib
-, cairo
-, desktop-file-utils
-, xdg-utils
-, xdg-user-dirs
-, wine
-, winetricks
-, pciutils
-, glxinfo
+{
+  lib,
+  fetchFromGitLab,
+  gobject-introspection,
+  python3Packages,
+  gtk3,
+  wrapGAppsHook,
+  glib,
+  cairo,
+  desktop-file-utils,
+  xdg-utils,
+  xdg-user-dirs,
+  wine,
+  winetricks,
+  pciutils,
+  glxinfo,
 }:
-
-python3Packages.buildPythonApplication rec  {
+python3Packages.buildPythonApplication rec {
   pname = "grapejuice";
   version = "4.10.2";
 
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec  {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks pciutils glxinfo ]}"
+    "--prefix PATH : ${lib.makeBinPath [xdg-user-dirs xdg-utils wine winetricks pciutils glxinfo]}"
   ];
 
   postPatch = ''
@@ -83,13 +83,13 @@ python3Packages.buildPythonApplication rec  {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [ "grapejuice" ];
+  pythonImportsCheck = ["grapejuice"];
 
   meta = with lib; {
     homepage = "https://gitlab.com/brinkervii/grapejuice";
     description = "A wine+Roblox management application";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
   };
 }

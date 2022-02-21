@@ -1,12 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub, runCommand }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runCommand,
+}:
 buildGoModule rec {
   pname = "elvish";
   version = "0.17.0";
 
-  subPackages = [ "cmd/elvish" ];
+  subPackages = ["cmd/elvish"];
 
-  ldflags = [ "-s" "-w" "-X src.elv.sh/pkg/buildinfo.Version==${version}" "-X src.elv.sh/pkg/buildinfo.Reproducible=true" ];
+  ldflags = ["-s" "-w" "-X src.elv.sh/pkg/buildinfo.Version==${version}" "-X src.elv.sh/pkg/buildinfo.Reproducible=true"];
 
   src = fetchFromGitHub {
     owner = "elves";
@@ -47,7 +51,7 @@ buildGoModule rec {
     '';
     homepage = "https://elv.sh/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ vrthra AndersonTorres ];
+    maintainers = with maintainers; [vrthra AndersonTorres];
   };
 
   passthru.shellPath = "/bin/elvish";

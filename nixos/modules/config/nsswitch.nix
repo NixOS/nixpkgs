@@ -1,12 +1,12 @@
 # Configuration for the Name Service Switch (/etc/nsswitch.conf).
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   options = {
-
     # NSS modules.  Hacky!
     # Only works with nscd!
     system.nssModules = mkOption {
@@ -18,11 +18,10 @@ with lib;
         several DNS resolution methods to be specified via
         <filename>/etc/nsswitch.conf</filename>.
       '';
-      apply = list:
-        {
-          inherit list;
-          path = makeLibraryPath list;
-        };
+      apply = list: {
+        inherit list;
+        path = makeLibraryPath list;
+      };
     };
 
     system.nssDatabases = {
@@ -89,7 +88,7 @@ with lib;
   };
 
   imports = [
-    (mkRenamedOptionModule [ "system" "nssHosts" ] [ "system" "nssDatabases" "hosts" ])
+    (mkRenamedOptionModule ["system" "nssHosts"] ["system" "nssDatabases" "hosts"])
   ];
 
   config = {
@@ -120,14 +119,14 @@ with lib;
     '';
 
     system.nssDatabases = {
-      passwd = mkBefore [ "files" ];
-      group = mkBefore [ "files" ];
-      shadow = mkBefore [ "files" ];
+      passwd = mkBefore ["files"];
+      group = mkBefore ["files"];
+      shadow = mkBefore ["files"];
       hosts = mkMerge [
-        (mkOrder 998 [ "files" ])
-        (mkOrder 1499 [ "dns" ])
+        (mkOrder 998 ["files"])
+        (mkOrder 1499 ["dns"])
       ];
-      services = mkBefore [ "files" ];
+      services = mkBefore ["files"];
     };
   };
 }

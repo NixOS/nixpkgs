@@ -1,5 +1,12 @@
-{ lib, stdenv, cmake, fetchurl, pkg-config, jansson, zlib }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchurl,
+  pkg-config,
+  jansson,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "avro-c";
   version = "1.11.0";
@@ -13,15 +20,15 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [pkg-config cmake];
 
-  buildInputs = [ jansson zlib ];
+  buildInputs = [jansson zlib];
 
   meta = with lib; {
     description = "A C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lblasc ];
+    maintainers = with maintainers; [lblasc];
     platforms = platforms.all;
   };
 }

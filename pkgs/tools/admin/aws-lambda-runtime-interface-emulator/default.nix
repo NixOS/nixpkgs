@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "aws-lambda-runtime-interface-emulator";
   version = "1.3";
@@ -20,6 +23,6 @@ buildGoModule rec {
     description = "To locally test their Lambda function packaged as a container image.";
     homepage = "https://github.com/aws/aws-lambda-runtime-interface-emulator";
     license = licenses.asl20;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
   };
 }

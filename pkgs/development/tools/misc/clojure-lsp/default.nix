@@ -1,5 +1,13 @@
-{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
-
+{
+  lib,
+  stdenv,
+  buildGraalvmNativeImage,
+  babashka,
+  fetchurl,
+  fetchFromGitHub,
+  clojure,
+  writeScript,
+}:
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
   version = "2022.02.01-16.53.14";
@@ -22,17 +30,18 @@ buildGraalvmNativeImage rec {
   ];
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
+  checkPhase =
+    ''
+      runHook preCheck
 
-    export HOME="$(mktemp -d)"
-    ./${pname} --version | fgrep -q '${version}'
-  ''
+      export HOME="$(mktemp -d)"
+      ./${pname} --version | fgrep -q '${version}'
+    ''
     # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
     #${babashka}/bin/bb integration-test ./${pname}
-  + ''
-    runHook postCheck
-  '';
+    + ''
+      runHook postCheck
+    '';
 
   passthru.updateScript = writeScript "update-clojure-lsp" ''
     #!/usr/bin/env nix-shell
@@ -59,6 +68,6 @@ buildGraalvmNativeImage rec {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
     license = licenses.mit;
-    maintainers = with maintainers; [ ericdallo babariviere ];
+    maintainers = with maintainers; [ericdallo babariviere];
   };
 }

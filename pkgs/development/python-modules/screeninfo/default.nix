@@ -1,14 +1,14 @@
-{ lib
-, buildPythonApplication
-, dataclasses
-, fetchPypi
-, libX11
-, libXinerama
-, libXrandr
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonApplication,
+  dataclasses,
+  fetchPypi,
+  libX11,
+  libXinerama,
+  libXrandr,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonApplication rec {
   pname = "screeninfo";
   version = "0.8";
@@ -39,12 +39,12 @@ buildPythonApplication rec {
     "screeninfo/test_screeninfo.py"
   ];
 
-  pythonImportsCheck = [ "screeninfo" ];
+  pythonImportsCheck = ["screeninfo"];
 
   meta = with lib; {
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with maintainers; [nickhu];
   };
 }

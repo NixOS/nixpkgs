@@ -1,5 +1,7 @@
-{ lib, buildHex }:
-
+{
+  lib,
+  buildHex,
+}:
 buildHex {
   name = "rebar3_proper";
   version = "0.12.1";

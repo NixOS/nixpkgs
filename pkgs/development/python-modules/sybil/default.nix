@@ -1,10 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonApplication rec {
   pname = "sybil";
   version = "3.0.0";
@@ -35,6 +35,6 @@ buildPythonApplication rec {
     description = "Automated testing for the examples in your documentation";
     homepage = "https://github.com/cjw296/sybil";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

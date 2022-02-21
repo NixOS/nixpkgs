@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook
-, librsvg
-, gsound
-, gettext
-, itstool
-, libxml2
-, libgnome-games-support
-, libgee
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
-, adwaita-icon-theme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook,
+  librsvg,
+  gsound,
+  gettext,
+  itstool,
+  libxml2,
+  libgnome-games-support,
+  libgee,
+  meson,
+  ninja,
+  vala,
+  python3,
+  desktop-file-utils,
+  adwaita-icon-theme,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-robots";
   version = "40.0";

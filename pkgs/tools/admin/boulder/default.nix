@@ -1,17 +1,16 @@
-{ buildGoPackage
-, libtool
-, fetchFromGitHub
-, lib
+{
+  buildGoPackage,
+  libtool,
+  fetchFromGitHub,
+  lib,
 }:
-
-buildGoPackage rec{
-
+buildGoPackage rec {
   pname = "boulder";
   version = "release-2019-10-13";
 
   goPackagePath = "github.com/letsencrypt/boulder";
 
-  buildInputs = [ libtool ];
+  buildInputs = [libtool];
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
@@ -23,8 +22,7 @@ buildGoPackage rec{
   meta = {
     homepage = "https://github.com/letsencrypt/boulder";
     description = "An ACME-based CA, written in Go";
-    license = [ lib.licenses.mpl20 ];
-    maintainers = [ ];
+    license = [lib.licenses.mpl20];
+    maintainers = [];
   };
-
 }

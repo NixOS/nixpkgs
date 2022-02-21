@@ -1,7 +1,13 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, substituteAll
-, qmake, qttools, qttranslations
+{
+  stdenv,
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  qmake,
+  qttools,
+  qttranslations,
 }:
-
 mkDerivation rec {
   pname = "gpxlab";
   version = "0.7.0";
@@ -19,7 +25,7 @@ mkDerivation rec {
     inherit qttranslations;
   });
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [qmake qttools];
 
   preConfigure = ''
     lrelease GPXLab/locale/*.ts
@@ -38,7 +44,7 @@ mkDerivation rec {
       previously recorded with a GPS tracker.
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = platforms.unix;
   };
 }

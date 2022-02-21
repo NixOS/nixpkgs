@@ -1,11 +1,12 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, makeWrapper
-, runc
-, wrapperDir ? "/run/wrappers/bin" # Default for NixOS, other systems might need customization.
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  runc,
+  wrapperDir ? "/run/wrappers/bin"
+  # Default for NixOS, other systems might need customization.
 }:
-
 buildGoModule rec {
   pname = "img";
   version = "0.5.11";
@@ -40,7 +41,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    wrapProgram "$out/bin/img" --prefix PATH : ${lib.makeBinPath [ runc ]}
+    wrapProgram "$out/bin/img" --prefix PATH : ${lib.makeBinPath [runc]}
   '';
 
   # Tests fail as: internal/binutils/install.go:57:15: undefined: Asset
@@ -50,6 +51,6 @@ buildGoModule rec {
     description = "Standalone, daemon-less, unprivileged Dockerfile and OCI compatible container image builder. ";
     license = licenses.mit;
     homepage = "https://github.com/genuinetools/img";
-    maintainers = with maintainers; [ bryanasdev000 ];
+    maintainers = with maintainers; [bryanasdev000];
   };
 }

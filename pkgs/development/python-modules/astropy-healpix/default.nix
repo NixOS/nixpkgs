@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, astropy
-, astropy-extension-helpers
-, setuptools-scm
-, pytestCheckHook
-, pytest-doctestplus
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  astropy,
+  astropy-extension-helpers,
+  setuptools-scm,
+  pytestCheckHook,
+  pytest-doctestplus,
+  hypothesis,
 }:
-
 buildPythonPackage rec {
   pname = "astropy-healpix";
   version = "0.6";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "BSD-licensed HEALPix for Astropy";
     homepage = "https://github.com/astropy/astropy-healpix";
     license = licenses.bsd3;
-    maintainers = [ maintainers.smaret ];
+    maintainers = [maintainers.smaret];
   };
 }

@@ -1,17 +1,17 @@
-{ stdenv
-, fetchPypi
-, buildPythonPackage
-, future
-, packbits
-, pillow
-, pyusb
-, pytest
-, mock
-, click
-, attrs
-, lib
+{
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  future,
+  packbits,
+  pillow,
+  pyusb,
+  pytest,
+  mock,
+  click,
+  attrs,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "brother-ql";
   version = "0.9.4";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "sha256-H1xXoDnwEsnCBDl/RwAB9267dINCHr3phdDLPGFOhmA=";
   };
 
-  propagatedBuildInputs = [ future packbits pillow pyusb click attrs ];
+  propagatedBuildInputs = [future packbits pillow pyusb click attrs];
 
   meta = with lib; {
     description = "Python package for the raster language protocol of the Brother QL series label printers";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pklaus/brother_ql";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ grahamc ];
+    maintainers = with maintainers; [grahamc];
   };
 }

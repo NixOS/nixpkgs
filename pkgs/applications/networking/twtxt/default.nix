@@ -1,5 +1,14 @@
-{ lib, fetchFromGitHub, buildPythonApplication, aiohttp, python-dateutil, humanize, click, pytestCheckHook, tox }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  aiohttp,
+  python-dateutil,
+  humanize,
+  click,
+  pytestCheckHook,
+  tox,
+}:
 buildPythonApplication rec {
   pname = "twtxt";
   version = "1.2.3";
@@ -19,14 +28,14 @@ buildPythonApplication rec {
       --replace 'humanize>=0.5.1,<1' 'humanize'
   '';
 
-  propagatedBuildInputs = [ aiohttp python-dateutil humanize click ];
+  propagatedBuildInputs = [aiohttp python-dateutil humanize click];
 
-  checkInputs = [ pytestCheckHook tox ];
+  checkInputs = [pytestCheckHook tox];
 
   meta = with lib; {
     description = "Decentralised, minimalist microblogging service for hackers";
     homepage = "https://github.com/buckket/twtxt";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
   };
 }

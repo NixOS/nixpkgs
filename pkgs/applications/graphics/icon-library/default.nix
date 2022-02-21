@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook
-, cargo, desktop-file-utils, meson, ninja, pkg-config, python3, rustc
-, dbus, gdk-pixbuf, glib, gtk3, gtksourceview4, libhandy
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustc,
+  dbus,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  gtksourceview4,
+  libhandy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "icon-library";
   version = "0.0.8";
@@ -13,9 +27,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cargo desktop-file-utils meson ninja pkg-config python3 rustc wrapGAppsHook
+    cargo
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    python3
+    rustc
+    wrapGAppsHook
   ];
-  buildInputs = [ dbus gdk-pixbuf glib gtk3 gtksourceview4 libhandy ];
+  buildInputs = [dbus gdk-pixbuf glib gtk3 gtksourceview4 libhandy];
 
   postPatch = ''
     patchShebangs build-aux/meson_post_install.py
@@ -24,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/icon-library";
     description = "Symbolic icons for your apps";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

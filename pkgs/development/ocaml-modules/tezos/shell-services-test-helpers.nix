@@ -1,13 +1,13 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-test-helpers
-, tezos-base
-, tezos-shell-services
-, qcheck-core
-, qcheck-alcotest
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-test-helpers,
+  tezos-base,
+  tezos-shell-services,
+  qcheck-core,
+  qcheck-alcotest,
 }:
-
 buildDunePackage {
   pname = "tezos-shell-services-test-helpers";
   inherit (tezos-stdlib) version useDune2;
@@ -26,7 +26,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: shell_services test helpers";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: shell_services test helpers";
+    };
 }

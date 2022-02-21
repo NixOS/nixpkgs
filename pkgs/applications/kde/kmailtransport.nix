@@ -1,22 +1,43 @@
 {
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  akonadi, akonadi-mime, cyrus_sasl, kcmutils,
-  ki18n, kio, kmime, kwallet, ksmtp, libkgapi,
-  kcalendarcore, kcontacts, qtkeychain, libsecret
+  mkDerivation,
+  lib,
+  kdepimTeam,
+  extra-cmake-modules,
+  kdoctools,
+  akonadi,
+  akonadi-mime,
+  cyrus_sasl,
+  kcmutils,
+  ki18n,
+  kio,
+  kmime,
+  kwallet,
+  ksmtp,
+  libkgapi,
+  kcalendarcore,
+  kcontacts,
+  qtkeychain,
+  libsecret,
 }:
-
 mkDerivation {
   pname = "kmailtransport";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [gpl2 lgpl21 fdl12];
     maintainers = kdepimTeam;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [extra-cmake-modules kdoctools];
   buildInputs = [
-    akonadi kcmutils ki18n kio ksmtp libkgapi kcalendarcore kcontacts
-    qtkeychain libsecret
+    akonadi
+    kcmutils
+    ki18n
+    kio
+    ksmtp
+    libkgapi
+    kcalendarcore
+    kcontacts
+    qtkeychain
+    libsecret
   ];
-  propagatedBuildInputs = [ akonadi-mime cyrus_sasl kmime kwallet ];
-  outputs = [ "out" "dev" ];
+  propagatedBuildInputs = [akonadi-mime cyrus_sasl kmime kwallet];
+  outputs = ["out" "dev"];
 }

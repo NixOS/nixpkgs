@@ -1,9 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "dict2xml";
   version = "1.7.1";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Library to convert a Python dictionary into an XML string";
     homepage = "https://github.com/delfick/python-dict2xml";
     license = licenses.mit;
-    maintainers = with maintainers; [ johnazoidberg ];
+    maintainers = with maintainers; [johnazoidberg];
   };
 }

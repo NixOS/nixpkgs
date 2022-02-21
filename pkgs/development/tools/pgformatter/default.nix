@@ -1,5 +1,10 @@
-{ lib, stdenv, perlPackages, fetchFromGitHub, shortenPerlShebang }:
-
+{
+  lib,
+  stdenv,
+  perlPackages,
+  fetchFromGitHub,
+  shortenPerlShebang,
+}:
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
   version = "5.2";
@@ -11,12 +16,12 @@ perlPackages.buildPerlPackage rec {
     sha256 = "sha256-NNdg3H+tB5ovKWGneOs496c0b2dv/zFYF4CZhuH07Fs=";
   };
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
-  makeMakerFlags = [ "INSTALLDIRS=vendor" ];
+  makeMakerFlags = ["INSTALLDIRS=vendor"];
 
   # Avoid creating perllocal.pod, which contains a timestamp
-  installTargets = [ "pure_install" ];
+  installTargets = ["pure_install"];
 
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
   patchPhase = ''
@@ -38,7 +43,7 @@ perlPackages.buildPerlPackage rec {
     description = "A PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
     homepage = "https://github.com/darold/pgFormatter";
     changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
-    maintainers = [ maintainers.marsam ];
-    license = [ licenses.postgresql licenses.artistic2 ];
+    maintainers = [maintainers.marsam];
+    license = [licenses.postgresql licenses.artistic2];
   };
 }

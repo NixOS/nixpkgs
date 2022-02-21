@@ -1,5 +1,13 @@
-{ lib, python3Packages, fetchFromGitHub, gtk-layer-shell, gtk3, gobject-introspection, wrapGAppsHook, wlr-randr }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  gtk-layer-shell,
+  gtk3,
+  gobject-introspection,
+  wrapGAppsHook,
+  wlr-randr,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "nwg-wrapper";
   version = "0.1.2";
@@ -11,11 +19,11 @@ python3Packages.buildPythonPackage rec {
     sha256 = "114y55mv2rgnp75a3c7rk46v5v84d1zqb6wkha7x16ab6xa9phzl";
   };
 
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [gobject-introspection wrapGAppsHook];
 
-  buildInputs = [ gtk3 gtk-layer-shell ];
+  buildInputs = [gtk3 gtk-layer-shell];
 
-  propagatedBuildInputs = with python3Packages; [ i3ipc pygobject3 ];
+  propagatedBuildInputs = with python3Packages; [i3ipc pygobject3];
 
   # ValueError: Namespace GtkLayerShell not available
   strictDeps = false;
@@ -26,16 +34,16 @@ python3Packages.buildPythonPackage rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      --prefix PATH : "${lib.makeBinPath [ wlr-randr ]}"
+      --prefix PATH : "${lib.makeBinPath [wlr-randr]}"
     )
   '';
 
-  pythonImportsCheck = [ "nwg_wrapper" ];
+  pythonImportsCheck = ["nwg_wrapper"];
 
   meta = with lib; {
     description = "Wrapper to display a script output or a text file content on the desktop in sway or other wlroots-based compositors";
     homepage = "https://github.com/nwg-piotr/nwg-wrapper/";
     license = licenses.mit;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
   };
 }

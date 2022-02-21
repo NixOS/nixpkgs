@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, libXt, libXaw, libXres, utilmacros }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libXt,
+  libXaw,
+  libXres,
+  utilmacros,
+}:
 stdenv.mkDerivation rec {
   pname = "editres";
   version = "1.0.7";
@@ -9,12 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "10mbgijb6ac6wqb2grpy9mrazzw68jxjkxr9cbdf1111pa64yj19";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libXt libXaw libXres utilmacros ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libXt libXaw libXres utilmacros];
 
-  configureFlags = [ "--with-appdefaultdir=$(out)/share/X11/app-defaults/editres" ];
+  configureFlags = ["--with-appdefaultdir=$(out)/share/X11/app-defaults/editres"];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     homepage = "https://cgit.freedesktop.org/xorg/app/editres/";

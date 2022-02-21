@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, python3
-, libgudev
-, libmbim
-, libqrtr-glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  glib,
+  python3,
+  libgudev,
+  libmbim,
+  libqrtr-glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libqmi";
   version = "1.30.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";

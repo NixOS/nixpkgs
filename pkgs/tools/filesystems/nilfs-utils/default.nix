@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libuuid, libselinux
-, e2fsprogs }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libuuid,
+  libselinux,
+  e2fsprogs,
+}:
 stdenv.mkDerivation rec {
   pname = "nilfs-utils";
   version = "2.2.8";
@@ -12,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "094mw7dsyppyiyzfdnf3f5hlkrh4bidk1kvvpn1kcvw5vn2xpfk7";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  buildInputs = [ libuuid libselinux ];
+  buildInputs = [libuuid libselinux];
 
   postPatch = ''
     # Fix up hardcoded paths.
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
   # According to upstream, libmount should be detected automatically but the
   # build system fails to do this. This is likely a bug with their build system
   # hence it is explicitly enabled here.
-  configureFlags = [ "--with-libmount" ];
+  configureFlags = ["--with-libmount"];
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
@@ -43,9 +50,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NILFS utilities";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
-    license =  with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [gpl2 lgpl21];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
   };
 }

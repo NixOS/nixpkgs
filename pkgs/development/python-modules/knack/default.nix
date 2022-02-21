@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, argcomplete
-, colorama
-, jmespath
-, pygments
-, pyyaml
-, six
-, tabulate
-, mock
-, vcrpy
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  argcomplete,
+  colorama,
+  jmespath,
+  pygments,
+  pyyaml,
+  six,
+  tabulate,
+  mock,
+  vcrpy,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "knack";
   version = "0.9.0";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "A Command-Line Interface framework";
     platforms = platforms.all;
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

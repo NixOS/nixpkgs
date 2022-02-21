@@ -1,24 +1,20 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "txredisapi";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ dandellion ];
+    maintainers = [dandellion];
   };
 
   nodes = {
-    machine =
-      { pkgs, ... }:
+    machine = {pkgs, ...}: {
+      services.redis.servers."".enable = true;
 
-      {
-        services.redis.servers."".enable = true;
-
-        environment.systemPackages = with pkgs; [ (python38.withPackages (ps: [ ps.twisted ps.txredisapi ps.mock ]))];
-      };
+      environment.systemPackages = with pkgs; [(python38.withPackages (ps: [ps.twisted ps.txredisapi ps.mock]))];
+    };
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     inherit (nodes.machine.config.services) redis;
-    in ''
+  in ''
     start_all()
     machine.wait_for_unit("redis")
     machine.wait_for_file("${redis.servers."".unixSocket}")

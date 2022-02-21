@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, libtool, pkg-config, perl, ncurses }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libtool,
+  pkg-config,
+  perl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "unibilium-unstable";
 
@@ -12,16 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "1l8p3fpdymba62x1f5d990v72z3m5f5g2yf505g0rlf2ysc5r1di";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ]
+  makeFlags =
+    ["PREFIX=$(out)"]
     ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
-  nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ libtool ncurses ];
+  nativeBuildInputs = [pkg-config perl];
+  buildInputs = [libtool ncurses];
 
   meta = with lib; {
     description = "A very basic terminfo library";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

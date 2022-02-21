@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, topkg, astring }:
-
+{
+  stdenv,
+  lib,
+  fetchzip,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  astring,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocb-stubblr";
   version = "0.1.0";
@@ -10,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "0hpds1lkq4j8wgslv7hnirgfrjmqi36h5rarpw9mwf24gfp5ays2";
   };
 
-  patches = [ ./pkg-config.patch ];
+  patches = [./pkg-config.patch];
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ocaml findlib ocamlbuild topkg];
 
-  propagatedBuildInputs = [ astring ];
+  propagatedBuildInputs = [astring];
 
   inherit (topkg) buildPhase installPhase;
 
@@ -23,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pqwy/ocb-stubblr";
     license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

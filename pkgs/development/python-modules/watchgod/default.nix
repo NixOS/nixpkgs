@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "watchgod";
   version = "0.7";
@@ -15,13 +15,12 @@ buildPythonPackage rec {
   # no tests in release
   doCheck = false;
 
-  pythonImportsCheck = [ "watchgod" ];
+  pythonImportsCheck = ["watchgod"];
 
   meta = with lib; {
     description = "Simple, modern file watching and code reload in python";
     homepage = "https://github.com/samuelcolvin/watchgod";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [globin];
   };
-
 }

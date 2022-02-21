@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, libunwind
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libunwind,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gperftools";
   version = "2.9.1";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   # tcmalloc uses libunwind in a way that works correctly only on non-ARM linux
   buildInputs = lib.optional (stdenv.isLinux && !(stdenv.isAarch64 || stdenv.isAarch32)) libunwind;
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
   # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
   configureFlags = lib.optional (stdenv.isAarch32 || stdenv.isAarch64)
-    "--disable-general-dynamic-tls";
+  "--disable-general-dynamic-tls";
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.am --replace stdc++ c++
   '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
-    "-D_XOPEN_SOURCE";
+  "-D_XOPEN_SOURCE";
 
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools
@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
     platforms = with platforms; linux ++ darwin;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vcunat ];
+    maintainers = with maintainers; [vcunat];
   };
 }

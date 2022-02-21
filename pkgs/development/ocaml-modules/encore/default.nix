@@ -1,6 +1,13 @@
-{ lib, buildDunePackage, fetchurl, ocaml
-, fmt, bigstringaf, angstrom, alcotest }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml,
+  fmt,
+  bigstringaf,
+  angstrom,
+  alcotest,
+}:
 buildDunePackage rec {
   pname = "encore";
   version = "0.8";
@@ -14,14 +21,14 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [ angstrom fmt bigstringaf ];
-  checkInputs = [ alcotest ];
+  propagatedBuildInputs = [angstrom fmt bigstringaf];
+  checkInputs = [alcotest];
   doCheck = true;
 
   meta = {
     homepage = "https://github.com/mirage/encore";
     description = "Library to generate encoder/decoder which ensure isomorphism";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

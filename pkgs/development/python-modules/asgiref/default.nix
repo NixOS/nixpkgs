@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   version = "3.4.1";
   pname = "asgiref";
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     "test_multiprocessing"
   ];
 
-  pythonImportsCheck = [ "asgiref" ];
+  pythonImportsCheck = ["asgiref"];
 
   meta = with lib; {
     description = "Reference ASGI adapters and channel layers";
     homepage = "https://github.com/django/asgiref";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

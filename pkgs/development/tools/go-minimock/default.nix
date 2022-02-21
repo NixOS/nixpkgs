@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "go-minimock";
   version = "3.0.10";
@@ -12,19 +15,21 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   vendorSha256 = "sha256-mIKknTrsJfFBKZrcxhnlDbvQq9q9FCOrk6ueJOoxOzk=";
 
   doCheck = true;
 
-  subPackages = [ "cmd/minimock" "." ];
+  subPackages = ["cmd/minimock" "."];
 
   meta = with lib; {
     homepage = "https://github.com/gojuno/minimock";
     description = "A golang mock generator from interfaces";
     license = licenses.mit;
-    maintainers = with maintainers; [ svrana ];
+    maintainers = with maintainers; [svrana];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "buildcatrust";
   version = "0.1.3";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     "buildcatrust/tests/test_nonhermetic.py"
   ];
 
-  pythonImportsCheck = [ "buildcatrust" "buildcatrust.cli" ];
+  pythonImportsCheck = ["buildcatrust" "buildcatrust.cli"];
 
   meta = with lib; {
     description = "Build SSL/TLS trust stores";
     homepage = "https://github.com/lukegb/buildcatrust";
     license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with maintainers; [lukegb];
   };
 }

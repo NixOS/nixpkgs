@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, vala
-, libxslt
-, pkg-config
-, glib
-, gtk3
-, gnome
-, python3
-, dconf
-, libxml2
-, gettext
-, docbook-xsl-nons
-, wrapGAppsHook
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  vala,
+  libxslt,
+  pkg-config,
+  glib,
+  gtk3,
+  gnome,
+  python3,
+  dconf,
+  libxml2,
+  gettext,
+  docbook-xsl-nons,
+  wrapGAppsHook,
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
   version = "3.38.3";

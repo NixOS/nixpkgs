@@ -1,5 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchurl, Security }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchurl,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "okapi";
   version = "1.2.0";
@@ -12,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoVendorDir = "vendor";
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
 
   postInstall = ''
     cp -r include $out
@@ -26,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/trinsic-id/okapi";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tmarkovski ];
+    maintainers = with maintainers; [tmarkovski];
   };
 }

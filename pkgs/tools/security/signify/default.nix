@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libbsd, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libbsd,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "signify";
   version = "30";
@@ -13,8 +18,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libbsd ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libbsd];
 
   preInstall = ''
     export PREFIX=$out
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.tedunangst.com/flak/post/signify";
     license = licenses.isc;
-    maintainers = [ maintainers.rlupton20 ];
+    maintainers = [maintainers.rlupton20];
     platforms = platforms.linux;
   };
 }

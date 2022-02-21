@@ -2,10 +2,10 @@ let
   nginxRoot = "/run/nginx";
 in
   import ./make-test-python.nix ({...}: {
-    name  = "nghttpx";
+    name = "nghttpx";
     nodes = {
       webserver = {
-        networking.firewall.allowedTCPPorts = [ 80 ];
+        networking.firewall.allowedTCPPorts = [80];
         systemd.services.nginx = {
           preStart = ''
             mkdir -p ${nginxRoot}
@@ -22,11 +22,12 @@ in
       };
 
       proxy = {
-        networking.firewall.allowedTCPPorts = [ 80 ];
+        networking.firewall.allowedTCPPorts = [80];
         services.nghttpx = {
           enable = true;
           frontends = [
-            { server = {
+            {
+              server = {
                 host = "*";
                 port = 80;
               };
@@ -37,11 +38,12 @@ in
             }
           ];
           backends = [
-            { server = {
+            {
+              server = {
                 host = "webserver";
                 port = 80;
               };
-              patterns = [ "/" ];
+              patterns = ["/"];
               params.proto = "http/1.1";
             }
           ];

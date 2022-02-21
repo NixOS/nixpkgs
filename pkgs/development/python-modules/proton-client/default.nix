@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, bcrypt
-, pyopenssl
-, python-gnupg
-, requests
-, openssl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  bcrypt,
+  pyopenssl,
+  python-gnupg,
+  requests,
+  openssl,
 }:
-
 buildPythonPackage rec {
   pname = "proton-client";
   version = "0.7.1";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   # This patch is supposed to indicate where to load OpenSSL library,
   # but it is not working as intended.
@@ -39,12 +39,12 @@ buildPythonPackage rec {
   # Regarding the issue above, I'm disabling tests for now
   doCheck = false;
 
-  pythonImportsCheck = [ "proton" ];
+  pythonImportsCheck = ["proton"];
 
   meta = with lib; {
     description = "Python Proton client module";
     homepage = "https://github.com/ProtonMail/proton-python-client";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
   };
 }

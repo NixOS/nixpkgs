@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchgit }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchgit,
+}:
 buildGoPackage rec {
   pname = "s3gof3r";
   version = "20151109-${lib.strings.substring 0 7 rev}";

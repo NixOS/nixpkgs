@@ -1,18 +1,18 @@
-{ lib
-, python3
-, fetchFromSourcehut
-, desktop-file-utils
-, glib
-, gobject-introspection
-, gtk3
-, libhandy
-, librsvg
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
+{
+  lib,
+  python3,
+  fetchFromSourcehut,
+  desktop-file-utils,
+  glib,
+  gobject-introspection,
+  gtk3,
+  libhandy,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "numberstation";
   version = "1.1.0";
@@ -63,6 +63,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "TOTP Authentication application for mobile";
     homepage = "https://sr.ht/~martijnbraam/numberstation/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda tomfitzhenry ];
+    maintainers = with maintainers; [dotlambda tomfitzhenry];
   };
 }

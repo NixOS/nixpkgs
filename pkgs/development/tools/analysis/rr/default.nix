@@ -1,5 +1,17 @@
-{ lib, gcc9Stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
-
+{
+  lib,
+  gcc9Stdenv,
+  fetchFromGitHub,
+  cmake,
+  libpfm,
+  zlib,
+  pkg-config,
+  python3Packages,
+  which,
+  procps,
+  gdb,
+  capnproto,
+}:
 gcc9Stdenv.mkDerivation rec {
   version = "5.5.0";
   pname = "rr";
@@ -21,11 +33,17 @@ gcc9Stdenv.mkDerivation rec {
   # see https://github.com/mozilla/rr/issues/2269
   preConfigure = ''substituteInPlace CMakeLists.txt --replace "std=c++11" "std=c++14"'';
 
-  nativeBuildInputs = [ cmake pkg-config which ];
+  nativeBuildInputs = [cmake pkg-config which];
   buildInputs = [
-    libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
+    libpfm
+    zlib
+    python3Packages.python
+    python3Packages.pexpect
+    procps
+    gdb
+    capnproto
   ];
-  propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
+  propagatedBuildInputs = [gdb]; # needs GDB to replay programs at runtime
   cmakeFlags = [
     "-DCMAKE_C_FLAGS_RELEASE:STRING="
     "-DCMAKE_CXX_FLAGS_RELEASE:STRING="
@@ -35,7 +53,7 @@ gcc9Stdenv.mkDerivation rec {
   # we turn on additional warnings due to hardening
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = ["fortify"];
 
   # FIXME
   #doCheck = true;
@@ -52,8 +70,8 @@ gcc9Stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = with lib.licenses; [ mit bsd2 ];
-    maintainers = with lib.maintainers; [ pierron thoughtpolice ];
+    license = with lib.licenses; [mit bsd2];
+    maintainers = with lib.maintainers; [pierron thoughtpolice];
     platforms = lib.platforms.x86;
   };
 }

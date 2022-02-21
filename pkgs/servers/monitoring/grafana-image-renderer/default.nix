@@ -1,7 +1,15 @@
-{ lib, mkYarnPackage, fetchFromGitHub, nodejs, runtimeShell
-, nodePackages, python3, vips, glib, pkg-config
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  nodejs,
+  runtimeShell,
+  nodePackages,
+  python3,
+  vips,
+  glib,
+  pkg-config,
 }:
-
 # Notes for the upgrade:
 # * Download the tarball of the new version to use.
 # * Remove the `resolutions`-section from upstream `package.json`
@@ -9,7 +17,6 @@
 # * Regenerate `yarn.lock` and `yarn2nix --no-patch`.
 # * Replace new `package.json`, `yarn.nix`, `yarn.lock` here.
 # * Update `version`+`hash` and rebuild.
-
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
   version = "3.4.0";
@@ -38,8 +45,8 @@ mkYarnPackage rec {
   yarnLock = ./yarn.lock;
 
   pkgConfig.sharp = {
-    nativeBuildInputs = [ nodePackages.node-gyp python3 pkg-config ];
-    buildInputs = [ glib vips ];
+    nativeBuildInputs = [nodePackages.node-gyp python3 pkg-config];
+    buildInputs = [glib vips];
     postInstall = ''
       node-gyp rebuild
     '';
@@ -71,7 +78,7 @@ mkYarnPackage rec {
     homepage = "https://github.com/grafana/grafana-image-renderer";
     description = "A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
     platforms = platforms.linux;
   };
 }

@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
   version = "0.44.0";
@@ -17,7 +17,7 @@ buildGoModule rec {
   proxyVendor = true;
   vendorSha256 = "sha256-4MnUDakBfo3nhSqMjDYiqx6FNZvAB/9DE1yxOvmQAAk=";
 
-  subPackages = [ "cmd/otelcontribcol" ];
+  subPackages = ["cmd/otelcontribcol"];
 
   ldflags = [
     "-s"
@@ -40,6 +40,6 @@ buildGoModule rec {
       is multiple times larger as a result.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ uri-canva jk ];
+    maintainers = with maintainers; [uri-canva jk];
   };
 }

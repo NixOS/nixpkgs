@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, gettext, libgpg-error, libgcrypt, libksba, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  libgpg-error,
+  libgcrypt,
+  libksba,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "ntbtls";
   version = "0.2.0";
@@ -9,9 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZJ/nSjEdE+Q7FrJuuqkWZd22MpJbc5AlkurD7TBRnhc=";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = ["dev" "out"];
 
-  buildInputs = [ libgcrypt libgpg-error libksba zlib ]
+  buildInputs =
+    [libgcrypt libgpg-error libksba zlib]
     ++ lib.optional stdenv.isDarwin gettext;
 
   postInstall = ''
@@ -23,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnupg.org/software/ntbtls/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [joachifm];
   };
 }

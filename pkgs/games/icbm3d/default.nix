@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, libX11}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "icbm3d";
   version = "0.4";
@@ -8,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z9q01mj0v9qbwby5cajjc9wpvdw2ma5v1r639vraxpl9qairm4s";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [libX11];
 
   installPhase = ''
     mkdir -p $out/bin

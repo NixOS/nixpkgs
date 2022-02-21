@@ -1,12 +1,12 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, expiringdict
-, google-auth-httplib2
-, google-auth-oauthlib
-, google-api-python-client
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  expiringdict,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  google-api-python-client,
 }:
-
 buildPythonApplication rec {
   pname = "drivelib";
   version = "0.3.0";
@@ -26,12 +26,12 @@ buildPythonApplication rec {
   # tests depend on a google auth token
   doCheck = false;
 
-  pythonImportsCheck = [ "drivelib" ];
+  pythonImportsCheck = ["drivelib"];
 
   meta = with lib; {
     description = "Easy access to the most common Google Drive API calls";
     homepage = "https://pypi.org/project/drivelib/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ gravndal ];
+    maintainers = with maintainers; [gravndal];
   };
 }

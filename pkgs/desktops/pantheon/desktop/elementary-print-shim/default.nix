@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gtk3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-print-shim";
   version = "0.1.3";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [gtk3];
 
   passthru = {
     updateScript = nix-update-script {

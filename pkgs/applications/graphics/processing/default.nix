@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
+  xmlstarlet,
+  makeWrapper,
+  ant,
+  jdk,
+  rsync,
+  javaPackages,
+  libXxf86vm,
+  gsettings-desktop-schemas,
+}:
 stdenv.mkDerivation rec {
   pname = "processing";
   version = "3.5.4";
@@ -19,8 +32,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ ant rsync makeWrapper ];
-  buildInputs = [ jdk ];
+  nativeBuildInputs = [ant rsync makeWrapper];
+  buildInputs = [jdk];
 
   buildPhase = ''
     # use compiled jogl to avoid patchelf'ing .so files inside jars
@@ -29,13 +42,14 @@ stdenv.mkDerivation rec {
 
     # do not download a file during build
     ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
-    install -D -m0444 ${fetchurl {
-                          # Use archive.org link for reproducibility until the following issue is fixed:
-                          # https://github.com/processing/processing/issues/5711
-                          url = "https://web.archive.org/web/20200406132357/https://download.processing.org/reference.zip";
-                          sha256 = "093hc7kc9wfxqgf5dzfmfp68pbsy8x647cj0a25vgjm1swi61zbi";
-                        }
-                       } ./java/reference.zip
+    install -D -m0444 ${
+      fetchurl {
+        # Use archive.org link for reproducibility until the following issue is fixed:
+        # https://github.com/processing/processing/issues/5711
+        url = "https://web.archive.org/web/20200406132357/https://download.processing.org/reference.zip";
+        sha256 = "093hc7kc9wfxqgf5dzfmfp68pbsy8x647cj0a25vgjm1swi61zbi";
+      }
+    } ./java/reference.zip
 
     # suppress "Not fond of this Java VM" message box
     substituteInPlace app/src/processing/app/platform/LinuxPlatform.java \

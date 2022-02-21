@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  curl,
+  leatherman,
+}:
 stdenv.mkDerivation rec {
   pname = "cpp-hocon";
   version = "0.3.0";
@@ -13,16 +20,15 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ boost curl leatherman ];
+  buildInputs = [boost curl leatherman];
 
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "A C++ port of the Typesafe Config library";
     license = licenses.asl20;
-    maintainers = [ maintainers.womfoo ];
+    maintainers = [maintainers.womfoo];
     platforms = platforms.unix;
   };
-
 }

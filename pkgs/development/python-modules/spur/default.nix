@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paramiko
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paramiko,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "spur";
   version = "0.3.22";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to run commands and manipulate files locally or over SSH";
     homepage = "https://github.com/mwilliamson/spur.py";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd2];
+    maintainers = with maintainers; [fab];
   };
 }

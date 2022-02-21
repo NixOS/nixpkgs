@@ -1,10 +1,20 @@
 import ../make-test-python.nix ({pkgs, ...}: {
   name = "kerberos_server-mit";
-  machine = { config, libs, pkgs, ...}:
-  { services.kerberos_server =
-    { enable = true;
+  machine = {
+    config,
+    libs,
+    pkgs,
+    ...
+  }: {
+    services.kerberos_server = {
+      enable = true;
       realms = {
-        "FOO.BAR".acl = [{principal = "admin"; access = ["add" "cpw"];}];
+        "FOO.BAR".acl = [
+          {
+            principal = "admin";
+            access = ["add" "cpw"];
+          }
+        ];
       };
     };
     krb5 = {
@@ -20,7 +30,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
         };
       };
     };
-    users.extraUsers.alice = { isNormalUser = true; };
+    users.extraUsers.alice = {isNormalUser = true;};
   };
 
   testScript = ''

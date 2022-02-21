@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre_headless,
+  gawk,
+}:
 stdenv.mkDerivation rec {
   pname = "nexus";
   version = "3.37.3-02";
@@ -13,9 +19,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}-${version}";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  patches = [ ./nexus-bin.patch ./nexus-vm-opts.patch ];
+  patches = [./nexus-bin.patch ./nexus-vm-opts.patch];
 
   postPatch = ''
     substituteInPlace bin/nexus.vmoptions \
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/nexus \
       --set JAVA_HOME ${jre_headless} \
       --set ALTERNATIVE_NAME "nexus" \
-      --prefix PATH "${lib.makeBinPath [ gawk ]}"
+      --prefix PATH "${lib.makeBinPath [gawk]}"
 
     runHook postInstall
   '';
@@ -43,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.sonatype.org/nexus";
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = with maintainers; [ aespinosa ironpinguin zaninime ];
+    maintainers = with maintainers; [aespinosa ironpinguin zaninime];
   };
 }

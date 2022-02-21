@@ -1,12 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libsodium
-, libseccomp
-, sqlite
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libsodium,
+  libseccomp,
+  sqlite,
+  pkg-config,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "sn0int";
   version = "0.24.1";
@@ -37,8 +37,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Semi-automatic OSINT framework and package manager";
     homepage = "https://github.com/kpcyrd/sn0int";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ xrelkd ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [xrelkd];
     platforms = platforms.linux;
   };
 }

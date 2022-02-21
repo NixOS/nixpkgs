@@ -1,5 +1,9 @@
-{ lib, fetchurl, tcl, tk }:
-
+{
+  lib,
+  fetchurl,
+  tcl,
+  tk,
+}:
 tcl.mkTclDerivation rec {
   pname = "bwidget";
   version = "1.9.14";
@@ -10,7 +14,7 @@ tcl.mkTclDerivation rec {
   };
 
   dontBuild = true;
-  propagatedBuildInputs = [ tk ];
+  propagatedBuildInputs = [tk];
 
   installPhase = ''
     mkdir -p "$out/lib/bwidget${version}"
@@ -20,7 +24,7 @@ tcl.mkTclDerivation rec {
   meta = {
     homepage = "https://sourceforge.net/projects/tcllib";
     description = "High-level widget set for Tcl/Tk";
-    maintainers = with lib.maintainers; [ agbrooks ];
+    maintainers = with lib.maintainers; [agbrooks];
     license = lib.licenses.tcltk;
     platforms = lib.platforms.linux;
   };

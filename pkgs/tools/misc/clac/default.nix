@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "clac";
   version = "0.3.3";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "rsag8MWl/udwXC0Gj864fAuQ6ts1gzrN2N/zelazqjE=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
     mkdir -p "$out/share/doc/${pname}"
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Interactive stack-based calculator";
     homepage = "https://github.com/soveran/clac";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

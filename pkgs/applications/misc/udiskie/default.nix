@@ -1,22 +1,22 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, asciidoc-full
-, docopt
-, gettext
-, gobject-introspection
-, gtk3
-, keyutils
-, libappindicator-gtk3
-, libnotify
-, librsvg
-, nose
-, pygobject3
-, pyyaml
-, udisks2
-, wrapGAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  asciidoc-full,
+  docopt,
+  gettext,
+  gobject-introspection,
+  gtk3,
+  keyutils,
+  libappindicator-gtk3,
+  libnotify,
+  librsvg,
+  nose,
+  pygobject3,
+  pyyaml,
+  udisks2,
+  wrapGAppsHook,
 }:
-
 buildPythonApplication rec {
   pname = "udiskie";
   version = "2.4.0";
@@ -28,7 +28,7 @@ buildPythonApplication rec {
     hash = "sha256-T4kMPMXfehZT7P+TOd1llR2TbHPA/quNL545xxlmJfE=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   nativeBuildInputs = [
     asciidoc-full # Man page
@@ -88,6 +88,6 @@ buildPythonApplication rec {
       - password caching (requires python keyutils 0.3)
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

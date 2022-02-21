@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "refined";
   version = "2017-12-28";
 
@@ -19,6 +20,6 @@ build-idris-package  {
     description = "Port of Scala/Haskell Refined library to Idris";
     homepage = "https://github.com/janschultecom/idris-refined";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

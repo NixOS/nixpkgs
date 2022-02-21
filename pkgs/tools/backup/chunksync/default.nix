@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, openssl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   version = "0.4";
   pname = "chunksync";

@@ -1,5 +1,8 @@
-{ lib, buildOcaml, fetchFromGitHub }:
-
+{
+  lib,
+  buildOcaml,
+  fetchFromGitHub,
+}:
 buildOcaml rec {
   pname = "pipebang";
   version = "113.00.00";
@@ -17,6 +20,6 @@ buildOcaml rec {
     homepage = "https://github.com/janestreet/pipebang";
     description = "Syntax extension to transform x |! f into f x";
     license = licenses.asl20;
-    maintainers = [ maintainers.ericbmerritt ];
+    maintainers = [maintainers.ericbmerritt];
   };
 }

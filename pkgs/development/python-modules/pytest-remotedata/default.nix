@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-remotedata";
   version = "0.3.3";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Pytest plugin for controlling remote data access";
     homepage = "https://github.com/astropy/pytest-remotedata";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

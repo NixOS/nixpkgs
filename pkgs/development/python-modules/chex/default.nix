@@ -1,15 +1,15 @@
-{ absl-py
-, buildPythonPackage
-, dm-tree
-, fetchFromGitHub
-, jax
-, jaxlib
-, lib
-, numpy
-, pytestCheckHook
-, toolz
+{
+  absl-py,
+  buildPythonPackage,
+  dm-tree,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  lib,
+  numpy,
+  pytestCheckHook,
+  toolz,
 }:
-
 buildPythonPackage rec {
   pname = "chex";
   # As of 2021-12-29, the latest official version has broken tests with jax 0.2.26:
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Chex is a library of utilities for helping to write reliable JAX code.";
     homepage = "https://github.com/deepmind/chex";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "gosec";
   version = "2.9.6";
@@ -34,7 +34,7 @@ buildGoModule rec {
     homepage = "https://github.com/securego/gosec";
     description = "Golang security checker";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit nilp0inter ];
+    maintainers = with maintainers; [kalbasit nilp0inter];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

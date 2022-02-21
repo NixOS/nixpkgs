@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoPatchelfHook
-, wrapGAppsHook
-, hicolor-icon-theme
-, gtk3
-, gobject-introspection
-, libxml2
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  wrapGAppsHook,
+  hicolor-icon-theme,
+  gtk3,
+  gobject-introspection,
+  libxml2,
+  fetchpatch,
 }:
 stdenv.mkDerivation rec {
   pname = "deadd-notification-center";
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "A haskell-written notification center for users that like a desktop with style";
     homepage = "https://github.com/phuhl/linux_notification_center";
     license = licenses.bsd3;
-    maintainers = [ maintainers.pacman99 ];
+    maintainers = [maintainers.pacman99];
     platforms = platforms.linux;
   };
 }

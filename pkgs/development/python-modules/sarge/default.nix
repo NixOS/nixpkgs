@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "sarge";
   version = "0.1.7.post1";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python wrapper for subprocess which provides command pipeline functionality";
     homepage = "https://sarge.readthedocs.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

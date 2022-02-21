@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, click
-, click-completion
-, factory_boy
-, faker
-, fetchPypi
-, inquirer
-, notify-py
-, pbr
-, pendulum
-, ptable
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, twine
-, validate-email
+{
+  lib,
+  buildPythonPackage,
+  click,
+  click-completion,
+  factory_boy,
+  faker,
+  fetchPypi,
+  inquirer,
+  notify-py,
+  pbr,
+  pendulum,
+  ptable,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  twine,
+  validate-email,
 }:
-
 buildPythonPackage rec {
   pname = "toggl-cli";
   version = "2.4.3";
@@ -86,6 +86,6 @@ buildPythonPackage rec {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     homepage = "https://toggl.uhlir.dev/";
     license = licenses.mit;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [mmahut];
   };
 }

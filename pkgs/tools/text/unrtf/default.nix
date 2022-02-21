@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "unrtf";
   version = "0.21.10";
@@ -9,13 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "1bil6z4niydz9gqm2j861dkxmqnpc8m7hvidsjbzz7x63whj17xl";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [autoconf automake];
 
-  buildInputs = [ libiconv ];
+  buildInputs = [libiconv];
 
   preConfigure = "./bootstrap";
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   meta = with lib; {
     description = "A converter from Rich Text Format to other formats";
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/unrtf/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [joachifm];
     platforms = platforms.unix;
   };
 }

@@ -1,12 +1,14 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "systemd-journal";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lewo ];
+    maintainers = [lewo];
   };
 
-  machine = { pkgs, lib, ... }: {
+  machine = {
+    pkgs,
+    lib,
+    ...
+  }: {
     services.journald.enableHttpGateway = true;
   };
 

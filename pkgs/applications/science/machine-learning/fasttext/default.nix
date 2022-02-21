@@ -1,5 +1,9 @@
-{lib, stdenv, fetchFromGitHub, cmake}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "fasttext";
   version = "0.9.2";
@@ -11,13 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "07cz2ghfq6amcljaxpdr5chbd64ph513y8zqmibfx2xwfp74xkhn";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "Library for text classification and representation learning";
     homepage = "https://fasttext.cc/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

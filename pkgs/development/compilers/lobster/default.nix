@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, cmake
-, callPackage
-
-# Linux deps
-, libGL
-, xorg
-
-# Darwin deps
-, cf-private
-, Cocoa
-, AudioToolbox
-, OpenGL
-, Foundation
-, ForceFeedback
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  cmake,
+  callPackage
+  # Linux deps
+  ,
+  libGL,
+  xorg
+  # Darwin deps
+  ,
+  cf-private,
+  Cocoa,
+  AudioToolbox,
+  OpenGL,
+  Foundation,
+  ForceFeedback,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lobster";
   version = "2021.3";
@@ -28,21 +29,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ENs2Jy2l6fogZdCSaIyfV9wQm57qaZfx5HVHOnQBrRk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = if stdenv.isDarwin
-    then [
-      cf-private
-      Cocoa
-      AudioToolbox
-      OpenGL
-      Foundation
-      ForceFeedback
-    ]
-    else [
-      libGL
-      xorg.libX11
-      xorg.libXext
-    ];
+  nativeBuildInputs = [cmake];
+  buildInputs =
+    if stdenv.isDarwin
+    then
+      [
+        cf-private
+        Cocoa
+        AudioToolbox
+        OpenGL
+        Foundation
+        ForceFeedback
+      ]
+    else
+      [
+        libGL
+        xorg.libX11
+        xorg.libXext
+      ];
 
   preConfigure = ''
     cd dev
@@ -59,7 +63,7 @@ stdenv.mkDerivation rec {
       friendly and terse syntax, by doing most of the heavy lifting for you.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }

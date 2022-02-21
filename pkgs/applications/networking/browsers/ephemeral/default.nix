@@ -1,23 +1,24 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, desktop-file-utils
-, vala
-, gettext
-, glib
-, gtk3
-, libgee
-, libdazzle
-, meson
-, ninja
-, pantheon
-, pkg-config
-, python3
-, webkitgtk
-, wrapGAppsHook
-, glib-networking
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  desktop-file-utils,
+  vala,
+  gettext,
+  glib,
+  gtk3,
+  libgee,
+  libdazzle,
+  meson,
+  ninja,
+  pantheon,
+  pkg-config,
+  python3,
+  webkitgtk,
+  wrapGAppsHook,
+  glib-networking,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ephemeral";
   version = "7.1.0";
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The always-incognito web browser";
     homepage = "https://github.com/cassidyjames/ephemeral";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [xiorcale] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3;
     mainProgram = "com.github.cassidyjames.ephemeral";

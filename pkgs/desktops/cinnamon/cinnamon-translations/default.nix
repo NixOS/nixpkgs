@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cinnamon-translations";
   version = "5.2.0";

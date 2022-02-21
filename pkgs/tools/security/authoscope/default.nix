@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, libcap
-, openssl
-, pkg-config
-, rustPlatform
-, Security
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  libcap,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  Security,
+  zlib,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "authoscope";
   version = "0.8.0";
@@ -28,11 +28,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libcap
-    zlib
-    openssl
-  ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs =
+    [
+      libcap
+      zlib
+      openssl
+    ]
+    ++ lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     installManPage docs/${pname}.1
@@ -44,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Scriptable network authentication cracker";
     homepage = "https://github.com/kpcyrd/authoscope";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

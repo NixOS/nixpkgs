@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "flake8-blind-except";
   version = "0.2.0";
@@ -10,7 +13,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/elijahandrews/flake8-blind-except";
     description = "A flake8 extension that checks for blind except: statements";
-    maintainers = with lib.maintainers; [ johbo ];
+    maintainers = with lib.maintainers; [johbo];
     license = lib.licenses.mit;
   };
 }

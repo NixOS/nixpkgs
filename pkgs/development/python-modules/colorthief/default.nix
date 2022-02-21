@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
 }:
-
 buildPythonPackage rec {
   pname = "colorthief";
   version = "0.2.1";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "colorthief" ];
+  pythonImportsCheck = ["colorthief"];
 
   meta = with lib; {
     description = "Python module for grabbing the color palette from an image";
     homepage = "https://github.com/fengsp/color-thief-py";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

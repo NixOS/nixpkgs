@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask-restful
-, hiro
-, limits
-, mock
-, ordereddict
-, pymemcache
-, pytestCheckHook
-, redis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  flask-restful,
+  hiro,
+  limits,
+  mock,
+  ordereddict,
+  pymemcache,
+  pytestCheckHook,
+  redis,
 }:
-
 buildPythonPackage rec {
   pname = "Flask-Limiter";
   version = "1.4";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "1k1b4b3s1acphqnar0y5g747bh1y7w35gcl5g819idq2a5vqnass";
   };
 
-  propagatedBuildInputs = [ flask limits ];
+  propagatedBuildInputs = [flask limits];
 
   checkInputs = [
     pytestCheckHook
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     "test_custom_key_prefix_with_headers"
   ];
 
-  pythonImportsCheck = [ "flask_limiter" ];
+  pythonImportsCheck = ["flask_limiter"];
 
   meta = with lib; {
     description = "Rate limiting for flask applications";

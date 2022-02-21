@@ -1,12 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, git
-, pandoc
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  git,
+  pandoc,
 }:
-
 buildGoModule rec {
   pname = "gg-scm";
   version = "1.1.0";
@@ -17,18 +17,21 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-kLmu4h/EBbSFHrffvusKq38X3/ID9bOlLMvEUtnFGhk=";
   };
-  patches = [ ./skip-broken-revert-tests.patch ];
-  subPackages = [ "cmd/gg" ];
+  patches = [./skip-broken-revert-tests.patch];
+  subPackages = ["cmd/gg"];
   ldflags = [
-    "-s" "-w"
-    "-X" "main.versionInfo=${version}"
-    "-X" "main.buildCommit=a0b348c9cef33fa46899f5e55e3316f382a09f6a+"
+    "-s"
+    "-w"
+    "-X"
+    "main.versionInfo=${version}"
+    "-X"
+    "main.buildCommit=a0b348c9cef33fa46899f5e55e3316f382a09f6a+"
   ];
 
   vendorSha256 = "sha256-+ZmNXB+I6vPRbACwEkfl/vVmqoZy67Zn9SBrham5zRk=";
 
-  nativeBuildInputs = [ git pandoc installShellFiles makeWrapper ];
-  buildInputs = [ git ];
+  nativeBuildInputs = [git pandoc installShellFiles makeWrapper];
+  buildInputs = [git];
 
   postInstall = ''
     wrapProgram $out/bin/gg --suffix PATH : ${git}/bin
@@ -50,6 +53,6 @@ buildGoModule rec {
     homepage = "https://gg-scm.io/";
     changelog = "https://github.com/gg-scm/gg/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zombiezen ];
+    maintainers = with maintainers; [zombiezen];
   };
 }

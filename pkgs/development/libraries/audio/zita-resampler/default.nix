@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "zita-resampler";
   version = "1.8.0";
@@ -14,14 +17,16 @@ stdenv.mkDerivation rec {
     "SUFFIX="
   ];
 
-  postPatch = ''
-    cd source
-    substituteInPlace Makefile \
-      --replace 'ldconfig' ""
-  '' + lib.optionalString (!stdenv.targetPlatform.isx86_64) ''
-    substituteInPlace Makefile \
-      --replace '-DENABLE_SSE2' ""
-  '';
+  postPatch =
+    ''
+      cd source
+      substituteInPlace Makefile \
+        --replace 'ldconfig' ""
+    ''
+    + lib.optionalString (!stdenv.targetPlatform.isx86_64) ''
+      substituteInPlace Makefile \
+        --replace '-DENABLE_SSE2' ""
+    '';
 
   fixupPhase = ''
     ln -s $out/lib/libzita-resampler.so.$version $out/lib/libzita-resampler.so.1
@@ -32,7 +37,7 @@ stdenv.mkDerivation rec {
     version = version;
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
     platforms = lib.platforms.linux;
   };
 }

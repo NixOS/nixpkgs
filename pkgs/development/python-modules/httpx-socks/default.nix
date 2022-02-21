@@ -1,23 +1,23 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, curio
-, fetchFromGitHub
-, flask
-, httpcore
-, httpx
-, hypercorn
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, python-socks
-, pythonOlder
-, sniffio
-, starlette
-, trio
-, yarl
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  flask,
+  httpcore,
+  httpx,
+  hypercorn,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  python-socks,
+  pythonOlder,
+  sniffio,
+  starlette,
+  trio,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "httpx-socks";
   version = "0.7.3";
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

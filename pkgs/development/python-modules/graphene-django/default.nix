@@ -1,22 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-
-, graphene
-, graphql-core
-, django
-, djangorestframework
-, promise
-, text-unidecode
-
-, django-filter
-, mock
-, pytest-django
-, pytest-random-order
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  graphene,
+  graphql-core,
+  django,
+  djangorestframework,
+  promise,
+  text-unidecode,
+  django-filter,
+  mock,
+  pytest-django,
+  pytest-random-order,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "graphene-django";
   version = "unstable-2021-06-11";
@@ -60,6 +58,6 @@ buildPythonPackage rec {
     description = "Integrate GraphQL into your Django project";
     homepage = "https://github.com/graphql-python/graphene-django";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

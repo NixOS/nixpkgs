@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "reredirect";
   version = "0.2";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0aqzs940kwvw80lhkszx8spcdh9ilsx5ncl9vnp611hwlryfw7kk";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   postFixup = ''
     substituteInPlace ${placeholder "out"}/bin/relink \
@@ -22,8 +25,7 @@ stdenv.mkDerivation rec {
     description = "Tool to dynamicly redirect outputs of a running process";
     homepage = "https://github.com/jerome-pouiller/reredirect";
     license = licenses.mit;
-    maintainers = [ maintainers.tobim ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [maintainers.tobim];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }
-

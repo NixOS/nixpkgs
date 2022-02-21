@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, python2Packages, openssh, rsync }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python2Packages,
+  openssh,
+  rsync,
+}:
 python2Packages.buildPythonApplication rec {
   pname = "pssh";
   version = "2.3.1";
@@ -29,6 +34,6 @@ python2Packages.buildPythonApplication rec {
     inherit (src.meta) homepage;
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [chris-martin];
   };
 }

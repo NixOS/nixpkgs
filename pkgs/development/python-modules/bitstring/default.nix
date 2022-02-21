@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "bitstring";
   version = "3.1.9";
@@ -20,13 +20,13 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover
   '';
 
-  pythonImportsCheck = [ "bitstring" ];
+  pythonImportsCheck = ["bitstring"];
 
   meta = with lib; {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
   };
 }

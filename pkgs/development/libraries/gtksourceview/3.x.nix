@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, atk, cairo, glib, gtk3, pango, vala
-, libxml2, perl, intltool, gettext, gobject-introspection, dbus, xvfb-run, shared-mime-info }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  atk,
+  cairo,
+  glib,
+  gtk3,
+  pango,
+  vala,
+  libxml2,
+  perl,
+  intltool,
+  gettext,
+  gobject-introspection,
+  dbus,
+  xvfb-run,
+  shared-mime-info,
+}:
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
   version = "3.24.11";
@@ -17,19 +34,19 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ pkg-config intltool perl gobject-introspection vala ];
+  nativeBuildInputs = [pkg-config intltool perl gobject-introspection vala];
 
-  checkInputs = [ xvfb-run dbus ];
+  checkInputs = [xvfb-run dbus];
 
-  buildInputs = [ atk cairo glib pango libxml2 gettext ];
+  buildInputs = [atk cairo glib pango libxml2 gettext];
 
   preBuild = ''
     substituteInPlace gtksourceview/gtksourceview-utils.c --replace "@NIX_SHARE_PATH@" "$out/share"
   '';
 
-  patches = [ ./3.x-nix_share_path.patch ];
+  patches = [./3.x-nix_share_path.patch];
 
   enableParallelBuilding = true;
 

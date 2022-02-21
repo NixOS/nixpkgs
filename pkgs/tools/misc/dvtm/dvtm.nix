@@ -1,6 +1,14 @@
-{ lib, stdenv, ncurses, customConfig ? null, pname, version, src, patches ? [] }:
+{
+  lib,
+  stdenv,
+  ncurses,
+  customConfig ? null,
+  pname,
+  version,
+  src,
+  patches ? [],
+}:
 stdenv.mkDerivation {
-
   inherit pname version src patches;
 
   CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
@@ -9,21 +17,21 @@ stdenv.mkDerivation {
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 
-  nativeBuildInputs = [ ncurses ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [ncurses];
+  buildInputs = [ncurses];
 
   prePatch = ''
     substituteInPlace Makefile \
       --replace /usr/share/terminfo $out/share/terminfo
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Dynamic virtual terminal manager";
     homepage = "http://www.brain-dump.org/projects/dvtm";
     license = licenses.mit;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [maintainers.vrthra];
     platforms = platforms.unix;
   };
 }

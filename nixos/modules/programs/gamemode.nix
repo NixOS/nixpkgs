@@ -1,20 +1,23 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.programs.gamemode;
-  settingsFormat = pkgs.formats.ini { };
-  configFile = settingsFormat.generate "gamemode.ini" cfg.settings;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.programs.gamemode;
+  settingsFormat = pkgs.formats.ini {};
+  configFile = settingsFormat.generate "gamemode.ini" cfg.settings;
+in {
   options = {
     programs.gamemode = {
       enable = mkEnableOption "GameMode to optimise system performance on demand";
 
-      enableRenice = mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness" // {
-        default = true;
-      };
+      enableRenice =
+        mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness"
+        // {
+          default = true;
+        };
 
       settings = mkOption {
         type = settingsFormat.type;
@@ -48,7 +51,7 @@ in
 
   config = mkIf cfg.enable {
     environment = {
-      systemPackages = [ pkgs.gamemode ];
+      systemPackages = [pkgs.gamemode];
       etc."gamemode.ini".source = configFile;
     };
 
@@ -65,11 +68,11 @@ in
     };
 
     systemd = {
-      packages = [ pkgs.gamemode ];
+      packages = [pkgs.gamemode];
       user.services.gamemoded = {
         # The upstream service already defines this, but doesn't get applied.
         # See https://github.com/NixOS/nixpkgs/issues/81138
-        wantedBy = [ "default.target" ];
+        wantedBy = ["default.target"];
 
         # Use pkexec from the security wrappers to allow users to
         # run libexec/cpugovctl & libexec/gpuclockctl as root with
@@ -93,6 +96,6 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [kira-bruneau];
   };
 }

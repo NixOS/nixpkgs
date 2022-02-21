@@ -1,9 +1,10 @@
-{ stdenv, lib
-, fetchFromGitHub
-, python3
-, installShellFiles
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "btrfs-heatmap";
   version = "9";
@@ -15,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yCkuZqWwxrs2eS7EXY6pAOVVVSq7dAMxJtf581gX8vg=";
   };
 
-  buildInputs = [ python3 ];
-  nativeBuildInputs = [ python3.pkgs.wrapPython installShellFiles ];
+  buildInputs = [python3];
+  nativeBuildInputs = [python3.pkgs.wrapPython installShellFiles];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   installPhase = ''
     runHook preInstall
@@ -37,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/knorrie/btrfs-heatmap";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.evils ];
+    maintainers = [maintainers.evils];
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "fabric-installer";
   version = "0.10.2";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [jre makeWrapper];
 
   installPhase = ''
     mkdir -p $out/{bin,lib/fabric}
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fabricmc.net/";
     description = "A lightweight, experimental modding toolchain for Minecraft";
     license = licenses.asl20;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
     platforms = platforms.unix;
   };
 }

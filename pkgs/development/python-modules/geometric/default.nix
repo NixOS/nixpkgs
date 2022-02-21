@@ -1,8 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitHub
-, networkx, numpy, scipy, six
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  networkx,
+  numpy,
+  scipy,
+  six,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "geometric";
   version = "0.9.7.2";
@@ -21,13 +26,12 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     description = "Geometry optimization code for molecular structures";
     homepage = "https://github.com/leeping/geomeTRIC";
-    license = [ licenses.bsd3 ];
-    maintainers = [ maintainers.markuskowa ];
+    license = [licenses.bsd3];
+    maintainers = [maintainers.markuskowa];
   };
 }
-

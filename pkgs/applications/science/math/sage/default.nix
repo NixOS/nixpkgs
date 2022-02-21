@@ -1,11 +1,10 @@
-{ pkgs
-, withDoc ? false
+{
+  pkgs,
+  withDoc ? false,
 }:
-
 # Here sage and its dependencies are put together. Some dependencies may be pinned
 # as a last resort. Patching sage for compatibility with newer dependency versions
 # is always preferred, see `sage-src.nix` for that.
-
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
@@ -16,7 +15,7 @@ let
         inherit flint arb;
         inherit sage-src env-locations singular;
         inherit (maxima) lisp-compiler;
-        linbox = pkgs.linbox.override { withSage = true; };
+        linbox = pkgs.linbox.override {withSage = true;};
         pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
       };
 
@@ -46,7 +45,7 @@ let
     logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
   };
 
-  three = callPackage ./threejs-sage.nix { };
+  three = callPackage ./threejs-sage.nix {};
 
   # A bash script setting various environment variables to tell sage where
   # the files its looking fore are located. Also see `sage-env`.
@@ -111,14 +110,16 @@ let
     pillow
   ];
 
-  pythonEnv = python3.buildEnv.override {
-    extraLibs = pythonRuntimeDeps;
-    ignoreCollisions = true;
-  } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
+  pythonEnv =
+    python3.buildEnv.override {
+      extraLibs = pythonRuntimeDeps;
+      ignoreCollisions = true;
+    }
+    // {extraLibs = pythonRuntimeDeps;}; # make the libs accessible
 
-  arb = pkgs.arb.override { inherit flint; };
+  arb = pkgs.arb.override {inherit flint;};
 
-  singular = pkgs.singular.override { inherit flint; };
+  singular = pkgs.singular.override {inherit flint;};
 
   maxima = pkgs.maxima.override {
     lisp-compiler = pkgs.ecl.override {
@@ -140,17 +141,29 @@ let
   # openblas instead of openblasCompat. Apparently other packages somehow use flints
   # blas when it is available. Alternative would be to override flint to use
   # openblasCompat.
-  flint = pkgs.flint.override { withBlas = false; };
+  flint = pkgs.flint.override {withBlas = false;};
 
   # Multiple palp dimensions need to be available and sage expects them all to be
   # in the same folder.
   palp = symlinkJoin {
     name = "palp-${pkgs.palp.version}";
     paths = [
-      (pkgs.palp.override { dimensions = 4; doSymlink = false; })
-      (pkgs.palp.override { dimensions = 5; doSymlink = false; })
-      (pkgs.palp.override { dimensions = 6; doSymlink = true; })
-      (pkgs.palp.override { dimensions = 11; doSymlink = false; })
+      (pkgs.palp.override {
+        dimensions = 4;
+        doSymlink = false;
+      })
+      (pkgs.palp.override {
+        dimensions = 5;
+        doSymlink = false;
+      })
+      (pkgs.palp.override {
+        dimensions = 6;
+        doSymlink = true;
+      })
+      (pkgs.palp.override {
+        dimensions = 11;
+        doSymlink = false;
+      })
     ];
   };
 
@@ -163,8 +176,8 @@ let
     ];
   };
 in
-# A wrapper around sage that makes sure sage finds its docs (if they were build).
-callPackage ./sage.nix {
-  inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition;
-  inherit withDoc;
-}
+  # A wrapper around sage that makes sure sage finds its docs (if they were build).
+  callPackage ./sage.nix {
+    inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition;
+    inherit withDoc;
+  }

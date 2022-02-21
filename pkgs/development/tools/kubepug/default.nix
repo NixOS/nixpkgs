@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kubepug";
   version = "1.3.2";
@@ -14,7 +17,9 @@ buildGoModule rec {
   vendorSha256 = "0hynxj3q4aa1gx3w4ak56z6j5iplxi2hzqzsjkgz20fy34nfd41s";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/rikatz/kubepug/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/rikatz/kubepug/version.Version=${src.rev}"
   ];
 
   patches = [
@@ -25,6 +30,6 @@ buildGoModule rec {
     description = "Checks a Kubernetes cluster for objects using deprecated API versions";
     homepage = "https://github.com/rikatz/kubepug";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mausch ];
+    maintainers = with maintainers; [mausch];
   };
 }

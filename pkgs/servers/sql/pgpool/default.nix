@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  postgresql,
+  openssl,
+  pam ? null,
+  libmemcached ? null,
+}:
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
   version = "4.0.6";
@@ -10,15 +17,17 @@ stdenv.mkDerivation rec {
     sha256 = "0blmbqczyrgzykby2z3xzmhzd8kgij9izxv50n5cjn5azf7dn8g5";
   };
 
-  patches = [ ./pgpool.patch ];
+  patches = [./pgpool.patch];
 
-  buildInputs = [ postgresql openssl pam libmemcached ];
+  buildInputs = [postgresql openssl pam libmemcached];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-openssl"
-  ] ++ lib.optional (pam != null) "--with-pam"
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
+      "--with-openssl"
+    ]
+    ++ lib.optional (pam != null) "--with-pam"
     ++ lib.optional (libmemcached != null) "--with-memcached=${libmemcached}";
 
   installFlags = [

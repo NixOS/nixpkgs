@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "civetweb";
   version = "1.15";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   installTargets = [
     "install-headers"
@@ -43,6 +44,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Embedded C/C++ web server";
     homepage = "https://github.com/civetweb/civetweb";
-    license = [ lib.licenses.mit ];
+    license = [lib.licenses.mit];
   };
 }

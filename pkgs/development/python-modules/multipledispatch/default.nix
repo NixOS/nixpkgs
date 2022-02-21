@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "multipledispatch";
   version = "0.6.0";
@@ -16,12 +16,12 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   meta = {
     homepage = "https://github.com/mrocklin/multipledispatch/";
     description = "A relatively sane approach to multiple dispatch in Python";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
   };
 }

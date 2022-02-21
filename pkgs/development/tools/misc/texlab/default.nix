@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, libiconv
-, Security
-, CoreServices
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  libiconv,
+  Security,
+  CoreServices,
+  nix-update-script,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
   version = "3.3.1";
@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-AdzaLqwONI7WEcL8U0OGuyX/pg+BpZbJz9aaSClo47Q=";
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv Security CoreServices];
 
   postInstall = ''
     installManPage texlab.1
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     description = "An implementation of the Language Server Protocol for LaTeX";
     homepage = "https://texlab.netlify.app";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar kira-bruneau ];
+    maintainers = with maintainers; [doronbehar kira-bruneau];
     platforms = platforms.all;
   };
 }

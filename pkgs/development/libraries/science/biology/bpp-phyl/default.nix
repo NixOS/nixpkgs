@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, bpp-core, bpp-seq }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bpp-core,
+  bpp-seq,
+}:
 stdenv.mkDerivation rec {
   pname = "bpp-phyl";
 
@@ -12,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "192zks6wyk903n06c2lbsscdhkjnfwms8p7jblsmk3lvjhdipb20";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ bpp-core bpp-seq ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [bpp-core bpp-seq];
 
   preCheck = ''
     export LD_LIBRARY_PATH=$(pwd)/src
@@ -26,7 +31,9 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = bpp-core.meta // {
-    changelog = "https://github.com/BioPP/bpp-phyl/blob/master/ChangeLog";
-  };
+  meta =
+    bpp-core.meta
+    // {
+      changelog = "https://github.com/BioPP/bpp-phyl/blob/master/ChangeLog";
+    };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, imagemagick }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  imagemagick,
+}:
 stdenv.mkDerivation {
   pname = "cuneiform";
   version = "1.1.0";
@@ -10,25 +15,25 @@ stdenv.mkDerivation {
   };
 
   patches = [
-  (fetchurl {
-    url = "https://raw.githubusercontent.com/archlinux/svntogit-community/a2ec92f05de006b56d16ac6a6c370d54a554861a/cuneiform/trunk/build-fix.patch";
-    sha256 = "19cmrlx4khn30qqrpyayn7bicg8yi0wpz1x1bvqqrbvr3kwldxyj";
-  })
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/a2ec92f05de006b56d16ac6a6c370d54a554861a/cuneiform/trunk/build-fix.patch";
+      sha256 = "19cmrlx4khn30qqrpyayn7bicg8yi0wpz1x1bvqqrbvr3kwldxyj";
+    })
   ];
 
   postPatch = ''
     rm cuneiform_src/Kern/hhh/tigerh/h/strings.h
   '';
 
-  buildInputs = [ imagemagick ];
+  buildInputs = [imagemagick];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "Multi-language OCR system";
     homepage = "https://launchpad.net/cuneiform-linux";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
   };
 }

@@ -1,5 +1,4 @@
-{ fetchFromGitHub }:
-
+{fetchFromGitHub}:
 fetchFromGitHub {
   owner = "cheatfate";
   repo = "nimcrypto";

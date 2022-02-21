@@ -1,16 +1,15 @@
-{ stdenv
-, lib
-, buildFHSUserEnvBubblewrap
-, callPackage
-, copyDesktopItems
-, dpkg
-, lndir
-, makeDesktopItem
-, makeWrapper
-, requireFile
-}:
-
-let
+{
+  stdenv,
+  lib,
+  buildFHSUserEnvBubblewrap,
+  callPackage,
+  copyDesktopItems,
+  dpkg,
+  lndir,
+  makeDesktopItem,
+  makeWrapper,
+  requireFile,
+}: let
   version = "7.3.1";
 
   ptFiles = stdenv.mkDerivation {
@@ -24,7 +23,7 @@ let
       url = "https://www.netacad.com";
     };
 
-    nativeBuildInputs = [ dpkg makeWrapper ];
+    nativeBuildInputs = [dpkg makeWrapper];
 
     installPhase = ''
       dpkg-deb -x $src $out
@@ -45,46 +44,48 @@ let
     name = "packettracer7";
     runScript = "${ptFiles}/bin/packettracer7";
 
-    targetPkgs = pkgs: with pkgs; [
-      alsa-lib
-      dbus
-      expat
-      fontconfig
-      glib
-      libglvnd
-      libpulseaudio
-      libudev0-shim
-      libxkbcommon
-      libxml2
-      libxslt
-      nspr
-      nss
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXScrnSaver
-    ];
+    targetPkgs = pkgs:
+      with pkgs; [
+        alsa-lib
+        dbus
+        expat
+        fontconfig
+        glib
+        libglvnd
+        libpulseaudio
+        libudev0-shim
+        libxkbcommon
+        libxml2
+        libxslt
+        nspr
+        nss
+        xorg.libICE
+        xorg.libSM
+        xorg.libX11
+        xorg.libXScrnSaver
+      ];
   };
-in stdenv.mkDerivation {
-  pname = "ciscoPacketTracer7";
-  inherit version;
+in
+  stdenv.mkDerivation {
+    pname = "ciscoPacketTracer7";
+    inherit version;
 
-  dontUnpack = true;
+    dontUnpack = true;
 
-  installPhase = ''
-    mkdir $out
-    ${lndir}/bin/lndir -silent ${fhs} $out
-  '';
+    installPhase = ''
+      mkdir $out
+      ${lndir}/bin/lndir -silent ${fhs} $out
+    '';
 
-  desktopItems = [ desktopItem ];
+    desktopItems = [desktopItem];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+    nativeBuildInputs = [copyDesktopItems];
 
-  meta = with lib; {
-    description = "Network simulation tool from Cisco";
-    homepage = "https://www.netacad.com/courses/packet-tracer";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ lucasew ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "Network simulation tool from Cisco";
+      homepage = "https://www.netacad.com/courses/packet-tracer";
+      license = licenses.unfree;
+      maintainers = with maintainers; [lucasew];
+      platforms = ["x86_64-linux"];
+    };
+  }

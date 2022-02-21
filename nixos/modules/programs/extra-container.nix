@@ -1,7 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.programs.extra-container;
 in {
   options = {
@@ -11,7 +14,7 @@ in {
     '';
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.extra-container ];
-    boot.extraSystemdUnitPaths = [ "/etc/systemd-mutable/system" ];
+    environment.systemPackages = [pkgs.extra-container];
+    boot.extraSystemdUnitPaths = ["/etc/systemd-mutable/system"];
   };
 }

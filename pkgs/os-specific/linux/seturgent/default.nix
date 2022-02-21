@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchgit, libX11, xorgproto }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libX11,
+  xorgproto,
+}:
 stdenv.mkDerivation rec {
   pname = "seturgent";
   version = "1.5";
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     platforms = platforms.linux;
     description = "Set an application's urgency hint (or not)";
-    maintainers = with maintainers; [ yarr ];
+    maintainers = with maintainers; [yarr];
     homepage = "https://codemadness.org/seturgent-set-urgency-hints-for-x-applications.html";
     license = licenses.mit;
   };

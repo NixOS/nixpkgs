@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchgit }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchgit,
+}:
 buildGoPackage rec {
   pname = "jd";
   version = "0.3.1";
@@ -16,6 +19,6 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Interactive JSON Editor";
     license = licenses.mit;
-    maintainers = [ maintainers.np ];
+    maintainers = [maintainers.np];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, python3Packages, bash, git, less }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  bash,
+  git,
+  less,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "icdiff";
   version = "1.9.5";
@@ -28,7 +34,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://www.jefftk.com/icdiff";
     description = "Side-by-side highlighted command line diffs";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.psfl;
   };
 }

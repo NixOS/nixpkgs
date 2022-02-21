@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fuse }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fuse,
+}:
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
   version = "2.2";
@@ -24,8 +29,8 @@ stdenv.mkDerivation rec {
       --replace '/usr/local/include/osxfuse/fuse' '${fuse}/include/fuse'
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ fuse ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [fuse];
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
   # possible to do:
@@ -45,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

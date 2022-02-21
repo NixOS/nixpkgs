@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, cirq-core
-, google-api-core
-, protobuf
-# test inputs
-, pytestCheckHook
-, freezegun
+{
+  buildPythonPackage,
+  cirq-core,
+  google-api-core,
+  protobuf
+  # test inputs
+  ,
+  pytestCheckHook,
+  freezegun,
 }:
-
 buildPythonPackage rec {
   pname = "cirq-google";
   inherit (cirq-core) version src meta;

@@ -1,6 +1,15 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, numpy, cython, zlib, six
-, python-lzo, nose }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  numpy,
+  cython,
+  zlib,
+  six,
+  python-lzo,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "bx-python";
   version = "0.8.13";
@@ -13,10 +22,10 @@ buildPythonPackage rec {
     sha256 = "0r3z02mvaswijalr42ikpa7crvliijy0aigsvp5m0frp05n4irf5";
   };
 
-  nativeBuildInputs = [ cython ];
-  buildInputs = [ zlib ];
-  propagatedBuildInputs = [ numpy six python-lzo ];
-  checkInputs = [ nose ];
+  nativeBuildInputs = [cython];
+  buildInputs = [zlib];
+  propagatedBuildInputs = [numpy six python-lzo];
+  checkInputs = [nose];
 
   postInstall = ''
     cp -r scripts/* $out/bin
@@ -30,10 +39,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/bxlab/bx-python";
-    description =
-      "Tools for manipulating biological data, particularly multiple sequence alignments";
+    description = "Tools for manipulating biological data, particularly multiple sequence alignments";
     license = licenses.mit;
-    maintainers = [ maintainers.jbedo ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.jbedo];
+    platforms = ["x86_64-linux"];
   };
 }

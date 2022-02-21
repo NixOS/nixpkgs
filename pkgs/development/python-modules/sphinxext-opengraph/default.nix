@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
-, pytestCheckHook
-, beautifulsoup4
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
+  pytestCheckHook,
+  beautifulsoup4,
 }:
-
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
   version = "0.5.1";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
-  pythonImportsCheck = [ "sphinxext.opengraph" ];
+  pythonImportsCheck = ["sphinxext.opengraph"];
 
   meta = with lib; {
     description = "Sphinx extension to generate unique OpenGraph metadata";
     homepage = "https://github.com/wpilibsuite/sphinxext-opengraph";
     license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

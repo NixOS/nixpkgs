@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, mock
-, nose
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  mock,
+  nose,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "python-ipmi";
   version = "0.5.2";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyipmi" ];
+  pythonImportsCheck = ["pyipmi"];
 
   meta = with lib; {
     description = "Python IPMI Library";
     homepage = "https://github.com/kontron/python-ipmi";
-    license = with licenses; [ lgpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [lgpl2Plus];
+    maintainers = with maintainers; [fab];
   };
 }

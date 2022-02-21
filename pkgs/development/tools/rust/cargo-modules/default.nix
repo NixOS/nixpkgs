@@ -1,5 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreFoundation, CoreServices }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  CoreFoundation,
+  CoreServices,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
   version = "0.5.6";
@@ -21,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cargo plugin for showing a tree-like overview of a crate's modules";
     homepage = "https://github.com/regexident/cargo-modules";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ figsoda rvarago ];
+    license = with licenses; [mpl20];
+    maintainers = with maintainers; [figsoda rvarago];
   };
 }

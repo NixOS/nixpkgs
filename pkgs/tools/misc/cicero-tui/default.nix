@@ -1,13 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, expat
-, fontconfig
-, freetype
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cicero-tui";
   version = "0.3.0";
@@ -34,8 +34,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Unicode tool with a terminal user interface";
     homepage = "https://github.com/eyeplum/cicero-tui";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ shamilton ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [shamilton];
     platforms = platforms.linux;
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ifaddr
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ifaddr,
+  requests,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pywilight";
   version = "0.0.74";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for WiLight device";
     homepage = "https://github.com/leofig-rj/pywilight";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

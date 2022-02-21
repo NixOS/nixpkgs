@@ -1,4 +1,8 @@
-{ lib, python3, fetchFromGitHub }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "perfect-hash";
   version = "0.4.1";
@@ -27,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
       easily be constructed for any programming language.
     '';
     license = licenses.bsd3;
-    maintainers = [ maintainers.kaction ];
+    maintainers = [maintainers.kaction];
 
     homepage = "https://github.com/ilanschnell/perfect-hash";
     platforms = platforms.unix;

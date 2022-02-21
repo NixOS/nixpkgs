@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "blessings";
   version = "1.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   # 4 failing tests, 2to3
   doCheck = false;
 
-  propagatedBuildInputs = [ six ];
-  checkInputs = [ nose ];
+  propagatedBuildInputs = [six];
+  checkInputs = [nose];
 
   checkPhase = ''
     nosetests
@@ -28,7 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/erikrose/blessings";
     description = "A thin, practical wrapper around terminal coloring, styling, and positioning";
     license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
-
 }

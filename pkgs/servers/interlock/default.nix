@@ -1,7 +1,13 @@
-{ sudo, coreutils, systemd, cryptsetup
-, mount, umount
-, buildGoPackage, fetchFromGitHub }:
-
+{
+  sudo,
+  coreutils,
+  systemd,
+  cryptsetup,
+  mount,
+  umount,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "interlock";
   version = "2016.04.13";
@@ -9,7 +15,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/inversepath/interlock";
 
-  subPackages = [ "./cmd/interlock" ];
+  subPackages = ["./cmd/interlock"];
 
   src = fetchFromGitHub {
     inherit rev;
@@ -20,8 +26,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ sudo ];
-  tags = [ "textsecure" ];
+  nativeBuildInputs = [sudo];
+  tags = ["textsecure"];
   postPatch = ''
     grep -lr '/s\?bin/' | xargs sed -i \
       -e 's|/bin/mount|${mount}/bin/mount|' \

@@ -1,9 +1,9 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "tornado";
   version = "6.1";

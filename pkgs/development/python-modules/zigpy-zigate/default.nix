@@ -1,15 +1,16 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pyusb
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy }:
-
+{
+  lib,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio,
+  pyusb,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  zigpy,
+}:
 buildPythonPackage rec {
   pname = "zigpy-zigate";
   version = "0.8.0";
@@ -42,7 +43,7 @@ buildPythonPackage rec {
     description = "A library which communicates with ZiGate radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-zigate";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [etu mvnetbiz];
     platforms = platforms.linux;
   };
 }

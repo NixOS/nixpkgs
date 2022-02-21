@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "dhex";
   version = "0.69";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "06y4lrp29f2fh303ijk1xhspa1d4x4dm6hnyw3dd8szi3k6hnwsj";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -1,9 +1,13 @@
-{ buildDunePackage
-, alcotest, cmdliner, irmin, metrics-unix, mtime, irmin-layers
+{
+  buildDunePackage,
+  alcotest,
+  cmdliner,
+  irmin,
+  metrics-unix,
+  mtime,
+  irmin-layers,
 }:
-
 buildDunePackage {
-
   pname = "irmin-test";
 
   inherit (irmin) version src;
@@ -11,11 +15,17 @@ buildDunePackage {
   useDune2 = true;
 
   propagatedBuildInputs = [
-    alcotest cmdliner irmin metrics-unix mtime irmin-layers
+    alcotest
+    cmdliner
+    irmin
+    metrics-unix
+    mtime
+    irmin-layers
   ];
 
-  meta = irmin.meta // {
-    description = "Irmin test suite";
-  };
-
+  meta =
+    irmin.meta
+    // {
+      description = "Irmin test suite";
+    };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fftw, fftwFloat, boost166, opencl-clhpp, ocl-icd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fftw,
+  fftwFloat,
+  boost166,
+  opencl-clhpp,
+  ocl-icd,
+}:
 stdenv.mkDerivation rec {
   pname = "clfft";
   version = "2.12.2";
@@ -13,9 +22,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ fftw fftwFloat boost166 opencl-clhpp ocl-icd ];
+  buildInputs = [fftw fftwFloat boost166 opencl-clhpp ocl-icd];
 
   meta = with lib; {
     description = "Library containing FFT functions written in OpenCL";
@@ -25,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     homepage = "http://clmathlibraries.github.io/clFFT/";
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ chessai ];
+    platforms = ["i686-linux" "x86_64-linux"];
+    maintainers = with maintainers; [chessai];
   };
 }

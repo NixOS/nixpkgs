@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper,
-  maim, slop, ffmpeg, byzanz, libnotify, xdpyinfo }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  maim,
+  slop,
+  ffmpeg,
+  byzanz,
+  libnotify,
+  xdpyinfo,
+}:
 stdenv.mkDerivation rec {
   pname = "yaxg";
   version = "unstable-2018-05-03";
@@ -12,14 +21,14 @@ stdenv.mkDerivation rec {
     sha256 = "01p6ghp1vfrlnrm78bgbl9ppqwsdxh761g0qa172dpvsqg91l1p6";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ maim slop ffmpeg byzanz libnotify xdpyinfo ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [maim slop ffmpeg byzanz libnotify xdpyinfo];
 
   installPhase = ''
     mkdir -p $out/bin/
     mv yaxg $out/bin/
     chmod +x $out/bin/yaxg
-    wrapProgram $out/bin/yaxg --prefix PATH : ${ lib.makeBinPath [ maim slop ffmpeg byzanz libnotify xdpyinfo ]}
+    wrapProgram $out/bin/yaxg --prefix PATH : ${lib.makeBinPath [maim slop ffmpeg byzanz libnotify xdpyinfo]}
   '';
 
   meta = with lib; {
@@ -33,6 +42,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ neonfuz ];
+    maintainers = with maintainers; [neonfuz];
   };
 }

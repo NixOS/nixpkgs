@@ -1,9 +1,7 @@
 # This module manages the terminfo database
 # and its integration in the system.
-{ config, ... }:
-{
+{config, ...}: {
   config = {
-
     environment.pathsToLink = [
       "/share/terminfo"
     ];
@@ -13,7 +11,7 @@
     };
 
     environment.profileRelativeSessionVariables = {
-      TERMINFO_DIRS = [ "/share/terminfo" ];
+      TERMINFO_DIRS = ["/share/terminfo"];
     };
 
     environment.extraInit = ''
@@ -28,6 +26,5 @@
       Defaults:root,%wheel env_keep+=TERMINFO_DIRS
       Defaults:root,%wheel env_keep+=TERMINFO
     '';
-
   };
 }

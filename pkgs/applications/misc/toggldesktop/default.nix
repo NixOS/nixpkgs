@@ -1,8 +1,26 @@
-{ mkDerivation, lib, fetchFromGitHub, buildEnv, makeDesktopItem, runCommand, writeText, pkg-config
-, cmake, qmake, cacert, jsoncpp, libX11, libXScrnSaver, lua, openssl, poco
-, qtbase, qtwebengine, qtx11extras, sqlite }:
-
-let
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  buildEnv,
+  makeDesktopItem,
+  runCommand,
+  writeText,
+  pkg-config,
+  cmake,
+  qmake,
+  cacert,
+  jsoncpp,
+  libX11,
+  libXScrnSaver,
+  lua,
+  openssl,
+  poco,
+  qtbase,
+  qtwebengine,
+  qtx11extras,
+  sqlite,
+}: let
   name = "toggldesktop-${version}";
   version = "7.4.231";
 
@@ -24,8 +42,8 @@ let
       sha256 = "sha256-2L7pxdQOniwrp1Kgq3Q8BFbjb2yGtGoKUiQC+B6tRgs=";
     };
 
-    nativeBuildInputs = [ qmake ];
-    buildInputs = [ qtbase ];
+    nativeBuildInputs = [qmake];
+    buildInputs = [qtbase];
   };
 
   qxtglobalshortcut = mkDerivation rec {
@@ -39,8 +57,8 @@ let
       sha256 = "sha256-gb94rqK8j1mbD4YSXdOaxCdczZJFC6MU+iBsdf07wcc=";
     };
 
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ qtbase qtx11extras ];
+    nativeBuildInputs = [cmake];
+    buildInputs = [qtbase qtx11extras];
   };
 
   qt-oauth-lib = mkDerivation rec {
@@ -54,8 +72,8 @@ let
       sha256 = "sha256-MjtNAN4F9JJFxM8MYpCv8tPe26RHtbXdq+lY49p+rn4=";
     };
 
-    nativeBuildInputs = [ qmake ];
-    buildInputs = [ qtbase qtwebengine ];
+    nativeBuildInputs = [qmake];
+    buildInputs = [qtbase qtwebengine];
   };
 
   poco-pc = writeText "poco.pc" ''
@@ -76,8 +94,8 @@ let
 
     sourceRoot = "source/src";
 
-    nativeBuildInputs = [ qmake pkg-config ];
-    buildInputs = [ jsoncpp lua openssl poco poco-pc-wrapped sqlite libX11 ];
+    nativeBuildInputs = [qmake pkg-config];
+    buildInputs = [jsoncpp lua openssl poco poco-pc-wrapped sqlite libX11];
 
     postPatch = ''
       cat ${./libtoggl.pro} > libtoggl.pro
@@ -101,7 +119,7 @@ let
       ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/cacert.pem
     '';
 
-    nativeBuildInputs = [ qmake pkg-config ];
+    nativeBuildInputs = [qmake pkg-config];
 
     buildInputs = [
       bugsnag-qt
@@ -141,17 +159,16 @@ let
     icon = "toggldesktop";
   };
 in
+  buildEnv {
+    inherit name;
+    paths = [desktopItem toggldesktop-icons toggldesktop-wrapped];
 
-buildEnv {
-  inherit name;
-  paths = [ desktopItem toggldesktop-icons toggldesktop-wrapped ];
-
-  meta = with lib; {
-    broken = true; # libtoggl is broken
-    description = "Client for Toggl time tracking service";
-    homepage = "https://github.com/toggl/toggldesktop";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ yana ];
-    platforms = platforms.linux;
-  };
-}
+    meta = with lib; {
+      broken = true; # libtoggl is broken
+      description = "Client for Toggl time tracking service";
+      homepage = "https://github.com/toggl/toggldesktop";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [yana];
+      platforms = platforms.linux;
+    };
+  }

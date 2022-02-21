@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "pico-sdk";
   version = "1.3.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cc1UTc1aswtJzuaUdYNcCzLtQ9+Wggiy/eRE+UoxSgE=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   # SDK contains libraries and build-system to develop projects for RP2040 chip
   # We only need to compile pioasm binary
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/raspberrypi/picotool";
     description = "SDK provides the headers, libraries and build system necessary to write programs for the RP2040-based devices";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ musfay ];
+    maintainers = with maintainers; [musfay];
     platforms = platforms.unix;
   };
 }

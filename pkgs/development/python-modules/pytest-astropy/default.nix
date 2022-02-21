@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pytest
-, pytest-arraydiff
-, pytest-astropy-header
-, pytest-doctestplus
-, pytest-filter-subpackage
-, pytest-mock
-, pytest-openfiles
-, pytest-remotedata
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pytest,
+  pytest-arraydiff,
+  pytest-astropy-header,
+  pytest-doctestplus,
+  pytest-filter-subpackage,
+  pytest-mock,
+  pytest-openfiles,
+  pytest-remotedata,
+  setuptools-scm,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-astropy";
   version = "0.9.0";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Meta-package containing dependencies for testing";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

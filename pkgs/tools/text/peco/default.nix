@@ -1,10 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "peco";
   version = "0.5.10";
 
-  subPackages = [ "cmd/peco" ];
+  subPackages = ["cmd/peco"];
 
   src = fetchFromGitHub {
     owner = "peco";
@@ -20,6 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/peco/peco";
     changelog = "https://github.com/peco/peco/blob/v${version}/Changes";
     license = licenses.mit;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

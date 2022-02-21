@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, aspell, boost, expat, intltool, libxml2, libxslt, pcre, wxGTK, xercesc }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  aspell,
+  boost,
+  expat,
+  intltool,
+  libxml2,
+  libxslt,
+  pcre,
+  wxGTK,
+  xercesc,
+}:
 stdenv.mkDerivation rec {
   pname = "xmlcopyeditor";
   version = "1.2.1.3";
@@ -10,11 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "0bwxn89600jbrkvlwyawgc0c0qqxpl453mbgcb9qbbxl8984ns4v";
   };
 
-  patches = [ ./xmlcopyeditor.patch ];
+  patches = [./xmlcopyeditor.patch];
   CPLUS_INCLUDE_PATH = "${libxml2.dev}/include/libxml2";
 
-  nativeBuildInputs = [ intltool ];
-  buildInputs = [ aspell boost expat libxml2 libxslt pcre wxGTK xercesc ];
+  nativeBuildInputs = [intltool];
+  buildInputs = [aspell boost expat libxml2 libxslt pcre wxGTK xercesc];
 
   enableParallelBuilding = true;
 
@@ -23,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://xml-copy-editor.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ candeira ];
+    maintainers = with maintainers; [candeira];
   };
 }

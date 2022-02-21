@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  ocamlmod,
+  ocamlify,
+}:
 stdenv.mkDerivation {
   version = "0.4.10";
   pname = "ocaml-oasis";
@@ -13,10 +21,13 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  buildInputs =
-    [
-      ocaml findlib ocamlbuild ocamlmod ocamlify
-    ];
+  buildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    ocamlmod
+    ocamlify
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -40,7 +51,8 @@ stdenv.mkDerivation {
     license = licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
-      vbgl maggesi
+      vbgl
+      maggesi
     ];
   };
 }

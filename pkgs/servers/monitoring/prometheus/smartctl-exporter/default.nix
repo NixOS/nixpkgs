@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildGoModule,
 }:
-
 buildGoModule rec {
   pname = "smartctl_exporter";
   version = "unstable-2020-11-14";
@@ -36,6 +36,6 @@ buildGoModule rec {
     description = "Export smartctl statistics for Prometheus";
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

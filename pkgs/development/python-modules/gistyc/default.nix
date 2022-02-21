@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, certifi
-, click
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  certifi,
+  click,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "gistyc";
   version = "1.3";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
       blocks.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

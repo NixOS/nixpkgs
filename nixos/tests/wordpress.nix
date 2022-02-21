@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "wordpress";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
@@ -11,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   };
 
   nodes = {
-    wp_httpd = { ... }: {
+    wp_httpd = {...}: {
       services.httpd.adminAddr = "webmaster@site.local";
       services.httpd.logPerVirtualHost = true;
 
@@ -24,11 +22,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+      networking.firewall.allowedTCPPorts = [80];
+      networking.hosts."127.0.0.1" = ["site1.local" "site2.local"];
     };
 
-    wp_nginx = { ... }: {
+    wp_nginx = {...}: {
       services.wordpress.webserver = "nginx";
       services.wordpress.sites = {
         "site1.local" = {
@@ -39,11 +37,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+      networking.firewall.allowedTCPPorts = [80];
+      networking.hosts."127.0.0.1" = ["site1.local" "site2.local"];
     };
 
-    wp_caddy = { ... }: {
+    wp_caddy = {...}: {
       services.wordpress.webserver = "caddy";
       services.wordpress.sites = {
         "site1.local" = {
@@ -54,8 +52,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+      networking.firewall.allowedTCPPorts = [80];
+      networking.hosts."127.0.0.1" = ["site1.local" "site2.local"];
     };
   };
 

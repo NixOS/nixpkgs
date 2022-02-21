@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "jikespg";
   version = "1.3";
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "The Jikes Parser Generator";
     platforms = platforms.all;
     license = licenses.ipl10;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

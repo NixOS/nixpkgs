@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_image, SDL2_mixer, SDL2_net }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_net,
+}:
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
   version = "4.1.1.0";
@@ -19,7 +27,7 @@ stdenv.mkDerivation rec {
     categories = "Game;LogicGame;";
   };
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net ];
+  buildInputs = [SDL2 SDL2_image SDL2_mixer SDL2_net];
 
   preBuild = ''
     dataDir="$out/share/rocksndiamonds"
@@ -43,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.artsoft.org/rocksndiamonds/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

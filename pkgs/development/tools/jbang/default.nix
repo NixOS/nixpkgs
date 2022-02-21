@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchzip, jdk, makeWrapper, coreutils, curl }:
-
+{
+  stdenv,
+  lib,
+  fetchzip,
+  jdk,
+  makeWrapper,
+  coreutils,
+  curl,
+}:
 stdenv.mkDerivation rec {
   version = "0.82.1";
   pname = "jbang";
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-C2zsIJvna7iqcaCM4phJonbA9TALL89rACms5II9hhU=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -18,7 +25,7 @@ stdenv.mkDerivation rec {
     cp -r . $out
     wrapProgram $out/bin/jbang \
       --set JAVA_HOME ${jdk} \
-      --set PATH ${lib.makeBinPath [ coreutils jdk curl ]}
+      --set PATH ${lib.makeBinPath [coreutils jdk curl]}
     runHook postInstall
   '';
 
@@ -35,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://https://www.jbang.dev/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    maintainers = with maintainers; [moaxcp];
   };
 }

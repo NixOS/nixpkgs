@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, lib }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "vitetris";
   version = "0.59.1";
@@ -11,15 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Rbfa2hD67RGmInfWwYD4SthL8lm5bGSBi3oudV5hAao=";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  makeFlags = [ "INSTALL=install" ];
+  makeFlags = ["INSTALL=install"];
 
   meta = {
     description = "Terminal-based Tetris clone by Victor Nilsson";
     homepage = "http://www.victornils.net/tetris/";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ siers ];
+    maintainers = with lib.maintainers; [siers];
 
     longDescription = ''
       vitetris is a terminal-based Tetris clone by Victor Nilsson. Gameplay is much

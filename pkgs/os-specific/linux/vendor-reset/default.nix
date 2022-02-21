@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, kernel, lib }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "vendor-reset";
   version = "unstable-2021-02-16-${kernel.version}";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   makeFlags = [
     "KVER=${kernel.modDirVersion}"
@@ -28,8 +32,8 @@ stdenv.mkDerivation rec {
     description = "Linux kernel vendor specific hardware reset module";
     homepage = "https://github.com/gnif/vendor-reset";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wedens ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wedens];
+    platforms = ["x86_64-linux"];
     broken = kernel.kernelOlder "4.19";
   };
 }

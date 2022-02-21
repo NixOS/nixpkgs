@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, ninja, boost, meson, pkg-config, nix, isPy3k, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ninja,
+  boost,
+  meson,
+  pkg-config,
+  nix,
+  isPy3k,
+  python,
+}:
 buildPythonPackage rec {
   pname = "pythonix";
   version = "0.1.7";
@@ -14,9 +24,9 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [meson ninja pkg-config];
 
-  buildInputs = [ nix boost ];
+  buildInputs = [nix boost];
 
   postInstall = ''
     # This is typically set by pipInstallHook/eggInstallHook,
@@ -24,13 +34,13 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  pythonImportsCheck = [ "nix" ];
+  pythonImportsCheck = ["nix"];
 
   meta = with lib; {
     description = ''
-       Eval nix code from python.
+      Eval nix code from python.
     '';
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
     license = licenses.mit;
   };
 }

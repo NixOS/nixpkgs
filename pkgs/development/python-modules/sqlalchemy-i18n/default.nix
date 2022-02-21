@@ -1,10 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, sqlalchemy
-, sqlalchemy-utils
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  sqlalchemy,
+  sqlalchemy-utils,
 }:
-
 buildPythonPackage rec {
   pname = "SQLAlchemy-i18n";
   version = "1.1.0";

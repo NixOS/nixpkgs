@@ -1,28 +1,32 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.errbot;
-  pluginEnv = plugins: pkgs.buildEnv {
-    name = "errbot-plugins";
-    paths = plugins;
-  };
-  mkConfigDir = instanceCfg: dataDir: pkgs.writeTextDir "config.py" ''
-    import logging
-    BACKEND = '${instanceCfg.backend}'
-    BOT_DATA_DIR = '${dataDir}'
-    BOT_EXTRA_PLUGIN_DIR = '${pluginEnv instanceCfg.plugins}'
+  pluginEnv = plugins:
+    pkgs.buildEnv {
+      name = "errbot-plugins";
+      paths = plugins;
+    };
+  mkConfigDir = instanceCfg: dataDir:
+    pkgs.writeTextDir "config.py" ''
+      import logging
+      BACKEND = '${instanceCfg.backend}'
+      BOT_DATA_DIR = '${dataDir}'
+      BOT_EXTRA_PLUGIN_DIR = '${pluginEnv instanceCfg.plugins}'
 
-    BOT_LOG_LEVEL = logging.${instanceCfg.logLevel}
-    BOT_LOG_FILE = False
+      BOT_LOG_LEVEL = logging.${instanceCfg.logLevel}
+      BOT_LOG_FILE = False
 
-    BOT_ADMINS = (${concatMapStringsSep "," (name: "'${name}'") instanceCfg.admins})
+      BOT_ADMINS = (${concatMapStringsSep "," (name: "'${name}'") instanceCfg.admins})
 
-    BOT_IDENTITY = ${builtins.toJSON instanceCfg.identity}
+      BOT_IDENTITY = ${builtins.toJSON instanceCfg.identity}
 
-    ${instanceCfg.extraConfig}
-  '';
+      ${instanceCfg.extraConfig}
+    '';
 in {
   options = {
     services.errbot.instances = mkOption {
@@ -82,23 +86,28 @@ in {
     };
     users.groups.errbot = {};
 
-    systemd.services = mapAttrs' (name: instanceCfg: nameValuePair "errbot-${name}" (
-    let
-      dataDir = if instanceCfg.dataDir != null then instanceCfg.dataDir else
-        "/var/lib/errbot/${name}";
-    in {
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        mkdir -p ${dataDir}
-        chown -R errbot:errbot ${dataDir}
-      '';
-      serviceConfig = {
-        User = "errbot";
-        Restart = "on-failure";
-        ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
-        PermissionsStartOnly = true;
-      };
-    })) cfg.instances;
+    systemd.services = mapAttrs' (name: instanceCfg:
+      nameValuePair "errbot-${name}" (
+        let
+          dataDir =
+            if instanceCfg.dataDir != null
+            then instanceCfg.dataDir
+            else "/var/lib/errbot/${name}";
+        in {
+          after = ["network-online.target"];
+          wantedBy = ["multi-user.target"];
+          preStart = ''
+            mkdir -p ${dataDir}
+            chown -R errbot:errbot ${dataDir}
+          '';
+          serviceConfig = {
+            User = "errbot";
+            Restart = "on-failure";
+            ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
+            PermissionsStartOnly = true;
+          };
+        }
+      ))
+    cfg.instances;
   };
 }

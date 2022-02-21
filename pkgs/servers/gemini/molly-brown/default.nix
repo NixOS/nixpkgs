@@ -1,5 +1,9 @@
-{ lib, buildGoPackage, fetchgit, nixosTests }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchgit,
+  nixosTests,
+}:
 buildGoPackage rec {
   pname = "molly-brown";
   version = "unstable-2020-08-19";
@@ -20,7 +24,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Full-featured Gemini server";
     homepage = "https://tildegit.org/solderpunk/molly-brown";
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ehmry];
     license = licenses.bsd2;
   };
 }

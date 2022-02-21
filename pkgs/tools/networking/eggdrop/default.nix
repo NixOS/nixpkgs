@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, tcl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  tcl,
+}:
 stdenv.mkDerivation rec {
   pname = "eggdrop";
   version = "1.9.1";
@@ -11,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vh8nym7aYeTRUQ7FBZRy4ToG2ajwRDhzi4jNiJQOEyQ=";
   };
 
-  buildInputs = [ tcl ];
+  buildInputs = [tcl];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   preConfigure = ''
     prefix=$out/eggdrop

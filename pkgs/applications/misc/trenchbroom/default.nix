@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, ninja, git, pandoc
-, libGL, libGLU, libXxf86vm, freeimage
-, qtbase, wrapQtAppsHook
-, copyDesktopItems, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  git,
+  pandoc,
+  libGL,
+  libGLU,
+  libXxf86vm,
+  freeimage,
+  qtbase,
+  wrapQtAppsHook,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-
 stdenv.mkDerivation rec {
   pname = "TrenchBroom";
   version = "2021.1";
@@ -23,8 +33,8 @@ stdenv.mkDerivation rec {
       --subst-var-by GIT_DESCRIBE v${version}
   '';
 
-  nativeBuildInputs = [ cmake git pandoc wrapQtAppsHook copyDesktopItems ];
-  buildInputs = [ libGL libGLU libXxf86vm freeimage qtbase ];
+  nativeBuildInputs = [cmake git pandoc wrapQtAppsHook copyDesktopItems];
+  buildInputs = [libGL libGLU libXxf86vm freeimage qtbase];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
   QT_QPA_PLATFORM = "offscreen";
   ninjaFlags = [
@@ -60,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://trenchbroom.github.io/";
     description = "Level editor for Quake-engine based games";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [astro];
   };
 }

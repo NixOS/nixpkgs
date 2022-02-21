@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, unstableGitUpdater
-, xxd
-, pkg-config
-, imagemagick
-, wrapGAppsHook
-, gtk3
-, jansson
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  unstableGitUpdater,
+  xxd,
+  pkg-config,
+  imagemagick,
+  wrapGAppsHook,
+  gtk3,
+  jansson,
 }:
-
 stdenv.mkDerivation {
   pname = "urn-timer";
   version = "unstable-2017-08-20";
@@ -51,7 +52,7 @@ stdenv.mkDerivation {
     jansson
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/3snowp7im/urn.git";
@@ -61,6 +62,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/3snowp7im/urn";
     description = "Split tracker / timer for speedrunning with GTK+ frontend";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
   };
 }

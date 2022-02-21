@@ -1,9 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi
-, defcon, fonttools, lxml, fs
-, mutatormath, fontmath, fontparts
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  defcon,
+  fonttools,
+  lxml,
+  fs,
+  mutatormath,
+  fontmath,
+  fontparts,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "ufoProcessor";
   version = "1.9.0";
@@ -14,7 +21,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
   propagatedBuildInputs = [
     defcon
@@ -39,6 +46,6 @@ buildPythonPackage rec {
     description = "Read, write and generate UFOs with designspace data";
     homepage = "https://github.com/LettError/ufoProcessor";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

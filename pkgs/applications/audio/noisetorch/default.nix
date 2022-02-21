@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, copyDesktopItems }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  copyDesktopItems,
+}:
 buildGoModule rec {
   pname = "NoiseTorch";
   version = "0.11.4";
@@ -15,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-X main.version=${version}"  "-X main.distribution=nix" ];
+  ldflags = ["-X main.version=${version}" "-X main.distribution=nix"];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [copyDesktopItems];
 
   preBuild = ''
     make -C c/ladspa/
@@ -37,6 +41,6 @@ buildGoModule rec {
     homepage = "https://github.com/lawl/NoiseTorch";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ panaeon lom ];
+    maintainers = with maintainers; [panaeon lom];
   };
 }

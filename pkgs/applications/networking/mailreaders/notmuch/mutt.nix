@@ -1,26 +1,35 @@
-{ stdenv, lib, perl, perlPackages, makeWrapper, coreutils, notmuch }:
-
+{
+  stdenv,
+  lib,
+  perl,
+  perlPackages,
+  makeWrapper,
+  coreutils,
+  notmuch,
+}:
 stdenv.mkDerivation rec {
   pname = "notmuch-mutt";
   version = notmuch.version;
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
   dontStrip = true;
 
-  buildInputs = [
-    perl
-    makeWrapper
-  ] ++ (with perlPackages; [
-    FileRemove
-    DigestSHA1
-    Later
-    MailBox
-    MailMaildir
-    MailTools
-    StringShellQuote
-    TermReadLineGnu
-  ]);
+  buildInputs =
+    [
+      perl
+      makeWrapper
+    ]
+    ++ (with perlPackages; [
+      FileRemove
+      DigestSHA1
+      Later
+      MailBox
+      MailMaildir
+      MailTools
+      StringShellQuote
+      TermReadLineGnu
+    ]);
 
   src = notmuch.src;
 
@@ -38,9 +47,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mutt support for notmuch";
-    homepage    = "https://notmuchmail.org/";
-    license     = with licenses; gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.unix;
+    homepage = "https://notmuchmail.org/";
+    license = with licenses; gpl3;
+    maintainers = with maintainers; [peterhoeg];
+    platforms = platforms.unix;
   };
 }

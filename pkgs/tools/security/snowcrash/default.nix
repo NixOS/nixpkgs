@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "snowcrash";
   version = "unstable-2021-04-29";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-YryQKLHwUDhR/Z7eWfCdL86Z83GrqBTvdGGj+dGKvjI";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   postFixup = lib.optionals (!stdenv.isDarwin) ''
     mv $out/bin/SNOWCRASH $out/bin/${pname}
@@ -26,7 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Polyglot payload generator";
     homepage = "https://github.com/redcode-labs/SNOWCRASH";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab] ++ teams.redcodelabs.members;
   };
 }

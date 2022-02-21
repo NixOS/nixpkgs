@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpcap, libnet, zlib, curl, pcre
-, openssl, ncurses, glib, gtk3, atk, pango, flex, bison, geoip, harfbuzz
-, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libpcap,
+  libnet,
+  zlib,
+  curl,
+  pcre,
+  openssl,
+  ncurses,
+  glib,
+  gtk3,
+  atk,
+  pango,
+  flex,
+  bison,
+  geoip,
+  harfbuzz,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "ettercap";
   version = "0.8.3.1";
@@ -14,10 +32,21 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ cmake flex bison pkg-config ];
+  nativeBuildInputs = [cmake flex bison pkg-config];
   buildInputs = [
-    libpcap libnet zlib curl pcre openssl ncurses
-    glib gtk3 atk pango geoip harfbuzz
+    libpcap
+    libnet
+    zlib
+    curl
+    pcre
+    openssl
+    ncurses
+    glib
+    gtk3
+    atk
+    pango
+    geoip
+    harfbuzz
   ];
 
   preConfigure = ''
@@ -31,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: Remove after the next release (0.8.4 should work without this):
-  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+  NIX_CFLAGS_COMPILE = ["-I${harfbuzz.dev}/include/harfbuzz"];
 
   meta = with lib; {
     description = "Comprehensive suite for man in the middle attacks";
@@ -45,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.ettercap-project.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

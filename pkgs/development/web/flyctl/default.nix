@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "flyctl";
   version = "0.0.297";
@@ -15,18 +18,18 @@ buildGoModule rec {
     go generate ./...
   '';
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   vendorSha256 = "sha256-EwMPPZOZ0xE1DKvaU7+PrUH+Ty6ut3UYJZSY4EqXFWo=";
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X github.com/superfly/flyctl/flyctl.Version=${version}" "-X github.com/superfly/flyctl/flyctl.Commit=${src.rev}" "-X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000" "-X github.com/superfly/flyctl/flyctl.Environment=production" ];
+  ldflags = ["-s" "-w" "-X github.com/superfly/flyctl/flyctl.Version=${version}" "-X github.com/superfly/flyctl/flyctl.Commit=${src.rev}" "-X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000" "-X github.com/superfly/flyctl/flyctl.Environment=production"];
 
   meta = with lib; {
     description = "Command line tools for fly.io services";
     homepage = "https://fly.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse jsierles ];
+    maintainers = with maintainers; [aaronjanse jsierles];
   };
 }

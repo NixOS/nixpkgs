@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, libcst
-, proto-plus
-, mock
-, pytestCheckHook
-, pytest-asyncio
-, google-cloud-testutils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  libcst,
+  proto-plus,
+  mock,
+  pytestCheckHook,
+  pytest-asyncio,
+  google-cloud-testutils,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
   version = "2.4.0";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Google Cloud Datastore API client library";
     homepage = "https://github.com/googleapis/python-datastore";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

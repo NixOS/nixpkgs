@@ -1,14 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  ecfg = config.services.earlyoom;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  ecfg = config.services.earlyoom;
+in {
   options = {
     services.earlyoom = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -39,7 +39,7 @@ in
         '';
       };
 
-      useKernelOOMKiller= mkOption {
+      useKernelOOMKiller = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -89,20 +89,26 @@ in
 
   config = mkIf ecfg.enable {
     assertions = [
-      { assertion = ecfg.freeMemThreshold > 0 && ecfg.freeMemThreshold <= 100;
-        message = "Needs to be a positive percentage"; }
-      { assertion = ecfg.freeSwapThreshold > 0 && ecfg.freeSwapThreshold <= 100;
-        message = "Needs to be a positive percentage"; }
-      { assertion = !ecfg.useKernelOOMKiller || !ecfg.ignoreOOMScoreAdjust;
-        message = "Both options in conjunction do not make sense"; }
+      {
+        assertion = ecfg.freeMemThreshold > 0 && ecfg.freeMemThreshold <= 100;
+        message = "Needs to be a positive percentage";
+      }
+      {
+        assertion = ecfg.freeSwapThreshold > 0 && ecfg.freeSwapThreshold <= 100;
+        message = "Needs to be a positive percentage";
+      }
+      {
+        assertion = !ecfg.useKernelOOMKiller || !ecfg.ignoreOOMScoreAdjust;
+        message = "Both options in conjunction do not make sense";
+      }
     ];
 
     warnings = optional (ecfg.notificationsCommand != null)
-      "`services.earlyoom.notificationsCommand` is deprecated and ignored by earlyoom since 1.6.";
+    "`services.earlyoom.notificationsCommand` is deprecated and ignored by earlyoom since 1.6.";
 
     systemd.services.earlyoom = {
       description = "Early OOM Daemon for Linux";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       path = optional ecfg.enableNotifications pkgs.dbus;
       serviceConfig = {
         StandardOutput = "null";

@@ -1,4 +1,21 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, gettext, imagemagick, curl, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, xercesc, xdg-utils, hicolor-icon-theme }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  gettext,
+  imagemagick,
+  curl,
+  libpng,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  xercesc,
+  xdg-utils,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "enigma";
   version = "1.30-alpha";
@@ -8,8 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zyk3j43gzfr1lhc6g13j7qai5f33fv5xm5735nnznaqvaz17949";
   };
 
-  nativeBuildInputs = [ pkg-config gettext makeWrapper imagemagick ];
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf libpng xercesc curl xdg-utils ];
+  nativeBuildInputs = [pkg-config gettext makeWrapper imagemagick];
+  buildInputs = [SDL2 SDL2_image SDL2_mixer SDL2_ttf libpng xercesc curl xdg-utils];
 
   # For some reason (might be related to the alpha status), some includes
   # which are required by lib-src/enigma-core are not picked up by the
@@ -18,15 +35,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -r $out/include
-    wrapProgram $out/bin/enigma --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"
+    wrapProgram $out/bin/enigma --prefix PATH : "${lib.makeBinPath [xdg-utils]}"
   '';
 
   meta = with lib; {
     description = "Puzzle game inspired by Oxyd on the Atari ST and Rock'n'Roll on the Amiga";
-    license = with licenses; [ gpl2 free ]; # source + bundles libs + art
+    license = with licenses; [gpl2 free]; # source + bundles libs + art
     platforms = platforms.unix;
     broken = stdenv.targetPlatform.isDarwin;
-    maintainers = with maintainers; [ iblech ];
+    maintainers = with maintainers; [iblech];
     homepage = "https://www.nongnu.org/enigma/";
   };
 }

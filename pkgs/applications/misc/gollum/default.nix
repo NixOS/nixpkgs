@@ -1,12 +1,20 @@
-{ lib, stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
-, git, docutils, perl }:
-
+{
+  lib,
+  stdenv,
+  bundlerEnv,
+  ruby,
+  makeWrapper,
+  bundlerUpdateScript,
+  git,
+  docutils,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "gollum";
   # nix-shell -p bundix icu zlib cmake pkg-config openssl
   version = (import ./gemset.nix).gollum.version;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontUnpack = true;
 
@@ -19,9 +27,9 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/gollum $out/bin/gollum \
-      --prefix PATH ":" ${lib.makeBinPath [ git docutils perl]}
+      --prefix PATH ":" ${lib.makeBinPath [git docutils perl]}
     makeWrapper ${env}/bin/gollum-migrate-tags $out/bin/gollum-migrate-tags \
-      --prefix PATH ":" ${lib.makeBinPath [ git ]}
+      --prefix PATH ":" ${lib.makeBinPath [git]}
   '';
 
   passthru.updateScript = bundlerUpdateScript "gollum";
@@ -31,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/gollum/gollum";
     changelog = "https://github.com/gollum/gollum/blob/v${version}/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ erictapen jgillich nicknovitski ];
+    maintainers = with maintainers; [erictapen jgillich nicknovitski];
     platforms = platforms.unix;
   };
 }

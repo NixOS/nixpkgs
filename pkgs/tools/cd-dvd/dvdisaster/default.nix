@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, pkg-config
-, which
-, glib
-, gtk2
-, enableSoftening ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  pkg-config,
+  which,
+  glib,
+  gtk2,
+  enableSoftening ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dvdisaster";
   version = "0.79.9";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-eclOJ33pS2aP4F7RUHc84ynpH7sTv2dsO4vn5vB248M=";
   };
 
-  nativeBuildInputs = [ gettext pkg-config which ];
-  buildInputs = [ glib gtk2 ];
+  nativeBuildInputs = [gettext pkg-config which];
+  buildInputs = [glib gtk2];
 
   patches = lib.optional enableSoftening [
     ./encryption.patch
@@ -34,12 +34,14 @@ stdenv.mkDerivation rec {
                 'if make -v | grep "GNU Make" > /dev/null 2>&1 ;'
   '';
 
-  configureFlags = [
-    # Explicit --docdir= is required for on-line help to work:
-    "--docdir=share/doc"
-    "--with-nls=yes"
-    "--with-embedded-src-path=no"
-  ] ++ lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
+  configureFlags =
+    [
+      # Explicit --docdir= is required for on-line help to work:
+      "--docdir=share/doc"
+      "--with-nls=yes"
+      "--with-embedded-src-path=no"
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
 
   # fatal error: inlined-icons.h: No such file or directory
   enableParallelBuilding = false;
@@ -92,6 +94,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

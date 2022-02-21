@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, PyGithub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  PyGithub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "ghrepo-stats";
   version = "0.3.1";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Python module and CLI tool for GitHub repo statistics";
     homepage = "https://github.com/mrbean-bremen/ghrepo-stats";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

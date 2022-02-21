@@ -1,5 +1,11 @@
-{ lib, rustPlatform, fetchCrate, makeWrapper, stdenv, Security }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  makeWrapper,
+  stdenv,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "racer";
   version = "2.1.48";
@@ -11,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-jGsvCmrPGVzWdx7V3J4bBK+SF2o+icORmVKuwqYxdh4=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   # a nightly compiler is required unless we use this cheat code.
@@ -41,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = "https://github.com/racer-rust/racer";
     license = licenses.mit;
-    maintainers = with maintainers; [ jagajaga ];
+    maintainers = with maintainers; [jagajaga];
     # error[E0199]: implementing the trait `Step` is not unsafe
     broken = true;
   };

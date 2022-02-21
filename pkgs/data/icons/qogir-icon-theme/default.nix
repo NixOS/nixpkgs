@@ -1,11 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, hicolor-icon-theme
-, jdupes
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  hicolor-icon-theme,
+  jdupes,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "qogir-icon-theme";
   version = "2022-01-12";
@@ -17,9 +17,9 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "1daayxsqh7di3bvfnl39h1arsj1fypd3ba30mas6dl1d0qy17z1p";
   };
 
-  nativeBuildInputs = [ gtk3 jdupes ];
+  nativeBuildInputs = [gtk3 jdupes];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [hicolor-icon-theme];
 
   dontDropIconThemeCache = true;
 
@@ -39,8 +39,8 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Flat colorful design icon theme";
     homepage = "https://github.com/vinceliuice/Qogir-icon-theme";
-    license = with licenses; [ gpl3Only ];
+    license = with licenses; [gpl3Only];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

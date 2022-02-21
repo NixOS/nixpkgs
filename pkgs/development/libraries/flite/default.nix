@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, alsa-lib, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "flite";
   version = "2.2";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n0p81jzndzc1rzgm66kw9ls189ricy5v1ps11y0p2fk1p56kbjf";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib ];
+  buildInputs = lib.optionals stdenv.isLinux [alsa-lib];
 
   # https://github.com/festvox/flite/pull/60.
   # Replaces `ar` with `$(AR)` in config/common_make_rules.
@@ -23,9 +28,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [
-    "--enable-shared"
-  ] ++ lib.optionals stdenv.isLinux [ "--with-audio=alsa" ];
+  configureFlags =
+    [
+      "--enable-shared"
+    ]
+    ++ lib.optionals stdenv.isLinux ["--with-audio=alsa"];
 
   enableParallelBuilding = true;
 

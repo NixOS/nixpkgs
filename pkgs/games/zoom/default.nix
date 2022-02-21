@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, perl, expat, xlibsWrapper, freetype }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  expat,
+  xlibsWrapper,
+  freetype,
+}:
 # !!! assert freetype == xorg.freetype
-
 stdenv.mkDerivation rec {
   pname = "zoom";
   version = "1.1.5";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g6van7f7sg3zfcz80mncnnbccyg2hnm0hq4x558vpsm0lf7z5pj";
   };
 
-  buildInputs = [ perl expat xlibsWrapper freetype ];
+  buildInputs = [perl expat xlibsWrapper freetype];
 
   NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
 

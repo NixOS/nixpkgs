@@ -1,7 +1,17 @@
-{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch, substituteAll
-, python, util-linux, pygit2, gitMinimal, git-annex, cacert
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  fetchpatch,
+  substituteAll,
+  python,
+  util-linux,
+  pygit2,
+  gitMinimal,
+  git-annex,
+  cacert,
 }:
-
 buildPythonPackage rec {
   pname = "git-annex-adapter";
   version = "0.2.2";
@@ -33,17 +43,17 @@ buildPythonPackage rec {
     util-linux # `rev` is needed in tests/test_process.py
   ];
 
-  propagatedBuildInputs = [ pygit2 cacert ];
+  propagatedBuildInputs = [pygit2 cacert];
 
   checkPhase = ''
     ${python.interpreter} -m unittest
   '';
-  pythonImportsCheck = [ "git_annex_adapter" ];
+  pythonImportsCheck = ["git_annex_adapter"];
 
   meta = with lib; {
     homepage = "https://github.com/alpernebbi/git-annex-adapter";
     description = "Call git-annex commands from Python";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv
-, fetchurl
-, lib
+{
+  stdenv,
+  fetchurl,
+  lib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "common-licenses";
   version = "11.1";
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tracker.debian.org/pkg/base-files";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = [maintainers.mkg20001];
   };
 }

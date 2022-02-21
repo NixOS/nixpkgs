@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libevent, glew, glfw }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libevent,
+  glew,
+  glfw,
+}:
 stdenv.mkDerivation {
   pname = "pixelnuke";
   version = "unstable-2019-05-19";
@@ -13,7 +19,7 @@ stdenv.mkDerivation {
 
   sourceRoot = "source/pixelnuke";
 
-  buildInputs = [ libevent glew glfw ];
+  buildInputs = [libevent glew glfw];
 
   installPhase = ''
     install -Dm755 ./pixelnuke $out/bin/pixelnuke
@@ -24,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://cccgoe.de/wiki/Pixelflut";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mrVanDalo ];
+    maintainers = with maintainers; [mrVanDalo];
   };
 }

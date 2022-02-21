@@ -1,16 +1,16 @@
-{ lib
-, aiohttp
-, aioresponses
-, aresponses
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  aresponses,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "tesla-wall-connector";
   version = "1.0.1";
@@ -40,7 +40,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-
   pythonImportsCheck = [
     "tesla_wall_connector"
   ];
@@ -48,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for communicating with a Tesla Wall Connector";
     homepage = "https://github.com/einarhauks/tesla-wall-connector";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

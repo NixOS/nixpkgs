@@ -1,5 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 buildGoPackage rec {
   pname = "tewisay-unstable";
   version = "2017-04-14";
@@ -13,7 +17,7 @@ buildGoPackage rec {
     sha256 = "1na3xi4z90v8qydcvd3454ia9jg7qhinciy6kvgyz61q837cw5dk";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   goDeps = ./deps.nix;
 
@@ -30,6 +34,6 @@ buildGoPackage rec {
     homepage = "https://github.com/lucy/tewisay";
     description = "Cowsay replacement with unicode and partial ansi escape support";
     license = lib.licenses.cc0;
-    maintainers = [ lib.maintainers.chiiruno ];
+    maintainers = [lib.maintainers.chiiruno];
   };
 }

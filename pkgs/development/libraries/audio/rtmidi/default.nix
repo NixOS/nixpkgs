@@ -1,19 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, jackSupport ? true
-, jack
-, coremidiSupport ? stdenv.hostPlatform.isDarwin
-, CoreMIDI
-, CoreAudio
-, CoreServices
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  jackSupport ? true,
+  jack,
+  coremidiSupport ? stdenv.hostPlatform.isDarwin,
+  CoreMIDI,
+  CoreAudio,
+  CoreServices,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rtmidi";
   version = "5.0.0";
@@ -40,23 +40,36 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = lib.optional alsaSupport alsa-lib
+  buildInputs =
+    lib.optional alsaSupport alsa-lib
     ++ lib.optional jackSupport jack
-    ++ lib.optionals coremidiSupport [ CoreMIDI CoreAudio CoreServices ];
+    ++ lib.optionals coremidiSupport [CoreMIDI CoreAudio CoreServices];
 
   cmakeFlags = [
-    "-DRTMIDI_API_ALSA=${if alsaSupport then "ON" else "OFF"}"
-    "-DRTMIDI_API_JACK=${if jackSupport then "ON" else "OFF"}"
-    "-DRTMIDI_API_CORE=${if coremidiSupport then "ON" else "OFF"}"
+    "-DRTMIDI_API_ALSA=${
+      if alsaSupport
+      then "ON"
+      else "OFF"
+    }"
+    "-DRTMIDI_API_JACK=${
+      if jackSupport
+      then "ON"
+      else "OFF"
+    }"
+    "-DRTMIDI_API_CORE=${
+      if coremidiSupport
+      then "ON"
+      else "OFF"
+    }"
   ];
 
   meta = with lib; {
     description = "A set of C++ classes that provide a cross platform API for realtime MIDI input/output";
     homepage = "https://www.music.mcgill.ca/~gary/rtmidi/";
     license = licenses.mit;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [magnetophon];
     platforms = platforms.unix;
   };
 }

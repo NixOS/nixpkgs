@@ -1,17 +1,18 @@
-{ lib, buildDunePackage
-, fetchFromGitHub
-, ppx_assert
-, ppx_bench
-, ppx_bin_prot
-, ppx_compare
-, ppx_enumerate
-, ppx_hash
-, ppx_here
-, ppx_optcomp
-, ppx_sexp_conv
-, ppx_sexp_value
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ppx_assert,
+  ppx_bench,
+  ppx_bin_prot,
+  ppx_compare,
+  ppx_enumerate,
+  ppx_hash,
+  ppx_here,
+  ppx_optcomp,
+  ppx_sexp_conv,
+  ppx_sexp_value,
 }:
-
 buildDunePackage rec {
   pname = "ppx_bap";
   version = "0.14";
@@ -46,6 +47,6 @@ buildDunePackage rec {
     description = "The set of ppx rewriters for BAP";
     license = lib.licenses.mit;
     inherit (src.meta) homepage;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

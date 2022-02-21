@@ -1,5 +1,4 @@
-{ rustPlatform }:
-
+{rustPlatform}:
 rustPlatform.buildRustPackage {
   pname = "git-dependency-branch";
   version = "0.1.0";

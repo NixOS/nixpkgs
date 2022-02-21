@@ -1,11 +1,8 @@
-import ./make-test-python.nix ({ lib, ...}:
-
-{
+import ./make-test-python.nix ({lib, ...}: {
   name = "zoneminder";
-  meta.maintainers = with lib.maintainers; [ danielfullmer ];
+  meta.maintainers = with lib.maintainers; [danielfullmer];
 
-  machine = { ... }:
-  {
+  machine = {...}: {
     services.zoneminder = {
       enable = true;
       database.createLocally = true;

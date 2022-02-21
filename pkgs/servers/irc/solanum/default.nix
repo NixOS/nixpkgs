@@ -1,15 +1,16 @@
-{ lib, stdenv
-, autoreconfHook
-, bison
-, fetchFromGitHub
-, flex
-, lksctp-tools
-, openssl
-, pkg-config
-, sqlite
-, util-linux
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  bison,
+  fetchFromGitHub,
+  flex,
+  lksctp-tools,
+  openssl,
+  pkg-config,
+  sqlite,
+  util-linux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "solanum";
   version = "unstable-2021-11-14";
@@ -29,17 +30,19 @@ stdenv.mkDerivation rec {
     substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
   '';
 
-  configureFlags = [
-    "--enable-epoll"
-    "--enable-ipv6"
-    "--enable-openssl=${openssl.dev}"
-    "--with-program-prefix=solanum-"
-    "--localstatedir=/var/lib"
-    "--with-rundir=/run"
-    "--with-logdir=/var/log"
-  ] ++ lib.optionals (stdenv.isLinux) [
-    "--enable-sctp=${lksctp-tools.out}/lib"
-  ];
+  configureFlags =
+    [
+      "--enable-epoll"
+      "--enable-ipv6"
+      "--enable-openssl=${openssl.dev}"
+      "--with-program-prefix=solanum-"
+      "--localstatedir=/var/lib"
+      "--with-rundir=/run"
+      "--with-logdir=/var/log"
+    ]
+    ++ lib.optionals (stdenv.isLinux) [
+      "--enable-sctp=${lksctp-tools.out}/lib"
+    ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "An IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
     platforms = platforms.unix;
   };
 }

@@ -1,19 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool
-, python3, perl, gmpxx, mpfr, boost, eigen, gfortran, cmake
-, enableFMA ? stdenv.hostPlatform.fmaSupport
-, enableFortran ? true
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  python3,
+  perl,
+  gmpxx,
+  mpfr,
+  boost,
+  eigen,
+  gfortran,
+  cmake,
+  enableFMA ? stdenv.hostPlatform.fmaSupport,
+  enableFortran ? true,
+}: let
   pname = "libint";
   version = "2.7.1";
 
   meta = with lib; {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
     homepage = "https://github.com/evaleev/libint";
-    license = with licenses; [ lgpl3Only gpl3Only ];
-    maintainers = with maintainers; [ markuskowa sheepforce ];
-    platforms = [ "x86_64-linux" ];
+    license = with licenses; [lgpl3Only gpl3Only];
+    maintainers = with maintainers; [markuskowa sheepforce];
+    platforms = ["x86_64-linux"];
   };
 
   codeGen = stdenv.mkDerivation {
@@ -40,37 +51,41 @@ let
       done
     '';
 
-    nativeBuildInputs = [
-      autoconf
-      automake
-      libtool
-      mpfr
-      python3
-      perl
-      gmpxx
-    ] ++ lib.optional enableFortran gfortran;
+    nativeBuildInputs =
+      [
+        autoconf
+        automake
+        libtool
+        mpfr
+        python3
+        perl
+        gmpxx
+      ]
+      ++ lib.optional enableFortran gfortran;
 
-    buildInputs = [ boost eigen ];
+    buildInputs = [boost eigen];
 
     preConfigure = "./autogen.sh";
 
-    configureFlags = [
-      "--enable-eri=2"
-      "--enable-eri3=2"
-      "--enable-eri2=2"
-      "--with-eri-max-am=7,5,4"
-      "--with-eri-opt-am=3"
-      "--with-eri3-max-am=7"
-      "--with-eri2-max-am=7"
-      "--with-g12-max-am=5"
-      "--with-g12-opt-am=3"
-      "--with-g12dkh-max-am=5"
-      "--with-g12dkh-opt-am=3"
-      "--enable-contracted-ints"
-      "--enable-shared"
-    ] ++ lib.optional enableFMA "--enable-fma";
+    configureFlags =
+      [
+        "--enable-eri=2"
+        "--enable-eri3=2"
+        "--enable-eri2=2"
+        "--with-eri-max-am=7,5,4"
+        "--with-eri-opt-am=3"
+        "--with-eri3-max-am=7"
+        "--with-eri2-max-am=7"
+        "--with-g12-max-am=5"
+        "--with-g12-opt-am=3"
+        "--with-g12dkh-max-am=5"
+        "--with-g12dkh-opt-am=3"
+        "--enable-contracted-ints"
+        "--enable-shared"
+      ]
+      ++ lib.optional enableFMA "--enable-fma";
 
-    makeFlags = [ "export" ];
+    makeFlags = ["export"];
 
     installPhase = ''
       mkdir -p $out
@@ -87,18 +102,21 @@ let
 
     src = "${codeGen}/${pname}-${version}.tgz";
 
-    nativeBuildInputs = [
-      python3
-      cmake
-    ] ++ lib.optional enableFortran gfortran;
+    nativeBuildInputs =
+      [
+        python3
+        cmake
+      ]
+      ++ lib.optional enableFortran gfortran;
 
-    buildInputs = [ boost eigen ];
+    buildInputs = [boost eigen];
 
     # Default is just "double", but SSE2 is available on all x86_64 CPUs.
     # AVX support is advertised, but does not work in 2.6 (possibly in 2.7).
     # Fortran interface is incompatible with changing the LIBINT2_REALTYPE.
     cmakeFlags = [
-      (if enableFortran
+      (
+        if enableFortran
         then "-DENABLE_FORTRAN=ON"
         else "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble"
       )
@@ -109,5 +127,5 @@ let
 
     inherit meta;
   };
-
-in codeComp
+in
+  codeComp

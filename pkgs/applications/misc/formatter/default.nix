@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, substituteAll
-, glib
-, gtk3
-, dosfstools
-, e2fsprogs
-, exfat
-, hfsprogs
-, ntfs3g
-, libgee
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  python3,
+  substituteAll,
+  glib,
+  gtk3,
+  dosfstools,
+  e2fsprogs,
+  exfat,
+  hfsprogs,
+  ntfs3g,
+  libgee,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "formatter";
   version = "0.4.0";
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple formatter designed for elementary OS";
     homepage = "https://github.com/Djaler/Formatter";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [xiorcale] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
     mainProgram = "com.github.djaler.formatter";

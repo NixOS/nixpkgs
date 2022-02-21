@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "stripe";
   version = "2.66.0";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Stripe Python bindings";
     homepage = "https://github.com/stripe/stripe-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

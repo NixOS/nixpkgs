@@ -1,12 +1,22 @@
-{ lib, stdenv, fetchFromGitLab
-, desktop-file-utils, shared-mime-info
-, libiconv
-, libX11, libXcursor, libXext, libXi
-, freetype, fontconfig
-, libjpeg, libpng, libtiff, libwebp
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  desktop-file-utils,
+  shared-mime-info,
+  libiconv,
+  libX11,
+  libXcursor,
+  libXext,
+  libXi,
+  freetype,
+  fontconfig,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "azpainter";
   version = "3.0.4";
@@ -20,15 +30,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils # for update-desktop-database
-    shared-mime-info   # for update-mime-info
+    shared-mime-info # for update-mime-info
   ];
 
-  buildInputs = [
-    libX11 libXcursor libXext libXi
-    freetype fontconfig
-    libjpeg libpng libtiff libwebp
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs =
+    [
+      libX11
+      libXcursor
+      libXext
+      libXi
+      freetype
+      fontconfig
+      libjpeg
+      libpng
+      libtiff
+      libwebp
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [libiconv];
 
   enableParallelBuilding = true;
 
@@ -36,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Full color painting software for illustration drawing";
     homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
     platforms = with platforms; linux ++ darwin;
   };
 }

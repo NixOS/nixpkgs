@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, coreutils
-, openssh
-, gnupg
-, perl
-, procps
-, gnugrep
-, gawk
-, findutils
-, gnused
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  coreutils,
+  openssh,
+  gnupg,
+  perl,
+  procps,
+  gnugrep,
+  gawk,
+  findutils,
+  gnused,
 }:
-
 stdenv.mkDerivation rec {
   pname = "keychain";
   version = "2.8.5";
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
     sha256 = "1bkjlg0a2bbdjhwp37ci1rwikvrl4s3xlbf2jq2z4azc96dr83mj";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [installShellFiles makeWrapper];
+  buildInputs = [perl];
 
   installPhase = ''
     mkdir -p $out/bin
     cp keychain $out/bin/keychain
     installManPage keychain.1
     wrapProgram $out/bin/keychain \
-      --prefix PATH ":" "${lib.makeBinPath [ coreutils findutils gawk gnupg gnugrep gnused openssh procps ]}" \
+      --prefix PATH ":" "${lib.makeBinPath [coreutils findutils gawk gnupg gnugrep gnused openssh procps]}" \
   '';
 
   meta = with lib; {
@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.funtoo.org/Keychain";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sigma SuperSandro2000 ];
+    maintainers = with maintainers; [sigma SuperSandro2000];
   };
 }

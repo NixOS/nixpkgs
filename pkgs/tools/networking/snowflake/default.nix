@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchgit }:
-
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+}:
 buildGoModule rec {
   pname = "snowflake";
   version = "2.0.1";
@@ -15,7 +18,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "System to defeat internet censorship";
     homepage = "https://snowflake.torproject.org/";
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [lourkeur];
     license = licenses.bsd3;
   };
 }

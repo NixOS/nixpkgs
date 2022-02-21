@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, ronn }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  ronn,
+}:
 stdenv.mkDerivation rec {
   pname = "flock";
   version = "0.2.3";
@@ -11,12 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "1vdq22zhdfi7wwndsd6s7fwmz02fsn0x04d7asq4hslk7bjxjjzn";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ronn ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [ronn];
 
   meta = with lib; {
     description = "Cross-platform version of flock(1)";
-    maintainers = [ maintainers.matthewbauer ];
+    maintainers = [maintainers.matthewbauer];
     platforms = platforms.all;
     license = licenses.isc;
   };

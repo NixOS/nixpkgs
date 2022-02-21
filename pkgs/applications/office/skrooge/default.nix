@@ -1,10 +1,32 @@
-{ mkDerivation, lib, fetchpatch, fetchurl,
-  cmake, extra-cmake-modules, qtwebengine, qtscript, grantlee,
-  kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
-  kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
-  kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared-mime-info
+{
+  mkDerivation,
+  lib,
+  fetchpatch,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  qtwebengine,
+  qtscript,
+  grantlee,
+  kxmlgui,
+  kwallet,
+  kparts,
+  kdoctools,
+  kjobwidgets,
+  kdesignerplugin,
+  kiconthemes,
+  knewstuff,
+  sqlcipher,
+  qca-qt5,
+  kactivities,
+  karchive,
+  kguiaddons,
+  knotifyconfig,
+  krunner,
+  kwindowsystem,
+  libofx,
+  shared-mime-info,
 }:
-
 mkDerivation rec {
   pname = "skrooge";
   version = "2.27.0";
@@ -15,13 +37,32 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake extra-cmake-modules kdoctools shared-mime-info
+    cmake
+    extra-cmake-modules
+    kdoctools
+    shared-mime-info
   ];
 
   buildInputs = [
-    qtwebengine qtscript grantlee kxmlgui kwallet kparts
-    kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
-    kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
+    qtwebengine
+    qtscript
+    grantlee
+    kxmlgui
+    kwallet
+    kparts
+    kjobwidgets
+    kdesignerplugin
+    kiconthemes
+    knewstuff
+    sqlcipher
+    qca-qt5
+    kactivities
+    karchive
+    kguiaddons
+    knotifyconfig
+    krunner
+    kwindowsystem
+    libofx
   ];
 
   # SKG_DESIGNER must be used to generate the needed library for QtDesigner.
@@ -36,8 +77,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A personal finances manager, powered by KDE";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ joko ];
+    license = with licenses; [gpl3];
+    maintainers = with maintainers; [joko];
     homepage = "https://skrooge.org/";
   };
 }

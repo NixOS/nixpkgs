@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, gsl
-, mpfr
-, perl
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gsl,
+  mpfr,
+  perl,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ViennaRNA";
   version = "2.4.18";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Prediction and comparison of RNA secondary structures";
     homepage = "https://www.tbi.univie.ac.at/RNA/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
     platforms = platforms.unix;
     # Perl bindings fail on aarch64-darwin with "Undefined symbols for architecture arm64"
     broken = stdenv.isDarwin && stdenv.isAarch64;

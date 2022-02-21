@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, installShellFiles
-, pytestCheckHook
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  pytestCheckHook,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "sqlparse";
   version = "0.4.2";
@@ -17,9 +17,9 @@ buildPythonPackage rec {
     sha256 = "0c00730c74263a94e5a9919ade150dfc3b19c574389985446148402998287dae";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   postInstall = ''
     installManPage docs/sqlformat.1

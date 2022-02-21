@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-# , backports
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm
+  # , backports
+  ,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "backports.weakref";
   version = "1.0.post1";
@@ -14,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "bc4170a29915f8b22c9e7c4939701859650f2eb84184aee80da329ac0b9825c2";
   };
 
-  buildInputs = [ setuptools-scm ];
-#   checkInputs = [ backports ];
+  buildInputs = [setuptools-scm];
+  #   checkInputs = [ backports ];
 
   # Requires backports package
   doCheck = false;
@@ -27,6 +28,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Backports of new features in Python’s weakref module";
     license = licenses.psfl;
-    maintainers = with maintainers; [ jyp ];
+    maintainers = with maintainers; [jyp];
   };
 }

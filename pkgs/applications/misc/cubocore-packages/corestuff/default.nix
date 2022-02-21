@@ -1,5 +1,16 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, kglobalaccel, xorg, cmake, ninja, libcprime, libcsys }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  qtx11extras,
+  kglobalaccel,
+  xorg,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 mkDerivation rec {
   pname = "corestuff";
   version = "4.3.0";
@@ -34,7 +45,7 @@ mkDerivation rec {
     description = "An activity viewer from the C Suite";
     homepage = "https://gitlab.com/cubocore/coreapps/corestuff";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

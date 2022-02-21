@@ -1,23 +1,25 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   inherit (builtins) attrNames head map match readFile;
   inherit (lib) types;
   inherit (config.environment) etc;
   cfg = config.security.apparmor;
-  mkDisableOption = name: mkEnableOption name // {
-    default = true;
-    example = false;
-  };
+  mkDisableOption = name:
+    mkEnableOption name
+    // {
+      default = true;
+      example = false;
+    };
   enabledPolicies = filterAttrs (n: p: p.enable) cfg.policies;
-in
-
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "security" "apparmor" "confineSUIDApplications" ] "Please use the new options: `security.apparmor.policies.<policy>.enable'.")
-    (mkRemovedOptionModule [ "security" "apparmor" "profiles" ] "Please use the new option: `security.apparmor.policies'.")
+    (mkRemovedOptionModule ["security" "apparmor" "confineSUIDApplications"] "Please use the new options: `security.apparmor.policies.<policy>.enable'.")
+    (mkRemovedOptionModule ["security" "apparmor" "profiles"] "Please use the new option: `security.apparmor.policies'.")
     apparmor/includes.nix
     apparmor/profiles.nix
   ];
@@ -45,7 +47,11 @@ in
         description = ''
           AppArmor policies.
         '';
-        type = types.attrsOf (types.submodule ({ name, config, ... }: {
+        type = types.attrsOf (types.submodule ({
+          name,
+          config,
+          ...
+        }: {
           options = {
             enable = mkDisableOption "loading of the profile into the kernel";
             enforce = mkDisableOption "enforcing of the policy or only complain in the logs";
@@ -93,8 +99,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = map (policy:
-      { assertion = match ".*/.*" policy == null;
+    assertions = map (
+      policy: {
+        assertion = match ".*/.*" policy == null;
         message = "`security.apparmor.policies.\"${policy}\"' must not contain a slash.";
         # Because, for instance, aa-remove-unknown uses profiles_names_list() in rc.apparmor.functions
         # which does not recurse into sub-directories.
@@ -108,15 +115,24 @@ in
     environment.etc."apparmor.d".source = pkgs.linkFarm "apparmor.d" (
       # It's important to put only enabledPolicies here and not all cfg.policies
       # because aa-remove-unknown reads profiles from all /etc/apparmor.d/*
-      mapAttrsToList (name: p: { inherit name; path = p.profile; }) enabledPolicies ++
-      mapAttrsToList (name: path: { inherit name path; }) cfg.includes
+      mapAttrsToList (name: p: {
+        inherit name;
+        path = p.profile;
+      })
+      enabledPolicies
+      ++ mapAttrsToList (name: path: {inherit name path;}) cfg.includes
     );
-    environment.etc."apparmor/parser.conf".text = ''
-        ${if cfg.enableCache then "write-cache" else "skip-cache"}
+    environment.etc."apparmor/parser.conf".text =
+      ''
+        ${
+          if cfg.enableCache
+          then "write-cache"
+          else "skip-cache"
+        }
         cache-loc /var/cache/apparmor
         Include /etc/apparmor.d
-      '' +
-      concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
+      ''
+      + concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
     # For aa-logprof
     environment.etc."apparmor/apparmor.conf".text = ''
     '';
@@ -151,23 +167,23 @@ in
           ${config.users.defaultUserShell} = icnu
       '';
       footer = "${pkgs.apparmor-utils}/etc/apparmor/logprof.conf";
-      passAsFile = [ "header" ];
+      passAsFile = ["header"];
     } ''
       cp $headerPath $out
       sed '1,/\[qualifiers\]/d' $footer >> $out
     '';
 
-    boot.kernelParams = [ "apparmor=1" "security=apparmor" ];
+    boot.kernelParams = ["apparmor=1" "security=apparmor"];
 
     systemd.services.apparmor = {
       after = [
         "local-fs.target"
         "systemd-journald-audit.socket"
       ];
-      before = [ "sysinit.target" ];
-      wantedBy = [ "multi-user.target" ];
+      before = ["sysinit.target"];
+      wantedBy = ["multi-user.target"];
       unitConfig = {
-        Description="Load AppArmor policies";
+        Description = "Load AppArmor policies";
         DefaultDependencies = "no";
         ConditionSecurity = "apparmor";
       };
@@ -187,7 +203,7 @@ in
           kill
         '';
         commonOpts = p: "--verbose --show-cache ${optionalString (!p.enforce) "--complain "}${p.profile}";
-        in {
+      in {
         Type = "oneshot";
         RemainAfterExit = "yes";
         ExecStartPre = "${pkgs.apparmor-utils}/bin/aa-teardown";
@@ -196,21 +212,23 @@ in
         ExecReload =
           # Add or replace into the kernel profiles in enabledPolicies
           # (because AppArmor can do that without stopping the processes already confined).
-          mapAttrsToList (n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --replace ${commonOpts p}") enabledPolicies ++
+          mapAttrsToList (n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --replace ${commonOpts p}") enabledPolicies
+          ++
           # Remove from the kernel any profile whose name is not
           # one of the names within the content of the profiles in enabledPolicies
           # (indirectly read from /etc/apparmor.d/*, without recursing into sub-directory).
           # Note that this does not remove profiles dynamically generated by libvirt.
-          [ "${pkgs.apparmor-utils}/bin/aa-remove-unknown" ] ++
+          ["${pkgs.apparmor-utils}/bin/aa-remove-unknown"]
+          ++
           # Optionaly kill the processes which are unconfined but now have a profile loaded
           # (because AppArmor can only start to confine new processes).
           optional cfg.killUnconfinedConfinables killUnconfinedConfinables;
         ExecStop = "${pkgs.apparmor-utils}/bin/aa-teardown";
-        CacheDirectory = [ "apparmor" "apparmor/logprof" ];
+        CacheDirectory = ["apparmor" "apparmor/logprof"];
         CacheDirectoryMode = "0700";
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ julm ];
+  meta.maintainers = with maintainers; [julm];
 }

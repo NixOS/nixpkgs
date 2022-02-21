@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchgit, pkg-config, libbpf, cmake, elfutils, zlib, argp-standalone, musl-obstack }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  pkg-config,
+  libbpf,
+  cmake,
+  elfutils,
+  zlib,
+  argp-standalone,
+  musl-obstack,
+}:
 stdenv.mkDerivation rec {
   pname = "pahole";
   version = "1.23";
@@ -9,15 +19,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Dt3ZcUfjwdtTTv6qRFRgwK5GFWXdpN7fvb9KhpS1O94=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ elfutils zlib libbpf ]
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs =
+    [elfutils zlib libbpf]
     ++ lib.optional stdenv.hostPlatform.isMusl [
-    argp-standalone
-    musl-obstack
-  ];
+      argp-standalone
+      musl-obstack
+    ];
 
   # Put libraries in "lib" subdirectory, not top level of $out
-  cmakeFlags = [ "-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF" ];
+  cmakeFlags = ["-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF"];
 
   meta = with lib; {
     homepage = "https://git.kernel.org/cgit/devel/pahole/pahole.git/";
@@ -25,6 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bosu martinetd ];
+    maintainers = with maintainers; [bosu martinetd];
   };
 }

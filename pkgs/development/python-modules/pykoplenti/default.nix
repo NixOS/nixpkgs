@@ -1,13 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, prompt-toolkit
-, pycryptodome
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  prompt-toolkit,
+  pycryptodome,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pykoplenti";
   version = "1.0.0";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pykoplenti" ];
+  pythonImportsCheck = ["pykoplenti"];
 
   meta = with lib; {
     description = "Python REST client API for Kostal Plenticore Inverters";
     homepage = "https://github.com/stegm/pykoplenti/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

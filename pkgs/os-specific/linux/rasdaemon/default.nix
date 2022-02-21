@@ -1,10 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook
-, glibcLocales, kmod, coreutils, perl
-, dmidecode, hwdata, sqlite
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  glibcLocales,
+  kmod,
+  coreutils,
+  perl,
+  dmidecode,
+  hwdata,
+  sqlite,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rasdaemon";
   version = "0.6.7";
@@ -16,36 +23,38 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vyUDwqDe+HD4mka6smdQuVSM5U9uMv/TrfHkyqVJMIo=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  buildInputs = [
-    coreutils
-    glibcLocales
-    hwdata
-    kmod
-    sqlite
-    (perl.withPackages (ps: with ps; [ DBI DBDSQLite ]))
-  ]
-  ++ lib.optionals (!stdenv.isAarch64) [ dmidecode ];
+  buildInputs =
+    [
+      coreutils
+      glibcLocales
+      hwdata
+      kmod
+      sqlite
+      (perl.withPackages (ps: with ps; [DBI DBDSQLite]))
+    ]
+    ++ lib.optionals (!stdenv.isAarch64) [dmidecode];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-sysconfdefdir=${placeholder "out"}/etc/sysconfig"
-    "--enable-sqlite3"
-    "--enable-aer"
-    "--enable-mce"
-    "--enable-extlog"
-    "--enable-non-standard"
-    "--enable-abrt-report"
-    "--enable-hisi-ns-decode"
-    "--enable-devlink"
-    "--enable-diskerror"
-    "--enable-memory-failure"
-    "--enable-memory-ce-pfa"
-    "--enable-amp-ns-decode"
-  ]
-  ++ lib.optionals (stdenv.isAarch64) [ "--enable-arm" ];
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
+      "--with-sysconfdefdir=${placeholder "out"}/etc/sysconfig"
+      "--enable-sqlite3"
+      "--enable-aer"
+      "--enable-mce"
+      "--enable-extlog"
+      "--enable-non-standard"
+      "--enable-abrt-report"
+      "--enable-hisi-ns-decode"
+      "--enable-devlink"
+      "--enable-diskerror"
+      "--enable-memory-failure"
+      "--enable-memory-ce-pfa"
+      "--enable-amp-ns-decode"
+    ]
+    ++ lib.optionals (stdenv.isAarch64) ["--enable-arm"];
 
   # The installation attempts to create the following directories:
   # /var/lib/rasdaemon
@@ -65,29 +74,30 @@ stdenv.mkDerivation rec {
   # therefore, stripping these from the generated Makefile
   # (needed in the config flags because those set where the tools look for these)
 
-# easy way out, ends up installing /nix/store/...rasdaemon/bin in $out
+  # easy way out, ends up installing /nix/store/...rasdaemon/bin in $out
 
   postConfigure = ''
     substituteInPlace Makefile \
       --replace '"$(DESTDIR)/etc/ras/dimm_labels.d"' '"$(prefix)/etc/ras/dimm_labels.d"'
   '';
 
-  outputs = [ "out" "dev" "man" "inject" ];
+  outputs = ["out" "dev" "man" "inject"];
 
   postInstall = ''
     install -Dm 0755 contrib/edac-fake-inject $inject/bin/edac-fake-inject
     install -Dm 0755 contrib/edac-tests $inject/bin/edac-tests
   '';
 
-  postFixup = ''
-    # Fix dmidecode and modprobe paths
-    substituteInPlace $out/bin/ras-mc-ctl \
-      --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
-  ''
-  + lib.optionalString (!stdenv.isAarch64) ''
-    substituteInPlace $out/bin/ras-mc-ctl \
-      --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
-  '';
+  postFixup =
+    ''
+      # Fix dmidecode and modprobe paths
+      substituteInPlace $out/bin/ras-mc-ctl \
+        --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
+    ''
+    + lib.optionalString (!stdenv.isAarch64) ''
+      substituteInPlace $out/bin/ras-mc-ctl \
+        --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
+    '';
 
   passthru.tests = nixosTests.rasdaemon;
 
@@ -106,6 +116,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     changelog = "https://github.com/mchehab/rasdaemon/blob/v${version}/ChangeLog";
-    maintainers = with maintainers; [ evils ];
+    maintainers = with maintainers; [evils];
   };
 }

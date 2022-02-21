@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   version = "1.0.1";
   pname = "gpac";
@@ -17,9 +22,9 @@ stdenv.mkDerivation rec {
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   enableParallelBuilding = true;
 
@@ -39,7 +44,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gpac.wp.imt.fr";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ bluescreen303 mgdelacroix ];
+    maintainers = with maintainers; [bluescreen303 mgdelacroix];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, substituteAll, python, nose, mercurial }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  substituteAll,
+  python,
+  nose,
+  mercurial,
+}:
 buildPythonPackage rec {
   pname = "python-hglib";
   version = "2.6.1";
@@ -27,7 +35,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   checkPhase = ''
     ${python.interpreter} test.py --with-hg "${mercurial}/bin/hg" -v
@@ -37,7 +45,7 @@ buildPythonPackage rec {
     description = "Mercurial Python library";
     homepage = "http://selenic.com/repo/python-hglib";
     license = licenses.mit;
-    maintainers = with maintainers; [ dfoxfranke ];
+    maintainers = with maintainers; [dfoxfranke];
     platforms = platforms.all;
   };
 }

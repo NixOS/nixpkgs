@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, zlib
-, ncurses
-, findutils
-, systemd
-, python3
-# makes the package unfree via pynvml
-, withAtopgpu ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  ncurses,
+  findutils,
+  systemd,
+  python3
+  # makes the package unfree via pynvml
+  ,
+  withAtopgpu ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "atop";
   version = "2.6.0";
@@ -19,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "nsLKOlcWkvfvqglfmaUQZDK8txzCLNbElZfvBIEFj3I=";
   };
 
-  nativeBuildInputs = lib.optionals withAtopgpu [ python3.pkgs.wrapPython ];
-  buildInputs = [ zlib ncurses ] ++ lib.optionals withAtopgpu [ python3 ];
-  pythonPath = lib.optionals withAtopgpu [ python3.pkgs.pynvml ];
+  nativeBuildInputs = lib.optionals withAtopgpu [python3.pkgs.wrapPython];
+  buildInputs = [zlib ncurses] ++ lib.optionals withAtopgpu [python3];
+  pythonPath = lib.optionals withAtopgpu [python3.pkgs.pynvml];
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -53,22 +54,28 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'chmod 04711' 'chmod 0711'
   '';
 
-  installTargets = [ "systemdinstall" ];
+  installTargets = ["systemdinstall"];
   preInstall = ''
     mkdir -p $out/bin
   '';
-  postInstall = ''
-    # remove extra files we don't need
-    rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
-  '' + (if withAtopgpu then ''
-    wrapPythonPrograms
-  '' else ''
-    rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
-  '');
+  postInstall =
+    ''
+      # remove extra files we don't need
+      rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
+    ''
+    + (if withAtopgpu
+    then
+      ''
+        wrapPythonPrograms
+      ''
+    else
+      ''
+        rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
+      '');
 
   meta = with lib; {
     platforms = platforms.linux;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     description = "Console system performance monitor";
 
     longDescription = ''

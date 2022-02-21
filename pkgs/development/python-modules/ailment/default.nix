@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pyvex
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pyvex,
 }:
-
 buildPythonPackage rec {
   pname = "ailment";
   version = "9.1.11752";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "The angr Intermediate Language";
     homepage = "https://github.com/angr/ailment";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd2];
+    maintainers = with maintainers; [fab];
   };
 }

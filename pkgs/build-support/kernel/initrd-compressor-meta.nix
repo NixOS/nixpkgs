@@ -43,11 +43,15 @@ rec {
     ubootName = "zstd";
     extension = ".zst";
   };
-  pigz = gzip // {
-    executable = pkgs: "${pkgs.pigz}/bin/pigz";
-  };
-  pixz = xz // {
-    executable = pkgs: "${pkgs.pixz}/bin/pixz";
-    defaultArgs = [];
-  };
+  pigz =
+    gzip
+    // {
+      executable = pkgs: "${pkgs.pigz}/bin/pigz";
+    };
+  pixz =
+    xz
+    // {
+      executable = pkgs: "${pkgs.pixz}/bin/pixz";
+      defaultArgs = [];
+    };
 }

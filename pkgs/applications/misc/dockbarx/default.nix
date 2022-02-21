@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, gtk3
-, keybinder3
-, libwnck
-, python3Packages
-, wrapGAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  gtk3,
+  keybinder3,
+  libwnck,
+  python3Packages,
+  wrapGAppsHook,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "dockbarx";
   version = "${ver}-${rev}";
@@ -79,6 +79,6 @@ python3Packages.buildPythonApplication rec {
     description = "Lightweight taskbar/panel replacement which works as a stand-alone dock";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

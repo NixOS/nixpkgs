@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qttools
-, alsa-lib, ftgl, libGLU, libjack2, qtbase, rtmidi, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  alsa-lib,
+  ftgl,
+  libGLU,
+  libjack2,
+  qtbase,
+  rtmidi,
+  wrapQtAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pianobooster";
   version = "0.7.2b";
@@ -13,9 +24,9 @@ stdenv.mkDerivation rec {
     sha256 = "03xcdnlpsij22ca3i6xj19yqzn3q2ch0d32r73v0c96nm04gvhjj";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [cmake pkg-config qttools wrapQtAppsHook];
 
-  buildInputs = [ alsa-lib ftgl libGLU libjack2 qtbase rtmidi ];
+  buildInputs = [alsa-lib ftgl libGLU libjack2 qtbase rtmidi];
 
   cmakeFlags = [
     "-DOpenGL_GL_PREFERENCE=GLVND"
@@ -26,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/captnfab/PianoBooster";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu orivej ];
+    maintainers = with maintainers; [goibhniu orivej];
   };
 }

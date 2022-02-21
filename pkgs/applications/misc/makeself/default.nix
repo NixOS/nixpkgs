@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, which, zstd, pbzip2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  zstd,
+  pbzip2,
+}:
 stdenv.mkDerivation rec {
   version = "2.4.5";
   pname = "makeself";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
   # when running these tests inside build, based on free disk space.
   doCheck = false;
   checkTarget = "test";
-  checkInputs = [ which zstd pbzip2 ];
+  checkInputs = [which zstd pbzip2];
 
   installPhase = ''
     mkdir -p $out/{bin,share/{${pname}-${version},man/man1}}
@@ -37,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://makeself.io";
     description = "Utility to create self-extracting packages";
     license = licenses.gpl2;
-    maintainers = [ maintainers.wmertens ];
+    maintainers = [maintainers.wmertens];
     platforms = platforms.all;
   };
 }

@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.matrix-appservice-irc;
 
   pkg = pkgs.matrix-appservice-irc;
@@ -12,11 +14,11 @@ let
 
   configFile = pkgs.runCommand "matrix-appservice-irc.yml" {
     # Because this program will be run at build time, we need `nativeBuildInputs`
-    nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.pyyaml ps.jsonschema ])) ];
+    nativeBuildInputs = [(pkgs.python3.withPackages (ps: [ps.pyyaml ps.jsonschema]))];
     preferLocalBuild = true;
 
     config = builtins.toJSON cfg.settings;
-    passAsFile = [ "config" ];
+    passAsFile = ["config"];
   } ''
     # The schema is given as yaml, we need to convert it to json
     python -c 'import json; import yaml; import sys; json.dump(yaml.safe_load(sys.stdin), sys.stdout)' \
@@ -139,7 +141,7 @@ in {
                 };
 
                 servers = mkOption {
-                  type = submodule { freeformType = jsonType; };
+                  type = submodule {freeformType = jsonType;};
                   description = "IRC servers to connect to";
                 };
               };
@@ -152,8 +154,8 @@ in {
   config = mkIf cfg.enable {
     systemd.services.matrix-appservice-irc = {
       description = "Matrix-IRC bridge";
-      before = [ "matrix-synapse.service" ]; # So the registration can be used by Synapse
-      wantedBy = [ "multi-user.target" ];
+      before = ["matrix-synapse.service"]; # So the registration can be used by Synapse
+      wantedBy = ["multi-user.target"];
 
       preStart = ''
         umask 077
@@ -205,7 +207,7 @@ in {
         User = "matrix-appservice-irc";
         Group = "matrix-appservice-irc";
 
-        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ optional (cfg.needBindingCap) "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = ["CAP_CHOWN"] ++ optional (cfg.needBindingCap) "CAP_NET_BIND_SERVICE";
         AmbientCapabilities = CapabilityBoundingSet;
         NoNewPrivileges = true;
 

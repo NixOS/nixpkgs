@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fontconfig
-, libX11
-, libXext
-, libXft
-, ncurses
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  libX11,
+  libXext,
+  libXft,
+  ncurses,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xst";
   version = "0.8.4.1";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/gnotclub/xst";
     description = "Simple terminal fork that can load config from Xresources";
     license = licenses.mit;
-    maintainers = [ maintainers.vyp ];
+    maintainers = [maintainers.vyp];
     platforms = platforms.linux;
   };
 }

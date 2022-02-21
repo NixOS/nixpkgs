@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, fuse }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  fuse,
+}:
 stdenv.mkDerivation rec {
   pname = "aefs";
   version = "0.4pre259-8843b7c";
@@ -26,13 +31,13 @@ stdenv.mkDerivation rec {
   #     $ grep -R FUSE_USE_VERSION
   configureFlags = lib.optional stdenv.isDarwin "CPPFLAGS=-DFUSE_USE_VERSION=26";
 
-  buildInputs = [ fuse ];
+  buildInputs = [fuse];
 
   meta = with lib; {
     homepage = "https://github.com/edolstra/aefs";
     description = "A cryptographic filesystem implemented in userspace using FUSE";
     platforms = platforms.unix;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [maintainers.eelco];
     license = licenses.gpl2;
   };
 }

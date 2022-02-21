@@ -1,5 +1,9 @@
-{ lib, perlPackages, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  perlPackages,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 perlPackages.buildPerlPackage rec {
   pname = "wakeonlan";
   version = "0.41";
@@ -11,9 +15,9 @@ perlPackages.buildPerlPackage rec {
     sha256 = "0m48b39lz0yc5ckx2jx8y2p4c8npjngxl9wy86k43xgsd8mq1g3c";
   };
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   installPhase = ''
     install -Dt $out/bin wakeonlan
@@ -24,6 +28,6 @@ perlPackages.buildPerlPackage rec {
     description = "Perl script for waking up computers via Wake-On-LAN magic packets";
     homepage = "https://github.com/jpoliv/wakeonlan";
     license = licenses.artistic1;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

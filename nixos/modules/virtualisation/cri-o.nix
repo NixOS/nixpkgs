@@ -1,18 +1,21 @@
-{ config, lib, pkgs, utils, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
+with lib; let
   cfg = config.virtualisation.cri-o;
 
-  crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
+  crioPackage = (pkgs.cri-o.override {inherit (cfg) extraPackages;});
 
-  format = pkgs.formats.toml { };
+  format = pkgs.formats.toml {};
 
   cfgFile = format.generate "00-default.conf" cfg.settings;
-in
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "virtualisation" "cri-o" "registries" ] [ "virtualisation" "containers" "registries" "search" ])
+    (mkRenamedOptionModule ["virtualisation" "cri-o" "registries"] ["virtualisation" "containers" "registries" "search"])
   ];
 
   meta = {
@@ -23,13 +26,13 @@ in
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum [ "btrfs" "overlay" "vfs" ];
+      type = types.enum ["btrfs" "overlay" "vfs"];
       default = "overlay";
       description = "Storage driver to be used";
     };
 
     logLevel = mkOption {
-      type = types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
+      type = types.enum ["trace" "debug" "info" "warn" "error" "fatal"];
       default = "info";
       description = "Log level to be used";
     };
@@ -57,7 +60,7 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = [ ];
+      default = [];
       example = literalExpression ''
         [
           pkgs.gvisor
@@ -90,7 +93,7 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = { };
+      default = {};
       description = ''
         Configuration for cri-o, see
         <link xlink:href="https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md"/>.
@@ -99,7 +102,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package pkgs.cri-tools ];
+    environment.systemPackages = [cfg.package pkgs.cri-tools];
 
     environment.etc."crictl.yaml".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/crictl.yaml";
 
@@ -112,7 +115,7 @@ in
       };
 
       network = {
-        plugin_dirs = [ "${pkgs.cni-plugins}/bin" ];
+        plugin_dirs = ["${pkgs.cni-plugins}/bin"];
         network_dir = mkIf (cfg.networkDir != null) cfg.networkDir;
       };
 
@@ -123,11 +126,11 @@ in
         pinns_path = "${cfg.package}/bin/pinns";
         hooks_dir =
           optional (config.virtualisation.containers.ociSeccompBpfHook.enable)
-            config.boot.kernelPackages.oci-seccomp-bpf-hook;
+          config.boot.kernelPackages.oci-seccomp-bpf-hook;
 
         default_runtime = mkIf (cfg.runtime != null) cfg.runtime;
         runtimes = mkIf (cfg.runtime != null) {
-          "${cfg.runtime}" = { };
+          "${cfg.runtime}" = {};
         };
       };
     };
@@ -141,10 +144,10 @@ in
 
     systemd.services.crio = {
       description = "Container Runtime Interface for OCI (CRI-O)";
-      documentation = [ "https://github.com/cri-o/cri-o" ];
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ cfg.package ];
+      documentation = ["https://github.com/cri-o/cri-o"];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      path = [cfg.package];
       serviceConfig = {
         Type = "notify";
         ExecStart = "${cfg.package}/bin/crio";
@@ -157,7 +160,7 @@ in
         TimeoutStartSec = "0";
         Restart = "on-abnormal";
       };
-      restartTriggers = [ cfgFile ];
+      restartTriggers = [cfgFile];
     };
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3 }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "git-crecord";
   version = "20201025.0";
@@ -11,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1rkdmy2d2vsx22fx97nd9afh0g5lq4pns7rdxyl711apq1bhiihn";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ docutils ];
+  propagatedBuildInputs = with python3.pkgs; [docutils];
 
   # has no tests
   doCheck = false;

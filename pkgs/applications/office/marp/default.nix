@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, atomEnv, libXScrnSaver, gtk2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  atomEnv,
+  libXScrnSaver,
+  gtk2,
+}:
 stdenv.mkDerivation rec {
   pname = "marp";
   version = "0.0.14";
@@ -23,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${atomEnv.libPath}:${lib.makeLibraryPath [ libXScrnSaver gtk2 ]}:$out/lib/marp" \
+      --set-rpath "${atomEnv.libPath}:${lib.makeLibraryPath [libXScrnSaver gtk2]}:$out/lib/marp" \
       $out/bin/Marp
   '';
 
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Markdown presentation writer, powered by Electron";
     homepage = "https://yhatt.github.io/marp/";
     license = licenses.mit;
-    maintainers = [ maintainers.puffnfresh ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.puffnfresh];
+    platforms = ["x86_64-linux"];
   };
 }

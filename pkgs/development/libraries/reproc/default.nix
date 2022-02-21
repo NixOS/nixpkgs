@@ -1,6 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "reproc";
   version = "14.2.4";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LWzBeKhE7cSiZsK8xWzoTdrOcPiU/zEkmi40WiFytic=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"

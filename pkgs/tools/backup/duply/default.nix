@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, coreutils, python2, duplicity, gawk, gnupg, bash
-, gnugrep, txt2man, makeWrapper, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  python2,
+  duplicity,
+  gawk,
+  gnupg,
+  bash,
+  gnugrep,
+  txt2man,
+  makeWrapper,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "duply";
   version = "2.3.1";
@@ -11,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "149hb9bk7hm5h3aqf19k37d0i2jf0viaqmpq2997i48qp3agji7h";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ txt2man ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [txt2man];
 
   postPatch = "patchShebangs .";
 
@@ -21,7 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/man/man1"
     install -vD duply "$out/bin"
     wrapProgram "$out/bin/duply" --set PATH \
-        ${lib.makeBinPath [ coreutils python2 duplicity gawk gnupg bash gnugrep txt2man which ]}
+        ${lib.makeBinPath [coreutils python2 duplicity gawk gnupg bash gnugrep txt2man which]}
     "$out/bin/duply" txt2man > "$out/share/man/man1/duply.1"
   '';
 
@@ -35,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://duply.net/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
     platforms = lib.platforms.unix;
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, beautifulsoup4
-, buildPythonApplication
-, fetchPypi
-, filelock
-, requests
-, tqdm
-, setuptools
-, six
+{
+  lib,
+  beautifulsoup4,
+  buildPythonApplication,
+  fetchPypi,
+  filelock,
+  requests,
+  tqdm,
+  setuptools,
+  six,
 }:
-
 buildPythonApplication rec {
   pname = "gdown";
   version = "4.3.0";
@@ -40,6 +40,6 @@ buildPythonApplication rec {
     description = "A CLI tool for downloading large files from Google Drive";
     homepage = "https://github.com/wkentaro/gdown";
     license = licenses.mit;
-    maintainers = with maintainers; [ breakds ];
+    maintainers = with maintainers; [breakds];
   };
 }

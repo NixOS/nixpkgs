@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "glow";
   version = "1.4.1";
@@ -15,13 +18,13 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X=main.Version=${version}"];
 
   meta = with lib; {
     description = "Render markdown on the CLI, with pizzazz!";
     homepage = "https://github.com/charmbracelet/glow";
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne penguwin ];
+    maintainers = with maintainers; [Br1ght0ne penguwin];
   };
 }

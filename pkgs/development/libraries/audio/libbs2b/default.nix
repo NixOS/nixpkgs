@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libsndfile }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libsndfile,
+}:
 stdenv.mkDerivation rec {
   pname = "libbs2b";
   version = "3.1.0";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vz442kkjn2h0dlxppzi4m5zx8qfyrivq581n06xzvnyxi5rg6a7";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsndfile ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libsndfile];
 
   configureFlags = [
     # Required for cross-compilation.
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
     # realloc(NULL, size) and treat it like malloc(size).
     "ac_cv_func_malloc_0_nonnull=yes"
   ];
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = {
     homepage = "http://bs2b.sourceforge.net/";

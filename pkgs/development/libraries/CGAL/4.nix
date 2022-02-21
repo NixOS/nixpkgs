@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, gmp, mpfr }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  gmp,
+  mpfr,
+}:
 stdenv.mkDerivation rec {
   version = "4.14.2";
   name = "cgal-" + version;
@@ -12,7 +20,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-
     # Pull upstream fix for c++17 (gcc-12):
     #  https://github.com/CGAL/cgal/pull/6109
     (fetchpatch {
@@ -22,7 +29,7 @@ stdenv.mkDerivation rec {
       # Upstream slightly reordered directory structure since.
       stripLen = 1;
       # Fill patch does not apply: touches too many parts of the source.
-      includes = [ "include/CGAL/CORE/BigFloatRep.h" ];
+      includes = ["include/CGAL/CORE/BigFloatRep.h"];
     })
     (fetchpatch {
       name = "gcc-12.patch";
@@ -35,16 +42,16 @@ stdenv.mkDerivation rec {
 
   # note: optional component libCGAL_ImageIO would need zlib and opengl;
   #   there are also libCGAL_Qt{3,4} omitted ATM
-  buildInputs = [ boost gmp mpfr ];
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [boost gmp mpfr];
+  nativeBuildInputs = [cmake];
 
   doCheck = false;
 
   meta = with lib; {
     description = "Computational Geometry Algorithms Library";
     homepage = "http://cgal.org";
-    license = with licenses; [ gpl3Plus lgpl3Plus];
+    license = with licenses; [gpl3Plus lgpl3Plus];
     platforms = platforms.all;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
   };
 }

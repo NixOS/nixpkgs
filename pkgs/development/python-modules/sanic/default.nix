@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, aiofiles
-, beautifulsoup4
-, buildPythonPackage
-, doCheck ? true
-, fetchFromGitHub
-, gunicorn
-, httptools
-, multidict
-, pytest-asyncio
-, pytest-benchmark
-, pytest-sugar
-, pytestCheckHook
-, pythonOlder
-, sanic-routing
-, sanic-testing
-, ujson
-, uvicorn
-, uvloop
-, websockets
+{
+  lib,
+  stdenv,
+  aiofiles,
+  beautifulsoup4,
+  buildPythonPackage,
+  doCheck ? true,
+  fetchFromGitHub,
+  gunicorn,
+  httptools,
+  multidict,
+  pytest-asyncio,
+  pytest-benchmark,
+  pytest-sugar,
+  pytestCheckHook,
+  pythonOlder,
+  sanic-routing,
+  sanic-testing,
+  ujson,
+  uvicorn,
+  uvloop,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "sanic";
   version = "21.12.1";
@@ -138,6 +138,6 @@ buildPythonPackage rec {
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc AluisioASG ];
+    maintainers = with maintainers; [costrouc AluisioASG];
   };
 }

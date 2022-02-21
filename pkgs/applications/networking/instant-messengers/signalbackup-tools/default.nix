@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, openssl, sqlite }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  sqlite,
+}:
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
   version = "20220218";
@@ -14,7 +19,7 @@ stdenv.mkDerivation rec {
   # Remove when Apple SDK is >= 10.13
   patches = lib.optional (stdenv.system == "x86_64-darwin") ./apple-sdk-missing-utimensat.patch;
 
-  buildInputs = [ openssl sqlite ];
+  buildInputs = [openssl sqlite];
   buildFlags = [
     "-Wall"
     "-Wextra"
@@ -39,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Tool to work with Signal Backup files";
     homepage = "https://github.com/bepaald/signalbackup-tools";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.malo ];
+    maintainers = [maintainers.malo];
     platforms = platforms.all;
   };
 }

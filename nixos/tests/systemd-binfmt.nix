@@ -1,33 +1,31 @@
 # Teach the kernel how to run armv7l and aarch64-linux binaries,
 # and run GNU Hello for these architectures.
-
-{ system ? builtins.currentSystem,
+{
+  system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. {inherit system config;},
 }:
+with import ../lib/testing-python.nix {inherit system pkgs;}; let
+  expectArgv0 = xpkgs:
+    xpkgs.runCommandCC "expect-argv0" {
+      src = pkgs.writeText "expect-argv0.c" ''
+        #include <stdio.h>
+        #include <string.h>
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
+        int main(int argc, char **argv) {
+          fprintf(stderr, "Our argv[0] is %s\n", argv[0]);
 
-let
-  expectArgv0 = xpkgs: xpkgs.runCommandCC "expect-argv0" {
-    src = pkgs.writeText "expect-argv0.c" ''
-      #include <stdio.h>
-      #include <string.h>
+          if (strcmp(argv[0], argv[1])) {
+            fprintf(stderr, "ERROR: argv[0] is %s, should be %s\n", argv[0], argv[1]);
+            return 1;
+          }
 
-      int main(int argc, char **argv) {
-        fprintf(stderr, "Our argv[0] is %s\n", argv[0]);
-
-        if (strcmp(argv[0], argv[1])) {
-          fprintf(stderr, "ERROR: argv[0] is %s, should be %s\n", argv[0], argv[1]);
-          return 1;
+          return 0;
         }
-
-        return 0;
-      }
+      '';
+    } ''
+      $CC -o $out $src
     '';
-  } ''
-    $CC -o $out $src
-  '';
 in {
   basic = makeTest {
     name = "systemd-binfmt";

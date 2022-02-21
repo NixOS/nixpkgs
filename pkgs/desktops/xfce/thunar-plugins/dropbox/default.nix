@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, gtk3
-, thunar
-, cmake
-, ninja
-, xfce
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  thunar,
+  cmake,
+  ninja,
+  xfce,
 }:
-
 stdenv.mkDerivation rec {
-  pname  = "thunar-dropbox";
+  pname = "thunar-dropbox";
   version = "0.3.1";
 
   src = fetchFromGitHub {
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
     description = "A plugin that adds context-menu items for Dropbox to Thunar";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

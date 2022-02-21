@@ -1,5 +1,12 @@
-{ fetchCrate, lib, openssl, pkg-config, rustPlatform, stdenv, Security }:
-
+{
+  fetchCrate,
+  lib,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "taplo-lsp";
   version = "0.2.6";
@@ -12,17 +19,18 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-zQ303JFqnbulkWL4t5+fRWijaY9zd9tLKvrvdUEvKpY=";
 
   # excludes test_tcp since it fails
-  cargoTestFlags = [ "test_stdio" ];
+  cargoTestFlags = ["test_stdio"];
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
 
-  buildInputs = lib.optional stdenv.isLinux openssl
+  buildInputs =
+    lib.optional stdenv.isLinux openssl
     ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "A TOML toolkit written in Rust";
     homepage = "https://taplo.tamasfe.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

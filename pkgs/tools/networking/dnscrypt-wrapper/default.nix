@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libsodium,
+  libevent,
+}:
 stdenv.mkDerivation rec {
   pname = "dnscrypt-wrapper";
   version = "0.4.2";
@@ -13,14 +20,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ libsodium libevent ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
+  buildInputs = [libsodium libevent];
 
   meta = with lib; {
     description = "A tool for adding dnscrypt support to any name resolver";
     homepage = "https://dnscrypt.info/";
     license = licenses.isc;
-    maintainers = with maintainers; [ tstrobel joachifm ];
+    maintainers = with maintainers; [tstrobel joachifm];
     platforms = platforms.linux;
   };
 }

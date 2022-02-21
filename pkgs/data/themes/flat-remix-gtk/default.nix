@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gtk-engine-murrine
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gtk-engine-murrine,
 }:
-
 stdenv.mkDerivation rec {
   pname = "flat-remix-gtk";
   version = "20220118";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   propagatedUserEnvPkgs = [
     gtk-engine-murrine
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://drasite.com/flat-remix-gtk";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = [maintainers.mkg20001];
   };
 }

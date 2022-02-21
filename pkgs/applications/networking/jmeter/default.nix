@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, jre, makeWrapper, coreutils }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  jre,
+  makeWrapper,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   pname = "jmeter";
   version = "5.4.3";
@@ -8,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-clISFMDLh9rFuXTBxug6F6AJx/03e1W/I1JcckA7He4=";
   };
 
-  nativeBuildInputs = [ makeWrapper jre ];
+  nativeBuildInputs = [makeWrapper jre];
 
   installPhase = ''
     mkdir $out
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = false; #NoClassDefFoundError: org/apache/logging/log4j/Level for tests
 
-  checkInputs = [ coreutils ];
+  checkInputs = [coreutils];
 
   installCheckPhase = ''
     $out/bin/jmeter --version 2>&1 | grep -q "${version}"
@@ -53,7 +59,7 @@ stdenv.mkDerivation rec {
       Applications but has since expanded to other test functions.
     '';
     license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    maintainers = [maintainers.bryanasdev000];
     priority = 1;
     platforms = platforms.unix;
   };

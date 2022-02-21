@@ -2,36 +2,32 @@
 # replace sendmail/postfix on simple systems.  It delivers email
 # directly to an SMTP server defined in its configuration file, without
 # queueing mail locally.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.ssmtp;
-
-in
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.ssmtp;
+in {
   imports = [
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "directDelivery" ] [ "services" "ssmtp" "enable" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "hostName" ] [ "services" "ssmtp" "hostName" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "domain" ] [ "services" "ssmtp" "domain" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "root" ] [ "services" "ssmtp" "root" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "useTLS" ] [ "services" "ssmtp" "useTLS" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "useSTARTTLS" ] [ "services" "ssmtp" "useSTARTTLS" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authUser" ] [ "services" "ssmtp" "authUser" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPassFile" ] [ "services" "ssmtp" "authPassFile" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "setSendmail" ] [ "services" "ssmtp" "setSendmail" ])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "directDelivery"] ["services" "ssmtp" "enable"])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "hostName"] ["services" "ssmtp" "hostName"])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "domain"] ["services" "ssmtp" "domain"])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "root"] ["services" "ssmtp" "root"])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "useTLS"] ["services" "ssmtp" "useTLS"])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "useSTARTTLS"] ["services" "ssmtp" "useSTARTTLS"])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "authUser"] ["services" "ssmtp" "authUser"])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "authPassFile"] ["services" "ssmtp" "authPassFile"])
+    (mkRenamedOptionModule ["networking" "defaultMailServer" "setSendmail"] ["services" "ssmtp" "setSendmail"])
 
-    (mkRemovedOptionModule [ "networking" "defaultMailServer" "authPass" ] "authPass has been removed since it leaks the clear-text password into the world-readable store. Use authPassFile instead and make sure it's not a store path")
-    (mkRemovedOptionModule [ "services" "ssmtp" "authPass" ] "authPass has been removed since it leaks the clear-text password into the world-readable store. Use authPassFile instead and make sure it's not a store path")
+    (mkRemovedOptionModule ["networking" "defaultMailServer" "authPass"] "authPass has been removed since it leaks the clear-text password into the world-readable store. Use authPassFile instead and make sure it's not a store path")
+    (mkRemovedOptionModule ["services" "ssmtp" "authPass"] "authPass has been removed since it leaks the clear-text password into the world-readable store. Use authPassFile instead and make sure it's not a store path")
   ];
 
   options = {
-
     services.ssmtp = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -48,7 +44,7 @@ in
       };
 
       settings = mkOption {
-        type = with types; attrsOf (oneOf [ bool str ]);
+        type = with types; attrsOf (oneOf [bool str]);
         default = {};
         description = ''
           <citerefentry><refentrytitle>ssmtp</refentrytitle><manvolnum>5</manvolnum></citerefentry> configuration. Refer
@@ -135,14 +131,10 @@ in
         default = true;
         description = "Whether to set the system sendmail to ssmtp's.";
       };
-
     };
-
   };
 
-
   config = mkIf cfg.enable {
-
     assertions = [
       {
         assertion = cfg.useSTARTTLS -> cfg.useTLS;
@@ -157,22 +149,25 @@ in
         UseTLS = cfg.useTLS;
         UseSTARTTLS = cfg.useSTARTTLS;
       })
-      (mkIf (cfg.root != "") { root = cfg.root; })
-      (mkIf (cfg.domain != "") { rewriteDomain = cfg.domain; })
-      (mkIf (cfg.authUser != "") { AuthUser = cfg.authUser; })
-      (mkIf (cfg.authPassFile != null) { AuthPassFile = cfg.authPassFile; })
+      (mkIf (cfg.root != "") {root = cfg.root;})
+      (mkIf (cfg.domain != "") {rewriteDomain = cfg.domain;})
+      (mkIf (cfg.authUser != "") {AuthUser = cfg.authUser;})
+      (mkIf (cfg.authPassFile != null) {AuthPassFile = cfg.authPassFile;})
     ];
 
     # careful here: ssmtp REQUIRES all config lines to end with a newline char!
-    environment.etc."ssmtp/ssmtp.conf".text = with generators; toKeyValue {
-      mkKeyValue = mkKeyValueDefault {
-        mkValueString = value:
-          if value == true then "YES"
-          else if value == false then "NO"
-          else mkValueStringDefault {} value
-        ;
-      } "=";
-    } cfg.settings;
+    environment.etc."ssmtp/ssmtp.conf".text = with generators;
+      toKeyValue {
+        mkKeyValue = mkKeyValueDefault {
+          mkValueString = value:
+            if value == true
+            then "YES"
+            else if value == false
+            then "NO"
+            else mkValueStringDefault {} value;
+        } "=";
+      }
+      cfg.settings;
 
     environment.systemPackages = [pkgs.ssmtp];
 
@@ -184,7 +179,5 @@ in
       owner = "root";
       group = "root";
     };
-
   };
-
 }

@@ -1,5 +1,11 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  gerbil-unstable,
+  gerbil-support,
+  gambit-support,
+}:
 gerbil-support.gerbilPackage {
   pname = "gerbil-ethereum";
   version = "unstable-2020-10-17";
@@ -19,9 +25,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil POO: Prototype Object Orientation for Gerbil Scheme";
-    homepage    = "https://github.com/fare/gerbil-poo";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    homepage = "https://github.com/fare/gerbil-poo";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [fare];
   };
 }

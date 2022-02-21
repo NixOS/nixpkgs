@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, libpcap }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  libpcap,
+}:
 stdenv.mkDerivation rec {
   pname = "nethogs";
   version = "0.8.6";
@@ -21,11 +27,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ncurses libpcap ];
+  buildInputs = [ncurses libpcap];
 
-  makeFlags = [ "VERSION=${version}" "nethogs" ];
+  makeFlags = ["VERSION=${version}" "nethogs"];
 
-  installFlags = [ "PREFIX=$(out)" "sbin=$(out)/bin" ];
+  installFlags = ["PREFIX=$(out)" "sbin=$(out)/bin"];
 
   meta = with lib; {
     description = "A small 'net top' tool, grouping bandwidth by process";
@@ -41,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "https://github.com/raboof/nethogs#readme";
     platforms = platforms.linux;
-    maintainers = [ maintainers.rycee ];
+    maintainers = [maintainers.rycee];
   };
 }

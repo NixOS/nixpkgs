@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, SDL2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  SDL2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "x16-emulator";
   version = "38";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  buildInputs = [ SDL2 ];
+  buildInputs = [SDL2];
 
   installPhase = ''
     runHook preInstall
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.commanderx16.com/forum/index.php?/home/";
     description = "The official emulator of CommanderX16 8-bit computer";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = SDL2.meta.platforms;
   };
 

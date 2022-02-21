@@ -1,5 +1,8 @@
-{ lib, stdenv, substituteAll }:
-
+{
+  lib,
+  stdenv,
+  substituteAll,
+}:
 # Provides a facility to hook into rfkill changes.
 #
 # Exemplary usage:
@@ -20,10 +23,8 @@
 #       fi
 #     '';
 #   }
-
 # Note: this package does not need the binaries
 # in the rfkill package.
-
 let
   rfkillHook =
     substituteAll {
@@ -31,26 +32,27 @@ let
       isExecutable = true;
       src = ./rfkill-hook.sh;
     };
-in stdenv.mkDerivation {
-  name = "rfkill-udev";
+in
+  stdenv.mkDerivation {
+    name = "rfkill-udev";
 
-  dontUnpack = true;
-  dontBuild = true;
+    dontUnpack = true;
+    dontBuild = true;
 
-  installPhase = ''
-    mkdir -p "$out/etc/udev/rules.d/";
-    cat > "$out/etc/udev/rules.d/90-rfkill.rules" << EOF
-      SUBSYSTEM=="rfkill", ATTR{type}=="wlan", RUN+="$out/bin/rfkill-hook.sh"
-    EOF
+    installPhase = ''
+      mkdir -p "$out/etc/udev/rules.d/";
+      cat > "$out/etc/udev/rules.d/90-rfkill.rules" << EOF
+        SUBSYSTEM=="rfkill", ATTR{type}=="wlan", RUN+="$out/bin/rfkill-hook.sh"
+      EOF
 
-    mkdir -p "$out/bin/";
-    cp ${rfkillHook} "$out/bin/rfkill-hook.sh"
-  '';
+      mkdir -p "$out/bin/";
+      cp ${rfkillHook} "$out/bin/rfkill-hook.sh"
+    '';
 
-  meta = with lib; {
-    homepage = "http://wireless.kernel.org/en/users/Documentation/rfkill";
-    description = "Rules+hook for udev to catch rfkill state changes";
-    platforms = platforms.linux;
-    license = licenses.mit;
-  };
-}
+    meta = with lib; {
+      homepage = "http://wireless.kernel.org/en/users/Documentation/rfkill";
+      description = "Rules+hook for udev to catch rfkill state changes";
+      platforms = platforms.linux;
+      license = licenses.mit;
+    };
+  }

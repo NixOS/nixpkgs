@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, google-api-python-client
-, google-auth-oauthlib
-, jupyterhub
-, mwoauth
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  google-api-python-client,
+  google-auth-oauthlib,
+  jupyterhub,
+  mwoauth,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "oauthenticator";
   version = "14.2.0";
@@ -42,12 +42,12 @@ buildPythonPackage rec {
     "test_mediawiki"
   ];
 
-  pythonImportsCheck = [ "oauthenticator" ];
+  pythonImportsCheck = ["oauthenticator"];
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";
-    homepage =  "https://github.com/jupyterhub/oauthenticator";
+    homepage = "https://github.com/jupyterhub/oauthenticator";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ixxie ];
+    maintainers = with maintainers; [ixxie];
   };
 }

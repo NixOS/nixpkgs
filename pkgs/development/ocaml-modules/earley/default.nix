@@ -1,7 +1,10 @@
-{ lib, fetchFromGitHub, ocaml, buildDunePackage
-, stdlib-shims
+{
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  buildDunePackage,
+  stdlib-shims,
 }:
-
 buildDunePackage rec {
   version = "3.0.0";
   pname = "earley";
@@ -15,14 +18,14 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.07";
   useDune2 = true;
 
-  buildInputs = [ stdlib-shims ];
+  buildInputs = [stdlib-shims];
 
   doCheck = true;
 
   meta = {
     description = "Parser combinators based on Earley Algorithm";
     license = lib.licenses.cecill-b;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     homepage = "https://github.com/rlepigre/ocaml-earley";
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, bcc
-, libseccomp
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  bcc,
+  libseccomp,
 }:
-
 buildGoModule rec {
   pname = "oci-seccomp-bpf-hook";
   version = "1.2.3";
@@ -19,7 +19,7 @@ buildGoModule rec {
   };
   vendorSha256 = null;
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
   nativeBuildInputs = [
     go-md2man
     installShellFiles
@@ -54,7 +54,7 @@ buildGoModule rec {
       OCI hook to trace syscalls and generate a seccomp profile
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ saschagrunert ];
+    maintainers = with maintainers; [saschagrunert];
     platforms = platforms.linux;
   };
 }

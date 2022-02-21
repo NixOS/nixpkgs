@@ -1,15 +1,14 @@
 {
-    lib,
-    buildPythonPackage,
-    fetchFromGitHub,
-    six,
-    requests,
-    django,
-    boto3,
-    python,
-    mock,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  requests,
+  django,
+  boto3,
+  python,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "django-anymail";
   version = "8.5";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     boto3
   ];
 
-  checkInputs = [ mock ];
+  checkInputs = [mock];
   checkPhase = ''
     substituteInPlace setup.py --replace "tests_require=[" "tests_require=[], #"
     export CONTINUOUS_INTEGRATION=1
@@ -42,6 +41,6 @@ buildPythonPackage rec {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

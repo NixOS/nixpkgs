@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "crcpp";
   version = "1.1.0.0";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/d-bahr/CRCpp";
     description = "Easy to use and fast C++ CRC library";
     platforms = platforms.all;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
     license = licenses.bsd3;
   };
 }

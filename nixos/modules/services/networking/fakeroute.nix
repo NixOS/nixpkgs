@@ -1,21 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.fakeroute;
   routeConf = pkgs.writeText "route.conf" (concatStringsSep "\n" cfg.route);
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.fakeroute = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -34,32 +30,27 @@ in
           "63.199.8.242"
         ];
         description = ''
-         Fake route that will appear after the real
-         one to any host running a traceroute.
+          Fake route that will appear after the real
+          one to any host running a traceroute.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
     systemd.services.fakeroute = {
       description = "Fakeroute Daemon";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "forking";
         User = "root";
         ExecStart = "${pkgs.fakeroute}/bin/fakeroute -f ${routeConf}";
       };
     };
-
   };
 
-  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
-
+  meta.maintainers = with lib.maintainers; [rnhmjoj];
 }

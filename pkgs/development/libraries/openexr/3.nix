@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, zlib
-, cmake
-, imath
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  zlib,
+  cmake,
+  imath,
 }:
-
 stdenv.mkDerivation rec {
   pname = "openexr";
   version = "3.1.3";
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = ["bin" "dev" "out" "doc"];
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ imath zlib ];
+  nativeBuildInputs = [cmake];
+  propagatedBuildInputs = [imath zlib];
 
   doCheck = true;
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "A high dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ paperdigits ];
+    maintainers = with maintainers; [paperdigits];
     platforms = platforms.all;
   };
 }

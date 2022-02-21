@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, patchelf
-, fontconfig
-, freetype
-, gcc
-, gcc-unwrapped
-, iputils
-, psmisc
-, xorg }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  patchelf,
+  fontconfig,
+  freetype,
+  gcc,
+  gcc-unwrapped,
+  iputils,
+  psmisc,
+  xorg,
+}:
 stdenv.mkDerivation rec {
   pname = "IPMIView";
   version = "2.19.0";
@@ -21,18 +23,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6hxOu/Wkcrp9MaMYlxOR2DZW21Wi3BIFZp3Vm8NRBWs=";
   };
 
-  nativeBuildInputs = [ patchelf makeWrapper ];
-  buildPhase = with xorg;
-    let
-      stunnelBinary = if stdenv.hostPlatform.system == "x86_64-linux" then "linux/stunnel64"
-      else if stdenv.hostPlatform.system == "i686-linux" then "linux/stunnel32"
+  nativeBuildInputs = [patchelf makeWrapper];
+  buildPhase = with xorg; let
+    stunnelBinary =
+      if stdenv.hostPlatform.system == "x86_64-linux"
+      then "linux/stunnel64"
+      else if stdenv.hostPlatform.system == "i686-linux"
+      then "linux/stunnel32"
       else throw "IPMIView is not supported on this platform";
-    in
-  ''
+  in ''
     runHook preBuild
 
-    patchelf --set-rpath "${lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/libawt_xawt.so
-    patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so
+    patchelf --set-rpath "${lib.makeLibraryPath [libX11 libXext libXrender libXtst libXi]}" ./jre/lib/libawt_xawt.so
+    patchelf --set-rpath "${lib.makeLibraryPath [freetype]}" ./jre/lib/libfontmanager.so
     patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
 
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
     # WORK_DIR: unfortunately the ikvm related binaries are loaded from
     #           and user configuration is written to files in the CWD
     makeWrapper $out/jre/bin/java $out/bin/IPMIView \
-      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ fontconfig gcc-unwrapped.lib ]}" \
+      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [fontconfig gcc-unwrapped.lib]}" \
       --prefix PATH : "$out/jre/bin:${iputils}/bin:${psmisc}/bin" \
       --add-flags "-jar $out/IPMIView20.jar" \
       --run 'WORK_DIR=''${XDG_DATA_HOME:-~/.local/share}/ipmiview
@@ -73,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     license = licenses.unfree;
-    maintainers = with maintainers; [ vlaci ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [vlaci];
+    platforms = ["x86_64-linux" "i686-linux"];
   };
 }

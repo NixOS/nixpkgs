@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "ubuntu-font-family-0.83";
 
@@ -21,6 +23,6 @@ fetchzip {
     homepage = "http://font.ubuntu.com/";
     license = lib.licenses.free;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.antono ];
+    maintainers = [lib.maintainers.antono];
   };
 }

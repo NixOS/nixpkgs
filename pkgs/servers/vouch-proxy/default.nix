@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "vouch-proxy";
   version = "0.35.1";
@@ -14,7 +17,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-ifH+420FIrib+zQtzzHtMMYd84BED+vgnRw4xToYIl4=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=${version}"
   ];
 
@@ -26,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/vouch/vouch-proxy";
     description = "An SSO and OAuth / OIDC login solution for NGINX using the auth_request module";
     license = licenses.mit;
-    maintainers = with maintainers; [ em0lar ];
+    maintainers = with maintainers; [em0lar];
   };
 }

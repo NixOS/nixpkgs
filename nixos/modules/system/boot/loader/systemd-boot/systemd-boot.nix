@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.boot.loader.systemd-boot;
 
   efi = config.boot.loader.efi;
@@ -18,37 +20,58 @@ let
 
     nix = config.nix.package.out;
 
-    timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else "";
+    timeout =
+      if config.boot.loader.timeout != null
+      then config.boot.loader.timeout
+      else "";
 
-    editor = if cfg.editor then "True" else "False";
+    editor =
+      if cfg.editor
+      then "True"
+      else "False";
 
-    configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
+    configurationLimit =
+      if cfg.configurationLimit == null
+      then 0
+      else cfg.configurationLimit;
 
     inherit (cfg) consoleMode graceful;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
-    memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
+    memtest86 =
+      if cfg.memtest86.enable
+      then pkgs.memtest86-efi
+      else "";
 
-    netbootxyz = if cfg.netbootxyz.enable then pkgs.netbootxyz-efi else "";
+    netbootxyz =
+      if cfg.netbootxyz.enable
+      then pkgs.netbootxyz-efi
+      else "";
 
     copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
       empty_file=$(mktemp)
 
-      ${concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/"${escapeShellArg n}
-      '') cfg.extraFiles)}
+      ${
+        concatStrings (mapAttrsToList (n: v: ''
+          ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
+          ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/"${escapeShellArg n}
+        '')
+        cfg.extraFiles)
+      }
 
-      ${concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${efi.efiSysMountPoint}/loader/entries/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/loader/entries/"${escapeShellArg n}
-      '') cfg.extraEntries)}
+      ${
+        concatStrings (mapAttrsToList (n: v: ''
+          ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${efi.efiSysMountPoint}/loader/entries/"${escapeShellArg n}
+          ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/loader/entries/"${escapeShellArg n}
+        '')
+        cfg.extraEntries)
+      }
     '';
   };
 
   checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy ];
+    nativeBuildInputs = [pkgs.mypy];
   } ''
     install -m755 ${systemdBootBuilder} $out
     mypy \
@@ -58,10 +81,9 @@ let
       $out
   '';
 in {
-
-  imports =
-    [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
-    ];
+  imports = [
+    (mkRenamedOptionModule ["boot" "loader" "gummiboot" "enable"] ["boot" "loader" "systemd-boot" "enable"])
+  ];
 
   options.boot.loader.systemd-boot = {
     enable = mkOption {
@@ -102,7 +124,7 @@ in {
     consoleMode = mkOption {
       default = "keep";
 
-      type = types.enum [ "0" "1" "2" "auto" "max" "keep" ];
+      type = types.enum ["0" "1" "2" "auto" "max" "keep"];
 
       description = ''
         The resolution of the console. The following values are valid:
@@ -225,25 +247,26 @@ in {
         scope or implication of the <literal>--graceful</literal> option may change in the future.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
-        message = "This kernel does not support the EFI boot stub";
-      }
-    ] ++ concatMap (filename: [
-      {
-        assertion = !(hasInfix "/" filename);
-        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
-      }
-      {
-        assertion = hasSuffix ".conf" filename;
-        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
-      }
-    ]) (builtins.attrNames cfg.extraEntries)
+    assertions =
+      [
+        {
+          assertion = (config.boot.kernelPackages.kernel.features or {efiBootStub = true;}) ? efiBootStub;
+          message = "This kernel does not support the EFI boot stub";
+        }
+      ]
+      ++ concatMap (filename: [
+        {
+          assertion = !(hasInfix "/" filename);
+          message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
+        }
+        {
+          assertion = hasSuffix ".conf" filename;
+          message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
+        }
+      ]) (builtins.attrNames cfg.extraEntries)
       ++ concatMap (filename: [
         {
           assertion = !(hasPrefix "/" filename);

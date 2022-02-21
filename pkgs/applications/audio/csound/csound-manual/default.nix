@@ -1,9 +1,13 @@
 {
-  lib, stdenv, fetchFromGitHub, docbook_xsl,
-  docbook_xml_dtd_45, python, pygments,
-  libxslt
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  python,
+  pygments,
+  libxslt,
 }:
-
 stdenv.mkDerivation {
   pname = "csound-manual";
   version = "unstable-2019-02-22";
@@ -21,9 +25,9 @@ stdenv.mkDerivation {
                 "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
   '';
 
-  nativeBuildInputs = [ libxslt.bin ];
+  nativeBuildInputs = [libxslt.bin];
 
-  buildInputs = [ docbook_xsl python pygments ];
+  buildInputs = [docbook_xsl python pygments];
 
   buildPhase = ''
     make XSL_BASE_PATH=${docbook_xsl}/share/xml/docbook-xsl html-dist
@@ -38,7 +42,7 @@ stdenv.mkDerivation {
     description = "The Csound Canonical Reference Manual";
     homepage = "https://github.com/csound/manual";
     license = lib.licenses.fdl12Plus;
-    maintainers = [ lib.maintainers.hlolli ];
+    maintainers = [lib.maintainers.hlolli];
     platforms = lib.platforms.all;
   };
 }

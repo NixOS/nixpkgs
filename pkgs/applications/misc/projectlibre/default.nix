@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchgit, ant, jdk, makeWrapper, jre, coreutils, which }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  ant,
+  jdk,
+  makeWrapper,
+  jre,
+  coreutils,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "projectlibre";
   version = "1.7.0";
@@ -10,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vy5vgbp45ai957gaby2dj1hvmbxfdlfnwcanwqm9f8q16qipdbq";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ant jdk ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [ant jdk];
   buildPhase = ''
     export ANT_OPTS=-Dbuild.sysclasspath=ignore
     ${ant}/bin/ant -f openproj_build/build.xml
@@ -39,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.projectlibre.com/";
     description = "Project-Management Software similar to MS-Project";
-    maintainers = [ maintainers.Mogria ];
+    maintainers = [maintainers.Mogria];
     license = licenses.cpal10;
   };
 }

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, glib, util-linux, scowl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  glib,
+  util-linux,
+  scowl,
+}:
 stdenv.mkDerivation rec {
   pname = "halfempty";
   version = "0.40";
@@ -11,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YGq6fneAMo2jCpLPrjzRJ0eeOsStKaK5L+lwQfqcfpY=";
   };
 
-  nativeBuildInputs = [ pkg-config util-linux ];
-  buildInputs = [ glib ];
+  nativeBuildInputs = [pkg-config util-linux];
+  buildInputs = [glib];
 
   enableParallelBuilding = true;
 
@@ -39,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fast, parallel test case minimization tool";
     homepage = "https://github.com/googleprojectzero/halfempty/";
-    maintainers = with lib.maintainers; [ fpletz ];
-    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [fpletz];
+    license = with lib.licenses; [asl20];
   };
 }

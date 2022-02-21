@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchurl, mkDerivation
-, qmake, qtbase, qtquickcontrols2, qtgraphicaleffects
-, python3, pyotherside
-, pcsclite, yubikey-personalization
-, yubikey-manager, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mkDerivation,
+  qmake,
+  qtbase,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  python3,
+  pyotherside,
+  pcsclite,
+  yubikey-personalization,
+  yubikey-manager,
+  makeWrapper,
+}:
 mkDerivation rec {
   pname = "yubioath-desktop";
   version = "5.0.5";
@@ -15,16 +25,16 @@ mkDerivation rec {
 
   doCheck = false;
 
-  buildInputs = [ stdenv qtbase qtquickcontrols2 qtgraphicaleffects python3 ];
+  buildInputs = [stdenv qtbase qtquickcontrols2 qtgraphicaleffects python3];
 
-  nativeBuildInputs = [ qmake makeWrapper python3.pkgs.wrapPython ];
+  nativeBuildInputs = [qmake makeWrapper python3.pkgs.wrapPython];
 
   postPatch = ''
     substituteInPlace deployment.pri \
       --replace '/usr/bin' "$out/bin"
   '';
 
-  pythonPath = [ yubikey-manager ];
+  pythonPath = [yubikey-manager];
 
   # Need LD_PRELOAD for libykpers as the Nix cpython disables ctypes.cdll.LoadLibrary
   # support that the yubicommon library uses to load libykpers
@@ -60,6 +70,6 @@ mkDerivation rec {
     changelog = "https://developers.yubico.com/yubioath-desktop/Release_Notes.html";
 
     license = lib.licenses.bsd2;
-    maintainers = with maintainers; [ mic92 risson ];
+    maintainers = with maintainers; [mic92 risson];
   };
 }

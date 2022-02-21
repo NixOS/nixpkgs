@@ -1,5 +1,12 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib, p7zip }:
-
+{
+  mkYarnPackage,
+  fetchFromGitHub,
+  electron,
+  makeWrapper,
+  makeDesktopItem,
+  lib,
+  p7zip,
+}:
 mkYarnPackage rec {
   pname = "vieb";
   version = "6.2.0";
@@ -14,9 +21,9 @@ mkYarnPackage rec {
   packageJSON = ./package.json;
   yarnLock = ./yarn.lock;
   yarnNix = ./yarn.nix;
-  yarnFlags = [ "--production" "--offline" ];
+  yarnFlags = ["--production" "--offline"];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   desktopItem = makeDesktopItem {
     name = "vieb";
@@ -57,7 +64,7 @@ mkYarnPackage rec {
     homepage = "https://vieb.dev/";
     changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
-    maintainers = with maintainers; [ gebner fortuneteller2k ];
+    maintainers = with maintainers; [gebner fortuneteller2k];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
   };

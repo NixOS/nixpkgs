@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpretty
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpretty,
+  pyjwt,
+  pytestCheckHook,
+  python-dateutil,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "adal";
   version = "1.2.7";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python module to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources";
     homepage = "https://github.com/AzureAD/azure-activedirectory-library-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

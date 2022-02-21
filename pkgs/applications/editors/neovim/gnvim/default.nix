@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, gtk, webkitgtk }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gtk,
+  webkitgtk,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "gnvim-unwrapped";
   version = "0.1.6";
@@ -13,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0z6hhahxdc6d7nzqvc8jlxn1frsc39va8z5pmwfmmq5z61ahk90z";
 
-  buildInputs = [ gtk webkitgtk ];
+  buildInputs = [gtk webkitgtk];
 
   # The default build script tries to get the version through Git, so we
   # replace it
@@ -45,6 +50,6 @@ rustPlatform.buildRustPackage rec {
     description = "GUI for neovim, without any web bloat";
     homepage = "https://github.com/vhakulinen/gnvim";
     license = licenses.mit;
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = with maintainers; [minijackson];
   };
 }

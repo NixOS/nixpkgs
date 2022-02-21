@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libdeflate
-, libunistring
-, ncurses
-, pandoc
-, pkg-config
-, zlib
-, multimediaSupport ? true, ffmpeg
-, qrcodegenSupport ? true, qrcodegen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libdeflate,
+  libunistring,
+  ncurses,
+  pandoc,
+  pkg-config,
+  zlib,
+  multimediaSupport ? true,
+  ffmpeg,
+  qrcodegenSupport ? true,
+  qrcodegen,
 }:
-
 stdenv.mkDerivation rec {
   pname = "notcurses";
   version = "3.0.6";
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DGAE3XomAoRhAkKUCxmr8R0dhNXeusSgETzmsbV1RhQ=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     cmake
@@ -31,14 +33,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libdeflate
-    libunistring
-    ncurses
-    zlib
-  ]
-  ++ lib.optional qrcodegenSupport qrcodegen
-  ++ lib.optional multimediaSupport ffmpeg;
+  buildInputs =
+    [
+      libdeflate
+      libunistring
+      ncurses
+      zlib
+    ]
+    ++ lib.optional qrcodegenSupport qrcodegen
+    ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
     lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"
@@ -57,7 +60,7 @@ stdenv.mkDerivation rec {
       replacement for NCURSES on existing systems.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jb55 AndersonTorres ];
+    maintainers = with maintainers; [jb55 AndersonTorres];
     inherit (ncurses.meta) platforms;
   };
 }

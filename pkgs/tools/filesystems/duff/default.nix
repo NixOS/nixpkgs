@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gettext }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gettext,
+}:
 stdenv.mkDerivation {
   pname = "duff";
   # The last release (0.5.2) is more than 2 years old and lacks features like -D,
@@ -13,7 +18,7 @@ stdenv.mkDerivation {
     owner = "elmindreda";
   };
 
-  nativeBuildInputs = [ autoreconfHook gettext ];
+  nativeBuildInputs = [autoreconfHook gettext];
 
   preAutoreconf = ''
     # gettexttize rightly refuses to run non-interactively:

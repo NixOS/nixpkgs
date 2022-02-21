@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, gjs, vte, gnome }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  gjs,
+  vte,
+  gnome,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-drop-down-terminal";
   version = "unstable-2020-03-25";
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Configurable drop down terminal shell";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ericdallo ];
+    maintainers = with maintainers; [ericdallo];
     homepage = "https://github.com/zzrough/gs-extensions-drop-down-terminal";
   };
 }

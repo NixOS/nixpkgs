@@ -1,10 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, groff
-, less
-}:
-let
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  groff,
+  less,
+}: let
   py = python3.override {
     packageOverrides = self: super: {
       # TODO: https://github.com/aws/aws-cli/pull/5712
@@ -31,65 +31,65 @@ let
       });
     };
   };
-
 in
-with py.pkgs; buildPythonApplication rec {
-  pname = "awscli";
-  version = "1.22.35"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  with py.pkgs;
+    buildPythonApplication rec {
+      pname = "awscli";
+      version = "1.22.35"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-GsMclLh/VtPaNjD+XDKqTYeSX29R2aRS7If9G918OWY=";
-  };
+      src = fetchPypi {
+        inherit pname version;
+        hash = "sha256-GsMclLh/VtPaNjD+XDKqTYeSX29R2aRS7If9G918OWY=";
+      };
 
-  # https://github.com/aws/aws-cli/issues/4837
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docutils>=0.10,<0.16" "docutils>=0.10" \
-      --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
-  '';
+      # https://github.com/aws/aws-cli/issues/4837
+      postPatch = ''
+        substituteInPlace setup.py \
+          --replace "docutils>=0.10,<0.16" "docutils>=0.10" \
+          --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
+      '';
 
-  propagatedBuildInputs = [
-    botocore
-    bcdoc
-    s3transfer
-    six
-    colorama
-    docutils
-    rsa
-    pyyaml
-    groff
-    less
-  ];
+      propagatedBuildInputs = [
+        botocore
+        bcdoc
+        s3transfer
+        six
+        colorama
+        docutils
+        rsa
+        pyyaml
+        groff
+        less
+      ];
 
-  postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
+      postInstall = ''
+        mkdir -p $out/share/bash-completion/completions
+        echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
 
-    mkdir -p $out/share/zsh/site-functions
-    mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
+        mkdir -p $out/share/zsh/site-functions
+        mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
 
-    rm $out/bin/aws.cmd
-  '';
+        rm $out/bin/aws.cmd
+      '';
 
-  passthru = {
-    python = py; # for aws_shell
-  };
+      passthru = {
+        python = py; # for aws_shell
+      };
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
+      doInstallCheck = true;
+      installCheckPhase = ''
+        runHook preInstallCheck
 
-    $out/bin/aws --version | grep "${py.pkgs.botocore.version}"
-    $out/bin/aws --version | grep "${version}"
+        $out/bin/aws --version | grep "${py.pkgs.botocore.version}"
+        $out/bin/aws --version | grep "${version}"
 
-    runHook postInstallCheck
-  '';
+        runHook postInstallCheck
+      '';
 
-  meta = with lib; {
-    homepage = "https://aws.amazon.com/cli/";
-    description = "Unified tool to manage your AWS services";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ muflax ];
-  };
-}
+      meta = with lib; {
+        homepage = "https://aws.amazon.com/cli/";
+        description = "Unified tool to manage your AWS services";
+        license = licenses.asl20;
+        maintainers = with maintainers; [muflax];
+      };
+    }

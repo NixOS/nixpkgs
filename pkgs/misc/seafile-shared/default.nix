@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, curl
-, libevent
-, libsearpc
-, libuuid
-, pkg-config
-, python3
-, sqlite
-, vala
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  curl,
+  libevent,
+  libsearpc,
+  libuuid,
+  pkg-config,
+  python3,
+  sqlite,
+  vala,
 }:
-
 stdenv.mkDerivation rec {
   pname = "seafile-shared";
   version = "8.0.3";
@@ -57,6 +58,6 @@ stdenv.mkDerivation rec {
     description = "Shared components of Seafile: seafile-daemon, libseafile, libseafile python bindings, manuals, and icons";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ greizgh schmittlauch ];
+    maintainers = with maintainers; [greizgh schmittlauch];
   };
 }

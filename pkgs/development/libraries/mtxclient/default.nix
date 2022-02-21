@@ -1,17 +1,18 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, openssl
-, olm
-, spdlog
-, nlohmann_json
-, coeurl
-, libevent
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  openssl,
+  olm,
+  spdlog,
+  nlohmann_json,
+  coeurl,
+  libevent,
+  curl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mtxclient";
   version = "0.6.1";
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Client API library for the Matrix protocol.";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz pstn ];
+    maintainers = with maintainers; [fpletz pstn];
     platforms = platforms.all;
     # Should be fixable if a higher clang version is used, see:
     # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177

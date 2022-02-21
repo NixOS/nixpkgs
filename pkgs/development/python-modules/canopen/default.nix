@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, can
-, canmatrix
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  can,
+  canmatrix,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "canopen";
   version = "2.0.0";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/christiansandberg/canopen/";
     description = "CANopen stack implementation";
     license = licenses.mit;
-    maintainers = with maintainers; [ sorki ];
+    maintainers = with maintainers; [sorki];
   };
 }

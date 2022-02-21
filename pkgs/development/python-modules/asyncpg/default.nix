@@ -1,11 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, uvloop
-, postgresql
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  uvloop,
+  postgresql,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "asyncpg";
   version = "0.25.0";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
       asyncio framework.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchgit
-, cmake
-, pkg-config
-, protobuf
-, python3Packages
-, ffmpeg
-, libopus
-, mkDerivation
-, qtbase
-, qtmultimedia
-, qtsvg
-, SDL2
-, libevdev
-, udev
-, qtmacextras
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  pkg-config,
+  protobuf,
+  python3Packages,
+  ffmpeg,
+  libopus,
+  mkDerivation,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  SDL2,
+  libevdev,
+  udev,
+  qtmacextras,
 }:
-
 mkDerivation rec {
   pname = "chiaki";
   version = "2.1.1";
@@ -35,20 +36,23 @@ mkDerivation rec {
     python3Packages.python
   ];
 
-  buildInputs = [
-    ffmpeg
-    libopus
-    qtbase
-    qtmultimedia
-    qtsvg
-    protobuf
-    SDL2
-  ] ++ lib.optionals stdenv.isLinux [
-    libevdev
-    udev
-  ] ++ lib.optionals stdenv.isDarwin [
-    qtmacextras
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      libopus
+      qtbase
+      qtmultimedia
+      qtsvg
+      protobuf
+      SDL2
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libevdev
+      udev
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      qtmacextras
+    ];
 
   doCheck = true;
 
@@ -58,7 +62,7 @@ mkDerivation rec {
     homepage = "https://git.sr.ht/~thestr4ng3r/chiaki";
     description = "Free and Open Source PlayStation Remote Play Client";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [delroth];
     platforms = platforms.all;
   };
 }

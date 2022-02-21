@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "stacs";
   version = "0.2.0";
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Static token and credential scanner";
     homepage = "https://github.com/stacscan/stacs";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

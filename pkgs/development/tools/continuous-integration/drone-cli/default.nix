@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   version = "1.5.0";
   pname = "drone-cli";
@@ -9,7 +12,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  patches = [ ./0001-use-different-upstream-for-gomod.patch ];
+  patches = [./0001-use-different-upstream-for-gomod.patch];
 
   ldflags = [
     "-X main.version=${version}"
@@ -24,7 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "drone";
-    maintainers = with maintainers; [ techknowlogick ];
+    maintainers = with maintainers; [techknowlogick];
     license = licenses.asl20;
     description = "Command line client for the Drone continuous integration server";
   };

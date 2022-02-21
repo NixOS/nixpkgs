@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.pihole;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.pihole;
+in {
   port = 9617;
   extraOpts = {
     apiToken = mkOption {
@@ -49,7 +50,7 @@ in
       '';
     };
     protocol = mkOption {
-      type = types.enum [ "http" "https" ];
+      type = types.enum ["http" "https"];
       default = "http";
       example = "https";
       description = ''

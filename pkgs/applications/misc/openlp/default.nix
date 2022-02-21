@@ -1,86 +1,102 @@
 # This file contains all runtime glue: Bindings to optional runtime dependencies
 # for pdfSupport, presentationSupport, and media playback.
-{ lib, mkDerivation, wrapGAppsHook, python3Packages
-
-# qt deps
-, qtbase, qtmultimedia
-
-# optional deps
-, pdfSupport ? false, mupdf  # alternatively could use ghostscript
-, presentationSupport ? false, libreoffice-unwrapped
-, vlcSupport ? false
-, gstreamerSupport ? false, gst_all_1, gstPlugins ? (gst: [
+{
+  lib,
+  mkDerivation,
+  wrapGAppsHook,
+  python3Packages
+  # qt deps
+  ,
+  qtbase,
+  qtmultimedia
+  # optional deps
+  ,
+  pdfSupport ? false,
+  mupdf
+  # alternatively could use ghostscript
+  ,
+  presentationSupport ? false,
+  libreoffice-unwrapped,
+  vlcSupport ? false,
+  gstreamerSupport ? false,
+  gst_all_1,
+  gstPlugins ? (gst: [
     gst.gst-plugins-base
     gst.gst-plugins-good
     gst.gst-plugins-bad
     gst.gst-plugins-ugly
   ])
+  #, enableMySql ? false      # Untested. If interested, contact maintainer.
+  #, enablePostgreSql ? false # Untested. If interested, contact maintainer.
+  #, enableJenkinsApi ? false # Untested. If interested, contact maintainer.
+}: let
+  p = gstPlugins gst_all_1;
+  # If gstreamer is activated but no plugins are given, it will at runtime
+  # create the false illusion of being usable.
+in
+  assert gstreamerSupport -> (builtins.isList p && builtins.length p > 0); let
+    # optional packages
+    libreofficePath = "${libreoffice-unwrapped}/lib/libreoffice/program";
 
-#, enableMySql ? false      # Untested. If interested, contact maintainer.
-#, enablePostgreSql ? false # Untested. If interested, contact maintainer.
-#, enableJenkinsApi ? false # Untested. If interested, contact maintainer.
-}:
+    # lib functions
+    inherit (lib.lists) optional optionals;
+    wrapSetVar = var: ''--set ${var} "''$${var}"'';
 
-let p = gstPlugins gst_all_1;
-# If gstreamer is activated but no plugins are given, it will at runtime
-# create the false illusion of being usable.
-in assert gstreamerSupport -> (builtins.isList p && builtins.length p > 0);
+    # base pkg/lib
+    baseLib = python3Packages.callPackage ./lib.nix {};
+  in
+    mkDerivation {
+      inherit (baseLib) pname version src;
 
-let
-  # optional packages
-  libreofficePath = "${libreoffice-unwrapped}/lib/libreoffice/program";
+      nativeBuildInputs = [python3Packages.wrapPython wrapGAppsHook];
+      buildInputs =
+        [qtbase]
+        ++ optionals gstreamerSupport
+        ([qtmultimedia.bin gst_all_1.gstreamer] ++ gstPlugins gst_all_1);
+      propagatedBuildInputs =
+        optional pdfSupport mupdf
+        ++ optional presentationSupport libreoffice-unwrapped;
+      pythonPath = [baseLib] ++ optional vlcSupport python3Packages.python-vlc;
+      # ++ optional enableMySql mysql-connector  # Untested. If interested, contact maintainer.
+      # ++ optional enablePostgreSql psycopg2    # Untested. If interested, contact maintainer.
+      # ++ optional enableJenkinsApi jenkinsapi  # Untested. If interested, contact maintainer.
 
-  # lib functions
-  inherit (lib.lists) optional optionals;
-  wrapSetVar = var: ''--set ${var} "''$${var}"'';
+      PYTHONPATH = libreofficePath;
+      URE_BOOTSTRAP = "vnd.sun.star.pathname:${libreofficePath}/fundamentalrc";
+      UNO_PATH = libreofficePath;
+      LD_LIBRARY_PATH = libreofficePath;
+      JAVA_HOME = "${libreoffice-unwrapped.jdk.home}";
 
-  # base pkg/lib
-  baseLib = python3Packages.callPackage ./lib.nix { };
-in mkDerivation {
-  inherit (baseLib) pname version src;
+      dontWrapQtApps = true;
+      dontWrapGApps = true;
 
-  nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook ];
-  buildInputs = [ qtbase ] ++ optionals gstreamerSupport
-    ([ qtmultimedia.bin gst_all_1.gstreamer ] ++ gstPlugins gst_all_1);
-  propagatedBuildInputs = optional pdfSupport mupdf
-    ++ optional presentationSupport libreoffice-unwrapped;
-  pythonPath = [ baseLib ] ++ optional vlcSupport python3Packages.python-vlc;
-    # ++ optional enableMySql mysql-connector  # Untested. If interested, contact maintainer.
-    # ++ optional enablePostgreSql psycopg2    # Untested. If interested, contact maintainer.
-    # ++ optional enableJenkinsApi jenkinsapi  # Untested. If interested, contact maintainer.
+      # defined in gappsWrapperHook
+      wrapPrefixVariables = optionals presentationSupport
+      ["PYTHONPATH" "LD_LIBRARY_PATH" "JAVA_HOME"];
+      makeWrapperArgs =
+        [
+          "\${gappsWrapperArgs[@]}"
+          "\${qtWrapperArgs[@]}"
+        ]
+        ++ optionals presentationSupport
+        (["--prefix PATH : ${libreoffice-unwrapped}/bin"]
+        ++ map wrapSetVar ["URE_BOOTSTRAP" "UNO_PATH"]);
 
-  PYTHONPATH = libreofficePath;
-  URE_BOOTSTRAP = "vnd.sun.star.pathname:${libreofficePath}/fundamentalrc";
-  UNO_PATH = libreofficePath;
-  LD_LIBRARY_PATH = libreofficePath;
-  JAVA_HOME = "${libreoffice-unwrapped.jdk.home}";
+      installPhase = ''
+        install -D openlp.py $out/bin/openlp
+      '';
 
-  dontWrapQtApps = true;
-  dontWrapGApps = true;
+      preFixup = ''
+        wrapPythonPrograms
+      '';
 
-  # defined in gappsWrapperHook
-  wrapPrefixVariables = optionals presentationSupport
-    [ "PYTHONPATH" "LD_LIBRARY_PATH" "JAVA_HOME" ];
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "\${qtWrapperArgs[@]}"
-  ] ++ optionals presentationSupport
-    ([ "--prefix PATH : ${libreoffice-unwrapped}/bin" ]
-      ++ map wrapSetVar [ "URE_BOOTSTRAP" "UNO_PATH" ]);
+      meta =
+        baseLib.meta
+        // {
+          hydraPlatforms = []; # this is only the wrapper; baseLib gets built
+        };
 
-  installPhase = ''
-    install -D openlp.py $out/bin/openlp
-  '';
-
-  preFixup = ''
-    wrapPythonPrograms
-  '';
-
-  meta = baseLib.meta // {
-    hydraPlatforms = [ ]; # this is only the wrapper; baseLib gets built
-  };
-
-  passthru = {
-    inherit baseLib;
-  };
-}
+      passthru = {
+        inherit baseLib;
+      };
+    }

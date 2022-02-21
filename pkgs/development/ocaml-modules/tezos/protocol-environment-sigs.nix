@@ -1,11 +1,11 @@
-{ lib
-, buildDunePackage
-, ocaml
-, tezos-stdlib
-, tezos-protocol-environment-packer
-, zarith
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  tezos-stdlib,
+  tezos-protocol-environment-packer,
+  zarith,
 }:
-
 buildDunePackage {
   pname = "tezos-protocol-environment-sigs";
   inherit (tezos-stdlib) version useDune2;
@@ -36,7 +36,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: restricted typing environment for the economic protocols";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: restricted typing environment for the economic protocols";
+    };
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, lxml
-, pytestCheckHook
-, text-unidecode
-, xmlschema
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  lxml,
+  pytestCheckHook,
+  text-unidecode,
+  xmlschema,
 }:
-
 buildPythonPackage rec {
   pname = "sepaxml";
   version = "2.4.1";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "SEPA Direct Debit XML generation in python";
     homepage = "https://github.com/raphaelm/python-sepaxml/";
     license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = with maintainers; [elohmeier];
   };
 }

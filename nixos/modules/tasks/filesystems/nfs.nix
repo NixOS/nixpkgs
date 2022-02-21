@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   inInitrd = any (fs: fs == "nfs") config.boot.initrd.supportedFilesystems;
 
   nfsStateDir = "/var/lib/nfs";
@@ -19,10 +20,7 @@ let
   '';
 
   cfg = config.services.nfs;
-
-in
-
-{
+in {
   ###### interface
 
   options = {
@@ -59,13 +57,12 @@ in
   ###### implementation
 
   config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
-
     services.rpcbind.enable = true;
 
     services.nfs.idmapd.settings = {
       General = mkMerge [
-        { Pipefs-Directory = rpcMountpoint; }
-        (mkIf (config.networking.domain != null) { Domain = config.networking.domain; })
+        {Pipefs-Directory = rpcMountpoint;}
+        (mkIf (config.networking.domain != null) {Domain = config.networking.domain;})
       ];
       Mapping = {
         Nobody-User = "nobody";
@@ -76,13 +73,13 @@ in
       };
     };
 
-    system.fsPackages = [ pkgs.nfs-utils ];
+    system.fsPackages = [pkgs.nfs-utils];
 
-    boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
+    boot.initrd.kernelModules = mkIf inInitrd ["nfs"];
 
-    systemd.packages = [ pkgs.nfs-utils ];
+    systemd.packages = [pkgs.nfs-utils];
 
-    environment.systemPackages = [ pkgs.keyutils ];
+    environment.systemPackages = [pkgs.keyutils];
 
     environment.etc = {
       "idmapd.conf".source = idmapdConfFile;
@@ -90,46 +87,43 @@ in
       "request-key.conf".source = requestKeyConfFile;
     };
 
-    systemd.services.nfs-blkmap =
-      { restartTriggers = [ nfsConfFile ];
-      };
+    systemd.services.nfs-blkmap = {
+      restartTriggers = [nfsConfFile];
+    };
 
-    systemd.targets.nfs-client =
-      { wantedBy = [ "multi-user.target" "remote-fs.target" ];
-      };
+    systemd.targets.nfs-client = {
+      wantedBy = ["multi-user.target" "remote-fs.target"];
+    };
 
-    systemd.services.nfs-idmapd =
-      { restartTriggers = [ idmapdConfFile ];
-      };
+    systemd.services.nfs-idmapd = {
+      restartTriggers = [idmapdConfFile];
+    };
 
-    systemd.services.nfs-mountd =
-      { restartTriggers = [ nfsConfFile ];
-        enable = mkDefault false;
-      };
+    systemd.services.nfs-mountd = {
+      restartTriggers = [nfsConfFile];
+      enable = mkDefault false;
+    };
 
-    systemd.services.nfs-server =
-      { restartTriggers = [ nfsConfFile ];
-        enable = mkDefault false;
-      };
+    systemd.services.nfs-server = {
+      restartTriggers = [nfsConfFile];
+      enable = mkDefault false;
+    };
 
-    systemd.services.auth-rpcgss-module =
-      {
-        unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
-      };
+    systemd.services.auth-rpcgss-module = {
+      unitConfig.ConditionPathExists = ["" "/etc/krb5.keytab"];
+    };
 
-    systemd.services.rpc-gssd =
-      { restartTriggers = [ nfsConfFile ];
-        unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
-      };
+    systemd.services.rpc-gssd = {
+      restartTriggers = [nfsConfFile];
+      unitConfig.ConditionPathExists = ["" "/etc/krb5.keytab"];
+    };
 
-    systemd.services.rpc-statd =
-      { restartTriggers = [ nfsConfFile ];
+    systemd.services.rpc-statd = {
+      restartTriggers = [nfsConfFile];
 
-        preStart =
-          ''
-            mkdir -p /var/lib/nfs/{sm,sm.bak}
-          '';
-      };
-
+      preStart = ''
+        mkdir -p /var/lib/nfs/{sm,sm.bak}
+      '';
+    };
   };
 }

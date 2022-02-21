@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "zxcvbn-c";
   version = "2.4";
@@ -19,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "A C/C++ implementation of the zxcvbn password strength estimation";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ xurei ];
+    maintainers = with maintainers; [xurei];
   };
 }

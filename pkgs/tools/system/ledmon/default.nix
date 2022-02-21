@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, perl, udev, sg3_utils }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  udev,
+  sg3_utils,
+}:
 stdenv.mkDerivation rec {
   pname = "ledmon";
   version = "0.92";
@@ -14,9 +20,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl # for pod2man
   ];
-  buildInputs = [ udev sg3_utils ];
+  buildInputs = [udev sg3_utils];
 
-  installTargets = [ "install" "install-systemd" ];
+  installTargets = ["install" "install-systemd"];
 
   makeFlags = [
     "MAN_INSTDIR=${placeholder "out"}/share/man"
@@ -29,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/ledmon";
     description = "Enclosure LED Utilities";
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ sorki ];
+    license = with licenses; [gpl2];
+    maintainers = with lib.maintainers; [sorki];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, nixosTests
-, rustPlatform
-, fetchFromGitHub
-, Security
+{
+  lib,
+  stdenv,
+  nixosTests,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "libreddit";
   version = "0.21.7";
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Private front-end for Reddit";
     homepage = "https://github.com/spikecodes/libreddit";
-    license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ fab jojosch ];
+    license = with licenses; [agpl3Only];
+    maintainers = with maintainers; [fab jojosch];
   };
 }

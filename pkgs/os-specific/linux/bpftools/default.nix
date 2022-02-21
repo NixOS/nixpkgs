@@ -1,15 +1,22 @@
-{ lib, stdenv
-, libopcodes, libbfd, libelf, readline
-, linuxPackages_latest, zlib
-, python3, bison, flex
+{
+  lib,
+  stdenv,
+  libopcodes,
+  libbfd,
+  libelf,
+  readline,
+  linuxPackages_latest,
+  zlib,
+  python3,
+  bison,
+  flex,
 }:
-
 stdenv.mkDerivation {
   pname = "bpftools";
   inherit (linuxPackages_latest.kernel) version src;
 
-  nativeBuildInputs = [ python3 bison flex ];
-  buildInputs = [ libopcodes libbfd libelf zlib readline ];
+  nativeBuildInputs = [python3 bison flex];
+  buildInputs = [libopcodes libbfd libelf zlib readline];
 
   preConfigure = ''
     patchShebangs scripts/bpf_doc.py
@@ -21,7 +28,7 @@ stdenv.mkDerivation {
       --replace '/sbin'      '/bin'
   '';
 
-  buildFlags = [ "bpftool" "bpf_asm" "bpf_dbg" ];
+  buildFlags = ["bpftool" "bpf_asm" "bpf_dbg"];
 
   installPhase = ''
     make -C bpftool install
@@ -31,8 +38,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Debugging/program analysis tools for the eBPF subsystem";
-    license     = [ licenses.gpl2 licenses.bsd2 ];
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = [licenses.gpl2 licenses.bsd2];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

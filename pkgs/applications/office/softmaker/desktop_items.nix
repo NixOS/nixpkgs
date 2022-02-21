@@ -1,6 +1,8 @@
-{ makeDesktopItem, pname, suiteName }:
-
 {
+  makeDesktopItem,
+  pname,
+  suiteName,
+}: {
   planmaker = makeDesktopItem {
     name = "${pname}-planmaker";
     desktopName = "${suiteName} PlanMaker";

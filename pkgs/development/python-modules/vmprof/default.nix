@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, colorama
-, libunwind
-, pytz
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  colorama,
+  libunwind,
+  pytz,
+  requests,
+  six,
 }:
-
 buildPythonPackage rec {
   version = "0.4.15";
   pname = "vmprof";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
     sha256 = "a2d872a40196404386d1e0d960e97b37c86c3f72a4f9d5a2b5f9ca1adaff5b62";
   };
 
-  buildInputs = [ libunwind ];
-  propagatedBuildInputs = [ colorama requests six pytz ];
+  buildInputs = [libunwind];
+  propagatedBuildInputs = [colorama requests six pytz];
 
   # No tests included
   doCheck = false;
-  pythonImportsCheck = [ "vmprof" ];
+  pythonImportsCheck = ["vmprof"];
 
   meta = with lib; {
     description = "A vmprof client";

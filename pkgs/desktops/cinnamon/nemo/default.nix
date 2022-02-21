@@ -1,27 +1,27 @@
-{ fetchFromGitHub
-, fetchpatch
-, glib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, lib
-, stdenv
-, wrapGAppsHook
-, libxml2
-, gtk3
-, libnotify
-, gvfs
-, cinnamon-desktop
-, xapps
-, libexif
-, exempi
-, intltool
-, shared-mime-info
-, cinnamon-translations
-, libgsf
+{
+  fetchFromGitHub,
+  fetchpatch,
+  glib,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  lib,
+  stdenv,
+  wrapGAppsHook,
+  libxml2,
+  gtk3,
+  libnotify,
+  gvfs,
+  cinnamon-desktop,
+  xapps,
+  libexif,
+  exempi,
+  intltool,
+  shared-mime-info,
+  cinnamon-translations,
+  libgsf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nemo";
   version = "5.2.4";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-v63dFiBKtLCmRnwJ6u814lSv+tfPG+IIJtcWCnOEZjk=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   buildInputs = [
     glib
@@ -70,9 +70,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
-    license = [ licenses.gpl2 licenses.lgpl2 ];
+    license = [licenses.gpl2 licenses.lgpl2];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };
 }
-

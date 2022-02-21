@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, certifi
-, click
-, keyring
-, keyrings-alt
-, pytz
-, requests
-, six
-, tzlocal
-, pytest-mock
-, pytestCheckHook
-, future
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  certifi,
+  click,
+  keyring,
+  keyrings-alt,
+  pytz,
+  requests,
+  six,
+  tzlocal,
+  pytest-mock,
+  pytestCheckHook,
+  future,
 }:
-
 buildPythonPackage rec {
   pname = "pyicloud";
   version = "0.10.2";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "PyiCloud is a module which allows pythonistas to interact with iCloud webservices";
     homepage = "https://github.com/picklepete/pyicloud";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

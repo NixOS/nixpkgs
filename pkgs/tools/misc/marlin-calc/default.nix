@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "marlin-calc";
   version = "2019-10-17";
@@ -25,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/eyal0/Marlin";
     description = "Marlin 3D printer timing simulator";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/marlin-calc.x86_64-darwin
   };

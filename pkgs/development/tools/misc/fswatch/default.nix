@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-                     # for xargs
-, gettext
-, libtool
-, makeWrapper
-, texinfo
-, CoreServices
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook
+  # for xargs
+  ,
+  gettext,
+  libtool,
+  makeWrapper,
+  texinfo,
+  CoreServices,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fswatch";
   version = "1.16.0";
@@ -20,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EKbo5gkrWuijLJgYsNBDtxy0ioXu/yHxnPPeOpk620g=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
-  buildInputs = [ gettext libtool texinfo ];
+  nativeBuildInputs = [autoreconfHook makeWrapper] ++ lib.optionals stdenv.isDarwin [CoreServices];
+  buildInputs = [gettext libtool texinfo];
 
   enableParallelBuilding = true;
 
@@ -30,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emcrisostomo/fswatch";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

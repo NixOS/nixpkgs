@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, substituteAll
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, borgbackup
-, dbus
-, gdk-pixbuf
-, glib
-, gtk3
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  substituteAll,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook,
+  borgbackup,
+  dbus,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libhandy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pika-backup";
   version = "0.3.5";
@@ -46,18 +46,20 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux
   '';
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    python3
-    wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs =
+    [
+      desktop-file-utils
+      meson
+      ninja
+      pkg-config
+      python3
+      wrapGAppsHook
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
 
   buildInputs = [
     dbus
@@ -72,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/PikaBackup";
     changelog = "https://gitlab.gnome.org/World/pika-backup/-/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

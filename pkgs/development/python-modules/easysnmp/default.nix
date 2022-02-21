@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, net-snmp
-, openssl
-, pytest
-, pytest-cov
-, pytest-flake8
-, pytest-sugar
-, termcolor
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+  net-snmp,
+  openssl,
+  pytest,
+  pytest-cov,
+  pytest-flake8,
+  pytest-sugar,
+  termcolor,
 }:
-
 buildPythonPackage rec {
   pname = "easysnmp";
   version = "0.2.5";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "A blazingly fast and Pythonic SNMP library based on the official Net-SNMP bindings";
     homepage = "https://easysnmp.readthedocs.io/en/latest/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ WhittlesJr ];
+    maintainers = with maintainers; [WhittlesJr];
   };
 }

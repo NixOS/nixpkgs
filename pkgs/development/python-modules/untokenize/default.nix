@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "untokenize";
   version = "0.1.1";
@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "Transforms tokens into original source code while preserving whitespace";
     homepage = "https://github.com/myint/untokenize";
     license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with maintainers; [FlorianFranzen];
   };
 }

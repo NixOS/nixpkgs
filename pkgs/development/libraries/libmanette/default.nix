@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, ninja
-, meson
-, pkg-config
-, vala
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, libgudev
-, libevdev
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ninja,
+  meson,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  glib,
+  libgudev,
+  libevdev,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libmanette";
   version = "0.2.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

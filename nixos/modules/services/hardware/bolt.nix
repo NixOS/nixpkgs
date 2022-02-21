@@ -1,14 +1,13 @@
 # Thunderbolt 3 device manager
-
-{ config, lib, pkgs, ...}:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   options = {
-
     services.hardware.bolt = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -19,16 +18,12 @@ with lib;
           Bolt is used by GNOME 3 to handle Thunderbolt settings.
         '';
       };
-
     };
-
   };
 
   config = mkIf config.services.hardware.bolt.enable {
-
-    environment.systemPackages = [ pkgs.bolt ];
-    services.udev.packages = [ pkgs.bolt ];
-    systemd.packages = [ pkgs.bolt ];
-
+    environment.systemPackages = [pkgs.bolt];
+    services.udev.packages = [pkgs.bolt];
+    systemd.packages = [pkgs.bolt];
   };
 }

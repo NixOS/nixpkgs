@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, libtool, libxml2, cppunit, boost
-, apr, aprutil, db, expat
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtool,
+  libxml2,
+  cppunit,
+  boost,
+  apr,
+  aprutil,
+  db,
+  expat,
 }:
-
 stdenv.mkDerivation rec {
   pname = "log4cxx";
   version = "0.10.0";
@@ -16,22 +25,24 @@ stdenv.mkDerivation rec {
     ./narrowing-fixes.patch
   ];
 
-  postPatch = ''
-    sed -i -e '1,/^#include/ {
-      /^#include/i \
-        #include <cstdio> \
-        #include <cstdlib> \
-        #include <cstring>
-    }' src/examples/cpp/console.cpp \
-       src/main/cpp/inputstreamreader.cpp \
-       src/main/cpp/socketoutputstream.cpp
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i 's/namespace std { class locale; }/#include <locale>/' src/main/include/log4cxx/helpers/simpledateformat.h
-    sed -i 's/\(#include <cctype>\)/\1\n#include <cstdlib>/' src/main/cpp/stringhelper.cpp
-  '';
+  postPatch =
+    ''
+      sed -i -e '1,/^#include/ {
+        /^#include/i \
+          #include <cstdio> \
+          #include <cstdlib> \
+          #include <cstring>
+      }' src/examples/cpp/console.cpp \
+         src/main/cpp/inputstreamreader.cpp \
+         src/main/cpp/socketoutputstream.cpp
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      sed -i 's/namespace std { class locale; }/#include <locale>/' src/main/include/log4cxx/helpers/simpledateformat.h
+      sed -i 's/\(#include <cctype>\)/\1\n#include <cstdlib>/' src/main/cpp/stringhelper.cpp
+    '';
 
-  buildInputs = [ libxml2 cppunit boost apr aprutil db expat ];
-  nativeBuildInputs = [ libtool ];
+  buildInputs = [libxml2 cppunit boost apr aprutil db expat];
+  nativeBuildInputs = [libtool];
 
   meta = {
     homepage = "https://logging.apache.org/log4cxx/index.html";

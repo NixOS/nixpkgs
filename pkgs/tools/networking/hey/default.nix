@@ -1,5 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
-
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "hey";
   version = "0.1.4";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "HTTP load generator, ApacheBench (ab) replacement";
     homepage = "https://github.com/rakyll/hey";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
   };
 }

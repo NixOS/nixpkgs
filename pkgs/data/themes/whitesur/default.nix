@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, gnome-shell
-, gnome-themes-extra
-, libxml2
-, sassc
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  gnome-shell,
+  gnome-themes-extra,
+  libxml2,
+  sassc,
+  util-linux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
   version = "2021-12-28";
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vinceliuice/WhiteSur-gtk-theme";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

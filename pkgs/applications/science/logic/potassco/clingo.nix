@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "clingo";
   version = "5.5.1";
@@ -11,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KBCwGNkz5HqbgXbDxPVcqxMXC8B2+wRI8eZVVXMVpLI=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  cmakeFlags = [ "-DCLINGO_BUILD_WITH_PYTHON=OFF" ];
+  cmakeFlags = ["-DCLINGO_BUILD_WITH_PYTHON=OFF"];
 
   meta = {
     description = "ASP system to ground and solve logic programs";

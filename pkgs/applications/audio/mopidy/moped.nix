@@ -1,5 +1,9 @@
-{ lib, pythonPackages, mopidy, glibcLocales }:
-
+{
+  lib,
+  pythonPackages,
+  mopidy,
+  glibcLocales,
+}:
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Moped";
   version = "0.7.1";
@@ -10,8 +14,8 @@ pythonPackages.buildPythonApplication rec {
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ mopidy ];
+  buildInputs = [glibcLocales];
+  propagatedBuildInputs = [mopidy];
 
   # no tests implemented
   doCheck = false;

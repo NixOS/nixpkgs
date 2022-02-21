@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, alsa-lib, Carbon, CoreAudio, CoreFoundation, CoreMIDI, CoreServices }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  alsa-lib,
+  Carbon,
+  CoreAudio,
+  CoreFoundation,
+  CoreMIDI,
+  CoreServices,
+}:
 stdenv.mkDerivation rec {
   pname = "portmidi";
   version = "2.0.2";
@@ -22,24 +33,32 @@ stdenv.mkDerivation rec {
     ./missing-header.diff
   ];
 
-  postInstall = let ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+  postInstall = let
+    ext = stdenv.hostPlatform.extensions.sharedLibrary;
+  in ''
     ln -s libportmidi${ext} "$out/lib/libporttime${ext}"
   '';
 
-  nativeBuildInputs = [ unzip cmake ];
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon CoreAudio CoreFoundation CoreMIDI CoreServices
-  ];
+  nativeBuildInputs = [unzip cmake];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Carbon
+      CoreAudio
+      CoreFoundation
+      CoreMIDI
+      CoreServices
+    ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     homepage = "https://github.com/PortMidi/portmidi";
     description = "Platform independent library for MIDI I/O";
     license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     platforms = platforms.unix;
   };
 }

@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, pkg-config, libsodium
-, enableDrafts ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  asciidoc,
+  pkg-config,
+  libsodium,
+  enableDrafts ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "zeromq";
   version = "4.3.4";
@@ -12,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-epOEyHOswUGVwzz0FLxhow/zISmZHxsIgmpOV8C8bQM=";
   };
 
-  nativeBuildInputs = [ cmake asciidoc pkg-config ];
-  buildInputs = [ libsodium ];
+  nativeBuildInputs = [cmake asciidoc pkg-config];
+  buildInputs = [libsodium];
 
   doCheck = false; # fails all the tests (ctest)
 
@@ -25,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "The Intelligent Transport Layer";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

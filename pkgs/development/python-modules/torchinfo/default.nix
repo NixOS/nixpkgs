@@ -1,13 +1,13 @@
-{ lib
-, fetchPypi
-, python
-, buildPythonPackage
-, pythonOlder
-, pytorch
-, pytestCheckHook
-, torchvision
+{
+  lib,
+  fetchPypi,
+  python,
+  buildPythonPackage,
+  pythonOlder,
+  pytorch,
+  pytestCheckHook,
+  torchvision,
 }:
-
 buildPythonPackage rec {
   pname = "torchinfo";
   version = "1.6.3";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     "test_eval_order_doesnt_matter"
   ];
 
-  pythonImportsCheck = [ "torchvision" ];
+  pythonImportsCheck = ["torchvision"];
 
   meta = {
     description = "API to visualize pytorch models";
     homepage = "https://github.com/TylerYep/torchinfo";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ petterstorvik ];
+    maintainers = with lib.maintainers; [petterstorvik];
   };
 }

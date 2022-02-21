@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.localtime;
 in {
   options = {
@@ -30,9 +32,9 @@ in {
     };
 
     # Install the polkit rules.
-    environment.systemPackages = [ pkgs.localtime ];
+    environment.systemPackages = [pkgs.localtime];
     # Install the systemd unit.
-    systemd.packages = [ pkgs.localtime ];
+    systemd.packages = [pkgs.localtime];
 
     users.users.localtimed = {
       description = "localtime daemon";
@@ -42,7 +44,7 @@ in {
     users.groups.localtimed = {};
 
     systemd.services.localtime = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig.Restart = "on-failure";
     };
   };

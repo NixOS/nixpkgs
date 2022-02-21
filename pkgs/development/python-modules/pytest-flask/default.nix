@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools-scm, isPy27 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  flask,
+  werkzeug,
+  setuptools-scm,
+  isPy27,
+}:
 buildPythonPackage rec {
   pname = "pytest-flask";
   version = "1.2.0";
@@ -12,19 +20,19 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
   propagatedBuildInputs = [
     flask
     werkzeug
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
   meta = with lib; {
     homepage = "https://github.com/pytest-dev/pytest-flask/";
     license = licenses.mit;
     description = "A set of py.test fixtures to test Flask applications";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [vanschelven];
   };
 }

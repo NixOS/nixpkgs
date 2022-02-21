@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, smbus-cffi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  smbus-cffi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "bme680";
   version = "1.1.1";
@@ -35,13 +35,13 @@ buildPythonPackage rec {
       --replace "smbus" "smbus-cffi"
   '';
 
-  pythonImportsCheck = [ "bme680" ];
+  pythonImportsCheck = ["bme680"];
 
   meta = with lib; {
     description = "Python library for driving the Pimoroni BME680 Breakout";
     homepage = "https://github.com/pimoroni/bme680-python";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [mic92];
   };
 }

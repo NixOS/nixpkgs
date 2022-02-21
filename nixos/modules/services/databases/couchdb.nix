@@ -1,8 +1,11 @@
-{ config, options, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.couchdb;
   opt = options.services.couchdb;
   configFile = pkgs.writeText "couchdb.ini" (
@@ -11,29 +14,28 @@ let
       database_dir = ${cfg.databaseDir}
       uri_file = ${cfg.uriFile}
       view_index_dir = ${cfg.viewIndexDir}
-    '' + (optionalString (cfg.adminPass != null) ''
+    ''
+    + (optionalString (cfg.adminPass != null) ''
       [admins]
       ${cfg.adminUser} = ${cfg.adminPass}
-    '' + ''
-      [chttpd]
-    '') +
     ''
+    + ''
+      [chttpd]
+    '')
+    + ''
       port = ${toString cfg.port}
       bind_address = ${cfg.bindAddress}
 
       [log]
       file = ${cfg.logFile}
-    '');
+    ''
+  );
   executable = "${cfg.package}/bin/couchdb";
-
 in {
-
   ###### interface
 
   options = {
-
     services.couchdb = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -167,16 +169,13 @@ in {
           needs to be readable and writable from couchdb user/group.
         '';
       };
-
     };
-
   };
 
   ###### implementation
 
   config = mkIf config.services.couchdb.enable {
-
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     services.couchdb.configFile = mkDefault "/var/lib/couchdb/local.ini";
 
@@ -189,7 +188,7 @@ in {
 
     systemd.services.couchdb = {
       description = "CouchDB Server";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       preStart = ''
         touch ${cfg.configFile}
@@ -201,9 +200,9 @@ in {
         # 2. the module configuration
         # 3. the extraConfig from the module options
         # 4. the locally writable config file, which couchdb itself writes to
-        ERL_FLAGS= ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
+        ERL_FLAGS = ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
         # 5. the vm.args file
-        COUCHDB_ARGS_FILE=''${cfg.argsFile}'';
+        COUCHDB_ARGS_FILE = ''${cfg.argsFile}'';
       };
 
       serviceConfig = {
@@ -220,6 +219,5 @@ in {
     };
 
     users.groups.couchdb.gid = config.ids.gids.couchdb;
-
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, blockdiag
-, fetchFromGitHub
-, buildPythonPackage
-, nose
-, pytestCheckHook
-, setuptools
-, pythonOlder
+{
+  lib,
+  blockdiag,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nose,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "nwdiag";
   version = "3.0.0";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
   };
 }

@@ -1,16 +1,15 @@
-{ lib
-, mkXfceDerivation
-, ffmpegthumbnailer
-, gdk-pixbuf
-, glib
-, freetype
-, libgsf
-, poppler
-, gst_all_1
+{
+  lib,
+  mkXfceDerivation,
+  ffmpegthumbnailer,
+  gdk-pixbuf,
+  glib,
+  freetype,
+  libgsf,
+  poppler,
+  gst_all_1,
 }:
-
 # TODO: add libopenraw
-
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
@@ -35,6 +34,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "A D-Bus thumbnailer service";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

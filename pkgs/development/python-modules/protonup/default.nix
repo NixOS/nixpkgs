@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, requests, configparser }:
-
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  requests,
+  configparser,
+}:
 buildPythonPackage rec {
   pname = "protonup";
   version = "0.1.4";
@@ -15,15 +21,15 @@ buildPythonPackage rec {
       --replace "argparse" ""
   '';
 
-  propagatedBuildInputs = [ requests configparser ];
+  propagatedBuildInputs = [requests configparser];
 
   doCheck = false; # protonup does not have any tests
-  pythonImportsCheck = [ "protonup" ];
+  pythonImportsCheck = ["protonup"];
 
   meta = with lib; {
     homepage = "https://github.com/AUNaseef/protonup";
     description = "CLI program and API to automate the installation and update of GloriousEggroll's Proton-GE";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ flexagoon ];
+    maintainers = with maintainers; [flexagoon];
   };
 }

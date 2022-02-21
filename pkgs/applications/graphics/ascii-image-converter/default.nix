@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ascii-image-converter";
   version = "1.11.0";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "Convert images into ASCII art on the console";
     homepage = "https://github.com/TheZoraiz/ascii-image-converter#readme";
     license = licenses.asl20;
-    maintainers = [ maintainers.danth ];
+    maintainers = [maintainers.danth];
   };
 }

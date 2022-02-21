@@ -1,17 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.jupyter;
 
   package = cfg.package;
 
-  kernels = (pkgs.jupyter-kernel.create  {
-    definitions = if cfg.kernels != null
+  kernels = (pkgs.jupyter-kernel.create {
+    definitions =
+      if cfg.kernels != null
       then cfg.kernels
-      else  pkgs.jupyter-kernel.default;
+      else pkgs.jupyter-kernel.default;
   });
 
   notebookConfig = pkgs.writeText "jupyter_config.py" ''
@@ -19,9 +21,8 @@ let
 
     c.NotebookApp.password = ${cfg.password}
   '';
-
 in {
-  meta.maintainers = with maintainers; [ aborsu ];
+  meta.maintainers = with maintainers; [aborsu];
 
   options.services.jupyter = {
     enable = mkEnableOption "Jupyter development server";
@@ -53,7 +54,7 @@ in {
       description = ''
         Which command the service runs. Note that not all jupyter packages
         have all commands, e.g. jupyter-lab isn't present in the default package.
-       '';
+      '';
     };
 
     port = mkOption {
@@ -118,7 +119,7 @@ in {
     };
 
     kernels = mkOption {
-      type = types.nullOr (types.attrsOf(types.submodule (import ./kernel-options.nix {
+      type = types.nullOr (types.attrsOf (types.submodule (import ./kernel-options.nix {
         inherit lib;
       })));
 
@@ -157,15 +158,15 @@ in {
   };
 
   config = mkMerge [
-    (mkIf cfg.enable  {
+    (mkIf cfg.enable {
       systemd.services.jupyter = {
         description = "Jupyter development server";
 
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = ["network.target"];
+        wantedBy = ["multi-user.target"];
 
         # TODO: Patch notebook so we can explicitly pass in a shell
-        path = [ pkgs.bash ]; # needed for sh in cell magic to work
+        path = [pkgs.bash]; # needed for sh in cell magic to work
 
         environment = {
           JUPYTER_PATH = toString kernels;
@@ -173,12 +174,12 @@ in {
 
         serviceConfig = {
           Restart = "always";
-          ExecStart = ''${package}/bin/${cfg.command} \
-            --no-browser \
-            --ip=${cfg.ip} \
-            --port=${toString cfg.port} --port-retries 0 \
-            --notebook-dir=${cfg.notebookDir} \
-            --NotebookApp.config_file=${notebookConfig}
+          ExecStart = ''            ${package}/bin/${cfg.command} \
+                        --no-browser \
+                        --ip=${cfg.ip} \
+                        --port=${toString cfg.port} --port-retries 0 \
+                        --notebook-dir=${cfg.notebookDir} \
+                        --NotebookApp.config_file=${notebookConfig}
           '';
           User = cfg.user;
           Group = cfg.group;
@@ -191,7 +192,7 @@ in {
     })
     (mkIf (cfg.enable && (cfg.user == "jupyter")) {
       users.extraUsers.jupyter = {
-        extraGroups = [ cfg.group ];
+        extraGroups = [cfg.group];
         home = "/var/lib/jupyter";
         createHome = true;
         useDefaultShell = true; # needed so that the user can start a terminal.

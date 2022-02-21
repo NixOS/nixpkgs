@@ -1,5 +1,9 @@
-{ lib, stdenv, kernel, fetchFromGitHub, }:
-
+{
+  lib,
+  stdenv,
+  kernel,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "mbp2018-bridge-drv";
   version = "2020-01-31";
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/MCMrARM/mbp2018-bridge-drv";
     license = lib.licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ lib.maintainers.hlolli ];
+    maintainers = [lib.maintainers.hlolli];
     broken = kernel.kernelOlder "5.4";
   };
 }

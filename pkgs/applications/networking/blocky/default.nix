@@ -1,9 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, nixosTests
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nixosTests,
 }:
-
 buildGoModule rec {
   pname = "blocky";
   version = "0.17";
@@ -26,8 +26,8 @@ buildGoModule rec {
     homepage = "https://0xerr0r.github.io/blocky";
     changelog = "https://github.com/0xERR0R/blocky/releases";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ratsclub ];
+    maintainers = with maintainers; [ratsclub];
   };
 
-  passthru.tests = { inherit (nixosTests) blocky; };
+  passthru.tests = {inherit (nixosTests) blocky;};
 }

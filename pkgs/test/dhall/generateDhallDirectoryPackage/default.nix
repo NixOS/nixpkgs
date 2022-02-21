@@ -1,11 +1,12 @@
-{ dhallPackages, fetchFromGitHub }:
-
+{
+  dhallPackages,
+  fetchFromGitHub,
+}:
 # This file tests that dhallPackages.generateDhallDirectoryPackage works.
 #
 # TODO: It would be nice to extend this test to make sure that the resulting
 # Nix file has the expected contents, but it might be tough to do that easily
 # without IFD.
-
 dhallPackages.generateDhallDirectoryPackage {
   src = fetchFromGitHub {
     owner = "cdepillabout";

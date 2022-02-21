@@ -1,10 +1,23 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper, cmake, llvmPackages
-, flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, bash, libbpf, nixosTests
-, audit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  cmake,
+  llvmPackages,
+  flex,
+  bison,
+  elfutils,
+  python,
+  luajit,
+  netperf,
+  iperf,
+  libelf,
+  bash,
+  libbpf,
+  nixosTests,
+  audit,
 }:
-
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
   version = "0.24.0";
@@ -20,9 +33,16 @@ python.pkgs.buildPythonApplication rec {
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang
-    elfutils luajit netperf iperf
-    flex bash libbpf
+    llvm
+    llvm.dev
+    libclang
+    elfutils
+    luajit
+    netperf
+    iperf
+    flex
+    bash
+    libbpf
   ];
 
   patches = [
@@ -31,8 +51,8 @@ python.pkgs.buildPythonApplication rec {
     ./fix-deadlock-detector-import.patch
   ];
 
-  propagatedBuildInputs = [ python.pkgs.netaddr ];
-  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ];
+  propagatedBuildInputs = [python.pkgs.netaddr];
+  nativeBuildInputs = [makeWrapper cmake flex bison llvmPackages.llvm.dev];
 
   cmakeFlags = [
     "-DBCC_KERNEL_MODULES_DIR=/run/booted-system/kernel-modules/lib/modules"
@@ -83,8 +103,8 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = "https://iovisor.github.io/bcc/";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ragge mic92 thoughtpolice martinetd];
   };
 }

@@ -1,7 +1,9 @@
-{ fetchFromGitHub, fetchFromGitLab, lib, pkgs }:
-
-let
-
+{
+  fetchFromGitHub,
+  fetchFromGitLab,
+  lib,
+  pkgs,
+}: let
   http_proxy_connect_module_generic = patchName: rec {
     src = fetchFromGitHub {
       name = "http_proxy_connect_module_generic";
@@ -15,10 +17,7 @@ let
       "${src}/patch/${patchName}.patch"
     ];
   };
-
-in
-
-{
+in {
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 
@@ -30,7 +29,7 @@ in
       rev = "34fd0c94d2c43c642f323491c4f4a226cd83b962";
       sha256 = "0yf34s11vgkcl03wbl6gjngm3p9hs8vvm7hkjkwhjh39vkk2a7cy";
     };
-    inputs = [ pkgs.openssl ];
+    inputs = [pkgs.openssl];
   };
 
   auth-a2aclr = {
@@ -43,16 +42,16 @@ in
     };
     inputs = [
       (pkgs.arpa2common.overrideAttrs
-        (old: rec {
-          version = "0.7.1";
+      (old: rec {
+        version = "0.7.1";
 
-          src = fetchFromGitLab {
-            owner = "arpa2";
-            repo = "arpa2common";
-            rev = "v${version}";
-            sha256 = "sha256-8zVsAlGtmya9EK4OkGUMu2FKJRn2Q3bg2QWGjqcii64=";
-          };
-        }))
+        src = fetchFromGitLab {
+          owner = "arpa2";
+          repo = "arpa2common";
+          rev = "v${version}";
+          sha256 = "sha256-8zVsAlGtmya9EK4OkGUMu2FKJRn2Q3bg2QWGjqcii64=";
+        };
+      }))
     ];
   };
 
@@ -67,19 +66,21 @@ in
   };
 
   brotli = {
-    src = let gitsrc = pkgs.fetchFromGitHub {
-      name = "brotli";
-      owner = "google";
-      repo = "ngx_brotli";
-      rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
-      sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
-    }; in
-      pkgs.runCommand "ngx_brotli-src" { } ''
+    src = let
+      gitsrc = pkgs.fetchFromGitHub {
+        name = "brotli";
+        owner = "google";
+        repo = "ngx_brotli";
+        rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
+        sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
+      };
+    in
+      pkgs.runCommand "ngx_brotli-src" {} ''
         cp -a ${gitsrc} $out
         substituteInPlace $out/filter/config \
           --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
       '';
-    inputs = [ pkgs.brotli ];
+    inputs = [pkgs.brotli];
   };
 
   cache-purge = {
@@ -110,7 +111,7 @@ in
       rev = "v3.0.0";
       sha256 = "000dm5zk0m1hm1iq60aff5r6y8xmqd7djrwhgnz9ig01xyhnjv9w";
     };
-    inputs = [ pkgs.expat ];
+    inputs = [pkgs.expat];
   };
 
   develkit = {
@@ -142,7 +143,7 @@ in
       sha256 = "0nar45lp3jays3p6b01a78a6gwh6v0snpzcncgiphcqmj5kw8ipg";
     };
     meta = {
-      maintainers = with lib.maintainers; [ aneeshusa ];
+      maintainers = with lib.maintainers; [aneeshusa];
     };
   };
 
@@ -164,31 +165,37 @@ in
       rev = "3.3";
       sha256 = "EEn/qxPsBFgVBqOgPYTrRhaLPwSBlSPWYYSr3SL8wZA=";
     };
-    inputs = [ pkgs.libmaxminddb ];
+    inputs = [pkgs.libmaxminddb];
 
     meta = {
-      maintainers = with lib.maintainers; [ pinpox ];
+      maintainers = with lib.maintainers; [pinpox];
     };
   };
 
-  http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "18";
-  };
+  http_proxy_connect_module_v18 =
+    http_proxy_connect_module_generic "proxy_connect_rewrite_1018"
+    // {
+      supports = with lib.versions; version: major version == "1" && minor version == "18";
+    };
 
-  http_proxy_connect_module_v19 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "19";
-  };
+  http_proxy_connect_module_v19 =
+    http_proxy_connect_module_generic "proxy_connect_rewrite_1018"
+    // {
+      supports = with lib.versions; version: major version == "1" && minor version == "19";
+    };
 
   ipscrub = {
-    src = fetchFromGitHub
+    src =
+      fetchFromGitHub
       {
         name = "ipscrub";
         owner = "masonicboom";
         repo = "ipscrub";
         rev = "v1.0.1";
         sha256 = "0qcx15c8wbsmyz2hkmyy5yd7qn1n84kx9amaxnfxkpqi05vzm1zz";
-      } + "/ipscrub";
-    inputs = [ pkgs.libbsd ];
+      }
+      + "/ipscrub";
+    inputs = [pkgs.libbsd];
   };
 
   limit-speed = {
@@ -219,7 +226,7 @@ in
       rev = "v0.10.15";
       sha256 = "1j216isp0546hycklbr5wi8mlga5hq170hk7f2sm16sfavlkh5gz";
     };
-    inputs = [ pkgs.luajit ];
+    inputs = [pkgs.luajit];
     preConfigure = ''
       export LUAJIT_LIB="${pkgs.luajit}/lib"
       export LUAJIT_INC="${pkgs.luajit}/include/luajit-2.0"
@@ -235,13 +242,13 @@ in
       rev = "v0.07";
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
-    inputs = [ pkgs.luajit ];
+    inputs = [pkgs.luajit];
     allowMemoryWriteExecute = true;
   };
 
   modsecurity = {
     src = "${pkgs.modsecurity_standalone.nginx}/nginx/modsecurity";
-    inputs = [ pkgs.curl pkgs.apr pkgs.aprutil pkgs.apacheHttpd pkgs.yajl ];
+    inputs = [pkgs.curl pkgs.apr pkgs.aprutil pkgs.apacheHttpd pkgs.yajl];
     preConfigure = ''
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.aprutil.dev}/include/apr-1 -I${pkgs.apacheHttpd.dev}/include -I${pkgs.apr.dev}/include/apr-1 -I${pkgs.yajl}/include"
     '';
@@ -255,7 +262,7 @@ in
       rev = "v1.0.2";
       sha256 = "sha256-UXiitc3jZlgXlCsDPS+xEFLNRVgRbn8BCCXUEqAWlII=";
     };
-    inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
+    inputs = [pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl];
   };
 
   moreheaders = {
@@ -279,61 +286,61 @@ in
   };
 
   naxsi = {
-    src = fetchFromGitHub
+    src =
+      fetchFromGitHub
       {
         name = "naxsi";
         owner = "nbs-system";
         repo = "naxsi";
         rev = "95ac520eed2ea04098a76305fd0ad7e9158840b7";
         sha256 = "0b5pnqkgg18kbw5rf2ifiq7lsx5rqmpqsql6hx5ycxjzxj6acfb3";
-      } + "/naxsi_src";
+      }
+      + "/naxsi_src";
   };
 
   opentracing = {
-    src =
-      let src' = fetchFromGitHub {
+    src = let
+      src' = fetchFromGitHub {
         name = "opentracing";
         owner = "opentracing-contrib";
         repo = "nginx-opentracing";
         rev = "v0.10.0";
         sha256 = "1q234s3p55xv820207dnh4fcxkqikjcq5rs02ai31ylpmfsf0kkb";
       };
-      in "${src'}/opentracing";
-    inputs = [ pkgs.opentracing-cpp ];
+    in "${src'}/opentracing";
+    inputs = [pkgs.opentracing-cpp];
   };
 
-  pagespeed =
-    let
-      version = pkgs.psol.version;
+  pagespeed = let
+    version = pkgs.psol.version;
 
-      moduleSrc = fetchFromGitHub {
-        name = "pagespeed";
-        owner = "pagespeed";
-        repo = "ngx_pagespeed";
-        rev = "v${version}-stable";
-        sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
-      };
-
-      ngx_pagespeed = pkgs.runCommand
-        "ngx_pagespeed"
-        {
-          meta = {
-            description = "PageSpeed module for Nginx";
-            homepage = "https://developers.google.com/speed/pagespeed/module/";
-            license = pkgs.lib.licenses.asl20;
-          };
-        }
-        ''
-          cp -r "${moduleSrc}" "$out"
-          chmod -R +w "$out"
-          ln -s "${pkgs.psol}" "$out/psol"
-        '';
-    in
-    {
-      src = ngx_pagespeed;
-      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
-      allowMemoryWriteExecute = true;
+    moduleSrc = fetchFromGitHub {
+      name = "pagespeed";
+      owner = "pagespeed";
+      repo = "ngx_pagespeed";
+      rev = "v${version}-stable";
+      sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
     };
+
+    ngx_pagespeed = pkgs.runCommand
+    "ngx_pagespeed"
+    {
+      meta = {
+        description = "PageSpeed module for Nginx";
+        homepage = "https://developers.google.com/speed/pagespeed/module/";
+        license = pkgs.lib.licenses.asl20;
+      };
+    }
+    ''
+      cp -r "${moduleSrc}" "$out"
+      chmod -R +w "$out"
+      ln -s "${pkgs.psol}" "$out/psol"
+    '';
+  in {
+    src = ngx_pagespeed;
+    inputs = [pkgs.zlib pkgs.libuuid]; # psol deps
+    allowMemoryWriteExecute = true;
+  };
 
   pam = {
     src = fetchFromGitHub {
@@ -343,7 +350,7 @@ in
       rev = "v1.5.3";
       sha256 = "sha256:09lnljdhjg65643bc4535z378lsn4llbq67zcxlln0pizk9y921a";
     };
-    inputs = [ pkgs.pam ];
+    inputs = [pkgs.pam];
   };
 
   pinba = {
@@ -384,7 +391,7 @@ in
       rev = "95bdc0d1aca06ea7fe42555f71e65910bd74914d";
       sha256 = "19wzck1xzq4kz7nyabcwzlank1k7wi7w2wn2c1mwz374c79g8ggp";
     };
-    inputs = [ pkgs.openssl ];
+    inputs = [pkgs.openssl];
   };
 
   set-misc = {
@@ -525,7 +532,7 @@ in
       rev = "v2.7.1";
       sha256 = "0ya4330in7zjzqw57djv4icpk0n1j98nvf0f8v296yi9rjy054br";
     };
-    inputs = [ pkgs.msgpuck.dev pkgs.yajl ];
+    inputs = [pkgs.msgpuck.dev pkgs.yajl];
   };
 
   url = {
@@ -546,7 +553,7 @@ in
       rev = "92b80642538eec4cfc98114dec5917b8d820e912";
       sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
     };
-    inputs = [ pkgs.ffmpeg ];
+    inputs = [pkgs.ffmpeg];
   };
 
   vod = {
@@ -557,7 +564,7 @@ in
       rev = "1.29";
       sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
     };
-    inputs = with pkgs; [ ffmpeg fdk_aac openssl libxml2 libiconv ];
+    inputs = with pkgs; [ffmpeg fdk_aac openssl libxml2 libiconv];
   };
 
   vts = {

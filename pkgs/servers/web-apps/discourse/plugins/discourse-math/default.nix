@@ -1,5 +1,8 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
-
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 mkDiscoursePlugin {
   name = "discourse-math";
   src = fetchFromGitHub {
@@ -10,7 +13,7 @@ mkDiscoursePlugin {
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-math";
-    maintainers = with maintainers; [ talyz ];
+    maintainers = with maintainers; [talyz];
     license = licenses.mit;
     description = "Official MathJax support for Discourse";
   };

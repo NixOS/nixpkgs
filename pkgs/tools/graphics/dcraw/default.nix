@@ -1,5 +1,12 @@
-{lib, stdenv, fetchurl, libjpeg, lcms2, gettext, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjpeg,
+  lcms2,
+  gettext,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "dcraw";
   version = "9.28.0";
@@ -10,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin libiconv;
-  buildInputs = [ libjpeg lcms2 gettext ];
+  buildInputs = [libjpeg lcms2 gettext];
 
   # Jasper is disabled because the library is abandoned and has many
   # CVEs.
@@ -31,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Decoder for many camera raw picture formats";
     license = lib.licenses.free;
     platforms = lib.platforms.unix; # Once had cygwin problems
-    maintainers = [ ];
+    maintainers = [];
     knownVulnerabilities = [
       "CVE-2018-19655"
       "CVE-2018-19565"

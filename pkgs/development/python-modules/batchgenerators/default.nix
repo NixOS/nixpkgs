@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, future
-, numpy
-, pillow
-, fetchpatch
-, scipy
-, scikit-learn
-, scikitimage
-, threadpoolctl
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  future,
+  numpy,
+  pillow,
+  fetchpatch,
+  scipy,
+  scikit-learn,
+  scikitimage,
+  threadpoolctl,
 }:
-
 buildPythonPackage rec {
   pname = "batchgenerators";
   version = "0.21";
@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "2D and 3D image data augmentation for deep learning";
     homepage = "https://github.com/MIC-DKFZ/batchgenerators";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

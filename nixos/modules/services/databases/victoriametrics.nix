@@ -1,6 +1,11 @@
-{ config, pkgs, lib, ... }:
-let cfg = config.services.victoriametrics; in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  cfg = config.services.victoriametrics;
+in {
   options.services.victoriametrics = with lib; {
     enable = mkEnableOption "victoriametrics";
     package = mkOption {
@@ -39,7 +44,7 @@ let cfg = config.services.victoriametrics; in
   config = lib.mkIf cfg.enable {
     systemd.services.victoriametrics = {
       description = "VictoriaMetrics time series database";
-      after = [ "network.target" ];
+      after = ["network.target"];
       startLimitBurst = 5;
       serviceConfig = {
         Restart = "on-failure";
@@ -62,12 +67,11 @@ let cfg = config.services.victoriametrics; in
         # open /var/lib/victoriametrics/data/small/2021_08/[...]/values.bin: too many open files
         LimitNOFILE = 1048576;
       };
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
-      postStart =
-        let
-          bindAddr = (lib.optionalString (lib.hasPrefix ":" cfg.listenAddress) "127.0.0.1") + cfg.listenAddress;
-        in
+      postStart = let
+        bindAddr = (lib.optionalString (lib.hasPrefix ":" cfg.listenAddress) "127.0.0.1") + cfg.listenAddress;
+      in
         lib.mkBefore ''
           until ${lib.getBin pkgs.curl}/bin/curl -s -o /dev/null http://${bindAddr}/ping; do
             sleep 1;

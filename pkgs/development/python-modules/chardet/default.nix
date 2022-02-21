@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "chardet";
   version = "4.0.0";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "chardet" ];
+  pythonImportsCheck = ["chardet"];
 
   meta = with lib; {
     description = "Universal encoding detector";
     homepage = "https://github.com/chardet/chardet";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

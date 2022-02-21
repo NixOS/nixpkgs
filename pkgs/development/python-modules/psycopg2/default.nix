@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, isPyPy
-, fetchPypi
-, postgresql
-, openssl
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  isPyPy,
+  fetchPypi,
+  postgresql,
+  openssl,
 }:
-
 buildPythonPackage rec {
   pname = "psycopg2";
   version = "2.9.3";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PostgreSQL database adapter for the Python programming language";
     homepage = "https://www.psycopg.org";
-    license = with licenses; [ lgpl3 zpl20 ];
+    license = with licenses; [lgpl3 zpl20];
   };
 }

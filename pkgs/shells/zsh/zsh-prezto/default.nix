@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, unstableGitUpdater }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+}:
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
   version = "unstable-2021-11-16";
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/sorin-ionescu/prezto";
     license = licenses.mit;
-    maintainers = with maintainers; [ holymonson ];
+    maintainers = with maintainers; [holymonson];
     platforms = platforms.unix;
   };
 }

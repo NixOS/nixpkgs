@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, alsaSupport ? !stdenv.isDarwin, alsa-lib
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, CoreServices, AudioUnit, AudioToolbox
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  alsaSupport ? !stdenv.isDarwin,
+  alsa-lib,
+  pulseSupport ? !stdenv.isDarwin,
+  libpulseaudio,
+  CoreServices,
+  AudioUnit,
+  AudioToolbox,
 }:
-
 stdenv.mkDerivation rec {
   pname = "openal-soft";
   version = "1.21.1";
@@ -17,7 +24,7 @@ stdenv.mkDerivation rec {
 
   # this will make it find its own data files (e.g. HRTF profiles)
   # without any other configuration
-  patches = [ ./search-out.patch ];
+  patches = [./search-out.patch];
   postPatch = ''
     substituteInPlace alc/helpers.cpp \
       --replace "@OUT@" $out
@@ -25,16 +32,18 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.cc.libc
+  buildInputs =
+    lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.cc.libc
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+    ++ lib.optionals stdenv.isDarwin [CoreServices AudioUnit AudioToolbox];
 
   NIX_LDFLAGS = toString (
     lib.optional alsaSupport "-lasound"
-    ++ lib.optional pulseSupport "-lpulse");
+    ++ lib.optional pulseSupport "-lpulse"
+  );
 
   meta = with lib; {
     description = "OpenAL alternative";

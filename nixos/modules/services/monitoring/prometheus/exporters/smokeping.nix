@@ -1,8 +1,10 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
   cfg = config.services.prometheus.exporters.smokeping;
   goDuration = types.mkOptionType {
     name = "goDuration";
@@ -10,8 +12,7 @@ let
     check = x: types.str.check x && builtins.match "(-?[0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+" x != null;
     inherit (types.str) merge;
   };
-in
-{
+in {
   port = 9374;
   extraOpts = {
     telemetryPath = mkOption {
@@ -44,8 +45,8 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      AmbientCapabilities = [ "CAP_NET_RAW" ];
-      CapabilityBoundingSet = [ "CAP_NET_RAW" ];
+      AmbientCapabilities = ["CAP_NET_RAW"];
+      CapabilityBoundingSet = ["CAP_NET_RAW"];
       ExecStart = ''
         ${pkgs.prometheus-smokeping-prober}/bin/smokeping_prober \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

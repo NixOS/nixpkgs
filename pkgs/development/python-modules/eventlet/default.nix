@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, dnspython
-, greenlet
-, monotonic
-, six
-, nose
-, pyopenssl
-, iana-etc
-, pytestCheckHook
-, libredirect
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  dnspython,
+  greenlet,
+  monotonic,
+  six,
+  nose,
+  pyopenssl,
+  iana-etc,
+  pytestCheckHook,
+  libredirect,
 }:
-
 buildPythonPackage rec {
   pname = "eventlet";
   version = "0.33.0";
@@ -26,14 +26,16 @@ buildPythonPackage rec {
     hash = "sha256-kE/eYBbaTt1mPGoUIMhonvFBlQOdAfPU5GvCvPaRHvs=";
   };
 
-  propagatedBuildInputs = [
-    dnspython
-    greenlet
-    pyopenssl
-    six
-  ] ++ lib.optional (pythonOlder "3.5") [
-    monotonic
-  ];
+  propagatedBuildInputs =
+    [
+      dnspython
+      greenlet
+      pyopenssl
+      six
+    ]
+    ++ lib.optional (pythonOlder "3.5") [
+      monotonic
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -92,6 +94,6 @@ buildPythonPackage rec {
     description = "A concurrent networking library for Python";
     homepage = "https://github.com/eventlet/eventlet/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

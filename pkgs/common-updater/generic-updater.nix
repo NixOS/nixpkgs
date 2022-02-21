@@ -1,16 +1,21 @@
-{ stdenv, writeScript, coreutils, gnugrep, gnused, common-updater-scripts, nix }:
-
-{ pname
-, version
-, attrPath ? pname
-, versionLister
-, ignoredVersions ? ""
-, rev-prefix ? ""
-, odd-unstable ? false
-, patchlevel-unstable ? false
-}:
-
-let
+{
+  stdenv,
+  writeScript,
+  coreutils,
+  gnugrep,
+  gnused,
+  common-updater-scripts,
+  nix,
+}: {
+  pname,
+  version,
+  attrPath ? pname,
+  versionLister,
+  ignoredVersions ? "",
+  rev-prefix ? "",
+  odd-unstable ? false,
+  patchlevel-unstable ? false,
+}: let
   # where to print git commands and debugging messages
   fileForGitCommands = "update-git-commits.txt";
 
@@ -103,6 +108,4 @@ let
 
     echo "" >> ${fileForGitCommands}
   '';
-
-in
-[ updateScript pname version attrPath versionLister ignoredVersions rev-prefix odd-unstable patchlevel-unstable ]
+in [updateScript pname version attrPath versionLister ignoredVersions rev-prefix odd-unstable patchlevel-unstable]

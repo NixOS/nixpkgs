@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pyusb, pyserial }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pyusb,
+  pyserial,
+}:
 buildPythonPackage rec {
   pname = "facedancer";
   version = "2019.3.2";
@@ -11,7 +17,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ pyusb pyserial ];
+  propagatedBuildInputs = [pyusb pyserial];
 
   preBuild = ''
     echo "$version" > VERSION
@@ -21,6 +27,6 @@ buildPythonPackage rec {
     description = "library for emulating usb devices";
     homepage = "https://greatscottgadgets.com/greatfet/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ mog ];
+    maintainers = with maintainers; [mog];
   };
 }

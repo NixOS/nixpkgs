@@ -1,6 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub, passlib, dnspython, loguru, toml
-, ipaddr, poetry, poetry-core, black, Fabric, pytest, sphinx }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  passlib,
+  dnspython,
+  loguru,
+  toml,
+  ipaddr,
+  poetry,
+  poetry-core,
+  black,
+  Fabric,
+  pytest,
+  sphinx,
+}:
 buildPythonPackage rec {
   pname = "ciscoconfparse";
   version = "1.6.21";
@@ -17,16 +30,14 @@ buildPythonPackage rec {
     patchShebangs tests
   '';
 
-  propagatedBuildInputs =
-    [ passlib dnspython loguru toml ipaddr poetry black Fabric sphinx ];
+  propagatedBuildInputs = [passlib dnspython loguru toml ipaddr poetry black Fabric sphinx];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   meta = with lib; {
-    description =
-      "Parse, Audit, Query, Build, and Modify Cisco IOS-style configurations";
+    description = "Parse, Audit, Query, Build, and Modify Cisco IOS-style configurations";
     homepage = "https://github.com/mpenning/ciscoconfparse";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.astro ];
+    maintainers = [maintainers.astro];
   };
 }

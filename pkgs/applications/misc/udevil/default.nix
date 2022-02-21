@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, acl
-, glib
-, intltool
-, pkg-config
-, udev
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  acl,
+  glib,
+  intltool,
+  pkg-config,
+  udev,
+  util-linux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "udevil";
   version = "0.4.4";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nd44r8rbxifx4x4m24z5aji1c6k1fhw8cmf5s43wd5qys0bcdad";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
     glib
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ignorantguru.github.io/udevil/";
     description = "Mount without password";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

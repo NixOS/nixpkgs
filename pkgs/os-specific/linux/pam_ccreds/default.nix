@@ -1,5 +1,11 @@
-{lib, stdenv, fetchurl, pam, openssl, db}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pam,
+  openssl,
+  db,
+}:
 stdenv.mkDerivation rec {
   pname = "pam_ccreds";
   version = "10";
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
     sed 's/-o root -g root//' -i Makefile.in
   '';
 
-  buildInputs = [ pam openssl db ];
+  buildInputs = [pam openssl db];
 
   meta = with lib; {
     homepage = "https://www.padl.com/OSS/pam_ccreds.html";

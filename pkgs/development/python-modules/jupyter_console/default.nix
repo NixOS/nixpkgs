@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, jupyter-client
-, ipython
-, ipykernel
-, prompt-toolkit
-, pygments
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  jupyter-client,
+  ipython,
+  ipykernel,
+  prompt-toolkit,
+  pygments,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "jupyter_console";
   version = "6.4.0";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     prompt-toolkit
     pygments
   ];
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   postPatch = ''
     substituteInPlace setup.py \

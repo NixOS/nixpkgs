@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-  cfg = config.services.webdav;
-  format = pkgs.formats.yaml { };
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.webdav;
+  format = pkgs.formats.yaml {};
+in {
   options = {
     services.webdav = {
       enable = mkEnableOption "WebDAV server";
@@ -24,7 +26,7 @@ in
 
       settings = mkOption {
         type = format.type;
-        default = { };
+        default = {};
         description = ''
           Attrset that is converted and passed as config file. Available options
           can be found at
@@ -91,17 +93,17 @@ in
 
     systemd.services.webdav = {
       description = "WebDAV server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = "${pkgs.webdav}/bin/webdav -c ${cfg.configFile}";
         Restart = "on-failure";
         User = cfg.user;
         Group = cfg.group;
-        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        EnvironmentFile = mkIf (cfg.environmentFile != null) [cfg.environmentFile];
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ pmy ];
+  meta.maintainers = with maintainers; [pmy];
 }

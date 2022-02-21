@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gmp, flex, bison }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gmp,
+  flex,
+  bison,
+}:
 stdenv.mkDerivation {
   pname = "veriT";
   version = "2021.06.2";
@@ -9,13 +16,13 @@ stdenv.mkDerivation {
     sha256 = "1yjvvxnsix0rhilc81ycx1s85dymq366c6zh1hwwd8qxp7k1zca2";
   };
 
-  nativeBuildInputs = [ autoreconfHook flex bison ];
-  buildInputs = [ gmp ];
+  nativeBuildInputs = [autoreconfHook flex bison];
+  buildInputs = [gmp];
 
   # --disable-static actually enables static linking here...
   dontDisableStatic = true;
 
-  makeFlags = [ "LEX=${flex}/bin/flex" ];
+  makeFlags = ["LEX=${flex}/bin/flex"];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -26,6 +33,6 @@ stdenv.mkDerivation {
     homepage = "https://verit.loria.fr/";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    maintainers = [maintainers.gebner];
   };
 }

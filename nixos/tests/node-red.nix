@@ -1,14 +1,22 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "nodered";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ matthewcroughan ];
+    maintainers = [matthewcroughan];
   };
 
   nodes = {
-    client = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.curl ];
+    client = {
+      config,
+      pkgs,
+      ...
+    }: {
+      environment.systemPackages = [pkgs.curl];
     };
-    nodered = { config, pkgs, ... }: {
+    nodered = {
+      config,
+      pkgs,
+      ...
+    }: {
       services.node-red = {
         enable = true;
         openFirewall = true;

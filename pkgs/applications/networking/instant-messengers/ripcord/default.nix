@@ -1,8 +1,24 @@
-{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools
-, qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats
-, autoPatchelfHook, desktop-file-utils, imagemagick
-, twemoji-color-font, xorg, libsodium, libopus, libGL, alsa-lib }:
-
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  makeFontsConf,
+  appimageTools,
+  qtbase,
+  qtsvg,
+  qtmultimedia,
+  qtwebsockets,
+  qtimageformats,
+  autoPatchelfHook,
+  desktop-file-utils,
+  imagemagick,
+  twemoji-color-font,
+  xorg,
+  libsodium,
+  libopus,
+  libGL,
+  alsa-lib,
+}:
 mkDerivation rec {
   pname = "ripcord";
   version = "0.4.29";
@@ -13,18 +29,20 @@ mkDerivation rec {
       sha256 = "sha256-4yDLPEBDsPKWtLwdpmSyl3b5XCwLAr2/EVtNRrFmmJk=";
       name = "${pname}-${version}.AppImage";
     };
-  in appimageTools.extract {
-    name = "${pname}-${version}";
-    src = appimage;
-  };
+  in
+    appimageTools.extract {
+      name = "${pname}-${version}";
+      src = appimage;
+    };
 
-  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils imagemagick ];
-  buildInputs = [ libsodium libopus libGL alsa-lib ]
-    ++ [ qtbase qtsvg qtmultimedia qtwebsockets qtimageformats ]
-    ++ (with xorg; [ libX11 libXScrnSaver libXcursor xkeyboardconfig ]);
+  nativeBuildInputs = [autoPatchelfHook desktop-file-utils imagemagick];
+  buildInputs =
+    [libsodium libopus libGL alsa-lib]
+    ++ [qtbase qtsvg qtmultimedia qtwebsockets qtimageformats]
+    ++ (with xorg; [libX11 libXScrnSaver libXcursor xkeyboardconfig]);
 
   fontsConf = makeFontsConf {
-    fontDirectories = [ twemoji-color-font ];
+    fontDirectories = [twemoji-color-font];
   };
 
   installPhase = ''
@@ -62,7 +80,7 @@ mkDerivation rec {
     homepage = "https://cancel.fm/ripcord/";
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ infinisil ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [infinisil];
+    platforms = ["x86_64-linux"];
   };
 }

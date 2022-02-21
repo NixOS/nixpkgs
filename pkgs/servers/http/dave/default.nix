@@ -1,5 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, mage }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  mage,
+}:
 buildGoPackage rec {
   pname = "dave";
   version = "0.4.0";
@@ -13,16 +17,14 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/micromata/dave";
 
-  subPackages = [ "cmd/dave" "cmd/davecli" ];
+  subPackages = ["cmd/dave" "cmd/davecli"];
 
-  ldflags =
-    [ "-s" "-w" "-X main.version=${version}" "-X main.builtBy=nixpkgs" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}" "-X main.builtBy=nixpkgs"];
 
   meta = with lib; {
     homepage = "https://github.com/micromata/dave";
-    description =
-      "A totally simple and very easy to configure stand alone webdav server";
+    description = "A totally simple and very easy to configure stand alone webdav server";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lunik1 ];
+    maintainers = with maintainers; [lunik1];
   };
 }

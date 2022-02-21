@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libpng
-, libjpeg
-, freetype
-, xorg
-, python3
-, imagemagick
-, gcc-arm-embedded
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libpng,
+  libjpeg,
+  freetype,
+  xorg,
+  python3,
+  imagemagick,
+  gcc-arm-embedded,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "numworks-epsilon";
   version = "15.5.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "fPBO3FzZ4k5OxG+Ifc6R/au4Te974HNKAEdHz+aFdSg=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     libpng
     libjpeg
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "Simulator for Epsilon, a High-performance graphing calculator operating system";
     homepage = "https://numworks.com/";
     license = licenses.cc-by-nc-sa-40;
-    maintainers = with maintainers; [ erikbackman ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [erikbackman];
+    platforms = ["x86_64-linux"];
   };
 }

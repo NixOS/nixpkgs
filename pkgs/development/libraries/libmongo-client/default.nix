@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  glib,
+}:
 stdenv.mkDerivation rec {
   pname = "libmongo-client";
   version = "0.1.8";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1cjx06i3gd9zkyvwm2ysjrf0hkhr7bjg3c27s7n0y31j10igfjp0";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ ];
-  propagatedBuildInputs = [ glib ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [];
+  propagatedBuildInputs = [glib];
 
   postPatch = ''
     # Fix when uses glib in public headers

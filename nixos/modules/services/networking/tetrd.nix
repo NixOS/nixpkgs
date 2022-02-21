@@ -1,20 +1,23 @@
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   options.services.tetrd.enable = lib.mkEnableOption pkgs.tetrd.meta.description;
 
   config = lib.mkIf config.services.tetrd.enable {
     environment = {
-      systemPackages = [ pkgs.tetrd ];
+      systemPackages = [pkgs.tetrd];
       etc."resolv.conf".source = "/etc/tetrd/resolv.conf";
     };
 
     systemd = {
-      tmpfiles.rules = [ "f /etc/tetrd/resolv.conf - - -" ];
+      tmpfiles.rules = ["f /etc/tetrd/resolv.conf - - -"];
 
       services.tetrd = {
         description = pkgs.tetrd.meta.description;
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
 
         serviceConfig = {
           ExecStart = "${pkgs.tetrd}/opt/Tetrd/bin/tetrd";
@@ -41,7 +44,7 @@
           ProtectProc = "invisible";
           ProtectSystem = "strict";
           RemoveIPC = true;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

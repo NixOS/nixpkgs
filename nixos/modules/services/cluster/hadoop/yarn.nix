@@ -1,9 +1,13 @@
-{ config, lib, pkgs, ...}:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.hadoop;
-  hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-  restartIfChanged  = mkOption {
+  hadoopConf = "${import ./conf.nix {inherit cfg pkgs lib;}}/";
+  restartIfChanged = mkOption {
     type = types.bool;
     description = ''
       Automatically restart the service on config change.
@@ -13,8 +17,7 @@ let
     '';
     default = false;
   };
-in
-{
+in {
   options.services.hadoop.yarn = {
     resourcemanager = {
       enable = mkEnableOption "Whether to run the Hadoop YARN ResourceManager";
@@ -50,9 +53,8 @@ in
 
   config = mkMerge [
     (mkIf (
-        cfg.yarn.resourcemanager.enable || cfg.yarn.nodemanager.enable
+      cfg.yarn.resourcemanager.enable || cfg.yarn.nodemanager.enable
     ) {
-
       users.users.yarn = {
         description = "Hadoop YARN user";
         group = "hadoop";
@@ -63,14 +65,15 @@ in
     (mkIf cfg.yarn.resourcemanager.enable {
       systemd.services.yarn-resourcemanager = {
         description = "Hadoop YARN ResourceManager";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
         inherit (cfg.yarn.resourcemanager) restartIfChanged;
 
         serviceConfig = {
           User = "yarn";
           SyslogIdentifier = "yarn-resourcemanager";
-          ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} " +
-                      " resourcemanager";
+          ExecStart =
+            "${cfg.package}/bin/yarn --config ${hadoopConf} "
+            + " resourcemanager";
           Restart = "always";
         };
       };
@@ -92,7 +95,7 @@ in
 
       systemd.services.yarn-nodemanager = {
         description = "Hadoop YARN NodeManager";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
         inherit (cfg.yarn.nodemanager) restartIfChanged;
 
         preStart = ''
@@ -113,16 +116,19 @@ in
           User = "yarn";
           SyslogIdentifier = "yarn-nodemanager";
           PermissionsStartOnly = true;
-          ExecStart = "${cfg.package}/bin/yarn --config ${hadoopConf} " +
-                      " nodemanager";
+          ExecStart =
+            "${cfg.package}/bin/yarn --config ${hadoopConf} "
+            + " nodemanager";
           Restart = "always";
         };
       };
 
       networking.firewall.allowedTCPPortRanges = [
-        (mkIf (cfg.yarn.nodemanager.openFirewall) {from = 1024; to = 65535;})
+        (mkIf (cfg.yarn.nodemanager.openFirewall) {
+          from = 1024;
+          to = 65535;
+        })
       ];
     })
-
   ];
 }

@@ -1,15 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, DiskArbitration
-, Foundation
-, IOKit
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  DiskArbitration,
+  Foundation,
+  IOKit,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "keyscope";
   version = "1.1.0";
@@ -23,14 +23,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-aq7xUma8QDRnu74R7JSuZjrXCco7L9JrNmAZiGtTyts=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    DiskArbitration
-    Foundation
-    IOKit
-    Security
-  ];
+  buildInputs =
+    [openssl]
+    ++ lib.optionals stdenv.isDarwin [
+      DiskArbitration
+      Foundation
+      IOKit
+      Security
+    ];
 
   # build script tries to get information from git
   postPatch = ''
@@ -44,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/spectralops/keyscope";
     changelog = "https://github.com/spectralops/keyscope/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

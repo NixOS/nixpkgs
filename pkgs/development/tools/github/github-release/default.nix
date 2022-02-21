@@ -1,5 +1,8 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
-
+{
+  buildGoPackage,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoPackage rec {
   pname = "github-release";
   version = "0.10.0";
@@ -23,7 +26,7 @@ buildGoPackage rec {
 
     license = licenses.mit;
     homepage = "https://github.com/github-release/github-release";
-    maintainers = with maintainers; [ ardumont j03 ];
+    maintainers = with maintainers; [ardumont j03];
     platforms = with platforms; unix;
   };
 }

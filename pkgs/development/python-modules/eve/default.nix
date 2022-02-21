@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, events
-, pymongo
-, simplejson
-, cerberus
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  events,
+  pymongo,
+  simplejson,
+  cerberus,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "Eve";
   version = "1.1.5";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
       --replace "events>=0.3,<0.4" "events>=0.3,<0.5"
   '';
 
-  pythonImportsCheck = [ "eve" ];
+  pythonImportsCheck = ["eve"];
 
   # tests call a running mongodb instance
   doCheck = false;
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://python-eve.org/";
     description = "Open source Python REST API framework designed for human beings";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

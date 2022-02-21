@@ -1,16 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.davfs2;
   cfgFile = pkgs.writeText "davfs2.conf" ''
     dav_user ${cfg.davUser}
     dav_group ${cfg.davGroup}
     ${cfg.extraConfig}
   '';
-in
-{
+in {
   options.services.davfs2 = {
     enable = mkOption {
       type = types.bool;
@@ -49,12 +50,12 @@ in
       '';
       description = ''
         Extra lines appended to the configuration of davfs2.
-      ''  ;
+      '';
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.davfs2 ];
+    environment.systemPackages = [pkgs.davfs2];
     environment.etc."davfs2/davfs2.conf".source = cfgFile;
 
     users.groups = optionalAttrs (cfg.davGroup == "davfs2") {
@@ -87,7 +88,5 @@ in
       setuid = true;
       permissions = "u+rx,g+x";
     };
-
   };
-
 }

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, pythonOlder
-, geos
-, pytestCheckHook
-, cython
-, numpy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  pythonOlder,
+  geos,
+  pytestCheckHook,
+  cython,
+  numpy,
 }:
-
 buildPythonPackage rec {
   pname = "Shapely";
   version = "1.8.0";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       libgeos_c = GEOS_LIBRARY_PATH;
       libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
- ];
+  ];
 
   preCheck = ''
     rm -r shapely # prevent import of local shapely
@@ -53,12 +53,12 @@ buildPythonPackage rec {
     "test_collection"
   ];
 
-  pythonImportsCheck = [ "shapely" ];
+  pythonImportsCheck = ["shapely"];
 
   meta = with lib; {
     description = "Geometric objects, predicates, and operations";
     homepage = "https://pypi.python.org/pypi/Shapely/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ knedlsepp ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [knedlsepp];
   };
 }

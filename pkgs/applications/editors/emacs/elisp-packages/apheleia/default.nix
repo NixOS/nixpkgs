@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, trivialBuild
-, fetchFromGitHub
-, emacs
+{
+  lib,
+  stdenv,
+  trivialBuild,
+  fetchFromGitHub,
+  emacs,
 }:
-
 trivialBuild rec {
   pname = "apheleia";
   version = "1.2";
@@ -28,7 +28,7 @@ trivialBuild rec {
       patches and dynamic programming.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres leungbk ];
+    maintainers = with maintainers; [AndersonTorres leungbk];
     inherit (emacs.meta) platforms;
   };
 }

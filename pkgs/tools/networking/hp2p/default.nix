@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, mpi, python3Packages, autoconf, automake } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mpi,
+  python3Packages,
+  autoconf,
+  automake,
+}:
 stdenv.mkDerivation rec {
   pname = "hp2p";
   version = "3.3";
@@ -11,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "0zvlwb941rlp3vrf9yzv7njgpj3mh4671ch7qvxfa4hq2ivd52br";
   };
 
-  patches = [ ./python3.patch ];
+  patches = [./python3.patch];
   enableParallelBuilding = true;
-  nativeBuildInputs = [ autoconf automake python3Packages.wrapPython ];
-  buildInputs = [ mpi ] ++ (with python3Packages; [ python numpy matplotlib plotly mpldatacursor ]) ;
-  pythonPath = (with python3Packages; [ numpy matplotlib plotly mpldatacursor ]) ;
+  nativeBuildInputs = [autoconf automake python3Packages.wrapPython];
+  buildInputs = [mpi] ++ (with python3Packages; [python numpy matplotlib plotly mpldatacursor]);
+  pythonPath = (with python3Packages; [numpy matplotlib plotly mpldatacursor]);
 
   preConfigure = ''
     patchShebangs autogen.sh
@@ -33,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cea-hpc/hp2p";
     platforms = platforms.unix;
     license = licenses.cecill-c;
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [maintainers.bzizou];
   };
 }

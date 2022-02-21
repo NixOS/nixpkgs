@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, pkg-config
-, systemd
-, dbus
-, pcsclite
-, wget
-, coreutils
-, perlPackages
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  systemd,
+  dbus,
+  pcsclite,
+  wget,
+  coreutils,
+  perlPackages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pcsc-tools";
   version = "1.6.0";
@@ -26,20 +26,21 @@ stdenv.mkDerivation rec {
       --replace /usr/share/pcsc $out/share/pcsc
   '';
 
-  buildInputs = [ dbus perlPackages.perl pcsclite ]
+  buildInputs =
+    [dbus perlPackages.perl pcsclite]
     ++ lib.optional stdenv.isLinux systemd;
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [makeWrapper pkg-config];
 
   postInstall = ''
     wrapProgram $out/bin/scriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [pcscperl]}"
     wrapProgram $out/bin/gscriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [pcscperl GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject]}"
     wrapProgram $out/bin/ATR_analysis \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [pcscperl]}"
     wrapProgram $out/bin/pcsc_scan \
-      --prefix PATH : "$out/bin:${lib.makeBinPath [ coreutils wget ]}"
+      --prefix PATH : "$out/bin:${lib.makeBinPath [coreutils wget]}"
 
     install -Dm444 -t $out/share/pcsc smartcard_list.txt
   '';
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Tools used to test a PC/SC driver, card or reader";
     homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     platforms = platforms.linux;
   };
 }

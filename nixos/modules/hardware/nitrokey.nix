@@ -1,14 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.hardware.nitrokey;
-
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.hardware.nitrokey;
+in {
   options.hardware.nitrokey = {
     enable = mkOption {
       type = types.bool;
@@ -22,6 +20,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [ pkgs.nitrokey-udev-rules ];
+    services.udev.packages = [pkgs.nitrokey-udev-rules];
   };
 }

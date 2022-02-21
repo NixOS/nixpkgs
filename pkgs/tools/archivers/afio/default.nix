@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "2.5.2";
   pname = "afio";
@@ -15,9 +18,9 @@ stdenv.mkDerivation rec {
    * A patch to simplify the installation and for removing the
    * hard coded dependency on GCC.
    */
-  patches = [ ./0001-makefile-fix-installation.patch ];
+  patches = [./0001-makefile-fix-installation.patch];
 
-  installFlags = [ "DESTDIR=$(out)" ];
+  installFlags = ["DESTDIR=$(out)"];
 
   meta = {
     homepage = "https://github.com/kholtman/afio";

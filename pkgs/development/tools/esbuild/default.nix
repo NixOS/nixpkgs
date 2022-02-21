@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "esbuild";
   version = "0.14.23";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "An extremely fast JavaScript bundler";
     homepage = "https://esbuild.github.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucus16 ];
+    maintainers = with maintainers; [lucus16];
   };
 }

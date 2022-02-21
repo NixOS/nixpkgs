@@ -1,11 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytest-runner
-, numpy
-, pyyaml
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytest-runner,
+  numpy,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "pysrim";
   version = "0.5.10";
@@ -15,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "ada088f73f7e1a3bf085206e81e0f83ed89c1d0b23a789ecd0ba0a250724aee8";
   };
 
-  buildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ numpy pyyaml ];
+  buildInputs = [pytest-runner];
+  propagatedBuildInputs = [numpy pyyaml];
 
   # Tests require git lfs download of repository
   doCheck = false;
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Srim Automation of Tasks via Python";
     homepage = "https://gitlab.com/costrouc/pysrim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ costrouc ];
+    maintainers = with lib.maintainers; [costrouc];
   };
 }

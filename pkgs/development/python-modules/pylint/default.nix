@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, installShellFiles
-, astroid
-, isort
-, GitPython
-, mccabe
-, platformdirs
-, toml
-, pytest-benchmark
-, pytest-xdist
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  installShellFiles,
+  astroid,
+  isort,
+  GitPython,
+  mccabe,
+  platformdirs,
+  toml,
+  pytest-benchmark,
+  pytest-xdist,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pylint";
   version = "2.12.2";
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://pylint.pycqa.org/";
     description = "A bug and style checker for Python";
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

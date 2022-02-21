@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, virtualenv
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  virtualenv,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "virtualenv-clone";
   version = "0.5.7";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

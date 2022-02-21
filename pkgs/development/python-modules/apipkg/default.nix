@@ -1,6 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, setuptools-scm, isPy3k }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  setuptools-scm,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "apipkg";
   version = "2.1.0";
@@ -10,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "a4be31cf8081e660d2cdea6edfb8a0f39f385866abdcfcfa45e5a0887345cb70";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [setuptools-scm];
+  checkInputs = [pytest];
 
   # Fix pytest 4 support. See: https://github.com/pytest-dev/apipkg/issues/14
   postPatch = ''

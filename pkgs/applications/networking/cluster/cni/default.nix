@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
+}:
 buildGoPackage rec {
   pname = "cni";
   version = "0.8.1";
@@ -17,7 +20,7 @@ buildGoPackage rec {
     description = "Container Network Interface - networking for Linux containers";
     license = licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";
-    maintainers = with maintainers; [ offline vdemeester ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [offline vdemeester];
+    platforms = ["x86_64-linux" "aarch64-linux"];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "dotmap";
   version = "1.3.26";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "dotmap/test.py" ];
+  pytestFlagsArray = ["dotmap/test.py"];
 
-  pythonImportsCheck = [ "dotmap" ];
+  pythonImportsCheck = ["dotmap"];
 
   meta = with lib; {
     description = "Python for dot-access dictionaries";
     homepage = "https://github.com/drgrib/dotmap";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

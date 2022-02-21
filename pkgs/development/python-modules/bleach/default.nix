@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, six
-, html5lib
-, setuptools
-, packaging
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  six,
+  html5lib,
+  setuptools,
+  packaging,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "bleach";
   version = "4.1.0";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     "protocols"
   ];
 
-  pythonImportsCheck = [ "bleach" ];
+  pythonImportsCheck = ["bleach"];
 
   meta = with lib; {
     description = "An easy, HTML5, whitelisting HTML sanitizer";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozilla/bleach";
     downloadPage = "https://github.com/mozilla/bleach/releases";
     license = licenses.asl20;
-    maintainers = with maintainers; [ prikhi ];
+    maintainers = with maintainers; [prikhi];
   };
 }

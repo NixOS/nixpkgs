@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "docker-credential-gcr";
   version = "2.0.5";
@@ -22,6 +25,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/GoogleCloudPlatform/docker-credential-gcr";
     license = licenses.asl20;
-    maintainers = with maintainers; [ suvash ];
+    maintainers = with maintainers; [suvash];
   };
 }

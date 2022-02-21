@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, libcap, openssl, pam }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libcap,
+  openssl,
+  pam,
+}:
 stdenv.mkDerivation rec {
   pname = "vsftpd";
   version = "3.0.5";
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
   };
 
-  buildInputs = [ libcap openssl pam ];
+  buildInputs = [libcap openssl pam];
 
-  patches = [ ./CVE-2015-1419.patch ];
+  patches = [./CVE-2015-1419.patch];
 
   postPatch = ''
     sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h
@@ -37,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A very secure FTP daemon";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     platforms = platforms.linux;
   };
 }

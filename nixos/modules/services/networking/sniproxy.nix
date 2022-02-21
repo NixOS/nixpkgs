@@ -1,9 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.sniproxy;
 
   configFile = pkgs.writeText "sniproxy.conf" ''
@@ -11,10 +12,8 @@ let
     pidfile /run/sniproxy.pid
     ${cfg.config}
   '';
-
-in
-{
-  imports = [ (mkRemovedOptionModule [ "services" "sniproxy" "logDir" ] "Now done by LogsDirectory=. Set to a custom path if you log to a different folder in your config.") ];
+in {
+  imports = [(mkRemovedOptionModule ["services" "sniproxy" "logDir"] "Now done by LogsDirectory=. Set to a custom path if you log to a different folder in your config.")];
 
   options = {
     services.sniproxy = {
@@ -53,14 +52,13 @@ in
         '';
       };
     };
-
   };
 
   config = mkIf cfg.enable {
     systemd.services.sniproxy = {
       description = "sniproxy server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "forking";
@@ -83,6 +81,5 @@ in
         gid = config.ids.gids.sniproxy;
       };
     };
-
   };
 }

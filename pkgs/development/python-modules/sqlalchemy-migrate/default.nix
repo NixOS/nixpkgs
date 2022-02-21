@@ -1,8 +1,20 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
-, scripttest, pytz, pbr, tempita, decorator, sqlalchemy
-, six, sqlparse, testrepository
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  python,
+  scripttest,
+  pytz,
+  pbr,
+  tempita,
+  decorator,
+  sqlalchemy,
+  six,
+  sqlparse,
+  testrepository,
 }:
-
 buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
   version = "0.13.0";
@@ -29,8 +41,8 @@ buildPythonPackage rec {
       --replace "pylint" ""
   '';
 
-  checkInputs = [ scripttest pytz testrepository ];
-  propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
+  checkInputs = [scripttest pytz testrepository];
+  propagatedBuildInputs = [pbr tempita decorator sqlalchemy six sqlparse];
 
   doCheck = !stdenv.isDarwin;
 
@@ -50,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/x/sqlalchemy-migrate";
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
-    maintainers = teams.openstack.members ++ (with maintainers; [ makefu ]);
+    maintainers = teams.openstack.members ++ (with maintainers; [makefu]);
   };
 }

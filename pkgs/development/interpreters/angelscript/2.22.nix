@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "angelscript";
   version = "2.22.2";
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   src = fetchurl {
     url = "http://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
@@ -26,9 +30,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Light-weight scripting library";
     license = licenses.zlib;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = ["aarch64-linux"];
     downloadPage = "http://www.angelcode.com/angelscript/downloads.html";
     homepage = "http://www.angelcode.com/angelscript/";
   };

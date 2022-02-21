@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "power";
   version = "1.4";
@@ -20,5 +20,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/Kentzo/Power";
     license = licenses.mit;
   };
-
 }

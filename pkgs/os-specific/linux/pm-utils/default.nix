@@ -1,29 +1,33 @@
-{ lib, stdenv, fetchurl, coreutils, gnugrep, util-linux, kmod
-, procps, kbd, dbus }:
-
-let
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  gnugrep,
+  util-linux,
+  kmod,
+  procps,
+  kbd,
+  dbus,
+}: let
   binPath = lib.makeBinPath
-    [ coreutils gnugrep util-linux kmod procps kbd dbus ];
+  [coreutils gnugrep util-linux kmod procps kbd dbus];
 
   sbinPath = lib.makeSearchPathOutput "bin" "sbin"
-    [ procps ];
-
+  [procps];
 in
+  stdenv.mkDerivation rec {
+    pname = "pm-utils";
+    version = "1.4.1";
 
-stdenv.mkDerivation rec {
-  pname = "pm-utils";
-  version = "1.4.1";
+    src = fetchurl {
+      url = "https://pm-utils.freedesktop.org/releases/pm-utils-${version}.tar.gz";
+      sha256 = "02qc6zaf7ams6qcc470fwb6jvr4abv3lrlx16clqpn36501rkn4f";
+    };
 
-  src = fetchurl {
-    url = "https://pm-utils.freedesktop.org/releases/pm-utils-${version}.tar.gz";
-    sha256 = "02qc6zaf7ams6qcc470fwb6jvr4abv3lrlx16clqpn36501rkn4f";
-  };
+    configureFlags = ["--sysconfdir=/etc"];
 
-  configureFlags = [ "--sysconfdir=/etc" ];
-
-  preConfigure =
-    ''
+    preConfigure = ''
       # Install the manpages (xmlto isn't really needed).
       substituteInPlace man/Makefile.in --replace '@HAVE_XMLTO_TRUE@' ""
 
@@ -37,8 +41,7 @@ stdenv.mkDerivation rec {
       substituteInPlace pm/sleep.d/90clock --replace /sbin/hwclock hwclock
     '';
 
-  postInstall =
-    ''
+    postInstall = ''
       # Remove some hooks that have doubtful usefulness.  See
       # http://zinc.canonical.com/~cking/power-benchmarking/pm-utils-results/results.txt.
       # In particular, journal-commit breaks things if you have
@@ -47,10 +50,10 @@ stdenv.mkDerivation rec {
       rm $out/lib/pm-utils/power.d/{journal-commit,readahead}
     '';
 
-  meta = {
-    homepage = "https://pm-utils.freedesktop.org/wiki/";
-    description = "A small collection of scripts that handle suspend and resume on behalf of HAL";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-  };
-}
+    meta = {
+      homepage = "https://pm-utils.freedesktop.org/wiki/";
+      description = "A small collection of scripts that handle suspend and resume on behalf of HAL";
+      license = lib.licenses.gpl2;
+      platforms = lib.platforms.linux;
+    };
+  }

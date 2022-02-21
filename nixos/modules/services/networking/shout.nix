@@ -1,26 +1,31 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
-
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.shout;
   shoutHome = "/var/lib/shout";
 
-  defaultConfig = pkgs.runCommand "config.js" { preferLocalBuild = true; } ''
+  defaultConfig = pkgs.runCommand "config.js" {preferLocalBuild = true;} ''
     EDITOR=true ${pkgs.shout}/bin/shout config --home $PWD
     mv config.js $out
   '';
 
-  finalConfigFile = if (cfg.configFile != null) then cfg.configFile else ''
-    var _ = require('${pkgs.shout}/lib/node_modules/shout/node_modules/lodash')
+  finalConfigFile =
+    if (cfg.configFile != null)
+    then cfg.configFile
+    else
+      ''
+        var _ = require('${pkgs.shout}/lib/node_modules/shout/node_modules/lodash')
 
-    module.exports = _.merge(
-      {},
-      require('${defaultConfig}'),
-      ${builtins.toJSON cfg.config}
-    )
-  '';
-
+        module.exports = _.merge(
+          {},
+          require('${defaultConfig}'),
+          ${builtins.toJSON cfg.config}
+        )
+      '';
 in {
   options.services.shout = {
     enable = mkEnableOption "Shout web IRC client";
@@ -93,16 +98,21 @@ in {
 
     systemd.services.shout = {
       description = "Shout web IRC client";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"];
+      after = ["network-online.target"];
       preStart = "ln -sf ${pkgs.writeText "config.js" finalConfigFile} ${shoutHome}/config.js";
       script = concatStringsSep " " [
         "${pkgs.shout}/bin/shout"
-        (if cfg.private then "--private" else "--public")
-        "--port" (toString cfg.port)
-        "--host" (toString cfg.listenAddress)
-        "--home" shoutHome
+        (if cfg.private
+        then "--private"
+        else "--public")
+        "--port"
+        (toString cfg.port)
+        "--host"
+        (toString cfg.listenAddress)
+        "--home"
+        shoutHome
       ];
       serviceConfig = {
         User = "shout";

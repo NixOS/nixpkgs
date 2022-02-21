@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, funcparserlib
-, nose
-, pillow
-, ephem
-, pythonOlder
-, pytestCheckHook
-, reportlab
-, setuptools
-, webcolors
-, python
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  funcparserlib,
+  nose,
+  pillow,
+  ephem,
+  pythonOlder,
+  pytestCheckHook,
+  reportlab,
+  setuptools,
+  webcolors,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "blockdiag";
   version = "3.0.0";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
+    maintainers = with maintainers; [bjornfor SuperSandro2000];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
+}:
 stdenv.mkDerivation rec {
   pname = "bluej";
   version = "5.0.2";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9sWfVQF/wCiVDKBmesMpM+5BHjFUPszm6U1SgJNQ8lE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   unpackPhase = ''
     ar xf $src
@@ -30,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "A simple integrated development environment for Java";
     homepage = "https://www.bluej.org/";
     license = licenses.gpl2ClasspathPlus;
-    maintainers = [ maintainers.chvp ];
+    maintainers = [maintainers.chvp];
     platforms = platforms.unix;
   };
 }

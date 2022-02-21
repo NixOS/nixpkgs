@@ -368,15 +368,20 @@
   };
   mysql2 = {
     groups = ["default"];
-    platforms = [{
-      engine = "maglev";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mingw";
-    } {
-      engine = "ruby";
-    }];
+    platforms = [
+      {
+        engine = "maglev";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "ruby";
+      }
+    ];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0d14pcy5m4hjig0zdxnl9in5f4izszc7v9zcczf2gyi5kiyxk8jw";
@@ -438,15 +443,20 @@
   };
   pg = {
     groups = ["default"];
-    platforms = [{
-      engine = "maglev";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mingw";
-    } {
-      engine = "ruby";
-    }];
+    platforms = [
+      {
+        engine = "maglev";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "ruby";
+      }
+    ];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "13mfrysrdrh8cka1d96zm0lnfs59i5x2g6ps49r2kz5p3q81xrzj";

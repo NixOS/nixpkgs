@@ -1,35 +1,36 @@
-{ buildPythonPackage
-, fetchPypi
-, futures ? null
-, isPy27
-, isPyPy
-, jinja2
-, lib
-, mock
-, numpy
-, nodejs
-, packaging
-, pillow
-#, pytestCheckHook#
-, pytest
-, python-dateutil
-, pyyaml
-, selenium
-, six
-, substituteAll
-, tornado
-, typing-extensions
-, pytz
-, flaky
-, networkx
-, beautifulsoup4
-, requests
-, nbconvert
-, icalendar
-, pandas
-, pythonImportsCheckHook
+{
+  buildPythonPackage,
+  fetchPypi,
+  futures ? null,
+  isPy27,
+  isPyPy,
+  jinja2,
+  lib,
+  mock,
+  numpy,
+  nodejs,
+  packaging,
+  pillow
+  #, pytestCheckHook#
+  ,
+  pytest,
+  python-dateutil,
+  pyyaml,
+  selenium,
+  six,
+  substituteAll,
+  tornado,
+  typing-extensions,
+  pytz,
+  flaky,
+  networkx,
+  beautifulsoup4,
+  requests,
+  nbconvert,
+  icalendar,
+  pandas,
+  pythonImportsCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
@@ -73,20 +74,21 @@ buildPythonPackage rec {
     pandas
   ];
 
-  propagatedBuildInputs = [
-    pillow
-    jinja2
-    python-dateutil
-    six
-    pyyaml
-    tornado
-    numpy
-    packaging
-    typing-extensions
-  ]
-  ++ lib.optionals ( isPy27 ) [
-    futures
-  ];
+  propagatedBuildInputs =
+    [
+      pillow
+      jinja2
+      python-dateutil
+      six
+      pyyaml
+      tornado
+      numpy
+      packaging
+      typing-extensions
+    ]
+    ++ lib.optionals (isPy27) [
+      futures
+    ];
 
   # This test suite is a complete pain. Somehow it can't find its fixtures.
   doCheck = false;
@@ -95,6 +97,6 @@ buildPythonPackage rec {
     description = "Statistical and novel interactive HTML plots for Python";
     homepage = "https://github.com/bokeh/bokeh";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [orivej];
   };
 }

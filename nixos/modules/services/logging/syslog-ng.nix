@@ -1,9 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.syslog-ng;
 
   syslogngConfig = pkgs.writeText "syslog-ng.conf" ''
@@ -23,15 +24,13 @@ let
     "--persist-file=${persistFile}"
     "--pidfile=${pidFile}"
   ];
-
 in {
   imports = [
-    (mkRemovedOptionModule [ "services" "syslog-ng" "serviceName" ] "")
-    (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ] "")
+    (mkRemovedOptionModule ["services" "syslog-ng" "serviceName"] "")
+    (mkRemovedOptionModule ["services" "syslog-ng" "listenToJournal"] "")
   ];
 
   options = {
-
     services.syslog-ng = {
       enable = mkOption {
         type = types.bool;
@@ -85,8 +84,8 @@ in {
     systemd.services.syslog-ng = {
       description = "syslog-ng daemon";
       preStart = "mkdir -p /{var,run}/syslog-ng";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "multi-user.target" ]; # makes sure hostname etc is set
+      wantedBy = ["multi-user.target"];
+      after = ["multi-user.target"]; # makes sure hostname etc is set
       serviceConfig = {
         Type = "notify";
         PIDFile = pidFile;
@@ -97,5 +96,4 @@ in {
       };
     };
   };
-
 }

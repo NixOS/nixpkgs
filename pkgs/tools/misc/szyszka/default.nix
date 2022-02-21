@@ -1,15 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, glib
-, cairo
-, pango
-, atk
-, gdk-pixbuf
-, gtk3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  cairo,
+  pango,
+  atk,
+  gdk-pixbuf,
+  gtk3,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "szyszka";
   version = "2.0.0";
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A simple but powerful and fast bulk file renamer";
     homepage = "https://github.com/qarmin/szyszka";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ kranzes ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [kranzes];
   };
 }

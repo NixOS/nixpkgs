@@ -1,12 +1,12 @@
-{ lib
-, async_generator
-, buildPythonPackage
-, fetchFromGitHub
-, geographiclib
-, isPy3k
-, pytestCheckHook
+{
+  lib,
+  async_generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geographiclib,
+  isPy3k,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "geopy";
   version = "2.2.0";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-zFz0T/M/CABKkChuiKsFkWj2pphZuFeE5gz0HxZYaz8=";
   };
 
-  propagatedBuildInputs = [ geographiclib ];
+  propagatedBuildInputs = [geographiclib];
 
   checkInputs = [
     async_generator
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   ];
 
   # Exclude tests which perform API calls
-  pytestFlagsArray = [ "--ignore test/geocoders/" ];
-  pythonImportsCheck = [ "geopy" ];
+  pytestFlagsArray = ["--ignore test/geocoders/"];
+  pythonImportsCheck = ["geopy"];
 
   __darwinAllowLocalNetworking = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [GuillaumeDesforges];
   };
 }

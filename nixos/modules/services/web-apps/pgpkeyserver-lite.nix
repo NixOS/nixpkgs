@@ -1,23 +1,19 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.pgpkeyserver-lite;
   sksCfg = config.services.sks;
   sksOpt = options.services.sks;
 
   webPkg = cfg.package;
-
-in
-
-{
-
+in {
   options = {
-
     services.pgpkeyserver-lite = {
-
       enable = mkEnableOption "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver";
 
       package = mkOption {
@@ -57,7 +53,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
     services.nginx.enable = true;
 
     services.nginx.virtualHosts = let

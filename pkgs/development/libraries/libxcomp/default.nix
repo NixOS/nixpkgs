@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libjpeg, libpng, libX11, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libjpeg,
+  libpng,
+  libX11,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "libxcomp";
   version = "3.5.99.16";
@@ -9,8 +18,8 @@ stdenv.mkDerivation rec {
     url = "https://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
   };
 
-  buildInputs = [ libjpeg libpng libX11 zlib ];
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [libjpeg libpng libX11 zlib];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   preAutoreconf = ''
     cd nxcomp/

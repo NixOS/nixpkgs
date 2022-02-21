@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xcffib, pillow }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  xcffib,
+  pillow,
+}:
 buildPythonPackage rec {
   pname = "xpybutil";
   version = "0.0.6";
@@ -13,9 +18,9 @@ buildPythonPackage rec {
   };
 
   # pillow is a dependency in image.py which is not listed in setup.py
-  propagatedBuildInputs = [ pillow xcffib ];
+  propagatedBuildInputs = [pillow xcffib];
 
-  propagatedNativeBuildInputs = [ xcffib ];
+  propagatedNativeBuildInputs = [xcffib];
 
   # no tests
   doCheck = false;
@@ -28,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/BurntSushi/xpybutil";
     description = "An incomplete xcb-util port plus some extras";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
   };
 }

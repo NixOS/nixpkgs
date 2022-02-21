@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, requests
-, six
-, websocket-client
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  requests,
+  six,
+  websocket-client,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "socketio-client";
   version = "0.7.2";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "A socket.io client library for protocol 1.x";
     homepage = "https://github.com/invisibleroads/socketIO-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    maintainers = with maintainers; [raitobezarius];
   };
 }

@@ -1,7 +1,13 @@
-{ lib, stdenv, pkg-config, autoreconfHook,
-glib, check, python3, dsview
+{
+  lib,
+  stdenv,
+  pkg-config,
+  autoreconfHook,
+  glib,
+  check,
+  python3,
+  dsview,
 }:
-
 stdenv.mkDerivation {
   inherit (dsview) version src;
 
@@ -11,10 +17,12 @@ stdenv.mkDerivation {
     export sourceRoot=$sourceRoot/libsigrokdecode4DSL
   '';
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
 
   buildInputs = [
-    python3 glib check
+    python3
+    glib
+    check
   ];
 
   meta = with lib; {
@@ -22,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bachp ];
+    maintainers = [maintainers.bachp];
   };
 }

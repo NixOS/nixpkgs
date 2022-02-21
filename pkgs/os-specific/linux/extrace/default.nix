@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "extrace";
   version = "0.9";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Jy/Ac3NcqBkW0kHyypMAVUGAQ41qWM96BbLAym06ogM=";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   postInstall = ''
     install -dm755 "$out/share/licenses/extrace/"
@@ -21,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/leahneukirchen/extrace";
     description = "Trace exec() calls system-wide";
-    license = with licenses; [ gpl2Plus bsd2 ];
+    license = with licenses; [gpl2Plus bsd2];
     platforms = platforms.linux;
-    maintainers = [ maintainers.leahneukirchen ];
+    maintainers = [maintainers.leahneukirchen];
   };
 }

@@ -1,30 +1,30 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytestCheckHook
-, brotli
-, cairosvg
-, flit-core
-, fonttools
-, pydyf
-, pyphen
-, cffi
-, cssselect
-, lxml
-, html5lib
-, tinycss
-, zopfli
-, glib
-, harfbuzz
-, pango
-, fontconfig
-, lib
-, stdenv
-, ghostscript
-, isPy3k
-, substituteAll
+{
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pytestCheckHook,
+  brotli,
+  cairosvg,
+  flit-core,
+  fonttools,
+  pydyf,
+  pyphen,
+  cffi,
+  cssselect,
+  lxml,
+  html5lib,
+  tinycss,
+  zopfli,
+  glib,
+  harfbuzz,
+  pango,
+  fontconfig,
+  lib,
+  stdenv,
+  ghostscript,
+  isPy3k,
+  substituteAll,
 }:
-
 buildPythonPackage rec {
   pname = "weasyprint";
   version = "54.1";
@@ -98,6 +98,6 @@ buildPythonPackage rec {
     homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = with maintainers; [elohmeier];
   };
 }

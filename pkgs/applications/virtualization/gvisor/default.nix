@@ -1,21 +1,20 @@
-{ lib
-, buildBazelPackage
-, fetchFromGitHub
-, callPackage
-, bash
-, cacert
-, git
-, glibcLocales
-, go
-, iproute2
-, iptables
-, makeWrapper
-, procps
-, protobuf
-, python3
-}:
-
-let
+{
+  lib,
+  buildBazelPackage,
+  fetchFromGitHub,
+  callPackage,
+  bash,
+  cacert,
+  git,
+  glibcLocales,
+  go,
+  iproute2,
+  iptables,
+  makeWrapper,
+  procps,
+  protobuf,
+  python3,
+}: let
   preBuild = ''
     patchShebangs .
 
@@ -50,75 +49,75 @@ let
       EOF
     '';
   };
+in
+  buildBazelPackage rec {
+    name = "gvisor-${version}";
+    version = "20210518.0";
 
-in buildBazelPackage rec {
-  name = "gvisor-${version}";
-  version = "20210518.0";
+    src = fetchFromGitHub {
+      owner = "google";
+      repo = "gvisor";
+      rev = "release-${version}";
+      sha256 = "15a6mlclnyfc9mx3bjksnnf4vla0xh0rv9kxdp34la4gw3c4hksn";
+    };
 
-  src = fetchFromGitHub {
-    owner = "google";
-    repo  = "gvisor";
-    rev   = "release-${version}";
-    sha256 = "15a6mlclnyfc9mx3bjksnnf4vla0xh0rv9kxdp34la4gw3c4hksn";
-  };
+    nativeBuildInputs = [git glibcLocales go makeWrapper python3];
 
-  nativeBuildInputs = [ git glibcLocales go makeWrapper python3 ];
+    bazelTarget = "//runsc:runsc";
+    bazelFlags = [
+      "--override_repository=rules_proto=${rulesProto}"
+    ];
 
-  bazelTarget = "//runsc:runsc";
-  bazelFlags = [
-    "--override_repository=rules_proto=${rulesProto}"
-  ];
+    # gvisor uses the Starlark implementation of rules_cc, not the built-in one,
+    # so we shouldn't delete it from our dependencies.
+    removeRulesCC = false;
 
-  # gvisor uses the Starlark implementation of rules_cc, not the built-in one,
-  # so we shouldn't delete it from our dependencies.
-  removeRulesCC = false;
+    fetchAttrs = {
+      inherit preBuild;
 
-  fetchAttrs = {
-    inherit preBuild;
+      preInstall = ''
+        # Remove the go_sdk (it's just a copy of the go derivation) and all
+        # references to it from the marker files. Bazel does not need to download
+        # this sdk because we have patched the WORKSPACE file to point to the one
+        # currently present in PATH. Without removing the go_sdk from the marker
+        # file, the hash of it will change anytime the Go derivation changes and
+        # that would lead to impurities in the marker files which would result in
+        # a different sha256 for the fetch phase.
+        rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
 
-    preInstall = ''
-      # Remove the go_sdk (it's just a copy of the go derivation) and all
-      # references to it from the marker files. Bazel does not need to download
-      # this sdk because we have patched the WORKSPACE file to point to the one
-      # currently present in PATH. Without removing the go_sdk from the marker
-      # file, the hash of it will change anytime the Go derivation changes and
-      # that would lead to impurities in the marker files which would result in
-      # a different sha256 for the fetch phase.
-      rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
+        # Remove the gazelle tools, they contain go binaries that are built
+        # non-deterministically. As long as the gazelle version matches the tools
+        # should be equivalent.
+        rm -rf $bazelOut/external/{bazel_gazelle_go_repository_tools,\@bazel_gazelle_go_repository_tools.marker}
 
-      # Remove the gazelle tools, they contain go binaries that are built
-      # non-deterministically. As long as the gazelle version matches the tools
-      # should be equivalent.
-      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_tools,\@bazel_gazelle_go_repository_tools.marker}
+        # Remove the gazelle repository cache
+        chmod -R +w $bazelOut/external/bazel_gazelle_go_repository_cache
+        rm -rf $bazelOut/external/{bazel_gazelle_go_repository_cache,\@bazel_gazelle_go_repository_cache.marker}
 
-      # Remove the gazelle repository cache
-      chmod -R +w $bazelOut/external/bazel_gazelle_go_repository_cache
-      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_cache,\@bazel_gazelle_go_repository_cache.marker}
+        # Remove log file(s)
+        rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
+      '';
 
-      # Remove log file(s)
-      rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
-    '';
+      sha256 = "13pahppm431m198v5bffrzq5iw8m79riplbfqp0afh384ln669hb";
+    };
 
-    sha256 = "13pahppm431m198v5bffrzq5iw8m79riplbfqp0afh384ln669hb";
-  };
+    buildAttrs = {
+      inherit preBuild;
 
-  buildAttrs = {
-    inherit preBuild;
+      installPhase = ''
+        install -Dm755 bazel-out/*/bin/runsc/runsc_/runsc $out/bin/runsc
 
-    installPhase = ''
-      install -Dm755 bazel-out/*/bin/runsc/runsc_/runsc $out/bin/runsc
+        # Needed for the 'runsc do' subcomand
+        wrapProgram $out/bin/runsc \
+          --prefix PATH : ${lib.makeBinPath [iproute2 iptables procps]}
+      '';
+    };
 
-      # Needed for the 'runsc do' subcomand
-      wrapProgram $out/bin/runsc \
-        --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
-    '';
-  };
-
-  meta = with lib; {
-    description = "Container Runtime Sandbox";
-    homepage = "https://github.com/google/gvisor";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ andrew-d ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "Container Runtime Sandbox";
+      homepage = "https://github.com/google/gvisor";
+      license = licenses.asl20;
+      maintainers = with maintainers; [andrew-d];
+      platforms = ["x86_64-linux"];
+    };
+  }

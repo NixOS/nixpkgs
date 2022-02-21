@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "python-dateutil";
   version = "2.8.2";
@@ -14,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-ASPKzBYnrhnd88J6XeW9Z+5FhvvdZEDZdI+Ku0g9PoY=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   # cyclic dependency: tests need freezegun, which depends on python-dateutil
   doCheck = false;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Powerful extensions to the standard datetime module";
     homepage = "https://github.com/dateutil/dateutil/";
-    license = with licenses; [ asl20 bsd3 ];
-    maintainers = with maintainers; [ dotlambda ];
+    license = with licenses; [asl20 bsd3];
+    maintainers = with maintainers; [dotlambda];
   };
 }

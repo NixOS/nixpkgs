@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, markdown-it-py
-, pytest-regressions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  markdown-it-py,
+  pytest-regressions,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
   version = "0.3.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Collection of core plugins for markdown-it-py";
     homepage = "https://github.com/executablebooks/mdit-py-plugins";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = with maintainers; [AluisioASG];
   };
 }

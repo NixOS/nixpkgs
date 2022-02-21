@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "gdm";
   version = "1.4";
@@ -19,6 +22,6 @@ buildGoPackage rec {
     description = "Minimalist dependency manager for Go written in Go";
     homepage = "https://github.com/sparrc/gdm";
     license = licenses.unlicense;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

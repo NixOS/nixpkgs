@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, cpio, xorgproto, libX11, libXmu, libXaw, libXt, tcl, tk
-, libXext, fontconfig, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cpio,
+  xorgproto,
+  libX11,
+  libXmu,
+  libXaw,
+  libXt,
+  tcl,
+  tk,
+  libXext,
+  fontconfig,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "xconq";
   version = "7.5.0-0pre.0.20050612";
@@ -10,8 +23,19 @@ stdenv.mkDerivation rec {
     sha256 = "1za78yx57mgwcmmi33wx3533yz1x093dnqis8q2qmqivxav51lca";
   };
 
-  buildInputs = [ cpio xorgproto libX11 libXmu libXaw libXt tcl tk libXext
-    fontconfig makeWrapper ];
+  buildInputs = [
+    cpio
+    xorgproto
+    libX11
+    libXmu
+    libXaw
+    libXt
+    tcl
+    tk
+    libXext
+    fontconfig
+    makeWrapper
+  ];
 
   configureFlags = [
     "--enable-alternate-scoresdir=scores"
@@ -19,7 +43,7 @@ stdenv.mkDerivation rec {
     "--with-tkconfig=${tk}/lib"
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   patchPhase = ''
     # Fix Makefiles
@@ -46,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A programmable turn-based strategy game";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

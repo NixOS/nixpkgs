@@ -1,5 +1,12 @@
-{ lib, fetchurl, buildDunePackage, cppo, gettext, fileutils, ounit }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cppo,
+  gettext,
+  fileutils,
+  ounit,
+}:
 buildDunePackage rec {
   pname = "gettext";
   version = "0.4.2";
@@ -13,13 +20,13 @@ buildDunePackage rec {
     sha256 = "19ynsldb21r539fiwz1f43apsdnx7hj2a2d9qr9wg2hva9y2qrwb";
   };
 
-  buildInputs = [ cppo ];
+  buildInputs = [cppo];
 
-  propagatedBuildInputs = [ gettext fileutils ];
+  propagatedBuildInputs = [gettext fileutils];
 
   doCheck = true;
 
-  checkInputs = [ ounit ];
+  checkInputs = [ounit];
 
   dontStrip = true;
 
@@ -27,6 +34,6 @@ buildDunePackage rec {
     description = "OCaml Bindings to gettext";
     homepage = "https://github.com/gildor478/ocaml-gettext";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.volth ];
+    maintainers = [maintainers.volth];
   };
 }

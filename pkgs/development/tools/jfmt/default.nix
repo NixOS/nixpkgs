@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "jfmt";
   version = "1.2.0";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "CLI utility to format json files";
     homepage = "https://github.com/scruffystuffs/jfmt.rs";
     license = licenses.mit;
-    maintainers = [ maintainers.psibi ];
+    maintainers = [maintainers.psibi];
   };
 }

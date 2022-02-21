@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, simplejson
-, mock
-, twisted
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  simplejson,
+  mock,
+  twisted,
+  isPyPy,
 }:
-
 buildPythonPackage rec {
   pname = "pyutil";
   version = "3.3.0";
@@ -16,9 +16,9 @@ buildPythonPackage rec {
     sha256 = "8c4d4bf668c559186389bb9bce99e4b1b871c09ba252a756ccaacd2b8f401848";
   };
 
-  propagatedBuildInputs = [ simplejson ];
+  propagatedBuildInputs = [simplejson];
 
-  checkInputs = [ mock twisted ];
+  checkInputs = [mock twisted];
 
   prePatch = lib.optionalString isPyPy ''
     grep -rl 'utf-8-with-signature-unix' ./ | xargs sed -i -e "s|utf-8-with-signature-unix|utf-8|g"
@@ -39,7 +39,6 @@ buildPythonPackage rec {
 
     homepage = "https://github.com/tpltnt/pyutil";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
   };
-
 }

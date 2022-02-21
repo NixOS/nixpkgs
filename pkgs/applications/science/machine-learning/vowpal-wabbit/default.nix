@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, flatbuffers, rapidjson, spdlog, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  flatbuffers,
+  rapidjson,
+  spdlog,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "vowpal-wabbit";
   version = "9.0.1";
@@ -11,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZUurY2bmTKKIW4GR4oiIpLxb6DSRUNJI/EyNSOu9D9c=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   buildInputs = [
     boost
@@ -47,7 +56,7 @@ stdenv.mkDerivation rec {
       Machine learning system which pushes the frontier of machine learning with techniques such as online,
       hashing, allreduce, reductions, learning2search, active, and interactive and reinforcement learning
     '';
-    maintainers = with maintainers; [ jackgerrits ];
+    maintainers = with maintainers; [jackgerrits];
     platforms = platforms.unix;
   };
 }

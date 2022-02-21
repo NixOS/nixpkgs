@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config
-, boost, cairo, fftw, gnome, ladspa-sdk, libxcb, lv2, xcbutilwm
-, zita-convolver, zita-resampler
- }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust,
+  meson,
+  ninja,
+  pkg-config,
+  boost,
+  cairo,
+  fftw,
+  gnome,
+  ladspa-sdk,
+  libxcb,
+  lv2,
+  xcbutilwm,
+  zita-convolver,
+  zita-resampler,
+}:
 stdenv.mkDerivation rec {
   pname = "kapitonov-plugins-pack";
   version = "1.2.1";
@@ -38,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/olegkapitonov/Kapitonov-Plugins-Pack";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [magnetophon];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, efl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  efl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ephoto";
   version = "1.6.0";
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.smhouston.us/ephoto/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

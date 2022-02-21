@@ -1,9 +1,9 @@
 let
-  gopherRoot   = "/tmp/gopher";
-  gopherHost   = "gopherd";
+  gopherRoot = "/tmp/gopher";
+  gopherHost = "gopherd";
   gopherClient = "client";
-  fileContent  = "Hello Gopher!\n";
-  fileName     = "file.txt";
+  fileContent = "Hello Gopher!\n";
+  fileName = "file.txt";
 in
   import ./make-test-python.nix ({...}: {
     name = "spacecookie";
@@ -40,7 +40,7 @@ in
       fileResponse = ${gopherClient}.succeed("curl -f -s gopher://${gopherHost}/0/${fileName}")
 
       # the file response should return our created file exactly
-      if not (fileResponse == "${builtins.replaceStrings [ "\n" ] [ "\\n" ] fileContent}"):
+      if not (fileResponse == "${builtins.replaceStrings ["\n"] ["\\n"] fileContent}"):
           raise Exception("Unexpected file response")
 
       # sanity check on the directory listing: we serve a directory and a file

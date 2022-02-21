@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, cython
+{
+  lib,
+  buildPythonPackage,
+  fetchgit,
+  cython,
 }:
-
 buildPythonPackage {
   pname = "rencode";
   version = "git20150810";
@@ -14,12 +14,11 @@ buildPythonPackage {
     sha256 = "b4bd82852d4220e8a9493d3cfaecbc57b1325708a2d48c0f8acf262edb10dc40";
   };
 
-  buildInputs = [ cython ];
+  buildInputs = [cython];
 
   meta = with lib; {
     homepage = "https://github.com/aresch/rencode";
     description = "Fast (basic) object serialization similar to bencode";
     license = licenses.gpl3;
   };
-
 }

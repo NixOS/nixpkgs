@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pathlib
-, py-cpuinfo
-, pytest
-, pythonOlder
-, statistics
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pathlib,
+  py-cpuinfo,
+  pytest,
+  pythonOlder,
+  statistics,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-benchmark";
   version = "3.4.1";
@@ -24,12 +24,14 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
-    py-cpuinfo
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    pathlib
-    statistics
-  ];
+  propagatedBuildInputs =
+    [
+      py-cpuinfo
+    ]
+    ++ lib.optionals (pythonOlder "3.4") [
+      pathlib
+      statistics
+    ];
 
   # Circular dependency
   doCheck = false;
@@ -42,6 +44,6 @@ buildPythonPackage rec {
     description = "Pytest fixture for benchmarking code";
     homepage = "https://github.com/ionelmc/pytest-benchmark";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

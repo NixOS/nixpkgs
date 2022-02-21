@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, libjpeg
-, libGLU
-, libGL
-, freeglut
-, zlib
-, cmake
-, libX11
-, libxml2
-, libpng
-, libXxf86vm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjpeg,
+  libGLU,
+  libGL,
+  freeglut,
+  zlib,
+  cmake,
+  libX11,
+  libxml2,
+  libpng,
+  libXxf86vm,
 }:
-
 stdenv.mkDerivation rec {
   pname = "freepv";
   version = "0.3.0";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "1w19abqjn64w47m35alg7bcdl1p97nf11zn64cp4p0dydihmhv56";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libjpeg libGLU libGL freeglut zlib libX11 libxml2 libpng libXxf86vm ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libjpeg libGLU libGL freeglut zlib libX11 libxml2 libpng libXxf86vm];
 
   postPatch = ''
     sed -i -e '/GECKO/d' CMakeLists.txt
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source panorama viewer using GL";
     homepage = "http://freepv.sourceforge.net/";
-    license = [ lib.licenses.lgpl21 ];
+    license = [lib.licenses.lgpl21];
   };
 }

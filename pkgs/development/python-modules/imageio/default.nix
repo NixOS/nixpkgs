@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, fetchpatch
-, imageio-ffmpeg
-, numpy
-, pillow
-, psutil
-, pytestCheckHook
-, tifffile
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  fetchpatch,
+  imageio-ffmpeg,
+  numpy,
+  pillow,
+  psutil,
+  pytestCheckHook,
+  tifffile,
 }:
-
 buildPythonPackage rec {
   pname = "imageio";
   version = "2.14.1";

@@ -1,7 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, azure-core
-, msrest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-core,
+  msrest,
 }:
-
 buildPythonPackage rec {
   pname = "azure-appconfiguration";
   version = "1.3.0";
@@ -17,12 +20,12 @@ buildPythonPackage rec {
     msrest
   ];
 
-  pythonImportsCheck = [ "azure.appconfiguration" ];
+  pythonImportsCheck = ["azure.appconfiguration"];
 
   meta = with lib; {
     description = "Microsoft App Configuration Data Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/appconfiguration/azure-appconfiguration";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

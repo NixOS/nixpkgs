@@ -1,5 +1,4 @@
-{ lib }:
-rec {
+{lib}: rec {
   toPackages = pkgNames: pkgs:
     map (pn: lib.getAttr pn pkgs) pkgNames;
   toBuildInputs = pkgArches: archPkgs:

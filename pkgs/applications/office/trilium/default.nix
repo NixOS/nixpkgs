@@ -1,6 +1,16 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
-
-let
+{
+  lib,
+  stdenv,
+  nixosTests,
+  fetchurl,
+  autoPatchelfHook,
+  atomEnv,
+  makeWrapper,
+  makeDesktopItem,
+  gtk3,
+  libxshmfence,
+  wrapGAppsHook,
+}: let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
   desktopItem = makeDesktopItem {
     name = "Trilium";
@@ -15,8 +25,8 @@ let
     inherit description;
     homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ fliegendewurst ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [fliegendewurst];
   };
 
   version = "0.50.2";
@@ -30,9 +40,7 @@ let
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
     sha256 = "0jqpi1gc48jxvc68yzx80jp553haihybj3g3c5ymvqmgivwn7n4c";
   };
-
 in {
-
   trilium-desktop = stdenv.mkDerivation rec {
     pname = "trilium-desktop";
     inherit version;
@@ -46,7 +54,7 @@ in {
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
+    buildInputs = atomEnv.packages ++ [gtk3 libxshmfence];
 
     installPhase = ''
       runHook preInstall
@@ -69,7 +77,6 @@ in {
 
     dontStrip = true;
   };
-
 
   trilium-server = stdenv.mkDerivation rec {
     pname = "trilium-server";

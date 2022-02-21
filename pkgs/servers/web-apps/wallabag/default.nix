@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "wallabag";
   version = "2.4.2";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n39flqqqjih0lc86vxdzbp44x4rqj5292if2fsa8y1xxlvyqmns";
   };
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
   patches = [
     ./wallabag-data.patch # exposes $WALLABAG_DATA
@@ -34,8 +37,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     homepage = "http://wallabag.org";
-    maintainers = with maintainers; [ schneefux ];
+    maintainers = with maintainers; [schneefux];
     platforms = platforms.all;
   };
 }
-

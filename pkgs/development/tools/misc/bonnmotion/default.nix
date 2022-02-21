@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchzip, substituteAll, bash, jre }:
-
+{
+  stdenv,
+  lib,
+  fetchzip,
+  substituteAll,
+  bash,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "bonnmotion";
   version = "3.0.1";
@@ -45,6 +51,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sys.cs.uos.de/bonnmotion/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }

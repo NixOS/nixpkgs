@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "josepy";
   version = "1.12.0";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "JOSE protocol implementation in Python";
     homepage = "https://github.com/jezdez/josepy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

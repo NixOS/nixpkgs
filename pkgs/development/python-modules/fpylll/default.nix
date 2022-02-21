@@ -1,17 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pkgconfig
-, gmp
-, pari
-, mpfr
-, fplll
-, cython
-, cysignals
-, numpy
-, pytest
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pkgconfig,
+  gmp,
+  pari,
+  mpfr,
+  fplll,
+  cython,
+  cysignals,
+  numpy,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "fpylll";
   version = "0.5.6";

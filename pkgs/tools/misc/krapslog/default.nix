@@ -1,5 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "krapslog";
   version = "0.3.2";
@@ -18,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Visualize a log file with sparklines";
     homepage = "https://github.com/acj/krapslog-rs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ yanganto ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [yanganto];
   };
 }

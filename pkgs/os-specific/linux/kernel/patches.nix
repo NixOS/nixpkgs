@@ -1,6 +1,8 @@
-{ lib, fetchpatch, fetchurl }:
-
 {
+  lib,
+  fetchpatch,
+  fetchurl,
+}: {
   ath_regd_optional = rec {
     name = "ath_regd_optional";
     patch = fetchpatch {
@@ -14,47 +16,54 @@
     };
   };
 
-  bridge_stp_helper =
-    { name = "bridge-stp-helper";
-      patch = ./bridge-stp-helper.patch;
-    };
+  bridge_stp_helper = {
+    name = "bridge-stp-helper";
+    patch = ./bridge-stp-helper.patch;
+  };
 
-  request_key_helper =
-    { name = "request-key-helper";
-      patch = ./request-key-helper.patch;
-    };
+  request_key_helper = {
+    name = "request-key-helper";
+    patch = ./request-key-helper.patch;
+  };
 
-  request_key_helper_updated =
-    { name = "request-key-helper-updated";
-      patch = ./request-key-helper-updated.patch;
-    };
+  request_key_helper_updated = {
+    name = "request-key-helper-updated";
+    patch = ./request-key-helper-updated.patch;
+  };
 
-  p9_fixes =
-    { name = "p9-fixes";
-      patch = ./p9-fixes.patch;
-    };
+  p9_fixes = {
+    name = "p9-fixes";
+    patch = ./p9-fixes.patch;
+  };
 
-  modinst_arg_list_too_long =
-    { name = "modinst-arglist-too-long";
-      patch = ./modinst-arg-list-too-long.patch;
-    };
+  modinst_arg_list_too_long = {
+    name = "modinst-arglist-too-long";
+    patch = ./modinst-arg-list-too-long.patch;
+  };
 
-  genksyms_fix_segfault =
-    { name = "genksyms-fix-segfault";
-      patch = ./genksyms-fix-segfault.patch;
-    };
+  genksyms_fix_segfault = {
+    name = "genksyms-fix-segfault";
+    patch = ./genksyms-fix-segfault.patch;
+  };
 
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   hardened = let
-    mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
+    mkPatch = kernelVersion: {
+      version,
+      sha256,
+      patch,
+    }: let
+      src = patch;
+    in {
       name = lib.removeSuffix ".patch" src.name;
       patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
       extra = src.extra;
       inherit version sha256;
     };
     patches = lib.importJSON ./hardened/patches.json;
-  in lib.mapAttrs mkPatch patches;
+  in
+    lib.mapAttrs mkPatch patches;
 
   # https://bugzilla.kernel.org/show_bug.cgi?id=197591#c6
   iwlwifi_mvm_support_version_7_scan_req_umac_fw_command = rec {
@@ -88,10 +97,10 @@
 
   # Adapted for Linux 5.4 from:
   # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04896832c94aae4842100cafb8d3a73e1bed3a45
-  rtl8761b_support =
-    { name = "rtl8761b-support";
-      patch = ./rtl8761b-support.patch;
-    };
+  rtl8761b_support = {
+    name = "rtl8761b-support";
+    patch = ./rtl8761b-support.patch;
+  };
 
   export-rt-sched-migrate = {
     name = "export-rt-sched-migrate";

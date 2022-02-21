@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, withFzf ? true
-, fzf
-, installShellFiles
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  withFzf ? true,
+  fzf,
+  installShellFiles,
+  libiconv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
   version = "0.8.0";
@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-5syCq2Qjjk/XoYqW4MGoSSTRLqzgBwadBJwZDDdWNgU=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
 
   postPatch = lib.optionalString withFzf ''
     substituteInPlace src/fzf.rs \
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     description = "A fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
     changelog = "https://github.com/ajeetdsouza/zoxide/raw/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ysndr cole-h SuperSandro2000 ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [ysndr cole-h SuperSandro2000];
   };
 }

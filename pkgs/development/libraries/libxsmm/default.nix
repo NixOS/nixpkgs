@@ -1,9 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
-, python3, util-linux, which
-
-, enableStatic ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  gfortran,
+  gnused,
+  python3,
+  util-linux,
+  which,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libxsmm";
   version = "1.16.3";
@@ -29,7 +35,10 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   makeFlags = let
-    static = if enableStatic then "1" else "0";
+    static =
+      if enableStatic
+      then "1"
+      else "0";
   in [
     "OMP=1"
     "PREFIX=$(out)"
@@ -45,6 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "https://github.com/hfp/libxsmm";
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ chessai ];
+    maintainers = with lib.maintainers; [chessai];
   };
 }

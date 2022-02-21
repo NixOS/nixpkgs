@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools-scm,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pygmars";
   version = "0.7.0";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python lexing and parsing library";
     homepage = "https://github.com/nexB/pygmars";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

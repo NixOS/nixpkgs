@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, SDL }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+}:
 stdenv.mkDerivation rec {
   pname = "SDL_stretch";
   version = "0.3.1";
@@ -9,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "1mzw68sn4yxbp8429jg2h23h8xw2qjid51z1f5pdsghcn3x0pgvw";
   };
 
-  buildInputs = [ SDL ];
+  buildInputs = [SDL];
 
   meta = with lib; {
-     description = "Stretch Functions For SDL";
-     homepage = "http://sdl-stretch.sourceforge.net/";
-     license = licenses.lgpl2;
-     platforms = platforms.linux;
+    description = "Stretch Functions For SDL";
+    homepage = "http://sdl-stretch.sourceforge.net/";
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
   };
 }

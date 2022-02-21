@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "go-bindata-assetfs";
   version = "20160814-${rev}";
@@ -16,6 +19,6 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Serve embedded files from jteeuwen/go-bindata";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ avnik ];
+    maintainers = with maintainers; [avnik];
   };
 }

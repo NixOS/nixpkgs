@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "lfs";
   version = "1.4.0";
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Get information on your mounted disks";
     homepage = "https://github.com/Canop/lfs";
     license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [koral];
   };
 }

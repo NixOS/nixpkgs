@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch,
-  openssl, zlib, libjpeg, xorg, coreutils, libvncserver,
-  autoreconfHook, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  zlib,
+  libjpeg,
+  xorg,
+  coreutils,
+  libvncserver,
+  autoreconfHook,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "x11vnc";
   version = "0.9.16";
@@ -21,16 +31,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs =
-    [ xorg.libXfixes xorg.xorgproto openssl xorg.libXdamage
-      zlib xorg.libX11 libjpeg
-      xorg.libXtst xorg.libXinerama xorg.libXrandr
-      xorg.libXext
-      xorg.libXi xorg.libXrender
-      libvncserver
-    ];
+  buildInputs = [
+    xorg.libXfixes
+    xorg.xorgproto
+    openssl
+    xorg.libXdamage
+    zlib
+    xorg.libX11
+    libjpeg
+    xorg.libXtst
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    libvncserver
+  ];
 
   postPatch = ''
     substituteInPlace src/unixpw.c \
@@ -52,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LibVNC/x11vnc/";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
   };
 }

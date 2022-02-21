@@ -1,26 +1,27 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, meson
-, ninja
-, nixosTests
-, pkg-config
-, glib
-, gettext
-, makeWrapper
-, python3
-, gnutls
-, p11-kit
-, libproxy
-, gnome
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  substituteAll,
+  meson,
+  ninja,
+  nixosTests,
+  pkg-config,
+  glib,
+  gettext,
+  makeWrapper,
+  python3,
+  gnutls,
+  p11-kit,
+  libproxy,
+  gnome,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "glib-networking";
   version = "2.70.1";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = ["out" "installedTests"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

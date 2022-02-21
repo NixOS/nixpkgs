@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, abseil-cpp
-, bzip2
-, zlib
-, lsb-release
-, which
-, protobuf
-, cbc
-, ensureNewerSourcesForZipFilesHook
-, python
-, swig4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  abseil-cpp,
+  bzip2,
+  zlib,
+  lsb-release,
+  which,
+  protobuf,
+  cbc,
+  ensureNewerSourcesForZipFilesHook,
+  python,
+  swig4,
 }:
-
 stdenv.mkDerivation rec {
   pname = "or-tools";
   version = "9.1";
-  disabled = python.pythonOlder "3.6";  # not supported upstream
+  disabled = python.pythonOlder "3.6"; # not supported upstream
 
   src = fetchFromGitHub {
     owner = "google";
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
     "PROTOBUF_PYTHON_DESC=${python.pkgs.protobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
   ];
-  buildFlags = [ "cc" "pypi_archive" ];
+  buildFlags = ["cc" "pypi_archive"];
 
   doCheck = true;
   checkTarget = "test_cc";
 
-  installTargets = [ "install_cc" ];
+  installTargets = ["install_cc"];
   # The upstream install_python target installs to $HOME.
   postInstall = ''
     mkdir -p "$python/${python.sitePackages}"
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     python.pkgs.mypy-protobuf
   ];
 
-  outputs = [ "out" "python" ];
+  outputs = ["out" "python"];
 
   meta = with lib; {
     homepage = "https://github.com/google/or-tools";
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     description = ''
       Google's software suite for combinatorial optimization.
     '';
-    maintainers = with maintainers; [ andersk ];
+    maintainers = with maintainers; [andersk];
     platforms = with platforms; linux;
   };
 }

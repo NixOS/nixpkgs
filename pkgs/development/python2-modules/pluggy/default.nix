@@ -1,10 +1,10 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, setuptools-scm
-, importlib-metadata
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  setuptools-scm,
+  importlib-metadata,
 }:
-
 buildPythonPackage rec {
   pname = "pluggy";
   version = "0.13.1";
@@ -21,14 +21,14 @@ buildPythonPackage rec {
   # To prevent infinite recursion with pytest
   doCheck = false;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  propagatedBuildInputs = [ importlib-metadata ];
+  propagatedBuildInputs = [importlib-metadata];
 
   meta = {
     description = "Plugin and hook calling mechanisms for Python";
     homepage = "https://github.com/pytest-dev/pluggy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

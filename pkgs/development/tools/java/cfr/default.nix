@@ -1,5 +1,10 @@
-{ lib, stdenv, makeWrapper, fetchurl, jre }:
-
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "cfr";
   version = "0.152";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9obo897Td9e8h9IWqQ6elRLfQVbnWwbGVaFmSK6HZbI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   buildCommand = ''
     jar=$out/share/java/cfr_${version}.jar

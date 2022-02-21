@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytest-runner }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytest-runner,
+}:
 buildPythonPackage rec {
   pname = "mccabe";
   version = "0.6.1";
@@ -9,12 +14,12 @@ buildPythonPackage rec {
     sha256 = "07w3p1qm44hgxf3vvwz84kswpsx6s7kvaibzrsx5dzm0hli1i3fx";
   };
 
-  buildInputs = [ pytest pytest-runner ];
+  buildInputs = [pytest pytest-runner];
 
   meta = with lib; {
     description = "McCabe checker, plugin for flake8";
     homepage = "https://github.com/flintwork/mccabe";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

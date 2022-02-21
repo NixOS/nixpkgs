@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libxkbcommon
-, pkg-config
-, wayland
-, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxkbcommon,
+  pkg-config,
+  wayland,
+  wayland-protocols,
 }:
-
 stdenv.mkDerivation rec {
   pname = "havoc";
   version = "0.4.0";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  installFlags = [ "PREFIX=$$out" ];
+  installFlags = ["PREFIX=$$out"];
 
   postInstall = ''
     install -D -m 644 havoc.cfg -t $out/etc/${pname}/
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ii8/havoc";
     description = "A minimal terminal emulator for Wayland";
-    license = with licenses; [ mit publicDomain ];
+    license = with licenses; [mit publicDomain];
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

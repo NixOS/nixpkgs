@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   version = "0.1.6";
   pname = "cdcs";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Python client for performing REST calls to configurable data curation system (CDCS) databases";
     homepage = "https://github.com/usnistgov/pycdcs";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

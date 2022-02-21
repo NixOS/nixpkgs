@@ -1,7 +1,27 @@
-{ fetchFromGitHub, libxcb, mtools, p7zip, parted, procps, qemu, unzip, zip,
-  coreutils, gnugrep, which, gnused, e2fsprogs, autoPatchelfHook, gptfdisk,
-  python3Packages, qt5, runtimeShell, lib, util-linux, wrapQtAppsHook }:
-
+{
+  fetchFromGitHub,
+  libxcb,
+  mtools,
+  p7zip,
+  parted,
+  procps,
+  qemu,
+  unzip,
+  zip,
+  coreutils,
+  gnugrep,
+  which,
+  gnused,
+  e2fsprogs,
+  autoPatchelfHook,
+  gptfdisk,
+  python3Packages,
+  qt5,
+  runtimeShell,
+  lib,
+  util-linux,
+  wrapQtAppsHook,
+}:
 # Note: Multibootusb is tricky to maintain. It relies on the
 # $PYTHONPATH variable containing some of their code, so that
 # something like:
@@ -12,7 +32,6 @@
 # resources thanks to a use of __file__.
 #
 # https://github.com/mbusb/multibootusb/blob/0d34d70c3868f1d7695cfd141141b17c075de967/scripts/osdriver.py#L59
-
 python3Packages.buildPythonApplication rec {
   pname = "multibootusb";
   name = "${pname}-${version}";

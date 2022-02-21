@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, ncurses }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "ht";
   version = "2.1.0";
@@ -13,17 +17,17 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  patches = [ ./gcc7.patch ];
+  patches = [./gcc7.patch];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-narrowing" ];
+  NIX_CFLAGS_COMPILE = ["-Wno-narrowing"];
 
   meta = with lib; {
     description = "File editor/viewer/analyzer for executables";
     homepage = "http://hte.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [cstrahan];
   };
 }

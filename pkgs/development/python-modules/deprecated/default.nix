@@ -1,10 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, wrapt
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  wrapt,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "deprecated";
   version = "1.2.13";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "deprecated" ];
+  pythonImportsCheck = ["deprecated"];
 
   meta = with lib; {
     homepage = "https://github.com/tantale/deprecated";
     description = "Python @deprecated decorator to deprecate old python classes, functions or methods";
     license = licenses.mit;
-    maintainers = with maintainers; [ tilpner ];
+    maintainers = with maintainers; [tilpner];
   };
 }

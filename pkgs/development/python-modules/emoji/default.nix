@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "emoji";
   version = "1.6.3";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
     "test_emojize_name_only"
   ];
 
-  pythonImportsCheck = [ "emoji" ];
+  pythonImportsCheck = ["emoji"];
 
   meta = with lib; {
     description = "Emoji for Python";
     homepage = "https://github.com/carpedm20/emoji/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [joachifm];
   };
 }

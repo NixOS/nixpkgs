@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyhomepilot";
   version = "0.0.3";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pyhomepilot" ];
+  pythonImportsCheck = ["pyhomepilot"];
 
   meta = with lib; {
     description = "Python module to communicate with the Rademacher HomePilot API";
     homepage = "https://github.com/nico0302/pyhomepilot";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

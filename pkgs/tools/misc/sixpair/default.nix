@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libusb-compat-0_1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb-compat-0_1,
+}:
 stdenv.mkDerivation {
   pname = "sixpair";
   version = "unstable-2007-04-18";
@@ -9,9 +14,9 @@ stdenv.mkDerivation {
   };
 
   # hcitool is depricated
-  patches = [ ./hcitool.patch ];
+  patches = [./hcitool.patch];
 
-  buildInputs = [ libusb-compat-0_1 ];
+  buildInputs = [libusb-compat-0_1];
 
   unpackPhase = ''
     cp $src sixpair.c
@@ -33,7 +38,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.pabr.org/sixlinux/";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.tomsmeets ];
+    maintainers = [lib.maintainers.tomsmeets];
     platforms = lib.platforms.linux;
   };
 }

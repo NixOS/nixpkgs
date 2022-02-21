@@ -1,26 +1,26 @@
-{ lib
-, argon2_cffi
-, buildPythonPackage
-, cbor
-, cbor2
-, cffi
-, cryptography
-, fetchPypi
-, flatbuffers
-, mock
-, msgpack
-, passlib
-, pynacl
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, twisted
-, py-ubjson
-, txaio
-, ujson
-, zope_interface
+{
+  lib,
+  argon2_cffi,
+  buildPythonPackage,
+  cbor,
+  cbor2,
+  cffi,
+  cryptography,
+  fetchPypi,
+  flatbuffers,
+  mock,
+  msgpack,
+  passlib,
+  pynacl,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  twisted,
+  py-ubjson,
+  txaio,
+  ujson,
+  zope_interface,
 }:
-
 buildPythonPackage rec {
   pname = "autobahn";
   version = "21.11.1";
@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

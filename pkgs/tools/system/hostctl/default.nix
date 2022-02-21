@@ -1,5 +1,9 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "hostctl";
   version = "1.1.1";
@@ -13,9 +17,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-rGDWrivIdl5FTu/kNR8nAfE2+1hE4cm3uDg7oBobE9M=";
 
-  ldflags = [ "-s" "-w" "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
   postInstall = ''
     installShellCompletion --cmd hostctl \
       --bash <($out/bin/hostctl completion bash) \
@@ -30,6 +34,6 @@ buildGoModule rec {
     '';
     homepage = "https://guumaster.github.io/hostctl/";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [blaggacao];
   };
 }

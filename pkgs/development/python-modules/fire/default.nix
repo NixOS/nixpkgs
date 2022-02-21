@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
-, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  hypothesis,
+  mock,
+  python-Levenshtein,
+  pytest,
+  termcolor,
+  isPy27,
+  enum34,
+}:
 buildPythonPackage rec {
   pname = "fire";
   version = "0.4.0";
@@ -12,9 +22,9 @@ buildPythonPackage rec {
     sha256 = "1caz6j2kdhj0kccrnqri6b4g2d6wzkkx8y9vxyvm7axvrwkv2vyn";
   };
 
-  propagatedBuildInputs = [ six termcolor ] ++ lib.optional isPy27 enum34;
+  propagatedBuildInputs = [six termcolor] ++ lib.optional isPy27 enum34;
 
-  checkInputs = [ hypothesis mock python-Levenshtein pytest ];
+  checkInputs = [hypothesis mock python-Levenshtein pytest];
 
   # ignore test which asserts exact usage statement, default behavior
   # changed in python3.8. This can likely be remove >=0.3.1
@@ -43,6 +53,6 @@ buildPythonPackage rec {
         and created.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

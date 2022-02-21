@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, libiconv }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-feature";
   version = "0.6.0";
@@ -20,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Riey/cargo-feature";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ riey ];
+    maintainers = with maintainers; [riey];
   };
 }
-

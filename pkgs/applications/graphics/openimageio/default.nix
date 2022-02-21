@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, boost, cmake, ilmbase, libjpeg, libpng, libtiff
-, opencolorio_1, openexr, unzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  ilmbase,
+  libjpeg,
+  libpng,
+  libtiff,
+  opencolorio_1,
+  openexr,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "openimageio";
   version = "1.8.17";
@@ -13,12 +23,17 @@ stdenv.mkDerivation rec {
     sha256 = "0zq34szprgkrrayg5sl3whrsx2l6lr8nw4hdrnwv2qhn70jbi2w2";
   };
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = ["bin" "out" "dev" "doc"];
 
-  nativeBuildInputs = [ cmake unzip ];
+  nativeBuildInputs = [cmake unzip];
   buildInputs = [
-    boost ilmbase libjpeg libpng
-    libtiff opencolorio_1 openexr
+    boost
+    ilmbase
+    libjpeg
+    libpng
+    libtiff
+    opencolorio_1
+    openexr
   ];
 
   cmakeFlags = [
@@ -42,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.openimageio.org";
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.unix;
   };
 }

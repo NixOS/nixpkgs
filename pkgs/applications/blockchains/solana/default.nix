@@ -1,14 +1,15 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, rustPlatform
-, IOKit
-, Security
-, AppKit
-, pkg-config
-, udev
-, zlib
-, protobuf
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  IOKit,
+  Security,
+  AppKit,
+  pkg-config,
+  udev,
+  zlib,
+  protobuf,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "solana-testnet-cli";
@@ -25,8 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "cli";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ protobuf pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ udev zlib ] ++ lib.optionals stdenv.isDarwin [ IOKit Security AppKit ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [protobuf pkg-config];
+  buildInputs = lib.optionals stdenv.isLinux [udev zlib] ++ lib.optionals stdenv.isDarwin [IOKit Security AppKit];
 
   # check phase fails
   # on darwin with missing framework System. This framework is not available in nixpkgs
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
     homepage = "https://solana.com";
     license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [happysalada];
     platforms = platforms.unix;
   };
 }

@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, django, fetchpatch }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  django,
+  fetchpatch,
+}:
 buildPythonPackage rec {
   pname = "django-appconf";
   version = "1.0.3";
@@ -10,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "06hwbz7362y0la9np3df25mms235fcqgpd2vn0mnf8dri9spzy1h";
   };
 
-  propagatedBuildInputs = [ six django ];
+  propagatedBuildInputs = [six django];
 
   patches = [
     (fetchpatch {
@@ -30,6 +37,6 @@ buildPythonPackage rec {
     description = "A helper class for handling configuration defaults of packaged apps gracefully";
     homepage = "https://django-appconf.readthedocs.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ desiderius ];
+    maintainers = with maintainers; [desiderius];
   };
 }

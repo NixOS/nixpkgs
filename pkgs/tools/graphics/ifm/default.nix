@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchzip, autoreconfHook, bison, flex, help2man, perl, tk }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoreconfHook,
+  bison,
+  flex,
+  help2man,
+  perl,
+  tk,
+}:
 stdenv.mkDerivation rec {
   pname = "ifm";
   version = "2015-11-08";
@@ -9,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "14af21qjd5jvsscm6vxpsdrnipdr33g6niagzmykrhyfhwcbjahi";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex help2man ];
+  nativeBuildInputs = [autoreconfHook bison flex help2man];
 
-  buildInputs = [ perl tk ]; # perl and wish are not run but written as shebangs.
+  buildInputs = [perl tk]; # perl and wish are not run but written as shebangs.
 
   enableParallelBuilding = false; # ifm-scan.l:16:10: fatal error: ifm-parse.h: No such file or directory
 
@@ -20,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Interactive fiction mapper";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

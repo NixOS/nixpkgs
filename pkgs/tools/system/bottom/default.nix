@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, DiskArbitration
-, Foundation
-, IOKit
-, installShellFiles
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  DiskArbitration,
+  Foundation,
+  IOKit,
+  installShellFiles,
+  libiconv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
   version = "0.6.8";
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     DiskArbitration
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform graphical process/system monitor with a customizable interface";
     homepage = "https://github.com/ClementTsang/bottom";
     license = licenses.mit;
-    maintainers = with maintainers; [ berbiche ];
+    maintainers = with maintainers; [berbiche];
     platforms = platforms.unix;
     mainProgram = "btm";
   };

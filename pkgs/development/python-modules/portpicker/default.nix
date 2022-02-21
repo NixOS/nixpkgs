@@ -1,8 +1,8 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "portpicker";
   version = "1.5.0";
@@ -17,6 +17,6 @@ buildPythonPackage rec {
     description = "A library to choose unique available network ports.";
     homepage = "https://github.com/google/python_portpicker";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danharaj ];
+    maintainers = with lib.maintainers; [danharaj];
   };
 }

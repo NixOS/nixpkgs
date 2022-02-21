@@ -1,5 +1,10 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, cctools }:
-
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchFromGitHub,
+  cctools,
+}:
 stdenv.mkDerivation rec {
   pname = "macdylibbundler";
   version = "1.0.4";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "0j4ij48jf5izgymzxxaakf6vc50w9q0761yir6nfj1n6qlnrlidf";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
     wrapProgram $out/bin/dylibbundler \
@@ -33,7 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/auriamg/macdylibbundler";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.nomeata ];
-
+    maintainers = [maintainers.nomeata];
   };
 }

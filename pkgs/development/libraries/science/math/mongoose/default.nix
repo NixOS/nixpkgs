@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mongoose";
   version = "2.0.4";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = ["bin" "out" "dev"];
 
   src = fetchFromGitHub {
     owner = "ScottKolo";

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "pysmt";
   version = "0.9.1.dev132";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   # No tests present, only GitHub release which is 0.9.0
   doCheck = false;
 
-  pythonImportsCheck = [ "pysmt" ];
+  pythonImportsCheck = ["pysmt"];
 
   meta = with lib; {
     description = "Python library for SMT formulae manipulation and solving";
     homepage = "https://github.com/pysmt/pysmt";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

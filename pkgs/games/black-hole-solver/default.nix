@@ -1,9 +1,14 @@
 {
-  stdenv, lib, fetchurl,
-  cmake, perl, pkg-config, python3,
-  rinutils, PathTiny,
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  perl,
+  pkg-config,
+  python3,
+  rinutils,
+  PathTiny,
 }:
-
 stdenv.mkDerivation rec {
   pname = "black-hole-solver";
   version = "1.10.1";
@@ -19,12 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "1qhihmk4fwz6n16c7bnxnh3v7jhbb7xhkc9wk9484bp0k4x9bq9n";
   };
 
-  nativeBuildInputs = [ cmake perl pkg-config python3 ];
+  nativeBuildInputs = [cmake perl pkg-config python3];
 
-  buildInputs = [ rinutils PathTiny ];
+  buildInputs = [rinutils PathTiny];
 
   prePatch = ''
     patchShebangs ./scripts
   '';
-
 }

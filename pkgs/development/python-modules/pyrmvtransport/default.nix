@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, flit
-, async-timeout
-, lxml
-, httpx
-, pytestCheckHook
-, pytest-asyncio
-, pytest-httpx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  flit,
+  async-timeout,
+  lxml,
+  httpx,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-httpx,
 }:
-
 buildPythonPackage rec {
   pname = "pyrmvtransport";
   version = "0.3.2";
@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cgtobi/PyRMVtransport";
     description = "Get transport information from opendata.rmv.de";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

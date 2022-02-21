@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "shfm";
   version = "0.4.2";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dylanaraps/shfm";
     description = "POSIX-shell based file manager";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }

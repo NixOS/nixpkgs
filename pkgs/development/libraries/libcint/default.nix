@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, blas
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  blas
   # Check Inputs
-, python3
+  ,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libcint";
   version = "4.4.6";
@@ -18,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eWUuORMZs6Bl/zFGYZkpgNAgJPIei+k0cQoWl+v+zxo=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ blas ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [blas];
   cmakeFlags = [
     "-DENABLE_TEST=1"
     "-DQUICK_TEST=1"
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   doCheck = true;
-  checkInputs = [ python3.pkgs.numpy ];
+  checkInputs = [python3.pkgs.numpy];
 
   meta = with lib; {
     description = "General GTO integrals for quantum chemistry";
@@ -45,6 +46,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/sunqm/libcint";
     changelog = "https://github.com/sunqm/libcint/blob/master/ChangeLog";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

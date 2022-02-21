@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config
-, libX11, libXv
-, udev
-, SDL2
-, gtk2, gtksourceview
-, alsa-lib, libao, openal, libpulseaudio
-, libicns, Cocoa, OpenAL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libX11,
+  libXv,
+  udev,
+  SDL2,
+  gtk2,
+  gtksourceview,
+  alsa-lib,
+  libao,
+  openal,
+  libpulseaudio,
+  libicns,
+  Cocoa,
+  OpenAL,
 }:
-
 stdenv.mkDerivation {
   pname = "bsnes-hd";
   version = "10.6-beta";
@@ -34,22 +43,24 @@ stdenv.mkDerivation {
     ./macos-copy-app-to-prefix.patch
   ];
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals stdenv.isDarwin [ libicns ];
+  nativeBuildInputs =
+    [pkg-config]
+    ++ lib.optionals stdenv.isDarwin [libicns];
 
-  buildInputs = [ SDL2 libao ]
-    ++ lib.optionals stdenv.isLinux [ libX11 libXv udev gtk2 gtksourceview alsa-lib openal libpulseaudio ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ];
+  buildInputs =
+    [SDL2 libao]
+    ++ lib.optionals stdenv.isLinux [libX11 libXv udev gtk2 gtksourceview alsa-lib openal libpulseaudio]
+    ++ lib.optionals stdenv.isDarwin [Cocoa OpenAL];
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "-C" "bsnes" "prefix=$(out)" ];
+  makeFlags = ["-C" "bsnes" "prefix=$(out)"];
 
   meta = with lib; {
     description = "A fork of bsnes that adds HD video features";
     homepage = "https://github.com/DerKoun/bsnes-hd";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ stevebob ];
+    maintainers = with maintainers; [stevebob];
     platforms = platforms.unix;
   };
 }

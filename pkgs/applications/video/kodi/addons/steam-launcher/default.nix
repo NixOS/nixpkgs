@@ -1,4 +1,9 @@
-{ lib, buildKodiAddon, fetchFromGitHub, steam }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  steam,
+}:
 buildKodiAddon {
   pname = "steam-launcher";
   namespace = "script.steam.launcher";
@@ -11,7 +16,7 @@ buildKodiAddon {
     sha256 = "1fj3ry5s44nf1jzxk4bmnpa4b9p23nrpmpj2a4i6xf94h7jl7p5k";
   };
 
-  propagatedBuildInputs = [ steam ];
+  propagatedBuildInputs = [steam];
 
   meta = with lib; {
     homepage = "https://forum.kodi.tv/showthread.php?tid=157499";

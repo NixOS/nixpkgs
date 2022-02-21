@@ -1,23 +1,23 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pbr
-, appdirs
-, cliff
-, dogpile-cache
-, jsonschema
-, keystoneauth1
-, openstacksdk
-, osc-lib
-, oslo-utils
-, pyyaml
-, requests
-, stevedore
-, stestr
-, requests-mock
-, oslotest
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pbr,
+  appdirs,
+  cliff,
+  dogpile-cache,
+  jsonschema,
+  keystoneauth1,
+  openstacksdk,
+  osc-lib,
+  oslo-utils,
+  pyyaml,
+  requests,
+  stevedore,
+  stestr,
+  requests-mock,
+  oslotest,
 }:
-
 buildPythonApplication rec {
   pname = "python-ironicclient";
   version = "4.10.0";
@@ -52,7 +52,7 @@ buildPythonApplication rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "ironicclient" ];
+  pythonImportsCheck = ["ironicclient"];
 
   meta = with lib; {
     description = "A client for OpenStack bare metal provisioning API, includes a Python module (ironicclient) and CLI (baremetal).";

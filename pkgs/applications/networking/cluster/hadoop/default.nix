@@ -1,14 +1,33 @@
-{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook
-, jdk8_headless, jdk11_headless
-, bash, coreutils, which
-, bzip2, cyrus_sasl , protobuf3_7, snappy, zlib, zstd
-, openssl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  jdk8_headless,
+  jdk11_headless,
+  bash,
+  coreutils,
+  which,
+  bzip2,
+  cyrus_sasl,
+  protobuf3_7,
+  snappy,
+  zlib,
+  zstd,
+  openssl,
 }:
-
-with lib;
-
-let
-  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl, nativeLibs ? [ ], libPatches ? "" }:
+with lib; let
+  common = {
+    pname,
+    version,
+    untarDir ? "${pname}-${version}",
+    sha256,
+    jdk,
+    openssl,
+    nativeLibs ? [],
+    libPatches ? "",
+  }:
     stdenv.mkDerivation rec {
       inherit pname version jdk libPatches untarDir openssl;
       src = fetchurl {
@@ -16,23 +35,26 @@ let
         inherit sha256;
       };
 
-      nativeBuildInputs = [ makeWrapper ]
-        ++ optional (nativeLibs != [] || libPatches != "") [ autoPatchelfHook ];
-      buildInputs = [ openssl ] ++ nativeLibs;
+      nativeBuildInputs =
+        [makeWrapper]
+        ++ optional (nativeLibs != [] || libPatches != "") [autoPatchelfHook];
+      buildInputs = [openssl] ++ nativeLibs;
 
-      installPhase = ''
-        mkdir -p $out/{lib/${untarDir}/conf,bin,lib}
-        mv * $out/lib/${untarDir}
+      installPhase =
+        ''
+          mkdir -p $out/{lib/${untarDir}/conf,bin,lib}
+          mv * $out/lib/${untarDir}
 
-        for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
-          makeWrapper "$n" "$out/bin/$(basename $n)"\
-            --set-default JAVA_HOME ${jdk.home}\
-            --set-default HADOOP_HOME $out/lib/${untarDir}\
-            --set-default HADOOP_CONF_DIR /etc/hadoop-conf/\
-            --prefix PATH : "${makeBinPath [ bash coreutils which]}"\
-            --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath buildInputs}"
-        done
-      '' + libPatches;
+          for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
+            makeWrapper "$n" "$out/bin/$(basename $n)"\
+              --set-default JAVA_HOME ${jdk.home}\
+              --set-default HADOOP_HOME $out/lib/${untarDir}\
+              --set-default HADOOP_CONF_DIR /etc/hadoop-conf/\
+              --prefix PATH : "${makeBinPath [bash coreutils which]}"\
+              --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath buildInputs}"
+          done
+        ''
+        + libPatches;
 
       meta = {
         homepage = "https://hadoop.apache.org/";
@@ -50,13 +72,11 @@ let
           so delivering a highly-availabile service on top of a cluster of
           computers, each of which may be prone to failures.
         '';
-        maintainers = with maintainers; [ volth illustris ];
-        platforms = [ "x86_64-linux" ];
+        maintainers = with maintainers; [volth illustris];
+        platforms = ["x86_64-linux"];
       };
-
     };
-in
-{
+in {
   # Different version of hadoop support different java runtime versions
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
   hadoop_3_3 = common rec {
@@ -67,7 +87,7 @@ in
     jdk = jdk11_headless;
     inherit openssl;
     # TODO: Package and add Intel Storage Acceleration Library
-    nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
+    nativeLibs = [stdenv.cc.cc.lib protobuf3_7 zlib snappy];
     libPatches = ''
       ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
       ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${untarDir}/lib/native/

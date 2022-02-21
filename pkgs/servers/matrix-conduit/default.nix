@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitLab, rustPlatform, pkgs }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  rustPlatform,
+  pkgs,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
   version = "0.3.0";
@@ -35,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pstn piegames pimeys ];
+    maintainers = with maintainers; [pstn piegames pimeys];
   };
 }

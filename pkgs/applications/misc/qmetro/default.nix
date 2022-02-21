@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, qmake4Hook, unzip, qt4 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qmake4Hook,
+  unzip,
+  qt4,
+}:
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
   project = "qmetro";
@@ -10,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1zdj87lzcr43gr2h05g17z31pd22n5kxdwbvx7rx656rmhv0sjq5";
   };
 
-  nativeBuildInputs = [ qmake4Hook unzip ];
+  nativeBuildInputs = [qmake4Hook unzip];
 
-  buildInputs = [ qt4 ];
+  buildInputs = [qt4];
 
   postPatch = ''
     sed -e 's#Exec=/usr/bin/qmetro#Exec=qmetro#' -i rc/qmetro.desktop
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Worldwide transit maps viewer";
     license = licenses.gpl3;
 
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.unix;
   };
 }

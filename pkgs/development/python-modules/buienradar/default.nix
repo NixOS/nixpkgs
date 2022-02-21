@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, docopt
-, pytz
-, requests
-, setuptools
-, vincenty
-, xmltodict
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  docopt,
+  pytz,
+  requests,
+  setuptools,
+  vincenty,
+  xmltodict,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "buienradar";
   version = "1.0.5";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Library and CLI tools for interacting with buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

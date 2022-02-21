@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, case
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  case,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "vine";
   version = "5.0.0";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python promises";
     homepage = "https://github.com/celery/vine";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "libsodium";
   version = "1.0.18";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h9ncvj23qbbni958knzsli8dvybcswcjbx0qjjgi922nf848l3g";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   patches = lib.optional stdenv.targetPlatform.isMinGW ./mingw-no-fortify.patch;
 
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "A modern and easy-to-use crypto library";
     homepage = "http://doc.libsodium.org/";
     license = licenses.isc;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.all;
   };
 }

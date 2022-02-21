@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cldr-emoji-annotation";
   version = "37.0_13.0_0_2";

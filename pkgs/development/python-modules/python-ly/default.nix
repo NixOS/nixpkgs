@@ -1,5 +1,8 @@
-{ buildPythonPackage, fetchPypi, lib }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+}:
 buildPythonPackage rec {
   pname = "python-ly";
   version = "0.9.7";
@@ -16,6 +19,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool and library for manipulating LilyPond files";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

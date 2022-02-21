@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, opusfile, libogg, SDL2, openal, freetype
-, libjpeg, curl, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opusfile,
+  libogg,
+  SDL2,
+  openal,
+  freetype,
+  libjpeg,
+  curl,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "iortcw-sp";
   version = "1.51c";
@@ -23,18 +33,24 @@ stdenv.mkDerivation rec {
     "USE_CURL_DLOPEN=0"
   ];
 
-  installTargets = [ "copyfiles" ];
+  installTargets = ["copyfiles"];
 
   buildInputs = [
-    opusfile libogg SDL2 freetype libjpeg openal curl
+    opusfile
+    libogg
+    SDL2
+    freetype
+    libjpeg
+    openal
+    curl
   ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   NIX_CFLAGS_COMPILE = [
     "-I${SDL2.dev}/include/SDL2"
     "-I${opusfile}/include/opus"
   ];
-  NIX_CFLAGS_LINK = [ "-lSDL2" ];
+  NIX_CFLAGS_LINK = ["-lSDL2"];
 
   postInstall = ''
     for i in `find $out/opt/iortcw -maxdepth 1 -type f -executable`; do
@@ -47,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

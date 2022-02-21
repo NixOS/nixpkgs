@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi}:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "gorilla";
   version = "0.4.0";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/christophercrouzet/gorilla";
     description = "Convenient approach to monkey patching";
     license = licenses.mit;
-    maintainers = with maintainers; [ tbenst ];
+    maintainers = with maintainers; [tbenst];
   };
 }

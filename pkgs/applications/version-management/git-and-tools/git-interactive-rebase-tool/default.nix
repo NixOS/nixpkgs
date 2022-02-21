@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, libiconv, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  libiconv,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "git-interactive-rebase-tool";
   version = "2.1.0";
@@ -21,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-2aHW9JIiqkO0X0B0D44tSZ8QkmKH/QZoYvKNEQWldo4=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv Security];
 
   checkFlags = [
     "--skip=external_editor::tests::edit_success"
@@ -38,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ masaeedu SuperSandro2000 zowoq ];
+    maintainers = with maintainers; [masaeedu SuperSandro2000 zowoq];
   };
 }

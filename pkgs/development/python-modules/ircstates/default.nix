@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, irctokens
-, pendulum
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  irctokens,
+  pendulum,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "ircstates";
   version = "0.11.8";
-  disabled = pythonOlder "3.6";  # f-strings
+  disabled = pythonOlder "3.6"; # f-strings
 
   src = fetchFromGitHub {
     owner = "jesopo";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest test
   '';
 
-  pythonImportsCheck = [ "ircstates" ];
+  pythonImportsCheck = ["ircstates"];
 
   meta = with lib; {
     description = "sans-I/O IRC session state parsing library";
     license = licenses.mit;
     homepage = "https://github.com/jesopo/ircstates";
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

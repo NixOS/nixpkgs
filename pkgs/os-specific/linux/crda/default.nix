@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, libgcrypt, libnl, pkg-config, python3Packages, wireless-regdb }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libgcrypt,
+  libnl,
+  pkg-config,
+  python3Packages,
+  wireless-regdb,
+}:
 stdenv.mkDerivation rec {
   pname = "crda";
   version = "4.14";
@@ -52,7 +61,7 @@ stdenv.mkDerivation rec {
     "REG_BIN=${wireless-regdb}/lib/crda/regulatory.bin"
   ];
 
-  buildFlags = [ "all_noverify" ];
+  buildFlags = ["all_noverify"];
   enableParallelBuilding = true;
 
   doCheck = true;

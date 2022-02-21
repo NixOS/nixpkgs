@@ -1,5 +1,12 @@
-{ lib, mkDerivation, qmake, qttools, qtwebkit, qttranslations, gpsbabel }:
-
+{
+  lib,
+  mkDerivation,
+  qmake,
+  qttools,
+  qtwebkit,
+  qttranslations,
+  gpsbabel,
+}:
 mkDerivation {
   pname = "gpsbabel-gui";
 
@@ -7,8 +14,8 @@ mkDerivation {
 
   sourceRoot = "source/gui";
 
-  nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtwebkit ];
+  nativeBuildInputs = [qmake qttools];
+  buildInputs = [qtwebkit];
 
   dontWrapQtApps = true;
 
@@ -31,7 +38,7 @@ mkDerivation {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ gpsbabel ]}"
+    "--prefix PATH : ${lib.makeBinPath [gpsbabel]}"
   ];
 
   postInstall = ''
@@ -45,7 +52,7 @@ mkDerivation {
     description = "Qt-based GUI for gpsbabel";
     homepage = "http://www.gpsbabel.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = with platforms; linux;
   };
 }

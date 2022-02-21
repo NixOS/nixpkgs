@@ -1,5 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
-
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kubergrunt";
   version = "0.8.0";
@@ -26,6 +29,6 @@ buildGoModule rec {
     description = "Collection of commands to fill in the gaps between Terraform, Helm, and Kubectl";
     homepage = "https://github.com/gruntwork-io/kubergrunt";
     license = licenses.asl20;
-    maintainers = with maintainers; [ psibi ];
+    maintainers = with maintainers; [psibi];
   };
 }

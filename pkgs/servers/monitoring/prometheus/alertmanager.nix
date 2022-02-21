@@ -1,5 +1,10 @@
-{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  go,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "alertmanager";
   version = "0.23.0";
@@ -14,9 +19,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-zJvzCC7Vn5repWssyDuGtoUSZC2ojQhMqDX5Orr0ST0=";
 
-  subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
+  subPackages = ["cmd/alertmanager" "cmd/amtool"];
 
-  ldflags = let t = "github.com/prometheus/common/version"; in [
+  ldflags = let
+    t = "github.com/prometheus/common/version";
+  in [
     "-X ${t}.Version=${version}"
     "-X ${t}.Revision=${src.rev}"
     "-X ${t}.Branch=unknown"
@@ -25,7 +32,7 @@ buildGoModule rec {
     "-X ${t}.GoVersion=${lib.getVersion go}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     $out/bin/amtool --completion-script-bash > amtool.bash
@@ -38,7 +45,7 @@ buildGoModule rec {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz globin Frostman ];
+    maintainers = with maintainers; [benley fpletz globin Frostman];
     platforms = platforms.unix;
   };
 }

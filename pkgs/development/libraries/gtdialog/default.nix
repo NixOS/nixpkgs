@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, cdk, unzip, gtk2, glib, ncurses, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cdk,
+  unzip,
+  gtk2,
+  glib,
+  ncurses,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "gtdialog";
   version = "1.4";
@@ -9,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0+WBr1IZIhQjxOsKO/yuXjaTRWPObhMdGqgibcpXGtI=";
   };
 
-  nativeBuildInputs = [ pkg-config unzip ];
+  nativeBuildInputs = [pkg-config unzip];
   buildInputs = [
     cdk
     gtk2
@@ -17,12 +26,12 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Cross-platform helper for creating interactive dialogs";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     homepage = "http://foicica.com/gtdialog";
     downloadPage = "http://foicica.com/gtdialog/download";

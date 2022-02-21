@@ -1,5 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, darwin }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  darwin,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
   version = "0.13.6";
@@ -17,10 +22,9 @@ rustPlatform.buildRustPackage rec {
     lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta = with lib; {
-    description =
-      "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
+    description = "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
   };
 }

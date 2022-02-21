@@ -1,20 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.zigbee2mqtt;
 
-  format = pkgs.formats.yaml { };
+  format = pkgs.formats.yaml {};
   configFile = format.generate "zigbee2mqtt.yaml" cfg.settings;
-
-in
-{
-  meta.maintainers = with maintainers; [ sweber hexa ];
+in {
+  meta.maintainers = with maintainers; [sweber hexa];
 
   imports = [
     # Remove warning before the 21.11 release
-    (mkRenamedOptionModule [ "services" "zigbee2mqtt" "config" ] [ "services" "zigbee2mqtt" "settings" ])
+    (mkRenamedOptionModule ["services" "zigbee2mqtt" "config"] ["services" "zigbee2mqtt" "settings"])
   ];
 
   options.services.zigbee2mqtt = {
@@ -37,7 +37,7 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = { };
+      default = {};
       example = literalExpression ''
         {
           homeassistant = config.services.home-assistant.enable;
@@ -56,7 +56,6 @@ in
   };
 
   config = mkIf (cfg.enable) {
-
     # preset config values
     services.zigbee2mqtt.settings = {
       homeassistant = mkDefault config.services.home-assistant.enable;
@@ -73,8 +72,8 @@ in
 
     systemd.services.zigbee2mqtt = {
       description = "Zigbee2mqtt Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       environment.ZIGBEE2MQTT_DATA = cfg.dataDir;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zigbee2mqtt";

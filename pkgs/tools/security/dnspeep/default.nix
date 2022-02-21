@@ -1,5 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, libpcap }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libpcap,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "dnspeep";
   version = "0.1.3";
@@ -13,13 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-w81FewtyweuSNYNPNr2uxB0uB1JoN5t252CAG1pm4Z8=";
 
-  LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
+  LIBPCAP_LIBDIR = lib.makeLibraryPath [libpcap];
   LIBPCAP_VER = libpcap.version;
 
   meta = with lib; {
     description = "Spy on the DNS queries your computer is making";
     homepage = "https://github.com/jvns/dnspeep";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

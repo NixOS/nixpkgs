@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pysvg-py3";
   version = "0.2.2-post3";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "pysvg" ];
+  pythonImportsCheck = ["pysvg"];
 
   meta = {
     homepage = "https://github.com/alorence/pysvg-py3";
     description = "Creating SVG with Python";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ davidak ];
+    maintainers = with lib.maintainers; [davidak];
   };
 }

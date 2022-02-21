@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycryptodome-test-vectors
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pycryptodome-test-vectors,
 }:
-
 buildPythonPackage rec {
   pname = "pycryptodome";
   version = "3.12.0";
@@ -22,8 +22,14 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Cryptography Toolkit";
     homepage = "https://www.pycryptodome.org/";
-    license = with licenses; [ bsd2 /* and */ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [
+      bsd2
+      /*
+       and
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [fab];
     platforms = platforms.unix;
   };
 }

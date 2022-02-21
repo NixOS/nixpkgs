@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, expects
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  expects,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "aiosyncthing";
   version = "0.6.3";
@@ -39,12 +39,12 @@ buildPythonPackage rec {
       --replace " --cov=aiosyncthing --cov-report=html" ""
   '';
 
-  pythonImportsCheck = [ "aiosyncthing" ];
+  pythonImportsCheck = ["aiosyncthing"];
 
   meta = with lib; {
     description = "Python client for the Syncthing REST API";
     homepage = "https://github.com/zhulik/aiosyncthing";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

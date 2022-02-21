@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "unicode-character-database";
   version = "14.0.0";

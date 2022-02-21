@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "distribution";
   version = "2.7.1";
@@ -17,7 +20,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "The Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
-    maintainers = [ maintainers.globin ];
+    maintainers = [maintainers.globin];
     platforms = platforms.unix;
   };
 }

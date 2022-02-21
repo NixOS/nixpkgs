@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dap";
   version = "3.10";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "Bk5sty/438jLb1PpurMQ5OqMbr6JqUuuQjcg2bejh2Y=";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/dap";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       analyses).
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

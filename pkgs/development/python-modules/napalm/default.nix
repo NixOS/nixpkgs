@@ -1,7 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, callPackage, setuptools, cffi
-, paramiko, requests, future, textfsm, jinja2, netaddr, pyyaml, pyeapi, netmiko
-, junos-eznc, ciscoconfparse, scp, lxml, ncclient, pytestCheckHook, ddt, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  callPackage,
+  setuptools,
+  cffi,
+  paramiko,
+  requests,
+  future,
+  textfsm,
+  jinja2,
+  netaddr,
+  pyyaml,
+  pyeapi,
+  netmiko,
+  junos-eznc,
+  ciscoconfparse,
+  scp,
+  lxml,
+  ncclient,
+  pytestCheckHook,
+  ddt,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "napalm";
   version = "3.3.1";
@@ -13,7 +34,7 @@ buildPythonPackage rec {
     sha256 = "15h1h1a3avv48i14x96b8v7zkhmwg7dnzxycxr18f9530j237rq6";
   };
 
-  buildInputs = [ setuptools ];
+  buildInputs = [setuptools];
   propagatedBuildInputs = [
     cffi
     paramiko
@@ -32,13 +53,12 @@ buildPythonPackage rec {
     ncclient
   ];
 
-  checkInputs = [ pytestCheckHook mock ddt ];
+  checkInputs = [pytestCheckHook mock ddt];
 
   meta = with lib; {
-    description =
-      "Network Automation and Programmability Abstraction Layer with Multivendor support";
+    description = "Network Automation and Programmability Abstraction Layer with Multivendor support";
     homepage = "https://github.com/napalm-automation/napalm";
     license = licenses.asl20;
-    maintainers = [ maintainers.astro ];
+    maintainers = [maintainers.astro];
   };
 }

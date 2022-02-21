@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "pyqt5-sip";
   version = "12.9.1";
@@ -20,9 +20,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = "https://www.riverbankcomputing.com/software/sip/";
-    license     = licenses.gpl3Only;
-    platforms   = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ sander ];
+    homepage = "https://www.riverbankcomputing.com/software/sip/";
+    license = licenses.gpl3Only;
+    platforms = platforms.mesaPlatforms;
+    maintainers = with maintainers; [sander];
   };
 }

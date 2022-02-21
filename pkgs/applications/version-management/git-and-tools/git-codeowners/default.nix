@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "git-codeowners";
   version = "0.1.2";
@@ -16,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/softprops/git-codeowners";
     description = "a git extension to work with CODEOWNERS files";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "go-swagger";
   version = "0.29.0";
@@ -15,14 +18,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/swagger" ];
+  subPackages = ["cmd/swagger"];
 
-  ldflags = [ "-s" "-w" "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Version=${version}" "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Commit=${src.rev}" ];
+  ldflags = ["-s" "-w" "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Version=${version}" "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Commit=${src.rev}"];
 
   meta = with lib; {
     description = "Golang implementation of Swagger 2.0, representation of your RESTful API";
     homepage = "https://github.com/go-swagger/go-swagger";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
   };
 }

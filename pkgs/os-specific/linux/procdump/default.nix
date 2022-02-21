@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, bash, coreutils, gdb, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  bash,
+  coreutils,
+  gdb,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "procdump";
   version = "1.2";
@@ -21,8 +29,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ zlib ];
-  buildInputs = [ bash coreutils gdb ];
+  nativeBuildInputs = [zlib];
+  buildInputs = [bash coreutils gdb];
 
   postPatch = ''
     substituteInPlace src/CoreDumpWriter.c \
@@ -55,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "A Linux version of the ProcDump Sysinternals tool";
     homepage = "https://github.com/Microsoft/ProcDump-for-Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ c0bw3b ];
+    maintainers = with maintainers; [c0bw3b];
     platforms = platforms.linux;
   };
 }

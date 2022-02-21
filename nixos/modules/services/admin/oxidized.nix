@@ -1,11 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.oxidized;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.oxidized;
+in {
   options.services.oxidized = {
     enable = mkEnableOption "the oxidized configuration backup service";
 
@@ -83,7 +84,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.groups.${cfg.group} = { };
+    users.groups.${cfg.group} = {};
     users.users.${cfg.user} = {
       description = "Oxidized service user";
       group = cfg.group;
@@ -93,8 +94,8 @@ in
     };
 
     systemd.services.oxidized = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       preStart = ''
         mkdir -p ${cfg.dataDir}/.config/oxidized
@@ -108,7 +109,7 @@ in
         Group = cfg.group;
         UMask = "0077";
         NoNewPrivileges = true;
-        Restart  = "always";
+        Restart = "always";
         WorkingDirectory = cfg.dataDir;
         KillSignal = "SIGKILL";
         PIDFile = "${cfg.dataDir}/.config/oxidized/pid";

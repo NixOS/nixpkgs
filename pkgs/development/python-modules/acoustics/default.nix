@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matplotlib
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scipy
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  matplotlib,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  tabulate,
 }:
-
 buildPythonPackage rec {
   pname = "acoustics";
   version = "0.2.4.post0";
@@ -48,12 +48,12 @@ buildPythonPackage rec {
     "tests/test_aio.py"
   ];
 
-  pythonImportsCheck = [ "acoustics" ];
+  pythonImportsCheck = ["acoustics"];
 
   meta = with lib; {
     description = "Python package for acousticians";
-    maintainers = with maintainers; [ fridh ];
-    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [fridh];
+    license = with licenses; [bsd3];
     homepage = "https://github.com/python-acoustics/python-acoustics";
   };
 }

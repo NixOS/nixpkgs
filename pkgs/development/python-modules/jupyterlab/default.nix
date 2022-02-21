@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyterlab_server
-, notebook
-, pythonOlder
-, jupyter-packaging
-, nbclassic
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyterlab_server,
+  notebook,
+  pythonOlder,
+  jupyter-packaging,
+  nbclassic,
 }:
-
 buildPythonPackage rec {
   pname = "jupyterlab";
   version = "3.2.9";
@@ -45,8 +45,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter lab environment notebook server extension";
-    license = with licenses; [ bsd3 ];
+    license = with licenses; [bsd3];
     homepage = "https://jupyter.org/";
-    maintainers = with maintainers; [ zimbatm costrouc ];
+    maintainers = with maintainers; [zimbatm costrouc];
   };
 }

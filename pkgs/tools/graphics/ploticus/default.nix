@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, zlib
-, libX11
-, libpng
-, gd
-, freetype
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  libX11,
+  libpng,
+  gd,
+  freetype,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ploticus";
   version = "2.42";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ploticus/ploticus/${version}/ploticus${lib.replaceStrings [ "." ] [ "" ] version}_src.tar.gz";
+    url = "mirror://sourceforge/ploticus/ploticus/${version}/ploticus${lib.replaceStrings ["."] [""] version}_src.tar.gz";
     sha256 = "PynkufQFIDqT7+yQDlgW2eG0OBghiB4kHAjKt91m4LA=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     freetype
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   preBuild = ''
     cd src
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       over colors, styles, options and details.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     homepage = "http://ploticus.sourceforge.net/";
     platforms = with platforms; linux;
   };

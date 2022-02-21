@@ -1,17 +1,19 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
-
-let
-  client = { pkgs, ... } : {
-    environment.systemPackages = [ pkgs.glusterfs ];
-    virtualisation.fileSystems =
-      { "/gluster" =
-          { device = "server1:/gv0";
-            fsType = "glusterfs";
-          };
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
+  client = {pkgs, ...}: {
+    environment.systemPackages = [pkgs.glusterfs];
+    virtualisation.fileSystems = {
+      "/gluster" = {
+        device = "server1:/gv0";
+        fsType = "glusterfs";
       };
+    };
   };
 
-  server = { pkgs, ... } : {
+  server = {pkgs, ...}: {
     networking.firewall.enable = false;
     services.glusterfs.enable = true;
 
@@ -20,14 +22,14 @@ let
       ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb
     '';
 
-    virtualisation.emptyDiskImages = [ 1024 ];
+    virtualisation.emptyDiskImages = [1024];
 
-    virtualisation.fileSystems =
-      { "/data" =
-          { device = "/dev/disk/by-label/data";
-            fsType = "ext4";
-          };
+    virtualisation.fileSystems = {
+      "/data" = {
+        device = "/dev/disk/by-label/data";
+        fsType = "ext4";
       };
+    };
   };
 in {
   name = "glusterfs";

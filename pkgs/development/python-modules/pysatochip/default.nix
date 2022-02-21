@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, certifi
-, cryptography
-, ecdsa
-, pyaes
-, pyopenssl
-, pyscard
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  certifi,
+  cryptography,
+  ecdsa,
+  pyaes,
+  pyopenssl,
+  pyscard,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pysatochip";
   version = "0.14.2";
@@ -27,16 +27,16 @@ buildPythonPackage rec {
       --replace "pyopenssl==20.0.0" "pyopenssl"
   '';
 
-  propagatedBuildInputs = [ cryptography ecdsa pyaes pyopenssl pyscard ];
+  propagatedBuildInputs = [cryptography ecdsa pyaes pyopenssl pyscard];
 
-  checkInputs = [ certifi ];
+  checkInputs = [certifi];
 
-  pythonImportsCheck = [ "pysatochip" ];
+  pythonImportsCheck = ["pysatochip"];
 
   meta = with lib; {
     description = "Simple python library to communicate with a Satochip hardware wallet";
     homepage = "https://github.com/Toporin/pysatochip";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with maintainers; [oxalica];
   };
 }

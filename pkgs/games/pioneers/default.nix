@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, itstool
-, gtk3
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  itstool,
+  gtk3,
+  libxml2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pioneers";
   version = "15.6";
@@ -16,15 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "07b3xdd81n8ybsb4fzc5lx0813y9crzp1hj69khncf4faj48sdcs";
   };
 
-  nativeBuildInputs = [ pkg-config intltool itstool ];
+  nativeBuildInputs = [pkg-config intltool itstool];
 
-  buildInputs = [ gtk3 libxml2 ];
+  buildInputs = [gtk3 libxml2];
 
   meta = with lib; {
     description = "Addicting game based on The Settlers of Catan";
-    homepage = "http://pio.sourceforge.net/";  # https does not work
+    homepage = "http://pio.sourceforge.net/"; # https does not work
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [viric];
     platforms = platforms.linux;
   };
 }

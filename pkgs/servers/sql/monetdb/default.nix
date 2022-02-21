@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, python3
-, bison, openssl, readline, bzip2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  python3,
+  bison,
+  openssl,
+  readline,
+  bzip2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "monetdb";
   version = "11.41.13";
@@ -21,14 +28,14 @@ stdenv.mkDerivation rec {
     rm $out/bin/monetdb_mtest.sh
   '';
 
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ bison openssl readline bzip2 ];
+  nativeBuildInputs = [cmake python3];
+  buildInputs = [bison openssl readline bzip2];
 
   meta = with lib; {
     description = "An open source database system";
     homepage = "https://www.monetdb.org/";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.StillerHarpo ];
+    maintainers = [maintainers.StillerHarpo];
   };
 }

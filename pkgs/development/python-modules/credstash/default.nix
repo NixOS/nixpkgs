@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  boto3,
+  pyyaml,
+  docutils,
+  pytest,
+  fetchpatch,
+}:
 buildPythonPackage rec {
   pname = "credstash";
   version = "1.17.1";
@@ -23,9 +32,9 @@ buildPythonPackage rec {
   # file ensures that Python imports the module from site-packages library.
   postInstall = "rm $out/bin/credstash.py";
 
-  nativeBuildInputs = [ pytest ];
+  nativeBuildInputs = [pytest];
 
-  propagatedBuildInputs = [ cryptography boto3 pyyaml docutils ];
+  propagatedBuildInputs = [cryptography boto3 pyyaml docutils];
 
   # No tests in archive
   doCheck = false;

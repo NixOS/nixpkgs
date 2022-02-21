@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, oauthlib
-, requests
-, pythonOlder
-, vcrpy
-, pytestCheckHook
-, requests_oauthlib
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oauthlib,
+  requests,
+  pythonOlder,
+  vcrpy,
+  pytestCheckHook,
+  requests_oauthlib,
 }:
-
 buildPythonPackage rec {
   pname = "tweepy";
   version = "4.5.0";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tweepy/tweepy";
     description = "Twitter library for Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

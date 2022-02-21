@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, fetchFromGitLab
-, llvmPackages
-, cmake, boehmgc, gmp, zlib, ncurses, boost, libelf
-, python3, git, sbcl
-, wafHook
-}:
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  llvmPackages,
+  cmake,
+  boehmgc,
+  gmp,
+  zlib,
+  ncurses,
+  boost,
+  libelf,
+  python3,
+  git,
+  sbcl,
+  wafHook,
+}: let
   sicl = fetchFromGitHub {
     owner = "Bike";
     repo = "SICL";
@@ -55,75 +66,85 @@ let
     sha256 = "0ljr2vc0cb2wrijcyjmp9hcaj2bdhh05ci3zf4f43hdq6i2fgg6g";
   };
 in
-stdenv.mkDerivation rec {
-  pname = "clasp";
-  version = "0.8.99.20181128";
+  stdenv.mkDerivation rec {
+    pname = "clasp";
+    version = "0.8.99.20181128";
 
-  src = fetchFromGitHub {
-    owner = "drmeister";
-    repo = "clasp";
-    rev = "2f2b52ccb750048460562b5987a7eaf7a1aa4445";
-    sha256 = "0ra55vdnk59lygwzlxr5cg16vb9c45fmg59wahaxclwm461w7fwz";
-    fetchSubmodules = true;
-  };
+    src = fetchFromGitHub {
+      owner = "drmeister";
+      repo = "clasp";
+      rev = "2f2b52ccb750048460562b5987a7eaf7a1aa4445";
+      sha256 = "0ra55vdnk59lygwzlxr5cg16vb9c45fmg59wahaxclwm461w7fwz";
+      fetchSubmodules = true;
+    };
 
-  nativeBuildInputs = [ cmake python3 git sbcl wafHook ] ++
-    (with llvmPackages; [ llvm clang ]);
+    nativeBuildInputs =
+      [cmake python3 git sbcl wafHook]
+      ++ (with llvmPackages; [llvm clang]);
 
-  buildInputs = with llvmPackages;
-  (
-   builtins.map (x: lib.overrideDerivation x
-           (x: {NIX_CFLAGS_COMPILE= (x.NIX_CFLAGS_COMPILE or "") + " -frtti"; }))
-   [ llvm clang clang-unwrapped clang ]) ++
-  [
-    gmp zlib ncurses
-    boost boehmgc libelf
-    (boost.override {enableStatic = true; enableShared = false;})
-    (lib.overrideDerivation boehmgc
-      (x: {configureFlags = (x.configureFlags or []) ++ ["--enable-static"];}))
-  ];
+    buildInputs = with llvmPackages;
+      (
+        builtins.map (x:
+          lib.overrideDerivation x
+          (x: {NIX_CFLAGS_COMPILE = (x.NIX_CFLAGS_COMPILE or "") + " -frtti";}))
+        [llvm clang clang-unwrapped clang]
+      )
+      ++ [
+        gmp
+        zlib
+        ncurses
+        boost
+        boehmgc
+        libelf
+        (boost.override {
+          enableStatic = true;
+          enableShared = false;
+        })
+        (lib.overrideDerivation boehmgc
+        (x: {configureFlags = (x.configureFlags or []) ++ ["--enable-static"];}))
+      ];
 
-  NIX_CXXSTDLIB_COMPILE = " -frtti ";
+    NIX_CXXSTDLIB_COMPILE = " -frtti ";
 
-  postPatch = ''
-    echo "
-      PREFIX = '$out'
-    " | sed -e 's/^ *//' > wscript.config
+    postPatch = ''
+      echo "
+        PREFIX = '$out'
+      " | sed -e 's/^ *//' > wscript.config
 
-    mkdir -p src/lisp/kernel/contrib/sicl
-    mkdir -p src/lisp/kernel/contrib/Concrete-Syntax-Tree
-    mkdir -p src/lisp/kernel/contrib/closer-mop
-    mkdir -p src/lisp/kernel/contrib/Acclimation
-    mkdir -p src/lisp/kernel/contrib/Eclector
-    mkdir -p src/lisp/kernel/contrib/alexandria
-    mkdir -p src/mps
-    mkdir -p src/lisp/modules/asdf
+      mkdir -p src/lisp/kernel/contrib/sicl
+      mkdir -p src/lisp/kernel/contrib/Concrete-Syntax-Tree
+      mkdir -p src/lisp/kernel/contrib/closer-mop
+      mkdir -p src/lisp/kernel/contrib/Acclimation
+      mkdir -p src/lisp/kernel/contrib/Eclector
+      mkdir -p src/lisp/kernel/contrib/alexandria
+      mkdir -p src/mps
+      mkdir -p src/lisp/modules/asdf
 
-    cp -rfT "${sicl}" src/lisp/kernel/contrib/sicl
-    cp -rfT "${cst}" src/lisp/kernel/contrib/Concrete-Syntax-Tree
-    cp -rfT "${c2mop}" src/lisp/kernel/contrib/closer-mop
-    cp -rfT "${acclimation}" src/lisp/kernel/contrib/Acclimation
-    cp -rfT "${eclector}" src/lisp/kernel/contrib/Eclector
-    cp -rfT "${alexandria}" src/lisp/kernel/contrib/alexandria
-    cp -rfT "${mps}" src/mps
-    cp -rfT "${asdf}" src/lisp/modules/asdf
+      cp -rfT "${sicl}" src/lisp/kernel/contrib/sicl
+      cp -rfT "${cst}" src/lisp/kernel/contrib/Concrete-Syntax-Tree
+      cp -rfT "${c2mop}" src/lisp/kernel/contrib/closer-mop
+      cp -rfT "${acclimation}" src/lisp/kernel/contrib/Acclimation
+      cp -rfT "${eclector}" src/lisp/kernel/contrib/Eclector
+      cp -rfT "${alexandria}" src/lisp/kernel/contrib/alexandria
+      cp -rfT "${mps}" src/mps
+      cp -rfT "${asdf}" src/lisp/modules/asdf
 
-    chmod -R u+rwX src
-    ( cd src/lisp/modules/asdf; make )
-  '';
+      chmod -R u+rwX src
+      ( cd src/lisp/modules/asdf; make )
+    '';
 
-  buildTargets = "build_cboehm";
-  installTargets = "install_cboehm";
+    buildTargets = "build_cboehm";
+    installTargets = "install_cboehm";
 
-  CLASP_SRC_DONTTOUCH = "true";
+    CLASP_SRC_DONTTOUCH = "true";
 
-  meta = {
-    description = "A Common Lisp implementation based on LLVM with C++ integration";
-    license = lib.licenses.lgpl21Plus ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
-    # Large, long to build, a private build of clang is needed, a prerelease.
-    hydraPlatforms = [];
-    homepage = "https://github.com/drmeister/clasp";
-  };
-}
+    meta = {
+      description = "A Common Lisp implementation based on LLVM with C++ integration";
+      license = lib.licenses.lgpl21Plus;
+      maintainers = [lib.maintainers.raskin];
+      platforms = lib.platforms.linux;
+      # Large, long to build, a private build of clang is needed, a prerelease.
+      hydraPlatforms = [];
+      homepage = "https://github.com/drmeister/clasp";
+    };
+  }

@@ -16,7 +16,6 @@ import ../make-test-python.nix ({...}: {
         "yarn.nodemanager.log-dirs" = "/tmp/userlogs";
       };
     };
-
   };
 
   testScript = ''

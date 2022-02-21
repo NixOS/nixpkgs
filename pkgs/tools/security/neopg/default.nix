@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, sqlite
-, botan2
-, boost
-, curl
-, gettext
-, pkg-config
-, libusb1
-, gnutls }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sqlite,
+  botan2,
+  boost,
+  curl,
+  gettext,
+  pkg-config,
+  libusb1,
+  gnutls,
+}:
 stdenv.mkDerivation rec {
   pname = "neopg";
   version = "0.0.6";
@@ -22,9 +24,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [  cmake gettext pkg-config ];
+  nativeBuildInputs = [cmake gettext pkg-config];
 
-  buildInputs = [ sqlite botan2 boost curl libusb1 gnutls ];
+  buildInputs = [sqlite botan2 boost curl libusb1 gnutls];
 
   doCheck = true;
   checkTarget = "test";
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
       NeoPG starts as an opiniated fork of GnuPG 2 to clean up the code and make it easier to develop.
       It is written in C++11.
     '';
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [erictapen];
     platforms = platforms.linux;
     broken = true; # fails to build with recent versions of botan. https://github.com/das-labor/neopg/issues/98
   };

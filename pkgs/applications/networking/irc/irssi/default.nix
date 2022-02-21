@@ -1,9 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr, git }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  ncurses,
+  glib,
+  openssl,
+  perl,
+  libintl,
+  libgcrypt,
+  libotr,
+  git,
+}:
 stdenv.mkDerivation rec {
   pname = "irssi";
   version = "1.2.3";
-
 
   src = fetchFromGitHub {
     "owner" = "irssi";
@@ -13,8 +27,8 @@ stdenv.mkDerivation rec {
     "leaveDotGit" = true;
   };
 
-  nativeBuildInputs = [ pkg-config autoconf automake libtool git ];
-  buildInputs = [ ncurses glib openssl perl libintl libgcrypt libotr ];
+  nativeBuildInputs = [pkg-config autoconf automake libtool git];
+  buildInputs = [ncurses glib openssl perl libintl libgcrypt libotr];
 
   enableParallelBuilding = true;
 
@@ -31,10 +45,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage    = "https://irssi.org";
+    homepage = "https://irssi.org";
     description = "A terminal based IRC client";
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ lovek323 ];
-    license     = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [lovek323];
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, granite
-, gtk3
-, libgee
-, libgudev
-, libwacom
-, switchboard
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  granite,
+  gtk3,
+  libgee,
+  libgudev,
+  libwacom,
+  switchboard,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-wacom";
   version = "1.0.0";

@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   cfg = config.hardware.uinput;
 in {
   options.hardware.uinput = {
@@ -8,7 +11,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    boot.kernelModules = [ "uinput" ];
+    boot.kernelModules = ["uinput"];
 
     users.groups.uinput = {};
 

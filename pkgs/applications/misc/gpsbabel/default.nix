@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, libusb1, qtbase, zlib, IOKit, which, expat }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libusb1,
+  qtbase,
+  zlib,
+  IOKit,
+  which,
+  expat,
+}:
 stdenv.mkDerivation rec {
   pname = "gpsbabel";
   version = "1.7.0";
@@ -18,22 +28,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libusb1 qtbase zlib ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs =
+    [libusb1 qtbase zlib]
+    ++ lib.optionals stdenv.isDarwin [IOKit];
 
-  checkInputs = [ expat.dev which ]; # Avoid ./testo.d/kml.test: line 74: which: command not found. Skipping KML validation phase.
+  checkInputs = [expat.dev which]; # Avoid ./testo.d/kml.test: line 74: which: command not found. Skipping KML validation phase.
 
-  /* FIXME: Building the documentation, with "make doc", requires this:
+  /*
+    FIXME: Building the documentation, with "make doc", requires this:
+   
+     [ libxml2 libxslt perl docbook_xml_dtd_412 docbook_xsl fop ]
+   
+   But FOP isn't packaged yet.
+   */
 
-      [ libxml2 libxslt perl docbook_xml_dtd_412 docbook_xsl fop ]
-
-    But FOP isn't packaged yet.  */
-
-  configureFlags = [ "--with-zlib=system" ]
+  configureFlags =
+    ["--with-zlib=system"]
     # Floating point behavior on i686 causes test failures. Preventing
     # extended precision fixes this problem.
     ++ lib.optionals stdenv.isi686 [
-      "CFLAGS=-ffloat-store" "CXXFLAGS=-ffloat-store"
+      "CFLAGS=-ffloat-store"
+      "CXXFLAGS=-ffloat-store"
     ];
 
   enableParallelBuilding = true;
@@ -41,19 +56,20 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   doCheck = true;
-  preCheck = ''
-    patchShebangs testo
-    substituteInPlace testo \
-      --replace "-x /usr/bin/hexdump" ""
+  preCheck =
+    ''
+      patchShebangs testo
+      substituteInPlace testo \
+        --replace "-x /usr/bin/hexdump" ""
 
-    rm -v testo.d/alantrl.test
-  ''
+      rm -v testo.d/alantrl.test
+    ''
     # The raymarine and gtm tests fail on i686 despite -ffloat-store.
-  + lib.optionalString stdenv.isi686 "rm -v testo.d/raymarine.test testo.d/gtm.test;"
+    + lib.optionalString stdenv.isi686 "rm -v testo.d/raymarine.test testo.d/gtm.test;"
     # The gtm, kml and tomtom asc tests fail on darwin, see PR #23572.
-  + lib.optionalString stdenv.isDarwin "rm -v testo.d/gtm.test testo.d/kml.test testo.d/tomtom_asc.test testo.d/classic-2.test"
+    + lib.optionalString stdenv.isDarwin "rm -v testo.d/gtm.test testo.d/kml.test testo.d/tomtom_asc.test testo.d/classic-2.test"
     # The arc-project test fails on aarch64.
-  + lib.optionalString stdenv.isAarch64 "rm -v testo.d/arc-project.test";
+    + lib.optionalString stdenv.isAarch64 "rm -v testo.d/arc-project.test";
 
   meta = with lib; {
     description = "Convert, upload and download data from GPS and Map programs";

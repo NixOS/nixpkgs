@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, rustPlatform
-, libiconv
-, Security
-, SystemConfiguration
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  rustPlatform,
+  libiconv,
+  Security,
+  SystemConfiguration,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
   version = "0.8.0";
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-KMss6Mpn4LHnkhtJyRea+D7mKItBK4lqq9syFEmCiFo=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv Security SystemConfiguration];
 
   postInstall = ''
     HOME=$(mktemp -d)
@@ -41,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/ellie/atuin";
     license = licenses.mit;
-    maintainers = with maintainers; [ onsails SuperSandro2000 ];
+    maintainers = with maintainers; [onsails SuperSandro2000];
   };
 }

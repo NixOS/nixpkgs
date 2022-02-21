@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "capstone";
   version = "4.0.2";
@@ -26,7 +30,8 @@ stdenv.mkDerivation rec {
     make check
   '';
 
-  installPhase = (lib.optionalString stdenv.isDarwin "HOMEBREW_CAPSTONE=1 ")
+  installPhase =
+    (lib.optionalString stdenv.isDarwin "HOMEBREW_CAPSTONE=1 ")
     + "PREFIX=$out ./make.sh install";
 
   nativeBuildInputs = [
@@ -37,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Advanced disassembly library";
-    homepage    = "http://www.capstone-engine.org";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thoughtpolice ris ];
+    homepage = "http://www.capstone-engine.org";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [thoughtpolice ris];
   };
 }

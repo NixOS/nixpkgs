@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, fetchpatch, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
   version = "1.10.1";
@@ -33,6 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "A bouncer-style Matrix-IRC bridge.";
     homepage = "https://github.com/hifi/heisenbridge";
     license = licenses.mit;
-    maintainers = [ maintainers.sumnerevans ];
+    maintainers = [maintainers.sumnerevans];
   };
 }

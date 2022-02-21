@@ -1,6 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+}: let
   pname = "ookla-speedtest";
   version = "1.1.1";
 
@@ -15,29 +17,28 @@ let
     };
   };
 in
+  stdenv.mkDerivation rec {
+    inherit pname version;
 
-stdenv.mkDerivation rec {
-  inherit pname version;
+    src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    setSourceRoot = ''
+      sourceRoot=$PWD
+    '';
 
-  setSourceRoot = ''
-    sourceRoot=$PWD
-  '';
+    dontBuild = true;
+    dontConfigure = true;
 
-  dontBuild = true;
-  dontConfigure = true;
+    installPhase = ''
+      install -D speedtest $out/bin/speedtest
+      install -D speedtest.5 $out/share/man/man5/speedtest.5
+    '';
 
-  installPhase = ''
-    install -D speedtest $out/bin/speedtest
-    install -D speedtest.5 $out/share/man/man5/speedtest.5
-  '';
-
-  meta = with lib; {
-    description = "Command line internet speedtest tool by Ookla";
-    homepage = "https://www.speedtest.net/apps/cli";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ kranzes ];
-    platforms = lib.attrNames srcs;
-  };
-}
+    meta = with lib; {
+      description = "Command line internet speedtest tool by Ookla";
+      homepage = "https://www.speedtest.net/apps/cli";
+      license = licenses.unfree;
+      maintainers = with maintainers; [kranzes];
+      platforms = lib.attrNames srcs;
+    };
+  }

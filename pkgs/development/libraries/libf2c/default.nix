@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, unzip}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "libf2c";
   version = "20160102";
@@ -15,7 +19,7 @@ stdenv.mkDerivation rec {
     unzip ${src}
   '';
 
-  makeFlags = [ "-f" "makefile.u" ];
+  makeFlags = ["-f" "makefile.u"];
 
   installPhase = ''
     mkdir -p $out/include $out/lib
@@ -23,9 +27,9 @@ stdenv.mkDerivation rec {
     cp f2c.h $out/include
   '';
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   # Makefile is missing depepdencies on generated headers:
   #   main.c:4:10: fatal error: signal1.h: No such file or directory

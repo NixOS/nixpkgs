@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "bootstrap";
   version = "5.1.3";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vewp21DsjR7My3AgIrgj3wozPhBYFMJksyG9UYuJxyE=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   dontBuild = true;
   installPhase = ''
@@ -22,5 +26,4 @@ stdenv.mkDerivation rec {
     homepage = "https://getbootstrap.com/";
     license = lib.licenses.mit;
   };
-
 }

@@ -1,21 +1,23 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub
   # Python Inputs
-, decorator
-, docplex
-, networkx
-, numpy
-, qiskit-terra
-, scipy
+  ,
+  decorator,
+  docplex,
+  networkx,
+  numpy,
+  qiskit-terra,
+  scipy
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pylatexenc
-, qiskit-aer
+  ,
+  pytestCheckHook,
+  ddt,
+  pylatexenc,
+  qiskit-aer,
 }:
-
 buildPythonPackage rec {
   pname = "qiskit-optimization";
   version = "0.3.0";
@@ -49,8 +51,8 @@ buildPythonPackage rec {
     qiskit-aer
   ];
 
-  pythonImportsCheck = [ "qiskit_optimization" ];
-  pytestFlagsArray = [ "--durations=10" ];
+  pythonImportsCheck = ["qiskit_optimization"];
+  pytestFlagsArray = ["--durations=10"];
 
   meta = with lib; {
     description = "Software for developing quantum computing programs";
@@ -58,6 +60,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

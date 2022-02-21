@@ -1,5 +1,12 @@
-{ lib, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
-
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  python,
+  buildPythonPackage,
+  mpi,
+  openssh,
+}:
 buildPythonPackage rec {
   pname = "mpi4py";
   version = "3.1.3";
@@ -41,7 +48,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
 
-  nativeBuildInputs = [ mpi openssh ];
+  nativeBuildInputs = [mpi openssh];
 
   meta = with lib; {
     description = "Python bindings for the Message Passing Interface standard";

@@ -1,6 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages }:
-let
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+  perl,
+  patchutils,
+  perlPackages,
+}: let
   media = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
@@ -16,49 +23,50 @@ let
     rev = "a0d62eba4d429e0e9d2c2f910fb203e817cac84b";
     sha256 = "1329s7w9xlqjqwkpaqsd6b5dmzhm97jw0c7c7zzmmbdkl289i4i4";
   };
+in
+  stdenv.mkDerivation {
+    pname = "tbs";
+    version = "2018.04.18-${kernel.version}";
 
-in stdenv.mkDerivation {
-  pname = "tbs";
-  version = "2018.04.18-${kernel.version}";
+    srcs = [media build];
+    sourceRoot = build.name;
 
-  srcs = [ media build ];
-  sourceRoot = build.name;
+    preConfigure = ''
+      make dir DIR=../${media.name}
+    '';
 
-  preConfigure = ''
-    make dir DIR=../${media.name}
-  '';
+    postPatch = ''
+      patchShebangs .
 
-  postPatch = ''
-    patchShebangs .
+      sed -i v4l/Makefile \
+        -i v4l/scripts/make_makefile.pl \
+        -e 's,/sbin/depmod,${kmod}/bin/depmod,g' \
+        -e 's,/sbin/lsmod,${kmod}/bin/lsmod,g'
 
-    sed -i v4l/Makefile \
-      -i v4l/scripts/make_makefile.pl \
-      -e 's,/sbin/depmod,${kmod}/bin/depmod,g' \
-      -e 's,/sbin/lsmod,${kmod}/bin/lsmod,g'
+      sed -i v4l/Makefile \
+        -e 's,^OUTDIR ?= /lib/modules,OUTDIR ?= ${kernel.dev}/lib/modules,' \
+        -e 's,^SRCDIR ?= /lib/modules,SRCDIR ?= ${kernel.dev}/lib/modules,'
+    '';
 
-    sed -i v4l/Makefile \
-      -e 's,^OUTDIR ?= /lib/modules,OUTDIR ?= ${kernel.dev}/lib/modules,' \
-      -e 's,^SRCDIR ?= /lib/modules,SRCDIR ?= ${kernel.dev}/lib/modules,'
-  '';
+    buildFlags = ["VER=${kernel.modDirVersion}"];
+    installFlags = ["DESTDIR=$(out)"];
 
-  buildFlags = [ "VER=${kernel.modDirVersion}" ];
-  installFlags = [ "DESTDIR=$(out)" ];
+    hardeningDisable = ["all"];
 
-  hardeningDisable = [ "all" ];
+    nativeBuildInputs =
+      [patchutils kmod perl perlPackages.ProcProcessTable]
+      ++ kernel.moduleBuildDependencies;
 
-  nativeBuildInputs = [ patchutils kmod perl perlPackages.ProcProcessTable ]
-  ++ kernel.moduleBuildDependencies;
+    postInstall = ''
+      find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
+    '';
 
-   postInstall = ''
-    find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
-  '';
-
-  meta = with lib; {
-    homepage = "https://www.tbsdtv.com/";
-    description = "Linux driver for TBSDTV cards";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ck3d ];
-    priority = -1;
-    broken = true;
-  };
-}
+    meta = with lib; {
+      homepage = "https://www.tbsdtv.com/";
+      description = "Linux driver for TBSDTV cards";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ck3d];
+      priority = -1;
+      broken = true;
+    };
+  }

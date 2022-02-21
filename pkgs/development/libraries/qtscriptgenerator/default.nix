@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, qt4 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qt4,
+}:
 stdenv.mkDerivation rec {
   pname = "qtscriptgenerator";
   version = "0.1.0";
@@ -8,9 +12,9 @@ stdenv.mkDerivation rec {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/qtscriptgenerator/qtscriptgenerator-src-${version}.tar.gz";
     sha256 = "0h8zjh38n2wfz7jld0jz6a09y66dbsd2jhm4f2024qfgcmxcabj6";
   };
-  buildInputs = [ qt4 ];
+  buildInputs = [qt4];
 
-  patches = [ ./qtscriptgenerator.gcc-4.4.patch ./qt-4.8.patch ];
+  patches = [./qtscriptgenerator.gcc-4.4.patch ./qt-4.8.patch];
 
   postPatch = ''
     # remove phonon stuff which causes errors (thanks to Gentoo bug reports)
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = {
     description = "QtScript bindings generator";

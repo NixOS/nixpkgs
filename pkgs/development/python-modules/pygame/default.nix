@@ -1,8 +1,23 @@
-{ stdenv, lib, substituteAll, fetchFromGitHub, buildPythonPackage, python, pkg-config, libX11
-, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype, fontconfig
-, AppKit
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  pkg-config,
+  libX11,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  libpng,
+  libjpeg,
+  portmidi,
+  freetype,
+  fontconfig,
+  AppKit,
 }:
-
 buildPythonPackage rec {
   pname = "pygame";
   version = "2.1.2";
@@ -25,11 +40,13 @@ buildPythonPackage rec {
       buildinputs_include = builtins.toJSON (builtins.concatMap (dep: [
         "${lib.getDev dep}/"
         "${lib.getDev dep}/include"
-      ]) buildInputs);
+      ])
+      buildInputs);
       buildinputs_lib = builtins.toJSON (builtins.concatMap (dep: [
         "${lib.getLib dep}/"
         "${lib.getLib dep}/lib"
-      ]) buildInputs);
+      ])
+      buildInputs);
     })
   ];
 
@@ -40,15 +57,25 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config SDL2
+    pkg-config
+    SDL2
   ];
 
-  buildInputs = [
-    SDL2 SDL2_image SDL2_mixer SDL2_ttf libpng libjpeg
-    portmidi libX11 freetype
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  buildInputs =
+    [
+      SDL2
+      SDL2_image
+      SDL2_mixer
+      SDL2_ttf
+      libpng
+      libjpeg
+      portmidi
+      libX11
+      freetype
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+    ];
 
   preConfigure = ''
     ${python.interpreter} buildconfig/config.py
@@ -66,13 +93,13 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-  pythonImportsCheck = [ "pygame" ];
+  pythonImportsCheck = ["pygame"];
 
   meta = with lib; {
     description = "Python library for games";
     homepage = "https://www.pygame.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     platforms = platforms.unix;
   };
 }

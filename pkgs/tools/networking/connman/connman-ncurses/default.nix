@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, pkg-config, dbus, json_c, ncurses, connman }:
-
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  dbus,
+  json_c,
+  ncurses,
+  connman,
+}:
 stdenv.mkDerivation {
   pname = "connman-ncurses";
   version = "2015-07-21";
@@ -20,9 +30,9 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [ dbus ncurses json_c connman ];
+  buildInputs = [dbus ncurses json_c connman];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -36,6 +46,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/eurogiciel-oss/connman-json-client";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

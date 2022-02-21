@@ -1,14 +1,14 @@
-{ lib
-, fetchPypi
-, bitcoin-utils-fork-minimal
-, buildPythonPackage
-, base58
-, pycryptodome
-, requests
-, setuptools
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  bitcoin-utils-fork-minimal,
+  buildPythonPackage,
+  base58,
+  pycryptodome,
+  requests,
+  setuptools,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "block-io";
   version = "2.0.5";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Integrate Bitcoin, Dogecoin and Litecoin in your Python applications using block.io";
     homepage = "https://github.com/BlockIo/block_io-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [nyanloutre];
   };
 }

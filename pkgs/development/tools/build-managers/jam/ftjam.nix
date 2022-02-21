@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ftjam";
   version = "2.5.2";
@@ -45,8 +45,9 @@ stdenv.mkDerivation rec {
     homepage = "https://freetype.org/jam/";
     description = "Freetype's enhanced, backwards-compatible Jam clone";
     license = licenses.free;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: setup hook for Jam
+

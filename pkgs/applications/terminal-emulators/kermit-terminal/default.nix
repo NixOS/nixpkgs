@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtk3
-, pcre
-, pkg-config
-, vte
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtk3,
+  pcre,
+  pkg-config,
+  vte,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kermit";
   version = "3.7";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/orhun/kermit";
     description = "A VTE-based, simple and froggy terminal emulator";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

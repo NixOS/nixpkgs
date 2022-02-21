@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, apacheHttpd }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  apacheHttpd,
+}:
 stdenv.mkDerivation rec {
   pname = "mod_cspnonce";
   version = "1.3";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kqvxf1dn8r0ywrfiwsxryjrxii2sq11wisbjnm7770sjwckwqh5";
   };
 
-  buildInputs = [ apacheHttpd ];
+  buildInputs = [apacheHttpd];
 
   buildPhase = ''
     apxs -ca mod_cspnonce.c
@@ -29,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wyattoday/mod_cspnonce";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dasj19 ];
+    maintainers = with maintainers; [dasj19];
   };
 }

@@ -1,9 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gnugrep
-, nix
-, enableFlakes ? null # deprecated
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnugrep,
+  nix,
+  enableFlakes ? null
+  # deprecated
 }:
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
@@ -31,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast, persistent use_nix implementation for direnv";
-    homepage    = "https://github.com/nix-community/nix-direnv";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ mic92 ];
+    homepage = "https://github.com/nix-community/nix-direnv";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [mic92];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, jdk, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "polylith";
   version = "0.2.13-alpha";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  passAsFile = [ "polyWrapper" ];
+  passAsFile = ["polyWrapper"];
   polyWrapper = ''
     #!${runtimeShell}
     ARGS=""
@@ -45,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "A tool used to develop Polylith based architectures in Clojure";
     homepage = "https://github.com/polyfy/polylith";
     license = licenses.epl10;
-    maintainers = with maintainers; [ ericdallo jlesquembre ];
+    maintainers = with maintainers; [ericdallo jlesquembre];
     platforms = jdk.meta.platforms;
   };
 }

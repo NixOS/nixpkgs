@@ -1,14 +1,26 @@
-{ symlinkJoin, lib, rofi-unwrapped, makeWrapper, wrapGAppsHook, gdk-pixbuf, hicolor-icon-theme, theme ? null, plugins ? [], symlink-dmenu ? false }:
-
+{
+  symlinkJoin,
+  lib,
+  rofi-unwrapped,
+  makeWrapper,
+  wrapGAppsHook,
+  gdk-pixbuf,
+  hicolor-icon-theme,
+  theme ? null,
+  plugins ? [],
+  symlink-dmenu ? false,
+}:
 symlinkJoin {
   name = "rofi-${rofi-unwrapped.version}";
 
-  paths = [
-    rofi-unwrapped.out
-  ] ++ (lib.forEach plugins (p: p.out));
+  paths =
+    [
+      rofi-unwrapped.out
+    ]
+    ++ (lib.forEach plugins (p: p.out));
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ gdk-pixbuf ];
+  nativeBuildInputs = [makeWrapper wrapGAppsHook];
+  buildInputs = [gdk-pixbuf];
 
   preferLocalBuild = true;
   passthru.unwrapped = rofi-unwrapped;
@@ -36,7 +48,9 @@ symlinkJoin {
       --prefix XDG_DATA_DIRS : $out/share
   '';
 
-  meta = rofi-unwrapped.meta // {
-    priority = (rofi-unwrapped.meta.priority or 0) - 1;
-  };
+  meta =
+    rofi-unwrapped.meta
+    // {
+      priority = (rofi-unwrapped.meta.priority or 0) - 1;
+    };
 }

@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, libcst
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  libcst,
+  mock,
+  proto-plus,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
   version = "2.8.0";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Secret Manager API API client library";
     homepage = "https://github.com/googleapis/python-secret-manager";
     license = licenses.asl20;
-    maintainers = with maintainers; [ siriobalmelli SuperSandro2000 ];
+    maintainers = with maintainers; [siriobalmelli SuperSandro2000];
   };
 }

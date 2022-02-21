@@ -1,9 +1,12 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi
-, mock
-, pytest
-, setuptools
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytest,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "supervisor";
   version = "4.2.4";
@@ -16,17 +19,17 @@ buildPythonPackage rec {
   # wants to write to /tmp/foo which is likely already owned by another
   # nixbld user on hydra
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ mock pytest ];
+  checkInputs = [mock pytest];
   checkPhase = ''
     pytest
   '';
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [setuptools];
 
   meta = with lib; {
     description = "A system for controlling process state under UNIX";
     homepage = "http://supervisord.org/";
     license = licenses.free; # http://www.repoze.org/LICENSE.txt
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

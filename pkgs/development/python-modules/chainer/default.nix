@@ -1,8 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, filelock, protobuf, numpy, pytestCheckHook, mock, typing-extensions
-, cupy, cudaSupport ? false
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  filelock,
+  protobuf,
+  numpy,
+  pytestCheckHook,
+  mock,
+  typing-extensions,
+  cupy,
+  cudaSupport ? false,
 }:
-
 buildPythonPackage rec {
   pname = "chainer";
   version = "7.8.1";
@@ -21,14 +30,16 @@ buildPythonPackage rec {
     mock
   ];
 
-  propagatedBuildInputs = [
-    filelock
-    protobuf
-    numpy
-    typing-extensions
-  ] ++ lib.optionals cudaSupport [ cupy ];
+  propagatedBuildInputs =
+    [
+      filelock
+      protobuf
+      numpy
+      typing-extensions
+    ]
+    ++ lib.optionals cudaSupport [cupy];
 
-  pytestFlagsArray = [ "tests/chainer_tests/utils_tests" ];
+  pytestFlagsArray = ["tests/chainer_tests/utils_tests"];
 
   disabledTests = [
     "gpu"
@@ -40,6 +51,6 @@ buildPythonPackage rec {
     description = "A flexible framework of neural networks for deep learning";
     homepage = "https://chainer.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ hyphon81 ];
+    maintainers = with maintainers; [hyphon81];
   };
 }

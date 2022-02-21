@@ -1,9 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, bison, flex, pkg-config
-, curl, geoip, libmaxminddb, libxml2, lmdb, lua, pcre
-, ssdeep, valgrind, yajl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
+  curl,
+  geoip,
+  libmaxminddb,
+  libxml2,
+  lmdb,
+  lua,
+  pcre,
+  ssdeep,
+  valgrind,
+  yajl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
   version = "3.0.6";
@@ -16,10 +29,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
-  buildInputs = [ curl geoip libmaxminddb libxml2 lmdb lua pcre ssdeep valgrind yajl ];
+  nativeBuildInputs = [autoreconfHook bison flex pkg-config];
+  buildInputs = [curl geoip libmaxminddb libxml2 lmdb lua pcre ssdeep valgrind yajl];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   configureFlags = [
     "--enable-parser-generation"
@@ -65,6 +78,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with maintainers; [izorkin];
   };
 }

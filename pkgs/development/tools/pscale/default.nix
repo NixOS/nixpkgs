@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "pscale";
   version = "0.89.0";
@@ -18,6 +21,6 @@ buildGoModule rec {
     changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
     description = "The CLI for PlanetScale Database";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pimeys ];
+    maintainers = with maintainers; [pimeys];
   };
 }

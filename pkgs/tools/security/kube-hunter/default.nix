@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "kube-hunter";
   version = "0.6.5";
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to search issues in Kubernetes clusters";
     homepage = "https://github.com/aquasecurity/kube-hunter";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

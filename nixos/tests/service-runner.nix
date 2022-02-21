@@ -1,11 +1,15 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "service-runner";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ roberth ];
+    maintainers = [roberth];
   };
 
   nodes = {
-    machine = { pkgs, lib, ... }: {
+    machine = {
+      pkgs,
+      lib,
+      ...
+    }: {
       services.nginx.enable = true;
       services.nginx.virtualHosts.machine.root = pkgs.runCommand "webroot" {} ''
         mkdir $out
@@ -13,10 +17,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       '';
       systemd.services.nginx.enable = false;
     };
-
   };
 
-  testScript = { nodes, ... }: ''
+  testScript = {nodes, ...}: ''
     url = "http://localhost/index.html"
 
     with subtest("check systemd.services.nginx.runner"):

@@ -1,5 +1,10 @@
-{ lib, fetchFromGitLab, buildDunePackage, ff-sig, zarith }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  ff-sig,
+  zarith,
+}:
 buildDunePackage rec {
   pname = "bls12-381-gen";
   version = "0.4.4";
@@ -26,6 +31,6 @@ buildDunePackage rec {
     homepage = "https://gitlab.com/dannywillems/ocaml-bls12-381";
     description = "Functors to generate BLS12-381 primitives based on stubs";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

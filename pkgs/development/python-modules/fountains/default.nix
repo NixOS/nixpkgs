@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, bitlist
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  bitlist,
 }:
-
 buildPythonPackage rec {
   pname = "fountains";
   version = "1.2.0";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for generating and embedding data for unit testing";
     homepage = "https://github.com/reity/fountains";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

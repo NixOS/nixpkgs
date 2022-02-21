@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation {
   pname = "apfsprogs";
   version = "unstable-2021-10-26";
@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-apfs/apfsprogs";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

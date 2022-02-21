@@ -1,5 +1,9 @@
-{ lib, stdenv, rustPlatform, Security }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rustfmt";
   inherit (rustPlatform.rust.rustc) version src;
@@ -24,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A tool for formatting Rust code according to style guidelines";
     homepage = "https://github.com/rust-lang-nursery/rustfmt";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ globin basvandijk ];
+    license = with licenses; [mit asl20];
+    maintainers = with maintainers; [globin basvandijk];
   };
 }

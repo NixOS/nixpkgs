@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, fping, rrdtool, perlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fping,
+  rrdtool,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "smokeping";
   version = "2.6.11";
@@ -7,9 +13,24 @@ stdenv.mkDerivation rec {
     url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${version}.tar.gz";
     sha256 = "1p9hpa2zs33p7hzrds80kwrm5255s0869v3s3qmsyx2sx63c7czj";
   };
-  propagatedBuildInputs = [ rrdtool ] ++
-    (with perlPackages; [ perl FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet
-      NetOpenSSH NetSNMP LWP IOTty fping NetDNS perlldap ]);
+  propagatedBuildInputs =
+    [rrdtool]
+    ++ (with perlPackages; [
+      perl
+      FCGI
+      CGI
+      CGIFast
+      ConfigGrammar
+      DigestHMAC
+      NetTelnet
+      NetOpenSSH
+      NetSNMP
+      LWP
+      IOTty
+      fping
+      NetDNS
+      perlldap
+    ]);
 
   postInstall = ''
     mv $out/htdocs/smokeping.fcgi.dist $out/htdocs/smokeping.fcgi
@@ -19,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://oss.oetiker.ch/smokeping";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.erictapen ];
+    maintainers = [lib.maintainers.erictapen];
   };
 }

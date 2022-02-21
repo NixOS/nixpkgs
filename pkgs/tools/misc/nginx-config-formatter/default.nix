@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 stdenv.mkDerivation {
   version = "2019-02-13";
   pname = "nginx-config-formatter";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "0h6pj9i0wim9pzkafi92l1nhlnl2a530vnm7qqi3n2ra8iwfyw4f";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
   doCheck = true;
   checkPhase = ''
@@ -25,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "nginx config file formatter";
-    maintainers = with maintainers; [ Baughn ];
+    maintainers = with maintainers; [Baughn];
     license = licenses.asl20;
     homepage = "https://github.com/1connect/nginx-config-formatter";
   };

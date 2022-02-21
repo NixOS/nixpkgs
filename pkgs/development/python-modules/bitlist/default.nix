@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, parts
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  parts,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "bitlist";
   version = "0.6.2";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for working with little-endian list representation of bit strings";
     homepage = "https://github.com/lapets/bitlist";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

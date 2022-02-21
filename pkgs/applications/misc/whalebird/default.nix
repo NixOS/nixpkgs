@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, nodePackages, alsa-lib, gtk3, libxshmfence, mesa, nss }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  nodePackages,
+  alsa-lib,
+  gtk3,
+  libxshmfence,
+  mesa,
+  nss,
+}:
 stdenv.mkDerivation rec {
   pname = "whalebird";
   version = "4.5.1";
@@ -17,7 +29,7 @@ stdenv.mkDerivation rec {
     nodePackages.asar
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
+  buildInputs = [alsa-lib gtk3 libxshmfence mesa nss];
 
   dontConfigure = true;
 
@@ -55,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "Electron based Mastodon, Pleroma and Misskey client for Windows, Mac and Linux";
     homepage = "https://whalebird.social";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

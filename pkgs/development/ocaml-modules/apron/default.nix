@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  perl,
+  gmp,
+  mpfr,
+  ppl,
+  ocaml,
+  findlib,
+  camlidl,
+  mlgmpidl,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-apron";
   version = "0.9.13";
@@ -10,10 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "14ymjahqdxj26da8wik9d5dzlxn81b3z1iggdl7rn2nn06jy7lvy";
   };
 
-  buildInputs = [ perl gmp mpfr ppl ocaml findlib camlidl ];
-  propagatedBuildInputs = [ mlgmpidl ];
+  buildInputs = [perl gmp mpfr ppl ocaml findlib camlidl];
+  propagatedBuildInputs = [mlgmpidl];
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = ["out" "bin" "dev"];
 
   configurePhase = ''
     runHook preConfigure
@@ -32,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = {
     license = lib.licenses.lgpl21;
     homepage = "http://apron.cri.ensmp.fr/library/";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     description = "Numerical abstract domain library";
     inherit (ocaml.meta) platforms;
   };

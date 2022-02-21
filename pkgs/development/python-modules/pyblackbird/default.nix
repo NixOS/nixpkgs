@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "pyblackbird";
   version = "0.5";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
 
   # Test setup try to create a serial port
   doCheck = false;
-  pythonImportsCheck = [ "pyblackbird" ];
+  pythonImportsCheck = ["pyblackbird"];
 
   meta = with lib; {
     description = "Python implementation for Monoprice Blackbird units";
     homepage = "https://github.com/koolsb/pyblackbird";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  python3,
+  libxcb,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "kmon";
   version = "1.6.0";
@@ -13,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-QMJ3Rpgcfrza2zFiA5LFBuYedn+VnffzpyzAGeC0PSM=";
 
-  nativeBuildInputs = [ installShellFiles python3 ];
+  nativeBuildInputs = [installShellFiles python3];
 
-  buildInputs = [ libxcb ];
+  buildInputs = [libxcb];
 
   postInstall = ''
     installManPage man/kmon.8
@@ -27,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/kmon/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda misuzu ];
+    maintainers = with maintainers; [figsoda misuzu];
   };
 }

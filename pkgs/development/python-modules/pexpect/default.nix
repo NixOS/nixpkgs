@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ptyprocess
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ptyprocess,
 }:
-
 buildPythonPackage (rec {
   pname = "pexpect";
   version = "4.8.0";
@@ -16,13 +16,13 @@ buildPythonPackage (rec {
   # Wants to run pythonin a subprocess
   doCheck = false;
 
-  propagatedBuildInputs = [ ptyprocess ];
+  propagatedBuildInputs = [ptyprocess];
 
   meta = with lib; {
     homepage = "http://www.noah.org/wiki/Pexpect";
     description = "Automate interactive console applications such as ssh, ftp, etc";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
 
     longDescription = ''
       Pexpect is similar to the Don Libes "Expect" system, but Pexpect

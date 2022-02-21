@@ -1,18 +1,18 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtx11extras
-, qttools
-, qtsvg
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, polkit-qt
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  lxqt-build-tools,
+  qtx11extras,
+  qttools,
+  qtsvg,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  polkit-qt,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "lxqt-admin";
   version = "1.0.0";
@@ -47,13 +47,13 @@ mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-admin";
     description = "LXQt system administration tool";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

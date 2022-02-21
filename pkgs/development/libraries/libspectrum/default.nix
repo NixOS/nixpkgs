@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, perl, pkg-config, audiofile, bzip2, glib, libgcrypt, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  pkg-config,
+  audiofile,
+  bzip2,
+  glib,
+  libgcrypt,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "libspectrum";
   version = "1.5.0";
@@ -9,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-o1PLRumxooEGHYFjU+oBDQpv545qF6oLe3QnHKXkrPw=";
   };
 
-  nativeBuildInputs = [ perl pkg-config ];
+  nativeBuildInputs = [perl pkg-config];
 
-  buildInputs = [ audiofile bzip2 glib libgcrypt zlib ];
+  buildInputs = [audiofile bzip2 glib libgcrypt zlib];
 
   enableParallelBuilding = true;
   doCheck = true;
@@ -21,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "ZX Spectrum input and output support library";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

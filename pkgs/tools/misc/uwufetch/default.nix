@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, viu }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  viu,
+}:
 stdenv.mkDerivation rec {
   pname = "uwufetch";
   version = "1.7";
@@ -21,7 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installFlags = [
     "PREFIX=${placeholder "out"}/bin"
@@ -35,13 +41,13 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/uwufetch \
-      --prefix PATH ":" ${lib.makeBinPath [ viu ]}
+      --prefix PATH ":" ${lib.makeBinPath [viu]}
   '';
 
   meta = with lib; {
     description = "A meme system info tool for Linux";
     homepage = "https://github.com/TheDarkBug/uwufetch";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [lourkeur];
   };
 }

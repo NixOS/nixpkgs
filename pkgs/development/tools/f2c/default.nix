@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation {
   pname = "f2c";
   version = "20200916";
@@ -9,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0d8xfbv6dk4dz95qds7sd44b5hvara07f2g2c5g4xiwim9b7916l";
   };
 
-  makeFlags = [ "-f" "makefile.u" ];
+  makeFlags = ["-f" "makefile.u"];
 
   installPhase = ''
     runHook preInstall
@@ -26,7 +29,7 @@ stdenv.mkDerivation {
     description = "Convert Fortran 77 source code to C";
     homepage = "https://www.netlib.org/f2c/";
     license = licenses.mit;
-    maintainers = [ maintainers.markuskowa ];
+    maintainers = [maintainers.markuskowa];
     platforms = platforms.unix;
   };
 }

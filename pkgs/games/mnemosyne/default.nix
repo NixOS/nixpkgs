@@ -1,20 +1,20 @@
-{ fetchurl
-, python
-, anki
+{
+  fetchurl,
+  python,
+  anki,
 }:
-
 python.pkgs.buildPythonApplication rec {
   pname = "mnemosyne";
   version = "2.7.2";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
+    url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
     sha256 = "09yp9zc00xrc9dmjbsscnkb3hsv3yj46sxikc0r6s9cbghn3nypy";
   };
 
-  nativeBuildInputs = with python.pkgs; [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = with python.pkgs; [pyqtwebengine.wrapQtAppsHook];
 
-  buildInputs = [ anki ];
+  buildInputs = [anki];
 
   propagatedBuildInputs = with python.pkgs; [
     cheroot

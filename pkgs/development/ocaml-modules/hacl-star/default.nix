@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, hacl-star-raw, zarith, cppo }:
-
+{
+  lib,
+  buildDunePackage,
+  hacl-star-raw,
+  zarith,
+  cppo,
+}:
 buildDunePackage {
   pname = "hacl-star";
 

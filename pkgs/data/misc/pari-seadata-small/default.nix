@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation {
   version = "20090618";
   pname = "pari-seadata-small";

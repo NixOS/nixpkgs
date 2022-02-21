@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, flex}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "detox";
   version = "1.2.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [flex];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   postInstall = ''
     install -m644 safe.tbl $out/share/detox/
@@ -28,6 +32,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

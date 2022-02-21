@@ -1,8 +1,9 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "Pympler";
   version = "1.0.1";
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-   rm test/asizeof/test_asizeof.py
+    rm test/asizeof/test_asizeof.py
   '';
 
   doCheck = stdenv.hostPlatform.isLinux;
@@ -23,5 +24,4 @@ buildPythonPackage rec {
     homepage = "https://pythonhosted.org/Pympler/";
     license = licenses.asl20;
   };
-
 }

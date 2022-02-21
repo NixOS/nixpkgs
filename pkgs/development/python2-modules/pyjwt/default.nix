@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, ecdsa
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  ecdsa,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyjwt";
   version = "1.7.1";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     "test_ec_verify_should_return_false_if_signature_invalid"
   ];
 
-  pythonImportsCheck = [ "jwt" ];
+  pythonImportsCheck = ["jwt"];
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";

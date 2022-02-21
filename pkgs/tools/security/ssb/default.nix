@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "ssb";
   version = "0.1.1";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to bruteforce SSH server";
     homepage = "https://github.com/kitabisa/ssb";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

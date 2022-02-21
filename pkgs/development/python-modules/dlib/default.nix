@@ -1,8 +1,13 @@
-{ stdenv, buildPythonPackage, dlib, python, pytest, more-itertools
-, sse4Support ? stdenv.hostPlatform.sse4_1Support
-, avxSupport ? stdenv.hostPlatform.avxSupport
+{
+  stdenv,
+  buildPythonPackage,
+  dlib,
+  python,
+  pytest,
+  more-itertools,
+  sse4Support ? stdenv.hostPlatform.sse4_1Support,
+  avxSupport ? stdenv.hostPlatform.avxSupport,
 }:
-
 buildPythonPackage {
   inherit (dlib) name src nativeBuildInputs buildInputs meta;
 
@@ -14,11 +19,19 @@ buildPythonPackage {
   '';
 
   setupPyBuildFlags = [
-    "--set USE_SSE4_INSTRUCTIONS=${if sse4Support then "yes" else "no"}"
-    "--set USE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}"
+    "--set USE_SSE4_INSTRUCTIONS=${
+      if sse4Support
+      then "yes"
+      else "no"
+    }"
+    "--set USE_AVX_INSTRUCTIONS=${
+      if avxSupport
+      then "yes"
+      else "no"
+    }"
   ];
 
-  patches = [ ./build-cores.patch ];
+  patches = [./build-cores.patch];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -26,7 +39,7 @@ buildPythonPackage {
       --replace "pytest==3.8" "pytest"
   '';
 
-  checkInputs = [ pytest more-itertools ];
+  checkInputs = [pytest more-itertools];
 
   dontUseCmakeConfigure = true;
 }

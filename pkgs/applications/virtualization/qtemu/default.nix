@@ -1,5 +1,12 @@
-{ lib, mkDerivation, fetchFromGitLab, pkg-config, qmake, qtbase, qemu }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  pkg-config,
+  qmake,
+  qtbase,
+  qemu,
+}:
 mkDerivation rec {
   pname = "qtemu";
   version = "2.1";
@@ -30,7 +37,7 @@ mkDerivation rec {
     install -D -t $out/bin qtemu
 
     # make sure that the qemu-* executables are found
-    wrapProgram $out/bin/qtemu --prefix PATH : ${lib.makeBinPath [ qemu ]}
+    wrapProgram $out/bin/qtemu --prefix PATH : ${lib.makeBinPath [qemu]}
 
     runHook postInstall
   '';
@@ -40,6 +47,6 @@ mkDerivation rec {
     homepage = "https://qtemu.org";
     license = licenses.gpl2;
     platforms = with platforms; linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

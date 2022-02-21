@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, bzip2
-, lz4
-, pcre2
-, xz
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  bzip2,
+  lz4,
+  pcre2,
+  xz,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ugrep";
   version = "3.7.1";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Ultra fast grep with interactive query UI";
     homepage = "https://github.com/Genivia/ugrep";
-    maintainers = with maintainers; [ numkem ];
+    maintainers = with maintainers; [numkem];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

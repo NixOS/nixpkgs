@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, makeWrapper
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bpytop";
   version = "1.0.68";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NHfaWWwNpGhqu/ALcW4p4X6sktEyLbKQuNHpAUUw4LY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  propagatedBuildInputs = with python3Packages; [ python psutil ];
+  propagatedBuildInputs = with python3Packages; [python psutil];
 
   dontBuild = true;
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "A resource monitor; python port of bashtop";
     homepage = src.meta.homepage;
     license = licenses.asl20;
-    maintainers = with maintainers; [ aw ];
+    maintainers = with maintainers; [aw];
     platforms = with platforms; linux ++ freebsd ++ darwin;
 
     # https://github.com/NixOS/nixpkgs/pull/94625#issuecomment-668509399

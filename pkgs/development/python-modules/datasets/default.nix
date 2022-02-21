@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dill
-, filelock
-, fsspec
-, huggingface-hub
-, multiprocess
-, numpy
-, pandas
-, pyarrow
-, requests
-, tqdm
-, xxhash
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dill,
+  filelock,
+  fsspec,
+  huggingface-hub,
+  multiprocess,
+  numpy,
+  pandas,
+  pyarrow,
+  requests,
+  tqdm,
+  xxhash,
 }:
-
 buildPythonPackage rec {
   pname = "datasets";
   version = "1.17.0";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   # Module import will attempt to create a cache directory.
   postFixup = "export HF_MODULES_CACHE=$TMPDIR";
 
-  pythonImportsCheck = [ "datasets" ];
+  pythonImportsCheck = ["datasets"];
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/datasets";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

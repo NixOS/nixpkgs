@@ -1,13 +1,13 @@
-{ autoreconfHook
-, fetchFromGitHub
-, gensio
-, lib
-, libyaml
-, nix-update-script
-, pkg-config
-, stdenv
+{
+  autoreconfHook,
+  fetchFromGitHub,
+  gensio,
+  lib,
+  libyaml,
+  nix-update-script,
+  pkg-config,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ser2net";
   version = "4.3.5";
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
 
-  buildInputs = [ gensio libyaml ];
+  buildInputs = [gensio libyaml];
 
   meta = with lib; {
     description = "Serial to network connection server";
     homepage = "https://github.com/cminyard/ser2net";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with maintainers; [emantor];
     platforms = with platforms; linux;
   };
 }

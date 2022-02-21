@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, icu }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  icu,
+}:
 buildGoModule rec {
   pname = "zk";
   version = "0.9.0";
@@ -15,16 +19,16 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildInputs = [ icu ];
+  buildInputs = [icu];
 
   CGO_ENABLED = 1;
 
-  ldflags = [ "-s" "-w" "-X=main.Build=${version}" ];
+  ldflags = ["-s" "-w" "-X=main.Build=${version}"];
 
-  tags = [ "fts5" "icu" ];
+  tags = ["fts5" "icu"];
 
   meta = with lib; {
-    maintainers = with maintainers; [ pinpox ];
+    maintainers = with maintainers; [pinpox];
     license = licenses.gpl3;
     description = "A zettelkasten plain text note-taking assistant";
     homepage = "https://github.com/mickael-menu/zk";

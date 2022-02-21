@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "num-utils";
   version = "0.5";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kn6yskjww2agcqvas5l2xp55mp4njdxqkdicchlji3qzih2fn83";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   patchPhase = ''
     substituteInPlace Makefile --replace "-o 0 -g 0" "" --replace "\$(RPMDIR)" ""
@@ -24,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://suso.suso.org/xulu/Num-utils";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.catern ];
+    maintainers = [maintainers.catern];
   };
 }

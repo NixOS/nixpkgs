@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pycryptodomex
-, pytestCheckHook
-, requests
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pycryptodomex,
+  pytestCheckHook,
+  requests,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "huawei-lte-api";
   version = "1.5.4";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "API For huawei LAN/WAN LTE Modems";
     homepage = "https://github.com/Salamek/huawei-lte-api";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

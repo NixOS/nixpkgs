@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, markdown
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  markdown,
 }:
-
 buildPythonPackage rec {
   pname = "markdown-macros";
   version = "0.1.2";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "distribute" "setuptools"
   '';
 
-  propagatedBuildInputs = [ markdown ];
+  propagatedBuildInputs = [markdown];
 
   doCheck = false;
 
@@ -34,7 +34,6 @@ buildPythonPackage rec {
     description = "An extension for python-markdown that makes writing trac-like macros easy";
     homepage = "https://github.com/wnielson/markdown-macros";
     license = licenses.mit;
-    maintainers = [ maintainers.abigailbuccaneer ];
+    maintainers = [maintainers.abigailbuccaneer];
   };
-
 }

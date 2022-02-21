@@ -1,7 +1,9 @@
-{ lib, appleDerivation', stdenv }:
-
+{
+  lib,
+  appleDerivation',
+  stdenv,
+}:
 appleDerivation' stdenv {
-
   prePatch = ''
     substituteInPlace Makefile \
       --replace /usr/lib /lib \
@@ -17,12 +19,12 @@ appleDerivation' stdenv {
       --replace -mmacosx-version-min=10.5 -mmacosx-version-min=10.6
   '';
 
-  installFlags = [ "DSTROOT=$(out)" ];
+  installFlags = ["DSTROOT=$(out)"];
 
   meta = with lib; {
     description = "Apple's common startup stubs for darwin";
-    maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    maintainers = with maintainers; [copumpkin];
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

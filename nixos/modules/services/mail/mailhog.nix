@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.mailhog;
 
   args = lib.concatStringsSep " " (
@@ -11,26 +13,24 @@ let
       "-smtp-bind-addr :${toString cfg.smtpPort}"
       "-ui-bind-addr :${toString cfg.uiPort}"
       "-storage ${cfg.storage}"
-    ] ++ lib.optional (cfg.storage == "maildir")
-      "-maildir-path $STATE_DIRECTORY"
+    ]
+    ++ lib.optional (cfg.storage == "maildir")
+    "-maildir-path $STATE_DIRECTORY"
     ++ cfg.extraArgs
   );
-
-in
-{
+in {
   ###### interface
 
   imports = [
-    (mkRemovedOptionModule [ "services" "mailhog" "user" ] "")
+    (mkRemovedOptionModule ["services" "mailhog" "user"] "")
   ];
 
   options = {
-
     services.mailhog = {
       enable = mkEnableOption "MailHog";
 
       storage = mkOption {
-        type = types.enum [ "maildir" "memory" ];
+        type = types.enum ["maildir" "memory"];
         default = "memory";
         description = "Store mails on disk or in memory.";
       };
@@ -61,15 +61,13 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-
     systemd.services.mailhog = {
       description = "MailHog - Web and API based SMTP testing";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "exec";
         ExecStart = "${pkgs.mailhog}/bin/MailHog ${args}";

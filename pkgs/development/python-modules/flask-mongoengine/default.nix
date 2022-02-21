@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask_wtf
-, mongoengine
-, six
-, nose
-, rednose
-, coverage
-, email_validator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  flask_wtf,
+  mongoengine,
+  six,
+  nose,
+  rednose,
+  coverage,
+  email_validator,
 }:
-
 buildPythonPackage rec {
   pname = "flask-mongoengine";
   version = "1.0.0";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Flask-MongoEngine is a Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

@@ -1,5 +1,11 @@
-{lib, stdenv, fetchurl, curl, libnxml, pkg-config}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  libnxml,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "libmrss";
   version = "0.19.2";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "02r1bgj8qlkn63xqfi5yq8y7wrilxcnkycaag8qskhg5ranic507";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ curl libnxml ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [curl libnxml];
 
   meta = {
     homepage = "http://www.autistici.org/bakunin/libmrss/doc";
@@ -18,6 +24,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2;
 
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.viric ];
+    maintainers = [lib.maintainers.viric];
   };
 }

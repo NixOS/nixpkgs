@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  libxml2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libwebcam";
   version = "0.2.5";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     ./uvcdynctrl_symlink_support_and_take_data_dir_from_env.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libxml2 ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [libxml2];
 
   postPatch = ''
     substituteInPlace ./uvcdynctrl/CMakeLists.txt \
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
       --replace "/lib/udev" "$out/lib/udev"
   '';
 
-
   preConfigure = ''
     cmakeFlagsArray=(
       $cmakeFlagsArray
@@ -46,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "The webcam-tools package";
     platforms = platforms.linux;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [jraygauthier];
   };
 }

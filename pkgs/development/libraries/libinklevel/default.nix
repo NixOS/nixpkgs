@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libusb1 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libusb1,
+}:
 stdenv.mkDerivation rec {
   pname = "libinklevel";
   version = "0.9.3";
@@ -14,7 +19,7 @@ stdenv.mkDerivation rec {
     libusb1
   ];
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
   meta = with lib; {
     description = "A library for checking the ink level of your printer";
@@ -30,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://libinklevel.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.freebsd;
-    maintainers = with maintainers; [ samb96 ];
+    maintainers = with maintainers; [samb96];
   };
 }

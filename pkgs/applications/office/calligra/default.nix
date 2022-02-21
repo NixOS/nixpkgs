@@ -1,17 +1,75 @@
-{ mkDerivation, lib, fetchpatch, fetchurl, extra-cmake-modules, kdoctools
-, boost, qtwebkit, qtx11extras, shared-mime-info
-, breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets
-, kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n
-, kiconthemes, kitemviews, kjobwidgets, kcmutils, kdelibs4support, kio, kross
-, knotifications, knotifyconfig, kparts, ktextwidgets, kwallet, kwidgetsaddons
-, kwindowsystem, kxmlgui, sonnet, threadweaver
-, kcontacts, akonadi, akonadi-calendar, akonadi-contacts
-, eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen
-, librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon
-, poppler, pstoedit, qca-qt5, vc, fontconfig
-# TODO: package Spnav, m2mml LibEtonyek, Libqgit2
+{
+  mkDerivation,
+  lib,
+  fetchpatch,
+  fetchurl,
+  extra-cmake-modules,
+  kdoctools,
+  boost,
+  qtwebkit,
+  qtx11extras,
+  shared-mime-info,
+  breeze-icons,
+  kactivities,
+  karchive,
+  kcodecs,
+  kcompletion,
+  kconfig,
+  kconfigwidgets,
+  kcoreaddons,
+  kdbusaddons,
+  kdiagram,
+  kguiaddons,
+  khtml,
+  ki18n,
+  kiconthemes,
+  kitemviews,
+  kjobwidgets,
+  kcmutils,
+  kdelibs4support,
+  kio,
+  kross,
+  knotifications,
+  knotifyconfig,
+  kparts,
+  ktextwidgets,
+  kwallet,
+  kwidgetsaddons,
+  kwindowsystem,
+  kxmlgui,
+  sonnet,
+  threadweaver,
+  kcontacts,
+  akonadi,
+  akonadi-calendar,
+  akonadi-contacts,
+  eigen,
+  git,
+  gsl,
+  ilmbase,
+  kproperty,
+  kreport,
+  lcms2,
+  marble,
+  pcre,
+  libgit2,
+  libodfgen,
+  librevenge,
+  libvisio,
+  libwpd,
+  libwpg,
+  libwps,
+  okular,
+  openexr,
+  openjpeg,
+  phonon,
+  poppler,
+  pstoedit,
+  qca-qt5,
+  vc,
+  fontconfig
+  # TODO: package Spnav, m2mml LibEtonyek, Libqgit2
 }:
-
 mkDerivation rec {
   pname = "calligra";
   version = "3.2.1";
@@ -28,25 +86,77 @@ mkDerivation rec {
       name = "fix-fontconfig-linking.patch";
       url = "https://github.com/KDE/calligra/commit/62f510702ef9c34ac50f8d8601a4290ab558464c.patch";
       sha256 = "11dzrp9q05dmvnwp4vk4ihcibqcf4xyr0ijscpi716cyy730flma";
-      excludes = [ "CMakeLists.txt" ];
+      excludes = ["CMakeLists.txt"];
     })
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [extra-cmake-modules kdoctools];
 
   buildInputs = [
-    boost qtwebkit qtx11extras shared-mime-info
-    kactivities karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
-    kdbusaddons kdiagram kguiaddons khtml ki18n kiconthemes kitemviews
-    kjobwidgets kcmutils kdelibs4support kio kross knotifications knotifyconfig kparts
-    ktextwidgets kwallet kwidgetsaddons kwindowsystem kxmlgui sonnet threadweaver
-    kcontacts akonadi akonadi-calendar akonadi-contacts
-    eigen git gsl ilmbase kproperty kreport lcms2 marble pcre libgit2 libodfgen librevenge
-    libvisio libwpd libwpg libwps okular openexr openjpeg phonon poppler qca-qt5 vc
+    boost
+    qtwebkit
+    qtx11extras
+    shared-mime-info
+    kactivities
+    karchive
+    kcodecs
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kdbusaddons
+    kdiagram
+    kguiaddons
+    khtml
+    ki18n
+    kiconthemes
+    kitemviews
+    kjobwidgets
+    kcmutils
+    kdelibs4support
+    kio
+    kross
+    knotifications
+    knotifyconfig
+    kparts
+    ktextwidgets
+    kwallet
+    kwidgetsaddons
+    kwindowsystem
+    kxmlgui
+    sonnet
+    threadweaver
+    kcontacts
+    akonadi
+    akonadi-calendar
+    akonadi-contacts
+    eigen
+    git
+    gsl
+    ilmbase
+    kproperty
+    kreport
+    lcms2
+    marble
+    pcre
+    libgit2
+    libodfgen
+    librevenge
+    libvisio
+    libwpd
+    libwpg
+    libwps
+    okular
+    openexr
+    openjpeg
+    phonon
+    poppler
+    qca-qt5
+    vc
     fontconfig
   ];
 
-  propagatedUserEnvPkgs = [ kproperty ];
+  propagatedUserEnvPkgs = [kproperty];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -65,8 +175,8 @@ mkDerivation rec {
       vector graphics.
     '';
     homepage = "https://www.calligra.org/";
-    maintainers = with maintainers; [ ebzzry zraexy ];
+    maintainers = with maintainers; [ebzzry zraexy];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [gpl2 lgpl2];
   };
 }

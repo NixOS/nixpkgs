@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyjwt
-, djangorestframework
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyjwt,
+  djangorestframework,
 }:
-
 buildPythonPackage rec {
   pname = "drf-jwt";
   version = "1.19.2";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "JSON Web Token based authentication for Django REST framework";
     homepage = "https://github.com/Styria-Digital/django-rest-framework-jwt";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

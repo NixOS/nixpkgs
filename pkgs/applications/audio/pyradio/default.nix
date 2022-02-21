@@ -1,5 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
   version = "0.8.9.14";
@@ -25,6 +28,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://www.coderholic.com/pyradio/";
     description = "Curses based internet radio player";
     license = licenses.mit;
-    maintainers = with maintainers; [ contrun ];
+    maintainers = with maintainers; [contrun];
   };
 }

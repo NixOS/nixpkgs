@@ -1,20 +1,23 @@
-{ lib, stdenv, python, fetchFromGitHub
-, cmake
-, Cocoa
-, fontconfig
-, freetype
-, libGL
-, libGLU
-, libX11
-, libXext
-, libXi
-, libXmu
-, opencascade-occt
-, rapidjson
-, smesh
-, swig
+{
+  lib,
+  stdenv,
+  python,
+  fetchFromGitHub,
+  cmake,
+  Cocoa,
+  fontconfig,
+  freetype,
+  libGL,
+  libGLU,
+  libX11,
+  libXext,
+  libXi,
+  libXmu,
+  opencascade-occt,
+  rapidjson,
+  smesh,
+  swig,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
   version = "7.5.1";
@@ -32,12 +35,23 @@ stdenv.mkDerivation rec {
     --replace "/usr/X11R6/lib/libGLU.dylib" "${libGLU}/lib/libGLU.dylib"
   '';
 
-  nativeBuildInputs = [ cmake swig ];
-  buildInputs = [
-    python opencascade-occt smesh
-    freetype libGL libGLU libX11 libXext libXmu libXi
-    fontconfig rapidjson
-  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  nativeBuildInputs = [cmake swig];
+  buildInputs =
+    [
+      python
+      opencascade-occt
+      smesh
+      freetype
+      libGL
+      libGLU
+      libX11
+      libXext
+      libXmu
+      libXi
+      fontconfig
+      rapidjson
+    ]
+    ++ lib.optionals stdenv.isDarwin [Cocoa];
 
   cmakeFlags = [
     "-Wno-dev"
@@ -53,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpaviot/pythonocc-core";
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+}:
 buildPythonPackage rec {
   pname = "diff-match-patch";
   version = "20200713";

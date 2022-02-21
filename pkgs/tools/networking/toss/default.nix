@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "toss";
   version = "1.1";
@@ -11,10 +14,11 @@ stdenv.mkDerivation rec {
   };
   preInstall = "export DESTDIR=$out/bin";
   meta = with lib;
-    src.meta // {
+    src.meta
+    // {
       description = "Dead simple LAN file transfers from the command line";
-      license = with licenses; [ mit ];
-      maintainers = with maintainers; [ ehmry ];
+      license = with licenses; [mit];
+      maintainers = with maintainers; [ehmry];
       platforms = platforms.unix;
     };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule {
   pname = "duckling-proxy";
   version = "2021-07-23-unstable";
@@ -16,6 +19,6 @@ buildGoModule {
     description = "Gemini proxy to access the Small Web";
     homepage = "https://github.com/LukeEmmet/duckling-proxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    maintainers = with maintainers; [kaction];
   };
 }

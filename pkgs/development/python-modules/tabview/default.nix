@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "tabview";
   version = "1.4.4";
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/TabViewer/tabview";
     changelog = "https://github.com/TabViewer/tabview/blob/main/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

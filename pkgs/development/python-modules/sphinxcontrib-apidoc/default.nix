@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
 }:
-
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
   version = "0.3.0";

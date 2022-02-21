@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "consul-template";
   version = "0.27.2";
@@ -22,6 +25,6 @@ buildGoModule rec {
     description = "Generic template rendering and notifications with Consul";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ cpcloud pradeepchhetri ];
+    maintainers = with maintainers; [cpcloud pradeepchhetri];
   };
 }

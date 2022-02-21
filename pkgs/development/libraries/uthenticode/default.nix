@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, gtest, openssl, pe-parse }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  gtest,
+  openssl,
+  pe-parse,
+}:
 stdenv.mkDerivation rec {
   pname = "uthenticode";
   version = "1.0.4";
@@ -19,10 +27,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = [ "-DBUILD_TESTS=1" "-DUSE_SYSTEM_GTEST=1" ];
+  cmakeFlags = ["-DBUILD_TESTS=1" "-DUSE_SYSTEM_GTEST=1"];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ pe-parse openssl gtest ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [pe-parse openssl gtest];
 
   doCheck = true;
   checkPhase = "test/uthenticode_test";
@@ -32,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/trailofbits/uthenticode";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ arturcygan ];
+    maintainers = with maintainers; [arturcygan];
   };
 }

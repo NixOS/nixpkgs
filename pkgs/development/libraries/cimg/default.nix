@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cimg";
   version = "3.0.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-dC4VuWTz0uyFxLjBQ+2ggndHaCErcoI7tJMfkqbWmeg=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   installPhase = ''
     runHook preInstall
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       processing applications.
     '';
     license = licenses.cecill-c;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.unix;
   };
 }

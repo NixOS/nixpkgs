@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "catch";
   version = "1.12.2";
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gdp5wm8khn02g2miz381llw3191k7309qj8s3jd6sasj01rhf23";
   };
 
-  nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-DUSE_CPP14=ON" ];
+  nativeBuildInputs = [cmake];
+  cmakeFlags = ["-DUSE_CPP14=ON"];
 
   patches = [
     # https://github.com/catchorg/Catch2/pull/2151
@@ -29,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "A multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";
     homepage = "http://catch-lib.net";
     license = licenses.boost;
-    maintainers = with maintainers; [ edwtjo knedlsepp ];
+    maintainers = with maintainers; [edwtjo knedlsepp];
     platforms = with platforms; unix;
   };
 }

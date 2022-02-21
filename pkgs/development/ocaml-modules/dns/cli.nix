@@ -1,9 +1,28 @@
-{ buildDunePackage, dns, dns-tsig, dns-client, dns-server, dns-certify
-, rresult, bos, cmdliner, fpath, x509, mirage-crypto, mirage-crypto-pk
-, mirage-crypto-rng, hex, ptime, mtime, logs, fmt, ipaddr, lwt
-, randomconv, alcotest
+{
+  buildDunePackage,
+  dns,
+  dns-tsig,
+  dns-client,
+  dns-server,
+  dns-certify,
+  rresult,
+  bos,
+  cmdliner,
+  fpath,
+  x509,
+  mirage-crypto,
+  mirage-crypto-pk,
+  mirage-crypto-rng,
+  hex,
+  ptime,
+  mtime,
+  logs,
+  fmt,
+  ipaddr,
+  lwt,
+  randomconv,
+  alcotest,
 }:
-
 buildDunePackage {
   pname = "dns-cli";
 
@@ -42,7 +61,9 @@ buildDunePackage {
     alcotest
   ];
 
-  meta = dns.meta // {
-    description = "Unix command line utilities using uDNS";
-  };
+  meta =
+    dns.meta
+    // {
+      description = "Unix command line utilities using uDNS";
+    };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, nettools }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nettools,
+}:
 stdenv.mkDerivation rec {
   pname = "hans";
   version = "1.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "friedrich";
   };
 
-  buildInputs = [ nettools ];
+  buildInputs = [nettools];
 
   postPatch = ''
     substituteInPlace src/tun.cpp --replace "/sbin/" "${nettools}/bin/"

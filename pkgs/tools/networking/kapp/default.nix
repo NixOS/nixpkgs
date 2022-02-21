@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "kapp";
   version = "0.46.0";
@@ -12,13 +17,13 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = [ "cmd/kapp" ];
+  subPackages = ["cmd/kapp"];
 
   ldflags = [
     "-X github.com/k14s/kapp/pkg/kapp/version.Version=${version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -31,6 +36,6 @@ buildGoModule rec {
     description = "CLI tool that encourages Kubernetes users to manage bulk resources with an application abstraction for grouping";
     homepage = "https://get-kapp.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ brodes ];
+    maintainers = with maintainers; [brodes];
   };
 }

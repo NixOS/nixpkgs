@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy36 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy36,
+}:
 buildPythonPackage rec {
   pname = "dataclasses";
   version = "0.8";
@@ -16,6 +20,6 @@ buildPythonPackage rec {
     description = "An implementation of PEP 557: Data Classes";
     homepage = "https://github.com/ericvsmith/dataclasses";
     license = licenses.asl20;
-    maintainers = with maintainers; [ catern ];
+    maintainers = with maintainers; [catern];
   };
 }

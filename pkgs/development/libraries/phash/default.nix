@@ -1,16 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cimg, imagemagick }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cimg,
+  imagemagick,
+}:
 stdenv.mkDerivation rec {
   pname = "pHash";
   version = "0.9.4";
 
-  buildInputs = [ cimg ];
+  buildInputs = [cimg];
 
   # CImg.h calls to external binary `convert` from the `imagemagick` package
   # at runtime
-  propagatedBuildInputs = [ imagemagick ];
+  propagatedBuildInputs = [imagemagick];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   configureFlags = ["--enable-video-hash=no" "--enable-audio-hash=no"];
   postInstall = ''

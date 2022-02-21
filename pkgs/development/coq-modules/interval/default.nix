@@ -1,16 +1,40 @@
-{ lib, mkCoqDerivation, which, autoconf, coq, coquelicot, flocq, bignums ? null, gnuplot_qt, version ? null }:
-
+{
+  lib,
+  mkCoqDerivation,
+  which,
+  autoconf,
+  coq,
+  coquelicot,
+  flocq,
+  bignums ? null,
+  gnuplot_qt,
+  version ? null,
+}:
 mkCoqDerivation rec {
   pname = "interval";
   owner = "coqinterval";
   domain = "gitlab.inria.fr";
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = isGe "8.8"; out = "4.4.0"; }
-    { case = range "8.8" "8.12"; out = "4.0.0"; }
-    { case = range "8.7" "8.11"; out = "3.4.2"; }
-    { case = range "8.5" "8.6";  out = "3.3.0"; }
-  ] null;
+  defaultVersion = with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = isGe "8.8";
+        out = "4.4.0";
+      }
+      {
+        case = range "8.8" "8.12";
+        out = "4.0.0";
+      }
+      {
+        case = range "8.7" "8.11";
+        out = "3.4.2";
+      }
+      {
+        case = range "8.5" "8.6";
+        out = "3.3.0";
+      }
+    ]
+    null;
   release."4.4.0".sha256 = "sha256-0+9AatTIEsjul0RXoOw6zWGEbGDVmuy7XuyrZNBZ8Kk=";
   release."4.3.0".sha256 = "sha256-k8DLC4HYYpHeEEgXUafS8jkaECqlM+/CoYaInmUTYko=";
   release."4.2.0".sha256 = "sha256-SD5thgpirs3wmZBICjXGpoefg9AAXyExb5t8tz3iZhE=";
@@ -20,9 +44,10 @@ mkCoqDerivation rec {
   release."3.3.0".sha256 = "0lz2hgggzn4cvklvm8rpaxvwaryf37i8mzqajqgdxdbd8f12acsz";
   releaseRev = v: "interval-${v}";
 
-  nativeBuildInputs = [ which autoconf ];
-  propagatedBuildInputs = [ bignums coquelicot flocq ]
-    ++ lib.optionals (lib.versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];
+  nativeBuildInputs = [which autoconf];
+  propagatedBuildInputs =
+    [bignums coquelicot flocq]
+    ++ lib.optionals (lib.versions.isGe "4.2.0" defaultVersion) [gnuplot_qt];
   useMelquiondRemake.logpath = "Interval";
   mlPlugin = true;
   enableParallelBuilding = true;
@@ -30,6 +55,6 @@ mkCoqDerivation rec {
   meta = with lib; {
     description = "Tactics for simplifying the proofs of inequalities on expressions of real numbers for the Coq proof assistant";
     license = licenses.cecill-c;
-    maintainers = with maintainers; [ vbgl ];
+    maintainers = with maintainers; [vbgl];
   };
 }

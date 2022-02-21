@@ -1,7 +1,16 @@
-{ fetchurl, lib, stdenv, libxml2, libxslt
-, docbook_xml_dtd_45, docbook_xsl, w3m
-, bash, getopt, makeWrapper }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  libxml2,
+  libxslt,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  w3m,
+  bash,
+  getopt,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "xmlto";
   version = "0.0.28";
@@ -23,12 +32,12 @@ stdenv.mkDerivation rec {
 
   # `libxml2' provides `xmllint', needed at build-time and run-time.
   # `libxslt' provides `xsltproc', used by `xmlto' at run-time.
-  nativeBuildInputs = [ makeWrapper getopt ];
-  buildInputs = [ libxml2 libxslt docbook_xml_dtd_45 docbook_xsl ];
+  nativeBuildInputs = [makeWrapper getopt];
+  buildInputs = [libxml2 libxslt docbook_xml_dtd_45 docbook_xsl];
 
   postInstall = ''
     wrapProgram "$out/bin/xmlto" \
-       --prefix PATH : "${lib.makeBinPath [ libxslt libxml2 getopt ]}"
+       --prefix PATH : "${lib.makeBinPath [libxslt libxml2 getopt]}"
 
     # `w3m' is needed for HTML to text conversions.
     substituteInPlace "$out/share/xmlto/format/docbook/txt" \

@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.factorio;
   name = "Factorio";
   stateDir = "/var/lib/${cfg.stateDirName}";
@@ -13,35 +15,36 @@ let
     read-data=${cfg.package}/share/factorio/data
     write-data=${stateDir}
   '';
-  serverSettings = {
-    name = cfg.game-name;
-    description = cfg.description;
-    visibility = {
-      public = cfg.public;
-      lan = cfg.lan;
-    };
-    username = cfg.username;
-    password = cfg.password;
-    token = cfg.token;
-    game_password = cfg.game-password;
-    require_user_verification = cfg.requireUserVerification;
-    max_upload_in_kilobytes_per_second = 0;
-    minimum_latency_in_ticks = 0;
-    ignore_player_limit_for_returning_players = false;
-    allow_commands = "admins-only";
-    autosave_interval = cfg.autosave-interval;
-    autosave_slots = 5;
-    afk_autokick_interval = 0;
-    auto_pause = true;
-    only_admins_can_pause_the_game = true;
-    autosave_only_on_server = true;
-    non_blocking_saving = cfg.nonBlockingSaving;
-  } // cfg.extraSettings;
+  serverSettings =
+    {
+      name = cfg.game-name;
+      description = cfg.description;
+      visibility = {
+        public = cfg.public;
+        lan = cfg.lan;
+      };
+      username = cfg.username;
+      password = cfg.password;
+      token = cfg.token;
+      game_password = cfg.game-password;
+      require_user_verification = cfg.requireUserVerification;
+      max_upload_in_kilobytes_per_second = 0;
+      minimum_latency_in_ticks = 0;
+      ignore_player_limit_for_returning_players = false;
+      allow_commands = "admins-only";
+      autosave_interval = cfg.autosave-interval;
+      autosave_slots = 5;
+      afk_autokick_interval = 0;
+      auto_pause = true;
+      only_admins_can_pause_the_game = true;
+      autosave_only_on_server = true;
+      non_blocking_saving = cfg.nonBlockingSaving;
+    }
+    // cfg.extraSettings;
   serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
   serverAdminsFile = pkgs.writeText "server-adminlist.json" (builtins.toJSON cfg.admins);
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
-in
-{
+in {
   options = {
     services.factorio = {
       enable = mkEnableOption name;
@@ -56,7 +59,7 @@ in
       admins = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "username" ];
+        example = ["username"];
         description = ''
           List of player names which will be admin.
         '';
@@ -133,7 +136,7 @@ in
       extraSettings = mkOption {
         type = types.attrs;
         default = {};
-        example = { admins = [ "username" ];};
+        example = {admins = ["username"];};
         description = ''
           Extra game configuration that will go into server-settings.json
         '';
@@ -218,17 +221,17 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.factorio = {
-      description   = "Factorio headless server";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Factorio headless server";
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       preStart = toString [
         "test -e ${stateDir}/saves/${cfg.saveName}.zip"
         "||"
         "${cfg.package}/bin/factorio"
-          "--config=${cfg.configFile}"
-          "--create=${mkSavePath cfg.saveName}"
-          (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
+        "--config=${cfg.configFile}"
+        "--create=${mkSavePath cfg.saveName}"
+        (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
       ];
 
       serviceConfig = {
@@ -256,13 +259,16 @@ in
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
         RestrictRealtime = true;
         RestrictNamespaces = true;
         MemoryDenyWriteExecute = true;
       };
     };
 
-    networking.firewall.allowedUDPPorts = if cfg.openFirewall then [ cfg.port ] else [];
+    networking.firewall.allowedUDPPorts =
+      if cfg.openFirewall
+      then [cfg.port]
+      else [];
   };
 }

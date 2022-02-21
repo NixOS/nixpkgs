@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, coreutils }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  coreutils,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "heatseeker";
   version = "1.7.1";
@@ -28,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "A general-purpose fuzzy selector";
     homepage = "https://github.com/rschmitt/heatseeker";
     license = licenses.mit;
-    maintainers = [ maintainers.michaelpj ];
+    maintainers = [maintainers.michaelpj];
     platforms = platforms.unix;
   };
 }

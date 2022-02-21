@@ -1,22 +1,17 @@
 # verifies:
 #   1. GoCD server starts
 #   2. GoCD server responds
-
-import ./make-test-python.nix ({ pkgs, ...} :
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "gocd-server";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ swarren83 ];
+    maintainers = [swarren83];
   };
 
   nodes = {
-    server =
-      { ... }:
-      {
-        virtualisation.memorySize = 2046;
-        services.gocd-server.enable = true;
-      };
+    server = {...}: {
+      virtualisation.memorySize = 2046;
+      services.gocd-server.enable = true;
+    };
   };
 
   testScript = ''

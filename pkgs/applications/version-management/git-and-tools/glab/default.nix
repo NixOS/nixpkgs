@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "glab";
   version = "1.22.0";
@@ -22,12 +25,12 @@ buildGoModule rec {
     export HOME=$TMPDIR
   '';
 
-  subPackages = [ "cmd/glab" ];
+  subPackages = ["cmd/glab"];
 
   meta = with lib; {
     description = "An open-source GitLab command line tool";
     license = licenses.mit;
     homepage = "https://glab.readthedocs.io/";
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ruby, zfs }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  zfs,
+}:
 stdenv.mkDerivation rec {
   pname = "zfstools";
   version = "0.3.6";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "bdrewery";
   };
 
-  buildInputs = [ ruby ];
+  buildInputs = [ruby];
 
   installPhase = ''
     mkdir -p $out/bin

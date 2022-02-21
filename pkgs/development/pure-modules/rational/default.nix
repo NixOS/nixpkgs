@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, pure }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-rational";
   version = "0.1";
@@ -9,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "62cb4079a0dadd232a859e577e97e50e9718ccfcc5983c4d9c4c32cac7a9bafa";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -19,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-rational.html";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

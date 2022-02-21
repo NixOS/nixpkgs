@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, capstone
-, fetchFromGitHub
-, fetchPypi
-, gevent
-, keystone-engine
-, multiprocess
-, pefile
-, pyelftools
-, python-registry
-, unicorn
+{
+  lib,
+  buildPythonPackage,
+  capstone,
+  fetchFromGitHub,
+  fetchPypi,
+  gevent,
+  keystone-engine,
+  multiprocess,
+  pefile,
+  pyelftools,
+  python-registry,
+  unicorn,
 }:
-
 buildPythonPackage rec {
   pname = "qiling";
   version = "1.4.1";

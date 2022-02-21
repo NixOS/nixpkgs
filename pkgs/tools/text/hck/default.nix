@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, stdenv
-, CoreFoundation
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  stdenv,
+  CoreFoundation,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "hck";
   version = "0.7.1";
@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-VAtvc8K4282twB1MRY72+dCky3JmrTRjOPx1Ft7Oqt8=";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [CoreFoundation Security];
 
   # link System as a dylib instead of a framework on macos
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -37,7 +37,13 @@ rustPlatform.buildRustPackage rec {
     description = "A close to drop in replacement for cut that can use a regex delimiter instead of a fixed string";
     homepage = "https://github.com/sstadick/hck";
     changelog = "https://github.com/sstadick/hck/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ unlicense ];
-    maintainers = with maintainers; [ figsoda ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      unlicense
+    ];
+    maintainers = with maintainers; [figsoda];
   };
 }

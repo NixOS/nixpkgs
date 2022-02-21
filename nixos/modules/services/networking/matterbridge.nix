@@ -1,20 +1,18 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.matterbridge;
 
   matterbridgeConfToml =
-    if cfg.configPath == null then
-      pkgs.writeText "matterbridge.toml" (cfg.configFile)
-    else
-      cfg.configPath;
-
-in
-
-{
+    if cfg.configPath == null
+    then pkgs.writeText "matterbridge.toml" (cfg.configFile)
+    else cfg.configPath;
+in {
   options = {
     services.matterbridge = {
       enable = mkEnableOption "Matterbridge chat platform bridge";
@@ -90,23 +88,25 @@ in
 
   config = mkIf cfg.enable {
     warnings = optional options.services.matterbridge.configFile.isDefined
-      "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
+    "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
 
     users.users = optionalAttrs (cfg.user == "matterbridge")
-      { matterbridge = {
-          group = "matterbridge";
-          isSystemUser = true;
-        };
+    {
+      matterbridge = {
+        group = "matterbridge";
+        isSystemUser = true;
       };
+    };
 
     users.groups = optionalAttrs (cfg.group == "matterbridge")
-      { matterbridge = { };
-      };
+    {
+      matterbridge = {};
+    };
 
     systemd.services.matterbridge = {
       description = "Matterbridge chat platform bridge";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         User = cfg.user;

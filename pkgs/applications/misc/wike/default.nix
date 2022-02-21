@@ -1,13 +1,23 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, ninja
-, python3
-, glib, appstream-glib , desktop-file-utils
-, gobject-introspection, gtk3
-, wrapGAppsHook
-, libhandy, webkitgtk, glib-networking
-, gnome, dconf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  python3,
+  glib,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  wrapGAppsHook,
+  libhandy,
+  webkitgtk,
+  glib-networking,
+  gnome,
+  dconf,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "wike";
   version = "1.7.1";
@@ -55,6 +65,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/hugolabe/Wike";
     license = licenses.gpl3Plus;
     platforms = webkitgtk.meta.platforms;
-    maintainers = with maintainers; [ samalws ];
+    maintainers = with maintainers; [samalws];
   };
 }

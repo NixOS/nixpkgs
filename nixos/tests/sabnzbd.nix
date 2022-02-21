@@ -1,16 +1,20 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "sabnzbd";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     services.sabnzbd = {
       enable = true;
     };
 
     # unrar is unfree
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "unrar" ];
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) ["unrar"];
   };
 
   testScript = ''

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, openssl, curl, postgresql, yajl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  curl,
+  postgresql,
+  yajl,
+}:
 stdenv.mkDerivation rec {
   pname = "kore";
   version = "4.1.0";
@@ -11,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-w5H1USQ2aladwSFdfYsX925pjCt3QWoXK4HqyEL7rH0=";
   };
 
-  buildInputs = [ openssl curl postgresql yajl ];
+  buildInputs = [openssl curl postgresql yajl];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -28,7 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   # added to fix build w/gcc7 and clang5
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=pointer-compare"
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.cc.isGNU "-Wno-error=pointer-compare"
     + lib.optionalString stdenv.cc.isClang " -Wno-error=unknown-warning-option";
 
   enableParallelBuilding = true;
@@ -38,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://kore.io";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ johnmh ];
+    maintainers = with maintainers; [johnmh];
   };
 }

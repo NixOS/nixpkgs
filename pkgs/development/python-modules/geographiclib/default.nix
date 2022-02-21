@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "geographiclib";
   version = "1.52";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "geographiclib" ];
+  pythonImportsCheck = ["geographiclib"];
 
   meta = with lib; {
     homepage = "https://geographiclib.sourceforge.io";

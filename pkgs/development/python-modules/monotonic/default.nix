@@ -1,8 +1,9 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "monotonic";
   version = "1.6";
@@ -24,5 +25,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/atdt/monotonic";
     license = licenses.asl20;
   };
-
 }

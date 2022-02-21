@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "elfkickers";
   version = "3.2";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-m4HmxT4MlPwZjZiC63NxVvNtVlFS3DIRiJfHewaiaHw=";
   };
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "prefix:=${placeholder "out"}" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "prefix:=${placeholder "out"}"];
 
   enableParallelBuilding = true;
 
@@ -18,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "A collection of programs that access and manipulate ELF files";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.dtzWill ];
+    maintainers = [maintainers.dtzWill];
   };
 }

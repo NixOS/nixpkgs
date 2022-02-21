@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3, lua, glib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  lua,
+  glib,
+}:
 stdenv.mkDerivation rec {
   pname = "pinsel";
   version = "unstable-2021-09-13";
@@ -13,11 +20,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config glib ];
+  nativeBuildInputs = [pkg-config glib];
 
-  buildInputs = [ lua gtk3 ];
+  buildInputs = [lua gtk3];
 
-  makeFlags = [ "INSTALLDIR=${placeholder "out"}/bin" ];
+  makeFlags = ["INSTALLDIR=${placeholder "out"}/bin"];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Nooo37/pinsel";
     # no license
     license = licenses.unfree;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [lom];
     mainProgram = "pinsel";
   };
 }

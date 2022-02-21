@@ -1,9 +1,25 @@
-{ stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkg-config
-, xcbutilwm, alsa-lib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
-, configFile ? null, lib
-, rev, sha256, version, patches ? []
+{
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+  gdk-pixbuf,
+  libconfig,
+  pango,
+  pkg-config,
+  xcbutilwm,
+  alsa-lib,
+  wirelesstools,
+  asciidoc,
+  libxslt,
+  makeWrapper,
+  docbook_xsl,
+  configFile ? null,
+  lib,
+  rev,
+  sha256,
+  version,
+  patches ? [],
 }:
-
 stdenv.mkDerivation {
   pname = "yabar";
   inherit version;
@@ -12,12 +28,12 @@ stdenv.mkDerivation {
     inherit rev sha256;
 
     owner = "geommer";
-    repo  = "yabar";
+    repo = "yabar";
   };
 
   inherit patches;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   strictDeps = true;
   depsBuildBuild = [
@@ -48,13 +64,14 @@ stdenv.mkDerivation {
       --replace "a2x" "a2x --no-xmllint"
   '';
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
+  makeFlags = ["DESTDIR=$(out)" "PREFIX=/"];
 
   postInstall = ''
     mkdir -p $out/share/yabar/examples
     cp -v examples/*.config $out/share/yabar/examples
 
-    ${lib.optionalString (configFile != null)
+    ${
+      lib.optionalString (configFile != null)
       ''
         wrapProgram "$out/bin/yabar" \
           --add-flags "-c ${configFile}"
@@ -64,9 +81,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A modern and lightweight status bar for X window managers";
-    homepage    = "https://github.com/geommer/yabar";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/geommer/yabar";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [];
   };
 }

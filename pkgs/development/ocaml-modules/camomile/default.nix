@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, cppo }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  cppo,
+}:
 buildDunePackage rec {
   pname = "camomile";
   version = "1.0.2";
@@ -13,7 +17,7 @@ buildDunePackage rec {
     sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
   };
 
-  buildInputs = [ cppo ];
+  buildInputs = [cppo];
 
   configurePhase = ''
     runHook preConfigure
@@ -23,7 +27,7 @@ buildDunePackage rec {
 
   meta = {
     inherit (src.meta) homepage;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     license = lib.licenses.lgpl21;
     description = "A Unicode library for OCaml";
   };

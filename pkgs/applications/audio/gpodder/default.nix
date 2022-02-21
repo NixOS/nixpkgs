@@ -1,8 +1,15 @@
-{ lib, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome, gtk3, wrapGAppsHook
-, gobject-introspection
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  python3Packages,
+  intltool,
+  glibcLocales,
+  gnome,
+  gtk3,
+  wrapGAppsHook,
+  gobject-introspection,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
   version = "3.10.17";
@@ -42,7 +49,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkInputs = with python3Packages; [
-    coverage minimock
+    coverage
+    minimock
   ];
 
   doCheck = true;
@@ -81,6 +89,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://gpodder.org/";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ skeidel mic92 ];
+    maintainers = with maintainers; [skeidel mic92];
   };
 }

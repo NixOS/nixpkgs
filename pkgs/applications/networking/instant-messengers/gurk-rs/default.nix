@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, protobuf
-, rustPlatform
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  protobuf,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
   version = "0.2.3";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-pYMMgBvLsqkj2peouDQK1vn97ByUjtdCrkbzuZZLXrY=";
-  buildInputs = [ protobuf ];
+  buildInputs = [protobuf];
 
   PROTOC = "${protobuf}/bin/protoc";
 
@@ -25,6 +25,6 @@ rustPlatform.buildRustPackage rec {
     description = "Signal Messenger client for terminal";
     homepage = "https://github.com/boxdot/gurk-rs";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ devhell ];
+    maintainers = with maintainers; [devhell];
   };
 }

@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, glfw, makeWrapper,
-  libXrandr, libXinerama, libXcursor, gtk3, ffmpeg-full, ...}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libX11,
+  glfw,
+  makeWrapper,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+  gtk3,
+  ffmpeg-full,
+  ...
+}:
 stdenv.mkDerivation rec {
   pname = "MIDIVisualizer";
   version = "6.5";
@@ -12,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-thRcRJ88bz3jwu6rKaQxt2MkBSf5Ri1jygkKDguP2eE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper];
+  nativeBuildInputs = [cmake pkg-config makeWrapper];
 
   buildInputs = [
     libX11
@@ -37,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kosua20/MIDIVisualizer";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.ericdallo ];
+    maintainers = [maintainers.ericdallo];
   };
 }

@@ -1,12 +1,15 @@
-{ buildPecl, lib, pcre2 }:
-
+{
+  buildPecl,
+  lib,
+  pcre2,
+}:
 buildPecl {
   pname = "pcov";
 
   version = "1.0.11";
   sha256 = "sha256-rSLmTNOvBlMwGCrBQsHDq0Dek0SCzUAPi9dgZBMKwkI=";
 
-  buildInputs = [ pcre2 ];
+  buildInputs = [pcre2];
 
   meta = with lib; {
     description = "A self contained php-code-coverage compatible driver for PHP.";

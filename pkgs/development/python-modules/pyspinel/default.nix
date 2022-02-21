@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyspinel";
   version = "unstable-2021-08-19";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Interface to the OpenThread Network Co-Processor (NCP)";
     homepage = "https://github.com/openthread/pyspinel";
     license = licenses.asl20;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

@@ -1,6 +1,4 @@
-{ callPackage }:
-
-rec {
+{callPackage}: rec {
   buildMod = callPackage ./builder.nix {
     type = "mod";
   };
@@ -33,14 +31,15 @@ rec {
   #       (attachPkgs pkgs myBuild).withMods (_: []);
   #     in
   #     goodExample.x  # returns "hello"
-  attachPkgs = pkgs: super:
-  let
+  attachPkgs = pkgs: super: let
     self = super.overrideAttrs (old: {
-      passthru = old.passthru // {
-        pkgs = pkgs.override { build = self; };
-        withMods = wrapCDDA self;
-      };
+      passthru =
+        old.passthru
+        // {
+          pkgs = pkgs.override {build = self;};
+          withMods = wrapCDDA self;
+        };
     });
   in
-  self;
+    self;
 }

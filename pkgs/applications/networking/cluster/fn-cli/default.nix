@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, docker }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  docker,
+}:
 buildGoModule rec {
   pname = "fn";
   version = "0.6.13";
@@ -31,6 +35,6 @@ buildGoModule rec {
     description = "Command-line tool for the fn project";
     homepage = "https://fnproject.io";
     license = licenses.asl20;
-    maintainers = [ maintainers.c4605 ];
+    maintainers = [maintainers.c4605];
   };
 }

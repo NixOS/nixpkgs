@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pythonOlder
-, python
-, substituteAll
-, importlib-resources
-, tzdata
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  python,
+  substituteAll,
+  importlib-resources,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "backports-zoneinfo";
   version = "0.2.1";
@@ -27,13 +29,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    tzdata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      tzdata
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      importlib-resources
+    ];
 
-  pythonImportsCheck = [ "backports.zoneinfo" ];
+  pythonImportsCheck = ["backports.zoneinfo"];
 
   checkInputs = [
     hypothesis
@@ -53,6 +57,6 @@ buildPythonPackage rec {
     description = "Backport of the standard library module zoneinfo";
     homepage = "https://github.com/pganssle/zoneinfo";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

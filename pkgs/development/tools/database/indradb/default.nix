@@ -1,10 +1,10 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, rustPlatform
-, rustfmt
-}:
-let
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  rustfmt,
+}: let
   src = fetchFromGitHub {
     owner = "indradb";
     repo = "indradb";
@@ -16,11 +16,10 @@ let
     description = "A graph database written in rust ";
     homepage = "https://github.com/indradb/indradb";
     license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [happysalada];
     platforms = platforms.unix;
   };
-in
-{
+in {
   indradb-server = rustPlatform.buildRustPackage {
     pname = "indradb-server";
     version = "unstable-2021-01-05";
@@ -30,7 +29,7 @@ in
 
     buildAndTestSubdir = "server";
 
-    nativeBuildInputs = [ rustfmt ];
+    nativeBuildInputs = [rustfmt];
 
     # test rely on libindradb and it can't be found
     # failure at https://github.com/indradb/indradb/blob/master/server/tests/plugins.rs#L63
@@ -44,7 +43,7 @@ in
 
     cargoSha256 = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
 
-    nativeBuildInputs = [ rustfmt ];
+    nativeBuildInputs = [rustfmt];
 
     buildAndTestSubdir = "client";
   };

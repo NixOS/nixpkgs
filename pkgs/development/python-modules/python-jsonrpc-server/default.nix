@@ -1,7 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytestCheckHook, mock, pytest-cov, coverage
-, future, futures ? null, ujson}:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  mock,
+  pytest-cov,
+  coverage,
+  future,
+  futures ? null,
+  ujson,
+}:
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
   version = "0.4.0";
@@ -18,16 +27,20 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    pytestCheckHook mock pytest-cov coverage
+    pytestCheckHook
+    mock
+    pytest-cov
+    coverage
   ];
 
-  propagatedBuildInputs = [ future ujson ]
+  propagatedBuildInputs =
+    [future ujson]
     ++ lib.optional (pythonOlder "3.2") futures;
 
   meta = with lib; {
     homepage = "https://github.com/palantir/python-jsonrpc-server";
     description = "A Python 2 and 3 asynchronous JSON RPC server";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

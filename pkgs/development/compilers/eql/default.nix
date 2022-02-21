@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchgit, qt4, ecl, xorgserver, xkbcomp, xkeyboard_config }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  qt4,
+  ecl,
+  xorgserver,
+  xkbcomp,
+  xkeyboard_config,
+}:
 stdenv.mkDerivation rec {
   version = "unstable-2012-12-10";
   pname = "eql";
@@ -9,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "17h23qr7fyr9hvjgiq0yhacmjs43x06vh8978aq42ymcgipxdcww";
   };
 
-  buildInputs = [ ecl qt4 xorgserver xkbcomp xkeyboard_config ];
+  buildInputs = [ecl qt4 xorgserver xkbcomp xkeyboard_config];
 
   NIX_CFLAGS_COMPILE = "-fPIC";
 
@@ -46,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Embedded Qt Lisp (ECL+Qt)";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     license = licenses.mit;
   };

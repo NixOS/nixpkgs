@@ -1,10 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, dbus, pytest, pytest-cov, pytest-asyncio, pytest-timeout
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  dbus,
+  pytest,
+  pytest-cov,
+  pytest-asyncio,
+  pytest-timeout,
 }:
-
 buildPythonPackage rec {
   pname = "dbus-next";
   version = "0.2.3";
@@ -35,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/altdesktop/python-dbus-next";
     description = "A zero-dependency DBus library for Python with asyncio support";
     license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    maintainers = with maintainers; [sfrijters];
   };
 }

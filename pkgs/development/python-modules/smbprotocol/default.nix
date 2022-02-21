@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyspnego,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "smbprotocol";
   version = "1.8.3";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SMBv2 and v3 Client";
     homepage = "https://github.com/jborean93/smbprotocol";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

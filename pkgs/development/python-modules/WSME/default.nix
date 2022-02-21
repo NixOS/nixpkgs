@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pbr
-, six
-, simplegeneric
-, netaddr
-, pytz
-, webob
-# Test inputs
-, cherrypy
-, flask
-, flask-restful
-, glibcLocales
-, nose
-, pecan
-, sphinx
-, transaction
-, webtest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  pbr,
+  six,
+  simplegeneric,
+  netaddr,
+  pytz,
+  webob
+  # Test inputs
+  ,
+  cherrypy,
+  flask,
+  flask-restful,
+  glibcLocales,
+  nose,
+  pecan,
+  sphinx,
+  transaction,
+  webtest,
 }:
-
 buildPythonPackage rec {
   pname = "WSME";
   version = "0.11.0";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     sha256 = "bd2dfc715bedcc8f4649611bc0c8a238f483dc01cff7102bc1efa6bea207b64b";
   };
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
   propagatedBuildInputs = [
     netaddr

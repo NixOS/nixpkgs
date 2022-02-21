@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk4
-, hicolor-icon-theme
-, json-glib
-, libadwaita
-, libgee
-, meson
-, ninja
-, nix-update-script
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk4,
+  hicolor-icon-theme,
+  json-glib,
+  libadwaita,
+  libgee,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook4,
 }:
-
 stdenv.mkDerivation rec {
   pname = "notejot";
   version = "3.4.9";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lainsce/notejot";
     description = "Stupidly-simple notes app";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
     mainProgram = "io.github.lainsce.Notejot";
   };

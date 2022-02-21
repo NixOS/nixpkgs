@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut }:
-
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromSourcehut,
+}:
 buildPythonPackage rec {
   pname = "loca";
   version = "2.0.1";
@@ -14,12 +18,12 @@ buildPythonPackage rec {
   };
 
   doCheck = false; # all checks are static analyses
-  pythonImportsCheck = [ "loca" ];
+  pythonImportsCheck = ["loca"];
 
   meta = with lib; {
     description = "Local locations";
     homepage = "https://pypi.org/project/loca";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    maintainers = [maintainers.McSinyx];
   };
 }

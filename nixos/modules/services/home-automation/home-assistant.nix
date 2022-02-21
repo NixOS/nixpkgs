@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.home-assistant;
   format = pkgs.formats.yaml {};
 
@@ -11,8 +13,8 @@ let
   # options shown in settings.
   # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
   # https://www.home-assistant.io/docs/configuration/secrets/
-  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.config or {};
-  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
+  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: !elem v [null])) cfg.config or {};
+  configFile = pkgs.runCommand "configuration.yaml" {preferLocalBuild = true;} ''
     cp ${format.generate "configuration.yaml" filteredConfig} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';
@@ -35,12 +37,13 @@ let
   #   ...
   # } ];
   usedPlatforms = config:
-    if isAttrs config then
+    if isAttrs config
+    then
       optional (config ? platform) config.platform
       ++ concatMap usedPlatforms (attrValues config)
-    else if isList config then
-      concatMap usedPlatforms config
-    else [ ];
+    else if isList config
+    then concatMap usedPlatforms config
+    else [];
 
   useComponentPlatform = component: elem component (usedPlatforms cfg.config);
 
@@ -64,9 +67,9 @@ let
 in {
   imports = [
     # Migrations in NixOS 22.05
-    (mkRemovedOptionModule [ "services" "home-assistant" "applyDefaultConfig" ] "The default config was migrated into services.home-assistant.config")
-    (mkRemovedOptionModule [ "services" "home-assistant" "autoExtraComponents" ] "Components are now parsed from services.home-assistant.config unconditionally")
-    (mkRenamedOptionModule [ "services" "home-assistant" "port" ] [ "services" "home-assistant" "config" "http" "server_port" ])
+    (mkRemovedOptionModule ["services" "home-assistant" "applyDefaultConfig"] "The default config was migrated into services.home-assistant.config")
+    (mkRemovedOptionModule ["services" "home-assistant" "autoExtraComponents"] "Components are now parsed from services.home-assistant.config unconditionally")
+    (mkRenamedOptionModule ["services" "home-assistant" "port"] ["services" "home-assistant" "config" "http" "server_port"])
   ];
 
   meta = {
@@ -87,16 +90,18 @@ in {
 
     extraComponents = mkOption {
       type = types.listOf (types.enum availableComponents);
-      default = [
-        # List of components required to complete the onboarding
-        "default_config"
-        "met"
-        "esphome"
-      ] ++ optionals (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) [
-        # Use the platform as an indicator that we might be running on a RaspberryPi and include
-        # relevant components
-        "rpi_power"
-      ];
+      default =
+        [
+          # List of components required to complete the onboarding
+          "default_config"
+          "met"
+          "esphome"
+        ]
+        ++ optionals (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) [
+          # Use the platform as an indicator that we might be running on a RaspberryPi and include
+          # relevant components
+          "rpi_power"
+        ];
       example = literalExpression ''
         [
           "analytics"
@@ -172,7 +177,7 @@ in {
             };
 
             unit_system = mkOption {
-              type = types.nullOr (types.enum [ "metric" "imperial" ]);
+              type = types.nullOr (types.enum ["metric" "imperial"]);
               default = null;
               example = "metric";
               description = ''
@@ -181,7 +186,7 @@ in {
             };
 
             temperature_unit = mkOption {
-              type = types.nullOr (types.enum [ "C" "F" ]);
+              type = types.nullOr (types.enum ["C" "F"]);
               default = null;
               example = "C";
               description = ''
@@ -228,8 +233,9 @@ in {
           lovelace = {
             # https://www.home-assistant.io/lovelace/dashboards/
             mode = mkOption {
-              type = types.enum [ "yaml" "storage" ];
-              default = if cfg.lovelaceConfig != null
+              type = types.enum ["yaml" "storage"];
+              default =
+                if cfg.lovelaceConfig != null
                 then "yaml"
                 else "storage";
               defaultText = literalExpression ''
@@ -364,7 +370,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.port];
 
     systemd.services.home-assistant = {
       description = "Home Assistant";
@@ -376,43 +382,56 @@ in {
         "postgresql.service"
       ];
       preStart = let
-        copyConfig = if cfg.configWritable then ''
-          cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
-        '' else ''
-          rm -f "${cfg.configDir}/configuration.yaml"
-          ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
-        '';
-        copyLovelaceConfig = if cfg.lovelaceConfigWritable then ''
-          cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
-        '' else ''
-          rm -f "${cfg.configDir}/ui-lovelace.yaml"
-          ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
-        '';
+        copyConfig =
+          if cfg.configWritable
+          then
+            ''
+              cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
+            ''
+          else
+            ''
+              rm -f "${cfg.configDir}/configuration.yaml"
+              ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
+            '';
+        copyLovelaceConfig =
+          if cfg.lovelaceConfigWritable
+          then
+            ''
+              cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+            ''
+          else
+            ''
+              rm -f "${cfg.configDir}/ui-lovelace.yaml"
+              ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+            '';
       in
-        (optionalString (cfg.config != null) copyConfig) +
-        (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig)
-      ;
+        (optionalString (cfg.config != null) copyConfig)
+        + (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig);
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
-        capabilities = [
-          # Empty string first, so we will never accidentally have an empty capability bounding set
-          # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
-          ""
-        ] ++ (unique (optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
-          # Required for interaction with hci devices and bluetooth sockets
-          # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
-          "CAP_NET_ADMIN"
-          "CAP_NET_RAW"
-        ] ++ lib.optionals (useComponent "emulated_hue") [
-          # Alexa looks for the service on port 80
-          # https://www.home-assistant.io/integrations/emulated_hue
-          "CAP_NET_BIND_SERVICE"
-        ] ++ lib.optionals (useComponent "nmap_tracker") [
-          # https://www.home-assistant.io/integrations/nmap_tracker#linux-capabilities
-          "CAP_NET_ADMIN"
-          "CAP_NET_BIND_SERVICE"
-          "CAP_NET_RAW"
-        ]));
+        capabilities =
+          [
+            # Empty string first, so we will never accidentally have an empty capability bounding set
+            # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
+            ""
+          ]
+          ++ (unique (optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
+            # Required for interaction with hci devices and bluetooth sockets
+            # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
+            "CAP_NET_ADMIN"
+            "CAP_NET_RAW"
+          ]
+          ++ lib.optionals (useComponent "emulated_hue") [
+            # Alexa looks for the service on port 80
+            # https://www.home-assistant.io/integrations/emulated_hue
+            "CAP_NET_BIND_SERVICE"
+          ]
+          ++ lib.optionals (useComponent "nmap_tracker") [
+            # https://www.home-assistant.io/integrations/nmap_tracker#linux-capabilities
+            "CAP_NET_ADMIN"
+            "CAP_NET_BIND_SERVICE"
+            "CAP_NET_RAW"
+          ]));
         componentsUsingBluetooth = [
           # Components that require the AF_BLUETOOTH address family
           "bluetooth_tracker"
@@ -505,18 +524,24 @@ in {
         RemoveIPC = true;
         ReadWritePaths = let
           # Allow rw access to explicitly configured paths
-          cfgPath = [ "config" "homeassistant" "allowlist_external_dirs" ];
+          cfgPath = ["config" "homeassistant" "allowlist_external_dirs"];
           value = attrByPath cfgPath [] cfg;
-          allowPaths = if isList value then value else singleton value;
-        in [ "${cfg.configDir}" ] ++ allowPaths;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_NETLINK"
-          "AF_UNIX"
-        ] ++ optionals (any useComponent componentsUsingBluetooth) [
-          "AF_BLUETOOTH"
-        ];
+          allowPaths =
+            if isList value
+            then value
+            else singleton value;
+        in
+          ["${cfg.configDir}"] ++ allowPaths;
+        RestrictAddressFamilies =
+          [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+            "AF_UNIX"
+          ]
+          ++ optionals (any useComponent componentsUsingBluetooth) [
+            "AF_BLUETOOTH"
+          ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -524,12 +549,14 @@ in {
           "dialout"
         ];
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-        ] ++ optionals (any useComponent componentsUsingPing) [
-          "capset"
-        ];
+        SystemCallFilter =
+          [
+            "@system-service"
+            "~@privileged"
+          ]
+          ++ optionals (any useComponent componentsUsingPing) [
+            "capset"
+          ];
         UMask = "0077";
       };
       path = [
@@ -539,8 +566,8 @@ in {
 
     systemd.targets.home-assistant = rec {
       description = "Home Assistant";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "home-assistant.service" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["home-assistant.service"];
       after = wants;
     };
 

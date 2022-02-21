@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "stem";
   version = "1.8.0";
@@ -16,7 +21,7 @@ buildPythonPackage rec {
     sed -i '/MOCK_VERSION/d' run_tests.py
   '';
 
-  checkInputs = [ mock ];
+  checkInputs = [mock];
 
   checkPhase = ''
     touch .gitignore
@@ -27,6 +32,6 @@ buildPythonPackage rec {
     description = "Controller library that allows applications to interact with Tor";
     homepage = "https://stem.torproject.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

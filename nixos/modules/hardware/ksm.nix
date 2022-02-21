@@ -1,13 +1,13 @@
-{ config, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.hardware.ksm;
-
 in {
   imports = [
-    (mkRenamedOptionModule [ "hardware" "enableKSM" ] [ "hardware" "ksm" "enable" ])
+    (mkRenamedOptionModule ["hardware" "enableKSM"] ["hardware" "ksm" "enable"])
   ];
 
   options.hardware.ksm = {
@@ -25,11 +25,12 @@ in {
   config = mkIf cfg.enable {
     systemd.services.enable-ksm = {
       description = "Enable Kernel Same-Page Merging";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       script =
         ''
           echo 1 > /sys/kernel/mm/ksm/run
-        '' + optionalString (cfg.sleep != null)
+        ''
+        + optionalString (cfg.sleep != null)
         ''
           echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs
         '';

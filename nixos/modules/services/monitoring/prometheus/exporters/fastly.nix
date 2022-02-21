@@ -1,10 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let cfg = config.services.prometheus.exporters.fastly;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.fastly;
+in {
   port = 9118;
   extraOpts = {
     debug = mkEnableOption "Debug logging mode for fastly-exporter";
@@ -21,7 +23,10 @@ in
 
     tokenPath = mkOption {
       type = types.nullOr types.path;
-      apply = final: if final == null then null else toString final;
+      apply = final:
+        if final == null
+        then null
+        else toString final;
       description = ''
         A run-time path to the token file, which is supposed to be provisioned
         outside of Nix store.
@@ -30,8 +35,10 @@ in
   };
   serviceOpts = {
     script = ''
-      ${optionalString (cfg.tokenPath != null)
-      "export FASTLY_API_TOKEN=$(cat ${toString cfg.tokenPath})"}
+      ${
+        optionalString (cfg.tokenPath != null)
+        "export FASTLY_API_TOKEN=$(cat ${toString cfg.tokenPath})"
+      }
       ${pkgs.prometheus-fastly-exporter}/bin/fastly-exporter \
         -listen http://${cfg.listenAddress}:${toString cfg.port}
         ${optionalString cfg.debug "-debug true"} \

@@ -1,5 +1,4 @@
-{ fetchFromGitHub }:
-
+{fetchFromGitHub}:
 fetchFromGitHub {
   owner = "soasme";
   repo = "nim-markdown";

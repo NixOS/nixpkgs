@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, ciso8601
-, fetchPypi
-, geopy
-, pythonOlder
-, requests
-, sseclient
+{
+  lib,
+  buildPythonPackage,
+  ciso8601,
+  fetchPypi,
+  geopy,
+  pythonOlder,
+  requests,
+  sseclient,
 }:
-
 buildPythonPackage rec {
   pname = "ritassist";
   version = "0.9.3";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python client to access RitAssist and FleetGO API";
     homepage = "https://github.com/depl0y/ritassist-py";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

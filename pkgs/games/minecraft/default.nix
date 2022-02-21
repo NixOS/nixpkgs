@@ -1,37 +1,40 @@
-{ lib, stdenv
-, fetchurl
-, nixosTests
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, wrapGAppsHook
-, gobject-introspection
-, jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
-, xorg
-, zlib
-, nss
-, nspr
-, fontconfig
-, pango
-, cairo
-, expat
-, alsa-lib
-, cups
-, dbus
-, atk
-, gtk3-x11
-, gtk2-x11
-, gdk-pixbuf
-, glib
-, curl
-, freetype
-, libpulseaudio
-, libuuid
-, systemd
-, flite ? null
-, libXxf86vm ? null
-}:
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  wrapGAppsHook,
+  gobject-introspection,
+  jre
+  # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
+  ,
+  xorg,
+  zlib,
+  nss,
+  nspr,
+  fontconfig,
+  pango,
+  cairo,
+  expat,
+  alsa-lib,
+  cups,
+  dbus,
+  atk,
+  gtk3-x11,
+  gtk2-x11,
+  gdk-pixbuf,
+  glib,
+  curl,
+  freetype,
+  libpulseaudio,
+  libuuid,
+  systemd,
+  flite ? null,
+  libXxf86vm ? null,
+}: let
   desktopItem = makeDesktopItem {
     name = "minecraft-launcher";
     exec = "minecraft-launcher";
@@ -69,8 +72,8 @@ let
     stdenv.cc.cc
     zlib
     libuuid
-  ] ++
-  (with xorg; [
+  ]
+  ++ (with xorg; [
     libX11
     libxcb
     libXcomposite
@@ -85,76 +88,76 @@ let
     libXScrnSaver
   ]));
 in
-stdenv.mkDerivation rec {
-  pname = "minecraft-launcher";
+  stdenv.mkDerivation rec {
+    pname = "minecraft-launcher";
 
-  version = "2.2.1441";
+    version = "2.2.1441";
 
-  src = fetchurl {
-    url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "03q579hvxnsh7d00j6lmfh53rixdpf33xb5zlz7659pvb9j5w0cm";
-  };
+    src = fetchurl {
+      url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
+      sha256 = "03q579hvxnsh7d00j6lmfh53rixdpf33xb5zlz7659pvb9j5w0cm";
+    };
 
-  icon = fetchurl {
-    url = "https://launcher.mojang.com/download/minecraft-launcher.svg";
-    sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
-  };
+    icon = fetchurl {
+      url = "https://launcher.mojang.com/download/minecraft-launcher.svg";
+      sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
+    };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems ];
-  buildInputs = [ gobject-introspection ];
+    nativeBuildInputs = [makeWrapper wrapGAppsHook copyDesktopItems];
+    buildInputs = [gobject-introspection];
 
-  sourceRoot = ".";
+    sourceRoot = ".";
 
-  dontWrapGApps = true;
-  dontConfigure = true;
-  dontBuild = true;
+    dontWrapGApps = true;
+    dontConfigure = true;
+    dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/opt
-    mv minecraft-launcher $out/opt
+      mkdir -p $out/opt
+      mv minecraft-launcher $out/opt
 
-    install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
+      install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  preFixup = ''
-    patchelf \
-      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/minecraft-launcher
-    patchelf \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/libcef.so
-    patchelf \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/liblauncher.so
-  '';
+    preFixup = ''
+      patchelf \
+        --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+        --set-rpath '$ORIGIN/'":${libPath}" \
+        $out/opt/minecraft-launcher/minecraft-launcher
+      patchelf \
+        --set-rpath '$ORIGIN/'":${libPath}" \
+        $out/opt/minecraft-launcher/libcef.so
+      patchelf \
+        --set-rpath '$ORIGIN/'":${libPath}" \
+        $out/opt/minecraft-launcher/liblauncher.so
+    '';
 
-  postFixup = ''
-    # Do not create `GPUCache` in current directory
-    makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
-      --prefix LD_LIBRARY_PATH : ${envLibPath} \
-      --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${lib.getBin jre} \
-      --run "cd /tmp" \
-      "''${gappsWrapperArgs[@]}"
-  '';
+    postFixup = ''
+      # Do not create `GPUCache` in current directory
+      makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
+        --prefix LD_LIBRARY_PATH : ${envLibPath} \
+        --prefix PATH : ${lib.makeBinPath [jre]} \
+        --set JAVA_HOME ${lib.getBin jre} \
+        --run "cd /tmp" \
+        "''${gappsWrapperArgs[@]}"
+    '';
 
-  desktopItems = [ desktopItem ];
+    desktopItems = [desktopItem];
 
-  meta = with lib; {
-    description = "Official launcher for Minecraft, a sandbox-building game";
-    homepage = "https://minecraft.net";
-    maintainers = with maintainers; [ cpages ryantm infinisil ];
-    license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-  };
+    meta = with lib; {
+      description = "Official launcher for Minecraft, a sandbox-building game";
+      homepage = "https://minecraft.net";
+      maintainers = with maintainers; [cpages ryantm infinisil];
+      license = licenses.unfree;
+      platforms = ["x86_64-linux"];
+    };
 
-  passthru = {
-    tests = { inherit (nixosTests) minecraft; };
-    updateScript = ./update.sh;
-  };
-}
+    passthru = {
+      tests = {inherit (nixosTests) minecraft;};
+      updateScript = ./update.sh;
+    };
+  }

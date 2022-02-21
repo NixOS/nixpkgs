@@ -1,10 +1,10 @@
-{ lib
-, fetchurl
-, python3Packages
-, mercurial
-, qt5
+{
+  lib,
+  fetchurl,
+  python3Packages,
+  mercurial,
+  qt5,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "tortoisehg";
   version = "6.0";
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     qscintilla-qt5
     iniparse
   ];
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [qt5.wrapQtAppsHook];
 
   doCheck = true;
   postInstall = ''
@@ -54,6 +54,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tortoisehg.bitbucket.io/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = with lib.maintainers; [danbst];
   };
 }

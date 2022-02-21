@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libtool, autoconf, automake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtool,
+  autoconf,
+  automake,
+}:
 stdenv.mkDerivation rec {
   pname = "libmkv";
   version = "0.6.5.1";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pr9q7yprndl8d15ir7i7cznvmf1yqpvnsyivv763n6wryssq6dl";
   };
 
-  nativeBuildInputs = [ libtool autoconf automake ];
+  nativeBuildInputs = [libtool autoconf automake];
 
   preConfigure = "sh bootstrap.sh";
 
@@ -23,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/saintdev/libmkv";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.wmertens ];
+    maintainers = [lib.maintainers.wmertens];
     platforms = lib.platforms.unix;
   };
 }

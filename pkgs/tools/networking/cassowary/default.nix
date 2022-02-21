@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "cassowary";
   version = "0.14.0";
@@ -15,13 +18,13 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
   meta = with lib; {
     homepage = "https://github.com/rogerwelin/cassowary";
     description = "Modern cross-platform HTTP load-testing tool written in Go";
     license = licenses.mit;
-    maintainers = with maintainers; [ hugoreeves ];
+    maintainers = with maintainers; [hugoreeves];
     platforms = platforms.unix;
   };
 }

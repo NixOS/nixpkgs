@@ -1,12 +1,15 @@
-{ lib, buildDunePackage, irmin, irmin-test }:
-
+{
+  lib,
+  buildDunePackage,
+  irmin,
+  irmin-test,
+}:
 buildDunePackage rec {
-
   pname = "irmin-fs";
 
   inherit (irmin) version src;
 
-  propagatedBuildInputs = [ irmin ];
+  propagatedBuildInputs = [irmin];
 
   useDune2 = true;
 
@@ -14,10 +17,9 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = irmin.meta // {
-    description = "Generic file-system backend for Irmin";
-  };
-
+  meta =
+    irmin.meta
+    // {
+      description = "Generic file-system backend for Irmin";
+    };
 }
-
-

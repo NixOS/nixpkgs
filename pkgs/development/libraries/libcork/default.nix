@@ -1,9 +1,10 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, lib
-, pkg-config
-, check
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lib,
+  pkg-config,
+  check,
 }:
 stdenv.mkDerivation rec {
   pname = "libcork";
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
     sed -i '/add_subdirectory(tests)/d' ./CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ check ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [check];
 
   doCheck = false;
 
@@ -40,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "A simple, easily embeddable cross-platform C library";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

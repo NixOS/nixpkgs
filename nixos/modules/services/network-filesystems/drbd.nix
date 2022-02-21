@@ -1,17 +1,16 @@
 # Support for DRBD, the Distributed Replicated Block Device.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.services.drbd; in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.drbd;
+in {
   ###### interface
 
   options = {
-
     services.drbd.enable = mkOption {
       default = false;
       type = types.bool;
@@ -28,32 +27,27 @@ let cfg = config.services.drbd; in
         Contents of the <filename>drbd.conf</filename> configuration file.
       '';
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [pkgs.drbd];
 
-    environment.systemPackages = [ pkgs.drbd ];
+    services.udev.packages = [pkgs.drbd];
 
-    services.udev.packages = [ pkgs.drbd ];
+    boot.kernelModules = ["drbd"];
 
-    boot.kernelModules = [ "drbd" ];
+    boot.extraModprobeConfig = ''
+      options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
+    '';
 
-    boot.extraModprobeConfig =
-      ''
-        options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
-      '';
-
-    environment.etc."drbd.conf" =
-      { source = pkgs.writeText "drbd.conf" cfg.config; };
+    environment.etc."drbd.conf" = {source = pkgs.writeText "drbd.conf" cfg.config;};
 
     systemd.services.drbd = {
-      after = [ "systemd-udev.settle.service" "network.target" ];
-      wants = [ "systemd-udev.settle.service" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["systemd-udev.settle.service" "network.target"];
+      wants = ["systemd-udev.settle.service"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = "${pkgs.drbd}/sbin/drbdadm up all";
         ExecStop = "${pkgs.drbd}/sbin/drbdadm down all";

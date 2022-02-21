@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, fonttools
-, pytestCheckHook
-, fs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  fonttools,
+  pytestCheckHook,
+  fs,
 }:
-
 buildPythonPackage rec {
   pname = "ufoLib2";
   version = "0.13.1";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-pythonImportsCheck = [ "ufoLib2" ];
+  pythonImportsCheck = ["ufoLib2"];
 
   meta = with lib; {
     description = "Library to deal with UFO font sources";
     homepage = "https://github.com/fonttools/ufoLib2";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

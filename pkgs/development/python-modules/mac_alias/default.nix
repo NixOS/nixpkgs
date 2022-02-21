@@ -1,6 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "2.2.0";
   pname = "mac_alias";
@@ -13,7 +15,7 @@ buildPythonPackage rec {
   # pypi package does not include tests;
   # tests anyway require admin privileges to succeed
   doCheck = false;
-  pythonImportsCheck = [ "mac_alias" ];
+  pythonImportsCheck = ["mac_alias"];
 
   meta = with lib; {
     homepage = "https://github.com/al45tair/mac_alias";
@@ -26,6 +28,6 @@ buildPythonPackage rec {
       so this module currently is not portable to other platforms.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [siriobalmelli];
   };
 }

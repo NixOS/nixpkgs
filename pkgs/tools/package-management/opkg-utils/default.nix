@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchgit }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 stdenv.mkDerivation {
   pname = "opkg-utils";
   version = "unstable-2014-10-30";
@@ -20,6 +23,6 @@ stdenv.mkDerivation {
     homepage = "http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

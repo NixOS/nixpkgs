@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, nixosTests, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  nixosTests,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "wsdd";
   version = "0.7.0";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9cwzkF2mg6yOIsurLMXTLoEIOsKbPIWMicpWBQ0XVhE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
   patches = [
     # Increase timeout to socket urlopen
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/christgau/wsdd";
     description = "A Web Service Discovery (WSD) host daemon for SMB/Samba";
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with maintainers; [izorkin];
     license = licenses.mit;
     platforms = platforms.all;
   };

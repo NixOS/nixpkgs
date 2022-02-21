@@ -1,13 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, click
-, joblib
-, regex
-, tqdm
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  click,
+  joblib,
+  regex,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "nltk";
   version = "3.7";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Natural Language Processing ToolKit";
     homepage = "http://nltk.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lheckemann ];
+    maintainers = with maintainers; [lheckemann];
   };
 }

@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl
-, glib
-, gtk3
-, libffcall
-, pkg-config
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  gtk3,
+  libffcall,
+  pkg-config,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtk-server";
   version = "2.4.5";
@@ -19,16 +21,16 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
-  buildInputs = [ libffcall glib gtk3 ];
+  nativeBuildInputs = [pkg-config wrapGAppsHook];
+  buildInputs = [libffcall glib gtk3];
 
-  configureOptions = [ "--with-gtk3" ];
+  configureOptions = ["--with-gtk3"];
 
   meta = with lib; {
     description = "gtk-server for interpreted GUI programming";
     homepage = "http://www.gtk-server.org/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.tohl ];
+    maintainers = [maintainers.tohl];
     platforms = platforms.linux;
   };
 }

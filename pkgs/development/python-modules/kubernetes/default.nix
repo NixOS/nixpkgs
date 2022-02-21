@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# propgatedBuildInputs
-, adal
-, certifi
-, google-auth
-, python-dateutil
-, pyyaml
-, requests
-, requests_oauthlib
-, urllib3
-, websocket-client
-
-# tests
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder
+  # propgatedBuildInputs
+  ,
+  adal,
+  certifi,
+  google-auth,
+  python-dateutil,
+  pyyaml,
+  requests,
+  requests_oauthlib,
+  urllib3,
+  websocket-client
+  # tests
+  ,
+  pytestCheckHook,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "kubernetes";
   version = "20.13.0";
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Kubernetes python client";
     homepage = "https://github.com/kubernetes-client/python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lsix ];
+    maintainers = with maintainers; [lsix];
   };
 }

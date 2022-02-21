@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "bpf";
-  meta.maintainers = with pkgs.lib.maintainers; [ martinetd ];
+  meta.maintainers = with pkgs.lib.maintainers; [martinetd];
 
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     programs.bcc.enable = true;
-    environment.systemPackages = with pkgs; [ bpftrace ];
+    environment.systemPackages = with pkgs; [bpftrace];
   };
 
   testScript = ''

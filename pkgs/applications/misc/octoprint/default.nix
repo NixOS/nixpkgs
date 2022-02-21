@@ -1,29 +1,29 @@
-{ pkgs
-, stdenv
-, lib
-, fetchFromGitHub
-, python3
-, substituteAll
-, nix-update-script
+{
+  pkgs,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3,
+  substituteAll,
+  nix-update-script
   # To include additional plugins, pass them here as an overlay.
-, packageOverrides ? self: super: { }
-}:
-let
-  mkOverride = attrname: version: sha256:
-    self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (
-        oldAttrs: {
-          inherit version;
-          src = oldAttrs.src.override {
-            inherit version sha256;
-          };
-        }
-      );
-    };
+  ,
+  packageOverrides ? self: super: {},
+}: let
+  mkOverride = attrname: version: sha256: self: super: {
+    ${attrname} = super.${attrname}.overridePythonAttrs (
+      oldAttrs: {
+        inherit version;
+        src = oldAttrs.src.override {
+          inherit version sha256;
+        };
+      }
+    );
+  };
 
   py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: {}) (
       [
         # the following dependencies are non trivial to update since later versions introduce backwards incompatible
         # changes that might affect plugins, or due to other observed problems
@@ -117,7 +117,7 @@ let
                 pytestCheckHook
                 nose
               ];
-              pytestFlagsArray = [ "zeroconf/test.py" ];
+              pytestFlagsArray = ["zeroconf/test.py"];
             });
           }
         )
@@ -192,9 +192,11 @@ let
           self: super: {
             falcon = super.falcon.overridePythonAttrs (oldAttrs: rec {
               #pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
-              disabledTestPaths = oldAttrs.disabledTestPaths ++ [
-                "tests/asgi/test_asgi_servers.py"
-              ];
+              disabledTestPaths =
+                oldAttrs.disabledTestPaths
+                ++ [
+                  "tests/asgi/test_asgi_servers.py"
+                ];
             });
           }
         )
@@ -203,12 +205,14 @@ let
         (
           self: super: {
             sanic = super.sanic.overridePythonAttrs (oldAttrs: rec {
-              disabledTestPaths = oldAttrs.disabledTestPaths ++ [
-                "test_cli.py"
-                "test_cookies.py"
-                # requires network
-                "test_worker.py"
-              ];
+              disabledTestPaths =
+                oldAttrs.disabledTestPaths
+                ++ [
+                  "test_cli.py"
+                  "test_cookies.py"
+                  # requires network
+                  "test_worker.py"
+                ];
             });
           }
         )
@@ -282,55 +286,57 @@ let
                 sha256 = "sha256-U6g7WysHHOlZ4p5BM4tw3GGAxQmxv6ltYgAp1rO/eCg=";
               };
 
-              propagatedBuildInputs = with super; [
-                blinker
-                cachelib
-                click
-                colorlog
-                emoji
-                feedparser
-                filetype
-                flask
-                flask-babel
-                flask_assets
-                flask_login
-                frozendict
-                future
-                itsdangerous
-                immutabledict
-                jinja2
-                markdown
-                markupsafe
-                netaddr
-                netifaces
-                octoprint-filecheck
-                octoprint-firmwarecheck
-                octoprint-pisupport
-                pathvalidate
-                pkginfo
-                pip
-                psutil
-                pylru
-                pyserial
-                pyyaml
-                regex
-                requests
-                rsa
-                sarge
-                semantic-version
-                sentry-sdk
-                setuptools
-                tornado
-                unidecode
-                watchdog
-                websocket-client
-                werkzeug
-                wrapt
-                zeroconf
-                zipstream-new
-              ] ++ lib.optionals stdenv.isDarwin [
-                py.pkgs.appdirs
-              ];
+              propagatedBuildInputs = with super;
+                [
+                  blinker
+                  cachelib
+                  click
+                  colorlog
+                  emoji
+                  feedparser
+                  filetype
+                  flask
+                  flask-babel
+                  flask_assets
+                  flask_login
+                  frozendict
+                  future
+                  itsdangerous
+                  immutabledict
+                  jinja2
+                  markdown
+                  markupsafe
+                  netaddr
+                  netifaces
+                  octoprint-filecheck
+                  octoprint-firmwarecheck
+                  octoprint-pisupport
+                  pathvalidate
+                  pkginfo
+                  pip
+                  psutil
+                  pylru
+                  pyserial
+                  pyyaml
+                  regex
+                  requests
+                  rsa
+                  sarge
+                  semantic-version
+                  sentry-sdk
+                  setuptools
+                  tornado
+                  unidecode
+                  watchdog
+                  websocket-client
+                  werkzeug
+                  wrapt
+                  zeroconf
+                  zipstream-new
+                ]
+                ++ lib.optionals stdenv.isDarwin [
+                  py.pkgs.appdirs
+                ];
 
               checkInputs = with super; [
                 ddt
@@ -352,31 +358,31 @@ let
                 })
               ];
 
-              postPatch =
-                let
-                  ignoreVersionConstraints = [
-                    "cachelib"
-                    "colorlog"
-                    "emoji"
-                    "immutabledict"
-                    "PyYAML"
-                    "sarge"
-                    "sentry-sdk"
-                    "watchdog"
-                    "wrapt"
-                    "zeroconf"
-                  ];
-                in
-                ''
-                    sed -r -i \
-                      ${lib.concatStringsSep "\n" (
+              postPatch = let
+                ignoreVersionConstraints = [
+                  "cachelib"
+                  "colorlog"
+                  "emoji"
+                  "immutabledict"
+                  "PyYAML"
+                  "sarge"
+                  "sentry-sdk"
+                  "watchdog"
+                  "wrapt"
+                  "zeroconf"
+                ];
+              in ''
+                sed -r -i \
+                  ${
+                  lib.concatStringsSep "\n" (
                     map (
-                      e:
-                        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
-                    ) ignoreVersionConstraints
-                  )}
-                      setup.py
-                '';
+                      e: ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+                    )
+                    ignoreVersionConstraints
+                  )
+                }
+                  setup.py
+              '';
 
               dontUseSetuptoolsCheck = true;
 
@@ -385,30 +391,32 @@ let
                 rm pytest.ini
               '';
 
-              disabledTests = [
-                "test_check_setup" # Why should it be able to call pip?
-              ] ++ lib.optionals stdenv.isDarwin [
-                "test_set_external_modification"
-              ];
+              disabledTests =
+                [
+                  "test_check_setup" # Why should it be able to call pip?
+                ]
+                ++ lib.optionals stdenv.isDarwin [
+                  "test_set_external_modification"
+                ];
 
               passthru = {
                 python = self.python;
-                updateScript = nix-update-script { attrPath = "octoprint"; };
+                updateScript = nix-update-script {attrPath = "octoprint";};
               };
 
               meta = with lib; {
                 homepage = "https://octoprint.org/";
                 description = "The snappy web interface for your 3D printer";
                 license = licenses.agpl3Only;
-                maintainers = with maintainers; [ abbradar gebner WhittlesJr ];
+                maintainers = with maintainers; [abbradar gebner WhittlesJr];
               };
             };
           }
         )
-        (import ./plugins.nix { inherit pkgs; })
+        (import ./plugins.nix {inherit pkgs;})
         packageOverrides
       ]
     );
   };
 in
-with py.pkgs; toPythonApplication octoprint
+  with py.pkgs; toPythonApplication octoprint

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   useHostResolvConf = config.networking.resolvconf.enable && config.networking.useHostResolvConf;
 
   bootStage2 = pkgs.substituteAll {
@@ -18,26 +19,22 @@ let
     path = lib.makeBinPath ([
       pkgs.coreutils
       pkgs.util-linux
-    ] ++ lib.optional useHostResolvConf pkgs.openresolv);
+    ]
+    ++ lib.optional useHostResolvConf pkgs.openresolv);
     fsPackagesPath = lib.makeBinPath config.system.fsPackages;
     systemdUnitPathEnvVar = lib.optionalString (config.boot.extraSystemdUnitPaths != [])
-      ("SYSTEMD_UNIT_PATH="
-      + builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths
-      + ":"); # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
+    ("SYSTEMD_UNIT_PATH="
+    + builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths
+    + ":"); # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
     postBootCommands = pkgs.writeText "local-cmds"
-      ''
-        ${config.boot.postBootCommands}
-        ${config.powerManagement.powerUpCommands}
-      '';
+    ''
+      ${config.boot.postBootCommands}
+      ${config.powerManagement.powerUpCommands}
+    '';
   };
-
-in
-
-{
+in {
   options = {
-
     boot = {
-
       postBootCommands = mkOption {
         default = "";
         example = "rm -f /var/log/messages";
@@ -96,13 +93,9 @@ in
         '';
       };
     };
-
   };
 
-
   config = {
-
     system.build.bootStage2 = bootStage2;
-
   };
 }

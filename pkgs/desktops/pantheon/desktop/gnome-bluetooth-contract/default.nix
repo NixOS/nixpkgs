@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, substituteAll
-, gnome-bluetooth
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  substituteAll,
+  gnome-bluetooth,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth-contract";
   version = "unstable-2021-02-22";

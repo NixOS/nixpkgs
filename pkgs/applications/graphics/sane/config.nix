@@ -1,10 +1,12 @@
-{ lib, stdenv }:
-
-{ paths, disabledDefaultBackends ? [] }:
-
-with lib;
-let
-installSanePath = path: ''
+{
+  lib,
+  stdenv,
+}: {
+  paths,
+  disabledDefaultBackends ? [],
+}:
+  with lib; let
+    installSanePath = path: ''
       if [ -e "${path}/lib/sane" ]; then
         find "${path}/lib/sane" -maxdepth 1 -not -type d | while read backend; do
           symlink "$backend" "$out/lib/sane/$(basename "$backend")"
@@ -32,22 +34,23 @@ installSanePath = path: ''
       grep -q '${backend}' $out/etc/sane.d/dll.conf || { echo '${backend} is not a default plugin in $SANE_CONFIG_DIR/dll.conf'; exit 1; }
       substituteInPlace $out/etc/sane.d/dll.conf --replace '${backend}' '# ${backend} disabled in nixos config'
     '';
-in
-stdenv.mkDerivation {
-  name = "sane-config";
-  phases = "installPhase";
+  in
+    stdenv.mkDerivation {
+      name = "sane-config";
+      phases = "installPhase";
 
-  installPhase = ''
-    function symlink () {
-      local target=$1 linkname=$2
-      if [ -e "$linkname" ]; then
-        echo "warning: conflict for $linkname. Overriding $(readlink $linkname) with $target."
-      fi
-      ln -sfn "$target" "$linkname"
+      installPhase =
+        ''
+          function symlink () {
+            local target=$1 linkname=$2
+            if [ -e "$linkname" ]; then
+              echo "warning: conflict for $linkname. Overriding $(readlink $linkname) with $target."
+            fi
+            ln -sfn "$target" "$linkname"
+          }
+
+          mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
+        ''
+        + (concatMapStrings installSanePath paths)
+        + (concatMapStrings disableBackend disabledDefaultBackends);
     }
-
-    mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
-  ''
-  + (concatMapStrings installSanePath paths)
-  + (concatMapStrings disableBackend disabledDefaultBackends);
-}

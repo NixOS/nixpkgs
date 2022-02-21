@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   cfg = dmcfg.sddm;
@@ -9,7 +12,7 @@ let
 
   sddm = pkgs.libsForQt5.sddm;
 
-  iniFmt = pkgs.formats.ini { };
+  iniFmt = pkgs.formats.ini {};
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
@@ -25,77 +28,81 @@ let
     ${cfg.stopScript}
   '';
 
-  defaultConfig = {
-    General = {
-      HaltCommand = "/run/current-system/systemd/bin/systemctl poweroff";
-      RebootCommand = "/run/current-system/systemd/bin/systemctl reboot";
-      Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
+  defaultConfig =
+    {
+      General = {
+        HaltCommand = "/run/current-system/systemd/bin/systemctl poweroff";
+        RebootCommand = "/run/current-system/systemd/bin/systemctl reboot";
+        Numlock =
+          if cfg.autoNumlock
+          then "on"
+          else "none"; # on, off none
 
-      # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
-      DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
-    };
+        # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
+        DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
+      };
 
-    Theme = {
-      Current = cfg.theme;
-      ThemeDir = "/run/current-system/sw/share/sddm/themes";
-      FacesDir = "/run/current-system/sw/share/sddm/faces";
-    };
+      Theme = {
+        Current = cfg.theme;
+        ThemeDir = "/run/current-system/sw/share/sddm/themes";
+        FacesDir = "/run/current-system/sw/share/sddm/faces";
+      };
 
-    Users = {
-      MaximumUid = config.ids.uids.nixbld;
-      HideUsers = concatStringsSep "," dmcfg.hiddenUsers;
-      HideShells = "/run/current-system/sw/bin/nologin";
-    };
+      Users = {
+        MaximumUid = config.ids.uids.nixbld;
+        HideUsers = concatStringsSep "," dmcfg.hiddenUsers;
+        HideShells = "/run/current-system/sw/bin/nologin";
+      };
 
-    X11 = {
-      MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
-      ServerPath = toString xserverWrapper;
-      XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
-      SessionCommand = toString dmcfg.sessionData.wrapper;
-      SessionDir = "${dmcfg.sessionData.desktops}/share/xsessions";
-      XauthPath = "${pkgs.xorg.xauth}/bin/xauth";
-      DisplayCommand = toString Xsetup;
-      DisplayStopCommand = toString Xstop;
-      EnableHiDPI = cfg.enableHidpi;
-    };
+      X11 = {
+        MinimumVT =
+          if xcfg.tty != null
+          then xcfg.tty
+          else 7;
+        ServerPath = toString xserverWrapper;
+        XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
+        SessionCommand = toString dmcfg.sessionData.wrapper;
+        SessionDir = "${dmcfg.sessionData.desktops}/share/xsessions";
+        XauthPath = "${pkgs.xorg.xauth}/bin/xauth";
+        DisplayCommand = toString Xsetup;
+        DisplayStopCommand = toString Xstop;
+        EnableHiDPI = cfg.enableHidpi;
+      };
 
-    Wayland = {
-      EnableHiDPI = cfg.enableHidpi;
-      SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+      Wayland = {
+        EnableHiDPI = cfg.enableHidpi;
+        SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+      };
+    }
+    // lib.optionalAttrs dmcfg.autoLogin.enable {
+      Autologin = {
+        User = dmcfg.autoLogin.user;
+        Session = autoLoginSessionName;
+        Relogin = cfg.autoLogin.relogin;
+      };
     };
-  } // lib.optionalAttrs dmcfg.autoLogin.enable {
-    Autologin = {
-      User = dmcfg.autoLogin.user;
-      Session = autoLoginSessionName;
-      Relogin = cfg.autoLogin.relogin;
-    };
-  };
 
   cfgFile =
     iniFmt.generate "sddm.conf" (lib.recursiveUpdate defaultConfig cfg.settings);
 
-  autoLoginSessionName =
-    "${dmcfg.sessionData.autologinSession}.desktop";
-
-in
-{
+  autoLoginSessionName = "${dmcfg.sessionData.autologinSession}.desktop";
+in {
   imports = [
     (mkRemovedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "themes" ]
-      "Set the option `services.xserver.displayManager.sddm.package' instead.")
+    ["services" "xserver" "displayManager" "sddm" "themes"]
+    "Set the option `services.xserver.displayManager.sddm.package' instead.")
     (mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "autoLogin" "enable" ]
-      [ "services" "xserver" "displayManager" "autoLogin" "enable" ])
+    ["services" "xserver" "displayManager" "sddm" "autoLogin" "enable"]
+    ["services" "xserver" "displayManager" "autoLogin" "enable"])
     (mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "autoLogin" "user" ]
-      [ "services" "xserver" "displayManager" "autoLogin" "user" ])
+    ["services" "xserver" "displayManager" "sddm" "autoLogin" "user"]
+    ["services" "xserver" "displayManager" "autoLogin" "user"])
     (mkRemovedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "extraConfig" ]
-      "Set the option `services.xserver.displayManager.sddm.settings' instead.")
+    ["services" "xserver" "displayManager" "sddm" "extraConfig"]
+    "Set the option `services.xserver.displayManager.sddm.settings' instead.")
   ];
 
   options = {
-
     services.xserver.displayManager.sddm = {
       enable = mkOption {
         type = types.bool;
@@ -115,7 +122,7 @@ in
 
       settings = mkOption {
         type = iniFmt.type;
-        default = { };
+        default = {};
         example = {
           Autologin = {
             User = "john";
@@ -188,7 +195,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
     assertions = [
       {
         assertion = xcfg.enable;
@@ -263,8 +269,8 @@ in
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 
-    environment.systemPackages = [ sddm ];
-    services.dbus.packages = [ sddm ];
+    environment.systemPackages = [sddm];
+    services.dbus.packages = [sddm];
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;

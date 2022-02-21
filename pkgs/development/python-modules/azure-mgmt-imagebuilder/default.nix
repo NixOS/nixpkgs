@@ -1,10 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  azure-common,
+  azure-mgmt-core,
+  msrest,
+  msrestazure,
 }:
-
 buildPythonPackage rec {
   version = "1.0.0";
   pname = "azure-mgmt-imagebuilder";
@@ -36,6 +39,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Image Builder Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

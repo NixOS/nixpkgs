@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, geopy
-, imageio
-, lxml
-, pillow
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, voluptuous
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geopy,
+  imageio,
+  lxml,
+  pillow,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  voluptuous,
 }:
-
 buildPythonPackage rec {
   pname = "env-canada";
   version = "0.5.20";
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to get Environment Canada weather data";
     homepage = "https://github.com/michaeldavie/env_canada";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

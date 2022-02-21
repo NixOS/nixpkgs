@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aiocontextvars
-, boltons
-, hypothesis
-, pyrsistent
-, pytest
-, setuptools
-, six
-, testtools
-, zope_interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  aiocontextvars,
+  boltons,
+  hypothesis,
+  pyrsistent,
+  pytest,
+  setuptools,
+  six,
+  testtools,
+  zope_interface,
 }:
-
 buildPythonPackage rec {
   pname = "eliot";
   version = "1.14.0";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     hypothesis
     testtools
     pytest
-   ];
+  ];
 
   propagatedBuildInputs = [
     aiocontextvars
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  pythonImportsCheck = [ "eliot" ];
+  pythonImportsCheck = ["eliot"];
 
   # Tests run eliot-prettyprint in out/bin.
   # test_parse_stream is broken, skip it.
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";
     license = licenses.asl20;
-    maintainers = [ maintainers.dpausp ];
+    maintainers = [maintainers.dpausp];
   };
 }

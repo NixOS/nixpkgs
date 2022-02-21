@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex, bison, file }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  flex,
+  bison,
+  file,
+}:
 stdenv.mkDerivation rec {
   pname = "libstdc++5";
   version = "3.3.6";
@@ -89,15 +96,15 @@ stdenv.mkDerivation rec {
       )
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  nativeBuildInputs = [ flex bison file ];
+  nativeBuildInputs = [flex bison file];
 
-  configureFlags = [ "--disable-multilib" "--enable-__cxa-atexit" "--enable-threads=posix" "--enable-languages=c++" "--enable-clocale=gnu" ];
+  configureFlags = ["--disable-multilib" "--enable-__cxa-atexit" "--enable-threads=posix" "--enable-languages=c++" "--enable-clocale=gnu"];
 
-  buildFLags = [ "all-target-libstdc++-v3" ];
+  buildFLags = ["all-target-libstdc++-v3"];
 
-  installFlags = [ "install-target-libstdc++-v3" ];
+  installFlags = ["install-target-libstdc++-v3"];
 
   postInstall = ''
     # Remove includefiles and libs provided by gcc
@@ -112,6 +119,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     description = "GNU Compiler Collection, version ${version} -- C++ standard library";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

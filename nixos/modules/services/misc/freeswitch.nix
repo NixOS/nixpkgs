@@ -1,18 +1,26 @@
-{ config, lib, pkgs, ...}:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.freeswitch;
   pkg = cfg.package;
-  configDirectory = pkgs.runCommand "freeswitch-config-d" { } ''
+  configDirectory = pkgs.runCommand "freeswitch-config-d" {} ''
     mkdir -p $out
     cp -rT ${cfg.configTemplate} $out
     chmod -R +w $out
-    ${concatStringsSep "\n" (mapAttrsToList (fileName: filePath: ''
-      mkdir -p $out/$(dirname ${fileName})
-      cp ${filePath} $out/${fileName}
-    '') cfg.configDir)}
+    ${
+      concatStringsSep "\n" (mapAttrsToList (fileName: filePath: ''
+        mkdir -p $out/$(dirname ${fileName})
+        cp ${filePath} $out/${fileName}
+      '')
+      cfg.configDir)
+    }
   '';
-  configPath = if cfg.enableReload
+  configPath =
+    if cfg.enableReload
     then "/etc/freeswitch"
     else configDirectory;
 in {
@@ -42,7 +50,7 @@ in {
       };
       configDir = mkOption {
         type = with types; attrsOf path;
-        default = { };
+        default = {};
         example = literalExpression ''
           {
             "freeswitch.xml" = ./freeswitch.xml;
@@ -73,9 +81,9 @@ in {
       source = configDirectory;
     };
     systemd.services.freeswitch-config-reload = mkIf cfg.enableReload {
-      before = [ "freeswitch.service" ];
-      wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ configDirectory ];
+      before = ["freeswitch.service"];
+      wantedBy = ["multi-user.target"];
+      restartTriggers = [configDirectory];
       serviceConfig = {
         ExecStart = "/run/current-system/systemd/bin/systemctl try-reload-or-restart freeswitch.service";
         RemainAfterExit = true;
@@ -84,8 +92,8 @@ in {
     };
     systemd.services.freeswitch = {
       description = "Free and open-source application server for real-time communication";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "freeswitch";
@@ -99,6 +107,6 @@ in {
         CPUSchedulingPolicy = "fifo";
       };
     };
-    environment.systemPackages = [ pkg ];
+    environment.systemPackages = [pkg];
   };
 }

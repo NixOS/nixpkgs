@@ -1,15 +1,20 @@
-{lib, stdenv, fetchFromGitHub
-, autoconf, automake, mandoc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  mandoc,
+}:
 stdenv.mkDerivation rec {
   pname = "owamp";
   version = "3.5.6";
-  buildInputs = [ autoconf automake mandoc ];
+  buildInputs = [autoconf automake mandoc];
   src = fetchFromGitHub {
     owner = "perfsonar";
     repo = "owamp";
     rev = version;
-    sha256="019rcshmrqk8pfp510j5jvazdcnz0igfkwv44mfxb5wirzj9p6s7";
+    sha256 = "019rcshmrqk8pfp510j5jvazdcnz0igfkwv44mfxb5wirzj9p6s7";
     fetchSubmodules = true;
   };
 

@@ -1,8 +1,12 @@
-{ lib, cabextract, fetchFromGitHub, readline, stdenv_32bit }:
-
+{
+  lib,
+  cabextract,
+  fetchFromGitHub,
+  readline,
+  stdenv_32bit,
+}:
 # stdenv_32bit is needed because the program depends upon 32-bit libraries and does not have
 # support for 64-bit yet: it requires libc6-dev:i386, libreadline-dev:i386.
-
 stdenv_32bit.mkDerivation rec {
   pname = "loadlibrary";
   version = "20170525-${lib.strings.substring 0 7 rev}";
@@ -14,7 +18,7 @@ stdenv_32bit.mkDerivation rec {
     sha256 = "01hb7wzfh1s5b8cvmrmr1gqknpq5zpzj9prq3wrpsgg129jpsjkb";
   };
 
-  buildInputs = [ cabextract readline ];
+  buildInputs = [cabextract readline];
 
   installPhase = ''
     mkdir -p $out/bin/
@@ -25,7 +29,7 @@ stdenv_32bit.mkDerivation rec {
     homepage = "https://github.com/taviso/loadlibrary";
     description = "Porting Windows Dynamic Link Libraries to Linux";
     platforms = platforms.linux;
-    maintainers = [ maintainers.eleanor ];
+    maintainers = [maintainers.eleanor];
     license = licenses.gpl2;
   };
 }

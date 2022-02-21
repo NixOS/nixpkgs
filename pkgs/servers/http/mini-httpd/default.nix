@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "mini-httpd";
   version = "1.7";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jggmlaywjfbdljzv5hyiz49plnxh0har2bnc9dq4xmj1pmjgs49";
   };
 
-  buildInputs = [ boost ];
+  buildInputs = [boost];
 
   enableParallelBuilding = true;
 
@@ -18,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "minimalistic high-performance web server";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.peti ];
+    maintainers = [lib.maintainers.peti];
   };
 }

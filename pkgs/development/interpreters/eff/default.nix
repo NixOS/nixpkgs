@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, which, ocamlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  ocamlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "eff";
   version = "5.0";
@@ -15,9 +20,16 @@ stdenv.mkDerivation rec {
     substituteInPlace setup.ml --replace js_of_ocaml.ocamlbuild js_of_ocaml-ocamlbuild
   '';
 
-  buildInputs = [ which ] ++ (with ocamlPackages; [
-    ocaml findlib ocamlbuild menhir js_of_ocaml js_of_ocaml-ocamlbuild
-  ]);
+  buildInputs =
+    [which]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      ocamlbuild
+      menhir
+      js_of_ocaml
+      js_of_ocaml-ocamlbuild
+    ]);
 
   doCheck = true;
   checkTarget = "test";
@@ -33,6 +45,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd2;
     inherit (ocamlPackages.ocaml.meta) platforms;
-    maintainers = [ maintainers.jirkamarsik ];
+    maintainers = [maintainers.jirkamarsik];
   };
 }

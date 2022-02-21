@@ -1,7 +1,29 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, wxGTK30, openal, pkg-config, curl, libtorrent-rasterbar
-, libpng, libX11, gettext, boost, libnotify, gtk2, doxygen, spring
-, makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  wxGTK30,
+  openal,
+  pkg-config,
+  curl,
+  libtorrent-rasterbar,
+  libpng,
+  libX11,
+  gettext,
+  boost,
+  libnotify,
+  gtk2,
+  doxygen,
+  spring,
+  makeWrapper,
+  glib,
+  minizip,
+  alure,
+  pcre,
+  jsoncpp,
+}:
 stdenv.mkDerivation rec {
   pname = "springlobby";
   version = "0.270";
@@ -11,10 +33,22 @@ stdenv.mkDerivation rec {
     sha256 = "1r1g2hw9ipsmsmzbhsi7bxqra1za6x7j1kw12qzl5psqyq8rqbgs";
   };
 
-  nativeBuildInputs = [ cmake pkg-config gettext doxygen makeWrapper ];
+  nativeBuildInputs = [cmake pkg-config gettext doxygen makeWrapper];
   buildInputs = [
-    wxGTK30 openal curl libtorrent-rasterbar pcre jsoncpp
-    boost libpng libX11 libnotify gtk2 glib minizip alure
+    wxGTK30
+    openal
+    curl
+    libtorrent-rasterbar
+    pcre
+    jsoncpp
+    boost
+    libpng
+    libX11
+    libnotify
+    gtk2
+    glib
+    minizip
+    alure
   ];
 
   patches = [
@@ -37,7 +71,7 @@ stdenv.mkDerivation rec {
     repositories.git = "git://github.com/springlobby/springlobby.git";
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ qknight domenkozar ];
+    maintainers = with maintainers; [qknight domenkozar];
     platforms = platforms.linux;
   };
 }

@@ -1,36 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, vala
-, atk
-, cairo
-, dconf
-, glib
-, gtk3
-, libwnck
-, libX11
-, libXfixes
-, libXi
-, pango
-, gettext
-, pkg-config
-, libxml2
-, bamf
-, gdk-pixbuf
-, libdbusmenu-gtk3
-, gnome-menus
-, libgee
-, wrapGAppsHook
-, meson
-, ninja
-, granite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  vala,
+  atk,
+  cairo,
+  dconf,
+  glib,
+  gtk3,
+  libwnck,
+  libX11,
+  libXfixes,
+  libXi,
+  pango,
+  gettext,
+  pkg-config,
+  libxml2,
+  bamf,
+  gdk-pixbuf,
+  libdbusmenu-gtk3,
+  gnome-menus,
+  libgee,
+  wrapGAppsHook,
+  meson,
+  ninja,
+  granite,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-dock";
   version = "unstable-2021-12-08";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "elementary";
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/dock";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [davidak] ++ teams.pantheon.members;
     mainProgram = "plank";
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   version = "0.7.4";
   pname = "nload";
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   meta = {
     description = "Monitors network traffic and bandwidth usage with ncurses graphs";
@@ -35,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.roland-riegel.de/nload/index.html";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.devhell ];
+    maintainers = [lib.maintainers.devhell];
   };
 }

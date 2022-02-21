@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "deluge-client";
   version = "1.9.0";
@@ -16,6 +19,6 @@ buildPythonPackage rec {
     description = "Lightweight pure-python rpc client for deluge";
     homepage = "https://github.com/JohnDoee/deluge-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

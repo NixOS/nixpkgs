@@ -1,8 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "workstyle";
   version = "unstable-2021-05-09";
@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     description = "Sway workspaces with style";
     homepage = "https://github.com/pierrechevalier83/workstyle";
     license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with maintainers; [FlorianFranzen];
   };
 }

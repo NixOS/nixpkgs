@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, libxslt
-, docbook-xsl-ns
-, glib
-, gdk-pixbuf
-, gnome
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  libxslt,
+  docbook-xsl-ns,
+  glib,
+  gdk-pixbuf,
+  gnome,
+  withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform),
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libnotify";
   version = "0.7.9";
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = ["out" "man" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -28,21 +29,27 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
     "-Ddocbook_docs=disabled"
     "-Dgtk_doc=false"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+    "-Dintrospection=${
+      if withIntrospection
+      then "enabled"
+      else "disabled"
+    }"
   ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    libxslt
-    docbook-xsl-ns
-    glib # for glib-mkenums needed during the build
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      libxslt
+      docbook-xsl-ns
+      glib # for glib-mkenums needed during the build
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
   buildInputs = lib.optionals withIntrospection [
     gobject-introspection

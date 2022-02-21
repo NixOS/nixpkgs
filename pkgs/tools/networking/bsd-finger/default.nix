@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 # !!! Duplication: this package is almost exactly the same as `bsd-finger'.
-
 stdenv.mkDerivation rec {
   pname = "bsd-finger";
   version = "0.17";
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
-  patches = [ ./ubuntu-0.17-9.patch ];
+  patches = [./ubuntu-0.17-9.patch];
 
   preBuild = "cd finger";
 

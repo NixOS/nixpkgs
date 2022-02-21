@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, curtsies
-, cwcwidth
-, greenlet
-, jedi
-, pygments
-, pytestCheckHook
-, pyperclip
-, pyxdg
-, requests
-, substituteAll
-, typing-extensions
-, urwid
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  curtsies,
+  cwcwidth,
+  greenlet,
+  jedi,
+  pygments,
+  pytestCheckHook,
+  pyperclip,
+  pyxdg,
+  requests,
+  substituteAll,
+  typing-extensions,
+  urwid,
+  watchdog,
 }:
-
 buildPythonPackage rec {
   pname = "bpython";
   version = "0.22.1";
@@ -48,12 +48,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "bpython" ];
+  pythonImportsCheck = ["bpython"];
 
   meta = with lib; {
     description = "A fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli dotlambda ];
+    maintainers = with maintainers; [flokli dotlambda];
   };
 }

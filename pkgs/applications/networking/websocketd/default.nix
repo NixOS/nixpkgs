@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "websocketd";
   version = "0.4.1";
@@ -18,7 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Turn any program that uses STDIN/STDOUT into a WebSocket server";
     homepage = "http://websocketd.com/";
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
     license = licenses.bsd2;
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-core
-, msrest
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-core,
+  msrest,
+  msrestazure,
 }:
-
 buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
   version = "4.3.0";
@@ -24,16 +24,16 @@ buildPythonPackage rec {
     msrestazure
   ];
 
-  pythonNamespaces = [ "azure.keyvault" ];
+  pythonNamespaces = ["azure.keyvault"];
 
   # has no tests
   doCheck = false;
-  pythonImportsCheck = [ "azure.keyvault.certificates" ];
+  pythonImportsCheck = ["azure.keyvault.certificates"];
 
   meta = with lib; {
     description = "Microsoft Azure Key Vault Certificates Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

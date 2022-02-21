@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "base16-shell-preview";
   version = "1.0.0";
@@ -18,6 +20,6 @@ python3Packages.buildPythonApplication rec {
     description = "Browse and preview Base16 Shell themes in your terminal";
     homepage = "https://github.com/nvllsvm/base16-shell-preview";
     license = licenses.mit;
-    maintainers = [ maintainers.rencire ];
+    maintainers = [maintainers.rencire];
   };
 }

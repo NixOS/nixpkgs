@@ -1,34 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, linkFarm
-, substituteAll
-, elementary-greeter
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, gnome-settings-daemon
-, mutter
-, elementary-icon-theme
-, wingpanel-with-indicators
-, elementary-gtk-theme
-, nixos-artwork
-, lightdm
-, gdk-pixbuf
-, clutter-gtk
-, dbus
-, accountsservice
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  linkFarm,
+  substituteAll,
+  elementary-greeter,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gtk3,
+  granite,
+  libgee,
+  libhandy,
+  gnome-settings-daemon,
+  mutter,
+  elementary-icon-theme,
+  wingpanel-with-indicators,
+  elementary-gtk-theme,
+  nixos-artwork,
+  lightdm,
+  gdk-pixbuf,
+  clutter-gtk,
+  dbus,
+  accountsservice,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
   version = "6.0.1";
@@ -122,10 +122,12 @@ stdenv.mkDerivation rec {
       attrPath = "pantheon.${pname}";
     };
 
-    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
-      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-      name = "io.elementary.greeter.desktop";
-    }];
+    xgreeters = linkFarm "pantheon-greeter-xgreeters" [
+      {
+        path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+        name = "io.elementary.greeter.desktop";
+      }
+    ];
   };
 
   meta = with lib; {

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "async-lru";
   version = "unstable-2020-10-24";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
     "test_close"
   ];
 
-  pythonImportsCheck = [ "async_lru" ];
+  pythonImportsCheck = ["async_lru"];
 
   meta = with lib; {
     description = "Simple lru cache for asyncio";
     homepage = "https://github.com/wikibusiness/async_lru";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

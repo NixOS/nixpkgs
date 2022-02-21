@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, writers
-, adoptopenjdk-jre-bin
-, fetchurl
-, makeWrapper
+{
+  lib,
+  stdenv,
+  writers,
+  adoptopenjdk-jre-bin,
+  fetchurl,
+  makeWrapper,
 }:
 stdenv.mkDerivation rec {
   pname = "cgoban";
   version = "3.5.23";
 
-  nativeBuildInputs = [ adoptopenjdk-jre-bin makeWrapper ];
+  nativeBuildInputs = [adoptopenjdk-jre-bin makeWrapper];
 
   src = fetchurl {
     url = "https://web.archive.org/web/20210116034119/https://files.gokgs.com/javaBin/cgoban.jar";
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Client for the KGS Go Server";
     homepage = "https://www.gokgs.com/";
     license = licenses.free;
-    maintainers = with maintainers; [ savannidgerinel ];
+    maintainers = with maintainers; [savannidgerinel];
     platforms = adoptopenjdk-jre-bin.meta.platforms;
   };
 }

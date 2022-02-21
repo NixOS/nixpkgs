@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pyrabbit2";
   version = "1.0.7";
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "A Pythonic interface to the RabbitMQ Management HTTP API";
     homepage = "https://github.com/deslum/pyrabbit2";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

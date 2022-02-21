@@ -1,5 +1,9 @@
-{ lib, python3, fetchFromGitHub, ncurses }:
-
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  ncurses,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "swaglyrics";
   version = "unstable-2021-06-17";
@@ -12,7 +16,12 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3.pkgs; [
-    unidecode colorama beautifulsoup4 flask requests swspotify
+    unidecode
+    colorama
+    beautifulsoup4
+    flask
+    requests
+    swspotify
   ];
 
   preConfigure = ''
@@ -26,22 +35,22 @@ python3.pkgs.buildPythonApplication rec {
 
   # disable tests which touch network
   disabledTests = [
-     "test_database_for_unsupported_song"
-     "test_that_lyrics_works_for_unsupported_songs"
-     "test_that_get_lyrics_works"
-     "test_lyrics_are_shown_in_tab"
-     "test_songchanged_can_raise_songplaying"
+    "test_database_for_unsupported_song"
+    "test_that_lyrics_works_for_unsupported_songs"
+    "test_that_get_lyrics_works"
+    "test_lyrics_are_shown_in_tab"
+    "test_songchanged_can_raise_songplaying"
   ];
 
   checkInputs = with python3.pkgs;
-    [ blinker swspotify pytestCheckHook flask mock flask_testing ]
-    ++ [ ncurses ];
+    [blinker swspotify pytestCheckHook flask mock flask_testing]
+    ++ [ncurses];
 
   meta = with lib; {
     description = "Lyrics fetcher for currently playing Spotify song";
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
     platforms = platforms.unix;
   };
 }

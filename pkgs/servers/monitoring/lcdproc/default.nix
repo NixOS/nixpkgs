@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, makeWrapper
-, pkg-config
-, doxygen
-, freetype
-, libX11
-, libftdi
-, libusb-compat-0_1
-, libusb1
-, ncurses
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  makeWrapper,
+  pkg-config,
+  doxygen,
+  freetype,
+  libX11,
+  libftdi,
+  libusb-compat-0_1,
+  libusb1,
+  ncurses,
+  perl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lcdproc";
   version = "0.5.9";
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     "--with-pidfile-dir=/run"
   ];
 
-  buildInputs = [ freetype libX11 libftdi libusb-compat-0_1 libusb1 ncurses ];
+  buildInputs = [freetype libX11 libftdi libusb-compat-0_1 libusb1 ncurses];
 
-  nativeBuildInputs = [ autoreconfHook doxygen makeWrapper pkg-config ];
+  nativeBuildInputs = [autoreconfHook doxygen makeWrapper pkg-config];
 
   # In 0.5.9: gcc: error: libbignum.a: No such file or directory
   enableParallelBuilding = false;
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Client/server suite for controlling a wide variety of LCD devices";
     homepage = "http://lcdproc.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     platforms = platforms.unix;
   };
 }

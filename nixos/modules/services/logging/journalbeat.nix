@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.journalbeat;
 
   journalbeatYml = pkgs.writeText "journalbeat.yml" ''
@@ -11,13 +13,9 @@ let
 
     ${cfg.extraConfig}
   '';
-
-in
-{
+in {
   options = {
-
     services.journalbeat = {
-
       enable = mkEnableOption "journalbeat";
 
       package = mkOption {
@@ -56,26 +54,24 @@ in
         default = "";
         description = "Any other configuration options you want to add";
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-
     assertions = [
       {
         assertion = !hasPrefix "/" cfg.stateDir;
         message =
-          "The option services.journalbeat.stateDir shouldn't be an absolute directory." +
-          " It should be a directory relative to /var/lib/.";
+          "The option services.journalbeat.stateDir shouldn't be an absolute directory."
+          + " It should be a directory relative to /var/lib/.";
       }
     ];
 
     systemd.services.journalbeat = {
       description = "Journalbeat log shipper";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "elasticsearch.service" ];
-      after = [ "elasticsearch.service" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["elasticsearch.service"];
+      after = ["elasticsearch.service"];
       preStart = ''
         mkdir -p ${cfg.stateDir}/data
         mkdir -p ${cfg.stateDir}/logs

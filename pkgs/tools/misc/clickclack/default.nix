@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  SDL2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "clickclack";
   version = "0.2.2";
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~proycon/clickclack";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

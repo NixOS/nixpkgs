@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  libiconv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "anevicon";
   version = "0.1.0";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1g15v13ysx09fy0b8qddw5fwql2pvwzc2g2h1ndhzpxvfy7fzpr1";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv Security];
 
   cargoPatches = [
     # Add Cargo.lock file, https://github.com/rozgo/anevicon/pull/1
@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     description = "UDP-based load generator";
     homepage = "https://github.com/rozgo/anevicon";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

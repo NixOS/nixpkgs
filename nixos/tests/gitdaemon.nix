@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   hashes = pkgs.writeText "hashes" ''
     b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c  /project/bar
   '';
@@ -8,31 +6,29 @@ in {
   name = "gitdaemon";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ tilpner ];
+    maintainers = [tilpner];
   };
 
   nodes = {
-    server =
-      { config, ... }: {
-        networking.firewall.allowedTCPPorts = [ config.services.gitDaemon.port ];
+    server = {config, ...}: {
+      networking.firewall.allowedTCPPorts = [config.services.gitDaemon.port];
 
-        environment.systemPackages = [ pkgs.git ];
+      environment.systemPackages = [pkgs.git];
 
-        systemd.tmpfiles.rules = [
-          # type path mode user group age arg
-          " d    /git 0755 root root  -   -"
-        ];
+      systemd.tmpfiles.rules = [
+        # type path mode user group age arg
+        " d    /git 0755 root root  -   -"
+      ];
 
-        services.gitDaemon = {
-          enable = true;
-          basePath = "/git";
-        };
+      services.gitDaemon = {
+        enable = true;
+        basePath = "/git";
       };
+    };
 
-    client =
-      { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.git ];
-      };
+    client = {pkgs, ...}: {
+      environment.systemPackages = [pkgs.git];
+    };
   };
 
   testScript = ''

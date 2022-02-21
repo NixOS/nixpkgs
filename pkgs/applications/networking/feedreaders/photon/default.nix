@@ -1,5 +1,9 @@
-{ buildGoModule, fetchFromSourcehut, lib, xorg }:
-
+{
+  buildGoModule,
+  fetchFromSourcehut,
+  lib,
+  xorg,
+}:
 buildGoModule rec {
   pname = "photon";
   version = "unstable-2022-01-11";
@@ -11,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-2RSGLWfthcChd5YhDSBfLSch6wuTUv1Sh1f7flgzQwc=";
   };
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [xorg.libX11];
 
   proxyVendor = true;
 
@@ -21,7 +25,7 @@ buildGoModule rec {
     description = "RSS/Atom reader with the focus on speed, usability and a bit of unix philosophy";
     homepage = "https://sr.ht/~ghost08/photon";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kmein ];
+    maintainers = with maintainers; [kmein];
     platforms = platforms.linux;
   };
 }

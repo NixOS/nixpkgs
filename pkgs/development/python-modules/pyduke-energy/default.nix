@@ -1,16 +1,16 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, jsonpickle
-, paho-mqtt
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonpickle,
+  paho-mqtt,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyduke-energy";
   version = "1.0.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Python module for the Duke Energy API";
     homepage = "https://github.com/mjmeli/pyduke-energy";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

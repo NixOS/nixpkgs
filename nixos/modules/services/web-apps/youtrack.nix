@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.youtrack;
 
   extraAttr = concatStringsSep " " (mapAttrsToList (k: v: "-D${k}=${v}") (stdParams // cfg.extraParams));
@@ -13,14 +15,12 @@ let
       "jetbrains.youtrack.baseUrl" = cfg.baseUrl;
     })
     {
-    "java.aws.headless" = "true";
-    "jetbrains.youtrack.disableBrowser" = "true";
+      "java.aws.headless" = "true";
+      "jetbrains.youtrack.disableBrowser" = "true";
     }
   ];
-in
-{
+in {
   options.services.youtrack = {
-
     enable = mkEnableOption "YouTrack service";
 
     address = mkOption {
@@ -117,13 +117,12 @@ in
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.youtrack = {
       environment.HOME = cfg.statePath;
       environment.YOUTRACK_JVM_OPTS = "${extraAttr}";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ unixtools.hostname ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
+      path = with pkgs; [unixtools.hostname];
       serviceConfig = {
         Type = "simple";
         User = "youtrack";
@@ -173,9 +172,7 @@ in
             proxy_set_header X-Forwarded-Proto $scheme;
           '';
         };
-
       };
     };
-
   };
 }

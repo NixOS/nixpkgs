@@ -1,16 +1,16 @@
-{ lib
-, aio-geojson-client
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pytz
-, pythonOlder
+{
+  lib,
+  aio-geojson-client,
+  aiohttp,
+  aresponses,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytz,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aio-geojson-nsw-rfs-incidents";
   version = "0.5";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for accessing the NSW Rural Fire Service incidents feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

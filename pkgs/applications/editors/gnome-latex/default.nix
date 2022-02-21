@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, gtk-doc
-, vala
-, gobject-introspection
-, wrapGAppsHook
-, gsettings-desktop-schemas
-, gspell
-, gtksourceview4
-, libgee
-, tepl
-, amtk
-, gnome
-, glib
-, pkg-config
-, intltool
-, itstool
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  gtk-doc,
+  vala,
+  gobject-introspection,
+  wrapGAppsHook,
+  gsettings-desktop-schemas,
+  gspell,
+  gtksourceview4,
+  libgee,
+  tepl,
+  amtk,
+  gnome,
+  glib,
+  pkg-config,
+  intltool,
+  itstool,
+  libxml2,
 }:
-
 stdenv.mkDerivation rec {
   version = "3.38.0";
   pname = "gnome-latex";
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/GNOME-LaTeX";
     description = "A LaTeX editor for the GNOME desktop";
-    maintainers = [ maintainers.manveru ];
+    maintainers = [maintainers.manveru];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

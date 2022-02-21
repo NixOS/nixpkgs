@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
-
-let
+import ./make-test-python.nix ({
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkMerge nameValuePair maintainers;
 
   baseGrafanaConf = {
@@ -18,7 +20,7 @@ let
 
   extraNodeConfs = {
     declarativePlugins = {
-      services.grafana.declarativePlugins = [ pkgs.grafanaPlugins.grafana-clock-panel ];
+      services.grafana.declarativePlugins = [pkgs.grafanaPlugins.grafana-clock-panel];
     };
 
     postgresql = {
@@ -28,41 +30,44 @@ let
       };
       services.postgresql = {
         enable = true;
-        ensureDatabases = [ "grafana" ];
-        ensureUsers = [{
-          name = "grafana";
-          ensurePermissions."DATABASE grafana" = "ALL PRIVILEGES";
-        }];
+        ensureDatabases = ["grafana"];
+        ensureUsers = [
+          {
+            name = "grafana";
+            ensurePermissions."DATABASE grafana" = "ALL PRIVILEGES";
+          }
+        ];
       };
-      systemd.services.grafana.after = [ "postgresql.service" ];
+      systemd.services.grafana.after = ["postgresql.service"];
     };
 
     mysql = {
       services.grafana.database.user = "grafana";
       services.mysql = {
         enable = true;
-        ensureDatabases = [ "grafana" ];
-        ensureUsers = [{
-          name = "grafana";
-          ensurePermissions."grafana.*" = "ALL PRIVILEGES";
-        }];
+        ensureDatabases = ["grafana"];
+        ensureUsers = [
+          {
+            name = "grafana";
+            ensurePermissions."grafana.*" = "ALL PRIVILEGES";
+          }
+        ];
         package = pkgs.mariadb;
       };
-      systemd.services.grafana.after = [ "mysql.service" ];
+      systemd.services.grafana.after = ["mysql.service"];
     };
   };
 
   nodes = builtins.listToAttrs (map (dbName:
     nameValuePair dbName (mkMerge [
-    baseGrafanaConf
-    (extraNodeConfs.${dbName} or {})
-  ])) [ "sqlite" "declarativePlugins" "postgresql" "mysql" ]);
-
+      baseGrafanaConf
+      (extraNodeConfs.${dbName} or {})
+    ])) ["sqlite" "declarativePlugins" "postgresql" "mysql"]);
 in {
   name = "grafana";
 
   meta = with maintainers; {
-    maintainers = [ willibutz ];
+    maintainers = [willibutz];
   };
 
   inherit nodes;

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, qt4, qmake4Hook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qt4,
+  qmake4Hook,
+}:
 stdenv.mkDerivation rec {
   pname = "qwt";
   version = "5.2.3";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dqa096mm6n3bidfq2b67nmdsvsw4ndzzd1qhl6hn8skcwqazzip";
   };
 
-  propagatedBuildInputs = [ qt4 ];
-  nativeBuildInputs = [ qmake4Hook ];
+  propagatedBuildInputs = [qt4];
+  nativeBuildInputs = [qmake4Hook];
 
   postPatch = ''
     sed -e "s@\$\$\[QT_INSTALL_PLUGINS\]@$out/lib/qt4/plugins@" -i designer/designer.pro
@@ -27,6 +32,6 @@ stdenv.mkDerivation rec {
     # LGPL 2.1 plus a few exceptions (more liberal)
     license = lib.licenses.qwt;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

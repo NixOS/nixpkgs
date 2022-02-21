@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, poetry-core
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  poetry-core,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "xpath-expressions";
   version = "1.1.0";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
       --replace "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  pythonImportsCheck = [ "xpath" ];
+  pythonImportsCheck = ["xpath"];
 
   meta = with lib; {
     description = "Python module to handle XPath expressions";
     homepage = "https://github.com/orf/xpath-expressions";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

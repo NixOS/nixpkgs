@@ -1,29 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, cinnamon-desktop
-, file
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, gtk-doc
-, gtk3
-, intltool
-, itstool
-, lcms2
-, libexif
-, libjpeg
-, libpeas
-, libtool
-, libxml2
-, pkg-config
-, shared-mime-info
-, wrapGAppsHook
-, xapps
-, yelp-tools
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  cinnamon-desktop,
+  file,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk-doc,
+  gtk3,
+  intltool,
+  itstool,
+  lcms2,
+  libexif,
+  libjpeg,
+  libpeas,
+  libtool,
+  libxml2,
+  pkg-config,
+  shared-mime-info,
+  wrapGAppsHook,
+  xapps,
+  yelp-tools,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xviewer";
   version = "3.2.4";
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/xviewer";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ] ++ teams.cinnamon.members;
+    maintainers = with maintainers; [tu-maurice] ++ teams.cinnamon.members;
   };
 }

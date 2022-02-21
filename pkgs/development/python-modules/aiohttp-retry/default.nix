@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-aiohttp
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-aiohttp,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiohttp-retry";
   version = "2.5.6";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Retry client for aiohttp";
     homepage = "https://github.com/inyutin/aiohttp_retry";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

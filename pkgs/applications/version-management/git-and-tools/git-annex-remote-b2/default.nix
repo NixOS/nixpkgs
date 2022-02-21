@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchgit }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchgit,
+}:
 buildGoPackage rec {
   pname = "git-annex-remote-b2";
   version = "20151212-${lib.strings.substring 0 7 rev}";

@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, gssdp
-, gtk4
-, libsoup
+{
+  stdenv,
+  lib,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  gssdp,
+  gtk4,
+  libsoup,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gssdp-tools";
   inherit (gssdp) version src;

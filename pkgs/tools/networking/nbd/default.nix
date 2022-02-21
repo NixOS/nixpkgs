@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "nbd";
   version = "3.21";
@@ -9,10 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-52iK852Rczu80tsIBixE/lA9AE5RUodAE5xEr/amvvk=";
   };
 
-  buildInputs = [ glib ]
+  buildInputs =
+    [glib]
     ++ lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [pkg-config which];
 
   postInstall = ''
     mkdir -p "$out/share/doc/nbd-${version}"

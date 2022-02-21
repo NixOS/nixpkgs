@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, six, requests, websocket-client, docker_pycreds }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  requests,
+  websocket-client,
+  docker_pycreds,
+}:
 buildPythonPackage rec {
   version = "1.10.6";
   pname = "docker-py";
@@ -23,6 +30,6 @@ buildPythonPackage rec {
     description = "Python library for the Docker Remote API";
     homepage = "https://github.com/docker/docker-py/";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.pmiddend ];
+    maintainers = [lib.maintainers.pmiddend];
   };
 }

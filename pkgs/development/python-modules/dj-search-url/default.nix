@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "0.1";
   pname = "dj-search-url";
@@ -16,7 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dstufft/dj-search-url";
     description = "Use Search URLs in your Django Haystack Application";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
-
 }

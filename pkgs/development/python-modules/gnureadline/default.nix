@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   version = "8.0.0";
   pname = "gnureadline";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0xllr43dizvybmb68i0ybk1xhaqx5abjwxa9vrg43b9ds0pggvk1";
   };
 
-  buildInputs = [ pkgs.ncurses ];
+  buildInputs = [pkgs.ncurses];
   patchPhase = ''
     substituteInPlace setup.py --replace "/bin/bash" "${pkgs.bash}/bin/bash"
   '';
@@ -25,5 +25,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/ludwigschwardt/python-gnureadline";
     license = licenses.gpl3;
   };
-
 }

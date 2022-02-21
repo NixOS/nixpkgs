@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "gomatrix";
   version = "101.0.0";
@@ -18,7 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = ''Displays "The Matrix" in a terminal'';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ skykanin ];
+    maintainers = with maintainers; [skykanin];
     homepage = "https://github.com/GeertJohan/gomatrix";
   };
 }

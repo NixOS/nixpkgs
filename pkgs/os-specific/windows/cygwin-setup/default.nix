@@ -1,46 +1,57 @@
-{ lib, stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkg-config
-, zlib, bzip2, xz, libgcrypt
+{
+  lib,
+  stdenv,
+  fetchcvs,
+  autoconf,
+  automake,
+  libtool,
+  flex,
+  bison,
+  pkg-config,
+  zlib,
+  bzip2,
+  xz,
+  libgcrypt,
 }:
-
 with lib;
+  stdenv.mkDerivation rec {
+    pname = "cygwin-setup";
+    version = "20131101";
 
-stdenv.mkDerivation rec {
-  pname = "cygwin-setup";
-  version = "20131101";
+    src = fetchcvs {
+      cvsRoot = ":pserver:anoncvs@cygwin.com:/cvs/cygwin-apps";
+      module = "setup";
+      date = version;
+      sha256 = "024wxaaxkf7p1i78bh5xrsqmfz7ss2amigbfl2r5w9h87zqn9aq3";
+    };
 
-  src = fetchcvs {
-    cvsRoot = ":pserver:anoncvs@cygwin.com:/cvs/cygwin-apps";
-    module = "setup";
-    date = version;
-    sha256 = "024wxaaxkf7p1i78bh5xrsqmfz7ss2amigbfl2r5w9h87zqn9aq3";
-  };
+    nativeBuildInputs = [autoconf automake libtool flex bison pkg-config];
 
-  nativeBuildInputs = [ autoconf automake libtool flex bison pkg-config ];
+    buildInputs = let
+      mkStatic = flip overrideDerivation (o: {
+        dontDisableStatic = true;
+        configureFlags = toList (o.configureFlags or []) ++ ["--enable-static"];
+        buildInputs = map mkStatic (o.buildInputs or []);
+        propagatedBuildInputs = map mkStatic (o.propagatedBuildInputs or []);
+      });
+    in
+      map mkStatic [zlib bzip2 xz libgcrypt];
 
-  buildInputs = let
-    mkStatic = flip overrideDerivation (o: {
-      dontDisableStatic = true;
-      configureFlags = toList (o.configureFlags or []) ++ [ "--enable-static" ];
-      buildInputs = map mkStatic (o.buildInputs or []);
-      propagatedBuildInputs = map mkStatic (o.propagatedBuildInputs or []);
-    });
-  in map mkStatic [ zlib bzip2 xz libgcrypt ];
+    configureFlags = ["--disable-shared"];
 
-  configureFlags = [ "--disable-shared" ];
+    dontDisableStatic = true;
 
-  dontDisableStatic = true;
+    preConfigure = ''
+      autoreconf -vfi
+    '';
 
-  preConfigure = ''
-    autoreconf -vfi
-  '';
+    installPhase = ''
+      install -vD setup.exe "$out/bin/setup.exe"
+    '';
 
-  installPhase = ''
-    install -vD setup.exe "$out/bin/setup.exe"
-  '';
-
-  meta = {
-    homepage = "https://sourceware.org/cygwin-apps/setup.html";
-    description = "A tool for installing Cygwin";
-    license = licenses.gpl2Plus;
-  };
-}
+    meta = {
+      homepage = "https://sourceware.org/cygwin-apps/setup.html";
+      description = "A tool for installing Cygwin";
+      license = licenses.gpl2Plus;
+    };
+  }

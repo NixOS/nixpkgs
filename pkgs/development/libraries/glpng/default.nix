@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromRepoOrCz
-, cmake
-, libGL
-, libpng
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromRepoOrCz,
+  cmake,
+  libGL,
+  libpng,
+  pkg-config,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "glpng";
   version = "1.46";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://repo.or.cz/glpng.git/blob_plain/HEAD:/glpng.htm";
     description = "PNG loader for OpenGL";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

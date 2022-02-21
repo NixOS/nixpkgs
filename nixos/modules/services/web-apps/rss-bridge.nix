@@ -1,14 +1,17 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.rss-bridge;
 
   poolName = "rss-bridge";
 
   whitelist = pkgs.writeText "rss-bridge_whitelist.txt"
-    (concatStringsSep "\n" cfg.whitelist);
-in
-{
+  (concatStringsSep "\n" cfg.whitelist);
+in {
   options = {
     services.rss-bridge = {
       enable = mkEnableOption "rss-bridge";

@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, pkg-config, pcre, perl }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  pcre,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "maildrop";
   version = "2.6.0";
@@ -9,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1a94p2b41iy334cwfwmzi19557dn5j61abh0cp2rfc9dkc8ibhdg";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre perl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [pcre perl];
 
-  patches = [ ./maildrop.configure.hack.patch ]; # for building in chroot
+  patches = [./maildrop.configure.hack.patch]; # for building in chroot
 
   doCheck = false; # fails with "setlocale: LC_ALL: cannot change locale (en_US.UTF-8)"
 

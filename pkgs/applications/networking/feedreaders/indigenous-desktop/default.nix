@@ -1,6 +1,13 @@
-{ stdenv, lib, fetchurl, unzip, makeDesktopItem, copyDesktopItems
-, makeWrapper, electron }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  electron,
+}:
 stdenv.mkDerivation rec {
   pname = "indigenous-desktop";
   version = "1.3.0";
@@ -48,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "IndieWeb app with extensions for sharing to/reading from micropub endpoints";
     homepage = "https://indigenous.realize.be/indigenous-desktop";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, pytestCheckHook
-, psutil
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytest,
+  pytestCheckHook,
+  psutil,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-openfiles";
   version = "0.5.0";
@@ -18,20 +18,20 @@ buildPythonPackage rec {
     sha256 = "179c2911d8aee3441fee051aba08e0d9b4dab61b829ae4811906d5c49a3b0a58";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
   propagatedBuildInputs = [
     psutil
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     description = "Pytest plugin for detecting inadvertent open file handles";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

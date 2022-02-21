@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy38
-, kerberos
-, mock
-, pytest
-, requests
-, requests_ntlm
-, six
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy38,
+  kerberos,
+  mock,
+  pytest,
+  requests,
+  requests_ntlm,
+  six,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "pywinrm";
   version = "0.4.2";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
     sha256 = "e7865ec5e46e7fedb859c656cfaba4fcf669de7c042b5a7d8a759544636bcfb7";
   };
 
-  checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ requests requests_ntlm six kerberos xmltodict ];
+  checkInputs = [mock pytest];
+  propagatedBuildInputs = [requests requests_ntlm six kerberos xmltodict];
 
   meta = with lib; {
     description = "Python library for Windows Remote Management";

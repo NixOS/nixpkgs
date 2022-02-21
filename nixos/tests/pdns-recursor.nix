@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "powerdns";
 
-  nodes.server = { ... }: {
+  nodes.server = {...}: {
     services.pdns-recursor.enable = true;
   };
 

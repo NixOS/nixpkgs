@@ -2,120 +2,124 @@
 # engines: Gecko (via Firefox), Chromium, QtWebEngine (Falkon) and WebKitGTK
 # (via Midori). The test checks that certificates issued by a custom trusted
 # CA are accepted but those from an unknown CA are rejected.
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
+  makeCert = {
+    caName,
+    domain,
+  }:
+    pkgs.runCommand "example-cert"
+    {buildInputs = [pkgs.gnutls];}
+    ''
+      mkdir $out
 
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+      # CA cert template
+      cat >ca.template <<EOF
+      organization = "${caName}"
+      cn = "${caName}"
+      expiration_days = 365
+      ca
+      cert_signing_key
+      crl_signing_key
+      EOF
 
-let
-  makeCert = { caName, domain }: pkgs.runCommand "example-cert"
-  { buildInputs = [ pkgs.gnutls ]; }
-  ''
-    mkdir $out
+      # server cert template
+      cat >server.template <<EOF
+      organization = "An example company"
+      cn = "${domain}"
+      expiration_days = 30
+      dns_name = "${domain}"
+      encryption_key
+      signing_key
+      EOF
 
-    # CA cert template
-    cat >ca.template <<EOF
-    organization = "${caName}"
-    cn = "${caName}"
-    expiration_days = 365
-    ca
-    cert_signing_key
-    crl_signing_key
-    EOF
+      # generate CA keypair
+      certtool                \
+        --generate-privkey    \
+        --key-type rsa        \
+        --sec-param High      \
+        --outfile $out/ca.key
+      certtool                     \
+        --generate-self-signed     \
+        --load-privkey $out/ca.key \
+        --template ca.template     \
+        --outfile $out/ca.crt
 
-    # server cert template
-    cat >server.template <<EOF
-    organization = "An example company"
-    cn = "${domain}"
-    expiration_days = 30
-    dns_name = "${domain}"
-    encryption_key
-    signing_key
-    EOF
-
-    # generate CA keypair
-    certtool                \
-      --generate-privkey    \
-      --key-type rsa        \
-      --sec-param High      \
-      --outfile $out/ca.key
-    certtool                     \
-      --generate-self-signed     \
-      --load-privkey $out/ca.key \
-      --template ca.template     \
-      --outfile $out/ca.crt
-
-    # generate server keypair
-    certtool                    \
-      --generate-privkey        \
-      --key-type rsa            \
-      --sec-param High          \
-      --outfile $out/server.key
-    certtool                            \
-      --generate-certificate            \
-      --load-privkey $out/server.key    \
-      --load-ca-privkey $out/ca.key     \
-      --load-ca-certificate $out/ca.crt \
-      --template server.template        \
-      --outfile $out/server.crt
-  '';
+      # generate server keypair
+      certtool                    \
+        --generate-privkey        \
+        --key-type rsa            \
+        --sec-param High          \
+        --outfile $out/server.key
+      certtool                            \
+        --generate-certificate            \
+        --load-privkey $out/server.key    \
+        --load-ca-privkey $out/ca.key     \
+        --load-ca-certificate $out/ca.crt \
+        --template server.template        \
+        --outfile $out/server.crt
+    '';
 
   example-good-cert = makeCert
-    { caName = "Example good CA";
-      domain = "good.example.com";
-    };
+  {
+    caName = "Example good CA";
+    domain = "good.example.com";
+  };
 
   example-bad-cert = makeCert
-    { caName = "Unknown CA";
-      domain = "bad.example.com";
-    };
-
-in
-
-{
+  {
+    caName = "Unknown CA";
+    domain = "bad.example.com";
+  };
+in {
   name = "custom-ca";
-  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+  meta.maintainers = with lib.maintainers; [rnhmjoj];
 
   enableOCR = true;
 
-  machine = { pkgs, ... }:
-    { imports = [ ./common/user-account.nix ./common/x11.nix ];
+  machine = {pkgs, ...}: {
+    imports = [./common/user-account.nix ./common/x11.nix];
 
-      # chromium-based browsers refuse to run as root
-      test-support.displayManager.auto.user = "alice";
+    # chromium-based browsers refuse to run as root
+    test-support.displayManager.auto.user = "alice";
 
-      # browsers may hang with the default memory
-      virtualisation.memorySize = 600;
+    # browsers may hang with the default memory
+    virtualisation.memorySize = 600;
 
-      networking.hosts."127.0.0.1" = [ "good.example.com" "bad.example.com" ];
-      security.pki.certificateFiles = [ "${example-good-cert}/ca.crt" ];
+    networking.hosts."127.0.0.1" = ["good.example.com" "bad.example.com"];
+    security.pki.certificateFiles = ["${example-good-cert}/ca.crt"];
 
-      services.nginx.enable = true;
-      services.nginx.virtualHosts."good.example.com" =
-        { onlySSL = true;
-          sslCertificate = "${example-good-cert}/server.crt";
-          sslCertificateKey = "${example-good-cert}/server.key";
-          locations."/".extraConfig = ''
-            add_header Content-Type text/plain;
-            return 200 'It works!';
-          '';
-        };
-      services.nginx.virtualHosts."bad.example.com" =
-        { onlySSL = true;
-          sslCertificate = "${example-bad-cert}/server.crt";
-          sslCertificateKey = "${example-bad-cert}/server.key";
-          locations."/".extraConfig = ''
-            add_header Content-Type text/plain;
-            return 200 'It does not work!';
-          '';
-        };
-
-      environment.systemPackages = with pkgs; [
-        xdotool
-        firefox
-        chromium
-        qutebrowser
-        midori
-      ];
+    services.nginx.enable = true;
+    services.nginx.virtualHosts."good.example.com" = {
+      onlySSL = true;
+      sslCertificate = "${example-good-cert}/server.crt";
+      sslCertificateKey = "${example-good-cert}/server.key";
+      locations."/".extraConfig = ''
+        add_header Content-Type text/plain;
+        return 200 'It works!';
+      '';
     };
+    services.nginx.virtualHosts."bad.example.com" = {
+      onlySSL = true;
+      sslCertificate = "${example-bad-cert}/server.crt";
+      sslCertificateKey = "${example-bad-cert}/server.key";
+      locations."/".extraConfig = ''
+        add_header Content-Type text/plain;
+        return 200 'It does not work!';
+      '';
+    };
+
+    environment.systemPackages = with pkgs; [
+      xdotool
+      firefox
+      chromium
+      qutebrowser
+      midori
+    ];
+  };
 
   testScript = ''
     from typing import Tuple

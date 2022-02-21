@@ -1,10 +1,17 @@
-{lib, stdenv, asdf, which, bash, lisp ? null}:
+{
+  lib,
+  stdenv,
+  asdf,
+  which,
+  bash,
+  lisp ? null,
+}:
 stdenv.mkDerivation {
   name = "cl-wrapper-script";
 
-  buildPhase="";
+  buildPhase = "";
 
-  installPhase=''
+  installPhase = ''
     mkdir -p "$out"/bin
     export head="$(which head)"
     export ls="$(which ls)"
@@ -44,7 +51,7 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  ASDF_OUTPUT_TRANSLATIONS="${builtins.storeDir}/:${builtins.storeDir}";
+  ASDF_OUTPUT_TRANSLATIONS = "${builtins.storeDir}/:${builtins.storeDir}";
 
   passthru = {
     inherit lisp;

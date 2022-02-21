@@ -1,9 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, pytest-cov, pytest-xdist
-, six, numpy, scipy, pyyaml, h5py
-, keras-applications, keras-preprocessing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytest-cov,
+  pytest-xdist,
+  six,
+  numpy,
+  scipy,
+  pyyaml,
+  h5py,
+  keras-applications,
+  keras-preprocessing,
 }:
-
 buildPythonPackage rec {
   pname = "keras";
   version = "2.7.0";
@@ -21,8 +30,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six pyyaml numpy scipy h5py
-    keras-applications keras-preprocessing
+    six
+    pyyaml
+    numpy
+    scipy
+    h5py
+    keras-applications
+    keras-preprocessing
   ];
 
   # Couldn't get tests working
@@ -32,6 +46,6 @@ buildPythonPackage rec {
     description = "Deep Learning library for Theano and TensorFlow";
     homepage = "https://keras.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ NikolaMandic ];
+    maintainers = with maintainers; [NikolaMandic];
   };
 }

@@ -1,15 +1,16 @@
-{ lib, stdenv
-, autoreconfHook
-, fetchbzr
-, pkg-config
-, gtk3
-, glib
-, file
-, gobject-introspection
-, json-glib
-, libsoup
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchbzr,
+  pkg-config,
+  gtk3,
+  glib,
+  file,
+  gobject-introspection,
+  json-glib,
+  libsoup,
 }:
-
 stdenv.mkDerivation rec {
   pname = "timezonemap";
   version = "0.4.5.1";
@@ -60,6 +61,6 @@ stdenv.mkDerivation rec {
     description = "A GTK+3 Timezone Map Widget";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = [maintainers.mkg20001];
   };
 }

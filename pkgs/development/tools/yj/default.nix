@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "yj";
   version = "5.0.0";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "0y0n9fsb85qlpf9slwsxzarmfi98asa4x04qp2r8pagl28l0i8wv";
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.Version=${version}"];
 
   meta = with lib; {
     description = "Convert YAML <=> TOML <=> JSON <=> HCL";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with maintainers; [Profpatsch];
     homepage = "https://github.com/sclevine/yj";
   };
 }

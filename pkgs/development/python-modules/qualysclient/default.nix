@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, certifi
-, charset-normalizer
-, fetchFromGitHub
-, idna
-, lxml
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  charset-normalizer,
+  fetchFromGitHub,
+  idna,
+  lxml,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "qualysclient";
   version = "0.0.4.8.2";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

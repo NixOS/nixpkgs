@@ -1,24 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, DiskArbitration
-, pkg-config
-, bzip2
-, libarchive
-, libconfuse
-, libsodium
-, xz
-, zlib
-, coreutils
-, dosfstools
-, mtools
-, unzip
-, zip
-, which
-, xdelta
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  DiskArbitration,
+  pkg-config,
+  bzip2,
+  libarchive,
+  libconfuse,
+  libsodium,
+  xz,
+  zlib,
+  coreutils,
+  dosfstools,
+  mtools,
+  unzip,
+  zip,
+  which,
+  xdelta,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fwup";
   version = "1.9.0";
@@ -35,16 +35,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    bzip2
-    libarchive
-    libconfuse
-    libsodium
-    xz
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    DiskArbitration
-  ];
+  buildInputs =
+    [
+      bzip2
+      libarchive
+      libconfuse
+      libsodium
+      xz
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      DiskArbitration
+    ];
 
   propagatedBuildInputs = [
     coreutils
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "Configurable embedded Linux firmware update creator and runner";
     homepage = "https://github.com/fhunleth/fwup";
     license = licenses.asl20;
-    maintainers = [ maintainers.georgewhewell ];
+    maintainers = [maintainers.georgewhewell];
     platforms = platforms.all;
   };
 }

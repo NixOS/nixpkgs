@@ -1,14 +1,15 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   dataDir = "/var/lib/mx-puppet-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
   cfg = config.services.mx-puppet-discord;
   settingsFormat = pkgs.formats.json {};
   settingsFile = settingsFormat.generate "mx-puppet-discord-config.json" cfg.settings;
-
 in {
   options = {
     services.mx-puppet-discord = {
@@ -26,8 +27,8 @@ in {
             enabled = true;
             interval = 500;
           };
-          provisioning.whitelist = [ ];
-          relay.whitelist = [ ];
+          provisioning.whitelist = [];
+          relay.whitelist = [];
 
           # variables are preceded by a colon.
           namePatterns = {
@@ -81,9 +82,9 @@ in {
     systemd.services.mx-puppet-discord = {
       description = "Matrix to Discord puppeting bridge";
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
-      after = [ "network-online.target" ] ++ cfg.serviceDependencies;
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"] ++ cfg.serviceDependencies;
+      after = ["network-online.target"] ++ cfg.serviceDependencies;
 
       preStart = ''
         # generate the appservice's registration file if absent
@@ -118,5 +119,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ govanify ];
+  meta.maintainers = with maintainers; [govanify];
 }

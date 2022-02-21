@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, autoPatchelfHook
-, dotnetCorePackages
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  dotnetCorePackages,
 }:
-
 buildDotnetModule rec {
   pname = "discordchatexporter-cli";
   version = "2.32";
@@ -23,15 +23,15 @@ buildDotnetModule rec {
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
   nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ stdenv.cc.cc.lib ];
+  nativeBuildInputs = [autoPatchelfHook];
+  buildInputs = [stdenv.cc.cc.lib];
 
   meta = with lib; {
     description = "A tool to export Discord chat logs to a file";
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.ivar ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.ivar];
+    platforms = ["x86_64-linux"];
   };
   passthru.updateScript = ./updater.sh;
 }

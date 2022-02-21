@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, acme
-, boto3
-, certbot
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  acme,
+  boto3,
+  certbot,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "certbot-dns-route53";
 
@@ -22,11 +22,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+  pytestFlagsArray = ["-o cache_dir=$(mktemp -d)"];
 
   sourceRoot = "source/certbot-dns-route53";
 
-  meta = certbot.meta // {
-    description = "Route53 DNS Authenticator plugin for Certbot";
-  };
+  meta =
+    certbot.meta
+    // {
+      description = "Route53 DNS Authenticator plugin for Certbot";
+    };
 }

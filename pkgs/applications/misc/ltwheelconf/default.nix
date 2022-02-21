@@ -1,5 +1,10 @@
-{ lib, stdenv, libusb1, pkg-config, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  libusb1,
+  pkg-config,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "ltwheelconf";
   version = "0.2.7";
@@ -11,8 +16,8 @@ stdenv.mkDerivation {
     sha256 = "1fsz7k73yln987gcx1jvb5irxfbp1x2c457a60a8yap27nkp5y2w";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libusb1];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/thk/LTWheelConf";
     description = "Logitech wheels configuration tool";
     license = licenses.gpl3;
-    maintainers = [ maintainers.ebzzry ];
+    maintainers = [maintainers.ebzzry];
     platforms = platforms.linux;
   };
 }

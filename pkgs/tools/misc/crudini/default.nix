@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, python3Packages, help2man, installShellFiles }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  help2man,
+  installShellFiles,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "crudini";
   version = "0.9.3";
@@ -11,9 +16,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0298hvg0fpk0m0bjpwryj3icksbckwqqsr9w1ain55wf5s0v24k3";
   };
 
-  nativeBuildInputs = [ help2man installShellFiles ];
+  nativeBuildInputs = [help2man installShellFiles];
 
-  propagatedBuildInputs = with python3Packages; [ iniparse ];
+  propagatedBuildInputs = with python3Packages; [iniparse];
 
   postPatch = ''
     substituteInPlace crudini-help \
@@ -44,6 +49,6 @@ python3Packages.buildPythonApplication rec {
     description = "A utility for manipulating ini files ";
     homepage = "https://www.pixelbeat.org/programs/crudini/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

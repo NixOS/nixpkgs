@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, django, pytest, pytest-django }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  pytest,
+  pytest-django,
+}:
 buildPythonPackage rec {
   pname = "django-picklefield";
   version = "3.0.1";
@@ -12,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "0ni7bc86k0ra4pc8zv451pzlpkhs1nyil1sq9jdb4m2mib87b5fk";
   };
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [django];
 
-  checkInputs = [ pytest pytest-django ];
+  checkInputs = [pytest pytest-django];
 
   checkPhase = ''
     PYTHONPATH="$(pwd):$PYTHONPATH" \

@@ -1,23 +1,23 @@
-{ lib
-, Babel
-, buildPythonPackage
-, click
-, cryptography
-, fetchPypi
-, gntp
-, installShellFiles
-, markdown
-, mock
-, paho-mqtt
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, requests_oauthlib
-, six
-, slixmpp
+{
+  lib,
+  Babel,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fetchPypi,
+  gntp,
+  installShellFiles,
+  markdown,
+  mock,
+  paho-mqtt,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  requests_oauthlib,
+  six,
+  slixmpp,
 }:
-
 buildPythonPackage rec {
   pname = "apprise";
   version = "0.9.7";
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [marsam];
   };
 }

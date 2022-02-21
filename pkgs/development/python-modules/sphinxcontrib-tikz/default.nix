@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, pdf2svg
-, texLive
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
+  pdf2svg,
+  texLive,
 }:
-
 buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
   version = "0.4.15";
@@ -21,18 +21,17 @@ buildPythonPackage rec {
       --replace "system(['pdf2svg'" "system(['${pdf2svg}/bin/pdf2svg'"
   '';
 
-  propagatedBuildInputs = [ sphinx ];
+  propagatedBuildInputs = [sphinx];
 
   # no tests in package
   doCheck = false;
 
-  pythonImportsCheck = [ "sphinxcontrib.tikz" ];
+  pythonImportsCheck = ["sphinxcontrib.tikz"];
 
   meta = with lib; {
     description = "TikZ extension for Sphinx";
     homepage = "https://bitbucket.org/philexander/tikz";
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
     license = licenses.bsd3;
   };
-
 }

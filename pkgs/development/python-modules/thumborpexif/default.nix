@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "thumbor-pexif";
   version = "0.14.1";
-  disabled = ! isPy27;
+  disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,5 +19,4 @@ buildPythonPackage rec {
     homepage = "http://www.benno.id.au/code/pexif/";
     license = licenses.mit;
   };
-
 }

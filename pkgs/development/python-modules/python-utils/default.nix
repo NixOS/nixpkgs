@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
-, pytest-mypy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
+  pytest-mypy,
 }:
-
 buildPythonPackage rec {
   pname = "python-utils";
   version = "3.1.0";

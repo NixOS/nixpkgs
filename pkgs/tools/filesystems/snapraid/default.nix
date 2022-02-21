@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "snapraid";
   version = "12.1";
@@ -15,14 +19,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [];
 
   meta = {
     homepage = "http://www.snapraid.it/";
     description = "A backup program for disk arrays";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.makefu ];
+    maintainers = [lib.maintainers.makefu];
     platforms = lib.platforms.unix;
   };
 }

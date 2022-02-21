@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "disk-filltest";
   version = "0.8.2";
@@ -31,8 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://panthema.net/2013/disk-filltest";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ caadar ];
+    maintainers = with maintainers; [caadar];
     platforms = platforms.all;
   };
-
 }

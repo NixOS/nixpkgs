@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, ncurses, readline, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  ncurses,
+  readline,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "abook";
   version = "0.6.1";
@@ -17,14 +25,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ ncurses readline ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
+  buildInputs = [ncurses readline];
 
   meta = {
     homepage = "http://abook.sourceforge.net/";
     description = "Text-based addressbook program designed to use with mutt mail client";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.edwtjo ];
+    maintainers = [lib.maintainers.edwtjo];
     platforms = with lib.platforms; linux;
   };
 }

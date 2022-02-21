@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.syncthing.relay;
 
   dataDirectory = "/var/lib/syncthing-relay";
@@ -106,8 +108,8 @@ in {
   config = mkIf cfg.enable {
     systemd.services.syncthing-relay = {
       description = "Syncthing relay service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         DynamicUser = true;

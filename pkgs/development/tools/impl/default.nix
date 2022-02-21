@@ -1,5 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
-
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "impl";
   version = "1.0.0";
@@ -20,7 +23,7 @@ buildGoModule rec {
     description = "Generate method stubs for implementing an interface";
     homepage = "https://github.com/josharian/impl";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

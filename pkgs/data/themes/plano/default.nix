@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gdk-pixbuf
-, gtk_engines
-, gtk-engine-murrine
-, librsvg
-, sassc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gdk-pixbuf,
+  gtk_engines,
+  gtk-engine-murrine,
+  librsvg,
+  sassc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "plano-theme";
   version = "4.0";
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lassekongo83/plano-theme";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

@@ -1,7 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools
-, twiggy, requests, offtrac, bugzilla, taskw, python-dateutil, pytz, keyring, six
-, jinja2, pycurl, dogpile-cache, lockfile, click, pyxdg, future, jira }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  twiggy,
+  requests,
+  offtrac,
+  bugzilla,
+  taskw,
+  python-dateutil,
+  pytz,
+  keyring,
+  six,
+  jinja2,
+  pycurl,
+  dogpile-cache,
+  lockfile,
+  click,
+  pyxdg,
+  future,
+  jira,
+}:
 buildPythonPackage rec {
   pname = "bugwarrior";
   version = "1.8.0";
@@ -14,8 +34,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     setuptools
-    twiggy requests offtrac bugzilla taskw python-dateutil pytz keyring six
-    jinja2 pycurl dogpile-cache lockfile click pyxdg future jira
+    twiggy
+    requests
+    offtrac
+    bugzilla
+    taskw
+    python-dateutil
+    pytz
+    keyring
+    six
+    jinja2
+    pycurl
+    dogpile-cache
+    lockfile
+    click
+    pyxdg
+    future
+    jira
   ];
 
   # for the moment oauth2client <4.0.0 and megaplan>=1.4 are missing for running the test suite.
@@ -26,6 +61,6 @@ buildPythonPackage rec {
     description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pierron yurrriq ];
+    maintainers = with maintainers; [pierron yurrriq];
   };
 }

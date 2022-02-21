@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+}:
 stdenv.mkDerivation rec {
   pname = "orocos-kdl";
   version = "1.5.1";
@@ -15,14 +20,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/orocos_kdl";
 
-  nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ eigen ];
+  nativeBuildInputs = [cmake];
+  propagatedBuildInputs = [eigen];
 
   meta = with lib; {
     description = "Kinematics and Dynamics Library";
     homepage = "https://www.orocos.org/kdl.html";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [lopsided98];
     platforms = platforms.all;
   };
 }

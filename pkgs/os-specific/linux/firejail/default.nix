@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, libapparmor
-, which
-, xdg-dbus-proxy
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  libapparmor,
+  which,
+  xdg-dbus-proxy,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "firejail";
   version = "0.9.68";
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Namespace-based sandboxing tool for Linux";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     homepage = "https://firejail.wordpress.com/";
   };

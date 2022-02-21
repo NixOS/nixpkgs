@@ -1,16 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, atk
-, cairo
-, gdk-pixbuf
-, glib
-, gtk3
-, openssl
-, pango
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  openssl,
+  pango,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "noaa-apt";
   version = "1.3.1";
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     description = "NOAA APT image decoder";
     homepage = "https://noaa-apt.mbernardi.com.ar/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [trepetti];
     platforms = platforms.all;
     changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${version}";
   };

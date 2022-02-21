@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, installShellFiles
-, openstackdocstheme
-, osc-lib
-, pbr
-, python-cinderclient
-, python-keystoneclient
-, python-novaclient
-, requests-mock
-, sphinx
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  installShellFiles,
+  openstackdocstheme,
+  osc-lib,
+  pbr,
+  python-cinderclient,
+  python-keystoneclient,
+  python-novaclient,
+  requests-mock,
+  sphinx,
+  stestr,
 }:
-
 buildPythonPackage rec {
   pname = "python-openstackclient";
   version = "5.7.0";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "openstackclient" ];
+  pythonImportsCheck = ["openstackclient"];
 
   meta = with lib; {
     description = "OpenStack Command-line Client";

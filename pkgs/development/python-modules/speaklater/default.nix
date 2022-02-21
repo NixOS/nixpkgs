@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "speaklater";
   version = "1.3";
@@ -16,7 +16,6 @@ buildPythonPackage rec {
     description = "Implements a lazy string for python useful for use with gettext";
     homepage = "https://github.com/mitsuhiko/speaklater";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ matejc ];
+    maintainers = with maintainers; [matejc];
   };
-
 }

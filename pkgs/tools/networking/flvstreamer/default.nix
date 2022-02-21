@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "flvstreamer";
   version = "2.1c1";
@@ -24,16 +27,15 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command-line RTMP client";
 
-    longDescription =
-      '' flvstreamer is an open source command-line RTMP client intended to
-         stream audio or video content from all types of flash or rtmp servers.
-      '';
+    longDescription = ''      flvstreamer is an open source command-line RTMP client intended to
+              stream audio or video content from all types of flash or rtmp servers.
+    '';
 
     license = lib.licenses.gpl2Plus;
 
     homepage = "https://savannah.nongnu.org/projects/flvstreamer";
 
-    maintainers = [ lib.maintainers.thammers ];
+    maintainers = [lib.maintainers.thammers];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "robodoc";
   version = "4.99.44";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "l3prSdaGhOvXmZfCPbsZJNocO7y20zJjLQpajRTJOqE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     homepage = "https://github.com/gumpu/ROBODoc";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       Java -- basically any program in which you can use remarks/comments.
     '';
     license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; all;
   };
 }

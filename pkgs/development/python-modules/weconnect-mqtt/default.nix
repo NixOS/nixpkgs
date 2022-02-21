@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, paho-mqtt
-, weconnect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  paho-mqtt,
+  weconnect,
 }:
-
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
   version = "0.29.1";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client that publishes data from Volkswagen WeConnect";
     homepage = "https://github.com/tillsteinbach/WeConnect-mqtt";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

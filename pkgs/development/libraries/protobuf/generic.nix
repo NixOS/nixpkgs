@@ -1,27 +1,34 @@
-{ lib, stdenv, version, src
-, autoreconfHook, zlib, gtest
-, ...
+{
+  lib,
+  stdenv,
+  version,
+  src,
+  autoreconfHook,
+  zlib,
+  gtest,
+  ...
 }:
-
 stdenv.mkDerivation {
   pname = "protobuf";
   inherit version;
 
   inherit src;
 
-  postPatch = ''
-    rm -rf gtest
-    cp -r ${gtest.src}/googletest gtest
-    chmod -R a+w gtest
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
-  '';
+  postPatch =
+    ''
+      rm -rf gtest
+      cp -r ${gtest.src}/googletest gtest
+      chmod -R a+w gtest
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/google/protobuf/testing/googletest.cc \
+        --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
+    '';
 
-  outputs = [ "out" "lib" ];
+  outputs = ["out" "lib"];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [zlib];
 
   # The generated C++ code uses static initializers which mutate a global data
   # structure. This causes problems for an executable when:
@@ -47,11 +54,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Protocol Buffers - Google's data interchange format";
-    longDescription =
-      '' Protocol Buffers are a way of encoding structured data in an
-         efficient yet extensible format.  Google uses Protocol Buffers for
-         almost all of its internal RPC protocols and file formats.
-      '';
+    longDescription = ''      Protocol Buffers are a way of encoding structured data in an
+              efficient yet extensible format.  Google uses Protocol Buffers for
+              almost all of its internal RPC protocols and file formats.
+    '';
     license = "mBSD";
     homepage = "https://developers.google.com/protocol-buffers/";
     platforms = lib.platforms.unix;

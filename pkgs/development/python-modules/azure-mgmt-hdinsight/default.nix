@@ -1,10 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  azure-common,
+  azure-mgmt-core,
+  msrest,
+  msrestazure,
 }:
-
 buildPythonPackage rec {
   version = "9.0.0";
   pname = "azure-mgmt-hdinsight";
@@ -26,12 +29,12 @@ buildPythonPackage rec {
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.hdinsight" ];
+  pythonImportsCheck = ["azure.common" "azure.mgmt.hdinsight"];
 
   meta = with lib; {
     description = "Microsoft Azure HDInsight Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ocaml,
+}:
 buildDunePackage rec {
   pname = "integers";
   version = "0.5.1";
@@ -18,6 +22,6 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/ocamllabs/ocaml-integers";
     changelog = "https://github.com/ocamllabs/ocaml-integers/raw/${version}/CHANGES.md";
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

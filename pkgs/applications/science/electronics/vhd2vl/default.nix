@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, bison
-, flex
-, verilog
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  bison,
+  flex,
+  verilog,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vhd2vl";
   version = "unstable-2018-09-01";
@@ -47,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "VHDL to Verilog converter";
     homepage = "https://github.com/ldoolitt/vhd2vl";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ matthuszagh ];
+    maintainers = with maintainers; [matthuszagh];
   };
 }

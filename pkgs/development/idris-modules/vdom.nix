@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "vdom";
   version = "0.6.0";
 
@@ -19,6 +20,6 @@ build-idris-package  {
     description = "Virtual DOM in pure Idris";
     homepage = "https://github.com/brandondyck/idris-vdom";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

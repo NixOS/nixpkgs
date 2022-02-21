@@ -1,7 +1,9 @@
-{ appleDerivation', stdenvNoCC }:
-
+{
+  appleDerivation',
+  stdenvNoCC,
+}:
 appleDerivation' stdenvNoCC {
-  phases = [ "unpackPhase" "installPhase" ];
+  phases = ["unpackPhase" "installPhase"];
 
   installPhase = ''
     mkdir -p $out/include

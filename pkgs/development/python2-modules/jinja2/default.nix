@@ -1,12 +1,13 @@
-{ lib, stdenv
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, pytest
-, markupsafe
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  pytest,
+  markupsafe,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "Jinja2";
   version = "2.11.3";
@@ -16,8 +17,8 @@ buildPythonPackage rec {
     sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ markupsafe setuptools ];
+  checkInputs = [pytest];
+  propagatedBuildInputs = [markupsafe setuptools];
 
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158
@@ -37,6 +38,6 @@ buildPythonPackage rec {
       Django inspired non-XML syntax but supports inline expressions and
       an optional sandboxed environment.
     '';
-    maintainers = with maintainers; [ pierron sjourdois ];
+    maintainers = with maintainers; [pierron sjourdois];
   };
 }

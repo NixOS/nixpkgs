@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "strict-rfc3339";
   version = "0.7";
@@ -15,6 +18,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/danielrichman/strict-rfc3339";
     license = licenses.gpl3;
     description = "Strict, simple, lightweight RFC3339 functions";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [vanschelven];
   };
 }

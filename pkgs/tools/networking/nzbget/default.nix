@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, ncurses, libsigcxx, libpar2
-, gnutls, libgcrypt, zlib, openssl, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  ncurses,
+  libsigcxx,
+  libpar2,
+  gnutls,
+  libgcrypt,
+  zlib,
+  openssl,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "nzbget";
   version = "21.1";
@@ -10,20 +22,28 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-To/BvrgNwq8tajajOjP0Te3d1EhgAsZE9MR5MEMHICU=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libxml2 ncurses libsigcxx libpar2 gnutls
-                  libgcrypt zlib openssl ];
+  buildInputs = [
+    libxml2
+    ncurses
+    libsigcxx
+    libpar2
+    gnutls
+    libgcrypt
+    zlib
+    openssl
+  ];
 
   enableParallelBuilding = true;
 
-  passthru.tests = { inherit (nixosTests) nzbget; };
+  passthru.tests = {inherit (nixosTests) nzbget;};
 
   meta = with lib; {
     homepage = "https://nzbget.net";
     license = licenses.gpl2Plus;
     description = "A command line tool for downloading files from news servers";
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = with platforms; unix;
   };
 }

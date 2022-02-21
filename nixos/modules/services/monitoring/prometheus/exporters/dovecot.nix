@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.dovecot;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.dovecot;
+in {
   port = 9166;
   extraOpts = {
     telemetryPath = mkOption {
@@ -65,8 +66,8 @@ in
     };
     scopes = mkOption {
       type = types.listOf types.str;
-      default = [ "user" ];
-      example = [ "user" "global" ];
+      default = ["user"];
+      example = ["user" "global"];
       description = ''
         Stats scopes to query.
       '';

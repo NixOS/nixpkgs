@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, asciidoc, libxml2, docbook_xml_dtd_45, libxslt
-, docbook_xsl, diffutils, coreutils, gnugrep, gnused
+{
+  lib,
+  stdenv,
+  fetchurl,
+  asciidoc,
+  libxml2,
+  docbook_xml_dtd_45,
+  libxslt,
+  docbook_xsl,
+  diffutils,
+  coreutils,
+  gnugrep,
+  gnused,
 }:
-
 stdenv.mkDerivation rec {
   pname = "autorevision";
   version = "1.22";
@@ -12,10 +22,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    asciidoc libxml2 docbook_xml_dtd_45 libxslt docbook_xsl
+    asciidoc
+    libxml2
+    docbook_xml_dtd_45
+    libxslt
+    docbook_xsl
   ];
 
-  installFlags = [ "prefix=$(out)" ];
+  installFlags = ["prefix=$(out)"];
 
   postInstall = ''
     sed -e "s|\<cmp\>|${diffutils}/bin/cmp|g" \
@@ -31,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://autorevision.github.io/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

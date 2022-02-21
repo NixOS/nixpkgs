@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytest-metadata
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pytest-metadata,
+  pytest-xdist,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-json-report";
   version = "1.4.1";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to report test results as JSON";
     homepage = "https://github.com/numirias/pytest-json-report";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

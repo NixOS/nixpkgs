@@ -1,25 +1,27 @@
 # Test for cntr tool
-{ system ? builtins.currentSystem, config ? { }
-, pkgs ? import ../.. { inherit system config; }, lib ? pkgs.lib }:
-
-let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
+{
+  system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. {inherit system config;},
+  lib ? pkgs.lib,
+}: let
+  inherit (import ../lib/testing-python.nix {inherit system pkgs;}) makeTest;
 
   mkOCITest = backend:
     makeTest {
       name = "cntr-${backend}";
 
-      meta = { maintainers = with lib.maintainers; [ sorki mic92 ]; };
+      meta = {maintainers = with lib.maintainers; [sorki mic92];};
 
       nodes = {
-        ${backend} = { pkgs, ... }: {
-          environment.systemPackages = [ pkgs.cntr ];
+        ${backend} = {pkgs, ...}: {
+          environment.systemPackages = [pkgs.cntr];
           virtualisation.oci-containers = {
             inherit backend;
             containers.nginx = {
               image = "nginx-container";
               imageFile = pkgs.dockerTools.examples.nginx;
-              ports = [ "8181:80" ];
+              ports = ["8181:80"];
             };
           };
         };
@@ -38,16 +40,16 @@ let
   mkContainersTest = makeTest {
     name = "cntr-containers";
 
-    meta = with pkgs.lib.maintainers; { maintainers = [ sorki mic92 ]; };
+    meta = with pkgs.lib.maintainers; {maintainers = [sorki mic92];};
 
-    machine = { lib, ... }: {
-      environment.systemPackages = [ pkgs.cntr ];
+    machine = {lib, ...}: {
+      environment.systemPackages = [pkgs.cntr];
       containers.test = {
         autoStart = true;
         privateNetwork = true;
         hostAddress = "172.16.0.1";
         localAddress = "172.16.0.2";
-        config = { };
+        config = {};
       };
     };
 
@@ -57,7 +59,9 @@ let
       machine.succeed("cntr attach test sh -- -c 'ping -c5 172.16.0.1'")
     '';
   };
-in {
-  nixos-container = mkContainersTest;
-} // (lib.foldl' (attrs: backend: attrs // { ${backend} = mkOCITest backend; })
-  { } [ "docker" "podman" ])
+in
+  {
+    nixos-container = mkContainersTest;
+  }
+  // (lib.foldl' (attrs: backend: attrs // {${backend} = mkOCITest backend;})
+  {} ["docker" "podman"])

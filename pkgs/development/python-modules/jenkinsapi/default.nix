@@ -1,15 +1,16 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest
-, pytest-mock
-, pytz
-, requests
-, requests-kerberos
-, toml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytest,
+  pytest-mock,
+  pytz,
+  requests,
+  requests-kerberos,
+  toml,
 }:
-
 buildPythonPackage rec {
   pname = "jenkinsapi";
   version = "0.3.11";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
     sha256 = "a212a244b0a6022a61657746c8120ac9b6db83432371b345154075eb8faceb61";
   };
 
-  propagatedBuildInputs = [ pytz requests ];
-  checkInputs = [ mock pytest pytest-mock requests-kerberos toml ];
+  propagatedBuildInputs = [pytz requests];
+  checkInputs = [mock pytest pytest-mock requests-kerberos toml];
   # TODO requests-kerberos is broken on darwin, weeding out the broken tests without
   # access to macOS is not an adventure I am ready to embark on - @rski
   doCheck = !stdenv.isDarwin;
@@ -33,8 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python API for accessing resources on a Jenkins continuous-integration server";
     homepage = "https://github.com/salimfadhley/jenkinsapi";
-    maintainers = with maintainers; [ drets ];
+    maintainers = with maintainers; [drets];
     license = licenses.mit;
   };
-
 }

@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, pcre
-, json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  pcre,
+  json_c,
+  flex,
+  bison,
+  dtc,
+  pciutils,
+  dmidecode,
+  acpica-tools,
+  libbsd,
+}:
 stdenv.mkDerivation rec {
   pname = "fwts";
   version = "21.07.00";
@@ -11,8 +25,8 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode acpica-tools libbsd ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [glib pcre json_c flex bison dtc pciutils dmidecode acpica-tools libbsd];
 
   postPatch = ''
     substituteInPlace src/lib/include/fwts_binpaths.h \
@@ -28,6 +42,6 @@ stdenv.mkDerivation rec {
     description = "Firmware Test Suite";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ tadfisher ];
+    maintainers = with maintainers; [tadfisher];
   };
 }

@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-video-effects";
   version = "0.5.0";

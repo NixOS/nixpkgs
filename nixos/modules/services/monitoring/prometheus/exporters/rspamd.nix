@@ -1,60 +1,66 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
   cfg = config.services.prometheus.exporters.rspamd;
 
   mkFile = conf:
     pkgs.writeText "rspamd-exporter-config.yml" (builtins.toJSON conf);
 
   generateConfig = extraLabels: {
-    metrics = (map (path: {
-      name = "rspamd_${replaceStrings [ "[" "." " " "]" "\\" "'" ] [ "_" "_" "_" "" "" "" ] path}";
-      path = "{ .${path} }";
-      labels = extraLabels;
-    }) [
-      "actions['add\\ header']"
-      "actions['no\\ action']"
-      "actions['rewrite\\ subject']"
-      "actions['soft\\ reject']"
-      "actions.greylist"
-      "actions.reject"
-      "bytes_allocated"
-      "chunks_allocated"
-      "chunks_freed"
-      "chunks_oversized"
-      "connections"
-      "control_connections"
-      "ham_count"
-      "learned"
-      "pools_allocated"
-      "pools_freed"
-      "read_only"
-      "scanned"
-      "shared_chunks_allocated"
-      "spam_count"
-      "total_learns"
-    ]) ++ [{
-      name = "rspamd_statfiles";
-      type = "object";
-      path = "{.statfiles[*]}";
-      labels = recursiveUpdate {
-        symbol = "{.symbol}";
-        type = "{.type}";
-      } extraLabels;
-      values = {
-        revision = "{.revision}";
-        size = "{.size}";
-        total = "{.total}";
-        used = "{.used}";
-        languages = "{.languages}";
-        users = "{.users}";
-      };
-    }];
+    metrics =
+      (map (path: {
+        name = "rspamd_${replaceStrings ["[" "." " " "]" "\\" "'"] ["_" "_" "_" "" "" ""] path}";
+        path = "{ .${path} }";
+        labels = extraLabels;
+      }) [
+        "actions['add\\ header']"
+        "actions['no\\ action']"
+        "actions['rewrite\\ subject']"
+        "actions['soft\\ reject']"
+        "actions.greylist"
+        "actions.reject"
+        "bytes_allocated"
+        "chunks_allocated"
+        "chunks_freed"
+        "chunks_oversized"
+        "connections"
+        "control_connections"
+        "ham_count"
+        "learned"
+        "pools_allocated"
+        "pools_freed"
+        "read_only"
+        "scanned"
+        "shared_chunks_allocated"
+        "spam_count"
+        "total_learns"
+      ])
+      ++ [
+        {
+          name = "rspamd_statfiles";
+          type = "object";
+          path = "{.statfiles[*]}";
+          labels = recursiveUpdate {
+            symbol = "{.symbol}";
+            type = "{.type}";
+          }
+          extraLabels;
+          values = {
+            revision = "{.revision}";
+            size = "{.size}";
+            total = "{.total}";
+            used = "{.used}";
+            languages = "{.languages}";
+            users = "{.users}";
+          };
+        }
+      ];
   };
-in
-{
+in {
   port = 7980;
   extraOpts = {
     extraLabels = mkOption {
@@ -80,7 +86,7 @@ in
   '';
 
   imports = [
-    (mkRemovedOptionModule [ "url" ] ''
+    (mkRemovedOptionModule ["url"] ''
       This option was removed. The URL of the rspamd metrics endpoint
       must now be provided to the exporter by prometheus via the url
       parameter `target'.
@@ -92,6 +98,9 @@ in
       For more information, take a look at the official documentation
       (https://github.com/prometheus-community/json_exporter) of the json_exporter.
     '')
-     ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
 }

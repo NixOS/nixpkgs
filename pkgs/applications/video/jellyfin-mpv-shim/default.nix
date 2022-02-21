@@ -1,16 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, jellyfin-apiclient-python
-, jinja2
-, mpv
-, pillow
-, pystray
-, python-mpv-jsonipc
-, pywebview
-, tkinter
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  jellyfin-apiclient-python,
+  jinja2,
+  mpv,
+  pillow,
+  pystray,
+  python-mpv-jsonipc,
+  pywebview,
+  tkinter,
 }:
-
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
   version = "2.0.2";
@@ -54,7 +54,7 @@ buildPythonApplication rec {
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "jellyfin_mpv_shim" ];
+  pythonImportsCheck = ["jellyfin_mpv_shim"];
 
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellyfin-mpv-shim";
@@ -79,6 +79,6 @@ buildPythonApplication rec {
       # Static Grain
       unlicense
     ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

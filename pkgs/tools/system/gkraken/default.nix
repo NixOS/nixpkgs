@@ -1,18 +1,18 @@
-{ python3Packages
-, lib
-, fetchFromGitLab
-, meson
-, pkg-config
-, glib
-, ninja
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, libnotify
-, dbus
-, wrapGAppsHook
+{
+  python3Packages,
+  lib,
+  fetchFromGitLab,
+  meson,
+  pkg-config,
+  glib,
+  ninja,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  dbus,
+  wrapGAppsHook,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "gkraken";
   version = "1.1.6";
@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/leinardi/gkraken";
     changelog = "https://gitlab.com/leinardi/gkraken/-/tags/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.linux;
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchPypi
-, cachecontrol
-, lockfile
-, mistune
-, rdflib
-, ruamel-yaml
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  black,
+  buildPythonPackage,
+  fetchPypi,
+  cachecontrol,
+  lockfile,
+  mistune,
+  rdflib,
+  ruamel-yaml,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "schema-salad";
   version = "8.2.20220103095339";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [veprbl];
   };
 }

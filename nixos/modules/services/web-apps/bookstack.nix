@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.bookstack;
   bookstack = pkgs.bookstack.override {
     dataDir = cfg.dataDir;
@@ -25,15 +27,13 @@ let
   '';
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
-
 in {
   imports = [
-    (mkRemovedOptionModule [ "services" "bookstack" "extraConfig" ] "Use services.bookstack.config instead.")
-    (mkRemovedOptionModule [ "services" "bookstack" "cacheDir" ] "The cache directory is now handled automatically.")
+    (mkRemovedOptionModule ["services" "bookstack" "extraConfig"] "Use services.bookstack.config instead.")
+    (mkRemovedOptionModule ["services" "bookstack" "cacheDir"] "The cache directory is now handled automatically.")
   ];
 
   options.services.bookstack = {
-
     enable = mkEnableOption "BookStack";
 
     user = mkOption {
@@ -60,10 +60,10 @@ in {
 
     hostname = lib.mkOption {
       type = lib.types.str;
-      default = if config.networking.domain != null then
-                  config.networking.fqdn
-                else
-                  config.networking.hostName;
+      default =
+        if config.networking.domain != null
+        then config.networking.fqdn
+        else config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
       example = "bookstack.example.com";
       description = ''
@@ -128,7 +128,7 @@ in {
 
     mail = {
       driver = mkOption {
-        type = types.enum [ "smtp" "sendmail" ];
+        type = types.enum ["smtp" "sendmail"];
         default = "smtp";
         description = "Mail driver to use.";
       };
@@ -168,7 +168,7 @@ in {
         '';
       };
       encryption = mkOption {
-        type = with types; nullOr (enum [ "tls" ]);
+        type = with types; nullOr (enum ["tls"]);
         default = null;
         description = "SMTP encryption mechanism to use.";
       };
@@ -182,7 +182,7 @@ in {
     };
 
     poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+      type = with types; attrsOf (oneOf [str int bool]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -200,7 +200,7 @@ in {
     nginx = mkOption {
       type = types.submodule (
         recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
+        (import ../web-servers/nginx/vhost-options.nix {inherit config lib;}) {}
       );
       default = {};
       example = literalExpression ''
@@ -221,27 +221,27 @@ in {
     config = mkOption {
       type = with types;
         attrsOf
-          (nullOr
-            (either
-              (oneOf [
-                bool
-                int
-                port
-                path
-                str
-              ])
-              (submodule {
-                options = {
-                  _secret = mkOption {
-                    type = nullOr str;
-                    description = ''
-                      The path to a file containing the value the
-                      option should be set to in the final
-                      configuration file.
-                    '';
-                  };
-                };
-              })));
+        (nullOr
+        (either
+        (oneOf [
+          bool
+          int
+          port
+          path
+          str
+        ])
+        (submodule {
+          options = {
+            _secret = mkOption {
+              type = nullOr str;
+              description = ''
+                The path to a file containing the value the
+                option should be set to in the final
+                configuration file.
+              '';
+            };
+          };
+        })));
       default = {};
       example = literalExpression ''
         {
@@ -273,16 +273,16 @@ in {
         file.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
-
     assertions = [
-      { assertion = db.createLocally -> db.user == user;
+      {
+        assertion = db.createLocally -> db.user == user;
         message = "services.bookstack.database.user must be set to ${user} if services.bookstack.database.createLocally is set true.";
       }
-      { assertion = db.createLocally -> db.passwordFile == null;
+      {
+        assertion = db.createLocally -> db.passwordFile == null;
         message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";
       }
     ];
@@ -311,15 +311,16 @@ in {
       SESSION_SECURE_COOKIE = tlsEnabled;
     };
 
-    environment.systemPackages = [ artisan ];
+    environment.systemPackages = [artisan];
 
     services.mysql = mkIf db.createLocally {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = [ db.name ];
+      ensureDatabases = [db.name];
       ensureUsers = [
-        { name = db.user;
-          ensurePermissions = { "${db.name}.*" = "ALL PRIVILEGES"; };
+        {
+          name = db.user;
+          ensurePermissions = {"${db.name}.*" = "ALL PRIVILEGES";};
         }
       ];
     };
@@ -332,11 +333,13 @@ in {
         post_max_size = ${cfg.maxUploadSize}
         upload_max_filesize = ${cfg.maxUploadSize}
       '';
-      settings = {
-        "listen.mode" = "0660";
-        "listen.owner" = user;
-        "listen.group" = group;
-      } // cfg.poolConfig;
+      settings =
+        {
+          "listen.mode" = "0660";
+          "listen.owner" = user;
+          "listen.group" = group;
+        }
+        // cfg.poolConfig;
     };
 
     services.nginx = {
@@ -344,28 +347,31 @@ in {
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
       recommendedGzipSettings = true;
-      virtualHosts.${cfg.hostname} = mkMerge [ cfg.nginx {
-        root = mkForce "${bookstack}/public";
-        locations = {
-          "/" = {
-            index = "index.php";
-            tryFiles = "$uri $uri/ /index.php?$query_string";
+      virtualHosts.${cfg.hostname} = mkMerge [
+        cfg.nginx
+        {
+          root = mkForce "${bookstack}/public";
+          locations = {
+            "/" = {
+              index = "index.php";
+              tryFiles = "$uri $uri/ /index.php?$query_string";
+            };
+            "~ \.php$".extraConfig = ''
+              fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
+            '';
+            "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+              extraConfig = "expires 365d;";
+            };
           };
-          "~ \.php$".extraConfig = ''
-            fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
-          '';
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
-            extraConfig = "expires 365d;";
-          };
-        };
-      }];
+        }
+      ];
     };
 
     systemd.services.bookstack-setup = {
       description = "Preperation tasks for BookStack";
-      before = [ "phpfpm-bookstack.service" ];
+      before = ["phpfpm-bookstack.service"];
       after = optional db.createLocally "mysql.service";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -374,29 +380,34 @@ in {
         RuntimeDirectory = "bookstack/cache";
         RuntimeDirectoryMode = 0700;
       };
-      path = [ pkgs.replace-secret ];
-      script =
-        let
-          isSecret = v: isAttrs v && v ? _secret && isString v._secret;
-          bookstackEnvVars = lib.generators.toKeyValue {
-            mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
-              mkValueString = v: with builtins;
-                if isInt         v then toString v
-                else if isString v then v
-                else if true  == v then "true"
-                else if false == v then "false"
-                else if isSecret v then hashString "sha256" v._secret
+      path = [pkgs.replace-secret];
+      script = let
+        isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+        bookstackEnvVars = lib.generators.toKeyValue {
+          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
+            mkValueString = v:
+              with builtins;
+                if isInt v
+                then toString v
+                else if isString v
+                then v
+                else if true == v
+                then "true"
+                else if false == v
+                then "false"
+                else if isSecret v
+                then hashString "sha256" v._secret
                 else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
-            };
           };
-          secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
-          mkSecretReplacement = file: ''
-            replace-secret ${escapeShellArgs [ (builtins.hashString "sha256" file) file "${cfg.dataDir}/.env" ]}
-          '';
-          secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
-          bookstackEnv = pkgs.writeText "bookstack.env" (bookstackEnvVars filteredConfig);
-        in ''
+        };
+        secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
+        mkSecretReplacement = file: ''
+          replace-secret ${escapeShellArgs [(builtins.hashString "sha256" file) file "${cfg.dataDir}/.env"]}
+        '';
+        secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: !elem v [{} null])) cfg.config;
+        bookstackEnv = pkgs.writeText "bookstack.env" (bookstackEnvVars filteredConfig);
+      in ''
         # error handling
         set -euo pipefail
 
@@ -436,14 +447,13 @@ in {
           inherit group;
           isSystemUser = true;
         };
-        "${config.services.nginx.user}".extraGroups = [ group ];
+        "${config.services.nginx.user}".extraGroups = [group];
       };
       groups = mkIf (group == "bookstack") {
         bookstack = {};
       };
     };
-
   };
 
-  meta.maintainers = with maintainers; [ ymarkus ];
+  meta.maintainers = with maintainers; [ymarkus];
 }

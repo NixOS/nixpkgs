@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, beautifulsoup4
-, python-slugify
-, unidecode
-, css-html-js-minify
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
+  beautifulsoup4,
+  python-slugify,
+  unidecode,
+  css-html-js-minify,
+  lxml,
 }:
-
 buildPythonPackage rec {
   pname = "sphinx-material";
   version = "0.0.35";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [ "sphinx_material" ];
+  pythonImportsCheck = ["sphinx_material"];
 
   meta = with lib; {
     description = "A material-based, responsive theme inspired by mkdocs-material";
     homepage = "https://bashtage.github.io/sphinx-material";
     license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with maintainers; [FlorianFranzen];
   };
 }

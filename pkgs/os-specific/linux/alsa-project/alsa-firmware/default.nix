@@ -1,5 +1,10 @@
-{ lib, buildPackages, stdenv, autoreconfHook, fetchurl }:
-
+{
+  lib,
+  buildPackages,
+  stdenv,
+  autoreconfHook,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "alsa-firmware";
   version = "1.2.4";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tnttfQi8/CR+9v8KuIqZwYgwWjz1euLf0LzZpbNs1bs=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
+  nativeBuildInputs = [autoreconfHook];
 
   configureFlags = [
     "--with-hotplug-dir=$(out)/lib/firmware"
@@ -33,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Soundcard firmwares from the alsa project";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ l-as ];
+    maintainers = with maintainers; [l-as];
   };
 }

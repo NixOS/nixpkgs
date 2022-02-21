@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, git, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "topgit";
   version = "0.19.13";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K0X1DGc1LQsoteUhoHLxVJRrZaaPLKSSF61OKyGB5Qg=";
   };
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = ["prefix=${placeholder "out"}"];
 
-  nativeBuildInputs = [ perl git ];
+  nativeBuildInputs = [perl git];
 
   postInstall = ''
     install -Dm644 README -t "$out/share/doc/${pname}-${version}/"
@@ -25,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mackyle/topgit";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ marcweber ];
+    maintainers = with maintainers; [marcweber];
   };
 }

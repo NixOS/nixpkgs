@@ -1,11 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, libclang
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libclang,
+  stdenv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
   version = "0.10.1";
@@ -33,7 +33,13 @@ rustPlatform.buildRustPackage rec {
     description = "Checks rust documentation for spelling and grammar mistakes";
     homepage = "https://github.com/drahnr/cargo-spellcheck";
     changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ newam ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [newam];
   };
 }

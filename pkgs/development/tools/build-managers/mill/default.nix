@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "mill";
   version = "0.10.0";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1acm1z24cw2yzykwwjfrcf66mi16xvsrnrrhrsd9yqrajqab707n";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontUnpack = true;
   dontConfigure = true;
@@ -46,7 +51,7 @@ stdenv.mkDerivation rec {
       SBT, but can also be extended to support any other language or platform via
       modules (written in Java or Scala) or through an external subprocesses.
     '';
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [scalavision];
     platforms = lib.platforms.all;
   };
 }

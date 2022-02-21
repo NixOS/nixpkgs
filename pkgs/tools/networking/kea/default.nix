@@ -1,17 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, autoreconfHook
-, pkg-config
-, boost
-, botan2
-, libmysqlclient
-, log4cplus
-, postgresql
-, python3
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  botan2,
+  libmysqlclient,
+  log4cplus,
+  postgresql,
+  python3,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kea";
   version = "2.0.1"; # only even minor versions are stable
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9Qu5qVTjFDFrQDOhddyAdJa7nBdUEQvZKiHBZanoTFc=";
   };
 
-  patches = [ ./dont-create-var.patch ];
+  patches = [./dont-create-var.patch];
 
   postPatch = ''
     substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz hexa ];
+    maintainers = with maintainers; [fpletz hexa];
   };
 }

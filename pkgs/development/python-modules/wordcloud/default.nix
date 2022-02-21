@@ -1,14 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, matplotlib
-, mock
-, numpy
-, pillow
-, cython
-, pytest-cov
-, pytest
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  mock,
+  numpy,
+  pillow,
+  cython,
+  pytest-cov,
+  pytest,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "word_cloud";
   version = "1.8.1";
@@ -21,11 +23,11 @@ buildPythonPackage rec {
     sha256 = "sha256-4EFQfv+Jn9EngUAyDoJP0yv9zr9Tnbrdwq1YzDacB9Q=";
   };
 
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ matplotlib numpy pillow ];
+  nativeBuildInputs = [cython];
+  propagatedBuildInputs = [matplotlib numpy pillow];
 
   # Tests require extra dependencies
-  checkInputs = [ mock pytest pytest-cov ];
+  checkInputs = [mock pytest pytest-cov];
 
   checkPhase = ''
     PATH=$out/bin:$PATH pytest test
@@ -43,6 +45,6 @@ buildPythonPackage rec {
     description = "A little word cloud generator in Python";
     homepage = "https://github.com/amueller/word_cloud";
     license = licenses.mit;
-    maintainers = with maintainers; [ jm2dev ];
+    maintainers = with maintainers; [jm2dev];
   };
 }

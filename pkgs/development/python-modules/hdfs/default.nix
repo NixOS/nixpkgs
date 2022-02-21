@@ -1,14 +1,14 @@
-{ buildPythonPackage
-, docopt
-, fastavro
-, fetchFromGitHub
-, lib
-, nose
-, pytestCheckHook
-, requests
-, six
+{
+  buildPythonPackage,
+  docopt,
+  fastavro,
+  fetchFromGitHub,
+  lib,
+  nose,
+  pytestCheckHook,
+  requests,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "hdfs";
   # See https://github.com/mtth/hdfs/issues/176.
@@ -21,16 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-94Q3IUoX1Cb+uRqvsfpVZJ1koJSx5cQ3/XpYJ0gkQNU=";
   };
 
-  propagatedBuildInputs = [ docopt requests six ];
+  propagatedBuildInputs = [docopt requests six];
 
-  checkInputs = [ fastavro nose pytestCheckHook ];
+  checkInputs = [fastavro nose pytestCheckHook];
 
-  pythonImportsCheck = [ "hdfs" ];
+  pythonImportsCheck = ["hdfs"];
 
   meta = with lib; {
     description = "Python API and command line interface for HDFS";
     homepage = "https://github.com/mtth/hdfs";
     license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    maintainers = with maintainers; [samuela];
   };
 }

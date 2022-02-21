@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
-
 buildGoModule rec {
   pname = "gdu";
   version = "5.13.2";
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-9+Zez33oET0nx/Xm3fXh1WFoQduMBodvml1oGO6jUYc=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   ldflags = [
     "-s"
@@ -44,8 +44,8 @@ buildGoModule rec {
       the performance gain is not so huge.
     '';
     homepage = "https://github.com/dundee/gdu";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.fab maintainers.zowoq ];
+    license = with licenses; [mit];
+    maintainers = [maintainers.fab maintainers.zowoq];
     platforms = platforms.unix;
   };
 }

@@ -1,13 +1,14 @@
-{ build-idris-package
-, fetchFromGitHub
-, hezarfen
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  hezarfen,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "composition";
   version = "2017-11-12";
 
-  idrisDeps = [ hezarfen ];
+  idrisDeps = [hezarfen];
 
   src = fetchFromGitHub {
     owner = "vmchale";
@@ -20,6 +21,6 @@ build-idris-package  {
     description = "Composition extras for Idris";
     homepage = "https://github.com/vmchale/composition";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

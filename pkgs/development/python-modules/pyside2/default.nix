@@ -1,6 +1,13 @@
-{ python, fetchurl, lib, stdenv,
-  cmake, ninja, qt5, shiboken2 }:
-
+{
+  python,
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  ninja,
+  qt5,
+  shiboken2,
+}:
 stdenv.mkDerivation rec {
   pname = "pyside2";
   version = "5.15.2";
@@ -23,12 +30,23 @@ stdenv.mkDerivation rec {
     "-DPYTHON_EXECUTABLE=${python.interpreter}"
   ];
 
-  nativeBuildInputs = [ cmake ninja qt5.qmake python ];
+  nativeBuildInputs = [cmake ninja qt5.qmake python];
   buildInputs = with qt5; [
-    qtbase qtxmlpatterns qtmultimedia qttools qtx11extras qtlocation qtscript
-    qtwebsockets qtwebengine qtwebchannel qtcharts qtsensors qtsvg
+    qtbase
+    qtxmlpatterns
+    qtmultimedia
+    qttools
+    qtx11extras
+    qtlocation
+    qtscript
+    qtwebsockets
+    qtwebengine
+    qtwebchannel
+    qtcharts
+    qtsensors
+    qtsvg
   ];
-  propagatedBuildInputs = [ shiboken2 ];
+  propagatedBuildInputs = [shiboken2];
 
   dontWrapQtApps = true;
 
@@ -36,6 +54,6 @@ stdenv.mkDerivation rec {
     description = "LGPL-licensed Python bindings for Qt";
     license = licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

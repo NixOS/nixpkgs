@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, libmtp, glib, libmad, libid3tag }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  libmtp,
+  glib,
+  libmad,
+  libid3tag,
+}:
 stdenv.mkDerivation rec {
   pname = "mtpfs";
   version = "1.1";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse libmtp glib libid3tag libmad ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [fuse libmtp glib libid3tag libmad];
 
   # adding LIBS is a hack, duno why it does not find libid3tag.so by adding buildInputs
   preConfigure = ''
@@ -24,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "FUSE Filesystem providing access to MTP devices";
     platforms = platforms.all;
     license = licenses.gpl3;
-    maintainers = [ maintainers.qknight ];
+    maintainers = [maintainers.qknight];
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/mtpfs.x86_64-darwin
   };
 }

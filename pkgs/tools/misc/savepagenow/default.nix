@@ -1,5 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "savepagenow";
   version = "1.1.1";
@@ -11,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1lz6rc47cds9rb35jdf8n13gr61wdkh5jqzx4skikm1yrqkwjyhm";
   };
 
-  propagatedBuildInputs = with python3Packages; [ click requests ];
+  propagatedBuildInputs = with python3Packages; [click requests];
 
   # requires network access
   doCheck = false;
@@ -20,6 +23,6 @@ python3Packages.buildPythonApplication rec {
     description = "A simple Python wrapper for archive.org's \"Save Page Now\" capturing service";
     homepage = "https://github.com/pastpages/savepagenow";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

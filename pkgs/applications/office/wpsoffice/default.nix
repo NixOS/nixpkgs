@@ -1,42 +1,43 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
-, dpkg
-, wrapGAppsHook
-, wrapQtAppsHook
-, alsa-lib
-, atk
-, bzip2
-, cairo
-, cups
-, dbus
-, expat
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gperftools
-, gtk2-x11
-, libpng12
-, libtool
-, libuuid
-, libxml2
-, xz
-, nspr
-, nss
-, openssl
-, pango
-, qt4
-, qtbase
-, sqlite
-, unixODBC
-, xorg
-, zlib
-, steam
-, makeWrapper
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchurl,
+  dpkg,
+  wrapGAppsHook,
+  wrapQtAppsHook,
+  alsa-lib,
+  atk,
+  bzip2,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  ffmpeg,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gperftools,
+  gtk2-x11,
+  libpng12,
+  libtool,
+  libuuid,
+  libxml2,
+  xz,
+  nspr,
+  nss,
+  openssl,
+  pango,
+  qt4,
+  qtbase,
+  sqlite,
+  unixODBC,
+  xorg,
+  zlib,
+  steam,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
   version = "11.1.0.9615";
@@ -54,15 +55,15 @@ stdenv.mkDerivation rec {
     rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
   '';
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook wrapQtAppsHook makeWrapper ];
+  nativeBuildInputs = [dpkg wrapGAppsHook wrapQtAppsHook makeWrapper];
 
   meta = with lib; {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com/";
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     hydraPlatforms = [];
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ mlatus th0rgal ];
+    maintainers = with maintainers; [mlatus th0rgal];
   };
 
   buildInputs = with xorg; [
@@ -132,7 +133,8 @@ stdenv.mkDerivation rec {
     "png"
     # File saving breaks unless we are using vendored llvmPackages_8.libcxx
     #"c++"
-    "ssl" "crypto"
+    "ssl"
+    "crypto"
     "nspr"
     "nss"
     "odbc"
@@ -140,10 +142,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = let
-    steam-run = (steam.override {
-      extraPkgs = p: buildInputs;
-      nativeOnly = true;
-    }).run;
+    steam-run =
+      (steam.override {
+        extraPkgs = p: buildInputs;
+        nativeOnly = true;
+      })
+      .run;
   in ''
     prefix=$out/opt/kingsoft/wps-office
     mkdir -p $out

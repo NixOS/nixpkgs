@@ -1,5 +1,8 @@
-{ lib, pythonPackages, fetchFromGitHub }:
-
+{
+  lib,
+  pythonPackages,
+  fetchFromGitHub,
+}:
 pythonPackages.buildPythonApplication rec {
   pname = "nixbang";
   version = "0.1.2";
@@ -15,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/madjar/nixbang";
     description = "A special shebang to run scripts in a nix-shell";
-    maintainers = [ lib.maintainers.madjar ];
+    maintainers = [lib.maintainers.madjar];
     platforms = lib.platforms.all;
   };
 }

@@ -1,8 +1,12 @@
-{ stdenv, lib
-, fetchFromGitHub
-, cmake, nodejs, libelf, libunwind
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  nodejs,
+  libelf,
+  libunwind,
 }:
-
 stdenv.mkDerivation rec {
   pname = "malt";
   version = "1.2.1";
@@ -21,14 +25,14 @@ stdenv.mkDerivation rec {
       src/integration/malt-{webview,passwd}.sh.in
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libelf libunwind ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libelf libunwind];
 
   meta = with lib; {
     description = "Memory tool to find where you allocate your memory";
     homepage = "https://github.com/memtt/malt";
     license = licenses.cecill-c;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [viric];
     platforms = platforms.linux;
   };
 }

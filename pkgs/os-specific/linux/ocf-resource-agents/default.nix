@@ -1,16 +1,15 @@
-{ stdenv
-, lib
-, runCommand
-, lndir
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, python3
-, glib
-, drbd
-}:
-
-let
+{
+  stdenv,
+  lib,
+  runCommand,
+  lndir,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  python3,
+  glib,
+  drbd,
+}: let
   drbdForOCF = drbd.override {
     forOCF = true;
   };
@@ -41,16 +40,14 @@ let
       description = "Combined repository of OCF agents from the RHCS and Linux-HA projects";
       license = licenses.gpl2Plus;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ ryantm astro ];
+      maintainers = with maintainers; [ryantm astro];
     };
   };
-
 in
-
-# This combines together OCF definitions from other derivations.
-# https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
-runCommand "ocf-resource-agents" {} ''
-  mkdir -p $out/usr/lib/ocf
-  ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
-  ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
-''
+  # This combines together OCF definitions from other derivations.
+  # https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
+  runCommand "ocf-resource-agents" {} ''
+    mkdir -p $out/usr/lib/ocf
+    ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
+    ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
+  ''

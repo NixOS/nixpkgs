@@ -1,7 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, unittest2, lxml, robotframework
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittest2,
+  lxml,
+  robotframework,
 }:
-
 buildPythonPackage rec {
   pname = "robotsuite";
   version = "2.2.1";
@@ -11,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "8764e01990ac6774e0c983579bcb9cb79f44373a61ad47fbae9a1dc7eedbdd61";
   };
 
-  buildInputs = [ unittest2 ];
-  propagatedBuildInputs = [ robotframework lxml ];
+  buildInputs = [unittest2];
+  propagatedBuildInputs = [robotframework lxml];
 
   postPatch = ''
     substituteInPlace setup.py \

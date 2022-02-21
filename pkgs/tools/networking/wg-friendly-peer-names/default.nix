@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wireguard-tools
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wireguard-tools,
 }:
-
 stdenv.mkDerivation {
   pname = "wg-friendly-peer-names";
   version = "unstable-2021-11-08";
@@ -24,6 +24,6 @@ stdenv.mkDerivation {
     description = "Small shellscript that makes it possible to give peers a friendlier and more readable name in the `wg` peer list";
     license = licenses.mit;
     platforms = wireguard-tools.meta.platforms;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
   };
 }

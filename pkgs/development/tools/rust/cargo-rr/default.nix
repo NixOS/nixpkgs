@@ -1,11 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, makeWrapper
-, rr
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  makeWrapper,
+  rr,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rr";
   version = "0.1.3";
@@ -25,16 +25,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
-    wrapProgram $out/bin/cargo-rr --prefix PATH : ${lib.makeBinPath [ rr ]}
+    wrapProgram $out/bin/cargo-rr --prefix PATH : ${lib.makeBinPath [rr]}
   '';
 
   meta = with lib; {
     description = "Cargo subcommand \"rr\": a light wrapper around rr, the time-travelling debugger";
     homepage = "https://github.com/danielzfranklin/cargo-rr";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ otavio ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [otavio];
   };
 }

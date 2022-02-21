@@ -1,14 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, kcoreaddons
-, kdeclarative
-, kdecoration
-, plasma-framework
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  kcoreaddons,
+  kdeclarative,
+  kdecoration,
+  plasma-framework,
 }:
-
 mkDerivation rec {
   pname = "applet-window-buttons";
   version = "0.10.1";
@@ -36,6 +36,6 @@ mkDerivation rec {
     description = "Plasma 5 applet in order to show window buttons in your panels";
     homepage = "https://github.com/psifidotos/applet-window-buttons";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

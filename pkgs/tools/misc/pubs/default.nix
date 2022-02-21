@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "pubs";
   version = "0.8.3";
@@ -12,23 +15,30 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    argcomplete python-dateutil configobj feedparser bibtexparser pyyaml requests six
+    argcomplete
+    python-dateutil
+    configobj
+    feedparser
+    bibtexparser
+    pyyaml
+    requests
+    six
     beautifulsoup4
   ];
 
-  checkInputs = with python3Packages; [ pyfakefs mock ddt ];
+  checkInputs = with python3Packages; [pyfakefs mock ddt];
 
   # Disabling git tests because they expect git to be preconfigured
   # with the user's details. See
   # https://github.com/NixOS/nixpkgs/issues/94663
   preCheck = ''
     rm tests/test_git.py
-    '';
+  '';
 
   meta = with lib; {
     description = "Command-line bibliography manager";
     homepage = "https://github.com/pubs/pubs";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

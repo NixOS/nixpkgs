@@ -1,9 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage
-, gviz-api
-, protobuf
-, werkzeug
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  gviz-api,
+  protobuf,
+  werkzeug,
 }:
-
 buildPythonPackage rec {
   pname = "tensorboard_plugin_profile";
   version = "2.5.0";
@@ -27,6 +29,6 @@ buildPythonPackage rec {
     description = "Profile Tensorboard Plugin.";
     homepage = "http://tensorflow.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

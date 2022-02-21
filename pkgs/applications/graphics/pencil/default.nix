@@ -1,11 +1,31 @@
-{ stdenv, fetchurl, lib, makeWrapper, wrapGAppsHook,
+{
+  stdenv,
+  fetchurl,
+  lib,
+  makeWrapper,
+  wrapGAppsHook,
   # build dependencies
-  alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig,
-  freetype, gdk-pixbuf, glib, glibc, gtk3, libuuid, nspr, nss, pango,
-  xorg, systemd
-}:
-let
-
+  alsa-lib,
+  atk,
+  at-spi2-atk,
+  at-spi2-core,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gtk3,
+  libuuid,
+  nspr,
+  nss,
+  pango,
+  xorg,
+  systemd,
+}: let
   deps = [
     alsa-lib
     atk
@@ -40,67 +60,66 @@ let
     stdenv.cc.cc.lib
     stdenv.cc.cc
   ];
+in
+  stdenv.mkDerivation rec {
+    version = "3.1.0";
+    pname = "pencil";
 
-in stdenv.mkDerivation rec {
-  version = "3.1.0";
-  pname = "pencil";
+    src = fetchurl {
+      url = "http://pencil.evolus.vn/dl/V${version}.ga/pencil_${version}.ga_amd64.deb";
+      sha256 = "01ae54b1a1351b909eb2366c6ec00816e1deba370e58f35601cf7368f10aaba3";
+    };
 
-  src = fetchurl {
-    url    = "http://pencil.evolus.vn/dl/V${version}.ga/pencil_${version}.ga_amd64.deb";
-    sha256 = "01ae54b1a1351b909eb2366c6ec00816e1deba370e58f35601cf7368f10aaba3";
-  };
+    sourceRoot = ".";
 
-  sourceRoot = ".";
+    unpackCmd = ''
+      ar p "$src" data.tar.gz | tar xz
+    '';
 
-  unpackCmd = ''
-    ar p "$src" data.tar.gz | tar xz
-  '';
+    dontBuild = true;
 
-  dontBuild = true;
+    nativeBuildInputs = [makeWrapper wrapGAppsHook];
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+    buildInputs = deps;
 
-  buildInputs = deps;
+    installPhase = ''
+      mkdir -p $out/bin $out/opt $out/share/applications
+      cp -R usr/share $out/
+      cp -R opt/pencil*/ $out/opt/pencil
+      cp $out/opt/pencil/pencil.desktop $out/share/applications/
 
-  installPhase = ''
-    mkdir -p $out/bin $out/opt $out/share/applications
-    cp -R usr/share $out/
-    cp -R opt/pencil*/ $out/opt/pencil
-    cp $out/opt/pencil/pencil.desktop $out/share/applications/
+      # fix the path in the desktop file
+      substituteInPlace \
+        $out/share/applications/pencil.desktop \
+        --replace /opt/ $out/opt/
 
-    # fix the path in the desktop file
-    substituteInPlace \
-      $out/share/applications/pencil.desktop \
-      --replace /opt/ $out/opt/
+      # symlink the binary to bin/
+      ln -s $out/opt/pencil/pencil $out/bin/pencil
+    '';
 
-    # symlink the binary to bin/
-    ln -s $out/opt/pencil/pencil $out/bin/pencil
-  '';
+    preFixup = let
+      packages = deps;
+      libPathNative = lib.makeLibraryPath packages;
+      libPath64 = lib.makeSearchPathOutput "lib" "lib64" packages;
+      libPath = "${libPathNative}:${libPath64}";
+    in ''
+      # patch executable
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}:$out/opt/pencil" \
+        $out/opt/pencil/pencil
 
+      # fix missing libudev
+      ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
+      wrapProgram $out/opt/pencil/pencil \
+        --prefix LD_LIBRARY_PATH : $out/opt/pencil
+    '';
 
-  preFixup = let
-    packages = deps;
-    libPathNative = lib.makeLibraryPath packages;
-    libPath64 = lib.makeSearchPathOutput "lib" "lib64" packages;
-    libPath = "${libPathNative}:${libPath64}";
-  in ''
-    # patch executable
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}:$out/opt/pencil" \
-      $out/opt/pencil/pencil
-
-    # fix missing libudev
-    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
-    wrapProgram $out/opt/pencil/pencil \
-      --prefix LD_LIBRARY_PATH : $out/opt/pencil
-  '';
-
-  meta = with lib; {
-    description = "GUI prototyping/mockup tool";
-    homepage    = "https://pencil.evolus.vn/";
-    license     = licenses.gpl2; # Commercial license is also available
-    maintainers = with maintainers; [ bjornfor prikhi mrVanDalo ];
-    platforms   = platforms.linux;
-  };
-}
+    meta = with lib; {
+      description = "GUI prototyping/mockup tool";
+      homepage = "https://pencil.evolus.vn/";
+      license = licenses.gpl2; # Commercial license is also available
+      maintainers = with maintainers; [bjornfor prikhi mrVanDalo];
+      platforms = platforms.linux;
+    };
+  }

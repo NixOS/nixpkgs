@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl, pcre2 }:
-
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pcre2,
+}:
 stdenv.mkDerivation {
   pname = "hardlink";
   version = "1.3-4";
@@ -10,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0g4hyrnd9hpykbf06qvvp3s4yyk7flbd95gilkf7r3w9vqiagvs2";
   };
 
-  buildInputs = [ pcre2 ];
+  buildInputs = [pcre2];
   NIX_CFLAGS_LINK = "-lpcre2-8";
 
   buildPhase = ''

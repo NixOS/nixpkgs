@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook
-, glib
-, granite
-, gtk3
-, libhandy
-, systemd
-, vte
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook,
+  glib,
+  granite,
+  gtk3,
+  libhandy,
+  systemd,
+  vte,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
   version = "1.1.0";

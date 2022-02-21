@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, crystal }:
-
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+}:
 crystal.buildCrystalPackage rec {
   pname = "ameba";
   version = "0.14.3";
@@ -15,6 +18,6 @@ crystal.buildCrystalPackage rec {
     description = "A static code analysis tool for Crystal";
     homepage = "https://crystal-ameba.github.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ kimburgess ];
+    maintainers = with maintainers; [kimburgess];
   };
 }

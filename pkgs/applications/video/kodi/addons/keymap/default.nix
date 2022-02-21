@@ -1,5 +1,11 @@
-{ lib, addonDir, buildKodiAddon, fetchzip, defusedxml, kodi-six }:
-
+{
+  lib,
+  addonDir,
+  buildKodiAddon,
+  fetchzip,
+  defusedxml,
+  kodi-six,
+}:
 buildKodiAddon rec {
   pname = "keymap";
   namespace = "script.keymap";

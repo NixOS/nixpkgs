@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, lib, openssl }:
-
+{
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  lib,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "ibm-sw-tpm2";
   version = "1661";
@@ -16,9 +21,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  patchFlags = [ "-p2" ];
+  patchFlags = ["-p2"];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   sourceRoot = "src";
 
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "IBM's Software TPM 2.0, an implementation of the TCG TPM 2.0 specification";
     homepage = "https://sourceforge.net/projects/ibmswtpm2/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [delroth];
     license = licenses.bsd3;
   };
 }

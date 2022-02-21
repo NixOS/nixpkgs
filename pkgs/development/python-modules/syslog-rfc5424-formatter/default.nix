@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "syslog-rfc5424-formatter";
   version = "1.2.2";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   # Tests are not picked up, review later again
   doCheck = false;
 
-  pythonImportsCheck = [ "syslog_rfc5424_formatter" ];
+  pythonImportsCheck = ["syslog_rfc5424_formatter"];
 
   meta = with lib; {
     description = "Python logging formatter for emitting RFC5424 Syslog messages";
     homepage = "https://github.com/easypost/syslog-rfc5424-formatter";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [isc];
+    maintainers = with maintainers; [fab];
   };
 }

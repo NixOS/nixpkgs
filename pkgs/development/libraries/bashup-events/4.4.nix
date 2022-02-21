@@ -1,5 +1,7 @@
-{ callPackage, fetchFromGitHub }:
-
+{
+  callPackage,
+  fetchFromGitHub,
+}:
 callPackage ./generic.nix {
   variant = "4.4";
   version = "2020-04-04";
@@ -12,7 +14,7 @@ callPackage ./generic.nix {
   };
   keep = {
     # allow vars in eval
-    eval = [ "e" "bashup_ev" "n" ];
+    eval = ["e" "bashup_ev" "n"];
     # allow vars executed as commands
     "$f" = true;
     "$n" = true;

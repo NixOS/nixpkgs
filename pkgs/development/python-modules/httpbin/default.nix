@@ -1,17 +1,17 @@
-{ lib
-, brotlipy
-, buildPythonPackage
-, decorator
-, fetchPypi
-, flask
-, flask-limiter
-, itsdangerous
-, markupsafe
-, raven
-, six
-, pytestCheckHook
+{
+  lib,
+  brotlipy,
+  buildPythonPackage,
+  decorator,
+  fetchPypi,
+  flask,
+  flask-limiter,
+  itsdangerous,
+  markupsafe,
+  raven,
+  six,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "httpbin";
   version = "0.7.0";
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "HTTP Request and Response Service";
     homepage = "https://github.com/kennethreitz/httpbin";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

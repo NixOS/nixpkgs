@@ -1,10 +1,10 @@
 # Test whether `houndd` indexes nixpkgs
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "hound";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ grahamc ];
+    maintainers = [grahamc];
   };
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     services.hound = {
       enable = true;
       config = ''
@@ -22,15 +22,15 @@ import ./make-test-python.nix ({ pkgs, ... } : {
 
     systemd.services.houndseed = {
       description = "seed hound with a git repo";
-      requiredBy = [ "hound.service" ];
-      before = [ "hound.service" ];
+      requiredBy = ["hound.service"];
+      before = ["hound.service"];
 
       serviceConfig = {
         User = "hound";
         Group = "hound";
         WorkingDirectory = "/var/lib/hound";
       };
-      path = [ pkgs.git ];
+      path = [pkgs.git];
       script = ''
         git config --global user.email "you@example.com"
         git config --global user.name "Your Name"

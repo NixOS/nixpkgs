@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "stb";
   version = "unstable-2021-09-10";
@@ -23,6 +26,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/nothings/stb";
     license = licenses.publicDomain;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [jfrankenau];
   };
 }

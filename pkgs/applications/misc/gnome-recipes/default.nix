@@ -1,26 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, gettext
-, itstool
-, python3
-, wrapGAppsHook
-, gtk3
-, glib
-, libsoup
-, gnome-online-accounts
-, librest
-, json-glib
-, gnome-autoar
-, gspell
-, libcanberra
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  gettext,
+  itstool,
+  python3,
+  wrapGAppsHook,
+  gtk3,
+  glib,
+  libsoup,
+  gnome-online-accounts,
+  librest,
+  json-glib,
+  gnome-autoar,
+  gspell,
+  libcanberra,
+  nix-update-script,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-recipes";
   version = "2.0.4";

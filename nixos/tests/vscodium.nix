@@ -1,17 +1,17 @@
 let
   tests = {
-    wayland = { pkgs, ... }: {
-      imports = [ ./common/wayland-cage.nix ];
+    wayland = {pkgs, ...}: {
+      imports = [./common/wayland-cage.nix];
 
       services.cage.program = "${pkgs.vscodium}/bin/codium";
 
       environment.variables.NIXOS_OZONE_WL = "1";
       environment.variables.DISPLAY = "do not use";
 
-      fonts.fonts = with pkgs; [ dejavu_fonts ];
+      fonts.fonts = with pkgs; [dejavu_fonts];
     };
-    xorg = { pkgs, ... }: {
-      imports = [ ./common/user-account.nix ./common/x11.nix ];
+    xorg = {pkgs, ...}: {
+      imports = [./common/user-account.nix ./common/x11.nix];
 
       virtualisation.memorySize = 2047;
       services.xserver.enable = true;
@@ -23,13 +23,13 @@ let
   };
 
   mkTest = name: machine:
-    import ./make-test-python.nix ({ pkgs, ... }: {
+    import ./make-test-python.nix ({pkgs, ...}: {
       inherit name;
 
-      nodes = { "${name}" = machine; };
+      nodes = {"${name}" = machine;};
 
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ synthetica turion ];
+        maintainers = [synthetica turion];
       };
       enableOCR = true;
       testScript = ''
@@ -73,6 +73,5 @@ let
         machine.wait_until_fails('pgrep -x codium')
       '';
     });
-
 in
-builtins.mapAttrs (k: v: mkTest k v { }) tests
+  builtins.mapAttrs (k: v: mkTest k v {}) tests

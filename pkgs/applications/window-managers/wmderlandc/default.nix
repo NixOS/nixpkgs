@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libX11, xorgproto }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libX11,
+  xorgproto,
+}:
 stdenv.mkDerivation {
   pname = "wmderlandc";
   version = "unstable-2020-07-17";
@@ -27,6 +33,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aesophor/wmderland/tree/master/ipc-client";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ takagiy ];
+    maintainers = with maintainers; [takagiy];
   };
 }

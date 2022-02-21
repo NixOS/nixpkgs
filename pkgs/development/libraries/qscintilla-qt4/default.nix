@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, fetchurl
-, unzip
-, qt4
-, qmake4Hook
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  qt4,
+  qmake4Hook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "qscintilla-qt4";
   version = "2.11.6";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "QScintilla-${version}/Qt4Qt5";
 
-  buildInputs = [ qt4 ];
+  buildInputs = [qt4];
 
-  nativeBuildInputs = [ unzip qmake4Hook ];
+  nativeBuildInputs = [unzip qmake4Hook];
 
   patches = [
     ./fix-qt4-build.patch
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
       background colours and multiple fonts.
     '';
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
-    license = with licenses; [ gpl3 ]; # and commercial
-    maintainers = with maintainers; [ peterhoeg ];
+    license = with licenses; [gpl3]; # and commercial
+    maintainers = with maintainers; [peterhoeg];
     platforms = platforms.linux;
   };
 }

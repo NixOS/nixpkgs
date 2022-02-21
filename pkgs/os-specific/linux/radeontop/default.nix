@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gettext, makeWrapper
-, ncurses, libdrm, libpciaccess, libxcb }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gettext,
+  makeWrapper,
+  ncurses,
+  libdrm,
+  libpciaccess,
+  libxcb,
+}:
 stdenv.mkDerivation rec {
   pname = "radeontop";
   version = "1.4";
@@ -12,8 +21,8 @@ stdenv.mkDerivation rec {
     owner = "clbr";
   };
 
-  buildInputs = [ ncurses libdrm libpciaccess libxcb ];
-  nativeBuildInputs = [ pkg-config gettext makeWrapper ];
+  buildInputs = [ncurses libdrm libpciaccess libxcb];
+  nativeBuildInputs = [pkg-config gettext makeWrapper];
 
   enableParallelBuilding = true;
 
@@ -22,7 +31,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace pkg-config "$PKG_CONFIG"
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
     wrapProgram $out/bin/radeontop \

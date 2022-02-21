@@ -1,60 +1,65 @@
-{ channel, pname, version, sha256Hash }:
-
-{ alsa-lib
-, bash
-, buildFHSUserEnv
-, cacert
-, coreutils
-, dbus
-, expat
-, fetchurl
-, findutils
-, file
-, fontsConf
-, git
-, glxinfo
-, gnugrep
-, gnused
-, gnutar
-, gtk2, gnome_vfs, glib, GConf
-, gzip
-, fontconfig
-, freetype
-, libpulseaudio
-, libGL
-, libuuid
-, libX11
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, makeWrapper
-, ncurses5
-, nspr
-, nss
-, pciutils
-, pkgsi686Linux
-, ps
-, setxkbmap
-, lib
-, stdenv
-, systemd
-, unzip
-, usbutils
-, which
-, runCommand
-, xkeyboard_config
-, zlib
-, makeDesktopItem
-}:
-
-let
+{
+  channel,
+  pname,
+  version,
+  sha256Hash,
+}: {
+  alsa-lib,
+  bash,
+  buildFHSUserEnv,
+  cacert,
+  coreutils,
+  dbus,
+  expat,
+  fetchurl,
+  findutils,
+  file,
+  fontsConf,
+  git,
+  glxinfo,
+  gnugrep,
+  gnused,
+  gnutar,
+  gtk2,
+  gnome_vfs,
+  glib,
+  GConf,
+  gzip,
+  fontconfig,
+  freetype,
+  libpulseaudio,
+  libGL,
+  libuuid,
+  libX11,
+  libxcb,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  makeWrapper,
+  ncurses5,
+  nspr,
+  nss,
+  pciutils,
+  pkgsi686Linux,
+  ps,
+  setxkbmap,
+  lib,
+  stdenv,
+  systemd,
+  unzip,
+  usbutils,
+  which,
+  runCommand,
+  xkeyboard_config,
+  zlib,
+  makeDesktopItem,
+}: let
   drvName = "android-studio-${channel}-${version}";
   filename = "android-studio-${version}-linux.tar.gz";
 
@@ -81,8 +86,8 @@ let
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set FONTCONFIG_FILE ${fontsConf} \
-        --prefix PATH : "${lib.makeBinPath [
-
+        --prefix PATH : "${
+        lib.makeBinPath [
           # Checked in studio.sh
           coreutils
           findutils
@@ -104,9 +109,10 @@ let
           git
           ps
           usbutils
-        ]}" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-
+        ]
+      }" \
+        --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
           # Crash at startup without these
           fontconfig
           freetype
@@ -148,13 +154,16 @@ let
           gnome_vfs
           glib
           GConf
-        ]}"
+        ]
+      }"
 
       # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
-      wrapProgram $(find $out -name LLDBFrontend) --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-        ncurses5
-        zlib
-      ]}"
+      wrapProgram $(find $out -name LLDBFrontend) --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          ncurses5
+          zlib
+        ]
+      }"
     '';
   };
 
@@ -166,7 +175,7 @@ let
     comment = "The official Android IDE";
     categories = "Development;IDE;";
     startupNotify = "true";
-    extraEntries="StartupWMClass=jetbrains-studio";
+    extraEntries = "StartupWMClass=jetbrains-studio";
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
@@ -179,13 +188,14 @@ let
 
       # Flutter can only search for certs Fedora-way.
       (runCommand "fedoracert" {}
-        ''
+      ''
         mkdir -p $out/etc/pki/tls/
         ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
-        '')
+      '')
     ];
   };
-in runCommand
+in
+  runCommand
   drvName
   {
     startScript = ''
@@ -203,10 +213,11 @@ in runCommand
         Android Studio is the official IDE for Android app development, based on
         IntelliJ IDEA.
       '';
-      homepage = if channel == "stable"
+      homepage =
+        if channel == "stable"
         then "https://developer.android.com/studio/index.html"
         else "https://developer.android.com/studio/preview/index.html";
-      license = with licenses; [ asl20 unfree ]; # The code is under Apache-2.0, but:
+      license = with licenses; [asl20 unfree]; # The code is under Apache-2.0, but:
       # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
       # "Android Studio includes proprietary code subject to separate license,
       # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)
@@ -214,13 +225,15 @@ in runCommand
       # Also: For actual development the Android SDK is required and the Google
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
-      platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; rec {
-        stable = [ meutraa fabianhjr ];
-        beta = [ meutraa fabianhjr ];
-        canary = [ meutraa fabianhjr ];
-        dev = canary;
-      }."${channel}";
+      platforms = ["x86_64-linux"];
+      maintainers = with maintainers;
+        rec {
+          stable = [meutraa fabianhjr];
+          beta = [meutraa fabianhjr];
+          canary = [meutraa fabianhjr];
+          dev = canary;
+        }
+        ."${channel}";
     };
   }
   ''

@@ -1,53 +1,59 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.traefik;
-  jsonValue = with types;
-    let
-      valueType = nullOr (oneOf [
+  jsonValue = with types; let
+    valueType =
+      nullOr (oneOf [
         bool
         int
         float
         str
         (lazyAttrsOf valueType)
         (listOf valueType)
-      ]) // {
+      ])
+      // {
         description = "JSON value";
-        emptyValue.value = { };
+        emptyValue.value = {};
       };
-    in valueType;
-  dynamicConfigFile = if cfg.dynamicConfigFile == null then
-    pkgs.runCommand "config.toml" {
-      buildInputs = [ pkgs.remarshal ];
-      preferLocalBuild = true;
-    } ''
-      remarshal -if json -of toml \
-        < ${
+  in
+    valueType;
+  dynamicConfigFile =
+    if cfg.dynamicConfigFile == null
+    then
+      pkgs.runCommand "config.toml" {
+        buildInputs = [pkgs.remarshal];
+        preferLocalBuild = true;
+      } ''
+        remarshal -if json -of toml \
+          < ${
           pkgs.writeText "dynamic_config.json"
           (builtins.toJSON cfg.dynamicConfigOptions)
         } \
-        > $out
-    ''
-  else
-    cfg.dynamicConfigFile;
-  staticConfigFile = if cfg.staticConfigFile == null then
-    pkgs.runCommand "config.toml" {
-      buildInputs = [ pkgs.yj ];
-      preferLocalBuild = true;
-    } ''
-      yj -jt -i \
-        < ${
+          > $out
+      ''
+    else cfg.dynamicConfigFile;
+  staticConfigFile =
+    if cfg.staticConfigFile == null
+    then
+      pkgs.runCommand "config.toml" {
+        buildInputs = [pkgs.yj];
+        preferLocalBuild = true;
+      } ''
+        yj -jt -i \
+          < ${
           pkgs.writeText "static_config.json" (builtins.toJSON
-            (recursiveUpdate cfg.staticConfigOptions {
-              providers.file.filename = "${dynamicConfigFile}";
-            }))
+          (recursiveUpdate cfg.staticConfigOptions {
+            providers.file.filename = "${dynamicConfigFile}";
+          }))
         } \
-        > $out
-    ''
-  else
-    cfg.staticConfigFile;
+          > $out
+      ''
+    else cfg.staticConfigFile;
 in {
   options.services.traefik = {
     enable = mkEnableOption "Traefik web server";
@@ -67,12 +73,12 @@ in {
         Static configuration for Traefik.
       '';
       type = jsonValue;
-      default = { entryPoints.http.address = ":80"; };
+      default = {entryPoints.http.address = ":80";};
       example = {
         entryPoints.web.address = ":8080";
         entryPoints.http.address = ":80";
 
-        api = { };
+        api = {};
       };
     };
 
@@ -91,15 +97,14 @@ in {
         Dynamic configuration for Traefik.
       '';
       type = jsonValue;
-      default = { };
+      default = {};
       example = {
         http.routers.router1 = {
           rule = "Host(`localhost`)";
           service = "service1";
         };
 
-        http.services.service1.loadBalancer.servers =
-          [{ url = "http://localhost:8080"; }];
+        http.services.service1.loadBalancer.servers = [{url = "http://localhost:8080";}];
       };
     };
 
@@ -130,17 +135,16 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 traefik traefik - -" ];
+    systemd.tmpfiles.rules = ["d '${cfg.dataDir}' 0700 traefik traefik - -"];
 
     systemd.services.traefik = {
       description = "Traefik web server";
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
       startLimitIntervalSec = 86400;
       startLimitBurst = 5;
       serviceConfig = {
-        ExecStart =
-          "${cfg.package}/bin/traefik --configfile=${staticConfigFile}";
+        ExecStart = "${cfg.package}/bin/traefik --configfile=${staticConfigFile}";
         Type = "simple";
         User = "traefik";
         Group = cfg.group;
@@ -165,6 +169,6 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.traefik = { };
+    users.groups.traefik = {};
   };
 }

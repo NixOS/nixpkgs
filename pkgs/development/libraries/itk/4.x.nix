@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libX11, libuuid, xz, vtk_7, Cocoa }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libX11,
+  libuuid,
+  xz,
+  vtk_7,
+  Cocoa,
+}:
 stdenv.mkDerivation rec {
   pname = "itk";
   version = "4.13.3";
@@ -22,8 +31,8 @@ stdenv.mkDerivation rec {
     "-DModule_ITKReview=ON"
   ];
 
-  nativeBuildInputs = [ cmake xz ];
-  buildInputs = [ libX11 libuuid vtk_7 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  nativeBuildInputs = [cmake xz];
+  buildInputs = [libX11 libuuid vtk_7] ++ lib.optionals stdenv.isDarwin [Cocoa];
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";

@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+}:
 buildPythonPackage rec {
   pname = "py";
   version = "1.11.0";
@@ -12,7 +16,7 @@ buildPythonPackage rec {
   # Circular dependency on pytest
   doCheck = false;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
   pythonImportsCheck = [
     "py"

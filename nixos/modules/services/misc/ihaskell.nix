@@ -1,17 +1,15 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
-
-let
-
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.ihaskell;
   ihaskell = pkgs.ihaskell.override {
     packages = cfg.extraPackages;
   };
-
-in
-
-{
+in {
   options = {
     services.ihaskell = {
       enable = mkOption {
@@ -40,7 +38,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
     users.users.ihaskell = {
       group = config.users.groups.ihaskell.name;
       description = "IHaskell user";
@@ -53,8 +50,8 @@ in
 
     systemd.services.ihaskell = {
       description = "IHaskell notebook instance";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
         User = config.users.users.ihaskell.name;
         Group = config.users.groups.ihaskell.name;

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, efl, python3Packages, dbus, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  efl,
+  python3Packages,
+  dbus,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "econnman";
   version = "1.1";
@@ -9,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "057pwwavlvrrq26bncqnfrf449zzaim0zq717xv86av4n940gwv0";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config python3Packages.wrapPython ];
+  nativeBuildInputs = [makeWrapper pkg-config python3Packages.wrapPython];
 
-  buildInputs = [ efl python3Packages.python dbus ];
+  buildInputs = [efl python3Packages.python dbus];
 
-  pythonPath = [ python3Packages.pythonefl python3Packages.dbus-python ];
+  pythonPath = [python3Packages.pythonefl python3Packages.dbus-python];
 
   postInstall = ''
     wrapPythonPrograms
@@ -24,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with lib.maintainers; [matejc tstrobel ftrvxmtrx romildo];
   };
 }

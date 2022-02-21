@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "arkade";
   version = "0.8.14";
@@ -33,7 +33,8 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/alexellis/arkade/cmd.GitCommit=ref/tags/${version}"
     "-X github.com/alexellis/arkade/cmd.Version=${version}"
   ];
@@ -42,6 +43,6 @@ buildGoModule rec {
     homepage = "https://github.com/alexellis/arkade";
     description = "Open Source Kubernetes Marketplace";
     license = licenses.mit;
-    maintainers = with maintainers; [ welteki ];
+    maintainers = with maintainers; [welteki];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, bison, buildPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "nawk";
   version = "unstable-2021-02-15";
@@ -11,11 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "kQCvItpSJnDJMDvlB8ruY+i0KdjmAphRDqCKw8f0m/8=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
+  nativeBuildInputs = [bison];
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-    "HOSTCC=${if stdenv.buildPlatform.isDarwin then "clang" else "cc"}"
+    "HOSTCC=${
+      if stdenv.buildPlatform.isDarwin
+      then "clang"
+      else "cc"
+    }"
   ];
 
   installPhase = ''
@@ -28,13 +37,13 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The one, true implementation of AWK";
     longDescription = ''
-       This is the version of awk described in "The AWK Programming
-       Language", by Al Aho, Brian Kernighan, and Peter Weinberger
-       (Addison-Wesley, 1988, ISBN 0-201-07981-X).
+      This is the version of awk described in "The AWK Programming
+      Language", by Al Aho, Brian Kernighan, and Peter Weinberger
+      (Addison-Wesley, 1988, ISBN 0-201-07981-X).
     '';
     homepage = "https://www.cs.princeton.edu/~bwk/btl.mirror/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.konimex ];
+    maintainers = [lib.maintainers.konimex];
     platforms = lib.platforms.all;
   };
 }

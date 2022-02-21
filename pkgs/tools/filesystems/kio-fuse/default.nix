@@ -1,12 +1,12 @@
-{ lib
-, mkDerivation
-, fetchgit
-, cmake
-, extra-cmake-modules
-, kio
-, fuse3
+{
+  lib,
+  mkDerivation,
+  fetchgit,
+  cmake,
+  extra-cmake-modules,
+  kio,
+  fuse3,
 }:
-
 mkDerivation rec {
   pname = "kio-fuse";
   version = "5.0.1";
@@ -17,15 +17,15 @@ mkDerivation rec {
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [cmake extra-cmake-modules];
 
-  buildInputs = [ kio fuse3 ];
+  buildInputs = [kio fuse3];
 
   meta = with lib; {
     description = "FUSE Interface for KIO";
     homepage = "https://invent.kde.org/system/kio-fuse";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ _1000teslas ];
+    maintainers = with maintainers; [_1000teslas];
   };
 }

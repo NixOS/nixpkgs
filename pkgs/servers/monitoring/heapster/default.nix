@@ -1,11 +1,15 @@
-{ lib, buildGoPackage, fetchFromGitHub, docker }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  docker,
+}:
 buildGoPackage rec {
   rev = "3057a2c07061c8d9ffaf77e5442ffd7512ac0133";
   pname = "heapster";
   version = lib.strings.substring 0 7 rev;
   goPackagePath = "k8s.io/heapster";
-  subPackages = [ "./" ];
+  subPackages = ["./"];
 
   src = fetchFromGitHub {
     inherit rev;
@@ -22,7 +26,7 @@ buildGoPackage rec {
     description = "Compute Resource Usage Analysis and Monitoring of Container Clusters";
     license = licenses.asl20;
     homepage = "https://github.com/kubernetes/heapster";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [offline];
     platforms = docker.meta.platforms;
   };
 }

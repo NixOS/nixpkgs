@@ -1,10 +1,15 @@
-{ lib, stdenv, cmake, ninja, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  ninja,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "gtest";
   version = "1.11.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "google";
@@ -17,15 +22,15 @@ stdenv.mkDerivation rec {
     ./fix-cmake-config-includedir.patch
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [cmake ninja];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
 
   meta = with lib; {
     description = "Google's framework for writing C++ tests";
     homepage = "https://github.com/google/googletest";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    maintainers = with maintainers; [ivan-tkatchev];
   };
 }

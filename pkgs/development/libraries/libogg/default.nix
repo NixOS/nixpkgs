@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libogg";
   version = "1.3.5";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "01b7050bghdvbxvw0gzv588fn4a27zh42ljpwzm4vrf8dziipnf4";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
   meta = with lib; {
     description = "Media container library to manipulate Ogg files";
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://xiph.org/ogg/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = [maintainers.ehmry];
     platforms = platforms.all;
   };
 }

@@ -1,8 +1,6 @@
-{ callPackage }:
-
-{
+{callPackage}: {
   # All the defaults
-  connman = callPackage ./connman.nix { };
+  connman = callPackage ./connman.nix {};
 
   connmanFull = callPackage ./connman.nix {
     # TODO: Why is this in `connmanFull` and not the default build? See TODO in

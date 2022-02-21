@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, gettext }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+}:
 stdenv.mkDerivation rec {
   pname = "ms-sys";
   version = "2.6.0";
@@ -9,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "06xqpm2s9cg8fj7a1822wmh3p4arii0sifssazg1gr6i7xg7kbjz";
   };
   # TODO: Remove with next release, see https://sourceforge.net/p/ms-sys/patches/8/
-  patches = [ ./manpages-without-build-timestamps.patch ];
+  patches = [./manpages-without-build-timestamps.patch];
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [gettext];
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "A program for writing Microsoft-compatible boot records";

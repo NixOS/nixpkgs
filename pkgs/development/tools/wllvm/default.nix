@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   version = "1.2.8";
   pname = "wllvm";
@@ -14,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/travitch/whole-program-llvm";
     description = "A wrapper script to build whole-program LLVM bitcode files";
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 dtzWill ];
+    maintainers = with maintainers; [mic92 dtzWill];
     platforms = platforms.all;
   };
 }

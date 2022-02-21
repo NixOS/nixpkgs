@@ -1,6 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+}: let
   mkPdfSet = name: sha256:
     stdenv.mkDerivation {
       inherit name;

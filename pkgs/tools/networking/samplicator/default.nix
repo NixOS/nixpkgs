@@ -1,11 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "samplicator";
   version = "1.3.8rc1";
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [];
 
   src = fetchFromGitHub {
     owner = "sleinen";

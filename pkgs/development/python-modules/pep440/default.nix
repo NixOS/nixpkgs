@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pep440";
   version = "0.1.0";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Python module to check whether versions number match PEP 440";
     homepage = "https://github.com/Carreau/pep440";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

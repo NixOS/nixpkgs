@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "oppai-ng";
   version = "4.1.0";
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Difficulty and pp calculator for osu!";
     homepage = "https://github.com/Francesco149/oppai-ng";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = with maintainers; [tadeokondrak];
     platforms = platforms.all;
   };
 }

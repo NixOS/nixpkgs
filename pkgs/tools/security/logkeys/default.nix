@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, which, procps, kbd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  which,
+  procps,
+  kbd,
+}:
 stdenv.mkDerivation {
   pname = "logkeys";
   version = "2018-01-22";
@@ -11,13 +19,13 @@ stdenv.mkDerivation {
     sha256 = "1k6kj0913imwh53lh6hrhqmrpygqg2h462raafjsn7gbd3vkgx8n";
   };
 
-  buildInputs = [ autoconf automake which procps kbd ];
+  buildInputs = [autoconf automake which procps kbd];
 
   postPatch = ''
     substituteInPlace src/Makefile.am --replace 'root' '$(id -u)'
     substituteInPlace configure.ac --replace '/dev/input' '/tmp'
     sed -i '/chmod u+s/d' src/Makefile.am
- '';
+  '';
 
   preConfigure = "./autogen.sh";
 

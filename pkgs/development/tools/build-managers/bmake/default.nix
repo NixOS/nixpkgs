@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, getopt
-, tzdata
-, ksh
-, pkgsMusl # for passthru.tests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  getopt,
+  tzdata,
+  ksh,
+  pkgsMusl
+  # for passthru.tests
 }:
-
 stdenv.mkDerivation rec {
   pname = "bmake";
   version = "20220208";
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
   '';
 
-  nativeBuildInputs = [ getopt ];
+  nativeBuildInputs = [getopt];
 
   patches = [
     # make bootstrap script aware of the prefix in /nix/store
@@ -83,11 +84,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
-    tzdata
-  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
-  ];
+  checkInputs =
+    [
+      tzdata
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
+      ksh
+    ];
 
   checkPhase = ''
     runHook preCheck
@@ -103,7 +106,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.crufty.net/help/sjg/bmake.html";
     description = "Portable version of NetBSD 'make'";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ thoughtpolice AndersonTorres ];
+    maintainers = with maintainers; [thoughtpolice AndersonTorres];
     platforms = platforms.unix;
     broken = stdenv.isAarch64; # ofborg complains
   };
@@ -111,3 +114,4 @@ stdenv.mkDerivation rec {
   passthru.tests.bmakeMusl = pkgsMusl.bmake;
 }
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)
+

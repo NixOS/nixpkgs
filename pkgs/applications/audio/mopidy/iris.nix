@@ -1,5 +1,8 @@
-{ lib, python3Packages, mopidy }:
-
+{
+  lib,
+  python3Packages,
+  mopidy,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
   version = "3.60.0";
@@ -9,13 +12,15 @@ python3Packages.buildPythonApplication rec {
     sha256 = "18w6qqmxzn8psiacybryxailm826f3j1wgiv0c03fbdsy6kr5f7l";
   };
 
-  propagatedBuildInputs = [
-    mopidy
-  ] ++ (with python3Packages; [
-    configobj
-    requests
-    tornado
-  ]);
+  propagatedBuildInputs =
+    [
+      mopidy
+    ]
+    ++ (with python3Packages; [
+      configobj
+      requests
+      tornado
+    ]);
 
   # no tests implemented
   doCheck = false;
@@ -24,6 +29,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/jaedb/Iris";
     description = "A fully-functional Mopidy web client encompassing Spotify and many other backends";
     license = licenses.asl20;
-    maintainers = [ maintainers.rvolosatovs ];
+    maintainers = [maintainers.rvolosatovs];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nixosTests,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
   version = "0.2.8";
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.xandikos = nixosTests.xandikos;
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3Packages; [pytestCheckHook];
   disabledTests = [
     # these tests are failing due to the following error:
     # TypeError: expected str, bytes or os.PathLike object, not int
@@ -40,6 +40,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/jelmer/xandikos";
     license = licenses.gpl3Plus;
     changelog = "https://github.com/jelmer/xandikos/blob/v${version}/NEWS";
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [_0x4A6F];
   };
 }

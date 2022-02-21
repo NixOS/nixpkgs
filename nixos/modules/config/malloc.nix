@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.environment.memoryAllocator;
 
   # The set of alternative malloc(3) providers.
@@ -25,7 +28,7 @@ let
     scudo = let
       platformMap = {
         aarch64-linux = "aarch64";
-        x86_64-linux  = "x86_64";
+        x86_64-linux = "x86_64";
       };
 
       systemPlatform = platformMap.${pkgs.stdenv.hostPlatform.system} or (throw "scudo not supported on ${pkgs.stdenv.hostPlatform.system}");
@@ -53,29 +56,27 @@ let
   # An output that contains only the shared library, to avoid
   # needlessly bloating the system closure
   mallocLib = pkgs.runCommand "malloc-provider-${cfg.provider}"
-    rec {
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      origLibPath = providerConf.libPath;
-      libName = baseNameOf origLibPath;
-    }
-    ''
-      mkdir -p $out/lib
-      cp -L $origLibPath $out/lib/$libName
-    '';
+  rec {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    origLibPath = providerConf.libPath;
+    libName = baseNameOf origLibPath;
+  }
+  ''
+    mkdir -p $out/lib
+    cp -L $origLibPath $out/lib/$libName
+  '';
 
   # The full path to the selected provider shlib.
   providerLibPath = "${mallocLib}/lib/${mallocLib.libName}";
-in
-
-{
+in {
   meta = {
-    maintainers = [ maintainers.joachifm ];
+    maintainers = [maintainers.joachifm];
   };
 
   options = {
     environment.memoryAllocator.provider = mkOption {
-      type = types.enum ([ "libc" ] ++ attrNames providers);
+      type = types.enum (["libc"] ++ attrNames providers);
       default = "libc";
       description = ''
         The system-wide memory allocator.
@@ -83,9 +84,11 @@ in
         Briefly, the system-wide memory allocator providers are:
         <itemizedlist>
         <listitem><para><literal>libc</literal>: the standard allocator provided by libc</para></listitem>
-        ${toString (mapAttrsToList
-            (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
-            providers)}
+        ${
+          toString (mapAttrsToList
+          (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
+          providers)
+        }
         </itemizedlist>
 
         <warning>
@@ -107,10 +110,12 @@ in
       "abstractions/base" = ''
         r /etc/ld-nix.so.preload,
         r ${config.environment.etc."ld-nix.so.preload".source},
-        include "${pkgs.apparmorRulesFromClosure {
+        include "${
+          pkgs.apparmorRulesFromClosure {
             name = "mallocLib";
             baseRules = ["mr $path/lib/**.so*"];
-          } [ mallocLib ] }"
+          } [mallocLib]
+        }"
       '';
     };
   };

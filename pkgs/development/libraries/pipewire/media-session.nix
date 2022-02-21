@@ -1,22 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, doxygen
-, graphviz
-, systemd
-, pipewire
-, glib
-, dbus
-, alsa-lib
-, callPackage
-}:
-
-let
-  mesonEnable = b: if b then "enabled" else "disabled";
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  doxygen,
+  graphviz,
+  systemd,
+  pipewire,
+  glib,
+  dbus,
+  alsa-lib,
+  callPackage,
+}: let
+  mesonEnable = b:
+    if b
+    then "enabled"
+    else "disabled";
   mesonList = l: "[" + lib.concatStringsSep "," l + "]";
 
   self = stdenv.mkDerivation rec {
@@ -84,7 +86,7 @@ let
     passthru = {
       updateScript = ./update-media-session.sh;
       tests = {
-        test-paths = callPackage ./test-paths.nix { package = self; } {
+        test-paths = callPackage ./test-paths.nix {package = self;} {
           paths-out = [
             "nix-support/alsa-monitor.conf.json"
             "nix-support/bluez-monitor.conf.json"
@@ -101,9 +103,8 @@ let
       homepage = "https://pipewire.org";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar kranzes ];
+      maintainers = with maintainers; [jtojnar kranzes];
     };
   };
-
 in
-self
+  self

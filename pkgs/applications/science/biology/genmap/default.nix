@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "genmap";
   version = "1.3.0";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7sIKBRMNzyCrZ/c2nXkknb6a5YsXe6DRE2IFhp6AviY=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   doCheck = true;
-  patches = [ ./gtest.patch ];
-  checkInputs = [ gtest which ];
+  patches = [./gtest.patch];
+  checkInputs = [gtest which];
   preCheck = "make genmap_algo_test";
 
   # disable benchmarks
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Ultra-fast computation of genome mappability";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/cpockrandt/genmap";
-    maintainers = with lib.maintainers; [ jbedo ];
+    maintainers = with lib.maintainers; [jbedo];
     platforms = lib.platforms.unix;
   };
 }

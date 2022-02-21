@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, makeWrapper
-, pythonOlder
-, crytic-compile
-, prettytable
-, setuptools
-, solc
-, withSolc ? false
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  makeWrapper,
+  pythonOlder,
+  crytic-compile,
+  prettytable,
+  setuptools,
+  solc,
+  withSolc ? false,
 }:
-
 buildPythonPackage rec {
   pname = "slither-analyzer";
   version = "0.8.2";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \
-      --prefix PATH : "${lib.makeBinPath [ solc ]}"
+      --prefix PATH : "${lib.makeBinPath [solc]}"
   '';
 
   # No Python tests
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/trailofbits/slither";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ arturcygan fab ];
+    maintainers = with maintainers; [arturcygan fab];
   };
 }

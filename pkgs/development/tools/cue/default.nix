@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "cue";
   version = "0.4.2";
@@ -15,10 +18,12 @@ buildGoModule rec {
 
   checkPhase = "go test ./...";
 
-  subPackages = [ "cmd/cue" ];
+  subPackages = ["cmd/cue"];
 
   ldflags = [
-    "-s" "-w" "-X cuelang.org/go/cmd/cue/cmd.version=${version}"
+    "-s"
+    "-w"
+    "-X cuelang.org/go/cmd/cue/cmd.version=${version}"
   ];
 
   doInstallCheck = true;

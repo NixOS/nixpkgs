@@ -1,6 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub
-, kcoreaddons, kwindowsystem, plasma-framework, systemsettings }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  kcoreaddons,
+  kwindowsystem,
+  plasma-framework,
+  systemsettings,
+}:
 mkDerivation rec {
   pname = "krohnkite";
   version = "0.7";
@@ -13,7 +19,10 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    kcoreaddons kwindowsystem plasma-framework systemsettings
+    kcoreaddons
+    kwindowsystem
+    plasma-framework
+    systemsettings
   ];
 
   dontBuild = true;
@@ -32,7 +41,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "A dynamic tiling extension for KWin";
     license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    maintainers = with maintainers; [seqizz];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;
   };

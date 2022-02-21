@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper
-, gtk3-x11 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  gtk3-x11,
+}:
 stdenv.mkDerivation rec {
   pname = "pixeluvo";
   version = "1.6.0-2";
@@ -50,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "A Beautifully Designed Image and Photo Editor for Windows and Linux";
     homepage = "http://www.pixeluvo.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
   };
 }

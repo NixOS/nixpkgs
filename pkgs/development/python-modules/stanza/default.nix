@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, emoji
-, numpy
-, protobuf
-, requests
-, six
-, pytorch
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  emoji,
+  numpy,
+  protobuf,
+  requests,
+  six,
+  pytorch,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "stanza";
   version = "1.3.0";
@@ -38,12 +38,12 @@ buildPythonPackage rec {
   # is forbidden in the sandbox
   doCheck = false;
 
-  pythonImportsCheck = [ "stanza" ];
+  pythonImportsCheck = ["stanza"];
 
   meta = with lib; {
     description = "Official Stanford NLP Python Library for Many Human Languages";
     homepage = "https://github.com/stanfordnlp/stanza/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ riotbib ];
+    maintainers = with maintainers; [riotbib];
   };
 }

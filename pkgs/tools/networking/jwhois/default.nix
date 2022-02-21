@@ -1,5 +1,9 @@
-{lib, stdenv, lynx, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  lynx,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "jwhois";
   version = "4.0";
@@ -14,9 +18,9 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/usr/bin/lynx|${lynx}/bin/lynx|g" $out/etc/jwhois.conf
   '';
 
-  patches = [ ./connect.patch ./service-name.patch ];
+  patches = [./connect.patch ./service-name.patch];
 
-  makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
+  makeFlags = ["AR=${stdenv.cc.bintools.targetPrefix}ar"];
 
   # Work around error from <stdio.h> on aarch64-darwin:
   #     error: 'TARGET_OS_IPHONE' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]

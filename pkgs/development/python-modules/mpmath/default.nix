@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "mpmath";
   version = "1.2.1";
@@ -21,11 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage    = "https://mpmath.org/";
+    homepage = "https://mpmath.org/";
     description = "A pure-Python library for multiprecision floating arithmetic";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [lovek323];
+    platforms = platforms.unix;
   };
-
 }

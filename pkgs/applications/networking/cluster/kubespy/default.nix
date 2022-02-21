@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "kubespy";
   version = "0.6.0";
@@ -27,7 +31,7 @@ buildGoModule rec {
     description = "A tool to observe Kubernetes resources in real time";
     homepage = "https://github.com/pulumi/kubespy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [blaggacao];
     platforms = platforms.unix;
   };
 }

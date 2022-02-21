@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pynut2";
   version = "2.1.2";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [ "pynut2.nut2" ];
+  pythonImportsCheck = ["pynut2.nut2"];
 
   # tests are unmaintained and broken
   doCheck = false;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "API overhaul of PyNUT, a Python library to allow communication with NUT (Network UPS Tools) servers.";
     homepage = "https://github.com/mezz64/python-nut2";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = [ maintainers.luker ];
+    license = with licenses; [gpl3Plus];
+    maintainers = [maintainers.luker];
   };
 }

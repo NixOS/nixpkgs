@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.bitcoin;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.bitcoin;
+in {
   port = 9332;
   extraOpts = {
     rpcUser = mkOption {
@@ -24,7 +25,7 @@ in
     };
 
     rpcScheme = mkOption {
-      type = types.enum [ "http" "https" ];
+      type = types.enum ["http" "https"];
       default = "http";
       description = ''
         Whether to connect to bitcoind over http or https.
@@ -69,14 +70,16 @@ in
       exec ${pkgs.prometheus-bitcoin-exporter}/bin/bitcoind-monitor.py
     '';
 
-    environment = {
-      BITCOIN_RPC_USER = cfg.rpcUser;
-      BITCOIN_RPC_SCHEME = cfg.rpcScheme;
-      BITCOIN_RPC_HOST = cfg.rpcHost;
-      BITCOIN_RPC_PORT = toString cfg.rpcPort;
-      METRICS_ADDR = cfg.listenAddress;
-      METRICS_PORT = toString cfg.port;
-      REFRESH_SECONDS = toString cfg.refreshSeconds;
-    } // cfg.extraEnv;
+    environment =
+      {
+        BITCOIN_RPC_USER = cfg.rpcUser;
+        BITCOIN_RPC_SCHEME = cfg.rpcScheme;
+        BITCOIN_RPC_HOST = cfg.rpcHost;
+        BITCOIN_RPC_PORT = toString cfg.rpcPort;
+        METRICS_ADDR = cfg.listenAddress;
+        METRICS_PORT = toString cfg.port;
+        REFRESH_SECONDS = toString cfg.refreshSeconds;
+      }
+      // cfg.extraEnv;
   };
 }

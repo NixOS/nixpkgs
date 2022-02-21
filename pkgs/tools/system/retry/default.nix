@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, which, txt2man }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  which,
+  txt2man,
+}:
 stdenv.mkDerivation rec {
   pname = "retry";
   version = "1.0.4";
 
-  nativeBuildInputs = [ autoreconfHook which txt2man ];
+  nativeBuildInputs = [autoreconfHook which txt2man];
 
   src = fetchFromGitHub {
     owner = "minfrin";
@@ -17,7 +24,6 @@ stdenv.mkDerivation rec {
     description = "Retry a command until the command succeeds";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = with maintainers; [ gfrascadorio ];
+    maintainers = with maintainers; [gfrascadorio];
   };
 }
-

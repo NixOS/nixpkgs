@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, autoconf, automake, pkg-config, glib
-, perl, ncurses5, hamlib, xmlrpc_c }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  autoconf,
+  automake,
+  pkg-config,
+  glib,
+  perl,
+  ncurses5,
+  hamlib,
+  xmlrpc_c,
+}:
 stdenv.mkDerivation rec {
   pname = "tlf";
   version = "1.4.1";
@@ -24,10 +36,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook autoconf automake pkg-config perl ];
-  buildInputs = [ glib ncurses5 hamlib xmlrpc_c ];
+  nativeBuildInputs = [autoreconfHook autoconf automake pkg-config perl];
+  buildInputs = [glib ncurses5 hamlib xmlrpc_c];
 
-  configureFlags = [ "--enable-hamlib" "--enable-fldigi-xmlrpc" ];
+  configureFlags = ["--enable-hamlib" "--enable-fldigi-xmlrpc"];
 
   postInstall = ''
     mkdir -p $out/lib
@@ -46,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://tlf.github.io/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [etu];
     platforms = platforms.linux;
   };
 }

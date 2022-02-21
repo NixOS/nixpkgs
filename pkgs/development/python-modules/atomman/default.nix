@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, cython
-, datamodeldict
-, fetchFromGitHub
-, matplotlib
-, numericalunits
-, numpy
-, pandas
-, potentials
-, pytest
-, pythonOlder
-, scipy
-, toolz
-, xmltodict
-, python
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  datamodeldict,
+  fetchFromGitHub,
+  matplotlib,
+  numericalunits,
+  numpy,
+  pandas,
+  potentials,
+  pytest,
+  pythonOlder,
+  scipy,
+  toolz,
+  xmltodict,
+  python,
 }:
-
 buildPythonPackage rec {
   version = "1.4.3";
   pname = "atomman";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

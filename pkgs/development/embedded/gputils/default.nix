@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "gputils";
   version = "1.5.2";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gputils.sourceforge.io";
     description = "A collection of tools for the Microchip (TM) PIC microcontrollers. It includes gpasm, gplink, and gplib";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ yorickvp ];
+    maintainers = with maintainers; [yorickvp];
     platforms = platforms.linux;
   };
 }

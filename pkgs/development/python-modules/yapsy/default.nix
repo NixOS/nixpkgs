@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "Yapsy";
   version = "1.12.2";

@@ -1,27 +1,24 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.torque.server;
   torque = pkgs.torque;
-in
-{
+in {
   options = {
-
     services.torque.server = {
-
       enable = mkEnableOption "torque server";
-
     };
-
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.torque ];
+    environment.systemPackages = [pkgs.torque];
 
     systemd.services.torque-server-init = {
-      path = with pkgs; [ torque util-linux procps inetutils ];
+      path = with pkgs; [torque util-linux procps inetutils];
 
       script = ''
         tmpsetup=$(mktemp -t torque-XXXX)
@@ -51,10 +48,10 @@ in
     };
 
     systemd.services.trqauthd = {
-      path = [ torque ];
+      path = [torque];
 
-      requires = [ "torque-server-init.service" ];
-      after = [ "torque-server-init.service" ];
+      requires = ["torque-server-init.service"];
+      after = ["torque-server-init.service"];
 
       serviceConfig = {
         Type = "forking";
@@ -63,13 +60,13 @@ in
     };
 
     systemd.services.torque-server = {
-      path = [ torque ];
+      path = [torque];
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "torque-scheduler.service" "trqauthd.service" ];
-      before = [ "trqauthd.service" ];
-      requires = [ "torque-server-init.service" ];
-      after = [ "torque-server-init.service" "network.target" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["torque-scheduler.service" "trqauthd.service"];
+      before = ["trqauthd.service"];
+      requires = ["torque-server-init.service"];
+      after = ["torque-server-init.service" "network.target"];
 
       serviceConfig = {
         Type = "forking";
@@ -80,10 +77,10 @@ in
     };
 
     systemd.services.torque-scheduler = {
-      path = [ torque ];
+      path = [torque];
 
-      requires = [ "torque-server-init.service" ];
-      after = [ "torque-server-init.service" ];
+      requires = ["torque-server-init.service"];
+      after = ["torque-server-init.service"];
 
       serviceConfig = {
         Type = "forking";
@@ -91,6 +88,5 @@ in
         PIDFile = "/var/spool/torque/sched_priv/sched.lock";
       };
     };
-
   };
 }

@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.json;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.json;
+in {
   port = 7979;
   extraOpts = {
     configFile = mkOption {
@@ -26,7 +27,7 @@ in
     };
   };
   imports = [
-    (mkRemovedOptionModule [ "url" ] ''
+    (mkRemovedOptionModule ["url"] ''
       This option was removed. The URL of the endpoint serving JSON
       must now be provided to the exporter by prometheus via the url
       parameter `target'.
@@ -38,6 +39,9 @@ in
       For more information, take a look at the official documentation
       (https://github.com/prometheus-community/json_exporter) of the json_exporter.
     '')
-     ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
 }

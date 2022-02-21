@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python2,
+}:
 stdenv.mkDerivation rec {
   pname = "opencc";
   version = "1.1.3";
@@ -11,14 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-q/y4tRov/BYCAiE4i7fT6ysTerxxOHMZUWT2Jlo/0rI=";
   };
 
-  nativeBuildInputs = [ cmake python2 ];
+  nativeBuildInputs = [cmake python2];
 
   # let intermediate tools find intermediate library
-  preBuild = lib.optionalString stdenv.isLinux ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/src
-  '' + lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$(pwd)/src
-  '';
+  preBuild =
+    lib.optionalString stdenv.isLinux ''
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/src
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$(pwd)/src
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
       phrase-level conversion, variant conversion and regional idioms among Mainland China,
       Taiwan and Hong kong.
     '';
-    maintainers = with maintainers; [ sifmelcara ];
+    maintainers = with maintainers; [sifmelcara];
     platforms = with platforms; linux ++ darwin;
   };
 }

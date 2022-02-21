@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xandikos;
-in
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xandikos;
+in {
   options = {
     services.xandikos = {
       enable = mkEnableOption "Xandikos CalDAV and CardDAV server";
@@ -82,20 +82,18 @@ in
           };
         };
       };
-
     };
-
   };
 
   config = mkIf cfg.enable (
     mkMerge [
       {
-        meta.maintainers = with lib.maintainers; [ _0x4A6F ];
+        meta.maintainers = with lib.maintainers; [_0x4A6F];
 
         systemd.services.xandikos = {
           description = "A Simple Calendar and Contact Server";
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          after = ["network.target"];
+          wantedBy = ["multi-user.target"];
 
           serviceConfig = {
             User = "xandikos";

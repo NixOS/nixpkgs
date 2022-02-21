@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, mednafen
-, gtk3
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  mednafen,
+  gtk3,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mednaffe";
   version = "0.9.2";
@@ -19,19 +19,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zvSAt6CMcgdoPpTTA5sPlQaWUw9LUMsR2Xg9jM2UaWY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
-  buildInputs = [ gtk3 mednafen ];
+  nativeBuildInputs = [autoreconfHook pkg-config wrapGAppsHook];
+  buildInputs = [gtk3 mednafen];
 
   postInstall = ''
     wrapProgram $out/bin/mednaffe \
       --prefix PATH ':' "${mednafen}/bin"
-   '';
+  '';
 
   meta = with lib; {
     description = "GTK-based frontend for mednafen emulator";
     homepage = "https://github.com/AmatCoder/mednaffe";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sheenobu yana AndersonTorres ];
+    maintainers = with maintainers; [sheenobu yana AndersonTorres];
     platforms = platforms.linux;
   };
 }

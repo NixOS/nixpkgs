@@ -1,25 +1,26 @@
-{ lib, stdenv
-, fetchurl
-, glib
-, gmime3
-, gnutls
-, gobject-introspection
-, gpgme
-, gtk3
-, gtksourceview
-, gtkspell3
-, intltool
-, libcanberra-gtk3
-, libesmtp
-, libical
-, libnotify
-, libsecret
-, openssl
-, pkg-config
-, webkitgtk
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  gmime3,
+  gnutls,
+  gobject-introspection,
+  gpgme,
+  gtk3,
+  gtksourceview,
+  gtkspell3,
+  intltool,
+  libcanberra-gtk3,
+  libesmtp,
+  libical,
+  libnotify,
+  libsecret,
+  openssl,
+  pkg-config,
+  webkitgtk,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "balsa";
   version = "2.6.1";
@@ -72,6 +73,6 @@ stdenv.mkDerivation rec {
     description = "An e-mail client for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

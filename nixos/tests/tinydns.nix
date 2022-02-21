@@ -1,13 +1,17 @@
-import ./make-test-python.nix ({ lib, ...} : {
+import ./make-test-python.nix ({lib, ...}: {
   name = "tinydns";
   meta = {
-    maintainers = with lib.maintainers; [ basvandijk ];
+    maintainers = with lib.maintainers; [basvandijk];
   };
   nodes = {
-    nameserver = { config, lib, ... } : let
+    nameserver = {
+      config,
+      lib,
+      ...
+    }: let
       ip = (lib.head config.networking.interfaces.eth1.ipv4.addresses).address;
     in {
-      networking.nameservers = [ ip ];
+      networking.nameservers = [ip];
       services.tinydns = {
         enable = true;
         inherit ip;

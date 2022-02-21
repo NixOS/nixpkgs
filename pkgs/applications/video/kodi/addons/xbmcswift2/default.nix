@@ -1,5 +1,8 @@
-{ lib, buildKodiAddon, fetchFromGitHub }:
-
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+}:
 buildKodiAddon rec {
   pname = "xbmcswift2";
   namespace = "script.module.xbmcswift2";

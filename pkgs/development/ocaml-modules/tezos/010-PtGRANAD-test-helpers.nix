@@ -1,16 +1,16 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-stdlib-unix
-, tezos-base
-, tezos-shell-services
-, tezos-protocol-environment
-, tezos-protocol-010-PtGRANAD
-, tezos-protocol-010-PtGRANAD-parameters
-, tezos-client-010-PtGRANAD
-, alcotest-lwt
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-stdlib-unix,
+  tezos-base,
+  tezos-shell-services,
+  tezos-protocol-environment,
+  tezos-protocol-010-PtGRANAD,
+  tezos-protocol-010-PtGRANAD-parameters,
+  tezos-client-010-PtGRANAD,
+  alcotest-lwt,
 }:
-
 buildDunePackage {
   pname = "tezos-010-PtGRANAD-test-helpers";
   inherit (tezos-stdlib) version useDune2;
@@ -33,7 +33,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: protocol testing framework";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos/Protocol: protocol testing framework";
+    };
 }

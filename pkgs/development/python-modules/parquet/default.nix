@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, python-snappy
-, thriftpy2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-snappy,
+  thriftpy2,
 }:
-
 buildPythonPackage rec {
   pname = "parquet";
   version = "1.3.1";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     "testFromExample"
   ];
 
-  pythonImportsCheck = [ "thriftpy2" ];
+  pythonImportsCheck = ["thriftpy2"];
 
   meta = with lib; {
     description = "Python implementation of the parquet columnar file format";
     homepage = "https://github.com/jcrobak/parquet-python";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

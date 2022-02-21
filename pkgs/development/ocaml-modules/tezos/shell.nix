@@ -1,19 +1,19 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-p2p
-, tezos-requester
-, tezos-validation
-, tezos-store
-, lwt-canceler
-, alcotest-lwt
-, qcheck-alcotest
-, tezos-base-test-helpers
-, tezos-embedded-protocol-demo-noops
-, tezos-protocol-plugin-alpha
-, tezos-test-helpers
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-p2p,
+  tezos-requester,
+  tezos-validation,
+  tezos-store,
+  lwt-canceler,
+  alcotest-lwt,
+  qcheck-alcotest,
+  tezos-base-test-helpers,
+  tezos-embedded-protocol-demo-noops,
+  tezos-protocol-plugin-alpha,
+  tezos-test-helpers,
 }:
-
 buildDunePackage {
   pname = "tezos-shell";
   inherit (tezos-stdlib) version useDune2;
@@ -38,7 +38,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: descriptions of RPCs exported by `tezos-shell`";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: descriptions of RPCs exported by `tezos-shell`";
+    };
 }

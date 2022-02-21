@@ -1,19 +1,19 @@
-{ stdenv
-, buildGoModule
-, fetchFromGitHub
-, lib
-, go
-, pkg-config
-, libX11
-, libXcursor
-, libXrandr
-, libXinerama
-, libXi
-, libXext
-, libXxf86vm
-, libGL
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  go,
+  pkg-config,
+  libX11,
+  libXcursor,
+  libXrandr,
+  libXinerama,
+  libXi,
+  libXext,
+  libXxf86vm,
+  libGL,
 }:
-
 stdenv.mkDerivation rec {
   pname = "darktile";
   version = "0.0.10";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pdj4yv3qrq56gb67p85ara3g8qrzw5ha787bl2ls4vcx85q7303";
   };
 
-  nativeBuildInputs = [ go pkg-config ];
+  nativeBuildInputs = [go pkg-config];
 
   buildInputs = [
     libX11
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     export GOPATH=$TMP/go
   '';
 
-  makeFlags = [ "HOME=$TMP" ];
+  makeFlags = ["HOME=$TMP"];
 
   installPhase = ''
     runHook preInstall
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/liamg/darktile/releases";
     changelog = "https://github.com/liamg/darktile/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ flexagoon ];
+    maintainers = with maintainers; [flexagoon];
   };
 }

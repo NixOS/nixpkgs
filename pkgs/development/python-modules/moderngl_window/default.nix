@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, numpy
-, moderngl
-, pyglet
-, pillow
-, pyrr
-, glcontext
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  numpy,
+  moderngl,
+  pyglet,
+  pillow,
+  pyrr,
+  glcontext,
 }:
-
 buildPythonPackage rec {
   pname = "moderngl_window";
   version = "2.4.1";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "12a5nl01c9b1ww7sj7i02xa7zmlrgg8jvi8cz004hw98kjcs9li8";
   };
 
-  propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr glcontext ];
+  propagatedBuildInputs = [numpy moderngl pyglet pillow pyrr glcontext];
 
   disabled = !isPy3k;
 
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Cross platform helper library for ModernGL making window creation and resource loading simple";
     license = licenses.mit;
     platforms = platforms.linux; # should be mesaPlatforms, darwin build breaks.
-    maintainers = with maintainers; [ c0deaddict ];
+    maintainers = with maintainers; [c0deaddict];
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, attrs
-, pdfminer
-, commoncode
-, plugincode
-, binaryornot
-, typecode-libmagic
-, pytestCheckHook
-, pytest-xdist
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  attrs,
+  pdfminer,
+  commoncode,
+  plugincode,
+  binaryornot,
+  typecode-libmagic,
+  pytestCheckHook,
+  pytest-xdist,
 }:
-
 buildPythonPackage rec {
   pname = "typecode";
   version = "21.6.1";

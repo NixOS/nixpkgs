@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "prow-unstable";
   version = "2020-04-01";
@@ -62,7 +65,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kubernetes/test-infra/tree/master/prow";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

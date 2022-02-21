@@ -1,13 +1,17 @@
-{ lib
-, libfprint
-, fetchFromGitLab
+{
+  lib,
+  libfprint,
+  fetchFromGitLab,
 }:
-
 # for the curious, "tod" means "Touch OEM Drivers" meaning it can load
 # external .so's.
-libfprint.overrideAttrs ({ postPatch ? "", mesonFlags ? [], ... }: let
+libfprint.overrideAttrs ({
+  postPatch ? "",
+  mesonFlags ? [],
+  ...
+}: let
   version = "1.90.7+git20210222+tod1";
-in  {
+in {
   pname = "libfprint-tod";
   inherit version;
 
@@ -25,18 +29,16 @@ in  {
     "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
 
-
   postPatch = ''
     ${postPatch}
     patchShebangs ./tests/*.py ./tests/*.sh
   '';
-
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/3v1n0/libfprint";
     description = "A library designed to make it easy to add support for consumer fingerprint readers, with support for loaded drivers";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ grahamc ];
+    maintainers = with maintainers; [grahamc];
   };
 })

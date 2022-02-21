@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, vala
-, ninja
-, pkg-config
-, wrapGAppsHook
-, desktop-file-utils
-, appstream-glib
-, python3
-, glib
-, gtk3
-, libhandy
-, libtransmission
-, libb64
-, libutp
-, miniupnpc
-, dht
-, libnatpmp
-, libevent
-, curl
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  vala,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  desktop-file-utils,
+  appstream-glib,
+  python3,
+  glib,
+  gtk3,
+  libhandy,
+  libtransmission,
+  libb64,
+  libutp,
+  miniupnpc,
+  dht,
+  libnatpmp,
+  libevent,
+  curl,
+  openssl,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fragments";
   version = "1.5";
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Fragments";
     description = "A GTK3 BitTorrent Client";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

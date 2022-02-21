@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, pkgs, python3, wrapGAppsHook}:
-
+{
+  lib,
+  fetchFromGitHub,
+  pkgs,
+  python3,
+  wrapGAppsHook,
+}:
 python3.pkgs.buildPythonApplication {
   pname = "pdf-quench";
   version = "1.0.5";
@@ -11,14 +16,14 @@ python3.pkgs.buildPythonApplication {
     sha256 = "1rp9rlwr6rarcsxygv5x2c5psgwl6r69k0lsgribgyyla9cf2m7n";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [wrapGAppsHook];
   buildInputs = with pkgs; [
     gtk3
     gobject-introspection
     goocanvas2
     poppler_gi
   ];
-  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pypdf2 ];
+  propagatedBuildInputs = with python3.pkgs; [pygobject3 pypdf2];
 
   format = "other";
   doCheck = false;
@@ -32,6 +37,6 @@ python3.pkgs.buildPythonApplication {
     description = "A visual tool for cropping pdf files";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
   };
 }

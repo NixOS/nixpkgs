@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "gocode-unstable";
   version = "2020-04-06";
@@ -39,6 +42,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/mdempsky/gocode";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
   };
 }

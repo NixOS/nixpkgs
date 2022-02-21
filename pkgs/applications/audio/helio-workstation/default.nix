@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, alsa-lib, freetype, xorg, curl, libGL, libjack2, gnome
-, pkg-config, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  freetype,
+  xorg,
+  curl,
+  libGL,
+  libjack2,
+  gnome,
+  pkg-config,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
   version = "3.8";
@@ -16,17 +25,27 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsa-lib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
-    xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome.zenity
+    alsa-lib
+    freetype
+    xorg.libX11
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXcursor
+    xorg.libXcomposite
+    curl
+    libGL
+    libjack2
+    gnome.zenity
   ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [pkg-config makeWrapper];
 
   preBuild = ''
     cd Projects/LinuxMakefile
     substituteInPlace Makefile --replace alsa "alsa jack"
   '';
-  buildFlags = [ "CONFIG=Release64" ];
+  buildFlags = ["CONFIG=Release64"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -43,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "One music sequencer for all major platforms, both desktop and mobile";
     homepage = "https://helio.fm/";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.suhr ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.suhr];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libconfuse, gettext }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libconfuse,
+  gettext,
+}:
 stdenv.mkDerivation rec {
   pname = "genimage";
   version = "9";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0y4h8x8lqxam8m90rdfq8cg5137kvilxr3d1qzddpx7nxpvmmwv9";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libconfuse gettext ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libconfuse gettext];
 
   postInstall = ''
     # As there is no manpage or built-in --help, add the README file for
@@ -25,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Generate filesystem images from directory trees";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

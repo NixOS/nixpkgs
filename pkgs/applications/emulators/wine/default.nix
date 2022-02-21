@@ -6,9 +6,16 @@
 # };
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
-{ lib, stdenv, callPackage, darwin,
+{
+  lib,
+  stdenv,
+  callPackage,
+  darwin,
   wineRelease ? "stable",
-  wineBuild ? if stdenv.hostPlatform.system == "x86_64-linux" then "wineWow" else "wine32",
+  wineBuild ?
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then "wineWow"
+    else "wine32",
   gettextSupport ? false,
   fontconfigSupport ? false,
   alsaSupport ? false,
@@ -40,28 +47,56 @@
   usbSupport ? false,
   mingwSupport ? wineRelease != "stable",
   waylandSupport ? wineRelease == "wayland",
-  embedInstallers ? false, # The Mono and Gecko MSI installers
-  moltenvk ? darwin.moltenvk # Allow users to override MoltenVK easily
-}:
-
-let wine-build = build: release:
-      lib.getAttr build (callPackage ./packages.nix {
-        wineRelease = release;
-        supportFlags = {
-          inherit
-            cupsSupport gettextSupport dbusSupport openalSupport cairoSupport
-            odbcSupport netapiSupport cursesSupport vaSupport pcapSupport
-            v4lSupport saneSupport gphoto2Support krb5Support ldapSupport fontconfigSupport
-            alsaSupport pulseaudioSupport xineramaSupport gtkSupport openclSupport
-            tlsSupport openglSupport gstreamerSupport udevSupport vulkanSupport
-            sdlSupport usbSupport vkd3dSupport mingwSupport waylandSupport embedInstallers;
-        };
-        inherit moltenvk;
-      });
-
-in if wineRelease == "staging" then
-  callPackage ./staging.nix {
-    wineUnstable = wine-build wineBuild "unstable";
-  }
-else
-  wine-build wineBuild wineRelease
+  embedInstallers ? false,
+  # The Mono and Gecko MSI installers
+  moltenvk ? darwin.moltenvk
+  # Allow users to override MoltenVK easily
+}: let
+  wine-build = build: release:
+    lib.getAttr build (callPackage ./packages.nix {
+      wineRelease = release;
+      supportFlags = {
+        inherit
+          cupsSupport
+          gettextSupport
+          dbusSupport
+          openalSupport
+          cairoSupport
+          odbcSupport
+          netapiSupport
+          cursesSupport
+          vaSupport
+          pcapSupport
+          v4lSupport
+          saneSupport
+          gphoto2Support
+          krb5Support
+          ldapSupport
+          fontconfigSupport
+          alsaSupport
+          pulseaudioSupport
+          xineramaSupport
+          gtkSupport
+          openclSupport
+          tlsSupport
+          openglSupport
+          gstreamerSupport
+          udevSupport
+          vulkanSupport
+          sdlSupport
+          usbSupport
+          vkd3dSupport
+          mingwSupport
+          waylandSupport
+          embedInstallers
+          ;
+      };
+      inherit moltenvk;
+    });
+in
+  if wineRelease == "staging"
+  then
+    callPackage ./staging.nix {
+      wineUnstable = wine-build wineBuild "unstable";
+    }
+  else wine-build wineBuild wineRelease

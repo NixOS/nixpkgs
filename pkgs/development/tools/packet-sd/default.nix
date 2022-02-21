@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "prometheus-packet-sd";
   version = "0.0.3";
@@ -12,13 +16,13 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Prometheus service discovery for Equinix Metal";
     homepage = "https://github.com/packethost/prometheus-packet-sd";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

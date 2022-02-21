@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "joker";
   version = "0.18.0";
@@ -19,12 +22,12 @@ buildGoModule rec {
     go generate ./...
   '';
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     homepage = "https://github.com/candid82/joker";
     description = "A small Clojure interpreter and linter written in Go";
     license = licenses.epl10;
-    maintainers = with maintainers; [ andrestylianos ];
+    maintainers = with maintainers; [andrestylianos];
   };
 }

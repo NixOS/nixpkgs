@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nmap
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nmap,
 }:
-
 buildPythonPackage rec {
   pname = "python-nmap";
   version = "0.7.1";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
       It also supports nmap script outputs.
     '';
     homepage = "http://xael.org/pages/python-nmap-en.html";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

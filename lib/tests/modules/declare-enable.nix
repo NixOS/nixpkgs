@@ -1,6 +1,4 @@
-{ lib, ... }:
-
-{
+{lib, ...}: {
   options = {
     enable = lib.mkOption {
       default = false;

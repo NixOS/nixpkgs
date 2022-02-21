@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "compile-daemon-unstable";
   version = "2017-03-08";
@@ -19,7 +22,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Very simple compile daemon for Go";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     inherit (src.meta) homepage;
   };
 }

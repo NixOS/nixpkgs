@@ -1,17 +1,17 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt-build-tools
-, json-glib
-, libfm-qt
-, qtbase
-, qttools
-, qtx11extras
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  lxqt-build-tools,
+  json-glib,
+  libfm-qt,
+  qtbase,
+  qttools,
+  qtx11extras,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "lxqt-archiver";
   version = "0.5.0";
@@ -37,15 +37,15 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-archiver/";
     description = "Archive tool for the LXQt desktop environment";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ jchw ];
+    maintainers = with maintainers; [jchw];
   };
 }

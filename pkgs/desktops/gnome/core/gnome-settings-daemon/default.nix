@@ -1,45 +1,46 @@
-{ lib, stdenv
-, fetchpatch
-, substituteAll
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, perl
-, gettext
-, gtk3
-, glib
-, libnotify
-, libgnomekbd
-, lcms2
-, libpulseaudio
-, alsa-lib
-, libcanberra-gtk3
-, upower
-, colord
-, libgweather
-, polkit
-, gsettings-desktop-schemas
-, geoclue2
-, systemd
-, libgudev
-, libwacom
-, libxslt
-, libxml2
-, modemmanager
-, networkmanager
-, gnome-desktop
-, geocode-glib
-, docbook_xsl
-, wrapGAppsHook
-, python3
-, tzdata
-, nss
-, gcr
-, gnome-session-ctl
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  substituteAll,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  perl,
+  gettext,
+  gtk3,
+  glib,
+  libnotify,
+  libgnomekbd,
+  lcms2,
+  libpulseaudio,
+  alsa-lib,
+  libcanberra-gtk3,
+  upower,
+  colord,
+  libgweather,
+  polkit,
+  gsettings-desktop-schemas,
+  geoclue2,
+  systemd,
+  libgudev,
+  libwacom,
+  libxslt,
+  libxml2,
+  modemmanager,
+  networkmanager,
+  gnome-desktop,
+  geocode-glib,
+  docbook_xsl,
+  wrapGAppsHook,
+  python3,
+  tzdata,
+  nss,
+  gcr,
+  gnome-session-ctl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
   version = "41.0";
@@ -109,7 +110,6 @@ stdenv.mkDerivation rec {
   # Default for release buildtype but passed manually because
   # we're using plain
   NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
-
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do

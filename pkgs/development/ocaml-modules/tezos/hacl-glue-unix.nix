@@ -1,11 +1,11 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-hacl-glue
-, ctypes
-, hacl-star
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-hacl-glue,
+  ctypes,
+  hacl-star,
 }:
-
 buildDunePackage {
   pname = "tezos-hacl-glue-unix";
 
@@ -20,7 +20,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: thin layer of glue around hacl-star (unix implementation)";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: thin layer of glue around hacl-star (unix implementation)";
+    };
 }

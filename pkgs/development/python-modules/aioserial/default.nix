@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyserial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyserial,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aioserial";
   version = "1.3.0";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aioserial" ];
+  pythonImportsCheck = ["aioserial"];
 
   meta = with lib; {
     description = "Python module for async serial communication";
     homepage = "https://github.com/changyuheng/aioserial";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

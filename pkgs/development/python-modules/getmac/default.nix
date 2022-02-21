@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-benchmark
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-benchmark,
+  pytest-mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "getmac";
   version = "0.8.3";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python package to get the MAC address of network interfaces and hosts on the local network";
     homepage = "https://github.com/GhostofGoes/getmac";
     license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [colemickens];
   };
 }

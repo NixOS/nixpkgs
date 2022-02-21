@@ -1,7 +1,9 @@
-{lib, stdenv, fetchhg}:
-let
-  s =
-  rec {
+{
+  lib,
+  stdenv,
+  fetchhg,
+}: let
+  s = rec {
     baseName = "slmenu";
     version = "hg-${date}";
     date = "2012-02-01";
@@ -13,18 +15,18 @@ let
   buildInputs = [
   ];
 in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchhg {
-    inherit (s) url sha256;
-  };
-  makeFlags = [ "PREFIX=$(out)" ];
-  meta = {
-    inherit (s) version;
-    description = "A console dmenu-like tool";
-    license = lib.licenses.mit;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
-  };
-}
+  stdenv.mkDerivation {
+    inherit (s) name version;
+    inherit buildInputs;
+    src = fetchhg {
+      inherit (s) url sha256;
+    };
+    makeFlags = ["PREFIX=$(out)"];
+    meta = {
+      inherit (s) version;
+      description = "A console dmenu-like tool";
+      license = lib.licenses.mit;
+      maintainers = [lib.maintainers.raskin];
+      platforms = lib.platforms.linux;
+    };
+  }

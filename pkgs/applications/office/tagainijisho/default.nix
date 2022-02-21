@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, qt4, cmake, sqlite }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qt4,
+  cmake,
+  sqlite,
+}:
 stdenv.mkDerivation rec {
   pname = "tagainijisho";
   version = "1.0.3";
@@ -9,19 +15,23 @@ stdenv.mkDerivation rec {
     sha256 = "0kmg1940yiqfm4vpifyj680283ids4nsij9s750nrshwxiwwbqvg";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 sqlite ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [qt4 sqlite];
 
   meta = with lib; {
     description = "A free, open-source Japanese dictionary and kanji lookup tool";
     homepage = "https://www.tagaini.net/";
     license = with licenses; [
-      /* program */
+      /*
+       program
+       */
       gpl3Plus
-      /* data */
+      /*
+       data
+       */
       cc-by-sa-30
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ vbgl ];
+    maintainers = with maintainers; [vbgl];
   };
 }

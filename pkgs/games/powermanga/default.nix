@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, automake
-, SDL
-, SDL_mixer
-, libpng
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  SDL,
+  SDL_mixer,
+  libpng,
 }:
-
 stdenv.mkDerivation rec {
   pname = "powermanga";
   version = "0.93.1";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       power up your ship and get special powers, helpers and weapons.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }

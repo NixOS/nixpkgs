@@ -1,6 +1,4 @@
-{ fetchurl }:
-
-{
+{fetchurl}: {
   mxu11x0_4 = {
     version = "4.1";
     src = fetchurl {

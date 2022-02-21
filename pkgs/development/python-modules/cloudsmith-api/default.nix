@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, certifi
-, six
-, python-dateutil
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  certifi,
+  six,
+  python-dateutil,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "cloudsmith-api";
   version = "1.8.2";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Cloudsmith API Client";
     homepage = "https://github.com/cloudsmith-io/cloudsmith-api";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

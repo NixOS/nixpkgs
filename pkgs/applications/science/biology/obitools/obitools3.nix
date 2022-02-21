@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchurl, python3Packages, cmake, python3 }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  python3Packages,
+  cmake,
+  python3,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "obitools3";
   version = "3.0.1b11";
@@ -9,11 +15,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1x7a0nrr9agg1pfgq8i1j8r1p6c0jpyxsv196ylix1dd2iivmas1";
   };
 
-  nativeBuildInputs = [ python3Packages.cython cmake ];
+  nativeBuildInputs = [python3Packages.cython cmake];
 
   postPatch = lib.optionalString stdenv.isAarch64 ''
-      substituteInPlace setup.py \
-      --replace "'-msse2'," ""
+    substituteInPlace setup.py \
+    --replace "'-msse2'," ""
   '';
 
   preBuild = ''
@@ -25,11 +31,11 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "Management of analyses and data in DNA metabarcoding";
     homepage = "https://git.metabarcoding.org/obitools/obitools3";
     license = licenses.cecill20;
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [maintainers.bzizou];
     platforms = platforms.all;
   };
 }

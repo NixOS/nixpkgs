@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, serpent
-, dill
-, cloudpickle
-, msgpack
-, isPy27
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  serpent,
+  dill,
+  cloudpickle,
+  msgpack,
+  isPy27,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyro4";
   version = "4.82";
@@ -39,7 +39,6 @@ buildPythonPackage rec {
   # add testsupport.py to PATH
   preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
 
-
   pytestFlagsArray = [
     # ignore network related tests, which fail in sandbox
     "--ignore=tests/PyroTests/test_naming.py"
@@ -62,6 +61,6 @@ buildPythonPackage rec {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro4";
     license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
   };
 }

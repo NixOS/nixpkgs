@@ -1,5 +1,8 @@
-{ fetchFromGitHub, ocamlPackages, lib }:
-
+{
+  fetchFromGitHub,
+  ocamlPackages,
+  lib,
+}:
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
   version = "3.2.0";
@@ -36,7 +39,6 @@ ocamlPackages.buildDunePackage rec {
     description = "A tool that helps you create and manage static websites";
     homepage = "https://soupault.app/";
     license = licenses.mit;
-    maintainers = [ maintainers.toastal ];
+    maintainers = [maintainers.toastal];
   };
 }
-

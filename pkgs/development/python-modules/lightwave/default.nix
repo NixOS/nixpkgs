@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "lightwave";
   version = "0.20";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Module for interacting with LightwaveRF hubs";
     homepage = "https://github.com/GeoffAtHome/lightwave";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, versiontools
-, django
-, sampledata
-, nose
-, pillow
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  versiontools,
+  django,
+  sampledata,
+  nose,
+  pillow,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "django-sampledatahelper";
   version = "0.5";
@@ -21,11 +21,11 @@ buildPythonPackage rec {
     sha256 = "1fx3ql4b9791594zkary19n20x5ra1m1n3pjaya9di1qy64csac4";
   };
 
-  nativeBuildInputs = [ versiontools ];
+  nativeBuildInputs = [versiontools];
 
-  propagatedBuildInputs = [ django sampledata ];
+  propagatedBuildInputs = [django sampledata];
 
-  checkInputs = [ nose pillow six ];
+  checkInputs = [nose pillow six];
 
   checkPhase = ''
     DJANGO_SETTINGS_MODULE=tests.settings NOSE_EXCLUDE=test_calling_command nosetests -v

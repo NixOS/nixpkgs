@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "inotify";
   version = "unstable-2020-08-27";

@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitLab, iri, re, sedlex_2, uutf }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  iri,
+  re,
+  sedlex_2,
+  uutf,
+}:
 buildDunePackage rec {
   pname = "xtmpl";
   version = "0.19.0";
@@ -12,12 +19,12 @@ buildDunePackage rec {
     sha256 = "sha256:0vwj0aayg60wm98d91fg3hmj90730liljy4cn8771dpxvz8m07bw";
   };
 
-  propagatedBuildInputs = [ iri re sedlex_2 uutf ];
+  propagatedBuildInputs = [iri re sedlex_2 uutf];
 
   meta = with lib; {
     description = "XML templating library for OCaml";
     homepage = "https://www.good-eris.net/xtmpl/";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ regnat ];
+    maintainers = with maintainers; [regnat];
   };
 }

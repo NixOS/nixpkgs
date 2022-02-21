@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, sqlite
-, isPyPy
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sqlite,
+  isPyPy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "apsw";
   version = "3.37.0-r1";
@@ -33,19 +33,21 @@ buildPythonPackage rec {
     "tests.py"
   ];
 
-  disabledTests = [
-    "testCursor"
-    "testLoadExtension"
-    "testShell"
-    "testVFS"
-    "testVFSWithWAL"
-    "testdb"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # This is https://github.com/rogerbinns/apsw/issues/277 but
-    # because we use pytestCheckHook we need to blacklist the test
-    # manually
-    "testzzForkChecker"
-  ];
+  disabledTests =
+    [
+      "testCursor"
+      "testLoadExtension"
+      "testShell"
+      "testVFS"
+      "testVFSWithWAL"
+      "testdb"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # This is https://github.com/rogerbinns/apsw/issues/277 but
+      # because we use pytestCheckHook we need to blacklist the test
+      # manually
+      "testzzForkChecker"
+    ];
 
   pythonImportsCheck = [
     "apsw"
@@ -55,6 +57,6 @@ buildPythonPackage rec {
     description = "A Python wrapper for the SQLite embedded relational database engine";
     homepage = "https://github.com/rogerbinns/apsw";
     license = licenses.zlib;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

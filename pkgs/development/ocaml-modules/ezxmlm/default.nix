@@ -1,5 +1,9 @@
-{ lib, fetchurl, buildDunePackage, xmlm }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  xmlm,
+}:
 buildDunePackage rec {
   pname = "ezxmlm";
   version = "1.1.0";
@@ -11,7 +15,7 @@ buildDunePackage rec {
     sha256 = "123dn4h993mlng9gzf4nc6mw75ja7ndcxkbkwfs48j5jk1z05j6d";
   };
 
-  propagatedBuildInputs = [ xmlm ];
+  propagatedBuildInputs = [xmlm];
 
   meta = with lib; {
     description = "Combinators to use with xmlm for parsing and selection";
@@ -26,7 +30,7 @@ buildDunePackage rec {
       types in this library are more specific than Xmlm, it should interoperate
       just fine with it if you decide to switch over.
     '';
-    maintainers = [ maintainers.carlosdagos ];
+    maintainers = [maintainers.carlosdagos];
     homepage = "https://github.com/mirage/ezxmlm/";
     license = licenses.isc;
   };

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliff
-, fixtures
-, future
-, pbr
-, subunit
-, testtools
-, voluptuous
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cliff,
+  fixtures,
+  future,
+  pbr,
+  subunit,
+  testtools,
+  voluptuous,
+  callPackage,
 }:
-
 buildPythonPackage rec {
   pname = "stestr";
   version = "3.2.1";
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    tests = callPackage ./tests.nix { };
+    tests = callPackage ./tests.nix {};
   };
 
-  pythonImportsCheck = [ "stestr" ];
+  pythonImportsCheck = ["stestr"];
 
   meta = with lib; {
     description = "A parallel Python test runner built around subunit";

@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, protobufc
-, libunwind, lzo, openssl, protobuf, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  protobufc,
+  libunwind,
+  lzo,
+  openssl,
+  protobuf,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zbackup";
   version = "1.4.4";
@@ -20,8 +28,8 @@ stdenv.mkDerivation rec {
     ./protobuf-api-change.patch
   ];
 
-  buildInputs = [ zlib openssl protobuf lzo libunwind ];
-  nativeBuildInputs = [ cmake protobufc ];
+  buildInputs = [zlib openssl protobuf lzo libunwind];
+  nativeBuildInputs = [cmake protobufc];
 
   meta = {
     description = "A versatile deduplicating backup tool";

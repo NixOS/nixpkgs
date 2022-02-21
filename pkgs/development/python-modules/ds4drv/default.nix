@@ -1,8 +1,11 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, evdev, pyudev
-, bluez
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  evdev,
+  pyudev,
+  bluez,
 }:
-
 buildPythonPackage rec {
   pname = "ds4drv";
   version = "0.5.1";
@@ -15,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "0vinpla0apizzykcyfis79mrm1i6fhns83nkzw85svypdhkx2g8v";
   };
 
-  propagatedBuildInputs = [ evdev pyudev ];
+  propagatedBuildInputs = [evdev pyudev];
 
-  buildInputs = [ bluez ];
+  buildInputs = [bluez];
 
   meta = {
     description = "Userspace driver for the DualShock 4 controller";

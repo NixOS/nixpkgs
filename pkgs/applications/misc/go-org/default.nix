@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "go-org";
   version = "1.5.0";
@@ -21,6 +24,6 @@ buildGoModule rec {
     description = "Org-mode parser and static site generator in go";
     homepage = "https://niklasfasching.github.io/go-org";
     license = licenses.mit;
-    maintainers = with maintainers; [ payas ];
+    maintainers = with maintainers; [payas];
   };
 }

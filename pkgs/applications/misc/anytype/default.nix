@@ -1,6 +1,8 @@
-{ lib, fetchurl, appimageTools }:
-
-let
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}: let
   pname = "anytype";
   version = "0.23.5";
   name = "Anytype-${version}";
@@ -10,28 +12,29 @@ let
     name = "Anytype-${version}.AppImage";
     sha256 = "sha256-kVM/F0LsIgMtur8jHZzUWkFIcfHe0i8y9Zxe3z5SkVM=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 {inherit name src;};
 in
-appimageTools.wrapType2 {
-  inherit name src;
+  appimageTools.wrapType2 {
+    inherit name src;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
-    ++ [ pkgs.libsecret ];
+    extraPkgs = pkgs:
+      (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
+      ++ [pkgs.libsecret];
 
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
-    install -m 444 -D ${appimageContents}/anytype2.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/anytype2.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/0x0/apps/anytype2.png \
-      $out/share/icons/hicolor/512x512/apps/anytype2.png
-  '';
+    extraInstallCommands = ''
+      mv $out/bin/${name} $out/bin/${pname}
+      install -m 444 -D ${appimageContents}/anytype2.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/anytype2.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}'
+      install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/0x0/apps/anytype2.png \
+        $out/share/icons/hicolor/512x512/apps/anytype2.png
+    '';
 
-  meta = with lib; {
-    description = "P2P note-taking tool";
-    homepage = "https://anytype.io/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ bbigras ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "P2P note-taking tool";
+      homepage = "https://anytype.io/";
+      license = licenses.unfree;
+      maintainers = with maintainers; [bbigras];
+      platforms = ["x86_64-linux"];
+    };
+  }

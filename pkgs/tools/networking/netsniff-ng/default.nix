@@ -1,23 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, bison
-, flex
-, geoip
-, geolite-legacy
-, libcli
-, libnet
-, libnetfilter_conntrack
-, libnl
-, libpcap
-, libsodium
-, liburcu
-, ncurses
-, pkg-config
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  bison,
+  flex,
+  geoip,
+  geolite-legacy,
+  libcli,
+  libnet,
+  libnetfilter_conntrack,
+  libnl,
+  libpcap,
+  libsodium,
+  liburcu,
+  ncurses,
+  pkg-config,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
   version = "0.6.8";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # All files installed to /etc are just static data that can go in the store
-  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" ];
+  makeFlags = ["PREFIX=$(out)" "ETCDIR=$(out)/etc"];
 
   postInstall = ''
     # trafgen and bpfc can call out to cpp to process config files.
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
       development and analysis, debugging, auditing or network reconnaissance.
     '';
     homepage = "http://netsniff-ng.org/";
-    license = with licenses; [ gpl2Only ];
+    license = with licenses; [gpl2Only];
     platforms = platforms.linux;
   };
 }

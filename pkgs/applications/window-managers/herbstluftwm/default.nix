@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, freetype, asciidoc
-, xdotool, xorgserver, xsetroot, xterm, runtimeShell
-, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  python3,
+  libX11,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXft,
+  libXrender,
+  freetype,
+  asciidoc,
+  xdotool,
+  xorgserver,
+  xsetroot,
+  xterm,
+  runtimeShell,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
   version = "0.9.3";
@@ -60,7 +78,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkInputs = [
-    (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
+    (python3.withPackages (ps: with ps; [ewmh pytest xlib]))
     xdotool
     xorgserver
     xsetroot
@@ -73,7 +91,7 @@ stdenv.mkDerivation rec {
     export PYTHONPATH="$PYTHONPATH:../python"
   '';
 
-  pytestFlagsArray = [ "../tests" ];
+  pytestFlagsArray = ["../tests"];
   disabledTests = [
     "test_title_different_letters_are_drawn"
   ];
@@ -87,6 +105,6 @@ stdenv.mkDerivation rec {
     homepage = "https://herbstluftwm.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ thibautmarty ];
+    maintainers = with maintainers; [thibautmarty];
   };
 }

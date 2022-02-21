@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl} :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libbtree";
   version = "0.0.1alpha2";

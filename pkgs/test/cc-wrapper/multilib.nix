@@ -1,5 +1,7 @@
-{ lib, stdenv }:
-
+{
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation {
   name = "cc-multilib-test";
 

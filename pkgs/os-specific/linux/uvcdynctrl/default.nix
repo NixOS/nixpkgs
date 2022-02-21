@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libxml2,
+}:
 stdenv.mkDerivation {
   version = "0.3.0";
   pname = "uvcdynctrl";
@@ -11,8 +17,8 @@ stdenv.mkDerivation {
     sha256 = "0s15xxgdx8lnka7vi8llbf6b0j4rhbjl6yp0qxaihysf890xj73s";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libxml2 ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [libxml2];
 
   prePatch = ''
     local fixup_list=(
@@ -31,7 +37,7 @@ stdenv.mkDerivation {
     description = "A simple interface for devices supported by the linux UVC driver";
     homepage = "http://guvcview.sourceforge.net";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.puffnfresh ];
+    maintainers = [maintainers.puffnfresh];
     platforms = platforms.linux;
   };
 }

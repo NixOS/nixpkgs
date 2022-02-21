@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, aiohttp }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  aiohttp,
+}:
 buildPythonPackage rec {
   pname = "pytest-aiohttp";
   version = "0.3.0";
@@ -9,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "0kx4mbs9bflycd8x9af0idcjhdgnzri3nw1qb0vpfyb3751qaaf9";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [aiohttp];
 
   # There are no tests
   doCheck = false;
@@ -20,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aio-libs/pytest-aiohttp/";
     description = "Pytest plugin for aiohttp support";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

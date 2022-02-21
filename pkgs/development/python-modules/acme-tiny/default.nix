@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, fusepy
-, fuse
-, openssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  fusepy,
+  fuse,
+  openssl,
 }:
-
 buildPythonPackage rec {
   pname = "acme-tiny";
   version = "5.0.1";
@@ -22,13 +22,13 @@ buildPythonPackage rec {
     substituteInPlace tests/utils.py --replace /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf
   '';
 
-  buildInputs = [ setuptools-scm ];
+  buildInputs = [setuptools-scm];
 
-  checkInputs = [ fusepy fuse ];
+  checkInputs = [fusepy fuse];
 
   doCheck = false; # seems to hang, not sure
 
-  pythonImportsCheck = [ "acme_tiny" ];
+  pythonImportsCheck = ["acme_tiny"];
 
   meta = with lib; {
     description = "A tiny script to issue and renew TLS certs from Let's Encrypt";

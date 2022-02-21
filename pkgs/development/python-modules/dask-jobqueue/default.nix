@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, dask
-, distributed
-, docrep
-, fetchPypi
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  distributed,
+  docrep,
+  fetchPypi,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   version = "0.7.3";
   pname = "dask-jobqueue";
@@ -38,12 +38,12 @@ buildPythonPackage rec {
     "test_security"
   ];
 
-  pythonImportsCheck = [ "dask_jobqueue" ];
+  pythonImportsCheck = ["dask_jobqueue"];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-jobqueue";
     description = "Deploy Dask on job schedulers like PBS, SLURM, and SGE";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

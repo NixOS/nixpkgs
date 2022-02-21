@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, colorama
-, sphinx
-, livereload
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  colorama,
+  sphinx,
+  livereload,
 }:
-
 buildPythonPackage rec {
   pname = "sphinx-autobuild";
   version = "2021.3.14";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # No tests included.
   doCheck = false;
 
-  pythonImportsCheck = [ "sphinx_autobuild" ];
+  pythonImportsCheck = ["sphinx_autobuild"];
 
   meta = with lib; {
     description = "Rebuild Sphinx documentation on changes, with live-reload in the browser";
     homepage = "https://github.com/executablebooks/sphinx-autobuild";
-    license = with licenses; [ mit ];
+    license = with licenses; [mit];
     maintainers = with maintainers; [holgerpeters];
   };
 }

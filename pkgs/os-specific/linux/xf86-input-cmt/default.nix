@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, xorgserver, xorgproto,
-  utilmacros, libgestures, libevdevc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  xorgserver,
+  xorgproto,
+  utilmacros,
+  libgestures,
+  libevdevc,
+}:
 stdenv.mkDerivation rec {
   pname = "xf86-input-cmt";
   version = "2.0.2";
@@ -16,10 +24,13 @@ stdenv.mkDerivation rec {
     ./apply_patches.sh
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    xorgserver xorgproto utilmacros
-    libgestures libevdevc
+    xorgserver
+    xorgproto
+    utilmacros
+    libgestures
+    libevdevc
   ];
 
   configureFlags = [
@@ -31,6 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     homepage = "https://www.github.com/hugegreenbug/xf86-input-cmt";
-    maintainers = with maintainers; [ kcalvinalvin ];
+    maintainers = with maintainers; [kcalvinalvin];
   };
 }

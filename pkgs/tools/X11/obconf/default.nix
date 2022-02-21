@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, gtk3, openbox,
-  imlib2, libxml2, libstartup_notification, makeWrapper, libSM }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  gtk3,
+  openbox,
+  imlib2,
+  libxml2,
+  libstartup_notification,
+  makeWrapper,
+  libSM,
+}:
 stdenv.mkDerivation rec {
   pname = "obconf";
   version = "unstable-2015-02-13";
@@ -38,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "GUI configuration tool for openbox";
     homepage = "http://openbox.org/wiki/ObConf";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sfrijters ];
+    maintainers = [lib.maintainers.sfrijters];
     platforms = lib.platforms.linux;
   };
 }

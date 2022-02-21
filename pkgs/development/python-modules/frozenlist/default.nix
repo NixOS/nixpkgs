@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "frozenlist";
   version = "1.2.0";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
     cython frozenlist/_frozenlist.pyx
   '';
 
-  pythonImportsCheck = [ "frozenlist" ];
+  pythonImportsCheck = ["frozenlist"];
 
   meta = with lib; {
     description = "Python module for list-like structure";
     homepage = "https://github.com/aio-libs/frozenlist";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

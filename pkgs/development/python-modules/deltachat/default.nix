@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, setuptools-scm
-, libdeltachat
-, cffi
-, imapclient
-, pluggy
-, requests
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  setuptools-scm,
+  libdeltachat,
+  cffi,
+  imapclient,
+  pluggy,
+  requests,
+  setuptools,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "deltachat";
   inherit (libdeltachat) version src;
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/deltachat/deltachat-core-rust/tree/master/python";
     changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${version}/python/CHANGELOG";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

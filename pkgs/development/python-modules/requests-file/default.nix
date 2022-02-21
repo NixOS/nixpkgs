@@ -1,11 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, requests
-, six
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
+  requests,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "requests-file";
   version = "1.5.1";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Transport adapter for fetching file:// URLs with the requests python library";
     homepage = "https://github.com/dashea/requests-file";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

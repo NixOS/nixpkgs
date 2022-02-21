@@ -1,5 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils, installShellFiles, scdoc, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  coreutils,
+  installShellFiles,
+  scdoc,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "maddy";
   version = "0.5.3";
@@ -13,11 +20,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-lL9hlICc9t/2v6eawG8LU6hpAKpY7raTg5l1RagewPs=";
 
-  ldflags = [ "-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}"];
 
-  subPackages = [ "cmd/maddy" "cmd/maddyctl" ];
+  subPackages = ["cmd/maddy" "cmd/maddyctl"];
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [installShellFiles scdoc];
 
   postInstall = ''
     for f in docs/man/*.scd; do
@@ -43,6 +50,6 @@ buildGoModule rec {
     description = "Composable all-in-one mail server";
     homepage = "https://maddy.email";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with maintainers; [nickcao];
   };
 }

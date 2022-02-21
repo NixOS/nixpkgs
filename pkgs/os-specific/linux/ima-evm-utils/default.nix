@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, openssl, attr, keyutils, asciidoc, libxslt, docbook_xsl }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  attr,
+  keyutils,
+  asciidoc,
+  libxslt,
+  docbook_xsl,
+}:
 stdenv.mkDerivation rec {
   pname = "ima-evm-utils";
   version = "1.4";
@@ -10,8 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zmyv82232lzqk52m0s7fap9zb9hb1x6nsi5gznk0cbsnq2m67pc";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ openssl attr keyutils asciidoc libxslt ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [openssl attr keyutils asciidoc libxslt];
 
   MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
@@ -20,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/linux-ima/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ tstrobel ];
+    maintainers = with lib.maintainers; [tstrobel];
   };
 }

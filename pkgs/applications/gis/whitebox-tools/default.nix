@@ -1,4 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "whitebox_tools";
   version = "2.0.0";
@@ -22,6 +28,6 @@ rustPlatform.buildRustPackage rec {
     description = "An advanced geospatial data analysis platform";
     homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
     license = licenses.mit;
-    maintainers = [ maintainers.mpickering ];
+    maintainers = [maintainers.mpickering];
   };
 }

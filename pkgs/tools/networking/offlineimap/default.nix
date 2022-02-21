@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, python3
-, asciidoc
-, cacert
-, docbook_xsl
-, installShellFiles
-, libxml2
-, libxslt
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  asciidoc,
+  cacert,
+  docbook_xsl,
+  installShellFiles,
+  libxml2,
+  libxslt,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "offlineimap";
   version = "8.0.0";
@@ -63,6 +63,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ endocrimes ];
+    maintainers = with maintainers; [endocrimes];
   };
 }

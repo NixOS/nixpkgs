@@ -1,11 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests
-, py
-, pytest
-, pytest-flake8
-, lazy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  py,
+  pytest,
+  pytest-flake8,
+  lazy,
 }:
-
 buildPythonPackage rec {
   pname = "devpi-common";
   version = "3.6.0";
@@ -20,7 +22,7 @@ buildPythonPackage rec {
     py
     lazy
   ];
-  checkInputs = [ pytest pytest-flake8 ];
+  checkInputs = [pytest pytest-flake8];
 
   checkPhase = ''
     py.test
@@ -30,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/devpi/devpi";
     description = "Utilities jointly used by devpi-server and devpi-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ lewo makefu ];
+    maintainers = with maintainers; [lewo makefu];
   };
 }

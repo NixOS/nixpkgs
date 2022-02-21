@@ -1,42 +1,43 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, coreutils
-, curl
-, file
-, glibc
-, makeWrapper
-, nixosTests
-, protobuf
-, python3
-, sgx-sdk
-, shadow
-, systemd
-, util-linux
-, which
-, debug ? false
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  coreutils,
+  curl,
+  file,
+  glibc,
+  makeWrapper,
+  nixosTests,
+  protobuf,
+  python3,
+  sgx-sdk,
+  shadow,
+  systemd,
+  util-linux,
+  which,
+  debug ? false,
 }:
 stdenv.mkDerivation rec {
   inherit (sgx-sdk) version versionTag src;
   pname = "sgx-psw";
 
-  postUnpack =
-    let
-      ae.prebuilt = fetchurl {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
-        hash = "sha256-JriA9UGYFkAPuCtRizk8RMM1YOYGR/eO9ILnx47A40s=";
+  postUnpack = let
+    ae.prebuilt = fetchurl {
+      url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
+      hash = "sha256-JriA9UGYFkAPuCtRizk8RMM1YOYGR/eO9ILnx47A40s=";
+    };
+    dcap = rec {
+      version = "1.12.1";
+      filename = "prebuilt_dcap_${version}.tar.gz";
+      prebuilt = fetchurl {
+        url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
+        hash = "sha256-V/XHva9Sq3P36xSW+Sd0G6Dnk4H0ANO1Ns/u+FI1eGI=";
       };
-      dcap = rec {
-        version = "1.12.1";
-        filename = "prebuilt_dcap_${version}.tar.gz";
-        prebuilt = fetchurl {
-          url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-V/XHva9Sq3P36xSW+Sd0G6Dnk4H0ANO1Ns/u+FI1eGI=";
-        };
-      };
-    in
-    sgx-sdk.postUnpack + ''
+    };
+  in
+    sgx-sdk.postUnpack
+    + ''
       # Make sure we use the correct version of prebuilt DCAP
       grep -q 'ae_file_name=${dcap.filename}' "$src/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
         || (echo "Could not find expected prebuilt DCAP ${dcap.filename} in linux-sgx source" >&2 && exit 1)
@@ -88,11 +89,13 @@ stdenv.mkDerivation rec {
   # Randomly fails if enabled
   enableParallelBuilding = false;
 
-  buildFlags = [
-    "psw_install_pkg"
-  ] ++ lib.optionals debug [
-    "DEBUG=1"
-  ];
+  buildFlags =
+    [
+      "psw_install_pkg"
+    ]
+    ++ lib.optionals debug [
+      "DEBUG=1"
+    ];
 
   installFlags = [
     "-C linux/installer/common/psw/output"
@@ -134,7 +137,7 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     makeWrapper $out/aesm/aesm_service $out/bin/aesm_service \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ protobuf ]}:$out/aesm \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [protobuf]}:$out/aesm \
       --run "cd $out/aesm"
 
     # Make sure we didn't forget to handle any files
@@ -183,8 +186,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Intel SGX Architectural Enclave Service Manager";
     homepage = "https://github.com/intel/linux-sgx";
-    maintainers = with maintainers; [ veehaitch citadelcore ];
-    platforms = [ "x86_64-linux" ];
-    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [veehaitch citadelcore];
+    platforms = ["x86_64-linux"];
+    license = with licenses; [bsd3];
   };
 }

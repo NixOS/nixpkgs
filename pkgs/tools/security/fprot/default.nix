@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation {
-
   pname = "f-prot";
   version = "6.2.1";
 
@@ -36,7 +38,7 @@ stdenv.mkDerivation {
     homepage = "http://www.f-prot.com";
     description = "A popular proprietary antivirus program";
     license = licenses.unfree;
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

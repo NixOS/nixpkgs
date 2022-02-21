@@ -1,12 +1,11 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
-
-, withSpeech ? true
-, makeWrapper
-, espeak-ng
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  withSpeech ? true,
+  makeWrapper,
+  espeak-ng,
 }:
-
 buildGoPackage rec {
   pname = "mob";
   version = "2.2.1";
@@ -33,7 +32,7 @@ buildGoPackage rec {
     description = "Tool for smooth git handover";
     homepage = "https://github.com/remotemobprogramming/mob";
     license = licenses.mit;
-    maintainers = with maintainers; [ ericdallo ];
+    maintainers = with maintainers; [ericdallo];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ lib, ... }: {
+import ./make-test-python.nix ({lib, ...}: {
   name = "without-nix";
   meta = with lib.maintainers; {
-    maintainers = [ ericson2314 ];
+    maintainers = [ericson2314];
   };
 
   nixpkgs.overlays = [
@@ -10,7 +10,7 @@ import ./make-test-python.nix ({ lib, ... }: {
     })
   ];
 
-  nodes.machine = { ... }: {
+  nodes.machine = {...}: {
     nix.enable = false;
   };
 

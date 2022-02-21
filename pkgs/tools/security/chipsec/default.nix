@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel ? null
-, libelf
-, nasm
-, python3
-, withDriver ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel ? null,
+  libelf,
+  nasm,
+  python3,
+  withDriver ? false,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
   version = "1.8.1";
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-bK8wlwhP0pi8rOs8ysbSZ+0aZOaX4mckfH/p4OLGnes=";
   };
 
-  patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
+  patches = lib.optionals withDriver [./ko-path.diff ./compile-ko.diff];
 
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -46,11 +46,13 @@ python3.pkgs.buildPythonApplication rec {
       $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
   '';
 
-  setupPyBuildFlags = [
-    "--build-lib=$CHIPSEC_BUILD_LIB"
-  ] ++ lib.optional (!withDriver) [
-    "--skip-driver"
-  ];
+  setupPyBuildFlags =
+    [
+      "--build-lib=$CHIPSEC_BUILD_LIB"
+    ]
+    ++ lib.optional (!withDriver) [
+      "--skip-driver"
+    ];
 
   pythonImportsCheck = [
     "chipsec"
@@ -67,7 +69,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
-    maintainers = with maintainers; [ johnazoidberg ];
-    platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
+    maintainers = with maintainers; [johnazoidberg];
+    platforms =
+      if withDriver
+      then ["x86_64-linux"]
+      else platforms.all;
   };
 }

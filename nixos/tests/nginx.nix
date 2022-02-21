@@ -4,14 +4,18 @@
 #   2. whether the ETag header is properly generated whenever we're serving
 #      files in Nix store paths
 #   3. nginx doesn't restart on configuration changes (only reloads)
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "nginx";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ mbbx6spp danbst ];
+    maintainers = [mbbx6spp danbst];
   };
 
   nodes = {
-    webserver = { pkgs, lib, ... }: {
+    webserver = {
+      pkgs,
+      lib,
+      ...
+    }: {
       services.nginx.enable = true;
       services.nginx.commonHttpConfig = ''
         log_format ceeformat '@cee: {"status":"$status",'
@@ -52,7 +56,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       specialisation.justReloadSystem.configuration = {
-        services.nginx.virtualHosts."1.my.test".listen = [ { addr = "127.0.0.1"; port = 8080; }];
+        services.nginx.virtualHosts."1.my.test".listen = [
+          {
+            addr = "127.0.0.1";
+            port = 8080;
+          }
+        ];
       };
 
       specialisation.reloadRestartSystem.configuration = {
@@ -66,7 +75,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     };
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etagSystem";
     justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/justReloadSystem";
     reloadRestartSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadRestartSystem";

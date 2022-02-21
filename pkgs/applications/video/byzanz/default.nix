@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchgit, wrapGAppsHook, which, gnome, glib, intltool, pkg-config, libtool, cairo, gtk3, gst_all_1, xorg }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  wrapGAppsHook,
+  which,
+  gnome,
+  glib,
+  intltool,
+  pkg-config,
+  libtool,
+  cairo,
+  gtk3,
+  gst_all_1,
+  xorg,
+}:
 stdenv.mkDerivation {
   version = "0.2.3.alpha";
   pname = "byzanz";
@@ -10,7 +24,7 @@ stdenv.mkDerivation {
     sha256 = "0a72fw2mxl8vdcdnzy0bwis4jk28pd7nc8qgr4vhyw5pd48dynvh";
   };
 
-  patches = [ ./add-amflags.patch ];
+  patches = [./add-amflags.patch];
 
   preBuild = ''
     ./autogen.sh --prefix=$out
@@ -18,15 +32,16 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ which gnome.gnome-common glib intltool libtool cairo gtk3 xorg.xwininfo xorg.libXdamage ]
-  ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-plugins-ugly gst-libav wrapGAppsHook ]);
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [which gnome.gnome-common glib intltool libtool cairo gtk3 xorg.xwininfo xorg.libXdamage]
+    ++ (with gst_all_1; [gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-plugins-ugly gst-libav wrapGAppsHook]);
 
   meta = with lib; {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";
     homepage = "https://github.com/GNOME/byzanz";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

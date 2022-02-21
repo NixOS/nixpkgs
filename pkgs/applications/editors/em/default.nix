@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "em";
   version = "1.0.0";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       (such as the ITT's at QMC).
     '';
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

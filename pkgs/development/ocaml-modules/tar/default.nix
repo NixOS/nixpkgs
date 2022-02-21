@@ -1,12 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, ppx_cstruct
-, cstruct
-, re
-, ppx_tools
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ppx_cstruct,
+  cstruct,
+  re,
+  ppx_tools,
 }:
-
 buildDunePackage rec {
   pname = "tar";
   version = "1.1.0";
@@ -34,6 +34,6 @@ buildDunePackage rec {
   meta = {
     description = "Decode and encode tar format files from Unix";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

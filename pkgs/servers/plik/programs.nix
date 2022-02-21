@@ -1,6 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchurl, makeWrapper, runCommand }:
-
-let
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchurl,
+  makeWrapper,
+  runCommand,
+}: let
   version = "1.3.4";
 
   src = fetchFromGitHub {
@@ -15,17 +20,15 @@ let
   meta = with lib; {
     homepage = "https://plik.root.gg/";
     description = "Scalable & friendly temporary file upload system";
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
     license = licenses.mit;
   };
-in
-{
-
+in {
   plik = buildGoModule {
     pname = "plik";
     inherit version meta src vendorSha256;
 
-    subPackages = [ "client" ];
+    subPackages = ["client"];
     postInstall = ''
       mv $out/bin/client $out/bin/plik
     '';
@@ -35,7 +38,7 @@ in
     pname = "plikd-unwrapped";
     inherit version src vendorSha256;
 
-    subPackages = [ "server" ];
+    subPackages = ["server"];
     postFixup = ''
       mv $out/bin/server $out/bin/plikd
     '';

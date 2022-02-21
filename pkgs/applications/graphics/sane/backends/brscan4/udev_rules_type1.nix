@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libsaneUDevRuleNumber ? "49" }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libsaneUDevRuleNumber ? "49",
+}:
 stdenv.mkDerivation rec {
   pname = "brother-udev-rule-type1";
   version = "1.0.0-1";
@@ -17,21 +21,21 @@ stdenv.mkDerivation rec {
   '';
 
   /*
-    Fix the following error:
-
-    ~~~
-    invalid rule 49-brother-libsane-type1.rules
-    unknown key 'SYSFS{idVendor}'
-    ~~~
-
-    Apparently the udev rules syntax has change and the SYSFS key has to
-    be changed to ATTR.
-
-    See:
-
-     -  <http://ubuntuforums.org/showthread.php?t=1496878>
-     -  <http://www.planet-libre.org/index.php?post_id=10937>
-  */
+   Fix the following error:
+   
+   ~~~
+   invalid rule 49-brother-libsane-type1.rules
+   unknown key 'SYSFS{idVendor}'
+   ~~~
+   
+   Apparently the udev rules syntax has change and the SYSFS key has to
+   be changed to ATTR.
+   
+   See:
+   
+    -  <http://ubuntuforums.org/showthread.php?t=1496878>
+    -  <http://www.planet-libre.org/index.php?post_id=10937>
+   */
   patchPhase = ''
     sed -i -e s/SYSFS/ATTR/g opt/brother/scanner/udev-rules/type1/*.rules
   '';
@@ -51,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.brother.com";
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ jraygauthier ];
+    maintainers = with lib.maintainers; [jraygauthier];
   };
 }

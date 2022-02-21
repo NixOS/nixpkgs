@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvm_12, ncurses, readline, zlib, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvm_12,
+  ncurses,
+  readline,
+  zlib,
+  libxml2,
+}:
 stdenv.mkDerivation {
   pname = "hobbes";
   version = "unstable-2021-04-28";
@@ -40,7 +49,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/morganstanley/hobbes";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kthielen thmzlt ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [kthielen thmzlt];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
   };
 }

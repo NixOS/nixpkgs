@@ -1,11 +1,11 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, dnspython
-, m2crypto
-, pygraphviz
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  dnspython,
+  m2crypto,
+  pygraphviz,
 }:
-
 buildPythonApplication rec {
   pname = "dnsviz";
   version = "0.9.4";
@@ -35,7 +35,7 @@ buildPythonApplication rec {
   # Tests require network connection and /etc/resolv.conf
   doCheck = false;
 
-  pythonImportsCheck = [ "dnsviz" ];
+  pythonImportsCheck = ["dnsviz"];
 
   meta = with lib; {
     description = "Tool suite for analyzing and visualizing DNS and DNSSEC behavior";
@@ -46,6 +46,6 @@ buildPythonApplication rec {
       This tool suite powers the Web-based analysis available at https://dnsviz.net/
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

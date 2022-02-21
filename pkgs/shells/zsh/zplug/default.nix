@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "zplug";
   version = "2.4.2";
@@ -25,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zplug/zplug";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.s1341 ];
+    maintainers = [maintainers.s1341];
   };
 }

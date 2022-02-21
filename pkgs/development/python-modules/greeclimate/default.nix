@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, netifaces
-, pycryptodome
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  netifaces,
+  pycryptodome,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "greeclimate";
   version = "1.0.3";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Discover, connect and control Gree based minisplit systems";
     homepage = "https://github.com/cmroche/greeclimate";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

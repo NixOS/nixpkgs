@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with pkgs;
-with lib;
-
-let
-
+with lib; let
   cfg = config.hardware.pulseaudio;
   alsaCfg = config.sound;
 
@@ -13,7 +14,7 @@ let
   hasZeroconf = let z = cfg.zeroconf; in z.publish.enable || z.discovery.enable;
 
   overriddenPackage = cfg.package.override
-    (optionalAttrs hasZeroconf { zeroconfSupport = true; });
+  (optionalAttrs hasZeroconf {zeroconfSupport = true;});
   binary = "${getBin overriddenPackage}/bin/pulseaudio";
   binaryNoDaemon = "${binary} --daemonize=no";
 
@@ -21,21 +22,24 @@ let
   # using 32bit alsa on 64bit linux.
   enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs.pkgsi686Linux.alsa-lib != null && pkgs.pkgsi686Linux.libpulseaudio != null);
 
-
-  myConfigFile =
-    let
-      addModuleIf = cond: mod: optionalString cond "load-module ${mod}";
-      allAnon = optional cfg.tcp.anonymousClients.allowAll "auth-anonymous=1";
-      ipAnon =  let a = cfg.tcp.anonymousClients.allowedIpRanges;
-                in optional (a != []) ''auth-ip-acl=${concatStringsSep ";" a}'';
-    in writeTextFile {
+  myConfigFile = let
+    addModuleIf = cond: mod: optionalString cond "load-module ${mod}";
+    allAnon = optional cfg.tcp.anonymousClients.allowAll "auth-anonymous=1";
+    ipAnon = let
+      a = cfg.tcp.anonymousClients.allowedIpRanges;
+    in
+      optional (a != []) ''auth-ip-acl=${concatStringsSep ";" a}'';
+  in
+    writeTextFile {
       name = "default.pa";
-        text = ''
+      text = ''
         .include ${cfg.configFile}
         ${addModuleIf cfg.zeroconf.publish.enable "module-zeroconf-publish"}
         ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
-        ${addModuleIf cfg.tcp.enable (concatStringsSep " "
-           ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
+        ${
+          addModuleIf cfg.tcp.enable (concatStringsSep " "
+          (["module-native-protocol-tcp"] ++ allAnon ++ ipAnon))
+        }
         ${addModuleIf config.services.jack.jackd.enable "module-jack-sink"}
         ${addModuleIf config.services.jack.jackd.enable "module-jack-source"}
         ${cfg.extraConfig}
@@ -63,8 +67,10 @@ let
   alsaConf = writeText "asound.conf" (''
     pcm_type.pulse {
       libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
-      ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
+      ${
+      lib.optionalString enable32BitAlsaPlugins
+      "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"
+    }
     }
     pcm.!default {
       type pulse
@@ -72,19 +78,18 @@ let
     }
     ctl_type.pulse {
       libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
-      ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
+      ${
+      lib.optionalString enable32BitAlsaPlugins
+      "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"
+    }
     }
     ctl.!default {
       type pulse
     }
     ${alsaCfg.extraConfig}
   '');
-
 in {
-
   options = {
-
     hardware.pulseaudio = {
       enable = mkOption {
         type = types.bool;
@@ -146,9 +151,10 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = if config.services.jack.jackd.enable
-                  then pkgs.pulseaudioFull
-                  else pkgs.pulseaudio;
+        default =
+          if config.services.jack.jackd.enable
+          then pkgs.pulseaudioFull
+          else pkgs.pulseaudio;
         defaultText = literalExpression "pkgs.pulseaudio";
         example = literalExpression "pkgs.pulseaudioFull";
         description = ''
@@ -211,11 +217,8 @@ in {
           };
         };
       };
-
     };
-
   };
-
 
   config = mkMerge [
     {
@@ -227,7 +230,7 @@ in {
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [ overriddenPackage ];
+      environment.systemPackages = [overriddenPackage];
 
       sound.enable = true;
 
@@ -235,7 +238,7 @@ in {
         "asound.conf".source = alsaConf;
 
         "pulse/daemon.conf".source = writeText "daemon.conf"
-          (lib.generators.toKeyValue {} cfg.daemon.config);
+        (lib.generators.toKeyValue {} cfg.daemon.config);
 
         "openal/alsoft.conf".source = writeText "alsoft.conf" "drivers=pulse";
 
@@ -251,22 +254,23 @@ in {
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 
-      systemd.packages = [ overriddenPackage ];
+      systemd.packages = [overriddenPackage];
 
       # PulseAudio is packaged with udev rules to handle various audio device quirks
-      services.udev.packages = [ overriddenPackage ];
+      services.udev.packages = [overriddenPackage];
     })
 
     (mkIf (cfg.extraModules != []) {
       hardware.pulseaudio.daemon.config.dl-search-path = let
         overriddenModules = builtins.map
-          (drv: drv.override { pulseaudio = overriddenPackage; })
-          cfg.extraModules;
+        (drv: drv.override {pulseaudio = overriddenPackage;})
+        cfg.extraModules;
         modulePaths = builtins.map
-          (drv: "${drv}/${overriddenPackage.pulseDir}/modules")
-          # User-provided extra modules take precedence
-          (overriddenModules ++ [ overriddenPackage ]);
-      in lib.concatStringsSep ":" modulePaths;
+        (drv: "${drv}/${overriddenPackage.pulseDir}/modules")
+        # User-provided extra modules take precedence
+        (overriddenModules ++ [overriddenPackage]);
+      in
+        lib.concatStringsSep ":" modulePaths;
     })
 
     (mkIf hasZeroconf {
@@ -282,17 +286,19 @@ in {
         "pulse/default.pa".source = myConfigFile;
       };
       systemd.user = {
-        services.pulseaudio = {
-          restartIfChanged = true;
-          serviceConfig = {
-            RestartSec = "500ms";
-            PassEnvironment = "DISPLAY";
+        services.pulseaudio =
+          {
+            restartIfChanged = true;
+            serviceConfig = {
+              RestartSec = "500ms";
+              PassEnvironment = "DISPLAY";
+            };
+          }
+          // optionalAttrs config.services.jack.jackd.enable {
+            environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
           };
-        } // optionalAttrs config.services.jack.jackd.enable {
-          environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
-        };
         sockets.pulseaudio = {
-          wantedBy = [ "sockets.target" ];
+          wantedBy = ["sockets.target"];
         };
       };
     })
@@ -302,7 +308,7 @@ in {
         # For some reason, PulseAudio wants UID == GID.
         uid = assert uid == gid; uid;
         group = "pulse";
-        extraGroups = [ "audio" ];
+        extraGroups = ["audio"];
         description = "PulseAudio system service user";
         home = stateDir;
         createHome = true;
@@ -313,8 +319,8 @@ in {
 
       systemd.services.pulseaudio = {
         description = "PulseAudio System-Wide Server";
-        wantedBy = [ "sound.target" ];
-        before = [ "sound.target" ];
+        wantedBy = ["sound.target"];
+        before = ["sound.target"];
         environment.PULSE_RUNTIME_PATH = stateDir;
         serviceConfig = {
           Type = "notify";
@@ -327,5 +333,4 @@ in {
       environment.variables.PULSE_COOKIE = "${stateDir}/.config/pulse/cookie";
     })
   ];
-
 }

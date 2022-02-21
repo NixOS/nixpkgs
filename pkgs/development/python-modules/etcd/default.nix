@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, simplejson
-, pytz
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  simplejson,
+  pytz,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "etcd";
   version = "2.0.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sed -i -e '13,14d;37d' setup.py
   '';
 
-  propagatedBuildInputs = [ simplejson pytz requests ];
+  propagatedBuildInputs = [simplejson pytz requests];
 
   # No proper tests are available
   doCheck = false;
@@ -32,5 +32,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/dsoprea/PythonEtcdClient";
     license = licenses.gpl2;
   };
-
 }

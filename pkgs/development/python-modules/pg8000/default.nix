@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, passlib
-, pythonOlder
-, scramp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  passlib,
+  pythonOlder,
+  scramp,
 }:
-
 buildPythonPackage rec {
   pname = "pg8000";
   version = "1.24.0";
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python driver for PostgreSQL";
     homepage = "https://github.com/tlocke/pg8000";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ domenkozar ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [domenkozar];
     platforms = platforms.unix;
   };
 }

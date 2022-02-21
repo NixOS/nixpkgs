@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  granite,
+  gtk3,
+  switchboard,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
   version = "2.1.5";

@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kirc";
   version = "0.2.9";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     homepage = "http://kirc.io/";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       - Easy customized color scheme definition.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

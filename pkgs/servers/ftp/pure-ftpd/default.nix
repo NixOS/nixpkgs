@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, openssl, pam, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  pam,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-ftpd";
   version = "1.0.50";
@@ -9,15 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "08zas1kg5pnckl28gs7q29952pjfyj8rj59bq96hscqbni7gkqmb";
   };
 
-  buildInputs = [ openssl pam ];
+  buildInputs = [openssl pam];
 
-  configureFlags = [ "--with-tls" ];
+  configureFlags = ["--with-tls"];
 
   meta = with lib; {
     description = "A free, secure, production-quality and standard-conformant FTP server";
     homepage = "https://www.pureftpd.org";
     license = licenses.isc; # with some parts covered by BSD3(?)
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.unix;
   };
 }

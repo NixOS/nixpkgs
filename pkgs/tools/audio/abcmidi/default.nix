@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "abcMIDI";
   version = "2022.01.28";
@@ -15,6 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     description = "Utilities for converting between abc and MIDI";
     platforms = platforms.unix;
-    maintainers = [ maintainers.dotlambda ];
+    maintainers = [maintainers.dotlambda];
   };
 }

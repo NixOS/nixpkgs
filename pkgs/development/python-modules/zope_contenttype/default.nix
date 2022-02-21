@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_testrunner
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope_testrunner,
 }:
-
 buildPythonPackage rec {
   pname = "zope.contenttype";
   version = "4.5.0";
@@ -13,12 +13,12 @@ buildPythonPackage rec {
     sha256 = "c12d929c67ab3eaef9b8a7fba3d19cce8500c8fd25afed8058c8e15f324cbd5b";
   };
 
-  checkInputs = [ zope_testrunner ];
+  checkInputs = [zope_testrunner];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.contenttype";
     description = "A utility module for content-type (MIME type) handling";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [goibhniu];
   };
 }

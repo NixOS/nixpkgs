@@ -1,5 +1,8 @@
-{ pkgs, makeInstalledTest, ... }:
-
+{
+  pkgs,
+  makeInstalledTest,
+  ...
+}:
 makeInstalledTest {
   tested = pkgs.libgdata;
 

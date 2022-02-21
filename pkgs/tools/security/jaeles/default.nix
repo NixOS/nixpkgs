@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "jaeles";
   version = "0.17";
@@ -23,6 +23,6 @@ buildGoModule rec {
     description = "Tool for automated Web application testing";
     homepage = "https://github.com/jaeles-project/jaeles";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

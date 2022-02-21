@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "aacgain";
   version = "1.9.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "07hl432vsscqg01b6wr99qmsj4gbx0i02x4k565432y6zpfmaxm0";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   # -Wnarrowing is enabled by default in recent GCC versions,
   # causing compilation to fail.
@@ -20,11 +24,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     (
       cd mp4v2
-      patch -p0 < ${fetchpatch {
+      patch -p0 < ${
+      fetchpatch {
         name = "fix_missing_ptr_deref.patch";
         url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_missing_ptr_deref.patch?h=aacgain-cvs&id=e1a19c920f57063e64bab75cb0d8624731f6e3d7";
         sha256 = "1cq7r005nvmwdjb25z80grcam7jv6k57jnl2bh349mg3ajmslbq9";
-      }}
+      }
+    }
     )
   '';
 
@@ -63,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://aacgain.altosdesign.com";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.robbinch ];
+    maintainers = [maintainers.robbinch];
   };
 }

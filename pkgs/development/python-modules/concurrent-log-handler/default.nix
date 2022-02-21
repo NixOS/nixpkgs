@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, portalocker
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  portalocker,
 }:
-
 buildPythonPackage rec {
   pname = "concurrent-log-handler";
   version = "0.9.20";

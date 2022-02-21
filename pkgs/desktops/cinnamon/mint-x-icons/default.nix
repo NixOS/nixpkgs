@@ -1,14 +1,14 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, gnome
-, gnome-icon-theme
-, hicolor-icon-theme
-, gtk3
-, humanity-icon-theme
-, ubuntu-themes
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  gnome,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  gtk3,
+  humanity-icon-theme,
+  ubuntu-themes,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mint-x-icons";
   version = "1.6.3";

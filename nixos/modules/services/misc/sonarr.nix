@@ -1,11 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.sonarr;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.sonarr;
+in {
   options = {
     services.sonarr = {
       enable = mkEnableOption "Sonarr";
@@ -45,8 +46,8 @@ in
 
     systemd.services.sonarr = {
       description = "Sonarr";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "simple";
@@ -58,7 +59,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8989 ];
+      allowedTCPPorts = [8989];
     };
 
     users.users = mkIf (cfg.user == "sonarr") {

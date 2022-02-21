@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, krb5, liburcu , libtirpc, libnsl
-} :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  krb5,
+  liburcu,
+  libtirpc,
+  libnsl,
+}:
 stdenv.mkDerivation rec {
   pname = "ntirpc";
   version = "4.0";
@@ -17,8 +23,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ntirpc/netconfig.h --replace "/etc/netconfig" "$out/etc/netconfig"
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ krb5 liburcu libnsl ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [krb5 liburcu libnsl];
 
   postInstall = ''
     mkdir -p $out/etc
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Transport-independent RPC (TI-RPC)";
     homepage = "https://github.com/nfs-ganesha/ntirpc";
-    maintainers = [ maintainers.markuskowa ];
+    maintainers = [maintainers.markuskowa];
     platforms = platforms.linux;
     license = licenses.bsd3;
   };

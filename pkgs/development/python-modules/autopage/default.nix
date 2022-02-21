@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "autopage";
   version = "0.5.0";
@@ -11,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-UwW0PMB5gXDXEk5aL+7Plp5F9KC691yzUROBFOr3a4M=";
   };
 
-  pythonImportsCheck = [ "autopage" ];
+  pythonImportsCheck = ["autopage"];
 
   meta = with lib; {
     description = "A library to provide automatic paging for console output";

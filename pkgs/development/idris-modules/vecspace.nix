@@ -1,13 +1,14 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "vecspace";
   version = "2018-01-12";
 
-  idrisDeps = [ contrib ];
+  idrisDeps = [contrib];
 
   src = fetchFromGitHub {
     owner = "clayrat";
@@ -19,6 +20,6 @@ build-idris-package  {
   meta = {
     description = "Abstract vector spaces in Idris";
     homepage = "https://github.com/clayrat/idris-vecspace";
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

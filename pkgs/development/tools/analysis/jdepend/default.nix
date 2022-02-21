@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ant, jdk, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "jdepend";
   version = "2.10";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lxf3j9vflky7a2py3i59q7cwd1zvjv2b88l3za39vc90s04dz6k";
   };
 
-  nativeBuildInputs = [ ant jdk ];
+  nativeBuildInputs = [ant jdk];
   buildPhase = "ant jar";
 
   installPhase = ''
@@ -30,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.clarkware.com/software/JDepend.html";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gevent
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gevent,
 }:
-
 buildPythonPackage rec {
   pname = "gipc";
   version = "1.4.0";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-P8d2GIxFAAHeXjXgIxKGwahiH1TW/9fE+V0f9Ra54wo=";
   };
 
-  propagatedBuildInputs = [ gevent ];
+  propagatedBuildInputs = [gevent];
 
   meta = with lib; {
     description = "gevent-cooperative child processes and IPC";
@@ -30,5 +30,4 @@ buildPythonPackage rec {
     # gipc only has support for older versions of gevent
     broken = versionOlder "1.6" gevent.version;
   };
-
 }

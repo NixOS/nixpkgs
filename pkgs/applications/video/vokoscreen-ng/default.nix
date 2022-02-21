@@ -1,23 +1,22 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, gstreamer
-, libX11
-, pulseaudio
-, qtbase
-, qtmultimedia
-, qtx11extras
-
-, gst-plugins-base
-, gst-plugins-good
-, gst-plugins-bad
-, gst-plugins-ugly
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  qttools,
+  gstreamer,
+  libX11,
+  pulseaudio,
+  qtbase,
+  qtmultimedia,
+  qtx11extras,
+  gst-plugins-base,
+  gst-plugins-good,
+  gst-plugins-bad,
+  gst-plugins-ugly,
 }:
 mkDerivation rec {
-
   pname = "vokoscreen-ng";
   version = "3.0.8";
 
@@ -34,9 +33,9 @@ mkDerivation rec {
     ./linux-support-installation-target.patch
   ];
 
-  qmakeFlags = [ "src/vokoscreenNG.pro" ];
+  qmakeFlags = ["src/vokoscreenNG.pro"];
 
-  nativeBuildInputs = [ qttools pkg-config qmake ];
+  nativeBuildInputs = [qttools pkg-config qmake];
   buildInputs = [
     gstreamer
     libX11
@@ -64,7 +63,7 @@ mkDerivation rec {
     description = "User friendly Open Source screencaster for Linux and Windows";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/vkohaupt/vokoscreenNG";
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [shamilton];
     platforms = platforms.linux;
   };
 }

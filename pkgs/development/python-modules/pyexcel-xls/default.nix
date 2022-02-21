@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyexcel-io
-, xlrd
-, xlwt
-, nose
-, pyexcel
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyexcel-io,
+  xlrd,
+  xlwt,
+  nose,
+  pyexcel,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "pyexcel-xls";
   version = "0.7.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "A wrapper library to read, manipulate and write data in xls using xlrd and xlwt";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [jtojnar];
   };
 }

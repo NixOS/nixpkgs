@@ -1,9 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, msrestazure
-, azure-common
-, azure-mgmt-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
 }:
-
 buildPythonPackage rec {
   pname = "azure-mgmt-databoxedge";
   version = "1.0.0";
@@ -23,12 +25,12 @@ buildPythonPackage rec {
   # no tests in pypi tarball
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.databoxedge" ];
+  pythonImportsCheck = ["azure.mgmt.databoxedge"];
 
   meta = with lib; {
     description = "Microsoft Azure Databoxedge Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

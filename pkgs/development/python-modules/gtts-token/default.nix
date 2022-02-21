@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "gtts-token";
   version = "1.1.4";
@@ -20,16 +20,15 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   # requires internet access
-  disabledTests = [ "test_real" ];
+  disabledTests = ["test_real"];
 
   meta = with lib; {
     description = "Calculates a token to run the Google Translate text to speech";
     homepage = "https://github.com/boudewijn26/gTTS-token";
     license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
 }
-

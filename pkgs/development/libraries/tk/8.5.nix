@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, callPackage
-, fetchurl
-, fetchpatch
-, tcl
-, ...
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  fetchpatch,
+  tcl,
+  ...
 } @ args:
-
-callPackage ./generic.nix (args // {
-
+callPackage ./generic.nix (args
+// {
   src = fetchurl {
     url = "mirror://sourceforge/tcl/tk${tcl.version}-src.tar.gz";
     sha256 = "0an3wqkjzlyyq6l9l3nawz76axsrsppbyylx0zk9lkv7llrala03";
@@ -24,5 +24,4 @@ callPackage ./generic.nix (args // {
       sha256 = "0crhf4zrzdpc1jdgyv6l6mxqgmny12r3i39y1i0j8q3pbqkd04bv";
     })
   ];
-
 })

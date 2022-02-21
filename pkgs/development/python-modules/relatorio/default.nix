@@ -1,5 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, genshi, lxml, python_magic }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  genshi,
+  lxml,
+  python_magic,
+}:
 buildPythonPackage rec {
   pname = "relatorio";
   version = "0.10.0";
@@ -18,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://relatorio.tryton.org/";
     description = "A templating library able to output odt and pdf files";
-    maintainers = with lib.maintainers; [ johbo ];
+    maintainers = with lib.maintainers; [johbo];
     license = lib.licenses.gpl3;
   };
 }

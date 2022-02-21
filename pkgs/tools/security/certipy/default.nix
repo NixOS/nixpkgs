@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "certipy";
   version = "2.0";
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
     homepage = "https://github.com/ly4k/Certipy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

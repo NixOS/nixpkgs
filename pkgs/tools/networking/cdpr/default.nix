@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libpcap }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpcap,
+}:
 stdenv.mkDerivation rec {
   pname = "cdpr";
   version = "2.4";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'gcc' '"$$CC"'
   '';
 
-  buildInputs = [ libpcap ];
+  buildInputs = [libpcap];
 
   installPhase = ''
     install -Dm755 cdpr $out/bin/cdpr
@@ -24,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cdpr.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.sgo ];
+    maintainers = [maintainers.sgo];
   };
 }

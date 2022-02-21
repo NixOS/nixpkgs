@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "avro3k";
   version = "1.7.7-SNAPSHOT";
@@ -10,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "15ahl0irwwj558s964abdxg4vp6iwlabri7klsm2am6q5r0ngsky";
   };
 
-  doCheck = false;        # No such file or directory: './run_tests.py
+  doCheck = false; # No such file or directory: './run_tests.py
 
   meta = with lib; {
     description = "A serialization and RPC framework";

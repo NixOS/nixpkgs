@@ -1,16 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-cfg = config.services.xserver.cmt;
-etcPath = "X11/xorg.conf.d";
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.cmt;
+  etcPath = "X11/xorg.conf.d";
 in {
-
   options = {
-
     services.xserver.cmt = {
       enable = mkOption {
         type = types.bool;
@@ -18,7 +16,7 @@ in {
         description = "Enable chrome multitouch input (cmt). Touchpad drivers that are configured for chromebooks.";
       };
       models = mkOption {
-        type = types.enum [ "atlas" "banjo" "candy" "caroline" "cave" "celes" "clapper" "cyan" "daisy" "elan" "elm" "enguarde" "eve" "expresso" "falco" "gandof" "glimmer" "gnawty" "heli" "kevin" "kip" "leon" "lulu" "orco" "pbody" "peppy" "pi" "pit" "puppy" "quawks" "rambi" "samus" "snappy" "spring" "squawks" "swanky" "winky" "wolf" "auron_paine" "auron_yuna" "daisy_skate" "nyan_big" "nyan_blaze" "veyron_jaq" "veyron_jerry" "veyron_mighty" "veyron_minnie" "veyron_speedy" ];
+        type = types.enum ["atlas" "banjo" "candy" "caroline" "cave" "celes" "clapper" "cyan" "daisy" "elan" "elm" "enguarde" "eve" "expresso" "falco" "gandof" "glimmer" "gnawty" "heli" "kevin" "kip" "leon" "lulu" "orco" "pbody" "peppy" "pi" "pit" "puppy" "quawks" "rambi" "samus" "snappy" "spring" "squawks" "swanky" "winky" "wolf" "auron_paine" "auron_yuna" "daisy_skate" "nyan_big" "nyan_blaze" "veyron_jaq" "veyron_jerry" "veyron_mighty" "veyron_minnie" "veyron_speedy"];
         example = "banjo";
         description = ''
           Which models to enable cmt for. Enter the Code Name for your Chromebook.
@@ -29,8 +27,7 @@ in {
   }; #closes options
 
   config = mkIf cfg.enable {
-
-    services.xserver.modules = [ pkgs.xf86_input_cmt ];
+    services.xserver.modules = [pkgs.xf86_input_cmt];
 
     environment.etc = {
       "${etcPath}/40-touchpad-cmt.conf" = {

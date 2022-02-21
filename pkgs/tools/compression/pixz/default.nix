@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, pkg-config
-, asciidoc
-, libxslt
-, libxml2
-, docbook_xml_dtd_45
-, docbook_xsl
-, libarchive
-, xz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  asciidoc,
+  libxslt,
+  libxml2,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libarchive,
+  xz,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pixz";
   version = "1.0.7";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     autoconf
     automake
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A parallel compressor/decompressor for xz format";
     license = licenses.bsd2;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.unix;
   };
 }

@@ -1,12 +1,15 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, nix
-, openssl
-, pkg-config
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  nix,
+  openssl,
+  pkg-config,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "nix-template";
   version = "0.2.0";
@@ -27,13 +30,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl ]
+  buildInputs =
+    [openssl]
     ++ lib.optional stdenv.isDarwin Security;
 
   # needed for nix-prefetch-url
   postInstall = ''
     wrapProgram $out/bin/nix-template \
-      --prefix PATH : ${lib.makeBinPath [ nix ]}
+      --prefix PATH : ${lib.makeBinPath [nix]}
 
     installShellCompletion --cmd nix-template \
       --bash <($out/bin/nix-template completions bash) \
@@ -46,6 +50,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jonringer/nix-template/";
     changelog = "https://github.com/jonringer/nix-template/releases/tag/v${version}";
     license = licenses.cc0;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

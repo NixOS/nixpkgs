@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchzip, breeze-icons, gtk3, gnome-icon-theme, hicolor-icon-theme, mint-x-icons, pantheon }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  breeze-icons,
+  gtk3,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  mint-x-icons,
+  pantheon,
+}:
 stdenv.mkDerivation rec {
   pname = "BeautyLine";
   version = "0.0.1";
@@ -10,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "030bjk333fr9wm1nc740q8i31rfsgf3vg6cvz36xnvavx3q363l7";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [gtk3];
 
   # ubuntu-mono is also required but missing in ubuntu-themes (please add it if it is packaged at some point)
   propagatedBuildInputs = [
@@ -33,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "BeautyLine icon theme";
     homepage = "https://www.gnome-look.org/p/1425426/";
     platforms = platforms.linux;
-    license = [ licenses.publicDomain ];
-    maintainers = with maintainers; [ gvolpe ];
+    license = [licenses.publicDomain];
+    maintainers = with maintainers; [gvolpe];
   };
 }

@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, ecos
-, joblib
-, numexpr
-, numpy
-, osqp
-, pandas
-, setuptools-scm
-, scikit-learn
-, scipy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  ecos,
+  joblib,
+  numexpr,
+  numpy,
+  osqp,
+  pandas,
+  setuptools-scm,
+  scikit-learn,
+  scipy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "scikit-survival";
   version = "0.17.0";
@@ -39,9 +39,9 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [ "sksurv" ];
+  pythonImportsCheck = ["sksurv"];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   # Hack needed to make pytest + cython work
   # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Survival analysis built on top of scikit-learn";
     homepage = "https://github.com/sebp/scikit-survival";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    maintainers = with maintainers; [GuillaumeDesforges];
   };
 }

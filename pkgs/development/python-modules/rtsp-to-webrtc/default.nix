@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "rtsp-to-webrtc";
   version = "0.5.0";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for RTSPtoWeb and RTSPtoWebRTC";
     homepage = "https://github.com/allenporter/rtsp-to-webrtc-client";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

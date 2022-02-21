@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, perl, kmod, coreutils }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  kmod,
+  coreutils,
+}:
 # Requires the acpi_call kernel module in order to run.
 stdenv.mkDerivation rec {
   pname = "tpacpi-bat";
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wbaz34z99gqx721alh5vmpxpj2yxg3x9m8jqyivfi1wfpwc2nd5";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   installPhase = ''
     mkdir -p $out/bin

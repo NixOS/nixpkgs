@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  python2,
+}:
 stdenv.mkDerivation rec {
   pname = "manta";
   version = "1.6.0";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1711xkcw8rpw9xv3bbm7v1aryjz4r341rkq5255192dg38sgq7w2";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python2 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [zlib python2];
   postFixup = ''
     sed -i 's|/usr/bin/env python2|${python2.interpreter}|' $out/lib/python/makeRunScript.py
     sed -i 's|/usr/bin/env python|${python2.interpreter}|' $out/lib/python/pyflow/pyflow.py
@@ -29,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Structural variant caller";
     license = licenses.gpl3;
     homepage = "https://github.com/Illumina/manta";
-    maintainers = with maintainers; [ jbedo ];
-    platforms =  platforms.x86_64;
+    maintainers = with maintainers; [jbedo];
+    platforms = platforms.x86_64;
   };
 }

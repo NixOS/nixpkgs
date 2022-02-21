@@ -1,13 +1,13 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, mock
-, openstacksdk
-, pbr
-, python-keystoneclient
-, stestr
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  mock,
+  openstacksdk,
+  pbr,
+  python-keystoneclient,
+  stestr,
 }:
-
 buildPythonApplication rec {
   pname = "python-swiftclient";
   version = "3.13.0";
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "b200dcfbc6842bd4cac29efd0ea9ef34d3b8625957472ba7aa3ae0242437e2cc";
   };
 
-  propagatedBuildInputs = [ pbr python-keystoneclient ];
+  propagatedBuildInputs = [pbr python-keystoneclient];
 
   checkInputs = [
     mock
@@ -33,7 +33,7 @@ buildPythonApplication rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "swiftclient" ];
+  pythonImportsCheck = ["swiftclient"];
 
   meta = with lib; {
     homepage = "https://github.com/openstack/python-swiftclient";

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "erigon";
   version = "2022.01.02";
@@ -16,7 +19,7 @@ buildGoModule rec {
 
   # Build errors in mdbx when format hardening is enabled:
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   subPackages = [
     "cmd/erigon"
@@ -28,7 +31,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";
-    license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ d-xo ];
+    license = with licenses; [lgpl3Plus gpl3Plus];
+    maintainers = with maintainers; [d-xo];
   };
 }

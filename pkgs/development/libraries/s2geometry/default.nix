@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, openssl, gtest }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  openssl,
+  gtest,
+}:
 stdenv.mkDerivation rec {
   pname = "s2geometry";
   version = "0.9.0";
@@ -19,14 +27,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl gtest ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [openssl gtest];
 
   meta = with lib; {
     description = "Computational geometry and spatial indexing on the sphere";
     homepage = "http://s2geometry.io/";
     license = licenses.asl20;
-    maintainers = [ maintainers.Thra11 ];
+    maintainers = [maintainers.Thra11];
     platforms = platforms.linux;
   };
 }

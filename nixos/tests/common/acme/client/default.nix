@@ -1,8 +1,11 @@
-{ lib, nodes, pkgs, ... }:
-let
+{
+  lib,
+  nodes,
+  pkgs,
+  ...
+}: let
   caCert = nodes.acme.config.test-support.acme.caCert;
   caDomain = nodes.acme.config.test-support.acme.caDomain;
-
 in {
   security.acme = {
     acceptTerms = true;
@@ -12,5 +15,5 @@ in {
     };
   };
 
-  security.pki.certificateFiles = [ caCert ];
+  security.pki.certificateFiles = [caCert];
 }

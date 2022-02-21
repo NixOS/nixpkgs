@@ -1,5 +1,11 @@
-{lib, stdenv, fetchFromGitHub, git, mercurial, makeWrapper}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  mercurial,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "fast-export";
   version = "210917";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xg8r9rbqv7mriraqxdks2mgj7j4c9gap3kc05y1kxi3nniywyd3";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   buildInputs = [mercurial.python mercurial];
 
   installPhase = ''
@@ -61,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "Import mercurial into git";
     homepage = "https://repo.or.cz/w/fast-export.git";
     license = licenses.gpl2;
-    maintainers = [ maintainers.koral ];
+    maintainers = [maintainers.koral];
     platforms = platforms.unix;
   };
 }

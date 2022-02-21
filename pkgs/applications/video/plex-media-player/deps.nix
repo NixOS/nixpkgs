@@ -1,6 +1,4 @@
-{ fetchurl }:
-
-rec {
+{fetchurl}: rec {
   webClientBuildId = "183-045db5be50e175";
   webClientDesktopBuildId = "4.29.2-e50e175";
   webClientTvBuildId = "4.29.6-045db5b";

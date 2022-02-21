@@ -1,9 +1,17 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config
-, qmake, qtbase, qtdeclarative, wrapQtAppsHook
-, glib, gobject-introspection
-, genericUpdater, common-updater-scripts
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtdeclarative,
+  wrapQtAppsHook,
+  glib,
+  gobject-introspection,
+  genericUpdater,
+  common-updater-scripts,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gsettings-qt";
   version = "0.2";
@@ -66,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/ubports/core/gsettings-qt";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
-, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoconf,
+  sbcl,
+  lispPackages,
+  xdpyinfo,
+  texinfo4,
+  makeWrapper,
+}:
 stdenv.mkDerivation {
   name = "clfswm";
 
@@ -11,14 +19,16 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    texinfo4 makeWrapper autoconf
+    texinfo4
+    makeWrapper
+    autoconf
     sbcl
     lispPackages.clx
     lispPackages.cl-ppcre
     xdpyinfo
   ];
 
-  patches = [ ./require-clx.patch ];
+  patches = [./require-clx.patch];
 
   # Stripping destroys the generated SBCL image
   dontStrip = true;
@@ -41,10 +51,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A(nother) Common Lisp FullScreen Window Manager";
-    homepage    = "https://common-lisp.net/project/clfswm/";
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ robgssp ];
-    platforms   = platforms.linux;
-    broken      = true;
+    homepage = "https://common-lisp.net/project/clfswm/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [robgssp];
+    platforms = platforms.linux;
+    broken = true;
   };
 }

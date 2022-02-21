@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, openssl, cmake, pkg-config, qt, darwin }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  cmake,
+  pkg-config,
+  qt,
+  darwin,
+}:
 stdenv.mkDerivation rec {
   pname = "qca";
   version = "2.2.1";
@@ -9,8 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "00kv1vsrc8fp556hm8s6yw3240vx3l4067q6vfxrb3gdwgcd45np";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl qt ]
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs =
+    [openssl qt]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   # tells CMake to use this CA bundle file if it is accessible
@@ -19,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   # tricks CMake into using this CA bundle file if it is not accessible (in a sandbox)
-  cmakeFlags = [ "-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt" ];
+  cmakeFlags = ["-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt"];
 
   postPatch = ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
@@ -29,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Qt Cryptographic Architecture";
     license = "LGPL";
     homepage = "http://delta.affinix.com/qca";
-    maintainers = [ maintainers.sander ];
+    maintainers = [maintainers.sander];
     platforms = platforms.unix;
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage {
   pname = "python-unshare";
   # pypi version doesn't support Python 3 and the package didn't update for a long time:
@@ -18,10 +18,9 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Python bindings for the Linux unshare() syscall";
-    homepage    = "https://github.com/thetincho/python-unshare";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    homepage = "https://github.com/thetincho/python-unshare";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [abbradar];
   };
-
 }

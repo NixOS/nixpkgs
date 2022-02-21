@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, msgpack
-, pytestCheckHook
-, python-engineio
-, pythonOlder
-, requests
-, websocket-client
+{
+  lib,
+  aiohttp,
+  bidict,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  msgpack,
+  pytestCheckHook,
+  python-engineio,
+  pythonOlder,
+  requests,
+  websocket-client,
 }:
-
 buildPythonPackage rec {
   pname = "python-socketio";
   version = "5.5.1";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-socketio/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ mic92 ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [mic92];
   };
 }

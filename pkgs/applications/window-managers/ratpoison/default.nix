@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, autoconf, automake
-, libX11, xorgproto, libXt, libXpm, libXft, libXtst, libXi
-, libXrandr, fontconfig, freetype, readline
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  perl,
+  autoconf,
+  automake,
+  libX11,
+  xorgproto,
+  libXt,
+  libXpm,
+  libXft,
+  libXtst,
+  libXi,
+  libXrandr,
+  fontconfig,
+  freetype,
+  readline,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ratpoison";
   version = "1.4.9";
@@ -12,19 +27,29 @@ stdenv.mkDerivation rec {
     sha256 = "1wfir1gvh5h7izgvx2kd1pr2k7wlncd33zq7qi9s9k2y0aza93yr";
   };
 
-  outputs = [ "out" "contrib" "man" "doc" "info" ];
+  outputs = ["out" "contrib" "man" "doc" "info"];
 
   configureFlags = [
     # >=1.4.9 requires this even with readline in inputs
     "--enable-history"
   ];
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
+  nativeBuildInputs = [pkg-config autoconf automake];
 
-  buildInputs =
-    [ perl
-      libX11 xorgproto libXt libXpm libXft libXtst libXi libXrandr
-      fontconfig freetype readline ];
+  buildInputs = [
+    perl
+    libX11
+    xorgproto
+    libXt
+    libXpm
+    libXft
+    libXtst
+    libXi
+    libXrandr
+    fontconfig
+    freetype
+    readline
+  ];
 
   postInstall = ''
     mkdir -p $contrib/{bin,share}
@@ -38,21 +63,21 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     longDescription = ''
-       Ratpoison is a simple window manager with no fat library
-       dependencies, no fancy graphics, no window decorations, and no
-       rodent dependence.  It is largely modelled after GNU Screen which
-       has done wonders in the virtual terminal market.
+      Ratpoison is a simple window manager with no fat library
+      dependencies, no fancy graphics, no window decorations, and no
+      rodent dependence.  It is largely modelled after GNU Screen which
+      has done wonders in the virtual terminal market.
 
-       The screen can be split into non-overlapping frames.  All windows
-       are kept maximized inside their frames to take full advantage of
-       your precious screen real estate.
+      The screen can be split into non-overlapping frames.  All windows
+      are kept maximized inside their frames to take full advantage of
+      your precious screen real estate.
 
-       All interaction with the window manager is done through keystrokes.
-       Ratpoison has a prefix map to minimize the key clobbering that
-       cripples Emacs and other quality pieces of software.
+      All interaction with the window manager is done through keystrokes.
+      Ratpoison has a prefix map to minimize the key clobbering that
+      cripples Emacs and other quality pieces of software.
     '';
 
     platforms = platforms.unix;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
   };
 }

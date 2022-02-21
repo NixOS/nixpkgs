@@ -1,10 +1,18 @@
-{ lib, stdenv, libgcrypt, fetchFromGitHub, ocamlPackages, perl }:
+{
+  lib,
+  stdenv,
+  libgcrypt,
+  fetchFromGitHub,
+  ocamlPackages,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "obliv-c";
   version = "0.0pre20180624";
-  buildInputs = [ perl ]
-  ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ]);
-  propagatedBuildInputs = [ libgcrypt ];
+  buildInputs =
+    [perl]
+    ++ (with ocamlPackages; [ocaml findlib ocamlbuild]);
+  propagatedBuildInputs = [libgcrypt];
   src = fetchFromGitHub {
     owner = "samee";
     repo = "obliv-c";
@@ -12,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ib21ngn7zr58xxq4sjigrpaxb0wx35x3k9l4qvwflzrmvnman20";
   };
 
-  patches = [ ./ignore-complex-float128.patch ];
+  patches = [./ignore-complex-float128.patch];
 
   preBuild = ''
     patchShebangs .

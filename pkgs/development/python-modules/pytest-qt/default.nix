@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest
-, pyqt5
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytest,
+  pyqt5,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-qt";
   version = "4.0.2";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "pytest support for PyQt and PySide applications";
     homepage = "https://github.com/pytest-dev/pytest-qt";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,5 +1,8 @@
-{lib, stdenv, fetchFromGitHub}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "git-radar";
   version = "0.6";
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "A tool you can add to your prompt to provide at-a-glance information on your git repo";
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ kamilchm ];
+    maintainers = with maintainers; [kamilchm];
   };
 }

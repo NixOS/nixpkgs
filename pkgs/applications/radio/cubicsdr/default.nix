@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, fftw, hamlib, libpulseaudio, libGL, libX11, liquid-dsp,
-  pkg-config, soapysdr-with-plugins, wxGTK31-gtk3, enableDigitalLab ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  fftw,
+  hamlib,
+  libpulseaudio,
+  libGL,
+  libX11,
+  liquid-dsp,
+  pkg-config,
+  soapysdr-with-plugins,
+  wxGTK31-gtk3,
+  enableDigitalLab ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "cubicsdr";
   version = "0.2.5";
@@ -29,19 +43,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ fftw hamlib libpulseaudio libGL libX11 liquid-dsp soapysdr-with-plugins wxGTK31-gtk3 ];
+  buildInputs = [fftw hamlib libpulseaudio libGL libX11 liquid-dsp soapysdr-with-plugins wxGTK31-gtk3];
 
-  cmakeFlags = [ "-DUSE_HAMLIB=ON" ]
+  cmakeFlags =
+    ["-DUSE_HAMLIB=ON"]
     ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
 
   meta = with lib; {
     homepage = "https://cubicsdr.com";
     description = "Software Defined Radio application";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lasandell ];
+    maintainers = with maintainers; [lasandell];
     platforms = platforms.linux;
   };
 }
-

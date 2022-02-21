@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   name = "shared-desktop-ontologies-0.11.0";
 
@@ -8,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1m5vnijg7rnwg41vig2ckg632dlczzdab1gsq51g4x7m9k1fdbw2";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     homepage = "http://oscaf.sourceforge.net/";
@@ -20,6 +24,6 @@ stdenv.mkDerivation rec {
       are used by projects like KDE or Strigi.
     '';
     platforms = platforms.all;
-    maintainers = [ maintainers.sander ];
+    maintainers = [maintainers.sander];
   };
 }

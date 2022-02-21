@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  cmdliner,
+}:
 stdenv.mkDerivation rec {
   version = "0.9.7";
   pname = "uuidm";
@@ -8,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ivxb3hxn9bk62rmixx6px4fvn52s4yr1bpla7rgkcn8981v45r8";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ocaml findlib ocamlbuild];
   configurePlatforms = [];
-  buildInputs = [ topkg cmdliner ];
+  buildInputs = [topkg cmdliner];
 
   inherit (topkg) buildPhase installPhase;
 
@@ -19,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/uuidm";
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
-    maintainers = [ maintainers.maurer ];
+    maintainers = [maintainers.maurer];
   };
 }

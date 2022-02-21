@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "mmark";
   version = "1.3.6";
@@ -20,7 +23,7 @@ buildGoPackage rec {
     description = "A powerful markdown processor in Go geared towards the IETF";
     homepage = "https://github.com/miekg/mmark";
     license = with lib.licenses; bsd2;
-    maintainers = with lib.maintainers; [ yrashk ];
+    maintainers = with lib.maintainers; [yrashk];
     platforms = lib.platforms.unix;
   };
 }

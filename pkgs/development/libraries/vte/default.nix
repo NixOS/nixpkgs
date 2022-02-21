@@ -1,33 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, gettext
-, pkg-config
-, meson
-, ninja
-, gnome
-, glib
-, gtk3
-, gobject-introspection
-, vala
-, python3
-, libxml2
-, gnutls
-, gperf
-, pango
-, pcre2
-, fribidi
-, zlib
-, icu
-, systemd
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  gettext,
+  pkg-config,
+  meson,
+  ninja,
+  gnome,
+  glib,
+  gtk3,
+  gobject-introspection,
+  vala,
+  python3,
+  libxml2,
+  gnutls,
+  gperf,
+  pango,
+  pcre2,
+  fribidi,
+  zlib,
+  icu,
+  systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vte";
   version = "0.64.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       the system's terminfo database.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ astsmtl antono ] ++ teams.gnome.members;
+    maintainers = with maintainers; [astsmtl antono] ++ teams.gnome.members;
     platforms = platforms.unix;
   };
 }

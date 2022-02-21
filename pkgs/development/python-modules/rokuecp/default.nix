@@ -1,19 +1,19 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, backoff
-, buildPythonPackage
-, cachetools
-, fetchFromGitHub
-, poetry
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, xmltodict
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  poetry,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  xmltodict,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "rokuecp";
   version = "0.14.1";
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     description = "Asynchronous Python client for Roku (ECP)";
     homepage = "https://github.com/ctalkington/python-rokuecp";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

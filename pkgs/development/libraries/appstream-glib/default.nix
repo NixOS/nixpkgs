@@ -1,32 +1,34 @@
-{ lib, stdenv
-, fetchFromGitHub
-, substituteAll
-, docbook_xml_dtd_42
-, docbook_xsl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, gettext
-, glib
-, gobject-introspection
-, gperf
-, gtk-doc
-, gtk3
-, json-glib
-, libarchive
-, libsoup
-, libuuid
-, libxslt
-, meson
-, ninja
-, pkg-config
-, pngquant
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  docbook_xml_dtd_42,
+  docbook_xsl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  gobject-introspection,
+  gperf,
+  gtk-doc,
+  gtk3,
+  json-glib,
+  libarchive,
+  libsoup,
+  libuuid,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  pngquant,
 }:
 stdenv.mkDerivation rec {
   pname = "appstream-glib";
   version = "0.7.18";
 
-  outputs = [ "out" "dev" "man" "installedTests" ];
+  outputs = ["out" "dev" "man" "installedTests"];
   outputBin = "dev";
 
   src = fetchFromGitHub {
@@ -90,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [matthewbauer];
   };
 }

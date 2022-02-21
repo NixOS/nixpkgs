@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msgpack
-, oslo-utils
-, oslotest
-, pbr
-, pytz
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msgpack,
+  oslo-utils,
+  oslotest,
+  pbr,
+  pytz,
+  stestr,
 }:
-
 buildPythonPackage rec {
   pname = "oslo-serialization";
   version = "4.3.0";
@@ -25,17 +25,17 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
-  propagatedBuildInputs = [ msgpack oslo-utils pytz ];
+  propagatedBuildInputs = [msgpack oslo-utils pytz];
 
-  checkInputs = [ oslotest stestr ];
+  checkInputs = [oslotest stestr];
 
   checkPhase = ''
     stestr run
   '';
 
-  pythonImportsCheck = [ "oslo_serialization" ];
+  pythonImportsCheck = ["oslo_serialization"];
 
   meta = with lib; {
     description = "Oslo Serialization library";

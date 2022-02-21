@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, unbound
-, libreswan
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  unbound,
+  libreswan,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hash-slinger";
   version = "3.1";
@@ -28,10 +28,12 @@ stdenv.mkDerivation rec {
     python3.pkgs.wrapPython
   ];
 
-  propagatedBuildInputs = [
-    unbound
-    libreswan
-  ] ++ pythonPath;
+  propagatedBuildInputs =
+    [
+      unbound
+      libreswan
+    ]
+    ++ pythonPath;
 
   propagatedUserEnvPkgs = [
     unbound
@@ -58,6 +60,6 @@ stdenv.mkDerivation rec {
     description = "Various tools to generate special DNS records";
     homepage = "https://github.com/letoams/hash-slinger";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

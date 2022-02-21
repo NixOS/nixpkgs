@@ -1,10 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, ffmpeg
-, imagemagick
-, makeWrapper
-, mplayer
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg,
+  imagemagick,
+  makeWrapper,
+  mplayer,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gopro";
   version = "1.0";
@@ -16,14 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "0sb9vpiadrq8g4ag828h8mvq01fg0306j0wjwkxdmwfqync1128l";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
 
     install -Dm755 gopro -t $out/bin
     wrapProgram $out/bin/gopro \
-      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg imagemagick mplayer ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ffmpeg imagemagick mplayer]}"
 
     runHook postInstall
   '';
@@ -33,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KonradIT/gopro-linux";
     platforms = platforms.unix;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

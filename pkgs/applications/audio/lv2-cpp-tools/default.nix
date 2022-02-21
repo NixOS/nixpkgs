@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchzip, pkg-config, lv2, gtkmm2, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  lv2,
+  gtkmm2,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "lv2-cpp-tools";
   version = "1.0.5";
@@ -14,15 +21,15 @@ stdenv.mkDerivation rec {
     sed -r 's,/sbin/ldconfig,ldconfig,g' -i ./Makefile.template
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ lv2 gtkmm2 boost ];
+  buildInputs = [lv2 gtkmm2 boost];
 
   meta = with lib; {
     homepage = "http://ll-plugins.nongnu.org/hacking.html";
     description = "Tools and libraries that may come in handy when writing LV2 plugins in C++";
     license = licenses.gpl3;
-    maintainers = [ maintainers.michalrus ];
+    maintainers = [maintainers.michalrus];
     platforms = platforms.linux;
   };
 }

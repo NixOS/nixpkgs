@@ -1,5 +1,10 @@
-{ lib, python, fetchPypi, buildPythonPackage, cython }:
-
+{
+  lib,
+  python,
+  fetchPypi,
+  buildPythonPackage,
+  cython,
+}:
 buildPythonPackage rec {
   pname = "PyStemmer";
   version = "2.0.1";
@@ -9,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "9b81c35302f1d2a5ad9465b85986db246990db93d97d3e8f129269ed7102788e";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [cython];
 
   preBuild = ''
     cython src/Stemmer.pyx

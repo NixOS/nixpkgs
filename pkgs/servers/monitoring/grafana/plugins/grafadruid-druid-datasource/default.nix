@@ -1,5 +1,7 @@
-{ grafanaPlugin, lib }:
-
+{
+  grafanaPlugin,
+  lib,
+}:
 grafanaPlugin rec {
   pname = "grafadruid-druid-datasource";
   version = "1.2.0";
@@ -7,7 +9,7 @@ grafanaPlugin rec {
   meta = with lib; {
     description = "Connects Grafana to Druid";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nukaduka ];
+    maintainers = with maintainers; [nukaduka];
     platforms = platforms.unix;
   };
 }

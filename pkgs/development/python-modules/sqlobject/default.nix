@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, FormEncode
-, pastedeploy
-, paste
-, pydispatcher
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  FormEncode,
+  pastedeploy,
+  paste,
+  pydispatcher,
 }:
-
 buildPythonPackage rec {
   pname = "sqlobject";
   version = "3.9.1";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Object Relational Manager for providing an object interface to your database";
     homepage = "http://www.sqlobject.org/";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

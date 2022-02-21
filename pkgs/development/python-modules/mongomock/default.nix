@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, sentinels
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  sentinels,
+  six,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "mongomock";
   version = "4.0.0";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "mongomock" ];
+  pythonImportsCheck = ["mongomock"];
 
   meta = with lib; {
     homepage = "https://github.com/mongomock/mongomock";
     description = "Fake pymongo stub for testing simple MongoDB-dependent code";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [gador];
   };
 }

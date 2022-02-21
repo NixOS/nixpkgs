@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, chardet
-, attrs
-, commoncode
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chardet,
+  attrs,
+  commoncode,
+  pytestCheckHook,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "debian-inspector";
   version = "30.0.0";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities to parse Debian package, copyright and control files";
     homepage = "https://github.com/nexB/debian-inspector";
-    license = with licenses; [ asl20 bsd3 mit ];
+    license = with licenses; [asl20 bsd3 mit];
     maintainers = teams.determinatesystems.members;
   };
 }

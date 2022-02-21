@@ -1,9 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-  meta.maintainers = [ maintainers.romildo ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
+  meta.maintainers = [maintainers.romildo];
 
   ###### interface
   options = {
@@ -26,6 +28,6 @@ with lib;
   ###### implementation
   config = mkIf config.programs.qt5ct.enable {
     environment.variables.QT_QPA_PLATFORMTHEME = "qt5ct";
-    environment.systemPackages = with pkgs; [ libsForQt5.qt5ct ];
+    environment.systemPackages = with pkgs; [libsForQt5.qt5ct];
   };
 }

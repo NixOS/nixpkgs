@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "0.3";
   pname = "httpauth";
@@ -18,7 +18,6 @@ buildPythonPackage rec {
     description = "WSGI HTTP Digest Authentication middleware";
     homepage = "https://github.com/jonashaag/httpauth";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
-
 }

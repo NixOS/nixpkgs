@@ -1,6 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+}:
 buildPythonPackage rec {
   pname = "trueskill";
   version = "0.4.5";

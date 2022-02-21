@@ -1,18 +1,26 @@
-{ lib, stdenv, fetchurl, gtk, pkg-config, procps, makeWrapper, ... }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk,
+  pkg-config,
+  procps,
+  makeWrapper,
+  ...
+}:
 stdenv.mkDerivation rec {
   pname = "xbindkeys-config";
   version = "0.1.3";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ gtk ];
+  nativeBuildInputs = [pkg-config makeWrapper];
+  buildInputs = [gtk];
 
   src = fetchurl {
     url = "mirror://debian/pool/main/x/xbindkeys-config/xbindkeys-config_${version}.orig.tar.gz";
     sha256 = "1rs3li2hyig6cdzvgqlbz0vw6x7rmgr59qd6m0cvrai8xhqqykda";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = {
     homepage = "https://packages.debian.org/source/xbindkeys-config";
@@ -22,7 +30,7 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
   };
 
-  patches = [ ./xbindkeys-config-patch1.patch ];
+  patches = [./xbindkeys-config-patch1.patch];
 
   # killall is dangerous on non-gnu platforms. Use pkill instead.
   postPatch = ''

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, m4 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m4,
+}:
 stdenv.mkDerivation rec {
   pname = "libmilter";
   version = "8.15.2";
@@ -32,14 +36,14 @@ stdenv.mkDerivation rec {
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ./darwin.patch ];
+  patches = [./install.patch ./sharedlib.patch ./glibc-2.30.patch ./darwin.patch];
 
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [m4];
 
   meta = with lib; {
     description = "Sendmail Milter mail filtering API library";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
     license = licenses.sendmail;
   };
 }

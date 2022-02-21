@@ -1,10 +1,17 @@
-{ stdenv, lib, fetchurl, makeWrapper, getconf,
-  ocaml, unzip, ncurses, curl, aspcud, bubblewrap
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  getconf,
+  ocaml,
+  unzip,
+  ncurses,
+  curl,
+  aspcud,
+  bubblewrap,
 }:
-
-assert lib.versionAtLeast ocaml.version "4.02.3";
-
-let
+assert lib.versionAtLeast ocaml.version "4.02.3"; let
   srcs = {
     "0install-solver" = fetchurl {
       url = "https://github.com/0install/0install/releases/download/v2.17/0install-v2.17.tbz";
@@ -71,66 +78,68 @@ let
       sha256 = "0yq3dgx869016xrf65xv0glmqill1nk2ad12x3l36l70pn90rmyd";
     };
   };
-in stdenv.mkDerivation {
-  pname = "opam";
-  version = "2.1.2";
+in
+  stdenv.mkDerivation {
+    pname = "opam";
+    version = "2.1.2";
 
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ curl ncurses ocaml getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
+    nativeBuildInputs = [makeWrapper unzip];
+    buildInputs = [curl ncurses ocaml getconf] ++ lib.optional stdenv.isLinux bubblewrap;
 
-  src = srcs.opam;
+    src = srcs.opam;
 
-  postUnpack = ''
-    ln -sv ${srcs."0install-solver"} $sourceRoot/src_ext/0install-solver.tbz
-    ln -sv ${srcs."cmdliner"} $sourceRoot/src_ext/cmdliner.tbz
-    ln -sv ${srcs."cppo"} $sourceRoot/src_ext/cppo.tbz
-    ln -sv ${srcs."cudf"} $sourceRoot/src_ext/cudf.tar.gz
-    ln -sv ${srcs."dose3"} $sourceRoot/src_ext/dose3.tar.gz
-    ln -sv ${srcs."dune-local"} $sourceRoot/src_ext/dune-local.tbz
-    ln -sv ${srcs."extlib"} $sourceRoot/src_ext/extlib.tar.gz
-    ln -sv ${srcs."mccs"} $sourceRoot/src_ext/mccs.tar.gz
-    ln -sv ${srcs."ocamlgraph"} $sourceRoot/src_ext/ocamlgraph.tbz
-    ln -sv ${srcs."opam-0install-cudf"} $sourceRoot/src_ext/opam-0install-cudf.tbz
-    ln -sv ${srcs."opam-file-format"} $sourceRoot/src_ext/opam-file-format.tar.gz
-    ln -sv ${srcs."re"} $sourceRoot/src_ext/re.tbz
-    ln -sv ${srcs."result"} $sourceRoot/src_ext/result.tbz
-    ln -sv ${srcs."seq"} $sourceRoot/src_ext/seq.tar.gz
-    ln -sv ${srcs."stdlib-shims"} $sourceRoot/src_ext/stdlib-shims.tbz
-  '';
+    postUnpack = ''
+      ln -sv ${srcs."0install-solver"} $sourceRoot/src_ext/0install-solver.tbz
+      ln -sv ${srcs."cmdliner"} $sourceRoot/src_ext/cmdliner.tbz
+      ln -sv ${srcs."cppo"} $sourceRoot/src_ext/cppo.tbz
+      ln -sv ${srcs."cudf"} $sourceRoot/src_ext/cudf.tar.gz
+      ln -sv ${srcs."dose3"} $sourceRoot/src_ext/dose3.tar.gz
+      ln -sv ${srcs."dune-local"} $sourceRoot/src_ext/dune-local.tbz
+      ln -sv ${srcs."extlib"} $sourceRoot/src_ext/extlib.tar.gz
+      ln -sv ${srcs."mccs"} $sourceRoot/src_ext/mccs.tar.gz
+      ln -sv ${srcs."ocamlgraph"} $sourceRoot/src_ext/ocamlgraph.tbz
+      ln -sv ${srcs."opam-0install-cudf"} $sourceRoot/src_ext/opam-0install-cudf.tbz
+      ln -sv ${srcs."opam-file-format"} $sourceRoot/src_ext/opam-file-format.tar.gz
+      ln -sv ${srcs."re"} $sourceRoot/src_ext/re.tbz
+      ln -sv ${srcs."result"} $sourceRoot/src_ext/result.tbz
+      ln -sv ${srcs."seq"} $sourceRoot/src_ext/seq.tar.gz
+      ln -sv ${srcs."stdlib-shims"} $sourceRoot/src_ext/stdlib-shims.tbz
+    '';
 
-  patches = [ ./opam-shebangs.patch ];
+    patches = [./opam-shebangs.patch];
 
-  preConfigure = ''
-    substituteInPlace ./src_ext/Makefile --replace "%.stamp: %.download" "%.stamp:"
-    patchShebangs src/state/shellscripts
-  '';
+    preConfigure = ''
+      substituteInPlace ./src_ext/Makefile --replace "%.stamp: %.download" "%.stamp:"
+      patchShebangs src/state/shellscripts
+    '';
 
-  postConfigure = "make lib-ext";
+    postConfigure = "make lib-ext";
 
-  # Dirty, but apparently ocp-build requires a TERM
-  makeFlags = ["TERM=screen"];
+    # Dirty, but apparently ocp-build requires a TERM
+    makeFlags = ["TERM=screen"];
 
-  outputs = [ "out" "installer" ];
-  setOutputFlags = false;
+    outputs = ["out" "installer"];
+    setOutputFlags = false;
 
-  # change argv0 to "opam" as a workaround for
-  # https://github.com/ocaml/opam/issues/2142
-  postInstall = ''
-    mv $out/bin/opam $out/bin/.opam-wrapped
-    makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
-      --argv0 "opam" \
-      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
-      --set OPAM_USER_PATH_RO /run/current-system/sw/bin:/nix/
-    $out/bin/opam-installer --prefix=$installer opam-installer.install
-  '';
+    # change argv0 to "opam" as a workaround for
+    # https://github.com/ocaml/opam/issues/2142
+    postInstall = ''
+      mv $out/bin/opam $out/bin/.opam-wrapped
+      makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
+        --argv0 "opam" \
+        --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
+        --set OPAM_USER_PATH_RO /run/current-system/sw/bin:/nix/
+      $out/bin/opam-installer --prefix=$installer opam-installer.install
+    '';
 
-  doCheck = false;
+    doCheck = false;
 
-  meta = with lib; {
-    description = "A package manager for OCaml";
-    homepage = "https://opam.ocaml.org/";
-    maintainers = [ maintainers.henrytill maintainers.marsam ];
-    platforms = platforms.all;
-  };
-}
+    meta = with lib; {
+      description = "A package manager for OCaml";
+      homepage = "https://opam.ocaml.org/";
+      maintainers = [maintainers.henrytill maintainers.marsam];
+      platforms = platforms.all;
+    };
+  }
 # Generated by: ./opam.nix.pl -v 2.1.2 -p opam-shebangs.patch
+

@@ -1,5 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-readme";
   version = "3.2.0";
@@ -28,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Generate README.md from docstrings";
     homepage = "https://github.com/livioribeiro/cargo-readme";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ baloo ];
+    license = with licenses; [mit asl20];
+    maintainers = with maintainers; [baloo];
   };
 }

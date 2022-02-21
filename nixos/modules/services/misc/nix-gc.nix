@@ -1,19 +1,15 @@
-{ config, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.nix.gc;
-in
-
 {
-
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.nix.gc;
+in {
   ###### interface
 
   options = {
-
     nix.gc = {
-
       automatic = mkOption {
         default = false;
         type = types.bool;
@@ -72,16 +68,12 @@ in
           garbage collector is run automatically.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = {
-
     systemd.services.nix-gc = {
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
@@ -94,7 +86,5 @@ in
         Persistent = cfg.persistent;
       };
     };
-
   };
-
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, sphinx
-, readthedocs-sphinx-ext
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  sphinx,
+  readthedocs-sphinx-ext,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "sphinx_rtd_theme";
   version = "1.0.0";
@@ -42,5 +42,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.unix;
   };
-
 }

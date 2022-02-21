@@ -1,70 +1,74 @@
-{ stdenv
-, lib
-, buildPackages
-, fetchFromGitLab
-, fetchpatch
-, removeReferencesTo
-, python3
-, meson
-, ninja
-, systemd
-, pkg-config
-, docutils
-, doxygen
-, graphviz
-, glib
-, dbus
-, alsa-lib
-, libjack2
-, libusb1
-, udev
-, libva
-, libsndfile
-, SDL2
-, vulkan-headers
-, vulkan-loader
-, webrtc-audio-processing
-, ncurses
-, readline81 # meson can't find <7 as those versions don't have a .pc file
-, lilv
-, makeFontsConf
-, callPackage
-, nixosTests
-, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
-, valgrind
-, withMediaSession ? true
-, libcameraSupport ? true
-, libcamera
-, libdrm
-, gstreamerSupport ? true
-, gst_all_1
-, ffmpegSupport ? true
-, ffmpeg
-, bluezSupport ? true
-, bluez
-, sbc
-, libfreeaptx
-, ldacbt
-, fdk_aac
-, nativeHspSupport ? true
-, nativeHfpSupport ? true
-, ofonoSupport ? true
-, hsphfpdSupport ? true
-, pulseTunnelSupport ? true
-, libpulseaudio
-, zeroconfSupport ? true
-, avahi
-, raopSupport ? true
-, openssl
-, rocSupport ? true
-, roc-toolkit
-, x11Support ? true
-, libcanberra
-, xorg
-}:
-
-let
-  mesonEnableFeature = b: if b then "enabled" else "disabled";
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchFromGitLab,
+  fetchpatch,
+  removeReferencesTo,
+  python3,
+  meson,
+  ninja,
+  systemd,
+  pkg-config,
+  docutils,
+  doxygen,
+  graphviz,
+  glib,
+  dbus,
+  alsa-lib,
+  libjack2,
+  libusb1,
+  udev,
+  libva,
+  libsndfile,
+  SDL2,
+  vulkan-headers,
+  vulkan-loader,
+  webrtc-audio-processing,
+  ncurses,
+  readline81
+  # meson can't find <7 as those versions don't have a .pc file
+  ,
+  lilv,
+  makeFontsConf,
+  callPackage,
+  nixosTests,
+  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind,
+  valgrind,
+  withMediaSession ? true,
+  libcameraSupport ? true,
+  libcamera,
+  libdrm,
+  gstreamerSupport ? true,
+  gst_all_1,
+  ffmpegSupport ? true,
+  ffmpeg,
+  bluezSupport ? true,
+  bluez,
+  sbc,
+  libfreeaptx,
+  ldacbt,
+  fdk_aac,
+  nativeHspSupport ? true,
+  nativeHfpSupport ? true,
+  ofonoSupport ? true,
+  hsphfpdSupport ? true,
+  pulseTunnelSupport ? true,
+  libpulseaudio,
+  zeroconfSupport ? true,
+  avahi,
+  raopSupport ? true,
+  openssl,
+  rocSupport ? true,
+  roc-toolkit,
+  x11Support ? true,
+  libcanberra,
+  xorg,
+}: let
+  mesonEnableFeature = b:
+    if b
+    then "enabled"
+    else "disabled";
   mesonList = l: "[" + lib.concatStringsSep "," l + "]";
 
   self = stdenv.mkDerivation rec {
@@ -115,31 +119,33 @@ let
       python3
     ];
 
-    buildInputs = [
-      alsa-lib
-      dbus
-      glib
-      libjack2
-      libusb1
-      libsndfile
-      lilv
-      ncurses
-      readline81
-      udev
-      vulkan-headers
-      vulkan-loader
-      webrtc-audio-processing
-      SDL2
-      systemd
-    ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
-    ++ lib.optionals libcameraSupport [ libcamera libdrm ]
-    ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
-    ++ lib.optional pulseTunnelSupport libpulseaudio
-    ++ lib.optional zeroconfSupport avahi
-    ++ lib.optional raopSupport openssl
-    ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals x11Support [ libcanberra xorg.libxcb ];
+    buildInputs =
+      [
+        alsa-lib
+        dbus
+        glib
+        libjack2
+        libusb1
+        libsndfile
+        lilv
+        ncurses
+        readline81
+        udev
+        vulkan-headers
+        vulkan-loader
+        webrtc-audio-processing
+        SDL2
+        systemd
+      ]
+      ++ lib.optionals gstreamerSupport [gst_all_1.gst-plugins-base gst_all_1.gstreamer]
+      ++ lib.optionals libcameraSupport [libcamera libdrm]
+      ++ lib.optional ffmpegSupport ffmpeg
+      ++ lib.optionals bluezSupport [bluez libfreeaptx ldacbt sbc fdk_aac]
+      ++ lib.optional pulseTunnelSupport libpulseaudio
+      ++ lib.optional zeroconfSupport avahi
+      ++ lib.optional raopSupport openssl
+      ++ lib.optional rocSupport roc-toolkit
+      ++ lib.optionals x11Support [libcanberra xorg.libxcb];
 
     # Valgrind binary is required for running one optional test.
     checkInputs = lib.optional withValgrind valgrind;
@@ -172,7 +178,7 @@ let
     ];
 
     # Fontconfig error: Cannot load default config file
-    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+    FONTCONFIG_FILE = makeFontsConf {fontDirectories = [];};
 
     doCheck = true;
 
@@ -183,17 +189,23 @@ let
 
     postInstall = ''
       mkdir $out/nix-support
-      ${if (stdenv.hostPlatform == stdenv.buildPlatform) then ''
-        pushd $lib/share/pipewire
-        for f in *.conf; do
-          echo "Generating JSON from $f"
+      ${
+        if (stdenv.hostPlatform == stdenv.buildPlatform)
+        then
+          ''
+            pushd $lib/share/pipewire
+            for f in *.conf; do
+              echo "Generating JSON from $f"
 
-          $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
-        done
-        popd
-      '' else ''
-        cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
-      ''}
+              $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
+            done
+            popd
+          ''
+        else
+          ''
+            cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
+          ''
+      }
 
       moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
@@ -208,7 +220,7 @@ let
         installedTests = nixosTests.installed-tests.pipewire;
 
         # This ensures that all the paths used by the NixOS module are found.
-        test-paths = callPackage ./test-paths.nix { package = self; } {
+        test-paths = callPackage ./test-paths.nix {package = self;} {
           paths-out = [
             "share/alsa/alsa.conf.d/50-pipewire.conf"
             "nix-support/client-rt.conf.json"
@@ -230,9 +242,8 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar kranzes ];
+      maintainers = with maintainers; [jtojnar kranzes];
     };
   };
-
 in
-self
+  self

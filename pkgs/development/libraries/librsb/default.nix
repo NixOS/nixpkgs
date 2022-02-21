@@ -1,19 +1,27 @@
-{ lib, stdenv, fetchurl
-, gfortran
-, pkg-config, libtool
-, m4, gnum4
-, file
-# Memory Hierarchy (End-user can provide this.)
-, memHierarchy ? ""
-# Headers/Libraries
-, blas, zlib
-# RPC headers (rpc/xdr.h)
-, openmpi
-, help2man
-, doxygen
-, octave
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gfortran,
+  pkg-config,
+  libtool,
+  m4,
+  gnum4,
+  file
+  # Memory Hierarchy (End-user can provide this.)
+  ,
+  memHierarchy ? ""
+  # Headers/Libraries
+  ,
+  blas,
+  zlib
+  # RPC headers (rpc/xdr.h)
+  ,
+  openmpi,
+  help2man,
+  doxygen,
+  octave,
 }:
-
 stdenv.mkDerivation rec {
   pname = "librsb";
   version = "1.2.0.9";
@@ -39,17 +47,20 @@ stdenv.mkDerivation rec {
   ];
 
   # Ensure C/Fortran code is position-independent.
-  NIX_CFLAGS_COMPILE = [ "-fPIC" "-Ofast" ];
-  FCFLAGS = [ "-fPIC" "-Ofast" ];
+  NIX_CFLAGS_COMPILE = ["-fPIC" "-Ofast"];
+  FCFLAGS = ["-fPIC" "-Ofast"];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     gfortran
-    pkg-config libtool
-    m4 gnum4
+    pkg-config
+    libtool
+    m4
+    gnum4
     file
-    blas zlib
+    blas
+    zlib
     openmpi
     octave
     help2man # Turn "--help" into a man-page
@@ -79,8 +90,8 @@ stdenv.mkDerivation rec {
       Contains libraries and header files for developing applications that
       want to make use of librsb.
     '';
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ KarlJoad ];
+    license = with licenses; [lgpl3Plus];
+    maintainers = with maintainers; [KarlJoad];
     platforms = platforms.all;
     # ./rsb_common.h:56:10: fatal error: 'omp.h' file not found
     broken = stdenv.isDarwin;

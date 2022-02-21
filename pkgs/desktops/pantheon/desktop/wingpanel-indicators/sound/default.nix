@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, gtk3
-, granite
-, wingpanel
-, libnotify
-, pulseaudio
-, libcanberra-gtk3
-, libgee
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  python3,
+  ninja,
+  vala,
+  gtk3,
+  granite,
+  wingpanel,
+  libnotify,
+  pulseaudio,
+  libcanberra-gtk3,
+  libgee,
+  libxml2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
   version = "6.0.1";

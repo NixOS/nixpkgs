@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "tp";
   version = "2017-08-15";
 
@@ -20,6 +21,6 @@ build-idris-package  {
     description = "Strongly Typed Paths for Idris";
     homepage = "https://github.com/superfunc/tp";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

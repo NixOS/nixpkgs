@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchzip, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   pname = "dpdk-kmods";
   version = "2021-04-21";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8ysWT3X3rIyUAo4/QbkX7cQq5iFeU18/BPsmmWugcIc=";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Kernel modules for DPDK";
     homepage = "https://git.dpdk.org/dpdk-kmods/";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
     platforms = platforms.linux;
   };
 }

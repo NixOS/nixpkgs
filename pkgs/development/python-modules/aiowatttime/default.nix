@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiowatttime";
   version = "2021.10.0";
@@ -40,14 +40,14 @@ buildPythonPackage rec {
   ];
 
   # Ignore the examples directory as the files are prefixed with test_
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = ["examples/"];
 
-  pythonImportsCheck = [ "aiowatttime" ];
+  pythonImportsCheck = ["aiowatttime"];
 
   meta = with lib; {
     description = "Python library for interacting with WattTime";
     homepage = "https://github.com/bachya/aiowatttime";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,10 @@
-{ rustPlatform, fetchFromGitHub, rust, lib, stdenv }:
-
+{
+  rustPlatform,
+  fetchFromGitHub,
+  rust,
+  lib,
+  stdenv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rustc-demangle";
   version = "0.1.20";
@@ -26,9 +31,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Rust symbol demangling";
     homepage = "https://github.com/alexcrichton/rustc-demangle";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [asl20 mit];
     # upstream supports other platforms, but maintainer can only test on linux
     platforms = platforms.linux;
-    maintainers = with maintainers; [ _1000teslas ];
+    maintainers = with maintainers; [_1000teslas];
   };
 }

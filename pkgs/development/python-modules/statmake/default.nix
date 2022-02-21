@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, attrs
-, cattrs
-, fonttools
-, fs
-, pytestCheckHook
-, ufo2ft
-, ufoLib2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  attrs,
+  cattrs,
+  fonttools,
+  fs,
+  pytestCheckHook,
+  ufo2ft,
+  ufoLib2,
 }:
-
 buildPythonPackage rec {
   pname = "statmake";
   version = "0.4.1";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Applies STAT information from a Stylespace to a variable font";
     homepage = "https://github.com/daltonmaag/statmake";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

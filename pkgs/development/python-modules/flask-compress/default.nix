@@ -1,7 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, flask
-, brotli
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  flask,
+  brotli,
 }:
-
 buildPythonPackage rec {
   version = "1.10.1";
   pname = "Flask-Compress";
@@ -15,7 +18,7 @@ buildPythonPackage rec {
     sed -i -e 's/use_scm_version=.*/version="${version}",/' setup.py
   '';
 
-  propagatedBuildInputs = [ flask brotli ];
+  propagatedBuildInputs = [flask brotli];
 
   meta = with lib; {
     description = "Compress responses in your Flask app with gzip";

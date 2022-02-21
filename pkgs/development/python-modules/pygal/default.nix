@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPyPy
-, flask
-, pyquery
-, pytest
-, pytest-runner
-, cairosvg
-, tinycss
-, cssselect
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  isPyPy,
+  flask,
+  pyquery,
+  pytest,
+  pytest-runner,
+  cairosvg,
+  tinycss,
+  cssselect,
+  lxml,
 }:
-
 buildPythonPackage rec {
   pname = "pygal";
   version = "3.0.0";
@@ -46,14 +46,14 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
   '';
 
-  propagatedBuildInputs = [ cairosvg tinycss cssselect ]
-    ++ lib.optionals (!isPyPy) [ lxml ];
+  propagatedBuildInputs =
+    [cairosvg tinycss cssselect]
+    ++ lib.optionals (!isPyPy) [lxml];
 
   meta = with lib; {
     description = "Sexy and simple python charting";
     homepage = "http://www.pygal.org";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ sjourdois ];
+    maintainers = with maintainers; [sjourdois];
   };
-
 }

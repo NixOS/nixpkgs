@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, help2man, xrandr }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  help2man,
+  xrandr,
+}:
 stdenv.mkDerivation rec {
   pname = "mons";
   version = "20200320";
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
     substituteInPlace mons.sh --replace '@xrandr@' '${xrandr}/bin/xrandr'
   '';
 
-  nativeBuildInputs = [ help2man ];
+  nativeBuildInputs = [help2man];
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
@@ -32,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "POSIX Shell script to quickly manage 2-monitors display";
     homepage = "https://github.com/Ventto/mons.git";
     license = licenses.mit;
-    maintainers = with maintainers; [ mschneider thiagokokada ];
+    maintainers = with maintainers; [mschneider thiagokokada];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, appimageTools, undmg, libsecret, libxshmfence }:
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  undmg,
+  libsecret,
+  libxshmfence,
+}: let
   pname = "keeweb";
   version = "1.18.6";
   name = "${pname}-${version}";
@@ -29,14 +36,14 @@ let
     homepage = "https://keeweb.info/";
     changelog = "https://github.com/keeweb/keeweb/blob/v${version}/release-notes.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = builtins.attrNames srcs;
   };
 
   linux = appimageTools.wrapType2 rec {
     inherit name src meta;
 
-    extraPkgs = pkgs: with pkgs; [ libsecret libxshmfence ];
+    extraPkgs = pkgs: with pkgs; [libsecret libxshmfence];
 
     extraInstallCommands = ''
       mv $out/bin/{${name},${pname}}
@@ -51,7 +58,7 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [undmg];
 
     sourceRoot = ".";
 
@@ -61,6 +68,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+  if stdenv.isDarwin
+  then darwin
+  else linux

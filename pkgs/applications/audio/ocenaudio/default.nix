@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, qt5
-, libjack2
-, alsa-lib
-, bzip2
-, libpulseaudio }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  qt5,
+  libjack2,
+  alsa-lib,
+  bzip2,
+  libpulseaudio,
+}:
 stdenv.mkDerivation rec {
   pname = "ocenaudio";
   version = "3.11.5";
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     alsa-lib
   ];
 
-  buildInputs = [ dpkg ];
+  buildInputs = [dpkg];
 
   dontUnpack = true;
   dontBuild = true;
@@ -49,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.ocenaudio.com";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
   };
 }

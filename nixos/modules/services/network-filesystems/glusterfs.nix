@@ -1,38 +1,40 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   inherit (pkgs) glusterfs rsync;
 
-  tlsCmd = if (cfg.tlsSettings != null) then
-  ''
-    mkdir -p /var/lib/glusterd
-    touch /var/lib/glusterd/secure-access
-  ''
-  else
-  ''
-    rm -f /var/lib/glusterd/secure-access
-  '';
+  tlsCmd =
+    if (cfg.tlsSettings != null)
+    then
+      ''
+        mkdir -p /var/lib/glusterd
+        touch /var/lib/glusterd/secure-access
+      ''
+    else
+      ''
+        rm -f /var/lib/glusterd/secure-access
+      '';
 
-  restartTriggers = if (cfg.tlsSettings != null) then [
-    config.environment.etc."ssl/glusterfs.pem".source
-    config.environment.etc."ssl/glusterfs.key".source
-    config.environment.etc."ssl/glusterfs.ca".source
-  ] else [];
+  restartTriggers =
+    if (cfg.tlsSettings != null)
+    then
+      [
+        config.environment.etc."ssl/glusterfs.pem".source
+        config.environment.etc."ssl/glusterfs.key".source
+        config.environment.etc."ssl/glusterfs.ca".source
+      ]
+    else [];
 
   cfg = config.services.glusterfs;
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.glusterfs = {
-
       enable = mkEnableOption "GlusterFS Daemon";
 
       logLevel = mkOption {
@@ -135,7 +137,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.glusterfs ];
+    environment.systemPackages = [pkgs.glusterfs];
 
     services.rpcbind.enable = cfg.useRpcbind;
 
@@ -150,33 +152,34 @@ in
 
       description = "GlusterFS, a clustered file-system server";
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       requires = lib.optional cfg.useRpcbind "rpcbind.service";
-      after = [ "network.target" ] ++ lib.optional cfg.useRpcbind "rpcbind.service";
+      after = ["network.target"] ++ lib.optional cfg.useRpcbind "rpcbind.service";
 
-      preStart = ''
-        install -m 0755 -d /var/log/glusterfs
-      ''
-      # The copying of hooks is due to upstream bug https://bugzilla.redhat.com/show_bug.cgi?id=1452761
-      + ''
-        mkdir -p /var/lib/glusterd/hooks/
-        ${rsync}/bin/rsync -a ${glusterfs}/var/lib/glusterd/hooks/ /var/lib/glusterd/hooks/
+      preStart =
+        ''
+          install -m 0755 -d /var/log/glusterfs
+        ''
+        # The copying of hooks is due to upstream bug https://bugzilla.redhat.com/show_bug.cgi?id=1452761
+        + ''
+          mkdir -p /var/lib/glusterd/hooks/
+          ${rsync}/bin/rsync -a ${glusterfs}/var/lib/glusterd/hooks/ /var/lib/glusterd/hooks/
 
-        ${tlsCmd}
-      ''
-      # `glusterfind` needs dirs that upstream installs at `make install` phase
-      # https://github.com/gluster/glusterfs/blob/v3.10.2/tools/glusterfind/Makefile.am#L16-L17
-      + ''
-        mkdir -p /var/lib/glusterd/glusterfind/.keys
-        mkdir -p /var/lib/glusterd/hooks/1/delete/post/
-      '';
+          ${tlsCmd}
+        ''
+        # `glusterfind` needs dirs that upstream installs at `make install` phase
+        # https://github.com/gluster/glusterfs/blob/v3.10.2/tools/glusterfind/Makefile.am#L16-L17
+        + ''
+          mkdir -p /var/lib/glusterd/glusterfind/.keys
+          mkdir -p /var/lib/glusterd/hooks/1/delete/post/
+        '';
 
       serviceConfig = {
-        LimitNOFILE=65536;
-        ExecStart="${glusterfs}/sbin/glusterd --no-daemon --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
-        KillMode=cfg.killMode;
-        TimeoutStopSec=cfg.stopKillTimeout;
+        LimitNOFILE = 65536;
+        ExecStart = "${glusterfs}/sbin/glusterd --no-daemon --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
+        KillMode = cfg.killMode;
+        TimeoutStopSec = cfg.stopKillTimeout;
       };
     };
 
@@ -185,23 +188,23 @@ in
 
       description = "Gluster Events Notifier";
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
-      after = [ "network.target" ];
+      after = ["network.target"];
 
       preStart = ''
         install -m 0755 -d /var/log/glusterfs
       '';
 
       # glustereventsd uses the `gluster` executable
-      path = [ glusterfs ];
+      path = [glusterfs];
 
       serviceConfig = {
-        Type="simple";
-        PIDFile="/run/glustereventsd.pid";
-        ExecStart="${glusterfs}/sbin/glustereventsd --pid-file /run/glustereventsd.pid";
-        ExecReload="/bin/kill -SIGUSR2 $MAINPID";
-        KillMode="control-group";
+        Type = "simple";
+        PIDFile = "/run/glustereventsd.pid";
+        ExecStart = "${glusterfs}/sbin/glustereventsd --pid-file /run/glustereventsd.pid";
+        ExecReload = "/bin/kill -SIGUSR2 $MAINPID";
+        KillMode = "control-group";
       };
     };
   };

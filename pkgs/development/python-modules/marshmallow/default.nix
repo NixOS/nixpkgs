@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, pytz
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytz,
+  simplejson,
 }:
-
 buildPythonPackage rec {
   pname = "marshmallow";
   version = "3.13.0";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/marshmallow-code/marshmallow";
     license = licenses.mit;
-    maintainers = with maintainers; [ cript0nauta ];
+    maintainers = with maintainers; [cript0nauta];
   };
 }

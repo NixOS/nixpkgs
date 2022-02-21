@@ -1,21 +1,28 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.boot.loader.raspberryPi;
 
-  builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
-  builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
+  builderUboot = import ./uboot-builder.nix {
+    inherit pkgs configTxt;
+    inherit (cfg) version;
+  };
+  builderGeneric = import ./raspberrypi-builder.nix {inherit pkgs configTxt;};
 
   builder =
-    if cfg.uboot.enable then
-      "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
-    else
-      "${builderGeneric} -c";
+    if cfg.uboot.enable
+    then "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
+    else "${builderGeneric} -c";
 
   blCfg = config.boot.loader;
-  timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
+  timeoutStr =
+    if blCfg.timeout == null
+    then "-1"
+    else toString blCfg.timeout;
 
   isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
   optional = pkgs.lib.optionalString;
@@ -29,21 +36,24 @@ let
       # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
       # when attempting to show low-voltage or overtemperature warnings.
       avoid_warnings=1
-    '' + optional isAarch64 ''
+    ''
+    + optional isAarch64 ''
       # Boot in 64-bit mode.
       arm_64bit=1
-    '' + (if cfg.uboot.enable then ''
-      kernel=u-boot-rpi.bin
-    '' else ''
-      kernel=kernel.img
-      initramfs initrd followkernel
-    '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
-
-in
-
-{
+    ''
+    + (if cfg.uboot.enable
+    then
+      ''
+        kernel=u-boot-rpi.bin
+      ''
+    else
+      ''
+        kernel=kernel.img
+        initramfs initrd followkernel
+      '')
+    + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
+in {
   options = {
-
     boot.loader.raspberryPi = {
       enable = mkOption {
         default = false;
@@ -57,7 +67,7 @@ in
 
       version = mkOption {
         default = 2;
-        type = types.enum [ 0 1 2 3 4 ];
+        type = types.enum [0 1 2 3 4];
         description = "";
       };
 
@@ -78,7 +88,6 @@ in
             Maximum number of configurations in the boot menu.
           '';
         };
-
       };
 
       firmwareConfig = mkOption {

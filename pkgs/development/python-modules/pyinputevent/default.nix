@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage {
   pname = "pyinputevent";
   version = "2016-10-18";
@@ -20,5 +20,4 @@ buildPythonPackage {
     license = licenses.bsd3;
     platforms = platforms.unix;
   };
-
 }

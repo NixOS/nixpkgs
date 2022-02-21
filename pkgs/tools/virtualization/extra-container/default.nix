@@ -1,5 +1,11 @@
-{ stdenv, lib, nixos-container, openssh, glibcLocales, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  nixos-container,
+  openssh,
+  glibcLocales,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "extra-container";
   version = "0.8";
@@ -18,7 +24,7 @@ stdenv.mkDerivation rec {
     install $src/eval-config.nix -Dt $share
 
     # Use existing PATH for systemctl and machinectl
-    scriptPath="export PATH=${lib.makeBinPath [ nixos-container openssh ]}:\$PATH"
+    scriptPath="export PATH=${lib.makeBinPath [nixos-container openssh]}:\$PATH"
 
     sed -i \
       -e "s|evalConfig=.*|evalConfig=$share/eval-config.nix|" \
@@ -32,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/erikarvstedt/extra-container";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.earvstedt ];
+    maintainers = [maintainers.earvstedt];
   };
 }

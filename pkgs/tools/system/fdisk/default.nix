@@ -1,5 +1,12 @@
-{ fetchurl, lib, stdenv, parted, libuuid, gettext, guile }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  parted,
+  libuuid,
+  gettext,
+  guile,
+}:
 stdenv.mkDerivation rec {
   pname = "gnufdisk";
   version = "2.0.0a"; # .0a1 seems broken, see https://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "04nd7civ561x2lwcmxhsqbprml3178jfc58fy1v7hzqg5k4nbhy3";
   };
 
-  buildInputs = [ parted libuuid gettext guile ];
+  buildInputs = [parted libuuid gettext guile];
 
   doCheck = true;
 

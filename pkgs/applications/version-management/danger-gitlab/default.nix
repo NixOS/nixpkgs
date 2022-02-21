@@ -1,9 +1,11 @@
-{ lib, bundlerApp }:
-
+{
+  lib,
+  bundlerApp,
+}:
 bundlerApp {
   pname = "danger-gitlab";
   gemdir = ./.;
-  exes = [ "danger" ];
+  exes = ["danger"];
 
   meta = with lib; {
     description = "A gem that exists to ensure all dependencies are set up for Danger with GitLab";

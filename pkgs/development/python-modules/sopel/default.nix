@@ -1,16 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy
-, dnspython
-, geoip2
-, ipython
-, praw
-, pyenchant
-, pygeoip
-, pytestCheckHook
-, pytz
-, sqlalchemy
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  dnspython,
+  geoip2,
+  ipython,
+  praw,
+  pyenchant,
+  pygeoip,
+  pytestCheckHook,
+  pytz,
+  sqlalchemy,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "sopel";
   version = "7.1.7";
@@ -40,7 +43,7 @@ buildPythonPackage rec {
       --replace "sqlalchemy<1.4" "sqlalchemy"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   preCheck = ''
     export TESTDIR=$(mktemp -d)
@@ -52,12 +55,12 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [ "sopel" ];
+  pythonImportsCheck = ["sopel"];
 
   meta = with lib; {
     description = "Simple and extensible IRC bot";
     homepage = "https://sopel.chat";
     license = licenses.efl20;
-    maintainers = with maintainers; [ mog ];
+    maintainers = with maintainers; [mog];
   };
 }

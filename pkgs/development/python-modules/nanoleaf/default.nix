@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+}:
 buildPythonPackage rec {
   pname = "nanoleaf";
   version = "0.4.1";
@@ -14,12 +18,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'gitVersion' '"${version}"'
   '';
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
   meta = with lib; {
     description = "A python interface for Nanoleaf Aurora lighting";
     homepage = "https://github.com/software-2/nanoleaf";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [elseym];
   };
 }

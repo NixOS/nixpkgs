@@ -1,9 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.services.touchegg;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.touchegg;
 in {
   meta = {
     maintainers = teams.pantheon.members;
@@ -30,9 +32,9 @@ in {
         ExecStart = "${cfg.package}/bin/touchegg --daemon";
         Restart = "on-failure";
       };
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
 }

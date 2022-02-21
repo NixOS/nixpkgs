@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.gitea;
   opt = options.services.gitea;
   gitea = cfg.package;
@@ -19,9 +22,7 @@ let
 
     ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
   '';
-in
-
-{
+in {
   options = {
     services.gitea = {
       enable = mkOption {
@@ -58,7 +59,7 @@ in
         };
         level = mkOption {
           default = "Info";
-          type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
+          type = types.enum ["Trace" "Debug" "Info" "Warn" "Error" "Critical"];
           description = "General log level.";
         };
       };
@@ -71,7 +72,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "sqlite3" "mysql" "postgres" ];
+          type = types.enum ["sqlite3" "mysql" "postgres"];
           example = "mysql";
           default = "sqlite3";
           description = "Database engine to use.";
@@ -85,7 +86,9 @@ in
 
         port = mkOption {
           type = types.port;
-          default = (if !usePostgresql then 3306 else pg.port);
+          default = (if !usePostgresql
+          then 3306
+          else pg.port);
           defaultText = literalExpression ''
             if config.${opt.database.type} != "postgresql"
             then 3306
@@ -128,7 +131,12 @@ in
 
         socket = mkOption {
           type = types.nullOr types.path;
-          default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
+          default =
+            if (cfg.database.createDatabase && usePostgresql)
+            then "/run/postgresql"
+            else if (cfg.database.createDatabase && useMysql)
+            then "/run/mysqld/mysqld.sock"
+            else null;
           defaultText = literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
@@ -179,7 +187,7 @@ in
         };
 
         type = mkOption {
-          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" ];
+          type = types.enum ["zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4"];
           default = "zip";
           description = "Archive format used to store the dump file.";
         };
@@ -293,20 +301,22 @@ in
         description = "Path to a file containing the SMTP password.";
       };
 
-      disableRegistration = mkEnableOption "the registration lock" // {
-        description = ''
-          By default any user can create an account on this <literal>gitea</literal> instance.
-          This can be disabled by using this option.
+      disableRegistration =
+        mkEnableOption "the registration lock"
+        // {
+          description = ''
+            By default any user can create an account on this <literal>gitea</literal> instance.
+            This can be disabled by using this option.
 
-          <emphasis>Note:</emphasis> please keep in mind that this should be added after the initial
-          deploy unless <link linkend="opt-services.gitea.useWizard">services.gitea.useWizard</link>
-          is <literal>true</literal> as the first registered user will be the administrator if
-          no install wizard is used.
-        '';
-      };
+            <emphasis>Note:</emphasis> please keep in mind that this should be added after the initial
+            deploy unless <link linkend="opt-services.gitea.useWizard">services.gitea.useWizard</link>
+            is <literal>true</literal> as the first registered user will be the administrator if
+            no install wizard is used.
+          '';
+        };
 
       settings = mkOption {
-        type = with types; attrsOf (attrsOf (oneOf [ bool int str ]));
+        type = with types; attrsOf (attrsOf (oneOf [bool int str]));
         default = {};
         description = ''
           Gitea configuration. Refer to <link xlink:href="https://docs.gitea.io/en-us/config-cheat-sheet/"/>
@@ -342,7 +352,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
+      {
+        assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
     ];
@@ -353,7 +364,10 @@ in
           DB_TYPE = cfg.database.type;
         }
         (mkIf (useMysql || usePostgresql) {
-          HOST = if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port;
+          HOST =
+            if cfg.database.socket != null
+            then cfg.database.socket
+            else cfg.database.host + ":" + toString cfg.database.port;
           NAME = cfg.database.name;
           USER = cfg.database.user;
           PASSWD = "#dbpass#";
@@ -396,7 +410,6 @@ in
           LFS_START_SERVER = true;
           LFS_CONTENT_PATH = cfg.lfs.contentDir;
         })
-
       ];
 
       session = {
@@ -431,10 +444,11 @@ in
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
       enable = mkDefault true;
 
-      ensureDatabases = [ cfg.database.name ];
+      ensureDatabases = [cfg.database.name];
       ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        {
+          name = cfg.database.user;
+          ensurePermissions = {"DATABASE ${cfg.database.name}" = "ALL PRIVILEGES";};
         }
       ];
     };
@@ -443,10 +457,11 @@ in
       enable = mkDefault true;
       package = mkDefault pkgs.mariadb;
 
-      ensureDatabases = [ cfg.database.name ];
+      ensureDatabases = [cfg.database.name];
       ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+        {
+          name = cfg.database.user;
+          ensurePermissions = {"${cfg.database.name}.*" = "ALL PRIVILEGES";};
         }
       ];
     };
@@ -481,9 +496,9 @@ in
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
-      wantedBy = [ "multi-user.target" ];
-      path = [ gitea pkgs.git ];
+      after = ["network.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+      wantedBy = ["multi-user.target"];
+      path = [gitea pkgs.git];
 
       # In older versions the secret naming for JWT was kind of confusing.
       # The file jwt_secret hold the value for LFS_JWT_SECRET and JWT_SECRET
@@ -501,51 +516,59 @@ in
         internalToken = "${cfg.stateDir}/custom/conf/internal_token";
       in ''
         # copy custom configuration and generate a random secret key if needed
-        ${optionalString (cfg.useWizard == false) ''
-          function gitea_setup {
-            cp -f ${configFile} ${runConfig}
+        ${
+          optionalString (cfg.useWizard == false) ''
+            function gitea_setup {
+              cp -f ${configFile} ${runConfig}
 
-            if [ ! -e ${secretKey} ]; then
-                ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
-            fi
+              if [ ! -e ${secretKey} ]; then
+                  ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
+              fi
 
-            # Migrate LFS_JWT_SECRET filename
-            if [[ -e ${oldLfsJwtSecret} && ! -e ${lfsJwtSecret} ]]; then
-                mv ${oldLfsJwtSecret} ${lfsJwtSecret}
-            fi
+              # Migrate LFS_JWT_SECRET filename
+              if [[ -e ${oldLfsJwtSecret} && ! -e ${lfsJwtSecret} ]]; then
+                  mv ${oldLfsJwtSecret} ${lfsJwtSecret}
+              fi
 
-            if [ ! -e ${oauth2JwtSecret} ]; then
-                ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
-            fi
+              if [ ! -e ${oauth2JwtSecret} ]; then
+                  ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
+              fi
 
-            if [ ! -e ${lfsJwtSecret} ]; then
-                ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
-            fi
+              if [ ! -e ${lfsJwtSecret} ]; then
+                  ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
+              fi
 
-            if [ ! -e ${internalToken} ]; then
-                ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
-            fi
+              if [ ! -e ${internalToken} ]; then
+                  ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
+              fi
 
-            SECRETKEY="$(head -n1 ${secretKey})"
-            DBPASS="$(head -n1 ${cfg.database.passwordFile})"
-            OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
-            LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
-            INTERNALTOKEN="$(head -n1 ${internalToken})"
-            ${if (cfg.mailerPasswordFile == null) then ''
-              MAILERPASSWORD="#mailerpass#"
-            '' else ''
-              MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
-            ''}
-            sed -e "s,#secretkey#,$SECRETKEY,g" \
-                -e "s,#dbpass#,$DBPASS,g" \
-                -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
-                -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
-                -e "s,#internaltoken#,$INTERNALTOKEN,g" \
-                -e "s,#mailerpass#,$MAILERPASSWORD,g" \
-                -i ${runConfig}
-          }
-          (umask 027; gitea_setup)
-        ''}
+              SECRETKEY="$(head -n1 ${secretKey})"
+              DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+              OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
+              LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
+              INTERNALTOKEN="$(head -n1 ${internalToken})"
+              ${
+              if (cfg.mailerPasswordFile == null)
+              then
+                ''
+                  MAILERPASSWORD="#mailerpass#"
+                ''
+              else
+                ''
+                  MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+                ''
+            }
+              sed -e "s,#secretkey#,$SECRETKEY,g" \
+                  -e "s,#dbpass#,$DBPASS,g" \
+                  -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
+                  -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
+                  -e "s,#internaltoken#,$INTERNALTOKEN,g" \
+                  -e "s,#mailerpass#,$MAILERPASSWORD,g" \
+                  -i ${runConfig}
+            }
+            (umask 027; gitea_setup)
+          ''
+        }
 
         # run migrations/init the database
         ${gitea}/bin/gitea migrate
@@ -571,7 +594,7 @@ in
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
         # Access write directories
-        ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
+        ReadWritePaths = [cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir];
         UMask = "0027";
         # Capabilities
         CapabilityBoundingSet = "";
@@ -589,7 +612,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6" ];
+        RestrictAddressFamilies = ["AF_UNIX AF_INET AF_INET6"];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
@@ -620,44 +643,43 @@ in
     users.groups.gitea = {};
 
     warnings =
-      optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
-      optional (cfg.extraConfig != null) ''
+      optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead."
+      ++ optional (cfg.extraConfig != null) ''
         services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
       '';
 
     # Create database passwordFile default when password is configured.
-    services.gitea.database.passwordFile =
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "gitea-database-password";
-        text = cfg.database.password;
-      })));
+    services.gitea.database.passwordFile = (mkDefault (toString (pkgs.writeTextFile {
+      name = "gitea-database-password";
+      text = cfg.database.password;
+    })));
 
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
-       description = "gitea dump";
-       after = [ "gitea.service" ];
-       wantedBy = [ "default.target" ];
-       path = [ gitea ];
+      description = "gitea dump";
+      after = ["gitea.service"];
+      wantedBy = ["default.target"];
+      path = [gitea];
 
-       environment = {
-         USER = cfg.user;
-         HOME = cfg.stateDir;
-         GITEA_WORK_DIR = cfg.stateDir;
-       };
+      environment = {
+        USER = cfg.user;
+        HOME = cfg.stateDir;
+        GITEA_WORK_DIR = cfg.stateDir;
+      };
 
-       serviceConfig = {
-         Type = "oneshot";
-         User = cfg.user;
-         ExecStart = "${gitea}/bin/gitea dump --type ${cfg.dump.type}" + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
-         WorkingDirectory = cfg.dump.backupDir;
-       };
+      serviceConfig = {
+        Type = "oneshot";
+        User = cfg.user;
+        ExecStart = "${gitea}/bin/gitea dump --type ${cfg.dump.type}" + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
+        WorkingDirectory = cfg.dump.backupDir;
+      };
     };
 
     systemd.timers.gitea-dump = mkIf cfg.dump.enable {
       description = "Update timer for gitea-dump";
-      partOf = [ "gitea-dump.service" ];
-      wantedBy = [ "timers.target" ];
+      partOf = ["gitea-dump.service"];
+      wantedBy = ["timers.target"];
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
-  meta.maintainers = with lib.maintainers; [ srhb ma27 ];
+  meta.maintainers = with lib.maintainers; [srhb ma27];
 }

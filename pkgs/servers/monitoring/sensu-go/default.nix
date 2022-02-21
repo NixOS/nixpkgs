@@ -1,7 +1,14 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
-let
-  generic = { subPackages, pname, postInstall ? "", mainProgram }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}: let
+  generic = {
+    subPackages,
+    pname,
+    postInstall ? "",
+    mainProgram,
+  }:
     buildGoModule rec {
       inherit pname;
       version = "6.6.6";
@@ -32,14 +39,13 @@ let
         homepage = "https://sensu.io";
         description = "Open source monitoring tool for ephemeral infrastructure & distributed applications";
         license = lib.licenses.mit;
-        maintainers = with lib.maintainers; [ thefloweringash ];
+        maintainers = with lib.maintainers; [thefloweringash];
       };
     };
-in
-{
+in {
   sensu-go-cli = generic {
     pname = "sensu-go-cli";
-    subPackages = [ "cmd/sensuctl" ];
+    subPackages = ["cmd/sensuctl"];
     postInstall = ''
       mkdir -p \
         "''${!outputBin}/share/bash-completion/completions" \
@@ -60,13 +66,13 @@ in
 
   sensu-go-backend = generic {
     pname = "sensu-go-backend";
-    subPackages = [ "cmd/sensu-backend" ];
+    subPackages = ["cmd/sensu-backend"];
     mainProgram = "sensu-backend";
   };
 
   sensu-go-agent = generic {
     pname = "sensu-go-agent";
-    subPackages = [ "cmd/sensu-agent" ];
+    subPackages = ["cmd/sensu-agent"];
     mainProgram = "sensu-agent";
   };
 }

@@ -1,20 +1,20 @@
-{ lib
-, GitPython
-, buildPythonApplication
-, emoji
-, fetchFromGitHub
-, filetype
-, ipython
-, junit-xml
-, lxml
-, mock
-, netaddr
-, pytestCheckHook
-, python3Packages
-, radish-bdd
-, semver
+{
+  lib,
+  GitPython,
+  buildPythonApplication,
+  emoji,
+  fetchFromGitHub,
+  filetype,
+  ipython,
+  junit-xml,
+  lxml,
+  mock,
+  netaddr,
+  pytestCheckHook,
+  python3Packages,
+  radish-bdd,
+  semver,
 }:
-
 buildPythonApplication rec {
   pname = "terraform-compliance";
   version = "1.2.11";
@@ -32,7 +32,7 @@ buildPythonApplication rec {
       --replace "IPython==7.16.1" "IPython"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   disabledTests = [
     "test_which_success"
@@ -56,6 +56,6 @@ buildPythonApplication rec {
     description = "BDD test framework for terraform";
     homepage = "https://github.com/eerkunt/terraform-compliance";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
   };
 }

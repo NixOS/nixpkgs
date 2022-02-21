@@ -1,9 +1,30 @@
-{ lib, stdenv, fetchurl, alsa-lib, boost, bzip2, fftw, fftwFloat, libfishsound
-, libid3tag, liblo, libmad, liboggz, libpulseaudio, libsamplerate
-, libsndfile, lrdf, opusfile, portaudio, rubberband, serd, sord, capnproto
-, wrapQtAppsHook, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  boost,
+  bzip2,
+  fftw,
+  fftwFloat,
+  libfishsound,
+  libid3tag,
+  liblo,
+  libmad,
+  liboggz,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  lrdf,
+  opusfile,
+  portaudio,
+  rubberband,
+  serd,
+  sord,
+  capnproto,
+  wrapQtAppsHook,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sonic-lineup";
   version = "1.1";
@@ -13,13 +34,30 @@ stdenv.mkDerivation rec {
     sha256 = "0k45k9fawcm4s5yy05x00pgww7j8m7k2cxcc7g0fn9vqy7vcbq9h";
   };
 
-  buildInputs =
-    [ alsa-lib boost bzip2 fftw fftwFloat libfishsound libid3tag liblo
-      libmad liboggz libpulseaudio libsamplerate libsndfile lrdf opusfile
-      portaudio rubberband serd sord capnproto
-    ];
+  buildInputs = [
+    alsa-lib
+    boost
+    bzip2
+    fftw
+    fftwFloat
+    libfishsound
+    libid3tag
+    liblo
+    libmad
+    liboggz
+    libpulseaudio
+    libsamplerate
+    libsndfile
+    lrdf
+    opusfile
+    portaudio
+    rubberband
+    serd
+    sord
+    capnproto
+  ];
 
-  nativeBuildInputs = [ pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [pkg-config wrapQtAppsHook];
 
   enableParallelBuilding = true;
 
@@ -32,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Comparative visualisation of related audio recordings";
     homepage = "https://www.sonicvisualiser.org/sonic-lineup/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.vandenoever ];
+    maintainers = [maintainers.vandenoever];
     platforms = platforms.linux;
   };
 }

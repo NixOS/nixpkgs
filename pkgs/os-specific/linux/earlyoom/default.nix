@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pandoc,
+  installShellFiles,
+  withManpage ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "earlyoom";
   version = "1.6.2";
@@ -11,17 +17,19 @@ stdenv.mkDerivation rec {
     sha256 = "16iyn51xlrsbshc7p5xl2338yyfzknaqc538sa7mamgccqwgyvvq";
   };
 
-  nativeBuildInputs = lib.optionals withManpage [ pandoc installShellFiles ];
+  nativeBuildInputs = lib.optionals withManpage [pandoc installShellFiles];
 
-  patches = [ ./fix-dbus-path.patch ];
+  patches = [./fix-dbus-path.patch];
 
-  makeFlags = [ "VERSION=${version}" ];
+  makeFlags = ["VERSION=${version}"];
 
-  installPhase = ''
-    install -D earlyoom $out/bin/earlyoom
-  '' + lib.optionalString withManpage ''
-    installManPage earlyoom.1
-  '';
+  installPhase =
+    ''
+      install -D earlyoom $out/bin/earlyoom
+    ''
+    + lib.optionalString withManpage ''
+      installManPage earlyoom.1
+    '';
 
   meta = with lib; {
     description = "Early OOM Daemon for Linux";

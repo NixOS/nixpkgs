@@ -1,14 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf mkOption types literalExpression;
 
   cfg = config.services.isso;
 
-  settingsFormat = pkgs.formats.ini { };
+  settingsFormat = pkgs.formats.ini {};
   configFile = settingsFormat.generate "isso.conf" cfg.settings;
 in {
-
   options = {
     services.isso = {
       enable = mkEnableOption ''
@@ -47,7 +49,7 @@ in {
 
     systemd.services.isso = {
       description = "isso, a commenting server similar to Disqus";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         User = "isso";

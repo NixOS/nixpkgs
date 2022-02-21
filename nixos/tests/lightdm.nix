@@ -1,11 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "lightdm";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ aszlig ];
+    maintainers = [aszlig];
   };
 
-  machine = { ... }: {
-    imports = [ ./common/user-account.nix ];
+  machine = {...}: {
+    imports = [./common/user-account.nix];
     services.xserver.enable = true;
     services.xserver.displayManager.lightdm.enable = true;
     services.xserver.displayManager.defaultSession = "none+icewm";
@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
   in ''
     start_all()

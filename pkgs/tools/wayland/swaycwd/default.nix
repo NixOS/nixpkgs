@@ -1,9 +1,10 @@
-{ lib
-, nimPackages
-, fetchFromGitLab
-, enableShells ? [ "bash" "zsh" "fish" "sh" "posh" ]
+{
+  lib,
+  nimPackages,
+  fetchFromGitLab,
+  enableShells ? ["bash" "zsh" "fish" "sh" "posh"],
 }:
-nimPackages.buildNimPackage rec{
+nimPackages.buildNimPackage rec {
   pname = "swaycwd";
   version = "0.0.2";
 
@@ -25,12 +26,12 @@ nimPackages.buildNimPackage rec{
     EOF
   '';
 
-  nimFlags = [ "--opt:speed" ];
+  nimFlags = ["--opt:speed"];
 
   meta = with lib; {
     homepage = "https://gitlab.com/cab404/swaycwd";
     description = "Returns cwd for shell in currently focused sway window, or home directory if cannot find shell";
-    maintainers = with maintainers; [ cab404 ];
+    maintainers = with maintainers; [cab404];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.nginx.sso;
   pkg = getBin cfg.package;
   configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
@@ -51,8 +53,8 @@ in {
   config = mkIf cfg.enable {
     systemd.services.nginx-sso = {
       description = "Nginx SSO Backend";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = ''
           ${pkg}/bin/nginx-sso \

@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, copyDesktopItems
-, libX11
-, libXpm
-, libpng
-, makeDesktopItem
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  copyDesktopItems,
+  libX11,
+  libXpm,
+  libpng,
+  makeDesktopItem,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ace-of-penguins";
   version = "1.4";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       Martin Thornquist).
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

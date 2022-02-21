@@ -1,9 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, libsndfile }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libsndfile,
+}:
 stdenv.mkDerivation {
-
   pname = "twolame";
   version = "2017-09-27";
 
@@ -14,12 +17,12 @@ stdenv.mkDerivation {
     sha256 = "1rq3yc8ygzdqid9zk6pixmm4w9sk2vrlx217lhn5bjaglv7iyf7x";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libsndfile ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [libsndfile];
 
   doCheck = false; # fails with "../build-scripts/test-driver: line 107: -Mstrict: command not found"
 
-  meta = with lib;{
+  meta = with lib; {
     description = "A MP2 encoder";
     longDescription = ''
       TwoLAME is an optimised MPEG Audio Layer 2 (MP2) encoder based on
@@ -27,8 +30,8 @@ stdenv.mkDerivation {
       code and portions of LAME.
     '';
     homepage = "https://www.twolame.org/";
-    license = with licenses; [ lgpl2Plus ];
+    license = with licenses; [lgpl2Plus];
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

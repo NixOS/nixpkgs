@@ -1,9 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitHub
-, requests, tqdm
-, nose, vcrpy
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  requests,
+  tqdm,
+  nose,
+  vcrpy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "habanero";
   version = "1.0.0";
@@ -16,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "0lhbd5c4sypcd65nh4cgxddsqrxwg89nn1qiii6m5l4fzsvblggv";
   };
 
-  propagatedBuildInputs = [ requests tqdm ];
+  propagatedBuildInputs = [requests tqdm];
 
   # almost the entirety of the test suite makes network calls
   pytestFlagsArray = [
@@ -32,6 +36,6 @@ buildPythonPackage rec {
     description = "Python interface to Library Genesis";
     homepage = "https://habanero.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nico202 ];
+    maintainers = [lib.maintainers.nico202];
   };
 }

@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.ferm;
 
   configFile = pkgs.stdenv.mkDerivation {
@@ -46,13 +48,13 @@ in {
     systemd.services.firewall.enable = false;
     systemd.services.ferm = {
       description = "Ferm Firewall";
-      after = [ "ipset.target" ];
-      before = [ "network-pre.target" ];
-      wants = [ "network-pre.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["ipset.target"];
+      before = ["network-pre.target"];
+      wants = ["network-pre.target"];
+      wantedBy = ["multi-user.target"];
       reloadIfChanged = true;
       serviceConfig = {
-        Type="oneshot";
+        Type = "oneshot";
         RemainAfterExit = "yes";
         ExecStart = "${cfg.package}/bin/ferm ${configFile}";
         ExecReload = "${cfg.package}/bin/ferm ${configFile}";

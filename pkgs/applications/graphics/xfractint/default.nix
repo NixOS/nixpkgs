@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, libX11, libXft}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXft,
+}:
 stdenv.mkDerivation rec {
   pname = "xfractint";
   version = "20.04p16";

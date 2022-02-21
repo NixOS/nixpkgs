@@ -1,5 +1,10 @@
-{ buildGoPackage, fetchFromGitHub, git, pandoc, lib }:
-
+{
+  buildGoPackage,
+  fetchFromGitHub,
+  git,
+  pandoc,
+  lib,
+}:
 buildGoPackage rec {
   pname = "checkmake";
   version = "0.1.0-2020.11.30";
@@ -13,21 +18,19 @@ buildGoPackage rec {
     sha256 = "121rsl9mh3wwadgf8ggi2xnb050pak6ma68b2sw5j8clmxbrqli3";
   };
 
-  nativeBuildInputs = [ pandoc ];
+  nativeBuildInputs = [pandoc];
 
-  preBuild =
-    let
-      buildVars = {
-        version = version;
-        buildTime = "N/A";
-        builder = "nix";
-        goversion = "$(go version | egrep -o 'go[0-9]+[.][^ ]*')";
-      };
-      buildVarsFlags = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-X main.${k}=${v}") buildVars);
-    in
-    ''
-      buildFlagsArray+=("-ldflags=${buildVarsFlags}")
-    '';
+  preBuild = let
+    buildVars = {
+      version = version;
+      buildTime = "N/A";
+      builder = "nix";
+      goversion = "$(go version | egrep -o 'go[0-9]+[.][^ ]*')";
+    };
+    buildVarsFlags = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-X main.${k}=${v}") buildVars);
+  in ''
+    buildFlagsArray+=("-ldflags=${buildVarsFlags}")
+  '';
 
   postInstall = ''
     pandoc -s -t man -o checkmake.1 go/src/${goPackagePath}/man/man1/checkmake.1.md
@@ -39,7 +42,7 @@ buildGoPackage rec {
     description = "Experimental tool for linting and checking Makefiles";
     homepage = "https://github.com/mrtazz/checkmake";
     license = licenses.mit;
-    maintainers = with maintainers; [ vidbina ];
+    maintainers = with maintainers; [vidbina];
     platforms = platforms.linux;
     longDescription = ''
       checkmake is an experimental tool for linting and checking

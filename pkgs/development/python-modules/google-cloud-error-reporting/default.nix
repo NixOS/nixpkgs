@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-cloud-logging
-, google-cloud-testutils
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  google-cloud-logging,
+  google-cloud-testutils,
+  libcst,
+  mock,
+  proto-plus,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
   version = "1.5.0";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

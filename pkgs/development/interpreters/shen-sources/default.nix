@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "shen-sources";
   version = "22.4";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Source code for the Shen Language";
     changelog = "https://github.com/Shen-Language/shen-sources/raw/shen-${version}/CHANGELOG.md";
     platforms = platforms.all;
-    maintainers = with maintainers; [ bsima ];
+    maintainers = with maintainers; [bsima];
     license = licenses.bsd3;
   };
 }

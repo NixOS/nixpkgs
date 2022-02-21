@@ -1,7 +1,8 @@
-{ stdenv, lib, fetchurl }:
-
-let
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+}: let
   rootHints = fetchurl {
     # Original source https://www.internic.net/domain/named.root
     # occasionally suffers from pointless hash changes,
@@ -15,21 +16,19 @@ let
 
   rootKey = ./root.key;
   rootDs = ./root.ds;
-
 in
+  stdenv.mkDerivation {
+    name = "dns-root-data-2019-01-11";
 
-stdenv.mkDerivation {
-  name = "dns-root-data-2019-01-11";
+    buildCommand = ''
+      mkdir $out
+      cp ${rootHints} $out/root.hints
+      cp ${rootKey} $out/root.key
+      cp ${rootDs} $out/root.ds
+    '';
 
-  buildCommand = ''
-    mkdir $out
-    cp ${rootHints} $out/root.hints
-    cp ${rootKey} $out/root.key
-    cp ${rootDs} $out/root.ds
-  '';
-
-  meta = with lib; {
-    description = "DNS root data including root zone and DNSSEC key";
-    maintainers = with maintainers; [ fpletz vcunat ];
-  };
-}
+    meta = with lib; {
+      description = "DNS root data including root zone and DNSSEC key";
+      maintainers = with maintainers; [fpletz vcunat];
+    };
+  }

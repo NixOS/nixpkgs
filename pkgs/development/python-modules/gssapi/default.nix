@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, six
-, decorator
-, nose
-, krb5Full
-, GSS
-, parameterized
-, shouldbe
-, cython
-, python
-, k5test
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  six,
+  decorator,
+  nose,
+  krb5Full,
+  GSS,
+  parameterized,
+  shouldbe,
+  cython,
+  python,
+  k5test,
 }:
-
 buildPythonPackage rec {
   pname = "gssapi";
   version = "1.7.2";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     krb5Full
   ];
 
-  propagatedBuildInputs =  [
+  propagatedBuildInputs = [
     decorator
     six
   ];
@@ -55,8 +55,10 @@ buildPythonPackage rec {
     six
   ];
 
-  doCheck = pythonOlder "3.8"  # `shouldbe` not available
-    && !stdenv.isDarwin;  # many failures on darwin
+  doCheck =
+    pythonOlder "3.8"
+    # `shouldbe` not available
+    && !stdenv.isDarwin; # many failures on darwin
 
   # skip tests which fail possibly due to be an upstream issue (see
   # https://github.com/pythongssapi/python-gssapi/issues/220)
@@ -69,7 +71,7 @@ buildPythonPackage rec {
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
     nosetests -e 'ext_test_\d.*'
   '';
-  pythonImportsCheck = [ "gssapi" ];
+  pythonImportsCheck = ["gssapi"];
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/gssapi";

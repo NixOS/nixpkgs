@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, SDL, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "SDL_net";
   version = "1.2.8";
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ SDL ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [SDL];
 
   meta = with lib; {
     description = "SDL networking library";

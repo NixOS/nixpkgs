@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "aliyun-cli";
   version = "3.0.109";
@@ -14,9 +17,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-c7LsCNcxdHwDBEknXJt9AyrmFcem8YtUYy06vNDBdDY=";
 
-  subPackages = [ "main" ];
+  subPackages = ["main"];
 
-  ldFlags = [ "-s" "-w" "-X github.com/aliyun/aliyun-cli/cli.Version=${version}" ];
+  ldFlags = ["-s" "-w" "-X github.com/aliyun/aliyun-cli/cli.Version=${version}"];
 
   postInstall = ''
     mv $out/bin/main $out/bin/aliyun
@@ -27,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/aliyun/aliyun-cli";
     changelog = "https://github.com/aliyun/aliyun-cli/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ornxka ];
+    maintainers = with maintainers; [ornxka];
   };
 }

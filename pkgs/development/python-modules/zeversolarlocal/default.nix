@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, httpx
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  httpx,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "zeversolarlocal";
   version = "1.1.0";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Python module to interact with Zeversolar inverters";
     homepage = "https://github.com/sander76/zeversolarlocal";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

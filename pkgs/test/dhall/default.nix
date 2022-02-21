@@ -1,6 +1,8 @@
-{ lib, callPackage }:
-
+{
+  lib,
+  callPackage,
+}:
 lib.recurseIntoAttrs {
-  buildDhallUrl = callPackage ./buildDhallUrl { };
-  generateDhallDirectoryPackage = callPackage ./generateDhallDirectoryPackage { };
+  buildDhallUrl = callPackage ./buildDhallUrl {};
+  generateDhallDirectoryPackage = callPackage ./generateDhallDirectoryPackage {};
 }

@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+}:
 buildPythonPackage rec {
   pname = "backports.ssl_match_hostname";
   version = "3.7.0.1";

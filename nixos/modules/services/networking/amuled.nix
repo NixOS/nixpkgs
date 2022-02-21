@@ -1,21 +1,22 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.amule;
   opt = options.services.amule;
-  user = if cfg.user != null then cfg.user else "amule";
-in
-
-{
-
+  user =
+    if cfg.user != null
+    then cfg.user
+    else "amule";
+in {
   ###### interface
 
   options = {
-
     services.amule = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -42,32 +43,32 @@ in
           The user the AMule daemon should run as.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users = mkIf (cfg.user == null) [
-      { name = "amule";
+      {
+        name = "amule";
         description = "AMule daemon";
         group = "amule";
         uid = config.ids.uids.amule;
-      } ];
+      }
+    ];
 
     users.groups = mkIf (cfg.user == null) [
-      { name = "amule";
+      {
+        name = "amule";
         gid = config.ids.gids.amule;
-      } ];
+      }
+    ];
 
     systemd.services.amuled = {
       description = "AMule daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       preStart = ''
         mkdir -p ${cfg.dataDir}

@@ -1,30 +1,31 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.spacecookie;
 
-  spacecookieConfig = {
-    listen = {
-      inherit (cfg) port;
-    };
-  } // cfg.settings;
+  spacecookieConfig =
+    {
+      listen = {
+        inherit (cfg) port;
+      };
+    }
+    // cfg.settings;
 
   format = pkgs.formats.json {};
 
   configFile = format.generate "spacecookie.json" spacecookieConfig;
-
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "spacecookie" "root" ] [ "services" "spacecookie" "settings" "root" ])
-    (mkRenamedOptionModule [ "services" "spacecookie" "hostname" ] [ "services" "spacecookie" "settings" "hostname" ])
+    (mkRenamedOptionModule ["services" "spacecookie" "root"] ["services" "spacecookie" "settings" "root"])
+    (mkRenamedOptionModule ["services" "spacecookie" "hostname"] ["services" "spacecookie" "settings" "hostname"])
   ];
 
   options = {
-
     services.spacecookie = {
-
       enable = mkEnableOption "spacecookie";
 
       package = mkOption {
@@ -90,8 +91,12 @@ in {
           };
 
           options.log = {
-            enable = mkEnableOption "logging for spacecookie"
-              // { default = true; example = false; };
+            enable =
+              mkEnableOption "logging for spacecookie"
+              // {
+                default = true;
+                example = false;
+              };
 
             hide-ips = mkOption {
               type = types.bool;
@@ -168,8 +173,8 @@ in {
 
     systemd.sockets.spacecookie = {
       description = "Socket for the Spacecookie Gopher Server";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ "${cfg.address}:${toString cfg.port}" ];
+      wantedBy = ["sockets.target"];
+      listenStreams = ["${cfg.address}:${toString cfg.port}"];
       socketConfig = {
         BindIPv6Only = "both";
       };
@@ -177,8 +182,8 @@ in {
 
     systemd.services.spacecookie = {
       description = "Spacecookie Gopher Server";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "spacecookie.socket" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["spacecookie.socket"];
 
       serviceConfig = {
         Type = "notify";
@@ -210,7 +215,7 @@ in {
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [cfg.port];
     };
   };
 }

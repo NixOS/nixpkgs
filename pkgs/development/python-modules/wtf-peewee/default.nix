@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, peewee
-, wtforms
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  peewee,
+  wtforms,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "wtf-peewee";
   version = "3.0.3";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "WTForms integration for peewee models";
     homepage = "https://github.com/coleifer/wtf-peewee/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

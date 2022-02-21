@@ -1,14 +1,14 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, thunar
-, exo
-, libxfce4util
-, intltool
-, gettext
-, taglib
+{
+  lib,
+  mkXfceDerivation,
+  gtk3,
+  thunar,
+  exo,
+  libxfce4util,
+  intltool,
+  gettext,
+  taglib,
 }:
-
 mkXfceDerivation {
   category = "thunar-plugins";
   pname = "thunar-media-tags-plugin";
@@ -32,6 +32,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Thunar plugin providing tagging and renaming features for media files";
-    maintainers = with maintainers; [ ncfavier ] ++ teams.xfce.members;
+    maintainers = with maintainers; [ncfavier] ++ teams.xfce.members;
   };
 }

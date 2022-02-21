@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "ditaa";
   version = "0.11.0";
@@ -29,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stathissideris/ditaa";
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

@@ -1,13 +1,16 @@
-{ config, lib, ... }:
-let inherit (lib) types mkOption attrNames;
-in
 {
+  config,
+  lib,
+  ...
+}: let
+  inherit (lib) types mkOption attrNames;
+in {
   options = {
-    attrs = mkOption { type = types.attrsOf lib.types.int; };
-    result = mkOption { };
-    resultFoo = mkOption { };
-    resultFooBar = mkOption { };
-    resultFooFoo = mkOption { };
+    attrs = mkOption {type = types.attrsOf lib.types.int;};
+    result = mkOption {};
+    resultFoo = mkOption {};
+    resultFooBar = mkOption {};
+    resultFooFoo = mkOption {};
   };
   config = {
     attrs.a = 1;

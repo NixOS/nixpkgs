@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "dapr";
   version = "1.1.0";
@@ -24,6 +27,6 @@ buildGoModule rec {
     homepage = "https://dapr.io";
     description = "A CLI for managing Dapr, the distributed application runtime";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    maintainers = with maintainers; [lucperkins];
   };
 }

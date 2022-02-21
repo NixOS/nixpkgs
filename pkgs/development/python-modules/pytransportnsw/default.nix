@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pytransportnsw";
   version = "0.1.1";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "TransportNSW" ];
+  pythonImportsCheck = ["TransportNSW"];
 
   meta = with lib; {
     description = "Python module to access Transport NSW information";
     homepage = "https://github.com/Dav0815/TransportNSW";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

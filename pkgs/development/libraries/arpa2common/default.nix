@@ -1,17 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-
-, arpa2cm
-, doxygen
-, e2fsprogs
-, lmdb
-, openssl
-, pkg-config
-, ragel
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  arpa2cm,
+  doxygen,
+  e2fsprogs,
+  lmdb,
+  openssl,
+  pkg-config,
+  ragel,
 }:
-
 stdenv.mkDerivation rec {
   pname = "arpa2common";
   version = "2.2.14";
@@ -38,11 +37,10 @@ stdenv.mkDerivation rec {
   ];
 
   # the project uses single argument `printf` throughout the program
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = {
-    description =
-      "ARPA2 ID and ACL libraries and other core data structures for ARPA2";
+    description = "ARPA2 ID and ACL libraries and other core data structures for ARPA2";
     longDescription = ''
       The ARPA2 Common Library package offers elementary services that can
       benefit many software packages.  They are designed to be easy to
@@ -51,8 +49,8 @@ stdenv.mkDerivation rec {
       liberate users.
     '';
     homepage = "https://gitlab.com/arpa2/arpa2common";
-    license = with lib.licenses; [ bsd2 cc-by-sa-40 cc0 isc ];
-    maintainers = with lib.maintainers; [ fufexan ];
+    license = with lib.licenses; [bsd2 cc-by-sa-40 cc0 isc];
+    maintainers = with lib.maintainers; [fufexan];
     platforms = lib.platforms.linux;
   };
 }

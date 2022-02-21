@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "eigen";
   version = "3.4.0";
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     ./include-dir.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     homepage = "https://eigen.tuxfamily.org";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ sander raskin ];
+    maintainers = with maintainers; [sander raskin];
     platforms = platforms.unix;
   };
 }

@@ -1,31 +1,31 @@
-{ lib
-, Babel
-, buildPythonPackage
-, cssselect
-, feedparser
-, fetchPypi
-, gdata
-, gnupg
-, google-api-python-client
-, html2text
-, libyaml
-, lxml
-, mechanize
-, nose
-, pdfminer
-, pillow
-, prettytable
-, pyqt5
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pyyaml
-, requests
-, simplejson
-, termcolor
-, unidecode
+{
+  lib,
+  Babel,
+  buildPythonPackage,
+  cssselect,
+  feedparser,
+  fetchPypi,
+  gdata,
+  gnupg,
+  google-api-python-client,
+  html2text,
+  libyaml,
+  lxml,
+  mechanize,
+  nose,
+  pdfminer,
+  pillow,
+  prettytable,
+  pyqt5,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  simplejson,
+  termcolor,
+  unidecode,
 }:
-
 buildPythonPackage rec {
   pname = "weboob";
   version = "2.0";
@@ -92,6 +92,6 @@ buildPythonPackage rec {
     description = "Collection of applications and APIs to interact with websites";
     homepage = "http://weboob.org";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

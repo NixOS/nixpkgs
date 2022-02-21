@@ -1,5 +1,8 @@
-{ fetchurl, lib, stdenv }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "mpage";
   version = "2.5.7";
@@ -25,7 +28,7 @@ stdenv.mkDerivation rec {
       ISO 8859.1 to print 8-bit characters.
     '';
 
-    license = "liberal";  # a non-copyleft license, see `Copyright' file
+    license = "liberal"; # a non-copyleft license, see `Copyright' file
     homepage = "http://www.mesa.nl/pub/mpage/";
     platforms = lib.platforms.all;
   };

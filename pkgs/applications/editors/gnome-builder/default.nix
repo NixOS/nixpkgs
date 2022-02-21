@@ -1,48 +1,48 @@
-{ stdenv
-, lib
-, ctags
-, cmark
-, appstream-glib
-, desktop-file-utils
-, fetchurl
-, fetchpatch
-, flatpak
-, gnome
-, libgit2-glib
-, gi-docgen
-, gobject-introspection
-, glade
-, gspell
-, gtk3
-, gtksourceview4
-, json-glib
-, jsonrpc-glib
-, libdazzle
-, libpeas
-, libportal-gtk3
-, libxml2
-, meson
-, ninja
-, ostree
-, pcre
-, pcre2
-, pkg-config
-, python3
-, sysprof
-, template-glib
-, vala
-, vte
-, webkitgtk
-, wrapGAppsHook
-, dbus
-, xvfb-run
+{
+  stdenv,
+  lib,
+  ctags,
+  cmark,
+  appstream-glib,
+  desktop-file-utils,
+  fetchurl,
+  fetchpatch,
+  flatpak,
+  gnome,
+  libgit2-glib,
+  gi-docgen,
+  gobject-introspection,
+  glade,
+  gspell,
+  gtk3,
+  gtksourceview4,
+  json-glib,
+  jsonrpc-glib,
+  libdazzle,
+  libpeas,
+  libportal-gtk3,
+  libxml2,
+  meson,
+  ninja,
+  ostree,
+  pcre,
+  pcre2,
+  pkg-config,
+  python3,
+  sysprof,
+  template-glib,
+  vala,
+  vte,
+  webkitgtk,
+  wrapGAppsHook,
+  dbus,
+  xvfb-run,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
   version = "41.3";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = ["out" "devdoc"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
+  pythonPath = with python3.pkgs; requiredPythonModules [pygobject3];
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"

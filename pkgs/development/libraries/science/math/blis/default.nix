@@ -1,64 +1,70 @@
-{ lib, stdenv
-, fetchFromGitHub
-, perl
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  python3
+  # Enable BLAS interface with 64-bit integer width.
+  ,
+  blas64 ? false
+  # Target architecture. x86_64 builds Intel and AMD kernels.
+  ,
+  withArchitecture ? "x86_64"
+  # Enable OpenMP-based threading.
+  ,
+  withOpenMP ? true,
+}: let
+  blasIntSize =
+    if blas64
+    then "64"
+    else "32";
+in
+  stdenv.mkDerivation rec {
+    pname = "blis";
+    version = "0.8.1";
 
-# Enable BLAS interface with 64-bit integer width.
-, blas64 ? false
+    src = fetchFromGitHub {
+      owner = "flame";
+      repo = "blis";
+      rev = version;
+      sha256 = "sha256-D5T/itq9zyD5TkeJ4Ae1vS4yEWU51omyJoIkKQ2NLhY=";
+    };
 
-# Target architecture. x86_64 builds Intel and AMD kernels.
-, withArchitecture ? "x86_64"
+    inherit blas64;
 
-# Enable OpenMP-based threading.
-, withOpenMP ? true
-}:
+    nativeBuildInputs = [
+      perl
+      python3
+    ];
 
-let
-  blasIntSize = if blas64 then "64" else "32";
-in stdenv.mkDerivation rec {
-  pname = "blis";
-  version = "0.8.1";
+    doCheck = true;
 
-  src = fetchFromGitHub {
-    owner = "flame";
-    repo = "blis";
-    rev = version;
-    sha256 = "sha256-D5T/itq9zyD5TkeJ4Ae1vS4yEWU51omyJoIkKQ2NLhY=";
-  };
+    enableParallelBuilding = true;
 
-  inherit blas64;
+    configureFlags =
+      [
+        "--enable-cblas"
+        "--blas-int-size=${blasIntSize}"
+      ]
+      ++ lib.optionals withOpenMP ["--enable-threading=openmp"]
+      ++ [withArchitecture];
 
-  nativeBuildInputs = [
-    perl
-    python3
-  ];
+    postPatch = ''
+      patchShebangs configure build/flatten-headers.py
+    '';
 
-  doCheck = true;
+    postInstall = ''
+      ln -s $out/lib/libblis.so.3 $out/lib/libblas.so.3
+      ln -s $out/lib/libblis.so.3 $out/lib/libcblas.so.3
+      ln -s $out/lib/libblas.so.3 $out/lib/libblas.so
+      ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
+    '';
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    "--enable-cblas"
-    "--blas-int-size=${blasIntSize}"
-  ] ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
-    ++ [ withArchitecture ];
-
-  postPatch = ''
-    patchShebangs configure build/flatten-headers.py
-  '';
-
-  postInstall = ''
-    ln -s $out/lib/libblis.so.3 $out/lib/libblas.so.3
-    ln -s $out/lib/libblis.so.3 $out/lib/libcblas.so.3
-    ln -s $out/lib/libblas.so.3 $out/lib/libblas.so
-    ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
-  '';
-
-  meta = with lib; {
-    description = "BLAS-compatible linear algebra library";
-    homepage = "https://github.com/flame/blis";
-    license = licenses.bsd3;
-    maintainers = [ ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "BLAS-compatible linear algebra library";
+      homepage = "https://github.com/flame/blis";
+      license = licenses.bsd3;
+      maintainers = [];
+      platforms = ["x86_64-linux"];
+    };
+  }

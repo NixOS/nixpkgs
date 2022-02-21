@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sqlalchemy
-, alembic
-, banal
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sqlalchemy,
+  alembic,
+  banal,
 }:
-
 buildPythonPackage rec {
   pname = "dataset";
   version = "1.5.2";
@@ -16,7 +16,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    sqlalchemy alembic banal
+    sqlalchemy
+    alembic
+    banal
   ];
 
   # checks attempt to import nonexistent module 'test.test' and fail
@@ -30,6 +32,6 @@ buildPythonPackage rec {
     description = "Toolkit for Python-based database access";
     homepage = "https://dataset.readthedocs.io";
     license = licenses.mit;
-    maintainers = [ maintainers.xfnw ];
+    maintainers = [maintainers.xfnw];
   };
 }

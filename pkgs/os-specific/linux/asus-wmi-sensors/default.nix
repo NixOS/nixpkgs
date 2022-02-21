@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   name = "asus-wmi-sensors-${version}-${kernel.version}";
   version = "unstable-2019-11-07";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kc0xlrsmf783ln5bqyj6qxzmrhdxdfdd2b9ygf2lbl2153i04vc";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -30,8 +34,8 @@ stdenv.mkDerivation rec {
     description = "Linux HWMON (lmsensors) sensors driver for various ASUS Ryzen and Threadripper motherboards";
     homepage = "https://github.com/electrified/asus-wmi-sensors";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ Frostman ];
+    platforms = ["x86_64-linux" "i686-linux"];
+    maintainers = with maintainers; [Frostman];
     broken = versionOlder kernel.version "4.12";
   };
 }

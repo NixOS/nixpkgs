@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, fetchpatch
-, python3
-, meson
-, ninja
-, vala
-, gtk3
-, glib
-, pantheon
-, gtksourceview
-, libgee
-, nix-update-script
-, webkitgtk
-, libqalculate
-, intltool
-, gnuplot
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  fetchpatch,
+  python3,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  glib,
+  pantheon,
+  gtksourceview,
+  libgee,
+  nix-update-script,
+  webkitgtk,
+  libqalculate,
+  intltool,
+  gnuplot,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nasc";
   version = "0.8.0";
@@ -43,16 +44,19 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    gtksourceview
-    libgee
-    pantheon.elementary-icon-theme
-    pantheon.granite
-    webkitgtk
-    # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
-  ] ++ libqalculate.buildInputs ++ libqalculate.propagatedBuildInputs;
+  buildInputs =
+    [
+      glib
+      gtk3
+      gtksourceview
+      libgee
+      pantheon.elementary-icon-theme
+      pantheon.granite
+      webkitgtk
+      # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
+    ]
+    ++ libqalculate.buildInputs
+    ++ libqalculate.propagatedBuildInputs;
 
   postPatch = ''
     chmod +x meson/post_install.py

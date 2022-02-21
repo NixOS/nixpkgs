@@ -1,5 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools, qtx11extras, poppler }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  qtbase,
+  qttools,
+  qtx11extras,
+  poppler,
+}:
 mkDerivation rec {
   pname = "qcomicbook";
   version = "0.9.1";
@@ -12,11 +21,15 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkg-config
+    cmake
+    pkg-config
   ];
 
   buildInputs = [
-    qtbase qttools qtx11extras poppler
+    qtbase
+    qttools
+    qtx11extras
+    poppler
   ];
 
   postInstall = ''
@@ -38,6 +51,6 @@ mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ greydot ];
+    maintainers = with maintainers; [greydot];
   };
 }

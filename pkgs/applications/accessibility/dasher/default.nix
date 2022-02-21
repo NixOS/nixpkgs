@@ -1,23 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, wrapGAppsHook
-, glib
-, gtk3
-, expat
-, itstool
-, gnome-doc-utils
-, which
-, at-spi2-core
-, dbus
-, libxslt
-, libxml2
-, speechSupport ? true
-, speechd
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  wrapGAppsHook,
+  glib,
+  gtk3,
+  expat,
+  itstool,
+  gnome-doc-utils,
+  which,
+  at-spi2-core,
+  dbus,
+  libxslt,
+  libxml2,
+  speechSupport ? true,
+  speechd,
 }:
-
 stdenv.mkDerivation {
   pname = "dasher";
   version = "unstable-2021-04-25";
@@ -48,15 +48,17 @@ stdenv.mkDerivation {
     libxml2
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    expat
-    itstool
-    # at-spi2 needs dbus to be recognized by pkg-config
-    at-spi2-core
-    dbus
-  ] ++ lib.optional speechSupport speechd;
+  buildInputs =
+    [
+      glib
+      gtk3
+      expat
+      itstool
+      # at-spi2 needs dbus to be recognized by pkg-config
+      at-spi2-core
+      dbus
+    ]
+    ++ lib.optional speechSupport speechd;
 
   enableParallelBuilding = true;
 
@@ -64,7 +66,7 @@ stdenv.mkDerivation {
     homepage = "https://www.inference.org.uk/dasher/";
     description = "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
     license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.Profpatsch ];
+    maintainers = [lib.maintainers.Profpatsch];
     platforms = lib.platforms.all;
   };
 }

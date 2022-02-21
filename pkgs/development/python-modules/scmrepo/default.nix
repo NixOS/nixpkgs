@@ -1,17 +1,17 @@
-{ lib
-, asyncssh
-, buildPythonPackage
-, dulwich
-, fetchFromGitHub
-, fsspec
-, funcy
-, GitPython
-, pathspec
-, pygit2
-, pygtrie
-, pythonOlder
+{
+  lib,
+  asyncssh,
+  buildPythonPackage,
+  dulwich,
+  fetchFromGitHub,
+  fsspec,
+  funcy,
+  GitPython,
+  pathspec,
+  pygit2,
+  pygtrie,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "scmrepo";
   version = "0.0.7";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "SCM wrapper and fsspec filesystem";
     homepage = "https://github.com/iterative/scmrepo";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

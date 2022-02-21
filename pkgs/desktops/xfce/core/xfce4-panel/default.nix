@@ -1,19 +1,19 @@
-{ lib
-, mkXfceDerivation
-, exo
-, garcon
-, glib
-, gobject-introspection
-, gtk3
-, libdbusmenu-gtk3
-, libwnck
-, libxfce4ui
-, libxfce4util
-, tzdata
-, vala
-, xfconf
+{
+  lib,
+  mkXfceDerivation,
+  exo,
+  garcon,
+  glib,
+  gobject-introspection,
+  gtk3,
+  libdbusmenu-gtk3,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  tzdata,
+  vala,
+  xfconf,
 }:
-
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-panel";
@@ -42,7 +42,7 @@ mkXfceDerivation {
     libxfce4util
   ];
 
-  patches = [ ./xfce4-panel-datadir.patch ];
+  patches = [./xfce4-panel-datadir.patch];
 
   postPatch = ''
     substituteInPlace plugins/clock/clock.c \
@@ -54,6 +54,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Panel for the Xfce desktop environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

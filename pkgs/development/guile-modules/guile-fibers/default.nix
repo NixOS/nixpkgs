@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, guile
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  guile,
+  pkg-config,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "guile-fibers";
   version = "1.0.0";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wingo/fibers";
     description = "Concurrent ML-like concurrency for Guile";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = with maintainers; [vyp];
     platforms = platforms.linux;
   };
 }

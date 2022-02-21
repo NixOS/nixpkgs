@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bitbox02
-, ecdsa
-, hidapi
-, libusb1
-, mnemonic
-, pyaes
-, typing-extensions
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bitbox02,
+  ecdsa,
+  hidapi,
+  libusb1,
+  mnemonic,
+  pyaes,
+  typing-extensions,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "hwi";
   version = "2.0.2";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bitcoin Hardware Wallet Interface";
     homepage = "https://github.com/bitcoin-core/hwi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [prusnak];
   };
 }

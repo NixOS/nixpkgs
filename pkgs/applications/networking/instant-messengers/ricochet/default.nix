@@ -1,18 +1,18 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, pkg-config
-, makeDesktopItem
-, qtbase
-, qttools
-, qtmultimedia
-, qtquick1
-, qtquickcontrols
-, openssl
-, protobuf
-, qmake
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  makeDesktopItem,
+  qtbase,
+  qttools,
+  qtmultimedia,
+  qtquick1,
+  qtquickcontrols,
+  openssl,
+  protobuf,
+  qmake,
 }:
-
 mkDerivation rec {
   pname = "ricochet";
   version = "1.1.4";
@@ -44,13 +44,13 @@ mkDerivation rec {
     protobuf
   ];
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [pkg-config qmake];
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags openssl)"
   '';
 
-  qmakeFlags = [ "DEFINES+=RICOCHET_NO_PORTABLE" ];
+  qmakeFlags = ["DEFINES+=RICOCHET_NO_PORTABLE"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -70,7 +70,7 @@ mkDerivation rec {
     description = "Anonymous peer-to-peer instant messaging";
     homepage = "https://ricochet.im";
     license = licenses.bsd3;
-    maintainers = [ maintainers.codsl maintainers.jgillich maintainers.np ];
+    maintainers = [maintainers.codsl maintainers.jgillich maintainers.np];
     platforms = platforms.linux;
   };
 }

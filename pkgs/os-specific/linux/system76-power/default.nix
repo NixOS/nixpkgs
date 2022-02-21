@@ -1,5 +1,11 @@
-{ pkg-config, libusb1, dbus, lib, rustPlatform, fetchFromGitHub }:
-
+{
+  pkg-config,
+  libusb1,
+  dbus,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "system76-power";
   version = "1.1.20";
@@ -11,8 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Qk9zHqwFlUTWE+YRt2GASIekbDoBCHPAUUN3+0wpvfw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus libusb1 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [dbus libusb1];
 
   cargoSha256 = "sha256-iG7M9ICFRTFVkbC89DyfR+Iyi7jaT9WmG3PSdBOF7YI=";
 
@@ -24,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "System76 Power Management";
     homepage = "https://github.com/pop-os/system76-power";
     license = licenses.gpl3Plus;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ maintainers.jwoudenberg ];
+    platforms = ["i686-linux" "x86_64-linux"];
+    maintainers = [maintainers.jwoudenberg];
   };
 }

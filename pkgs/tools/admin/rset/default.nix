@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, coreutils, openssh, gnutar }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  openssh,
+  gnutar,
+}:
 stdenv.mkDerivation rec {
   pname = "rset";
   version = "2.1";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0916f96afl8kcn2hpj4qhg92g2j93ycp2sb94nsz3q44sqc6ddhb";
   };
 
-  patches = [ ./paths.patch ];
+  patches = [./paths.patch];
 
   postPatch = ''
     substituteInPlace rset.c \
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   dontAddPrefix = true;
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://scriptedconfiguration.org/";
@@ -43,6 +49,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/eradman/rset/raw/${version}/NEWS";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [cstrahan];
   };
 }

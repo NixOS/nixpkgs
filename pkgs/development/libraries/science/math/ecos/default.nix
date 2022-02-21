@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "ecos";
   version = "2.0.7";
@@ -33,6 +36,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/embotech/ecos/releases";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, mock
-, pyyaml
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  mock,
+  pyyaml,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "python-multipart";
   version = "0.0.5";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "A streaming multipart parser for Python";
     homepage = "https://github.com/andrew-d/python-multipart";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

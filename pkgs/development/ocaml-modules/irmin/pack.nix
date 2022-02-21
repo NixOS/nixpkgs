@@ -1,7 +1,15 @@
-{ lib, buildDunePackage
-, alcotest-lwt, index, irmin, irmin-layers, irmin-test, ocaml_lwt, fpath, optint
+{
+  lib,
+  buildDunePackage,
+  alcotest-lwt,
+  index,
+  irmin,
+  irmin-layers,
+  irmin-test,
+  ocaml_lwt,
+  fpath,
+  optint,
 }:
-
 buildDunePackage rec {
   minimumOCamlVersion = "4.02.3";
 
@@ -11,15 +19,16 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [ fpath ];
-  propagatedBuildInputs = [ index irmin irmin-layers ocaml_lwt optint ];
+  buildInputs = [fpath];
+  propagatedBuildInputs = [index irmin irmin-layers ocaml_lwt optint];
 
-  checkInputs = [ alcotest-lwt irmin-test ];
+  checkInputs = [alcotest-lwt irmin-test];
 
   doCheck = true;
 
-  meta = irmin.meta // {
-    description = "Irmin backend which stores values in a pack file";
-  };
-
+  meta =
+    irmin.meta
+    // {
+      description = "Irmin backend which stores values in a pack file";
+    };
 }

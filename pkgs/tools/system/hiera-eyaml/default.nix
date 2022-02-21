@@ -1,5 +1,9 @@
-{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
-
+{
+  lib,
+  bundlerEnv,
+  ruby,
+  bundlerUpdateScript,
+}:
 bundlerEnv {
   inherit ruby;
   pname = "hiera-eyaml";
@@ -11,7 +15,7 @@ bundlerEnv {
     description = "Per-value asymmetric encryption of sensitive data for Hiera";
     homepage = "https://github.com/TomPoulton/hiera-eyaml";
     license = licenses.mit;
-    maintainers = with maintainers; [ benley nicknovitski ];
+    maintainers = with maintainers; [benley nicknovitski];
     platforms = platforms.unix;
   };
 }

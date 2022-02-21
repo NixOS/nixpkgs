@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "xxHash";
   version = "0.8.1";
@@ -18,9 +21,9 @@ stdenv.mkDerivation rec {
     sed -i '/LIBXXH) $(DESTDIR/ d' Makefile
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  makeFlags = [ "PREFIX=$(dev)" "EXEC_PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(dev)" "EXEC_PREFIX=$(out)"];
 
   # pkgs/build-support/setup-hooks/compress-man-pages.sh hook fails
   # to compress symlinked manpages. Avoid compressing manpages until
@@ -37,8 +40,8 @@ stdenv.mkDerivation rec {
       endian).
     '';
     homepage = "https://github.com/Cyan4973/xxHash";
-    license = with licenses; [ bsd2 gpl2 ];
-    maintainers = with maintainers; [ orivej ];
+    license = with licenses; [bsd2 gpl2];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.unix;
   };
 }

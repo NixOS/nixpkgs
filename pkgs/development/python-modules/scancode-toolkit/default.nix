@@ -1,61 +1,61 @@
-{ lib
-, attrs
-, beautifulsoup4
-, bitarray
-, boolean-py
-, buildPythonPackage
-, chardet
-, click
-, colorama
-, commoncode
-, debian-inspector
-, dparse
-, extractcode
-, extractcode-7z
-, extractcode-libarchive
-, fasteners
-, fetchPypi
-, fingerprints
-, ftfy
-, gemfileparser
-, html5lib
-, importlib-metadata
-, intbitset
-, jaraco_functools
-, javaproperties
-, jinja2
-, jsonstreams
-, license-expression
-, lxml
-, markupsafe
-, packageurl-python
-, packaging
-, parameter-expansion-patched
-, pefile
-, pkginfo
-, pluggy
-, plugincode
-, publicsuffix2
-, pyahocorasick
-, pycryptodome
-, pygmars
-, pygments
-, pymaven-patch
-, pytestCheckHook
-, pythonOlder
-, requests
-, saneyaml
-, spdx-tools
-, text-unidecode
-, toml
-, typecode
-, typecode-libmagic
-, typing
-, urlpy
-, xmltodict
-, zipp
+{
+  lib,
+  attrs,
+  beautifulsoup4,
+  bitarray,
+  boolean-py,
+  buildPythonPackage,
+  chardet,
+  click,
+  colorama,
+  commoncode,
+  debian-inspector,
+  dparse,
+  extractcode,
+  extractcode-7z,
+  extractcode-libarchive,
+  fasteners,
+  fetchPypi,
+  fingerprints,
+  ftfy,
+  gemfileparser,
+  html5lib,
+  importlib-metadata,
+  intbitset,
+  jaraco_functools,
+  javaproperties,
+  jinja2,
+  jsonstreams,
+  license-expression,
+  lxml,
+  markupsafe,
+  packageurl-python,
+  packaging,
+  parameter-expansion-patched,
+  pefile,
+  pkginfo,
+  pluggy,
+  plugincode,
+  publicsuffix2,
+  pyahocorasick,
+  pycryptodome,
+  pygmars,
+  pygments,
+  pymaven-patch,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  saneyaml,
+  spdx-tools,
+  text-unidecode,
+  toml,
+  typecode,
+  typecode-libmagic,
+  typing,
+  urlpy,
+  xmltodict,
+  zipp,
 }:
-
 buildPythonPackage rec {
   pname = "scancode-toolkit";
   version = "30.1.0";
@@ -69,61 +69,64 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  propagatedBuildInputs = [
-    attrs
-    beautifulsoup4
-    bitarray
-    boolean-py
-    chardet
-    click
-    colorama
-    commoncode
-    debian-inspector
-    dparse
-    extractcode
-    extractcode-7z
-    extractcode-libarchive
-    fasteners
-    fingerprints
-    ftfy
-    gemfileparser
-    html5lib
-    intbitset
-    jaraco_functools
-    javaproperties
-    jinja2
-    jsonstreams
-    license-expression
-    lxml
-    markupsafe
-    packageurl-python
-    packaging
-    parameter-expansion-patched
-    pefile
-    pkginfo
-    pluggy
-    plugincode
-    publicsuffix2
-    pyahocorasick
-    pycryptodome
-    pygmars
-    pygments
-    pymaven-patch
-    requests
-    saneyaml
-    spdx-tools
-    text-unidecode
-    toml
-    typecode
-    typecode-libmagic
-    urlpy
-    xmltodict
-    zipp
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
-  ];
+  propagatedBuildInputs =
+    [
+      attrs
+      beautifulsoup4
+      bitarray
+      boolean-py
+      chardet
+      click
+      colorama
+      commoncode
+      debian-inspector
+      dparse
+      extractcode
+      extractcode-7z
+      extractcode-libarchive
+      fasteners
+      fingerprints
+      ftfy
+      gemfileparser
+      html5lib
+      intbitset
+      jaraco_functools
+      javaproperties
+      jinja2
+      jsonstreams
+      license-expression
+      lxml
+      markupsafe
+      packageurl-python
+      packaging
+      parameter-expansion-patched
+      pefile
+      pkginfo
+      pluggy
+      plugincode
+      publicsuffix2
+      pyahocorasick
+      pycryptodome
+      pygmars
+      pygments
+      pymaven-patch
+      requests
+      saneyaml
+      spdx-tools
+      text-unidecode
+      toml
+      typecode
+      typecode-libmagic
+      urlpy
+      xmltodict
+      zipp
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-metadata
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      typing
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -152,7 +155,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
-    license = with licenses; [ asl20 cc-by-40 ];
+    license = with licenses; [asl20 cc-by-40];
     maintainers = teams.determinatesystems.members;
   };
 }

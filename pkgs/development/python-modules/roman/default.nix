@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "2.0.0";
   pname = "roman";
@@ -18,5 +18,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/roman";
     license = licenses.psfl;
   };
-
 }

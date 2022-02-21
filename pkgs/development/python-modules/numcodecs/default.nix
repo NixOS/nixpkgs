@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools-scm
-, cython
-, numpy
-, msgpack
-, pytestCheckHook
-, python
-, gcc8
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  setuptools-scm,
+  cython,
+  numpy,
+  msgpack,
+  pytestCheckHook,
+  python,
+  gcc8,
 }:
-
 buildPythonPackage rec {
   pname = "numcodecs";
   version = "0.9.1";
@@ -48,10 +48,10 @@ buildPythonPackage rec {
     "test_bytes"
   ];
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://github.com/zarr-developers/numcodecs";
     license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

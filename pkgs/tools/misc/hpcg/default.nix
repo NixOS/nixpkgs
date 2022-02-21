@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, mpi } :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mpi,
+}:
 stdenv.mkDerivation rec {
   pname = "hpcg";
   version = "3.1";
@@ -13,9 +17,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ mpi ];
+  buildInputs = [mpi];
 
-  makeFlags = [ "arch=Linux_MPI" ];
+  makeFlags = ["arch=Linux_MPI"];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/hpcg
@@ -29,7 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.hpcg-benchmark.org";
     platforms = platforms.linux;
     license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    maintainers = [maintainers.markuskowa];
   };
 }
-

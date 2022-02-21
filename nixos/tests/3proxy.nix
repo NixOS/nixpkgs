@@ -1,11 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "3proxy";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ misuzu ];
+    maintainers = [misuzu];
   };
 
   nodes = {
-    peer0 = { lib, ... }: {
+    peer0 = {lib, ...}: {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
         ipv4.addresses = [
@@ -21,7 +21,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       };
     };
 
-    peer1 = { lib, ... }: {
+    peer1 = {lib, ...}: {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
         ipv4.addresses = [
@@ -43,19 +43,19 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           {
             type = "admin";
             bindPort = 9999;
-            auth = [ "none" ];
+            auth = ["none"];
           }
           {
             type = "proxy";
             bindPort = 3128;
-            auth = [ "none" ];
+            auth = ["none"];
           }
         ];
       };
-      networking.firewall.allowedTCPPorts = [ 3128 9999 ];
+      networking.firewall.allowedTCPPorts = [3128 9999];
     };
 
-    peer2 = { lib, ... }: {
+    peer2 = {lib, ...}: {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
         ipv4.addresses = [
@@ -75,12 +75,12 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           {
             type = "admin";
             bindPort = 9999;
-            auth = [ "none" ];
+            auth = ["none"];
           }
           {
             type = "proxy";
             bindPort = 3128;
-            auth = [ "iponly" ];
+            auth = ["iponly"];
             acl = [
               {
                 rule = "allow";
@@ -89,10 +89,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           }
         ];
       };
-      networking.firewall.allowedTCPPorts = [ 3128 9999 ];
+      networking.firewall.allowedTCPPorts = [3128 9999];
     };
 
-    peer3 = { lib, ... }: {
+    peer3 = {lib, ...}: {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
         ipv4.addresses = [
@@ -115,12 +115,12 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           {
             type = "admin";
             bindPort = 9999;
-            auth = [ "none" ];
+            auth = ["none"];
           }
           {
             type = "proxy";
             bindPort = 3128;
-            auth = [ "strong" ];
+            auth = ["strong"];
             acl = [
               {
                 rule = "allow";
@@ -129,7 +129,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           }
         ];
       };
-      networking.firewall.allowedTCPPorts = [ 3128 9999 ];
+      networking.firewall.allowedTCPPorts = [3128 9999];
     };
   };
 

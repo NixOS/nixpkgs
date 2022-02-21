@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autopage
-, cmd2
-, installShellFiles
-, openstackdocstheme
-, pbr
-, prettytable
-, pyparsing
-, pyyaml
-, stevedore
-, sphinx
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  autopage,
+  cmd2,
+  installShellFiles,
+  openstackdocstheme,
+  pbr,
+  prettytable,
+  pyparsing,
+  pyyaml,
+  stevedore,
+  sphinx,
+  callPackage,
 }:
-
 buildPythonPackage rec {
   pname = "cliff";
   version = "3.10.1";
@@ -53,10 +53,10 @@ buildPythonPackage rec {
   # check in passthru.tests.pytest to escape infinite recursion with stestr
   doCheck = false;
 
-  pythonImportsCheck = [ "cliff" ];
+  pythonImportsCheck = ["cliff"];
 
   passthru.tests = {
-    pytest = callPackage ./tests.nix { };
+    pytest = callPackage ./tests.nix {};
   };
 
   meta = with lib; {

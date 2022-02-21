@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, libepoxy
-, glib
-, gtk4
-, wayland
-, meson
-, mpv
-, ninja
-, nix-update-script
-, pkg-config
-, python3
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  libepoxy,
+  glib,
+  gtk4,
+  wayland,
+  meson,
+  mpv,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
 }:
-
 stdenv.mkDerivation rec {
   pname = "celluloid";
   version = "0.22";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       allowing access to mpv's powerful playback capabilities.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 

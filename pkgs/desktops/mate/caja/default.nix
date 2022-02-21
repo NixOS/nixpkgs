@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libnotify, libxml2, libexif, exempi, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  libnotify,
+  libxml2,
+  libexif,
+  exempi,
+  mate,
+  hicolor-icon-theme,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "caja";
   version = "1.26.0";
@@ -25,16 +39,16 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  configureFlags = [ "--disable-update-mimedb" ];
+  configureFlags = ["--disable-update-mimedb"];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "File manager for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [gpl2Plus lgpl2Plus];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

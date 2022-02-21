@@ -24,19 +24,26 @@
   classifier-reborn = {
     dependencies = ["fast-stemmer"];
     groups = ["default"];
-    platforms = [{
-      engine = "maglev";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mswin";
-    } {
-      engine = "rbx";
-    } {
-      engine = "ruby";
-    }];
+    platforms = [
+      {
+        engine = "maglev";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mswin";
+      }
+      {
+        engine = "rbx";
+      }
+      {
+        engine = "ruby";
+      }
+    ];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "04nxmm5b7j7r0ij9pcpdr7xqpig559gfzrw042ycxcfyav2pv6ij";
@@ -149,19 +156,26 @@
   };
   fast-stemmer = {
     groups = ["default"];
-    platforms = [{
-      engine = "maglev";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mswin";
-    } {
-      engine = "rbx";
-    } {
-      engine = "ruby";
-    }];
+    platforms = [
+      {
+        engine = "maglev";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mswin";
+      }
+      {
+        engine = "rbx";
+      }
+      {
+        engine = "ruby";
+      }
+    ];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0688clyk4xxh3kdb18vi089k90mca8ji5fwaknh3da5wrzcrzanh";
@@ -419,19 +433,26 @@
   };
   liquid = {
     groups = ["default"];
-    platforms = [{
-      engine = "maglev";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mswin";
-    } {
-      engine = "rbx";
-    } {
-      engine = "ruby";
-    }];
+    platforms = [
+      {
+        engine = "maglev";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mswin";
+      }
+      {
+        engine = "rbx";
+      }
+      {
+        engine = "ruby";
+      }
+    ];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0zhg5ha8zy8zw9qr3fl4wgk4r5940n4128xm2pn4shpbzdbsj5by";
@@ -442,19 +463,26 @@
   liquid-c = {
     dependencies = ["liquid"];
     groups = ["default"];
-    platforms = [{
-      engine = "maglev";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mswin";
-    } {
-      engine = "rbx";
-    } {
-      engine = "ruby";
-    }];
+    platforms = [
+      {
+        engine = "maglev";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mswin";
+      }
+      {
+        engine = "rbx";
+      }
+      {
+        engine = "ruby";
+      }
+    ];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0ibcpajsgq530xrz3dk578mfvivrlfd624j6ifz6ms4w69j8jqj6";
@@ -724,19 +752,26 @@
   };
   yajl-ruby = {
     groups = ["default"];
-    platforms = [{
-      engine = "maglev";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mingw";
-    } {
-      engine = "mswin";
-    } {
-      engine = "rbx";
-    } {
-      engine = "ruby";
-    }];
+    platforms = [
+      {
+        engine = "maglev";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mingw";
+      }
+      {
+        engine = "mswin";
+      }
+      {
+        engine = "rbx";
+      }
+      {
+        engine = "ruby";
+      }
+    ];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "16v0w5749qjp13xhjgr2gcsvjv6mf35br7iqwycix1n2h7kfcckf";

@@ -1,15 +1,16 @@
-{ config, pkgs, lib, ... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   cfg = config.services.mailcatcher;
 
   inherit (lib) mkEnableOption mkIf mkOption types optionalString;
-in
-{
+in {
   # interface
 
   options = {
-
     services.mailcatcher = {
       enable = mkEnableOption "MailCatcher";
 
@@ -44,18 +45,17 @@ in
         description = "The port address of the smtp server.";
       };
     };
-
   };
 
   # implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.mailcatcher ];
+    environment.systemPackages = [pkgs.mailcatcher];
 
     systemd.services.mailcatcher = {
       description = "MailCatcher Service";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         DynamicUser = true;

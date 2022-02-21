@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, libxml2
-, libxslt
-, itstool
-, gnome
-, pkg-config
-, meson
-, ninja
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  libxslt,
+  itstool,
+  gnome,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "yelp-tools";
   version = "41.0";
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Yelp/Tools";
     description = "Small programs that help you create, edit, manage, and publish your Mallard or DocBook documentation";
-    maintainers = teams.gnome.members ++ (with maintainers; [ domenkozar ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [domenkozar]);
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

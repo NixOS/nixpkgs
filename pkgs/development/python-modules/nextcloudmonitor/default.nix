@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "nextcloudmonitor";
   version = "1.2.0";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "nextcloudmonitor" ];
+  pythonImportsCheck = ["nextcloudmonitor"];
 
   meta = with lib; {
     description = "Python wrapper around nextcloud monitor api";
     homepage = "https://github.com/meichthys/nextcloud_monitor";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, jre
-, fetchpatch, fetchFromGitHub, cmake, ninja, pkg-config, libuuid, utf8cpp, darwin }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  libuuid,
+  utf8cpp,
+  darwin,
+}: let
   version = "4.9.2";
   source = fetchFromGitHub {
     owner = "antlr";
@@ -16,7 +26,7 @@ let
       inherit version;
       src = source;
 
-      outputs = [ "out" "dev" "doc" ];
+      outputs = ["out" "dev" "doc"];
 
       patches = [
         (fetchpatch {
@@ -26,10 +36,11 @@ let
         })
       ];
 
-      patchFlags = [ "-p3" ];
+      patchFlags = ["-p3"];
 
-      nativeBuildInputs = [ cmake ninja pkg-config ];
-      buildInputs = [ utf8cpp ]
+      nativeBuildInputs = [cmake ninja pkg-config];
+      buildInputs =
+        [utf8cpp]
         ++ lib.optional stdenv.isLinux libuuid
         ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreFoundation;
 
@@ -92,4 +103,5 @@ let
       platforms = platforms.unix;
     };
   };
-in antlr
+in
+  antlr

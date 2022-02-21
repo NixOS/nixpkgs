@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qt4, qscintilla-qt4 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt4,
+  qscintilla-qt4,
+}:
 stdenv.mkDerivation rec {
   pname = "sqliteman";
   version = "1.2.0";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1blzyh1646955d580f71slgdvz0nqx0qacryx0jc9w02yrag17cs";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 qscintilla-qt4 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [qt4 qscintilla-qt4];
 
   prePatch = ''
     sed -i 's,m_file(0),m_file(QString()),' Sqliteman/sqliteman/main.cpp
@@ -29,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://sqliteman.yarpen.cz/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.eikek ];
+    maintainers = [maintainers.eikek];
   };
 }

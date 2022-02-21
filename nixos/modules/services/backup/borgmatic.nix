@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.borgmatic;
   cfgfile = pkgs.writeText "config.yaml" (builtins.toJSON cfg.settings);
 in {
@@ -22,7 +24,7 @@ in {
               List of source directories to backup (required). Globs and
               tildes are expanded.
             '';
-            example = [ "/home" "/etc" "/var/log/syslog*" ];
+            example = ["/home" "/etc" "/var/log/syslog*"];
           };
           repositories = mkOption {
             type = types.listOf types.str;
@@ -46,12 +48,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-
-    environment.systemPackages = [ pkgs.borgmatic ];
+    environment.systemPackages = [pkgs.borgmatic];
 
     environment.etc."borgmatic/config.yaml".source = cfgfile;
 
-    systemd.packages = [ pkgs.borgmatic ];
-
+    systemd.packages = [pkgs.borgmatic];
   };
 }

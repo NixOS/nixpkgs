@@ -1,18 +1,16 @@
-{ lib, config, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.xmr-stak;
 
   pkg = pkgs.xmr-stak.override {
     inherit (cfg) openclSupport cudaSupport;
   };
-
-in
-
-{
+in {
   options = {
     services.xmr-stak = {
       enable = mkEnableOption "xmr-stak miner";
@@ -22,7 +20,7 @@ in
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "--noCPU" "--currency monero" ];
+        example = ["--noCPU" "--currency monero"];
         description = "List of parameters to pass to xmr-stak.";
       };
 
@@ -61,9 +59,9 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.xmr-stak = {
-      wantedBy = [ "multi-user.target" ];
-      bindsTo = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      bindsTo = ["network-online.target"];
+      after = ["network-online.target"];
       environment = mkIf cfg.cudaSupport {
         LD_LIBRARY_PATH = "${pkgs.linuxPackages_latest.nvidia_x11}/lib";
       };
@@ -72,13 +70,15 @@ in
         ln -sf '${pkgs.writeText "xmr-stak-${fn}" content}' '${fn}'
       ''));
 
-      serviceConfig = let rootRequired = cfg.openclSupport || cfg.cudaSupport; in {
+      serviceConfig = let
+        rootRequired = cfg.openclSupport || cfg.cudaSupport;
+      in {
         ExecStart = "${pkg}/bin/xmr-stak ${concatStringsSep " " cfg.extraArgs}";
         # xmr-stak generates cpu and/or gpu configuration files
         WorkingDirectory = "/tmp";
         PrivateTmp = true;
         DynamicUser = !rootRequired;
-        LimitMEMLOCK = toString (1024*1024);
+        LimitMEMLOCK = toString (1024 * 1024);
       };
     };
   };

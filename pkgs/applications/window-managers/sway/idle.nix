@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "swayidle";
   version = "1.7.1";
@@ -14,10 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "06iq12p4438d6bv3jlqsf01wjaxrzlnj1bnicn41kad563aq41xl";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols systemd ];
+  nativeBuildInputs = [meson ninja pkg-config scdoc wayland-scanner];
+  buildInputs = [wayland wayland-protocols systemd];
 
-  mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=enabled" ];
+  mesonFlags = ["-Dman-pages=enabled" "-Dlogind=enabled"];
 
   meta = with lib; {
     description = "Idle management daemon for Wayland";
@@ -28,6 +36,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
-
+{
+  lib,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "kodi-six";
   namespace = "script.module.kodi-six";

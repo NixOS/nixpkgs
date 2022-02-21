@@ -1,12 +1,12 @@
-{ fetchFromGitHub
-, freerdp
-, nmap
-, openvpn
-, python3Packages
-, lib
-, tigervnc
+{
+  fetchFromGitHub,
+  freerdp,
+  nmap,
+  openvpn,
+  python3Packages,
+  lib,
+  tigervnc,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "crowbar";
   version = "unstable-2020-04-23";
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "05m9vywr9976pc7il0ak8nl26mklzxlcqx0p8rlfyx1q766myqzf";
   };
 
-  propagatedBuildInputs = [ python3Packages.paramiko ];
+  propagatedBuildInputs = [python3Packages.paramiko];
 
   patchPhase = ''
     sed -i 's,/usr/bin/xfreerdp,${freerdp}/bin/xfreerdp,g' lib/main.py
@@ -37,6 +37,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/galkan/crowbar";
     description = "A brute forcing tool that can be used during penetration tests";
     license = licenses.mit;
-    maintainers = with maintainers; [ pamplemousse ];
+    maintainers = with maintainers; [pamplemousse];
   };
 }

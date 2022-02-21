@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pillow, pytestCheckHook, pythonOlder }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+}:
 buildPythonPackage rec {
   pname = "image-go-nord";
   version = "0.1.5";
@@ -12,14 +18,14 @@ buildPythonPackage rec {
     sha256 = "sha256-O34COlGsXExJShRd2zvhdescNfYXWLNuGpkjcH3koPU=";
   };
 
-  propagatedBuildInputs = [ pillow ];
+  propagatedBuildInputs = [pillow];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     description = "A tool that can convert rgb images to nordtheme palette";
     homepage = "https://github.com/Schrodinger-Hat/ImageGoNord-pip";
     license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [kranzes];
   };
 }

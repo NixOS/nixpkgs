@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, emacs
-, tcl
-, tclx
-, espeak-ng
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  emacs,
+  tcl,
+  tclx,
+  espeak-ng,
 }:
-
 stdenv.mkDerivation rec {
   pname = "emacspeak";
   version = "54.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "tvraman";
     repo = pname;
     rev = version;
-    hash= "sha256-aOZ8PmkASJKETPhXhE9WQXyJS7SPe+d97fK/piqqzqc=";
+    hash = "sha256-aOZ8PmkASJKETPhXhE9WQXyJS7SPe+d97fK/piqqzqc=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tvraman/emacspeak/";
     description = "Emacs extension that provides spoken output";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

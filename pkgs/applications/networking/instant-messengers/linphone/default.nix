@@ -1,54 +1,53 @@
-{ bcg729
-, bctoolbox
-, bcunit
-, belcard
-, belle-sip
-, belr
-, bzrtp
-, cairo
-, cmake
-, cyrus_sasl
-, fetchFromGitLab
-, fetchurl
-, ffmpeg
-, gdk-pixbuf
-, glib
-, gnused
-, graphviz
-, gtk2
-, intltool
-, lib
-, libexosip
-, liblinphone
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
-, libxml2
-, makeWrapper
-, mbedtls
-, mediastreamer
-, mediastreamer-openh264
-, minizip2
-, mkDerivation
-, openldap
-, ortp
-, pango
-, pkg-config
-, qtbase
-, qtgraphicaleffects
-, qtquickcontrols2
-, qttranslations
-, readline
-, speex
-, sqlite
-
-, udev
-, zlib
+{
+  bcg729,
+  bctoolbox,
+  bcunit,
+  belcard,
+  belle-sip,
+  belr,
+  bzrtp,
+  cairo,
+  cmake,
+  cyrus_sasl,
+  fetchFromGitLab,
+  fetchurl,
+  ffmpeg,
+  gdk-pixbuf,
+  glib,
+  gnused,
+  graphviz,
+  gtk2,
+  intltool,
+  lib,
+  libexosip,
+  liblinphone,
+  libmatroska,
+  libnotify,
+  libosip,
+  libsoup,
+  libupnp,
+  libX11,
+  libxml2,
+  makeWrapper,
+  mbedtls,
+  mediastreamer,
+  mediastreamer-openh264,
+  minizip2,
+  mkDerivation,
+  openldap,
+  ortp,
+  pango,
+  pkg-config,
+  qtbase,
+  qtgraphicaleffects,
+  qtquickcontrols2,
+  qttranslations,
+  readline,
+  speex,
+  sqlite,
+  udev,
+  zlib,
 }:
-
 mkDerivation rec {
   pname = "linphone-desktop";
   version = "4.2.5";
@@ -181,6 +180,6 @@ mkDerivation rec {
     description = "Open source SIP phone for voice/video calls and instant messaging";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

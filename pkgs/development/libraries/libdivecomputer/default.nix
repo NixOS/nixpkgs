@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libdivecomputer";
   version = "0.7.0";
@@ -14,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.libdivecomputer.org";
     description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
-    maintainers = [ maintainers.mguentner ];
+    maintainers = [maintainers.mguentner];
     license = licenses.lgpl21;
     platforms = platforms.all;
   };

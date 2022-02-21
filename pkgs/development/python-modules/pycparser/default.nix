@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+}:
 buildPythonPackage rec {
   pname = "pycparser";
   version = "2.21";
@@ -17,6 +21,6 @@ buildPythonPackage rec {
     description = "C parser in Python";
     homepage = "https://github.com/eliben/pycparser";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

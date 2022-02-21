@@ -1,12 +1,16 @@
-{ lib, stdenv, zlib, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  zlib,
+  autoreconfHook,
+}:
 stdenv.mkDerivation {
   pname = "minizip";
   version = zlib.version;
   inherit (zlib) src;
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [zlib];
 
   sourceRoot = "zlib-${zlib.version}/contrib/minizip";
 

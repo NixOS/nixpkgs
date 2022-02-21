@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyhumps";
   version = "3.5.3";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to convert strings (and dictionary keys) between snake case, camel case and pascal case";
     homepage = "https://github.com/nficano/humps";
-    license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [unlicense];
+    maintainers = with maintainers; [fab];
   };
 }

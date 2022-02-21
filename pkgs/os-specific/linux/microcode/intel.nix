@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libarchive, iucode-tool }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libarchive,
+  iucode-tool,
+}:
 stdenv.mkDerivation rec {
   pname = "microcode-intel";
   version = "20220207";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yNHYAf8AX8C8iSaFWa6u7knUryaUgvI6nIH9jkD4jjw=";
   };
 
-  nativeBuildInputs = [ iucode-tool libarchive ];
+  nativeBuildInputs = [iucode-tool libarchive];
 
   installPhase = ''
     runHook preInstall
@@ -28,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Microcode for Intel processors";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

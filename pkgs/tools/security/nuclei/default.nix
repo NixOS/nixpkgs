@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "nuclei";
   version = "2.6.0";
@@ -35,6 +35,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/nuclei";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

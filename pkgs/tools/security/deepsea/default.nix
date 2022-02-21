@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "deepsea";
   version = "0.9";
@@ -24,7 +24,7 @@ buildGoModule rec {
       out on the outside as well as on the inside of a perimeter.
     '';
     homepage = "https://github.com/dsnezhkov/deepsea";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

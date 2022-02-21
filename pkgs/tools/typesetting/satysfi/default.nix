@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, ruby, dune_2, ocamlPackages
-, ipaexfont, junicode, lmodern, lmmath
-}:
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  dune_2,
+  ocamlPackages,
+  ipaexfont,
+  junicode,
+  lmodern,
+  lmmath,
+}: let
   camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
     src = fetchFromGitHub {
       owner = "gfngfn";
@@ -28,8 +36,8 @@ let
       sha256 = "17s5xrnpim54d1apy972b5l08bph4c0m5kzbndk600fl0vnlirnl";
     };
     useDune2 = true;
-    nativeBuildInputs = [ ocamlPackages.cppo ];
-    propagatedBuildInputs = [ ocamlPackages.biniou ];
+    nativeBuildInputs = [ocamlPackages.cppo];
+    propagatedBuildInputs = [ocamlPackages.biniou];
     inherit (ocamlPackages.yojson) meta;
   };
 in
@@ -50,12 +58,24 @@ in
       $out/share/satysfi
     '';
 
-    nativeBuildInputs = [ ruby dune_2 ];
+    nativeBuildInputs = [ruby dune_2];
 
-    buildInputs = [ camlpdf otfm yojson-with-position ] ++ (with ocamlPackages; [
-      ocaml findlib menhir menhirLib
-      batteries camlimages core_kernel ppx_deriving uutf omd cppo re
-    ]);
+    buildInputs =
+      [camlpdf otfm yojson-with-position]
+      ++ (with ocamlPackages; [
+        ocaml
+        findlib
+        menhir
+        menhirLib
+        batteries
+        camlimages
+        core_kernel
+        ppx_deriving
+        uutf
+        omd
+        cppo
+        re
+      ]);
 
     installPhase = ''
       cp -r ${ipaexfont}/share/fonts/opentype/* lib-satysfi/dist/fonts/
@@ -72,7 +92,7 @@ in
       description = "A statically-typed, functional typesetting system";
       changelog = "https://github.com/gfngfn/SATySFi/blob/v${version}/CHANGELOG.md";
       license = licenses.lgpl3Only;
-      maintainers = [ maintainers.mt-caret maintainers.marsam ];
+      maintainers = [maintainers.mt-caret maintainers.marsam];
       platforms = platforms.all;
     };
   }

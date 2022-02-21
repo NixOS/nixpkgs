@@ -1,12 +1,15 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
-, aiohttp
-, maxminddb
-, mocket
-, requests
-, requests-mock
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  pythonOlder,
+  aiohttp,
+  maxminddb,
+  mocket,
+  requests,
+  requests-mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   version = "4.5.0";
   pname = "geoip2";
@@ -21,7 +24,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "requests>=2.24.0,<3.0.0" "requests"
   '';
 
-  propagatedBuildInputs = [ aiohttp requests maxminddb ];
+  propagatedBuildInputs = [aiohttp requests maxminddb];
 
   checkInputs = [
     mocket
@@ -29,12 +32,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "geoip2" ];
+  pythonImportsCheck = ["geoip2"];
 
   meta = with lib; {
     description = "Python client for GeoIP2 webservice client and database reader";
     homepage = "https://github.com/maxmind/GeoIP2-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

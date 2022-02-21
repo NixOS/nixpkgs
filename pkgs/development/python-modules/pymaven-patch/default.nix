@@ -1,13 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pbr
-, requests
-, six
-, lxml
-, pytestCheckHook
-, pytest-cov
-, mock
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pbr,
+  requests,
+  six,
+  lxml,
+  pytestCheckHook,
+  pytest-cov,
+  mock,
 }:
 buildPythonPackage rec {
   pname = "pymaven-patch";

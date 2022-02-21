@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libnl, libpcap, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libnl,
+  libpcap,
+  pkg-config,
+}:
 stdenv.mkDerivation {
   pname = "mdk4";
   version = "unstable-2021-04-27";
@@ -18,16 +24,16 @@ stdenv.mkDerivation {
     substituteInPlace src/Makefile --replace '/usr/local/src/mdk4' '$out'
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libnl libpcap ];
+  buildInputs = [libnl libpcap];
 
-  makeFlags = [ "PREFIX=$(out)" "SBINDIR=$(PREFIX)/bin" ];
+  makeFlags = ["PREFIX=$(out)" "SBINDIR=$(PREFIX)/bin"];
 
   meta = with lib; {
     description = "A tool that injects data into wireless networks";
     homepage = "https://github.com/aircrack-ng/mdk4";
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
     license = licenses.gpl2Plus;
   };
 }

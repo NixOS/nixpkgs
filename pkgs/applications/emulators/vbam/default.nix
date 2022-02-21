@@ -1,19 +1,21 @@
-{ lib, stdenv
-, cairo
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, ffmpeg
-, gettext
-, libGLU, libGL
-, openal
-, pkg-config
-, SDL2
-, sfml
-, zip
-, zlib
+{
+  lib,
+  stdenv,
+  cairo,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  ffmpeg,
+  gettext,
+  libGLU,
+  libGL,
+  openal,
+  pkg-config,
+  SDL2,
+  sfml,
+  zip,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "visualboyadvance-m";
   version = "2.1.4";
@@ -24,13 +26,14 @@ stdenv.mkDerivation rec {
     sha256 = "1kgpbvng3c12ws0dy92zc0azd94h0i3j4vm7b67zc8mi3pqsppdg";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   buildInputs = [
     cairo
     ffmpeg
     gettext
-    libGLU libGL
+    libGLU
+    libGL
     openal
     SDL2
     sfml
@@ -56,12 +59,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta =  with lib; {
+  meta = with lib; {
     description = "A merge of the original Visual Boy Advance forks";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ lassulus ];
+    maintainers = with maintainers; [lassulus];
     homepage = "https://vba-m.com/";
     platforms = lib.platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = ["aarch64-linux"];
   };
 }

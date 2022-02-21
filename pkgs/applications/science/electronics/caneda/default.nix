@@ -1,5 +1,13 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  qtsvg,
+  qwt,
+}:
 mkDerivation rec {
   pname = "caneda";
   version = "0.3.1";
@@ -11,8 +19,8 @@ mkDerivation rec {
     sha256 = "0hx8qid50j9xvg2kpbpqmbdyakgyjn6m373m1cvhp70v2gp1v8l2";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase qttools qtsvg qwt ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [qtbase qttools qtsvg qwt];
 
   meta = {
     description = "Open source EDA software focused on easy of use and portability";

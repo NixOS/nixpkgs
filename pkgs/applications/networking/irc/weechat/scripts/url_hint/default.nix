@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, weechat }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  weechat,
+}:
 stdenv.mkDerivation {
   pname = "url_hint";
   version = "0.8";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  passthru.scripts = [ "url_hint.py" ];
+  passthru.scripts = ["url_hint.py"];
 
   installPhase = ''
     runHook preInstall
@@ -23,6 +27,6 @@ stdenv.mkDerivation {
     inherit (weechat.meta) platforms;
     description = "url_hint.py is a URL opening script.";
     license = licenses.mit;
-    maintainers = with maintainers; [ eraserhd ];
+    maintainers = with maintainers; [eraserhd];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "vpk";
   version = "1.4.0";
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Library for working with Valve Pak files";
     homepage = "https://github.com/ValvePython/vpk";
     license = licenses.mit;
-    maintainers = with maintainers; [ joshuafern ];
+    maintainers = with maintainers; [joshuafern];
   };
 }

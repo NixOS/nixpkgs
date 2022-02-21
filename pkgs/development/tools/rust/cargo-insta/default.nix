@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, libiconv, stdenv }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libiconv,
+  stdenv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
   version = "1.11.0";
@@ -13,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/cargo-insta";
   cargoSha256 = "sha256-Bjh9we0OD8kqMJtovO1yw9Yta5u93dlYMRsxPdErkaY=";
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
 
   meta = with lib; {
     description = "A Cargo subcommand for snapshot testing";
     homepage = "https://github.com/mitsuhiko/insta";
     license = licenses.asl20;
-    maintainers = with lib.maintainers; [ oxalica ];
+    maintainers = with lib.maintainers; [oxalica];
   };
 }

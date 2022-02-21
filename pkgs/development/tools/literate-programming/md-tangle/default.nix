@@ -1,8 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonPackage rec {
   pname = "md-tangle";
   version = "1.3.1";
@@ -19,10 +19,10 @@ python3.pkgs.buildPythonPackage rec {
   # testing suite
   doCheck = false;
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://github.com/joakimmj/md-tangle/";
     description = "Generates (\"tangles\") source code from Markdown documents";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

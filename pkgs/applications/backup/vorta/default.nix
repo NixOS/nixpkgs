@@ -1,11 +1,11 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapQtAppsHook
-, borgbackup
-, qt5
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  borgbackup,
+  qt5,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
   version = "0.8.3";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "06sb24pimq9ckdkp9hzp4r9d3i21kxacsx5b7x9q99qcwf7h6372";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [wrapQtAppsHook];
 
   propagatedBuildInputs = with python3Packages; [
     paramiko
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
-      --prefix PATH : ${lib.makeBinPath [ borgbackup ]}
+      --prefix PATH : ${lib.makeBinPath [borgbackup]}
     )
   '';
 
@@ -86,7 +86,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     license = licenses.gpl3Only;
     homepage = "https://vorta.borgbase.com/";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
     description = "Desktop Backup Client for Borg";
     platforms = platforms.linux;
   };

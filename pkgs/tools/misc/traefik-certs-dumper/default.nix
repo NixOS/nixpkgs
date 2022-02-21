@@ -1,5 +1,8 @@
-{ fetchFromGitHub, buildGoModule, lib }:
-
+{
+  fetchFromGitHub,
+  buildGoModule,
+  lib,
+}:
 buildGoModule rec {
   pname = "traefik-certs-dumper";
   version = "2.8.1";
@@ -18,6 +21,6 @@ buildGoModule rec {
     description = "dump ACME data from traefik to certificates";
     homepage = "https://github.com/ldez/traefik-certs-dumper";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with maintainers; [nickcao];
   };
 }

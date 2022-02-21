@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4, libargs, catch2, cmake, libyamlcpp }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  antlr4,
+  libargs,
+  catch2,
+  cmake,
+  libyamlcpp,
+}:
 stdenv.mkDerivation rec {
   pname = "luaformatter";
   version = "1.3.6";
@@ -19,16 +28,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ antlr4.runtime.cpp libyamlcpp ];
+  buildInputs = [antlr4.runtime.cpp libyamlcpp];
 
   meta = with lib; {
     description = "Code formatter for Lua";
     homepage = "https://github.com/Koihik/LuaFormatter";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ figsoda SuperSandro2000 ];
+    maintainers = with maintainers; [figsoda SuperSandro2000];
     mainProgram = "lua-format";
   };
 }

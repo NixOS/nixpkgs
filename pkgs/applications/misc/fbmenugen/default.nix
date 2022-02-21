@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, fluxbox
-, gnused
-, makeWrapper
-, perlPackages
-, substituteAll
-, xorg
-, wrapGAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  fluxbox,
+  gnused,
+  makeWrapper,
+  perlPackages,
+  substituteAll,
+  xorg,
+  wrapGAppsHook,
 }:
-
 perlPackages.buildPerlPackage rec {
   pname = "fbmenugen";
   version = "0.86";
@@ -28,7 +28,7 @@ perlPackages.buildPerlPackage rec {
     })
   ];
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
   nativeBuildInputs = [
     makeWrapper
@@ -70,6 +70,6 @@ perlPackages.buildPerlPackage rec {
     description = "Simple menu generator for the Fluxbox Window Manager";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

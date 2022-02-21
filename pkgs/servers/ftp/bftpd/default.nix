@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "bftpd";
   version = "6.1";
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.all;
   };
 }

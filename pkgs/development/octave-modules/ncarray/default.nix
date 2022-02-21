@@ -1,10 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, netcdf
-, statistics
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  netcdf,
+  statistics,
 }:
-
 buildOctavePackage rec {
   pname = "ncarray";
   version = "1.0.4";
@@ -25,7 +25,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/ncarray/index.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Access a single or a collection of NetCDF files as a multi-dimensional array";
   };
 }

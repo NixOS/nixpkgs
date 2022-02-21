@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, types-futures
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  types-futures,
 }:
-
 buildPythonPackage rec {
   pname = "types-protobuf";
   version = "3.19.12";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Typing stubs for protobuf";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ andersk ];
+    maintainers = with maintainers; [andersk];
   };
 }

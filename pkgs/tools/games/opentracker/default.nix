@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, autoPatchelfHook
-, wrapGAppsHook
-, dotnetCorePackages
-, fontconfig
-, gtk3
-, openssl
-, libX11
-, libXi
-, xinput
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  wrapGAppsHook,
+  dotnetCorePackages,
+  fontconfig,
+  gtk3,
+  openssl,
+  libX11,
+  libXi,
+  xinput,
 }:
-
 buildDotnetModule rec {
   pname = "opentracker";
   version = "1.8.2";
@@ -28,7 +28,7 @@ buildDotnetModule rec {
   nugetDeps = ./deps.nix;
 
   projectFile = "OpenTracker.sln";
-  executables = [ "OpenTracker" ];
+  executables = ["OpenTracker"];
 
   doCheck = true;
   dotnet-test-sdk = dotnetCorePackages.sdk_3_1;
@@ -58,7 +58,7 @@ buildDotnetModule rec {
     description = "A tracking application for A Link to the Past Randomizer";
     homepage = "https://github.com/trippsc2/OpenTracker";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
     mainProgram = "OpenTracker";
     platforms = platforms.linux;
   };

@@ -1,7 +1,22 @@
-{ pkgs, fetchFromGitHub, lib, stdenv, gtk3, udev, desktop-file-utils
-, shared-mime-info, intltool, pkg-config, wrapGAppsHook, ffmpegthumbnailer
-, jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2 }:
-
+{
+  pkgs,
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  gtk3,
+  udev,
+  desktop-file-utils,
+  shared-mime-info,
+  intltool,
+  pkg-config,
+  wrapGAppsHook,
+  ffmpegthumbnailer,
+  jmtpfs,
+  ifuseSupport ? false,
+  ifuse ? null,
+  lsof,
+  udisks2,
+}:
 stdenv.mkDerivation rec {
   pname = "spacefm";
   version = "1.0.6";
@@ -38,15 +53,27 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    gtk3 udev desktop-file-utils shared-mime-info intltool
-    wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks2
-  ] ++ (if ifuseSupport then [ ifuse ] else []);
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [
+      gtk3
+      udev
+      desktop-file-utils
+      shared-mime-info
+      intltool
+      wrapGAppsHook
+      ffmpegthumbnailer
+      jmtpfs
+      lsof
+      udisks2
+    ]
+    ++ (if ifuseSupport
+    then [ifuse]
+    else []);
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…
 
-  meta = with lib;  {
+  meta = with lib; {
     description = "A multi-panel tabbed file manager";
     longDescription = ''
       Multi-panel tabbed file and desktop manager for Linux
@@ -56,6 +83,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ignorantguru.github.io/spacefm/";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga obadz ];
+    maintainers = with maintainers; [jagajaga obadz];
   };
 }

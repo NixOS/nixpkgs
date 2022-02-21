@@ -1,7 +1,11 @@
-{lib, stdenv, fetchurl, openssl, fuse}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  fuse,
+}:
 throw "It still does not build"
-
 stdenv.mkDerivation rec {
   pname = "fsfs";
   version = "0.1.1";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "05wka9aq182li2r7gxcd8bb3rhpns7ads0k59v7w1jza60l57c74";
   };
 
-  buildInputs = [ fuse openssl ];
+  buildInputs = [fuse openssl];
 
   patchPhase = ''
     sed -i -e 's,CONFDIR=\(.*\),CONFDIR='$out/etc, \

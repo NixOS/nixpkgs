@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, numpy
-, onnx
-, pytestCheckHook
-, pytorch
-, typing-extensions
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  numpy,
+  onnx,
+  pytestCheckHook,
+  pytorch,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
   version = "0.5.6";
@@ -19,11 +19,11 @@ buildPythonPackage rec {
     sha256 = "1ch4vhz3zjanj5advqsj51yy7idrp8yvydvcg4ymwa3wsfjrx58g";
   };
 
-  propagatedBuildInputs = [ numpy pytorch typing-extensions ];
+  propagatedBuildInputs = [numpy pytorch typing-extensions];
 
-  checkInputs = [ onnx pytestCheckHook ];
+  checkInputs = [onnx pytestCheckHook];
 
-  pythonImportsCheck = [ "pytorch_pfn_extras" ];
+  pythonImportsCheck = ["pytorch_pfn_extras"];
 
   disabledTestPaths = [
     # Requires optuna which is currently (2022-02-16) marked as broken.
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Supplementary components to accelerate research and development in PyTorch";
     homepage = "https://github.com/pfnet/pytorch-pfn-extras";
     license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    maintainers = with maintainers; [samuela];
   };
 }

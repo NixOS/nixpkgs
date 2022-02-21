@@ -1,5 +1,10 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, git }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+}:
 buildGoPackage rec {
   pname = "fac";
   version = "2.0.0";
@@ -15,7 +20,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram $out/bin/fac \
@@ -29,7 +34,6 @@ buildGoPackage rec {
     description = "CUI for fixing git conflicts";
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }
-

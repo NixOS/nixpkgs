@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, enableTool ? false
-, enableTest ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  doxygen,
+  enableTool ? false,
+  enableTest ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "sockperf";
   version = "3.7";
@@ -13,9 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "MtpV21lCEAv7ARxk0dAxoOxxlqDM+skdQnPlqOvksjw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook doxygen ];
+  nativeBuildInputs = [autoreconfHook doxygen];
 
-  configureFlags = [ "--enable-doc" ]
+  configureFlags =
+    ["--enable-doc"]
     ++ lib.optional enableTest "--enable-test"
     ++ lib.optional enableTool "--enable-tool";
 
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Network Benchmarking Utility";
     homepage = "https://github.com/Mellanox/sockperf";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     platforms = platforms.all;
   };
 }

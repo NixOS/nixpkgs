@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, unzip
-, gnumake, gcc-arm-embedded, binutils-arm-embedded
-, dfu-util-axoloti, jdk, ant, libfaketime }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  makeWrapper,
+  unzip,
+  gnumake,
+  gcc-arm-embedded,
+  binutils-arm-embedded,
+  dfu-util-axoloti,
+  jdk,
+  ant,
+  libfaketime,
+}:
 stdenv.mkDerivation rec {
   version = "1.0.12-2";
   pname = "axoloti";
@@ -29,7 +40,7 @@ stdenv.mkDerivation rec {
     dfu-util-axoloti
     ant
   ];
-  buildInputs = [jdk libfaketime ];
+  buildInputs = [jdk libfaketime];
 
   patchPhase = ''
     unzip ${chibios}
@@ -96,6 +107,6 @@ stdenv.mkDerivation rec {
       <literal>SUBSYSTEM=="usb", ATTR{idVendor}=="16c0", ATTR{idProduct}=="0442", OWNER="someuser", GROUP="somegroup"</literal>
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

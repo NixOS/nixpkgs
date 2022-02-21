@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, suds-jurko
-, ldap
-, mechanize
-, beautifulsoup4
-, pyxdg
-, python-dateutil
-, requests
-, httpretty
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  suds-jurko,
+  ldap,
+  mechanize,
+  beautifulsoup4,
+  pyxdg,
+  python-dateutil,
+  requests,
+  httpretty,
 }:
-
 buildPythonPackage rec {
   pname = "suseapi";
   version = "0.24-31-g0fcbe96";
@@ -24,10 +24,17 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    django suds-jurko ldap mechanize beautifulsoup4 pyxdg python-dateutil requests
+    django
+    suds-jurko
+    ldap
+    mechanize
+    beautifulsoup4
+    pyxdg
+    python-dateutil
+    requests
   ];
 
-  buildInputs = [ httpretty ];
+  buildInputs = [httpretty];
 
   doCheck = false;
 

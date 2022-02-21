@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pymysql
-, pytest
-, isPy27
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pymysql,
+  pytest,
+  isPy27,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "aiomysql";
   version = "0.0.21";
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "MySQL driver for asyncio";
     homepage = "https://github.com/aio-libs/aiomysql";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

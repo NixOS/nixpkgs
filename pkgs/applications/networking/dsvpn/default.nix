@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "dsvpn";
   version = "0.1.4";
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "A Dead Simple VPN";
     homepage = "https://github.com/jedisct1/dsvpn";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     platforms = platforms.unix;
   };
 }

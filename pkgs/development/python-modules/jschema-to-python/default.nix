@@ -1,10 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, attrs
-, jsonpickle
-, pbr
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  jsonpickle,
+  pbr,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "jschema-to-python";
   version = "1.2.3";
@@ -24,16 +26,16 @@ buildPythonPackage rec {
     jsonpickle
   ];
 
-  checkInputs =[
+  checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "jschema_to_python" ];
+  pythonImportsCheck = ["jschema_to_python"];
 
   meta = with lib; {
     description = "Generate source code for Python classes from a JSON schema";
     homepage = "https://github.com/microsoft/jschema-to-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

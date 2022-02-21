@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, readme_renderer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  readme_renderer,
 }:
-
 buildPythonPackage rec {
   pname = "readme";
   version = "0.7.1";
@@ -34,7 +34,6 @@ buildPythonPackage rec {
     description = "Readme is a library for rendering readme descriptions for Warehouse";
     homepage = "https://github.com/pypa/readme";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
-
 }

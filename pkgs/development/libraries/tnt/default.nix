@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, unzip}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation {
   pname = "tnt";
   version = "3.0.12";
@@ -9,11 +13,11 @@ stdenv.mkDerivation {
     sha256 = "1bzkfdb598584qlc058n8wqq9vbz714gr5r57401rsa9qaxhk5j7";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   installPhase = ''
-      mkdir -p $out/include
-      cp *.h $out/include
+    mkdir -p $out/include
+    cp *.h $out/include
   '';
 
   meta = {

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, readline, bzip2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  bzip2,
+}:
 stdenv.mkDerivation rec {
   pname = "gnupg";
   version = "1.4.23";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fkq4sqldvf6a25mm2qz95swv1qjg464736091w51djiwqbjyin9";
   };
 
-  buildInputs = [ readline bzip2 ];
+  buildInputs = [readline bzip2];
 
   doCheck = true;
 

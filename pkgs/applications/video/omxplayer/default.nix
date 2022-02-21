@@ -1,15 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, raspberrypifw
-, pcre
-, boost
-, freetype
-, zlib
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  raspberrypifw,
+  pcre,
+  boost,
+  freetype,
+  zlib,
+}: let
   ffmpeg = stdenv.mkDerivation rec {
     pname = "ffmpeg";
     version = "1.1.3";
@@ -19,46 +18,50 @@ let
       sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
     };
 
-    configurePlatforms = [ ];
-    configureFlags = [
-      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-      # TODO be better with condition
-      "--cpu=arm1176jzf-s"
-    ] ++ [
-      "--disable-muxers"
-      "--enable-muxer=spdif"
-      "--enable-muxer=adts"
-      "--disable-encoders"
-      "--enable-encoder=ac3"
-      "--enable-encoder=aac"
-      "--disable-decoder=mpeg_xvmc"
-      "--disable-devices"
-      "--disable-ffprobe"
-      "--disable-ffplay"
-      "--disable-ffserver"
-      "--disable-ffmpeg"
-      "--enable-shared"
-      "--disable-doc"
-      "--enable-postproc"
-      "--enable-gpl"
-      "--enable-protocol=http"
-      "--enable-pthreads"
-      "--disable-runtime-cpudetect"
-      "--enable-pic"
-      "--disable-armv5te"
-      "--disable-neon"
-      "--enable-armv6t2"
-      "--enable-armv6"
-      "--enable-hardcoded-tables"
-      "--disable-runtime-cpudetect"
-      "--disable-debug"
-      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
-      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--cross-prefix=${stdenv.cc.targetPrefix}"
-      "--enable-cross-compile"
-    ];
+    configurePlatforms = [];
+    configureFlags =
+      [
+        "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+        # TODO be better with condition
+        "--cpu=arm1176jzf-s"
+      ]
+      ++ [
+        "--disable-muxers"
+        "--enable-muxer=spdif"
+        "--enable-muxer=adts"
+        "--disable-encoders"
+        "--enable-encoder=ac3"
+        "--enable-encoder=aac"
+        "--disable-decoder=mpeg_xvmc"
+        "--disable-devices"
+        "--disable-ffprobe"
+        "--disable-ffplay"
+        "--disable-ffserver"
+        "--disable-ffmpeg"
+        "--enable-shared"
+        "--disable-doc"
+        "--enable-postproc"
+        "--enable-gpl"
+        "--enable-protocol=http"
+        "--enable-pthreads"
+        "--disable-runtime-cpudetect"
+        "--enable-pic"
+        "--disable-armv5te"
+        "--disable-neon"
+        "--enable-armv6t2"
+        "--enable-armv6"
+        "--enable-hardcoded-tables"
+        "--disable-runtime-cpudetect"
+        "--disable-debug"
+        "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+        "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+        "--cross-prefix=${stdenv.cc.targetPrefix}"
+        "--enable-cross-compile"
+      ];
 
     enableParallelBuilding = true;
 
@@ -68,33 +71,33 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
-  pname = "omxplayer";
-  version = "unstable-2013-03-28";
+  stdenv.mkDerivation rec {
+    pname = "omxplayer";
+    version = "unstable-2013-03-28";
 
-  src = fetchFromGitHub {
-    owner = "huceke";
-    repo = "omxplayer";
-    rev = "fbee325dc20441138d04d8d2022ad85956302e97";
-    sha256 = "0fkvv8il7ffqxki2gp8cxa5shh6sz9jsy5vv3f4025g4gss6afkg";
-  };
+    src = fetchFromGitHub {
+      owner = "huceke";
+      repo = "omxplayer";
+      rev = "fbee325dc20441138d04d8d2022ad85956302e97";
+      sha256 = "0fkvv8il7ffqxki2gp8cxa5shh6sz9jsy5vv3f4025g4gss6afkg";
+    };
 
-  postPatch = ''
-    sed -i 1d Makefile
-    export INCLUDES="-I${raspberrypifw}/include/interface/vcos/pthreads -I${raspberrypifw}/include/interface/vmcs_host/linux/"
-  '';
+    postPatch = ''
+      sed -i 1d Makefile
+      export INCLUDES="-I${raspberrypifw}/include/interface/vcos/pthreads -I${raspberrypifw}/include/interface/vmcs_host/linux/"
+    '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp omxplayer.bin $out/bin
-  '';
+    installPhase = ''
+      mkdir -p $out/bin
+      cp omxplayer.bin $out/bin
+    '';
 
-  buildInputs = [ raspberrypifw ffmpeg pcre boost freetype zlib ];
+    buildInputs = [raspberrypifw ffmpeg pcre boost freetype zlib];
 
-  meta = with lib; {
-    homepage = "https://github.com/huceke/omxplayer";
-    description = "Commandline OMX player for the Raspberry Pi";
-    license = licenses.gpl2Plus;
-    platforms = platforms.arm;
-  };
-}
+    meta = with lib; {
+      homepage = "https://github.com/huceke/omxplayer";
+      description = "Commandline OMX player for the Raspberry Pi";
+      license = licenses.gpl2Plus;
+      platforms = platforms.arm;
+    };
+  }

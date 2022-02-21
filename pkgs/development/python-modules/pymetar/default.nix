@@ -1,5 +1,10 @@
-{ lib, python, buildPythonPackage, isPy3k, fetchPypi }:
-
+{
+  lib,
+  python,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "pymetar";
   version = "1.4";
@@ -25,6 +30,6 @@ buildPythonPackage rec {
     description = "A command-line tool to show the weather report by a given station ID";
     homepage = "https://github.com/klausman/pymetar";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erosennin ];
+    maintainers = with maintainers; [erosennin];
   };
 }

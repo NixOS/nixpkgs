@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, appstream-glib
-, clutter
-, gjs
-, glib
-, gobject-introspection
-, gtk3
-, meson
-, mutter
-, ninja
-, pango
-, pkg-config
-, vala
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  appstream-glib,
+  clutter,
+  gjs,
+  glib,
+  gobject-introspection,
+  gtk3,
+  meson,
+  mutter,
+  ninja,
+  pango,
+  pkg-config,
+  vala,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   version = "3.42.5";
   pname = "gpaste";

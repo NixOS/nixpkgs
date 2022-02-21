@@ -1,16 +1,16 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, invoke
-, mock
-, pyasn1
-, pynacl
-, pytest-relaxed
-, pytestCheckHook
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  invoke,
+  mock,
+  pyasn1,
+  pynacl,
+  pytest-relaxed,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "paramiko";
   version = "2.9.2";
@@ -60,6 +60,6 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, tqdm }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  tqdm,
+}:
 buildPythonPackage rec {
   pname = "proglog";
   version = "0.1.9";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "13diln950wk6nnn4rpmzx37rvrnpa7f803gwygiwbq1q46zwri6q";
   };
 
-  propagatedBuildInputs = [ tqdm ];
+  propagatedBuildInputs = [tqdm];
 
   meta = with lib; {
     description = "Logs and progress bars manager for Python";

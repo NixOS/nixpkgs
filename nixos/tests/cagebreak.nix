@@ -1,24 +1,24 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
-
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   cagebreakConfigfile = pkgs.writeText "config" ''
     workspaces 1
     escape C-t
     bind t exec env DISPLAY=:0 ${pkgs.xterm}/bin/xterm -cm -pc
   '';
-in
-{
+in {
   name = "cagebreak";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ berbiche ];
+    maintainers = [berbiche];
   };
 
-  machine = { config, ... }:
-  let
+  machine = {config, ...}: let
     alice = config.users.users.alice;
   in {
     # Automatically login on tty1 as a normal user:
-    imports = [ ./common/user-account.nix ];
+    imports = [./common/user-account.nix];
     services.getty.autologinUser = "alice";
     programs.bash.loginShellInit = ''
       if [ "$(tty)" = "/dev/tty1" ]; then
@@ -33,15 +33,15 @@ in
 
     hardware.opengl.enable = true;
     programs.xwayland.enable = true;
-    environment.systemPackages = [ pkgs.cagebreak pkgs.wayland-utils ];
+    environment.systemPackages = [pkgs.cagebreak pkgs.wayland-utils];
 
     # Need to switch to a different GPU driver than the default one (-vga std) so that Cagebreak can launch:
-    virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
+    virtualisation.qemu.options = ["-vga none -device virtio-gpu-pci"];
   };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
     XDG_RUNTIME_DIR = "/run/user/${toString user.uid}";
   in ''

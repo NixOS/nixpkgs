@@ -1,13 +1,13 @@
-{ lib
-, buildDunePackage
-, alcotest
-, alcotest-lwt
-, tezos-base
-, tezos-event-logging-test-helpers
-, tezos-stdlib
-, tezos-test-helpers
+{
+  lib,
+  buildDunePackage,
+  alcotest,
+  alcotest-lwt,
+  tezos-base,
+  tezos-event-logging-test-helpers,
+  tezos-stdlib,
+  tezos-test-helpers,
 }:
-
 buildDunePackage {
   pname = "tezos-base-test-helpers";
   inherit (tezos-stdlib) version useDune2;
@@ -26,7 +26,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: base test helpers";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: base test helpers";
+    };
 }

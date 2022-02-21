@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, frozendict
-, pytestCheckHook
-, pythonOlder
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  frozendict,
+  pytestCheckHook,
+  pythonOlder,
+  simplejson,
 }:
-
 buildPythonPackage rec {
   pname = "canonicaljson";
   version = "1.5.0";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Encodes objects and arrays as RFC 7159 JSON";
     homepage = "https://github.com/matrix-org/python-canonicaljson";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, blas, lapack, mpi, petsc, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gfortran,
+  blas,
+  lapack,
+  mpi,
+  petsc,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "getdp";
   version = "3.4.0";
@@ -9,10 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   inherit (petsc) mpiSupport;
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ gfortran blas lapack petsc ]
-    ++ lib.optional mpiSupport mpi
-  ;
+  nativeBuildInputs = [cmake python3];
+  buildInputs =
+    [gfortran blas lapack petsc]
+    ++ lib.optional mpiSupport mpi;
   cmakeFlags = lib.optional mpiSupport "-DENABLE_MPI=1";
 
   meta = with lib; {
@@ -26,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://getdp.info/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with maintainers; [wucke13];
     platforms = platforms.linux;
   };
 }

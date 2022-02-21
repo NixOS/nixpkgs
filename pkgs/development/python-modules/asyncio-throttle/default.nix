@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "asyncio-throttle";
   version = "1.0.2";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "asyncio_throttle" ];
+  pythonImportsCheck = ["asyncio_throttle"];
 
   meta = with lib; {
     description = "Simple, easy-to-use throttler for asyncio";
     homepage = "https://github.com/hallazzang/asyncio-throttle";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

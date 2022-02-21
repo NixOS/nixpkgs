@@ -1,30 +1,28 @@
 /*
-  Pleroma E2E VM test.
-
-  Abstract:
-  =========
-  Using pleroma, postgresql, a local CA cert, a nginx reverse proxy
-  and a toot-based client, we're going to:
-
-  1. Provision a pleroma service from scratch (pleroma config + postgres db).
-  2. Create a "jamy" admin user.
-  3. Send a toot from this user.
-  4. Send a upload from this user.
-  5. Check the toot is part of the server public timeline
-
-  Notes:
-  - We need a fully functional TLS setup without having any access to
-    the internet. We do that by issuing a self-signed cert, add this
-    self-cert to the hosts pki trust store and finally spoof the
-    hostnames using /etc/hosts.
-  - For this NixOS test, we *had* to store some DB-related and
-    pleroma-related secrets to the store. Keep in mind the store is
-    world-readable, it's the worst place possible to store *any*
-    secret. **DO NOT DO THIS IN A REAL WORLD DEPLOYMENT**.
-*/
-
-import ./make-test-python.nix ({ pkgs, ... }:
-  let
+ Pleroma E2E VM test.
+ 
+ Abstract:
+ =========
+ Using pleroma, postgresql, a local CA cert, a nginx reverse proxy
+ and a toot-based client, we're going to:
+ 
+ 1. Provision a pleroma service from scratch (pleroma config + postgres db).
+ 2. Create a "jamy" admin user.
+ 3. Send a toot from this user.
+ 4. Send a upload from this user.
+ 5. Check the toot is part of the server public timeline
+ 
+ Notes:
+ - We need a fully functional TLS setup without having any access to
+   the internet. We do that by issuing a self-signed cert, add this
+   self-cert to the hosts pki trust store and finally spoof the
+   hostnames using /etc/hosts.
+ - For this NixOS test, we *had* to store some DB-related and
+   pleroma-related secrets to the store. Keep in mind the store is
+   world-readable, it's the worst place possible to store *any*
+   secret. **DO NOT DO THIS IN A REAL WORLD DEPLOYMENT**.
+ */
+import ./make-test-python.nix ({pkgs, ...}: let
   send-toot = pkgs.writeScriptBin "send-toot" ''
     set -eux
     # toot is using the requests library internally. This library
@@ -61,10 +59,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   test-db-passwd = "SccZOvTGM//BMrpoQj68JJkjDkMGb4pHv2cECWiI+XhVe3uGJTLI0vFV/gDlZ5jJ";
 
-  /* For this NixOS test, we *had* to store this secret to the store.
-    Keep in mind the store is world-readable, it's the worst place
-    possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
-    DEPLOYMENT**.*/
+  /*
+    For this NixOS test, we *had* to store this secret to the store.
+   Keep in mind the store is world-readable, it's the worst place
+   possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
+   DEPLOYMENT**.
+   */
   db-seed = pkgs.writeText "provision.psql" ''
     CREATE USER pleroma WITH ENCRYPTED PASSWORD '${test-db-passwd}';
     CREATE DATABASE pleroma OWNER pleroma;
@@ -112,14 +112,15 @@ import ./make-test-python.nix ({ pkgs, ... }:
     config :pleroma, configurable_from_database: false
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
-    Keep in mind the store is world-readable, it's the worst place
-    possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
-    DEPLOYMENT**.
-    In a real-word deployment, you'd handle this either by:
-    - manually upload your pleroma secrets to /var/lib/pleroma/secrets.exs
-    - use a deployment tool such as morph or NixOps to deploy your secrets.
-  */
+  /*
+    For this NixOS test, we *had* to store this secret to the store.
+   Keep in mind the store is world-readable, it's the worst place
+   possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
+   DEPLOYMENT**.
+   In a real-word deployment, you'd handle this either by:
+   - manually upload your pleroma secrets to /var/lib/pleroma/secrets.exs
+   - use a deployment tool such as morph or NixOps to deploy your secrets.
+   */
   pleroma-conf-secret = pkgs.writeText "secrets.exs" ''
     import Config
 
@@ -135,25 +136,27 @@ import ./make-test-python.nix ({ pkgs, ... }:
       private_key: "k7o9onKMQrgMjMb6l4fsxSaXO0BTNAer5MVSje3q60k"
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
-    Keep in mind the store is world-readable, it's the worst place
-    possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
-    DEPLOYMENT**.
-    In a real-word deployment, you'd handle this either by:
-    - manually upload your pleroma secrets to /var/lib/pleroma/secrets.exs
-    - use a deployment tool such as morph or NixOps to deploy your secrets.
-    */
+  /*
+    For this NixOS test, we *had* to store this secret to the store.
+   Keep in mind the store is world-readable, it's the worst place
+   possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
+   DEPLOYMENT**.
+   In a real-word deployment, you'd handle this either by:
+   - manually upload your pleroma secrets to /var/lib/pleroma/secrets.exs
+   - use a deployment tool such as morph or NixOps to deploy your secrets.
+   */
   provision-secrets = pkgs.writeScriptBin "provision-secrets" ''
     set -eux
     cp "${pleroma-conf-secret}" "/var/lib/pleroma/secrets.exs"
     chown pleroma:pleroma /var/lib/pleroma/secrets.exs
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
-    Keep in mind the store is world-readable, it's the worst place
-    possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
-    DEPLOYMENT**.
-  */
+  /*
+    For this NixOS test, we *had* to store this secret to the store.
+   Keep in mind the store is world-readable, it's the worst place
+   possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
+   DEPLOYMENT**.
+   */
   provision-user = pkgs.writeScriptBin "provision-user" ''
     set -eux
 
@@ -162,44 +165,58 @@ import ./make-test-python.nix ({ pkgs, ... }:
     pleroma_ctl user new jamy jamy@nixos.test --password 'jamy-password' --moderator --admin -y
   '';
 
-  tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+  tls-cert = pkgs.runCommand "selfSignedCerts" {buildInputs = [pkgs.openssl];} ''
     openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=pleroma.nixos.test' -days 36500
     mkdir -p $out
     cp key.pem cert.pem $out
   '';
 
-  /* Toot is preventing users from feeding login_cli a password non
-     interactively. While it makes sense most of the times, it's
-     preventing us to login in this non-interactive test. This patch
-     introduce a TOOT_LOGIN_CLI_PASSWORD env variable allowing us to
-     provide a password to toot login_cli
-
-     If https://github.com/ihabunek/toot/pull/180 gets merged at some
-     point, feel free to remove this patch. */
-  custom-toot = pkgs.toot.overrideAttrs(old:{
-    patches = [ (pkgs.fetchpatch {
-      url = "https://github.com/NinjaTrappeur/toot/commit/b4a4c30f41c0cb7e336714c2c4af9bc9bfa0c9f2.patch";
-      sha256 = "sha256-0xxNwjR/fStLjjUUhwzCCfrghRVts+fc+fvVJqVcaFg=";
-    }) ];
+  /*
+   Toot is preventing users from feeding login_cli a password non
+   interactively. While it makes sense most of the times, it's
+   preventing us to login in this non-interactive test. This patch
+   introduce a TOOT_LOGIN_CLI_PASSWORD env variable allowing us to
+   provide a password to toot login_cli
+   
+   If https://github.com/ihabunek/toot/pull/180 gets merged at some
+   point, feel free to remove this patch.
+   */
+  custom-toot = pkgs.toot.overrideAttrs (old: {
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/NinjaTrappeur/toot/commit/b4a4c30f41c0cb7e336714c2c4af9bc9bfa0c9f2.patch";
+        sha256 = "sha256-0xxNwjR/fStLjjUUhwzCCfrghRVts+fc+fvVJqVcaFg=";
+      })
+    ];
   });
 
   hosts = nodes: ''
     ${nodes.pleroma.config.networking.primaryIPAddress} pleroma.nixos.test
     ${nodes.client.config.networking.primaryIPAddress} client.nixos.test
   '';
-  in {
+in {
   name = "pleroma";
   nodes = {
-    client = { nodes, pkgs, config, ... }: {
-      security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
+    client = {
+      nodes,
+      pkgs,
+      config,
+      ...
+    }: {
+      security.pki.certificateFiles = ["${tls-cert}/cert.pem"];
       networking.extraHosts = hosts nodes;
       environment.systemPackages = with pkgs; [
         custom-toot
         send-toot
       ];
     };
-    pleroma = { nodes, pkgs, config, ... }: {
-      security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
+    pleroma = {
+      nodes,
+      pkgs,
+      config,
+      ...
+    }: {
+      security.pki.certificateFiles = ["${tls-cert}/cert.pem"];
       networking.extraHosts = hosts nodes;
       networking.firewall.enable = false;
       environment.systemPackages = with pkgs; [
@@ -253,7 +270,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     };
   };
 
-  testScript = { nodes, ... }: ''
+  testScript = {nodes, ...}: ''
     pleroma.wait_for_unit("postgresql.service")
     pleroma.succeed("provision-db")
     pleroma.succeed("provision-secrets")

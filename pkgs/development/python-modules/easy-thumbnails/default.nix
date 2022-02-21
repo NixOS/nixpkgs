@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, pillow
-, pytestCheckHook
-, pythonOlder
-, reportlab
-, svglib
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  reportlab,
+  svglib,
 }:
-
 buildPythonPackage rec {
   pname = "easy-thumbnails";
   version = "2.8.1";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Easy thumbnails for Django";
     homepage = "https://github.com/SmileyChris/easy-thumbnails";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,9 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, chardet, cssselect, lxml
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  requests,
+  chardet,
+  cssselect,
+  lxml,
 }:
-
 buildPythonPackage rec {
-  pname   = "PyReadability";
+  pname = "PyReadability";
   version = "0.4.0";
 
   src = fetchPypi {
@@ -11,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1k6fq416pdmjcdqh6gdxl0y0k8kj1zlpzwp5574xsvsha18p2zpn";
   };
 
-  propagatedBuildInputs = [ requests chardet cssselect lxml ];
+  propagatedBuildInputs = [requests chardet cssselect lxml];
 
   # ModuleNotFoundError: No module named 'tests'
   doCheck = false;
@@ -21,5 +26,4 @@ buildPythonPackage rec {
     description = "fast python port of arc90's readability tool, updated to match latest readability.js!";
     license = lib.licenses.asl20;
   };
-
 }

@@ -1,27 +1,24 @@
 # This test checks charliecloud image construction and run
-
-import ./make-test-python.nix ({ pkgs, ...} : let
-
+import ./make-test-python.nix ({pkgs, ...}: let
   dockerfile = pkgs.writeText "Dockerfile" ''
     FROM nix
     RUN mkdir /home /tmp
     RUN touch /etc/passwd /etc/group
     CMD ["true"]
   '';
-
 in {
   name = "charliecloud";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ bzizou ];
+    maintainers = [bzizou];
   };
 
   nodes = {
-    host = { ... }: {
-      environment.systemPackages = [ pkgs.charliecloud ];
+    host = {...}: {
+      environment.systemPackages = [pkgs.charliecloud];
       virtualisation.docker.enable = true;
       users.users.alice = {
         isNormalUser = true;
-        extraGroups = [ "docker" ];
+        extraGroups = ["docker"];
       };
     };
   };

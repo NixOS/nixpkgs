@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl, nss, pkg-config, nspr, bash, debug ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  nss,
+  pkg-config,
+  nspr,
+  bash,
+  debug ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "badvpn";
   version = "1.999.130";
@@ -11,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bLTDpq3ohUP+KooPvhv1/AZfdo0HwB3g9QOuE2E/pmY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
   buildInputs = [
     openssl
     nss
@@ -27,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A set of network-related (mostly VPN-related) tools";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
   };
 }

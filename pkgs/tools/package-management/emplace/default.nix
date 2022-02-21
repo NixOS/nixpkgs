@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "emplace";
   version = "1.4.2";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Mirror installed software on multiple machines";
     homepage = "https://github.com/tversteeg/emplace";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
   };
 }

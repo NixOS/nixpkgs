@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchurl, imake, libXt, libXaw, libXtst
-, libXi, libXpm, xorgproto, gccmakedep, Xaw3d }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  libXt,
+  libXaw,
+  libXtst,
+  libXi,
+  libXpm,
+  xorgproto,
+  gccmakedep,
+  Xaw3d,
+}:
 stdenv.mkDerivation {
   pname = "xvkbd";
   version = "3.9";
@@ -9,9 +20,9 @@ stdenv.mkDerivation {
     sha256 = "17csj6x5zm3g67izfwhagkal1rbqzpw09lqmmlyrjy3vzgfkf75q";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ libXt libXaw libXtst xorgproto libXi Xaw3d libXpm ];
-  installTargets = [ "install" "install.man" ];
+  nativeBuildInputs = [imake gccmakedep];
+  buildInputs = [libXt libXaw libXtst xorgproto libXi Xaw3d libXpm];
+  installTargets = ["install" "install.man"];
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
     "CONFDIR=${placeholder "out"}/etc/X11"
@@ -29,7 +40,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://t-sato.in.coocan.jp/xvkbd";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bennofs ];
+    maintainers = [maintainers.bennofs];
     platforms = platforms.linux;
   };
 }

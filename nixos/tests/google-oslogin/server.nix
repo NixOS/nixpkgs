@@ -1,9 +1,11 @@
-{ pkgs, ... }:
-let
-  inherit (import ./../ssh-keys.nix pkgs)
-    snakeOilPrivateKey snakeOilPublicKey;
+{pkgs, ...}: let
+  inherit
+    (import ./../ssh-keys.nix pkgs)
+    snakeOilPrivateKey
+    snakeOilPublicKey
+    ;
 in {
-  networking.firewall.allowedTCPPorts = [ 80 ];
+  networking.firewall.allowedTCPPorts = [80];
 
   systemd.services.mock-google-metadata = {
     description = "Mock Google metadata service";
@@ -12,8 +14,8 @@ in {
     environment = {
       SNAKEOIL_PUBLIC_KEY = snakeOilPublicKey;
     };
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
+    wantedBy = ["multi-user.target"];
+    after = ["network.target"];
   };
 
   services.openssh.enable = true;
@@ -23,5 +25,10 @@ in {
   security.googleOsLogin.enable = true;
 
   # Mock google service
-  networking.interfaces.lo.ipv4.addresses = [ { address = "169.254.169.254"; prefixLength = 32; } ];
+  networking.interfaces.lo.ipv4.addresses = [
+    {
+      address = "169.254.169.254";
+      prefixLength = 32;
+    }
+  ];
 }

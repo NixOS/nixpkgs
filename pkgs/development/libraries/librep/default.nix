@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, gdbm
-, gmp
-, libffi
-, pkg-config
-, readline
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gdbm,
+  gmp,
+  libffi,
+  pkg-config,
+  readline,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "librep";
   version = "0.92.7";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "http://sawfish.tuxfamily.org/";
     description = "Fast, lightweight, and versatile Lisp environment";
     longDescription = ''
@@ -42,9 +42,10 @@ stdenv.mkDerivation rec {
       language but is also suitable for standalone scripts.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/librep.x86_64-darwin
   };
 }
 # TODO: investigate fetchFromGithub
+

@@ -1,20 +1,19 @@
-{ lib
-, multiStdenv
-, fetchFromGitHub
-, fetchpatch
-, substituteAll
-, pkgsi686Linux
-, libnotify
-, meson
-, ninja
-, pkg-config
-, wine
-, boost
-, libxcb
-, nix-update-script
-}:
-
-let
+{
+  lib,
+  multiStdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  substituteAll,
+  pkgsi686Linux,
+  libnotify,
+  meson,
+  ninja,
+  pkg-config,
+  wine,
+  boost,
+  libxcb,
+  nix-update-script,
+}: let
   # Derived from subprojects/bitsery.wrap
   bitsery = fetchFromGitHub {
     owner = "fraillt";
@@ -47,103 +46,104 @@ let
     fetchSubmodules = true;
     sha256 = "sha256-oHRJZItw+he5M+beVZkUrhJir6rgFZ80ORzA73mJT2A=";
   };
-in multiStdenv.mkDerivation rec {
-  pname = "yabridge";
-  version = "3.8.0";
+in
+  multiStdenv.mkDerivation rec {
+    pname = "yabridge";
+    version = "3.8.0";
 
-  # NOTE: Also update yabridgectl's cargoHash when this is updated
-  src = fetchFromGitHub {
-    owner = "robbert-vdh";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-XacJjHxsp60/l36pFPGonUyOsyFF2lmqplAaisHXZDY=";
-  };
+    # NOTE: Also update yabridgectl's cargoHash when this is updated
+    src = fetchFromGitHub {
+      owner = "robbert-vdh";
+      repo = pname;
+      rev = version;
+      sha256 = "sha256-XacJjHxsp60/l36pFPGonUyOsyFF2lmqplAaisHXZDY=";
+    };
 
-  # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    cp -R --no-preserve=mode,ownership ${bitsery} bitsery
-    cp packagefiles/bitsery/* bitsery
-    cp -R --no-preserve=mode,ownership ${function2} function2
-    cp packagefiles/function2/* function2
-    cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
-    cp -R --no-preserve=mode,ownership ${vst3} vst3
-  )'';
+    # Unpack subproject sources
+    postUnpack = ''      (
+          cd "$sourceRoot/subprojects"
+          cp -R --no-preserve=mode,ownership ${bitsery} bitsery
+          cp packagefiles/bitsery/* bitsery
+          cp -R --no-preserve=mode,ownership ${function2} function2
+          cp packagefiles/function2/* function2
+          cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
+          cp -R --no-preserve=mode,ownership ${vst3} vst3
+        )'';
 
-  patches = [
-    # Hard code bitbridge & runtime dependencies
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
-      boost32 = pkgsi686Linux.boost;
-      libxcb32 = pkgsi686Linux.xorg.libxcb;
-      inherit libnotify wine;
-    })
-    # Remove with next yabridge update
-   (fetchpatch {
-      name = "fix-for-wine-7.1.patch";
-      url = "https://github.com/robbert-vdh/yabridge/commit/de470d345ab206b08f6d4a147b6af1d285a4211f.patch";
-      sha256 = "sha256-xJx1zvxD+DIjbkm7Ovoy4RaAvjx936/j/7AYUPh/kOo=";
-      includes = [ "src/wine-host/xdnd-proxy.cpp" ];
-    })
+    patches = [
+      # Hard code bitbridge & runtime dependencies
+      (substituteAll {
+        src = ./hardcode-dependencies.patch;
+        boost32 = pkgsi686Linux.boost;
+        libxcb32 = pkgsi686Linux.xorg.libxcb;
+        inherit libnotify wine;
+      })
+      # Remove with next yabridge update
+      (fetchpatch {
+        name = "fix-for-wine-7.1.patch";
+        url = "https://github.com/robbert-vdh/yabridge/commit/de470d345ab206b08f6d4a147b6af1d285a4211f.patch";
+        sha256 = "sha256-xJx1zvxD+DIjbkm7Ovoy4RaAvjx936/j/7AYUPh/kOo=";
+        includes = ["src/wine-host/xdnd-proxy.cpp"];
+      })
+    ];
 
-  ];
+    postPatch = ''
+      patchShebangs .
+    '';
 
-  postPatch = ''
-    patchShebangs .
-  '';
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
+      wine
+    ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wine
-  ];
+    buildInputs = [
+      boost
+      libxcb
+    ];
 
-  buildInputs = [
-    boost
-    libxcb
-  ];
+    # Meson is no longer able to pick up Boost automatically.
+    # https://github.com/NixOS/nixpkgs/issues/86131
+    BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
+    BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
-  # Meson is no longer able to pick up Boost automatically.
-  # https://github.com/NixOS/nixpkgs/issues/86131
-  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
+    mesonFlags = [
+      "--cross-file"
+      "cross-wine.conf"
+      "-Dwith-bitbridge=true"
 
-  mesonFlags = [
-    "--cross-file" "cross-wine.conf"
-    "-Dwith-bitbridge=true"
+      # Requires CMake and is unnecessary
+      "-Dtomlplusplus:generate_cmake_config=false"
+    ];
 
-    # Requires CMake and is unnecessary
-    "-Dtomlplusplus:generate_cmake_config=false"
-  ];
+    installPhase = ''
+      runHook preInstall
+      mkdir -p "$out/bin" "$out/lib"
+      cp yabridge-group*.exe{,.so} "$out/bin"
+      cp yabridge-host*.exe{,.so} "$out/bin"
+      cp libyabridge-vst2.so "$out/lib"
+      cp libyabridge-vst3.so "$out/lib"
+      runHook postInstall
+    '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p "$out/bin" "$out/lib"
-    cp yabridge-group*.exe{,.so} "$out/bin"
-    cp yabridge-host*.exe{,.so} "$out/bin"
-    cp libyabridge-vst2.so "$out/lib"
-    cp libyabridge-vst3.so "$out/lib"
-    runHook postInstall
-  '';
+    # Hard code wine path in wrapper scripts generated by winegcc
+    postFixup = ''
+      for exe in "$out"/bin/*.exe; do
+        substituteInPlace "$exe" \
+          --replace 'WINELOADER="wine"' 'WINELOADER="${wine}/bin/wine"'
+      done
+    '';
 
-  # Hard code wine path in wrapper scripts generated by winegcc
-  postFixup = ''
-    for exe in "$out"/bin/*.exe; do
-      substituteInPlace "$exe" \
-        --replace 'WINELOADER="wine"' 'WINELOADER="${wine}/bin/wine"'
-    done
-  '';
+    passthru.updateScript = nix-update-script {
+      attrPath = pname;
+    };
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
-
-  meta = with lib; {
-    description = "Yet Another VST bridge, run Windows VST2 plugins under Linux";
-    homepage = "https://github.com/robbert-vdh/yabridge";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "Yet Another VST bridge, run Windows VST2 plugins under Linux";
+      homepage = "https://github.com/robbert-vdh/yabridge";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [kira-bruneau];
+      platforms = ["x86_64-linux"];
+    };
+  }

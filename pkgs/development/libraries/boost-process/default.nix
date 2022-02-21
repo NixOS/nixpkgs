@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "boost-process";
   version = "0.5";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v9y9pffb2b7p642kp9ic4z6kg42ziizmyvbgrqd1ci0i4gn0831";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   unpackPhase = ''
     mkdir boost-process-$version
@@ -27,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Library to manage system processes";
     license = licenses.boost;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

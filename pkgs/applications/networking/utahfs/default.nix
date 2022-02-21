@@ -1,5 +1,8 @@
-{ buildGoPackage, lib, fetchFromGitHub }:
-
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "utahfs";
   version = "1.0";
@@ -14,10 +17,9 @@ buildGoPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/cloudflare/utahfs";
-    description =
-      "Encrypted storage system that provides a user-friendly FUSE drive backed by cloud storage";
+    description = "Encrypted storage system that provides a user-friendly FUSE drive backed by cloud storage";
     license = licenses.bsd3;
-    maintainers = [ maintainers.snglth ];
+    maintainers = [maintainers.snglth];
     platforms = platforms.unix;
   };
 }

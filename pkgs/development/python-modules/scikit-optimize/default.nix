@@ -1,15 +1,15 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, scipy
-, scikit-learn
-, pyaml
-, pytestCheckHook
+{
+  lib,
+  isPy27,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  scipy,
+  scikit-learn,
+  pyaml,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "scikit-optimize";
   version = "0.9.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Sequential model-based optimization toolbox";
     homepage = "https://scikit-optimize.github.io/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

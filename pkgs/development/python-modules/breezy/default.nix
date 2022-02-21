@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, configobj
-, patiencediff
-, six
-, fastimport
-, dulwich
-, launchpadlib
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  configobj,
+  patiencediff,
+  six,
+  fastimport,
+  dulwich,
+  launchpadlib,
+  testtools,
 }:
-
 buildPythonPackage rec {
   pname = "breezy";
   version = "3.2.1";
@@ -19,9 +19,9 @@ buildPythonPackage rec {
     sha256 = "sha256-4LJo6xoooq8EUoDDfQIa4y1/8XX0ybmfM6rX2wsp2Fw=";
   };
 
-  propagatedBuildInputs = [ configobj patiencediff six fastimport dulwich launchpadlib ];
+  propagatedBuildInputs = [configobj patiencediff six fastimport dulwich launchpadlib];
 
-  checkInputs = [ testtools ];
+  checkInputs = [testtools];
 
   # There is a conflict with their `lazy_import` and plugin tests
   doCheck = false;
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     ln -s "$out/bin/brz" "$out/bin/bzr"
   '';
 
-  pythonImportsCheck = [ "breezy" ];
+  pythonImportsCheck = ["breezy"];
 
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

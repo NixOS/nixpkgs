@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "pycfdns";
   version = "1.2.2";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for updating Cloudflare DNS A records";
     homepage = "https://github.com/ludeeus/pycfdns";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

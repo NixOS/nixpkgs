@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, opencl-clhpp, ocl-icd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opencl-clhpp,
+  ocl-icd,
+}:
 stdenv.mkDerivation {
   pname = "opencl-info";
   version = "unstable-2014-02-21";
@@ -19,7 +24,7 @@ stdenv.mkDerivation {
     ./opencl-info-clhpp2.diff
   ];
 
-  buildInputs = [ opencl-clhpp ocl-icd ];
+  buildInputs = [opencl-clhpp ocl-icd];
 
   NIX_LDFLAGS = "-lOpenCL";
 
@@ -32,6 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/marchv/opencl-info";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

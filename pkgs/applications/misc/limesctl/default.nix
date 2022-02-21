@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "limesctl";
   version = "2.0.1";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-SzgiWqPuDZuSH8I9im8r+06E085PWyHwLjwxcaoJgQo=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "CLI for Limes";
     homepage = "https://github.com/sapcc/limesctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

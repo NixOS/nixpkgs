@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-common
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aws-c-common,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aws-c-compression";
   version = "0.2.14";
@@ -33,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-c-compression";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
   };
 }

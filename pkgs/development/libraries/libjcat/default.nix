@@ -1,26 +1,27 @@
-{ lib, stdenv
-, fetchFromGitHub
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, glib
-, json-glib
-, gnutls
-, gpgme
-, gobject-introspection
-, vala
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, python3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  glib,
+  json-glib,
+  gnutls,
+  gpgme,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libjcat";
   version = "0.1.10";
 
-  outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
+  outputs = ["bin" "out" "dev" "devdoc" "man" "installedTests"];
 
   src = fetchFromGitHub {
     owner = "hughsie";
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "Library for reading and writing Jcat files";
     homepage = "https://github.com/hughsie/libjcat";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.all;
   };
 }

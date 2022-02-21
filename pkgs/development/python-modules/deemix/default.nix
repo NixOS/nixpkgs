@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, spotipy
-, click
-, pycryptodomex
-, mutagen
-, requests
-, deezer-py
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  spotipy,
+  click,
+  pycryptodomex,
+  mutagen,
+  requests,
+  deezer-py,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "deemix";
   version = "3.6.6";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Deezer downloader built from the ashes of Deezloader Remix";
     homepage = "https://git.freezerapp.xyz/RemixDev/deemix-py";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ natto1784 ];
+    maintainers = with maintainers; [natto1784];
   };
 }

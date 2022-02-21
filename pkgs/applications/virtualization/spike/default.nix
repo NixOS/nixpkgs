@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchgit, dtc, fetchpatch, pkgsCross }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  dtc,
+  fetchpatch,
+  pkgsCross,
+}:
 stdenv.mkDerivation rec {
   pname = "spike";
   version = "1.0.0";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hcl01nj96s3rkz4mrq747s5lkw81lgdjdimb8b1b9h8qnida7ww";
   };
 
-  nativeBuildInputs = [ dtc ];
+  nativeBuildInputs = [dtc];
   enableParallelBuilding = true;
 
   patches = [
@@ -31,23 +37,21 @@ stdenv.mkDerivation rec {
   # To test whether spike is working, we run the RISC-V hello applications using the RISC-V proxy
   # kernel on the Spike emulator and see whether we get the expected output.
   doInstallCheck = true;
-  installCheckPhase =
-    let
-      riscvPkgs = pkgsCross.riscv64-embedded;
-    in
-    ''
-      runHook preInstallCheck
+  installCheckPhase = let
+    riscvPkgs = pkgsCross.riscv64-embedded;
+  in ''
+    runHook preInstallCheck
 
-      $out/bin/spike -m64 ${riscvPkgs.riscv-pk}/bin/pk ${riscvPkgs.hello}/bin/hello | grep -Fq "Hello, world"
+    $out/bin/spike -m64 ${riscvPkgs.riscv-pk}/bin/pk ${riscvPkgs.hello}/bin/hello | grep -Fq "Hello, world"
 
-      runHook postInstallCheck
-    '';
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A RISC-V ISA Simulator";
     homepage = "https://github.com/riscv/riscv-isa-sim";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ blitz ];
+    platforms = ["x86_64-linux" "aarch64-linux"];
+    maintainers = with maintainers; [blitz];
   };
 }

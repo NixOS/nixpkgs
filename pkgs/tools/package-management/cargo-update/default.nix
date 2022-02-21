@@ -1,18 +1,19 @@
-{ lib, stdenv
-, rustPlatform
-, fetchCrate
-, cmake
-, pkg-config
-, installShellFiles
-, ronn
-, curl
-, libgit2
-, libssh2
-, openssl
-, Security
-, zlib
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  cmake,
+  pkg-config,
+  installShellFiles,
+  ronn,
+  curl,
+  libgit2,
+  libssh2,
+  openssl,
+  Security,
+  zlib,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
   version = "8.1.2";
@@ -24,10 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-iUJBhBKWYRpzwMcOvMIP8smmw5OnsTv1olv61pel5dY=";
 
-  nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
+  nativeBuildInputs = [cmake installShellFiles pkg-config ronn];
 
-  buildInputs = [ libgit2 libssh2 openssl zlib ]
-    ++ lib.optionals stdenv.isDarwin [ curl Security ];
+  buildInputs =
+    [libgit2 libssh2 openssl zlib]
+    ++ lib.optionals stdenv.isDarwin [curl Security];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.
@@ -44,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     description = "A cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor ];
+    maintainers = with maintainers; [gerschtli Br1ght0ne johntitor];
   };
 }

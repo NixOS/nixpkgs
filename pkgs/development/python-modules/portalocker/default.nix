@@ -1,9 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytestCheckHook
-, pytest-mypy
-, redis
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pytest-mypy,
+  redis,
 }:
-
 buildPythonPackage rec {
   version = "2.4.0";
   pname = "portalocker";
@@ -26,7 +28,7 @@ buildPythonPackage rec {
     description = "A library to provide an easy API to file locking";
     homepage = "https://github.com/WoLpH/portalocker";
     license = licenses.psfl;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
     platforms = platforms.unix; # Windows has a dependency on pypiwin32
   };
 }

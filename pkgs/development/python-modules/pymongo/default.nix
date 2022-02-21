@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pymongo";
   version = "3.12.2";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   # Tests call a running mongodb instance
   doCheck = false;
 
-  pythonImportsCheck = [ "pymongo" ];
+  pythonImportsCheck = ["pymongo"];
 
   meta = with lib; {
     description = "Python driver for MongoDB";
     homepage = "https://github.com/mongodb/mongo-python-driver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchPypi
-, fsspec
-, lxml
-, numpy
-, pytestCheckHook
-, pythonOlder
-, zarr
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fetchPypi,
+  fsspec,
+  lxml,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  zarr,
 }:
-
 buildPythonPackage rec {
   pname = "tifffile";
   version = "2021.11.2";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lebastr ];
+    maintainers = with maintainers; [lebastr];
   };
 }

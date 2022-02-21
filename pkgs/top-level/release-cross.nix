@@ -1,17 +1,20 @@
-/* This file defines some basic smoke tests for cross compilation.
-*/
-
-{ # The platforms *from* which we cross compile.
-  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
-, # Strip most of attributes when evaluating to spare memory usage
-  scrubJobs ? true
-, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+/*
+ This file defines some basic smoke tests for cross compilation.
+ */
+{
+  # The platforms *from* which we cross compile.
+  supportedSystems ? ["x86_64-linux" "x86_64-darwin" "aarch64-linux"],
+  # Strip most of attributes when evaluating to spare memory usage
+  scrubJobs ? true,
+  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? {
+    config = {
+      allowUnfree = false;
+      inHydra = true;
+    };
+  },
 }:
-
-with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
-
-let
+with import ./release-lib.nix {inherit supportedSystems scrubJobs nixpkgsArgs;}; let
   nativePlatforms = all;
 
   embedded = {
@@ -68,18 +71,18 @@ let
     buildPackages.binutils = darwin;
   };
 
-  rpiCommon = linuxCommon // {
-    vim = nativePlatforms;
-    unzip = nativePlatforms;
-    ddrescue = nativePlatforms;
-    lynx = nativePlatforms;
-    patchelf = nativePlatforms;
-    buildPackages.binutils = nativePlatforms;
-    mpg123 = nativePlatforms;
-  };
-in
-
-{
+  rpiCommon =
+    linuxCommon
+    // {
+      vim = nativePlatforms;
+      unzip = nativePlatforms;
+      ddrescue = nativePlatforms;
+      lynx = nativePlatforms;
+      patchelf = nativePlatforms;
+      buildPackages.binutils = nativePlatforms;
+      mpg123 = nativePlatforms;
+    };
+in {
   # These derivations from a cross package set's `buildPackages` should be
   # identical to their vanilla equivalents --- none of these package should
   # observe the target platform which is the only difference between those
@@ -98,77 +101,100 @@ in
     # cause false negatives.
     testEqualOne = path: system: let
       f = path: crossSystem: system: builtins.toString (lib.getAttrFromPath path (pkgsForCross crossSystem system));
-    in assertTrue (
+    in
+      assertTrue (
         f path null system
-        ==
-        f (["buildPackages"] ++ path) crossSystem system
+        == f (["buildPackages"] ++ path) crossSystem system
       );
 
     testEqual = path: systems: forMatchingSystems systems (testEqualOne path);
 
     mapTestEqual = lib.mapAttrsRecursive testEqual;
-
-  in mapTestEqual {
-    boehmgc = nativePlatforms;
-    libffi = nativePlatforms;
-    libiconv = nativePlatforms;
-    libtool = nativePlatforms;
-    zlib = nativePlatforms;
-    readline = nativePlatforms;
-    libxml2 = nativePlatforms;
-    guile = nativePlatforms;
-  };
+  in
+    mapTestEqual {
+      boehmgc = nativePlatforms;
+      libffi = nativePlatforms;
+      libiconv = nativePlatforms;
+      libtool = nativePlatforms;
+      zlib = nativePlatforms;
+      readline = nativePlatforms;
+      libxml2 = nativePlatforms;
+      guile = nativePlatforms;
+    };
 
   crossIphone64 = mapTestOnCross lib.systems.examples.iphone64 darwinCommon;
 
   crossIphone32 = mapTestOnCross lib.systems.examples.iphone32 darwinCommon;
 
-  /* Test some cross builds to the Sheevaplug */
-  crossSheevaplugLinux = mapTestOnCross lib.systems.examples.sheevaplug (linuxCommon // {
+  /*
+   Test some cross builds to the Sheevaplug
+   */
+  crossSheevaplugLinux = mapTestOnCross lib.systems.examples.sheevaplug (linuxCommon
+  // {
     ubootSheevaplug = nativePlatforms;
   });
 
-  /* Test some cross builds on 32 bit mingw-w64 */
+  /*
+   Test some cross builds on 32 bit mingw-w64
+   */
   crossMingw32 = mapTestOnCross lib.systems.examples.mingw32 windowsCommon;
 
-  /* Test some cross builds on 64 bit mingw-w64 */
+  /*
+   Test some cross builds on 64 bit mingw-w64
+   */
   crossMingwW64 = mapTestOnCross lib.systems.examples.mingwW64 windowsCommon;
 
-  /* Linux on mipsel */
+  /*
+   Linux on mipsel
+   */
   fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
   ben-nanonote = mapTestOnCross lib.systems.examples.ben-nanonote linuxCommon;
 
-  /* Javacript */
+  /*
+   Javacript
+   */
   ghcjs = mapTestOnCross lib.systems.examples.ghcjs {
     haskell.packages.ghcjs.hello = nativePlatforms;
   };
 
-  /* Linux on Raspberrypi */
+  /*
+   Linux on Raspberrypi
+   */
   rpi = mapTestOnCross lib.systems.examples.raspberryPi rpiCommon;
   rpi-musl = mapTestOnCross lib.systems.examples.muslpi rpiCommon;
 
-  /* Linux on the Remarkable */
+  /*
+   Linux on the Remarkable
+   */
   remarkable1 = mapTestOnCross lib.systems.examples.remarkable1 linuxCommon;
   remarkable2 = mapTestOnCross lib.systems.examples.remarkable2 linuxCommon;
 
-  /* Linux on armv7l-hf */
+  /*
+   Linux on armv7l-hf
+   */
   armv7l-hf = mapTestOnCross lib.systems.examples.armv7l-hf-multiplatform linuxCommon;
   scaleway-c1 = mapTestOnCross lib.systems.examples.scaleway-c1 linuxCommon;
 
   pogoplug4 = mapTestOnCross lib.systems.examples.pogoplug4 linuxCommon;
 
-  /* Linux on aarch64 */
+  /*
+   Linux on aarch64
+   */
   aarch64 = mapTestOnCross lib.systems.examples.aarch64-multiplatform linuxCommon;
   aarch64-musl = mapTestOnCross lib.systems.examples.aarch64-multiplatform-musl linuxCommon;
 
-  /* Linux on RISCV */
+  /*
+   Linux on RISCV
+   */
   riscv64 = mapTestOnCross lib.systems.examples.riscv64 linuxCommon;
   riscv32 = mapTestOnCross lib.systems.examples.riscv32 linuxCommon;
 
   m68k = mapTestOnCross lib.systems.examples.m68k linuxCommon;
   s390x = mapTestOnCross lib.systems.examples.s390x linuxCommon;
 
-  /* (Cross-compiled) Linux on x86 */
+  /*
+   (Cross-compiled) Linux on x86
+   */
   x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
   x86_64-gnu = mapTestOnCross lib.systems.examples.gnu64 linuxCommon;
   i686-musl = mapTestOnCross lib.systems.examples.musl32 linuxCommon;
@@ -204,12 +230,15 @@ in
   # successfully cross-compile to Redox so far
   x86_64-redox = mapTestOnCross lib.systems.examples.x86_64-unknown-redox embedded;
 
-  /* Cross-built bootstrap tools for every supported platform */
+  /*
+   Cross-built bootstrap tools for every supported platform
+   */
   bootstrapTools = let
-    tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
-    maintainers = [ lib.maintainers.dezgeg ];
+    tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix {system = "x86_64-linux";};
+    maintainers = [lib.maintainers.dezgeg];
     mkBootstrapToolsJob = drv:
       assert lib.elem drv.system supportedSystems;
-      hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
-  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
+        hydraJob' (lib.addMetaAttrs {inherit maintainers;} drv);
+  in
+    lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }

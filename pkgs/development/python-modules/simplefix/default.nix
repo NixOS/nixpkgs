@@ -1,5 +1,9 @@
-{ lib, python, buildPythonPackage, fetchFromGitHub }:
-
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 buildPythonPackage rec {
   pname = "simplefix";
   version = "1.0.15";
@@ -20,6 +24,6 @@ buildPythonPackage rec {
     description = "Simple FIX Protocol implementation for Python";
     homepage = "https://github.com/da4089/simplefix";
     license = licenses.mit;
-    maintainers = with maintainers; [ catern ];
+    maintainers = with maintainers; [catern];
   };
 }

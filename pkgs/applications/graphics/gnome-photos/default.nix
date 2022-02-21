@@ -1,44 +1,45 @@
-{ lib, stdenv
-, fetchurl
-, at-spi2-core
-, babl
-, dbus
-, desktop-file-utils
-, dleyna-renderer
-, gdk-pixbuf
-, gegl
-, geocode-glib
-, gettext
-, gexiv2
-, gfbgraph
-, glib
-, gnome-online-accounts
-, gnome
-, gobject-introspection
-, grilo
-, grilo-plugins
-, gsettings-desktop-schemas
-, gtk3
-, itstool
-, libdazzle
-, libhandy
-, libgdata
-, libxml2
-, meson
-, ninja
-, nixosTests
-, pkg-config
-, python3
-, tracker
-, tracker-miners
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  at-spi2-core,
+  babl,
+  dbus,
+  desktop-file-utils,
+  dleyna-renderer,
+  gdk-pixbuf,
+  gegl,
+  geocode-glib,
+  gettext,
+  gexiv2,
+  gfbgraph,
+  glib,
+  gnome-online-accounts,
+  gnome,
+  gobject-introspection,
+  grilo,
+  grilo-plugins,
+  gsettings-desktop-schemas,
+  gtk3,
+  itstool,
+  libdazzle,
+  libhandy,
+  libgdata,
+  libxml2,
+  meson,
+  ninja,
+  nixosTests,
+  pkg-config,
+  python3,
+  tracker,
+  tracker-miners,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
   version = "40.0";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = ["out" "installedTests"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -59,11 +60,12 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    (python3.withPackages (pkgs: with pkgs; [
-      dogtail
-      pygobject3
-      pyatspi
-    ]))
+    (python3.withPackages (pkgs:
+      with pkgs; [
+        dogtail
+        pygobject3
+        pyatspi
+      ]))
     wrapGAppsHook
   ];
 

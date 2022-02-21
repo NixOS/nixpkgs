@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, makeWrapper
-, opencl-headers
-, ocl-icd
-, xxHash
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  opencl-headers,
+  ocl-icd,
+  xxHash,
 }:
-
 stdenv.mkDerivation rec {
-  pname   = "hashcat";
+  pname = "hashcat";
   version = "6.2.5";
 
   src = fetchurl {
@@ -15,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-b2iZ162Jlln3tDpNaAmFQ6tUbSFx+OUdaR0Iplk3iWk=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ opencl-headers xxHash ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [opencl-headers xxHash];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -40,9 +41,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast password cracker";
-    homepage    = "https://hashcat.net/hashcat/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ kierdavis zimbatm ];
+    homepage = "https://hashcat.net/hashcat/";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [kierdavis zimbatm];
   };
 }

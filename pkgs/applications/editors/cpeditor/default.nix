@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, qtbase
-, qttools
-, wrapQtAppsHook
-, cmake
-, ninja
-, python3
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  cmake,
+  ninja,
+  python3,
+  runtimeShell,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cpeditor";
   version = "6.10.1";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config wrapQtAppsHook python3 ];
-  buildInputs = [ qtbase qttools ];
+  nativeBuildInputs = [cmake ninja pkg-config wrapQtAppsHook python3];
+  buildInputs = [qtbase qttools];
 
   postPatch = ''
     substituteInPlace src/Core/Runner.cpp --replace "/bin/bash" "${runtimeShell}"
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://cpeditor.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [rewine];
   };
 }

@@ -1,20 +1,31 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.jibri;
 
   # Copied from the jitsi-videobridge.nix file.
   toHOCON = x:
-    if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
+    if isAttrs x && x ? __hocon_envvar
+    then ("\${" + x.__hocon_envvar + "}")
+    else if isAttrs x
+    then "{${concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x)}}"
+    else if isList x
+    then "[${concatMapStringsSep "," toHOCON x}]"
     else builtins.toJSON x;
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
-  toVarName = s: "XMPP_PASSWORD_" + stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
+  toVarName = s:
+    "XMPP_PASSWORD_"
+    + stringAsChars (c:
+      if builtins.match "[A-Za-z0-9]" c != null
+      then c
+      else "_")
+    s;
 
   defaultJibriConfig = {
     id = "";
@@ -58,24 +69,24 @@ let
       finalize-script = "${cfg.finalizeScript}";
     };
 
-    streaming.rtmp-allow-list = [ ".*" ];
+    streaming.rtmp-allow-list = [".*"];
 
-    chrome.flags = [
-      "--use-fake-ui-for-media-stream"
-      "--start-maximized"
-      "--kiosk"
-      "--enabled"
-      "--disable-infobars"
-      "--autoplay-policy=no-user-gesture-required"
-    ]
-    ++ lists.optional cfg.ignoreCert
+    chrome.flags =
+      [
+        "--use-fake-ui-for-media-stream"
+        "--start-maximized"
+        "--kiosk"
+        "--enabled"
+        "--disable-infobars"
+        "--autoplay-policy=no-user-gesture-required"
+      ]
+      ++ lists.optional cfg.ignoreCert
       "--ignore-certificate-errors";
 
-
     stats.enable-stats-d = true;
-    webhook.subscribers = [ ];
+    webhook.subscribers = [];
 
-    jwt-info = { };
+    jwt-info = {};
 
     call-status-checks = {
       no-media-timout = "30 seconds";
@@ -85,14 +96,13 @@ let
   };
   # Allow overriding leaves of the default config despite types.attrs not doing any merging.
   jibriConfig = recursiveUpdate defaultJibriConfig cfg.config;
-  configFile = pkgs.writeText "jibri.conf" (toHOCON { jibri = jibriConfig; });
-in
-{
+  configFile = pkgs.writeText "jibri.conf" (toHOCON {jibri = jibriConfig;});
+in {
   options.services.jibri = with types; {
     enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running <option>services.jitsi-meet.enable</option>, so for most use cases it will be simpler to run <option>services.jitsi-meet.jibri.enable</option>";
     config = mkOption {
       type = attrs;
-      default = { };
+      default = {};
       description = ''
         Jibri configuration.
         See <link xlink:href="https://github.com/jitsi/jibri/blob/master/src/main/resources/reference.conf" />
@@ -183,12 +193,12 @@ in
           stripFromRoomDomain = "conference.";
         };
       '';
-      default = { };
-      type = attrsOf (submodule ({ name, ... }: {
+      default = {};
+      type = attrsOf (submodule ({name, ...}: {
         options = {
           xmppServerHosts = mkOption {
             type = listOf str;
-            example = [ "xmpp.example.org" ];
+            example = ["xmpp.example.org"];
             description = ''
               Hostnames of the XMPP servers to connect to.
             '';
@@ -289,35 +299,33 @@ in
           };
         };
 
-        config =
-          let
-            nick = mkDefault (builtins.replaceStrings [ "." ] [ "-" ] (
-              config.networking.hostName + optionalString (config.networking.domain != null) ".${config.networking.domain}"
-            ));
-          in
-          {
-            call.login.username = nick;
-            control.muc.nickname = nick;
-          };
+        config = let
+          nick = mkDefault (builtins.replaceStrings ["."] ["-"] (
+            config.networking.hostName + optionalString (config.networking.domain != null) ".${config.networking.domain}"
+          ));
+        in {
+          call.login.username = nick;
+          control.muc.nickname = nick;
+        };
       }));
     };
   };
 
   config = mkIf cfg.enable {
-    users.groups.jibri = { };
-    users.groups.plugdev = { };
+    users.groups.jibri = {};
+    users.groups.plugdev = {};
     users.users.jibri = {
       isSystemUser = true;
       group = "jibri";
       home = "/var/lib/jibri";
-      extraGroups = [ "jitsi-meet" "adm" "audio" "video" "plugdev" ];
+      extraGroups = ["jitsi-meet" "adm" "audio" "video" "plugdev"];
     };
 
     systemd.services.jibri-xorg = {
       description = "Jitsi Xorg Process";
 
-      after = [ "network.target" ];
-      wantedBy = [ "jibri.service" "jibri-icewm.service" ];
+      after = ["network.target"];
+      wantedBy = ["jibri.service" "jibri-icewm.service"];
 
       preStart = ''
         cp --no-preserve=mode,ownership ${pkgs.jibri}/etc/jitsi/jibri/* /var/lib/jibri
@@ -343,9 +351,9 @@ in
     systemd.services.jibri-icewm = {
       description = "Jitsi Window Manager";
 
-      requires = [ "jibri-xorg.service" ];
-      after = [ "jibri-xorg.service" ];
-      wantedBy = [ "jibri.service" ];
+      requires = ["jibri-xorg.service"];
+      after = ["jibri-xorg.service"];
+      wantedBy = ["jibri.service"];
 
       environment.DISPLAY = ":0";
       serviceConfig = {
@@ -365,21 +373,22 @@ in
     systemd.services.jibri = {
       description = "Jibri Process";
 
-      requires = [ "jibri-icewm.service" "jibri-xorg.service" ];
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      requires = ["jibri-icewm.service" "jibri-xorg.service"];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
-      path = with pkgs; [ chromedriver chromium ffmpeg-full ];
+      path = with pkgs; [chromedriver chromium ffmpeg-full];
 
-      script = (concatStrings (mapAttrsToList
+      script =
+        (concatStrings (mapAttrsToList
         (name: env: ''
           export ${toVarName "${name}_control"}=$(cat ${env.control.login.passwordFile})
           export ${toVarName "${name}_call"}=$(cat ${env.call.login.passwordFile})
         '')
         cfg.xmppEnvironments))
-      + ''
-        ${pkgs.jre8_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
-      '';
+        + ''
+          ${pkgs.jre8_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
+        '';
 
       environment.HOME = "/var/lib/jibri";
 
@@ -399,17 +408,15 @@ in
       "d /var/log/jitsi/jibri 755 jibri jibri"
     ];
 
-
-
     # Configure Chromium to not show the "Chrome is being controlled by automatic test software" message.
-    environment.etc."chromium/policies/managed/managed_policies.json".text = builtins.toJSON { CommandLineFlagSecurityWarningsEnabled = false; };
-    warnings = [ "All security warnings for Chromium have been disabled. This is necessary for Jibri, but it also impacts all other uses of Chromium on this system." ];
+    environment.etc."chromium/policies/managed/managed_policies.json".text = builtins.toJSON {CommandLineFlagSecurityWarningsEnabled = false;};
+    warnings = ["All security warnings for Chromium have been disabled. This is necessary for Jibri, but it also impacts all other uses of Chromium on this system."];
 
     boot = {
       extraModprobeConfig = ''
         options snd-aloop enable=1,1,1,1,1,1,1,1
       '';
-      kernelModules = [ "snd-aloop" ];
+      kernelModules = ["snd-aloop"];
     };
   };
 

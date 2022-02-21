@@ -1,35 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, cmark
-, lmdb
-, lmdbxx
-, libsecret
-, mkDerivation
-, qtbase
-, qtkeychain
-, qtmacextras
-, qtmultimedia
-, qtimageformats
-, qttools
-, qtquickcontrols2
-, qtgraphicaleffects
-, mtxclient
-, boost17x
-, spdlog
-, olm
-, pkg-config
-, nlohmann_json
-, coeurl
-, libevent
-, curl
-, voipSupport ? true
-, gst_all_1
-, libnice
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  cmark,
+  lmdb,
+  lmdbxx,
+  libsecret,
+  mkDerivation,
+  qtbase,
+  qtkeychain,
+  qtmacextras,
+  qtmultimedia,
+  qtimageformats,
+  qttools,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  mtxclient,
+  boost17x,
+  spdlog,
+  olm,
+  pkg-config,
+  nlohmann_json,
+  coeurl,
+  libevent,
+  curl,
+  voipSupport ? true,
+  gst_all_1,
+  libnice,
 }:
-
 mkDerivation rec {
   pname = "nheko";
   version = "0.9.1";
@@ -47,30 +47,32 @@ mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    nlohmann_json
-    mtxclient
-    olm
-    boost17x
-    libsecret
-    lmdb
-    spdlog
-    cmark
-    qtbase
-    qtmultimedia
-    qtimageformats
-    qttools
-    qtquickcontrols2
-    qtgraphicaleffects
-    qtkeychain
-    coeurl
-    libevent
-    curl
-  ] ++ lib.optional stdenv.isDarwin qtmacextras
+  buildInputs =
+    [
+      nlohmann_json
+      mtxclient
+      olm
+      boost17x
+      libsecret
+      lmdb
+      spdlog
+      cmark
+      qtbase
+      qtmultimedia
+      qtimageformats
+      qttools
+      qtquickcontrols2
+      qtgraphicaleffects
+      qtkeychain
+      coeurl
+      libevent
+      curl
+    ]
+    ++ lib.optional stdenv.isDarwin qtmacextras
     ++ lib.optionals voipSupport (with gst_all_1; [
       gstreamer
       gst-plugins-base
-      (gst-plugins-good.override { qt5Support = true; })
+      (gst-plugins-good.override {qt5Support = true;})
       gst-plugins-bad
       libnice
     ]);
@@ -87,7 +89,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
-    maintainers = with maintainers; [ ekleog fpletz ];
+    maintainers = with maintainers; [ekleog fpletz];
     platforms = platforms.all;
     # Should be fixable if a higher clang version is used, see:
     # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177

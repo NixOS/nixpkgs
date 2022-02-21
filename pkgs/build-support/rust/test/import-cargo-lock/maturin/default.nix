@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  rustPlatform,
 }:
-
 python3.pkgs.buildPythonPackage rec {
   pname = "word-count";
   version = "0.13.2";
@@ -32,12 +32,12 @@ python3.pkgs.buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  pythonImportsCheck = [ "word_count" ];
+  pythonImportsCheck = ["word_count"];
 
   meta = with lib; {
     description = "PyO3 word count example";
     homepage = "https://github.com/PyO3/pyo3";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

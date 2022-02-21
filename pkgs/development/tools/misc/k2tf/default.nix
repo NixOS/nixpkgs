@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "k2tf";
   version = "0.6.3";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-YsSOw3G5ufxBn8Wu5J8md2Aaqhl0VJa7uB6ZzSPWo/A=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}"];
 
   meta = with lib; {
     description = "Kubernetes YAML to Terraform HCL converter";
     homepage = "https://github.com/sl1pm4t/k2tf";
     license = licenses.mpl20;
-    maintainers = [ maintainers.flokli ];
+    maintainers = [maintainers.flokli];
   };
 }

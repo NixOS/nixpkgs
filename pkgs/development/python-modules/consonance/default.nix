@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dissononce
-, python-axolotl-curve25519
-, transitions
-, protobuf
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dissononce,
+  python-axolotl-curve25519,
+  transitions,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "consonance";
   version = "0.1.5";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "WhatsApp's handshake implementation using Noise Protocol";
     homepage = "https://github.com/tgalal/consonance";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

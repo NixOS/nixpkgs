@@ -1,6 +1,16 @@
-{ buildPythonPackage, fetchPypi, lib, pytorch, contextlib2
-, graphviz, networkx, six, opt-einsum, tqdm, pyro-api }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pytorch,
+  contextlib2,
+  graphviz,
+  networkx,
+  six,
+  opt-einsum,
+  tqdm,
+  pyro-api,
+}:
 buildPythonPackage rec {
   version = "1.8.0";
   pname = "pyro-ppl";
@@ -37,6 +47,6 @@ buildPythonPackage rec {
     description = "A Python library for probabilistic modeling and inference";
     homepage = "http://pyro.ai";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh georgewhewell ];
+    maintainers = with lib.maintainers; [teh georgewhewell];
   };
 }

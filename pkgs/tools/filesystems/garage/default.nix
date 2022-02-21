@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitea, testVersion, garage }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitea,
+  testVersion,
+  garage,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "garage";
   version = "0.6.0";
@@ -14,13 +20,13 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-eKJxRcC43D8qVLORer34tlmsWhELTbcJbZLyf0MB618=";
 
   passthru = {
-    tests.version = testVersion { package = garage; };
+    tests.version = testVersion {package = garage;};
   };
 
   meta = {
     description = "S3-compatible object store for small self-hosted geo-distributed deployments";
     homepage = "https://garagehq.deuxfleurs.fr";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ nickcao _0x4A6F ];
+    maintainers = with lib.maintainers; [nickcao _0x4A6F];
   };
 }

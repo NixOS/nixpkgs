@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pyserial
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pyserial,
 }:
-
 buildPythonPackage rec {
   pname = "pyserial-asyncio";
   version = "0.6";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "Asyncio extension package for pyserial";
     homepage = "https://github.com/pyserial/pyserial-asyncio";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [etu];
     platforms = platforms.linux;
   };
 }

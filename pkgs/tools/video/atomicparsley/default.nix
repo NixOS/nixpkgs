@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, Cocoa }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  Cocoa,
+}:
 stdenv.mkDerivation rec {
   pname = "atomicparsley";
   version = "20210715.151551.e7ad03a";
@@ -11,10 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-77yWwfdEul4uLsUNX1dLwj8K0ilcuBaTVKMyXDvKVx4=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ zlib ]
-                ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs =
+    [zlib]
+    ++ lib.optionals stdenv.isDarwin [Cocoa];
 
   installPhase = ''
     runHook preInstall
@@ -44,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wez/atomicparsley";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pjones ];
+    maintainers = with maintainers; [pjones];
   };
 }

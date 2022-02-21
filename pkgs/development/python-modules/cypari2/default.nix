@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchpatch
-, fetchPypi
-, pari
-, gmp
-, cython
-, cysignals
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchpatch,
+  fetchPypi,
+  pari,
+  gmp,
+  cython,
+  cysignals,
 }:
-
 buildPythonPackage rec {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade

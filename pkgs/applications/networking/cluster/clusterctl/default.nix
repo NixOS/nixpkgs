@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "clusterctl";
   version = "1.1.2";
@@ -13,11 +17,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-3PzaMB7U19HnqS+zRbIupErE1S8+MzG92vQFq3oxHpE=";
 
-  subPackages = [ "cmd/clusterctl" ];
+  subPackages = ["cmd/clusterctl"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  ldflags = let t = "sigs.k8s.io/cluster-api/version"; in [
+  ldflags = let
+    t = "sigs.k8s.io/cluster-api/version";
+  in [
     "-X ${t}.gitMajor=${lib.versions.major version}"
     "-X ${t}.gitMinor=${lib.versions.minor version}"
     "-X ${t}.gitVersion=v${version}"
@@ -36,6 +42,6 @@ buildGoModule rec {
     description = "Kubernetes cluster API tool";
     homepage = "https://cluster-api.sigs.k8s.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [zowoq];
   };
 }

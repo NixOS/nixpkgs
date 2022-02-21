@@ -1,9 +1,9 @@
-{ lib
-, fetchgit
-, buildGoModule
-, pigeon
+{
+  lib,
+  fetchgit,
+  buildGoModule,
+  pigeon,
 }:
-
 buildGoModule rec {
   pname = "verifpal";
   version = "0.26.1";
@@ -16,9 +16,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-gUpgnd/xiLqRNl1bPzVp+0GM/J5GEx0VhUfo6JsX8N8=";
 
-  nativeBuildInputs = [ pigeon ];
+  nativeBuildInputs = [pigeon];
 
-  subPackages = [ "cmd/verifpal" ];
+  subPackages = ["cmd/verifpal"];
 
   # goversioninfo is for Windows only and can be skipped during go generate
   preBuild = ''
@@ -29,8 +29,8 @@ buildGoModule rec {
   meta = {
     homepage = "https://verifpal.com/";
     description = "Cryptographic protocol analysis for students and engineers";
-    maintainers = with lib.maintainers; [ zimbatm ];
-    license = with lib.licenses; [ gpl3 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [zimbatm];
+    license = with lib.licenses; [gpl3];
+    platforms = ["x86_64-linux"];
   };
 }

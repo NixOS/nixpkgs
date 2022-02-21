@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "rman";
   version = "3.2";
@@ -15,14 +18,14 @@ stdenv.mkDerivation rec {
       --replace gcc '${stdenv.cc.targetPrefix}cc'
   '';
 
-  makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man" ];
+  makeFlags = ["BINDIR=$(out)/bin" "MANDIR=$(out)/share/man"];
 
   preInstall = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   doCheck = false; # "check" target is probably meant to do "installcheck" or something
 

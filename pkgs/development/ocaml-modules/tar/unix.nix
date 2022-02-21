@@ -1,12 +1,12 @@
-{ lib
-, buildDunePackage
-, tar
-, cstruct
-, cstruct-lwt
-, re
-, lwt
+{
+  lib,
+  buildDunePackage,
+  tar,
+  cstruct,
+  cstruct-lwt,
+  re,
+  lwt,
 }:
-
 buildDunePackage rec {
   pname = "tar-unix";
   inherit (tar) version src useDune2 doCheck;
@@ -22,6 +22,6 @@ buildDunePackage rec {
   meta = {
     description = "Decode and encode tar format files from Unix";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

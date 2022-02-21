@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libX11, libXrandr, libXft }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXrandr,
+  libXft,
+}:
 stdenv.mkDerivation rec {
   pname = "bevelbar";
   version = "16.11";
@@ -11,15 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "1hbwg3vdxw9fyshy85skv476p0zr4ynvhcz2xkijydpzm2j3rmjm";
   };
 
-  buildInputs = [ libX11 libXrandr libXft ];
+  buildInputs = [libX11 libXrandr libXft];
 
-  installFlags = [ "prefix=$(out)" ];
+  installFlags = ["prefix=$(out)"];
 
   meta = with lib; {
     description = "An X11 status bar with fancy schmancy 1985-ish beveled borders";
     inherit (src.meta) homepage;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.neeasade ];
+    maintainers = [maintainers.neeasade];
   };
 }

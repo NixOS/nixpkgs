@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libuninameslist";
   version = "20211114";
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fontforge/libuninameslist/";
     description = "A Library of Unicode names and annotation data";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [erictapen];
     platforms = platforms.all;
   };
 }

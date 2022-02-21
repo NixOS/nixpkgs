@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, python3Packages, nix-update-script, gnupg }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nix-update-script,
+  gnupg,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "apt-offline";
   version = "1.8.4";
@@ -26,7 +31,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  pythonimportsCheck = [ "apt-offline" ];
+  pythonimportsCheck = ["apt-offline"];
 
   passthru.updateScript = nix-update-script {
     attrPath = pname;
@@ -36,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/rickysarraf/apt-offline";
     description = "Offline APT package manager";
     license = licenses.gpl3;
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

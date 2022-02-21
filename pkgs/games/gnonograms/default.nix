@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, vala
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, appstream
-, python3
-, shared-mime-info
-, wrapGAppsHook
-, gtk3
-, pantheon
-, libgee
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  vala,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  appstream,
+  python3,
+  shared-mime-info,
+  wrapGAppsHook,
+  gtk3,
+  pantheon,
+  libgee,
+  libhandy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnonograms";
   version = "2.0.0";
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       * Generate random puzzles of chosen difficulty
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     homepage = "https://github.com/jeremypw/gnonograms";
     platforms = platforms.all;
   };

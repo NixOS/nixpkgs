@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchzip, xorg }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  xorg,
+}:
 stdenv.mkDerivation rec {
   pname = "xtris";
   version = "1.15";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
       s:^CFLAGS:#CFLAGS:
     ' Makefile
   '';
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [xorg.libX11];
 
   meta = with lib; {
     description = "A multi-player version of the classical game of Tetris, for the X Window system";

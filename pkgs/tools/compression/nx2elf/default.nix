@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, lz4 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lz4,
+}:
 stdenv.mkDerivation rec {
   pname = "nx2elf";
   version = "unstable-2021-11-21";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cS8FFIEgDWva0j9JXhS+s7Y4Oh+mNhFaKRI7BF2hqvs=";
   };
 
-  buildInputs = [ lz4 ];
+  buildInputs = [lz4];
 
   postPatch = ''
     # pkg-config is not supported, so we'll manually devendor lz4
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shuffle2/nx2elf";
     description = "Convert Nintendo Switch executable files to ELFs";
     license = licenses.unfree; # No license specified upstream
-    platforms = [ "x86_64-linux" ]; # Should work on Darwin as well, but this is untested. aarch64-linux fails.
-    maintainers = [ maintainers.ivar ];
+    platforms = ["x86_64-linux"]; # Should work on Darwin as well, but this is untested. aarch64-linux fails.
+    maintainers = [maintainers.ivar];
   };
 }

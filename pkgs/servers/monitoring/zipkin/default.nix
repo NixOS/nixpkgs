@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, makeWrapper, jre}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   version = "1.28.1";
   pname = "zipkin-server";
@@ -6,10 +12,9 @@ stdenv.mkDerivation rec {
     url = "https://search.maven.org/remotecontent?filepath=io/zipkin/java/zipkin-server/${version}/zipkin-server-${version}-exec.jar";
     sha256 = "02369fkv0kbl1isq6y26fh2zj5wxv3zck522m5wypsjlcfcw2apa";
   };
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildCommand =
-  ''
+  buildCommand = ''
     mkdir -p $out/share/java
     cp ${src} $out/share/java/zipkin-server-${version}-exec.jar
     mkdir -p $out/bin
@@ -21,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://zipkin.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.hectorj ];
+    maintainers = [maintainers.hectorj];
   };
 }

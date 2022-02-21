@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "s3bro";
   version = "2.8";
@@ -9,7 +11,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "0k25g3vch0q772f29jlghda5mjvps55h5lgwhwwbd5g2nlnrrspq";
   };
 
-  propagatedBuildInputs = with python3Packages; [ boto3 botocore click termcolor ];
+  propagatedBuildInputs = with python3Packages; [boto3 botocore click termcolor];
 
   # No tests
   doCheck = false;
@@ -18,6 +20,6 @@ python3Packages.buildPythonPackage rec {
     description = "A handy s3 cli tool";
     homepage = "https://github.com/rsavordelli/s3bro";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

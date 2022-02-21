@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "scikit-fmm";
   version = "2022.2.2";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "A Python extension module which implements the fast marching method";
     homepage = "https://github.com/scikit-fmm/scikit-fmm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

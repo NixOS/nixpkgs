@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, perlPackages, iproute2, perl }:
-
+{
+  lib,
+  fetchFromGitHub,
+  perlPackages,
+  iproute2,
+  perl,
+}:
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
   version = "3.9.1";
@@ -12,9 +17,9 @@ perlPackages.buildPerlPackage rec {
   };
 
   # perl packages by default get devdoc which isn't present
-  outputs = [ "out" ];
+  outputs = ["out"];
 
-  buildInputs = with perlPackages; [ IOSocketSSL DigestSHA1 DataValidateIP JSONPP IOSocketInet6 ];
+  buildInputs = with perlPackages; [IOSocketSSL DigestSHA1 DataValidateIP JSONPP IOSocketInet6];
 
   # Use iproute2 instead of ifconfig
   preConfigure = ''
@@ -44,6 +49,6 @@ perlPackages.buildPerlPackage rec {
     license = licenses.gpl2Plus;
     # Mostly since `iproute` is Linux only.
     platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

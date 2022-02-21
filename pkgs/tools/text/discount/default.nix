@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "2.2.7";
   pname = "discount";
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of Markdown markup language in C";
     homepage = "http://www.pell.portland.or.us/~orc/Code/discount/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ shell ];
+    maintainers = with maintainers; [shell];
     platforms = platforms.unix;
   };
 }

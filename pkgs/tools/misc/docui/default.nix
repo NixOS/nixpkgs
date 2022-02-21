@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "docui";
   version = "2.0.4";
@@ -20,6 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/skanehira/docui";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ aethelz ];
+    maintainers = with maintainers; [aethelz];
   };
 }

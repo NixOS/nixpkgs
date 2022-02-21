@@ -1,12 +1,12 @@
-{ stdenv
-, lib
-, python
-, buildPythonPackage
-, fetchPypi
-, radare2
-, coreutils
+{
+  stdenv,
+  lib,
+  python,
+  buildPythonPackage,
+  fetchPypi,
+  radare2,
+  coreutils,
 }:
-
 buildPythonPackage rec {
   pname = "r2pipe";
   version = "1.6.5";
@@ -14,8 +14,7 @@ buildPythonPackage rec {
   postPatch = let
     r2lib = "${lib.getOutput "lib" radare2}/lib";
     libr_core = "${r2lib}/libr_core${stdenv.hostPlatform.extensions.sharedLibrary}";
-  in
-  ''
+  in ''
     # Fix find_library, can be removed after
     # https://github.com/NixOS/nixpkgs/issues/7307 is resolved.
     substituteInPlace r2pipe/native.py --replace 'find_library("r_core")' "'${libr_core}'"
@@ -45,6 +44,6 @@ buildPythonPackage rec {
     description = "Interact with radare2";
     homepage = "https://github.com/radare/radare2-r2pipe";
     license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [timokau];
   };
 }

@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.windowmaker;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.windowmaker;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.windowmaker.enable = mkEnableOption "windowmaker";
@@ -20,6 +21,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.windowmaker ];
+    environment.systemPackages = [pkgs.windowmaker];
   };
 }

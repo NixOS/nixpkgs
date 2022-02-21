@@ -1,21 +1,20 @@
-{ stdenv
-, lib
-, makeWrapper
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, openjdk11
-, dpkg
-, writeScript
-, bash
-, tor
-, gnutar
-, zip
-, xz
-}:
-
-let
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
+  openjdk11,
+  dpkg,
+  writeScript,
+  bash,
+  tor,
+  gnutar,
+  zip,
+  xz,
+}: let
   bisq-launcher = writeScript "bisq-launcher" ''
     #! ${bash}/bin/bash
 
@@ -33,70 +32,70 @@ let
     exec ${tor}/bin/tor "$@"
   '';
 in
-stdenv.mkDerivation rec {
-  pname = "bisq-desktop";
-  version = "1.8.2";
+  stdenv.mkDerivation rec {
+    pname = "bisq-desktop";
+    version = "1.8.2";
 
-  src = fetchurl {
-    url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "154b8whbbpnb8lk1b3an44h53gh5fdzxkg5vdfrw1ld6miy68kii";
-  };
+    src = fetchurl {
+      url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
+      sha256 = "154b8whbbpnb8lk1b3an44h53gh5fdzxkg5vdfrw1ld6miy68kii";
+    };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg gnutar zip xz ];
+    nativeBuildInputs = [makeWrapper copyDesktopItems imagemagick dpkg gnutar zip xz];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Bisq";
-      exec = "bisq-desktop";
-      icon = "bisq";
-      desktopName = "Bisq ${version}";
-      genericName = "Decentralized bitcoin exchange";
-      categories = "Network;P2P;";
-    })
-  ];
+    desktopItems = [
+      (makeDesktopItem {
+        name = "Bisq";
+        exec = "bisq-desktop";
+        icon = "bisq";
+        desktopName = "Bisq ${version}";
+        genericName = "Decentralized bitcoin exchange";
+        categories = "Network;P2P;";
+      })
+    ];
 
-  unpackPhase = ''
-    dpkg -x $src .
-  '';
+    unpackPhase = ''
+      dpkg -x $src .
+    '';
 
-  buildPhase = ''
-    # Replace the embedded Tor binary (which is in a Tar archive)
-    # with one from Nixpkgs.
+    buildPhase = ''
+      # Replace the embedded Tor binary (which is in a Tar archive)
+      # with one from Nixpkgs.
 
-    mkdir -p native/linux/x64/
-    cp ${bisq-tor} ./tor
-    tar -cJf native/linux/x64/tor.tar.xz tor
-    zip -r opt/bisq/lib/app/desktop-${version}-all.jar native
-  '';
+      mkdir -p native/linux/x64/
+      cp ${bisq-tor} ./tor
+      tar -cJf native/linux/x64/tor.tar.xz tor
+      zip -r opt/bisq/lib/app/desktop-${version}-all.jar native
+    '';
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/lib $out/bin
-    cp opt/bisq/lib/app/desktop-${version}-all.jar $out/lib
+      mkdir -p $out/lib $out/bin
+      cp opt/bisq/lib/app/desktop-${version}-all.jar $out/lib
 
-    makeWrapper ${openjdk11}/bin/java $out/bin/bisq-desktop-wrapped \
-      --add-flags "-jar $out/lib/desktop-${version}-all.jar bisq.desktop.app.BisqAppMain"
+      makeWrapper ${openjdk11}/bin/java $out/bin/bisq-desktop-wrapped \
+        --add-flags "-jar $out/lib/desktop-${version}-all.jar bisq.desktop.app.BisqAppMain"
 
-    makeWrapper ${bisq-launcher} $out/bin/bisq-desktop \
-      --prefix PATH : $out/bin
+      makeWrapper ${bisq-launcher} $out/bin/bisq-desktop \
+        --prefix PATH : $out/bin
 
-    for n in 16 24 32 48 64 96 128 256; do
-      size=$n"x"$n
-      convert opt/bisq/lib/Bisq.png -resize $size bisq.png
-      install -Dm644 -t $out/share/icons/hicolor/$size/apps bisq.png
-    done;
+      for n in 16 24 32 48 64 96 128 256; do
+        size=$n"x"$n
+        convert opt/bisq/lib/Bisq.png -resize $size bisq.png
+        install -Dm644 -t $out/share/icons/hicolor/$size/apps bisq.png
+      done;
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  passthru.updateScript = ./update.sh;
+    passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
-    description = "A decentralized bitcoin exchange network";
-    homepage = "https://bisq.network";
-    license = licenses.mit;
-    maintainers = with maintainers; [ juaningan emmanuelrosa ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "A decentralized bitcoin exchange network";
+      homepage = "https://bisq.network";
+      license = licenses.mit;
+      maintainers = with maintainers; [juaningan emmanuelrosa];
+      platforms = ["x86_64-linux"];
+    };
+  }

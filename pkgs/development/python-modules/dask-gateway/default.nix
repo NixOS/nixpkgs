@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, dask
-, distributed
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  dask,
+  distributed,
 }:
-
 buildPythonPackage rec {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # tests requires cluster for testing
   doCheck = false;
 
-  pythonImportsCheck = [ "dask_gateway" ];
+  pythonImportsCheck = ["dask_gateway"];
 
   meta = with lib; {
     description = "A client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

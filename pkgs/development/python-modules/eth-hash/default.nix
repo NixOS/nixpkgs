@@ -1,7 +1,13 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
-, pycryptodome
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  pytest,
+  pysha3,
+  pycrypto,
+  pycryptodome,
 }:
-
 buildPythonPackage rec {
   pname = "eth-hash";
   version = "0.3.2";
@@ -11,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "3f40cecd5ead88184aa9550afc19d057f103728108c5102f592f8415949b5a76";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   propagatedBuildInputs = [
     pysha3
@@ -50,6 +56,6 @@ buildPythonPackage rec {
     description = "The Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    maintainers = with lib.maintainers; [jluttine];
   };
 }

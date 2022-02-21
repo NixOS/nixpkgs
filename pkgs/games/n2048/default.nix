@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "n2048";
   version = "0.1";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Console implementation of 2048 game";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     homepage = "http://www.dettus.net/n2048/";
   };

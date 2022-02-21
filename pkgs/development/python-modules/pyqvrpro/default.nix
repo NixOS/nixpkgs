@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, untangle
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  untangle,
 }:
-
 buildPythonPackage rec {
   pname = "pyqvrpro";
   version = "0.52";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Module for interfacing with QVR Pro API";
     homepage = "https://github.com/oblogic7/pyqvrpro";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

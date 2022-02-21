@@ -1,31 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, gettext
-, desktop-file-utils
-, appstream-glib
-, pkg-config
-, txt2man
-, gzip
-, vala
-, wrapGAppsHook
-, gsettings-desktop-schemas
-, gtk3
-, glib
-, cairo
-, keybinder3
-, ffmpeg
-, python3
-, libxml2
-, gst_all_1
-, which
-, gifski
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  meson,
+  ninja,
+  gettext,
+  desktop-file-utils,
+  appstream-glib,
+  pkg-config,
+  txt2man,
+  gzip,
+  vala,
+  wrapGAppsHook,
+  gsettings-desktop-schemas,
+  gtk3,
+  glib,
+  cairo,
+  keybinder3,
+  ffmpeg,
+  python3,
+  libxml2,
+  gst_all_1,
+  which,
+  gifski,
 }:
-
 stdenv.mkDerivation rec {
   pname = "peek";
   version = "1.5.1";
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg gifski ]})
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [which ffmpeg gifski]})
   '';
 
   passthru = {
@@ -86,12 +86,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-
   meta = with lib; {
     homepage = "https://github.com/phw/peek";
     description = "Simple animated GIF screen recorder with an easy to use interface";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ puffnfresh ];
+    maintainers = with maintainers; [puffnfresh];
     platforms = platforms.linux;
   };
 }

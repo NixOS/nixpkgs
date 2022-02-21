@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "cshatag";
   version = "2019-12-03";
@@ -14,7 +17,7 @@ buildGoPackage rec {
     sha256 = "16kam3w75avh8khkk6jfdnxwggz2pw6ccv6v7d064j0fbb9y8x0v";
   };
 
-  makeFlags = [ "PREFIX=$(out)" "GITVERSION=${version}" ];
+  makeFlags = ["PREFIX=$(out)" "GITVERSION=${version}"];
 
   postInstall = ''
     # Install man page
@@ -28,5 +31,4 @@ buildGoPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
   };
-
 }

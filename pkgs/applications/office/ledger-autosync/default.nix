@@ -1,12 +1,12 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, ledger
-, hledger
-, useLedger ? true
-, useHledger ? true
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  ledger,
+  hledger,
+  useLedger ? true,
+  useHledger ? true,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "ledger-autosync";
   version = "1.0.3";
@@ -24,32 +24,34 @@ python3Packages.buildPythonApplication rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    asn1crypto
-    beautifulsoup4
-    cffi
-    cryptography
-    entrypoints
-    fuzzywuzzy
-    idna
-    jeepney
-    keyring
-    lxml
-    mock
-    nose
-    ofxclient
-    ofxhome
-    ofxparse
-    pbr
-    pycparser
-    secretstorage
-    six
-  ] ++ lib.optional useLedger ledger
+  propagatedBuildInputs = with python3Packages;
+    [
+      asn1crypto
+      beautifulsoup4
+      cffi
+      cryptography
+      entrypoints
+      fuzzywuzzy
+      idna
+      jeepney
+      keyring
+      lxml
+      mock
+      nose
+      ofxclient
+      ofxhome
+      ofxparse
+      pbr
+      pycparser
+      secretstorage
+      six
+    ]
+    ++ lib.optional useLedger ledger
     ++ lib.optional useHledger hledger;
 
   # Checks require ledger as a python package,
   # ledger does not support python3 while ledger-autosync requires it.
-  checkInputs = with python3Packages; [ ledger hledger nose mock pytestCheckHook ];
+  checkInputs = with python3Packages; [ledger hledger nose mock pytestCheckHook];
 
   # Disable some non-passing tests:
   # https://github.com/egh/ledger-autosync/issues/127
@@ -62,6 +64,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/egh/ledger-autosync";
     description = "OFX/CSV autosync for ledger and hledger";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ eamsden ];
+    maintainers = with maintainers; [eamsden];
   };
 }

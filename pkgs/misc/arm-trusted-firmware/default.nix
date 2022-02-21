@@ -1,77 +1,92 @@
-{ lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  pkgsCross,
+  buildPackages
+  # Warning: this blob runs on the main CPU (not the GPU) at privilege
+  # level EL3, which is above both the kernel and the hypervisor.
+  ,
+  unfreeIncludeHDCPBlob ? true,
+}: let
+  buildArmTrustedFirmware = {
+    filesToInstall,
+    installDir ? "$out",
+    platform ? null,
+    extraMakeFlags ? [],
+    extraMeta ? {},
+    version ? "2.6",
+    ...
+  } @ args:
+    stdenv.mkDerivation ({
+      pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
+      inherit version;
 
-# Warning: this blob runs on the main CPU (not the GPU) at privilege
-# level EL3, which is above both the kernel and the hypervisor.
-, unfreeIncludeHDCPBlob ? true
-}:
+      src = fetchFromGitHub {
+        owner = "ARM-software";
+        repo = "arm-trusted-firmware";
+        rev = "v${version}";
+        sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
+      };
 
-let
-  buildArmTrustedFirmware = { filesToInstall
-            , installDir ? "$out"
-            , platform ? null
-            , extraMakeFlags ? []
-            , extraMeta ? {}
-            , version ? "2.6"
-            , ... } @ args:
-           stdenv.mkDerivation ({
+      patches = lib.optionals (!unfreeIncludeHDCPBlob) [
+        # this is a rebased version of https://gitlab.com/vicencb/kevinboot/-/blob/master/atf.patch
+        ./remove-hdcp-blob.patch
+      ];
 
-    pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    inherit version;
+      depsBuildBuild = [buildPackages.stdenv.cc];
 
-    src = fetchFromGitHub {
-      owner = "ARM-software";
-      repo = "arm-trusted-firmware";
-      rev = "v${version}";
-      sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
-    };
+      # For Cortex-M0 firmware in RK3399
+      nativeBuildInputs = [pkgsCross.arm-embedded.stdenv.cc];
 
-    patches = lib.optionals (!unfreeIncludeHDCPBlob) [
-      # this is a rebased version of https://gitlab.com/vicencb/kevinboot/-/blob/master/atf.patch
-      ./remove-hdcp-blob.patch
-    ];
+      buildInputs = [openssl];
 
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
+      makeFlags =
+        [
+          "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+        ]
+        ++ (lib.optional (platform != null) "PLAT=${platform}")
+        ++ extraMakeFlags;
 
-    # For Cortex-M0 firmware in RK3399
-    nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
+      installPhase = ''
+        runHook preInstall
 
-    buildInputs = [ openssl ];
+        mkdir -p ${installDir}
+        cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
 
-    makeFlags = [
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ] ++ (lib.optional (platform != null) "PLAT=${platform}")
-      ++ extraMakeFlags;
+        runHook postInstall
+      '';
 
-    installPhase = ''
-      runHook preInstall
+      hardeningDisable = ["all"];
+      dontStrip = true;
 
-      mkdir -p ${installDir}
-      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+      # Fatal error: can't create build/sun50iw1p1/release/bl31/sunxi_clocks.o: No such file or directory
+      enableParallelBuilding = false;
 
-      runHook postInstall
-    '';
-
-    hardeningDisable = [ "all" ];
-    dontStrip = true;
-
-    # Fatal error: can't create build/sun50iw1p1/release/bl31/sunxi_clocks.o: No such file or directory
-    enableParallelBuilding = false;
-
-    meta = with lib; {
-      homepage = "https://github.com/ARM-software/arm-trusted-firmware";
-      description = "A reference implementation of secure world software for ARMv8-A";
-      license = (if unfreeIncludeHDCPBlob then [ licenses.unfreeRedistributable ] else []) ++ [ licenses.bsd3 ];
-      maintainers = with maintainers; [ lopsided98 ];
-    } // extraMeta;
-  } // builtins.removeAttrs args [ "extraMeta" ]);
-
+      meta = with lib;
+        {
+          homepage = "https://github.com/ARM-software/arm-trusted-firmware";
+          description = "A reference implementation of secure world software for ARMv8-A";
+          license =
+            (if unfreeIncludeHDCPBlob
+            then [licenses.unfreeRedistributable]
+            else [])
+            ++ [licenses.bsd3];
+          maintainers = with maintainers; [lopsided98];
+        }
+        // extraMeta;
+    }
+    // builtins.removeAttrs args ["extraMeta"]);
 in {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareTools = buildArmTrustedFirmware rec {
     extraMakeFlags = [
       "HOSTCC=${stdenv.cc.targetPrefix}gcc"
-      "fiptool" "certtool" "sptool"
+      "fiptool"
+      "certtool"
+      "sptool"
     ];
     filesToInstall = [
       "tools/fiptool/fiptool"
@@ -107,23 +122,23 @@ in {
   };
 
   armTrustedFirmwareRK3328 = buildArmTrustedFirmware rec {
-    extraMakeFlags = [ "bl31" ];
+    extraMakeFlags = ["bl31"];
     platform = "rk3328";
     extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+    filesToInstall = ["build/${platform}/release/bl31/bl31.elf"];
   };
 
   armTrustedFirmwareRK3399 = buildArmTrustedFirmware rec {
-    extraMakeFlags = [ "bl31" ];
+    extraMakeFlags = ["bl31"];
     platform = "rk3399";
     extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+    filesToInstall = ["build/${platform}/release/bl31/bl31.elf"];
   };
 
   armTrustedFirmwareS905 = buildArmTrustedFirmware rec {
-    extraMakeFlags = [ "bl31" ];
+    extraMakeFlags = ["bl31"];
     platform = "gxbb";
     extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = [ "build/${platform}/release/bl31.bin"];
+    filesToInstall = ["build/${platform}/release/bl31.bin"];
   };
 }

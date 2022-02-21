@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, c-ares
-, cffi
-, fetchPypi
-, idna
+{
+  lib,
+  buildPythonPackage,
+  c-ares,
+  cffi,
+  fetchPypi,
+  idna,
 }:
-
 buildPythonPackage rec {
   pname = "pycares";
   version = "4.1.2";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
   # Requires network access
   doCheck = false;
 
-  pythonImportsCheck = [ "pycares" ];
+  pythonImportsCheck = ["pycares"];
 
   meta = with lib; {
     description = "Python interface for c-ares";
     homepage = "https://github.com/saghul/pycares";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

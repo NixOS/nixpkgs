@@ -1,5 +1,4 @@
-{ pkgs }:
-rec {
+{pkgs}: rec {
   inherit (pkgs) eggDerivation fetchegg;
 
   base64 = eggDerivation {
@@ -12,7 +11,6 @@ rec {
     };
 
     buildInputs = [
-      
     ];
   };
 
@@ -26,7 +24,6 @@ rec {
     };
 
     buildInputs = [
-      
     ];
   };
 
@@ -73,7 +70,6 @@ rec {
     };
 
     buildInputs = [
-      
     ];
   };
 
@@ -87,7 +83,6 @@ rec {
     };
 
     buildInputs = [
-      
     ];
   };
 
@@ -101,7 +96,6 @@ rec {
     };
 
     buildInputs = [
-      
     ];
   };
 
@@ -135,4 +129,3 @@ rec {
     ];
   };
 }
-

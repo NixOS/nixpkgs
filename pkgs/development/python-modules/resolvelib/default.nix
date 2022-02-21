@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, commentjson
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  commentjson,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "resolvelib";
   # Currently this package is only used by Ansible and breaking changes
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";
     license = licenses.isc;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

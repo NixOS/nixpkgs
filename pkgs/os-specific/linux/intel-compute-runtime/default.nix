@@ -1,14 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, patchelf
-, cmake
-, pkg-config
-
-, intel-gmmlib
-, intel-graphics-compiler
-, libva
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  patchelf,
+  cmake,
+  pkg-config,
+  intel-gmmlib,
+  intel-graphics-compiler,
+  libva,
 }:
-
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
   version = "21.42.21270";
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "N9MsDcsL8kBWxfZjhukcxZiSJnXxqMgWF0etOhf2/AE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ intel-gmmlib intel-graphics-compiler libva ];
+  buildInputs = [intel-gmmlib intel-graphics-compiler libva];
 
   cmakeFlags = [
     "-DSKIP_UNIT_TESTS=1"
@@ -40,15 +40,15 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-rpath ${lib.makeLibraryPath [ intel-gmmlib intel-graphics-compiler libva stdenv.cc.cc.lib ]} \
+    patchelf --set-rpath ${lib.makeLibraryPath [intel-gmmlib intel-graphics-compiler libva stdenv.cc.cc.lib]} \
       $out/lib/intel-opencl/libigdrcl.so
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/intel/compute-runtime";
+    homepage = "https://github.com/intel/compute-runtime";
     description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ gloaming ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [gloaming];
   };
 }

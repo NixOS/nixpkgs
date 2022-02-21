@@ -1,7 +1,10 @@
-{ lib, appleDerivation, xcbuildHook }:
-
+{
+  lib,
+  appleDerivation,
+  xcbuildHook,
+}:
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook ];
+  nativeBuildInputs = [xcbuildHook];
 
   # These PBXcp calls should be patched in xcbuild to allow them to
   # automatically be prefixed.
@@ -27,6 +30,6 @@ appleDerivation {
 
   meta = {
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = with lib.maintainers; [matthewbauer];
   };
 }

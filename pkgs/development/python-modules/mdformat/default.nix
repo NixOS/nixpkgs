@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, markdown-it-py
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, tomli
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  markdown-it-py,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "mdformat";
   version = "0.7.13";
@@ -28,14 +28,17 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    markdown-it-py
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      markdown-it-py
+      tomli
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      importlib-metadata
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      typing-extensions
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -55,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CommonMark compliant Markdown formatter";
     homepage = "https://mdformat.rtfd.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

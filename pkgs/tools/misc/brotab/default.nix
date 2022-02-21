@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, glibcLocales, python }:
-
+{
+  lib,
+  fetchFromGitHub,
+  glibcLocales,
+  python,
+}:
 python.pkgs.buildPythonApplication rec {
   version = "1.3.0";
   pname = "brotab";
@@ -31,6 +35,6 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/balta2ar/brotab";
     description = "Control your browser's tabs from the command line";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
   };
 }

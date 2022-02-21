@@ -1,12 +1,17 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.hardware.openrazer;
   kernelPackages = config.boot.kernelPackages;
 
-  toPyBoolStr = b: if b then "True" else "False";
+  toPyBoolStr = b:
+    if b
+    then "True"
+    else "False";
 
   daemonExe = "${pkgs.openrazer-daemon}/bin/openrazer-daemon --config ${daemonConfFile}";
 
@@ -45,8 +50,7 @@ let
     "razermug"
     "razercore"
   ];
-in
-{
+in {
   options = {
     hardware.openrazer = {
       enable = mkEnableOption ''
@@ -107,15 +111,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.extraModulePackages = [ kernelPackages.openrazer ];
+    boot.extraModulePackages = [kernelPackages.openrazer];
     boot.kernelModules = drivers;
 
     # Makes the man pages available so you can succesfully run
     # > systemctl --user help openrazer-daemon
-    environment.systemPackages = [ pkgs.python3Packages.openrazer-daemon.man ];
+    environment.systemPackages = [pkgs.python3Packages.openrazer-daemon.man];
 
-    services.udev.packages = [ kernelPackages.openrazer ];
-    services.dbus.packages = [ dbusServiceFile ];
+    services.udev.packages = [kernelPackages.openrazer];
+    services.dbus.packages = [dbusServiceFile];
 
     # A user must be a member of the openrazer group in order to start
     # the openrazer-daemon. Therefore we make sure that the group
@@ -127,20 +131,20 @@ in
     systemd.user.services.openrazer-daemon = {
       description = "Daemon to manage razer devices in userspace";
       unitConfig.Documentation = "man:openrazer-daemon(8)";
-        # Requires a graphical session so the daemon knows when the screensaver
-        # starts. See the 'devicesOffOnScreensaver' option.
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.razer";
-          ExecStart = "${daemonExe} --foreground";
-          Restart = "always";
+      # Requires a graphical session so the daemon knows when the screensaver
+      # starts. See the 'devicesOffOnScreensaver' option.
+      wantedBy = ["graphical-session.target"];
+      partOf = ["graphical-session.target"];
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "org.razer";
+        ExecStart = "${daemonExe} --foreground";
+        Restart = "always";
       };
     };
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ roelvandijk ];
+    maintainers = with lib.maintainers; [roelvandijk];
   };
 }

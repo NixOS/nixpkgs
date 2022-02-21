@@ -1,7 +1,17 @@
-{ lib, stdenv, csound, desktop-file-utils,
-  fetchFromGitHub, python, python-qt, qmake,
-  qtwebengine, qtxmlpatterns, rtmidi, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  csound,
+  desktop-file-utils,
+  fetchFromGitHub,
+  python,
+  python-qt,
+  qmake,
+  qtwebengine,
+  qtxmlpatterns,
+  rtmidi,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "csound-qt";
   version = "0.9.6-beta3";
@@ -22,23 +32,27 @@ stdenv.mkDerivation rec {
     ./rtmidipath.patch
   ];
 
-  nativeBuildInputs = [ qmake qtwebengine qtxmlpatterns ];
+  nativeBuildInputs = [qmake qtwebengine qtxmlpatterns];
 
-  buildInputs = [ csound desktop-file-utils rtmidi ];
+  buildInputs = [csound desktop-file-utils rtmidi];
 
-  qmakeFlags = [ "qcs.pro" "CONFIG+=rtmidi" "CONFIG+=pythonqt"
-                 "CONFIG+=record_support" "CONFIG+=html_webengine"
-                 "CSOUND_INCLUDE_DIR=${csound}/include/csound"
-                 "CSOUND_LIBRARY_DIR=${csound}/lib"
-                 "RTMIDI_DIR=${rtmidi.src}"
-                 "PYTHONQT_SRC_DIR=${python-qt}/include/PythonQt"
-                 "PYTHONQT_LIB_DIR=${python-qt}/lib"
-                 "LIBS+=-L${python-qt}/lib"
-                 "INCLUDEPATH+=${python-qt}/include/PythonQt"
-                 "INCLUDEPATH+=${python}/include/python2.7"
-                 "INSTALL_DIR=${placeholder "out"}"
-                 "SHARE_DIR=${placeholder "out"}/share"
-                 ];
+  qmakeFlags = [
+    "qcs.pro"
+    "CONFIG+=rtmidi"
+    "CONFIG+=pythonqt"
+    "CONFIG+=record_support"
+    "CONFIG+=html_webengine"
+    "CSOUND_INCLUDE_DIR=${csound}/include/csound"
+    "CSOUND_LIBRARY_DIR=${csound}/lib"
+    "RTMIDI_DIR=${rtmidi.src}"
+    "PYTHONQT_SRC_DIR=${python-qt}/include/PythonQt"
+    "PYTHONQT_LIB_DIR=${python-qt}/lib"
+    "LIBS+=-L${python-qt}/lib"
+    "INCLUDEPATH+=${python-qt}/include/PythonQt"
+    "INCLUDEPATH+=${python}/include/python2.7"
+    "INSTALL_DIR=${placeholder "out"}"
+    "SHARE_DIR=${placeholder "out"}/share"
+  ];
 
   dontWrapQtApps = true;
 
@@ -47,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://csoundqt.github.io/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hlolli ];
+    maintainers = with maintainers; [hlolli];
   };
 }

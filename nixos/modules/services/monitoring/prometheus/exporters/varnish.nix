@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.varnish;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.varnish;
+in {
   port = 9131;
   extraOpts = {
     noExit = mkOption {
@@ -66,7 +67,7 @@ in
     };
   };
   serviceOpts = {
-    path = [ pkgs.varnish ];
+    path = [pkgs.varnish];
     serviceConfig = {
       RestartSec = mkDefault 1;
       DynamicUser = false;
@@ -75,13 +76,15 @@ in
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --varnishstat-path ${escapeShellArg cfg.varnishStatPath} \
-          ${concatStringsSep " \\\n  " (cfg.extraFlags
-            ++ optional (cfg.healthPath != null) "--web.health-path ${cfg.healthPath}"
-            ++ optional (cfg.instance != null) "-n ${escapeShellArg cfg.instance}"
-            ++ optional cfg.noExit "--no-exit"
-            ++ optional cfg.withGoMetrics "--with-go-metrics"
-            ++ optional cfg.verbose "--verbose"
-            ++ optional cfg.raw "--raw")}
+          ${
+          concatStringsSep " \\\n  " (cfg.extraFlags
+          ++ optional (cfg.healthPath != null) "--web.health-path ${cfg.healthPath}"
+          ++ optional (cfg.instance != null) "-n ${escapeShellArg cfg.instance}"
+          ++ optional cfg.noExit "--no-exit"
+          ++ optional cfg.withGoMetrics "--with-go-metrics"
+          ++ optional cfg.verbose "--verbose"
+          ++ optional cfg.raw "--raw")
+        }
       '';
     };
   };

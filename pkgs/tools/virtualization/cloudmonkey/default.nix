@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "cloudmonkey";
   version = "6.2.0";
@@ -16,8 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "CLI for Apache CloudStack";
     homepage = "https://github.com/apache/cloudstack-cloudmonkey";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.womfoo ];
+    license = [licenses.asl20];
+    maintainers = [maintainers.womfoo];
   };
-
 }

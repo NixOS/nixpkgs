@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "asyncmy";
   version = "0.2.3";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Python module to interact with MySQL/mariaDB";
     homepage = "https://github.com/long2ice/asyncmy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

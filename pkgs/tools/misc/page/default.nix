@@ -1,5 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "page";
   version = "2.3.5";
@@ -11,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1pk3iclmwbkg4nvsgarq4qjpzapjhsl7b7z6zw6havp1zmx9h806";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
   postInstall = ''
     completions_dir=$(find "target" -name "shell_completions" -type d -printf "%T+\t%p\n" | sort | awk 'NR==1{print $2}')
 
@@ -26,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "Use neovim as pager";
     homepage = "https://github.com/I60R/page";
     license = licenses.mit;
-    maintainers = [ maintainers.s1341 ];
+    maintainers = [maintainers.s1341];
   };
 }

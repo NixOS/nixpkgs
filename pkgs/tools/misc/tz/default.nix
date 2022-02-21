@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "tz";
   version = "0.6.1";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "A time zone helper";
     homepage = "https://github.com/oz/tz";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
   };
 }

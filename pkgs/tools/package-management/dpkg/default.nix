@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, perl, zlib, bzip2, xz, zstd
-, makeWrapper, coreutils, autoreconfHook, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  zlib,
+  bzip2,
+  xz,
+  zstd,
+  makeWrapper,
+  coreutils,
+  autoreconfHook,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dpkg";
   version = "1.20.9ubuntu2";
@@ -53,27 +63,26 @@ stdenv.mkDerivation rec {
        --replace '"diff"' \"${coreutils}/bin/diff\"
   '';
 
-  buildInputs = [ perl zlib bzip2 xz zstd ];
-  nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
+  buildInputs = [perl zlib bzip2 xz zstd];
+  nativeBuildInputs = [makeWrapper perl autoreconfHook pkg-config];
 
-  postInstall =
-    ''
-      for i in $out/bin/*; do
-        if head -n 1 $i | grep -q perl; then
-          substituteInPlace $i --replace \
-            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
-        fi
-      done
+  postInstall = ''
+    for i in $out/bin/*; do
+      if head -n 1 $i | grep -q perl; then
+        substituteInPlace $i --replace \
+          "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+      fi
+    done
 
-      mkdir -p $out/etc/dpkg
-      cp -r scripts/t/origins $out/etc/dpkg
-    '';
+    mkdir -p $out/etc/dpkg
+    cp -r scripts/t/origins $out/etc/dpkg
+  '';
 
   meta = with lib; {
     description = "The Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [siriobalmelli];
   };
 }

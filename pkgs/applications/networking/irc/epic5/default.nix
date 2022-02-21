@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  ncurses,
+  libiconv,
+  tcl,
+  coreutils,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "epic5";
   version = "2.0.1";
@@ -10,8 +19,9 @@ stdenv.mkDerivation rec {
   };
 
   # Darwin needs libiconv, tcl; while Linux build don't
-  buildInputs = [ openssl ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv tcl ];
+  buildInputs =
+    [openssl ncurses]
+    ++ lib.optionals stdenv.isDarwin [libiconv tcl];
 
   patches = [
     (fetchpatch {
@@ -20,7 +30,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--disable-debug" "--with-ipv6" ];
+  configureFlags = ["--disable-debug" "--with-ipv6"];
 
   postConfigure = ''
     substituteInPlace bsdinstall \
@@ -36,6 +46,3 @@ stdenv.mkDerivation rec {
     maintainers = [];
   };
 }
-
-
-

@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, poetry, pytest-asyncio, }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  poetry,
+  pytest-asyncio,
+}:
 buildPythonPackage rec {
   pname = "backoff";
   version = "1.11.1";
@@ -13,14 +19,14 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [poetry];
 
-  checkInputs = [ pytestCheckHook pytest-asyncio ];
+  checkInputs = [pytestCheckHook pytest-asyncio];
 
   meta = with lib; {
     description = "Function decoration for backoff and retry";
     homepage = "https://github.com/litl/backoff";
     license = licenses.mit;
-    maintainers = with maintainers; [ chkno ];
+    maintainers = with maintainers; [chkno];
   };
 }

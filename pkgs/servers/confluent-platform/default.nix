@@ -1,6 +1,13 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub
-, jre, makeWrapper, bash, gnused }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  bash,
+  gnused,
+}:
 stdenv.mkDerivation rec {
   pname = "confluent-platform";
   version = "5.3.0";
@@ -18,8 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "18yvp56b8l074qfkgr4afirgd43g8b023n9ija6dnk6p6dib1f4j";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre bash ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre bash];
 
   installPhase = ''
     cp -R $confluentCli confluent-cli
@@ -56,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.confluent.io/";
     description = "Confluent event streaming platform based on Apache Kafka";
     license = licenses.asl20;
-    maintainers = [ maintainers.offline ];
+    maintainers = [maintainers.offline];
     platforms = platforms.unix;
   };
 }

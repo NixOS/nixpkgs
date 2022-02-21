@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, doxygen
-, libX11
-, libXcursor
-, libXext
-, libXft
-, libXinerama
-, libXrandr
-, pkg-config
-, zlib
-, AGL
-, Cocoa
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  doxygen,
+  libX11,
+  libXcursor,
+  libXext,
+  libXft,
+  libXinerama,
+  libXrandr,
+  pkg-config,
+  zlib,
+  AGL,
+  Cocoa,
+  Foundation,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libopenshot-audio";
   version = "0.2.2";
@@ -34,21 +34,27 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ (if stdenv.isDarwin then [
-      AGL
-      Cocoa
-      Foundation
-      zlib
-    ] else [
-      libX11
-      libXcursor
-      libXext
-      libXft
-      libXinerama
-      libXrandr
-    ]);
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      alsa-lib
+    ]
+    ++ (if stdenv.isDarwin
+    then
+      [
+        AGL
+        Cocoa
+        Foundation
+        zlib
+      ]
+    else
+      [
+        libX11
+        libXcursor
+        libXext
+        libXft
+        libXinerama
+        libXrandr
+      ]);
 
   doCheck = false;
 
@@ -61,7 +67,7 @@ stdenv.mkDerivation rec {
       JUCE library.
     '';
     license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

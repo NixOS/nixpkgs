@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-raises";
   version = "0.11";
@@ -19,12 +19,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pytest_raises" ];
+  pythonImportsCheck = ["pytest_raises"];
 
   meta = with lib; {
     description = "An implementation of pytest.raises as a pytest.mark fixture";
     homepage = "https://github.com/Lemmons/pytest-raises";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

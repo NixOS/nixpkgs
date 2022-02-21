@@ -1,6 +1,7 @@
-{ stdenv
-, lib
-, fetchurl
+{
+  stdenv,
+  lib,
+  fetchurl,
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
@@ -9,13 +10,21 @@ stdenv.mkDerivation rec {
     url = "https://pallini.di.uniroma1.it/nauty${version}.tar.gz";
     sha256 = "0xsfqfcknbd6g6wzpa5l7crmmk3bf3zjh37rhylq6b20dqcmvjkn";
   };
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
   configureFlags = [
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
-    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-popcnt"
-    "--${if stdenv.hostPlatform.sse4_aSupport then "enable" else "disable"}-clz"
+    "--${
+      if stdenv.hostPlatform.sse4_2Support
+      then "enable"
+      else "disable"
+    }-popcnt"
+    "--${
+      if stdenv.hostPlatform.sse4_aSupport
+      then "enable"
+      else "disable"
+    }-clz"
   ];
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}

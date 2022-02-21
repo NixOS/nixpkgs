@@ -1,5 +1,8 @@
-{ lib, python3Packages, mopidy }:
-
+{
+  lib,
+  python3Packages,
+  mopidy,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-somafm";
   version = "2.0.0";
@@ -20,7 +23,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for playing music from SomaFM";
     license = licenses.mit;
-    maintainers = [ maintainers.nickhu ];
+    maintainers = [maintainers.nickhu];
   };
 }
-

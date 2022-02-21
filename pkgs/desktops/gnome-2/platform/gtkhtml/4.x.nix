@@ -1,6 +1,17 @@
-{ stdenv, fetchFromGitLab, pkg-config, gtk3, intltool, autoreconfHook, fetchpatch
-, GConf, enchant, isocodes, gnome-icon-theme, gsettings-desktop-schemas }:
-
+{
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  gtk3,
+  intltool,
+  autoreconfHook,
+  fetchpatch,
+  GConf,
+  enchant,
+  isocodes,
+  gnome-icon-theme,
+  gsettings-desktop-schemas,
+}:
 stdenv.mkDerivation rec {
   version = "4.10.0";
   pname = "gtkhtml";
@@ -17,14 +28,14 @@ stdenv.mkDerivation rec {
     # Enables enchant2 support.
     # Upstream is dead, no further releases are coming.
     (fetchpatch {
-      name ="enchant-2.patch";
+      name = "enchant-2.patch";
       url = "https://aur.archlinux.org/cgit/aur.git/plain/enchant-2.patch?h=gtkhtml4&id=0218303a63d64c04d6483a6fe9bb55063fcfaa43";
       sha256 = "f0OToWGHZwxvqf+0qosfA9FfwJ/IXfjIPP5/WrcvArI=";
       extraPrefix = "";
     })
   ];
 
-  propagatedBuildInputs = [ gsettings-desktop-schemas gtk3 gnome-icon-theme GConf ];
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ intltool enchant isocodes autoreconfHook ];
+  propagatedBuildInputs = [gsettings-desktop-schemas gtk3 gnome-icon-theme GConf];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [intltool enchant isocodes autoreconfHook];
 }

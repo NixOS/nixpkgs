@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "coverage";
   version = "6.2";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   # No tests in archive
   doCheck = false;
-  checkInputs = [ mock ];
+  checkInputs = [mock];
 
   meta = {
     description = "Code coverage measurement for python";

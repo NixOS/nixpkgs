@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, redis }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  redis,
+}:
 buildPythonPackage rec {
   pname = "huey";
   version = "2.4.2";
@@ -11,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "00fi04991skq61gjrmig8ry6936pc8zs7p8py8spfipbxf1irkjg";
   };
 
-  propagatedBuildInputs = [ redis ];
+  propagatedBuildInputs = [redis];
 
   # connects to redis
   doCheck = false;
@@ -20,6 +24,6 @@ buildPythonPackage rec {
     description = "A little task queue for python";
     homepage = "https://github.com/coleifer/huey";
     license = licenses.mit;
-    maintainers = [ maintainers.globin ];
+    maintainers = [maintainers.globin];
   };
 }

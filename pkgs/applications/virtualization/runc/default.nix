@@ -1,19 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, go-md2man
-, installShellFiles
-, pkg-config
-, which
-, libapparmor
-, apparmor-parser
-, libseccomp
-, libselinux
-, makeWrapper
-, procps
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  which,
+  libapparmor,
+  apparmor-parser,
+  libseccomp,
+  libselinux,
+  makeWrapper,
+  procps,
+  nixosTests,
 }:
-
 buildGoModule rec {
   pname = "runc";
   version = "1.1.0";
@@ -26,13 +26,13 @@ buildGoModule rec {
   };
 
   vendorSha256 = null;
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
+  nativeBuildInputs = [go-md2man installShellFiles makeWrapper pkg-config which];
 
-  buildInputs = [ libselinux libseccomp libapparmor ];
+  buildInputs = [libselinux libseccomp libapparmor];
 
-  makeFlags = [ "BUILDTAGS+=seccomp" ];
+  makeFlags = ["BUILDTAGS+=seccomp"];
 
   buildPhase = ''
     runHook preBuild
@@ -46,18 +46,18 @@ buildGoModule rec {
     install -Dm755 runc $out/bin/runc
     installManPage man/*/*.[1-9]
     wrapProgram $out/bin/runc \
-      --prefix PATH : ${lib.makeBinPath [ procps ]} \
+      --prefix PATH : ${lib.makeBinPath [procps]} \
       --prefix PATH : /run/current-system/systemd/bin
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) cri-o docker podman; };
+  passthru.tests = {inherit (nixosTests) cri-o docker podman;};
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline ] ++ teams.podman.members;
+    maintainers = with maintainers; [offline] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

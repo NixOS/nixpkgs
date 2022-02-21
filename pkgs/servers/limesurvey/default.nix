@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, writeText, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "limesurvey";
   version = "3.27.33+220125";
@@ -12,9 +17,9 @@ stdenv.mkDerivation rec {
   };
 
   phpConfig = writeText "config.php" ''
-  <?php
-    return require(getenv('LIMESURVEY_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('LIMESURVEY_CONFIG'));
+    ?>
   '';
 
   installPhase = ''

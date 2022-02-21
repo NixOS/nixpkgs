@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, tcl, tk }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tcl,
+  tk,
+}:
 stdenv.mkDerivation rec {
   pname = "tkcvs";
   version = "8.2.1";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kvj6rcx1153wq0n1lmd8imbrki6xy5wxghwzlb9i15l65sclg3i";
   };
 
-  buildInputs = [ tcl tk ];
+  buildInputs = [tcl tk];
 
   patchPhase = ''
     sed -e 's@exec wish@exec ${tk}/bin/wish@' -i tkcvs/tkcvs.tcl tkdiff/tkdiff

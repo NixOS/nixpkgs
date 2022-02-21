@@ -1,32 +1,33 @@
-{ lib, stdenv
-, gettext
-, fetchurl
-, evolution-data-server
-, pkg-config
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_42
-, python3
-, gtk3
-, glib
-, cheese
-, libchamplain
-, clutter-gtk
-, geocode-glib
-, gnome-desktop
-, gnome-online-accounts
-, wrapGAppsHook
-, folks
-, libgdata
-, libxml2
-, gnome
-, vala
-, meson
-, ninja
-, libhandy
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  evolution-data-server,
+  pkg-config,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  python3,
+  gtk3,
+  glib,
+  cheese,
+  libchamplain,
+  clutter-gtk,
+  geocode-glib,
+  gnome-desktop,
+  gnome-online-accounts,
+  wrapGAppsHook,
+  folks,
+  libgdata,
+  libxml2,
+  gnome,
+  vala,
+  meson,
+  ninja,
+  libhandy,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
   version = "41.0";

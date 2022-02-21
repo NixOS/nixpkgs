@@ -1,10 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pypdf2 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pypdf2,
+}:
 buildPythonPackage rec {
   pname = "pdftools.pdfposter";
   version = "0.7.post1";
 
-  propagatedBuildInputs = [ pypdf2 ];
+  propagatedBuildInputs = [pypdf2];
 
   src = fetchPypi {
     inherit pname version;
@@ -15,6 +19,6 @@ buildPythonPackage rec {
     description = "Split large pages of a PDF into smaller ones for poster printing";
     homepage = "https://pdfposter.readthedocs.io";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ wamserma ];
+    maintainers = with maintainers; [wamserma];
   };
 }

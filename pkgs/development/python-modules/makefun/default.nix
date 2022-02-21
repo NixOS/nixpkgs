@@ -1,10 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "makefun";
   version = "1.13.1";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "makefun" ];
+  pythonImportsCheck = ["makefun"];
 
   meta = with lib; {
     homepage = "https://github.com/smarie/python-makefun";
     description = "Small library to dynamically create python functions";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ veehaitch ];
+    maintainers = with maintainers; [veehaitch];
   };
 }

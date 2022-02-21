@@ -1,18 +1,18 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, poetry-core
-, pysmb
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  poetry-core,
+  pysmb,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyairvisual";
   version = "2021.10.0";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     description = "Python library for interacting with AirVisual";
     homepage = "https://github.com/bachya/pyairvisual";
     changelog = "https://github.com/bachya/pyairvisual/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

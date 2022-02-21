@@ -1,7 +1,12 @@
-{ writeText, writeScriptBin, xorg, xkeyboard_config, runtimeShell
-, unfreeFonts ? false, lib}:
-
-let
+{
+  writeText,
+  writeScriptBin,
+  xorg,
+  xkeyboard_config,
+  runtimeShell,
+  unfreeFonts ? false,
+  lib,
+}: let
   xorgConfig = writeText "dummy-xorg.conf" ''
     Section "ServerLayout"
       Identifier     "dummy_layout"
@@ -26,11 +31,13 @@ let
       FontPath "${xorg.fontadobe100dpi}/lib/X11/fonts/100dpi"
       FontPath "${xorg.fontmiscmisc}/lib/X11/fonts/misc"
       FontPath "${xorg.fontcursormisc}/lib/X11/fonts/misc"
-    ${lib.optionalString unfreeFonts ''
-      FontPath "${xorg.fontbhlucidatypewriter75dpi}/lib/X11/fonts/75dpi"
-      FontPath "${xorg.fontbhlucidatypewriter100dpi}/lib/X11/fonts/100dpi"
-      FontPath "${xorg.fontbh100dpi}/lib/X11/fonts/100dpi"
-    ''}
+    ${
+      lib.optionalString unfreeFonts ''
+        FontPath "${xorg.fontbhlucidatypewriter75dpi}/lib/X11/fonts/75dpi"
+        FontPath "${xorg.fontbhlucidatypewriter100dpi}/lib/X11/fonts/100dpi"
+        FontPath "${xorg.fontbh100dpi}/lib/X11/fonts/100dpi"
+      ''
+    }
     EndSection
 
     Section "Module"
@@ -74,12 +81,12 @@ let
       EndSubSection
     EndSection
   '';
-
-in writeScriptBin "xdummy" ''
-  #!${runtimeShell}
-  exec ${xorg.xorgserver.out}/bin/Xorg \
-    -noreset \
-    -logfile /dev/null \
-    "$@" \
-    -config "${xorgConfig}"
-''
+in
+  writeScriptBin "xdummy" ''
+    #!${runtimeShell}
+    exec ${xorg.xorgserver.out}/bin/Xorg \
+      -noreset \
+      -logfile /dev/null \
+      "$@" \
+      -config "${xorgConfig}"
+  ''

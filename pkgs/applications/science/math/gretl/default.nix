@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, curl, fftw, gmp, gnuplot, gtk3, gtksourceview3, json-glib
-, lapack, libxml2, mpfr, openblas, pkg-config, readline }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  fftw,
+  gmp,
+  gnuplot,
+  gtk3,
+  gtksourceview3,
+  json-glib,
+  lapack,
+  libxml2,
+  mpfr,
+  openblas,
+  pkg-config,
+  readline,
+}:
 stdenv.mkDerivation rec {
   pname = "gretl";
   version = "2022a";
@@ -25,7 +40,7 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   enableParallelBuilding = true;
 
@@ -37,7 +52,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://gretl.sourceforge.net";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dmrauh ];
+    maintainers = with maintainers; [dmrauh];
     platforms = with platforms; all;
   };
 }

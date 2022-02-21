@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, netcdf, nifticlib, hdf5 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  netcdf,
+  nifticlib,
+  hdf5,
+}:
 stdenv.mkDerivation rec {
-  pname   = "libminc";
+  pname = "libminc";
   version = "unstable-2020-07-17";
 
   owner = "BIC-MNI";
 
   src = fetchFromGitHub {
     inherit owner;
-    repo   = pname;
-    rev    = "ffb5fb234a852ea7e8da8bb2b3b49f67acbe56ca";
+    repo = pname;
+    rev = "ffb5fb234a852ea7e8da8bb2b3b49f67acbe56ca";
     sha256 = "0yr4ksghpvxh9zg0a4p7hvln3qirsi08plvjp5kxx2qiyj96zsdm";
   };
 
@@ -17,9 +25,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib nifticlib ];
-  propagatedBuildInputs = [ netcdf hdf5 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [zlib nifticlib];
+  propagatedBuildInputs = [netcdf hdf5];
 
   cmakeFlags = [
     "-DLIBMINC_MINC1_SUPPORT=ON"
@@ -38,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BIC-MNI/libminc";
     description = "Medical imaging library based on HDF5";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
     platforms = platforms.unix;
     license = licenses.free;
   };

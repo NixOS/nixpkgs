@@ -1,10 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, fonttools
-, lxml, fs # for fonttools extras
-, setuptools-scm
-, pytestCheckHook, pytest-cov, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  fonttools,
+  lxml,
+  fs
+  # for fonttools extras
+  ,
+  setuptools-scm,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-xdist,
 }:
-
 buildPythonPackage rec {
   pname = "psautohint";
   version = "2.3.1";
@@ -25,9 +33,9 @@ buildPythonPackage rec {
     sed -i '/setup(/a \     version="${version}",' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  propagatedBuildInputs = [ fonttools lxml fs ];
+  propagatedBuildInputs = [fonttools lxml fs];
 
   checkInputs = [
     pytestCheckHook
@@ -52,6 +60,6 @@ buildPythonPackage rec {
     description = "Script to normalize the XML and other data inside of a UFO";
     homepage = "https://github.com/adobe-type-tools/psautohint";
     license = licenses.bsd3;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

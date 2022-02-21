@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, python, autoreconfHook, pkg-config, makeWrapper
-, flex
-, gettext, libedit, glib, imagemagick6, libxml2, boost, gnuplot, graphviz
-, tesseract, gts, libXtst
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+  autoreconfHook,
+  pkg-config,
+  makeWrapper,
+  flex,
+  gettext,
+  libedit,
+  glib,
+  imagemagick6,
+  libxml2,
+  boost,
+  gnuplot,
+  graphviz,
+  tesseract,
+  gts,
+  libXtst,
 }:
 stdenv.mkDerivation rec {
   version = "0.42";
@@ -14,15 +30,33 @@ stdenv.mkDerivation rec {
     sha256 = "1jb9nb2mipc5cg99a80dny4m06vz2zral0q30fv75rz2cb6ja4zp";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config flex makeWrapper
-    python.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    flex
+    makeWrapper
+    python.pkgs.wrapPython
+  ];
 
-  buildInputs = [ python gettext libedit glib imagemagick6 libxml2 boost
-    gnuplot graphviz tesseract gts
-    ];
+  buildInputs = [
+    python
+    gettext
+    libedit
+    glib
+    imagemagick6
+    libxml2
+    boost
+    gnuplot
+    graphviz
+    tesseract
+    gts
+  ];
 
   propagatedBuildInputs = with python.pkgs; [
-    pyside pydbus pexpect pysideShiboken
+    pyside
+    pydbus
+    pexpect
+    pysideShiboken
   ];
 
   preBuild = ''
@@ -47,7 +81,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/fMBT";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
   };
 }
-

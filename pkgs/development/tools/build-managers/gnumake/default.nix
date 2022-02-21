@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config, guile }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guileSupport ? false,
+  pkg-config,
+  guile,
+}:
 stdenv.mkDerivation rec {
   pname = "gnumake";
   version = "4.3";
@@ -19,11 +25,11 @@ stdenv.mkDerivation rec {
     ./0002-remove-impure-dirs.patch
   ];
 
-  nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];
-  buildInputs = lib.optionals guileSupport [ guile ];
+  nativeBuildInputs = lib.optionals guileSupport [pkg-config];
+  buildInputs = lib.optionals guileSupport [guile];
 
-  configureFlags = lib.optional guileSupport "--with-guile"
-
+  configureFlags =
+    lib.optional guileSupport "--with-guile"
     # Make uses this test to decide whether it should keep track of
     # subseconds. Apple made this possible with APFS and macOS 10.13.
     # However, we still support macOS 10.11 and 10.12. Binaries built
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
     # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
     ++ lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
 
-  outputs = [ "out" "man" "info" ];
+  outputs = ["out" "man" "info"];
   separateDebugInfo = true;
 
   meta = with lib; {
@@ -53,6 +59,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [maintainers.vrthra];
   };
 }

@@ -1,8 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
-, pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
-, Cocoa, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_ttf,
+  pango,
+  gettext,
+  boost,
+  libvorbis,
+  fribidi,
+  dbus,
+  libpng,
+  pcre,
+  openssl,
+  icu,
+  Cocoa,
+  Foundation,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wesnoth";
   version = "1.16.1";
@@ -14,11 +33,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eRegE+Q5dEtuT2XRKAK0sycRuK6sdSXKS6aLCsBDU8g=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
-                  libvorbis fribidi dbus libpng pcre openssl icu ]
-                ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation];
+  buildInputs =
+    [
+      SDL2
+      SDL2_image
+      SDL2_mixer
+      SDL2_net
+      SDL2_ttf
+      pango
+      gettext
+      boost
+      libvorbis
+      fribidi
+      dbus
+      libpng
+      pcre
+      openssl
+      icu
+    ]
+    ++ lib.optionals stdenv.isDarwin [Cocoa Foundation];
 
   meta = with lib; {
     description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
@@ -32,7 +67,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.wesnoth.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
     platforms = platforms.unix;
   };
 }

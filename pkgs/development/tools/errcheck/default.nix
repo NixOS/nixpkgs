@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "errcheck";
   version = "1.6.0";
@@ -17,7 +20,7 @@ buildGoModule rec {
     description = "Program for checking for unchecked errors in go programs";
     homepage = "https://github.com/kisielk/errcheck";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, glib
-, cairo
-, pango
-, gdk-pixbuf
-, atk
-, gtk3
-, testVersion
-, czkawka
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  cairo,
+  pango,
+  gdk-pixbuf,
+  atk,
+  gtk3,
+  testVersion,
+  czkawka,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
   version = "4.0.0";
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ yanganto _0x4A6F ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [yanganto _0x4A6F];
   };
 }

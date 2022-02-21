@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, ncurses, pcre }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  ncurses,
+  pcre,
+}:
 stdenv.mkDerivation rec {
   pname = "ccze";
   version = "0.2.1-2";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-LVwmbrq78mZcAEuAqjXTqLE5we83H9mcMPtxQx2Tn/c=";
   };
 
-  nativeBuildInputs = [ autoconf ];
+  nativeBuildInputs = [autoconf];
 
-  buildInputs = [ ncurses pcre ];
+  buildInputs = [ncurses pcre];
 
   preConfigure = ''
     autoheader
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
       formats (Apache, Postfix, Procmail, etc.).
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ malyn ];
+    maintainers = with maintainers; [malyn];
     platforms = platforms.linux;
   };
 }

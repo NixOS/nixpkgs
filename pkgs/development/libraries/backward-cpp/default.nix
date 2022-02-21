@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "backward";
   version = "1.3";
@@ -25,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bombela/backward-cpp";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [cstrahan];
   };
 }

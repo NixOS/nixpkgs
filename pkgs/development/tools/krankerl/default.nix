@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, dbus
-, sqlite
-, file
-, gzip
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  dbus,
+  sqlite,
+  file,
+  gzip,
+  makeWrapper,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "krankerl";
   version = "0.13.3";
@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ChristophWurst/krankerl";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
   };
 }

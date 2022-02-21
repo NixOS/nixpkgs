@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, starlette
-, pytestCheckHook
-, pytest-asyncio
-, aiosqlite
-, databases
-, flask
-, httpx
-, passlib
-, peewee
-, python-jose
-, sqlalchemy
-, trio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pydantic,
+  starlette,
+  pytestCheckHook,
+  pytest-asyncio,
+  aiosqlite,
+  databases,
+  flask,
+  httpx,
+  passlib,
+  peewee,
+  python-jose,
+  sqlalchemy,
+  trio,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "fastapi";
   version = "0.73.0";
@@ -84,6 +84,6 @@ buildPythonPackage rec {
     description = "Web framework for building APIs";
     homepage = "https://github.com/tiangolo/fastapi";
     license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    maintainers = with maintainers; [wd15];
   };
 }

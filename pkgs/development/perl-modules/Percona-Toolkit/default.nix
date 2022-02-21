@@ -1,7 +1,13 @@
-{ lib, fetchFromGitHub, buildPerlPackage, shortenPerlShebang
-, DBDmysql, DBI, IOSocketSSL, TermReadKey
+{
+  lib,
+  fetchFromGitHub,
+  buildPerlPackage,
+  shortenPerlShebang,
+  DBDmysql,
+  DBI,
+  IOSocketSSL,
+  TermReadKey,
 }:
-
 buildPerlPackage rec {
   pname = "Percona-Toolkit";
   version = "3.2.0";
@@ -13,11 +19,11 @@ buildPerlPackage rec {
     sha256 = "084ldpskvlfm32lfss5qqzm5y9b8hf029aa4i5pcnzgb53xaxkqx";
   };
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
-  nativeBuildInputs = [ shortenPerlShebang ];
+  nativeBuildInputs = [shortenPerlShebang];
 
-  buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey ];
+  buildInputs = [DBDmysql DBI IOSocketSSL TermReadKey];
 
   postInstall = ''
     shortenPerlShebang $(grep -l "/bin/env perl" $out/bin/*)
@@ -26,7 +32,7 @@ buildPerlPackage rec {
   meta = with lib; {
     description = "Collection of advanced command-line tools to perform a variety of MySQL and system tasks.";
     homepage = "https://www.percona.com/software/database-tools/percona-toolkit";
-    license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ izorkin ];
+    license = with licenses; [gpl2];
+    maintainers = with maintainers; [izorkin];
   };
 }

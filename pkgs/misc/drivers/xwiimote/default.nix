@@ -1,5 +1,12 @@
-{ lib, stdenv, udev, ncurses, pkg-config, fetchurl, bluez }:
-
+{
+  lib,
+  stdenv,
+  udev,
+  ncurses,
+  pkg-config,
+  fetchurl,
+  bluez,
+}:
 stdenv.mkDerivation rec {
   pname = "xwiimote";
   version = "2";
@@ -9,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1g9cbhblll47l300zr999xr51x2g98y49l222f77fhswd12kjzhd";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ncurses bluez ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [udev ncurses bluez];
 
-  configureFlags = [ "--with-doxygen=no" ];
+  configureFlags = ["--with-doxygen=no"];
 
   meta = {
     homepage = "http://dvdhrm.github.io/xwiimote";

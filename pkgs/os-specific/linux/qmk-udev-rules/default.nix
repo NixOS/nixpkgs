@@ -1,9 +1,11 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 ## Usage
 # In NixOS, simply add this package to services.udev.packages:
 #   services.udev.packages = [ pkgs.qmk-udev-rules ];
-
 stdenv.mkDerivation rec {
   pname = "qmk-udev-rules";
   version = "0.13.23";
@@ -28,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Official QMK udev rules list";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ekleog ];
+    maintainers = with maintainers; [ekleog];
   };
 }

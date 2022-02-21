@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "vndr-unstable";
   version = "2020-07-28";
@@ -18,7 +21,7 @@ buildGoPackage rec {
   meta = {
     description = "Stupid golang vendoring tool, inspired by docker vendor script";
     homepage = "https://github.com/LK4D4/vndr";
-    maintainers = with lib.maintainers; [ vdemeester rvolosatovs ];
+    maintainers = with lib.maintainers; [vdemeester rvolosatovs];
     license = lib.licenses.asl20;
   };
 }

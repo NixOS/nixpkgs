@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "losant-rest";
   version = "1.15.2";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python module for consuming the Losant IoT Platform API";
     homepage = "https://github.com/Losant/losant-rest-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

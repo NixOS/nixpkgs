@@ -1,33 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, glib
-, gdk-pixbuf
-, pango
-, cairo
-, libxml2
-, bzip2
-, libintl
-, ApplicationServices
-, Foundation
-, libobjc
-, rustPlatform
-, rustc
-, rust
-, cargo
-, gnome
-, vala
-, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
-, gobject-introspection
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gdk-pixbuf,
+  pango,
+  cairo,
+  libxml2,
+  bzip2,
+  libintl,
+  ApplicationServices,
+  Foundation,
+  libobjc,
+  rustPlatform,
+  rustc,
+  rust,
+  cargo,
+  gnome,
+  vala,
+  withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform,
+  gobject-introspection,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "librsvg";
   version = "2.52.5";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = ["out" "dev" "installedTests"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -38,31 +38,36 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [pkg-config];
 
-  nativeBuildInputs = [
-    gdk-pixbuf
-    pkg-config
-    rustc
-    cargo
-    vala
-    rustPlatform.cargoSetupHook
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      gdk-pixbuf
+      pkg-config
+      rustc
+      cargo
+      vala
+      rustPlatform.cargoSetupHook
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
-  buildInputs = [
-    libxml2
-    bzip2
-    pango
-    libintl
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    Foundation
-    libobjc
-  ];
+  buildInputs =
+    [
+      libxml2
+      bzip2
+      pango
+      libintl
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      Foundation
+      libobjc
+    ];
 
   propagatedBuildInputs = [
     glib
@@ -70,16 +75,18 @@ stdenv.mkDerivation rec {
     cairo
   ];
 
-  configureFlags = [
-    (lib.enableFeature withIntrospection "introspection")
+  configureFlags =
+    [
+      (lib.enableFeature withIntrospection "introspection")
 
-    # Vapi does not build on MacOS.
-    # https://github.com/NixOS/nixpkgs/pull/117081#issuecomment-827782004
-    (lib.enableFeature (withIntrospection && !stdenv.isDarwin) "vala")
+      # Vapi does not build on MacOS.
+      # https://github.com/NixOS/nixpkgs/pull/117081#issuecomment-827782004
+      (lib.enableFeature (withIntrospection && !stdenv.isDarwin) "vala")
 
-    "--enable-installed-tests"
-    "--enable-always-build-tests"
-  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
+      "--enable-installed-tests"
+      "--enable-always-build-tests"
+    ]
+    ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
 
   makeFlags = [

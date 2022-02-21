@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, colorama
-, pythonOlder
-, tqdm
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  colorama,
+  pythonOlder,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "socialscan";
   version = "1.4.2";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library and CLI for accurately querying username and email usage on online platforms";
     homepage = "https://github.com/iojw/socialscan";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mpl20];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,12 @@
-{ fetchurl, lib, stdenv, guile, which, ed, libtool }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  guile,
+  which,
+  ed,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "mcron";
   version = "1.0.6";
@@ -9,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "0yvrfzzdy2m7fbqkr61fw01wd9r2jpnbyabxhcsfivgxywknl0fy";
   };
 
-  patches = [ ./install-vixie-programs.patch ];
+  patches = [./install-vixie-programs.patch];
 
   # don't attempt to chmod +s files in the nix store
   postPatch = ''
     substituteInPlace makefile.in --replace "rwxs" "rwx"
   '';
 
-  buildInputs = [ guile which ed libtool ];
+  buildInputs = [guile which ed libtool];
 
   doCheck = true;
 

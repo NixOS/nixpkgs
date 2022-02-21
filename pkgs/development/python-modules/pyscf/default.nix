@@ -1,20 +1,20 @@
-{ buildPythonPackage
-, python3
-, lib
-, fetchFromGitHub
-, cmake
-, blas
-, libcint
-, libxc
-, xcfun
-, cppe
-, h5py
-, numpy
-, scipy
-, nose
-, nose-exclude
+{
+  buildPythonPackage,
+  python3,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  libcint,
+  libxc,
+  xcfun,
+  cppe,
+  h5py,
+  numpy,
+  scipy,
+  nose,
+  nose-exclude,
 }:
-
 buildPythonPackage rec {
   pname = "pyscf";
   version = "2.0.1";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
   dontUseCmakeConfigure = true;
   preConfigure = ''
     export CMAKE_CONFIGURE_ARGS="-DBUILD_LIBCINT=0 -DBUILD_LIBXC=0 -DBUILD_XCFUN=0"
@@ -48,9 +48,9 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ nose nose-exclude ];
+  checkInputs = [nose nose-exclude];
 
-  pythonImportsCheck = [ "pyscf" ];
+  pythonImportsCheck = ["pyscf"];
   preCheck = ''
     # Set config used by tests to ensure reproducibility
     echo 'pbc_tools_pbc_fft_engine = "NUMPY"' > pyscf/pyscf_config.py
@@ -104,7 +104,7 @@ buildPythonPackage rec {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.sheepforce ];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
+    maintainers = [maintainers.sheepforce];
   };
 }

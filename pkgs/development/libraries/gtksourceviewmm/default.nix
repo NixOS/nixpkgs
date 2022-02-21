@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, gtkmm3, glibmm, gtksourceview3, gnome }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtkmm3,
+  glibmm,
+  gtksourceview3,
+  gnome,
+}:
 stdenv.mkDerivation rec {
   pname = "gtksourceviewmm";
   version = "3.21.3";
@@ -17,15 +25,14 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glibmm gtkmm3 gtksourceview3 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [glibmm gtkmm3 gtksourceview3];
 
   meta = with lib; {
     platforms = platforms.unix;
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceviewmm";
     description = "C++ wrapper for gtksourceview";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.juliendehos ];
+    maintainers = [maintainers.juliendehos];
   };
 }
-

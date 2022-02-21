@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pandoc-lua-filters";
   version = "2021-11-05";
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "A collection of lua filters for pandoc";
     homepage = "https://github.com/pandoc/lua-filters";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.all;
   };
 }

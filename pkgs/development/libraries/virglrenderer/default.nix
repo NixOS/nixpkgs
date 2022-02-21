@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config, python3
-, libGLU, libepoxy, libX11, libdrm, mesa
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  libGLU,
+  libepoxy,
+  libX11,
+  libdrm,
+  mesa,
 }:
-
 stdenv.mkDerivation rec {
   pname = "virglrenderer";
   version = "0.9.1";
@@ -11,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "1h76a1ylhh4niq33sa5knx033sr4k2816vibh4m58j54y7qc6346";
   };
 
-  buildInputs = [ libGLU libepoxy libX11 libdrm mesa ];
+  buildInputs = [libGLU libepoxy libX11 libdrm mesa];
 
-  nativeBuildInputs = [ cmake meson ninja pkg-config python3 ];
+  nativeBuildInputs = [cmake meson ninja pkg-config python3];
 
   dontUseCmakeConfigure = true;
 
@@ -22,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://virgil3d.github.io/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.xeji ];
+    maintainers = [maintainers.xeji];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, aiohttp }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  aiohttp,
+}:
 buildPythonPackage rec {
   pname = "pysqueezebox";
   version = "0.5.5";
@@ -16,12 +21,12 @@ buildPythonPackage rec {
 
   # No tests in the Pypi distribution
   doCheck = false;
-  pythonImportsCheck = [ "pysqueezebox" ];
+  pythonImportsCheck = ["pysqueezebox"];
 
   meta = with lib; {
     description = "Asynchronous library to control Logitech Media Server";
     homepage = "https://github.com/rajlaud/pysqueezebox";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [nyanloutre];
   };
 }

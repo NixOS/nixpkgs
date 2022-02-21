@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchurl
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
 }:
-
 buildPythonPackage rec {
   pname = "distutils-extra";
   version = "2.45";
@@ -15,12 +15,12 @@ buildPythonPackage rec {
   # Tests are out-dated as the last upstream release is from 2016
   doCheck = false;
 
-  pythonImportsCheck = [ "DistUtilsExtra" ];
+  pythonImportsCheck = ["DistUtilsExtra"];
 
   meta = with lib; {
     description = "Enhancements to Python's distutils";
     homepage = "https://launchpad.net/python-distutils-extra";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

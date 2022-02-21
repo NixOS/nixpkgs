@@ -1,12 +1,12 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, six
-, pytestCheckHook
-, mock
-, pytest-asyncio
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  six,
+  pytestCheckHook,
+  mock,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "promise";
   version = "2.3.0";

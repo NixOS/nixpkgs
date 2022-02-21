@@ -1,27 +1,28 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, gtk3
-, glib
-, intltool
-, dbus-glib
-, libX11
-, libXScrnSaver
-, libXxf86vm
-, libXext
-, systemd
-, pantheon
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  glib,
+  intltool,
+  dbus-glib,
+  libX11,
+  libXScrnSaver,
+  libXxf86vm,
+  libXext,
+  systemd,
+  pantheon,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "light-locker";
   version = "1.9.0";
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   src = fetchFromGitHub {
     owner = "the-cavalry";
@@ -84,7 +85,7 @@ stdenv.mkDerivation rec {
       ConsoleKit/UPower or logind/systemd.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ obadz ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [obadz] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, six
-, pandas
-, pyyaml
-, matplotlib
-, numba
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  six,
+  pandas,
+  pyyaml,
+  matplotlib,
+  numba,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "trackpy";
   version = "0.5.0";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, tree-sitter }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  tree-sitter,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
   version = "0.19.0";
@@ -18,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Wilfred/difftastic";
     changelog = "https://github.com/Wilfred/difftastic/raw/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 figsoda ];
+    maintainers = with maintainers; [ethancedwards8 figsoda];
     mainProgram = "difft";
   };
 }

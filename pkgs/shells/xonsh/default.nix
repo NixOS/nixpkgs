@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, glibcLocales
-, coreutils
-, git
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  glibcLocales,
+  coreutils,
+  git,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
   version = "0.11.0";
@@ -68,17 +68,18 @@ python3Packages.buildPythonApplication rec {
     HOME=$TMPDIR
   '';
 
-  checkInputs = [ glibcLocales git ] ++
-    (with python3Packages; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
+  checkInputs =
+    [glibcLocales git]
+    ++ (with python3Packages; [pyte pytestCheckHook pytest-mock pytest-subprocess]);
 
-  propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
+  propagatedBuildInputs = with python3Packages; [ply prompt-toolkit pygments];
 
   meta = with lib; {
     description = "A Python-ish, BASHwards-compatible shell";
     homepage = "https://xon.sh/";
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt vrthra ];
+    maintainers = with maintainers; [spwhitt vrthra];
   };
 
   passthru = {

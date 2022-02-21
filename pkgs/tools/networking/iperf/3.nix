@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, openssl, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "iperf";
   version = "3.10.1";
@@ -9,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "0nkisr2215w68ivadg3sx3q50iwamznwigs63lclb8jlrih9gg03";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
   configureFlags = [
     "--with-openssl=${openssl.dev}"
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -34,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

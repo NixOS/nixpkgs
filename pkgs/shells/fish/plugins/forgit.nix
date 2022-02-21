@@ -1,5 +1,10 @@
-{ lib, buildFishPlugin, fetchFromGitHub, git, fzf }:
-
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  git,
+  fzf,
+}:
 buildFishPlugin rec {
   pname = "forgit";
   version = "unstable-2021-04-09";
@@ -21,6 +26,6 @@ buildFishPlugin rec {
     description = "A utility tool powered by fzf for using git interactively.";
     homepage = "https://github.com/wfxr/forgit";
     license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [happysalada];
   };
 }

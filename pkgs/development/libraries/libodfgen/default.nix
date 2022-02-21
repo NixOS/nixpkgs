@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib, libwpg, libwpd, librevenge }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  pkg-config,
+  cppunit,
+  zlib,
+  libwpg,
+  libwpd,
+  librevenge,
+}:
 stdenv.mkDerivation rec {
   pname = "libodfgen";
   version = "0.1.7";
@@ -9,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Mj5JH5VsjKKrsSyZjjUGcJMKMjF7+WYrBhXdSzkiuDE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     boost
     cppunit
@@ -22,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A base library for generating ODF documents";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

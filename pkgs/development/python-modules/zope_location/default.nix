@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_proxy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope_proxy,
 }:
-
 buildPythonPackage rec {
   pname = "zope.location";
   version = "4.2";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "a720f9e3c8a51d5007ed6fcd47e1834df02671d85dbfd1062a0d808de8bf80ac";
   };
 
-  propagatedBuildInputs = [ zope_proxy ];
+  propagatedBuildInputs = [zope_proxy];
 
   # ignore circular dependency on zope_schema
   preBuild = ''
@@ -26,7 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.location/";
     description = "Zope Location";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [goibhniu];
   };
-
 }

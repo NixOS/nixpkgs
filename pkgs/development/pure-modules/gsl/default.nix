@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pure, pkg-config, gsl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pure,
+  pkg-config,
+  gsl,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-gsl";
   version = "0.12";
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "06bdd873d5417d90ca35093056a060b77365123ed24c3ac583cd3922d4c78a75";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure gsl ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure gsl];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -19,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-gsl.html";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

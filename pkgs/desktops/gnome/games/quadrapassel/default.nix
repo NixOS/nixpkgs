@@ -21,7 +21,6 @@
   vala,
   desktop-file-utils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "quadrapassel";
   version = "40.2";

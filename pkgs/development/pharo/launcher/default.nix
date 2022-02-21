@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, bash, pharo, unzip, makeDesktopItem }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  pharo,
+  unzip,
+  makeDesktopItem,
+}:
 stdenv.mkDerivation rec {
   version = "2017.02.28";
   pname = "pharo-launcher";
@@ -23,8 +30,8 @@ stdenv.mkDerivation rec {
   # because upstream tarball has no top-level directory.
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ bash pharo ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [bash pharo];
 
   installPhase = ''
     mkdir -p $prefix/share/pharo-launcher
@@ -77,7 +84,7 @@ stdenv.mkDerivation rec {
       result, launching any image is never more than 3 clicks away.
     '';
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [];
     platforms = pharo.meta.platforms;
   };
 }

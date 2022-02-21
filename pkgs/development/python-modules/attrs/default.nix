@@ -1,9 +1,9 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  callPackage,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "attrs";
   version = "21.4.0";
@@ -33,13 +33,13 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    pytest = callPackage ./tests.nix { };
+    pytest = callPackage ./tests.nix {};
   };
 
   meta = with lib; {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/hynek/attrs";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

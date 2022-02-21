@@ -1,10 +1,20 @@
-{ config, lib, stdenv, fetchurl
-, bison, flex
-, sysfsutils, kmod, udev
-, firmware   ? config.pcmciaUtils.firmware or [] # Special pcmcia cards.
-, configOpts ? config.pcmciaUtils.config or null # Special hardware (map memory & port & irq)
-}:                   # used to generate postInstall script.
-
+{
+  config,
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+  sysfsutils,
+  kmod,
+  udev,
+  firmware ? config.pcmciaUtils.firmware or []
+  # Special pcmcia cards.
+  ,
+  configOpts ? config.pcmciaUtils.config or null
+  # Special hardware (map memory & port & irq)
+}:
+# used to generate postInstall script.
 # FIXME: should add an option to choose between hotplug and udev.
 stdenv.mkDerivation rec {
   pname = "pcmciautils";
@@ -17,22 +27,26 @@ stdenv.mkDerivation rec {
 
   buildInputs = [udev bison sysfsutils kmod flex];
 
-  patchPhase = ''
-    sed -i "
-      s,/sbin/modprobe,${kmod}&,;
-      s,/lib/udev/,$out/sbin/,;
-    " udev/* # fix-color */
-    sed -i "
-      s,/lib/firmware,$out&,;
-      s,/etc/pcmcia,$out&,;
-    " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
-  ''
-  + (if firmware == [] then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'' else "")
-  + (if configOpts == null then "" else "ln -sf ${configOpts} ./config/config.opts")
-  ;
+  patchPhase =
+    ''
+      sed -i "
+        s,/sbin/modprobe,${kmod}&,;
+        s,/lib/udev/,$out/sbin/,;
+      " udev/* # fix-color */
+      sed -i "
+        s,/lib/firmware,$out&,;
+        s,/etc/pcmcia,$out&,;
+      " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
+    ''
+    + (if firmware == []
+    then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile''
+    else "")
+    + (if configOpts == null
+    then ""
+    else "ln -sf ${configOpts} ./config/config.opts");
 
-  makeFlags = [ "LEX=flex" ];
-  installFlags = [ "INSTALL=install" "DESTDIR=${placeholder "out"}" ];
+  makeFlags = ["LEX=flex"];
+  installFlags = ["INSTALL=install" "DESTDIR=${placeholder "out"}"];
   postInstall =
     lib.concatMapStrings (path: ''
       for f in : $(find ${path} -type f); do
@@ -40,7 +54,8 @@ stdenv.mkDerivation rec {
         mkdir -p $(dirname $out/lib/firmware/$\{f#${path}});
         ln -s $f $out/lib/firmware/$\{f#${path}};
       done;
-    '') firmware;
+    '')
+    firmware;
 
   meta = {
     homepage = "https://www.kernel.org/pub/linux/utils/kernel/pcmcia/";

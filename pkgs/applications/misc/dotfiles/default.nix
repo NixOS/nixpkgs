@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "dotfiles";
   version = "0.6.4";
@@ -12,8 +14,8 @@ python3Packages.buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  checkInputs = with python3Packages; [ pytest ];
-  propagatedBuildInputs = with python3Packages; [ click ];
+  checkInputs = with python3Packages; [pytest];
+  propagatedBuildInputs = with python3Packages; [click];
 
   meta = with lib; {
     description = "Easily manage your dotfiles";

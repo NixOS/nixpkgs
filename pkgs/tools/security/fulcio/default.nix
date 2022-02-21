@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "fulcio";
   version = "0.1.1";
@@ -12,10 +16,10 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-pRL0et+UOi/tzuQz/Q7UmSA+pVhLJYR8lG8NAbPN9PU=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   # Install completions post-install
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     mv $out/bin/fulcio $out/bin/fulcio-server
@@ -37,6 +41,6 @@ buildGoModule rec {
     changelog = "https://github.com/sigstore/fulcio/releases/tag/v${version}";
     description = "A Root-CA for code signing certs - issuing certificates based on an OIDC email address";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse jk ];
+    maintainers = with maintainers; [lesuisse jk];
   };
 }

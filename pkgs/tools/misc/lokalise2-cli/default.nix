@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "lokalise2-cli";
   version = "2.6.8";
@@ -23,7 +26,7 @@ buildGoModule rec {
     description = "Translation platform for developers. Upload language files, translate, integrate via API";
     homepage = "https://lokalise.com";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ timstott ];
+    maintainers = with maintainers; [timstott];
     platforms = platforms.unix;
   };
 }

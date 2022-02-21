@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-storage-common
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-storage-common,
 }:
-
 buildPythonPackage rec {
   pname = "azure-storage-queue";
   version = "2.1.0";
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Client library for Microsoft Azure Storage services containing the queue service APIs";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [cmcdragonkai];
   };
 }

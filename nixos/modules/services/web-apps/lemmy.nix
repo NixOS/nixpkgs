@@ -1,17 +1,19 @@
-{ lib, pkgs, config, ... }:
-with lib;
-let
-  cfg = config.services.lemmy;
-  settingsFormat = pkgs.formats.json { };
-in
 {
-  meta.maintainers = with maintainers; [ happysalada ];
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.services.lemmy;
+  settingsFormat = pkgs.formats.json {};
+in {
+  meta.maintainers = with maintainers; [happysalada];
   # Don't edit the docbook xml directly, edit the md and generate it:
   # `pandoc lemmy.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > lemmy.xml`
   meta.doc = ./lemmy.xml;
 
   options.services.lemmy = {
-
     enable = mkEnableOption "lemmy a federated alternative to reddit in rust";
 
     jwtSecretPath = mkOption {
@@ -30,7 +32,7 @@ in
     caddy.enable = mkEnableOption "exposing lemmy with the caddy reverse proxy";
 
     settings = mkOption {
-      default = { };
+      default = {};
       description = "Lemmy configuration";
 
       type = types.submodule {
@@ -59,40 +61,38 @@ in
             description = "Enable Captcha.";
           };
           difficulty = mkOption {
-            type = types.enum [ "easy" "medium" "hard" ];
+            type = types.enum ["easy" "medium" "hard"];
             default = "medium";
             description = "The difficultly of the captcha to solve.";
           };
         };
 
         options.database.createLocally = mkEnableOption "creation of database on the instance";
-
       };
     };
-
   };
 
-  config =
-    let
-      localPostgres = (cfg.settings.database.host == "localhost" || cfg.settings.database.host == "/run/postgresql");
-    in
+  config = let
+    localPostgres = (cfg.settings.database.host == "localhost" || cfg.settings.database.host == "/run/postgresql");
+  in
     lib.mkIf cfg.enable {
       services.lemmy.settings = (mapAttrs (name: mkDefault)
-        {
-          bind = "127.0.0.1";
-          tls_enabled = true;
-          pictrs_url = with config.services.pict-rs; "http://${address}:${toString port}";
-          actor_name_max_length = 20;
+      {
+        bind = "127.0.0.1";
+        tls_enabled = true;
+        pictrs_url = with config.services.pict-rs; "http://${address}:${toString port}";
+        actor_name_max_length = 20;
 
-          rate_limit.message = 180;
-          rate_limit.message_per_second = 60;
-          rate_limit.post = 6;
-          rate_limit.post_per_second = 600;
-          rate_limit.register = 3;
-          rate_limit.register_per_second = 3600;
-          rate_limit.image = 6;
-          rate_limit.image_per_second = 3600;
-        } // {
+        rate_limit.message = 180;
+        rate_limit.message_per_second = 60;
+        rate_limit.post = 6;
+        rate_limit.post_per_second = 600;
+        rate_limit.register = 3;
+        rate_limit.register_per_second = 3600;
+        rate_limit.image = 6;
+        rate_limit.image_per_second = 3600;
+      }
+      // {
         database = mapAttrs (name: mkDefault) {
           user = "lemmy";
           host = "/run/postgresql";
@@ -142,10 +142,12 @@ in
         };
       };
 
-      assertions = [{
-        assertion = cfg.settings.database.createLocally -> localPostgres;
-        message = "if you want to create the database locally, you need to use a local database";
-      }];
+      assertions = [
+        {
+          assertion = cfg.settings.database.createLocally -> localPostgres;
+          message = "if you want to create the database locally, you need to use a local database";
+        }
+      ];
 
       systemd.services.lemmy = {
         description = "Lemmy server";
@@ -154,7 +156,7 @@ in
           LEMMY_CONFIG_LOCATION = "/run/lemmy/config.hjson";
 
           # Verify how this is used, and don't put the password in the nix store
-          LEMMY_DATABASE_URL = with cfg.settings.database;"postgres:///${database}?host=${host}";
+          LEMMY_DATABASE_URL = with cfg.settings.database; "postgres:///${database}?host=${host}";
         };
 
         documentation = [
@@ -162,11 +164,11 @@ in
           "https://join-lemmy.org/docs"
         ];
 
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
 
-        after = [ "pict-rs.service " ] ++ lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
+        after = ["pict-rs.service "] ++ lib.optionals cfg.settings.database.createLocally ["lemmy-postgresql.service"];
 
-        requires = lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
+        requires = lib.optionals cfg.settings.database.createLocally ["lemmy-postgresql.service"];
 
         # script is needed here since loadcredential is not accessible on ExecPreStart
         script = ''
@@ -198,11 +200,11 @@ in
           "https://join-lemmy.org/docs"
         ];
 
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
 
-        after = [ "lemmy.service" ];
+        after = ["lemmy.service"];
 
-        requires = [ "lemmy.service" ];
+        requires = ["lemmy.service"];
 
         serviceConfig = {
           DynamicUser = true;
@@ -213,8 +215,8 @@ in
 
       systemd.services.lemmy-postgresql = mkIf cfg.settings.database.createLocally {
         description = "Lemmy postgresql db";
-        after = [ "postgresql.service" ];
-        partOf = [ "lemmy.service" ];
+        after = ["postgresql.service"];
+        partOf = ["lemmy.service"];
         script = with cfg.settings.database; ''
           PSQL() {
             ${config.services.postgresql.package}/bin/psql --port=${toString cfg.settings.database.port} "$@"
@@ -232,5 +234,4 @@ in
         };
       };
     };
-
 }

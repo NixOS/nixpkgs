@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-paperwm";
   version = "38.1";
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Tiled scrollable window management for Gnome Shell";
     homepage = "https://github.com/paperwm/PaperWM";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hedning ];
+    maintainers = with maintainers; [hedning];
   };
 }

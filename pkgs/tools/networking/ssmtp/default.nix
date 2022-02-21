@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, tlsSupport ? true, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tlsSupport ? true,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "ssmtp";
   version = "2.64";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
 
   # A request has been made to merge this patch into ssmtp.
   # See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=858781
-  patches = [ ./ssmtp_support_AuthPassFile_parameter.patch ];
+  patches = [./ssmtp_support_AuthPassFile_parameter.patch];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -28,9 +33,9 @@ stdenv.mkDerivation rec {
       --replace '$(INSTALL) -s' '$(INSTALL) -s --strip-program $(STRIP)'
   '';
 
-  installFlags = [ "etcdir=$(out)/etc" ];
+  installFlags = ["etcdir=$(out)/etc"];
 
-  installTargets = [ "install" "install-sendmail" ];
+  installTargets = ["install" "install-sendmail"];
 
   buildInputs = lib.optional tlsSupport openssl;
 
@@ -40,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "simple MTA to deliver mail from a computer to a mail hub";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ basvandijk ];
+    maintainers = with maintainers; [basvandijk];
   };
 }

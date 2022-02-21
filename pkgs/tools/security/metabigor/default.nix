@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "metabigor";
   version = "1.10";
@@ -23,6 +23,6 @@ buildGoModule rec {
     description = "Tool to perform OSINT tasks";
     homepage = "https://github.com/j3ssie/metabigor";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

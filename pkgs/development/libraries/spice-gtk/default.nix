@@ -1,41 +1,42 @@
-{ lib, stdenv
-, fetchurl
-, acl
-, cyrus_sasl
-, docbook_xsl
-, libepoxy
-, gettext
-, gobject-introspection
-, gst_all_1
-, gtk-doc
-, gtk3
-, hwdata
-, json-glib
-, libcacard
-, libcap_ng
-, libdrm
-, libjpeg_turbo
-, libopus
-, libsoup
-, libusb1
-, lz4
-, meson
-, ninja
-, openssl
-, perl
-, phodav
-, pixman
-, pkg-config
-, polkit
-, python3
-, spice-protocol
-, usbredir
-, vala
-, wayland-protocols
-, zlib
-, withPolkit ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  acl,
+  cyrus_sasl,
+  docbook_xsl,
+  libepoxy,
+  gettext,
+  gobject-introspection,
+  gst_all_1,
+  gtk-doc,
+  gtk3,
+  hwdata,
+  json-glib,
+  libcacard,
+  libcap_ng,
+  libdrm,
+  libjpeg_turbo,
+  libopus,
+  libsoup,
+  libusb1,
+  lz4,
+  meson,
+  ninja,
+  openssl,
+  perl,
+  phodav,
+  pixman,
+  pkg-config,
+  polkit,
+  python3,
+  spice-protocol,
+  usbredir,
+  vala,
+  wayland-protocols,
+  zlib,
+  withPolkit ? true,
 }:
-
 # If this package is built with polkit support (withPolkit=true),
 # usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
 # The helper confirms via polkit that the user has an active session,
@@ -45,7 +46,6 @@
 #   "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
 # On non-NixOS installations, make a setuid copy of the helper
 # outside the store and adjust PATH to find the setuid version.
-
 # If this package is built without polkit support (withPolkit=false),
 # usb redirection requires read-write access to usb devices.
 # This can be granted by adding users to a custom group like "usb"
@@ -56,12 +56,11 @@
 #  services.udev.extraRules = ''
 #    KERNEL=="*", SUBSYSTEMS=="usb", MODE="0664", GROUP="usb"
 #  '';
-
 stdenv.mkDerivation rec {
   pname = "spice-gtk";
   version = "0.40";
 
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = ["out" "dev" "devdoc" "man"];
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.xz";
@@ -95,29 +94,32 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
 
-  buildInputs = [
-    cyrus_sasl
-    libepoxy
-    gtk3
-    json-glib
-    libcacard
-    libcap_ng
-    libdrm
-    libjpeg_turbo
-    libopus
-    libusb1
-    lz4
-    openssl
-    phodav
-    pixman
-    spice-protocol
-    usbredir
-    wayland-protocols
-    zlib
-  ] ++ lib.optionals withPolkit [ polkit acl ] ;
+  buildInputs =
+    [
+      cyrus_sasl
+      libepoxy
+      gtk3
+      json-glib
+      libcacard
+      libcap_ng
+      libdrm
+      libjpeg_turbo
+      libopus
+      libusb1
+      lz4
+      openssl
+      phodav
+      pixman
+      spice-protocol
+      usbredir
+      wayland-protocols
+      zlib
+    ]
+    ++ lib.optionals withPolkit [polkit acl];
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
@@ -137,7 +139,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.xeji ];
+    maintainers = [maintainers.xeji];
     platforms = platforms.linux;
   };
 }

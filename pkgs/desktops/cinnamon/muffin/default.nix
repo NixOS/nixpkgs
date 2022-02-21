@@ -1,39 +1,38 @@
-{ fetchFromGitHub
-, cinnamon-desktop
-, glib
-, file
-, gnome
-, gnome-doc-utils
-, fetchpatch
-, gobject-introspection
-, gtk3
-, intltool
-, json-glib
-, libinput
-, libstartup_notification
-, libXtst
-, libxkbcommon
-, pkg-config
-, lib
-, stdenv
-, udev
-, xorg
-, wrapGAppsHook
-, pango
-, cairo
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_43
-, docbook_xml_dtd_42
-, docbook_xml_dtd_412
-, autoconf
-, automake
-, gettext
-, libtool
+{
+  fetchFromGitHub,
+  cinnamon-desktop,
+  glib,
+  file,
+  gnome,
+  gnome-doc-utils,
+  fetchpatch,
+  gobject-introspection,
+  gtk3,
+  intltool,
+  json-glib,
+  libinput,
+  libstartup_notification,
+  libXtst,
+  libxkbcommon,
+  pkg-config,
+  lib,
+  stdenv,
+  udev,
+  xorg,
+  wrapGAppsHook,
+  pango,
+  cairo,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_412,
+  autoconf,
+  automake,
+  gettext,
+  libtool,
 }:
-
 # it's a frankensteins monster with some cinnamon sparkles added on top of it
-
 stdenv.mkDerivation rec {
   pname = "muffin";
   version = "5.2.0";

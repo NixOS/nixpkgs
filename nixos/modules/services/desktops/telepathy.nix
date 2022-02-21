@@ -1,11 +1,11 @@
 # Telepathy daemon.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   meta = {
     maintainers = teams.gnome.members;
   };
@@ -13,9 +13,7 @@ with lib;
   ###### interface
 
   options = {
-
     services.telepathy = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -24,19 +22,15 @@ with lib;
           that enables real-time communication via pluggable protocol backends.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.telepathy.enable {
+    environment.systemPackages = [pkgs.telepathy-mission-control];
 
-    environment.systemPackages = [ pkgs.telepathy-mission-control ];
-
-    services.dbus.packages = [ pkgs.telepathy-mission-control ];
+    services.dbus.packages = [pkgs.telepathy-mission-control];
 
     # Enable runtime optional telepathy in gnome-shell
     services.xserver.desktopManager.gnome.sessionPath = with pkgs; [
@@ -44,5 +38,4 @@ with lib;
       telepathy-logger
     ];
   };
-
 }

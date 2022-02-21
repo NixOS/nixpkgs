@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  ocamlbuild,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml-dolog";
   version = "3.0";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6wfqT5sqo4YA8XoHH3QhG6/TyzzXCzqjmnPuBArRoj8=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ocaml findlib ocamlbuild];
 
   createFindlibDestdir = true;
 
@@ -21,8 +27,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/UnixJunkie/dolog";
     description = "Minimalistic lazy logger in OCaml";
-    platforms = ocaml.meta.platforms or [ ];
+    platforms = ocaml.meta.platforms or [];
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [vbgl];
   };
 }

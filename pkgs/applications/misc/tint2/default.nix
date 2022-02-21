@@ -1,27 +1,28 @@
-{ lib, stdenv
-, fetchFromGitLab
-, pkg-config
-, cmake
-, gettext
-, cairo
-, pango
-, pcre
-, glib
-, imlib2
-, gtk3
-, libXinerama
-, libXrender
-, libXcomposite
-, libXdamage
-, libX11
-, libXrandr
-, librsvg
-, libpthreadstubs
-, libXdmcp
-, libstartup_notification
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  cmake,
+  gettext,
+  cairo,
+  pango,
+  pcre,
+  glib,
+  imlib2,
+  gtk3,
+  libXinerama,
+  libXrender,
+  libXcomposite,
+  libXdamage,
+  libX11,
+  libXrandr,
+  librsvg,
+  libpthreadstubs,
+  libXdmcp,
+  libstartup_notification,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tint2";
   version = "17.0.2";
@@ -76,6 +77,6 @@ stdenv.mkDerivation rec {
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

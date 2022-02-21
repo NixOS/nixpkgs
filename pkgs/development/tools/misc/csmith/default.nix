@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, m4, makeWrapper, libbsd, perlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m4,
+  makeWrapper,
+  libbsd,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "csmith";
   version = "2.3.0";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mb5zgixsyf86slggs756k8a5ddmj980md3ic9sa1y75xl5cqizj";
   };
 
-  nativeBuildInputs = [ m4 makeWrapper ];
-  buildInputs = [ libbsd ] ++ (with perlPackages; [ perl SysCPU ]);
+  nativeBuildInputs = [m4 makeWrapper];
+  buildInputs = [libbsd] ++ (with perlPackages; [perl SysCPU]);
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
@@ -43,7 +50,7 @@ stdenv.mkDerivation rec {
       Csmith has found bugs in every tool that it has tested, and has been used
       to find and report more than 400 previously unknown compiler bugs.
     '';
-    maintainers = [ maintainers.dtzWill ];
+    maintainers = [maintainers.dtzWill];
     platforms = platforms.all;
   };
 }

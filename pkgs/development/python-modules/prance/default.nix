@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, chardet
-, requests
-, ruamel-yaml
-, setuptools-scm
-, six
-, semver
-, pytestCheckHook
-, openapi-spec-validator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  chardet,
+  requests,
+  ruamel-yaml,
+  setuptools-scm,
+  six,
+  semver,
+  pytestCheckHook,
+  openapi-spec-validator,
 }:
-
 buildPythonPackage rec {
   pname = "prance";
   version = "0.21.8.0";
@@ -54,12 +54,12 @@ buildPythonPackage rec {
   disabledTests = [
     "test_fetch_url_http"
   ];
-  pythonImportsCheck = [ "prance" ];
+  pythonImportsCheck = ["prance"];
 
   meta = with lib; {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
     homepage = "https://github.com/RonnyPfannschmidt/prance";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

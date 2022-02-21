@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "lambda-mod-zsh-theme-unstable";
   version = "2020-10-03";
@@ -20,6 +23,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/halfo/lambda-mod-zsh-theme/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

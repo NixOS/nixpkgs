@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "lupa";
   version = "1.10";
@@ -13,14 +13,14 @@ buildPythonPackage rec {
     sha256 = "sha256-4lEbJ/OB9v22bvQNzFGCFQOBl0MbJBk1Z438PVEXgjE=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [cython];
 
-  pythonImportsCheck = [ "lupa" ];
+  pythonImportsCheck = ["lupa"];
 
   meta = with lib; {
     description = "Lua in Python";
     homepage = "https://github.com/scoder/lupa";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

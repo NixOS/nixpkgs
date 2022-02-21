@@ -1,9 +1,9 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-core
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
+  azure-core,
 }:
-
 buildPythonPackage rec {
   version = "1.3.0";
   pname = "azure-mgmt-core";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
   # not included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.core" "azure.core" ];
+  pythonImportsCheck = ["azure.mgmt.core" "azure.core"];
 
   meta = with pkgs.lib; {
     description = "Microsoft Azure Management Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

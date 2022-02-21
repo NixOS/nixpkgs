@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   name = "proj-datumgrid";
   version = "world-1.0";
@@ -27,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://proj4.org";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

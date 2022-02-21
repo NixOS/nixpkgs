@@ -1,13 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, btrfs-progs
-, go-md2man
-, installShellFiles
-, util-linux
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  btrfs-progs,
+  go-md2man,
+  installShellFiles,
+  util-linux,
+  nixosTests,
 }:
-
 buildGoModule rec {
   pname = "containerd";
   version = "1.6.0";
@@ -21,11 +21,11 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
+  nativeBuildInputs = [go-md2man installShellFiles util-linux];
 
-  buildInputs = [ btrfs-progs ];
+  buildInputs = [btrfs-progs];
 
-  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
+  BUILDTAGS = lib.optionals (btrfs-progs == null) ["no_btrfs"];
 
   buildPhase = ''
     runHook preBuild
@@ -42,13 +42,13 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) docker; };
+  passthru.tests = {inherit (nixosTests) docker;};
 
   meta = with lib; {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester endocrimes zowoq ];
+    maintainers = with maintainers; [offline vdemeester endocrimes zowoq];
     platforms = platforms.linux;
   };
 }

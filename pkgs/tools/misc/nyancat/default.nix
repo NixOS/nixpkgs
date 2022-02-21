@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "nyancat";
   version = "1.5.2";
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Nyancat in your terminal, rendered through ANSI escape sequences";
     homepage = "https://nyancat.dakko.us";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [midchildan];
     platforms = platforms.unix;
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, jinja2
-, nbconvert
-, nbformat
-, sphinx
-, traitlets
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  jinja2,
+  nbconvert,
+  nbformat,
+  sphinx,
+  traitlets,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "nbsphinx";
   version = "0.8.8";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Jupyter Notebook Tools for Sphinx";
     homepage = "https://nbsphinx.readthedocs.io/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

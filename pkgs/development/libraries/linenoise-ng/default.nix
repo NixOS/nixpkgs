@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "linenoise-ng";
   version = "1.0.1";
@@ -11,12 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "176iz0kj0p8d8i3jqps4z8xkxwl3f1986q88i9xg5fvqgpzsxp20";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = {
     homepage = "https://github.com/arangodb/linenoise-ng";
     description = "A small, portable GNU readline replacement for Linux, Windows and MacOS which is capable of handling UTF-8 characters";
-    maintainers = with lib.maintainers; [ cstrahan ];
+    maintainers = with lib.maintainers; [cstrahan];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
   };

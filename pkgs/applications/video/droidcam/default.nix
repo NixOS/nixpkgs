@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, ffmpeg, libjpeg_turbo, gtk3, alsa-lib, speex, libusbmuxd, libappindicator-gtk3
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg,
+  libjpeg_turbo,
+  gtk3,
+  alsa-lib,
+  speex,
+  libusbmuxd,
+  libappindicator-gtk3,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "droidcam";
   version = "1.8.2";
@@ -51,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Linux client for DroidCam app";
     homepage = "https://github.com/aramg/droidcam";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.suhr ];
+    maintainers = [maintainers.suhr];
     platforms = platforms.linux;
   };
 }

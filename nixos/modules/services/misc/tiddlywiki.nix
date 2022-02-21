@@ -1,19 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.tiddlywiki;
   listenParams = concatStrings (mapAttrsToList (n: v: " '${n}=${toString v}' ") cfg.listenOptions);
   exe = "${pkgs.nodePackages.tiddlywiki}/lib/node_modules/.bin/tiddlywiki";
   name = "tiddlywiki";
   dataDir = "/var/lib/" + name;
-
 in {
-
   options.services.tiddlywiki = {
-
     enable = mkEnableOption "TiddlyWiki nodejs server";
 
     listenOptions = mkOption {
@@ -21,7 +19,7 @@ in {
       default = {};
       example = {
         credentials = "../credentials.csv";
-        readers="(authenticated)";
+        readers = "(authenticated)";
         port = 3456;
       };
       description = ''
@@ -36,8 +34,8 @@ in {
     systemd = {
       services.tiddlywiki = {
         description = "TiddlyWiki nodejs server";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = ["network.target"];
+        wantedBy = ["multi-user.target"];
         serviceConfig = {
           Type = "simple";
           Restart = "on-failure";

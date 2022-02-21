@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.programs.git;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.programs.git;
+in {
   options = {
     programs.git = {
       enable = mkEnableOption "git";
@@ -21,10 +21,10 @@ in
 
       config = mkOption {
         type = with types; attrsOf (attrsOf anything);
-        default = { };
+        default = {};
         example = {
           init.defaultBranch = "main";
-          url."https://github.com/".insteadOf = [ "gh:" "github:" ];
+          url."https://github.com/".insteadOf = ["gh:" "github:"];
         };
         description = ''
           Configuration to write to /etc/gitconfig. See the CONFIGURATION FILE
@@ -47,13 +47,13 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [cfg.package];
       environment.etc.gitconfig = mkIf (cfg.config != {}) {
         text = generators.toGitINI cfg.config;
       };
     })
     (mkIf (cfg.enable && cfg.lfs.enable) {
-      environment.systemPackages = [ cfg.lfs.package ];
+      environment.systemPackages = [cfg.lfs.package];
       programs.git.config = {
         filter.lfs = {
           clean = "git-lfs clean -- %f";
@@ -65,5 +65,5 @@ in
     })
   ];
 
-  meta.maintainers = with maintainers; [ figsoda ];
+  meta.maintainers = with maintainers; [figsoda];
 }

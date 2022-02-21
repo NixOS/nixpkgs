@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, autoreconfHook
-, pkg-config
-, gettext
-, libusb1
-, libtool
-, libexif
-, libgphoto2
-, libjpeg
-, curl
-, libxml2
-, gd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  libusb1,
+  libtool,
+  libexif,
+  libgphoto2,
+  libjpeg,
+  curl,
+  libxml2,
+  gd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libgphoto2";
   version = "2.5.28";
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
-    rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
+    rev = "libgphoto2-${builtins.replaceStrings ["."] ["_"] version}-release";
     sha256 = "sha256-e3zMinUUBKzZlQQzkS0oPWAzIVlmQoLj73Spj0XiTIE=";
   };
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [pkg-config];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -45,24 +45,21 @@ stdenv.mkDerivation rec {
   ];
 
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
-  propagatedBuildInputs = [ libexif ];
+  propagatedBuildInputs = [libexif];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  postInstall =
-    let
-      executablePrefix =
-        if stdenv.buildPlatform == stdenv.hostPlatform then
-          "$out"
-        else
-          buildPackages.libgphoto2;
-    in
-    ''
-      mkdir -p $out/lib/udev/rules.d
-      ${executablePrefix}/lib/libgphoto2/print-camera-list \
-          udev-rules version 175 group camera \
-          >$out/lib/udev/rules.d/40-gphoto2.rules
-    '';
+  postInstall = let
+    executablePrefix =
+      if stdenv.buildPlatform == stdenv.hostPlatform
+      then "$out"
+      else buildPackages.libgphoto2;
+  in ''
+    mkdir -p $out/lib/udev/rules.d
+    ${executablePrefix}/lib/libgphoto2/print-camera-list \
+        udev-rules version 175 group camera \
+        >$out/lib/udev/rules.d/40-gphoto2.rules
+  '';
 
   meta = {
     homepage = "http://www.gphoto.org/proj/libgphoto2/";
@@ -75,6 +72,6 @@ stdenv.mkDerivation rec {
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
     license = lib.licenses.lgpl21Plus;
     platforms = with lib.platforms; unix;
-    maintainers = with lib.maintainers; [ jcumming ];
+    maintainers = with lib.maintainers; [jcumming];
   };
 }

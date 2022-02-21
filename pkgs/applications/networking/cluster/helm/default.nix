@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "helm";
   version = "3.8.0";
@@ -15,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/helm" ];
+  subPackages = ["cmd/helm"];
   ldflags = [
     "-w"
     "-s"
@@ -23,7 +27,7 @@ buildGoModule rec {
     "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
   postInstall = ''
     $out/bin/helm completion bash > helm.bash
     $out/bin/helm completion zsh > helm.zsh
@@ -34,6 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/kubernetes/helm";
     description = "A package manager for kubernetes";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man ];
+    maintainers = with maintainers; [rlupton20 edude03 saschagrunert Frostman Chili-Man];
   };
 }

@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, zlib, libpng, libjpeg, giflib, libtiff
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  zlib,
+  libpng,
+  libjpeg,
+  giflib,
+  libtiff,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pslib";
   version = "0.4.6";
@@ -11,12 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "0m191ckqj1kj2yvxiilqw26x4vrn7pnlc2vy636yphjxr02q8bk4";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib libpng libjpeg giflib libtiff ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [zlib libpng libjpeg giflib libtiff];
 
   doCheck = true;
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
   installPhase = ''
     mkdir -p $out/lib
@@ -35,9 +44,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A C-library for generating multi page PostScript documents";
     homepage = "http://pslib.sourceforge.net/";
-    changelog =
-      "https://sourceforge.net/p/pslib/git/ci/master/tree/pslib/ChangeLog";
+    changelog = "https://sourceforge.net/p/pslib/git/ci/master/tree/pslib/ChangeLog";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ShamrockLee ];
+    maintainers = with maintainers; [ShamrockLee];
   };
 }

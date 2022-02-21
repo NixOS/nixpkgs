@@ -1,15 +1,15 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPyPy
-, python
-, libev
-, greenlet
-, zope_event
-, zope_interface
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPyPy,
+  python,
+  libev,
+  greenlet,
+  zope_event,
+  zope_interface,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "gevent";
   version = "21.12.0";
@@ -26,12 +26,14 @@ buildPythonPackage rec {
     libev
   ];
 
-  propagatedBuildInputs = [
-    zope_event
-    zope_interface
-  ] ++ lib.optionals (!isPyPy) [
-    greenlet
-  ];
+  propagatedBuildInputs =
+    [
+      zope_event
+      zope_interface
+    ]
+    ++ lib.optionals (!isPyPy) [
+      greenlet
+    ];
 
   # Bunch of failures.
   doCheck = false;
@@ -44,7 +46,7 @@ buildPythonPackage rec {
     description = "Coroutine-based networking library";
     homepage = "http://www.gevent.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
     platforms = platforms.unix;
   };
 }

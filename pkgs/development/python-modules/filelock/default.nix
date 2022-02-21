@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools-scm,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "filelock";
   version = "3.4.2";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/benediktschmitt/py-filelock";
     description = "A platform independent file lock for Python";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ hyphon81 ];
+    maintainers = with maintainers; [hyphon81];
   };
 }

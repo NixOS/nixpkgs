@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  requests,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pynuki";
   version = "1.5.2";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --replace 'requests = ">=2.27,<3"' 'requests = "*"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [poetry-core];
 
   propagatedBuildInputs = [
     requests
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for nuki.io bridges";
     homepage = "https://github.com/pschmitt/pynuki";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

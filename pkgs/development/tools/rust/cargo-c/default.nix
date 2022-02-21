@@ -1,15 +1,15 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, curl
-, openssl
-, stdenv
-, CoreFoundation
-, libiconv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  curl,
+  openssl,
+  stdenv,
+  CoreFoundation,
+  libiconv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
   version = "0.9.2";
@@ -23,12 +23,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-YikTjAeroaHyNe3ygUWRHSXJwdm2BSBV7RgIDN4suZ4=";
 
-  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
-  buildInputs = [ openssl curl ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    libiconv
-    Security
-  ];
+  nativeBuildInputs = [pkg-config (lib.getDev curl)];
+  buildInputs =
+    [openssl curl]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      libiconv
+      Security
+    ];
 
   # Ensure that we are avoiding build of the curl vendored in curl-sys
   doInstallCheck = stdenv.hostPlatform.libc == "glibc";
@@ -50,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lu-zero/cargo-c";
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

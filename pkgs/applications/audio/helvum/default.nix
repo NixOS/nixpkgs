@@ -1,19 +1,19 @@
-{ lib
-, clang
-, desktop-file-utils
-, fetchFromGitLab
-, fetchpatch
-, glib
-, gtk4
-, libclang
-, meson
-, ninja
-, pipewire
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  lib,
+  clang,
+  desktop-file-utils,
+  fetchFromGitLab,
+  fetchpatch,
+  glib,
+  gtk4,
+  libclang,
+  meson,
+  ninja,
+  pipewire,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "helvum";
   version = "0.3.4";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "A GTK patchbay for pipewire";
     homepage = "https://gitlab.freedesktop.org/pipewire/helvum";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fufexan ];
+    maintainers = with maintainers; [fufexan];
     platforms = platforms.linux;
   };
 }

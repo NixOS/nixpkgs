@@ -1,9 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.mattermost;
 
   database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
@@ -15,7 +16,7 @@ let
     localDatabaseUser ? cfg.localDatabaseUser,
     localDatabasePassword ? cfg.localDatabasePassword,
     localDatabaseName ? cfg.localDatabaseName,
-    useSudo ? true
+    useSudo ? true,
   }: ''
     if ! test -e ${escapeShellArg "${statePath}/.db-created"}; then
       ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
@@ -29,76 +30,82 @@ let
   '';
 
   mattermostPluginDerivations = with pkgs;
-    map (plugin: stdenv.mkDerivation {
-      name = "mattermost-plugin";
-      installPhase = ''
-        mkdir -p $out/share
-        cp ${plugin} $out/share/plugin.tar.gz
-      '';
-      dontUnpack = true;
-      dontPatch = true;
-      dontConfigure = true;
-      dontBuild = true;
-      preferLocalBuild = true;
-    }) cfg.plugins;
+    map (plugin:
+      stdenv.mkDerivation {
+        name = "mattermost-plugin";
+        installPhase = ''
+          mkdir -p $out/share
+          cp ${plugin} $out/share/plugin.tar.gz
+        '';
+        dontUnpack = true;
+        dontPatch = true;
+        dontConfigure = true;
+        dontBuild = true;
+        preferLocalBuild = true;
+      })
+    cfg.plugins;
 
   mattermostPlugins = with pkgs;
-    if mattermostPluginDerivations == [] then null
-    else stdenv.mkDerivation {
-      name = "${cfg.package.name}-plugins";
-      nativeBuildInputs = [
-        autoPatchelfHook
-      ] ++ mattermostPluginDerivations;
-      buildInputs = [
-        cfg.package
-      ];
-      installPhase = ''
-        mkdir -p $out/data/plugins
-        plugins=(${escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)})
-        for plugin in "''${plugins[@]}"; do
-          hash="$(sha256sum "$plugin" | cut -d' ' -f1)"
-          mkdir -p "$hash"
-          tar -C "$hash" -xzf "$plugin"
-          autoPatchelf "$hash"
-          GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/data/plugins/$hash.tar.gz" .
-          rm -rf "$hash"
-        done
-      '';
+    if mattermostPluginDerivations == []
+    then null
+    else
+      stdenv.mkDerivation {
+        name = "${cfg.package.name}-plugins";
+        nativeBuildInputs =
+          [
+            autoPatchelfHook
+          ]
+          ++ mattermostPluginDerivations;
+        buildInputs = [
+          cfg.package
+        ];
+        installPhase = ''
+          mkdir -p $out/data/plugins
+          plugins=(${escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)})
+          for plugin in "''${plugins[@]}"; do
+            hash="$(sha256sum "$plugin" | cut -d' ' -f1)"
+            mkdir -p "$hash"
+            tar -C "$hash" -xzf "$plugin"
+            autoPatchelf "$hash"
+            GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/data/plugins/$hash.tar.gz" .
+            rm -rf "$hash"
+          done
+        '';
 
-      dontUnpack = true;
-      dontPatch = true;
-      dontConfigure = true;
-      dontBuild = true;
-      preferLocalBuild = true;
-    };
+        dontUnpack = true;
+        dontPatch = true;
+        dontConfigure = true;
+        dontBuild = true;
+        preferLocalBuild = true;
+      };
 
   mattermostConfWithoutPlugins = recursiveUpdate
-    { ServiceSettings.SiteURL = cfg.siteUrl;
-      ServiceSettings.ListenAddress = cfg.listenAddress;
-      TeamSettings.SiteName = cfg.siteName;
-      SqlSettings.DriverName = "postgres";
-      SqlSettings.DataSource = database;
-      PluginSettings.Directory = "${cfg.statePath}/plugins/server";
-      PluginSettings.ClientDirectory = "${cfg.statePath}/plugins/client";
-    }
-    cfg.extraConfig;
+  {
+    ServiceSettings.SiteURL = cfg.siteUrl;
+    ServiceSettings.ListenAddress = cfg.listenAddress;
+    TeamSettings.SiteName = cfg.siteName;
+    SqlSettings.DriverName = "postgres";
+    SqlSettings.DataSource = database;
+    PluginSettings.Directory = "${cfg.statePath}/plugins/server";
+    PluginSettings.ClientDirectory = "${cfg.statePath}/plugins/client";
+  }
+  cfg.extraConfig;
 
   mattermostConf = recursiveUpdate
-    mattermostConfWithoutPlugins
-    (
-      if mattermostPlugins == null then {}
-      else {
+  mattermostConfWithoutPlugins
+  (
+    if mattermostPlugins == null
+    then {}
+    else
+      {
         PluginSettings = {
           Enable = true;
         };
       }
-    );
+  );
 
   mattermostConfJSON = pkgs.writeText "mattermost-config.json" (builtins.toJSON mattermostConf);
-
-in
-
-{
+in {
   options = {
     services.mattermost = {
       enable = mkEnableOption "Mattermost chat server";
@@ -168,7 +175,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = { };
+        default = {};
         description = ''
           Addtional configuration options as Nix attribute set in config.json schema.
         '';
@@ -243,8 +250,8 @@ in
         };
         parameters = mkOption {
           type = types.listOf types.str;
-          default = [ ];
-          example = [ "-mmserver chat.example.com" "-bind [::]:6667" ];
+          default = [];
+          example = ["-mmserver chat.example.com" "-bind [::]:6667"];
           description = ''
             Set commandline parameters to pass to matterircd. See
             https://github.com/42wim/matterircd#usage for more information.
@@ -278,39 +285,46 @@ in
 
       systemd.services.mattermost = {
         description = "Mattermost chat service";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" "postgresql.service" ];
+        wantedBy = ["multi-user.target"];
+        after = ["network.target" "postgresql.service"];
 
-        preStart = ''
-          mkdir -p "${cfg.statePath}"/{data,config,logs,plugins}
-          mkdir -p "${cfg.statePath}/plugins"/{client,server}
-          ln -sf ${cfg.package}/{bin,fonts,i18n,templates,client} "${cfg.statePath}"
-        '' + lib.optionalString (mattermostPlugins != null) ''
-          rm -rf "${cfg.statePath}/data/plugins"
-          ln -sf ${mattermostPlugins}/data/plugins "${cfg.statePath}/data"
-        '' + lib.optionalString (!cfg.mutableConfig) ''
-          rm -f "${cfg.statePath}/config/config.json"
-          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
-        '' + lib.optionalString cfg.mutableConfig ''
-          if ! test -e "${cfg.statePath}/config/.initial-created"; then
-            rm -f ${cfg.statePath}/config/config.json
+        preStart =
+          ''
+            mkdir -p "${cfg.statePath}"/{data,config,logs,plugins}
+            mkdir -p "${cfg.statePath}/plugins"/{client,server}
+            ln -sf ${cfg.package}/{bin,fonts,i18n,templates,client} "${cfg.statePath}"
+          ''
+          + lib.optionalString (mattermostPlugins != null) ''
+            rm -rf "${cfg.statePath}/data/plugins"
+            ln -sf ${mattermostPlugins}/data/plugins "${cfg.statePath}/data"
+          ''
+          + lib.optionalString (!cfg.mutableConfig) ''
+            rm -f "${cfg.statePath}/config/config.json"
             ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
-            touch "${cfg.statePath}/config/.initial-created"
-          fi
-        '' + lib.optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
-          new_config="$(${pkgs.jq}/bin/jq -s '.[0] * .[1]' "${cfg.statePath}/config/config.json" ${mattermostConfJSON})"
+          ''
+          + lib.optionalString cfg.mutableConfig ''
+            if ! test -e "${cfg.statePath}/config/.initial-created"; then
+              rm -f ${cfg.statePath}/config/config.json
+              ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
+              touch "${cfg.statePath}/config/.initial-created"
+            fi
+          ''
+          + lib.optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
+            new_config="$(${pkgs.jq}/bin/jq -s '.[0] * .[1]' "${cfg.statePath}/config/config.json" ${mattermostConfJSON})"
 
-          rm -f "${cfg.statePath}/config/config.json"
-          echo "$new_config" > "${cfg.statePath}/config/config.json"
-        '' + lib.optionalString cfg.localDatabaseCreate (createDb {}) + ''
-          # Don't change permissions recursively on the data, current, and symlinked directories (see ln -sf command above).
-          # This dramatically decreases startup times for installations with a lot of files.
-          find . -maxdepth 1 -not -name data -not -name client -not -name templates -not -name i18n -not -name fonts -not -name bin -not -name . \
-            -exec chown "${cfg.user}:${cfg.group}" -R {} \; -exec chmod u+rw,g+r,o-rwx -R {} \;
+            rm -f "${cfg.statePath}/config/config.json"
+            echo "$new_config" > "${cfg.statePath}/config/config.json"
+          ''
+          + lib.optionalString cfg.localDatabaseCreate (createDb {})
+          + ''
+            # Don't change permissions recursively on the data, current, and symlinked directories (see ln -sf command above).
+            # This dramatically decreases startup times for installations with a lot of files.
+            find . -maxdepth 1 -not -name data -not -name client -not -name templates -not -name i18n -not -name fonts -not -name bin -not -name . \
+              -exec chown "${cfg.user}:${cfg.group}" -R {} \; -exec chmod u+rw,g+r,o-rwx -R {} \;
 
-          chown "${cfg.user}:${cfg.group}" "${cfg.statePath}/data" .
-          chmod u+rw,g+r,o-rwx "${cfg.statePath}/data" .
-        '';
+            chown "${cfg.user}:${cfg.group}" "${cfg.statePath}/data" .
+            chmod u+rw,g+r,o-rwx "${cfg.statePath}/data" .
+          '';
 
         serviceConfig = {
           PermissionsStartOnly = true;
@@ -328,7 +342,7 @@ in
     (mkIf cfg.matterircd.enable {
       systemd.services.matterircd = {
         description = "Mattermost IRC bridge service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
         serviceConfig = {
           User = "nobody";
           Group = "nogroup";

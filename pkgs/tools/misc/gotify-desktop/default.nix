@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config}:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "gotify-desktop";
   version = "1.2.0";
@@ -13,14 +18,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-zcSAsI/yGGJer7SPKDKZ6NQ3UgTdBcDighS6VTNITMo=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   meta = with lib; {
     description = "Small Gotify daemon to send messages as desktop notifications";
     homepage = "https://github.com/desbma/gotify-desktop";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bryanasdev000 genofire ];
+    maintainers = with maintainers; [bryanasdev000 genofire];
   };
 }

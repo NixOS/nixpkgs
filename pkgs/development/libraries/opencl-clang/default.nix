@@ -1,34 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, git
-
-, llvmPackages_11
-, spirv-llvm-translator
-
-, buildWithPatches ? true
-}:
-
-let
-  llvmPkgs = llvmPackages_11 // {
-    inherit spirv-llvm-translator;
-  };
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  git,
+  llvmPackages_11,
+  spirv-llvm-translator,
+  buildWithPatches ? true,
+}: let
+  llvmPkgs =
+    llvmPackages_11
+    // {
+      inherit spirv-llvm-translator;
+    };
 
   inherit (lib) getVersion;
 
   addPatches = component: pkg:
-    with builtins; with lib;
-    let path = "${passthru.patchesOut}/${component}";
-    in pkg.overrideAttrs (super: {
-      postPatch = (if super ? postPatch then super.postPatch + "\n" else "") + ''
-        for p in ${path}/*
-        do
-          patch -p1 -i "$p"
-        done
-      '';
-    });
+    with builtins; with lib; let
+      path = "${passthru.patchesOut}/${component}";
+    in
+      pkg.overrideAttrs (super: {
+        postPatch =
+          (if super ? postPatch
+          then super.postPatch + "\n"
+          else "")
+          + ''
+            for p in ${path}/*
+            do
+              patch -p1 -i "$p"
+            done
+          '';
+      });
 
   passthru = rec {
     spirv-llvm-translator = llvmPkgs.spirv-llvm-translator;
@@ -63,7 +67,13 @@ let
 
   library = let
     inherit (llvmPkgs) llvm;
-    inherit (if buildWithPatches then passthru else llvmPkgs) libclang spirv-llvm-translator;
+    inherit
+      (if buildWithPatches
+      then passthru
+      else llvmPkgs)
+      libclang
+      spirv-llvm-translator
+      ;
   in
     stdenv.mkDerivation rec {
       pname = "opencl-clang";
@@ -79,8 +89,8 @@ let
       };
 
       patches = [
-      # Build script tries to find Clang OpenCL headers under ${llvm}
-      # Work around it by specifying that directory manually.
+        # Build script tries to find Clang OpenCL headers under ${llvm}
+        # Work around it by specifying that directory manually.
         ./opencl-headers-dir.patch
       ];
 
@@ -91,9 +101,9 @@ let
           --replace '-Wl,--no-undefined' ""
       '';
 
-      nativeBuildInputs = [ cmake git llvm.dev ];
+      nativeBuildInputs = [cmake git llvm.dev];
 
-      buildInputs = [ libclang llvm spirv-llvm-translator ];
+      buildInputs = [libclang llvm spirv-llvm-translator];
 
       cmakeFlags = [
         "-DPREFERRED_LLVM_VERSION=${getVersion llvm}"
@@ -104,11 +114,11 @@ let
       ];
 
       meta = with lib; {
-        homepage    = "https://github.com/intel/opencl-clang/";
+        homepage = "https://github.com/intel/opencl-clang/";
         description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
-        license     = licenses.ncsa;
-        platforms   = platforms.all;
-        maintainers = with maintainers; [ gloaming ];
+        license = licenses.ncsa;
+        platforms = platforms.all;
+        maintainers = with maintainers; [gloaming];
       };
     };
 in

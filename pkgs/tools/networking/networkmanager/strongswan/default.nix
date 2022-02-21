@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, networkmanager, strongswanNM
-, gtk3, gnome, libsecret, libnma }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  networkmanager,
+  strongswanNM,
+  gtk3,
+  gnome,
+  libsecret,
+  libnma,
+}:
 stdenv.mkDerivation rec {
   pname = "NetworkManager-strongswan";
   version = "1.5.2";
@@ -10,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "0sc1yzlxjfvl58hjjw99bchqc4061i3apw254z61v22k4sajnif8";
   };
 
-  buildInputs = [ networkmanager strongswanNM libsecret gtk3 libnma ];
+  buildInputs = [networkmanager strongswanNM libsecret gtk3 libnma];
 
-  nativeBuildInputs = [ intltool pkg-config ];
+  nativeBuildInputs = [intltool pkg-config];
 
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";

@@ -1,18 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.security.googleOsLogin;
   package = pkgs.google-guest-oslogin;
-
-in
-
-{
-
+in {
   options = {
-
     security.googleOsLogin.enable = mkOption {
       type = types.bool;
       default = false;
@@ -29,7 +25,6 @@ in
         an instance, and to perform operations as root (sudo).
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
@@ -47,13 +42,13 @@ in
       "d /var/google-users.d 750 root root -"
     ];
 
-    systemd.packages = [ package ];
-    systemd.timers.google-oslogin-cache.wantedBy = [ "timers.target" ];
+    systemd.packages = [package];
+    systemd.timers.google-oslogin-cache.wantedBy = ["timers.target"];
 
     # enable the nss module, so user lookups etc. work
-    system.nssModules = [ package ];
-    system.nssDatabases.passwd = [ "cache_oslogin" "oslogin" ];
-    system.nssDatabases.group = [ "cache_oslogin" "oslogin" ];
+    system.nssModules = [package];
+    system.nssDatabases.passwd = ["cache_oslogin" "oslogin"];
+    system.nssDatabases.group = ["cache_oslogin" "oslogin"];
 
     # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
     # So indirect by a symlink.
@@ -67,5 +62,4 @@ in
     services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command_google_oslogin %u";
     services.openssh.authorizedKeysCommandUser = "nobody";
   };
-
 }

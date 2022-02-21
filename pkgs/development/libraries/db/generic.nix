@@ -1,15 +1,18 @@
-{ lib, stdenv, fetchurl
-, cxxSupport ? true
-, compat185 ? true
-, dbmSupport ? false
-
-# Options from inherited versions
-, version, sha256
-, extraPatches ? [ ]
-, license ? lib.licenses.sleepycat
-, drvArgs ? {}
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cxxSupport ? true,
+  compat185 ? true,
+  dbmSupport ? false
+  # Options from inherited versions
+  ,
+  version,
+  sha256,
+  extraPatches ? [],
+  license ? lib.licenses.sleepycat,
+  drvArgs ? {},
 }:
-
 stdenv.mkDerivation (rec {
   pname = "db";
   inherit version;
@@ -21,12 +24,16 @@ stdenv.mkDerivation (rec {
 
   patches = extraPatches;
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = ["bin" "out" "dev"];
 
   configureFlags =
     [
-      (if cxxSupport then "--enable-cxx" else "--disable-cxx")
-      (if compat185 then "--enable-compat185" else "--disable-compat185")
+      (if cxxSupport
+      then "--enable-cxx"
+      else "--disable-cxx")
+      (if compat185
+      then "--enable-compat185"
+      else "--disable-compat185")
     ]
     ++ lib.optional dbmSupport "--enable-dbm"
     ++ lib.optional stdenv.isFreeBSD "--with-pic";
@@ -54,4 +61,5 @@ stdenv.mkDerivation (rec {
     license = license;
     platforms = platforms.unix;
   };
-} // drvArgs)
+}
+// drvArgs)

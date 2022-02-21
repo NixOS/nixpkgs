@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, numba
-, numpy
-, scikit-learn
-, scipy
-, matplotlib
-, seaborn
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  numba,
+  numpy,
+  scikit-learn,
+  scipy,
+  matplotlib,
+  seaborn,
 }:
-
 buildPythonPackage rec {
   pname = "hyppo";
   version = "0.2.2";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook matplotlib seaborn ];
+  checkInputs = [pytestCheckHook matplotlib seaborn];
   disabledTestPaths = [
     "docs"
     "benchmarks"
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/neurodata/hyppo";
     description = "Indepedence testing in Python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

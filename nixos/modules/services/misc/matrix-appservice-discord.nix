@@ -1,8 +1,11 @@
-{ config, options, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   dataDir = "/var/lib/matrix-appservice-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
   appDir = "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
@@ -10,7 +13,6 @@ let
   opt = options.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
   settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (builtins.toJSON cfg.settings);
-
 in {
   options = {
     services.matrix-appservice-discord = {
@@ -115,9 +117,9 @@ in {
     systemd.services.matrix-appservice-discord = {
       description = "A bridge between Matrix and Discord.";
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
-      after = [ "network-online.target" ] ++ cfg.serviceDependencies;
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"] ++ cfg.serviceDependencies;
+      after = ["network-online.target"] ++ cfg.serviceDependencies;
 
       preStart = ''
         if [ ! -f '${registrationFile}' ]; then
@@ -157,5 +159,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with maintainers; [pacien];
 }

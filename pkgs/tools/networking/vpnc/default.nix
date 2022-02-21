@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchsvn
-, makeWrapper, pkg-config
-, gawk, gnutls, libgcrypt, nettools, openresolv, perl
-, opensslSupport ? false, openssl # Distributing this is a GPL violation.
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  makeWrapper,
+  pkg-config,
+  gawk,
+  gnutls,
+  libgcrypt,
+  nettools,
+  openresolv,
+  perl,
+  opensslSupport ? false,
+  openssl
+  # Distributing this is a GPL violation.
 }:
-
 stdenv.mkDerivation {
   pname = "vpnc";
   version = "0.5.3-post-r550";
@@ -18,22 +28,28 @@ stdenv.mkDerivation {
     rm -r $sourceRoot/{trunk,branches,tags}
   '';
 
-  patches = [ ./no_default_route_when_netmask.patch ];
+  patches = [./no_default_route_when_netmask.patch];
 
   # The `etc/vpnc/vpnc-script' script relies on `which' and on
   # `ifconfig' as found in net-tools (not GNU Inetutils).
-  propagatedBuildInputs = [ nettools ];
+  propagatedBuildInputs = [nettools];
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs =
+    [makeWrapper]
     ++ lib.optional (!opensslSupport) pkg-config;
-  buildInputs = [ libgcrypt perl ]
-    ++ (if opensslSupport then [ openssl ] else [ gnutls ]);
+  buildInputs =
+    [libgcrypt perl]
+    ++ (if opensslSupport
+    then [openssl]
+    else [gnutls]);
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "ETCDIR=$(out)/etc/vpnc"
-    "SCRIPT_PATH=$(out)/etc/vpnc/vpnc-script"
-  ] ++ lib.optional opensslSupport "OPENSSL_GPL_VIOLATION=yes";
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "ETCDIR=$(out)/etc/vpnc"
+      "SCRIPT_PATH=$(out)/etc/vpnc/vpnc-script"
+    ]
+    ++ lib.optional opensslSupport "OPENSSL_GPL_VIOLATION=yes";
 
   postPatch = ''
     patchShebangs makeman.pl
@@ -63,7 +79,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.unix-ag.uni-kl.de/~massar/vpnc/";
     description = "Virtual private network (VPN) client for Cisco's VPN concentrators";
-    license = if opensslSupport then licenses.unfree else licenses.gpl2Plus;
+    license =
+      if opensslSupport
+      then licenses.unfree
+      else licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

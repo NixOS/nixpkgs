@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-, nose_progressive
-, nose
-, mock
-, blessings
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  nose_progressive,
+  nose,
+  mock,
+  blessings,
 }:
-
 buildPythonPackage rec {
   pname = "pilkit";
   version = "2.0";
@@ -24,13 +24,12 @@ buildPythonPackage rec {
   # tests fail, see https://github.com/matthewwithanm/pilkit/issues/9
   doCheck = false;
 
-  buildInputs = [ pillow nose_progressive nose mock blessings ];
+  buildInputs = [pillow nose_progressive nose mock blessings];
 
   meta = with lib; {
     homepage = "https://github.com/matthewwithanm/pilkit/";
     description = "A collection of utilities and processors for the Python Imaging Libary";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
-
 }

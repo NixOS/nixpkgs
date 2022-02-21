@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, ucl, zlib, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ucl,
+  zlib,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "upx";
   version = "3.96";
@@ -8,14 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "051pk5jk8fcfg5mpgzj43z5p4cn7jy5jbyshyn78dwjqr7slsxs7";
   };
 
-  buildInputs = [ ucl zlib perl ];
+  buildInputs = [ucl zlib perl];
 
   preConfigure = ''
     export UPX_UCLDIR=${ucl}
   '';
 
   makeFlags = [
-    "-C" "src"
+    "-C"
+    "src"
     "CHECK_WHITESPACE=true"
 
     # Disable blanket -Werror. Triggers failues on minor gcc-11 warnings.

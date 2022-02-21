@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libestr }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libestr,
+}:
 stdenv.mkDerivation rec {
   pname = "libee";
   version = "0.4.1";
@@ -8,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "09xhgzmsq0g3jsyj24vy67bhzk2fv971w5ixdkhfwgar70cw1nn0";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libestr];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libestr];
 
   meta = {
     homepage = "http://www.libee.org/";

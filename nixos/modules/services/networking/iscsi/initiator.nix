@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ... }: with lib;
-let
-  cfg = config.services.openiscsi;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.openiscsi;
+in {
   options.services.openiscsi = with types; {
     enable = mkEnableOption "the openiscsi iscsi daemon";
     enableAutoLoginOut = mkEnableOption ''
@@ -68,17 +72,17 @@ in
       ) > /etc/iscsi/iscsid.conf
     '';
 
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [cfg.package];
 
-    systemd.services."iscsid".wantedBy = [ "multi-user.target" ];
-    systemd.sockets."iscsid".wantedBy = [ "sockets.target" ];
+    systemd.services."iscsid".wantedBy = ["multi-user.target"];
+    systemd.sockets."iscsid".wantedBy = ["sockets.target"];
 
     systemd.services."iscsi" = mkIf cfg.enableAutoLoginOut {
-      wantedBy = [ "remote-fs.target" ];
+      wantedBy = ["remote-fs.target"];
       serviceConfig.ExecStartPre = mkIf (cfg.discoverPortal != null) "${cfg.package}/bin/iscsiadm --mode discoverydb --type sendtargets --portal ${escapeShellArg cfg.discoverPortal} --discover";
     };
 
-    environment.systemPackages = [ cfg.package ];
-    boot.kernelModules = [ "iscsi_tcp" ];
+    environment.systemPackages = [cfg.package];
+    boot.kernelModules = ["iscsi_tcp"];
   };
 }

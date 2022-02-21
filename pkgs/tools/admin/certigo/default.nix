@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "certigo";
   version = "1.14.1";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "A utility to examine and validate certificates in a variety of formats";
     homepage = "https://github.com/square/certigo";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

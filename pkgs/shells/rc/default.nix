@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook
-, ncurses #acinclude.m4 wants headers for tgetent().
-, historySupport ? false
-, readline ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  ncurses
+  #acinclude.m4 wants headers for tgetent().
+  ,
+  historySupport ? false,
+  readline ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rc";
   version = "1.7.4";
@@ -13,14 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "1n5zz6d6z4z6s3fwa0pscqqawy561k4xfnmi91i626hcvls67ljy";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ncurses ]
-    ++ lib.optionals (readline != null) [ readline ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs =
+    [ncurses]
+    ++ lib.optionals (readline != null) [readline];
 
-  configureFlags = [
-    "--enable-def-interp=${stdenv.shell}" #183
-    ] ++ lib.optionals historySupport [ "--with-history" ]
-    ++ lib.optionals (readline != null) [ "--with-edit=readline" ];
+  configureFlags =
+    [
+      "--enable-def-interp=${stdenv.shell}" #183
+    ]
+    ++ lib.optionals historySupport ["--with-history"]
+    ++ lib.optionals (readline != null) ["--with-edit=readline"];
 
   prePatch = ''
     substituteInPlace configure.ac \
@@ -36,7 +44,7 @@ stdenv.mkDerivation rec {
     longDescription = "Byron Rakitzis' UNIX reimplementation of Tom Duff's Plan 9 shell.";
     homepage = "http://tobold.org/article/rc";
     license = with licenses; zlib;
-    maintainers = with maintainers; [ ramkromberg ];
+    maintainers = with maintainers; [ramkromberg];
     platforms = with platforms; all;
   };
 }

@@ -1,28 +1,26 @@
-{ lib, stdenv
-, libXScrnSaver
-, makeWrapper
-, fetchurl
-, wrapGAppsHook
-, glib
-, gtk3
-, unzip
-, atomEnv
-, libuuid
-, at-spi2-atk
-, at-spi2-core
-, libdrm
-, mesa
-, libxkbcommon
-, libappindicator-gtk3
-, libxshmfence
-, libglvnd
-}@args:
-
-let
+{
+  lib,
+  stdenv,
+  libXScrnSaver,
+  makeWrapper,
+  fetchurl,
+  wrapGAppsHook,
+  glib,
+  gtk3,
+  unzip,
+  atomEnv,
+  libuuid,
+  at-spi2-atk,
+  at-spi2-core,
+  libdrm,
+  mesa,
+  libxkbcommon,
+  libappindicator-gtk3,
+  libxshmfence,
+  libglvnd,
+} @ args: let
   mkElectron = import ./generic.nix args;
-in
-rec {
-
+in rec {
   electron = electron_17;
 
   electron_9 = mkElectron "9.4.4" {

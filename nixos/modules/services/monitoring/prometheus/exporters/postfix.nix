@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.postfix;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.postfix;
+in {
   port = 9154;
   extraOpts = {
     group = mkOption {
@@ -78,20 +79,22 @@ in
       DynamicUser = false;
       # By default, each prometheus exporter only gets AF_INET & AF_INET6,
       # but AF_UNIX is needed to read from the `showq`-socket.
-      RestrictAddressFamilies = [ "AF_UNIX" ];
+      RestrictAddressFamilies = ["AF_UNIX"];
       ExecStart = ''
         ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --postfix.showq_path ${escapeShellArg cfg.showqPath} \
-          ${concatStringsSep " \\\n  " (cfg.extraFlags
+          ${
+          concatStringsSep " \\\n  " (cfg.extraFlags
           ++ optional cfg.systemd.enable "--systemd.enable"
           ++ optional cfg.systemd.enable (if cfg.systemd.slice != null
-                                          then "--systemd.slice ${cfg.systemd.slice}"
-                                          else "--systemd.unit ${cfg.systemd.unit}")
+          then "--systemd.slice ${cfg.systemd.slice}"
+          else "--systemd.unit ${cfg.systemd.unit}")
           ++ optional (cfg.systemd.enable && (cfg.systemd.journalPath != null))
-                       "--systemd.journal_path ${escapeShellArg cfg.systemd.journalPath}"
-          ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${escapeShellArg cfg.logfilePath}")}
+          "--systemd.journal_path ${escapeShellArg cfg.systemd.journalPath}"
+          ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${escapeShellArg cfg.logfilePath}")
+        }
       '';
     };
   };

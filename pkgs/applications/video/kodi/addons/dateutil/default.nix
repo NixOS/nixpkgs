@@ -1,5 +1,10 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, six }:
-
+{
+  lib,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  six,
+}:
 buildKodiAddon rec {
   pname = "dateutil";
   namespace = "script.module.dateutil";
@@ -24,7 +29,7 @@ buildKodiAddon rec {
   meta = with lib; {
     homepage = "https://dateutil.readthedocs.io/en/stable/";
     description = "Extensions to the standard Python datetime module";
-    license = with licenses; [ asl20 bsd3 ];
+    license = with licenses; [asl20 bsd3];
     maintainers = teams.kodi.members;
   };
 }

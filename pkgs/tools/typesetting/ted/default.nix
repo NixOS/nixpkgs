@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, pcre, xorg, libjpeg, libtiff, libpng, gtk2, libpaper, makeWrapper, ghostscript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  zlib,
+  pcre,
+  xorg,
+  libjpeg,
+  libtiff,
+  libpng,
+  gtk2,
+  libpaper,
+  makeWrapper,
+  ghostscript,
+}:
 stdenv.mkDerivation rec {
   pname = "ted";
   version = "2.23";
@@ -35,7 +49,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  makeFlags = [ "CONFIGURE_OPTIONS=--with-GTK" "CONFIGURE_OPTIONS+=--prefix=$(out)" "compile.shared" ];
+  makeFlags = ["CONFIGURE_OPTIONS=--with-GTK" "CONFIGURE_OPTIONS+=--prefix=$(out)" "compile.shared"];
 
   installPhase = ''
     runHook preInstall
@@ -49,7 +63,7 @@ stdenv.mkDerivation rec {
     pushd $out/share/Ted/examples
     for f in rtf2*.sh
     do
-        makeWrapper "$PWD/$f" "$out/bin/$f" --prefix PATH : $out/bin:${lib.makeBinPath [ ghostscript ]}
+        makeWrapper "$PWD/$f" "$out/bin/$f" --prefix PATH : $out/bin:${lib.makeBinPath [ghostscript]}
     done
     popd
 
@@ -58,8 +72,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper ];
+  nativeBuildInputs = [pkg-config makeWrapper];
+  buildInputs = [zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper];
 
   meta = with lib; {
     description = "An easy rich text processor";
@@ -75,10 +89,10 @@ stdenv.mkDerivation rec {
       MS-Word. Additionally, Ted also is an RTF to PostScript and an RTF to
       Acrobat PDF converter.
     '';
-    homepage    = "https://nllgg.nl/Ted/";
-    license     = licenses.gpl2;
-    platforms   = platforms.all;
-    broken      = stdenv.isDarwin;
-    maintainers = with maintainers; [ obadz ];
+    homepage = "https://nllgg.nl/Ted/";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [obadz];
   };
 }

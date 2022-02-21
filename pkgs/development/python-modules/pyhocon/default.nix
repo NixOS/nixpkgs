@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pyparsing
-, pytestCheckHook
-, python-dateutil
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pyparsing,
+  pytestCheckHook,
+  python-dateutil,
 }:
-
 buildPythonPackage rec {
   pname = "pyhocon";
   version = "0.3.59";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyhocon" ];
+  pythonImportsCheck = ["pyhocon"];
 
   meta = with lib; {
     homepage = "https://github.com/chimpler/pyhocon/";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
       format
     '';
     license = licenses.asl20;
-    maintainers = [ maintainers.chreekat ];
+    maintainers = [maintainers.chreekat];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, packaging
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  packaging,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
   version = "0.11.2";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Pytest plugin with advanced doctest features";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, graphviz }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  graphviz,
+}:
 stdenv.mkDerivation rec {
   version = "6.1.0";
   pname = "schemaspy";
@@ -35,7 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://schemaspy.org";
     description = "Document your database simply and easily";
     license = licenses.mit;
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [jraygauthier];
   };
 }
-

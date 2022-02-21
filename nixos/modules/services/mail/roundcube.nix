@@ -1,15 +1,20 @@
-{ lib, config, pkgs, ... }:
-
-with lib;
-
-let
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.roundcube;
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php80.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
-in
-{
+  phpWithPspell = pkgs.php80.withExtensions ({
+    enabled,
+    all,
+  }:
+    [all.pspell] ++ enabled);
+in {
   options.services.roundcube = {
     enable = mkOption {
       type = types.bool;
@@ -126,13 +131,21 @@ in
       ${lib.optionalString (!localDB) "$password = file_get_contents('${cfg.database.passwordFile}');"}
 
       $config = array();
-      $config['db_dsnw'] = 'pgsql://${cfg.database.username}${lib.optionalString (!localDB) ":' . $password . '"}@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
+      $config['db_dsnw'] = 'pgsql://${cfg.database.username}${lib.optionalString (!localDB) ":' . $password . '"}@${
+        if localDB
+        then "unix(/run/postgresql)"
+        else cfg.database.host
+      }/${cfg.database.dbname}';
       $config['log_driver'] = 'syslog';
       $config['max_message_size'] =  '${cfg.maxAttachmentSize}';
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
       $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
       $config['mime_types'] = '${pkgs.nginx}/conf/mime.types';
-      $config['enable_spellcheck'] = ${if cfg.dicts == [] then "false" else "true"};
+      $config['enable_spellcheck'] = ${
+        if cfg.dicts == []
+        then "false"
+        else "true"
+      };
       # by default, spellchecking uses a third-party cloud services
       $config['spellcheck_engine'] = 'pspell';
       $config['spellcheck_languages'] = array(${lib.concatMapStringsSep ", " (dict: let p = builtins.parseDrvName dict.shortName; in "'${p.name}' => '${dict.fullName}'") cfg.dicts});
@@ -164,13 +177,15 @@ in
 
     services.postgresql = mkIf localDB {
       enable = true;
-      ensureDatabases = [ cfg.database.dbname ];
-      ensureUsers = [ {
-        name = cfg.database.username;
-        ensurePermissions = {
-          "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
-        };
-      } ];
+      ensureDatabases = [cfg.database.dbname];
+      ensureUsers = [
+        {
+          name = cfg.database.username;
+          ensurePermissions = {
+            "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
     users.users.${user} = mkIf localDB {
@@ -181,7 +196,10 @@ in
     users.groups.${user} = mkIf localDB {};
 
     services.phpfpm.pools.roundcube = {
-      user = if localDB then user else "nginx";
+      user =
+        if localDB
+        then user
+        else "nginx";
       phpOptions = ''
         error_log = 'stderr'
         log_errors = on
@@ -203,7 +221,7 @@ in
       phpPackage = phpWithPspell;
       phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
     };
-    systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
+    systemd.services.phpfpm-roundcube.after = ["roundcube-setup.service"];
 
     # Restart on config changes.
     systemd.services.phpfpm-roundcube.restartTriggers = [
@@ -212,16 +230,15 @@ in
 
     systemd.services.roundcube-setup = mkMerge [
       (mkIf (cfg.database.host == "localhost") {
-        requires = [ "postgresql.service" ];
-        after = [ "postgresql.service" ];
-        path = [ config.services.postgresql.package ];
+        requires = ["postgresql.service"];
+        after = ["postgresql.service"];
+        path = [config.services.postgresql.package];
       })
       {
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
         script = let
           psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
-        in
-        ''
+        in ''
           version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
           if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
             ${psql} -f ${cfg.package}/SQL/postgres.initial.sql
@@ -239,7 +256,10 @@ in
         serviceConfig = {
           Type = "oneshot";
           StateDirectory = "roundcube";
-          User = if localDB then user else "nginx";
+          User =
+            if localDB
+            then user
+            else "nginx";
           # so that the des_key is not world readable
           StateDirectoryMode = "0700";
         };

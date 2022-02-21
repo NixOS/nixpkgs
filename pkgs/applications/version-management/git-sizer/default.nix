@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "git-sizer";
   version = "1.3.0";
@@ -16,6 +19,6 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Compute various size metrics for a Git repository";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [matthewbauer];
   };
 }

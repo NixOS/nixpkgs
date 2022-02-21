@@ -1,16 +1,16 @@
-{ lib
-, stdenvNoCC
-, buildDotnetModule
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, ffmpeg
-, alsa-lib
-, SDL2
-, lttng-ust
-, numactl
+{
+  lib,
+  stdenvNoCC,
+  buildDotnetModule,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  ffmpeg,
+  alsa-lib,
+  SDL2,
+  lttng-ust,
+  numactl,
 }:
-
 buildDotnetModule rec {
   pname = "osu-lazer";
   version = "2022.205.0";
@@ -25,7 +25,7 @@ buildDotnetModule rec {
   projectFile = "osu.Desktop/osu.Desktop.csproj";
   nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [copyDesktopItems];
 
   preConfigure = ''
     dotnetFlags+=(
@@ -41,7 +41,7 @@ buildDotnetModule rec {
     numactl
   ];
 
-  executables = [ "osu!" ];
+  executables = ["osu!"];
 
   fixupPhase = ''
     runHook preFixup
@@ -56,15 +56,17 @@ buildDotnetModule rec {
     runHook postFixup
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "osu!";
-    name = "osu";
-    exec = "osu!";
-    icon = "osu!";
-    comment = meta.description;
-    type = "Application";
-    categories = "Game;";
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "osu!";
+      name = "osu";
+      exec = "osu!";
+      icon = "osu!";
+      comment = meta.description;
+      type = "Application";
+      categories = "Game;";
+    })
+  ];
 
   meta = with lib; {
     description = "Rhythm is just a *click* away";
@@ -74,8 +76,8 @@ buildDotnetModule rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ oxalica ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [oxalica];
+    platforms = ["x86_64-linux"];
     mainProgram = "osu!";
   };
   passthru.updateScript = ./update.sh;

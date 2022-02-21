@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, git }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+}:
 buildPythonPackage rec {
   pname = "versiontag";
   version = "1.2.0";
@@ -16,14 +20,14 @@ buildPythonPackage rec {
       --replace "get_version(pypi=True)" '"${version}"'
   '';
 
-  checkInputs = [ git ];
+  checkInputs = [git];
 
-  pythonImportsCheck = [ "versiontag" ];
+  pythonImportsCheck = ["versiontag"];
 
   meta = with lib; {
     description = "Python library designed to make accessing the current version number of your software easy";
     homepage = "https://github.com/thelabnyc/python-versiontag";
     license = licenses.isc;
-    maintainers = with maintainers; [ MaskedBelgian ];
+    maintainers = with maintainers; [MaskedBelgian];
   };
 }

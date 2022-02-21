@@ -1,6 +1,12 @@
-{ lib, pkgs, fetchFromGitHub, nodejs, stdenv, ArchiSteamFarm, ... }:
-
-let
+{
+  lib,
+  pkgs,
+  fetchFromGitHub,
+  nodejs,
+  stdenv,
+  ArchiSteamFarm,
+  ...
+}: let
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
@@ -14,7 +20,6 @@ let
     rev = "156992e88d5c695375e9f69c29f2c68bec24d2b1";
     sha256 = "0zqiaj0957rr4kzw8q8zkxvd88nqw5ssym81dsd3pa0ypr4vqb4w";
   };
-
 in
   nodePackages.package.override {
     inherit src;
@@ -22,7 +27,7 @@ in
     # upstream isn't tagged, but we are using the latest official commit for that specific asf version (assuming both get updated at the same time)
     version = ArchiSteamFarm.version;
 
-    nativeBuildInputs = [ pkgs.nodePackages.node-gyp-build ];
+    nativeBuildInputs = [pkgs.nodePackages.node-gyp-build];
 
     postInstall = ''
       patchShebangs node_modules/
@@ -35,6 +40,6 @@ in
       license = licenses.apsl20;
       homepage = "https://github.com/JustArchiNET/ASF-ui";
       platforms = ArchiSteamFarm.meta.platforms;
-      maintainers = with maintainers; [ lom ];
+      maintainers = with maintainers; [lom];
     };
   }

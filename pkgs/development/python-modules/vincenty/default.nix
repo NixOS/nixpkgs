@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "vincenty";
   version = "0.1.4";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "vincenty" ];
+  pythonImportsCheck = ["vincenty"];
 
   meta = with lib; {
     description = "Calculate the geographical distance between 2 points with extreme accuracy";
     homepage = "https://github.com/maurycyp/vincenty";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

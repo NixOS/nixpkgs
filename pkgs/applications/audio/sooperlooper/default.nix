@@ -1,23 +1,24 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, which
-, libtool
-, liblo
-, libxml2
-, libjack2
-, libsndfile
-, wxGTK30
-, libsigcxx
-, libsamplerate
-, rubberband
-, gettext
-, ncurses
-, alsa-lib
-, fftw
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  which,
+  libtool,
+  liblo,
+  libxml2,
+  libjack2,
+  libsndfile,
+  wxGTK30,
+  libsigcxx,
+  libsamplerate,
+  rubberband,
+  gettext,
+  ncurses,
+  alsa-lib,
+  fftw,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sooperlooper";
   version = "1.7.4";
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "essej";
     repo = "sooperlooper";
-    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "v${builtins.replaceStrings ["."] ["_"] version}";
     sha256 = "1jng9bkb7iikad0dy1fkiq9wjjdhh1xi1p0cp2lvnz1dsc4yk6iw";
   };
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config which libtool ];
+  nativeBuildInputs = [autoreconfHook pkg-config which libtool];
 
   buildInputs = [
     liblo
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://essej.net/sooperlooper/"; # https is broken
     license = licenses.gpl2;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [magnetophon];
     platforms = platforms.linux;
   };
 }

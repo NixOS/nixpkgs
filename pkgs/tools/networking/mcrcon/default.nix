@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "mcrcon";
   version = "0.7.2";
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
       It is well suited for remote administration and to be used as part of automated server maintenance scripts.
       It does not trigger "IO: Broken pipe" or "IO: Connection reset" spam bugs on the server side.
     '';
-    maintainers = with lib.maintainers; [ dermetfan ];
-    license = with lib.licenses; [ zlib libpng ];
+    maintainers = with lib.maintainers; [dermetfan];
+    license = with lib.licenses; [zlib libpng];
   };
 }

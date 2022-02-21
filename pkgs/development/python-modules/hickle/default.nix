@@ -1,24 +1,24 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h5py
-, numpy
-, dill
-, astropy
-, scipy
-, pandas
-, codecov
-, pytest
-, pytest-cov
-, pytest-runner
-, coveralls
-, twine
-, check-manifest
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  h5py,
+  numpy,
+  dill,
+  astropy,
+  scipy,
+  pandas,
+  codecov,
+  pytest,
+  pytest-cov,
+  pytest-runner,
+  coveralls,
+  twine,
+  check-manifest,
+  lib,
 }:
-
 buildPythonPackage rec {
-  pname   = "hickle";
+  pname = "hickle";
   version = "4.0.4";
   disabled = pythonOlder "3.5";
 
@@ -32,14 +32,23 @@ buildPythonPackage rec {
       --replace 'astropy<3.1;' 'astropy;' --replace 'astropy<3.0;' 'astropy;'
   '';
 
-  propagatedBuildInputs = [ h5py numpy dill ];
+  propagatedBuildInputs = [h5py numpy dill];
 
   doCheck = false; # incompatible with latest astropy
   checkInputs = [
-    pytest pytest-cov pytest-runner coveralls scipy pandas astropy twine check-manifest codecov
+    pytest
+    pytest-cov
+    pytest-runner
+    coveralls
+    scipy
+    pandas
+    astropy
+    twine
+    check-manifest
+    codecov
   ];
 
-  pythonImportsCheck = [ "hickle" ];
+  pythonImportsCheck = ["hickle"];
 
   meta = {
     # incompatible with h5py>=3.0, see https://github.com/telegraphic/hickle/issues/143
@@ -47,6 +56,6 @@ buildPythonPackage rec {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [bcdarwin];
   };
 }

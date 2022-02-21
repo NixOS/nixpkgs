@@ -1,18 +1,19 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, elfutils
-, libxml2
-, pkg-config
-, strace
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  elfutils,
+  libxml2,
+  pkg-config,
+  strace,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libabigail";
   version = "2.0";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = ["bin" "out" "dev"];
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/${pname}/${pname}-${version}.tar.gz";
@@ -52,8 +53,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
-    license = with licenses; [ asl20 llvm-exception ];
-    maintainers = with maintainers; [ jtojnar ];
+    license = with licenses; [asl20 llvm-exception];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

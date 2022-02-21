@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ctop";
   version = "0.7.6";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.build=v${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}" "-X main.build=v${version}"];
 
   meta = with lib; {
     description = "Top-like interface for container metrics";
     homepage = "https://ctop.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux marsam SuperSandro2000 ];
+    maintainers = with maintainers; [apeyroux marsam SuperSandro2000];
   };
 }

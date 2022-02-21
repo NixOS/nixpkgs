@@ -1,5 +1,14 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, freetype, libGL, pcre }:
-
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  freetype,
+  libGL,
+  pcre,
+}:
 mkDerivation rec {
   pname = "contour";
   version = "0.1.1";
@@ -12,16 +21,16 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ freetype libGL pcre ];
+  buildInputs = [freetype libGL pcre];
 
   meta = with lib; {
     description = "Modern C++ Terminal Emulator";
     homepage = "https://github.com/christianparpart/contour";
     changelog = "https://github.com/christianparpart/contour/blob/HEAD/Changelog.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/contour.x86_64-darwin
   };

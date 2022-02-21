@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pandas
-, lxml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pandas,
+  lxml,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pandas-datareader";
   version = "0.10.0";
@@ -19,15 +19,15 @@ buildPythonPackage rec {
 
   # Tests are trying to load data over the network
   doCheck = false;
-  pythonImportsCheck = [ "pandas_datareader" ];
+  pythonImportsCheck = ["pandas_datareader"];
 
-  propagatedBuildInputs = [ pandas lxml requests ];
+  propagatedBuildInputs = [pandas lxml requests];
 
   meta = with lib; {
     description = "Up to date remote data access for pandas, works for multiple versions of pandas";
     homepage = "https://github.com/pydata/pandas-datareader";
-    license= licenses.bsd3;
-    maintainers = with maintainers; [ evax ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [evax];
     platforms = platforms.unix;
   };
 }

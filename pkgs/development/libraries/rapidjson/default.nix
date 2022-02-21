@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, cmake }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "rapidjson";
   version = "1.1.0";
@@ -18,7 +24,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [pkg-config cmake];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace "-Werror" ""
@@ -30,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "http://rapidjson.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [cstrahan];
   };
 }

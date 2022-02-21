@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "galene";
   version = "0.4.4";
@@ -13,10 +16,10 @@ buildGoModule rec {
 
   vendorSha256 = "0rkn6lpy4n5ra1jy3m0ysdjpwh3hq2z4xwda2pzvp99sgszxl5g3";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
   preCheck = "export TZ=UTC";
 
-  outputs = [ "out" "static" ];
+  outputs = ["out" "static"];
 
   postInstall = ''
     mkdir $static
@@ -29,6 +32,6 @@ buildGoModule rec {
     changelog = "https://github.com/jech/galene/raw/galene-${version}/CHANGES";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rgrunbla ];
+    maintainers = with maintainers; [rgrunbla];
   };
 }

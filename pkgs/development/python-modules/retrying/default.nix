@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "retrying";
   version = "1.3.3";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0fwp86xv0rvkncjdvy2mwcvbglw4w9k0fva25i7zx8kd19b3kh08";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   # doesn't ship tests in tarball
   doCheck = false;
@@ -23,5 +23,4 @@ buildPythonPackage rec {
     description = "General-purpose retrying library";
     license = licenses.asl20;
   };
-
 }

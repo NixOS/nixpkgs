@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sqlalchemy
-, aiocontextvars
-, aiopg
-, pythonOlder
-, pytestCheckHook
-, pymysql
-, asyncpg
-, aiomysql
-, aiosqlite
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sqlalchemy,
+  aiocontextvars,
+  aiopg,
+  pythonOlder,
+  pytestCheckHook,
+  pymysql,
+  asyncpg,
+  aiomysql,
+  aiosqlite,
 }:
-
 buildPythonPackage rec {
   pname = "databases";
   version = "0.5.5";
@@ -26,16 +26,18 @@ buildPythonPackage rec {
     hash = "sha256-NOXK1UCQzqvJRfzsgIfpihuD9oF52sMD+BxqUHWF8Rk=";
   };
 
-  propagatedBuildInputs = [
-    aiopg
-    aiomysql
-    aiosqlite
-    asyncpg
-    pymysql
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    aiocontextvars
-  ];
+  propagatedBuildInputs =
+    [
+      aiopg
+      aiomysql
+      aiosqlite
+      asyncpg
+      pymysql
+      sqlalchemy
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      aiocontextvars
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -57,6 +59,6 @@ buildPythonPackage rec {
     description = "Async database support for Python";
     homepage = "https://github.com/encode/databases";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, postgresql, testing-common-database
-, pg8000, pytestCheckHook, psycopg2, sqlalchemy }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  postgresql,
+  testing-common-database,
+  pg8000,
+  pytestCheckHook,
+  psycopg2,
+  sqlalchemy,
+}:
 buildPythonPackage rec {
   pname = "testing.postgresql";
   # Version 1.3.0 isn't working so let's use the latest commit from GitHub
@@ -19,19 +27,19 @@ buildPythonPackage rec {
       --replace "/usr/local/pgsql" "${postgresql}"
   '';
 
-  propagatedBuildInputs = [ testing-common-database pg8000 ];
+  propagatedBuildInputs = [testing-common-database pg8000];
 
   # Fix tests for Darwin build. See:
   # https://github.com/NixOS/nixpkgs/pull/74716#issuecomment-598546916
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [ pytestCheckHook psycopg2 sqlalchemy ];
+  checkInputs = [pytestCheckHook psycopg2 sqlalchemy];
 
   meta = with lib; {
     description = "Use temporary postgresql instance in testing";
     homepage = "https://github.com/tk0miya/testing.postgresql";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, pybind11, re2, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pybind11,
+  re2,
+  six,
+}:
 buildPythonPackage rec {
   pname = "google-re2";
   version = "0.2.20220201";
@@ -11,13 +18,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pybind11 re2 six
+    pybind11
+    re2
+    six
   ];
 
   meta = with lib; {
     description = "RE2 Python bindings";
-    homepage    = "https://github.com/google/re2";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ alexbakker ];
+    homepage = "https://github.com/google/re2";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [alexbakker];
   };
 }

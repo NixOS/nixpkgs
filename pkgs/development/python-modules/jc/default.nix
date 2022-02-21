@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ruamel-yaml
-, xmltodict
-, pygments
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ruamel-yaml,
+  xmltodict,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "jc";
   version = "1.18.3";
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     sha256 = "sha256-OMFW2xR6X/6H8ouHAe5qX8ltuwkNG9esjdosac+MiNw=";
   };
 
-  propagatedBuildInputs = [ ruamel-yaml xmltodict pygments ];
+  propagatedBuildInputs = [ruamel-yaml xmltodict pygments];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "jc" ];
+  pythonImportsCheck = ["jc"];
 
   # tests require timezone to set America/Los_Angeles
   doCheck = false;
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = licenses.mit;
-    maintainers = with maintainers; [ atemu ];
+    maintainers = with maintainers; [atemu];
   };
 }

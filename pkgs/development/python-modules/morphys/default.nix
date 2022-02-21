@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 }:
 buildPythonPackage rec {
   pname = "morphys";
@@ -13,12 +14,12 @@ buildPythonPackage rec {
     sha256 = "1da8s04m5wwih9cvkrks3ymb8v082lia47f274hxmfhi6ma3qc8b";
   };
 
-  pythonImportsCheck = [ "morphys" ];
+  pythonImportsCheck = ["morphys"];
 
   meta = with lib; {
     description = "Smart conversions between unicode and bytes types";
     homepage = "https://github.com/mkalinski/morphys";
     license = licenses.mit;
-    maintainers = with maintainers; [ rakesh4g ];
+    maintainers = with maintainers; [rakesh4g];
   };
 }

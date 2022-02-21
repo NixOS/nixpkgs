@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rebazel";
   version = "0.1.4";
@@ -16,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "tool for expediting bazel build workflows";
     homepage = "https://github.com/meetup/rebazel";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

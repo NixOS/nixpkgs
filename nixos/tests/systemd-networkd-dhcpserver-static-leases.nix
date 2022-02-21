@@ -1,13 +1,13 @@
 # In contrast to systemd-networkd-dhcpserver, this test configures
 # the router with a static DHCP lease for the client's MAC address.
-import ./make-test-python.nix ({ lib, ... }: {
+import ./make-test-python.nix ({lib, ...}: {
   name = "systemd-networkd-dhcpserver-static-leases";
   meta = with lib.maintainers; {
-    maintainers = [ veehaitch tomfitzhenry ];
+    maintainers = [veehaitch tomfitzhenry];
   };
   nodes = {
     router = {
-      virtualisation.vlans = [ 1 ];
+      virtualisation.vlans = [1];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking = {
         useNetworkd = true;
@@ -27,19 +27,21 @@ import ./make-test-python.nix ({ lib, ... }: {
               DHCPServer = true;
               Address = "10.0.0.1/24";
             };
-            dhcpServerStaticLeases = [{
-              dhcpServerStaticLeaseConfig = {
-                MACAddress = "02:de:ad:be:ef:01";
-                Address = "10.0.0.10";
-              };
-            }];
+            dhcpServerStaticLeases = [
+              {
+                dhcpServerStaticLeaseConfig = {
+                  MACAddress = "02:de:ad:be:ef:01";
+                  Address = "10.0.0.10";
+                };
+              }
+            ];
           };
         };
       };
     };
 
     client = {
-      virtualisation.vlans = [ 1 ];
+      virtualisation.vlans = [1];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking = {
         useNetworkd = true;

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
 }:
-
 buildPythonApplication rec {
   pname = "pwncat";
   version = "0.1.2";
@@ -18,7 +18,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "TCP/UDP communication suite";
     homepage = "https://pwncat.org/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

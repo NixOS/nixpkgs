@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchPypi
-, python
-, buildPythonPackage
-, cython
-, gfortran
-, pythran
-, nose
-, pytest
-, pytest-xdist
-, numpy
-, pybind11
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  python,
+  buildPythonPackage,
+  cython,
+  gfortran,
+  pythran,
+  nose,
+  pytest,
+  pytest-xdist,
+  numpy,
+  pybind11,
 }:
-
 buildPythonPackage rec {
   pname = "scipy";
   version = "1.7.3";
@@ -22,13 +22,13 @@ buildPythonPackage rec {
     sha256 = "ab5875facfdef77e0a47d5fd39ea178b58e60e454a4c85aa1e52fcb80db7babf";
   };
 
-  nativeBuildInputs = [ cython gfortran pythran ];
+  nativeBuildInputs = [cython gfortran pythran];
 
-  buildInputs = [ numpy.blas pybind11 ];
+  buildInputs = [numpy.blas pybind11];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [numpy];
 
-  checkInputs = [ nose pytest pytest-xdist ];
+  checkInputs = [nose pytest pytest-xdist];
 
   # Remove tests because of broken wrapper
   prePatch = ''
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   #
   #         ldr     x0, [x0, ___stack_chk_guard];momd
   #
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) ["stackprotector"];
 
   checkPhase = ''
     runHook preCheck
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     blas = numpy.blas;
   };
 
-  setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
+  setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
@@ -76,6 +76,6 @@ buildPythonPackage rec {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     homepage = "https://www.scipy.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.fridh ];
+    maintainers = [maintainers.fridh];
   };
 }

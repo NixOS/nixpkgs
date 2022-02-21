@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "align";
   version = "1.1.3";
@@ -16,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/Guitarbum722/align";
     description = "A general purpose application and library for aligning text";
-    maintainers = with maintainers; [ hrhino ];
+    maintainers = with maintainers; [hrhino];
     license = licenses.mit;
   };
 }

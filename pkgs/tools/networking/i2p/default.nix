@@ -1,5 +1,16 @@
-{ lib, stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which, java-service-wrapper }:
-
+{
+  lib,
+  stdenv,
+  ps,
+  coreutils,
+  fetchurl,
+  jdk,
+  jre,
+  ant,
+  gettext,
+  which,
+  java-service-wrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "i2p";
   version = "1.6.1";
@@ -9,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cZYGxMtRDeT+dPJLv6U5EacFMYIfwe55op49luqhZzM=";
   };
 
-  buildInputs = [ jdk ant gettext which ];
-  patches = [ ./i2p.patch ];
+  buildInputs = [jdk ant gettext which];
+  patches = [./i2p.patch];
 
   buildPhase = ''
     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
@@ -46,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ joelmo ];
+    platforms = ["x86_64-linux" "i686-linux"];
+    maintainers = with maintainers; [joelmo];
   };
 }

@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, cmake
-, boost, eigen2, lua, luabind, libGLU, libGL, SDL }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  boost,
+  eigen2,
+  lua,
+  luabind,
+  libGLU,
+  libGL,
+  SDL,
+}:
 stdenv.mkDerivation rec {
   pname = "soi";
   version = "0.1.2";
@@ -11,8 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "03c3wnvhd42qh8mi68lybf8nv6wzlm1nx16d6pdcn2jzgx1j2lzd";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost lua luabind libGLU libGL SDL ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [boost lua luabind libGLU libGL SDL];
 
   cmakeFlags = [
     "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
@@ -20,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A physics-based puzzle game";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     license = licenses.free;
     downloadPage = "https://sourceforge.net/projects/soi/files/";

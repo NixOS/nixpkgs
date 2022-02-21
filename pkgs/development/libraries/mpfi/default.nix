@@ -1,4 +1,11 @@
-{lib, stdenv, fetchurl, autoreconfHook, texinfo, mpfr}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  texinfo,
+  mpfr,
+}:
 stdenv.mkDerivation rec {
   pname = "mpfi";
   version = "1.5.4";
@@ -12,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ozk4WV1yCvF5c96vcnz8DdQcixbCCtwQOpcPSkOuOlY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook texinfo ];
-  buildInputs = [ mpfr ];
+  nativeBuildInputs = [autoreconfHook texinfo];
+  buildInputs = [mpfr];
 
   meta = {
     description = "A multiple precision interval arithmetic library based on MPFR";

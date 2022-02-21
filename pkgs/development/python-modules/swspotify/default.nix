@@ -1,7 +1,17 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
-, pytestCheckHook, flask, flask-cors, dbus-python, mock, isPy27
-, poetry-core }:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pytestCheckHook,
+  flask,
+  flask-cors,
+  dbus-python,
+  mock,
+  isPy27,
+  poetry-core,
+}:
 buildPythonPackage rec {
   pname = "SwSpotify";
   version = "1.2.3";
@@ -15,26 +25,31 @@ buildPythonPackage rec {
     sha256 = "sha256-xGLvc154xnje45Akf7H1qqQRUc03gGVt8AhGlkcP3kY=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [poetry-core];
 
-  propagatedBuildInputs = [ requests flask flask-cors ]
-    ++ lib.optionals stdenv.isLinux [ dbus-python ];
+  propagatedBuildInputs =
+    [requests flask flask-cors]
+    ++ lib.optionals stdenv.isLinux [dbus-python];
 
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    pytest tests/test_spotify.py::${if stdenv.isDarwin then "DarwinTests" else "LinuxTests"}
+    pytest tests/test_spotify.py::${
+      if stdenv.isDarwin
+      then "DarwinTests"
+      else "LinuxTests"
+    }
   '';
 
-  checkInputs = [ pytestCheckHook mock ];
+  checkInputs = [pytestCheckHook mock];
 
-  pythonImportsCheck = [ "SwSpotify" ];
+  pythonImportsCheck = ["SwSpotify"];
 
   meta = with lib; {
     homepage = "https://github.com/SwagLyrics/SwSpotify";
     description = "Library to get the currently playing song and artist from Spotify";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
     platforms = platforms.unix;
   };
 }

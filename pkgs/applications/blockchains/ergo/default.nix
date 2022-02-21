@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "ergo";
   version = "4.0.23";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZpBTfL8ghLOo8C9yDUfKelblpIlwdVAOgYVvqmxJQXo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontUnpack = true;
 
@@ -22,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ergoplatform.org/en/";
     license = licenses.cc0;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [mmahut];
   };
 }

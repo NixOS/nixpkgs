@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "fuzzyfinder";
   version = "2.1.0";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "fuzzyfinder" ];
+  pythonImportsCheck = ["fuzzyfinder"];
 
   meta = with lib; {
     description = "Fuzzy Finder implemented in Python";
     homepage = "https://github.com/amjith/fuzzyfinder";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

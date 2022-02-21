@@ -1,5 +1,8 @@
-{ rustPlatform, fetchFromGitHub, lib }:
-
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "pipes-rs";
   version = "1.4.7";
@@ -27,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An over-engineered rewrite of pipes.sh in Rust";
     homepage = "https://github.com/lhvy/pipes-rs";
-    license = with licenses; [ asl20 mit ];
-    maintainers = [ maintainers.vanilla ];
+    license = with licenses; [asl20 mit];
+    maintainers = [maintainers.vanilla];
   };
 }

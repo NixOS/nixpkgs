@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, zig
-, river
-, wayland
-, pkg-config
-, scdoc
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  zig,
+  river,
+  wayland,
+  pkg-config,
+  scdoc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rivercarro";
   version = "0.1.2";
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     description = "A layout generator for river Wayland compositor, fork of rivertile";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kraem ];
+    maintainers = with maintainers; [kraem];
   };
 }
-

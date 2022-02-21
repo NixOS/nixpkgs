@@ -1,5 +1,11 @@
-{stdenv, lib, fetchFromGitLab, autoconf, automake, libtool}:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  autoconf,
+  automake,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "soundtouch";
   version = "2.2";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "12i6yg8vvqwyk412lxl2krbfby6hnxld8qxy0k4m5xp4g94jiq4p";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [autoconf automake libtool];
 
   preConfigure = "./bootstrap";
 
@@ -22,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.surina.net/soundtouch/";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

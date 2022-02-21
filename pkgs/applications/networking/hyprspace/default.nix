@@ -1,5 +1,10 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, iproute2mac }:
-
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  iproute2mac,
+}:
 buildGoModule rec {
   pname = "hyprspace";
   version = "0.2.2";
@@ -19,7 +24,7 @@ buildGoModule rec {
     description = "A Lightweight VPN Built on top of Libp2p for Truly Distributed Networks.";
     homepage = "https://github.com/hyprspace/hyprspace";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yusdacra ];
+    maintainers = with maintainers; [yusdacra];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

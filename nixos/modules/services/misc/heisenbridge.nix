@@ -1,14 +1,16 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.heisenbridge;
 
   pkg = config.services.heisenbridge.package;
   bin = "${pkg}/bin/heisenbridge";
 
-  jsonType = (pkgs.formats.json { }).type;
+  jsonType = (pkgs.formats.json {}).type;
 
   registrationFile = "/var/lib/heisenbridge/registration.yml";
   # JSON is a proper subset of YAML
@@ -20,8 +22,7 @@ let
     sender_localpart = "heisenbridge";
     namespaces = cfg.namespaces;
   });
-in
-{
+in {
   options.services.heisenbridge = {
     enable = mkEnableOption "the Matrix to IRC bridge";
 
@@ -94,8 +95,8 @@ in
             exclusive = true;
           }
         ];
-        aliases = [ ];
-        rooms = [ ];
+        aliases = [];
+        rooms = [];
       };
     };
 
@@ -109,15 +110,15 @@ in
     extraArgs = mkOption {
       type = types.listOf types.str;
       description = "Heisenbridge is configured over the command line. Append extra arguments here";
-      default = [ ];
+      default = [];
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.heisenbridge = {
       description = "Matrix<->IRC bridge";
-      before = [ "matrix-synapse.service" ]; # So the registration file can be used by Synapse
-      wantedBy = [ "multi-user.target" ];
+      before = ["matrix-synapse.service"]; # So the registration file can be used by Synapse
+      wantedBy = ["multi-user.target"];
 
       preStart = ''
         umask 077
@@ -149,7 +150,9 @@ in
         ExecStart = lib.concatStringsSep " " (
           [
             bin
-            (if cfg.debug then "-vvv" else "-v")
+            (if cfg.debug
+            then "-vvv"
+            else "-v")
             "--config"
             registrationFile
             "--listen-address"
@@ -199,7 +202,7 @@ in
         RemoveIPC = true;
         UMask = "0077";
 
-        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ optional (cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)) "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = ["CAP_CHOWN"] ++ optional (cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)) "CAP_NET_BIND_SERVICE";
         AmbientCapabilities = CapabilityBoundingSet;
         NoNewPrivileges = true;
         LockPersonality = true;
@@ -218,5 +221,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.piegames ];
+  meta.maintainers = [lib.maintainers.piegames];
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  aiohttp,
 }:
-
 buildPythonPackage rec {
   pname = "pyatag";
   version = "3.5.1";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python module to talk to Atag One";
     homepage = "https://github.com/MatsNl/pyatag";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

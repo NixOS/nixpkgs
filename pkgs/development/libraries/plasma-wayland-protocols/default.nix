@@ -1,10 +1,10 @@
-{ mkDerivation
-, fetchurl
-, lib
-, extra-cmake-modules
-, qtbase
+{
+  mkDerivation,
+  fetchurl,
+  lib,
+  extra-cmake-modules,
+  qtbase,
 }:
-
 mkDerivation rec {
   pname = "plasma-wayland-protocols";
   version = "1.5.0";
@@ -14,14 +14,14 @@ mkDerivation rec {
     sha256 = "sha256-zMn8INehMO2/sjPDOxMldArAGyZAqjelxUTtv7oYqDM=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [extra-cmake-modules];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [qtbase];
 
   meta = {
     description = "Plasma Wayland Protocols";
     license = lib.licenses.lgpl21Plus;
     platforms = qtbase.meta.platforms;
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [lib.maintainers.ttuegel];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, libpng, perl, perlPackages, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpng,
+  perl,
+  perlPackages,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "icoutils";
   version = "0.32.3";
@@ -9,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1q66cksms4l62y0wizb8vfavhmf7kyfgcfkynil3n99s0hny1aqp";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libpng perl ];
-  propagatedBuildInputs = [ perlPackages.LWP ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [libpng perl];
+  propagatedBuildInputs = [perlPackages.LWP];
 
   patchPhase = ''
     patchShebangs extresso/extresso

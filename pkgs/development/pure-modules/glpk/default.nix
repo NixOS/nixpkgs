@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl,
-  pkg-config, pure, glpk, gmp, libtool, libmysqlclient, libiodbc }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+  glpk,
+  gmp,
+  libtool,
+  libmysqlclient,
+  libiodbc,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-glpk";
   version = "0.5";
@@ -11,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   glpkWithExtras = lib.overrideDerivation glpk (attrs: {
-    propagatedBuildInputs = [ gmp libtool libmysqlclient libiodbc ];
+    propagatedBuildInputs = [gmp libtool libmysqlclient libiodbc];
 
     CPPFLAGS = "-I${gmp.dev}/include";
 
@@ -19,15 +28,17 @@ stdenv.mkDerivation rec {
       substituteInPlace configure \
         --replace /usr/include/mysql ${libmysqlclient}/include/mysql
     '';
-    configureFlags = [ "--enable-dl"
-                       "--enable-odbc"
-                       "--enable-mysql"
-                       "--with-gmp=yes" ];
+    configureFlags = [
+      "--enable-dl"
+      "--enable-odbc"
+      "--enable-mysql"
+      "--with-gmp=yes"
+    ];
   });
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure glpkWithExtras ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure glpkWithExtras];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -35,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-glpk.html";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, which, zlib, openssl, libarchive }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  zlib,
+  openssl,
+  libarchive,
+}:
 stdenv.mkDerivation rec {
   pname = "xbps";
   version = "0.59.1";
@@ -11,11 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "0pab3xf97y4wqlyrb92zxd3cfsrbnlx6pssbw4brgwcxccw9jrhy";
   };
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [pkg-config which];
 
-  buildInputs = [ zlib openssl libarchive ];
+  buildInputs = [zlib openssl libarchive];
 
-  patches = [ ./cert-paths.patch ];
+  patches = [./cert-paths.patch];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
@@ -36,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "The X Binary Package System";
     platforms = platforms.linux; # known to not work on Darwin, at least
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

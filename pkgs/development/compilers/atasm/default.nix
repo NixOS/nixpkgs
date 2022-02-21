@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "atasm";
   version = "1.09";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://atari.miribilist.com/atasm/";
     description = "A commandline 6502 assembler compatible with Mac/65";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

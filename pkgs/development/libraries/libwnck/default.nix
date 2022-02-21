@@ -1,29 +1,30 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, libX11
-, glib
-, gtk3
-, pango
-, cairo
-, libXres
-, libstartup_notification
-, gettext
-, gobject-introspection
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  libX11,
+  glib,
+  gtk3,
+  pango,
+  cairo,
+  libXres,
+  libstartup_notification,
+  gettext,
+  gobject-introspection,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libwnck";
   version = "40.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
   outputBin = "dev";
 
   src = fetchurl {
@@ -69,6 +70,6 @@ stdenv.mkDerivation rec {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ liff ];
+    maintainers = with maintainers; [liff];
   };
 }

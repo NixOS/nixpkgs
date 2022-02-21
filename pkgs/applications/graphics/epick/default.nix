@@ -1,19 +1,19 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, python3
-, libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
-, libxkbcommon
-, AppKit
-, IOKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  python3,
+  libGL,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  libxcb,
+  libxkbcommon,
+  AppKit,
+  IOKit,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "epick";
   version = "0.6.0";
@@ -29,18 +29,20 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optional stdenv.isLinux python3;
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libxcb
-    libxkbcommon
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    IOKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      libGL
+      libX11
+      libXcursor
+      libXi
+      libXrandr
+      libxcb
+      libxkbcommon
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      IOKit
+    ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $out/bin/epick
@@ -51,6 +53,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/vv9k/epick";
     changelog = "https://github.com/vv9k/epick/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

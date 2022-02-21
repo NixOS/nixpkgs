@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, which
-, ldc
-, zlib
-, lz4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  which,
+  ldc,
+  zlib,
+  lz4,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sambamba";
   version = "0.8.2";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ which python3 ldc ];
-  buildInputs = [ zlib lz4 ];
+  nativeBuildInputs = [which python3 ldc];
+  buildInputs = [zlib lz4];
 
   # Upstream's install target is broken; copy manually
   installPhase = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "SAM/BAM processing tool";
     homepage = "https://lomereiter.github.io/sambamba/";
-    maintainers = with maintainers; [ jbedo ];
+    maintainers = with maintainers; [jbedo];
     license = with licenses; gpl2;
     platforms = platforms.x86_64;
   };

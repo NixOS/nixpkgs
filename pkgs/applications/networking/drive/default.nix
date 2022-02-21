@@ -1,11 +1,14 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "drive";
   version = "0.3.8.1";
 
   goPackagePath = "github.com/odeke-em/drive";
-  subPackages = [ "cmd/drive" ];
+  subPackages = ["cmd/drive"];
 
   src = fetchFromGitHub {
     owner = "odeke-em";

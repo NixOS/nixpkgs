@@ -1,5 +1,12 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, dateutil, requests, xbmcswift2 }:
-
+{
+  lib,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  dateutil,
+  requests,
+  xbmcswift2,
+}:
 buildKodiAddon rec {
   pname = "arteplussept";
   namespace = "plugin.video.arteplussept";

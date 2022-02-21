@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, prettytable
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  prettytable,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "somecomfort";
   version = "0.8.0";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [ "somecomfort" ];
+  pythonImportsCheck = ["somecomfort"];
 
   meta = with lib; {
     description = "Client for Honeywell's US-based cloud devices";
     homepage = "https://github.com/kk7ds/somecomfort";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

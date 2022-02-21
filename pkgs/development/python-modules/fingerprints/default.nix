@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, normality
-, mypy
-, coverage
-, nose
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  normality,
+  mypy,
+  coverage,
+  nose,
 }:
 buildPythonPackage rec {
   pname = "fingerprints";

@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libgtop
-, libhandy
-, granite
-, gtk3
-, switchboard
-, fwupd
-, appstream
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  libgtop,
+  libhandy,
+  granite,
+  gtk3,
+  switchboard,
+  fwupd,
+  appstream,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
   version = "6.0.1";
@@ -70,5 +70,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
   };
-
 }

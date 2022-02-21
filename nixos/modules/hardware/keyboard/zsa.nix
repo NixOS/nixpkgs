@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkOption mkIf types;
   cfg = config.hardware.keyboard.zsa;
-in
-{
+in {
   options.hardware.keyboard.zsa = {
     enable = mkOption {
       type = types.bool;
@@ -19,6 +21,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [ pkgs.zsa-udev-rules ];
+    services.udev.packages = [pkgs.zsa-udev-rules];
   };
 }

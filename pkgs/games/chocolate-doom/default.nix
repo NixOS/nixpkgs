@@ -1,5 +1,13 @@
-{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+  SDL2,
+  SDL2_mixer,
+  SDL2_net,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "chocolate-doom";
   version = "3.0.1";
@@ -15,8 +23,8 @@ stdenv.mkDerivation rec {
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [SDL2 SDL2_mixer SDL2_net];
   enableParallelBuilding = true;
 
   meta = {
@@ -25,6 +33,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # darwin times out
-    maintainers = with lib.maintainers; [ MP2E ];
+    maintainers = with lib.maintainers; [MP2E];
   };
 }

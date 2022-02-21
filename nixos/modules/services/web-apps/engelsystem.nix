@@ -1,6 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}: let
   inherit (lib) mkDefault mkEnableOption mkIf mkOption types literalExpression;
   cfg = config.services.engelsystem;
 in {
@@ -90,11 +94,13 @@ in {
     services.mysql = mkIf cfg.createDatabase {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureUsers = [{
-        name = "engelsystem";
-        ensurePermissions = { "engelsystem.*" = "ALL PRIVILEGES"; };
-      }];
-      ensureDatabases = [ "engelsystem" ];
+      ensureUsers = [
+        {
+          name = "engelsystem";
+          ensurePermissions = {"engelsystem.*" = "ALL PRIVILEGES";};
+        }
+      ];
+      ensureDatabases = ["engelsystem"];
     };
 
     environment.etc."engelsystem/config.php".source =
@@ -144,24 +150,23 @@ in {
     };
 
     systemd.services."engelsystem-init" = {
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = { Type = "oneshot"; };
-      script =
-        let
-          genConfigScript = pkgs.writeScript "engelsystem-gen-config.sh"
-            (utils.genJqSecretsReplacementSnippet cfg.config "config.json");
-        in ''
-          umask 077
-          mkdir -p /var/lib/engelsystem/storage/app
-          mkdir -p /var/lib/engelsystem/storage/cache/views
-          cd /var/lib/engelsystem
-          ${genConfigScript}
-          chmod 400 config.json
-          chown -R engelsystem .
+      wantedBy = ["multi-user.target"];
+      serviceConfig = {Type = "oneshot";};
+      script = let
+        genConfigScript = pkgs.writeScript "engelsystem-gen-config.sh"
+        (utils.genJqSecretsReplacementSnippet cfg.config "config.json");
+      in ''
+        umask 077
+        mkdir -p /var/lib/engelsystem/storage/app
+        mkdir -p /var/lib/engelsystem/storage/cache/views
+        cd /var/lib/engelsystem
+        ${genConfigScript}
+        chmod 400 config.json
+        chown -R engelsystem .
       '';
     };
     systemd.services."engelsystem-migrate" = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
         User = "engelsystem";
@@ -170,10 +175,9 @@ in {
       script = ''
         ${cfg.package}/bin/migrate
       '';
-      after = [ "engelsystem-init.service" "mysql.service" ];
+      after = ["engelsystem-init.service" "mysql.service"];
     };
-    systemd.services."phpfpm-engelsystem".after =
-      [ "engelsystem-migrate.service" ];
+    systemd.services."phpfpm-engelsystem".after = ["engelsystem-migrate.service"];
 
     users.users.engelsystem = {
       isSystemUser = true;
@@ -181,6 +185,6 @@ in {
       home = "/var/lib/engelsystem/storage";
       group = "engelsystem";
     };
-    users.groups.engelsystem = { };
+    users.groups.engelsystem = {};
   };
 }

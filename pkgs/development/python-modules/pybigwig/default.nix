@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, numpy
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  numpy,
+  zlib,
 }:
-
 buildPythonPackage rec {
   pname = "pyBigWig";
   version = "0.3.18";
@@ -15,9 +15,9 @@ buildPythonPackage rec {
     sha256 = "4c2a8c571b4100ad7c4c318c142eb48558646be52aaab28215a70426f5be31bc";
   };
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
-  checkInputs = [ numpy pytest ];
+  checkInputs = [numpy pytest];
 
   meta = with lib; {
     homepage = "https://github.com/deeptools/pyBigWig";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
       libBigWig for local and remote file access.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [scalavision];
   };
 }

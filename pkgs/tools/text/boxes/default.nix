@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, bison, flex }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "boxes";
   version = "1.3";
@@ -13,7 +18,7 @@ stdenv.mkDerivation rec {
 
   # Building instructions:
   # https://boxes.thomasjensen.com/build.html#building-on-linux--unix
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [bison flex];
 
   dontConfigure = true;
 
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
                 "GLOBALCONF=${placeholder "out"}/share/boxes/boxes-config"
   '';
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   installPhase = ''
     install -Dm755 -t $out/bin src/boxes
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://boxes.thomasjensen.com";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ waiting-for-dev ];
+    maintainers = with maintainers; [waiting-for-dev];
     platforms = platforms.unix;
   };
 }

@@ -1,8 +1,12 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage }:
-
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "pyserial";
-  version="3.5";
+  version = "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyserial/pyserial";
     license = licenses.psfl;
     description = "Python serial port extension";
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
 }

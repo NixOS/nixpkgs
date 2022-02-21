@@ -1,23 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   uid = config.ids.uids.gpsd;
   gid = config.ids.gids.gpsd;
   cfg = config.services.gpsd;
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.gpsd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -76,29 +71,25 @@ in
           The debugging level.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
+    users.users.gpsd = {
+      inherit uid;
+      group = "gpsd";
+      description = "gpsd daemon user";
+      home = "/var/empty";
+    };
 
-    users.users.gpsd =
-      { inherit uid;
-        group = "gpsd";
-        description = "gpsd daemon user";
-        home = "/var/empty";
-      };
-
-    users.groups.gpsd = { inherit gid; };
+    users.groups.gpsd = {inherit gid;};
 
     systemd.services.gpsd = {
       description = "GPSD daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
         Type = "forking";
         ExecStart = ''
@@ -110,7 +101,5 @@ in
         '';
       };
     };
-
   };
-
 }

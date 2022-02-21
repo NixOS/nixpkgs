@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  gettext,
+  python3,
+  python3Packages,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "calcurse";
   version = "4.7.1";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CnxV0HZ0Vp0WbAsOdYeyly09qBYM231gsdvSiVgDr7A=";
   };
 
-  buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ncurses gettext python3 python3Packages.wrapPython];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     patchShebangs .

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, autoconf-archive }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  autoconf-archive,
+}:
 stdenv.mkDerivation rec {
   pname = "libxls";
   version = "1.6.2";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive ];
+  nativeBuildInputs = [autoreconfHook autoconf-archive];
 
   enableParallelBuilding = true;
 
@@ -28,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libxls/libxls";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

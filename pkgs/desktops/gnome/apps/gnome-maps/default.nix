@@ -1,32 +1,33 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, python3
-, pkg-config
-, gnome
-, gtk3
-, gobject-introspection
-, gdk-pixbuf
-, librest
-, librsvg
-, libgweather
-, geoclue2
-, wrapGAppsHook
-, folks
-, libchamplain
-, libsoup
-, gsettings-desktop-schemas
-, webkitgtk
-, gjs
-, libgee
-, libhandy
-, geocode-glib
-, evolution-data-server
-, gnome-online-accounts
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  python3,
+  pkg-config,
+  gnome,
+  gtk3,
+  gobject-introspection,
+  gdk-pixbuf,
+  librest,
+  librsvg,
+  libgweather,
+  geoclue2,
+  wrapGAppsHook,
+  folks,
+  libchamplain,
+  libsoup,
+  gsettings-desktop-schemas,
+  webkitgtk,
+  gjs,
+  libgee,
+  libhandy,
+  geocode-glib,
+  evolution-data-server,
+  gnome-online-accounts,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
   version = "41.4";

@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, async-timeout
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  async-timeout,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyevilgenius";
   version = "1.0.0";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     description = "Python SDK to interact with Evil Genius Labs devices";
     homepage = "https://github.com/home-assistant-libs/pyevilgenius";
     changelog = "https://github.com/home-assistant-libs/pyevilgenius/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, chevron
-, decorator
-, fetchFromGitHub
-, mypy
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, regex
+{
+  lib,
+  buildPythonPackage,
+  chevron,
+  decorator,
+  fetchFromGitHub,
+  mypy,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  regex,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
   version = "1.9.3";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";
     homepage = "https://github.com/TypedDjango/pytest-mypy-plugins";
     license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    maintainers = with maintainers; [SomeoneSerge];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libusb1 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libusb1,
+}:
 stdenv.mkDerivation {
   pname = "rkdeveloptool";
   version = "unstable-2021-02-03";
@@ -11,9 +17,9 @@ stdenv.mkDerivation {
     sha256 = "08m0yfds5rpr5l0s75ynfarq3hrv94l3aadld17cz5gqapqcfs2n";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [libusb1];
 
   # main.cpp:1568:36: error: '%s' directive output may be truncated writing up to 557 bytes into a region of size 5
   CPPFLAGS = "-Wno-error=format-truncation";
@@ -22,6 +28,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/rockchip-linux/rkdeveloptool";
     description = "A tool from Rockchip to communicate with Rockusb devices";
     license = licenses.gpl2;
-    maintainers = [ maintainers.lopsided98 ];
+    maintainers = [maintainers.lopsided98];
   };
 }

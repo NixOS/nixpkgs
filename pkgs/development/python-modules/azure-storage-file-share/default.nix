@@ -1,14 +1,14 @@
-{ buildPythonPackage
-, fetchPypi
-, isPy3k
-, lib
-
-# pythonPackages
-, azure-core
-, cryptography
-, msrest
+{
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  lib
+  # pythonPackages
+  ,
+  azure-core,
+  cryptography,
+  msrest,
 }:
-
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
   version = "12.6.0";

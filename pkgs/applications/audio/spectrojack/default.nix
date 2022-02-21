@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, libjack2, fftwFloat, gtk2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libjack2,
+  fftwFloat,
+  gtk2,
+}:
 stdenv.mkDerivation rec {
   pname = "spectrojack";
   version = "0.4.1";
@@ -8,14 +15,14 @@ stdenv.mkDerivation rec {
     url = "http://sed.free.fr/spectrojack/${pname}-${version}.tar.gz";
     sha256 = "1kiwx0kag7kq7rhg0bvckfm8r7pqmbk76ppa39cq2980jb5v8rfp";
   };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjack2 fftwFloat gtk2 ];
-  configurePhase= ''
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libjack2 fftwFloat gtk2];
+  configurePhase = ''
     sed -i 's/.*home.*/#&/' ./Makefile
     substituteInPlace ./Makefile \
       --replace "/usr/share" "$out/usr/share"
   '';
-  installPhase= ''
+  installPhase = ''
     install -Dm755 spectrojack $out/bin/spectrojack
     install -Dm644 spectrojack_icon.svg $out/usr/share/spectrojack/icon.svg
     install -Dm644 -t $out/usr/share/spectrojack/colormaps colormaps/*
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A little spectrogram/audiogram/sonogram/whatever for JACK";
     homepage = "http://sed.free.fr/spectrojack";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ sleexyz ];
+    maintainers = with lib.maintainers; [sleexyz];
     platforms = with lib.platforms; linux;
   };
 }

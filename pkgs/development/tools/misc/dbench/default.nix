@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchgit, autoconf, popt, zlib, rpcsvc-proto, libtirpc }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoconf,
+  popt,
+  zlib,
+  rpcsvc-proto,
+  libtirpc,
+}:
 stdenv.mkDerivation rec {
   pname = "dbench";
   version = "2013-01-01";
@@ -10,10 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "16lcbwmmx8z5i73k3dnf54yffrpx7ql3y9k3cpkss9dcyxb1p83i";
   };
 
-  nativeBuildInputs = [ autoconf rpcsvc-proto ];
-  buildInputs = [ popt zlib libtirpc ];
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  nativeBuildInputs = [autoconf rpcsvc-proto];
+  buildInputs = [popt zlib libtirpc];
+  NIX_CFLAGS_COMPILE = ["-I${libtirpc.dev}/include/tirpc"];
+  NIX_LDFLAGS = ["-ltirpc"];
 
   patches = [
     # patch has been also sent upstream and might be included in future versions
@@ -41,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://dbench.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

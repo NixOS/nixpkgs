@@ -1,23 +1,29 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
-, pythonAtLeast, fetchpatch
-, atomicwrites
-, attrs
-, hypothesis
-, iniconfig
-, more-itertools
-, packaging
-, pathlib2
-, pluggy
-, py
-, pygments
-, setuptools
-, setuptools-scm
-, six
-, toml
-, wcwidth
-, writeText
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  isPy3k,
+  isPyPy,
+  pythonAtLeast,
+  fetchpatch,
+  atomicwrites,
+  attrs,
+  hypothesis,
+  iniconfig,
+  more-itertools,
+  packaging,
+  pathlib2,
+  pluggy,
+  py,
+  pygments,
+  setuptools,
+  setuptools-scm,
+  six,
+  toml,
+  wcwidth,
+  writeText,
 }:
-
 buildPythonPackage rec {
   pname = "pytest";
   version = "6.2.5";
@@ -36,21 +42,23 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  propagatedBuildInputs = [
-    atomicwrites
-    attrs
-    iniconfig
-    more-itertools
-    packaging
-    pluggy
-    py
-    setuptools
-    six
-    toml
-    wcwidth
-  ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+  propagatedBuildInputs =
+    [
+      atomicwrites
+      attrs
+      iniconfig
+      more-itertools
+      packaging
+      pluggy
+      py
+      setuptools
+      six
+      toml
+      wcwidth
+    ]
+    ++ lib.optionals (pythonOlder "3.6") [pathlib2];
 
   checkInputs = [
     hypothesis
@@ -109,7 +117,7 @@ buildPythonPackage rec {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    maintainers = with maintainers; [domenkozar lovek323 madjar lsix];
     license = licenses.mit;
   };
 }

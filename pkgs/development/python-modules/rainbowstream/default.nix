@@ -1,21 +1,21 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, freetype
-, glibcLocales
-, libjpeg
-, pillow
-, pocket
-, pyfiglet
-, pysocks
-, python
-, python-dateutil
-, requests
-, twitter
-, zlib
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freetype,
+  glibcLocales,
+  libjpeg,
+  pillow,
+  pocket,
+  pyfiglet,
+  pysocks,
+  python,
+  python-dateutil,
+  requests,
+  twitter,
+  zlib,
 }:
-
 buildPythonPackage rec {
   pname = "rainbowstream";
   version = "1.5.5";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     twitter
   ];
 
-  patches = [ ./image.patch ];
+  patches = [./image.patch];
 
   postPatch = ''
     clib=$out/${python.sitePackages}/rainbowstream/image.so
@@ -69,12 +69,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "rainbowstream" ];
+  pythonImportsCheck = ["rainbowstream"];
 
   meta = with lib; {
     description = "Streaming command-line twitter client";
     homepage = "https://github.com/orakaro/rainbowstream";
     license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

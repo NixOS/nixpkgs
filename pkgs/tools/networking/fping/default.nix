@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "fping";
   version = "5.1";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HuUmjAY9dmRq8rRCYFLn2BpCtlfmp32OfT0uYP10Cf4=";
   };
 
-  configureFlags = [ "--enable-ipv6" "--enable-ipv4" ];
+  configureFlags = ["--enable-ipv6" "--enable-ipv4"];
 
   meta = with lib; {
     homepage = "http://fping.org/";

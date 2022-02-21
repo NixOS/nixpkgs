@@ -1,16 +1,16 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, mock
-, parameterized
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, six
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  mock,
+  parameterized,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "aws-sam-translator";
   version = "1.42.0";
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
     homepage = "https://github.com/awslabs/serverless-application-model";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

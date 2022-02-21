@@ -1,12 +1,12 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, redis
-, pyyaml
-, buildsrht
+{
+  lib,
+  fetchFromSourcehut,
+  buildPythonPackage,
+  srht,
+  redis,
+  pyyaml,
+  buildsrht,
 }:
-
 buildPythonPackage rec {
   pname = "scmsrht";
   version = "0.22.19"; # Untagged version
@@ -32,12 +32,12 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
-  pythonImportsCheck = [ "scmsrht" ];
+  pythonImportsCheck = ["scmsrht"];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/scm.sr.ht";
     description = "Shared support code for sr.ht source control services.";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

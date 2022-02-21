@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, cairo, cmake, opencv, pcre, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cairo,
+  cmake,
+  opencv,
+  pcre,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
   version = "1.7.0";
@@ -19,8 +28,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ cairo opencv pcre ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [cairo opencv pcre];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $out/lib/frei0r-1/*.so* ; do
@@ -32,8 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux ++ platforms.darwin;
-
   };
 }

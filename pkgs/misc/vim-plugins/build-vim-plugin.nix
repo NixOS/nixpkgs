@@ -1,16 +1,18 @@
-{ lib, stdenv
-, rtpPath
-, vim
-, vimGenDocHook
-}:
-
-rec {
+{
+  lib,
+  stdenv,
+  rtpPath,
+  vim,
+  vimGenDocHook,
+}: rec {
   addRtp = path: attrs: derivation:
-    derivation // { rtp = "${derivation}"; } // {
+    derivation
+    // {rtp = "${derivation}";}
+    // {
       overrideAttrs = f: buildVimPlugin (attrs // f attrs);
     };
 
-  buildVimPlugin = attrs@{
+  buildVimPlugin = attrs @ {
     name ? "${attrs.pname}-${attrs.version}",
     namePrefix ? "vimplugin-",
     src,
@@ -23,14 +25,17 @@ rec {
     addonInfo ? null,
     ...
   }:
-    addRtp "${rtpPath}/${path}" attrs (stdenv.mkDerivation (attrs // {
+    addRtp "${rtpPath}/${path}" attrs (stdenv.mkDerivation (attrs
+    // {
       name = namePrefix + name;
 
       # dont move the doc folder since vim expects it
-      forceShare= [ "man" "info" ];
+      forceShare = ["man" "info"];
 
-      nativeBuildInputs = attrs.nativeBuildInputs or []
-      ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) vimGenDocHook;
+      nativeBuildInputs =
+        attrs.nativeBuildInputs
+        or []
+        ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) vimGenDocHook;
       inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
       installPhase = ''
@@ -44,9 +49,11 @@ rec {
       '';
     }));
 
-  buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
-    # vim plugins may override this
-    buildPhase = ":";
-    configurePhase =":";
-  } // attrs);
+  buildVimPluginFrom2Nix = attrs:
+    buildVimPlugin ({
+      # vim plugins may override this
+      buildPhase = ":";
+      configurePhase = ":";
+    }
+    // attrs);
 }

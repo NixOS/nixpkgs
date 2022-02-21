@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "pcapfix";
   version = "1.1.7";
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "https://f00l.de/pcapfix/";
     description = "Repair your broken pcap and pcapng files";
     license = licenses.gpl3;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = [maintainers.ehmry];
     platforms = platforms.all;
   };
 }

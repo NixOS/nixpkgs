@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "dnstake";
   version = "0.1.0";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to check missing hosted DNS zones";
     homepage = "https://github.com/pwnesia/dnstake";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

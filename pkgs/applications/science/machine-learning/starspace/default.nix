@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, boost165, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost165,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "starspace";
   version = "unstable-2021-01-17";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sc7a37z1skb9377a1qs8ggwrkz0nmpybx7sms38xj05b702kbvj";
   };
 
-  buildInputs = [ boost165 zlib ];
+  buildInputs = [boost165 zlib];
 
   makeFlags = [
     "CXX=${stdenv.cc.targetPrefix}c++"
@@ -32,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ai.facebook.com/tools/starspace/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.mausch ];
+    maintainers = [maintainers.mausch];
   };
 }

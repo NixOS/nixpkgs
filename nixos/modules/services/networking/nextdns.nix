@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.nextdns;
 in {
   options = {
@@ -15,7 +17,7 @@ in {
       arguments = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "-config" "10.0.3.0/24=abcdef" ];
+        example = ["-config" "10.0.3.0/24=abcdef"];
         description = "Additional arguments to be passed to nextdns run.";
       };
     };
@@ -35,10 +37,10 @@ in {
         RestartSec = 120;
         LimitMEMLOCK = "infinity";
       };
-      after = [ "network.target" ];
-      before = [ "nss-lookup.target" ];
-      wants = [ "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      before = ["nss-lookup.target"];
+      wants = ["nss-lookup.target"];
+      wantedBy = ["multi-user.target"];
     };
   };
 }

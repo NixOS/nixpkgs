@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-graph";
   version = "0.2.0-d895af1";
@@ -16,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A cargo subcommand for creating GraphViz DOT files and dependency graphs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ basvandijk ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [basvandijk];
   };
 }

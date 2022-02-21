@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake
-, gettext, vorbis-tools
-, xmlstarlet, doxygen, python3 }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  vorbis-tools,
+  xmlstarlet,
+  doxygen,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "colobot-data";
   version = "0.2.0-alpha";
@@ -13,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yzIbAzrGsDe6hO0GHF9gjnj7IE8B7+5LDbvjZi4Wtms=";
   };
 
-  nativeBuildInputs = [ cmake vorbis-tools xmlstarlet doxygen python3 ];
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [cmake vorbis-tools xmlstarlet doxygen python3];
+  buildInputs = [gettext];
 
   enableParallelBuilding = false;
   # Build procedure requires the data folder
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://colobot.info/";
     description = "Game data for colobot";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
     platforms = platforms.linux;
   };
 }

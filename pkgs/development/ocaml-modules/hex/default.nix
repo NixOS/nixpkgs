@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage, bigarray-compat, cstruct }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  bigarray-compat,
+  cstruct,
+}:
 buildDunePackage rec {
   pname = "hex";
   version = "1.4.0";
@@ -13,13 +18,13 @@ buildDunePackage rec {
     sha256 = "07b9y0lmnflsslkrm6xilkj40n8sf2hjqkyqghnk7sw5l0plkqsp";
   };
 
-  propagatedBuildInputs = [ bigarray-compat cstruct ];
+  propagatedBuildInputs = [bigarray-compat cstruct];
   doCheck = true;
 
   meta = {
     description = "Mininal OCaml library providing hexadecimal converters";
     homepage = "https://github.com/mirage/ocaml-hex";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [vbgl];
   };
 }

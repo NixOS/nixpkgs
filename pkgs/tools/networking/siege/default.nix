@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "siege";
   version = "4.1.1";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "HTTP load tester";
     homepage = "https://www.joedog.org/siege-home/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

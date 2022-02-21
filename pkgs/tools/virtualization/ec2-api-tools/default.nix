@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "ec2-api-tools";
   version = "1.7.5.1";
@@ -9,23 +15,22 @@ stdenv.mkDerivation rec {
     sha256 = "0figmvcm82ghmpz3018ihysz8zpxpysgbpdx7rmciq9y80qbw6l5";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [makeWrapper unzip];
 
-  installPhase =
-    ''
-      d=$out/libexec/ec2-api-tools
-      mkdir -p $d
-      mv * $d
-      rm $d/bin/*.cmd # Windows stuff
+  installPhase = ''
+    d=$out/libexec/ec2-api-tools
+    mkdir -p $d
+    mv * $d
+    rm $d/bin/*.cmd # Windows stuff
 
-      for i in $d/bin/*; do
-          b=$(basename $i)
-          if [ $b = "ec2-cmd" ]; then continue; fi
-          makeWrapper $i $out/bin/$(basename $i) \
-            --set EC2_HOME $d \
-            --set JAVA_HOME ${jre}
-      done
-    ''; # */
+    for i in $d/bin/*; do
+        b=$(basename $i)
+        if [ $b = "ec2-cmd" ]; then continue; fi
+        makeWrapper $i $out/bin/$(basename $i) \
+          --set EC2_HOME $d \
+          --set JAVA_HOME ${jre}
+    done
+  ''; # */
 
   meta = {
     homepage = "http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351";

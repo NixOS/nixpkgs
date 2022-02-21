@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pillow,
 }:
-
 buildPythonPackage rec {
   pname = "ev3dev2";
   version = "2.1.0";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     echo "${version}\n" > RELEASE-VERSION
   '';
 
-  propagatedBuildInputs = [ pillow ];
+  propagatedBuildInputs = [pillow];
 
   checkPhase = ''
     chmod -R g+rw ./tests/fake-sys/devices/**/*
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python language bindings for ev3dev";
     homepage = "https://github.com/ev3dev/ev3dev-lang-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [emilytrau];
   };
 }

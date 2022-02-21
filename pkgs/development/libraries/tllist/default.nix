@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  meson,
+  ninja,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tllist";
   version = "1.0.5";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "wJEW7haQBtCR2rffKOFyqH3aq0eBr6H8T6gnBs2bNRg=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [meson ninja];
 
   mesonBuildType = "release";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.mit;
-    maintainers = with maintainers; [ fionera AndersonTorres ];
+    maintainers = with maintainers; [fionera AndersonTorres];
     platforms = platforms.all;
   };
 }

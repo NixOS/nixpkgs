@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+}:
 buildPythonPackage rec {
   pname = "publicsuffix2";
   version = "2.20191221";
@@ -13,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1dkvfvl0izq9hqzilnw8ipkbgjs9xyad9p21i3864hzinbh0wp9r";
   };
 
-  nativeBuildInputs = [ requests ];
+  nativeBuildInputs = [requests];
 
   meta = with lib; {
     description = ''

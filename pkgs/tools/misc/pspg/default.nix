@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, installShellFiles, readline, postgresql }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnugrep,
+  ncurses,
+  pkg-config,
+  installShellFiles,
+  readline,
+  postgresql,
+}:
 stdenv.mkDerivation rec {
   pname = "pspg";
   version = "5.5.3";
@@ -11,10 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vjcAvTdqrZFmtVDkG/K4mHiInF63BPOyUXLVKIOq7qU=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ gnugrep ncurses readline postgresql ];
+  nativeBuildInputs = [pkg-config installShellFiles];
+  buildInputs = [gnugrep ncurses readline postgresql];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   postInstall = ''
     installShellCompletion --bash --cmd pspg bash-completion.sh
@@ -25,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Postgres Pager";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.jlesquembre ];
+    maintainers = [maintainers.jlesquembre];
   };
 }

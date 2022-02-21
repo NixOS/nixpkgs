@@ -1,16 +1,16 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "grocy";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
+    maintainers = [ma27];
   };
 
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     services.grocy = {
       enable = true;
       hostName = "localhost";
       nginx.enableSSL = false;
     };
-    environment.systemPackages = [ pkgs.jq ];
+    environment.systemPackages = [pkgs.jq];
   };
 
   testScript = ''

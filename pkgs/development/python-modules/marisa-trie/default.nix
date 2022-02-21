@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, pytestCheckHook
-, hypothesis
-, readme_renderer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  pytestCheckHook,
+  hypothesis,
+  readme_renderer,
 }:
-
 buildPythonPackage rec {
   pname = "marisa-trie";
   version = "0.7.7";
@@ -59,8 +59,8 @@ buildPythonPackage rec {
       There are official SWIG-based Python bindings included in C++ library distribution.
       This package provides alternative Cython-based pip-installable Python bindings.
     '';
-    homepage =  "https://github.com/kmike/marisa-trie";
+    homepage = "https://github.com/kmike/marisa-trie";
     license = licenses.mit;
-    maintainers = with maintainers; [ ixxie ];
+    maintainers = with maintainers; [ixxie];
   };
 }

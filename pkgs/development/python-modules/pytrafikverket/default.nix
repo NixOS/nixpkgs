@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, async-timeout
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  async-timeout,
+  lxml,
 }:
-
 buildPythonPackage rec {
   pname = "pytrafikverket";
   version = "0.1.6.2";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pytrafikverket" ];
+  pythonImportsCheck = ["pytrafikverket"];
 
   meta = with lib; {
     description = "Python library to manage Etekcity Devices and Levoit Air Purifier";
     homepage = "https://github.com/endor-force/pytrafikverket";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

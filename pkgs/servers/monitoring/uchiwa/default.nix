@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, buildBowerComponents, buildGoPackage, makeWrapper }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildBowerComponents,
+  buildGoPackage,
+  makeWrapper,
+}: let
   inherit (import ./src.nix) version sha256;
   owner = "sensu";
   repo = "uchiwa";
 
   src = fetchFromGitHub {
     inherit owner repo sha256;
-    rev    = version;
+    rev = version;
   };
 
   backend = buildGoPackage {
@@ -26,28 +31,28 @@ let
     generated = ./bower-packages.nix;
     inherit src;
   };
+in
+  stdenv.mkDerivation {
+    pname = "uchiwa";
+    inherit version;
 
-in stdenv.mkDerivation {
-  pname = "uchiwa";
-  inherit version;
+    inherit src;
 
-  inherit src;
+    nativeBuildInputs = [makeWrapper];
 
-  nativeBuildInputs = [ makeWrapper ];
+    buildCommand = ''
+      mkdir -p $out/bin $out/public
+      makeWrapper ${backend}/bin/uchiwa $out/bin/uchiwa \
+        --add-flags "-p $out/public"
+      ln -s ${backend.out}/index.html $out/public/index.html
+      ln -s ${frontend.out}/bower_components $out/public/bower_components
+    '';
 
-  buildCommand = ''
-    mkdir -p $out/bin $out/public
-    makeWrapper ${backend}/bin/uchiwa $out/bin/uchiwa \
-      --add-flags "-p $out/public"
-    ln -s ${backend.out}/index.html $out/public/index.html
-    ln -s ${frontend.out}/bower_components $out/public/bower_components
-  '';
-
-  meta = with lib; {
-    description = "A Dashboard for the sensu monitoring framework";
-    homepage    = "http://sensuapp.org/";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.unix;
-  };
-}
+    meta = with lib; {
+      description = "A Dashboard for the sensu monitoring framework";
+      homepage = "http://sensuapp.org/";
+      license = licenses.mit;
+      maintainers = with maintainers; [peterhoeg];
+      platforms = platforms.unix;
+    };
+  }

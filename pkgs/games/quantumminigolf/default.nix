@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, fftwSinglePrec, freetype, SDL, SDL_ttf }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fftwSinglePrec,
+  freetype,
+  SDL,
+  SDL_ttf,
+}:
 stdenv.mkDerivation rec {
   pname = "quantumminigolf";
   version = "1.1.1";
@@ -32,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Quantum mechanics-based minigolf-like game";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
   };
 }

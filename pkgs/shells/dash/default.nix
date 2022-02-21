@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, buildPackages
-, autoreconfHook
-, fetchurl
-, fetchpatch
-, libedit
-, runCommand
-, dash
+{
+  lib,
+  stdenv,
+  buildPackages,
+  autoreconfHook,
+  fetchurl,
+  fetchpatch,
+  libedit,
+  runCommand,
+  dash,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dash";
   version = "0.5.11.4";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "13g06zqfy4n7jkrbb5l1vw0xcnjvq76i16al8fjc5g33afxbf5af";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   patches = [
     (fetchpatch {
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
   ];
 
   # configure.ac patched; remove on next release
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ libedit ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
+  buildInputs = [libedit];
 
-  configureFlags = [ "--with-libedit" ];
+  configureFlags = ["--with-libedit"];
 
   enableParallelBuilding = true;
 
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
     description = "A POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
     platforms = platforms.unix;
-    license = with licenses; [ bsd3 gpl2 ];
+    license = with licenses; [bsd3 gpl2];
   };
 
   passthru = {
     shellPath = "/bin/dash";
     tests = {
-      "execute-simple-command" = runCommand "${pname}-execute-simple-command" { } ''
+      "execute-simple-command" = runCommand "${pname}-execute-simple-command" {} ''
         mkdir $out
         ${dash}/bin/dash -c 'echo "Hello World!" > $out/success'
         [ -s $out/success ]

@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, lib, autoPatchelfHook }:
-
+{
+  stdenv,
+  fetchurl,
+  lib,
+  autoPatchelfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "p4";
   version = "2021.2.2201121";
@@ -14,7 +18,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [autoPatchelfHook];
 
   installPhase = ''
     install -D --target $out/bin p4 p4broker p4d p4p
@@ -24,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Perforce Command-Line Client";
     homepage = "https://www.perforce.com";
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ corngood ];
+    platforms = ["x86_64-linux"];
+    maintainers = with lib.maintainers; [corngood];
   };
 }

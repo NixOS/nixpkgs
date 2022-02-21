@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gevent
-, nose
-, mock
-, twisted
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gevent,
+  nose,
+  mock,
+  twisted,
+  tornado,
 }:
-
 buildPythonPackage rec {
   pname = "pika";
   version = "1.2.0";
@@ -19,9 +19,9 @@ buildPythonPackage rec {
     sha256 = "sha256-Wog6Wxa8V/zv/bBrFOigZi6KE5qRf82bf1GK2XwvpDI=";
   };
 
-  propagatedBuildInputs = [ gevent tornado twisted ];
+  propagatedBuildInputs = [gevent tornado twisted];
 
-  checkInputs = [ nose mock ];
+  checkInputs = [nose mock];
 
   postPatch = ''
     # don't stop at first test failure
@@ -46,5 +46,4 @@ buildPythonPackage rec {
     homepage = "https://pika.readthedocs.org";
     license = licenses.bsd3;
   };
-
 }

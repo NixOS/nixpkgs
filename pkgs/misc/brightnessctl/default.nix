@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, systemd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  systemd,
+}:
 stdenv.mkDerivation rec {
   pname = "brightnessctl";
   version = "0.5.1";
@@ -11,17 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "0immxc7almmpg80n3bdn834p3nrrz7bspl2syhb04s3lawa5y2lq";
   };
 
-  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" "ENABLE_SYSTEMD=1" ];
+  makeFlags = ["PREFIX=" "DESTDIR=$(out)" "ENABLE_SYSTEMD=1"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ systemd ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [systemd];
 
   meta = with lib; {
     homepage = "https://github.com/Hummer12007/brightnessctl";
     description = "This program allows you read and control device brightness";
     license = licenses.mit;
-    maintainers = with maintainers; [ megheaiulian ];
+    maintainers = with maintainers; [megheaiulian];
     platforms = platforms.linux;
   };
-
 }

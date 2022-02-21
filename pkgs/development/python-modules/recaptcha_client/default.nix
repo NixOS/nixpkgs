@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
 }:
-
 buildPythonPackage rec {
   pname = "recaptcha-client";
   version = "1.0.6";
@@ -19,5 +19,4 @@ buildPythonPackage rec {
     homepage = "http://recaptcha.net/";
     license = licenses.mit;
   };
-
 }

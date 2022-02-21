@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c, kmod, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  perl,
+  lvm2,
+  libaio,
+  gzip,
+  readline,
+  systemd,
+  liburcu,
+  json_c,
+  kmod,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
   version = "0.8.3";
@@ -16,9 +31,9 @@ stdenv.mkDerivation rec {
 
     # pull upstream fix for -fno-common toolchains like clang-12
     (fetchpatch {
-        name = "fno-common.patch";
-        url = "https://github.com/opensvc/multipath-tools/commit/23a9247fa89cd0c84fe7e0f32468fd698b1caa48.patch";
-        sha256 = "10hq0g2jfkfbmwhm4x4q5cgsswj30lm34ib153alqzjzsxc1hqjk";
+      name = "fno-common.patch";
+      url = "https://github.com/opensvc/multipath-tools/commit/23a9247fa89cd0c84fe7e0f32468fd698b1caa48.patch";
+      sha256 = "10hq0g2jfkfbmwhm4x4q5cgsswj30lm34ib153alqzjzsxc1hqjk";
     })
   ];
 
@@ -41,8 +56,8 @@ stdenv.mkDerivation rec {
       $(find * -name Makefile\*)
   '';
 
-  nativeBuildInputs = [ gzip pkg-config perl ];
-  buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
+  nativeBuildInputs = [gzip pkg-config perl];
+  buildInputs = [systemd lvm2 libaio readline liburcu json_c];
 
   makeFlags = [
     "LIB=lib"
@@ -53,7 +68,7 @@ stdenv.mkDerivation rec {
     "SYSTEMDPATH=lib"
   ];
 
-  passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
+  passthru.tests = {inherit (nixosTests) iscsi-multipath-root;};
 
   meta = with lib; {
     description = "Tools for the Linux multipathing driver";

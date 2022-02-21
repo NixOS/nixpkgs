@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "makebootfat";
   version = "1.4";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Create bootable USB disks using the FAT filesystem and syslinux";
     homepage = "http://advancemame.sourceforge.net/boot-readme.html";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = [maintainers.ehmry];
     platforms = platforms.linux;
   };
 }

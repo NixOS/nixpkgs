@@ -1,8 +1,18 @@
-{ stdenv, lib, makeWrapper, dev_only_shellcheck ? null,
-fetchFromGitHub,
-
-fzf, coreutils, libxml2, libxslt, jing, findutils, gnugrep, gnused,
-docbook5
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  dev_only_shellcheck ? null,
+  fetchFromGitHub,
+  fzf,
+  coreutils,
+  libxml2,
+  libxslt,
+  jing,
+  findutils,
+  gnugrep,
+  gnused,
+  docbook5,
 }:
 stdenv.mkDerivation rec {
   pname = "xmloscopy";
@@ -48,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/grahamc/xmloscopy";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ grahamc ];
+    maintainers = with maintainers; [grahamc];
   };
 }

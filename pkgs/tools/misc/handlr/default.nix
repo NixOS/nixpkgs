@@ -1,5 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  shared-mime-info,
+  libiconv,
+  installShellFiles,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "handlr";
   version = "0.6.4";
@@ -13,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-xDQV8wVlzItz0lzR1nVRPVsg7nSf/khUhevDlGgSO3g=";
 
-  nativeBuildInputs = [ installShellFiles shared-mime-info ];
+  nativeBuildInputs = [installShellFiles shared-mime-info];
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   preCheck = ''
@@ -30,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     description = "Alternative to xdg-open to manage default applications with ease";
     homepage = "https://github.com/chmln/handlr";
     license = licenses.mit;
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [mredaelli];
   };
 }

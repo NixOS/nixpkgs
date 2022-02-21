@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, jre, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "zap";
   version = "2.11.1";
@@ -8,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b1qqrjm4m76djy0az9hnz3rqpz1qkql4faqmi7gkx33b1p6d0sz";
   };
 
-  buildInputs = [ jre ];
+  buildInputs = [jre];
 
   # From https://github.com/zaproxy/zaproxy/blob/master/zap/src/main/java/org/parosproxy/paros/Constant.java
   version_tag = "2010000";
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
 
     cat >> "$out/bin/${pname}" << EOF
     #!${runtimeShell}
-    export PATH="${lib.makeBinPath [ jre ]}:\$PATH"
+    export PATH="${lib.makeBinPath [jre]}:\$PATH"
     export JAVA_HOME='${jre}'
     if ! [ -f "~/.ZAP/config.xml" ];then
       mkdir -p "\$HOME/.ZAP"
@@ -38,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.owasp.org/index.php/ZAP";
     description = "Java application for web penetration testing";
-    maintainers = with maintainers; [ mog ];
+    maintainers = with maintainers; [mog];
     platforms = platforms.linux;
     license = licenses.asl20;
   };

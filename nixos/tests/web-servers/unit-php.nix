@@ -1,12 +1,15 @@
-import ../make-test-python.nix ({pkgs, ...}:
-let
+import ../make-test-python.nix ({pkgs, ...}: let
   testdir = pkgs.writeTextDir "www/info.php" "<?php phpinfo();";
-
 in {
   name = "unit-php-test";
-  meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
+  meta.maintainers = with pkgs.lib.maintainers; [izorkin];
 
-  machine = { config, lib, pkgs, ... }: {
+  machine = {
+    config,
+    lib,
+    pkgs,
+    ...
+  }: {
     services.unit = {
       enable = true;
       config = pkgs.lib.strings.toJSON {

@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 buildDunePackage rec {
   pname = "ocaml-version";
   version = "3.4.0";
@@ -16,6 +19,6 @@ buildDunePackage rec {
     description = "Manipulate, parse and generate OCaml compiler version strings";
     homepage = "https://github.com/ocurrent/ocaml-version";
     license = licenses.isc;
-    maintainers = with maintainers; [ vbgl ];
+    maintainers = with maintainers; [vbgl];
   };
 }

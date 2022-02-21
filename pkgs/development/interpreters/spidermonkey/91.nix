@@ -1,23 +1,24 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, perl
-, python3
-, zip
-, buildPackages
-, which
-, readline
-, zlib
-, icu69
-, cargo
-, rustc
-, rust-cbindgen
-, yasm
-, llvmPackages_latest
-, nspr
-, m4
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  perl,
+  python3,
+  zip,
+  buildPackages,
+  which,
+  readline,
+  zlib,
+  icu69,
+  cargo,
+  rustc,
+  rust-cbindgen,
+  yasm,
+  llvmPackages_latest,
+  nspr,
+  m4,
 }:
-
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
   version = "91.6.0";
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     sha512 = "3dd1929f93cdd087a93fc3597f32d9005c986b59832954e01a8c2472b179c92ad611eaa73d3fc000a08b838a0b70da73ff5ba82d6009160655ba6894cf04520e";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
   setOutputFlags = false; # Configure script only understands --includedir
 
   nativeBuildInputs = [
@@ -68,31 +69,33 @@ stdenv.mkDerivation rec {
     configureScript=../js/src/configure
   '';
 
-  configureFlags = [
-    "--with-intl-api"
-    "--with-system-icu"
-    "--with-system-nspr"
-    "--with-system-zlib"
-    "--enable-optimize"
-    "--enable-readline"
-    "--enable-release"
-    "--enable-shared-js"
-    "--disable-debug"
-    "--disable-jemalloc"
-    "--disable-strip"
-    "--disable-tests"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # Spidermonkey seems to use different host/build terminology for cross
-    # compilation here.
-    "--host=${stdenv.buildPlatform.config}"
-    "--target=${stdenv.hostPlatform.config}"
-  ];
+  configureFlags =
+    [
+      "--with-intl-api"
+      "--with-system-icu"
+      "--with-system-nspr"
+      "--with-system-zlib"
+      "--enable-optimize"
+      "--enable-readline"
+      "--enable-release"
+      "--enable-shared-js"
+      "--disable-debug"
+      "--disable-jemalloc"
+      "--disable-strip"
+      "--disable-tests"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # Spidermonkey seems to use different host/build terminology for cross
+      # compilation here.
+      "--host=${stdenv.buildPlatform.config}"
+      "--target=${stdenv.hostPlatform.config}"
+    ];
 
   # mkDerivation by default appends --build/--host to configureFlags when cross compiling
   # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
-  configurePlatforms = [ ];
+  configurePlatforms = [];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
   # Remove unnecessary static lib
   preFixup = ''
@@ -117,7 +120,7 @@ stdenv.mkDerivation rec {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ lostnet ];
+    maintainers = with maintainers; [lostnet];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  zip,
+  love,
+  lua,
+  makeWrapper,
+  makeDesktopItem,
+}:
 stdenv.mkDerivation rec {
   pname = "orthorobot";
   version = "1.1.1";
@@ -25,8 +35,8 @@ stdenv.mkDerivation rec {
     categories = "Game;";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ lua love zip ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [lua love zip];
 
   dontBuild = true;
 
@@ -41,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Recharge the robot";
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
     platforms = platforms.linux;
     license = licenses.free;
     downloadPage = "http://stabyourself.net/orthorobot/";

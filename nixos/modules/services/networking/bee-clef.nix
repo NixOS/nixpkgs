@@ -1,13 +1,15 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 # NOTE for now nothing is installed into /etc/bee-clef/. the config files are used as read-only from the nix store.
-
-with lib;
-let
+with lib; let
   cfg = config.services.bee-clef;
 in {
   meta = {
-    maintainers = with maintainers; [ attila-lendvai ];
+    maintainers = with maintainers; [attila-lendvai];
   };
 
   ### interface
@@ -55,12 +57,12 @@ in {
     # if we ever want to have rules.js under /etc/bee-clef/
     # environment.etc."bee-clef/rules.js".source = ${pkgs.bee-clef}/rules.js
 
-    systemd.packages = [ pkgs.bee-clef ]; # include the upstream bee-clef.service file
+    systemd.packages = [pkgs.bee-clef]; # include the upstream bee-clef.service file
 
     systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}/'         0750 ${cfg.user} ${cfg.group}"
-        "d '${cfg.dataDir}/keystore' 0700 ${cfg.user} ${cfg.group}"
-      ];
+      "d '${cfg.dataDir}/'         0750 ${cfg.user} ${cfg.group}"
+      "d '${cfg.dataDir}/keystore' 0700 ${cfg.user} ${cfg.group}"
+    ];
 
     systemd.services.bee-clef = {
       path = [
@@ -70,7 +72,7 @@ in {
         pkgs.gawk
       ];
 
-      wantedBy = [ "bee.service" "multi-user.target" ];
+      wantedBy = ["bee.service" "multi-user.target"];
 
       serviceConfig = {
         User = cfg.user;

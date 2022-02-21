@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl
-, flex, installShellFiles, ncurses, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  installShellFiles,
+  ncurses,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xjobs";
   version = "20200726";
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.maier-komor.de/xjobs.html";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.siriobalmelli ];
+    maintainers = [maintainers.siriobalmelli];
     longDescription = ''
       xjobs reads job descriptions line by line and executes them in parallel.
 

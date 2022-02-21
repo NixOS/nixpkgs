@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, future, spglib, glibcLocales, pytest, scipy }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  numpy,
+  future,
+  spglib,
+  glibcLocales,
+  pytest,
+  scipy,
+}:
 buildPythonPackage rec {
   pname = "seekpath";
   version = "2.0.1";
@@ -15,11 +25,11 @@ buildPythonPackage rec {
   LC_ALL = "en_US.utf-8";
 
   # scipy isn't listed in install_requires, but used in package
-  propagatedBuildInputs = [ numpy spglib future scipy ];
+  propagatedBuildInputs = [numpy spglib future scipy];
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [glibcLocales];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   # I don't know enough about crystal structures to fix
   checkPhase = ''
@@ -30,7 +40,6 @@ buildPythonPackage rec {
     description = "A module to obtain and visualize band paths in the Brillouin zone of crystal structures.";
     homepage = "https://github.com/giovannipizzi/seekpath";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }
-

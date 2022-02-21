@@ -1,12 +1,12 @@
-{ lib
-, fetchFromGitHub
-, python3
-, installShellFiles
-, bash
-, pandoc
-, apksigner
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  installShellFiles,
+  bash,
+  pandoc,
+  apksigner,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "apksigcopier";
   version = "1.0.1";
@@ -18,10 +18,10 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "07ldq3q1x2lpb15q5s5i1pbg89sn6ah45amskm9pndqlh16z9k2x";
   };
 
-  nativeBuildInputs = [ installShellFiles pandoc ];
-  propagatedBuildInputs = with python3.pkgs; [ click ];
-  checkInputs = with python3.pkgs; [ flake8 mypy pylint ];
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ apksigner ]}" ];
+  nativeBuildInputs = [installShellFiles pandoc];
+  propagatedBuildInputs = with python3.pkgs; [click];
+  checkInputs = with python3.pkgs; [flake8 mypy pylint];
+  makeWrapperArgs = ["--prefix" "PATH" ":" "${lib.makeBinPath [apksigner]}"];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
       * compare two APKs with different signatures (requires apksigner)
     '';
     homepage = "https://github.com/obfusk/apksigcopier";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = [ maintainers.obfusk ];
+    license = with licenses; [gpl3Plus];
+    maintainers = [maintainers.obfusk];
   };
 }

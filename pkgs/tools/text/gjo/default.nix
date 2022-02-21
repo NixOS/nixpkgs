@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "gjo";
   version = "1.0.3";
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Small utility to create JSON objects";
     homepage = "https://github.com/skanehira/gjo";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
   };
 }

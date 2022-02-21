@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, omake, ocaml, flex, bison }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  omake,
+  ocaml,
+  flex,
+  bison,
+}:
 stdenv.mkDerivation rec {
   pname = "teyjus";
   version = "2.1";
@@ -11,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nz7jZ+GdF6mZQPzBrVD9K/RtoeuVRuhfs7vej4zDkhg=";
   };
 
-  patches = [ ./fix-lex-to-flex.patch ];
+  patches = [./fix-lex-to-flex.patch];
 
-  buildInputs = [ omake ocaml flex bison ];
+  buildInputs = [omake ocaml flex bison];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   buildPhase = "omake all";
 
@@ -27,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "An efficient implementation of the Lambda Prolog language";
     homepage = "https://github.com/teyjus/teyjus";
     license = lib.licenses.gpl3;
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = [maintainers.bcdarwin];
     platforms = platforms.linux;
   };
 }

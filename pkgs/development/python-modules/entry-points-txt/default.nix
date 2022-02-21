@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchurl
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
 }:
-
 buildPythonPackage rec {
   pname = "entry-points-txt";
   version = "0.1.0";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/jwodder/entry-points-txt";
     description = "Read & write entry_points.txt files";
-    license = with licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ayazhafiz ];
+    license = with licenses; [mit];
+    maintainers = with lib.maintainers; [ayazhafiz];
   };
 }

@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, unzip, libGLU, libGL, libX11, SDL, openal, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  libGLU,
+  libGL,
+  libX11,
+  SDL,
+  openal,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "tremulous";
   version = "1.1.0";
@@ -15,8 +26,8 @@ stdenv.mkDerivation rec {
     url = "http://releases.mercenariesguild.net/tremded/mg_tremded_source_1.01.tar.gz";
     sha256 = "1njrqlhzjvy9myddzkagszwdcf3m4h08wip888w2rmbshs6kz6ql";
   };
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ libGLU libGL libX11 SDL openal ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [libGLU libGL libX11 SDL openal];
   unpackPhase = ''
     unzip $src1
     cd tremulous
@@ -26,8 +37,8 @@ stdenv.mkDerivation rec {
     tar xvf $src3
     cd ..
   '';
-  patches = [ ./parse.patch ];
-  patchFlags = [ "-p" "0" ];
+  patches = [./parse.patch];
+  patchFlags = ["-p" "0"];
   NIX_LD_FLAGS = ''
     -rpath ${stdenv.cc}/lib
     -rpath ${stdenv.cc}/lib64
@@ -73,9 +84,12 @@ stdenv.mkDerivation rec {
     homepage = "http://www.tremulous.net";
     license = with licenses; [
       gpl2
-      cc-by-sa-25 /* media */
+      cc-by-sa-25
+      /*
+       media
+       */
     ];
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [astsmtl];
     platforms = platforms.linux;
     broken = true;
   };

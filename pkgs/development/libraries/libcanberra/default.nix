@@ -1,9 +1,22 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, libtool
-, gtk2-x11, gtk3-x11 , gtkSupport ? null
-, libpulseaudio, gst_all_1, libvorbis, libcap
-, Carbon, CoreServices
-, withAlsa ? stdenv.isLinux, alsa-lib }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libtool,
+  gtk2-x11,
+  gtk3-x11,
+  gtkSupport ? null,
+  libpulseaudio,
+  gst_all_1,
+  libvorbis,
+  libcap,
+  Carbon,
+  CoreServices,
+  withAlsa ? stdenv.isLinux,
+  alsa-lib,
+}:
 stdenv.mkDerivation rec {
   pname = "libcanberra";
   version = "0.30";
@@ -14,18 +27,21 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libpulseaudio libvorbis
-    libtool # in buildInputs rather than nativeBuildInputs since libltdl is used (not libtool itself)
-  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [
+      libpulseaudio
+      libvorbis
+      libtool # in buildInputs rather than nativeBuildInputs since libltdl is used (not libtool itself)
+    ]
+    ++ (with gst_all_1; [gstreamer gst-plugins-base])
     ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
     ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
     ++ lib.optionals stdenv.isDarwin [Carbon CoreServices]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional withAlsa alsa-lib;
 
-  configureFlags = [ "--disable-oss" ];
+  configureFlags = ["--disable-oss"];
 
   patches = [
     (fetchpatch {
@@ -36,10 +52,12 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    patch -p0 < ${fetchpatch {
-      url = "https://raw.githubusercontent.com/macports/macports-ports/master/audio/libcanberra/files/patch-configure.diff";
-      sha256 = "1f7h7ifpqvbfhqygn1b7klvwi80zmpv3538vbmq7ql7bkf1q8h31";
-    }}
+    patch -p0 < ${
+      fetchpatch {
+        url = "https://raw.githubusercontent.com/macports/macports-ports/master/audio/libcanberra/files/patch-configure.diff";
+        sha256 = "1f7h7ifpqvbfhqygn1b7klvwi80zmpv3538vbmq7ql7bkf1q8h31";
+      }
+    }
   '';
 
   postInstall = ''
@@ -49,7 +67,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = lib.optionalAttrs (gtkSupport != null) {
-    gtkModule = if gtkSupport == "gtk2" then "/lib/gtk-2.0" else "/lib/gtk-3.0/";
+    gtkModule =
+      if gtkSupport == "gtk2"
+      then "/lib/gtk-2.0"
+      else "/lib/gtk-3.0/";
   };
 
   meta = with lib; {
@@ -63,7 +84,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://0pointer.de/lennart/projects/libcanberra/";
     license = licenses.lgpl2Plus;
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.unix;
   };
 }

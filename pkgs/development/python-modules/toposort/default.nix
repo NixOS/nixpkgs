@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "toposort";
   version = "1.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A topological sort algorithm";
     homepage = "https://pypi.python.org/pypi/toposort/";
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [tstrobel];
     platforms = platforms.unix;
     license = licenses.asl20;
   };

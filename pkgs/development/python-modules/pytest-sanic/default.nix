@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, async_generator
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest
-, pytestCheckHook
-, sanic
-, websockets
+{
+  lib,
+  aiohttp,
+  async_generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest,
+  pytestCheckHook,
+  sanic,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-sanic";
   version = "1.9.1";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     description = "A pytest plugin for Sanic";
     homepage = "https://github.com/yunstanford/pytest-sanic/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
     broken = true; # 2021-11-04
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
 }:
-
 buildPythonPackage rec {
   pname = "pyxdg";
   version = "0.27";
 
-  src =  fetchFromGitLab {
+  src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = pname;
@@ -22,7 +22,6 @@ buildPythonPackage rec {
     homepage = "http://freedesktop.org/wiki/Software/pyxdg";
     description = "Contains implementations of freedesktop.org standards";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
-
 }

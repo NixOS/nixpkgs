@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-rec {
+{
+  lib,
+  fetchFromGitHub,
+}: rec {
   version = "8.2.4227";
 
   src = fetchFromGitHub {
@@ -11,7 +13,7 @@ rec {
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = ["fortify"];
 
   postPatch =
     # Use man from $PATH; escape sequences are still problematic.
@@ -22,9 +24,9 @@ rec {
 
   meta = with lib; {
     description = "The most popular clone of the VI editor";
-    homepage    = "http://www.vim.org";
-    license     = licenses.vim;
-    maintainers = with maintainers; [ lovek323 equirosa ];
-    platforms   = platforms.unix;
+    homepage = "http://www.vim.org";
+    license = licenses.vim;
+    maintainers = with maintainers; [lovek323 equirosa];
+    platforms = platforms.unix;
   };
 }

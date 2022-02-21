@@ -1,5 +1,11 @@
-{ callPackage, lib, stdenv, fetchFromGitHub, git, zsh }:
-
+{
+  callPackage,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  zsh,
+}:
 stdenv.mkDerivation rec {
   pname = "gitstatus";
   version = "1.5.4";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mVfB3HWjvk4X8bmLEC/U8SKBRytTh/gjjuReqzN5qTk=";
   };
 
-  buildInputs = [ (callPackage ./romkatv_libgit2.nix { }) ];
+  buildInputs = [(callPackage ./romkatv_libgit2.nix {})];
 
   postPatch = ''
     sed -i '1i GITSTATUS_AUTO_INSTALL=''${GITSTATUS_AUTO_INSTALL-0}' gitstatus.plugin.sh
@@ -45,7 +51,7 @@ stdenv.mkDerivation rec {
   # that the script was sourced successfully and that the "gitstatus_query"
   # command ran successfully. This tests the binary itself and the zsh
   # integration.
-  installCheckInputs = [ git zsh ];
+  installCheckInputs = [git zsh];
   doInstallCheck = true;
   installCheckPhase = ''
     TEMP=$(mktemp -d)
@@ -85,6 +91,6 @@ stdenv.mkDerivation rec {
     description = "10x faster implementation of `git status` command";
     homepage = "https://github.com/romkatv/gitstatus";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mmlb hexa SuperSandro2000 ];
+    maintainers = with maintainers; [mmlb hexa SuperSandro2000];
   };
 }

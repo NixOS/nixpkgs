@@ -1,22 +1,22 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, dxflib
-, eigen
-, flann
-, gdal
-, LASzip
-, libLAS
-, pdal
-, pcl
-, qtbase
-, qtsvg
-, qttools
-, tbb
-, xercesc
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  dxflib,
+  eigen,
+  flann,
+  gdal,
+  LASzip,
+  libLAS,
+  pdal,
+  pcl,
+  qtbase,
+  qtsvg,
+  qttools,
+  tbb,
+  xercesc,
 }:
-
 mkDerivation rec {
   pname = "cloudcompare";
   # Released version(v2.11.3) doesn't work with packaged PCL.
@@ -79,7 +79,7 @@ mkDerivation rec {
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [nh2];
     platforms = with platforms; linux; # only tested here; might work on others
   };
 }

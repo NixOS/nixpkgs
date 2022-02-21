@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "swarm";
   version = "unstable-2019-03-11";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "http://spinroot.com/";
     license = licenses.free;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

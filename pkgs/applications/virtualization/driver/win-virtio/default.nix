@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, p7zip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  p7zip,
+}:
 stdenv.mkDerivation rec {
   pname = "win-virtio";
   version = "0.1.196-1";
@@ -16,27 +21,48 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase =
-    let
-      copy = arch: version: {input, output}: "mkdir -p $out/${arch}/${output}; cp ${input}/${version}/${arch}/* $out/${arch}/${output}/.";
-      virtio = [{input="Balloon"; output="vioballoon";}
-                {input="NetKVM"; output="vionet";}
-                {input="vioscsi"; output="vioscsi";}
-                {input="vioserial"; output="vioserial";}
-                {input="viostor"; output="viostor";}
-                {input="viorng"; output="viorng";}
-               ];
-    in ''
-      runHook preInstall
-      ${lib.concatStringsSep "\n" ((map (copy "amd64" "w10") virtio) ++ (map (copy "x86" "w10") virtio))}
-      runHook postInstall
-    '';
+  installPhase = let
+    copy = arch: version: {
+      input,
+      output,
+    }: "mkdir -p $out/${arch}/${output}; cp ${input}/${version}/${arch}/* $out/${arch}/${output}/.";
+    virtio = [
+      {
+        input = "Balloon";
+        output = "vioballoon";
+      }
+      {
+        input = "NetKVM";
+        output = "vionet";
+      }
+      {
+        input = "vioscsi";
+        output = "vioscsi";
+      }
+      {
+        input = "vioserial";
+        output = "vioserial";
+      }
+      {
+        input = "viostor";
+        output = "viostor";
+      }
+      {
+        input = "viorng";
+        output = "viorng";
+      }
+    ];
+  in ''
+    runHook preInstall
+    ${lib.concatStringsSep "\n" ((map (copy "amd64" "w10") virtio) ++ (map (copy "x86" "w10") virtio))}
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Windows VirtIO Drivers";
     homepage = "https://fedoraproject.org/wiki/Windows_Virtio_Drivers";
-    license = [ licenses.bsd3 ];
-    maintainers = [ maintainers.tstrobel ];
+    license = [licenses.bsd3];
+    maintainers = [maintainers.tstrobel];
     platforms = platforms.linux;
   };
 }

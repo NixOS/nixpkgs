@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gradle,
+  jdk,
+  makeWrapper,
+  perl,
+}: let
   pname = "jadx";
   version = "1.3.2";
 
@@ -15,7 +21,7 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ gradle jdk perl ];
+    nativeBuildInputs = [gradle jdk perl];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -42,69 +48,70 @@ let
     outputHashMode = "recursive";
     outputHash = "sha256-t+CkjoZqWqphxbg/4E3/7U8nKoV0AlITyRScLN8x6yY=";
   };
-in stdenv.mkDerivation {
-  inherit pname version src;
+in
+  stdenv.mkDerivation {
+    inherit pname version src;
 
-  nativeBuildInputs = [ gradle jdk makeWrapper ];
+    nativeBuildInputs = [gradle jdk makeWrapper];
 
-  buildPhase = ''
-    # The installDist Gradle build phase tries to copy some dependency .jar
-    # files multiple times into the build directory. This ends up failing when
-    # the dependencies are read directly from the Nix store since they are not
-    # marked as chmod +w. To work around this, get a local copy of the
-    # dependency store, and give write permissions.
-    depsDir=$(mktemp -d)
-    cp -R ${deps}/* $depsDir
-    chmod -R u+w $depsDir
+    buildPhase = ''
+      # The installDist Gradle build phase tries to copy some dependency .jar
+      # files multiple times into the build directory. This ends up failing when
+      # the dependencies are read directly from the Nix store since they are not
+      # marked as chmod +w. To work around this, get a local copy of the
+      # dependency store, and give write permissions.
+      depsDir=$(mktemp -d)
+      cp -R ${deps}/* $depsDir
+      chmod -R u+w $depsDir
 
-    gradleInit=$(mktemp)
-    cat >$gradleInit <<EOF
-      gradle.projectsLoaded {
-        rootProject.allprojects {
-          buildscript {
+      gradleInit=$(mktemp)
+      cat >$gradleInit <<EOF
+        gradle.projectsLoaded {
+          rootProject.allprojects {
+            buildscript {
+              repositories {
+                clear()
+                maven { url '$depsDir' }
+              }
+            }
             repositories {
               clear()
               maven { url '$depsDir' }
             }
           }
-          repositories {
-            clear()
-            maven { url '$depsDir' }
+        }
+
+        settingsEvaluated { settings ->
+          settings.pluginManagement {
+            repositories {
+              maven { url '$depsDir' }
+            }
           }
         }
-      }
+      EOF
 
-      settingsEvaluated { settings ->
-        settings.pluginManagement {
-          repositories {
-            maven { url '$depsDir' }
-          }
-        }
-      }
-    EOF
-
-    export GRADLE_USER_HOME=$(mktemp -d)
-    export JADX_VERSION=${version}
-    gradle --offline --no-daemon --info --init-script $gradleInit pack
-  '';
-
-  installPhase = ''
-    mkdir $out $out/bin
-    cp -R build/jadx/lib $out
-    for prog in jadx jadx-gui; do
-      cp build/jadx/bin/$prog $out/bin
-      wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk.home}
-    done
-  '';
-
-  meta = with lib; {
-    description = "Dex to Java decompiler";
-    longDescription = ''
-      Command line and GUI tools for produce Java source code from Android Dex
-      and Apk files.
+      export GRADLE_USER_HOME=$(mktemp -d)
+      export JADX_VERSION=${version}
+      gradle --offline --no-daemon --info --init-script $gradleInit pack
     '';
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ delroth ];
-  };
-}
+
+    installPhase = ''
+      mkdir $out $out/bin
+      cp -R build/jadx/lib $out
+      for prog in jadx jadx-gui; do
+        cp build/jadx/bin/$prog $out/bin
+        wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk.home}
+      done
+    '';
+
+    meta = with lib; {
+      description = "Dex to Java decompiler";
+      longDescription = ''
+        Command line and GUI tools for produce Java source code from Android Dex
+        and Apk files.
+      '';
+      license = licenses.asl20;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [delroth];
+    };
+  }

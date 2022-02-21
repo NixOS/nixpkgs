@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "liblbfgs";
   version = "1.10";
 
-  configureFlags = [ "--enable-sse2" ];
+  configureFlags = ["--enable-sse2"];
   src = fetchurl {
     url = "https://github.com/downloads/chokkan/liblbfgs/liblbfgs-${version}.tar.gz";
     sha256 = "1kv8d289rbz38wrpswx5dkhr2yh4fg4h6sszkp3fawxm09sann21";

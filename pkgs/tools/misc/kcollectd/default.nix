@@ -1,21 +1,21 @@
-{ lib
-, fetchFromGitLab
-, mkDerivation
-, qtbase
-, cmake
-, kconfig
-, kio
-, kiconthemes
-, kxmlgui
-, ki18n
-, kguiaddons
-, extra-cmake-modules
-, boost
-, shared-mime-info
-, rrdtool
-, breeze-icons
+{
+  lib,
+  fetchFromGitLab,
+  mkDerivation,
+  qtbase,
+  cmake,
+  kconfig,
+  kio,
+  kiconthemes,
+  kxmlgui,
+  ki18n,
+  kguiaddons,
+  extra-cmake-modules,
+  boost,
+  shared-mime-info,
+  rrdtool,
+  breeze-icons,
 }:
-
 mkDerivation rec {
   pname = "kcollectd";
   version = "0.12.0";
@@ -49,8 +49,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "A graphical frontend to collectd";
     homepage = "https://www.antonioerusso.com/projects/kcollectd/";
-    maintainers = [ maintainers.symphorien ];
-    license = [ lib.licenses.gpl3Plus ];
+    maintainers = [maintainers.symphorien];
+    license = [lib.licenses.gpl3Plus];
     platforms = lib.platforms.linux;
   };
 }

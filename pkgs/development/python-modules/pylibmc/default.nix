@@ -1,5 +1,11 @@
-{ buildPythonPackage, fetchPypi, lib, libmemcached, zlib, cyrus_sasl }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  libmemcached,
+  zlib,
+  cyrus_sasl,
+}:
 buildPythonPackage rec {
   version = "1.6.1";
   pname = "pylibmc";
@@ -9,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "1sg7d9j0v6g3xg3finf4l1hb72c13vcyyi6rqrc9shbx903d93ca";
   };
 
-  buildInputs = [ libmemcached zlib cyrus_sasl ];
-  setupPyBuildFlags = [ "--with-sasl2" ];
+  buildInputs = [libmemcached zlib cyrus_sasl];
+  setupPyBuildFlags = ["--with-sasl2"];
 
   # requires an external memcached server running
   doCheck = false;

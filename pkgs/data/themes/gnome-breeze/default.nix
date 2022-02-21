@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchgit }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 stdenv.mkDerivation {
   name = "gnome-breeze-20160526";
   src = fetchgit {
@@ -18,7 +21,7 @@ stdenv.mkDerivation {
     description = "A GTK theme built to match KDE's breeze theme";
     homepage = "https://github.com/dirruk1/gnome-breeze";
     license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ bennofs ];
+    maintainers = with lib.maintainers; [bennofs];
     platforms = lib.platforms.all;
     hydraPlatforms = [];
   };

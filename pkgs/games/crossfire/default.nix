@@ -1,6 +1,4 @@
-{ callPackage, ... }:
-
-rec {
+{callPackage, ...}: rec {
   crossfire-client = callPackage ./crossfire-client.nix {
     version = "1.75.0";
     rev = 21760;
@@ -11,7 +9,8 @@ rec {
     version = "latest";
     rev = 22111;
     sha256 = "04fjif6zv642n2zlw27cgzkak2kknwrxqzg42bvzl7q901bsr9l7";
-    maps = crossfire-maps; arch = crossfire-arch;
+    maps = crossfire-maps;
+    arch = crossfire-arch;
   };
 
   crossfire-arch = callPackage ./crossfire-arch.nix {

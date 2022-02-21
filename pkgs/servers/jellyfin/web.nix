@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, pkgs
-, stdenv
-, nodejs
+{
+  lib,
+  fetchFromGitHub,
+  pkgs,
+  stdenv,
+  nodejs,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jellyfin-web";
   version = "10.7.7";
@@ -35,31 +35,31 @@ stdenv.mkDerivation rec {
     nodejs
   ];
 
-  buildPhase =
-    let
-      nodeDependencies = ((import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      }).nodeDependencies.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
+  buildPhase = let
+    nodeDependencies = ((import ./node-composition.nix {
+      inherit pkgs nodejs;
+      inherit (stdenv.hostPlatform) system;
+    })
+    .nodeDependencies
+    .override (old: {
+      # access to path '/nix/store/...-source' is forbidden in restricted mode
+      src = src;
 
-        # dont run the prepare script:
-        # Error: Cannot find module '/nix/store/...-node-dependencies-jellyfin-web-.../jellyfin-web/scripts/prepare.js
-        # npm run build:production runs the same command
-        dontNpmInstall = true;
-      }));
-    in
-    ''
-      runHook preBuild
+      # dont run the prepare script:
+      # Error: Cannot find module '/nix/store/...-node-dependencies-jellyfin-web-.../jellyfin-web/scripts/prepare.js
+      # npm run build:production runs the same command
+      dontNpmInstall = true;
+    }));
+  in ''
+    runHook preBuild
 
-      ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-      export PATH="${nodeDependencies}/bin:$PATH"
+    ln -s ${nodeDependencies}/lib/node_modules ./node_modules
+    export PATH="${nodeDependencies}/bin:$PATH"
 
-      npm run build:production
+    npm run build:production
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -76,6 +76,6 @@ stdenv.mkDerivation rec {
     description = "Web Client for Jellyfin";
     homepage = "https://jellyfin.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
+    maintainers = with maintainers; [nyanloutre minijackson purcell jojosch];
   };
 }

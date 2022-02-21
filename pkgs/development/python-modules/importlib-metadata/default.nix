@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, typing-extensions
-, toml
-, zipp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  typing-extensions,
+  toml,
+  zipp,
 }:
-
 buildPythonPackage rec {
   pname = "importlib-metadata";
   version = "4.10.1";
@@ -25,12 +25,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    toml
-    zipp
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      toml
+      zipp
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+    ];
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;
@@ -43,6 +45,6 @@ buildPythonPackage rec {
     description = "Read metadata from Python packages";
     homepage = "https://importlib-metadata.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

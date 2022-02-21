@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "libESMTP";
   version = "1.1.0";
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [meson ninja pkg-config];
+  buildInputs = [openssl];
 
   src = fetchFromGitHub {
     owner = "libesmtp";
@@ -26,4 +33,3 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
   };
 }
-

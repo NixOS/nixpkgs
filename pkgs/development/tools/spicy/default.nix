@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "spicy";
   version = "unstable-2020-02-21";
@@ -23,6 +26,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/trhodeos/spicy";
     license = licenses.mit;
-    maintainers = [ maintainers._414owen];
+    maintainers = [maintainers._414owen];
   };
 }

@@ -1,7 +1,14 @@
-{ buildPythonPackage, pythonAtLeast, pytest, requests, requests_oauthlib, six
-, fetchFromGitHub, responses, lib
+{
+  buildPythonPackage,
+  pythonAtLeast,
+  pytest,
+  requests,
+  requests_oauthlib,
+  six,
+  fetchFromGitHub,
+  responses,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "asana";
   version = "0.10.3";
@@ -17,8 +24,8 @@ buildPythonPackage rec {
     sha256 = "11nsfygcfpc2qb2gy4npi9w00cqfh88g7k3rsfq7xambz1zjdz1n";
   };
 
-  checkInputs = [ pytest responses ];
-  propagatedBuildInputs = [ requests requests_oauthlib six ];
+  checkInputs = [pytest responses];
+  propagatedBuildInputs = [requests requests_oauthlib six];
 
   postPatch = ''
     substituteInPlace setup.py \

@@ -1,16 +1,16 @@
-{ buildDunePackage
-, lib
-, fetchFromGitHub
-, cmdliner
-, spacetime_lib
-, yojson
-, cohttp
-, ocaml_lwt
-, cohttp-lwt-unix
-, lambdaTerm
-, stdlib-shims
+{
+  buildDunePackage,
+  lib,
+  fetchFromGitHub,
+  cmdliner,
+  spacetime_lib,
+  yojson,
+  cohttp,
+  ocaml_lwt,
+  cohttp-lwt-unix,
+  lambdaTerm,
+  stdlib-shims,
 }:
-
 buildDunePackage rec {
   pname = "prof_spacetime";
   version = "0.3.0";
@@ -37,7 +37,7 @@ buildDunePackage rec {
   meta = {
     description = "A viewer for OCaml spacetime profiles";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.symphorien ];
+    maintainers = [lib.maintainers.symphorien];
     inherit (src.meta) homepage;
   };
 }

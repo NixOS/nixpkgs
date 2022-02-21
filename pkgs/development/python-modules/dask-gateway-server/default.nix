@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, colorlog
-, cryptography
-, traitlets
-, go
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  colorlog,
+  cryptography,
+  traitlets,
+  go,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "dask-gateway-server";
   # update dask-gateway-server lock step with dask-gateway
@@ -39,12 +39,12 @@ buildPythonPackage rec {
   # tests requires cluster for testing
   doCheck = false;
 
-  pythonImportsCheck = [ "dask_gateway_server" ];
+  pythonImportsCheck = ["dask_gateway_server"];
 
   meta = with lib; {
     description = "A multi-tenant server for securely deploying and managing multiple Dask clusters";
     homepage = "https://gateway.dask.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

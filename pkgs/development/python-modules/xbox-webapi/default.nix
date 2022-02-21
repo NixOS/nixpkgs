@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, appdirs
-, ecdsa
-, ms-cv
-, pydantic
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  appdirs,
+  ecdsa,
+  ms-cv,
+  pydantic,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "xbox-webapi";
   version = "2.0.11";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Library to authenticate with Windows Live/Xbox Live and use their API";
     homepage = "https://github.com/OpenXbox/xbox-webapi-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

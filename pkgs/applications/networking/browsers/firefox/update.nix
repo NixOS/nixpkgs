@@ -1,22 +1,22 @@
-{ writeScript
-, lib
-, xidel
-, common-updater-scripts
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, attrPath
-, runtimeShell
-, baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
-, versionSuffix ? ""
-, versionKey ? "version"
+{
+  writeScript,
+  lib,
+  xidel,
+  common-updater-scripts,
+  coreutils,
+  gnused,
+  gnugrep,
+  curl,
+  gnupg,
+  attrPath,
+  runtimeShell,
+  baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/",
+  versionSuffix ? "",
+  versionKey ? "version",
 }:
-
 writeScript "update-${attrPath}" ''
   #!${runtimeShell}
-  PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnupg gnused xidel ]}
+  PATH=${lib.makeBinPath [common-updater-scripts coreutils curl gnugrep gnupg gnused xidel]}
 
   set -eux
   HOME=`mktemp -d`

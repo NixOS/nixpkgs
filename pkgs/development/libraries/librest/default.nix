@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, glib
-, libsoup
-, gobject-introspection
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  libsoup,
+  gobject-introspection,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rest";
   version = "0.8.1";

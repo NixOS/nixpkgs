@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "lksctp-tools";
   version = "1.0.17";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux Kernel Stream Control Transmission Protocol Tools";
     homepage = "http://lksctp.sourceforge.net/";
-    license = with licenses; [ gpl2 lgpl21 ]; # library is lgpl21
+    license = with licenses; [gpl2 lgpl21]; # library is lgpl21
     platforms = platforms.linux;
   };
 }

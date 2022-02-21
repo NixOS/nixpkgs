@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "scimark";
   version = "4c";
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
     homepage = "https://math.nist.gov/scimark2/index.html";
     description = "Scientific and numerical computing benchmark (ANSI C version)";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }
 # TODO [ AndersonTorres ]: Java version
+

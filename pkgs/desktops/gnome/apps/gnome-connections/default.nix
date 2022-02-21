@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, itstool
-, python3
-, appstream-glib
-, desktop-file-utils
-, wrapGAppsHook
-, glib
-, gtk3
-, libhandy
-, libxml2
-, gtk-vnc
-, gtk-frdp
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  itstool,
+  python3,
+  appstream-glib,
+  desktop-file-utils,
+  wrapGAppsHook,
+  glib,
+  gtk3,
+  libhandy,
+  libxml2,
+  gtk-vnc,
+  gtk-frdp,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
   version = "41.2";

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, unzip, pkg-config, glib, llvmPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  pkg-config,
+  glib,
+  llvmPackages,
+}:
 stdenv.mkDerivation {
   pname = "milu-nightly";
   version = "2016-05-09";
@@ -11,7 +18,7 @@ stdenv.mkDerivation {
     owner = "yuejia";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   preConfigure = ''
     sed -i 's#/usr/bin/##g' Makefile
@@ -22,10 +29,10 @@ stdenv.mkDerivation {
     cp bin/milu $out/bin
   '';
 
-  nativeBuildInputs = [ pkg-config unzip ];
+  nativeBuildInputs = [pkg-config unzip];
   buildInputs = [
-     glib
-     llvmPackages.libclang
+    glib
+    llvmPackages.libclang
   ];
 
   meta = {
@@ -33,7 +40,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/yuejia/Milu";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.vrthra ];
+    maintainers = [lib.maintainers.vrthra];
   };
 }
-

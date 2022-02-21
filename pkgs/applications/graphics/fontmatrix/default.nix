@@ -1,5 +1,12 @@
-{ lib, mkDerivation, fetchpatch, fetchFromGitHub, cmake, qttools, qtwebkit }:
-
+{
+  lib,
+  mkDerivation,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  qtwebkit,
+}:
 mkDerivation rec {
   pname = "fontmatrix";
   version = "0.6.0-qt5";
@@ -12,16 +19,18 @@ mkDerivation rec {
   };
 
   # Add missing QAction include
-  patches = [ (fetchpatch {
-    url = "https://github.com/fcoiffie/fontmatrix/commit/dc6de8c414ae21516b72daead79c8db88309b102.patch";
-    sha256 = "092860fdyf5gq67jqfxnlgwzjgpizi6j0njjv3m62aiznrhig7c8";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fcoiffie/fontmatrix/commit/dc6de8c414ae21516b72daead79c8db88309b102.patch";
+      sha256 = "092860fdyf5gq67jqfxnlgwzjgpizi6j0njjv3m62aiznrhig7c8";
+    })
+  ];
 
-  buildInputs = [ qttools qtwebkit ];
+  buildInputs = [qttools qtwebkit];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "Fontmatrix is a free/libre font explorer for Linux, Windows and Mac";

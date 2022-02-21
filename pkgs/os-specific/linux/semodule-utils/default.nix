@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libsepol }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libsepol,
+}:
 stdenv.mkDerivation rec {
   pname = "semodule-utils";
   version = "3.3";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qvhl40a6jlm8p719nnlw2ghlxbh8lxbcsd59azxp884bxgfr61h";
   };
 
-  buildInputs = [ libsepol ];
+  buildInputs = [libsepol];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -22,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "SELinux policy core utilities (packaging additions)";
     license = licenses.gpl2;
     inherit (libsepol.meta) homepage platforms;
-    maintainers = [ maintainers.e-user ];
+    maintainers = [maintainers.e-user];
   };
 }

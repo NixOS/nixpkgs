@@ -1,18 +1,18 @@
-{ lib
-, apptools
-, buildPythonPackage
-, envisage
-, fetchPypi
-, numpy
-, pyface
-, pygments
-, pyqt5
-, pythonOlder
-, traitsui
-, vtk
-, wrapQtAppsHook
+{
+  lib,
+  apptools,
+  buildPythonPackage,
+  envisage,
+  fetchPypi,
+  numpy,
+  pyface,
+  pygments,
+  pyqt5,
+  pythonOlder,
+  traitsui,
+  vtk,
+  wrapQtAppsHook,
 }:
-
 buildPythonPackage rec {
   pname = "mayavi";
   version = "4.7.4";
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     description = "3D visualization of scientific data in Python";
     homepage = "https://github.com/enthought/mayavi";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [knedlsepp];
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, docopt
-, six
-, wcwidth
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  docopt,
+  six,
+  wcwidth,
+  pygments,
 }:
-
 buildPythonPackage rec {
   pname = "prompt-toolkit";
   version = "1.0.18";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "dd4fca02c8069497ad931a2d09914c6b0d1b50151ce876bc15bde4c747090126";
   };
 
-  propagatedBuildInputs = [ docopt six wcwidth pygments ];
+  propagatedBuildInputs = [docopt six wcwidth pygments];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   disabledTests = [
     "test_pathcompleter_can_expanduser"
@@ -35,7 +35,7 @@ buildPythonPackage rec {
       with a nice interactive Python shell (called ptpython) built on top.
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.bsd3;
   };
 }

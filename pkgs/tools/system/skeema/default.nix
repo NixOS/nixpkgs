@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "skeema";
   version = "1.7.0";
@@ -15,14 +18,14 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
-  checkFlags = [ "-short" ];
+  checkFlags = ["-short"];
 
   meta = with lib; {
     description = "Declarative pure-SQL schema management for MySQL and MariaDB";
     homepage = "https://skeema.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    maintainers = with maintainers; [aaronjheng];
   };
 }

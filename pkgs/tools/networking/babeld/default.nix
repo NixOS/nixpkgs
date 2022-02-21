@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "babeld";
   version = "1.10";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.irif.fr/~jch/software/babel/";
     description = "Loop-avoiding distance-vector routing protocol";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz hexa ];
+    maintainers = with maintainers; [fpletz hexa];
     platforms = platforms.linux;
   };
 }

@@ -21,7 +21,7 @@ rec {
   # Can be used for option header.
   configB = pkgs: this: {
     # Can depends on more than one configuration.
-    require = [ configC configD ];
+    require = [configC configD];
 
     optionB = pkgs.lib.mkOption {
       default = false;
@@ -31,7 +31,7 @@ rec {
   };
 
   configC = pkgs: this: {
-    require = [ configA ];
+    require = [configA];
 
     optionC = pkgs.lib.mkOption {
       default = false;

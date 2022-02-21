@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, readline }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  readline,
+}:
 buildGoModule rec {
   pname = "hilbish";
   version = "0.7.1";
@@ -14,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-xzB6sqBnDuvqTFMmLcXdSj6UFWYzA54PxUBKrFKhyQk=";
 
-  buildInputs = [ readline ];
+  buildInputs = [readline];
 
   ldflags = [
     "-s"
@@ -39,7 +43,7 @@ buildGoModule rec {
     description = "An interactive Unix-like shell written in Go";
     changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${version}";
     homepage = "https://github.com/Rosettea/Hilbish";
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
     license = licenses.mit;
     platforms = platforms.linux; # only officially supported on Linux
   };

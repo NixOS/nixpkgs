@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "air";
   version = "1.27.10";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-MEIPkron42OJioV7PPhnLWVevjKDs5Bw3jDmvZbac9s=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Live reload for Go apps";
     homepage = "https://github.com/cosmtrek/air";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Gonzih ];
+    maintainers = with maintainers; [Gonzih];
   };
 }

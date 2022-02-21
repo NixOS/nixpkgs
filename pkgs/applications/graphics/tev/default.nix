@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, wrapGAppsHook
-, libX11, libzip, glfw, libpng, xorg, gnome
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  wrapGAppsHook,
+  libX11,
+  libzip,
+  glfw,
+  libpng,
+  xorg,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tev";
   version = "1.23";
@@ -15,9 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NtnnZV/+8aUm8BkUz8Xm3aeSbOI2gNUPNfvYlwUl01Y=";
   };
 
-  nativeBuildInputs = [ cmake wrapGAppsHook ];
-  buildInputs = [ libX11 libzip glfw libpng ]
-    ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm libXext ]);
+  nativeBuildInputs = [cmake wrapGAppsHook];
+  buildInputs =
+    [libX11 libzip glfw libpng]
+    ++ (with xorg; [libXrandr libXinerama libXcursor libXi libXxf86vm libXext]);
 
   dontWrapGApps = true; # We also need zenity (see below)
 
@@ -48,7 +57,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    badPlatforms = [ "aarch64-linux" ]; # fails on Hydra since forever
-    maintainers = with maintainers; [ ];
+    badPlatforms = ["aarch64-linux"]; # fails on Hydra since forever
+    maintainers = with maintainers; [];
   };
 }

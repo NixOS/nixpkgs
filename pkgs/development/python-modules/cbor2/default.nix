@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "cbor2";
   version = "5.4.2";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Python CBOR (de)serializer with extensive tag support";
     homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
-    maintainers = with maintainers; [ taneb ];
+    maintainers = with maintainers; [taneb];
   };
 }

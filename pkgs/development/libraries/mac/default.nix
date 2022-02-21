@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, yasm }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  yasm,
+}:
 stdenv.mkDerivation rec {
   pname = "mac";
   version = "4.11-u4-b5-s7";
@@ -24,13 +29,13 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = "-DSHNTOOL";
 
-  nativeBuildInputs = [ yasm ];
+  nativeBuildInputs = [yasm];
 
   meta = with lib; {
     description = "APE codec and decompressor";
     homepage = "http://www.deb-multimedia.org/dists/testing/main/binary-amd64/package/monkeys-audio.php";
     license = licenses.unfreeRedistributable;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [jfrankenau];
   };
 }

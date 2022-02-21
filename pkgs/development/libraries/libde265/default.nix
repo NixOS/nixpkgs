@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   version = "1.0.8";
   pname = "libde265";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dzflqbk248lz5ws0ni5acmf32b3rmnq5gsfaz7691qqjxkl1zml";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   enableParallelBuilding = true;
 
@@ -20,7 +25,6 @@ stdenv.mkDerivation rec {
     description = "Open h.265 video codec implementation";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [gebner];
   };
-
 }

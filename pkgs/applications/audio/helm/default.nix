@@ -1,18 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, xorg
-, freetype
-, alsa-lib
-, curl
-, libjack2
-, lv2
-, pkg-config
-, libGLU
-, libGL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  xorg,
+  freetype,
+  alsa-lib,
+  curl,
+  libjack2,
+  lv2,
+  pkg-config,
+  libGLU,
+  libGL,
 }:
-
-  stdenv.mkDerivation {
+stdenv.mkDerivation {
   version = "0.9.0";
   pname = "helm";
 
@@ -24,15 +25,26 @@
   };
 
   buildInputs = [
-    xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
-    xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsa-lib curl libjack2 libGLU libGL lv2
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrender
+    xorg.libXrandr
+    freetype
+    alsa-lib
+    curl
+    libjack2
+    libGLU
+    libGL
+    lv2
   ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   CXXFLAGS = "-DHAVE_LROUND";
   enableParallelBuilding = true;
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = ["DESTDIR=$(out)"];
 
   patches = [
     # gcc9 compatibility https://github.com/mtytel/helm/pull/233
@@ -68,7 +80,7 @@
         Effects: Formant filter, stutter, delay
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
   };
 }

@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, appstream-glib
-, dbus
-, pango
-, pcre2
-, tmux
-, vte
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  appstream-glib,
+  dbus,
+  pango,
+  pcre2,
+  tmux,
+  vte,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "germinal";
   version = "26";
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HUi+skF4bJj5CY2cNTOC4tl7jhvpXYKqBx2rqKzjlo0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [autoreconfHook pkg-config wrapGAppsHook];
   buildInputs = [
     appstream-glib
     dbus
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     runHook preFixup
     wrapProgram $out/bin/germinal \
-     --prefix PATH ":" "${lib.makeBinPath [ tmux ]}" \
+     --prefix PATH ":" "${lib.makeBinPath [tmux]}" \
       "''${gappsWrapperArgs[@]}"
     runHook postFixup
   '';
@@ -50,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Keruspe/Germinal";
     license = with licenses; gpl3Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

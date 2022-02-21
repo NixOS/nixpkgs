@@ -1,12 +1,12 @@
-{ lib
-, pkgs
-, buildPythonPackage
-, fetchFromGitHub
-, pygame
-, python-i18n
-, pytestCheckHook
+{
+  lib,
+  pkgs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygame,
+  python-i18n,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pygame-gui";
   version = "0.6.4";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     sha256 = "13+fK1hYxiMh0T+xbbmHViZjyBoQfRyIDc05fIJ/46U=";
   };
 
-  propagatedBuildInputs = [ pygame python-i18n ];
+  propagatedBuildInputs = [pygame python-i18n];
 
   postPatch = ''
     substituteInPlace pygame_gui/core/utility.py \
       --replace "xsel" "${pkgs.xsel}/bin/xsel"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [emilytrau];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, jdk11, runtimeShell, unzip, chromium }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk11,
+  runtimeShell,
+  unzip,
+  chromium,
+}:
 stdenv.mkDerivation rec {
   pname = "burpsuite";
   version = "2021.12";
@@ -44,6 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = jdk11.meta.platforms;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [bennofs];
   };
 }

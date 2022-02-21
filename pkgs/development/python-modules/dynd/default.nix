@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPyPy
-, isPy3k
-, cython
-, numpy
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  isPyPy,
+  isPy3k,
+  cython,
+  numpy,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   version = "0.7.2";
   pname = "dynd";
@@ -31,15 +31,14 @@ buildPythonPackage rec {
   # Python 3 works but has a broken import test that I couldn't
   # figure out.
   doCheck = !isPy3k;
-  nativeBuildInputs = [ pkgs.cmake ];
-  buildInputs = [ pkgs.libdynd.dev cython ];
-  propagatedBuildInputs = [ numpy pkgs.libdynd ];
+  nativeBuildInputs = [pkgs.cmake];
+  buildInputs = [pkgs.libdynd.dev cython];
+  propagatedBuildInputs = [numpy pkgs.libdynd];
 
   meta = with lib; {
     homepage = "http://libdynd.org";
     license = licenses.bsd2;
     description = "Python exposure of dynd";
-    maintainers = with maintainers; [ teh ];
+    maintainers = with maintainers; [teh];
   };
-
 }

@@ -1,6 +1,19 @@
-{ lib, buildDunePackage, fetchFromGitHub, lwt_ppx, ppx_cstruct, optint
-, checkseum, diet, bitv, nocrypto, logs, lru, io-page, mirage-block }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  lwt_ppx,
+  ppx_cstruct,
+  optint,
+  checkseum,
+  diet,
+  bitv,
+  nocrypto,
+  logs,
+  lru,
+  io-page,
+  mirage-block,
+}:
 buildDunePackage rec {
   pname = "wodan";
   version = "unstable-2020-11-20";
@@ -35,6 +48,6 @@ buildDunePackage rec {
     inherit (src.meta) homepage;
     description = "A flash-friendly, safe and flexible filesystem library";
     license = licenses.isc;
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ehmry];
   };
 }

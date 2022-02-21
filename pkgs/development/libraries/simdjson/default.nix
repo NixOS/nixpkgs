@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "simdjson";
   version = "1.0.2";
@@ -11,17 +15,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WuqBR1/Iqly+Y8kJxTuZLTVkR3ltXdyr+/6J3zhBNkQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  cmakeFlags = [
-    "-DSIMDJSON_JUST_LIBRARY=ON"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic "-DSIMDJSON_BUILD_STATIC=ON";
+  cmakeFlags =
+    [
+      "-DSIMDJSON_JUST_LIBRARY=ON"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isStatic "-DSIMDJSON_BUILD_STATIC=ON";
 
   meta = with lib; {
     homepage = "https://simdjson.org/";
     description = "Parsing gigabytes of JSON per second";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ chessai ];
+    maintainers = with maintainers; [chessai];
   };
 }

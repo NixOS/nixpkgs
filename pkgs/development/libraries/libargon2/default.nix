@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, fixDarwinDylibNames }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fixDarwinDylibNames,
+}:
 stdenv.mkDerivation rec {
   pname = "libargon2";
   version = "20190702";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p4ry9dn0mi9js0byijxdyiwx74p1nr8zj7wjpd1fjgqva4sk23i";
   };
 
-  nativeBuildInputs = [ fixDarwinDylibNames ];
+  nativeBuildInputs = [fixDarwinDylibNames];
 
   patches = [
     # TODO: remove when https://github.com/P-H-C/phc-winner-argon2/pull/277 is merged + released
@@ -39,8 +44,8 @@ stdenv.mkDerivation rec {
       recommends using Argon2 rather than legacy algorithms.
     '';
     homepage = "https://www.argon2.com/";
-    license = with licenses; [ asl20 cc0 ];
-    maintainers = with maintainers; [ taeer olynch ];
+    license = with licenses; [asl20 cc0];
+    maintainers = with maintainers; [taeer olynch];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

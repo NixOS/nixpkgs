@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
-, libtool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  libtool,
 }:
-
 stdenv.mkDerivation {
   pname = "libvterm-neovim";
   # Releases are not tagged, look at commit history to find latest release
@@ -17,9 +17,10 @@ stdenv.mkDerivation {
     sha256 = "0r6yimzbkgrsi9aaxwvxahai2lzgjd1ysblr6m6by5w459853q3n";
   };
 
-  nativeBuildInputs = [ perl libtool ];
+  nativeBuildInputs = [perl libtool];
 
-  makeFlags = [ "PREFIX=$(out)" ]
+  makeFlags =
+    ["PREFIX=$(out)"]
     ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
   enableParallelBuilding = true;
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
     description = "VT220/xterm/ECMA-48 terminal emulator library";
     homepage = "http://www.leonerd.org.uk/code/libvterm/";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [rvolosatovs];
     platforms = platforms.unix;
   };
 }

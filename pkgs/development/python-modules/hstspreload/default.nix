@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "hstspreload";
   version = "2021.12.1";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Chromium HSTS Preload list as a Python package and updated daily";
     homepage = "https://github.com/sethmlarson/hstspreload";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc SuperSandro2000 ];
+    maintainers = with maintainers; [costrouc SuperSandro2000];
   };
 }

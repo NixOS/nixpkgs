@@ -1,13 +1,15 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.airsonic;
   opt = options.services.airsonic;
 in {
   options = {
-
     services.airsonic = {
       enable = mkEnableOption "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)";
 
@@ -76,7 +78,7 @@ in {
 
       transcoders = mkOption {
         type = types.listOf types.path;
-        default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
+        default = ["${pkgs.ffmpeg.bin}/bin/ffmpeg"];
         defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
         description = ''
           List of paths to transcoder executables that should be accessible
@@ -120,15 +122,14 @@ in {
           "-Djavax.sound.sampled.TargetDataLine='#CODEC [plughw:1,0]'"
         ];
       };
-
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.airsonic = {
       description = "Airsonic Media Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       preStart = ''
         # Install transcoders.
@@ -146,8 +147,10 @@ in {
           -Dserver.port=${toString cfg.port} \
           -Dairsonic.contextPath=${cfg.contextPath} \
           -Djava.awt.headless=true \
-          ${optionalString (cfg.virtualHost != null)
-            "-Dserver.use-forward-headers=true"} \
+          ${
+            optionalString (cfg.virtualHost != null)
+            "-Dserver.use-forward-headers=true"
+          } \
           ${toString cfg.jvmOptions} \
           -verbose:gc \
           -jar ${cfg.war}

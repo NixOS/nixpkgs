@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "element";
   version = "1.0.0";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "The periodic table on the command line";
     homepage = "https://github.com/gennaro-tedesco/element";
     license = licenses.asl20;
-    maintainers = [ maintainers.j0hax ];
+    maintainers = [maintainers.j0hax];
   };
 }

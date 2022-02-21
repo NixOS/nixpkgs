@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "muon";
   version = "2019-11-27";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sb1i08421jxlx791g8nh4l239syaj730hagkzc159g0z65614zz";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   buildPhase = ''
     mkdir -p $out/bin $out/share/mu
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Modern low-level programming language";
     homepage = "https://github.com/nickmqb/muon";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
     platforms = platforms.all;
   };
 }

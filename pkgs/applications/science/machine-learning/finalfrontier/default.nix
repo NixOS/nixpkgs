@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, libiconv
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  libiconv,
+  openssl,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "finalfrontier";
   version = "0.9.4";
@@ -27,10 +27,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
-  ];
+  buildInputs =
+    [openssl]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      Security
+    ];
 
   postInstall = ''
     installManPage man/*.1
@@ -46,6 +48,6 @@ rustPlatform.buildRustPackage rec {
     description = "Utility for training word and subword embeddings";
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, libretro, mgba }:
-
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  mgba,
+}:
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-mgba";
   namespace = "game.libretro.mgba";
@@ -16,7 +22,7 @@ buildKodiBinaryAddon rec {
     "-DMGBA_LIB=${mgba}/lib/retroarch/cores/mgba_libretro.so"
   ];
 
-  extraBuildInputs = [ mgba ];
+  extraBuildInputs = [mgba];
   propagatedBuildInputs = [
     libretro
   ];

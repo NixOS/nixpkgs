@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, cgal, boost, gmp, mpfr, flex, bison, dxflib, readline
-, qtbase, qmake, libGLU
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  cgal,
+  boost,
+  gmp,
+  mpfr,
+  flex,
+  bison,
+  dxflib,
+  readline,
+  qtbase,
+  qmake,
+  libGLU,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.9.8";
   pname = "rapcad";
@@ -21,12 +34,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase cgal boost gmp mpfr flex bison dxflib readline libGLU ];
+  nativeBuildInputs = [qmake];
+  buildInputs = [qtbase cgal boost gmp mpfr flex bison dxflib readline libGLU];
 
   meta = with lib; {
     license = licenses.gpl3;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
     description = "Constructive solid geometry package";
     broken = true; # 2018-04-11

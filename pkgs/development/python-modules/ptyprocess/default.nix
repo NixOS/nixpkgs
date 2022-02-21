@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "ptyprocess";
   version = "0.7.0";

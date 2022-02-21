@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pymdstat";
   version = "0.4.2";
@@ -19,12 +19,12 @@ buildPythonPackage rec {
     ${python.interpreter} $src/unitest.py
   '';
 
-  pythonImportsCheck = [ "pymdstat" ];
+  pythonImportsCheck = ["pymdstat"];
 
   meta = with lib; {
     description = "A pythonic library to parse Linux /proc/mdstat file";
     homepage = "https://github.com/nicolargo/pymdstat";
-    maintainers = with maintainers; [ rhoriguchi ];
+    maintainers = with maintainers; [rhoriguchi];
     license = licenses.mit;
   };
 }

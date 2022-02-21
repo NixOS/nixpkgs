@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libpcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libpcap,
 }:
-
 buildGoModule rec {
   pname = "naabu";
   version = "2.0.5";
@@ -37,6 +37,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/naabu";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

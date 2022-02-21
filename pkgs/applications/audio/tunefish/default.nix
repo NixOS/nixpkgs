@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, python3
-, alsa-lib, curl, freetype, gtk3, libGL, libX11, libXext, libXinerama, webkitgtk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
+  alsa-lib,
+  curl,
+  freetype,
+  gtk3,
+  libGL,
+  libX11,
+  libXext,
+  libXinerama,
+  webkitgtk,
 }:
-
 stdenv.mkDerivation {
   pname = "tunefish";
   version = "unstable-2020-08-13";
@@ -14,15 +26,16 @@ stdenv.mkDerivation {
     sha256 = "0rjpq3s609fblzkvnc9729glcnfinmxljh0z8ldpzr245h367zxh";
   };
 
-  nativeBuildInputs = [ pkg-config python3 ];
-  buildInputs = [ alsa-lib curl freetype gtk3 libGL libX11 libXext libXinerama webkitgtk ];
+  nativeBuildInputs = [pkg-config python3];
+  buildInputs = [alsa-lib curl freetype gtk3 libGL libX11 libXext libXinerama webkitgtk];
 
   postPatch = ''
     patchShebangs src/tunefish4/generate-lv2-ttl.py
   '';
 
   makeFlags = [
-    "-C" "src/tunefish4/Builds/LinuxMakefile"
+    "-C"
+    "src/tunefish4/Builds/LinuxMakefile"
     "CONFIG=Release"
   ];
 
@@ -37,7 +50,7 @@ stdenv.mkDerivation {
     homepage = "https://tunefish-synth.com/";
     description = "Virtual analog synthesizer LV2 plugin";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [orivej];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gmp, libffi }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmp,
+  libffi,
+}:
 stdenv.mkDerivation rec {
   pname = "polyml";
   version = "5.7.1";
@@ -8,9 +14,9 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
-  patches = [ ./5.7-new-libffi-FFI_SYSV.patch ];
+  patches = [./5.7-new-libffi-FFI_SYSV.patch];
 
-  buildInputs = [ libffi gmp ];
+  buildInputs = [libffi gmp];
 
   nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
 
@@ -35,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.polyml.org/";
     license = licenses.lgpl21;
     platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ maggesi ];
+    maintainers = with maintainers; [maggesi];
   };
 }

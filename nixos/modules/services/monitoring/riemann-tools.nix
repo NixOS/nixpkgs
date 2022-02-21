@@ -1,10 +1,11 @@
-{ config, pkgs, lib, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with pkgs;
-with lib;
-
-let
-
+with lib; let
   cfg = config.services.riemann-tools;
 
   riemannHost = "${cfg.riemannHost}";
@@ -13,12 +14,8 @@ let
     #!/bin/sh
     exec ${pkgs.riemann-tools}/bin/riemann-health ${builtins.concatStringsSep " " cfg.extraArgs} --host ${riemannHost}
   '';
-
-
 in {
-
   options = {
-
     services.riemann-tools = {
       enableHealth = mkOption {
         type = types.bool;
@@ -47,7 +44,6 @@ in {
   };
 
   config = mkIf cfg.enableHealth {
-
     users.groups.riemanntools.gid = config.ids.gids.riemanntools;
 
     users.users.riemanntools = {
@@ -57,14 +53,12 @@ in {
     };
 
     systemd.services.riemann-health = {
-      wantedBy = [ "multi-user.target" ];
-      path = [ procps ];
+      wantedBy = ["multi-user.target"];
+      path = [procps];
       serviceConfig = {
         User = "riemanntools";
         ExecStart = "${healthLauncher}/bin/riemann-health";
       };
     };
-
   };
-
 }

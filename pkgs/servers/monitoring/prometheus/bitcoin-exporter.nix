@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "bitcoin-prometheus-exporter";
   version = "0.5.0";
@@ -22,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [ prometheus-client bitcoinlib riprova ];
+  propagatedBuildInputs = with python3Packages; [prometheus-client bitcoinlib riprova];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -36,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     description = "Prometheus exporter for Bitcoin Core nodes";
     homepage = "https://github.com/jvstein/bitcoin-prometheus-exporter";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ mmilata ];
+    maintainers = with maintainers; [mmilata];
     platforms = platforms.all;
   };
 }

@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, pkg-config
-, cmake
-, meson
-, ninja
-, gtk3
-, gtk-layer-shell
-, json_c
-, scdoc
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  pkg-config,
+  cmake,
+  meson,
+  ninja,
+  gtk3,
+  gtk-layer-shell,
+  json_c,
+  scdoc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtkgreet";
   version = "0.7";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "GTK based greeter for greetd, to be run under cage or similar";
     homepage = "https://git.sr.ht/~kennylevinsen/gtkgreet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [luc65r];
     platforms = platforms.linux;
   };
 }

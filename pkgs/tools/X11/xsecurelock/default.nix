@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, libX11, libXcomposite, libXft, libXmu, libXrandr, libXext, libXScrnSaver
-, pam, apacheHttpd, pamtester, xscreensaver, coreutils, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libX11,
+  libXcomposite,
+  libXft,
+  libXmu,
+  libXrandr,
+  libXext,
+  libXScrnSaver,
+  pam,
+  apacheHttpd,
+  pamtester,
+  xscreensaver,
+  coreutils,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "xsecurelock";
   version = "1.7.0";
@@ -14,12 +30,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config makeWrapper
+    autoreconfHook
+    pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
-    libX11 libXcomposite libXft libXmu libXrandr libXext libXScrnSaver
-    pam apacheHttpd pamtester
+    libX11
+    libXcomposite
+    libXft
+    libXmu
+    libXrandr
+    libXext
+    libXScrnSaver
+    pam
+    apacheHttpd
+    pamtester
   ];
 
   configureFlags = [
@@ -41,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "X11 screen lock utility with security in mind";
     homepage = "https://github.com/google/xsecurelock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
     platforms = platforms.unix;
   };
 }

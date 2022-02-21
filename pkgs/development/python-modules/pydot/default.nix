@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, graphviz
-, python
-, pytestCheckHook
-, chardet
-, pythonOlder
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  graphviz,
+  python,
+  pytestCheckHook,
+  chardet,
+  pythonOlder,
+  pyparsing,
 }:
-
 buildPythonPackage rec {
   pname = "pydot";
   version = "1.4.2";
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "Allows to create both directed and non directed graphs from Python";
     homepage = "https://github.com/erocarrera/pydot";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

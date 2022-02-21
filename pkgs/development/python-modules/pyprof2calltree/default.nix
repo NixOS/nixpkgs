@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 buildPythonPackage rec {
   pname = "pyprof2calltree";
   version = "1.4.5";
@@ -17,6 +20,6 @@ buildPythonPackage rec {
     description = "Help visualize profiling data from cProfile with kcachegrind and qcachegrind";
     homepage = "https://pypi.python.org/pypi/pyprof2calltree/";
     license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    maintainers = with maintainers; [sfrijters];
   };
 }

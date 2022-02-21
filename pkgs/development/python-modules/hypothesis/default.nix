@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, attrs
-, pexpect
-, doCheck ? true
-, pytestCheckHook
-, pytest-xdist
-, sortedcontainers
-, tzdata
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+  attrs,
+  pexpect,
+  doCheck ? true,
+  pytestCheckHook,
+  pytest-xdist,
+  sortedcontainers,
+  tzdata,
+  pythonOlder,
 }:
 buildPythonPackage rec {
   # https://hypothesis.readthedocs.org/en/latest/packaging.html
@@ -38,13 +39,15 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  checkInputs = [
-    pexpect
-    pytest-xdist
-    pytestCheckHook
-  ] ++ lib.optional (pythonAtLeast "3.9") [
-    tzdata
-  ];
+  checkInputs =
+    [
+      pexpect
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ lib.optional (pythonAtLeast "3.9") [
+      tzdata
+    ];
 
   inherit doCheck;
 
@@ -65,6 +68,6 @@ buildPythonPackage rec {
     description = "Library for property based testing";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

@@ -1,10 +1,11 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, python
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "ppft";
   version = "1.6.6.1";
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "9e2173042edd5cc9c7bee0d7731873f17fcdce0e42e4b7ab68857d0de7b631fc";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   # darwin seems to hang
   doCheck = !stdenv.isDarwin;
@@ -28,5 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/uqfoundation";
     license = licenses.bsd3;
   };
-
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "pipes";
   version = "1.3.0";
@@ -11,21 +17,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-856OWlnNiGB20571TJg7Ayzcz4r6NqdW5DMDiim09mc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir $out -p
     make PREFIX=$out/ install
 
     wrapProgram $out/bin/pipes.sh \
-      --set PATH "${lib.makeBinPath [ coreutils ncurses ]}"
+      --set PATH "${lib.makeBinPath [coreutils ncurses]}"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pipeseroni/pipes.sh";
     description = "Animated pipes terminal screensaver";
     license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [maintainers.matthiasbeyer];
     platforms = platforms.unix;
   };
 }

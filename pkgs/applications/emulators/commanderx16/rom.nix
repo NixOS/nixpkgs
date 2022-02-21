@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cc65
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cc65,
 }:
-
 stdenv.mkDerivation rec {
   pname = "x16-rom";
   version = "38";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "xaqF0ppB7I7ST8Uh3jPbC14uRAb/WH21tHlNeTvYpoI=";
   };
 
-  nativeBuildInputs = [ cc65 ];
+  nativeBuildInputs = [cc65];
 
   postPatch = ''
     patchShebangs scripts/
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.commanderx16.com/forum/index.php?/home/";
     description = "ROM file for CommanderX16 8-bit computer";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = cc65.meta.platforms;
   };
 

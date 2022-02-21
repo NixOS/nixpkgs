@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, numpy
-, decorator
-, imageio
-, imageio-ffmpeg
-, proglog
-, requests
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  numpy,
+  decorator,
+  imageio,
+  imageio-ffmpeg,
+  proglog,
+  requests,
+  tqdm
   # Advanced image processing (triples size of output)
-, advancedProcessing ? false
-, opencv3
-, scikitimage
-, scikit-learn
-, scipy
-, matplotlib
-, youtube-dl
+  ,
+  advancedProcessing ? false,
+  opencv3,
+  scikitimage,
+  scikit-learn,
+  scipy,
+  matplotlib,
+  youtube-dl,
 }:
-
 buildPythonPackage rec {
   pname = "moviepy";
   version = "1.0.3";
@@ -38,27 +39,29 @@ buildPythonPackage rec {
   # No tests, require network connection
   doCheck = false;
 
-  propagatedBuildInputs = [
-    numpy
-    decorator
-    imageio
-    imageio-ffmpeg
-    tqdm
-    requests
-    proglog
-  ] ++ lib.optionals advancedProcessing [
-    opencv3
-    scikitimage
-    scikit-learn
-    scipy
-    matplotlib
-    youtube-dl
-  ];
+  propagatedBuildInputs =
+    [
+      numpy
+      decorator
+      imageio
+      imageio-ffmpeg
+      tqdm
+      requests
+      proglog
+    ]
+    ++ lib.optionals advancedProcessing [
+      opencv3
+      scikitimage
+      scikit-learn
+      scipy
+      matplotlib
+      youtube-dl
+    ];
 
   meta = with lib; {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

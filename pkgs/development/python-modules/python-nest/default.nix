@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, requests
-, six
-, sseclient-py
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  requests,
+  six,
+  sseclient-py,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "python-nest";
   version = "4.2.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python API and command line tool for talking to the Nest™ Thermostat";
     homepage = "https://github.com/jkoelker/python-nest";
     license = licenses.cc-by-nc-sa-40;
-    maintainers = with maintainers; [ jamiemagee ];
+    maintainers = with maintainers; [jamiemagee];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, python3, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "jbig2dec";
   version = "0.19";
@@ -13,9 +18,9 @@ stdenv.mkDerivation rec {
     patchShebangs test_jbig2dec.py
   '';
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  checkInputs = [ python3 ];
+  checkInputs = [python3];
   doCheck = true;
 
   meta = {

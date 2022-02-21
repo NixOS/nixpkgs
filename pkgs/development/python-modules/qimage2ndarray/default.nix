@@ -1,8 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, numpy
-, pyqt5
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  numpy,
+  pyqt5,
 }:
-
 buildPythonPackage rec {
   pname = "qimage2ndarray";
   version = "1.8.3";
@@ -25,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hmeine/qimage2ndarray";
     description = "A small python extension for quickly converting between QImages and numpy.ndarrays (in both directions)";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = with lib.maintainers; [tbenst];
   };
 }

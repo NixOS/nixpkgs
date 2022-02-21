@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, dune_2 }:
-
+{
+  lib,
+  buildDunePackage,
+  dune_2,
+}:
 buildDunePackage rec {
   pname = "dune-private-libs";
 
@@ -13,7 +16,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     description = "Private libraries of Dune";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     license = licenses.mit;
   };
 }

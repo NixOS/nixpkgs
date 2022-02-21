@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "sqlite-fts4";
   version = "1.0.1";
@@ -25,7 +25,6 @@ buildPythonPackage rec {
     description = "Custom Python functions for working with SQLite FTS4";
     homepage = "https://github.com/simonw/sqlite-fts4";
     license = licenses.asl20;
-    maintainers = with maintainers; [ meatcar ];
+    maintainers = with maintainers; [meatcar];
   };
-
 }

@@ -1,25 +1,26 @@
-{ lib, stdenv
-, fetchurl
-, cairo
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, glib
-, nv-codec-headers-11
-, pipewire
-, systemd
-, libvncserver
-, libsecret
-, libnotify
-, libxkbcommon
-, gdk-pixbuf
-, freerdp
-, fuse3
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cairo,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook,
+  glib,
+  nv-codec-headers-11,
+  pipewire,
+  systemd,
+  libvncserver,
+  libsecret,
+  libnotify,
+  libxkbcommon,
+  gdk-pixbuf,
+  freerdp,
+  fuse3,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
   version = "41.2";

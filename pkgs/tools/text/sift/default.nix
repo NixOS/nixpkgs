@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "sift";
   version = "0.9.0";
@@ -19,7 +22,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "A fast and powerful alternative to grep";
     homepage = "https://sift-tool.org";
-    maintainers = [ maintainers.carlsverre ];
+    maintainers = [maintainers.carlsverre];
     license = licenses.gpl3;
   };
 }

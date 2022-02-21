@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "shhmsg";
   version = "1.4.2";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
-  installFlags = [ "INSTBASEDIR=$(out)" ];
+  installFlags = ["INSTBASEDIR=$(out)"];
 
   meta = with lib; {
     description = "A library for displaying messages";

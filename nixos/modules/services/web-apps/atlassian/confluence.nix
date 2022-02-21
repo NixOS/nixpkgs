@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.confluence;
 
   pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
@@ -22,10 +23,7 @@ let
       session.lastvalidation                  session.lastvalidation
     '';
   });
-
-in
-
-{
+in {
   options = {
     services.confluence = {
       enable = mkEnableOption "Atlassian Confluence service";
@@ -63,7 +61,7 @@ in
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "-Xms1024m" "-Xmx2048m" "-Dconfluence.disable.peopledirectory.all=true" ];
+        example = ["-Xms1024m" "-Xmx2048m" "-Dconfluence.disable.peopledirectory.all=true"];
         description = "Java options to pass to catalina/tomcat.";
       };
 
@@ -163,11 +161,11 @@ in
     systemd.services.confluence = {
       description = "Atlassian Confluence";
 
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "postgresql.service" ];
-      after = [ "postgresql.service" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["postgresql.service"];
+      after = ["postgresql.service"];
 
-      path = [ cfg.jrePackage pkgs.bash ];
+      path = [cfg.jrePackage pkgs.bash];
 
       environment = {
         CONF_USER = cfg.user;
@@ -175,15 +173,18 @@ in
         CATALINA_OPTS = concatStringsSep " " cfg.catalinaOptions;
       };
 
-      preStart = ''
-        mkdir -p ${cfg.home}/{logs,work,temp,deploy}
+      preStart =
+        ''
+          mkdir -p ${cfg.home}/{logs,work,temp,deploy}
 
-        sed -e 's,port="8090",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
-        '' + (lib.optionalString cfg.proxy.enable ''
+          sed -e 's,port="8090",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
+        ''
+        + (lib.optionalString cfg.proxy.enable ''
           -e 's,protocol="org.apache.coyote.http11.Http11NioProtocol",protocol="org.apache.coyote.http11.Http11NioProtocol" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}",' \
-        '') + ''
+        '')
+        + ''
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
-      '';
+        '';
 
       serviceConfig = {
         User = cfg.user;

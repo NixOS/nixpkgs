@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "mod";
   version = "0.4.1";
@@ -15,17 +18,17 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/mod" ];
+  subPackages = ["cmd/mod"];
 
   meta = with lib; {
     description = "Automated Semantic Import Versioning Upgrades for Go";
     longDescription = ''
       Command line tool to upgrade/downgrade Semantic Import Versioning in Go
       Modules.
-      '';
+    '';
     homepage = "https://github.com/marwan-at-work/mod";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

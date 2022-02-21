@@ -1,12 +1,12 @@
-import ./make-test-python.nix ({ pkgs, lib, ...}:
-
-{
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "shiori";
-  meta.maintainers = with lib.maintainers; [ minijackson ];
+  meta.maintainers = with lib.maintainers; [minijackson];
 
-  machine =
-    { ... }:
-    { services.shiori.enable = true; };
+  machine = {...}: {services.shiori.enable = true;};
 
   testScript = let
     authJSON = pkgs.writeText "auth.json" (builtins.toJSON {
@@ -16,12 +16,12 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       owner = true;
     });
 
-  insertBookmark = {
-    url = "http://example.org";
-    title = "Example Bookmark";
-  };
+    insertBookmark = {
+      url = "http://example.org";
+      title = "Example Bookmark";
+    };
 
-  insertBookmarkJSON = pkgs.writeText "insertBookmark.json" (builtins.toJSON insertBookmark);
+    insertBookmarkJSON = pkgs.writeText "insertBookmark.json" (builtins.toJSON insertBookmark);
   in ''
     import json
 

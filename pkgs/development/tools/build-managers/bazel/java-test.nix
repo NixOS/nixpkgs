@@ -1,20 +1,17 @@
 {
-  bazel
-, bazelTest
-, bazel-examples
-, gccStdenv
-, lib
-, openjdk8
-, jdk11_headless
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
-}:
-
-let
-
+  bazel,
+  bazelTest,
+  bazel-examples,
+  gccStdenv,
+  lib,
+  openjdk8,
+  jdk11_headless,
+  runLocal,
+  runtimeShell,
+  writeScript,
+  writeText,
+  distDir,
+}: let
   toolsBazel = writeScript "bazel" ''
     #! ${runtimeShell}
 
@@ -42,21 +39,26 @@ let
     name = "bazel-test-java";
     inherit workspaceDir;
     bazelPkg = bazel;
-    buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];
-    bazelScript = ''
-      ${bazel}/bin/bazel \
-        run \
-        --distdir=${distDir} \
-          --verbose_failures \
-          --curses=no \
-          --sandbox_debug \
-          //:ProjectRunner \
-    '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
-          --host_javabase='@local_jdk//:jdk' \
-          --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-          --javabase='@local_jdk//:jdk' \
-    '';
+    buildInputs = [
+      (if lib.strings.versionOlder bazel.version "5.0.0"
+      then openjdk8
+      else jdk11_headless)
+    ];
+    bazelScript =
+      ''
+        ${bazel}/bin/bazel \
+          run \
+          --distdir=${distDir} \
+            --verbose_failures \
+            --curses=no \
+            --sandbox_debug \
+            //:ProjectRunner \
+      ''
+      + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
+        --host_javabase='@local_jdk//:jdk' \
+        --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+        --javabase='@local_jdk//:jdk' \
+      '';
   };
-
-in testBazel
-
+in
+  testBazel

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycryptodome
-, PyGithub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pycryptodome,
+  PyGithub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "brelpy";
   version = "0.0.3";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Python to communicate with the Brel hubs";
     homepage = "https://gitlab.com/rogiervandergeer/brelpy";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

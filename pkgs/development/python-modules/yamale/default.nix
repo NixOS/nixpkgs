@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pyyaml
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pyyaml,
+  ruamel-yaml,
 }:
-
 buildPythonPackage rec {
   pname = "yamale";
   version = "4.0.3";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "A schema and validator for YAML";
     homepage = "https://github.com/23andMe/Yamale";
     license = licenses.mit;
-    maintainers = with maintainers; [ rtburns-jpl ];
+    maintainers = with maintainers; [rtburns-jpl];
   };
 }

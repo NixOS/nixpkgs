@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, beautifulsoup4, requests, click }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  beautifulsoup4,
+  requests,
+  click,
+}:
 buildPythonPackage rec {
   pname = "deep-translator";
   version = "1.7.0";
@@ -28,6 +34,6 @@ buildPythonPackage rec {
     description = "Flexible, free and unlimited Python tool to translate between different languages in a simple way using multiple translators";
     homepage = "https://deep-translator.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
   };
 }

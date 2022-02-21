@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "nomad-driver-podman";
   version = "0.3.0";
@@ -13,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-QXAXDoYN5egl5y0YV4/7yh5K0tjzjN5vRJRHyI8eU2E=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   # some tests require a running podman service
   doCheck = false;
@@ -23,6 +26,6 @@ buildGoModule rec {
     description = "Podman task driver for Nomad";
     platforms = platforms.linux;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

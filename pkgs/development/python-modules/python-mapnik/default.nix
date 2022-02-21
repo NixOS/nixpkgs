@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPyPy
-, python
-, pillow
-, pycairo
-, pkg-config
-, boost
-, cairo
-, harfbuzz
-, icu
-, libjpeg
-, libpng
-, libtiff
-, libwebp
-, mapnik
-, proj
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPyPy,
+  python,
+  pillow,
+  pycairo,
+  pkg-config,
+  boost,
+  cairo,
+  harfbuzz,
+  icu,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  mapnik,
+  proj,
+  zlib,
 }:
-
 buildPythonPackage rec {
   pname = "python-mapnik";
   version = "unstable-2020-02-24";
@@ -62,13 +62,13 @@ buildPythonPackage rec {
     zlib
   ];
 
-  propagatedBuildInputs = [ pillow pycairo ];
+  propagatedBuildInputs = [pillow pycairo];
 
-  pythonImportsCheck = [ "mapnik" ];
+  pythonImportsCheck = ["mapnik"];
 
   meta = with lib; {
     description = "Python bindings for Mapnik";
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [erictapen];
     homepage = "https://mapnik.org";
     license = licenses.lgpl21;
   };

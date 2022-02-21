@@ -1,9 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, click
-, pytest
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  click,
+  pytest,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "xdis";
   version = "6.0.3";
@@ -16,13 +19,13 @@ buildPythonPackage rec {
     sha256 = "1qvg3bwqzqxlzlixz2di3si7siy0ismq93wd57r8cqmxl54gva6h";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six click ];
+  checkInputs = [pytest];
+  propagatedBuildInputs = [six click];
 
   checkPhase = ''
     make check
   '';
-  pythonImportsCheck = [ "xdis" ];
+  pythonImportsCheck = ["xdis"];
 
   meta = with lib; {
     description = "Python cross-version byte-code disassembler and marshal routines";

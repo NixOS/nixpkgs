@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-
+{
+  lib,
+  fetchFromGitHub,
+}:
 fetchFromGitHub {
   name = "oxygenfonts-20160824";
 

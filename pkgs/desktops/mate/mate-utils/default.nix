@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, gtk3, libxml2, libgtop, libcanberra-gtk3
-, inkscape, udisks2, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  glib,
+  gtk3,
+  libxml2,
+  libgtop,
+  libcanberra-gtk3,
+  inkscape,
+  udisks2,
+  mate,
+  hicolor-icon-theme,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-utils";
   version = "1.26.0";
@@ -32,12 +48,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "Utilities for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [gpl2Plus lgpl2Plus];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

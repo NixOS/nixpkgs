@@ -1,18 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, wayland-scanner
-, libGL
-, libX11
-, mesa
-, wayland
-, wayland-protocols
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  wayland-scanner,
+  libGL,
+  libX11,
+  mesa,
+  wayland,
+  wayland-protocols,
+}: let
   eglexternalplatform = stdenv.mkDerivation {
     pname = "eglexternalplatform";
     version = "1.1";
@@ -39,52 +38,52 @@ let
       license = licenses.mit;
     };
   };
+in
+  stdenv.mkDerivation rec {
+    pname = "egl-wayland";
+    version = "1.1.9";
 
-in stdenv.mkDerivation rec {
-  pname = "egl-wayland";
-  version = "1.1.9";
+    outputs = ["out" "dev"];
 
-  outputs = [ "out" "dev" ];
+    src = fetchFromGitHub {
+      owner = "Nvidia";
+      repo = pname;
+      rev = version;
+      sha256 = "sha256-rcmGVEcOtKTR8sVkHV7Xb+8NuKWUapYn+/Fswi4z6Mc=";
+    };
 
-  src = fetchFromGitHub {
-    owner = "Nvidia";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-rcmGVEcOtKTR8sVkHV7Xb+8NuKWUapYn+/Fswi4z6Mc=";
-  };
+    depsBuildBuild = [
+      pkg-config
+    ];
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
+      wayland-scanner
+    ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wayland-scanner
-  ];
+    buildInputs = [
+      eglexternalplatform
+      libGL
+      libX11
+      mesa
+      wayland
+      wayland-protocols
+    ];
 
-  buildInputs = [
-    eglexternalplatform
-    libGL
-    libX11
-    mesa
-    wayland
-    wayland-protocols
-  ];
+    postFixup = ''
+      # Doubled prefix in pc file after postbuild hook replaces includedir prefix variable with dev output path
+      substituteInPlace $dev/lib/pkgconfig/wayland-eglstream.pc \
+        --replace "=$dev/$dev" "=$dev" \
+        --replace "Requires:" "Requires.private:"
+    '';
 
-  postFixup = ''
-    # Doubled prefix in pc file after postbuild hook replaces includedir prefix variable with dev output path
-    substituteInPlace $dev/lib/pkgconfig/wayland-eglstream.pc \
-      --replace "=$dev/$dev" "=$dev" \
-      --replace "Requires:" "Requires.private:"
-  '';
-
-  meta = with lib; {
-    description = "The EGLStream-based Wayland external platform";
-    homepage = "https://github.com/NVIDIA/egl-wayland/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hedning ];
-  };
-}
+    meta = with lib; {
+      description = "The EGLStream-based Wayland external platform";
+      homepage = "https://github.com/NVIDIA/egl-wayland/";
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [hedning];
+    };
+  }

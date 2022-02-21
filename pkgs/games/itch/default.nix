@@ -1,15 +1,16 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, libnotify
-, nss
-, gtk3
-, fetchFromGitHub
-, makeDesktopItem
-, itch-setup
-, runtimeShell
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  libnotify,
+  nss,
+  gtk3,
+  fetchFromGitHub,
+  makeDesktopItem,
+  itch-setup,
+  runtimeShell,
 }:
-stdenvNoCC.mkDerivation rec{
+stdenvNoCC.mkDerivation rec {
   pname = "itch";
   version = "25.5.1";
 
@@ -40,7 +41,7 @@ stdenvNoCC.mkDerivation rec{
     exec ${itch-setup}/bin/itch-setup --prefer-launch -- "$@"
   '';
 
-  passAsFile = [ "itchBin" ];
+  passAsFile = ["itchBin"];
 
   # as taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=itch
   installPhase = ''
@@ -59,6 +60,6 @@ stdenvNoCC.mkDerivation rec{
     homepage = "https://github.com/itchio/itch";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pasqui23 ];
+    maintainers = with maintainers; [pasqui23];
   };
 }

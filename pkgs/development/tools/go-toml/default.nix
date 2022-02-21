@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "go-toml";
   version = "1.9.4";
@@ -13,12 +16,12 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/pelletier/go-toml";
 
-  excludedPackages = [ "cmd/tomltestgen" ];
+  excludedPackages = ["cmd/tomltestgen"];
 
   meta = with lib; {
     description = "Go library for the TOML language";
     homepage = "https://github.com/pelletier/go-toml";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     license = licenses.mit;
   };
 }

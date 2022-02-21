@@ -1,12 +1,13 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  openssl,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "tealdeer";
   version = "1.5.0";
@@ -20,9 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-BIMaVeNSdKl2A9613S+wgmb6YmiF5YJU8pTMVQfjDwI=";
 
-  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
+  buildInputs =
+    if stdenv.isDarwin
+    then [Security]
+    else [openssl];
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [installShellFiles pkg-config];
 
   postInstall = ''
     installShellCompletion --bash --name tealdeer.bash bash_tealdeer
@@ -38,8 +42,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A very fast implementation of tldr in Rust";
     homepage = "https://github.com/dbrgn/tealdeer";
-    maintainers = with maintainers; [ davidak ];
-    license = with licenses; [ asl20 mit ];
+    maintainers = with maintainers; [davidak];
+    license = with licenses; [asl20 mit];
     mainProgram = "tldr";
   };
 }

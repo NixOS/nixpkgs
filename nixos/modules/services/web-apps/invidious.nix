@@ -1,8 +1,13 @@
-{ lib, config, pkgs, options, ... }:
-let
+{
+  lib,
+  config,
+  pkgs,
+  options,
+  ...
+}: let
   cfg = config.services.invidious;
   # To allow injecting secrets with jq, json (instead of yaml) is used
-  settingsFormat = pkgs.formats.json { };
+  settingsFormat = pkgs.formats.json {};
   inherit (lib) types;
 
   settingsFile = settingsFormat.generate "invidious-settings" cfg.settings;
@@ -10,22 +15,21 @@ let
   serviceConfig = {
     systemd.services.invidious = {
       description = "Invidious (An alternative YouTube front-end)";
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      wants = ["network-online.target"];
+      after = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
 
-      script =
-        let
-          jqFilter = "."
-            + lib.optionalString (cfg.database.host != null) "[0].db.password = \"'\"'\"$(cat ${lib.escapeShellArg cfg.database.passwordFile})\"'\"'\""
-            + " | .[0]"
-            + lib.optionalString (cfg.extraSettingsFile != null) " * .[1]";
-          jqFiles = [ settingsFile ] ++ lib.optional (cfg.extraSettingsFile != null) cfg.extraSettingsFile;
-        in
-        ''
-          export INVIDIOUS_CONFIG="$(${pkgs.jq}/bin/jq -s "${jqFilter}" ${lib.escapeShellArgs jqFiles})"
-          exec ${cfg.package}/bin/invidious
-        '';
+      script = let
+        jqFilter =
+          "."
+          + lib.optionalString (cfg.database.host != null) "[0].db.password = \"'\"'\"$(cat ${lib.escapeShellArg cfg.database.passwordFile})\"'\"'\""
+          + " | .[0]"
+          + lib.optionalString (cfg.extraSettingsFile != null) " * .[1]";
+        jqFiles = [settingsFile] ++ lib.optional (cfg.extraSettingsFile != null) cfg.extraSettingsFile;
+      in ''
+        export INVIDIOUS_CONFIG="$(${pkgs.jq}/bin/jq -s "${jqFilter}" ${lib.escapeShellArgs jqFiles})"
+        exec ${cfg.package}/bin/invidious
+      '';
 
       serviceConfig = {
         RestartSec = "2s";
@@ -37,37 +41,44 @@ let
         ProtectHome = true;
         ProtectKernelLogs = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6"];
         RestrictNamespaces = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
       };
     };
 
-    services.invidious.settings = {
-      inherit (cfg) port;
+    services.invidious.settings =
+      {
+        inherit (cfg) port;
 
-      # Automatically initialises and migrates the database if necessary
-      check_tables = true;
+        # Automatically initialises and migrates the database if necessary
+        check_tables = true;
 
-      db = {
-        user = lib.mkDefault "kemal";
-        dbname = lib.mkDefault "invidious";
-        port = cfg.database.port;
-        # Blank for unix sockets, see
-        # https://github.com/will/crystal-pg/blob/1548bb255210/src/pq/conninfo.cr#L100-L108
-        host = if cfg.database.host == null then "" else cfg.database.host;
-        # Not needed because peer authentication is enabled
-        password = lib.mkIf (cfg.database.host == null) "";
-      };
-    } // (lib.optionalAttrs (cfg.domain != null) {
-      inherit (cfg) domain;
-    });
+        db = {
+          user = lib.mkDefault "kemal";
+          dbname = lib.mkDefault "invidious";
+          port = cfg.database.port;
+          # Blank for unix sockets, see
+          # https://github.com/will/crystal-pg/blob/1548bb255210/src/pq/conninfo.cr#L100-L108
+          host =
+            if cfg.database.host == null
+            then ""
+            else cfg.database.host;
+          # Not needed because peer authentication is enabled
+          password = lib.mkIf (cfg.database.host == null) "";
+        };
+      }
+      // (lib.optionalAttrs (cfg.domain != null) {
+        inherit (cfg) domain;
+      });
 
-    assertions = [{
-      assertion = cfg.database.host != null -> cfg.database.passwordFile != null;
-      message = "If database host isn't null, database password needs to be set";
-    }];
+    assertions = [
+      {
+        assertion = cfg.database.host != null -> cfg.database.passwordFile != null;
+        message = "If database host isn't null, database password needs to be set";
+      }
+    ];
   };
 
   # Settings necessary for running with an automatically managed local database
@@ -99,9 +110,9 @@ let
 
     systemd.services.invidious-db-clean = {
       description = "Invidious database cleanup";
-      documentation = [ "https://docs.invidious.io/Database-Information-and-Maintenance.md" ];
+      documentation = ["https://docs.invidious.io/Database-Information-and-Maintenance.md"];
       startAt = lib.mkDefault "weekly";
-      path = [ config.services.postgresql.package ];
+      path = [config.services.postgresql.package];
       script = ''
         psql ${cfg.settings.db.dbname} ${cfg.settings.db.user} -c "DELETE FROM nonces * WHERE expire < current_timestamp"
         psql ${cfg.settings.db.dbname} ${cfg.settings.db.user} -c "TRUNCATE TABLE videos"
@@ -113,8 +124,8 @@ let
     };
 
     systemd.services.invidious = {
-      requires = [ "postgresql.service" ];
-      after = [ "postgresql.service" ];
+      requires = ["postgresql.service"];
+      after = ["postgresql.service"];
 
       serviceConfig = {
         User = "invidious";
@@ -138,13 +149,14 @@ let
       };
     };
 
-    assertions = [{
-      assertion = cfg.domain != null;
-      message = "To use services.invidious.nginx, you need to set services.invidious.domain";
-    }];
+    assertions = [
+      {
+        assertion = cfg.domain != null;
+        message = "To use services.invidious.nginx, you need to set services.invidious.domain";
+      }
+    ];
   };
-in
-{
+in {
   options.services.invidious = {
     enable = lib.mkEnableOption "Invidious";
 
@@ -157,7 +169,7 @@ in
 
     settings = lib.mkOption {
       type = settingsFormat.type;
-      default = { };
+      default = {};
       description = ''
         The settings Invidious should use.
 

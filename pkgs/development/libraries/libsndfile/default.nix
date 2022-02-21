@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkg-config, python3
-, Carbon, AudioToolbox
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  autogen,
+  flac,
+  libogg,
+  libopus,
+  libvorbis,
+  pkg-config,
+  python3,
+  Carbon,
+  AudioToolbox,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libsndfile";
   version = "1.0.31";
@@ -13,30 +24,31 @@ stdenv.mkDerivation rec {
     sha256 = "1alba3iv8i7i2jb5fd6q5s7j9bcj48sf28nfjd3qigz2n2is5jl2";
   };
 
-  nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
-  buildInputs = [ flac libogg libopus libvorbis ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
+  nativeBuildInputs = [autoreconfHook autogen pkg-config python3];
+  buildInputs =
+    [flac libogg libopus libvorbis]
+    ++ lib.optionals stdenv.isDarwin [Carbon AudioToolbox];
 
   enableParallelBuilding = true;
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = ["bin" "dev" "out" "man" "doc"];
 
   # need headers from the Carbon.framework in /System/Library/Frameworks to
   # compile this on darwin -- not sure how to handle
   preConfigure = lib.optionalString stdenv.isDarwin
-    ''
-      NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
-    '';
+  ''
+    NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
+  '';
 
   # Needed on Darwin.
   NIX_CFLAGS_LINK = "-logg -lvorbis";
 
   meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";
-    homepage    = "https://libsndfile.github.io/libsndfile/";
-    license     = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    homepage = "https://libsndfile.github.io/libsndfile/";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [lovek323];
+    platforms = platforms.unix;
 
     longDescription = ''
       Libsndfile is a C library for reading and writing files containing

@@ -1,14 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.plantuml-server;
-
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.plantuml-server;
+in {
   options = {
     services.plantuml-server = {
       enable = mkEnableOption "PlantUML server";
@@ -95,23 +93,29 @@ in
 
     systemd.services.plantuml-server = {
       description = "PlantUML server";
-      wantedBy = [ "multi-user.target" ];
-      path = [ cfg.home ];
+      wantedBy = ["multi-user.target"];
+      path = [cfg.home];
       environment = {
         PLANTUML_LIMIT_SIZE = builtins.toString cfg.plantumlLimitSize;
         GRAPHVIZ_DOT = "${cfg.graphvizPackage}/bin/dot";
-        PLANTUML_STATS = if cfg.plantumlStats then "on" else "off";
+        PLANTUML_STATS =
+          if cfg.plantumlStats
+          then "on"
+          else "off";
         HTTP_AUTHORIZATION = cfg.httpAuthorization;
-        ALLOW_PLANTUML_INCLUDE = if cfg.allowPlantumlInclude then "true" else "false";
+        ALLOW_PLANTUML_INCLUDE =
+          if cfg.allowPlantumlInclude
+          then "true"
+          else "false";
       };
       script = ''
-      ${pkgs.jre}/bin/java \
-        -jar ${pkgs.jetty}/start.jar \
-          --module=deploy,http,jsp \
-          jetty.home=${pkgs.jetty} \
-          jetty.base=${cfg.package} \
-          jetty.http.host=${cfg.listenHost} \
-          jetty.http.port=${builtins.toString cfg.listenPort}
+        ${pkgs.jre}/bin/java \
+          -jar ${pkgs.jetty}/start.jar \
+            --module=deploy,http,jsp \
+            jetty.home=${pkgs.jetty} \
+            jetty.base=${cfg.package} \
+            jetty.http.host=${cfg.listenHost} \
+            jetty.http.port=${builtins.toString cfg.listenPort}
       '';
       serviceConfig = {
         User = cfg.user;
@@ -121,5 +125,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ truh ];
+  meta.maintainers = with lib.maintainers; [truh];
 }

@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "jsonwatch";
   version = "0.6.0";
@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/dbohdan/jsonwatch";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

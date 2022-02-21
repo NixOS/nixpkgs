@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, fetchpatch}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "libxdg-basedir";
   version = "1.2.0";

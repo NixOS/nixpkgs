@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_15, libsecret }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron_15,
+  libsecret,
+}:
 stdenv.mkDerivation rec {
   pname = "todoist-electron";
   version = "1.0.3";
@@ -18,7 +25,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -38,14 +45,14 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron_15}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc libsecret ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [stdenv.cc.cc libsecret]}"
   '';
 
   meta = with lib; {
     homepage = "https://todoist.com";
     description = "The official Todoist electron app";
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     license = licenses.unfree;
-    maintainers = with maintainers; [ i077 kylesferrazza ];
+    maintainers = with maintainers; [i077 kylesferrazza];
   };
 }

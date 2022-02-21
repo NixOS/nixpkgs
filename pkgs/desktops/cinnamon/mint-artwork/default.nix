@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, nixos-artwork
+{
+  stdenv,
+  lib,
+  fetchurl,
+  glib,
+  nixos-artwork,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mint-artwork";
   version = "1.5.4";

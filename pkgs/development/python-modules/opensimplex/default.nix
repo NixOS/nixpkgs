@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "opensimplex";
   version = "0.4.2";
@@ -16,11 +16,11 @@ buildPythonPackage rec {
     sha256 = "zljS0yu3cHF2Vz3rFkwLXiHnKjo970MDIrC/56FoHa4=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [numpy];
 
-  checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests/test_opensimplex.py" ];
-  pythonImportsCheck = [ "opensimplex" ];
+  checkInputs = [pytestCheckHook];
+  pytestFlagsArray = ["tests/test_opensimplex.py"];
+  pythonImportsCheck = ["opensimplex"];
 
   meta = with lib; {
     description = "OpenSimplex Noise functions for 2D, 3D and 4D";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
       directional artifacts characteristic of Perlin noise.
     '';
     homepage = "https://github.com/lmas/opensimplex";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [emilytrau];
   };
 }

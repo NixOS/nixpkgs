@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk11, curl, autoPatchelfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  zlib,
+  xorg,
+  freetype,
+  jdk11,
+  curl,
+  autoPatchelfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "codeql";
   version = "2.8.0";
@@ -42,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Semantic code analysis engine";
     homepage = "https://codeql.github.com";
-    maintainers = [ maintainers.dump_stack ];
+    maintainers = [maintainers.dump_stack];
     license = licenses.unfree;
   };
 }

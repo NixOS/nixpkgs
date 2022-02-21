@@ -1,5 +1,9 @@
-{ python_openzwave, fetchPypi, openzwave, fetchFromGitHub }:
-
+{
+  python_openzwave,
+  fetchPypi,
+  openzwave,
+  fetchFromGitHub,
+}:
 (python_openzwave.override {
   openzwave = openzwave.overrideAttrs (oldAttrs: {
     version = "unstable-2020-03-24";
@@ -11,9 +15,10 @@
       sha256 = "0p2869fwidz1wcqzfm52cwm9ab96pmwkna3d4yvvh21nh09cvmwk";
     };
 
-    patches = [ ];
+    patches = [];
   });
-}).overridePythonAttrs (oldAttrs: rec {
+})
+.overridePythonAttrs (oldAttrs: rec {
   pname = "homeassistant_pyozw";
   version = "0.1.10";
 

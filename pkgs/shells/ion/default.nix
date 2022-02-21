@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "ion";
   version = "unstable-2021-05-10";
@@ -17,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     description = "Modern system shell with simple (and powerful) syntax";
     homepage = "https://gitlab.redox-os.org/redox-os/ion";
     license = licenses.mit;
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [dywedir];
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin [

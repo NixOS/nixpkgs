@@ -1,12 +1,12 @@
-{ buildDunePackage
-, fetchzip
-, findlib
-, lib
-, menhir
-, ocaml
-, re
+{
+  buildDunePackage,
+  fetchzip,
+  findlib,
+  lib,
+  menhir,
+  ocaml,
+  re,
 }:
-
 buildDunePackage rec {
   pname = "coin";
   version = "0.1.3";
@@ -24,15 +24,15 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  nativeBuildInputs = [ menhir ];
+  nativeBuildInputs = [menhir];
 
-  checkInputs = [ re ];
+  checkInputs = [re];
   doCheck = true;
 
   meta = {
     description = "A library to normalize an KOI8-{U,R} input to Unicode";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/coin";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

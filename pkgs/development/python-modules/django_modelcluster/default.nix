@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytz
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytz,
+  pythonOlder,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "django-modelcluster";
   version = "5.2";
@@ -19,13 +19,12 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pytz six ];
+  propagatedBuildInputs = [pytz six];
 
   meta = with lib; {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";
     homepage = "https://github.com/torchbox/django-modelcluster/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ desiderius ];
+    maintainers = with maintainers; [desiderius];
   };
-
 }

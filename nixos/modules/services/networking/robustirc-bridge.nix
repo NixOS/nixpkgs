@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.robustirc-bridge;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.robustirc-bridge;
+in {
   options = {
     services.robustirc-bridge = {
       enable = mkEnableOption "RobustIRC bridge";
@@ -28,8 +29,8 @@ in
         "man:robustirc-bridge(1)"
         "https://robustirc.net/"
       ];
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         DynamicUser = true;

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, frozenlist
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  frozenlist,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiosignal";
   version = "1.2.0"; # re-enable tests after 1.2.0
@@ -35,12 +35,12 @@ buildPythonPackage rec {
       --replace "--cov=aiosignal" ""
   '';
 
-  pythonImportsCheck = [ "aiosignal" ];
+  pythonImportsCheck = ["aiosignal"];
 
   meta = with lib; {
     description = "Python list of registered asynchronous callbacks";
     homepage = "https://github.com/aio-libs/aiosignal";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

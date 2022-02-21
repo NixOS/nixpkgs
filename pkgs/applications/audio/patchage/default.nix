@@ -1,7 +1,18 @@
-{ lib, stdenv, alsa-lib, boost, dbus-glib, fetchsvn, ganv, glibmm
-, gtkmm2, libjack2, pkg-config, python2, wafHook
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  boost,
+  dbus-glib,
+  fetchsvn,
+  ganv,
+  glibmm,
+  gtkmm2,
+  libjack2,
+  pkg-config,
+  python2,
+  wafHook,
 }:
-
 stdenv.mkDerivation {
   pname = "patchage";
   version = "1.0.1";
@@ -12,8 +23,16 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    alsa-lib boost dbus-glib ganv glibmm gtkmm2 libjack2
-    pkg-config python2 wafHook
+    alsa-lib
+    boost
+    dbus-glib
+    ganv
+    glibmm
+    gtkmm2
+    libjack2
+    pkg-config
+    python2
+    wafHook
   ];
 
   meta = {
@@ -21,6 +40,6 @@ stdenv.mkDerivation {
     homepage = "http://non.tuxfamily.org";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nico202 ];
+    maintainers = [lib.maintainers.nico202];
   };
 }

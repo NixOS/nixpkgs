@@ -1,35 +1,37 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  cfg = config.networking.nftables;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.networking.nftables;
+in {
   ###### interface
 
   options = {
     networking.nftables.enable = mkOption {
       type = types.bool;
       default = false;
-      description =
-        ''
-          Whether to enable nftables.  nftables is a Linux-based packet
-          filtering framework intended to replace frameworks like iptables.
+      description = ''
+        Whether to enable nftables.  nftables is a Linux-based packet
+        filtering framework intended to replace frameworks like iptables.
 
-          This conflicts with the standard networking firewall, so make sure to
-          disable it before using nftables.
+        This conflicts with the standard networking firewall, so make sure to
+        disable it before using nftables.
 
-          Note that if you have Docker enabled you will not be able to use
-          nftables without intervention. Docker uses iptables internally to
-          setup NAT for containers. This module disables the ip_tables kernel
-          module, however Docker automatically loads the module. Please see [1]
-          for more information.
+        Note that if you have Docker enabled you will not be able to use
+        nftables without intervention. Docker uses iptables internally to
+        setup NAT for containers. This module disables the ip_tables kernel
+        module, however Docker automatically loads the module. Please see [1]
+        for more information.
 
-          There are other programs that use iptables internally too, such as
-          libvirt. For information on how the two firewalls interact, see [2].
+        There are other programs that use iptables internally too, such as
+        libvirt. For information on how the two firewalls interact, see [2].
 
-          [1]: https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273
-          [2]: https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F
-        '';
+        [1]: https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273
+        [2]: https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F
+      '';
     };
     networking.nftables.ruleset = mkOption {
       type = types.lines;
@@ -76,11 +78,10 @@ in
           }
         }
       '';
-      description =
-        ''
-          The ruleset to be used with nftables.  Should be in a format that
-          can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
-        '';
+      description = ''
+        The ruleset to be used with nftables.  Should be in a format that
+        can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
+      '';
     };
     networking.nftables.rulesetFile = mkOption {
       type = types.path;
@@ -89,29 +90,30 @@ in
         text = cfg.ruleset;
       };
       defaultText = literalDocBook ''a file with the contents of <option>networking.nftables.ruleset</option>'';
-      description =
-        ''
-          The ruleset file to be used with nftables.  Should be in a format that
-          can be loaded using "nft -f".  The ruleset is updated atomically.
-        '';
+      description = ''
+        The ruleset file to be used with nftables.  Should be in a format that
+        can be loaded using "nft -f".  The ruleset is updated atomically.
+      '';
     };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = config.networking.firewall.enable == false;
-      message = "You can not use nftables and iptables at the same time. networking.firewall.enable must be set to false.";
-    }];
-    boot.blacklistedKernelModules = [ "ip_tables" ];
-    environment.systemPackages = [ pkgs.nftables ];
+    assertions = [
+      {
+        assertion = config.networking.firewall.enable == false;
+        message = "You can not use nftables and iptables at the same time. networking.firewall.enable must be set to false.";
+      }
+    ];
+    boot.blacklistedKernelModules = ["ip_tables"];
+    environment.systemPackages = [pkgs.nftables];
     networking.networkmanager.firewallBackend = mkDefault "nftables";
     systemd.services.nftables = {
       description = "nftables firewall";
-      before = [ "network-pre.target" ];
-      wants = [ "network-pre.target" ];
-      wantedBy = [ "multi-user.target" ];
+      before = ["network-pre.target"];
+      wants = ["network-pre.target"];
+      wantedBy = ["multi-user.target"];
       reloadIfChanged = true;
       serviceConfig = let
         rulesScript = pkgs.writeScript "nftables-rules" ''

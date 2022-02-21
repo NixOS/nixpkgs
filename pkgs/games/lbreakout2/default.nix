@@ -1,9 +1,17 @@
-{ lib, stdenv, fetchurl, SDL, SDL_mixer, zlib, libpng, libintl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  SDL_mixer,
+  zlib,
+  libpng,
+  libintl,
+}:
 stdenv.mkDerivation rec {
   pname = "lbreakout2";
   version = "2.6.5";
-  buildInputs = [ SDL SDL_mixer zlib libpng libintl ];
+  buildInputs = [SDL SDL_mixer zlib libpng libintl];
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
@@ -14,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Breakout clone from the LGames series";
     homepage = "http://lgames.sourceforge.net/LBreakout2/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ciil ];
+    maintainers = [maintainers.ciil];
     platforms = platforms.unix;
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };

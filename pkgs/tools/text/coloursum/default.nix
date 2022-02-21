@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "coloursum";
   version = "0.2.0";
@@ -19,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "Colourise your checksum output";
     homepage = "https://github.com/ticky/coloursum";
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
   };
 }

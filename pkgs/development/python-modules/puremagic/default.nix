@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "puremagic";
   version = "1.12";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Implementation of magic file detection";
     homepage = "https://github.com/cdgriffith/puremagic";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [globin];
   };
 }

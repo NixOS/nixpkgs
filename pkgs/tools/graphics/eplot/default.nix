@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, gnuplot, ruby }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnuplot,
+  ruby,
+}:
 stdenv.mkDerivation {
   pname = "eplot";
   version = "2.09";
@@ -16,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "0fg31g8mrcx14h2rjcf091cbd924n19z55iscaiflspifya30yhd";
   };
 
-  buildInputs = [ ruby ];
+  buildInputs = [ruby];
 
   dontUnpack = true;
 
@@ -47,6 +52,6 @@ stdenv.mkDerivation {
     homepage = "https://perso.liris.cnrs.fr/christian.wolf/software/eplot/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor shamilton ];
+    maintainers = with maintainers; [bjornfor shamilton];
   };
 }

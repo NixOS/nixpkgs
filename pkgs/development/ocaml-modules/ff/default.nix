@@ -1,5 +1,10 @@
-{ lib, fetchFromGitLab, buildDunePackage, zarith, alcotest }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  zarith,
+  alcotest,
+}:
 buildDunePackage rec {
   pname = "ff";
   version = "0.4.0";
@@ -27,6 +32,6 @@ buildDunePackage rec {
     homepage = "https://gitlab.com/dannywillems/ocaml-ff";
     description = "OCaml implementation of Finite Field operations";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

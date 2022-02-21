@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, boost, gd, libsndfile, libmad, libid3tag }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  boost,
+  gd,
+  libsndfile,
+  libmad,
+  libid3tag,
+}:
 stdenv.mkDerivation rec {
   pname = "audiowaveform";
   version = "1.5.1";
@@ -11,9 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WODAgiwZ7UfoukTcujXE5atw/Z03+Vo6aR2jubPwQeU=";
   };
 
-  nativeBuildInputs = [ cmake gtest ];
+  nativeBuildInputs = [cmake gtest];
 
-  buildInputs = [ boost gd libsndfile libmad libid3tag ];
+  buildInputs = [boost gd libsndfile libmad libid3tag];
 
   preConfigure = ''
     ln -s ${gtest.src} googletest
@@ -32,6 +42,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/bbc/audiowaveform/blob/${version}/ChangeLog";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ edbentley ];
+    maintainers = with maintainers; [edbentley];
   };
 }

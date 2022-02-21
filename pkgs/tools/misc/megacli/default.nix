@@ -1,5 +1,12 @@
-{ lib, stdenv, rpmextract, ncurses5, patchelf, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  rpmextract,
+  ncurses5,
+  patchelf,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "megacli";
   version = "8.07.14";
@@ -9,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sdn58fbmd3fj4nzbajq3gcyw71ilgdh45r5p4sa6xmb7np55cfr";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
   buildInputs = [rpmextract ncurses5];
   libPath =
     lib.makeLibraryPath
-       [ stdenv.cc.cc stdenv.cc.libc ncurses5 ];
+    [stdenv.cc.cc stdenv.cc.libc ncurses5];
 
   buildCommand = ''
     unzip ${src}
@@ -35,6 +42,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "CLI program for LSI MegaRAID cards, which also works with some Dell PERC RAID cards";
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

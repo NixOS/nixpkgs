@@ -1,11 +1,15 @@
 import ./make-test-python.nix (
-  { pkgs, ... }: {
+  {pkgs, ...}: {
     name = "dnsdist";
     meta = with pkgs.lib; {
-      maintainers = with maintainers; [ jojosch ];
+      maintainers = with maintainers; [jojosch];
     };
 
-    machine = { pkgs, lib, ... }: {
+    machine = {
+      pkgs,
+      lib,
+      ...
+    }: {
       services.bind = {
         enable = true;
         extraOptions = "empty-zones-enable no;";
@@ -32,7 +36,7 @@ import ./make-test-python.nix (
         '';
       };
 
-      environment.systemPackages = with pkgs; [ dig ];
+      environment.systemPackages = with pkgs; [dig];
     };
 
     testScript = ''

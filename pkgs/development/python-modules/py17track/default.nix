@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, aresponses
-, async-timeout
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-timeout,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
 }:
-
 buildPythonPackage rec {
   pname = "py17track";
   version = "2021.12.2";
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to track package info from 17track.com";
     homepage = "https://github.com/bachya/py17track";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

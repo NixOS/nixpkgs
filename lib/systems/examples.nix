@@ -1,16 +1,13 @@
 # These can be passed to nixpkgs as either the `localSystem` or
 # `crossSystem`. They are put here for user convenience, but also used by cross
 # tests and linux cross stdenv building, so handle with care!
-{ lib }:
-let
-  platforms = import ./platforms.nix { inherit lib; };
+{lib}: let
+  platforms = import ./platforms.nix {inherit lib;};
 
   riscv = bits: {
     config = "riscv${bits}-unknown-linux-gnu";
   };
-in
-
-rec {
+in rec {
   #
   # Linux
   #
@@ -23,28 +20,36 @@ rec {
 
   ppc64 = {
     config = "powerpc64-unknown-linux-gnu";
-    gcc = { abi = "elfv2"; }; # for gcc configuration
+    gcc = {abi = "elfv2";}; # for gcc configuration
   };
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
-    gcc = { abi = "elfv2"; }; # for gcc configuration
+    gcc = {abi = "elfv2";}; # for gcc configuration
   };
 
-  sheevaplug = {
-    config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.sheevaplug;
+  sheevaplug =
+    {
+      config = "armv5tel-unknown-linux-gnueabi";
+    }
+    // platforms.sheevaplug;
 
-  raspberryPi = {
-    config = "armv6l-unknown-linux-gnueabihf";
-  } // platforms.raspberrypi;
+  raspberryPi =
+    {
+      config = "armv6l-unknown-linux-gnueabihf";
+    }
+    // platforms.raspberrypi;
 
-  remarkable1 = {
-    config = "armv7l-unknown-linux-gnueabihf";
-  } // platforms.zero-gravitas;
+  remarkable1 =
+    {
+      config = "armv7l-unknown-linux-gnueabihf";
+    }
+    // platforms.zero-gravitas;
 
-  remarkable2 = {
-    config = "armv7l-unknown-linux-gnueabihf";
-  } // platforms.zero-sugar;
+  remarkable2 =
+    {
+      config = "armv7l-unknown-linux-gnueabihf";
+    }
+    // platforms.zero-sugar;
 
   armv7l-hf-multiplatform = {
     config = "armv7l-unknown-linux-gnueabihf";
@@ -54,13 +59,15 @@ rec {
     config = "aarch64-unknown-linux-gnu";
   };
 
-  armv7a-android-prebuilt = {
-    config = "armv7a-unknown-linux-androideabi";
-    rustc.config = "armv7-linux-androideabi";
-    sdkVer = "29";
-    ndkVer = "21";
-    useAndroidPrebuilt = true;
-  } // platforms.armv7a-android;
+  armv7a-android-prebuilt =
+    {
+      config = "armv7a-unknown-linux-androideabi";
+      rustc.config = "armv7-linux-androideabi";
+      sdkVer = "29";
+      ndkVer = "21";
+      useAndroidPrebuilt = true;
+    }
+    // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
@@ -81,31 +88,39 @@ rec {
 
   scaleway-c1 = armv7l-hf-multiplatform // platforms.scaleway-c1;
 
-  pogoplug4 = {
-    config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.pogoplug4;
+  pogoplug4 =
+    {
+      config = "armv5tel-unknown-linux-gnueabi";
+    }
+    // platforms.pogoplug4;
 
-  ben-nanonote = {
-    config = "mipsel-unknown-linux-uclibc";
-  } // platforms.ben_nanonote;
+  ben-nanonote =
+    {
+      config = "mipsel-unknown-linux-uclibc";
+    }
+    // platforms.ben_nanonote;
 
-  fuloongminipc = {
-    config = "mipsel-unknown-linux-gnu";
-  } // platforms.fuloong2f_n32;
+  fuloongminipc =
+    {
+      config = "mipsel-unknown-linux-gnu";
+    }
+    // platforms.fuloong2f_n32;
 
-  muslpi = raspberryPi // {
-    config = "armv6l-unknown-linux-musleabihf";
-  };
+  muslpi =
+    raspberryPi
+    // {
+      config = "armv6l-unknown-linux-musleabihf";
+    };
 
   aarch64-multiplatform-musl = {
     config = "aarch64-unknown-linux-musl";
   };
 
-  gnu64 = { config = "x86_64-unknown-linux-gnu"; };
-  gnu32  = { config = "i686-unknown-linux-gnu"; };
+  gnu64 = {config = "x86_64-unknown-linux-gnu";};
+  gnu32 = {config = "i686-unknown-linux-gnu";};
 
-  musl64 = { config = "x86_64-unknown-linux-musl"; };
-  musl32  = { config = "i686-unknown-linux-musl"; };
+  musl64 = {config = "x86_64-unknown-linux-musl";};
+  musl32 = {config = "i686-unknown-linux-musl";};
 
   riscv64 = riscv "64";
   riscv32 = riscv "32";

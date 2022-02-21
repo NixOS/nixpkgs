@@ -1,5 +1,8 @@
-{ python3Packages, fetchFromGitHub, lib }:
-
+{
+  python3Packages,
+  fetchFromGitHub,
+  lib,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
   version = "2.5.4";
@@ -28,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     ./update_hack.patch
   ];
 
-  checkInputs = [ python3Packages.pytestCheckHook ];
+  checkInputs = [python3Packages.pytestCheckHook];
 
   # disable test that fail (networking, etc)
   disabledTests = [
@@ -41,6 +44,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/jkwill87/mnamer";
     description = "An intelligent and highly configurable media organization utility";
     license = licenses.mit;
-    maintainers = with maintainers; [ urlordjames ];
+    maintainers = with maintainers; [urlordjames];
   };
 }

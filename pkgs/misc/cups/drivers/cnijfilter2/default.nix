@@ -1,6 +1,16 @@
-{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb1, libtool
-, withDebug ? false }:
-
+{
+  stdenv,
+  lib,
+  fetchzip,
+  autoconf,
+  automake,
+  cups,
+  glib,
+  libxml2,
+  libusb1,
+  libtool,
+  withDebug ? false,
+}:
 stdenv.mkDerivation {
   pname = "cnijfilter2";
 
@@ -12,7 +22,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    cups automake autoconf glib libxml2 libusb1 libtool
+    cups
+    automake
+    autoconf
+    glib
+    libxml2
+    libusb1
+    libtool
   ];
 
   # lgmon3's --enable-libdir flag is used soley for specifying in which
@@ -22,61 +38,64 @@ stdenv.mkDerivation {
   #
   # Note that the drivers attempt to dlopen
   # $out/lib/cups/filter/libcnbpcnclapicom2.so
-  buildPhase = ''
-    mkdir -p $out/lib
-    cp com/libs_bin64/* $out/lib
-    mkdir -p $out/lib/cups/filter
-    ln -s $out/lib/libcnbpcnclapicom2.so $out/lib/cups/filter
+  buildPhase =
+    ''
+      mkdir -p $out/lib
+      cp com/libs_bin64/* $out/lib
+      mkdir -p $out/lib/cups/filter
+      ln -s $out/lib/libcnbpcnclapicom2.so $out/lib/cups/filter
 
-    export NIX_LDFLAGS="$NIX_LDFLAGS -L$out/lib"
-  '' + lib.optionalString withDebug ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D__DEBUG__ -DDEBUG_LOG"
-  '' + ''
+      export NIX_LDFLAGS="$NIX_LDFLAGS -L$out/lib"
+    ''
+    + lib.optionalString withDebug ''
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D__DEBUG__ -DDEBUG_LOG"
+    ''
+    + ''
 
-    (
-      cd lgmon3
-      substituteInPlace src/Makefile.am \
-        --replace /usr/include/libusb-1.0 \
-                  ${libusb1.dev}/include/libusb-1.0
-      ./autogen.sh --prefix=$out --enable-progpath=$out/bin \
-                   --datadir=$out/share \
-                   --enable-libdir=/var/cache/cups
-      make
-    )
+      (
+        cd lgmon3
+        substituteInPlace src/Makefile.am \
+          --replace /usr/include/libusb-1.0 \
+                    ${libusb1.dev}/include/libusb-1.0
+        ./autogen.sh --prefix=$out --enable-progpath=$out/bin \
+                     --datadir=$out/share \
+                     --enable-libdir=/var/cache/cups
+        make
+      )
 
-    (
-      cd cmdtocanonij2
-      ./autogen.sh --prefix=$out
-      make
-    )
+      (
+        cd cmdtocanonij2
+        ./autogen.sh --prefix=$out
+        make
+      )
 
-    (
-      cd cnijbe2
-      substituteInPlace src/Makefile.am \
-        --replace "/usr/lib/cups/backend" \
-                  "$out/lib/cups/backend"
-      ./autogen.sh --prefix=$out --enable-progpath=$out/bin
-      make
-    )
+      (
+        cd cnijbe2
+        substituteInPlace src/Makefile.am \
+          --replace "/usr/lib/cups/backend" \
+                    "$out/lib/cups/backend"
+        ./autogen.sh --prefix=$out --enable-progpath=$out/bin
+        make
+      )
 
-    (
-      cd rastertocanonij
-      ./autogen.sh --prefix=$out --enable-progpath=$out/bin
-      make
-    )
+      (
+        cd rastertocanonij
+        ./autogen.sh --prefix=$out --enable-progpath=$out/bin
+        make
+      )
 
-    (
-      cd tocanonij
-      ./autogen.sh --prefix=$out --enable-progpath=$out/bin
-      make
-    )
+      (
+        cd tocanonij
+        ./autogen.sh --prefix=$out --enable-progpath=$out/bin
+        make
+      )
 
-    (
-      cd tocnpwg
-      ./autogen.sh --prefix=$out --enable-progpath=$out/bin
-      make
-    )
-  '';
+      (
+        cd tocnpwg
+        ./autogen.sh --prefix=$out --enable-progpath=$out/bin
+        make
+      )
+    '';
 
   installPhase = ''
     (
@@ -128,7 +147,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://hk.canon/en/support/0101048401/1";
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ cstrahan ];
+    platforms = ["i686-linux" "x86_64-linux"];
+    maintainers = with maintainers; [cstrahan];
   };
 }

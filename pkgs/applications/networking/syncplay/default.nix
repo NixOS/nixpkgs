@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pyside2, shiboken2, twisted, certifi, qt5 }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  pyside2,
+  shiboken2,
+  twisted,
+  certifi,
+  qt5,
+}:
 buildPythonApplication rec {
   pname = "syncplay";
   version = "1.6.9";
@@ -13,10 +21,10 @@ buildPythonApplication rec {
     sha256 = "0qm3qn4a1nahhs7q81liz514n9blsi107g9s9xfw2i8pzi7v9v0v";
   };
 
-  propagatedBuildInputs = [ pyside2 shiboken2 twisted certifi ] ++ twisted.extras.tls;
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  propagatedBuildInputs = [pyside2 shiboken2 twisted certifi] ++ twisted.extras.tls;
+  nativeBuildInputs = [qt5.wrapQtAppsHook];
 
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
+  makeFlags = ["DESTDIR=" "PREFIX=$(out)"];
 
   postFixup = ''
     wrapQtApp $out/bin/syncplay
@@ -27,6 +35,6 @@ buildPythonApplication rec {
     description = "Free software that synchronises media players";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ Enzime ];
+    maintainers = with maintainers; [Enzime];
   };
 }

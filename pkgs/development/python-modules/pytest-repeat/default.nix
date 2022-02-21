@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-repeat";
   version = "0.9.1";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Pytest plugin for repeating tests";
     homepage = "https://github.com/pytest-dev/pytest-repeat";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

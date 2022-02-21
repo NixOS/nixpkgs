@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, click
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  click,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "click-default-group";
   version = "1.2.2";
@@ -26,16 +26,16 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ click ];
+  propagatedBuildInputs = [click];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "click_default_group" ];
+  pythonImportsCheck = ["click_default_group"];
 
   meta = with lib; {
     homepage = "https://github.com/click-contrib/click-default-group";
     description = "Group to invoke a command without explicit subcommand name";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [jakewaksbaum];
   };
 }

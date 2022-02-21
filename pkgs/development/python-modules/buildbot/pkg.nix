@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  buildbot,
+}:
 buildPythonPackage rec {
   pname = "buildbot-pkg";
   inherit (buildbot) version;
@@ -18,14 +23,14 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [ "buildbot_pkg" ];
+  pythonImportsCheck = ["buildbot_pkg"];
 
   disabled = !isPy3k;
 
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
-    maintainers = with maintainers; [ ryansydnor lopsided98 ];
+    maintainers = with maintainers; [ryansydnor lopsided98];
     license = licenses.gpl2;
   };
 }

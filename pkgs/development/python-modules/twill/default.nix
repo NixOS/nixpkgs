@@ -1,7 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, nose
-, lxml
-, requests
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  lxml,
+  requests,
+  pyparsing,
 }:
 buildPythonPackage rec {
   pname = "twill";
@@ -12,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "57cde4c3a2265f1a14d80007aa4f66c2135d509555499e9b156d2b4cf5048c2c";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   propagatedBuildInputs = [
     lxml
@@ -25,7 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://twill-tools.github.io/twill/";
     description = "A simple scripting language for Web browsing";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [mic92];
   };
 }

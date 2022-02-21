@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, django
-, djangorestframework
-, pytz
-, pytest
-, pytest-lazy-fixture
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  django,
+  djangorestframework,
+  pytz,
+  pytest,
+  pytest-lazy-fixture,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "django-timezone-field";
   version = "4.2.3";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Django app providing database, form and serializer fields for pytz timezone objects";
     homepage = "https://github.com/mfogel/django-timezone-field";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

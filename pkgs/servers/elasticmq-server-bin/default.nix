@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, jdk, jre, makeWrapper, runCommand, python3Packages, writeText }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  jre,
+  makeWrapper,
+  runCommand,
+  python3Packages,
+  writeText,
+}: let
   elasticmq-server = stdenv.mkDerivation rec {
     pname = "elasticmq-server";
     version = "1.2.0";
@@ -13,7 +21,7 @@ let
     # don't do anything?
     unpackPhase = "${jdk}/bin/jar xf $src favicon.png";
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
 
     installPhase = ''
       mkdir -p $out/bin $out/share/elasticmq-server
@@ -30,11 +38,12 @@ let
       description = "Message queueing system with Java, Scala and Amazon SQS-compatible interfaces";
       license = licenses.asl20;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ peterromfeldhk ];
+      maintainers = with maintainers; [peterromfeldhk];
     };
   };
-in elasticmq-server.overrideAttrs (_: {
-  passthru.tests.elasticmqTest = import ./elasticmq-test.nix {
-    inherit elasticmq-server runCommand python3Packages writeText;
-  };
-})
+in
+  elasticmq-server.overrideAttrs (_: {
+    passthru.tests.elasticmqTest = import ./elasticmq-test.nix {
+      inherit elasticmq-server runCommand python3Packages writeText;
+    };
+  })

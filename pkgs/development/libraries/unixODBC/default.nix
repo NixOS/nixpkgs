@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "unixODBC";
   version = "2.3.9";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UoM+rD1oHIsMmlpl8uvXRbOpZPII/HSPl35EAVoxsgc=";
   };
 
-  configureFlags = [ "--disable-gui" "--sysconfdir=/etc" ];
+  configureFlags = ["--disable-gui" "--sysconfdir=/etc"];
 
   meta = with lib; {
     description = "ODBC driver manager for Unix";

@@ -1,14 +1,14 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, platformdirs
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  platformdirs,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "platformdirs";
   version = "2.4.1";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Python module for determining appropriate platform-specific directories";
     homepage = "https://platformdirs.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

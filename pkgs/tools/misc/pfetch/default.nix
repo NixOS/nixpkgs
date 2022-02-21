@@ -1,5 +1,8 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
-
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "pfetch";
   version = "0.6.0";
@@ -22,6 +25,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/dylanaraps/pfetch";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ equirosa ];
+    maintainers = with maintainers; [equirosa];
   };
 }

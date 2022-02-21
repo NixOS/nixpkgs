@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, cffi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cffi,
+}:
 buildPythonPackage rec {
   pname = "milksnake";
   version = "0.1.5";
@@ -11,7 +15,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-   cffi
+    cffi
   ];
 
   # tests rely on pip/venv
@@ -21,6 +25,6 @@ buildPythonPackage rec {
     description = "A python library that extends setuptools for binary extensions";
     homepage = "https://github.com/getsentry/milksnake";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
   };
 }

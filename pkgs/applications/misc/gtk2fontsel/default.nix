@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, pkg-config, gtk2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+}:
 stdenv.mkDerivation rec {
   version = "0.1";
   pname = "gtk2fontsel";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0s2sj19n8ys92q9832hkn36ld91bb4qavicc6nygkry6qdpkkmjw";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ stdenv gtk2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [stdenv gtk2];
 
   preferLocalBuild = true;
 
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "http://gtk2fontsel.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/gtk2fontsel/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.prikhi ];
+    maintainers = [maintainers.prikhi];
     platforms = platforms.linux;
   };
 }

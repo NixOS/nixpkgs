@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libslirp";
   version = "4.6.1";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-AM6NxO4hjFiUAzRYbXV3fe18xwCBmzdM63n93UOxjKw=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [meson ninja pkg-config];
 
-  buildInputs = [ glib ];
+  buildInputs = [glib];
 
   postPatch = ''
     echo ${version} > .tarball-version
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "General purpose TCP-IP emulator";
     homepage = "https://gitlab.freedesktop.org/slirp/libslirp";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.unix;
   };
 }

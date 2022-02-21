@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "anonip";
   version = "1.1.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Tool to anonymize IP addresses in log files";
     homepage = "https://github.com/DigitaleGesellschaft/Anonip";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [mmahut];
   };
 }

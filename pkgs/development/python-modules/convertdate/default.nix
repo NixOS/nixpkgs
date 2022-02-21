@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pymeeus
-, pytz
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  pymeeus,
+  pytz,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "convertdate";
   version = "2.3.2";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "convertdate" ];
+  pythonImportsCheck = ["convertdate"];
 
   meta = with lib; {
     homepage = "https://github.com/fitnr/convertdate";
     description = "Utils for converting between date formats and calculating holidays";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

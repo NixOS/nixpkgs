@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchgit, bash-completion, cmake, pkg-config
-, libdrm, libpciaccess, llvmPackages, ncurses
+{
+  lib,
+  stdenv,
+  fetchgit,
+  bash-completion,
+  cmake,
+  pkg-config,
+  libdrm,
+  libpciaccess,
+  llvmPackages,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "umr";
   version = "unstable-2021-02-18";
@@ -12,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "IwTkHEuJ82hngPjFVIihU2rSolLBqHxQTNsP8puYPaY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config llvmPackages.llvm.dev ];
+  nativeBuildInputs = [cmake pkg-config llvmPackages.llvm.dev];
 
   buildInputs = [
     bash-completion
@@ -31,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "A userspace debugging and diagnostic tool for AMD GPUs";
     homepage = "https://gitlab.freedesktop.org/tomstdenis/umr";
     license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with maintainers; [Flakebi];
     platforms = platforms.linux;
- };
+  };
 }

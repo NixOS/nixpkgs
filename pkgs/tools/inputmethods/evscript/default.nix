@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "evscript";
   version = "unstable-2021-06-16";
@@ -17,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/unrelentingtech/evscript";
     description = "A tiny sandboxed Dyon scripting environment for evdev input devices";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ milesbreslin ];
+    maintainers = with maintainers; [milesbreslin];
     platforms = platforms.linux;
   };
 }

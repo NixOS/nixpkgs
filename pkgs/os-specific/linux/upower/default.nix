@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libxslt
-, docbook_xsl
-, udev
-, libgudev
-, libusb1
-, glib
-, gobject-introspection
-, gettext
-, systemd
-, useIMobileDevice ? true
-, libimobiledevice
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxslt,
+  docbook_xsl,
+  udev,
+  libgudev,
+  libusb1,
+  glib,
+  gobject-introspection,
+  gettext,
+  systemd,
+  useIMobileDevice ? true,
+  libimobiledevice,
 }:
-
 stdenv.mkDerivation {
   pname = "upower";
   version = "0.99.13";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/upower/upower/uploads/177df5b9f9b76f25a2ad9da41aa0c1fa/upower-0.99.13.tar.xz";
@@ -34,14 +34,14 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    libgudev
-    libusb1
-    udev
-    systemd
-  ]
-  ++ lib.optional useIMobileDevice libimobiledevice
-  ;
+  buildInputs =
+    [
+      libgudev
+      libusb1
+      udev
+      systemd
+    ]
+    ++ lib.optional useIMobileDevice libimobiledevice;
 
   propagatedBuildInputs = [
     glib

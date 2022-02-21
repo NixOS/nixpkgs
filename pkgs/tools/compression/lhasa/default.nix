@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "lhasa";
   version = "0.3.1";
@@ -18,7 +21,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     homepage = "http://fragglet.github.io/lhasa";
-    maintainers = [ maintainers.sander ];
+    maintainers = [maintainers.sander];
     platforms = platforms.unix;
   };
 }

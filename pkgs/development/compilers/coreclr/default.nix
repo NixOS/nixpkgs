@@ -1,29 +1,31 @@
-{ config, lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, which
-, cmake
-, llvmPackages
-, libunwind
-, gettext
-, openssl
-, python2
-, icu
-, lttng-ust
-, liburcu
-, libuuid
-, libkrb5
-, debug ? config.coreclr.debug or false
+{
+  config,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  which,
+  cmake,
+  llvmPackages,
+  libunwind,
+  gettext,
+  openssl,
+  python2,
+  icu,
+  lttng-ust,
+  liburcu,
+  libuuid,
+  libkrb5,
+  debug ? config.coreclr.debug or false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "coreclr";
   version = "2.0.7";
 
   src = fetchFromGitHub {
-    owner  = "dotnet";
-    repo   = "coreclr";
-    rev    = "v${version}";
+    owner = "dotnet";
+    repo = "coreclr";
+    rev = "v${version}";
     sha256 = "0pzkrfgqywhpijbx7j1v4lxa6270h6whymb64jdkp7yj56ipqh2n";
   };
 
@@ -65,8 +67,14 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  BuildArch = if stdenv.is64bit then "x64" else "x86";
-  BuildType = if debug then "Debug" else "Release";
+  BuildArch =
+    if stdenv.is64bit
+    then "x64"
+    else "x86";
+  BuildType =
+    if debug
+    then "Debug"
+    else "Release";
 
   hardeningDisable = [
     "strictoverflow"
@@ -93,8 +101,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/dotnet/core/";
     description = ".NET is a general purpose development platform";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kuznero ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [kuznero];
     license = licenses.mit;
   };
 }

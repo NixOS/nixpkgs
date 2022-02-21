@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, perlPackages, makeWrapper, zip, libxslt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perlPackages,
+  makeWrapper,
+  zip,
+  libxslt,
+}:
 stdenv.mkDerivation rec {
   pname = "docbook2odf";
   version = "0.244";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "10k44g0qqa37k30pfj8vz95j6zdzz0nmnqjq1lyahfs2h4glzgwb";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perlPackages.perl ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [perlPackages.perl];
 
   installPhase = ''
     mkdir -p "$out/bin/"
@@ -28,8 +35,8 @@ stdenv.mkDerivation rec {
     sed -i "s|/usr/share/docbook2odf|$out/share/docbook2odf|" "$out/bin/docbook2odf"
 
     wrapProgram "$out/bin/docbook2odf" \
-      --prefix PATH : "${lib.makeBinPath [ zip libxslt ]}" \
-      --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.ImageMagick ]}"
+      --prefix PATH : "${lib.makeBinPath [zip libxslt]}" \
+      --prefix PERL5PATH : "${perlPackages.makePerlPath [perlPackages.ImageMagick]}"
   '';
 
   meta = with lib; {
@@ -44,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "http://open.comsultia.com/docbook2odf/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

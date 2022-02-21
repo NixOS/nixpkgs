@@ -1,14 +1,14 @@
-{ version
-, src
-, jami-meta
-, stdenv
-, lib
-, pkg-config
-, cmake
-, qtbase
-, jami-daemon
+{
+  version,
+  src,
+  jami-meta,
+  stdenv,
+  lib,
+  pkg-config,
+  cmake,
+  qtbase,
+  jami-daemon,
 }:
-
 stdenv.mkDerivation {
   pname = "jami-libclient";
   inherit version src;
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [
     qtbase
   ];
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   cmakeFlags = [
     "-DRING_BUILD_DIR=${jami-daemon}/include"
@@ -41,8 +41,10 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
-  meta = jami-meta // {
-    description = "The client library" + jami-meta.description;
-    license = lib.licenses.lgpl21Plus;
-  };
+  meta =
+    jami-meta
+    // {
+      description = "The client library" + jami-meta.description;
+      license = lib.licenses.lgpl21Plus;
+    };
 }

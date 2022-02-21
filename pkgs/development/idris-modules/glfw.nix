@@ -1,17 +1,18 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, lib
-, pkgs
+{
+  build-idris-package,
+  fetchFromGitHub,
+  effects,
+  lib,
+  pkgs,
 }:
-build-idris-package  {
+build-idris-package {
   name = "glfw";
   version = "2016-12-05";
 
-  idrisDeps = [ effects ];
+  idrisDeps = [effects];
 
-  nativeBuildInputs = [ pkgs.pkg-config ];
-  extraBuildInputs = [ pkgs.glfw ];
+  nativeBuildInputs = [pkgs.pkg-config];
+  extraBuildInputs = [pkgs.glfw];
 
   postPatch = ''
     substituteInPlace src/MakefileGlfw \
@@ -29,6 +30,6 @@ build-idris-package  {
     description = "GLFW bindings for Idris";
     homepage = "https://github.com/eckart/glfw-idris";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

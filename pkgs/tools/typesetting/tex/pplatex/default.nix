@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, pcre }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  pcre,
+}:
 stdenv.mkDerivation {
   pname = "pplatex";
   version = "unstable-2015-09-14";
@@ -11,9 +17,9 @@ stdenv.mkDerivation {
     sha256 = "0wrkkbz6b6x91650nm8gccz7xghlp7b1i31fxwalz9xw3py9xygb";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ pcre ];
+  buildInputs = [pcre];
 
   installPhase = ''
     runHook preInstall
@@ -22,11 +28,10 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description =
-      "A tool to reformat the output of latex and friends into readable messages";
+    description = "A tool to reformat the output of latex and friends into readable messages";
     homepage = "https://github.com/stefanhepp/pplatex";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.srgom ];
+    maintainers = [maintainers.srgom];
     platforms = platforms.unix;
   };
 }

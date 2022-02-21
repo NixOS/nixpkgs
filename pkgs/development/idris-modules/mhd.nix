@@ -1,18 +1,19 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, effects
-, libmicrohttpd
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  effects,
+  libmicrohttpd,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "mhd";
   version = "2016-04-22";
 
   ipkgName = "MHD";
-  idrisDeps = [ contrib effects ];
+  idrisDeps = [contrib effects];
 
-  extraBuildInputs = [ libmicrohttpd ];
+  extraBuildInputs = [libmicrohttpd];
 
   src = fetchFromGitHub {
     owner = "colin-adams";
@@ -25,6 +26,6 @@ build-idris-package  {
     description = "A binding of the GNU libmicrohttpd library to the Idris C backend";
     homepage = "https://github.com/colin-adams/idris-libmicrohttpd";
     license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

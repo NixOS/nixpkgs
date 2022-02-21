@@ -1,8 +1,23 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake
-, qtbase, qtscript, qtwebkit, qtserialport, qtsvg, qtdeclarative, qtquickcontrols2
-, alsa-lib, libsndfile, flite, openssl, udev, SDL2
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  qmake,
+  qtbase,
+  qtscript,
+  qtwebkit,
+  qtserialport,
+  qtsvg,
+  qtdeclarative,
+  qtquickcontrols2,
+  alsa-lib,
+  libsndfile,
+  flite,
+  openssl,
+  udev,
+  SDL2,
 }:
-
 mkDerivation rec {
   pname = "apmplanner2";
   version = "2.0.28";
@@ -15,13 +30,24 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    alsa-lib libsndfile flite openssl udev SDL2
-    qtbase qtscript qtwebkit qtserialport qtsvg qtdeclarative qtquickcontrols2
+    alsa-lib
+    libsndfile
+    flite
+    openssl
+    udev
+    SDL2
+    qtbase
+    qtscript
+    qtwebkit
+    qtserialport
+    qtsvg
+    qtdeclarative
+    qtquickcontrols2
   ];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [qmake];
 
-  qmakeFlags = [ "apm_planner.pro" ];
+  qmakeFlags = ["apm_planner.pro"];
 
   # this ugly hack is necessary, as `bin/apmplanner2` needs the contents of `share/APMPlanner2` inside of `bin/`
   preFixup = ''
@@ -38,6 +64,6 @@ mkDerivation rec {
     '';
     homepage = "https://ardupilot.org/planner2/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ wucke13 ];
+    maintainers = with lib.maintainers; [wucke13];
   };
 }

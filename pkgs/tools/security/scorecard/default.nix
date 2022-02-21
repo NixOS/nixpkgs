@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchgit, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchgit,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "scorecard";
   version = "4.0.1";
@@ -30,9 +35,9 @@ buildGoModule rec {
   vendorSha256 = "sha256-NSV7mDn1efQAO4jm6bJm12ExDFTN76TkmD4r61V6D2Q=";
 
   # Install completions post-install
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   ldflags = [
     "-s"
@@ -70,6 +75,6 @@ buildGoModule rec {
     changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
     description = "Security health metrics for Open Source";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [jk];
   };
 }

@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "httpx";
   version = "1.1.5";
@@ -25,6 +25,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/httpx";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

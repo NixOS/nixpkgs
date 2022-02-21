@@ -1,53 +1,71 @@
-{ lib, fetchurl, stdenv, libgcrypt, libevent, libidn, gnutls
-, libxml2, zlib, guile, texinfo, cppunit, killall }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  libgcrypt,
+  libevent,
+  libidn,
+  gnutls,
+  libxml2,
+  zlib,
+  guile,
+  texinfo,
+  cppunit,
+  killall,
+}: let
+  version = "0.11";
+in
+  stdenv.mkDerivation rec {
+    pname = "myserver";
+    inherit version;
 
-let version = "0.11"; in
+    src = fetchurl {
+      url = "mirror://gnu/myserver/${version}/${pname}-${version}.tar.xz";
+      sha256 = "02y3vv4hxpy5h710y79s8ipzshhc370gbz1wm85x0lnq5nqxj2ax";
+    };
 
-stdenv.mkDerivation rec {
-  pname = "myserver";
-  inherit version;
+    patches = [./disable-dns-lookup-in-chroot.patch];
 
-  src = fetchurl {
-    url = "mirror://gnu/myserver/${version}/${pname}-${version}.tar.xz";
-    sha256 = "02y3vv4hxpy5h710y79s8ipzshhc370gbz1wm85x0lnq5nqxj2ax";
-  };
+    buildInputs = [
+      libgcrypt
+      libevent
+      libidn
+      gnutls
+      libxml2
+      zlib
+      guile
+      texinfo
+    ];
 
-  patches =
-    [ ./disable-dns-lookup-in-chroot.patch ];
+    checkInputs = [cppunit];
 
-  buildInputs = [
-    libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo
-  ];
+    makeFlags = ["V=1"];
 
-  checkInputs = [ cppunit ];
+    doCheck = true;
 
-  makeFlags = [ "V=1" ];
+    enableParallelBuilding = true;
 
-  doCheck = true;
+    # On GNU/Linux the `test_suite' process sometimes stays around, so
+    # forcefully terminate it.
+    postCheck = "${killall}/bin/killall test_suite || true";
 
-  enableParallelBuilding = true;
+    meta = {
+      description = "GNU MyServer, a powerful and easy to configure web server";
 
-  # On GNU/Linux the `test_suite' process sometimes stays around, so
-  # forcefully terminate it.
-  postCheck = "${killall}/bin/killall test_suite || true";
+      longDescription = ''
+        GNU MyServer is a powerful and easy to configure web server.  Its
+        multi-threaded architecture makes it extremely scalable and usable in
+        large scale sites as well as in small networks, it has a lot of
+        built-in features.  Share your files in minutes!
+      '';
 
-  meta = {
-    description = "GNU MyServer, a powerful and easy to configure web server";
+      homepage = "https://www.gnu.org/software/myserver/";
 
-    longDescription = ''
-      GNU MyServer is a powerful and easy to configure web server.  Its
-      multi-threaded architecture makes it extremely scalable and usable in
-      large scale sites as well as in small networks, it has a lot of
-      built-in features.  Share your files in minutes!
-    '';
+      license = lib.licenses.gpl3Plus;
 
-    homepage = "https://www.gnu.org/software/myserver/";
+      # libevent fails to build on Cygwin and Guile has troubles on Darwin.
+      platforms = lib.platforms.gnu ++ lib.platforms.linux;
 
-    license = lib.licenses.gpl3Plus;
-
-    # libevent fails to build on Cygwin and Guile has troubles on Darwin.
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;
-
-    broken = true; # needs patch for gets()
-  };
-}
+      broken = true; # needs patch for gets()
+    };
+  }

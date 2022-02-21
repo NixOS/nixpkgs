@@ -1,10 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+}:
 buildPythonPackage rec {
   pname = "pychart";
   version = "1.39";
 
-  disabled = ! isPy27;
+  disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;

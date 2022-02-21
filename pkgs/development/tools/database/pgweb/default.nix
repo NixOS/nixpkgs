@@ -1,5 +1,8 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
-
+{
+  buildGoPackage,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoPackage rec {
   pname = "pgweb";
   version = "0.11.7";
@@ -21,6 +24,6 @@ buildGoPackage rec {
     '';
     homepage = "https://sosedoff.github.io/pgweb/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zupo ];
+    maintainers = with maintainers; [zupo];
   };
 }

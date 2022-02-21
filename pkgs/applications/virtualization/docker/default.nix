@@ -1,25 +1,60 @@
-{ lib, callPackage, fetchFromGitHub }:
-
-with lib;
-
-rec {
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+}:
+with lib; rec {
   dockerGen = {
-      version, rev, sha256
-      , moby-src
-      , runcRev, runcSha256
-      , containerdRev, containerdSha256
-      , tiniRev, tiniSha256, buildxSupport ? true, composeSupport ? true
-      # package dependencies
-      , stdenv, fetchFromGitHub, buildGoPackage
-      , makeWrapper, installShellFiles, pkg-config, glibc
-      , go-md2man, go, containerd_1_4, runc, docker-proxy, tini, libtool
-      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
-      , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
-      , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
-      , nixosTests
-      , clientOnly ? !stdenv.isLinux, symlinkJoin
-    }:
-  let
+    version,
+    rev,
+    sha256,
+    moby-src,
+    runcRev,
+    runcSha256,
+    containerdRev,
+    containerdSha256,
+    tiniRev,
+    tiniSha256,
+    buildxSupport ? true,
+    composeSupport ? true
+    # package dependencies
+    ,
+    stdenv,
+    fetchFromGitHub,
+    buildGoPackage,
+    makeWrapper,
+    installShellFiles,
+    pkg-config,
+    glibc,
+    go-md2man,
+    go,
+    containerd_1_4,
+    runc,
+    docker-proxy,
+    tini,
+    libtool,
+    sqlite,
+    iproute2,
+    lvm2,
+    systemd,
+    docker-buildx,
+    docker-compose_2,
+    btrfs-progs,
+    iptables,
+    e2fsprogs,
+    xz,
+    util-linux,
+    xfsprogs,
+    git,
+    procps,
+    libseccomp,
+    rootlesskit,
+    slirp4netns,
+    fuse-overlayfs,
+    nixosTests,
+    clientOnly ? !stdenv.isLinux,
+    symlinkJoin,
+  }: let
     docker-runc = runc.overrideAttrs (oldAttrs: {
       name = "docker-runc-${version}";
       inherit version;
@@ -42,10 +77,10 @@ rec {
         rev = containerdRev;
         sha256 = containerdSha256;
       };
-      buildInputs = oldAttrs.buildInputs ++ [ libseccomp ];
+      buildInputs = oldAttrs.buildInputs ++ [libseccomp];
     });
 
-    docker-tini = tini.overrideAttrs  (oldAttrs: {
+    docker-tini = tini.overrideAttrs (oldAttrs: {
       name = "docker-init-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -58,7 +93,7 @@ rec {
       # Do not remove static from make files as we want a static binary
       postPatch = "";
 
-      buildInputs = [ glibc glibc.static ];
+      buildInputs = [glibc glibc.static];
 
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
@@ -72,12 +107,12 @@ rec {
 
       goPackagePath = "github.com/docker/docker";
 
-      nativeBuildInputs = [ makeWrapper pkg-config go-md2man go libtool installShellFiles ];
-      buildInputs = [ sqlite lvm2 btrfs-progs systemd libseccomp ];
+      nativeBuildInputs = [makeWrapper pkg-config go-md2man go libtool installShellFiles];
+      buildInputs = [sqlite lvm2 btrfs-progs systemd libseccomp];
 
-      extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = optionals (stdenv.isLinux) (makeBinPath [iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git]);
 
-      extraUserPath = optionals (stdenv.isLinux && !clientOnly) (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
+      extraUserPath = optionals (stdenv.isLinux && !clientOnly) (makeBinPath [rootlesskit slirp4netns fuse-overlayfs]);
 
       postPatch = ''
         patchShebangs hack/make.sh hack/make/
@@ -118,117 +153,139 @@ rec {
           --prefix PATH : "$out/libexec/docker:$extraPath:$extraUserPath"
       '';
 
-      DOCKER_BUILDTAGS = []
-        ++ optional (systemd != null) [ "journald" ]
+      DOCKER_BUILDTAGS =
+        []
+        ++ optional (systemd != null) ["journald"]
         ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
         ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
         ++ optional (libseccomp != null) "seccomp";
     });
 
-    plugins = optionals buildxSupport [ docker-buildx ]
-      ++ optionals composeSupport [ docker-compose_2 ];
-    pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
+    plugins =
+      optionals buildxSupport [docker-buildx]
+      ++ optionals composeSupport [docker-compose_2];
+    pluginsRef = symlinkJoin {
+      name = "docker-plugins";
+      paths = plugins;
+    };
   in
     buildGoPackage ((optionalAttrs (!clientOnly) {
+      inherit docker-runc docker-containerd docker-proxy docker-tini moby;
+    })
+    // rec {
+      inherit version rev;
 
-    inherit docker-runc docker-containerd docker-proxy docker-tini moby;
+      pname = "docker";
 
-   }) // rec {
-    inherit version rev;
+      src = fetchFromGitHub {
+        owner = "docker";
+        repo = "cli";
+        rev = "v${version}";
+        sha256 = sha256;
+      };
 
-    pname = "docker";
+      goPackagePath = "github.com/docker/cli";
 
-    src = fetchFromGitHub {
-      owner = "docker";
-      repo = "cli";
-      rev = "v${version}";
-      sha256 = sha256;
-    };
+      nativeBuildInputs = [
+        makeWrapper
+        pkg-config
+        go-md2man
+        go
+        libtool
+        installShellFiles
+      ];
+      buildInputs =
+        optionals (!clientOnly) [
+          sqlite
+          lvm2
+          btrfs-progs
+          systemd
+          libseccomp
+        ]
+        ++ plugins;
 
-    goPackagePath = "github.com/docker/cli";
+      postPatch =
+        ''
+          patchShebangs man scripts/build/
+          substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
+        ''
+        + optionalString (plugins != []) ''
+          substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
+              "${pluginsRef}/libexec/docker/cli-plugins"
+        '';
 
-    nativeBuildInputs = [
-      makeWrapper pkg-config go-md2man go libtool installShellFiles
-    ];
-    buildInputs = optionals (!clientOnly) [
-      sqlite lvm2 btrfs-progs systemd libseccomp
-    ] ++ plugins;
+      # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
+      buildPhase = ''
+        export GOCACHE="$TMPDIR/go-cache"
 
-    postPatch = ''
-      patchShebangs man scripts/build/
-      substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
-    '' + optionalString (plugins != []) ''
-      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
-          "${pluginsRef}/libexec/docker/cli-plugins"
-    '';
+        cd ./go/src/${goPackagePath}
+        # Mimic AUTO_GOPATH
+        mkdir -p .gopath/src/github.com/docker/
+        ln -sf $PWD .gopath/src/github.com/docker/cli
+        export GOPATH="$PWD/.gopath:$GOPATH"
+        export GITCOMMIT="${rev}"
+        export VERSION="${version}"
+        export BUILDTIME="1970-01-01T00:00:00Z"
+        source ./scripts/build/.variables
+        export CGO_ENABLED=1
+        go build -tags pkcs11 --ldflags "$LDFLAGS" github.com/docker/cli/cmd/docker
+        cd -
+      '';
 
-    # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
-    buildPhase = ''
-      export GOCACHE="$TMPDIR/go-cache"
+      outputs = ["out" "man"];
 
-      cd ./go/src/${goPackagePath}
-      # Mimic AUTO_GOPATH
-      mkdir -p .gopath/src/github.com/docker/
-      ln -sf $PWD .gopath/src/github.com/docker/cli
-      export GOPATH="$PWD/.gopath:$GOPATH"
-      export GITCOMMIT="${rev}"
-      export VERSION="${version}"
-      export BUILDTIME="1970-01-01T00:00:00Z"
-      source ./scripts/build/.variables
-      export CGO_ENABLED=1
-      go build -tags pkcs11 --ldflags "$LDFLAGS" github.com/docker/cli/cmd/docker
-      cd -
-    '';
+      installPhase =
+        ''
+          cd ./go/src/${goPackagePath}
+          install -Dm755 ./docker $out/libexec/docker/docker
 
-    outputs = ["out" "man"];
+          makeWrapper $out/libexec/docker/docker $out/bin/docker \
+            --prefix PATH : "$out/libexec/docker:$extraPath"
+        ''
+        + optionalString (!clientOnly) ''
+          # symlink docker daemon to docker cli derivation
+          ln -s ${moby}/bin/dockerd $out/bin/dockerd
+          ln -s ${moby}/bin/dockerd-rootless $out/bin/dockerd-rootless
 
-    installPhase = ''
-      cd ./go/src/${goPackagePath}
-      install -Dm755 ./docker $out/libexec/docker/docker
+          # systemd
+          mkdir -p $out/etc/systemd/system
+          ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
+          ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
+        ''
+        + ''
+          # completion (cli)
+          installShellCompletion --bash ./contrib/completion/bash/docker
+          installShellCompletion --fish ./contrib/completion/fish/docker.fish
+          installShellCompletion --zsh  ./contrib/completion/zsh/_docker
+        ''
+        + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+          # Generate man pages from cobra commands
+          echo "Generate man pages from cobra"
+          mkdir -p ./man/man1
+          go build -o ./gen-manpages github.com/docker/cli/man
+          ./gen-manpages --root . --target ./man/man1
+        ''
+        + ''
+          # Generate legacy pages from markdown
+          echo "Generate legacy manpages"
+          ./man/md2man-all.sh -q
 
-      makeWrapper $out/libexec/docker/docker $out/bin/docker \
-        --prefix PATH : "$out/libexec/docker:$extraPath"
-    '' + optionalString (!clientOnly) ''
-      # symlink docker daemon to docker cli derivation
-      ln -s ${moby}/bin/dockerd $out/bin/dockerd
-      ln -s ${moby}/bin/dockerd-rootless $out/bin/dockerd-rootless
+          installManPage man/*/*.[1-9]
+        '';
 
-      # systemd
-      mkdir -p $out/etc/systemd/system
-      ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
-      ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
-    '' + ''
-      # completion (cli)
-      installShellCompletion --bash ./contrib/completion/bash/docker
-      installShellCompletion --fish ./contrib/completion/fish/docker.fish
-      installShellCompletion --zsh  ./contrib/completion/zsh/_docker
-    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      # Generate man pages from cobra commands
-      echo "Generate man pages from cobra"
-      mkdir -p ./man/man1
-      go build -o ./gen-manpages github.com/docker/cli/man
-      ./gen-manpages --root . --target ./man/man1
-    '' + ''
-      # Generate legacy pages from markdown
-      echo "Generate legacy manpages"
-      ./man/md2man-all.sh -q
+      passthru.tests = lib.optionals (!clientOnly) {inherit (nixosTests) docker;};
 
-      installManPage man/*/*.[1-9]
-    '';
+      meta = {
+        homepage = "https://www.docker.com/";
+        description = "An open source project to pack, ship and run any application as a lightweight container";
+        license = licenses.asl20;
+        maintainers = with maintainers; [offline tailhook vdemeester periklis mikroskeem maxeaubrey];
+        platforms = with platforms; linux ++ darwin;
+      };
 
-    passthru.tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
-
-    meta = {
-      homepage = "https://www.docker.com/";
-      description = "An open source project to pack, ship and run any application as a lightweight container";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem maxeaubrey ];
-      platforms = with platforms; linux ++ darwin;
-    };
-
-    # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
-    inherit moby-src;
-  });
+      # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
+      inherit moby-src;
+    });
 
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*

@@ -1,34 +1,35 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, gettext
-, gperf
-, sqlite
-, librest
-, libarchive
-, libsoup
-, gnome
-, libxml2
-, lua5_3
-, liboauth
-, libgdata
-, libmediaart
-, grilo
-, gst_all_1
-, gnome-online-accounts
-, gmime
-, gom
-, json-glib
-, avahi
-, tracker
-, dleyna-server
-, itstool
-, totem-pl-parser
+{
+  lib,
+  stdenv,
+  fetchurl,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  gperf,
+  sqlite,
+  librest,
+  libarchive,
+  libsoup,
+  gnome,
+  libxml2,
+  lua5_3,
+  liboauth,
+  libgdata,
+  libmediaart,
+  grilo,
+  gst_all_1,
+  gnome-online-accounts,
+  gmime,
+  gom,
+  json-glib,
+  avahi,
+  tracker,
+  dleyna-server,
+  itstool,
+  totem-pl-parser,
 }:
-
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
   version = "0.3.14";

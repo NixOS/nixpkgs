@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libhangul }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  libhangul,
+}:
 stdenv.mkDerivation rec {
   pname = "nabi";
   version = "1.0.0";
@@ -9,14 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "0craa24pw7b70sh253arv9bg9sy4q3mhsjwfss3bnv5nf0xwnncw";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 libhangul ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gtk2 libhangul];
 
   meta = with lib; {
     description = "The Easy Hangul XIM";
     homepage = "https://github.com/choehwanjin/nabi";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ianwookim ];
+    maintainers = [maintainers.ianwookim];
     platforms = platforms.linux;
   };
 }

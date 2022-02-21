@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchgit
-, wrapLisp
-, sbcl
-, openssl
+{
+  lib,
+  stdenv,
+  fetchgit,
+  wrapLisp,
+  sbcl,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "clpm";
   version = "0.4.1";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Common Lisp Package Manager";
     homepage = "https://www.clpm.dev/";
     license = licenses.bsd2;
-    maintainers = [ maintainers.petterstorvik ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [maintainers.petterstorvik];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

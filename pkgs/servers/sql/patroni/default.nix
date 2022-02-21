@@ -1,8 +1,8 @@
-{ lib
-, pythonPackages
-, fetchFromGitHub
+{
+  lib,
+  pythonPackages,
+  fetchFromGitHub,
 }:
-
 pythonPackages.buildPythonApplication rec {
   pname = "patroni";
   version = "2.0.2";
@@ -51,7 +51,7 @@ pythonPackages.buildPythonApplication rec {
   # Fix tests by preventing them from writing to /homeless-shelter.
   preCheck = "export HOME=$(mktemp -d)";
 
-  pythonImportsCheck = [ "patroni" ];
+  pythonImportsCheck = ["patroni"];
 
   meta = with lib; {
     homepage = "https://patroni.readthedocs.io/en/latest/";

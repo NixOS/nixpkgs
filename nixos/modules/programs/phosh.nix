@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.phosh;
 
   # Based on https://source.puri.sm/Librem5/librem5-base/-/blob/4596c1056dd75ac7f043aede07887990fd46f572/default/sm.puri.OSK0.desktop
@@ -30,7 +32,7 @@ let
 
           To start XWayland immediately, use `immediate`.
         '';
-        type = types.enum [ "true" "false" "immediate" ];
+        type = types.enum ["true" "false" "immediate"];
         default = "false";
       };
       cursorTheme = mkOption {
@@ -88,19 +90,30 @@ let
           Screen transformation.
         '';
         type = types.enum [
-          "90" "180" "270" "flipped" "flipped-90" "flipped-180" "flipped-270" null
+          "90"
+          "180"
+          "270"
+          "flipped"
+          "flipped-90"
+          "flipped-180"
+          "flipped-270"
+          null
         ];
         default = null;
       };
     };
   };
 
-  optionalKV = k: v: if v == null then "" else "${k} = ${builtins.toString v}";
+  optionalKV = k: v:
+    if v == null
+    then ""
+    else "${k} = ${builtins.toString v}";
 
   renderPhocOutput = name: output: let
-    modelines = if builtins.isList output.modeline
+    modelines =
+      if builtins.isList output.modeline
       then output.modeline
-      else [ output.modeline ];
+      else [output.modeline];
     renderModeline = l: "modeline = ${l}";
   in ''
     [output:${name}]
@@ -129,7 +142,7 @@ in {
         description = ''
           Configurations for the Phoc compositor.
         '';
-        type = types.oneOf [ types.lines types.path phocConfigType ];
+        type = types.oneOf [types.lines types.path phocConfigType];
         default = {};
       };
     };
@@ -143,7 +156,7 @@ in {
       oskItem
     ];
 
-    systemd.packages = [ pkgs.phosh ];
+    systemd.packages = [pkgs.phosh];
 
     programs.feedbackd.enable = true;
 
@@ -153,11 +166,13 @@ in {
 
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;
-    services.xserver.displayManager.sessionPackages = [ pkgs.phosh ];
+    services.xserver.displayManager.sessionPackages = [pkgs.phosh];
 
     environment.etc."phosh/phoc.ini".source =
-      if builtins.isPath cfg.phocConfig then cfg.phocConfig
-      else if builtins.isString cfg.phocConfig then pkgs.writeText "phoc.ini" cfg.phocConfig
+      if builtins.isPath cfg.phocConfig
+      then cfg.phocConfig
+      else if builtins.isString cfg.phocConfig
+      then pkgs.writeText "phoc.ini" cfg.phocConfig
       else pkgs.writeText "phoc.ini" (renderPhocConfig cfg.phocConfig);
   };
 }

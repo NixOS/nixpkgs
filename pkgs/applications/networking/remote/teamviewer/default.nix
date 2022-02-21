@@ -1,9 +1,28 @@
-{ mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
-, qtbase, qtwebkit, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
-, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes, coreutils
-, wrapQtAppsHook
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  xdg-utils,
+  dbus,
+  qtbase,
+  qtwebkit,
+  qtwebengine,
+  qtx11extras,
+  qtquickcontrols,
+  getconf,
+  glibc,
+  libXrandr,
+  libX11,
+  libXext,
+  libXdamage,
+  libXtst,
+  libSM,
+  libXfixes,
+  coreutils,
+  wrapQtAppsHook,
 }:
-
 mkDerivation rec {
   pname = "teamviewer";
   version = "15.26.4";
@@ -18,9 +37,9 @@ mkDerivation rec {
     tar xf data.tar.*
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ dbus getconf qtbase qtwebkit qtwebengine qtx11extras libX11 ];
-  propagatedBuildInputs = [ qtquickcontrols ];
+  nativeBuildInputs = [autoPatchelfHook makeWrapper wrapQtAppsHook];
+  buildInputs = [dbus getconf qtbase qtwebkit qtwebengine qtx11extras libX11];
+  propagatedBuildInputs = [qtquickcontrols];
 
   installPhase = ''
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications
@@ -76,8 +95,8 @@ mkDerivation rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ getconf coreutils ]}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
+    "--prefix PATH : ${lib.makeBinPath [getconf coreutils]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus]}"
   ];
 
   postFixup = ''
@@ -96,7 +115,7 @@ mkDerivation rec {
     homepage = "https://www.teamviewer.com";
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jagajaga dasuxullebt jraygauthier ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [jagajaga dasuxullebt jraygauthier];
   };
 }

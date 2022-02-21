@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.icecast;
   configFile = pkgs.writeText "icecast.xml" ''
     <icecast>
@@ -37,13 +39,10 @@ let
     </icecast>
   '';
 in {
-
   ###### interface
 
   options = {
-
     services.icecast = {
-
       enable = mkEnableOption "Icecast server";
 
       hostname = mkOption {
@@ -103,20 +102,16 @@ in {
         description = "icecast.xml content.";
         default = "";
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     systemd.services.icecast = {
-      after = [ "network.target" ];
+      after = ["network.target"];
       description = "Icecast Network Audio Streaming Server";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       preStart = "mkdir -p ${cfg.logDir} && chown ${cfg.user}:${cfg.group} ${cfg.logDir}";
       serviceConfig = {
@@ -125,7 +120,5 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
-
   };
-
 }

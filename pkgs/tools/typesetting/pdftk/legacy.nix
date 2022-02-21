@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, gcj, unzip }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  gcj,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "pdftk";
   version = "2.02";
@@ -9,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "1hdq6zm2dx2f9h7bjrp6a1hfa1ywgkwydp14i2sszjiszljnm3qi";
   };
 
-  nativeBuildInputs = [ gcj unzip ];
+  nativeBuildInputs = [gcj unzip];
 
-  hardeningDisable = [ "fortify" "format" ];
+  hardeningDisable = ["fortify" "format"];
 
   preBuild = ''
     cd pdftk
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Makefile.Debian has almost fitting defaults
-  makeFlags = [ "-f" "Makefile.Debian" "VERSUFF=" ];
+  makeFlags = ["-f" "Makefile.Debian" "VERSUFF="];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -32,12 +37,11 @@ stdenv.mkDerivation rec {
     cp ../pdftk.1 $out/share/man/man1
   '';
 
-
   meta = {
     description = "Simple tool for doing everyday things with PDF documents";
     homepage = "https://www.pdflabs.com/tools/pdftk-server/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [raskin];
     platforms = with lib.platforms; linux;
     broken = true; # Broken on Hydra since 2020-08-24
   };

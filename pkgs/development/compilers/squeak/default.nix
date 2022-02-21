@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
-, libpthreadstubs, pango, pkg-config, libpulseaudio, which }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  coreutils,
+  dbus,
+  freetype,
+  glib,
+  gnused,
+  libpthreadstubs,
+  pango,
+  pkg-config,
+  libpulseaudio,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "squeak";
   version = "4.10.2.2614";
@@ -10,14 +23,23 @@ stdenv.mkDerivation rec {
     url = "http://squeakvm.org/unix/release/Squeak-${version}-src.tar.gz";
   };
 
-  buildInputs = [ coreutils dbus freetype glib gnused libpthreadstubs
-    pango libpulseaudio which ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    coreutils
+    dbus
+    freetype
+    glib
+    gnused
+    libpthreadstubs
+    pango
+    libpulseaudio
+    which
+  ];
+  nativeBuildInputs = [cmake pkg-config];
 
   postPatch = ''
     for i in squeak.in squeak.sh.in; do
       substituteInPlace unix/cmake/$i --replace "PATH=" \
-        "PATH=${lib.makeBinPath [ coreutils gnused which ]} #"
+        "PATH=${lib.makeBinPath [coreutils gnused which]} #"
     done
   '';
 
@@ -25,7 +47,7 @@ stdenv.mkDerivation rec {
     unix/cmake/configure --prefix=$out --enable-mpg-{mmx,pthreads}
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "Smalltalk programming language and environment";
@@ -39,7 +61,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://squeakvm.org/";
     downloadPage = "http://squeakvm.org/unix/index.html";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [asl20 mit];
     platforms = platforms.linux;
   };
 }

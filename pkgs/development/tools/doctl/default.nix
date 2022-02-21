@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "doctl";
   version = "1.70.0";
@@ -8,16 +12,18 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/doctl" ];
+  subPackages = ["cmd/doctl"];
 
-  ldflags = let t = "github.com/digitalocean/doctl"; in [
+  ldflags = let
+    t = "github.com/digitalocean/doctl";
+  in [
     "-X ${t}.Major=${lib.versions.major version}"
     "-X ${t}.Minor=${lib.versions.minor version}"
     "-X ${t}.Patch=${lib.versions.patch version}"
     "-X ${t}.Label=release"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     export HOME=$(mktemp -d) # attempts to write to /homeless-shelter
@@ -38,6 +44,6 @@ buildGoModule rec {
     description = "A command line tool for DigitalOcean services";
     homepage = "https://github.com/digitalocean/doctl";
     license = licenses.asl20;
-    maintainers = [ maintainers.siddharthist ];
+    maintainers = [maintainers.siddharthist];
   };
 }

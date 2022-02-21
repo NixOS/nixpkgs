@@ -1,17 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-
-# propagates
-, cryptography
-, deprecated
-, hiredis
-, importlib-metadata
-, packaging
-, requests
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder
+  # propagates
+  ,
+  cryptography,
+  deprecated,
+  hiredis,
+  importlib-metadata,
+  packaging,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "redis";
   version = "4.1.0";
@@ -24,15 +24,17 @@ buildPythonPackage rec {
     sha256 = "sha256-IfCiO85weQkHbmuizgdsulm/9g0qsily4GR/32IP/kc=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    deprecated
-    hiredis
-    packaging
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      cryptography
+      deprecated
+      hiredis
+      packaging
+      requests
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   pythonImportsCheck = [
     "redis"
@@ -50,6 +52,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for Redis key-value store";
     homepage = "https://pypi.python.org/pypi/redis/";
-    license = with licenses; [ mit ];
+    license = with licenses; [mit];
   };
 }

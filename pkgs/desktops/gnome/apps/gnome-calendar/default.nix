@@ -1,27 +1,28 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, libdazzle
-, libgweather
-, geoclue2
-, geocode-glib
-, python3
-, gettext
-, libxml2
-, gnome
-, gtk3
-, evolution-data-server
-, libsoup
-, glib
-, gnome-online-accounts
-, gsettings-desktop-schemas
-, libhandy
-, adwaita-icon-theme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  libdazzle,
+  libgweather,
+  geoclue2,
+  geocode-glib,
+  python3,
+  gettext,
+  libxml2,
+  gnome,
+  gtk3,
+  evolution-data-server,
+  libsoup,
+  glib,
+  gnome-online-accounts,
+  gsettings-desktop-schemas,
+  libhandy,
+  adwaita-icon-theme,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
   version = "41.2";

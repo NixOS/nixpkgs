@@ -1,5 +1,8 @@
-{ lib, python3Packages, ffmpeg }:
-
+{
+  lib,
+  python3Packages,
+  ffmpeg,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "vcsi";
   version = "7.0.13";
@@ -18,14 +21,14 @@ python3Packages.buildPythonApplication rec {
   ];
 
   doCheck = false;
-  pythonImportsCheck = [ "vcsi" ];
+  pythonImportsCheck = ["vcsi"];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
+  makeWrapperArgs = ["--prefix PATH : ${lib.makeBinPath [ffmpeg]}"];
 
   meta = with lib; {
     description = "Create video contact sheets";
     homepage = "https://github.com/amietn/vcsi";
     license = licenses.mit;
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with maintainers; [dandellion];
   };
 }

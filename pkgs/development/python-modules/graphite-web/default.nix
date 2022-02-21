@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, memcached
-, txamqp
-, django_tagging
-, gunicorn
-, pytz
-, pyparsing
-, cairocffi
-, whisper
-, whitenoise
-, urllib3
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  memcached,
+  txamqp,
+  django_tagging,
+  gunicorn,
+  pytz,
+  pyparsing,
+  cairocffi,
+  whisper,
+  whitenoise,
+  urllib3,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "graphite-web";
   version = "1.1.8";
@@ -51,19 +51,19 @@ buildPythonPackage rec {
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
   # carbon is installed as a regular python module.
-  GRAPHITE_NO_PREFIX="True";
+  GRAPHITE_NO_PREFIX = "True";
 
   preConfigure = ''
     substituteInPlace webapp/graphite/settings.py \
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
-  pythonImportsCheck = [ "graphite" ];
+  pythonImportsCheck = ["graphite"];
 
   meta = with lib; {
     homepage = "http://graphiteapp.org/";
     description = "Enterprise scalable realtime graphing";
-    maintainers = with maintainers; [ offline basvandijk ];
+    maintainers = with maintainers; [offline basvandijk];
     license = licenses.asl20;
   };
 }

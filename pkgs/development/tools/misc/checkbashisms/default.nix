@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   version = "2.21.1";
   pname = "checkbashisms";
@@ -8,8 +14,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-1ZbIiUrFd38uMVLy7YayLLm5RrmcovsA++JTb8PbTFI=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [installShellFiles];
+  buildInputs = [perl];
 
   buildPhase = ''
     runHook preBuild
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/checkbaskisms/";
     description = "Check shell scripts for non-portable syntax";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kaction ];
+    maintainers = with lib.maintainers; [kaction];
     platforms = lib.platforms.unix;
   };
 }

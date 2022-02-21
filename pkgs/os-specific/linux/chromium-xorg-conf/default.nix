@@ -1,5 +1,4 @@
-{ fetchFromGitiles }:
-
+{fetchFromGitiles}:
 fetchFromGitiles {
   name = "chromium-xorg-conf";
   url = "https://chromium.googlesource.com/chromiumos/platform/xorg-conf";

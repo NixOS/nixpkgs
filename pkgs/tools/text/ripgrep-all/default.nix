@@ -1,7 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg
-, pandoc, poppler_utils, ripgrep, Security, imagemagick, tesseract
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  makeWrapper,
+  ffmpeg,
+  pandoc,
+  poppler_utils,
+  ripgrep,
+  Security,
+  imagemagick,
+  tesseract,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
   version = "0.9.6";
@@ -14,12 +24,12 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1l71xj5crfb51wfp2bdvdqp1l8kg182n5d6w23lq2wjszaqcj7cw";
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     wrapProgram $out/bin/rga \
-      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg pandoc poppler_utils ripgrep imagemagick tesseract ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ffmpeg pandoc poppler_utils ripgrep imagemagick tesseract]}"
   '';
 
   # Use upstream's example data to run a couple of queries to ensure the dependencies
@@ -56,8 +66,8 @@ rustPlatform.buildRustPackage rec {
       to search in pdf, docx, sqlite, jpg, movie subtitles (mkv, mp4), etc.
     '';
     homepage = "https://github.com/phiresky/ripgrep-all";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ zaninime ma27 ];
+    license = with licenses; [agpl3Plus];
+    maintainers = with maintainers; [zaninime ma27];
     mainProgram = "rga";
   };
 }

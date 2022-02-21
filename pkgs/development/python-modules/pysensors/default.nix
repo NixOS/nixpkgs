@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub, lm_sensors }:
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchFromGitHub,
+  lm_sensors,
+}:
 buildPythonPackage {
   version = "2017-07-13";
   pname = "pysensors";
@@ -11,7 +17,7 @@ buildPythonPackage {
     sha256 = "1xvbxnkz55fk5fpr514263c7s7s9r8hgrw4ybfaj5a0mligmmrfm";
   };
 
-  buildInputs = [ lm_sensors ];
+  buildInputs = [lm_sensors];
 
   # Tests are disable because they fail on `aarch64-linux`, probably
   # due to sandboxing
@@ -23,7 +29,7 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ guibou ];
+    maintainers = with maintainers; [guibou];
     description = "Easy hardware health monitoring in Python for Linux systems";
     homepage = "https://pysensors.readthedocs.org";
     license = licenses.bsd2;

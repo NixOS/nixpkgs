@@ -1,17 +1,15 @@
-{ pkgs }:
-
+{pkgs}:
 with pkgs;
-
 # emscripten toolchain abstraction for nix
 # https://github.com/NixOS/nixpkgs/pull/16208
-
-rec {
-  json_c = (pkgs.json_c.override {
-    stdenv = pkgs.emscriptenStdenv;
-  }).overrideDerivation
+  rec {
+    json_c = (pkgs.json_c.override {
+      stdenv = pkgs.emscriptenStdenv;
+    })
+    .overrideDerivation
     (old: {
-      nativeBuildInputs = [ pkg-config cmake ];
-      propagatedBuildInputs = [ zlib ];
+      nativeBuildInputs = [pkg-config cmake];
+      propagatedBuildInputs = [zlib];
       configurePhase = ''
         HOME=$TMPDIR
         emcmake cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_INSTALL_INCLUDEDIR=$dev/include
@@ -42,13 +40,14 @@ rec {
       '';
     });
 
-  libxml2 = (pkgs.libxml2.override {
-    stdenv = emscriptenStdenv;
-    pythonSupport = false;
-  }).overrideDerivation
+    libxml2 = (pkgs.libxml2.override {
+      stdenv = emscriptenStdenv;
+      pythonSupport = false;
+    })
+    .overrideDerivation
     (old: {
-      propagatedBuildInputs = [ zlib ];
-      buildInputs = old.buildInputs ++ [ pkg-config ];
+      propagatedBuildInputs = [zlib];
+      buildInputs = old.buildInputs ++ [pkg-config];
 
       # just override it with nothing so it does not fail
       autoreconfPhase = "echo autoreconfPhase not used...";
@@ -79,64 +78,65 @@ rec {
       '';
     });
 
-  xmlmirror = pkgs.buildEmscriptenPackage rec {
-    pname = "xmlmirror";
-    version = "unstable-2016-06-05";
+    xmlmirror = pkgs.buildEmscriptenPackage rec {
+      pname = "xmlmirror";
+      version = "unstable-2016-06-05";
 
-    buildInputs = [ pkg-config autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
-    nativeBuildInputs = [ pkg-config zlib ];
+      buildInputs = [pkg-config autoconf automake libtool gnumake libxml2 nodejs openjdk json_c];
+      nativeBuildInputs = [pkg-config zlib];
 
-    src = pkgs.fetchgit {
-      url = "https://gitlab.com/odfplugfest/xmlmirror.git";
-      rev = "4fd7e86f7c9526b8f4c1733e5c8b45175860a8fd";
-      sha256 = "1jasdqnbdnb83wbcnyrp32f36w3xwhwp0wq8lwwmhqagxrij1r4b";
+      src = pkgs.fetchgit {
+        url = "https://gitlab.com/odfplugfest/xmlmirror.git";
+        rev = "4fd7e86f7c9526b8f4c1733e5c8b45175860a8fd";
+        sha256 = "1jasdqnbdnb83wbcnyrp32f36w3xwhwp0wq8lwwmhqagxrij1r4b";
+      };
+
+      configurePhase = ''
+        rm -f fastXmlLint.js*
+        # a fix for ERROR:root:For asm.js, TOTAL_MEMORY must be a multiple of 16MB, was 234217728
+        # https://gitlab.com/odfplugfest/xmlmirror/issues/8
+        sed -e "s/TOTAL_MEMORY=234217728/TOTAL_MEMORY=268435456/g" -i Makefile.emEnv
+        # https://github.com/kripken/emscripten/issues/6344
+        # https://gitlab.com/odfplugfest/xmlmirror/issues/9
+        sed -e "s/\$(JSONC_LDFLAGS) \$(ZLIB_LDFLAGS) \$(LIBXML20_LDFLAGS)/\$(JSONC_LDFLAGS) \$(LIBXML20_LDFLAGS) \$(ZLIB_LDFLAGS) /g" -i Makefile.emEnv
+        # https://gitlab.com/odfplugfest/xmlmirror/issues/11
+        sed -e "s/-o fastXmlLint.js/-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' -o fastXmlLint.js/g" -i Makefile.emEnv
+      '';
+
+      buildPhase = ''
+        HOME=$TMPDIR
+        make -f Makefile.emEnv
+      '';
+
+      outputs = ["out" "doc"];
+
+      installPhase = ''
+        mkdir -p $out/share
+        mkdir -p $doc/share/${pname}
+
+        cp Demo* $out/share
+        cp -R codemirror-5.12 $out/share
+        cp fastXmlLint.js* $out/share
+        cp *.xsd $out/share
+        cp *.js $out/share
+        cp *.xhtml $out/share
+        cp *.html $out/share
+        cp *.json $out/share
+        cp *.rng $out/share
+        cp README.md $doc/share/${pname}
+      '';
+      checkPhase = ''
+      '';
     };
 
-    configurePhase = ''
-      rm -f fastXmlLint.js*
-      # a fix for ERROR:root:For asm.js, TOTAL_MEMORY must be a multiple of 16MB, was 234217728
-      # https://gitlab.com/odfplugfest/xmlmirror/issues/8
-      sed -e "s/TOTAL_MEMORY=234217728/TOTAL_MEMORY=268435456/g" -i Makefile.emEnv
-      # https://github.com/kripken/emscripten/issues/6344
-      # https://gitlab.com/odfplugfest/xmlmirror/issues/9
-      sed -e "s/\$(JSONC_LDFLAGS) \$(ZLIB_LDFLAGS) \$(LIBXML20_LDFLAGS)/\$(JSONC_LDFLAGS) \$(LIBXML20_LDFLAGS) \$(ZLIB_LDFLAGS) /g" -i Makefile.emEnv
-      # https://gitlab.com/odfplugfest/xmlmirror/issues/11
-      sed -e "s/-o fastXmlLint.js/-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' -o fastXmlLint.js/g" -i Makefile.emEnv
-    '';
-
-    buildPhase = ''
-      HOME=$TMPDIR
-      make -f Makefile.emEnv
-    '';
-
-    outputs = [ "out" "doc" ];
-
-    installPhase = ''
-      mkdir -p $out/share
-      mkdir -p $doc/share/${pname}
-
-      cp Demo* $out/share
-      cp -R codemirror-5.12 $out/share
-      cp fastXmlLint.js* $out/share
-      cp *.xsd $out/share
-      cp *.js $out/share
-      cp *.xhtml $out/share
-      cp *.html $out/share
-      cp *.json $out/share
-      cp *.rng $out/share
-      cp README.md $doc/share/${pname}
-    '';
-    checkPhase = ''
-    '';
-  };
-
-  zlib = (pkgs.zlib.override {
-    stdenv = pkgs.emscriptenStdenv;
-  }).overrideDerivation
+    zlib = (pkgs.zlib.override {
+      stdenv = pkgs.emscriptenStdenv;
+    })
+    .overrideDerivation
     (old: {
-      buildInputs = old.buildInputs ++ [ pkg-config ];
+      buildInputs = old.buildInputs ++ [pkg-config];
       # we need to reset this setting!
-      NIX_CFLAGS_COMPILE="";
+      NIX_CFLAGS_COMPILE = "";
       configurePhase = ''
         # FIXME: Some tests require writing at $HOME
         HOME=$TMPDIR
@@ -148,7 +148,7 @@ rec {
         runHook postConfigure
       '';
       dontStrip = true;
-      outputs = [ "out" ];
+      outputs = ["out"];
       buildPhase = ''
         emmake make
       '';
@@ -183,5 +183,4 @@ rec {
           --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
       '';
     });
-
-}
+  }

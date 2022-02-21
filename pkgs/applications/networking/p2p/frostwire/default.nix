@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, gradle_6, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gradle_6,
+  perl,
+  jre,
+  makeWrapper,
+  makeDesktopItem,
+  mplayer,
+}: let
   version = "6.6.7-build-529";
   name = "frostwire-desktop-${version}";
 
@@ -25,7 +33,7 @@ let
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src;
-    buildInputs = [ gradle_6 perl ];
+    buildInputs = [gradle_6 perl];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       ( cd desktop
@@ -42,53 +50,57 @@ let
     outputHashMode = "recursive";
     outputHash = "11zd98g0d0fdgls4lsskkagwfxyh26spfd6c6g9cahl89czvlg3c";
   };
+in
+  stdenv.mkDerivation {
+    inherit name src;
 
-in stdenv.mkDerivation {
-  inherit name src;
+    nativeBuildInputs = [makeWrapper];
+    buildInputs = [gradle_6];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gradle_6 ];
+    buildPhase = ''
+      export GRADLE_USER_HOME=$(mktemp -d)
+      ( cd desktop
 
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-    ( cd desktop
+        # disable auto-update (anyway it won't update frostwire installed in nix store)
+        substituteInPlace src/com/frostwire/gui/updates/UpdateManager.java \
+          --replace 'um.checkForUpdates' '// um.checkForUpdates'
 
-      # disable auto-update (anyway it won't update frostwire installed in nix store)
-      substituteInPlace src/com/frostwire/gui/updates/UpdateManager.java \
-        --replace 'um.checkForUpdates' '// um.checkForUpdates'
+        # fix path to mplayer
+        substituteInPlace src/com/frostwire/gui/player/MediaPlayerLinux.java \
+          --replace /usr/bin/mplayer ${mplayer}/bin/mplayer
 
-      # fix path to mplayer
-      substituteInPlace src/com/frostwire/gui/player/MediaPlayerLinux.java \
-        --replace /usr/bin/mplayer ${mplayer}/bin/mplayer
+        substituteInPlace build.gradle \
+          --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
+        gradle --offline --no-daemon build
+      )
+    '';
 
-      substituteInPlace build.gradle \
-        --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
-      gradle --offline --no-daemon build
-    )
-  '';
+    installPhase = ''
+      mkdir -p $out/lib $out/share/java
 
-  installPhase = ''
-    mkdir -p $out/lib $out/share/java
+      cp desktop/build/libs/frostwire.jar $out/share/java/frostwire.jar
 
-    cp desktop/build/libs/frostwire.jar $out/share/java/frostwire.jar
+      cp ${
+        {
+          x86_64-darwin = "desktop/lib/native/*.dylib";
+          x86_64-linux = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
+          i686-linux = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
+        }
+        .${stdenv.hostPlatform.system}
+        or (throw "unsupported system ${stdenv.hostPlatform.system}")
+      } $out/lib
 
-    cp ${ { x86_64-darwin = "desktop/lib/native/*.dylib";
-            x86_64-linux  = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
-            i686-linux    = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
-          }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
-        } $out/lib
+      cp -dpR ${desktopItem}/share $out
 
-    cp -dpR ${desktopItem}/share $out
+      makeWrapper ${jre}/bin/java $out/bin/frostwire \
+        --add-flags "-Djava.library.path=$out/lib -jar $out/share/java/frostwire.jar"
+    '';
 
-    makeWrapper ${jre}/bin/java $out/bin/frostwire \
-      --add-flags "-Djava.library.path=$out/lib -jar $out/share/java/frostwire.jar"
-  '';
-
-  meta = with lib; {
-    homepage = "https://www.frostwire.com/";
-    description = "BitTorrent Client and Cloud File Downloader";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ gavin ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://www.frostwire.com/";
+      description = "BitTorrent Client and Cloud File Downloader";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [gavin];
+      platforms = ["x86_64-darwin" "x86_64-linux" "i686-linux"];
+    };
+  }

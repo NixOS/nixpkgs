@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, guile
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  guile,
+  pkg-config,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "guile-xcb";
   version = "1.3";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mwitmer/guile-xcb";
     description = "XCB bindings for Guile";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = with maintainers; [vyp];
     platforms = platforms.linux;
   };
 }

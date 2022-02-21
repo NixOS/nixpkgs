@@ -1,16 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.slimserver;
-
 in {
   options = {
-
     services.slimserver = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -37,19 +35,17 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - slimserver slimserver - -"
     ];
 
     systemd.services.slimserver = {
-      after = [ "network.target" ];
+      after = ["network.target"];
       description = "Slim Server for Logitech Squeezebox Players";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         User = "slimserver";
@@ -68,6 +64,4 @@ in {
       groups.slimserver = {};
     };
   };
-
 }
-

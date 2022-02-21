@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  cudatoolkit,
+  addOpenGLRunpath,
+}:
 stdenv.mkDerivation rec {
   name = "nccl-${version}-cuda-${cudatoolkit.majorVersion}";
   version = "2.7.8-1";
@@ -11,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "0xxiwaw239dc9g015fka3k1nvm5zyl00dzgxnwzkang61dys9wln";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ which addOpenGLRunpath ];
+  nativeBuildInputs = [which addOpenGLRunpath];
 
-  buildInputs = [ cudatoolkit ];
+  buildInputs = [cudatoolkit];
 
   preConfigure = ''
     patchShebangs src/collectives/device/gen_rules.sh
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
     addOpenGLRunpath $out/lib/lib*.so
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-unused-function" ];
+  NIX_CFLAGS_COMPILE = ["-Wno-unused-function"];
 
   enableParallelBuilding = true;
 
@@ -42,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mdaiter orivej ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [mdaiter orivej];
   };
 }

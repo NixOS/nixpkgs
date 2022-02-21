@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "openfst";
   version = "1.8.1";
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   meta = with lib; {
     description = "Library for working with finite-state transducers";
@@ -34,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.openfst.org/twiki/bin/view/FST/WebHome";
     license = licenses.asl20;
-    maintainers = [ maintainers.dfordivam ];
+    maintainers = [maintainers.dfordivam];
     platforms = platforms.unix;
   };
 }

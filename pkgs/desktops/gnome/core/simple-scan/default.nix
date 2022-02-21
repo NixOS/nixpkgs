@@ -1,28 +1,29 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, itstool
-, python3
-, wrapGAppsHook
-, cairo
-, gdk-pixbuf
-, colord
-, glib
-, gtk3
-, gusb
-, packagekit
-, libhandy
-, libwebp
-, libxml2
-, sane-backends
-, vala
-, gnome
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  itstool,
+  python3,
+  wrapGAppsHook,
+  cairo,
+  gdk-pixbuf,
+  colord,
+  glib,
+  gtk3,
+  gusb,
+  packagekit,
+  libhandy,
+  libwebp,
+  libxml2,
+  sane-backends,
+  vala,
+  gnome,
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "simple-scan";
   version = "40.7";

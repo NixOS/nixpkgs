@@ -1,7 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "nix-serve";
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     services.nix-serve.enable = true;
     environment.systemPackages = [
       pkgs.hello

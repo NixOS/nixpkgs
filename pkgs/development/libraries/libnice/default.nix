@@ -1,27 +1,29 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, python3
-, gobject-introspection
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, glib
-, gupnp-igd
-, gst_all_1
-, gnutls
-, graphviz
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gobject-introspection,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  glib,
+  gupnp-igd,
+  gst_all_1,
+  gnutls,
+  graphviz,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libnice";
   version = "0.1.18";
 
-  outputs = [ "bin" "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  outputs =
+    ["bin" "out" "dev"]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) ["devdoc"];
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/${pname}-${version}.tar.gz";
@@ -64,8 +66,16 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+    "-Dgtk_doc=${
+      if (stdenv.buildPlatform == stdenv.hostPlatform)
+      then "enabled"
+      else "disabled"
+    }"
+    "-Dintrospection=${
+      if (stdenv.buildPlatform == stdenv.hostPlatform)
+      then "enabled"
+      else "disabled"
+    }"
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ];
 
@@ -84,6 +94,6 @@ stdenv.mkDerivation rec {
       libstun as well as GStreamer elements.'';
     homepage = "https://libnice.freedesktop.org/";
     platforms = platforms.linux;
-    license = with licenses; [ lgpl21 mpl11 ];
+    license = with licenses; [lgpl21 mpl11];
   };
 }

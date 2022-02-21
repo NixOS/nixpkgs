@@ -1,8 +1,14 @@
-{ lib, buildGoModule, fetchFromSourcehut
-, ncurses, notmuch, scdoc
-, python3, w3m, dante
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  ncurses,
+  notmuch,
+  scdoc,
+  python3,
+  w3m,
+  dante,
 }:
-
 buildGoModule rec {
   pname = "aerc";
   version = "0.7.1";
@@ -32,7 +38,7 @@ buildGoModule rec {
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 notmuch ];
+  buildInputs = [python3 notmuch];
 
   buildPhase = "
     runHook preBuild
@@ -49,15 +55,15 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/aerc --prefix PATH ":" \
-      "$out/share/aerc/filters:${lib.makeBinPath [ ncurses ]}"
+      "$out/share/aerc/filters:${lib.makeBinPath [ncurses]}"
     wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
-      ${lib.makeBinPath [ w3m dante ]}
+      ${lib.makeBinPath [w3m dante]}
   '';
 
   meta = with lib; {
     description = "An email client for your terminal";
     homepage = "https://aerc-mail.org/";
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = with maintainers; [tadeokondrak];
     license = licenses.mit;
     platforms = platforms.unix;
   };

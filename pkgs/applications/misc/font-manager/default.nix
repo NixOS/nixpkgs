@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, fetchpatch
-, ninja
-, gettext
-, python3
-, pkg-config
-, libxml2
-, json-glib
-, sqlite
-, itstool
-, yelp-tools
-, vala
-, gsettings-desktop-schemas
-, gtk3
-, gnome
-, desktop-file-utils
-, wrapGAppsHook
-, gobject-introspection
-, libsoup
-, glib-networking
-, webkitgtk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  fetchpatch,
+  ninja,
+  gettext,
+  python3,
+  pkg-config,
+  libxml2,
+  json-glib,
+  sqlite,
+  itstool,
+  yelp-tools,
+  vala,
+  gsettings-desktop-schemas,
+  gtk3,
+  gnome,
+  desktop-file-utils,
+  wrapGAppsHook,
+  gobject-introspection,
+  libsoup,
+  glib-networking,
+  webkitgtk,
 }:
-
 stdenv.mkDerivation rec {
   pname = "font-manager";
   version = "0.8.7";
@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

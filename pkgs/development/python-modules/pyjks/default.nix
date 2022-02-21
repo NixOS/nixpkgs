@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-
-# pythonPackages
-, pyasn1-modules
-, pycryptodomex
-, twofish
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib
+  # pythonPackages
+  ,
+  pyasn1-modules,
+  pycryptodomex,
+  twofish,
 }:
-
 buildPythonPackage rec {
   pname = "pyjks";
   version = "20.0.0";

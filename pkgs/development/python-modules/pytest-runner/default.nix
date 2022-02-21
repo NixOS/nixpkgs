@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "pytest-runner";
   version = "5.3.1";
@@ -9,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0fce5b8dc68760f353979d99fdd6b3ad46330b6b1837e2077a89ebcf204aac91";
   };
 
-  nativeBuildInputs = [ setuptools-scm pytest ];
+  nativeBuildInputs = [setuptools-scm pytest];
 
   postPatch = ''
     rm pytest.ini

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "nose_warnings_filters";
   version = "0.1.5";
@@ -16,9 +16,9 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ nose ];
+  propagatedBuildInputs = [nose];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     nosetests -v
   '';

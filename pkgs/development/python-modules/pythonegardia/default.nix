@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  requests,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pythonegardia";
   version = "1.0.51";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface with Egardia/Woonveilig alarms";
     homepage = "https://github.com/jeroenterheerdt/python-egardia";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

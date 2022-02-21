@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, requests_oauthlib
-, django, python3-openid, mock, coverage }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  requests_oauthlib,
+  django,
+  python3-openid,
+  mock,
+  coverage,
+}:
 buildPythonPackage rec {
   pname = "django-allauth";
   version = "0.47.0";
@@ -13,9 +21,9 @@ buildPythonPackage rec {
     sha256 = "sha256-wKrsute6TCl331UrxNEBf/zTtGnyGHsOZQwdiicbg2o=";
   };
 
-  propagatedBuildInputs = [ requests requests_oauthlib django python3-openid ];
+  propagatedBuildInputs = [requests requests_oauthlib django python3-openid];
 
-  checkInputs = [ coverage mock ];
+  checkInputs = [coverage mock];
 
   doCheck = false;
   checkPhase = ''

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchsvn, imake, bison, flex, xlibsWrapper, libXaw, libXpm, ... }:
-
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  imake,
+  bison,
+  flex,
+  xlibsWrapper,
+  libXaw,
+  libXpm,
+  ...
+}:
 stdenv.mkDerivation rec {
   pname = "xspim";
   version = "9.1.22";
@@ -10,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kazfgrbmi4xq7nrkmnqw1280rhdyc1hmr82flrsa3g1b1rlmj1s";
   };
 
-  nativeBuildInputs = [ imake bison flex ];
-  buildInputs = [ xlibsWrapper libXaw libXpm ];
+  nativeBuildInputs = [imake bison flex];
+  buildInputs = [xlibsWrapper libXaw libXpm];
 
   preConfigure = ''
     cd xspim
@@ -43,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "A MIPS32 simulator";
     homepage = "http://spimsimulator.sourceforge.net/";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     platforms = platforms.linux;
   };
 }

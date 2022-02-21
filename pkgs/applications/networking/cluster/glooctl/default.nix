@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "glooctl";
   version = "1.10.8";
@@ -11,10 +15,10 @@ buildGoModule rec {
     sha256 = "sha256-D6UWwR+cs/pGLBOIky34g253xMxWygczbmjtg8ixNoQ=";
   };
 
-  subPackages = [ "projects/gloo/cli/cmd" ];
+  subPackages = ["projects/gloo/cli/cmd"];
   vendorSha256 = "sha256-6hmGtTNuuR4V0uMGEsOy6Iz/hhL8p1cn/4rEx4Uleug=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/glooctl
@@ -25,12 +29,12 @@ buildGoModule rec {
       --zsh <($out/bin/glooctl completion zsh)
   '';
 
-  ldflags = [ "-s" "-w" "-X github.com/solo-io/gloo/pkg/version.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/solo-io/gloo/pkg/version.Version=${version}"];
 
   meta = with lib; {
     description = "glooctl is the unified CLI for Gloo";
     homepage = "https://docs.solo.io/gloo-edge/latest/reference/cli/glooctl/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nelsonjeppesen ];
+    maintainers = with maintainers; [nelsonjeppesen];
   };
 }

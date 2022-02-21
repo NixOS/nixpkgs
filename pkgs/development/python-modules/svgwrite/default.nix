@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "svgwrite";
   version = "1.4.1";
@@ -33,5 +33,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozman/svgwrite";
     license = licenses.mit;
   };
-
 }

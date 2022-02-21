@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, freezegun
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  freezegun,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "ftputil";
   version = "5.0.3";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "High-level FTP client library (virtual file system and more)";
     homepage = "http://ftputil.sschwarzer.net/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, gtk2
-, pkg-config
-, curl
-, cdparanoia
-, libid3tag
-, libtool
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2,
+  pkg-config,
+  curl,
+  cdparanoia,
+  libid3tag,
+  libtool,
 }:
-
 stdenv.mkDerivation rec {
   pname = "grip";
   version = "4.2.3";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5Qgsf4+xs0ckhYJk2csKulXC3nWaLRAsQ15qaTkKkjw=";
   };
 
-  nativeBuildInputs = [ pkg-config libtool ];
+  nativeBuildInputs = [pkg-config libtool];
   buildInputs = [
     gtk2
     curl
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "http://nostatic.org/grip";
     license = lib.licenses.gpl2Plus;
 
-    maintainers = with lib.maintainers; [ marcweber ];
+    maintainers = with lib.maintainers; [marcweber];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, optipng, librsvg, gtk3, pantheon, gnome, gnome-icon-theme, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gdk-pixbuf,
+  optipng,
+  librsvg,
+  gtk3,
+  pantheon,
+  gnome,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";
   version = "0.15.2";
@@ -42,6 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [davidak];
   };
 }

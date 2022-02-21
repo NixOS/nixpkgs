@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "mbddns";
   version = "0.1.2";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "mbddns" ];
+  pythonImportsCheck = ["mbddns"];
 
   meta = with lib; {
     description = "Mythic Beasts Dynamic DNS updater";
     homepage = "https://github.com/thinkl33t/mb-ddns";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

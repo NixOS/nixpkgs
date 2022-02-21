@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, base36
-, cryptography
-, curve25519-donna
-, ecdsa
-, fetchFromGitHub
-, h11
-, pyqrcode
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  base36,
+  cryptography,
+  curve25519-donna,
+  ecdsa,
+  fetchFromGitHub,
+  h11,
+  pyqrcode,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  zeroconf,
 }:
-
 buildPythonPackage rec {
   pname = "hap-python";
   version = "4.4.0";
@@ -59,12 +59,12 @@ buildPythonPackage rec {
     "test_migration_to_include_client_properties"
   ];
 
-  pythonImportsCheck = [ "pyhap" ];
+  pythonImportsCheck = ["pyhap"];
 
   meta = with lib; {
     homepage = "https://github.com/ikalchev/HAP-python";
     description = "HomeKit Accessory Protocol implementation in python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ oro ];
+    maintainers = with maintainers; [oro];
   };
 }

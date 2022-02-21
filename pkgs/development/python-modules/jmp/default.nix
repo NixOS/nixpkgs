@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, jax
-, jaxlib
-, lib
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  lib,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "jmp";
   # As of 2022-01-01, the latest stable version (0.0.2) fails tests with recent JAX versions,
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "This library implements support for mixed precision training in JAX.";
     homepage = "https://github.com/deepmind/jmp";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

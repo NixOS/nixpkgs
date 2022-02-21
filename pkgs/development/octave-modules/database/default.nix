@@ -1,10 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, struct
-, postgresql
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  struct,
+  postgresql,
 }:
-
 buildOctavePackage rec {
   pname = "database";
   version = "2.4.4";
@@ -25,7 +25,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/database/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Interface to SQL databases, currently only postgresql using libpq";
   };
 }

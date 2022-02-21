@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, youtube-dl, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  youtube-dl,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "pafy";
   version = "0.5.5";
@@ -11,13 +16,12 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  propagatedBuildInputs = [ youtube-dl ];
+  propagatedBuildInputs = [youtube-dl];
 
   meta = with lib; {
     description = "A library to download YouTube content and retrieve metadata";
     homepage = "https://github.com/mps-youtube/pafy";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ odi ];
+    maintainers = with maintainers; [odi];
   };
 }
-

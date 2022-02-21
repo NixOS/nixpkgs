@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation {
   pname = "prover9";
   version = "2009-11a";
@@ -9,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1l2i3d3h5z7nnbzilb6z92r0rbx0kh6yaxn2c5qhn3000xcfsay3";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   postPatch = ''
     RM=$(type -tp rm)
@@ -22,7 +25,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildFlags = [ "all" ];
+  buildFlags = ["all"];
 
   checkPhase = "make test1";
 
@@ -41,6 +44,6 @@ stdenv.mkDerivation {
       the Otter Prover. This is the LADR command-line version.
     '';
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

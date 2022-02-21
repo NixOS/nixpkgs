@@ -1,24 +1,24 @@
-{ lib
-, mkDerivation
-, cmake
-, elfutils
-, extra-cmake-modules
-, fetchFromGitHub
-, kconfigwidgets
-, ki18n
-, kio
-, kitemmodels
-, kitemviews
-, kwindowsystem
-, libelf
-, qtbase
-, threadweaver
-, qtx11extras
-, zstd
-, kddockwidgets
-, rustc-demangle
+{
+  lib,
+  mkDerivation,
+  cmake,
+  elfutils,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  kconfigwidgets,
+  ki18n,
+  kio,
+  kitemmodels,
+  kitemviews,
+  kwindowsystem,
+  libelf,
+  qtbase,
+  threadweaver,
+  qtx11extras,
+  zstd,
+  kddockwidgets,
+  rustc-demangle,
 }:
-
 mkDerivation rec {
   pname = "hotspot";
   version = "1.3.0";
@@ -73,8 +73,8 @@ mkDerivation rec {
       then displays the result in a graphical way.
     '';
     homepage = "https://github.com/KDAB/hotspot";
-    license = with lib.licenses; [ gpl2Only gpl3Only ];
+    license = with lib.licenses; [gpl2Only gpl3Only];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ nh2 ];
+    maintainers = with lib.maintainers; [nh2];
   };
 }

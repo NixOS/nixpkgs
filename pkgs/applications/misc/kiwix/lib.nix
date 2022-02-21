@@ -1,17 +1,20 @@
-{ stdenv, lib, fetchFromGitHub
-, meson, ninja, pkg-config
-, python3
-, curl
-, icu
-, pugixml
-, zimlib
-, zlib
-, libmicrohttpd
-, mustache-hpp
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  curl,
+  icu,
+  pugixml,
+  zimlib,
+  zlib,
+  libmicrohttpd,
+  mustache-hpp,
+  gtest,
 }:
-
-
 stdenv.mkDerivation rec {
   pname = "kiwix-lib";
   version = "9.4.1";

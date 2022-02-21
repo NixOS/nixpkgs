@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, lxml
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  lxml,
+  pygments,
 }:
-
 buildPythonPackage rec {
   pname = "gcovr";
   version = "5.0";

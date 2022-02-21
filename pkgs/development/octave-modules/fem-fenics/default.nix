@@ -1,11 +1,11 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, dolfin
-, ffc
-, pkg-config
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  dolfin,
+  ffc,
+  pkg-config,
 }:
-
 buildOctavePackage rec {
   pname = "fem-fenics";
   version = "0.0.5";
@@ -27,7 +27,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/fem-fenics/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Package for the resolution of partial differential equations based on fenics";
     # Lots of compilation errors for newer octave versions and syntax errors
     broken = true;

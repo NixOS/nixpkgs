@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, alsa-lib, fixDarwinDylibNames }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  fixDarwinDylibNames,
+}:
 stdenv.mkDerivation rec {
   pname = "sndio";
   version = "1.8.1";
@@ -18,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sndio.org";
     description = "Small audio and MIDI framework part of the OpenBSD project";
     license = licenses.isc;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [chiiruno];
     platforms = platforms.all;
   };
 }

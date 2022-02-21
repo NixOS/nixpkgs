@@ -1,5 +1,4 @@
-{ fetchNimble }:
-
+{fetchNimble}:
 fetchNimble {
   pname = "nimsimd";
   version = "1.0.0";

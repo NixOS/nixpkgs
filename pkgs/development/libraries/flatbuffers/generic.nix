@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, version
-, sha256
-, patches ? [ ]
-, preConfigure ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  version,
+  sha256,
+  patches ? [],
+  preConfigure ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
   inherit version;
@@ -21,10 +21,14 @@ stdenv.mkDerivation rec {
 
   inherit patches preConfigure;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   cmakeFlags = [
-    "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DFLATBUFFERS_BUILD_TESTS=${
+      if doCheck
+      then "ON"
+      else "OFF"
+    }"
   ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
@@ -38,7 +42,7 @@ stdenv.mkDerivation rec {
       access serialized data without unpacking/parsing it first, while still
       having great forwards/backwards compatibility.
     '';
-    maintainers = [ maintainers.teh ];
+    maintainers = [maintainers.teh];
     license = licenses.asl20;
     platforms = platforms.unix;
     homepage = "https://google.github.io/flatbuffers/";

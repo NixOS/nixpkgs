@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, param
-, pyct
-, pytest-mpl
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  param,
+  pyct,
+  pytest-mpl,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "colorcet";
   version = "3.0.0";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Collection of perceptually uniform colormaps";
     homepage = "https://colorcet.pyviz.org";
     license = licenses.cc-by-40;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

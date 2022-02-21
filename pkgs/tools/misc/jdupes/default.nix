@@ -1,13 +1,16 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "jdupes";
   version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "jbruchon";
-    repo  = "jdupes";
-    rev   = "v${version}";
+    repo = "jdupes";
+    rev = "v${version}";
     sha256 = "sha256-3hKO+hNwYiJZ9Wn53vM7DHZmtvDhtgtSbW7bCMCT7s0=";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
@@ -17,14 +20,17 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ] ++ lib.optionals stdenv.isLinux [
-    "ENABLE_DEDUPE=1"
-    "STATIC_DEDUPE_H=1"
-  ] ++ lib.optionals stdenv.cc.isGNU [
-    "HARDEN=1"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "ENABLE_DEDUPE=1"
+      "STATIC_DEDUPE_H=1"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      "HARDEN=1"
+    ];
 
   enableParallelBuilding = true;
 
@@ -43,6 +49,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jbruchon/jdupes";
     license = licenses.mit;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

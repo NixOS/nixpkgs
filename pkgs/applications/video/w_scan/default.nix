@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "w_scan";
   version = "20170107";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Small CLI utility to scan DVB and ATSC transmissions";
     homepage = "http://wirbel.htpc-forum.de/w_scan/index_en.html";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.nico202 ] ;
+    maintainers = [lib.maintainers.nico202];
     license = lib.licenses.gpl2;
   };
 }

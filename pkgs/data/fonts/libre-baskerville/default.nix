@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-
+{
+  lib,
+  fetchFromGitHub,
+}:
 fetchFromGitHub rec {
   name = "libre-baskerville-1.000";
 
@@ -25,7 +27,7 @@ fetchFromGitHub rec {
     '';
     homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = with maintainers; [cmfwyp];
     platforms = platforms.all;
   };
 }

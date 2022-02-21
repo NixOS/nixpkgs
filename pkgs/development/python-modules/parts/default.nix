@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "parts";
   version = "1.2.2";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for common list functions related to partitioning lists";
     homepage = "https://github.com/lapets/parts";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

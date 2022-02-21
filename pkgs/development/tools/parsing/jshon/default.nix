@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, jansson }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  jansson,
+}:
 stdenv.mkDerivation rec {
   pname = "jshon";
   version = "20170302";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x4zfmsjq0l2y994bxkhx3mn5vzjxxr39iib213zjchi9h6yxvnc";
   };
 
-  buildInputs = [ jansson ];
+  buildInputs = [jansson];
 
   patches = [
     (fetchpatch {
@@ -21,21 +26,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    ''
-      substituteInPlace Makefile --replace "/usr/" "/"
-    '';
+  postPatch = ''
+    substituteInPlace Makefile --replace "/usr/" "/"
+  '';
 
-  preInstall =
-    ''
-      export DESTDIR=$out
-    '';
+  preInstall = ''
+    export DESTDIR=$out
+  '';
 
   meta = with lib; {
     homepage = "http://kmkeen.com/jshon";
     description = "JSON parser designed for maximum convenience within the shell";
     license = licenses.free;
     platforms = platforms.all;
-    maintainers = with maintainers; [ rushmorem ];
+    maintainers = with maintainers; [rushmorem];
   };
 }

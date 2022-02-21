@@ -1,13 +1,13 @@
 # Zeitgeist
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [] ++ teams.pantheon.members;
   };
 
   ###### interface
@@ -21,11 +21,10 @@ with lib;
   ###### implementation
 
   config = mkIf config.services.zeitgeist.enable {
+    environment.systemPackages = [pkgs.zeitgeist];
 
-    environment.systemPackages = [ pkgs.zeitgeist ];
+    services.dbus.packages = [pkgs.zeitgeist];
 
-    services.dbus.packages = [ pkgs.zeitgeist ];
-
-    systemd.packages = [ pkgs.zeitgeist ];
+    systemd.packages = [pkgs.zeitgeist];
   };
 }

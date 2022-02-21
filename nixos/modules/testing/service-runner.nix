@@ -1,12 +1,13 @@
-{ lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  makeScript = name: service: pkgs.writeScript "${name}-runner"
+{
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  makeScript = name: service:
+    pkgs.writeScript "${name}-runner"
     ''
-      #! ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl -w
+      #! ${pkgs.perl.withPackages (p: [p.FileSlurp])}/bin/perl -w
 
       use File::Slurp;
 
@@ -46,9 +47,12 @@ let
           next if $key eq 'LOCALE_ARCHIVE';
           delete $ENV{$key};
       }
-      ${concatStrings (mapAttrsToList (n: v: ''
-        $ENV{'${n}'} = '${v}';
-      '') service.environment)}
+      ${
+        concatStrings (mapAttrsToList (n: v: ''
+          $ENV{'${n}'} = '${v}';
+        '')
+        service.environment)
+      }
 
       # Run the ExecStartPre program.  FIXME: this could be a list.
       my $preStart = <<END_CMD;
@@ -104,21 +108,22 @@ let
       exit($mainRes & 127 ? 255 : $mainRes << 8);
     '';
 
-  opts = { config, name, ... }: {
+  opts = {
+    config,
+    name,
+    ...
+  }: {
     options.runner = mkOption {
-    internal = true;
-    description = ''
+      internal = true;
+      description = ''
         A script that runs the service outside of systemd,
         useful for testing or for using NixOS services outside
         of NixOS.
-    '';
+      '';
     };
     config.runner = makeScript name config;
   };
-
-in
-
-{
+in {
   options = {
     systemd.services = mkOption {
       type = with types; attrsOf (submodule opts);

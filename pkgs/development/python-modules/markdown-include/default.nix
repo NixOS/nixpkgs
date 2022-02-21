@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, markdown
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  markdown,
 }:
-
 buildPythonPackage rec {
   pname = "markdown-include";
   version = "0.6.0";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Extension to Python-Markdown which provides an include function";
     homepage = "https://github.com/cmacmackin/markdown-include";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

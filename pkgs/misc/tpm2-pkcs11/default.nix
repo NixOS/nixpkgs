@@ -1,9 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, substituteAll
-, pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
-, tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python37, glibc, libyaml
-, abrmdSupport ? true, tpm2-abrmd ? null
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  pkg-config,
+  autoreconfHook,
+  autoconf-archive,
+  makeWrapper,
+  patchelf,
+  tpm2-tss,
+  tpm2-tools,
+  opensc,
+  openssl,
+  sqlite,
+  python37,
+  glibc,
+  libyaml,
+  abrmdSupport ? true,
+  tpm2-abrmd ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tpm2-pkcs11";
   version = "1.7.0";
@@ -19,7 +34,8 @@ stdenv.mkDerivation rec {
     substituteAll {
       src = ./0001-configure-ac-version.patch;
       VERSION = version;
-    });
+    }
+  );
 
   # The preConfigure phase doesn't seem to be working here
   # ./bootstrap MUST be executed as the first step, before all
@@ -29,14 +45,23 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config autoreconfHook autoconf-archive makeWrapper patchelf
+    pkg-config
+    autoreconfHook
+    autoconf-archive
+    makeWrapper
+    patchelf
   ];
   buildInputs = [
-    tpm2-tss tpm2-tools opensc openssl sqlite libyaml
-    (python37.withPackages (ps: [ ps.pyyaml ps.cryptography ps.pyasn1-modules ]))
+    tpm2-tss
+    tpm2-tools
+    opensc
+    openssl
+    sqlite
+    libyaml
+    (python37.withPackages (ps: [ps.pyyaml ps.cryptography ps.pyasn1-modules]))
   ];
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = ["out" "bin" "dev"];
 
   dontStrip = true;
   dontPatchELF = true;
@@ -66,7 +91,7 @@ stdenv.mkDerivation rec {
     mkdir -p $bin/bin/ $bin/share/tpm2_pkcs11/
     mv ./tools/* $bin/share/tpm2_pkcs11/
     makeWrapper $bin/share/tpm2_pkcs11/tpm2_ptool.py $bin/bin/tpm2_ptool \
-      --prefix PATH : ${lib.makeBinPath [ tpm2-tools ]}
+      --prefix PATH : ${lib.makeBinPath [tpm2-tools]}
   '';
 
   meta = with lib; {
@@ -74,6 +99,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
   };
 }

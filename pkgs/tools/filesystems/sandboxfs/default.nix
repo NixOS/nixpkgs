@@ -1,11 +1,11 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, installShellFiles
-, fuse
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  installShellFiles,
+  fuse,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "sandboxfs";
   version = "0.2.0";
@@ -17,16 +17,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-izz10ePmEt2xxOyR4NODIMAcY9d4ODo677mq+DVf4RI=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [pkg-config installShellFiles];
 
-  buildInputs = [ fuse ];
+  buildInputs = [fuse];
 
   postInstall = "installManPage man/sandboxfs.1";
 
   meta = with lib; {
     description = "A virtual file system for sandboxing";
     homepage = "https://github.com/bazelbuild/sandboxfs";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jeremyschlatter ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [jeremyschlatter];
   };
 }

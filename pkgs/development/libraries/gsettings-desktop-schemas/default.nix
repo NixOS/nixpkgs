@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, glib
-, gobject-introspection
-, meson
-, ninja
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  meson,
+  ninja,
+  python3
   # just for passthru
-, gnome
+  ,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
   version = "41.0";
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [pkg-config];
   nativeBuildInputs = [
     glib
     meson

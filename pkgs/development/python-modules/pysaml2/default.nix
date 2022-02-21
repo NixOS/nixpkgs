@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, defusedxml
-, fetchFromGitHub
-, importlib-resources
-, mock
-, pyasn1
-, pymongo
-, pyopenssl
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
-, responses
-, six
-, substituteAll
-, xmlschema
-, xmlsec
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  defusedxml,
+  fetchFromGitHub,
+  importlib-resources,
+  mock,
+  pyasn1,
+  pymongo,
+  pyopenssl,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  requests,
+  responses,
+  six,
+  substituteAll,
+  xmlschema,
+  xmlsec,
 }:
-
 buildPythonPackage rec {
   pname = "pysaml2";
   version = "7.1.0";
@@ -34,18 +34,20 @@ buildPythonPackage rec {
     sha256 = "sha256-3Yl6j6KAlw7QQYnwU7+naY6D97IqX766zguekKAuic8=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    python-dateutil
-    defusedxml
-    pyopenssl
-    pytz
-    requests
-    six
-    xmlschema
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      cryptography
+      python-dateutil
+      defusedxml
+      pyopenssl
+      pytz
+      requests
+      six
+      xmlschema
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   checkInputs = [
     mock
@@ -83,6 +85,6 @@ buildPythonPackage rec {
     description = "Python implementation of SAML Version 2 Standard";
     homepage = "https://github.com/IdentityPython/pysaml2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodomex
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodomex,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "dsinternals";
   version = "1.2.4";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Module to interact with Windows Active Directory";
     homepage = "https://github.com/p0dalirius/pydsinternals";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

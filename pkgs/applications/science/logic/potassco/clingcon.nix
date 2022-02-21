@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, clingo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  clingo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "clingcon";
   version = "5.0.0";
@@ -13,9 +14,9 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     sha256 = "1g2xkz9nsgqnrw3fdf5jchl16f0skj5mm32va61scc2yrchll166";
-   };
+  };
 
-  nativeBuildInputs = [ cmake clingo ];
+  nativeBuildInputs = [cmake clingo];
 
   cmakeFlags = [
     "-DCLINGCON_MANAGE_RPATH=ON"

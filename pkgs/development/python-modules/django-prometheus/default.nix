@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, prometheus-client
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  prometheus-client,
+  pytest-django,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "django-prometheus";
   version = "2.2.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Django middlewares to monitor your application with Prometheus.io";
     homepage = "https://github.com/korfuri/django-prometheus";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

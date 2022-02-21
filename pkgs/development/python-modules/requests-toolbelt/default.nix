@@ -1,14 +1,14 @@
-{ lib
-, betamax
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, mock
-, pyopenssl
-, pytestCheckHook
-, requests
+{
+  lib,
+  betamax,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  mock,
+  pyopenssl,
+  pytestCheckHook,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "requests-toolbelt";
   version = "0.9.1";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Toolbelt of useful classes and functions to be used with requests";
     homepage = "http://toolbelt.rtfd.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
   };
 }

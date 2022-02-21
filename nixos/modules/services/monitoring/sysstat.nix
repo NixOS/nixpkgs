@@ -1,6 +1,10 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.sysstat;
 in {
   options = {
@@ -28,7 +32,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.sysstat = {
       description = "Resets System Activity Logs";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         User = "root";
@@ -52,7 +56,7 @@ in {
 
     systemd.timers.sysstat-collect = {
       description = "Run system activity accounting tool on a regular basis";
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
       timerConfig.OnCalendar = cfg.collect-frequency;
     };
 
@@ -69,7 +73,7 @@ in {
 
     systemd.timers.sysstat-summary = {
       description = "Generate summary of yesterday's process accounting";
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
       timerConfig.OnCalendar = "00:07:00";
     };
   };

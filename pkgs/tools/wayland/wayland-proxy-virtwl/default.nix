@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, ocamlPackages
-, buildPackages
+{
+  lib,
+  fetchFromGitHub,
+  ocamlPackages,
+  buildPackages,
 }:
-
 ocamlPackages.buildDunePackage rec {
   pname = "wayland-proxy-virtwl";
   version = "unstable-2021-12-05";
@@ -40,6 +40,6 @@ ocamlPackages.buildDunePackage rec {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";
     description = "Proxy Wayland connections across a VM boundary";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = [lib.maintainers.sternenseemann];
   };
 }

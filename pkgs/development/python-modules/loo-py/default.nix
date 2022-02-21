@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytools
-, pymbolic
-, genpy
-, cgen
-, islpy
-, six
-, colorama
-, mako
-, pyopencl
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytools,
+  pymbolic,
+  genpy,
+  cgen,
+  islpy,
+  six,
+  colorama,
+  mako,
+  pyopencl,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "loo-py";
   version = "2020.2";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "c0aba31f8b61f6487e84120a154fab862d19c3b374ad4285b987c4f2d746d51f";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   propagatedBuildInputs = [
     pytools
     pymbolic
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "A code generator for array-based code on CPUs and GPUs";
     homepage = "https://mathema.tician.de/software/loopy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

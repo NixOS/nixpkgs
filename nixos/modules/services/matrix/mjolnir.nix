@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.mjolnir;
 
   yamlConfig = {
@@ -9,10 +12,9 @@ let
 
     accessToken = "@ACCESS_TOKEN@"; # will be replaced in "generateConfig"
     homeserverUrl =
-      if cfg.pantalaimon.enable then
-        "http://${cfg.pantalaimon.options.listenAddress}:${toString cfg.pantalaimon.options.listenPort}"
-      else
-        cfg.homeserverUrl;
+      if cfg.pantalaimon.enable
+      then "http://${cfg.pantalaimon.options.listenAddress}:${toString cfg.pantalaimon.options.listenPort}"
+      else cfg.homeserverUrl;
 
     rawHomeserverUrl = cfg.homeserverUrl;
 
@@ -25,8 +27,9 @@ let
   };
 
   moduleConfigFile = pkgs.writeText "module-config.yaml" (
-    generators.toYAML { } (filterAttrs (_: v: v != null)
-      (fold recursiveUpdate { } [ yamlConfig cfg.settings ])));
+    generators.toYAML {} (filterAttrs (_: v: v != null)
+    (fold recursiveUpdate {} [yamlConfig cfg.settings]))
+  );
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
@@ -40,8 +43,7 @@ let
     let
       yqEvalStr = concatImapStringsSep " * " (pos: _: "select(fileIndex == ${toString (pos - 1)})") configFiles;
       yqEvalArgs = concatStringsSep " " configFiles;
-    in
-    ''
+    in ''
       set -euo pipefail
 
       umask 077
@@ -54,16 +56,19 @@ let
       # e.g. "eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' filea.yaml fileb.yaml" will merge filea.yaml with fileb.yaml
       ${pkgs.yq-go}/bin/yq eval-all -P '${yqEvalStr}' ${yqEvalArgs} > ${cfg.dataPath}/config/default.yaml
 
-      ${optionalString (cfg.accessTokenFile != null) ''
-        ${pkgs.replace-secret}/bin/replace-secret '@ACCESS_TOKEN@' '${cfg.accessTokenFile}' ${cfg.dataPath}/config/default.yaml
-      ''}
-      ${optionalString (cfg.pantalaimon.passwordFile != null) ''
-        ${pkgs.replace-secret}/bin/replace-secret '@PANTALAIMON_PASSWORD@' '${cfg.pantalaimon.passwordFile}' ${cfg.dataPath}/config/default.yaml
-      ''}
+      ${
+        optionalString (cfg.accessTokenFile != null) ''
+          ${pkgs.replace-secret}/bin/replace-secret '@ACCESS_TOKEN@' '${cfg.accessTokenFile}' ${cfg.dataPath}/config/default.yaml
+        ''
+      }
+      ${
+        optionalString (cfg.pantalaimon.passwordFile != null) ''
+          ${pkgs.replace-secret}/bin/replace-secret '@PANTALAIMON_PASSWORD@' '${cfg.pantalaimon.passwordFile}' ${cfg.dataPath}/config/default.yaml
+        ''
+      }
     ''
   );
-in
-{
+in {
   options.services.mjolnir = {
     enable = mkEnableOption "Mjolnir, a moderation tool for Matrix";
 
@@ -92,7 +97,7 @@ in
 
         This will create a <literal>pantalaimon</literal> instance with the name "mjolnir".
       '';
-      default = { };
+      default = {};
       type = types.submodule {
         options = {
           enable = mkEnableOption ''
@@ -115,7 +120,7 @@ in
 
           options = mkOption {
             type = types.submodule (import ./pantalaimon-options.nix);
-            default = { };
+            default = {};
             description = ''
               passthrough additional options to the <literal>pantalaimon</literal> service.
             '';
@@ -145,7 +150,7 @@ in
 
     protectedRooms = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       example = literalExpression ''
         [
           "https://matrix.to/#/#yourroom:example.org"
@@ -158,8 +163,8 @@ in
     };
 
     settings = mkOption {
-      default = { };
-      type = (pkgs.formats.yaml { }).type;
+      default = {};
+      type = (pkgs.formats.yaml {}).type;
       example = literalExpression ''
         {
           autojoinOnlyIfManager = true;
@@ -188,20 +193,22 @@ in
       }
     ];
 
-    services.pantalaimon-headless.instances."mjolnir" = mkIf cfg.pantalaimon.enable
+    services.pantalaimon-headless.instances."mjolnir" =
+      mkIf cfg.pantalaimon.enable
       {
         homeserver = cfg.homeserverUrl;
-      } // cfg.pantalaimon.options;
+      }
+      // cfg.pantalaimon.options;
 
     systemd.services.mjolnir = {
       description = "mjolnir - a moderation tool for Matrix";
-      wants = [ "network-online.target" ] ++ optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
-      after = [ "network-online.target" ] ++ optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
-      wantedBy = [ "multi-user.target" ];
+      wants = ["network-online.target"] ++ optionals (cfg.pantalaimon.enable) ["pantalaimon-mjolnir.service"];
+      after = ["network-online.target"] ++ optionals (cfg.pantalaimon.enable) ["pantalaimon-mjolnir.service"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         ExecStart = ''${pkgs.mjolnir}/bin/mjolnir'';
-        ExecStartPre = [ generateConfig ];
+        ExecStartPre = [generateConfig];
         WorkingDirectory = cfg.dataPath;
         StateDirectory = "mjolnir";
         StateDirectoryMode = "0700";
@@ -213,16 +220,17 @@ in
         User = "mjolnir";
         Restart = "on-failure";
 
-        /* TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME"
-        DynamicUser = true;
-        LoadCredential = [] ++
-          optionals (cfg.accessTokenFile != null) [
-            "access_token:${cfg.accessTokenFile}"
-          ] ++
-          optionals (cfg.pantalaimon.passwordFile != null) [
-            "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
-          ];
-        */
+        /*
+            TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME"
+         DynamicUser = true;
+         LoadCredential = [] ++
+           optionals (cfg.accessTokenFile != null) [
+             "access_token:${cfg.accessTokenFile}"
+           ] ++
+           optionals (cfg.pantalaimon.passwordFile != null) [
+             "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
+           ];
+         */
       };
     };
 
@@ -231,12 +239,12 @@ in
         group = "mjolnir";
         isSystemUser = true;
       };
-      groups.mjolnir = { };
+      groups.mjolnir = {};
     };
   };
 
   meta = {
     doc = ./mjolnir.xml;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pi1wire";
   version = "0.2.0";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
     "test_find_all_sensors" # flaky
   ];
 
-  pythonImportsCheck = [ "pi1wire" ];
+  pythonImportsCheck = ["pi1wire"];
 
   meta = with lib; {
     description = "1Wire Sensor Library for Raspberry PI";
     homepage = "https://github.com/ushiboy/pi1wire";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

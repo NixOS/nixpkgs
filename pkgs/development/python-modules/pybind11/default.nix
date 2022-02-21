@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, boost
-, eigen
-, python
-, catch
-, numpy
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  eigen,
+  python,
+  catch,
+  numpy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pybind11";
   version = "2.9.1";
@@ -22,17 +22,19 @@ buildPythonPackage rec {
     hash = "sha256-wBvEWQlZhHoSCMbGgYtB3alWBLA8mA8Mz6JPLhXa3Pc=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   dontUseCmakeBuildDir = true;
 
-  cmakeFlags = [
-    "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
-    "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-    "-DBUILD_TESTING=on"
-  ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
-    "-DPYBIND11_CXX_STANDARD=-std=c++17"
-  ];
+  cmakeFlags =
+    [
+      "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
+      "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
+      "-DBUILD_TESTING=on"
+    ]
+    ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
+      "-DPYBIND11_CXX_STANDARD=-std=c++17"
+    ];
 
   postBuild = ''
     # build tests
@@ -71,6 +73,6 @@ buildPythonPackage rec {
       bindings of existing C++ code.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ yuriaisaka dotlambda ];
+    maintainers = with maintainers; [yuriaisaka dotlambda];
   };
 }

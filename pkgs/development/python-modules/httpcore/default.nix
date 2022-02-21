@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, anyio
-, certifi
-, h11
-, h2
-, pproxy
-, pytest-asyncio
-, pytestCheckHook
-, pytest-cov
-, pytest-httpbin
-, sniffio
-, trio
-, trustme
-, uvicorn
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  anyio,
+  certifi,
+  h11,
+  h2,
+  pproxy,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-httpbin,
+  sniffio,
+  trio,
+  trustme,
+  uvicorn,
 }:
-
 buildPythonPackage rec {
   pname = "httpcore";
   version = "0.14.4";
@@ -48,12 +48,12 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  pythonImportsCheck = [ "httpcore" ];
+  pythonImportsCheck = ["httpcore"];
 
   meta = with lib; {
     description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ris];
   };
 }

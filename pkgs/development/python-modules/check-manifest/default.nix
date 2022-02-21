@@ -1,15 +1,15 @@
-{ lib
-, breezy
-, build
-, buildPythonPackage
-, fetchPypi
-, git
-, mock
-, pep517
-, pytestCheckHook
-, toml
+{
+  lib,
+  breezy,
+  build,
+  buildPythonPackage,
+  fetchPypi,
+  git,
+  mock,
+  pep517,
+  pytestCheckHook,
+  toml,
 }:
-
 buildPythonPackage rec {
   pname = "check-manifest";
   version = "0.47";
@@ -37,12 +37,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "check_manifest" ];
+  pythonImportsCheck = ["check_manifest"];
 
   meta = with lib; {
     homepage = "https://github.com/mgedmin/check-manifest";
     description = "Check MANIFEST.in in a Python source package for completeness";
     license = licenses.mit;
-    maintainers = with maintainers; [ lewo ];
+    maintainers = with maintainers; [lewo];
   };
 }

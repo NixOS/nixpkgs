@@ -1,16 +1,16 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, librsvg
-, libwnck
-, libxklavier
-, garcon
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
+{
+  lib,
+  mkXfceDerivation,
+  gtk3,
+  librsvg,
+  libwnck,
+  libxklavier,
+  garcon,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
 }:
-
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-xkb-plugin";
@@ -32,6 +32,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Allows you to setup and use multiple keyboard layouts";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

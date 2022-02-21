@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [ ] }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  xorgproto,
+  libX11,
+  libXft,
+  customConfig ? null,
+  patches ? [],
+}:
 stdenv.mkDerivation {
   pname = "tabbed";
   version = "unstable-2018-03-10";
@@ -16,17 +24,17 @@ stdenv.mkDerivation {
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 
-  buildInputs = [ xorgproto libX11 libXft ];
+  buildInputs = [xorgproto libX11 libXft];
 
-  makeFlags = [ "CC:=$(CC)" ];
+  makeFlags = ["CC:=$(CC)"];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://tools.suckless.org/tabbed";
     description = "Simple generic tabbed fronted to xembed aware applications";
     license = licenses.mit;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
     platforms = platforms.linux;
   };
 }

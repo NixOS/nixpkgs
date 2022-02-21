@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
+}:
 buildGoPackage rec {
   pname = "kt";
   version = "12.1.0";
@@ -16,7 +19,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Kafka command line tool";
     homepage = "https://github.com/fgeller/kt";
-    maintainers = with maintainers; [ utdemir ];
+    maintainers = with maintainers; [utdemir];
     platforms = with platforms; unix;
     license = licenses.mit;
   };

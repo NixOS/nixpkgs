@@ -1,7 +1,18 @@
-{ stdenv, cmake, lib, fetchFromGitHub, qt5, fftw, libtorch-bin, portaudio, eigen
-, xorg, pkg-config, autoPatchelfHook, soxr
+{
+  stdenv,
+  cmake,
+  lib,
+  fetchFromGitHub,
+  qt5,
+  fftw,
+  libtorch-bin,
+  portaudio,
+  eigen,
+  xorg,
+  pkg-config,
+  autoPatchelfHook,
+  soxr,
 }:
-
 stdenv.mkDerivation rec {
   pname = "in-formant";
   version = "2021-06-30";
@@ -15,7 +26,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config qt5.wrapQtAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [cmake pkg-config qt5.wrapQtAppsHook autoPatchelfHook];
 
   buildInputs = [
     qt5.qtbase
@@ -40,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/in-formant/in-formant";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = with maintainers; [ckie];
   };
 }

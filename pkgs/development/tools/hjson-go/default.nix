@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "hjson-go";
   version = "3.1.1";
@@ -14,9 +17,10 @@ buildGoPackage rec {
   goPackagePath = "github.com/hjson/hjson-go";
 
   meta = with lib;
-    src.meta // {
+    src.meta
+    // {
       description = "Utility to convert JSON to and from HJSON";
-      maintainers = with maintainers; [ ehmry ];
+      maintainers = with maintainers; [ehmry];
       license = licenses.mit;
     };
 }

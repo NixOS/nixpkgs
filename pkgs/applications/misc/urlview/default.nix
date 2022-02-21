@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl, ncurses, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
-  version    = "0.9";
+  version = "0.9";
   patchLevel = "19";
 
   name = "urlview-${version}-${patchLevel}";
@@ -13,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "746ff540ccf601645f500ee7743f443caf987d6380e61e5249fc15f7a455ed42";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [ncurses];
 
   preAutoreconf = ''
     touch NEWS
@@ -46,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://packages.qa.debian.org/u/urlview.html";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

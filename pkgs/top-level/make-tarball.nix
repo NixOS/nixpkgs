@@ -1,15 +1,16 @@
-/* Hydra job to build a tarball for Nixpkgs from a Git checkout.  It
-   also builds the documentation and tests whether the Nix expressions
-   evaluate correctly. */
-
-{ nixpkgs
-, officialRelease
-, supportedSystems
-, pkgs ? import nixpkgs.outPath {}
-, nix ? pkgs.nix
-, lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
+/*
+ Hydra job to build a tarball for Nixpkgs from a Git checkout.  It
+ also builds the documentation and tests whether the Nix expressions
+ evaluate correctly.
+ */
+{
+  nixpkgs,
+  officialRelease,
+  supportedSystems,
+  pkgs ? import nixpkgs.outPath {},
+  nix ? pkgs.nix,
+  lib-tests ? import ../../lib/tests/release.nix {inherit pkgs;},
 }:
-
 pkgs.releaseTools.sourceTarball {
   name = "nixpkgs-tarball";
   src = nixpkgs;
@@ -19,9 +20,10 @@ pkgs.releaseTools.sourceTarball {
   versionSuffix = "pre${
     if nixpkgs ? lastModified
     then builtins.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified)
-    else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
+    else toString nixpkgs.revCount
+  }.${nixpkgs.shortRev or "dirty"}";
 
-  buildInputs = with pkgs; [ nix.out jq lib-tests brotli ];
+  buildInputs = with pkgs; [nix.out jq lib-tests brotli];
 
   configurePhase = ''
     eval "$preConfigure"
@@ -33,7 +35,7 @@ pkgs.releaseTools.sourceTarball {
   '';
 
   nixpkgs-basic-release-checks = import ./nixpkgs-basic-release-checks.nix
-   { inherit nix pkgs nixpkgs supportedSystems; };
+  {inherit nix pkgs nixpkgs supportedSystems;};
 
   dontBuild = false;
 
@@ -81,6 +83,6 @@ pkgs.releaseTools.sourceTarball {
   '';
 
   meta = {
-    maintainers = [ pkgs.lib.maintainers.all ];
+    maintainers = [pkgs.lib.maintainers.all];
   };
 }

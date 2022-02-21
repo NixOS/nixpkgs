@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+}:
 stdenv.mkDerivation rec {
   pname = "rtl8821cu";
   version = "${kernel.version}-unstable-2021-10-21";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1j32psvfgzfs5b1pdff6xk76iz7j8scakji6zm3vgqb2ssbxx1k1";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
-  nativeBuildInputs = [ bc ];
+  nativeBuildInputs = [bc];
   buildInputs = kernel.moduleBuildDependencies;
 
   prePatch = ''
@@ -35,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/morrownr/8821cu";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.contrun ];
+    maintainers = [maintainers.contrun];
   };
 }

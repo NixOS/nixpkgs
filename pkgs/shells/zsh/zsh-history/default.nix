@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "zsh-history";
   version = "2019-12-10";
@@ -11,7 +16,7 @@ buildGoModule rec {
     sha256 = "13n643ik1zjvpk8h9458yd9ffahhbdnigmbrbmpn7b7g23wqqsi3";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   vendorSha256 = "1863ad97y82fx0an1ysalkxnqjz3zfz228wag9a92wdssl1vwzws";
 
@@ -28,7 +33,7 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/b4b4r07/history";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 
   passthru.tests = {

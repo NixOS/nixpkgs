@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "validictory";
   version = "1.1.2";
@@ -19,5 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/sunlightlabs/validictory";
     license = licenses.mit;
   };
-
 }

@@ -1,9 +1,11 @@
-{ config, lib, ... }:
-with lib;
-let
-  cfg = config.services.oauth2_proxy.nginx;
-in
 {
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.oauth2_proxy.nginx;
+in {
   options.services.oauth2_proxy.nginx = {
     proxy = mkOption {
       type = types.str;
@@ -27,7 +29,8 @@ in
   config.services.nginx = mkIf config.services.oauth2_proxy.enable (mkMerge
   ((optional (cfg.virtualHosts != []) {
     recommendedProxySettings = true; # needed because duplicate headers
-  }) ++ (map (vhost: {
+  })
+  ++ (map (vhost: {
     virtualHosts.${vhost} = {
       locations."/oauth2/" = {
         proxyPass = cfg.proxy;
@@ -60,7 +63,7 @@ in
         auth_request_set $auth_cookie $upstream_http_set_cookie;
         add_header Set-Cookie $auth_cookie;
       '';
-
     };
-  }) cfg.virtualHosts)));
+  })
+  cfg.virtualHosts)));
 }

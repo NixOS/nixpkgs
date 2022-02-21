@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, hidapi
-, libcbor
-, openssl
-, udev
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  hidapi,
+  libcbor,
+  openssl,
+  udev,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libfido2";
   version = "1.9.0";
@@ -20,20 +20,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ujnjrzc20t/IrT0ctuO+fszAlYhhCjsHyGXQ7T5YwtI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ libcbor openssl zlib ]
-    ++ lib.optionals stdenv.isDarwin [ hidapi ]
-    ++ lib.optionals stdenv.isLinux [ udev ];
+  buildInputs =
+    [libcbor openssl zlib]
+    ++ lib.optionals stdenv.isDarwin [hidapi]
+    ++ lib.optionals stdenv.isLinux [udev];
 
-  cmakeFlags = [
-    "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DUSE_HIDAPI=1"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-DNFC_LINUX=1"
-  ];
+  cmakeFlags =
+    [
+      "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DUSE_HIDAPI=1"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "-DNFC_LINUX=1"
+    ];
 
   meta = with lib; {
     description = ''
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Yubico/libfido2";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill prusnak ];
+    maintainers = with maintainers; [dtzWill prusnak];
     platforms = platforms.unix;
   };
 }

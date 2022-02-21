@@ -1,5 +1,3 @@
-{ modulesPath, ... }:
-
-{
-  imports = [ "${modulesPath}/virtualisation/brightbox-image.nix" ];
+{modulesPath, ...}: {
+  imports = ["${modulesPath}/virtualisation/brightbox-image.nix"];
 }

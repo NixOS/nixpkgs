@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "daemonize";
   version = "2.5.0";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/thesharp/daemonize";
     license = licenses.mit;
   };
-
 }

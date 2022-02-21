@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, unzip, bash, jre8 }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  unzip,
+  bash,
+  jre8,
+}: let
   pname = "diylc";
   version = "4.18.0";
   files = {
@@ -30,47 +36,47 @@ let
     categories = "Development;Electronics;";
   };
 in
-stdenv.mkDerivation rec {
-  inherit pname version;
+  stdenv.mkDerivation rec {
+    inherit pname version;
 
-  dontUnpack = true;
+    dontUnpack = true;
 
-  buildInputs = [ jre8 ];
-  nativeBuildInputs = [ unzip ];
+    buildInputs = [jre8];
+    nativeBuildInputs = [unzip];
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/share/diylc
-    unzip -UU ${files.app} -d $out/share/diylc
-    rm $out/share/diylc/diylc.exe
-    rm $out/share/diylc/run.sh
+      mkdir -p $out/share/diylc
+      unzip -UU ${files.app} -d $out/share/diylc
+      rm $out/share/diylc/diylc.exe
+      rm $out/share/diylc/run.sh
 
-    # Nope, the icon cannot be named 'diylc' because KDE does not like it.
-    install -Dm644 ${files.icon16} $out/share/icons/hicolor/16x16/apps/diylc_icon.png
-    install -Dm644 ${files.icon32} $out/share/icons/hicolor/32x32/apps/diylc_icon.png
-    install -Dm644 ${files.icon48} $out/share/icons/hicolor/48x48/apps/diylc_icon.png
+      # Nope, the icon cannot be named 'diylc' because KDE does not like it.
+      install -Dm644 ${files.icon16} $out/share/icons/hicolor/16x16/apps/diylc_icon.png
+      install -Dm644 ${files.icon32} $out/share/icons/hicolor/32x32/apps/diylc_icon.png
+      install -Dm644 ${files.icon48} $out/share/icons/hicolor/48x48/apps/diylc_icon.png
 
-    mkdir -p $out/share/applications
-    ln -s ${launcher}/share/applications/* $out/share/applications/
+      mkdir -p $out/share/applications
+      ln -s ${launcher}/share/applications/* $out/share/applications/
 
-    mkdir -p $out/bin
-    cat <<EOF > $out/bin/diylc
-    #!${bash}/bin/sh
-    cd $out/share/diylc
-    ${jre8}/bin/java -Xms512m -Xmx2048m -Dorg.diylc.scriptRun=true -Dfile.encoding=UTF-8 -cp diylc.jar:lib org.diylc.DIYLCStarter
-    EOF
-    chmod +x $out/bin/diylc
+      mkdir -p $out/bin
+      cat <<EOF > $out/bin/diylc
+      #!${bash}/bin/sh
+      cd $out/share/diylc
+      ${jre8}/bin/java -Xms512m -Xmx2048m -Dorg.diylc.scriptRun=true -Dfile.encoding=UTF-8 -cp diylc.jar:lib org.diylc.DIYLCStarter
+      EOF
+      chmod +x $out/bin/diylc
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  meta = with lib; {
-    description = "Multi platform circuit layout and schematic drawing tool";
-    homepage = "https://bancika.github.io/diy-layout-creator/";
-    changelog = "https://github.com/bancika/diy-layout-creator/releases";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
-  };
-}
+    meta = with lib; {
+      description = "Multi platform circuit layout and schematic drawing tool";
+      homepage = "https://bancika.github.io/diy-layout-creator/";
+      changelog = "https://github.com/bancika/diy-layout-creator/releases";
+      license = licenses.gpl3Plus;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [];
+    };
+  }

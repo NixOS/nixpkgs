@@ -1,12 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
-
   pname = "omniorb";
   version = "4.3.0";
 
@@ -15,11 +14,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-l2BFojQfTpqFBosh9L2SiZMpKTPu7O/qNy2wngIZ6t0=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [python3];
 
   enableParallelBuilding = true;
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "A robust high performance CORBA ORB for C++ and Python";
@@ -29,9 +28,9 @@ stdenv.mkDerivation rec {
       (for the libraries),and GNU General Public License (for the tools).
       omniORB is largely CORBA 2.6 compliant.
     '';
-    homepage    = "http://omniorb.sourceforge.net/";
-    license     = with licenses; [ gpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ smironov ];
-    platforms   = platforms.unix;
+    homepage = "http://omniorb.sourceforge.net/";
+    license = with licenses; [gpl2Plus lgpl21Plus];
+    maintainers = with maintainers; [smironov];
+    platforms = platforms.unix;
   };
 }

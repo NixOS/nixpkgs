@@ -1,5 +1,9 @@
-{ lib, pkgs, config, ... }:
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
   cfg = config.security.tpm2;
 
   # This snippet is taken from tpm2-tss/dist/tpm-udev.rules, but modified to allow custom user/groups
@@ -8,13 +12,13 @@ let
   # Therefore, if either of the two are null, the respective part isn't generated
   udevRules = tssUser: tssGroup: ''
     ${lib.optionalString (tssUser != null) ''KERNEL=="tpm[0-9]*", MODE="0660", OWNER="${tssUser}"''}
-    ${lib.optionalString (tssUser != null || tssGroup != null)
+    ${
+      lib.optionalString (tssUser != null || tssGroup != null)
       ''KERNEL=="tpmrm[0-9]*", MODE="0660"''
       + lib.optionalString (tssUser != null) '', OWNER="${tssUser}"''
       + lib.optionalString (tssGroup != null) '', GROUP="${tssGroup}"''
-     }
+    }
   '';
-
 in {
   options.security.tpm2 = {
     enable = lib.mkEnableOption "Trusted Platform Module 2 support";
@@ -25,7 +29,10 @@ in {
         set.
       '';
       type = lib.types.nullOr lib.types.str;
-      default = if cfg.abrmd.enable then "tss" else "root";
+      default =
+        if cfg.abrmd.enable
+        then "tss"
+        else "root";
       defaultText = lib.literalExpression ''if config.security.tpm2.abrmd.enable then "tss" else "root"'';
     };
 
@@ -101,7 +108,7 @@ in {
           The name of the TPM command transmission interface (TCTI) library to
           use.
         '';
-        type = lib.types.enum [ "tabrmd" "device" ];
+        type = lib.types.enum ["tabrmd" "device"];
         default = "device";
       };
 
@@ -140,7 +147,7 @@ in {
       ];
 
       services.udev.extraRules = lib.mkIf cfg.applyUdevRules
-        (udevRules cfg.tssUser cfg.tssGroup);
+      (udevRules cfg.tssUser cfg.tssGroup);
 
       # Create the tss user and group only if the default value is used
       users.users.${cfg.tssUser} = lib.mkIf (cfg.tssUser == "tss") {
@@ -154,17 +161,16 @@ in {
           "TPM2TOOLS_TCTI"
           "TPM2_PKCS11_TCTI"
         ] (_: ''${cfg.tctiEnvironment.interface}:${
-          if cfg.tctiEnvironment.interface == "tabrmd" then
-            cfg.tctiEnvironment.tabrmdConf
-          else
-            cfg.tctiEnvironment.deviceConf
-        }'')
+            if cfg.tctiEnvironment.interface == "tabrmd"
+            then cfg.tctiEnvironment.tabrmdConf
+            else cfg.tctiEnvironment.deviceConf
+          }'')
       );
     }
 
     (lib.mkIf cfg.abrmd.enable {
       systemd.services."tpm2-abrmd" = {
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
         serviceConfig = {
           Type = "dbus";
           Restart = "always";
@@ -180,5 +186,5 @@ in {
     })
   ]);
 
-  meta.maintainers = with lib.maintainers; [ lschuermann ];
+  meta.maintainers = with lib.maintainers; [lschuermann];
 }

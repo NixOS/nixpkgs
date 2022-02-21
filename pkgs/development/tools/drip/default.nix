@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, jdk8, which, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk8,
+  which,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "drip";
   version = "0.2.4";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1zl62wdwfak6z725asq5lcqb506la1aavj7ag78lvp155wyh8aq1";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = [ jdk8 ];
+  buildInputs = [jdk8];
 
   postPatch = ''
     patchShebangs .
@@ -34,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.epl10;
     homepage = "https://github.com/ninjudd/drip";
     platforms = platforms.linux;
-    maintainers = [ maintainers.rybern ];
+    maintainers = [maintainers.rybern];
   };
 }

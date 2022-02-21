@@ -1,21 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.atd;
 
   inherit (pkgs) at;
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.atd.enable = mkOption {
       type = types.bool;
       default = false;
@@ -32,46 +28,46 @@ in
         writeable by everyone (and sticky).  This is normally not
         needed since the <command>at</command> commands are
         setuid/setgid <literal>atd</literal>.
-     '';
+      '';
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     # Not wrapping "batch" because it's a shell script (kernel drops perms
     # anyway) and it's patched to invoke the "at" setuid wrapper.
     security.wrappers = builtins.listToAttrs (
-      map (program: { name = "${program}"; value = {
-      source = "${at}/bin/${program}";
-      owner = "atd";
-      group = "atd";
-      setuid = true;
-      setgid = true;
-    };}) [ "at" "atq" "atrm" ]);
+      map (program: {
+        name = "${program}";
+        value = {
+          source = "${at}/bin/${program}";
+          owner = "atd";
+          group = "atd";
+          setuid = true;
+          setgid = true;
+        };
+      }) ["at" "atq" "atrm"]
+    );
 
-    environment.systemPackages = [ at ];
+    environment.systemPackages = [at];
 
     security.pam.services.atd = {};
 
-    users.users.atd =
-      {
-        uid = config.ids.uids.atd;
-        group = "atd";
-        description = "atd user";
-        home = "/var/empty";
-      };
+    users.users.atd = {
+      uid = config.ids.uids.atd;
+      group = "atd";
+      description = "atd user";
+      home = "/var/empty";
+    };
 
     users.groups.atd.gid = config.ids.gids.atd;
 
     systemd.services.atd = {
       description = "Job Execution Daemon (atd)";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
-      path = [ at ];
+      path = [at];
 
       preStart = ''
         # Snippets taken and adapted from the original `install' rule of
@@ -84,7 +80,11 @@ in
         etcdir=/etc/at
 
         install -dm755 -o atd -g atd "$etcdir"
-        spool_and_job_dir_perms=${if cfg.allowEveryone then "1777" else "1770"}
+        spool_and_job_dir_perms=${
+          if cfg.allowEveryone
+          then "1777"
+          else "1770"
+        }
         install -dm"$spool_and_job_dir_perms" -o atd -g atd "$spooldir" "$jobdir"
         if [ ! -f "$etcdir"/at.deny ]; then
             touch "$etcdir"/at.deny

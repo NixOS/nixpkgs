@@ -1,7 +1,7 @@
-{ mkDerivation
-, fetchFromGitHub
+{
+  mkDerivation,
+  fetchFromGitHub,
 }:
-
 mkDerivation {
   pname = "compyte";
   version = "git-20150817";
@@ -17,5 +17,4 @@ mkDerivation {
     mkdir -p $out
     cp -r * $out
   '';
-
 }

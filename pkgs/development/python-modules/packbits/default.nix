@@ -1,13 +1,13 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pyparsing
-, six
-, pytest
-, pretend
-, lib
+{
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pyparsing,
+  six,
+  pytest,
+  pretend,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "packbits";
   version = "0.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PackBits encoder/decoder for Python";
     homepage = "https://github.com/psd-tools/packbits";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ grahamc ];
+    license = [licenses.mit];
+    maintainers = with maintainers; [grahamc];
   };
 }

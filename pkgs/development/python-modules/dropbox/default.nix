@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, urllib3
-, mock
-, setuptools
-, stone
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  urllib3,
+  mock,
+  setuptools,
+  stone,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "dropbox";
   version = "11.27.0";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

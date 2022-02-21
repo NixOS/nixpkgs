@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "samtools";
   version = "0.1.19";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
     ./samtools-0.1.19-no-curses.patch
   ];
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -28,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "http://samtools.sourceforge.net/";
     platforms = platforms.unix;
-    maintainers = [ maintainers.unode ];
+    maintainers = [maintainers.unode];
   };
 }

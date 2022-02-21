@@ -1,6 +1,10 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub
-, Cocoa ? null }:
-
+{
+  stdenv,
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  Cocoa ? null,
+}:
 buildGoPackage rec {
   pname = "noti";
   version = "3.5.0";
@@ -34,6 +38,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/variadico/noti";
     license = licenses.mit;
-    maintainers = with maintainers; [ stites marsam ];
+    maintainers = with maintainers; [stites marsam];
   };
 }

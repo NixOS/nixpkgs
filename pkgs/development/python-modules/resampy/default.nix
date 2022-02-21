@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytest-cov
-, numpy
-, scipy
-, cython
-, numba
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pytest-cov,
+  numpy,
+  scipy,
+  cython,
+  numba,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "resampy";
   version = "0.2.2";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
     sha256 = "0qmkxl5sbgh0j73n667vyi7ywzh09iaync91yp1j5rrcmwsn0qfs";
   };
 
-  checkInputs = [ pytest pytest-cov ];
-  propagatedBuildInputs = [ numpy scipy cython numba six ];
+  checkInputs = [pytest pytest-cov];
+  propagatedBuildInputs = [numpy scipy cython numba six];
 
   checkPhase = ''
     pytest tests
@@ -34,5 +34,4 @@ buildPythonPackage rec {
     description = "Efficient signal resampling";
     license = licenses.isc;
   };
-
 }

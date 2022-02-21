@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "mp3val";
   version = "0.1.8";
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
     install -Dv mp3val "$out/bin/mp3val"
   '';
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = ["fortify"];
 
   meta = {
     description = "A tool for validating and repairing MPEG audio streams";
@@ -32,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://mp3val.sourceforge.net/index.shtml";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.devhell ];
+    maintainers = [lib.maintainers.devhell];
   };
 }

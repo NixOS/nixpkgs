@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libcec
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libcec,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pycec";
   version = "0.5.1";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pycec" ];
+  pythonImportsCheck = ["pycec"];
 
   meta = with lib; {
     description = "Python modules to access HDMI CEC devices";
     homepage = "https://github.com/konikvranik/pycec/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

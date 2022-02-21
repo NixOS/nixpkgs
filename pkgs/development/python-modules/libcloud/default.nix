@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycrypto
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pycrypto,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "apache-libcloud";
   version = "3.4.1";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://libcloud.apache.org/";
     changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

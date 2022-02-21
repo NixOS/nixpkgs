@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_16 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron_16,
+}:
 stdenv.mkDerivation rec {
   pname = "blockbench-electron";
   version = "4.1.1";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -35,14 +41,14 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron_16}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [stdenv.cc.cc]}"
   '';
 
   meta = with lib; {
     description = "A boxy 3D model editor powered by Electron";
     homepage = "https://blockbench.net/";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.ckie ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.ckie];
+    platforms = ["x86_64-linux"];
   };
 }

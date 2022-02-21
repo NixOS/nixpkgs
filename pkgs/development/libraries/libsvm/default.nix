@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libsvm";
   version = "3.25";
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "A library for support vector machines";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = [maintainers.spwhitt];
     platforms = platforms.unix;
   };
 }

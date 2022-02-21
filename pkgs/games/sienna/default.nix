@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  love,
+  lua,
+  makeWrapper,
+  makeDesktopItem,
+}:
 stdenv.mkDerivation rec {
   pname = "sienna";
   version = "1.0c";
@@ -23,13 +30,12 @@ stdenv.mkDerivation rec {
     categories = "Game;";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ lua love ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [lua love];
 
   dontUnpack = true;
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
@@ -44,10 +50,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast-paced one button platformer";
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
     platforms = platforms.linux;
     license = licenses.free;
     downloadPage = "http://tangramgames.dk/games/sienna";
   };
-
 }

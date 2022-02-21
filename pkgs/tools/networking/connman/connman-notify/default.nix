@@ -1,5 +1,11 @@
-{ lib, fetchFromGitLab, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
-
+{
+  lib,
+  fetchFromGitLab,
+  python3Packages,
+  glib,
+  gobject-introspection,
+  wrapGAppsHook,
+}:
 python3Packages.buildPythonApplication {
   pname = "connman-notify";
   version = "2019-10-05";
@@ -13,11 +19,11 @@ python3Packages.buildPythonApplication {
 
   format = "other";
 
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [gobject-introspection wrapGAppsHook];
 
-  buildInputs = [ glib ];
+  buildInputs = [glib];
 
-  pythonPath = with python3Packages; [ dbus-python pygobject3 ];
+  pythonPath = with python3Packages; [dbus-python pygobject3];
 
   strictDeps = false;
 
@@ -31,6 +37,6 @@ python3Packages.buildPythonApplication {
     homepage = "https://gitlab.com/wavexx/connman-notify";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

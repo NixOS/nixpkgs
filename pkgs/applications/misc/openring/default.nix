@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromSourcehut, lib }:
-
+{
+  buildGoModule,
+  fetchFromSourcehut,
+  lib,
+}:
 buildGoModule rec {
   pname = "openring";
   version = "1.0.1";
@@ -20,6 +23,6 @@ buildGoModule rec {
     description = "A webring for static site generators";
     homepage = "https://sr.ht/~sircmpwn/openring";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sumnerevans ];
+    maintainers = with maintainers; [sumnerevans];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "dcadec";
   version = "0.2.0";
@@ -17,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "DTS Coherent Acoustics decoder with support for HD extensions";
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [edwtjo];
     homepage = "https://github.com/foo86/dcadec";
     license = licenses.lgpl21;
     platforms = platforms.linux;

@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, awk
-, grep
-, sed
-, runtimeShell
-, cmake
-, libXext
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libjpeg
-, libpng
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  awk,
+  grep,
+  sed,
+  runtimeShell,
+  cmake,
+  libXext,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libjpeg,
+  libpng,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pekwm";
   version = "0.2.1";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "pekdon";
     repo = "pekwm";
     rev = "release-${version}";
-    hash= "sha256-voHPstdcd4CHnAdD3PMxca0A6MyMYJi8Ik0UlFB0vG0=";
+    hash = "sha256-voHPstdcd4CHnAdD3PMxca0A6MyMYJi8Ik0UlFB0vG0=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       - Chainable Keygrabber, usability for everyone.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

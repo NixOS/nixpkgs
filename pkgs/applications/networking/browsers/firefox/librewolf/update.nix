@@ -1,20 +1,20 @@
-{ writeScript
-, lib
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, jq
-, nix-prefetch-git
-, moreutils
-, runtimeShell
-, ...
+{
+  writeScript,
+  lib,
+  coreutils,
+  gnused,
+  gnugrep,
+  curl,
+  gnupg,
+  jq,
+  nix-prefetch-git,
+  moreutils,
+  runtimeShell,
+  ...
 }:
-
 writeScript "update-librewolf" ''
   #!${runtimeShell}
-  PATH=${lib.makeBinPath [ coreutils curl gnugrep gnupg gnused jq moreutils nix-prefetch-git ]}
+  PATH=${lib.makeBinPath [coreutils curl gnugrep gnupg gnused jq moreutils nix-prefetch-git]}
   set -euo pipefail
 
   latestTag=$(curl https://gitlab.com/api/v4/projects/librewolf-community%2Fbrowser%2Fsource/repository/tags?per_page=1 | jq -r .[0].name)

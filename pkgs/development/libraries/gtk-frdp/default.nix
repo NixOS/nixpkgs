@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, vala
-, gobject-introspection
-, glib
-, gtk3
-, freerdp
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  glib,
+  gtk3,
+  freerdp,
+  unstableGitUpdater,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
   version = "unstable-2021-10-01";

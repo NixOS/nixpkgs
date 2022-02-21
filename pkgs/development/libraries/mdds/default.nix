@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, boost, llvmPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  llvmPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "mdds";
   version = "2.0.2";
@@ -14,9 +19,9 @@ stdenv.mkDerivation rec {
     cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
 
-  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  buildInputs = lib.optionals stdenv.cc.isClang [llvmPackages.openmp];
 
-  checkInputs = [ boost ];
+  checkInputs = [boost];
 
   meta = with lib; {
     homepage = "https://gitlab.com/mdds/mdds";

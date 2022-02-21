@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, lzip, lzlib, texinfo }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lzip,
+  lzlib,
+  texinfo,
+}:
 stdenv.mkDerivation rec {
   pname = "tarlz";
   version = "0.22";
-  outputs = [ "out" "man" "info" ];
+  outputs = ["out" "man" "info"];
 
-  nativeBuildInputs = [ lzip texinfo ];
-  buildInputs = [ lzlib ];
+  nativeBuildInputs = [lzip texinfo];
+  buildInputs = [lzlib];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}/${pname}-${version}.tar.lz";
@@ -14,15 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  makeFlags = [ "CXX:=$(CXX)" ];
+  makeFlags = ["CXX:=$(CXX)"];
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/${pname}.html";
-    description =
-      "Massively parallel combined implementation of the tar archiver and the lzip compressor";
+    description = "Massively parallel combined implementation of the tar archiver and the lzip compressor";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ehmry];
   };
 }

@@ -4,35 +4,42 @@ let
   containerIp = "192.168.0.100";
   containerPort = 80;
 in
-
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-  name = "containers-portforward";
-  meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ianwookim ];
-  };
-
-  machine =
-    { pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
-      virtualisation.writableStore = true;
-
-      containers.webserver =
-        { privateNetwork = true;
-          hostAddress = hostIp;
-          localAddress = containerIp;
-          forwardPorts = [ { protocol = "tcp"; hostPort = hostPort; containerPort = containerPort; } ];
-          config =
-            { services.httpd.enable = true;
-              services.httpd.adminAddr = "foo@example.org";
-              networking.firewall.allowedTCPPorts = [ 80 ];
-            };
-        };
-
-      virtualisation.additionalPaths = [ pkgs.stdenv ];
+  import ./make-test-python.nix ({
+    pkgs,
+    lib,
+    ...
+  }: {
+    name = "containers-portforward";
+    meta = {
+      maintainers = with lib.maintainers; [aristid aszlig eelco kampfschlaefer ianwookim];
     };
 
-  testScript =
-    ''
+    machine = {pkgs, ...}: {
+      imports = [../modules/installer/cd-dvd/channel.nix];
+      virtualisation.writableStore = true;
+
+      containers.webserver = {
+        privateNetwork = true;
+        hostAddress = hostIp;
+        localAddress = containerIp;
+        forwardPorts = [
+          {
+            protocol = "tcp";
+            hostPort = hostPort;
+            containerPort = containerPort;
+          }
+        ];
+        config = {
+          services.httpd.enable = true;
+          services.httpd.adminAddr = "foo@example.org";
+          networking.firewall.allowedTCPPorts = [80];
+        };
+      };
+
+      virtualisation.additionalPaths = [pkgs.stdenv];
+    };
+
+    testScript = ''
       container_list = machine.succeed("nixos-container list")
       assert "webserver" in container_list
 
@@ -55,5 +62,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       # Destroying a declarative container should fail.
       machine.fail("nixos-container destroy webserver")
     '';
-
-})
+  })

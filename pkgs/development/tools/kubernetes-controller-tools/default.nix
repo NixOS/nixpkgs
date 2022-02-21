@@ -1,5 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
-
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "controller-tools";
   version = "0.6.2";
@@ -25,6 +28,6 @@ buildGoModule rec {
     description = "Tools to use with the Kubernetes controller-runtime libraries";
     homepage = "https://github.com/kubernetes-sigs/controller-tools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ michojel ];
+    maintainers = with maintainers; [michojel];
   };
 }

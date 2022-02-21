@@ -1,5 +1,8 @@
-{ lib, fetchpatch, python3 }:
-
+{
+  lib,
+  fetchpatch,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "csvkit";
   version = "1.0.5";
@@ -31,11 +34,11 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "csvkit" ];
+  pythonImportsCheck = ["csvkit"];
 
   meta = with lib; {
     description = "A suite of command-line tools for converting to and working with CSV";
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
     license = licenses.mit;
     homepage = "https://github.com/wireservice/csvkit";
   };

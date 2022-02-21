@@ -1,17 +1,17 @@
-{ lib
-, anyio
-, buildPythonPackage
-, curio
-, fetchFromGitHub
-, hypothesis
-, pytest
-, pytestCheckHook
-, pythonOlder
-, sniffio
-, trio
-, trio-asyncio
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  hypothesis,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  sniffio,
+  trio,
+  trio-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-aio";
   version = "1.4.1";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/klen/pytest-aio";
     description = "Pytest plugin for aiohttp support";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

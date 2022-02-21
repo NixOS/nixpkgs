@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, click
-, crcmod
-, fetchFromGitHub
-, getmac
-, intelhex
-, paho-mqtt
-, pyserial
-, pyserial-asyncio
-, pytest-sugar
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  click,
+  crcmod,
+  fetchFromGitHub,
+  getmac,
+  intelhex,
+  paho-mqtt,
+  pyserial,
+  pyserial-asyncio,
+  pytest-sugar,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  voluptuous,
 }:
-
 buildPythonPackage rec {
   pname = "pymysensors";
   version = "0.23.0";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for talking to a MySensors gateway";
     homepage = "https://github.com/theolind/pymysensors";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

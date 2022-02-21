@@ -1,20 +1,20 @@
-{ mkDerivation
-, stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, ninja
-, qtbase
-, qt5
-, xorg
+{
+  mkDerivation,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  ninja,
+  qtbase,
+  qt5,
+  xorg,
 }:
-
 mkDerivation rec {
   pname = "adwaita-qt";
   version = "1.4.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
@@ -28,12 +28,14 @@ mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    qtbase
-    qt5.qtx11extras
-  ] ++ lib.optionals stdenv.isLinux [
-    xorg.libxcb
-  ];
+  buildInputs =
+    [
+      qtbase
+      qt5.qtx11extras
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      xorg.libxcb
+    ];
 
   postPatch = ''
     # Fix plugin dir
@@ -51,7 +53,7 @@ mkDerivation rec {
     description = "A style to bend Qt applications to look like they belong into GNOME Shell";
     homepage = "https://github.com/FedoraQt/adwaita-qt";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
+    maintainers = teams.gnome.members ++ (with maintainers; []);
     platforms = platforms.all;
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtermwidget
-, qtbase
-, qttools
-, qtx11extras
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  lxqt-build-tools,
+  qtermwidget,
+  qtbase,
+  qttools,
+  qtx11extras,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "qterminal";
   version = "1.0.0";
@@ -33,13 +33,13 @@ mkDerivation rec {
     qtermwidget
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/qterminal";
     description = "A lightweight Qt-based terminal emulator";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo globin ];
+    maintainers = with maintainers; [romildo globin];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fixtures
-, pbr
-, subunit
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fixtures,
+  pbr,
+  subunit,
+  callPackage,
 }:
-
 buildPythonPackage rec {
   pname = "oslotest";
   version = "4.5.0";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "360ad2c41ba3ad6f059c7c6e7291450d082c2e5dbb0012e839a829978053dfe6";
   };
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
   propagatedBuildInputs = [
     fixtures
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix {};
   };
 
-  pythonImportsCheck = [ "oslotest" ];
+  pythonImportsCheck = ["oslotest"];
 
   meta = with lib; {
     description = "Oslo test framework";

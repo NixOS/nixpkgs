@@ -1,5 +1,11 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  gerbil-unstable,
+  gerbil-support,
+  gambit-support,
+}:
 gerbil-support.gerbilPackage {
   pname = "gerbil-libp2p";
   version = "unstable-2018-12-27";
@@ -19,9 +25,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil libp2p: use libp2p from Gerbil";
-    homepage    = "https://github.com/vyzo/gerbil-libp2p";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    homepage = "https://github.com/vyzo/gerbil-libp2p";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [fare];
   };
 }

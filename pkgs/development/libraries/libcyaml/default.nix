@@ -1,7 +1,9 @@
-{ stdenv, lib, fetchFromGitHub
-, libyaml
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libyaml,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libcyaml";
   version = "1.3.1";
@@ -13,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ntgTgIJ3u1IbR/eYOgwmgR9Jvx28P+l44wAMlBEcbj8=";
   };
 
-  buildInputs = [ libyaml ];
+  buildInputs = [libyaml];
 
-  makeFlags = [ "VARIANT=release" "PREFIX=$(out)" ];
+  makeFlags = ["VARIANT=release" "PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://github.com/tlsa/libcyaml";

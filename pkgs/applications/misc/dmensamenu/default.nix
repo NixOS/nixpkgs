@@ -1,5 +1,11 @@
-{ lib, buildPythonApplication, fetchFromGitHub, substituteAll, requests, dmenu }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  substituteAll,
+  requests,
+  dmenu,
+}:
 buildPythonApplication rec {
   pname = "dmensamenu";
   version = "1.2.2";
@@ -29,6 +35,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/dotlambda/dmensamenu";
     description = "Print German canteen menus using dmenu and OpenMensa";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

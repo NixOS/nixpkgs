@@ -1,13 +1,13 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pymelcloud";
   version = "2.11.0";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for interacting with MELCloud";
     homepage = "https://github.com/vilppuvuorinen/pymelcloud";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

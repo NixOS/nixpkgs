@@ -1,24 +1,24 @@
-{ buildDunePackage
-, lib
-, fetchurl
-, asn1-combinators
-, uri
-, base64
-, logs
-, fmt
-, lwt
-, mirage-crypto
-, mirage-crypto-ec
-, mirage-crypto-pk
-, mirage-crypto-rng
-, x509
-, yojson
-, ounit
-, ptime
-, domain-name
-, cstruct
+{
+  buildDunePackage,
+  lib,
+  fetchurl,
+  asn1-combinators,
+  uri,
+  base64,
+  logs,
+  fmt,
+  lwt,
+  mirage-crypto,
+  mirage-crypto-ec,
+  mirage-crypto-pk,
+  mirage-crypto-rng,
+  x509,
+  yojson,
+  ounit,
+  ptime,
+  domain-name,
+  cstruct,
 }:
-
 buildDunePackage rec {
   pname = "letsencrypt";
   version = "0.4.1";
@@ -52,12 +52,12 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [ ounit ];
+  checkInputs = [ounit];
 
   meta = {
     description = "ACME implementation in OCaml";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = [lib.maintainers.sternenseemann];
     homepage = "https://github.com/mmaker/ocaml-letsencrypt";
   };
 }

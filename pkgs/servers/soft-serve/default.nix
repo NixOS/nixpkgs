@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, git }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+}:
 buildGoModule rec {
   pname = "soft-serve";
   version = "0.2.2";
@@ -15,13 +20,13 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X=main.Version=${version}"];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram $out/bin/soft \
-      --prefix PATH : "${lib.makeBinPath [ git ]}"
+      --prefix PATH : "${lib.makeBinPath [git]}"
   '';
 
   meta = with lib; {
@@ -29,6 +34,6 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/soft-serve";
     mainProgram = "soft";
     license = licenses.mit;
-    maintainers = with maintainers; [ penguwin ];
+    maintainers = with maintainers; [penguwin];
   };
 }

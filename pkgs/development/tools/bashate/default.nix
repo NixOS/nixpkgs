@@ -1,15 +1,15 @@
-{ lib
-, Babel
-, buildPythonApplication
-, fetchPypi
-, fixtures
-, mock
-, pbr
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  Babel,
+  buildPythonApplication,
+  fetchPypi,
+  fixtures,
+  mock,
+  pbr,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
-
 buildPythonApplication rec {
   pname = "bashate";
   version = "2.1.0";
@@ -32,12 +32,12 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "bashate" ];
+  pythonImportsCheck = ["bashate"];
 
   meta = with lib; {
     description = "Style enforcement for bash programs";
     homepage = "https://opendev.org/openstack/bashate";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

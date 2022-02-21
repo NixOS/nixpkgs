@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "vpcs";
   version = "0.8.2";
@@ -11,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-joEXRMtNZMQumkYDX1gdpGAV+XdNKiAMj3dh1GZxeqc=";
   };
 
-  buildPhase = ''(
-    cd src
-    ./mk.sh ${stdenv.buildPlatform.linuxArch}
-  )'';
+  buildPhase = ''    (
+        cd src
+        ./mk.sh ${stdenv.buildPlatform.linuxArch}
+      )'';
 
   installPhase = ''
     install -D -m555 src/vpcs $out/bin/vpcs;
@@ -33,6 +36,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

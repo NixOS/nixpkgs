@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "django-classy-tags";
   version = "3.0.1";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-0iK0VQKsmeVQpWZmeDnvrvlUucc2amST8UOGKqvqyHg=";
   };
 
-  propagatedBuildInputs = [ django six ];
+  propagatedBuildInputs = [django six];
 
   # pypi version doesn't include runtest.py, needed to run tests
   doCheck = false;
@@ -24,5 +24,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/divio/django-classy-tags";
     license = licenses.bsd3;
   };
-
 }

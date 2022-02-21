@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchurl
-, pkg-config, buildPackages
-, CoreAudio, alsa-lib, libjack2, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  buildPackages,
+  CoreAudio,
+  alsa-lib,
+  libjack2,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "timidity";
   version = "2.15.0";
@@ -12,31 +18,37 @@ stdenv.mkDerivation rec {
     sha256 = "1xf8n6dqzvi6nr2asags12ijbj1lwk1hgl3s27vm2szib8ww07qn";
   };
 
-  patches = [ ./timidity-iA-Oj.patch ];
+  patches = [./timidity-iA-Oj.patch];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libjack2
-    ncurses
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreAudio
-  ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [
+      libjack2
+      ncurses
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreAudio
+    ];
 
-  configureFlags = [
-    "--enable-ncurses"
-    "lib_cv_va_copy=yes"
-    "lib_cv___va_copy=yes"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--enable-audio=oss,alsa,jack"
-    "--enable-alsaseq"
-    "--with-default-output=alsa"
-    "lib_cv_va_val_copy=yes"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "--enable-audio=darwin,jack"
-    "lib_cv_va_val_copy=no"
-  ];
+  configureFlags =
+    [
+      "--enable-ncurses"
+      "lib_cv_va_copy=yes"
+      "lib_cv___va_copy=yes"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "--enable-audio=oss,alsa,jack"
+      "--enable-alsaseq"
+      "--with-default-output=alsa"
+      "lib_cv_va_val_copy=yes"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "--enable-audio=darwin,jack"
+      "lib_cv_va_val_copy=no"
+    ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
@@ -69,7 +81,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/timidity/";
     license = licenses.gpl2;
     description = "A software MIDI renderer";
-    maintainers = [ maintainers.marcweber ];
+    maintainers = [maintainers.marcweber];
     platforms = platforms.unix;
   };
 }

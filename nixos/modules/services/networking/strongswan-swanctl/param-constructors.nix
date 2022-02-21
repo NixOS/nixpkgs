@@ -38,14 +38,10 @@
 # value -> string but a function from a value to an attribute set:
 # { "${name}" = string }. This allows parameters to change the attribute
 # name like in the previous example.
-
-lib :
-
+lib:
 with lib;
-with (import ./param-lib.nix lib);
-
-rec {
-  mkParamOfType = type : strongswanDefault : description : {
+with (import ./param-lib.nix lib); rec {
+  mkParamOfType = type: strongswanDefault: description: {
     _type = "param";
     option = mkOption {
       type = types.nullOr type;
@@ -55,51 +51,56 @@ rec {
     render = single toString;
   };
 
-  documentDefault = description : strongswanDefault :
+  documentDefault = description: strongswanDefault:
     if strongswanDefault == null
     then description
-    else description + ''
-      </para><para>
-      StrongSwan default: <literal><![CDATA[${builtins.toJSON strongswanDefault}]]></literal>
-    '';
+    else
+      description
+      + ''
+        </para><para>
+        StrongSwan default: <literal><![CDATA[${builtins.toJSON strongswanDefault}]]></literal>
+      '';
 
-  single = f: name: value: { ${name} = f value; };
+  single = f: name: value: {${name} = f value;};
 
-  mkStrParam         = mkParamOfType types.str;
+  mkStrParam = mkParamOfType types.str;
   mkOptionalStrParam = mkStrParam null;
 
-  mkEnumParam = values : mkParamOfType (types.enum values);
+  mkEnumParam = values: mkParamOfType (types.enum values);
 
-  mkIntParam         = mkParamOfType types.int;
+  mkIntParam = mkParamOfType types.int;
   mkOptionalIntParam = mkIntParam null;
 
   # We should have floats in Nix...
   mkFloatParam = mkStrParam;
 
   # TODO: Check for hex format:
-  mkHexParam         = mkStrParam;
+  mkHexParam = mkStrParam;
   mkOptionalHexParam = mkOptionalStrParam;
 
   # TODO: Check for duration format:
-  mkDurationParam         = mkStrParam;
+  mkDurationParam = mkStrParam;
   mkOptionalDurationParam = mkOptionalStrParam;
 
-  mkYesNoParam = strongswanDefault : description : {
+  mkYesNoParam = strongswanDefault: description: {
     _type = "param";
     option = mkOption {
       type = types.nullOr types.bool;
       default = null;
       description = documentDefault description strongswanDefault;
     };
-    render = single (b: if b then "yes" else "no");
+    render = single (b:
+      if b
+      then "yes"
+      else "no");
   };
   yes = true;
-  no  = false;
+  no = false;
 
   mkSpaceSepListParam = mkSepListParam " ";
   mkCommaSepListParam = mkSepListParam ",";
 
-  mkSepListParam = sep : strongswanDefault : description : {
+  mkSepListParam = sep: strongswanDefault: description: {
     _type = "param";
     option = mkOption {
       type = types.nullOr (types.listOf types.str);
@@ -109,54 +110,54 @@ rec {
     render = single (value: concatStringsSep sep value);
   };
 
-  mkAttrsOfParams = params :
+  mkAttrsOfParams = params:
     mkAttrsOf params (types.submodule {options = paramsToOptions params;});
 
-  mkAttrsOfParam = param :
+  mkAttrsOfParam = param:
     mkAttrsOf param param.option.type;
 
-  mkAttrsOf = param : option : description : {
+  mkAttrsOf = param: option: description: {
     _type = "param";
     option = mkOption {
       type = types.attrsOf option;
       default = {};
       inherit description;
     };
-    render = single (attrs:
-      (paramsToRenderedStrings attrs
-        (mapAttrs (_n: _v: param) attrs)));
+    render = single (attrs: (paramsToRenderedStrings attrs
+    (mapAttrs (_n: _v: param) attrs)));
   };
 
-  mkPrefixedAttrsOfParams = params :
+  mkPrefixedAttrsOfParams = params:
     mkPrefixedAttrsOf params (types.submodule {options = paramsToOptions params;});
 
-  mkPrefixedAttrsOfParam = param :
+  mkPrefixedAttrsOfParam = param:
     mkPrefixedAttrsOf param param.option.type;
 
-  mkPrefixedAttrsOf = p : option : description : {
+  mkPrefixedAttrsOf = p: option: description: {
     _type = "param";
     option = mkOption {
       type = types.attrsOf option;
       default = {};
       inherit description;
     };
-    render = prefix: attrs:
-      let prefixedAttrs = mapAttrs' (name: nameValuePair "${prefix}-${name}") attrs;
-      in paramsToRenderedStrings prefixedAttrs
-           (mapAttrs (_n: _v: p) prefixedAttrs);
+    render = prefix: attrs: let
+      prefixedAttrs = mapAttrs' (name: nameValuePair "${prefix}-${name}") attrs;
+    in
+      paramsToRenderedStrings prefixedAttrs
+      (mapAttrs (_n: _v: p) prefixedAttrs);
   };
 
-  mkPostfixedAttrsOfParams = params : description : {
+  mkPostfixedAttrsOfParams = params: description: {
     _type = "param";
     option = mkOption {
       type = types.attrsOf (types.submodule {options = paramsToOptions params;});
       default = {};
       inherit description;
     };
-    render = postfix: attrs:
-      let postfixedAttrs = mapAttrs' (name: nameValuePair "${name}-${postfix}") attrs;
-      in paramsToRenderedStrings postfixedAttrs
-           (mapAttrs (_n: _v: params) postfixedAttrs);
+    render = postfix: attrs: let
+      postfixedAttrs = mapAttrs' (name: nameValuePair "${name}-${postfix}") attrs;
+    in
+      paramsToRenderedStrings postfixedAttrs
+      (mapAttrs (_n: _v: params) postfixedAttrs);
   };
-
 }

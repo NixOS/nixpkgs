@@ -1,12 +1,12 @@
-{ lib
-, fetchurl
-, nettools
-, openssl
-, readline
-, stdenv
-, which
+{
+  lib,
+  fetchurl,
+  nettools,
+  openssl,
+  readline,
+  stdenv,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "socat";
   version = "1.7.4.3";
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
       --replace /sbin/ifconfig ifconfig
   '';
 
-  buildInputs = [ openssl readline ];
+  buildInputs = [openssl readline];
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = ["pie"];
 
-  checkInputs = [ which nettools ];
+  checkInputs = [which nettools];
   doCheck = false; # fails a bunch, hangs
 
   meta = with lib; {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.dest-unreach.org/socat/";
     repositories.git = "git://repo.or.cz/socat.git";
     platforms = platforms.unix;
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ eelco ];
+    license = with licenses; [gpl2Only];
+    maintainers = with maintainers; [eelco];
   };
 }

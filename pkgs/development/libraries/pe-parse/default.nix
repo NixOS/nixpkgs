@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "pe-parse";
   version = "1.2.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jvfjaiwddczjlx4xdhpbgwvvpycab7ix35lwp3wfy44hs6qpjqv";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/trailofbits/pe-parse";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ arturcygan ];
+    maintainers = with maintainers; [arturcygan];
   };
 }

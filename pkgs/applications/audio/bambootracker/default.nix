@@ -1,15 +1,15 @@
-{ mkDerivation
-, stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, pkg-config
-, qttools
-, qtbase
-, rtaudio
-, rtmidi
+{
+  mkDerivation,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  qttools,
+  qtbase,
+  rtaudio,
+  rtmidi,
 }:
-
 mkDerivation rec {
   pname = "bambootracker";
   version = "0.5.0";
@@ -22,11 +22,11 @@ mkDerivation rec {
     sha256 = "1mpbvhsmrn0wdmxfp3n5dwv4474qlhy47r3vwc2jwdslq6vgl1fa";
   };
 
-  nativeBuildInputs = [ qmake qttools pkg-config ];
+  nativeBuildInputs = [qmake qttools pkg-config];
 
-  buildInputs = [ qtbase rtaudio rtmidi ];
+  buildInputs = [qtbase rtaudio rtmidi];
 
-  qmakeFlags = [ "CONFIG+=system_rtaudio" "CONFIG+=system_rtmidi" ];
+  qmakeFlags = ["CONFIG+=system_rtaudio" "CONFIG+=system_rtmidi"];
 
   postConfigure = "make qmake_all";
 
@@ -41,6 +41,6 @@ mkDerivation rec {
     homepage = "https://bambootracker.github.io/BambooTracker/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
   };
 }

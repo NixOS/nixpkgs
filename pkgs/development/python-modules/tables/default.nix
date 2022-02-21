@@ -1,20 +1,21 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, pythonOlder
-, bzip2
-, c-blosc
-, cython
-, hdf5
-, lzo
-, numpy
-, numexpr
-, packaging
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  pythonOlder,
+  bzip2,
+  c-blosc,
+  cython,
+  hdf5,
+  lzo,
+  numpy,
+  numexpr,
+  packaging
   # Test inputs
-, pytestCheckHook
+  ,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "tables";
   version = "3.7.0";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "sha256-6SqIetbyqYPlZKaZAt5KdkXDAGn8AavTU+xdolXF4f4=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [cython];
 
   buildInputs = [
     bzip2
@@ -36,7 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     numexpr
-    packaging  # uses packaging.version at runtime
+    packaging # uses packaging.version at runtime
   ];
 
   # When doing `make distclean`, ignore docs
@@ -60,7 +61,7 @@ buildPythonPackage rec {
     "--blosc=${lib.getDev c-blosc}"
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   preCheck = ''
     cd ..
   '';
@@ -70,12 +71,12 @@ buildPythonPackage rec {
     "tables.tests.test_suite"
   ];
 
-  pythonImportsCheck = [ "tables" ];
+  pythonImportsCheck = ["tables"];
 
   meta = with lib; {
     description = "Hierarchical datasets for Python";
     homepage = "https://www.pytables.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

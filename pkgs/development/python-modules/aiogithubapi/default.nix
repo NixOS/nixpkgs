@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, aresponses
-, async-timeout
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-timeout,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiogithubapi";
   version = "22.2.2";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the GitHub API";
     homepage = "https://github.com/ludeeus/aiogithubapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

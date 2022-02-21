@@ -1,12 +1,12 @@
-{ lib
-, isPy3k
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, nose
-, pythonOlder
+{
+  lib,
+  isPy3k,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  nose,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "annexremote";
   version = "1.6.0";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Helper module to easily develop git-annex remotes";
     homepage = "https://github.com/Lykos153/AnnexRemote";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ montag451 ];
+    maintainers = with maintainers; [montag451];
   };
 }

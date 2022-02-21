@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, nix-update-script, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  nix-update-script,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "editline";
   version = "1.17.1";
@@ -18,9 +24,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = ["out" "dev" "man" "doc"];
 
   passthru.updateScript = nix-update-script {
     attrPath = pname;
@@ -30,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://troglobit.com/projects/editline/";
     description = "A readline() replacement for UNIX without termcap (ncurses)";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ dtzWill oxalica ];
+    maintainers = with maintainers; [dtzWill oxalica];
     platforms = platforms.all;
   };
 }

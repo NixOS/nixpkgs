@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "1.3.3";
   pname = "htpdate";
@@ -20,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/twekkel/htpdate";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ julienmalka ];
+    maintainers = with maintainers; [julienmalka];
   };
 }

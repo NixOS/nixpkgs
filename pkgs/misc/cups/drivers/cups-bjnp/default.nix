@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, cups}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+}:
 stdenv.mkDerivation rec {
   pname = "cups-bjnp";
   version = "1.2.2";

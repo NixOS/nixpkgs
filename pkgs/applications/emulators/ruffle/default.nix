@@ -1,16 +1,16 @@
-{ alsa-lib
-, fetchFromGitHub
-, makeWrapper
-, openssl
-, pkg-config
-, python3
-, rustPlatform
-, lib
-, wayland
-, xorg
-, vulkan-loader
+{
+  alsa-lib,
+  fetchFromGitHub,
+  makeWrapper,
+  openssl,
+  pkg-config,
+  python3,
+  rustPlatform,
+  lib,
+  wayland,
+  xorg,
+  vulkan-loader,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
   version = "nightly-2022-02-02";
@@ -53,8 +53,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";
     homepage = "https://ruffle.rs/";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ govanify ];
+    license = with licenses; [mit asl20];
+    maintainers = with maintainers; [govanify];
     platforms = platforms.linux;
   };
 }

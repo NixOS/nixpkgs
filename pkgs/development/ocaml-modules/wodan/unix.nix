@@ -1,8 +1,18 @@
-{ lib, buildDunePackage, base64, benchmark, csv, cmdliner, wodan, afl-persistent
-, io-page-unix, mirage-block-ramdisk, mirage-block-unix }:
-
+{
+  lib,
+  buildDunePackage,
+  base64,
+  benchmark,
+  csv,
+  cmdliner,
+  wodan,
+  afl-persistent,
+  io-page-unix,
+  mirage-block-ramdisk,
+  mirage-block-unix,
+}:
 buildDunePackage rec {
-  outputs = [ "bin" "out" ];
+  outputs = ["bin" "out"];
   pname = "wodan-unix";
   inherit (wodan) version src useDune2;
 
@@ -22,6 +32,5 @@ buildDunePackage rec {
     moveToOutput bin "''${!outputBin}"
   '';
 
-  meta = wodan.meta // { description = "Wodan clients with Unix integration"; };
-
+  meta = wodan.meta // {description = "Wodan clients with Unix integration";};
 }

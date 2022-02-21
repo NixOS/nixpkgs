@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cssselect2
-, lxml
-, pillow
-, pytest
-, reportlab
-, tinycss2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  cssselect2,
+  lxml,
+  pillow,
+  pytest,
+  reportlab,
+  tinycss2,
 }:
-
 buildPythonPackage rec {
   pname = "svglib";
   version = "1.2.1";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/deeplook/svglib";
     description = "A pure-Python library for reading and converting SVG";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [trepetti];
   };
 }

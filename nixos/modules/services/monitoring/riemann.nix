@@ -1,14 +1,15 @@
-{ config, pkgs, lib, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with pkgs;
-with lib;
-
-let
-
+with lib; let
   cfg = config.services.riemann;
 
   classpath = concatStringsSep ":" (
-    cfg.extraClasspathEntries ++ [ "${riemann}/share/java/riemann.jar" ]
+    cfg.extraClasspathEntries ++ ["${riemann}/share/java/riemann.jar"]
   );
 
   riemannConfig = concatStringsSep "\n" (
@@ -21,11 +22,8 @@ let
       -cp ${classpath} \
       riemann.bin ${cfg.configFile}
   '';
-
 in {
-
   options = {
-
     services.riemann = {
       enable = mkOption {
         type = types.bool;
@@ -77,7 +75,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     users.groups.riemann.gid = config.ids.gids.riemann;
 
     users.users.riemann = {
@@ -91,15 +88,13 @@ in {
     );
 
     systemd.services.riemann = {
-      wantedBy = [ "multi-user.target" ];
-      path = [ inetutils ];
+      wantedBy = ["multi-user.target"];
+      path = [inetutils];
       serviceConfig = {
         User = "riemann";
         ExecStart = "${launcher}/bin/riemann";
       };
       serviceConfig.LimitNOFILE = 65536;
     };
-
   };
-
 }

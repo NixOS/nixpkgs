@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchsvn }:
-
+{
+  lib,
+  stdenv,
+  fetchsvn,
+}:
 stdenv.mkDerivation rec {
   pname = "xavs";
   version = "55";
@@ -12,23 +15,25 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase = ''
-    patchShebangs configure
-    patchShebangs config.sub
-    patchShebangs version.sh
-    patchShebangs tools/countquant_xavs.pl
-    patchShebangs tools/patcheck
-    patchShebangs tools/regression-test.pl
-    patchShebangs tools/xavs-format
-    '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace config.guess --replace 'uname -p' 'uname -m'
-    substituteInPlace configure \
-      --replace '-O4' '-O3' \
-      --replace ' -s ' ' ' \
-      --replace 'LDFLAGS -s' 'LDFLAGS' \
-      --replace '-dynamiclib' ' ' \
-      --replace '-falign-loops=16' ' '
-    substituteInPlace Makefile --replace '-Wl,-soname,' ' '
+  patchPhase =
+    ''
+      patchShebangs configure
+      patchShebangs config.sub
+      patchShebangs version.sh
+      patchShebangs tools/countquant_xavs.pl
+      patchShebangs tools/patcheck
+      patchShebangs tools/regression-test.pl
+      patchShebangs tools/xavs-format
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace config.guess --replace 'uname -p' 'uname -m'
+      substituteInPlace configure \
+        --replace '-O4' '-O3' \
+        --replace ' -s ' ' ' \
+        --replace 'LDFLAGS -s' 'LDFLAGS' \
+        --replace '-dynamiclib' ' ' \
+        --replace '-falign-loops=16' ' '
+      substituteInPlace Makefile --replace '-Wl,-soname,' ' '
     '';
 
   configureFlags = [
@@ -40,9 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "AVS encoder and decoder";
-    homepage    = "http://xavs.sourceforge.net/";
-    license     = licenses.lgpl2;
-    platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ codyopel ];
+    homepage = "http://xavs.sourceforge.net/";
+    license = licenses.lgpl2;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [codyopel];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytestCheckHook
-, enrich
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytestCheckHook,
+  enrich,
 }:
-
 buildPythonPackage rec {
   pname = "subprocess-tee";
   version = "0.3.5";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pycontribs/subprocess-tee";
     description = "A subprocess.run drop-in replacement that supports a tee mode";
     license = licenses.mit;
-    maintainers = with maintainers; [ putchar ];
+    maintainers = with maintainers; [putchar];
   };
 }

@@ -1,20 +1,21 @@
-{ lib
-, meson
-, ninja
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, glib
-, gnome
-, gobject-introspection
-, gtk3
-, libxml2
-, pkg-config
-, python3Packages
-, wrapGAppsHook }:
-
+{
+  lib,
+  meson,
+  ninja,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  gnome,
+  gobject-introspection,
+  gtk3,
+  libxml2,
+  pkg-config,
+  python3Packages,
+  wrapGAppsHook,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
   version = "0.4.1";
@@ -72,7 +73,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/RogerCrocker/BadaBib";
     description = "A simple BibTeX Viewer and Editor";
-    maintainers = [ maintainers.Cogitri ];
+    maintainers = [maintainers.Cogitri];
     license = licenses.gpl3Plus;
   };
 }

@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pandoc, pkg-config, zlib
-, Security, libiconv, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  pandoc,
+  pkg-config,
+  zlib,
+  Security,
+  libiconv,
+  installShellFiles,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "exa";
   version = "0.10.1";
@@ -14,15 +23,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   # Cargo.lock is outdated
-  cargoPatches = [ ./update-cargo-lock.diff ];
+  cargoPatches = [./update-cargo-lock.diff];
 
   cargoSha256 = "sha256-ah8IjShmivS6IWL3ku/4/j+WNr/LdUnh1YJnPdaFdcM=";
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
-  buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [cmake pkg-config installShellFiles pandoc];
+  buildInputs =
+    [zlib]
+    ++ lib.optionals stdenv.isDarwin [libiconv Security];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   postInstall = ''
     pandoc --standalone -f markdown -t man man/exa.1.md > man/exa.1
@@ -50,6 +60,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ogham/exa/releases/tag/v${version}";
     homepage = "https://the.exa.website";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehegnes lilyball globin fortuneteller2k ];
+    maintainers = with maintainers; [ehegnes lilyball globin fortuneteller2k];
   };
 }

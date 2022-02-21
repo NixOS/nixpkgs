@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "versioneer";
   version = "0.21";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
   # pip.
   doCheck = false;
 
-  pythonImportsCheck = [ "versioneer" ];
+  pythonImportsCheck = ["versioneer"];
 
   meta = with lib; {
     description = "Version-string management for VCS-controlled trees";
     homepage = "https://github.com/warner/python-versioneer";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

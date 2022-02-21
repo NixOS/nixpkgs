@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, JPype1
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  JPype1,
 }:
-
 buildPythonPackage rec {
   pname = "JayDeBeApi";
   version = "1.2.3";

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, rpmextract }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  rpmextract,
+}:
 stdenv.mkDerivation rec {
   pname = "libsane-dsseries";
   version = "1.0.5-1";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wfdbfbf51cc7njzikdg48kwpnpc0pg5s6p0s0y3z0q7y59x2wbq";
   };
 
-  nativeBuildInputs = [ rpmextract ];
+  nativeBuildInputs = [rpmextract];
 
   unpackCmd = ''
     mkdir ${pname}-${version} && pushd ${pname}-${version}
@@ -48,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.brother.com";
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ callahad ];
+    maintainers = with lib.maintainers; [callahad];
   };
 }

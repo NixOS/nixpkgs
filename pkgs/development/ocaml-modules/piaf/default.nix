@@ -1,20 +1,20 @@
-{ alcotest-lwt
-, buildDunePackage
-, dune-site
-, fetchzip
-, gluten-lwt-unix
-, lib
-, logs
-, lwt_ssl
-, magic-mime
-, mrmime
-, openssl
-, pecu
-, psq
-, ssl
-, uri
+{
+  alcotest-lwt,
+  buildDunePackage,
+  dune-site,
+  fetchzip,
+  gluten-lwt-unix,
+  lib,
+  logs,
+  lwt_ssl,
+  magic-mime,
+  mrmime,
+  openssl,
+  pecu,
+  psq,
+  ssl,
+  uri,
 }:
-
 buildDunePackage rec {
   pname = "piaf";
   version = "0.1.0";
@@ -49,6 +49,6 @@ buildDunePackage rec {
     description = "An HTTP library with HTTP/2 support written entirely in OCaml";
     homepage = "https://github.com/anmonteiro/piaf";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ anmonteiro ];
+    maintainers = with lib.maintainers; [anmonteiro];
   };
 }

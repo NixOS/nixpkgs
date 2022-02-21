@@ -1,8 +1,8 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "jsonrpclib-pelix";
   version = "0.4.3.2";
@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "JSON RPC client library - Pelix compatible fork";
     homepage = "https://pypi.python.org/pypi/jsonrpclib-pelix/";
     license = lib.licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

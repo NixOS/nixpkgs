@@ -1,14 +1,14 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-base
-, lwt-watcher
-, alcotest-lwt
-, qcheck-alcotest
-, tezos-base-test-helpers
-, tezos-test-helpers
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-base,
+  lwt-watcher,
+  alcotest-lwt,
+  qcheck-alcotest,
+  tezos-base-test-helpers,
+  tezos-test-helpers,
 }:
-
 buildDunePackage {
   pname = "tezos-requester";
   inherit (tezos-stdlib) version useDune2;
@@ -28,7 +28,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: generic resource fetching service";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: generic resource fetching service";
+    };
 }

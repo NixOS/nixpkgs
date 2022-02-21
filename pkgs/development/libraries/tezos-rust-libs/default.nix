@@ -1,5 +1,8 @@
-{ lib, fetchFromGitLab, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitLab,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "tezos-rust-libs";
   version = "1.0";
@@ -32,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/tezos/tezos-rust-libs";
     description = "Tezos: all rust dependencies and their dependencies";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

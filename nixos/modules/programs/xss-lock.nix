@@ -1,11 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.programs.xss-lock;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.programs.xss-lock;
+in {
   options.programs.xss-lock = {
     enable = mkEnableOption "xss-lock";
 
@@ -18,8 +19,8 @@ in
     };
 
     extraOptions = mkOption {
-      default = [ ];
-      example = [ "--ignore-sleep" ];
+      default = [];
+      example = ["--ignore-sleep"];
       type = types.listOf types.str;
       description = ''
         Additional command-line arguments to pass to
@@ -31,14 +32,17 @@ in
   config = mkIf cfg.enable {
     systemd.user.services.xss-lock = {
       description = "XSS Lock Daemon";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
+      partOf = ["graphical-session.target"];
       serviceConfig.ExecStart = with lib;
         strings.concatStringsSep " " ([
-            "${pkgs.xss-lock}/bin/xss-lock" "--session \${XDG_SESSION_ID}"
-          ] ++ (map escapeShellArg cfg.extraOptions) ++ [
-            "--"
-            cfg.lockerCommand
+          "${pkgs.xss-lock}/bin/xss-lock"
+          "--session \${XDG_SESSION_ID}"
+        ]
+        ++ (map escapeShellArg cfg.extraOptions)
+        ++ [
+          "--"
+          cfg.lockerCommand
         ]);
     };
   };

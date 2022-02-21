@@ -1,38 +1,39 @@
-{ lib, stdenv, fetchurl }:
-
-{ pkg
-, version
-, sha256
-, meta ? { }
+{
+  lib,
+  stdenv,
+  fetchurl,
+}: {
+  pkg,
+  version,
+  sha256,
+  meta ? {},
 }:
+  with lib;
+    stdenv.mkDerivation ({
+      pname = "hex-source-${pkg}";
+      inherit version;
+      dontBuild = true;
+      dontConfigure = true;
+      dontFixup = true;
 
-with lib;
+      src = fetchurl {
+        url = "https://repo.hex.pm/tarballs/${pkg}-${version}.tar";
+        inherit sha256;
+      };
 
-stdenv.mkDerivation ({
-  pname = "hex-source-${pkg}";
-  inherit version;
-  dontBuild = true;
-  dontConfigure = true;
-  dontFixup = true;
+      unpackCmd = ''
+        tar -xf $curSrc contents.tar.gz
+        mkdir contents
+        tar -C contents -xzf contents.tar.gz
+      '';
 
-  src = fetchurl {
-    url = "https://repo.hex.pm/tarballs/${pkg}-${version}.tar";
-    inherit sha256;
-  };
+      installPhase = ''
+        runHook preInstall
+        mkdir "$out"
+        cp -Hrt "$out" .
+        success=1
+        runHook postInstall
+      '';
 
-  unpackCmd = ''
-    tar -xf $curSrc contents.tar.gz
-    mkdir contents
-    tar -C contents -xzf contents.tar.gz
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir "$out"
-    cp -Hrt "$out" .
-    success=1
-    runHook postInstall
-  '';
-
-  inherit meta;
-})
+      inherit meta;
+    })

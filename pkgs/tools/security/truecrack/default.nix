@@ -1,7 +1,11 @@
-{ lib, gccStdenv, fetchFromGitLab, cudatoolkit
-, cudaSupport ? false
-, pkg-config }:
-
+{
+  lib,
+  gccStdenv,
+  fetchFromGitLab,
+  cudatoolkit,
+  cudaSupport ? false,
+  pkg-config,
+}:
 gccStdenv.mkDerivation rec {
   pname = "truecrack";
   version = "3.6";
@@ -13,11 +17,15 @@ gccStdenv.mkDerivation rec {
     sha256 = "+Rw9SfaQtO1AJO6UVVDMCo8DT0dYEbv7zX8SI+pHCRQ=";
   };
 
-  configureFlags = (if cudaSupport then [
-    "--with-cuda=${cudatoolkit}"
-  ] else [
-    "--enable-cpu"
-  ]);
+  configureFlags = (if cudaSupport
+  then
+    [
+      "--with-cuda=${cudatoolkit}"
+    ]
+  else
+    [
+      "--enable-cpu"
+    ]);
 
   nativeBuildInputs = [
     pkg-config
@@ -27,7 +35,7 @@ gccStdenv.mkDerivation rec {
     cudatoolkit
   ];
 
-  installFlags = [ "prefix=$(out)" ];
+  installFlags = ["prefix=$(out)"];
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -35,6 +43,6 @@ gccStdenv.mkDerivation rec {
     homepage = "https://gitlab.com/kalilinux/packages/truecrack";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    maintainers = with maintainers; [ethancedwards8];
   };
 }

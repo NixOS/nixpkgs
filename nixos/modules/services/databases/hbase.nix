@@ -1,43 +1,41 @@
-{ config, options, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.hbase;
   opt = options.services.hbase;
 
-  buildProperty = configAttr:
-    (builtins.concatStringsSep "\n"
-      (lib.mapAttrsToList
-        (name: value: ''
-          <property>
-            <name>${name}</name>
-            <value>${builtins.toString value}</value>
-          </property>
-        '')
-        configAttr));
+  buildProperty = configAttr: (builtins.concatStringsSep "\n"
+  (lib.mapAttrsToList
+  (name: value: ''
+    <property>
+      <name>${name}</name>
+      <value>${builtins.toString value}</value>
+    </property>
+  '')
+  configAttr));
 
   configFile = pkgs.writeText "hbase-site.xml"
-    ''<configuration>
-        ${buildProperty (opt.settings.default // cfg.settings)}
-      </configuration>
-    '';
+  ''    <configuration>
+            ${buildProperty (opt.settings.default // cfg.settings)}
+          </configuration>
+  '';
 
-  configDir = pkgs.runCommand "hbase-config-dir" { preferLocalBuild = true; } ''
+  configDir = pkgs.runCommand "hbase-config-dir" {preferLocalBuild = true;} ''
     mkdir -p $out
     cp ${cfg.package}/conf/* $out/
     rm $out/hbase-site.xml
     ln -s ${configFile} $out/hbase-site.xml
-  '' ;
-
+  '';
 in {
-
   ###### interface
 
   options = {
-
     services.hbase = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -54,7 +52,6 @@ in {
           HBase package to use.
         '';
       };
-
 
       user = mkOption {
         type = types.str;
@@ -91,7 +88,7 @@ in {
       };
 
       settings = mkOption {
-        type = with lib.types; attrsOf (oneOf [ str int bool ]);
+        type = with lib.types; attrsOf (oneOf [str int bool]);
         default = {
           "hbase.rootdir" = "file://${cfg.dataDir}/hbase";
           "hbase.zookeeper.property.dataDir" = "${cfg.dataDir}/zookeeper";
@@ -106,15 +103,12 @@ in {
           configurations in hbase-site.xml, see <link xlink:href="https://github.com/apache/hbase/blob/master/hbase-server/src/test/resources/hbase-site.xml"/> for details.
         '';
       };
-
     };
-
   };
 
   ###### implementation
 
   config = mkIf config.services.hbase.enable {
-
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.logDir}' - ${cfg.user} ${cfg.group} - -"
@@ -122,7 +116,7 @@ in {
 
     systemd.services.hbase = {
       description = "HBase Server";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       environment = {
         # JRE 15 removed option `UseConcMarkSweepGC` which is needed.
@@ -144,6 +138,5 @@ in {
     };
 
     users.groups.hbase.gid = config.ids.gids.hbase;
-
   };
 }

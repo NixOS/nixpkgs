@@ -1,13 +1,12 @@
-{ faust
-, jack2
-, qt4
-, libsndfile
-, alsa-lib
-, which
+{
+  faust,
+  jack2,
+  qt4,
+  libsndfile,
+  alsa-lib,
+  which,
 }:
-
 faust.wrapWithBuildEnv {
-
   baseName = "faust2jaqt";
 
   scripts = [
@@ -22,5 +21,4 @@ faust.wrapWithBuildEnv {
     alsa-lib
     which
   ];
-
 }

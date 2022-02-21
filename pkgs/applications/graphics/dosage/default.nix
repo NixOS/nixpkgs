@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "dosage";
   version = "2.17";
@@ -10,13 +12,20 @@ python3Packages.buildPythonApplication rec {
   };
 
   checkInputs = with python3Packages; [
-    pytestCheckHook pytest-xdist responses
+    pytestCheckHook
+    pytest-xdist
+    responses
   ];
 
-  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
+  nativeBuildInputs = with python3Packages; [setuptools-scm];
 
   propagatedBuildInputs = with python3Packages; [
-    colorama imagesize lxml requests setuptools six
+    colorama
+    imagesize
+    lxml
+    requests
+    setuptools
+    six
   ];
 
   disabled = python3Packages.pythonOlder "3.3";
@@ -25,6 +34,6 @@ python3Packages.buildPythonApplication rec {
     description = "A comic strip downloader and archiver";
     homepage = "https://dosage.rocks/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ toonn ];
+    maintainers = with lib.maintainers; [toonn];
   };
 }

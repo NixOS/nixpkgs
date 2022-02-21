@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, ncurses
-, readline
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  readline,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ytree";
   version = "2.04";
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'gzip' 'gzip -n'
   '';
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" ];
+  installFlags = ["DESTDIR=${placeholder "out"}"];
 
   preInstall = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -33,8 +34,9 @@ stdenv.mkDerivation rec {
     description = "A curses-based file manager similar to DOS Xtree(TM)";
     homepage = "https://www.han.de/~werner/ytree.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }
 # TODO: X11 support
+

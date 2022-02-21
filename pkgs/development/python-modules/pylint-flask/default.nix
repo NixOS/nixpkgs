@@ -1,12 +1,12 @@
-{ buildPythonPackage
-, fetchPypi
-, isPy3k
-, lib
-
-# pythonPackages
-, pylint-plugin-utils
+{
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  lib
+  # pythonPackages
+  ,
+  pylint-plugin-utils,
 }:
-
 buildPythonPackage rec {
   pname = "pylint-flask";
   version = "0.6";

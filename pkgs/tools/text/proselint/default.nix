@@ -1,5 +1,11 @@
-{ lib, fetchurl, buildPythonApplication, click, future, six }:
-
+{
+  lib,
+  fetchurl,
+  buildPythonApplication,
+  click,
+  future,
+  six,
+}:
 buildPythonApplication rec {
   pname = "proselint";
   version = "0.13.0";
@@ -11,12 +17,12 @@ buildPythonApplication rec {
     sha256 = "7dd2b63cc2aa390877c4144fcd3c80706817e860b017f04882fbcd2ab0852a58";
   };
 
-  propagatedBuildInputs = [ click future six ];
+  propagatedBuildInputs = [click future six];
 
   meta = with lib; {
     description = "A linter for prose";
     homepage = "http://proselint.com";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ alibabzo ];
+    maintainers = with maintainers; [alibabzo];
   };
 }

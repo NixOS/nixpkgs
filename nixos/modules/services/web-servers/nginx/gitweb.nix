@@ -1,19 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.nginx.gitweb;
   gitwebConfig = config.services.gitweb;
   package = pkgs.gitweb.override (optionalAttrs gitwebConfig.gitwebTheme {
     gitwebTheme = true;
   });
-
-in
-{
-
+in {
   options.services.nginx.gitweb = {
-
     enable = mkOption {
       default = false;
       type = types.bool;
@@ -53,23 +51,21 @@ in
         VirtualHost to serve gitweb on. Default is catch-all.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.gitweb = {
       description = "GitWeb service";
       script = "${package}/gitweb.cgi --fastcgi --nproc=1";
-      environment  = {
+      environment = {
         FCGI_SOCKET_PATH = "/run/gitweb/gitweb.sock";
       };
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        RuntimeDirectory = [ "gitweb" ];
+        RuntimeDirectory = ["gitweb"];
       };
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
 
     services.nginx = {
@@ -86,9 +82,7 @@ in
         };
       };
     };
-
   };
 
-  meta.maintainers = with maintainers; [ ];
-
+  meta.maintainers = with maintainers; [];
 }

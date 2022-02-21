@@ -1,6 +1,10 @@
-{ lib, fetchurl, gsettings-desktop-schemas, gtk3, appimageTools }:
-
-let
+{
+  lib,
+  fetchurl,
+  gsettings-desktop-schemas,
+  gtk3,
+  appimageTools,
+}: let
   pname = "bloomrpc";
   version = "1.5.3";
 
@@ -14,35 +18,35 @@ let
     inherit pname src version;
   };
 in
-appimageTools.wrapType2 {
-  inherit pname src version;
+  appimageTools.wrapType2 {
+    inherit pname src version;
 
-  profile = ''
-    export LC_ALL=C.UTF-8
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
-
-  multiPkgs = null; # no 32bit needed
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
-
-  extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
-    install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
-    install -m 444 -D ${appimageContents}/${pname}.png \
-      $out/share/icons/hicolor/512x512/apps/${pname}.png
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-  '';
-
-  meta = with lib; {
-    description = "GUI Client for GRPC Services";
-    longDescription = ''
-      Inspired by Postman and GraphQL Playground BloomRPC aims to provide the simplest
-      and most efficient developer experience for exploring and querying your GRPC services.
+    profile = ''
+      export LC_ALL=C.UTF-8
+      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
     '';
-    homepage = "https://github.com/uw-labs/bloomrpc";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ zoedsoupe ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+
+    multiPkgs = null; # no 32bit needed
+    extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [pkgs.bash];
+
+    extraInstallCommands = ''
+      ln -s $out/bin/${pname}-${version} $out/bin/${pname}
+      install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
+      install -m 444 -D ${appimageContents}/${pname}.png \
+        $out/share/icons/hicolor/512x512/apps/${pname}.png
+      substituteInPlace $out/share/applications/${pname}.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}'
+    '';
+
+    meta = with lib; {
+      description = "GUI Client for GRPC Services";
+      longDescription = ''
+        Inspired by Postman and GraphQL Playground BloomRPC aims to provide the simplest
+        and most efficient developer experience for exploring and querying your GRPC services.
+      '';
+      homepage = "https://github.com/uw-labs/bloomrpc";
+      license = licenses.lgpl3Plus;
+      maintainers = with maintainers; [zoedsoupe];
+      platforms = ["x86_64-linux"];
+    };
+  }

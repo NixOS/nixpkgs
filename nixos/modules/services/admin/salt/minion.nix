@@ -1,10 +1,11 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
-  cfg  = config.services.salt.minion;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.salt.minion;
 
   fullConfig = lib.recursiveUpdate {
     # Provide defaults for some directories to allow an immutable config dir
@@ -14,11 +15,9 @@ let
     default_include = "/var/lib/salt/minion.d/*.conf";
     # Default is in /etc/salt/pki/minion
     pki_dir = "/var/lib/salt/pki/minion";
-  } cfg.configuration;
-
-in
-
-{
+  }
+  cfg.configuration;
+in {
   options = {
     services.salt.minion = {
       enable = mkEnableOption "Salt minion service";
@@ -43,12 +42,12 @@ in
       etc."salt/minion".source = pkgs.writeText "minion" (
         builtins.toJSON fullConfig
       );
-      systemPackages = with pkgs; [ salt ];
+      systemPackages = with pkgs; [salt];
     };
     systemd.services.salt-minion = {
       description = "Salt Minion";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       path = with pkgs; [
         util-linux
       ];
@@ -64,4 +63,3 @@ in
     };
   };
 }
-

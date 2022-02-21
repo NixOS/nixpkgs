@@ -1,6 +1,13 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper
-, trash-cli, coreutils, which, getopt }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  trash-cli,
+  coreutils,
+  which,
+  getopt,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "rmtrash";
   version = "1.14";
@@ -12,13 +19,13 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "0wfb2ykzlsxyqn9krfsis9jxhaxy3pxl71a4f15an1ngfndai694";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     for f in rm{,dir}trash; do
       install -D ./$f $out/bin/$f
       wrapProgram $out/bin/$f \
-        --prefix PATH : ${lib.makeBinPath [ trash-cli coreutils which getopt ]}
+        --prefix PATH : ${lib.makeBinPath [trash-cli coreutils which getopt]}
     done
   '';
 
@@ -31,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
       and `rmdir`.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ peelz ];
+    maintainers = with maintainers; [peelz];
     platforms = platforms.all;
   };
 }

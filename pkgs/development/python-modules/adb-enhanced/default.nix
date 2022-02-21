@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, jdk11
-, psutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  jdk11,
+  psutil,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "adb-enhanced";
   version = "2.5.12";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Tool for Android testing and development";
     homepage = "https://github.com/ashishb/adb-enhanced";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vtuan10 ];
+    maintainers = with maintainers; [vtuan10];
     mainProgram = "adbe";
   };
 }

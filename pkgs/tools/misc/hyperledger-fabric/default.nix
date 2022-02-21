@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "hyperledger-fabric";
   version = "1.3.0";
@@ -30,6 +33,6 @@ buildGoPackage rec {
     description = "An implementation of blockchain technology, leveraging familiar and proven technologies";
     homepage = "https://wiki.hyperledger.org/display/fabric";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

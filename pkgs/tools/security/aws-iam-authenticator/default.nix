@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "aws-iam-authenticator";
   version = "0.5.5";
@@ -15,14 +18,14 @@ buildGoModule rec {
   deleteVendor = true;
   vendorSha256 = null;
 
-  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=v${version}"];
 
-  subPackages = [ "cmd/aws-iam-authenticator" ];
+  subPackages = ["cmd/aws-iam-authenticator"];
 
   meta = with lib; {
     homepage = "https://github.com/kubernetes-sigs/aws-iam-authenticator";
     description = "AWS IAM credentials for Kubernetes authentication";
     license = licenses.asl20;
-    maintainers = [ maintainers.srhb ];
+    maintainers = [maintainers.srhb];
   };
 }

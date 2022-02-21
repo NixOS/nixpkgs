@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "prio";
   version = "0.pre+unstable=2018-09-13";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/letoram/prio";
     description = "Plan9- Rio like Window Manager for Arcan";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }

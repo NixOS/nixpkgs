@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   inherit (pkgs) lib;
 
   tests = {
@@ -9,40 +8,47 @@ let
     #  - Alternatively, blocked on a NixOps 2 release
     #    https://github.com/NixOS/nixops/issues/1242
     # stable = testsLegacyNetwork { nixopsPkg = pkgs.nixops; };
-    unstable = testsForPackage { nixopsPkg = pkgs.nixopsUnstable; };
+    unstable = testsForPackage {nixopsPkg = pkgs.nixopsUnstable;};
 
     # inherit testsForPackage;
   };
 
-  testsForPackage = lib.makeOverridable (args: lib.recurseIntoAttrs {
-    legacyNetwork = testLegacyNetwork args;
-  });
+  testsForPackage = lib.makeOverridable (args:
+    lib.recurseIntoAttrs {
+      legacyNetwork = testLegacyNetwork args;
+    });
 
-  testLegacyNetwork = { nixopsPkg }: pkgs.nixosTest ({
-    nodes = {
-      deployer = { config, lib, nodes, pkgs, ... }: {
-        imports = [ ../../modules/installer/cd-dvd/channel.nix ];
-        environment.systemPackages = [ nixopsPkg ];
-        nix.settings.substituters = lib.mkForce [ ];
-        users.users.person.isNormalUser = true;
-        virtualisation.writableStore = true;
-        virtualisation.additionalPaths = [
-          pkgs.hello
-          pkgs.figlet
+  testLegacyNetwork = {nixopsPkg}:
+    pkgs.nixosTest ({
+      nodes = {
+        deployer = {
+          config,
+          lib,
+          nodes,
+          pkgs,
+          ...
+        }: {
+          imports = [../../modules/installer/cd-dvd/channel.nix];
+          environment.systemPackages = [nixopsPkg];
+          nix.settings.substituters = lib.mkForce [];
+          users.users.person.isNormalUser = true;
+          virtualisation.writableStore = true;
+          virtualisation.additionalPaths = [
+            pkgs.hello
+            pkgs.figlet
 
-          # This includes build dependencies all the way down. Not efficient,
-          # but we do need build deps to an *arbitrary* depth, which is hard to
-          # determine.
-          (allDrvOutputs nodes.server.config.system.build.toplevel)
-        ];
+            # This includes build dependencies all the way down. Not efficient,
+            # but we do need build deps to an *arbitrary* depth, which is hard to
+            # determine.
+            (allDrvOutputs nodes.server.config.system.build.toplevel)
+          ];
+        };
+        server = {lib, ...}: {
+          imports = [./legacy/base-configuration.nix];
+        };
       };
-      server = { lib, ... }: {
-        imports = [ ./legacy/base-configuration.nix ];
-      };
-    };
 
-    testScript = { nodes }:
-      let
+      testScript = {nodes}: let
         deployerSetup = pkgs.writeScript "deployerSetup" ''
           #!${pkgs.runtimeShell}
           set -eux -o pipefail
@@ -53,9 +59,8 @@ let
           chmod 0400 ~/.ssh/id_ed25519
         '';
         serverNetworkJSON = pkgs.writeText "server-network.json"
-          (builtins.toJSON nodes.server.config.system.build.networkConfig);
-      in
-      ''
+        (builtins.toJSON nodes.server.config.system.build.networkConfig);
+      in ''
         import shlex
 
         def deployer_do(cmd):
@@ -88,18 +93,18 @@ let
 
         deployer_do("cd ~/unicorn; nixops ssh server 'hello | figlet'")
       '';
-  });
+    });
 
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
   /*
-    Return a store path with a closure containing everything including
-    derivations and all build dependency outputs, all the way down.
-  */
-  allDrvOutputs = pkg:
-    let name = lib.strings.sanitizeDerivationName "allDrvOutputs-${pkg.pname or pkg.name or "unknown"}";
-    in
-    pkgs.runCommand name { refs = pkgs.writeReferencesToFile pkg.drvPath; } ''
+   Return a store path with a closure containing everything including
+   derivations and all build dependency outputs, all the way down.
+   */
+  allDrvOutputs = pkg: let
+    name = lib.strings.sanitizeDerivationName "allDrvOutputs-${pkg.pname or pkg.name or "unknown"}";
+  in
+    pkgs.runCommand name {refs = pkgs.writeReferencesToFile pkg.drvPath;} ''
       touch $out
       while read ref; do
         case $ref in
@@ -109,6 +114,5 @@ let
         esac
       done <$refs
     '';
-
 in
-tests
+  tests

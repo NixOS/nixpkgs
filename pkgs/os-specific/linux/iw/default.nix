@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libnl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libnl,
+}:
 stdenv.mkDerivation rec {
   pname = "iw";
   version = "5.16";
@@ -9,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TETkJ2L5A/kJS6WlmJmMgAqXpir9b9MeweCnmeMIZZw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libnl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libnl];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = {
     description = "Tool to use nl80211";
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wireless.wiki.kernel.org/en/users/Documentation/iw";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ viric primeos ];
+    maintainers = with lib.maintainers; [viric primeos];
     platforms = with lib.platforms; linux;
   };
 }

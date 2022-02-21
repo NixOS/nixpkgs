@@ -1,12 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.prowlarr;
-
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.prowlarr;
+in {
   options = {
     services.prowlarr = {
       enable = mkEnableOption "Prowlarr";
@@ -22,8 +22,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.prowlarr = {
       description = "Prowlarr";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "simple";
@@ -35,7 +35,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 9696 ];
+      allowedTCPPorts = [9696];
     };
   };
 }

@@ -1,9 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest-runner
-, setuptools
-, coverage, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-runner,
+  setuptools,
+  coverage,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "diceware";
   version = "0.10";
@@ -13,11 +16,11 @@ buildPythonPackage rec {
     sha256 = "sha256-srTMm1n1aNLvUb/fn34a+UHSX7j1wl8XAZHburzpZWk=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
+  nativeBuildInputs = [pytest-runner];
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [setuptools];
 
-  checkInputs = [ coverage pytest ];
+  checkInputs = [coverage pytest];
 
   # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
   checkPhase = ''
@@ -28,6 +31,6 @@ buildPythonPackage rec {
     description = "Generates passphrases by concatenating words randomly picked from wordlists";
     homepage = "https://github.com/ulif/diceware";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [asymmetric];
   };
 }

@@ -1,16 +1,19 @@
-{ lib, stdenv, dockapps-sources
-, libX11
-, libXpm
-, libXext
-, libdockapp }:
-
+{
+  lib,
+  stdenv,
+  dockapps-sources,
+  libX11,
+  libXpm,
+  libXext,
+  libdockapp,
+}:
 stdenv.mkDerivation rec {
   pname = "wmsm.app";
   version = "0.2.1";
 
   src = dockapps-sources;
 
-  buildInputs = [ libX11 libXpm libXext libdockapp ];
+  buildInputs = [libX11 libXpm libXext libdockapp];
 
   setSourceRoot = ''
     export sourceRoot=$(echo */${pname}/wmsm)
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/install" "install"
   '';
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   installPhase = ''
     runHook preInstall
@@ -32,12 +35,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  installFlags = [ "PREFIX=${placeholder "out"}/bin" ];
+  installFlags = ["PREFIX=${placeholder "out"}/bin"];
 
   meta = with lib; {
     description = "System monitor for Windowmaker";
     homepage = "https://www.dockapps.net/wmsmapp";
     license = licenses.gpl2;
-    maintainers = [ maintainers.bstrik ];
+    maintainers = [maintainers.bstrik];
   };
 }

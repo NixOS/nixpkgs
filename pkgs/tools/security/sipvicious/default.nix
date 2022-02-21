@@ -1,8 +1,8 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
 }:
-
 buildPythonApplication rec {
   pname = "sipvicious";
   version = "0.3.4";
@@ -16,12 +16,12 @@ buildPythonApplication rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "sipvicious" ];
+  pythonImportsCheck = ["sipvicious"];
 
   meta = with lib; {
     description = " Set of tools to audit SIP based VoIP systems";
     homepage = "https://github.com/EnableSecurity/sipvicious";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

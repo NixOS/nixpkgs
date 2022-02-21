@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, libXt
-, libXext
-, libXpm
-, imake
-, gccmakedep
-, svgSupport ? false
-, librsvg
-, glib
-, gdk-pixbuf
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXt,
+  libXext,
+  libXpm,
+  imake,
+  gccmakedep,
+  svgSupport ? false,
+  librsvg,
+  glib,
+  gdk-pixbuf,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xxkb";
   version = "1.11.1";
@@ -23,16 +23,18 @@ stdenv.mkDerivation rec {
     sha256 = "0hl1i38z9xnbgfjkaz04vv1n8xbgfg88g5z8fyzyb2hxv2z37anf";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
+  nativeBuildInputs = [imake gccmakedep];
 
-  buildInputs = [
-    libX11
-    libXt
-    libXext
-    libXpm
-  ] ++ lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkg-config ];
+  buildInputs =
+    [
+      libX11
+      libXt
+      libXext
+      libXpm
+    ]
+    ++ lib.optionals svgSupport [librsvg glib gdk-pixbuf pkg-config];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   imakeFlags = lib.optionalString svgSupport "-DWITH_SVG_SUPPORT";
 
@@ -45,13 +47,13 @@ stdenv.mkDerivation rec {
     "MANDIR=${placeholder "man"}/share/man"
   ];
 
-  installTargets = [ "install" "install.man" ];
+  installTargets = ["install" "install.man"];
 
   meta = with lib; {
     description = "A keyboard layout indicator and switcher";
     homepage = "http://xxkb.sourceforge.net/";
     license = licenses.artistic2;
-    maintainers = with maintainers; [ rasendubi ];
+    maintainers = with maintainers; [rasendubi];
     platforms = platforms.linux;
   };
 }

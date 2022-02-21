@@ -1,8 +1,14 @@
-{ lib, stdenv, pkgs }:
+{
+  lib,
+  stdenv,
+  pkgs,
+}:
 (import ./composition.nix {
   inherit pkgs;
   inherit (stdenv.hostPlatform) system;
-})."package".override {
+})
+."package"
+.override {
   postInstall = ''
     mkdir "$out/bin"
     echo '#!/bin/sh' >> "$out/bin/matrix-recorder"
@@ -22,6 +28,6 @@
     description = "Matrix message recorder";
     homepage = "https://gitlab.com/argit/matrix-recorder/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = [lib.maintainers.raskin];
   };
 }

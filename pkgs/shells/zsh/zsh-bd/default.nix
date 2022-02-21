@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "zsh-bd";
   version = "2018-07-04";
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.olejorgenb ];
+    maintainers = [lib.maintainers.olejorgenb];
   };
 }

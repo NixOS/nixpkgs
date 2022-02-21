@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, ibus
-, gtk3
-, m17n_lib
-, m17n_db
-, gettext
-, python3
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  ibus,
+  gtk3,
+  m17n_lib,
+  m17n_db,
+  gettext,
+  python3,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ibus-m17n";
   version = "1.4.6";
@@ -50,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ibus/ibus-m17n";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ericsagnes];
   };
 }

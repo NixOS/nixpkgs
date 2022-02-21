@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, SDL2
-, SDL2_mixer
-, libGLU
-, libconfig
-, meson
-, ninja
-, pkg-config
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  SDL2,
+  SDL2_mixer,
+  libGLU,
+  libconfig,
+  meson,
+  ninja,
+  pkg-config,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "MAR1D";
   version = "0.3.0";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "Radvendii";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [meson ninja pkg-config];
 
   buildInputs = [
     SDL2
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://mar1d.com";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ taeer ];
+    maintainers = with maintainers; [taeer];
     platforms = platforms.unix;
   };
 }

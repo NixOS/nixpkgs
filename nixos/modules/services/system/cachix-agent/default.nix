@@ -1,11 +1,13 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.cachix-agent;
 in {
-  meta.maintainers = [ lib.maintainers.domenkozar ];
+  meta.maintainers = [lib.maintainers.domenkozar];
 
   options.services.cachix-agent = {
     enable = mkEnableOption "Cachix Deploy Agent: https://docs.cachix.org/deploy/";
@@ -43,14 +45,18 @@ in {
     systemd.services.cachix-agent = {
       description = "Cachix Deploy Agent";
       after = ["network-online.target"];
-      path = [ config.nix.package ];
-      wantedBy = [ "multi-user.target" ];
+      path = [config.nix.package];
+      wantedBy = ["multi-user.target"];
       # don't restart while changing
       reloadIfChanged = true;
       serviceConfig = {
         Restart = "on-failure";
         EnvironmentFile = cfg.credentialsFile;
-        ExecStart = "${cfg.package}/bin/cachix deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
+        ExecStart = "${cfg.package}/bin/cachix deploy agent ${cfg.name} ${
+          if cfg.profile != null
+          then profile
+          else ""
+        }";
       };
     };
   };

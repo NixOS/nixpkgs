@@ -1,14 +1,14 @@
-{ lib
-, aiomysql
-, aiosqlite
-, asyncpg
-, buildPythonPackage
-, databases
-, fetchFromGitHub
-, pythonOlder
-, typesystem
+{
+  lib,
+  aiomysql,
+  aiosqlite,
+  asyncpg,
+  buildPythonPackage,
+  databases,
+  fetchFromGitHub,
+  pythonOlder,
+  typesystem,
 }:
-
 buildPythonPackage rec {
   pname = "orm";
   version = "0.3.1";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "An async ORM";
     homepage = "https://github.com/encode/orm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

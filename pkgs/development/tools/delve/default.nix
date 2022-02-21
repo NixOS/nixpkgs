@@ -1,5 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 buildGoPackage rec {
   pname = "delve";
   version = "1.8.1";
@@ -14,9 +18,9 @@ buildGoPackage rec {
     sha256 = "sha256-GIwu3G8cy2xKqFzN/7d/mbpS+5oGJa3QexoELlEwWRA=";
   };
 
-  subPackages = [ "cmd/dlv" ];
+  subPackages = ["cmd/dlv"];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     # fortify source breaks build since delve compiles with -O0
@@ -31,8 +35,8 @@ buildGoPackage rec {
   meta = with lib; {
     description = "debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
-    maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
+    maintainers = with maintainers; [SuperSandro2000 vdemeester];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = ["x86_64-linux"] ++ platforms.darwin;
   };
 }

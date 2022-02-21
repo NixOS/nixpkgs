@@ -1,5 +1,11 @@
-{ buildPackages, lib, stdenv, fetchurl, gettext, libgpg-error }:
-
+{
+  buildPackages,
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  libgpg-error,
+}:
 stdenv.mkDerivation rec {
   pname = "libksba";
   version = "1.6.0";
@@ -9,13 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2taD5vLZFdiAqkvtXOqaEVaQuJNbeKG74BZpGJMHpIs=";
   };
 
-  outputs = [ "out" "dev" "info" ];
+  outputs = ["out" "dev" "info"];
 
-  buildInputs = [ gettext ];
-  propagatedBuildInputs = [ libgpg-error ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  buildInputs = [gettext];
+  propagatedBuildInputs = [libgpg-error];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
-  configureFlags = [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ];
+  configureFlags = ["--with-libgpg-error-prefix=${libgpg-error.dev}"];
 
   postInstall = ''
     mkdir -p $dev/bin
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.lgpl3;
   };
 }

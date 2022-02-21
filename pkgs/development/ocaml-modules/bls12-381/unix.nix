@@ -1,14 +1,14 @@
-{ lib
-, buildDunePackage
-, bls12-381
-, hex
-, integers
-, zarith
-, alcotest
-, bisect_ppx
-, ff-pbt
+{
+  lib,
+  buildDunePackage,
+  bls12-381,
+  hex,
+  integers,
+  zarith,
+  alcotest,
+  bisect_ppx,
+  ff-pbt,
 }:
-
 buildDunePackage {
   pname = "bls12-381-unix";
 

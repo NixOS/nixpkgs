@@ -1,16 +1,17 @@
-{ bcunit
-, cmake
-, fetchFromGitLab
-, mbedtls
-, lib, stdenv
+{
+  bcunit,
+  cmake,
+  fetchFromGitLab,
+  mbedtls,
+  lib,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bctoolbox";
   version = "5.1.0";
 
-  nativeBuildInputs = [ cmake bcunit ];
-  buildInputs = [ mbedtls ];
+  nativeBuildInputs = [cmake bcunit];
+  buildInputs = [mbedtls];
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -22,15 +23,15 @@ stdenv.mkDerivation rec {
   };
 
   # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+  cmakeFlags = ["-DENABLE_STATIC=NO"];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+  NIX_CFLAGS_COMPILE = ["-Wno-error=stringop-truncation"];
 
   meta = with lib; {
     description = "Utilities library for Linphone";
     homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ raskin jluttine ];
+    maintainers = with maintainers; [raskin jluttine];
     platforms = platforms.linux;
   };
 }

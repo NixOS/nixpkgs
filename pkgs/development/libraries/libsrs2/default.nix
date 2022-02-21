@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchurl }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libsrs2";
   version = "1.0.18";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The next generation SRS library from the original designer of SRS";
-    license = with lib.licenses; [ gpl2 bsd3 ];
+    license = with lib.licenses; [gpl2 bsd3];
     homepage = "https://www.libsrs2.org/";
     platforms = lib.platforms.linux;
   };

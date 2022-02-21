@@ -1,13 +1,13 @@
-{ lib
-, rustPlatform
-, steamcmd
-, fetchFromGitHub
-, steam-run-native
-, runtimeShell
-, withWine ? false
-, wine
+{
+  lib,
+  rustPlatform,
+  steamcmd,
+  fetchFromGitHub,
+  steam-run-native,
+  runtimeShell,
+  withWine ? false,
+  wine,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "steam-tui";
   version = "0.1.0";
@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-VYBzwDLSV4N4qt2dNgIS399T2HIbPTdQ2rDIeheLlfo=";
 
-  buildInputs = [ steamcmd steam-run-native ]
+  buildInputs =
+    [steamcmd steam-run-native]
     ++ lib.optional withWine wine;
 
   preFixup = ''
@@ -38,8 +39,8 @@ rustPlatform.buildRustPackage rec {
     description = "Rust TUI client for steamcmd";
     homepage = "https://github.com/dmadisetti/steam-tui";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [lom];
     # steam only supports that platform
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

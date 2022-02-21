@@ -1,13 +1,16 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "0.4.5";
   pname = "theft";
 
   src = fetchFromGitHub {
-    owner  = "silentbicycle";
-    repo   = "theft";
-    rev    = "v${version}";
+    owner = "silentbicycle";
+    repo = "theft";
+    rev = "v${version}";
     sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
   };
 
@@ -16,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   # fix the libtheft.pc file to use the right installation
   # directory. should be fixed upstream, too
@@ -29,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C library for property-based testing";
-    homepage    = "https://github.com/silentbicycle/theft/";
-    platforms   = platforms.unix;
-    license     = licenses.isc;
-    maintainers = with maintainers; [ kquick thoughtpolice ];
+    homepage = "https://github.com/silentbicycle/theft/";
+    platforms = platforms.unix;
+    license = licenses.isc;
+    maintainers = with maintainers; [kquick thoughtpolice];
   };
 }

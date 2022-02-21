@@ -1,5 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, fetchpatch, setuptools-scm }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  fetchpatch,
+  setuptools-scm,
+}:
 buildPythonPackage rec {
   pname = "elevate";
   version = "0.1.3";
@@ -11,9 +16,9 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-    # This is for not calling shell wrappers through Python, which fails.
-    url = "https://github.com/rkitover/elevate/commit/148b2bf698203ea39c9fe5d635ecd03cd94051af.patch";
-    sha256 = "1ky3z1jxl1g28wbwbx8qq8jgx8sa8pr8s3fdcpdhdx1blw28cv61";
+      # This is for not calling shell wrappers through Python, which fails.
+      url = "https://github.com/rkitover/elevate/commit/148b2bf698203ea39c9fe5d635ecd03cd94051af.patch";
+      sha256 = "1ky3z1jxl1g28wbwbx8qq8jgx8sa8pr8s3fdcpdhdx1blw28cv61";
     })
   ];
 
@@ -24,12 +29,12 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "elevate" ];
+  pythonImportsCheck = ["elevate"];
 
   meta = with lib; {
     description = "Python module for re-launching the current process as super-user";
     homepage = "https://github.com/barneygale/elevate";
     license = licenses.mit;
-    maintainers = with maintainers; [ rkitover ];
+    maintainers = with maintainers; [rkitover];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, autoconf, automake, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "conspy";
   version = "1.16";
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux text console viewer";
     license = licenses.epl10;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
   };
 }

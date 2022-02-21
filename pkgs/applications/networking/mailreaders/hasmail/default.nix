@@ -1,13 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, gobject-introspection
-, pango
-, cairo
-, gtk2
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  gobject-introspection,
+  pango,
+  cairo,
+  gtk2,
 }:
-
 buildGoModule rec {
   pname = "hasmail-unstable";
   version = "2019-08-24";
@@ -37,6 +37,6 @@ buildGoModule rec {
     description = "Simple tray icon for detecting new email on IMAP servers";
     homepage = "https://github.com/jonhoo/hasmail";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
   };
 }

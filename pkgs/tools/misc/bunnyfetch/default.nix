@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "bunnyfetch";
   version = "0.2.0";
@@ -20,7 +23,7 @@ buildGoModule rec {
     description = "Tiny system info fetch utility";
     homepage = "https://github.com/Rosettea/bunnyfetch";
     license = licenses.mit;
-    maintainers = with maintainers; [ devins2518 ];
+    maintainers = with maintainers; [devins2518];
     platforms = platforms.linux;
     mainProgram = "bunnyfetch";
   };

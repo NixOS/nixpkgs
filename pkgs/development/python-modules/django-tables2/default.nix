@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, django
-, tablib
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  django,
+  tablib,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "django-tables2";
   version = "2.4.1";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Django app for creating HTML tables";
     homepage = "https://github.com/jieter/django-tables2";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

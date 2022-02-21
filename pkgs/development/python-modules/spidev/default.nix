@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "spidev";
   version = "3.5";
@@ -12,14 +15,13 @@ buildPythonPackage rec {
   # package does not include tests
   doCheck = false;
 
-  pythonImportsCheck = [ "spidev" ];
+  pythonImportsCheck = ["spidev"];
 
   meta = with lib; {
     homepage = "https://github.com/doceme/py-spidev";
     description = "Python bindings for Linux SPI access through spidev";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
     platforms = platforms.linux;
   };
-
 }

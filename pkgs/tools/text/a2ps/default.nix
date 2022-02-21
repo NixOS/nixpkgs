@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoconf,
+  bison,
+  libpaper,
+  gperf,
+  file,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "a2ps";
   version = "4.14";
@@ -30,8 +40,8 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/defs.in --replace "/bin/rm" "rm"
   '';
 
-  nativeBuildInputs = [ autoconf file bison perl ];
-  buildInputs = [ libpaper gperf ];
+  nativeBuildInputs = [autoconf file bison perl];
+  buildInputs = [libpaper gperf];
 
   meta = with lib; {
     description = "An Anything to PostScript converter and pretty-printer";
@@ -43,8 +53,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/a2ps/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.bennofs ];
+    maintainers = [maintainers.bennofs];
     platforms = platforms.linux;
-
   };
 }

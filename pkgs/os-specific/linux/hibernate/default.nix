@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl, gawk }:
-
-let version = "2.0";
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gawk,
+}: let
+  version = "2.0";
 in
   stdenv.mkDerivation {
     pname = "hibernate";
@@ -10,9 +14,9 @@ in
       sha256 = "0ib5bac3spbcwmhf8f9apjbll8x7fgqj4k1s5q3srijh793rfifh";
     };
 
-    patches = [ ./install.patch ./gen-manpages.patch ./hibernate.patch ];
+    patches = [./install.patch ./gen-manpages.patch ./hibernate.patch];
 
-    buildInputs = [ gawk ];
+    buildInputs = [gawk];
 
     installPhase = ''
       # FIXME: Storing config files under `$out/etc' is not very useful.

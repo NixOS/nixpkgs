@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook
-, gnome
-, libsecret
-, git
-, curl
-, nss
-, nspr
-, xorg
-, libdrm
-, alsa-lib
-, cups
-, mesa
-, systemd
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  wrapGAppsHook,
+  gnome,
+  libsecret,
+  git,
+  curl,
+  nss,
+  nspr,
+  xorg,
+  libdrm,
+  alsa-lib,
+  cups,
+  mesa,
+  systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "github-desktop";
   version = "2.9.6";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "GUI for managing Git and GitHub.";
     homepage = "https://desktop.github.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

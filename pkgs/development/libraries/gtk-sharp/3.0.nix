@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, mono
-, glib
-, pango
-, gtk3
-, libxml2
-, monoDLLFixer
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  mono,
+  glib,
+  pango,
+  gtk3,
+  libxml2,
+  monoDLLFixer,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtk-sharp";
   version = "2.99.3";
@@ -20,9 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "18n3l9zcldyvn4lwi8izd62307mkhz873039nl6awrv285qzah34";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    mono glib pango gtk3
+    mono
+    glib
+    pango
+    gtk3
     libxml2
   ];
 

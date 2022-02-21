@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, premake5, doxygen, libsodium, mbedtls }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  premake5,
+  doxygen,
+  libsodium,
+  mbedtls,
+}:
 stdenv.mkDerivation {
   pname = "yojimbo";
   version = "1.1";
@@ -12,8 +19,8 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ premake5 doxygen ];
-  propagatedBuildInputs = [ libsodium mbedtls ];
+  nativeBuildInputs = [premake5 doxygen];
+  propagatedBuildInputs = [libsodium mbedtls];
 
   postBuild = ''
     premake5 docs
@@ -38,6 +45,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/networkprotocol/yojimbo";
     license = licenses.bsd3;
     platforms = platforms.x86_64;
-    maintainers = with maintainers; [ paddygord ];
+    maintainers = with maintainers; [paddygord];
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, attrs
-, flake8
-, pytestCheckHook
-, hypothesis
-, hypothesmith
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  attrs,
+  flake8,
+  pytestCheckHook,
+  hypothesis,
+  hypothesmith,
 }:
-
 buildPythonPackage rec {
   pname = "flake8-bugbear";
   version = "22.1.11";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
       program.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ newam ];
+    maintainers = with maintainers; [newam];
   };
 }

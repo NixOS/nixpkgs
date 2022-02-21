@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, gcc, makeWrapper
-, db, gmp, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gcc,
+  makeWrapper,
+  db,
+  gmp,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "gnu-cobol";
   version = "3.1.2";
@@ -10,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "0x15ybfm63g7c9340fc6712h9v59spnbyaz4rf85pmnp3zbhaw2r";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = [ db gmp ncurses ];
+  buildInputs = [db gmp ncurses];
 
-  cflags  = lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
+  cflags = lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
   ldflags = lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
 
   cobolCCFlags = "-I$out/include ${ldflags} -L$out/lib ${cflags}";
@@ -29,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An open-source COBOL compiler";
     homepage = "https://sourceforge.net/projects/gnucobol/";
-    license = with licenses; [ gpl3Only lgpl3Only ];
-    maintainers = with maintainers; [ ericsagnes ];
+    license = with licenses; [gpl3Only lgpl3Only];
+    maintainers = with maintainers; [ericsagnes];
     platforms = platforms.all;
   };
 }

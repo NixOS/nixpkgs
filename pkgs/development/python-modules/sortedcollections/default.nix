@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov,
+  pytestCheckHook,
+  sortedcontainers,
 }:
-
 buildPythonPackage rec {
   pname = "sortedcollections";
   version = "2.1.0";
@@ -17,19 +17,19 @@ buildPythonPackage rec {
     sha256 = "sha256-GkZO8afUAgDpDjIa3dhO6nxykqrljeKldunKMODSXfg=";
   };
 
-  propagatedBuildInputs = [ sortedcontainers ];
+  propagatedBuildInputs = [sortedcontainers];
 
   checkInputs = [
     pytest-cov
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "sortedcollections" ];
+  pythonImportsCheck = ["sortedcollections"];
 
   meta = with lib; {
     description = "Python Sorted Collections";
     homepage = "http://www.grantjenks.com/docs/sortedcollections/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

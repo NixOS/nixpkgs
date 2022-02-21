@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-subtests";
   version = "0.6.0";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Pytest plugin for unittest subTest() support and subtests fixture";
     homepage = "https://github.com/pytest-dev/pytest-subtests";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

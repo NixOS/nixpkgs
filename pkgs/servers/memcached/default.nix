@@ -1,5 +1,11 @@
-{lib, stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cyrus_sasl,
+  libevent,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   version = "1.6.14";
   pname = "memcached";
@@ -10,14 +16,19 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-     "ac_cv_c_endian=${if stdenv.hostPlatform.isBigEndian then "big" else "little"}"
+    "ac_cv_c_endian=${
+      if stdenv.hostPlatform.isBigEndian
+      then "big"
+      else "little"
+    }"
   ];
 
   buildInputs = [cyrus_sasl libevent];
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = ["pie"];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ]
+  NIX_CFLAGS_COMPILE =
+    ["-Wno-error=deprecated-declarations"]
     ++ lib.optional stdenv.isDarwin "-Wno-error";
 
   meta = with lib; {
@@ -25,7 +36,7 @@ stdenv.mkDerivation rec {
     repositories.git = "https://github.com/memcached/memcached.git";
     homepage = "http://memcached.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.coconnor ];
+    maintainers = [maintainers.coconnor];
     platforms = platforms.linux ++ platforms.darwin;
   };
   passthru.tests = {

@@ -1,25 +1,23 @@
-{ stdenv
-, cmake
-, fetchFromGitHub
-, lib
-, alsa-lib
-, libGL
-, libX11
-, libXinerama
-, libXi
-, zlib
-, rtaudio
-, rapidjson
-, ilmbase
-, glm
-, glfw3
-, libpng
-, opencolorio_1
-, freetype
-}:
-
-let
-
+{
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  alsa-lib,
+  libGL,
+  libX11,
+  libXinerama,
+  libXi,
+  zlib,
+  rtaudio,
+  rapidjson,
+  ilmbase,
+  glm,
+  glfw3,
+  libpng,
+  opencolorio_1,
+  freetype,
+}: let
   # The way third-party dependencies are packaged has changed
   # significantly from the 2.0.8 release. This means any packaging
   # effort for the 2.0.8 release would have to be redone for the next
@@ -57,7 +55,7 @@ let
 
     sourceRoot = "source/etc/SuperBuild";
 
-    nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [cmake];
     buildInputs = [
       libGL
     ];
@@ -100,53 +98,52 @@ let
     dontInstall = true;
     doCheck = true;
   };
-
 in
-stdenv.mkDerivation rec {
-  pname = "djv";
-  version = djvVersion;
+  stdenv.mkDerivation rec {
+    pname = "djv";
+    version = djvVersion;
 
-  src = djvSrc;
+    src = djvSrc;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    alsa-lib
-    libGL
-    libX11
-    libXinerama
-    libXi
-    rapidjson
-    rtaudio
-    ilmbase
-    glm
-    glfw3
-    zlib.dev
-    libpng
-    freetype
-    opencolorio_1
-    djv-deps
-  ];
+    nativeBuildInputs = [cmake];
+    buildInputs = [
+      alsa-lib
+      libGL
+      libX11
+      libXinerama
+      libXi
+      rapidjson
+      rtaudio
+      ilmbase
+      glm
+      glfw3
+      zlib.dev
+      libpng
+      freetype
+      opencolorio_1
+      djv-deps
+    ];
 
-  postPatch = ''
-    chmod -R +w .
+    postPatch = ''
+      chmod -R +w .
 
-    # When linking opencolorio statically this results in failing to
-    # pull in opencolorio's dependencies (tixml and yaml libraries). Avoid
-    # this by linking it statically instead.
+      # When linking opencolorio statically this results in failing to
+      # pull in opencolorio's dependencies (tixml and yaml libraries). Avoid
+      # this by linking it statically instead.
 
-    sed -i cmake/Modules/FindOCIO.cmake \
-        -e 's/PATH_SUFFIXES static//' \
-        -e '/OpenColorIO_STATIC/d'
-  '';
+      sed -i cmake/Modules/FindOCIO.cmake \
+          -e 's/PATH_SUFFIXES static//' \
+          -e '/OpenColorIO_STATIC/d'
+    '';
 
-  # GLFW requires a working X11 session.
-  doCheck = false;
+    # GLFW requires a working X11 session.
+    doCheck = false;
 
-  meta = with lib; {
-    description = "A professional review software for VFX, animation, and film production";
-    homepage = "https://darbyjohnston.github.io/DJV/";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.blitz ];
-    license = licenses.bsd3;
-  };
-}
+    meta = with lib; {
+      description = "A professional review software for VFX, animation, and film production";
+      homepage = "https://darbyjohnston.github.io/DJV/";
+      platforms = platforms.linux;
+      maintainers = [maintainers.blitz];
+      license = licenses.bsd3;
+    };
+  }

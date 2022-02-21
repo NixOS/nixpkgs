@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitLab
-, python3
-, xlibsWrapper
-, xorg
-, libpulseaudio
-, pkg-config
-, patchelf
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  python3,
+  xlibsWrapper,
+  xorg,
+  libpulseaudio,
+  pkg-config,
+  patchelf,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "xidlehook";
   version = "0.10.0";
@@ -27,8 +27,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1y7m61j07gvqfqz97mda39nc602sv7a826c06m8l22i7z380xfms";
 
-  buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.isDarwin Security;
-  nativeBuildInputs = [ pkg-config patchelf python3 ];
+  buildInputs = [xlibsWrapper xorg.libXScrnSaver libpulseaudio] ++ lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [pkg-config patchelf python3];
 
   buildNoDefaultFeatures = !stdenv.isLinux;
   buildFeatures = lib.optional (!stdenv.isLinux) "pulse";
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     description = "xautolock rewrite in Rust, with a few extra features";
     homepage = "https://github.com/jD91mZM2/xidlehook";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.unix;
     badPlatforms = platforms.darwin;
   };

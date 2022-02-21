@@ -1,11 +1,14 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "goa";
   version = "1.4.1";
 
   goPackagePath = "github.com/goadesign/goa";
-  subPackages = [ "goagen" ];
+  subPackages = ["goagen"];
 
   src = fetchFromGitHub {
     owner = "goadesign";
@@ -20,6 +23,6 @@ buildGoPackage rec {
     homepage = "https://goa.design";
     description = "A framework for building microservices in Go using a unique design-first approach";
     license = licenses.mit;
-    maintainers = [ maintainers.rushmorem ];
+    maintainers = [maintainers.rushmorem];
   };
 }

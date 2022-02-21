@@ -1,15 +1,15 @@
-{ lib
-, substituteAll
-, buildPythonApplication
-, fetchPypi
-, joblib
-, segments
-, attrs
-, espeak-ng
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  substituteAll,
+  buildPythonApplication,
+  fetchPypi,
+  joblib,
+  segments,
+  attrs,
+  espeak-ng,
+  pytestCheckHook,
+  pytest-cov,
 }:
-
 buildPythonApplication rec {
   pname = "phonemizer";
   version = "3.0.1";
@@ -65,6 +65,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/bootphon/phonemizer";
     description = "Simple text to phones converter for multiple languages";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

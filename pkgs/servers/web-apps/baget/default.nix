@@ -1,5 +1,9 @@
-{ buildDotnetModule, lib, fetchFromGitHub, dotnetCorePackages }:
-
+{
+  buildDotnetModule,
+  lib,
+  fetchFromGitHub,
+  dotnetCorePackages,
+}:
 buildDotnetModule rec {
   pname = "BaGet";
   version = "0.4.0-preview2";
@@ -24,6 +28,6 @@ buildDotnetModule rec {
     license = licenses.mit;
     homepage = "https://loic-sharma.github.io/BaGet/";
     platforms = platforms.all;
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [maintainers.abbradar];
   };
 }

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  bison,
+  pcre,
+}:
 stdenv.mkDerivation rec {
   pname = "swig";
   version = "3.0.12";
@@ -12,10 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   PCRE_CONFIG = "${pcre.dev}/bin/pcre-config";
-  nativeBuildInputs = [ autoconf automake libtool bison ];
-  buildInputs = [ pcre ];
+  nativeBuildInputs = [autoconf automake libtool bison];
+  buildInputs = [pcre];
 
-  configureFlags = [ "--without-tcl" ];
+  configureFlags = ["--without-tcl"];
 
   # Disable ccache documentation as it needs yodl
   postPatch = ''

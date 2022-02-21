@@ -1,5 +1,8 @@
-{ lib, python3Packages, mopidy }:
-
+{
+  lib,
+  python3Packages,
+  mopidy,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-MPD";
   version = "3.2.0";
@@ -13,12 +16,12 @@ python3Packages.buildPythonApplication rec {
 
   # no tests implemented
   doCheck = false;
-  pythonImportsCheck = [ "mopidy_mpd" ];
+  pythonImportsCheck = ["mopidy_mpd"];
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-mpd";
     description = "Mopidy extension for controlling playback from MPD clients";
     license = licenses.asl20;
-    maintainers = [ maintainers.tomahna ];
+    maintainers = [maintainers.tomahna];
   };
 }

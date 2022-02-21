@@ -1,15 +1,15 @@
-{ lib
-, boto3
-, buildPythonPackage
-, envs
-, fetchFromGitHub
-, isPy27
-, mock
-, pytestCheckHook
-, python-jose
-, requests
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  envs,
+  fetchFromGitHub,
+  isPy27,
+  mock,
+  pytestCheckHook,
+  python-jose,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pycognito";
   version = "2022.01.0";
@@ -39,14 +39,14 @@ buildPythonPackage rec {
       --replace 'python-jose[cryptography]' 'python-jose'
   '';
 
-  pytestFlagsArray = [ "tests.py" ];
+  pytestFlagsArray = ["tests.py"];
 
-  pythonImportsCheck = [ "pycognito" ];
+  pythonImportsCheck = ["pycognito"];
 
   meta = with lib; {
     description = "Python class to integrate Boto3's Cognito client so it is easy to login users. With SRP support";
     homepage = "https://github.com/pvizeli/pycognito";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [mic92];
   };
 }

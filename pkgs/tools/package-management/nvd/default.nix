@@ -1,5 +1,10 @@
-{ fetchFromGitLab, installShellFiles, lib, python3, stdenv }:
-
+{
+  fetchFromGitLab,
+  installShellFiles,
+  lib,
+  python3,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "nvd";
   version = "0.1.2";
@@ -13,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "1537s7j0m0hkahf0s1ai7bm94xj9fz6b9x78py0dn3cgnl9bfzla";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   installPhase = ''
     runHook preInstall
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Nix/NixOS package version diff tool";
     homepage = "https://gitlab.com/khumba/nvd";
     license = licenses.asl20;
-    maintainers = with maintainers; [ khumba ];
+    maintainers = with maintainers; [khumba];
     platforms = platforms.all;
   };
 }

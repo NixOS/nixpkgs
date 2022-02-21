@@ -1,5 +1,10 @@
-{ buildDunePackage, resto, resto-directory, ezresto, lwt }:
-
+{
+  buildDunePackage,
+  resto,
+  resto-directory,
+  ezresto,
+  lwt,
+}:
 buildDunePackage {
   pname = "ezresto-directory";
   inherit (resto) src version meta useDune2 doCheck;

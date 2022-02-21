@@ -1,7 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub, alcotest, reason
-, ppxlib
-, yojson }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  alcotest,
+  reason,
+  ppxlib,
+  yojson,
+}:
 buildDunePackage rec {
   pname = "graphql_ppx";
   version = "1.2.0";
@@ -15,14 +20,14 @@ buildDunePackage rec {
     sha256 = "1fymmvk616wv5xkwfdmqibdgfl47ry6idc5wfh20a3mz9mpaa13s";
   };
 
-  buildInputs = [ ppxlib ];
+  buildInputs = [ppxlib];
 
   propagatedBuildInputs = [
     reason
     yojson
   ];
 
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
 
   doCheck = true;
 
@@ -32,6 +37,6 @@ buildDunePackage rec {
     homepage = "https://github.com/reasonml-community/graphql_ppx";
     description = "GraphQL PPX rewriter for Bucklescript/ReasonML";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Zimmi48 jtcoolen ];
+    maintainers = with lib.maintainers; [Zimmi48 jtcoolen];
   };
 }

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, which, python3, util-linux, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nodejs,
+  which,
+  python3,
+  util-linux,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "cjdns";
   version = "21.1";
@@ -11,7 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "NOmk+vMZ8i0E2MjrUzksk+tkJ9XVVNEXlE5OOTNa+Y0=";
   };
 
-  buildInputs = [ which python3 nodejs ] ++
+  buildInputs =
+    [which python3 nodejs]
+    ++
     # for flock
     lib.optional stdenv.isLinux util-linux;
 
@@ -31,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ehmry];
     platforms = platforms.linux;
   };
 }

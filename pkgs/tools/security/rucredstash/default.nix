@@ -1,5 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rucredstash";
   version = "0.9.0";
@@ -11,8 +18,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1jwsj2y890nxpgmlfbr9hms2raspp5h89ykzsh014mf7lb3yxzwg";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ]
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [openssl]
     ++ lib.optional stdenv.isDarwin Security;
 
   # Disable tests since it requires network access and relies on the
@@ -25,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "Rust port for credstash. Manages credentials securely in AWS cloud";
     homepage = "https://github.com/psibi/rucredstash";
     license = licenses.mit;
-    maintainers = with maintainers; [ psibi ];
+    maintainers = with maintainers; [psibi];
   };
 }

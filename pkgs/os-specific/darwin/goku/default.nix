@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "goku";
   version = "0.3.6";
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Karabiner configurator";
     homepage = "https://github.com/yqrashawn/GokuRakuJoudo";
     license = licenses.gpl3;
-    maintainers = [ maintainers.nikitavoloboev ];
+    maintainers = [maintainers.nikitavoloboev];
     platforms = platforms.darwin;
   };
 }

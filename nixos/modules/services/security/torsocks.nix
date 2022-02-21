@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.tor.torsocks;
   optionalNullStr = b: v: optionalString (b != null) v;
 
@@ -12,31 +14,38 @@ let
 
     OnionAddrRange ${cfg.onionAddrRange}
 
-    ${optionalNullStr cfg.socks5Username
-        "SOCKS5Username ${cfg.socks5Username}"}
-    ${optionalNullStr cfg.socks5Password
-        "SOCKS5Password ${cfg.socks5Password}"}
+    ${
+      optionalNullStr cfg.socks5Username
+      "SOCKS5Username ${cfg.socks5Username}"
+    }
+    ${
+      optionalNullStr cfg.socks5Password
+      "SOCKS5Password ${cfg.socks5Password}"
+    }
 
-    AllowInbound ${if cfg.allowInbound then "1" else "0"}
+    AllowInbound ${
+      if cfg.allowInbound
+      then "1"
+      else "0"
+    }
   '';
 
-  wrapTorsocks = name: server: pkgs.writeTextFile {
-    name = name;
-    text = ''
+  wrapTorsocks = name: server:
+    pkgs.writeTextFile {
+      name = name;
+      text = ''
         #!${pkgs.runtimeShell}
         TORSOCKS_CONF_FILE=${pkgs.writeText "torsocks.conf" (configFile server)} ${pkgs.torsocks}/bin/torsocks "$@"
-    '';
-    executable = true;
-    destination = "/bin/${name}";
-  };
-
-in
-{
+      '';
+      executable = true;
+      destination = "/bin/${name}";
+    };
+in {
   options = {
     services.tor.torsocks = {
       enable = mkOption {
-        type        = types.bool;
-        default     = config.services.tor.enable && config.services.tor.client.enable;
+        type = types.bool;
+        default = config.services.tor.enable && config.services.tor.client.enable;
         defaultText = literalExpression "config.services.tor.enable && config.services.tor.client.enable";
         description = ''
           Whether to build <literal>/etc/tor/torsocks.conf</literal>
@@ -45,7 +54,7 @@ in
       };
 
       server = mkOption {
-        type    = types.str;
+        type = types.str;
         default = "127.0.0.1:9050";
         example = "192.168.0.20:1234";
         description = ''
@@ -55,7 +64,7 @@ in
       };
 
       fasterServer = mkOption {
-        type    = types.str;
+        type = types.str;
         default = "127.0.0.1:9063";
         example = "192.168.0.20:1234";
         description = ''
@@ -65,7 +74,7 @@ in
       };
 
       onionAddrRange = mkOption {
-        type    = types.str;
+        type = types.str;
         default = "127.42.42.0/24";
         description = ''
           Tor hidden sites do not have real IP addresses. This
@@ -78,7 +87,7 @@ in
       };
 
       socks5Username = mkOption {
-        type    = types.nullOr types.str;
+        type = types.nullOr types.str;
         default = null;
         example = "bob";
         description = ''
@@ -88,7 +97,7 @@ in
       };
 
       socks5Password = mkOption {
-        type    = types.nullOr types.str;
+        type = types.nullOr types.str;
         default = null;
         example = "sekret";
         description = ''
@@ -98,7 +107,7 @@ in
       };
 
       allowInbound = mkOption {
-        type    = types.bool;
+        type = types.bool;
         default = false;
         description = ''
           Set Torsocks to accept inbound connections. If set to
@@ -106,16 +115,14 @@ in
           allowed to be used with non localhost address.
         '';
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.torsocks (wrapTorsocks "torsocks-faster" cfg.fasterServer) ];
+    environment.systemPackages = [pkgs.torsocks (wrapTorsocks "torsocks-faster" cfg.fasterServer)];
 
-    environment.etc."tor/torsocks.conf" =
-      {
-        source = pkgs.writeText "torsocks.conf" (configFile cfg.server);
-      };
+    environment.etc."tor/torsocks.conf" = {
+      source = pkgs.writeText "torsocks.conf" (configFile cfg.server);
+    };
   };
 }

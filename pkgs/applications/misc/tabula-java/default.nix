@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, jre, makeWrapper }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "tabula-java";
   version = "1.0.5";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IWHj//ZZOdfOCBJHnPnKNoYNtWl/f8H6ARYe1AkqB0U=";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [makeWrapper];
 
   dontUnpack = true;
   dontBuild = true;
@@ -30,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://tabula.technology/";
     license = licenses.mit;
-    maintainers = [ maintainers.jakewaksbaum ];
+    maintainers = [maintainers.jakewaksbaum];
     platforms = platforms.all;
   };
 }

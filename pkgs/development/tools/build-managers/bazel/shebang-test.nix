@@ -1,18 +1,15 @@
 {
-  bazel
-, bazelTest
-, distDir
-, extracted
-, runLocal
-, unzip
+  bazel,
+  bazelTest,
+  distDir,
+  extracted,
+  runLocal,
+  unzip,
 }:
-
 # Tests that all shebangs are patched appropriately.
 # #!/usr/bin/... should be replaced by Nix store references.
 # #!.../bin/env python should be replaced by Nix store reference to the python interpreter.
-
 let
-
   workspaceDir = runLocal "our_workspace" {} "mkdir $out";
 
   testBazel = bazelTest {
@@ -43,7 +40,7 @@ let
         exit 1
       fi
     '';
-    buildInputs = [ unzip ];
+    buildInputs = [unzip];
   };
-
-in testBazel
+in
+  testBazel

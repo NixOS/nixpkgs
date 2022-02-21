@@ -1,31 +1,30 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-let
-    accessKey = "BKIKJAA5BMMU2RHO6IBB";
-    secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
-    minioPythonScript = pkgs.writeScript "minio-test.py" ''
-      #! ${pkgs.python3.withPackages(ps: [ ps.minio ])}/bin/python
-      import io
-      import os
-      from minio import Minio
-      minioClient = Minio('localhost:9000',
-                    access_key='${accessKey}',
-                    secret_key='${secretKey}',
-                    secure=False)
-      sio = io.BytesIO()
-      sio.write(b'Test from Python')
-      sio.seek(0, os.SEEK_END)
-      sio_len = sio.tell()
-      sio.seek(0)
-      minioClient.put_object('test-bucket', 'test.txt', sio, sio_len, content_type='text/plain')
-    '';
+import ./make-test-python.nix ({pkgs, ...}: let
+  accessKey = "BKIKJAA5BMMU2RHO6IBB";
+  secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
+  minioPythonScript = pkgs.writeScript "minio-test.py" ''
+    #! ${pkgs.python3.withPackages (ps: [ps.minio])}/bin/python
+    import io
+    import os
+    from minio import Minio
+    minioClient = Minio('localhost:9000',
+                  access_key='${accessKey}',
+                  secret_key='${secretKey}',
+                  secure=False)
+    sio = io.BytesIO()
+    sio.write(b'Test from Python')
+    sio.seek(0, os.SEEK_END)
+    sio_len = sio.tell()
+    sio.seek(0)
+    minioClient.put_object('test-bucket', 'test.txt', sio, sio_len, content_type='text/plain')
+  '';
 in {
   name = "minio";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ bachp ];
+    maintainers = [bachp];
   };
 
   nodes = {
-    machine = { pkgs, ... }: {
+    machine = {pkgs, ...}: {
       services.minio = {
         enable = true;
         rootCredentialsFile = pkgs.writeText "minio-credentials" ''
@@ -33,7 +32,7 @@ in {
           MINIO_ROOT_PASSWORD=${secretKey}
         '';
       };
-      environment.systemPackages = [ pkgs.minio-client ];
+      environment.systemPackages = [pkgs.minio-client];
 
       # Minio requires at least 1GiB of free disk space to run.
       virtualisation.diskSize = 4 * 1024;

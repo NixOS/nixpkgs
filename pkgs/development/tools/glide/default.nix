@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "glide";
   version = "0.13.3";
@@ -21,6 +24,6 @@ buildGoPackage rec {
     homepage = "https://glide.sh";
     description = "Package management for Go";
     license = licenses.mit;
-    maintainers = [ maintainers.rushmorem ];
+    maintainers = [maintainers.rushmorem];
   };
 }

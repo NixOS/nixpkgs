@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ffmpeg, libkeyfinder }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg,
+  libkeyfinder,
+}:
 stdenv.mkDerivation rec {
   pname = "keyfinder-cli";
   version = "1.1.1";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1mlcygbj3gqii3cz8jd6ks1lz612i4jp0343qjg293xm39fg47ns";
   };
 
-  buildInputs = [ ffmpeg libkeyfinder ];
+  buildInputs = [ffmpeg libkeyfinder];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   enableParallelBuilding = true;
 

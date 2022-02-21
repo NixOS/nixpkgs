@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "xcat";
   version = "1.2.0";
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "xcat" ];
+  pythonImportsCheck = ["xcat"];
 
   meta = with lib; {
     description = "XPath injection tool";
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
       and directories.
     '';
     homepage = "https://github.com/orf/xcat";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

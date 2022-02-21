@@ -2,11 +2,12 @@
 # main server configuration, and for the virtual hosts.  (The latter
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
-
-{ config, lib, ... }:
-
-with lib;
 {
+  config,
+  lib,
+  ...
+}:
+with lib; {
   options = {
     serverName = mkOption {
       type = types.nullOr types.str;
@@ -27,16 +28,42 @@ with lib;
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule { options = {
-        addr = mkOption { type = str;  description = "IP address.";  };
-        port = mkOption { type = int;  description = "Port number."; default = 80; };
-        ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
-        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "reuseport" "deferred" ]; };
-      }; });
+      type = with types;
+        listOf (submodule {
+          options = {
+            addr = mkOption {
+              type = str;
+              description = "IP address.";
+            };
+            port = mkOption {
+              type = int;
+              description = "Port number.";
+              default = 80;
+            };
+            ssl = mkOption {
+              type = bool;
+              description = "Enable SSL.";
+              default = false;
+            };
+            extraParameters = mkOption {
+              type = listOf str;
+              description = "Extra parameters of this listen directive.";
+              default = [];
+              example = ["reuseport" "deferred"];
+            };
+          };
+        });
       default = [];
       example = [
-        { addr = "195.154.1.1"; port = 443; ssl = true;}
-        { addr = "192.154.1.1"; port = 80; }
+        {
+          addr = "195.154.1.1";
+          port = 443;
+          ssl = true;
+        }
+        {
+          addr = "192.154.1.1";
+          port = 80;
+        }
       ];
       description = ''
         Listen addresses and ports for this virtual host.
@@ -60,7 +87,7 @@ with lib;
         Note: This option overrides <literal>enableIPv6</literal>
       '';
       default = [];
-      example = [ "127.0.0.1" "::1" ];
+      example = ["127.0.0.1" "::1"];
     };
 
     enableACME = mkOption {

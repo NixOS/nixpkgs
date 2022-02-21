@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pysmartthings";
   version = "0.7.7";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     description = "Python library for interacting with the SmartThings cloud API";
     homepage = "https://github.com/andrewsayre/pysmartthings";
     changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

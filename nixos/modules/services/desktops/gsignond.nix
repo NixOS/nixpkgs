@@ -1,22 +1,19 @@
 # Accounts-SSO gSignOn daemon
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  package = pkgs.gsignond.override { plugins = config.services.gsignond.plugins; };
-in
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  package = pkgs.gsignond.override {plugins = config.services.gsignond.plugins;};
+in {
   meta.maintainers = teams.pantheon.members;
 
   ###### interface
 
   options = {
-
     services.gsignond = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -39,7 +36,6 @@ in
   ###### implementation
   config = mkIf config.services.gsignond.enable {
     environment.etc."gsignond.conf".source = "${package}/etc/gsignond.conf";
-    services.dbus.packages = [ package ];
+    services.dbus.packages = [package];
   };
-
 }

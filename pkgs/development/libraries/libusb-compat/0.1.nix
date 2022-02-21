@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, patchelf
-, pkg-config
-, libusb1
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  patchelf,
+  pkg-config,
+  libusb1,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libusb-compat";
   version = "0.1.7";
 
-  outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
+  outputs = ["out" "dev"]; # get rid of propagating systemd closure
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook patchelf pkg-config ];
+  nativeBuildInputs = [autoreconfHook patchelf pkg-config];
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [libusb1];
 
   src = fetchFromGitHub {
     owner = "libusb";

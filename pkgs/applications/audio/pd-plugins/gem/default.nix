@@ -1,18 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, puredata
-, libGL
-, libGLU
-, glew
-, freeglut
-, libv4l
-, libX11
-, file
- }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  puredata,
+  libGL,
+  libGLU,
+  glew,
+  freeglut,
+  libv4l,
+  libX11,
+  file,
+}:
 stdenv.mkDerivation rec {
   pname = "gem-unstable";
   version = "2020-09-22";
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Graphics Environment for Multimedia";
     homepage = "http://puredata.info/downloads/gem";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raboof ];
+    maintainers = [lib.maintainers.raboof];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "openseachest";
   version = "21.06.21";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  makeFlags = [ "-C Make/gcc" ];
-  buildFlags = [ "release" ];
+  makeFlags = ["-C Make/gcc"];
+  buildFlags = ["release"];
 
   installPhase = ''
     runHook preInstall
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A collection of command line diagnostic tools for storage devices";
     homepage = "https://github.com/Seagate/openSeaChest";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ justinas ];
+    maintainers = with maintainers; [justinas];
     platforms = with platforms; freebsd ++ linux;
   };
 }

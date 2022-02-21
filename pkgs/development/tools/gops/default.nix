@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "gops";
   version = "0.3.22";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "A tool to list and diagnose Go processes currently running on your system";
     homepage = "https://github.com/google/gops";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pborzenkov ];
+    maintainers = with maintainers; [pborzenkov];
   };
 }

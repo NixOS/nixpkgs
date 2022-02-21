@@ -1,10 +1,10 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, stdenv
-, libiconv
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  libiconv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "fst";
   version = "0.4.2";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-RMjNk8tE7AYBYgys4IjCCfgPdDgwbYVmrWpWNBOf70E=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -32,7 +32,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Represent large sets and maps compactly with finite state transducers";
     homepage = "https://github.com/BurntSushi/fst";
-    license = with licenses; [ unlicense /* or */ mit ];
-    maintainers = with maintainers; [ rmcgibbo ];
+    license = with licenses; [
+      unlicense
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [rmcgibbo];
   };
 }

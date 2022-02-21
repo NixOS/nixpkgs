@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, django
-, setuptools-scm
-, django-configurations
-, pytest-xdist
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  django,
+  setuptools-scm,
+  django-configurations,
+  pytest-xdist,
+  six,
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
@@ -17,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "d9076f759bb7c36939dbdd5ae6633c18edfc2902d1a69fdbefd2426b970ce6c2";
   };
 
-  nativeBuildInputs = [ pytest setuptools-scm ];
-  checkInputs = [ pytest django-configurations pytest-xdist six ];
-  propagatedBuildInputs = [ django ];
+  nativeBuildInputs = [pytest setuptools-scm];
+  checkInputs = [pytest django-configurations pytest-xdist six];
+  propagatedBuildInputs = [django];
 
   # Complicated. Requires Django setup.
   doCheck = false;

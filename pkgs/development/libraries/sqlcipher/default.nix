@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib, sqlite }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  openssl,
+  tcl,
+  installShellFiles,
+  buildPackages,
+  readline,
+  ncurses,
+  zlib,
+  sqlite,
+}:
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
   version = "4.5.0";
@@ -11,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MFuFyKvOOrDrq9cDPQlNK6/YHSkaRX4qbw/44m5CRh4=";
   };
 
-  nativeBuildInputs = [ installShellFiles tcl ];
-  buildInputs = [ readline ncurses openssl zlib ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [installShellFiles tcl];
+  buildInputs = [readline ncurses openssl zlib];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
   configureFlags = [
     "--enable-threadsafe"

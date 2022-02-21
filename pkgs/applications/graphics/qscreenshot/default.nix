@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, dos2unix, which, qt, Carbon }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dos2unix,
+  which,
+  qt,
+  Carbon,
+}:
 stdenv.mkDerivation rec {
   pname = "qscreenshot";
   version = "1.0";
@@ -9,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1spj5fg2l8p5bk81xsv6hqn1kcrdiy54w19jsfb7g5i94vcb1pcx";
   };
 
-  buildInputs = [ dos2unix which qt ]
+  buildInputs =
+    [dos2unix which qt]
     ++ lib.optional stdenv.isDarwin Carbon;
 
   # Remove carriage returns that cause /bin/sh to abort
@@ -23,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/qscreenshot/";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

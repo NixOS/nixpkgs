@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "bunch";
   version = "1.0.1";
@@ -12,6 +15,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

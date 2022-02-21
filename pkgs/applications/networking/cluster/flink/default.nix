@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "flink";
   version = "1.14.3";
@@ -9,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dst0Q1AlDdggtOwYROoV6QcBLRNfmGTo7DL2BV/5PB4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = [ jre ];
+  buildInputs = [jre];
 
   installPhase = ''
     rm bin/*.bat || true
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://flink.apache.org/downloads.html";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mbode ];
+    maintainers = with maintainers; [mbode];
     repositories.git = "git://git.apache.org/flink.git";
   };
 }

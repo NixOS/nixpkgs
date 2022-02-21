@@ -1,5 +1,16 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, cached-property, pytestCheckHook, cffi, cacert }:
-
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  isPy3k,
+  libgit2,
+  cached-property,
+  pytestCheckHook,
+  cffi,
+  cacert,
+}:
 buildPythonPackage rec {
   pname = "pygit2";
   version = "1.8.0";
@@ -17,13 +28,15 @@ buildPythonPackage rec {
     libgit2
   ];
 
-  propagatedBuildInputs = [
-    cached-property
-  ] ++ lib.optional (!isPyPy) cffi;
+  propagatedBuildInputs =
+    [
+      cached-property
+    ]
+    ++ lib.optional (!isPyPy) cffi;
 
   propagatedNativeBuildInputs = lib.optional (!isPyPy) cffi;
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   disabledTestPaths = [
     # disable tests that require networking
@@ -48,6 +61,6 @@ buildPythonPackage rec {
     description = "A set of Python bindings to the libgit2 shared library";
     homepage = "https://pypi.python.org/pypi/pygit2";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

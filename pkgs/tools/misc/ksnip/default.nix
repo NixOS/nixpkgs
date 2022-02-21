@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, kcolorpicker
-, kimageannotator
-, wrapQtAppsHook
-, qtsvg
-, qttranslations
-, qtx11extras
+{
+  stdenv,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  kcolorpicker,
+  kimageannotator,
+  wrapQtAppsHook,
+  qtsvg,
+  qttranslations,
+  qtx11extras,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ksnip";
   version = "1.9.2";
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       - Many configuration options.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ x3ro ];
+    maintainers = with maintainers; [x3ro];
     platforms = platforms.linux;
   };
 }

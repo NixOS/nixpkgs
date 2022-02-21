@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchFromGitHub
-, buildPythonApplication, python
-, pytestCheckHook, mock, pathpy, pyhamcrest, pytest-html
-, glibcLocales
-, colorama, cucumber-tag-expressions, parse, parse-type, six
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonApplication,
+  python,
+  pytestCheckHook,
+  mock,
+  pathpy,
+  pyhamcrest,
+  pytest-html,
+  glibcLocales,
+  colorama,
+  cucumber-tag-expressions,
+  parse,
+  parse-type,
+  six,
 }:
-
 buildPythonApplication rec {
   pname = "behave";
   version = "1.2.7.dev1";
@@ -16,15 +27,15 @@ buildPythonApplication rec {
     sha256 = "1ssgixmqlg8sxsyalr83a1970njc2wg3zl8idsmxnsljwacv7qwv";
   };
 
-  checkInputs = [ pytestCheckHook mock pathpy pyhamcrest pytest-html ];
+  checkInputs = [pytestCheckHook mock pathpy pyhamcrest pytest-html];
 
   # upstream tests are failing, so instead we only check if we can import it
   doCheck = false;
 
-  pythonImportsCheck = [ "behave" ];
+  pythonImportsCheck = ["behave"];
 
-  buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ colorama cucumber-tag-expressions parse parse-type six ];
+  buildInputs = [glibcLocales];
+  propagatedBuildInputs = [colorama cucumber-tag-expressions parse parse-type six];
 
   postPatch = ''
     patchShebangs bin
@@ -32,7 +43,7 @@ buildPythonApplication rec {
 
   # timing-based test flaky on Darwin
   # https://github.com/NixOS/nixpkgs/pull/97737#issuecomment-691489824
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_step_decorator_async_run_until_complete" ];
+  disabledTests = lib.optionals stdenv.isDarwin ["test_step_decorator_async_run_until_complete"];
 
   postCheck = ''
     export LANG="en_US.UTF-8"
@@ -47,6 +58,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/behave/behave";
     description = "behaviour-driven development, Python style";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ alunduil maxxk ];
+    maintainers = with maintainers; [alunduil maxxk];
   };
 }

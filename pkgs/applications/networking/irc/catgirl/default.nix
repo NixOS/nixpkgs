@@ -1,5 +1,12 @@
-{ ctags, fetchurl, lib, libressl, ncurses, pkg-config, stdenv }:
-
+{
+  ctags,
+  fetchurl,
+  lib,
+  libressl,
+  ncurses,
+  pkg-config,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "catgirl";
   version = "2.0a";
@@ -19,8 +26,8 @@ stdenv.mkDerivation rec {
       "${lib.getBin libressl}"
   '';
 
-  nativeBuildInputs = [ ctags pkg-config ];
-  buildInputs = [ libressl ncurses ];
+  nativeBuildInputs = [ctags pkg-config];
+  buildInputs = [libressl ncurses];
   strictDeps = true;
 
   enableParallelBuilding = true;
@@ -30,6 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     description = "A TLS-only terminal IRC client";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ xfnw ];
+    maintainers = with maintainers; [xfnw];
   };
 }

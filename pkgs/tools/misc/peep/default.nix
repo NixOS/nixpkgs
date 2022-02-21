@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "peep";
   version = "0.1.4-post.2021-08-17";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "The CLI text viewer tool that works like less command on small pane within the terminal window";
     license = licenses.mit;
     homepage = "https://github.com/ryochack/peep";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

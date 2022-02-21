@@ -1,12 +1,12 @@
-{ buildPythonPackage
-, python-manilaclient
-, stestr
-, ddt
-, tempest
-, mock
-, python-openstackclient
+{
+  buildPythonPackage,
+  python-manilaclient,
+  stestr,
+  ddt,
+  tempest,
+  mock,
+  python-openstackclient,
 }:
-
 buildPythonPackage rec {
   pname = "python-manilaclient-tests";
   inherit (python-manilaclient) version;

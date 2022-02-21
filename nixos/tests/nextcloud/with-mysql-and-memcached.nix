@@ -1,20 +1,27 @@
-args@{ pkgs, nextcloudVersion ? 22, ... }:
-
-(import ../make-test-python.nix ({ pkgs, ...}: let
+args @ {
+  pkgs,
+  nextcloudVersion ? 22,
+  ...
+}:
+(import ../make-test-python.nix ({pkgs, ...}: let
   adminpass = "hunter2";
   adminuser = "root";
 in {
   name = "nextcloud-with-mysql-and-memcached";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eqyiel ];
+    maintainers = [eqyiel];
   };
 
   nodes = {
     # The only thing the client needs to do is download a file.
-    client = { ... }: {};
+    client = {...}: {};
 
-    nextcloud = { config, pkgs, ... }: {
-      networking.firewall.allowedTCPPorts = [ 80 ];
+    nextcloud = {
+      config,
+      pkgs,
+      ...
+    }: {
+      networking.firewall.allowedTCPPorts = [80];
 
       services.nextcloud = {
         enable = true;
@@ -32,7 +39,7 @@ in {
           dbuser = "nextcloud";
           dbhost = "127.0.0.1";
           dbport = 3306;
-          dbpassFile = "${pkgs.writeText "dbpass" "hunter2" }";
+          dbpassFile = "${pkgs.writeText "dbpass" "hunter2"}";
           # Don't inherit adminuser since "root" is supposed to be the default
           adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
         };
@@ -60,7 +67,7 @@ in {
         '';
       };
 
-      systemd.services.nextcloud-setup= {
+      systemd.services.nextcloud-setup = {
         requires = ["mysql.service"];
         after = ["mysql.service"];
       };
@@ -107,4 +114,5 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
   '';
-})) args
+}))
+args

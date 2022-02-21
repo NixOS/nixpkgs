@@ -1,20 +1,20 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_sexp_conv
-, ppx_cstruct
-, lwt
-, mirage-net
-, io-page
-, mirage-xen
-, ipaddr
-, mirage-profile
-, shared-memory-ring
-, sexplib
-, logs
-, rresult
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_sexp_conv,
+  ppx_cstruct,
+  lwt,
+  mirage-net,
+  io-page,
+  mirage-xen,
+  ipaddr,
+  mirage-profile,
+  shared-memory-ring,
+  sexplib,
+  logs,
+  rresult,
 }:
-
 buildDunePackage rec {
   pname = "netchannel";
   version = "2.0.0";
@@ -49,7 +49,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Network device for reading and writing Ethernet frames via then Xen netfront/netback protocol";
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
     homepage = "https://github.com/mirage/mirage-net-xen";
   };
 }

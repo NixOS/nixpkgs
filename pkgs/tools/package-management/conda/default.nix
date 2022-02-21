@@ -1,21 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, runCommand
-, makeWrapper
-, buildFHSUserEnv
-, libselinux
-, libarchive
-, libGL
-, xorg
-# Conda installs its packages and environments under this directory
-, installationPath ? "~/.conda"
-# Conda manages most pkgs itself, but expects a few to be on the system.
-, condaDeps ? [ stdenv.cc xorg.libSM xorg.libICE xorg.libX11 xorg.libXau xorg.libXi xorg.libXrender libselinux libGL ]
-# Any extra nixpkgs you'd like available in the FHS env for Conda to use
-, extraPkgs ? [ ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  runCommand,
+  makeWrapper,
+  buildFHSUserEnv,
+  libselinux,
+  libarchive,
+  libGL,
+  xorg
+  # Conda installs its packages and environments under this directory
+  ,
+  installationPath ? "~/.conda"
+  # Conda manages most pkgs itself, but expects a few to be on the system.
+  ,
+  condaDeps ? [stdenv.cc xorg.libSM xorg.libICE xorg.libX11 xorg.libXau xorg.libXi xorg.libXrender libselinux libGL]
+  # Any extra nixpkgs you'd like available in the FHS env for Conda to use
+  ,
+  extraPkgs ? [],
 }:
-
 # How to use this package?
 #
 # First-time setup: this nixpkg downloads the conda installer and provides a FHS
@@ -32,26 +35,26 @@
 let
   version = "4.6.14";
   src = fetchurl {
-      url = "https://repo.continuum.io/miniconda/Miniconda3-${version}-Linux-x86_64.sh";
-      sha256 = "1gn43z1y5zw4yv93q1qajwbmmqs83wx5ls5x4i4llaciba4j6sqd";
+    url = "https://repo.continuum.io/miniconda/Miniconda3-${version}-Linux-x86_64.sh";
+    sha256 = "1gn43z1y5zw4yv93q1qajwbmmqs83wx5ls5x4i4llaciba4j6sqd";
   };
 
-  conda = runCommand "conda-install" { buildInputs = [ makeWrapper ]; }
-    ''
-      mkdir -p $out/bin
-      cp ${src} $out/bin/miniconda-installer.sh
-      chmod +x $out/bin/miniconda-installer.sh
+  conda = runCommand "conda-install" {buildInputs = [makeWrapper];}
+  ''
+    mkdir -p $out/bin
+    cp ${src} $out/bin/miniconda-installer.sh
+    chmod +x $out/bin/miniconda-installer.sh
 
-      makeWrapper                            \
-        $out/bin/miniconda-installer.sh      \
-        $out/bin/conda-install               \
-        --add-flags "-p ${installationPath}" \
-        --add-flags "-b"
-    '';
+    makeWrapper                            \
+      $out/bin/miniconda-installer.sh      \
+      $out/bin/conda-install               \
+      --add-flags "-p ${installationPath}" \
+      --add-flags "-b"
+  '';
 in
   buildFHSUserEnv {
     name = "conda-shell";
-    targetPkgs = pkgs: (builtins.concatLists [ [ conda ] condaDeps extraPkgs]);
+    targetPkgs = pkgs: (builtins.concatLists [[conda] condaDeps extraPkgs]);
     profile = ''
       # Add conda to PATH
       export PATH=${installationPath}/bin:$PATH
@@ -73,6 +76,6 @@ in
       homepage = "https://conda.io/";
       platforms = lib.platforms.linux;
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ jluttine bhipple ];
+      maintainers = with lib.maintainers; [jluttine bhipple];
     };
   }

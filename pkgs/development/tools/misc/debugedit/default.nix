@@ -1,12 +1,21 @@
 #TODO@deliciouslytyped The tool seems to unnecessarily force mutable access for the debugedit `-l` feature
-{fetchgit, lib, stdenv, autoreconfHook, pkg-config, elfutils, help2man, util-linux}:
+{
+  fetchgit,
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+  elfutils,
+  help2man,
+  util-linux,
+}:
 stdenv.mkDerivation rec {
   pname = "debugedit";
   version = "5.0";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config help2man ];
-  buildInputs = [ elfutils ];
-  checkInputs = [ util-linux ]; # Tests use `rev`
+  nativeBuildInputs = [autoreconfHook pkg-config help2man];
+  buildInputs = [elfutils];
+  checkInputs = [util-linux]; # Tests use `rev`
 
   src = fetchgit {
     url = "git://sourceware.org/git/debugedit.git";
@@ -25,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceware.org/debugedit/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ deliciouslytyped ];
+    maintainers = with maintainers; [deliciouslytyped];
   };
 }

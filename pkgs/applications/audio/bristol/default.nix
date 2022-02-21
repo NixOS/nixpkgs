@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, alsa-lib, libjack2, pkg-config, libpulseaudio, xorg }:
-
-stdenv.mkDerivation  rec {
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  libjack2,
+  pkg-config,
+  libpulseaudio,
+  xorg,
+}:
+stdenv.mkDerivation rec {
   pname = "bristol";
   version = "0.60.11";
 
@@ -9,9 +17,13 @@ stdenv.mkDerivation  rec {
     sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    alsa-lib libjack2 libpulseaudio xorg.libX11 xorg.libXext
+    alsa-lib
+    libjack2
+    libpulseaudio
+    xorg.libX11
+    xorg.libXext
     xorg.xorgproto
   ];
 
@@ -29,6 +41,6 @@ stdenv.mkDerivation  rec {
     homepage = "http://bristol.sourceforge.net";
     license = licenses.gpl3;
     platforms = ["x86_64-linux" "i686-linux"];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
   };
 }

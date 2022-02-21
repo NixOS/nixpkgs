@@ -1,12 +1,12 @@
-{ lib
-, nixosTests
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, nodejs
-, pkgs
+{
+  lib,
+  nixosTests,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  nodejs,
+  pkgs,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mjolnir";
   version = "1.3.1";
@@ -23,26 +23,26 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildPhase =
-    let
-      nodeDependencies = ((import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      }).nodeDependencies.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
-        dontNpmInstall = true;
-      }));
-    in
-    ''
-      runHook preBuild
+  buildPhase = let
+    nodeDependencies = ((import ./node-composition.nix {
+      inherit pkgs nodejs;
+      inherit (stdenv.hostPlatform) system;
+    })
+    .nodeDependencies
+    .override (old: {
+      # access to path '/nix/store/...-source' is forbidden in restricted mode
+      src = src;
+      dontNpmInstall = true;
+    }));
+  in ''
+    runHook preBuild
 
-      ln -s ${nodeDependencies}/lib/node_modules .
-      export PATH="${nodeDependencies}/bin:$PATH"
-      npm run build
+    ln -s ${nodeDependencies}/lib/node_modules .
+    export PATH="${nodeDependencies}/bin:$PATH"
+    npm run build
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
       uses across an entire homeserver.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

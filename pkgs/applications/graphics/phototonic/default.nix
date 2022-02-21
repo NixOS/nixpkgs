@@ -1,5 +1,11 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, qmake, exiv2 }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  exiv2,
+}:
 mkDerivation rec {
   pname = "phototonic";
   version = "2.1";
@@ -11,8 +17,8 @@ mkDerivation rec {
     sha256 = "0csidmxl1sfmn6gq81vn9f9jckb4swz3sgngnwqa4f75lr6604h7";
   };
 
-  buildInputs = [ qtbase exiv2 ];
-  nativeBuildInputs = [ qmake ];
+  buildInputs = [qtbase exiv2];
+  nativeBuildInputs = [qmake];
 
   preConfigure = ''
     sed -i 's;/usr;$$PREFIX/;g' phototonic.pro
@@ -23,6 +29,6 @@ mkDerivation rec {
     homepage = "https://sourceforge.net/projects/phototonic/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

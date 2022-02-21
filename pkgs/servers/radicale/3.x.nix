@@ -1,5 +1,9 @@
-{ lib, python3, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  nixosTests,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
   version = "3.1.5";
@@ -36,6 +40,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://radicale.org/v3.html";
     description = "CalDAV and CardDAV server";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda erictapen ];
+    maintainers = with maintainers; [dotlambda erictapen];
   };
 }

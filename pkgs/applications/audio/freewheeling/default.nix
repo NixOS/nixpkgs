@@ -1,38 +1,65 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gnutls, freetype, fluidsynth
-, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsa-lib, libjack2, libvorbis
-, libSM, libsndfile, libogg, libtool
-}:
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  gnutls,
+  freetype,
+  fluidsynth,
+  SDL,
+  SDL_gfx,
+  SDL_ttf,
+  liblo,
+  libxml2,
+  alsa-lib,
+  libjack2,
+  libvorbis,
+  libSM,
+  libsndfile,
+  libogg,
+  libtool,
+}: let
   makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
 in
+  stdenv.mkDerivation rec {
+    pname = "freewheeling";
+    version = "0.6.6";
 
-stdenv.mkDerivation rec {
-  pname = "freewheeling";
-  version = "0.6.6";
+    src = fetchFromGitHub {
+      owner = "free-wheeling";
+      repo = "freewheeling";
+      rev = "v${version}";
+      sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
+    };
 
-  src = fetchFromGitHub {
-    owner = "free-wheeling";
-    repo = "freewheeling";
-    rev = "v${version}";
-    sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
-  };
+    nativeBuildInputs = [pkg-config autoreconfHook libtool];
+    buildInputs = [
+      freetype
+      fluidsynth
+      SDL
+      SDL_gfx
+      SDL_ttf
+      liblo
+      libxml2
+      libjack2
+      alsa-lib
+      libvorbis
+      libsndfile
+      libogg
+      libSM
+      (gnutls.overrideAttrs (oldAttrs: {
+        configureFlags = oldAttrs.configureFlags ++ ["--enable-openssl-compatibility"];
+      }))
+    ];
+    NIX_CFLAGS_COMPILE = toString
+    (makeSDLFlags [SDL SDL_ttf SDL_gfx] ++ ["-I${libxml2.dev}/include/libxml2"]);
 
-  nativeBuildInputs = [ pkg-config autoreconfHook libtool ];
-  buildInputs = [
-    freetype fluidsynth SDL SDL_gfx SDL_ttf
-    liblo libxml2 libjack2 alsa-lib libvorbis libsndfile libogg libSM
-    (gnutls.overrideAttrs (oldAttrs: {
-      configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
-    }))
-  ];
-  NIX_CFLAGS_COMPILE = toString
-    (makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ]);
+    hardeningDisable = ["format"];
 
-  hardeningDisable = [ "format" ];
-
-  meta = {
-    description = "A live looping instrument with JACK and MIDI support";
-    longDescription = ''
+    meta = {
+      description = "A live looping instrument with JACK and MIDI support";
+      longDescription = ''
         Freewheeling allows us to build repetitive grooves
         by sampling and directing loops from within spirited improvisation.
 
@@ -42,11 +69,11 @@ stdenv.mkDerivation rec {
 
         Freewheeling runs under macOS and Linux, and is open source
         software, released under the GNU GPL license.
-    '' ;
+      '';
 
-    homepage = "http://freewheeling.sourceforge.net";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.sepi ];
-    platforms = lib.platforms.linux;
-  };
-}
+      homepage = "http://freewheeling.sourceforge.net";
+      license = lib.licenses.gpl2;
+      maintainers = [lib.maintainers.sepi];
+      platforms = lib.platforms.linux;
+    };
+  }

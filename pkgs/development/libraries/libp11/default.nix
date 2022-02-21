@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool, pkg-config
-, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  pkg-config,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "libp11";
   version = "0.4.11";
@@ -16,9 +22,9 @@ stdenv.mkDerivation rec {
     "--with-enginesdir=${placeholder "out"}/lib/engines"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
+  nativeBuildInputs = [autoreconfHook pkg-config libtool];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   enableParallelBuilding = true;
 

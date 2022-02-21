@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libnfnetlink, libmnl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libnfnetlink,
+  libmnl,
+}:
 stdenv.mkDerivation rec {
   pname = "libnetfilter_conntrack";
   version = "1.0.8";
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ky1mqgnplw2h9jf0kn0a69d94jkydhbiipng9l2hdcj13h3pl8c";
   };
 
-  buildInputs = [ libmnl ];
-  propagatedBuildInputs = [ libnfnetlink ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [libmnl];
+  propagatedBuildInputs = [libnfnetlink];
+  nativeBuildInputs = [pkg-config];
 
   meta = with lib; {
     description = "Userspace library providing an API to the in-kernel connection tracking state table";

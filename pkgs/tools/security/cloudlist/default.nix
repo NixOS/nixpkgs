@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "cloudlist";
   version = "1.0.0";
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Tool for listing assets from multiple cloud providers";
     homepage = "https://github.com/projectdiscovery/cloudlist";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

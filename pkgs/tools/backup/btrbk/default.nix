@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, bash
-, btrfs-progs
-, openssh
-, perl
-, perlPackages
-, util-linux
-, asciidoctor
-, mbuffer
-, makeWrapper
-, genericUpdater
-, curl
-, writeShellScript
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  btrfs-progs,
+  openssh,
+  perl,
+  perlPackages,
+  util-linux,
+  asciidoctor,
+  mbuffer,
+  makeWrapper,
+  genericUpdater,
+  curl,
+  writeShellScript,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "btrbk";
   version = "0.32.0";
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     sha256 = "HmvNtIgFfeaiFuSRobWlcJqusPSYtqAqx+79+CeNVDQ=";
   };
 
-  nativeBuildInputs = [ asciidoctor makeWrapper ];
+  nativeBuildInputs = [asciidoctor makeWrapper];
 
-  buildInputs = with perlPackages; [ perl DateCalc ];
+  buildInputs = with perlPackages; [perl DateCalc];
 
   preInstall = ''
     for f in $(find . -name Makefile); do
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/btrbk \
       --set PERL5LIB $PERL5LIB \
       --run 'export program_name=$0' \
-      --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
+      --prefix PATH ':' "${lib.makeBinPath [btrfs-progs bash mbuffer openssh]}"
   '';
 
   passthru.tests.btrbk = nixosTests.btrbk;
@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://digint.ch/btrbk";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [asymmetric];
   };
 }

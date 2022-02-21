@@ -1,5 +1,4 @@
-{ stdenv }:
-
+{stdenv}:
 stdenv.mkDerivation {
   name = "expand-response-params";
   src = ./expand-response-params.c;

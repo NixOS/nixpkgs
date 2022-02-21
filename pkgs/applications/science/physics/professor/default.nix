@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, eigen, makeWrapper, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  eigen,
+  makeWrapper,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "professor";
   version = "2.3.3";
@@ -15,11 +21,11 @@ stdenv.mkDerivation rec {
       --replace '-shared -o' '-shared -install_name "$(out)/$@" -o'
   '';
 
-  nativeBuildInputs = [ python3.pkgs.cython makeWrapper ];
-  buildInputs = [ python3 eigen ];
-  propagatedBuildInputs = with python3.pkgs; [ iminuit numpy matplotlib yoda ];
+  nativeBuildInputs = [python3.pkgs.cython makeWrapper];
+  buildInputs = [python3 eigen];
+  propagatedBuildInputs = with python3.pkgs; [iminuit numpy matplotlib yoda];
 
-  CPPFLAGS = [ "-I${eigen}/include/eigen3" ];
+  CPPFLAGS = ["-I${eigen}/include/eigen3"];
   PREFIX = placeholder "out";
 
   postInstall = ''
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "A tuning tool for Monte Carlo event generators";
     homepage = "https://professor.hepforge.org/";
     license = licenses.unfree; # no license specified
-    maintainers = [ maintainers.veprbl ];
+    maintainers = [maintainers.veprbl];
     platforms = platforms.unix;
   };
 }

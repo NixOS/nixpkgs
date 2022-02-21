@@ -1,10 +1,13 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, io # >= 2.2.7
-, geometry # >= 4.0.0
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  io
+  # >= 2.2.7
+  ,
+  geometry
+  # >= 4.0.0
 }:
-
 buildOctavePackage rec {
   pname = "mapping";
   version = "1.4.1";
@@ -22,7 +25,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/mapping/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Simple mapping and GIS .shp .dxf and raster file functions";
   };
 }

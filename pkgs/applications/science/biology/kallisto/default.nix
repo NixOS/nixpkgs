@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, cmake, hdf5, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  cmake,
+  hdf5,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "kallisto";
   version = "0.48.0";
@@ -11,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-r0cdR0jTRa1wu/LDKW6NdxI3XaKj6wcIVbIlct0fFvI=";
   };
 
-  nativeBuildInputs = [ autoconf cmake ];
+  nativeBuildInputs = [autoconf cmake];
 
-  buildInputs = [ hdf5 zlib ];
+  buildInputs = [hdf5 zlib];
 
-  cmakeFlags = [ "-DUSE_HDF5=ON" ];
+  cmakeFlags = ["-DUSE_HDF5=ON"];
 
   # Parallel build fails in some cases: https://github.com/pachterlab/kallisto/issues/160
   enableParallelBuilding = false;
@@ -25,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://pachterlab.github.io/kallisto";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ arcadio ];
+    maintainers = with maintainers; [arcadio];
   };
 }

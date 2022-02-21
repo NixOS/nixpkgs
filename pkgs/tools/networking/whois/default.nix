@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, perl, gettext, pkg-config, libidn2, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  gettext,
+  pkg-config,
+  libidn2,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   version = "5.5.11";
   pname = "whois";
@@ -11,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+fNld+stSniuQV2zx+Qd4s2ZSwNLmnve/tXg36MC2nM=";
   };
 
-  nativeBuildInputs = [ perl gettext pkg-config ];
-  buildInputs = [ libidn2 libiconv ];
+  nativeBuildInputs = [perl gettext pkg-config];
+  buildInputs = [libidn2 libiconv];
 
   preConfigure = ''
     for i in Makefile po/Makefile; do
@@ -20,10 +28,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = [ "HAVE_ICONV=1" ];
-  buildFlags = [ "whois" ];
+  makeFlags = ["HAVE_ICONV=1"];
+  buildFlags = ["whois"];
 
-  installTargets = [ "install-whois" ];
+  installTargets = ["install-whois"];
 
   meta = with lib; {
     description = "Intelligent WHOIS client from Debian";
@@ -36,7 +44,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://packages.qa.debian.org/w/whois.html";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
     platforms = platforms.unix;
   };
 }

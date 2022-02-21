@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "1.1.1";
   pname = "grappelli_safe";
@@ -27,8 +27,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/stephenmcd/grappelli-safe";
     downloadPage = "http://pypi.python.org/pypi/grappelli_safe/";
     license = licenses.free;
-    maintainers = with maintainers; [ prikhi ];
+    maintainers = with maintainers; [prikhi];
     platforms = platforms.unix;
   };
-
 }

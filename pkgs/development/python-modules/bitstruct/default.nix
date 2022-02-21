@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "bitstruct";
   version = "8.12.1";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/eerimoq/bitstruct";
     description = "Python bit pack/unpack package";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [jakewaksbaum];
   };
 }

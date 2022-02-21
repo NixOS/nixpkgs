@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "dstask";
   version = "0.23.1";
@@ -25,18 +28,19 @@ buildGoModule rec {
   # git ref and the release version from github.
   # Ref <https://github.com/NixOS/nixpkgs/pull/87383#discussion_r432097657>
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/naggie/dstask.VERSION=${version}"
     "-X github.com/naggie/dstask.GIT_COMMIT=v${version}"
   ];
 
-  subPackages = [ "cmd/dstask.go" ];
+  subPackages = ["cmd/dstask.go"];
 
   meta = with lib; {
     description = "Command line todo list with super-reliable git sync";
     homepage = src.meta.homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ stianlagstad ];
+    maintainers = with maintainers; [stianlagstad];
     platforms = platforms.linux;
   };
 }

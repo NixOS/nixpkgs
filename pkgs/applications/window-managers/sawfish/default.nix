@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, gdk-pixbuf-xlib
-, gettext
-, gtk2
-, imlib
-, libICE
-, libSM
-, libXinerama
-, libXrandr
-, libXtst
-, librep
-, makeWrapper
-, pango
-, pkg-config
-, rep-gtk
-, texinfo
-, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gdk-pixbuf-xlib,
+  gettext,
+  gtk2,
+  imlib,
+  libICE,
+  libSM,
+  libXinerama,
+  libXrandr,
+  libXtst,
+  librep,
+  makeWrapper,
+  pango,
+  pkg-config,
+  rep-gtk,
+  texinfo,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sawfish";
   version = "1.13.0";
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       extensibility or redefinition.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,13 @@
-{ mkDerivation, lib, fetchurl, makeWrapper, python3, qmake, ctags, gdb }:
-
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  makeWrapper,
+  python3,
+  qmake,
+  ctags,
+  gdb,
+}:
 mkDerivation rec {
   pname = "gede";
   version = "2.18.2";
@@ -9,9 +17,9 @@ mkDerivation rec {
     sha256 = "sha256-QWrDHV+2trl+wKKibWiDa+kVREN116OwQ6DomaKj3LY=";
   };
 
-  nativeBuildInputs = [ qmake makeWrapper python3 ];
+  nativeBuildInputs = [qmake makeWrapper python3];
 
-  buildInputs = [ ctags ];
+  buildInputs = [ctags];
 
   strictDeps = true;
 
@@ -22,7 +30,7 @@ mkDerivation rec {
   installPhase = ''
     python build.py install --verbose --prefix="$out"
     wrapProgram $out/bin/gede \
-      --prefix PATH : ${lib.makeBinPath [ ctags gdb ]}
+      --prefix PATH : ${lib.makeBinPath [ctags gdb]}
   '';
 
   meta = with lib; {
@@ -30,6 +38,6 @@ mkDerivation rec {
     homepage = "http://gede.dexar.se";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ juliendehos ];
+    maintainers = with maintainers; [juliendehos];
   };
 }

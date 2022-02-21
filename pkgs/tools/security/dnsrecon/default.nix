@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
   version = "1.0.0";
@@ -37,11 +37,10 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-
   meta = with lib; {
     description = "DNS Enumeration script";
     homepage = "https://github.com/darkoperator/dnsrecon";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ c0bw3b fab ];
+    maintainers = with maintainers; [c0bw3b fab];
   };
 }

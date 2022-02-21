@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+}:
 stdenv.mkDerivation rec {
   pname = "srt-to-vtt-cl";
   version = "unstable-2019-01-03";
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Convert SRT files to VTT";
     license = licenses.mit;
-    maintainers = with maintainers; [ ericdallo ];
+    maintainers = with maintainers; [ericdallo];
     homepage = "https://github.com/nwoltman/srt-to-vtt-cl";
     platforms = platforms.linux;
   };

@@ -1,5 +1,15 @@
-{ stdenv, lib, substituteAll, fetchPypi, buildPythonPackage, SDL2, SDL2_ttf, SDL2_image, SDL2_gfx, SDL2_mixer }:
-
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchPypi,
+  buildPythonPackage,
+  SDL2,
+  SDL2_ttf,
+  SDL2_image,
+  SDL2_gfx,
+  SDL2_mixer,
+}:
 buildPythonPackage rec {
   pname = "PySDL2";
   version = "0.9.11";
@@ -16,12 +26,13 @@ buildPythonPackage rec {
 
   # Deliberately not in propagated build inputs; users can decide
   # which library they want to include.
-  buildInputs = [ SDL2_ttf SDL2_image SDL2_gfx SDL2_mixer ];
-  propagatedBuildInputs = [ SDL2 ];
+  buildInputs = [SDL2_ttf SDL2_image SDL2_gfx SDL2_mixer];
+  propagatedBuildInputs = [SDL2];
   patches = [
     (substituteAll ({
       src = ./PySDL2-dll.patch;
-    } // builtins.mapAttrs (_: pkg: "${pkg}/lib/lib${pkg.pname}${stdenv.hostPlatform.extensions.sharedLibrary}") {
+    }
+    // builtins.mapAttrs (_: pkg: "${pkg}/lib/lib${pkg.pname}${stdenv.hostPlatform.extensions.sharedLibrary}") {
       # substituteAll keys must start lowercase
       sdl2 = SDL2;
       sdl2_ttf = SDL2_ttf;
@@ -35,6 +46,6 @@ buildPythonPackage rec {
     description = "A wrapper around the SDL2 library and as such similar to the discontinued PySDL project";
     homepage = "https://github.com/marcusva/py-sdl2";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ pmiddend ];
+    maintainers = with lib.maintainers; [pmiddend];
   };
 }

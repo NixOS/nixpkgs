@@ -1,8 +1,21 @@
-{ fetchFromGitHub, lib, stdenv, cmake, pkg-config, python3, alsa-lib
-, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
-, nixosTests
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  python3,
+  alsa-lib,
+  libX11,
+  libGLU,
+  SDL2,
+  lua5_3,
+  zlib,
+  freetype,
+  wavpack,
+  icoutils,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "teeworlds";
   version = "0.7.5";
@@ -22,10 +35,18 @@ stdenv.mkDerivation rec {
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  nativeBuildInputs = [ cmake pkg-config icoutils ];
+  nativeBuildInputs = [cmake pkg-config icoutils];
 
   buildInputs = [
-    python3 alsa-lib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
+    python3
+    alsa-lib
+    libX11
+    libGLU
+    SDL2
+    lua5_3
+    zlib
+    freetype
+    wavpack
   ];
 
   postInstall = ''
@@ -51,7 +72,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://teeworlds.com/";
     license = "BSD-style, see `license.txt'";
-    maintainers = with lib.maintainers; [ astsmtl ];
+    maintainers = with lib.maintainers; [astsmtl];
     platforms = lib.platforms.linux;
   };
 }

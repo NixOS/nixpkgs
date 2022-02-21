@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, autoPatchelfHook
-, openssl
-, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  autoPatchelfHook,
+  openssl,
+  icu,
 }:
-
 buildDotnetModule rec {
   pname = "python-language-server";
   version = "2021-09-08";
@@ -25,9 +25,9 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ stdenv.cc.cc.lib ];
-  runtimeDeps = [ openssl icu ];
+  nativeBuildInputs = [autoPatchelfHook];
+  buildInputs = [stdenv.cc.cc.lib];
+  runtimeDeps = [openssl icu];
 
   postFixup = ''
     mv $out/bin/Microsoft.Python.LanguageServer $out/bin/python-language-server
@@ -39,7 +39,7 @@ buildDotnetModule rec {
     description = "Microsoft Language Server for Python";
     homepage = "https://github.com/microsoft/python-language-server";
     license = licenses.asl20;
-    maintainers = with maintainers; [ thomasjm ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [thomasjm];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,16 +1,19 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "jhiccup";
   version = "2.0.10";
 
   src = fetchzip {
-    url    = "https://www.azul.com/files/jHiccup-${version}-dist.zip";
+    url = "https://www.azul.com/files/jHiccup-${version}-dist.zip";
     sha256 = "1hsvi8wjh615fnjf75h7b5afp04chqcgvini30vfcn3m9a5icbgy";
   };
 
   dontConfigure = true;
-  buildPhase     = ":";
+  buildPhase = ":";
   installPhase = ''
     mkdir -p $out/bin $out/share/java
     cp *.jar $out/share/java
@@ -28,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Measure JVM application stalls and GC pauses";
-    homepage    = "https://www.azul.com/jhiccup/";
-    license     = lib.licenses.cc0;
-    platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    homepage = "https://www.azul.com/jhiccup/";
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [thoughtpolice];
   };
 }

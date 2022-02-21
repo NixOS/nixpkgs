@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pyxb
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pyxb,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "yangson";
   version = "1.4.13";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

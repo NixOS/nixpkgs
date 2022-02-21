@@ -1,5 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, qtsvg, qtbase, cmake, ninja, libcprime, libcsys }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtsvg,
+  qtbase,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 mkDerivation rec {
   pname = "coreaction";
   version = "4.3.0";
@@ -27,7 +36,7 @@ mkDerivation rec {
     description = "A side bar for showing widgets from the C Suite";
     homepage = "https://gitlab.com/cubocore/coreapps/coreaction";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

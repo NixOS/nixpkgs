@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "M33-Linux";
   version = "unstable-2016-06-23";
@@ -21,6 +24,6 @@ stdenv.mkDerivation {
     description = "A Linux program that can communicate with the Micro 3D printer";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

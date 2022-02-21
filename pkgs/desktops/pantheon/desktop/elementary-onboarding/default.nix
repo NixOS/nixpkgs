@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, substituteAll
-, pkg-config
-, meson
-, ninja
-, vala
-, python3
-, gtk3
-, glib
-, granite
-, libgee
-, elementary-icon-theme
-, elementary-settings-daemon
-, gettext
-, libhandy
-, wrapGAppsHook
-, appcenter
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  substituteAll,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  python3,
+  gtk3,
+  glib,
+  granite,
+  libgee,
+  elementary-icon-theme,
+  elementary-settings-daemon,
+  gettext,
+  libhandy,
+  wrapGAppsHook,
+  appcenter,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
   version = "6.1.0";

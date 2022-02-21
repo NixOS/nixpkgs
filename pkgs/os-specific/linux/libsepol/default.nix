@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "libsepol";
   version = "3.3";
   se_url = "https://github.com/SELinuxProject/selinux/releases/download";
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = ["bin" "out" "dev" "man"];
 
   src = fetchurl {
     url = "${se_url}/${version}/libsepol-${version}.tar.gz";
@@ -17,7 +22,7 @@ stdenv.mkDerivation rec {
     sed -i $'/^\t.*LIBSO/d' src/Makefile
   '';
 
-  nativeBuildInputs = [ flex ];
+  nativeBuildInputs = [flex];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -31,13 +36,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  passthru = { inherit se_url; };
+  passthru = {inherit se_url;};
 
   meta = with lib; {
     description = "SELinux binary policy manipulation library";
     homepage = "http://userspace.selinuxproject.org";
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [];
     license = lib.licenses.gpl2Plus;
   };
 }

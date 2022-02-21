@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libomxil-bellagio";
   version = "0.9.3";
@@ -10,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "ac_cv_func_malloc_0_nonnull=yes" ];
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ["ac_cv_func_malloc_0_nonnull=yes"];
 
   patches = [
     ./fedora-fixes.patch

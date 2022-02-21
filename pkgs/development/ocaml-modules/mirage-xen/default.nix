@@ -1,22 +1,22 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, pkg-config
-, cstruct
-, lwt
-, shared-memory-ring-lwt
-, xenstore
-, lwt-dllist
-, mirage-profile
-, mirage-runtime
-, logs
-, fmt
-, ocaml-freestanding
-, bheap
-, duration
-, io-page
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  pkg-config,
+  cstruct,
+  lwt,
+  shared-memory-ring-lwt,
+  xenstore,
+  lwt-dllist,
+  mirage-profile,
+  mirage-runtime,
+  logs,
+  fmt,
+  ocaml-freestanding,
+  bheap,
+  duration,
+  io-page,
 }:
-
 buildDunePackage rec {
   pname = "mirage-xen";
   version = "6.0.0";
@@ -59,7 +59,7 @@ buildDunePackage rec {
     fmt
     bheap
     duration
-    (ocaml-freestanding.override { target = "xen"; })
+    (ocaml-freestanding.override {target = "xen";})
   ];
 
   # Move pkg-config files into their well-known location.
@@ -72,7 +72,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Xen core platform libraries for MirageOS";
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
     homepage = "https://github.com/mirage/mirage-xen";
   };
 }

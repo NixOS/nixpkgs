@@ -1,10 +1,10 @@
 import ../make-test-python.nix (
-  { pkgs, ... }:
-  let
+  {pkgs, ...}: let
     # Set up SSL certs for Synapse to be happy.
-    runWithOpenSSL = file: cmd: pkgs.runCommand file
+    runWithOpenSSL = file: cmd:
+      pkgs.runCommand file
       {
-        buildInputs = [ pkgs.openssl ];
+        buildInputs = [pkgs.openssl];
       }
       cmd;
 
@@ -27,15 +27,14 @@ import ../make-test-python.nix (
         -CAcreateserial -out $out \
         -days 365
     '';
-  in
-  {
+  in {
     name = "mjolnir";
     meta = with pkgs.lib; {
       maintainers = teams.matrix.members;
     };
 
     nodes = {
-      homeserver = { pkgs, ... }: {
+      homeserver = {pkgs, ...}: {
         services.matrix-synapse = {
           enable = true;
           database_type = "sqlite3";
@@ -50,8 +49,14 @@ import ../make-test-python.nix (
               "bind_address" = "";
               "port" = 8448;
               "resources" = [
-                { "compress" = true; "names" = [ "client" "webclient" ]; }
-                { "compress" = false; "names" = [ "federation" ]; }
+                {
+                  "compress" = true;
+                  "names" = ["client" "webclient"];
+                }
+                {
+                  "compress" = false;
+                  "names" = ["federation"];
+                }
               ];
               "tls" = false;
               "type" = "http";
@@ -60,31 +65,33 @@ import ../make-test-python.nix (
           ];
         };
 
-        networking.firewall.allowedTCPPorts = [ 8448 ];
+        networking.firewall.allowedTCPPorts = [8448];
 
         environment.systemPackages = [
-          (pkgs.writeShellScriptBin "register_mjolnir_user" ''
-            exec ${pkgs.matrix-synapse}/bin/register_new_matrix_user \
-              -u mjolnir \
-              -p mjolnir-password \
-              --admin \
-              --shared-secret supersecret-registration \
-              http://localhost:8448
-          ''
+          (
+            pkgs.writeShellScriptBin "register_mjolnir_user" ''
+              exec ${pkgs.matrix-synapse}/bin/register_new_matrix_user \
+                -u mjolnir \
+                -p mjolnir-password \
+                --admin \
+                --shared-secret supersecret-registration \
+                http://localhost:8448
+            ''
           )
-          (pkgs.writeShellScriptBin "register_moderator_user" ''
-            exec ${pkgs.matrix-synapse}/bin/register_new_matrix_user \
-              -u moderator \
-              -p moderator-password \
-              --no-admin \
-              --shared-secret supersecret-registration \
-              http://localhost:8448
-          ''
+          (
+            pkgs.writeShellScriptBin "register_moderator_user" ''
+              exec ${pkgs.matrix-synapse}/bin/register_new_matrix_user \
+                -u moderator \
+                -p moderator-password \
+                --no-admin \
+                --shared-secret supersecret-registration \
+                http://localhost:8448
+            ''
           )
         ];
       };
 
-      mjolnir = { pkgs, ... }: {
+      mjolnir = {pkgs, ...}: {
         services.mjolnir = {
           enable = true;
           homeserverUrl = "http://homeserver:8448";
@@ -97,34 +104,35 @@ import ../make-test-python.nix (
         };
       };
 
-      client = { pkgs, ... }: {
+      client = {pkgs, ...}: {
         environment.systemPackages = [
-          (pkgs.writers.writePython3Bin "create_management_room_and_invite_mjolnir"
-            { libraries = [ pkgs.python3Packages.matrix-nio ]; } ''
-            import asyncio
+          (
+            pkgs.writers.writePython3Bin "create_management_room_and_invite_mjolnir"
+            {libraries = [pkgs.python3Packages.matrix-nio];} ''
+              import asyncio
 
-            from nio import (
-                AsyncClient,
-                EnableEncryptionBuilder
-            )
+              from nio import (
+                  AsyncClient,
+                  EnableEncryptionBuilder
+              )
 
 
-            async def main() -> None:
-                client = AsyncClient("http://homeserver:8448", "moderator")
+              async def main() -> None:
+                  client = AsyncClient("http://homeserver:8448", "moderator")
 
-                await client.login("moderator-password")
+                  await client.login("moderator-password")
 
-                room = await client.room_create(
-                    name="Moderators",
-                    alias="moderators",
-                    initial_state=[EnableEncryptionBuilder().as_dict()],
-                )
+                  room = await client.room_create(
+                      name="Moderators",
+                      alias="moderators",
+                      initial_state=[EnableEncryptionBuilder().as_dict()],
+                  )
 
-                await client.join(room.room_id)
-                await client.room_invite(room.room_id, "@mjolnir:homeserver")
+                  await client.join(room.room_id)
+                  await client.room_invite(room.room_id, "@mjolnir:homeserver")
 
-            asyncio.run(main())
-          ''
+              asyncio.run(main())
+            ''
           )
         ];
       };

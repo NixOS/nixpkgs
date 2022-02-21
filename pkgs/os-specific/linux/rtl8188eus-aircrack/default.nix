@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+}:
 stdenv.mkDerivation {
   pname = "rtl8188eus-aircrack";
   version = "${kernel.version}-unstable-2021-05-04";
@@ -11,11 +16,11 @@ stdenv.mkDerivation {
     sha256 = "sha256-85STELbFB7QmTaM8GvJNlWvAg6KPAXeYRiMb4cGA6RY=";
   };
 
-  nativeBuildInputs = [ bc ];
+  nativeBuildInputs = [bc];
 
   buildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -35,7 +40,7 @@ stdenv.mkDerivation {
     description = "RealTek RTL8188eus WiFi driver with monitor mode & frame injection support";
     homepage = "https://github.com/aircrack-ng/rtl8188eus";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
     broken = kernel.kernelAtLeast "5.15" || kernel.isHardened;
   };
 }

@@ -1,15 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.steam;
 
   steam = pkgs.steam.override {
-    extraLibraries = pkgs: with config.hardware.opengl;
-      if pkgs.hostPlatform.is64bit
-      then [ package ] ++ extraPackages
-      else [ package32 ] ++ extraPackages32;
+    extraLibraries = pkgs:
+      with config.hardware.opengl;
+        if pkgs.hostPlatform.is64bit
+        then [package] ++ extraPackages
+        else [package32] ++ extraPackages32;
   };
 in {
   options.programs.steam = {
@@ -33,7 +36,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    hardware.opengl = { # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
+    hardware.opengl = {
+      # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
@@ -44,20 +48,25 @@ in {
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages = [ steam steam.run ];
+    environment.systemPackages = [steam steam.run];
 
     networking.firewall = lib.mkMerge [
       (mkIf cfg.remotePlay.openFirewall {
-        allowedTCPPorts = [ 27036 ];
-        allowedUDPPortRanges = [ { from = 27031; to = 27036; } ];
+        allowedTCPPorts = [27036];
+        allowedUDPPortRanges = [
+          {
+            from = 27031;
+            to = 27036;
+          }
+        ];
       })
 
       (mkIf cfg.dedicatedServer.openFirewall {
-        allowedTCPPorts = [ 27015 ]; # SRCDS Rcon port
-        allowedUDPPorts = [ 27015 ]; # Gameplay traffic
+        allowedTCPPorts = [27015]; # SRCDS Rcon port
+        allowedUDPPorts = [27015]; # Gameplay traffic
       })
     ];
   };
 
-  meta.maintainers = with maintainers; [ mkg20001 ];
+  meta.maintainers = with maintainers; [mkg20001];
 }

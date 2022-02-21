@@ -1,8 +1,16 @@
-{ stdenv, lib, fetchurl, fetchpatch, extra-cmake-modules
-, qca-qt5, kauth, kio, polkit-qt, qtbase
-, util-linux
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  extra-cmake-modules,
+  qca-qt5,
+  kauth,
+  kio,
+  polkit-qt,
+  qtbase,
+  util-linux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kpmcore";
   # NOTE: When changing this version, also change the version of `partition-manager`.
@@ -35,15 +43,15 @@ stdenv.mkDerivation rec {
     util-linux # Needs blkid in configure script (note that this is not provided by util-linux-compat)
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [extra-cmake-modules];
 
   dontWrapQtApps = true;
 
   meta = with lib; {
     description = "KDE Partition Manager core library";
     homepage = "https://invent.kde.org/system/kpmcore";
-    license = with licenses; [ cc-by-40 cc0 gpl3Plus mit ];
-    maintainers = with maintainers; [ peterhoeg oxalica ];
+    license = with licenses; [cc-by-40 cc0 gpl3Plus mit];
+    maintainers = with maintainers; [peterhoeg oxalica];
     # The build requires at least Qt 5.14:
     broken = versionOlder qtbase.version "5.14";
   };

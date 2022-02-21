@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "tendermint";
   version = "0.35.1";
@@ -13,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-aYY3rGm2Wvd5v1QrfhN0jWzAO9JYu4j5ZHk9UyEPjH8=";
 
-  subPackages = [ "cmd/tendermint" ];
+  subPackages = ["cmd/tendermint"];
 
   preBuild = ''
     makeFlagsArray+=(
@@ -25,7 +28,7 @@ buildGoModule rec {
     description = "Byzantine-Fault Tolerant State Machines. Or Blockchain, for short";
     homepage = "https://tendermint.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ alexfmpe ];
+    maintainers = with maintainers; [alexfmpe];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

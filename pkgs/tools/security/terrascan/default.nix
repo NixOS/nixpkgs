@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "terrascan";
   version = "1.13.1";
@@ -27,7 +27,7 @@ buildGoModule rec {
       500+ polices and support for Terraform and Kubernetes.
     '';
     homepage = "https://github.com/accurics/terrascan";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

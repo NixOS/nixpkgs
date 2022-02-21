@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "sentinels";
   version = "1.0.0";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "sentinels" ];
+  pythonImportsCheck = ["sentinels"];
 
   meta = with lib; {
     homepage = "https://github.com/vmalloc/sentinels/";
     description = "Various objects to denote special meanings in python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [gador];
   };
 }

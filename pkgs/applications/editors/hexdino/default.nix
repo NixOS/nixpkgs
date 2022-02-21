@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, ncurses }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  ncurses,
+}:
 rustPlatform.buildRustPackage {
   pname = "hexdino";
   version = "0.1.0";
@@ -13,12 +17,12 @@ rustPlatform.buildRustPackage {
 
   cargoSha256 = "1hpndmpk1zlfvb4r95m13yvnsbjkwgw4pb9ala2d5yzfp38225nm";
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   meta = with lib; {
     description = "A hex editor with vim like keybindings written in Rust";
     homepage = "https://github.com/Luz/hexdino";
     license = licenses.mit;
-    maintainers = [ maintainers.luz ];
+    maintainers = [maintainers.luz];
   };
 }

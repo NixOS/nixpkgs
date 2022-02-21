@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, ruyaml
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  ruyaml,
 }:
-
 buildPythonPackage rec {
   pname = "yamlfix";
   version = "0.8.0";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Python YAML formatter that keeps your comments";
     homepage = "https://github.com/lyz-code/yamlfix";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ koozz ];
+    maintainers = with maintainers; [koozz];
   };
 }

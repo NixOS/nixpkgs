@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "ibis";
   version = "3.2.0";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Lightweight template engine";
     homepage = "https://github.com/dmulholland/ibis";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

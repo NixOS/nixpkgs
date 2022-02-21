@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+}:
 stdenv.mkDerivation rec {
   pname = "pgvector";
   version = "0.2.5";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5tnitx2KdyARgeaaDINWbn5JtQ4j0aq2BQBljRZOmsk=";
   };
 
-  buildInputs = [ postgresql ];
+  buildInputs = [postgresql];
 
   installPhase = ''
     install -D -t $out/lib vector.so
@@ -25,6 +29,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/ankane/pgvector/raw/v${version}/CHANGELOG.md";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, nose
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  nose,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "flaky";
   version = "3.7.0";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "3ad100780721a1911f57a165809b7ea265a7863305acb66708220820caf8aa0d";
   };
 
-  checkInputs = [ mock nose pytest ];
+  checkInputs = [mock nose pytest];
 
   checkPhase = ''
     # based on tox.ini
@@ -31,5 +31,4 @@ buildPythonPackage rec {
     description = "Plugin for nose or py.test that automatically reruns flaky tests";
     license = licenses.asl20;
   };
-
 }

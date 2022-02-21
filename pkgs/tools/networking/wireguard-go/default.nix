@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchzip }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchzip,
+}:
 buildGoPackage rec {
   pname = "wireguard-go";
   version = "0.0.20210424";
@@ -25,6 +28,6 @@ buildGoPackage rec {
     description = "Userspace Go implementation of WireGuard";
     homepage = "https://git.zx2c4.com/wireguard-go/about/";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym kirelagin yana zx2c4 ];
+    maintainers = with maintainers; [elseym kirelagin yana zx2c4];
   };
 }

@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, double-conversion
-, fetchpatch
-, fmt_8
-, gflags
-, glog
-, libevent
-, libiberty
-, libunwind
-, lz4
-, openssl
-, pkg-config
-, xz
-, zlib
-, zstd
-, follyMobile ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  double-conversion,
+  fetchpatch,
+  fmt_8,
+  gflags,
+  glog,
+  libevent,
+  libiberty,
+  libunwind,
+  lz4,
+  openssl,
+  pkg-config,
+  xz,
+  zlib,
+  zstd,
+  follyMobile ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "folly";
   version = "2022.02.14.00";
@@ -52,15 +53,21 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" ];
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  NIX_CFLAGS_COMPILE = [
+    "-DFOLLY_MOBILE=${
+      if follyMobile
+      then "1"
+      else "0"
+    }"
+  ];
+  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
 
   meta = with lib; {
     description = "An open-source C++ library developed and used at Facebook";
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ abbradar pierreis ];
+    platforms = ["x86_64-linux" "x86_64-darwin" "aarch64-darwin"];
+    maintainers = with maintainers; [abbradar pierreis];
   };
 }

@@ -1,16 +1,15 @@
 # Mutable users tests.
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "mutable-users";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ gleber ];
+    maintainers = [gleber];
   };
 
   nodes = {
-    machine = { ... }: {
+    machine = {...}: {
       users.mutableUsers = false;
     };
-    mutable = { ... }: {
+    mutable = {...}: {
       users.mutableUsers = true;
       users.users.dry-test.isNormalUser = true;
     };

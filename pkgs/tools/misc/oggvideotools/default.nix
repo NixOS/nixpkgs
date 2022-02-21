@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, boost, gd, libogg, libtheora, libvorbis }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  boost,
+  gd,
+  libogg,
+  libtheora,
+  libvorbis,
+}:
 stdenv.mkDerivation rec {
   pname = "oggvideotools";
   version = "0.9.1";
@@ -34,14 +45,14 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace " -O0 " ""
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ boost gd libogg libtheora libvorbis ];
+  buildInputs = [boost gd libogg libtheora libvorbis];
 
   meta = with lib; {
     description = "Toolbox for manipulating and creating Ogg video files";
     homepage = "http://www.streamnik.de/oggvideotools.html";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

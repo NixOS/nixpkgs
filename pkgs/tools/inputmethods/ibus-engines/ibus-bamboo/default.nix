@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gettext
-, xorg
-, pkg-config
-, wrapGAppsHook
-, ibus
-, gtk3
-, go
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  xorg,
+  pkg-config,
+  wrapGAppsHook,
+  ibus,
+  gtk3,
+  go,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ibus-bamboo";
   version = "0.7.0";
@@ -43,13 +44,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-
   meta = with lib; {
     isIbusEngine = true;
     description = "A Vietnamese IME for IBus";
     homepage = "https://github.com/BambooEngine/ibus-bamboo";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ superbo ];
+    maintainers = with maintainers; [superbo];
   };
 }

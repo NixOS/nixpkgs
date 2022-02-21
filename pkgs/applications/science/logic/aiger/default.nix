@@ -1,11 +1,15 @@
-{ lib, stdenv, fetchurl, picosat }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  picosat,
+}:
 stdenv.mkDerivation rec {
   pname = "aiger";
   version = "1.9.9";
 
   src = fetchurl {
-    url    = "http://fmv.jku.at/aiger/${pname}-${version}.tar.gz";
+    url = "http://fmv.jku.at/aiger/${pname}-${version}.tar.gz";
     sha256 = "1ish0dw0nf9gyghxsdhpy1jjiy5wp54c993swp85xp7m6vdx6l0y";
   };
 
@@ -43,13 +47,13 @@ stdenv.mkDerivation rec {
     cp -v aiger.h $dev/include
   '';
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = ["out" "dev" "lib"];
 
   meta = {
     description = "And-Inverter Graph (AIG) utilities";
-    homepage    = "http://fmv.jku.at/aiger/";
-    license     = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
-    platforms   = lib.platforms.unix;
+    homepage = "http://fmv.jku.at/aiger/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [thoughtpolice];
+    platforms = lib.platforms.unix;
   };
 }

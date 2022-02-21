@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, gcc, zlib, python27 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gcc,
+  zlib,
+  python27,
+}:
 stdenv.mkDerivation rec {
   pname = "ecopcr";
   version = "0.8.0";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "ecoPCR/src";
 
-  buildInputs = [ gcc python27 zlib ];
+  buildInputs = [gcc python27 zlib];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -33,6 +39,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://git.metabarcoding.org/obitools/ecopcr/wikis/home";
     license = licenses.cecill20;
-    maintainers = [ maintainers.metabar ];
+    maintainers = [maintainers.metabar];
   };
 }

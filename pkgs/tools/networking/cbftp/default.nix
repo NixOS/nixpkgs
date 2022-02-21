@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, openssl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cbftp";
   version = "1173";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       semi-graphical user interface through ncurses.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

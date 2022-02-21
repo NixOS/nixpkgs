@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "trezor-udev-rules";
   version = "unstable-2019-07-17";
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Udev rules for Trezor";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
     platforms = platforms.linux;
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/common/udev";
   };

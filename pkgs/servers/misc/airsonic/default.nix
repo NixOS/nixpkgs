@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "airsonic";
   version = "10.6.2";
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://airsonic.github.io";
     license = lib.licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ disassembler ];
+    maintainers = with maintainers; [disassembler];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, bzip2, openssl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bzip2,
+  openssl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "imgpatchtools";
   version = "0.3";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7TOkqaXPui14VcSmMmYJ1Wg+s85wrgp+E0XcCB0Ml7M=";
   };
 
-  buildInputs = [ bzip2 openssl zlib ];
+  buildInputs = [bzip2 openssl zlib];
 
   installPhase = "install -Dt $out/bin bin/*";
 
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/erfanoabdi/imgpatchtools";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ yana ];
+    maintainers = with maintainers; [yana];
     platforms = platforms.linux;
   };
 }

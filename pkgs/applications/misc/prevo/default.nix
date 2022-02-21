@@ -1,12 +1,17 @@
-{ lib, symlinkJoin, prevo-tools, prevo-data, makeWrapper }:
-
+{
+  lib,
+  symlinkJoin,
+  prevo-tools,
+  prevo-data,
+  makeWrapper,
+}:
 symlinkJoin rec {
   name = "prevo-${version}";
   inherit (prevo-tools) version;
 
-  paths = [ prevo-tools ];
+  paths = [prevo-tools];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postBuild = ''
     wrapProgram $out/bin/prevo \
@@ -21,7 +26,7 @@ symlinkJoin rec {
     '';
     homepage = "https://github.com/bpeel/prevodb";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.das-g ];
+    maintainers = [maintainers.das-g];
     platforms = platforms.linux;
   };
 }

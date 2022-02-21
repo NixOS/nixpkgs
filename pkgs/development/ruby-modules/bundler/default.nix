@@ -1,5 +1,7 @@
-{ buildRubyGem, ruby }:
-
+{
+  buildRubyGem,
+  ruby,
+}:
 buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook, subversion, fuse, apr, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  subversion,
+  fuse,
+  apr,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "svnfs";
   version = "0.4";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lrzjr0812lrnkkwk60bws9k1hq2iibphm0nhqyv26axdsygkfky";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ subversion fuse apr perl ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [subversion fuse apr perl];
 
   # autoconf's AC_CHECK_HEADERS and AC_CHECK_LIBS fail to detect libfuse on
   # Darwin if FUSE_USE_VERSION isn't set at configure time.
@@ -20,15 +28,15 @@ stdenv.mkDerivation rec {
   #
   #     $ tar xf "$(nix-build -A svnfs.src)"
   #     $ grep -R FUSE_USE_VERSION
-  configureFlags = lib.optionals stdenv.isDarwin [ "CFLAGS=-DFUSE_USE_VERSION=25" ];
+  configureFlags = lib.optionals stdenv.isDarwin ["CFLAGS=-DFUSE_USE_VERSION=25"];
 
   # why is this required?
-  preConfigure=''
+  preConfigure = ''
     export LD_LIBRARY_PATH=${subversion.out}/lib
   '';
 
-  NIX_CFLAGS_COMPILE="-I ${subversion.dev}/include/subversion-1";
-  NIX_LDFLAGS="-lsvn_client-1 -lsvn_subr-1";
+  NIX_CFLAGS_COMPILE = "-I ${subversion.dev}/include/subversion-1";
+  NIX_LDFLAGS = "-lsvn_client-1 -lsvn_subr-1";
 
   meta = {
     description = "FUSE filesystem for accessing Subversion repositories";

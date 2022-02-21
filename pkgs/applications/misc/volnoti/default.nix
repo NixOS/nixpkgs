@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, pkg-config, dbus, gdk-pixbuf, glib, libX11, gtk2, librsvg
-, dbus-glib, autoreconfHook, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  dbus,
+  gdk-pixbuf,
+  glib,
+  libX11,
+  gtk2,
+  librsvg,
+  dbus-glib,
+  autoreconfHook,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation {
   pname = "volnoti-unstable";
   version = "2013-09-23";
@@ -22,10 +34,16 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook ];
+  nativeBuildInputs = [pkg-config autoreconfHook wrapGAppsHook];
 
   buildInputs = [
-    dbus gdk-pixbuf glib libX11 gtk2 dbus-glib librsvg
+    dbus
+    gdk-pixbuf
+    glib
+    libX11
+    gtk2
+    dbus-glib
+    librsvg
   ];
 
   meta = with lib; {
@@ -33,6 +51,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/davidbrazdil/volnoti";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.gilligan ];
+    maintainers = [maintainers.gilligan];
   };
 }

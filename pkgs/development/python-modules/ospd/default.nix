@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, defusedxml
-, deprecated
-, fetchFromGitHub
-, lxml
-, paramiko
-, psutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  defusedxml,
+  deprecated,
+  fetchFromGitHub,
+  lxml,
+  paramiko,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "ospd";
   version = "21.4.4";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Framework for vulnerability scanners which support OSP";
     homepage = "https://github.com/greenbone/ospd";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [agpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

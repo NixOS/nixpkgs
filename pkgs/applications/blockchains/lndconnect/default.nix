@@ -1,4 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "lndconnect";
   version = "0.2.0";
@@ -18,8 +22,7 @@ buildGoPackage rec {
     description = "Generate QRCode to connect apps to lnd Resources";
     license = licenses.mit;
     homepage = "https://github.com/LN-Zap/lndconnect";
-    maintainers = [ maintainers.d-xo ];
+    maintainers = [maintainers.d-xo];
     platforms = platforms.linux;
   };
 }
-

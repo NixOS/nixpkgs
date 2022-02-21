@@ -1,43 +1,42 @@
-{ lib
-, stdenvNoCC
-, coreutils
+{
+  lib,
+  stdenvNoCC,
+  coreutils,
+}: {
+  version,
+  src,
+  patches ? [],
 }:
+  stdenvNoCC.mkDerivation {
+    inherit patches src version;
 
-{ version
-, src
-, patches ? [ ]
-}:
+    pname = "fedora${lib.versions.major version}-backgrounds";
 
-stdenvNoCC.mkDerivation {
-  inherit patches src version;
+    dontBuild = true;
 
-  pname = "fedora${lib.versions.major version}-backgrounds";
+    postPatch = ''
+      for f in default/Makefile extras/Makefile; do
+        substituteInPlace $f \
+          --replace "usr/share" "share" \
+          --replace "/usr/bin/" "" \
+          --replace "/bin/" ""
+      done
 
-  dontBuild = true;
+      for f in $(find . -name '*.xml'); do
+        substituteInPlace $f \
+          --replace "/usr/share" "$out/share"
+      done;
+    '';
 
-  postPatch = ''
-    for f in default/Makefile extras/Makefile; do
-      substituteInPlace $f \
-        --replace "usr/share" "share" \
-        --replace "/usr/bin/" "" \
-        --replace "/bin/" ""
-    done
+    installFlags = [
+      "DESTDIR=$(out)"
+    ];
 
-    for f in $(find . -name '*.xml'); do
-      substituteInPlace $f \
-        --replace "/usr/share" "$out/share"
-    done;
-  '';
-
-  installFlags = [
-    "DESTDIR=$(out)"
-  ];
-
-  meta = with lib; {
-    homepage = "https://github.com/fedoradesign/backgrounds";
-    description = "A set of default and supplemental wallpapers for Fedora";
-    license = licenses.cc-by-sa-40;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://github.com/fedoradesign/backgrounds";
+      description = "A set of default and supplemental wallpapers for Fedora";
+      license = licenses.cc-by-sa-40;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [];
+    };
+  }

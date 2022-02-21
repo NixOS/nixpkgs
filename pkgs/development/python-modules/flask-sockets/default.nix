@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, gevent
-, gevent-websocket
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  gevent,
+  gevent-websocket,
 }:
-
 buildPythonPackage rec {
   pname = "Flask-Sockets";
   version = "0.2.1";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Elegant WebSockets for your Flask apps";
     homepage = "https://github.com/heroku-python/flask-sockets";
     license = licenses.mit;
-    maintainers = [ maintainers.prusnak ];
+    maintainers = [maintainers.prusnak];
   };
 }

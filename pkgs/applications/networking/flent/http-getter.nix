@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  pkg-config,
+}:
 stdenv.mkDerivation {
   pname = "http-getter";
   version = "unstable-2020-12-08";
@@ -11,8 +17,8 @@ stdenv.mkDerivation {
     sha256 = "0plyqqwfm9bysichda0w3akbdxf6279wd4mx8mda0c4mxd4xy9nl";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ curl ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [curl];
 
   meta = with lib; {
     homepage = "https://github.com/tohojo/http-getter";

@@ -1,14 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, qpdf
-, podofo
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  qtbase,
+  qttools,
+  qpdf,
+  podofo,
 }:
-
 mkDerivation rec {
   pname = "pdfmixtool";
   version = "1.0.2";
@@ -36,7 +36,6 @@ mkDerivation rec {
     description = "An application to split, merge, rotate and mix PDF files";
     homepage = "https://gitlab.com/scarpetta/pdfmixtool";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
   };
 }
-

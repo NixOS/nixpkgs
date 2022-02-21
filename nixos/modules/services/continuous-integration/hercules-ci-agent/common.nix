@@ -1,14 +1,18 @@
 /*
-
-  This file is for options that NixOS and nix-darwin have in common.
-
-  Platform-specific code is in the respective default.nix files.
-
-*/
-
-{ config, lib, options, pkgs, ... }:
-let
-  inherit (lib)
+ 
+ This file is for options that NixOS and nix-darwin have in common.
+ 
+ Platform-specific code is in the respective default.nix files.
+ */
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}: let
+  inherit
+    (lib)
     filterAttrs
     literalDocBook
     literalExpression
@@ -22,9 +26,9 @@ let
   cfg =
     config.services.hercules-ci-agent;
 
-  format = pkgs.formats.toml { };
+  format = pkgs.formats.toml {};
 
-  settingsModule = { config, ... }: {
+  settingsModule = {config, ...}: {
     freeformType = format.type;
     options = {
       apiBaseUrl = mkOption {
@@ -62,7 +66,7 @@ let
           because each split of resources causes inefficiencies; particularly with regards
           to build latency because of extra downloads.
         '';
-        type = types.either types.ints.positive (types.enum [ "auto" ]);
+        type = types.either types.ints.positive (types.enum ["auto"]);
         default = "auto";
       };
       labels = mkOption {
@@ -176,14 +180,12 @@ let
         '';
         installPhase = "touch $out";
       };
-
-in
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "extraOptions" ] [ "services" "hercules-ci-agent" "settings" ])
-    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "baseDirectory" ] [ "services" "hercules-ci-agent" "settings" "baseDirectory" ])
-    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "concurrentTasks" ] [ "services" "hercules-ci-agent" "settings" "concurrentTasks" ])
-    (mkRemovedOptionModule [ "services" "hercules-ci-agent" "patchNix" ] "Nix versions packaged in this version of Nixpkgs don't need a patched nix-daemon to work correctly in Hercules CI Agent clusters.")
+    (mkRenamedOptionModule ["services" "hercules-ci-agent" "extraOptions"] ["services" "hercules-ci-agent" "settings"])
+    (mkRenamedOptionModule ["services" "hercules-ci-agent" "baseDirectory"] ["services" "hercules-ci-agent" "settings" "baseDirectory"])
+    (mkRenamedOptionModule ["services" "hercules-ci-agent" "concurrentTasks"] ["services" "hercules-ci-agent" "settings" "concurrentTasks"])
+    (mkRemovedOptionModule ["services" "hercules-ci-agent" "patchNix"] "Nix versions packaged in this version of Nixpkgs don't need a patched nix-daemon to work correctly in Hercules CI Agent clusters.")
   ];
 
   options.services.hercules-ci-agent = {
@@ -224,15 +226,15 @@ in
 
         For the exhaustive list of settings, see <link xlink:href="https://docs.hercules-ci.com/hercules-ci/reference/agent-config/"/>.
       '';
-      type = types.submoduleWith { modules = [ settingsModule ]; };
+      type = types.submoduleWith {modules = [settingsModule];};
     };
 
     /*
-      Internal and/or computed values.
-
-      These are written as options instead of let binding to allow sharing with
-      default.nix on both NixOS and nix-darwin.
-    */
+     Internal and/or computed values.
+     
+     These are written as options instead of let binding to allow sharing with
+     default.nix on both NixOS and nix-darwin.
+     */
     tomlFile = mkOption {
       type = types.path;
       internal = true;
@@ -255,7 +257,7 @@ in
 
       settings.labels = {
         agent.source =
-          if options.services.hercules-ci-agent.package.highestPrio == (lib.modules.mkOptionDefault { }).priority
+          if options.services.hercules-ci-agent.package.highestPrio == (lib.modules.mkOptionDefault {}).priority
           then "nixpkgs"
           else lib.mkOptionDefault "override";
         pkgs.version = pkgs.lib.version;

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, watchdog
-, dataclasses
-, pytest-timeout
-, pytest-xprocess
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  watchdog,
+  dataclasses,
+  pytest-timeout,
+  pytest-xprocess,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "werkzeug";
   version = "2.0.2";
@@ -23,12 +23,14 @@ buildPythonPackage rec {
     sha256 = "sha256-qiu2/I3ujWxQTArB5/X33FgQqZA+eTtvcVqfAVva25o=";
   };
 
-  propagatedBuildInputs = lib.optionals (!stdenv.isDarwin) [
-    # watchdog requires macos-sdk 10.13+
-    watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs =
+    lib.optionals (!stdenv.isDarwin) [
+      # watchdog requires macos-sdk 10.13+
+      watchdog
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      dataclasses
+    ];
 
   checkInputs = [
     pytest-timeout
@@ -56,6 +58,6 @@ buildPythonPackage rec {
       utility libraries.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

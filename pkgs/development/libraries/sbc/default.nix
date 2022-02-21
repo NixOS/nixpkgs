@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libsndfile }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libsndfile,
+}:
 stdenv.mkDerivation rec {
   pname = "sbc";
   version = "1.4";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jal98pnrjkzxlkiqy0ykh4qmgnydz9bmsp1jn581p5kddpg92si";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsndfile ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libsndfile];
 
   meta = with lib; {
     description = "SubBand Codec Library";

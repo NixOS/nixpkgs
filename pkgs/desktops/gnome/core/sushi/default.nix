@@ -1,26 +1,27 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, gettext
-, gobject-introspection
-, glib
-, gnome
-, gtksourceview4
-, gjs
-, libsoup
-, webkitgtk
-, icu
-, wrapGAppsHook
-, gst_all_1
-, gdk-pixbuf
-, librsvg
-, gtk3
-, harfbuzz
-, ninja
-, libepoxy
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  gettext,
+  gobject-introspection,
+  glib,
+  gnome,
+  gtksourceview4,
+  gjs,
+  libsoup,
+  webkitgtk,
+  icu,
+  wrapGAppsHook,
+  gst_all_1,
+  gdk-pixbuf,
+  librsvg,
+  gtk3,
+  harfbuzz,
+  ninja,
+  libepoxy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sushi";
   version = "41.0";

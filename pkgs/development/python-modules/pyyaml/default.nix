@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cython
-, libyaml
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  libyaml,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "PyYAML";
   version = "6.0";
@@ -20,9 +20,9 @@ buildPythonPackage rec {
     sha256 = "sha256-wcII32mRgRRmAgojntyxBMQkjvxU2jylCgVzlHAj2Xc=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [cython];
 
-  buildInputs = [ libyaml ];
+  buildInputs = [libyaml];
 
   checkPhase = ''
     runHook preCheck
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "yaml" ];
+  pythonImportsCheck = ["yaml"];
 
   meta = with lib; {
     description = "The next generation YAML parser and emitter for Python";
     homepage = "https://github.com/yaml/pyyaml";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

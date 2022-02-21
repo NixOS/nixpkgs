@@ -1,8 +1,10 @@
-{ stdenv, lib, unstick, requireFile
-, supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
-}:
-
-let
+{
+  stdenv,
+  lib,
+  unstick,
+  requireFile,
+  supportedDevices ? ["Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA"],
+}: let
   deviceIds = {
     "Arria II" = "arria_lite";
     "Cyclone V" = "cyclonev";
@@ -12,17 +14,19 @@ let
     "MAX 10 FPGA" = "max10";
   };
 
-  supportedDeviceIds =
-    assert lib.assertMsg (lib.all (name: lib.hasAttr name deviceIds) supportedDevices)
-      "Supported devices are: ${lib.concatStringsSep ", " (lib.attrNames deviceIds)}";
+  supportedDeviceIds = assert lib.assertMsg (lib.all (name: lib.hasAttr name deviceIds) supportedDevices)
+  "Supported devices are: ${lib.concatStringsSep ", " (lib.attrNames deviceIds)}";
     lib.listToAttrs (map (name: {
       inherit name;
       value = deviceIds.${name};
-    }) supportedDevices);
+    })
+    supportedDevices);
 
-  unsupportedDeviceIds = lib.filterAttrs (name: value:
-    !(lib.hasAttr name supportedDeviceIds)
-  ) deviceIds;
+  unsupportedDeviceIds = lib.filterAttrs (
+    name: value:
+      !(lib.hasAttr name supportedDeviceIds)
+  )
+  deviceIds;
 
   componentHashes = {
     "arria_lite" = "140jqnb97vrxx6398cpgpw35zrrx3z5kv1x5gr9is1xdbnf4fqhy";
@@ -36,46 +40,56 @@ let
   version = "20.1.1.720";
   homepage = "https://fpgasoftware.intel.com";
 
-  require = {name, sha256}: requireFile {
-    inherit name sha256;
-    url = "${homepage}/${lib.versions.majorMinor version}/?edition=lite&platform=linux";
-  };
+  require = {
+    name,
+    sha256,
+  }:
+    requireFile {
+      inherit name sha256;
+      url = "${homepage}/${lib.versions.majorMinor version}/?edition=lite&platform=linux";
+    };
+in
+  stdenv.mkDerivation rec {
+    inherit version;
+    pname = "quartus-prime-lite-unwrapped";
 
-in stdenv.mkDerivation rec {
-  inherit version;
-  pname = "quartus-prime-lite-unwrapped";
+    src = map require ([
+      {
+        name = "QuartusLiteSetup-${version}-linux.run";
+        sha256 = "0mjp1rg312dipr7q95pb4nf4b8fwvxgflnd1vafi3g9cshbb1c3k";
+      }
+      {
+        name = "ModelSimSetup-${version}-linux.run";
+        sha256 = "1cqgv8x6vqga8s4v19yhmgrr886rb6p7sbx80528df5n4rpr2k4i";
+      }
+    ]
+    ++ (map (id: {
+      name = "${id}-${version}.qdz";
+      sha256 = lib.getAttr id componentHashes;
+    }) (lib.attrValues supportedDeviceIds)));
 
-  src = map require ([{
-    name = "QuartusLiteSetup-${version}-linux.run";
-    sha256 = "0mjp1rg312dipr7q95pb4nf4b8fwvxgflnd1vafi3g9cshbb1c3k";
-  } {
-    name = "ModelSimSetup-${version}-linux.run";
-    sha256 = "1cqgv8x6vqga8s4v19yhmgrr886rb6p7sbx80528df5n4rpr2k4i";
-  }] ++ (map (id: {
-    name = "${id}-${version}.qdz";
-    sha256 = lib.getAttr id componentHashes;
-  }) (lib.attrValues supportedDeviceIds)));
+    nativeBuildInputs = [unstick];
 
-  nativeBuildInputs = [ unstick ];
-
-  buildCommand = let
-    installers = lib.sublist 0 2 src;
-    components = lib.sublist 2 ((lib.length src) - 2) src;
-    copyInstaller = installer: ''
+    buildCommand = let
+      installers = lib.sublist 0 2 src;
+      components = lib.sublist 2 ((lib.length src) - 2) src;
+      copyInstaller = installer: ''
         # `$(cat $NIX_CC/nix-support/dynamic-linker) $src[0]` often segfaults, so cp + patchelf
         cp ${installer} $TEMP/${installer.name}
         chmod u+w,+x $TEMP/${installer.name}
         patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $TEMP/${installer.name}
       '';
-    copyComponent = component: "cp ${component} $TEMP/${component.name}";
-    # leaves enabled: quartus, modelsim_ase, devinfo
-    disabledComponents = [
-      "quartus_help"
-      "quartus_update"
-      # not modelsim_ase
-      "modelsim_ae"
-    ] ++ (lib.attrValues unsupportedDeviceIds);
-  in ''
+      copyComponent = component: "cp ${component} $TEMP/${component.name}";
+      # leaves enabled: quartus, modelsim_ase, devinfo
+      disabledComponents =
+        [
+          "quartus_help"
+          "quartus_update"
+          # not modelsim_ase
+          "modelsim_ae"
+        ]
+        ++ (lib.attrValues unsupportedDeviceIds);
+    in ''
       ${lib.concatMapStringsSep "\n" copyInstaller installers}
       ${lib.concatMapStringsSep "\n" copyComponent components}
 
@@ -86,12 +100,12 @@ in stdenv.mkDerivation rec {
       rm -r $out/uninstall $out/logs
     '';
 
-  meta = with lib; {
-    inherit homepage;
-    description = "FPGA design and simulation software";
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    hydraPlatforms = [ ]; # requireFile srcs cannot be fetched by hydra, ignore
-    maintainers = with maintainers; [ kwohlfahrt ];
-  };
-}
+    meta = with lib; {
+      inherit homepage;
+      description = "FPGA design and simulation software";
+      license = licenses.unfree;
+      platforms = platforms.linux;
+      hydraPlatforms = []; # requireFile srcs cannot be fetched by hydra, ignore
+      maintainers = with maintainers; [kwohlfahrt];
+    };
+  }

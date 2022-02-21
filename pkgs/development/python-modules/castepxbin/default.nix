@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, pymatgen
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  pymatgen,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "castepxbin";
   version = "0.2.0";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "A collection of readers for CASTEP binary outputs";
     homepage = "https://github.com/zhubonan/castepxbin";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

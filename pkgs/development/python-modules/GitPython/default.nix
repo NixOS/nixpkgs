@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, git
-, gitdb
-, ddt
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
+  git,
+  gitdb,
+  ddt,
+  pythonOlder,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "gitpython";
   version = "3.1.25";
@@ -28,22 +28,24 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    gitdb
-    ddt
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      gitdb
+      ddt
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      typing-extensions
+    ];
 
   # Tests require a git repo
   doCheck = false;
 
-  pythonImportsCheck = [ "git" ];
+  pythonImportsCheck = ["git"];
 
   meta = with lib; {
     description = "Python Git Library";
     homepage = "https://github.com/gitpython-developers/GitPython";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

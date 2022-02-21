@@ -1,10 +1,10 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-protocol-updater
-, tezos-protocol-compiler
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-protocol-updater,
+  tezos-protocol-compiler,
 }:
-
 buildDunePackage {
   pname = "tezos-validation";
   inherit (tezos-stdlib) version useDune2;
@@ -20,7 +20,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: library for blocks validation";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: library for blocks validation";
+    };
 }

@@ -1,13 +1,12 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ocaml
-
-, alcotest
-, eqaf
-, fmt
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml,
+  alcotest,
+  eqaf,
+  fmt,
 }:
-
 buildDunePackage rec {
   pname = "callipyge";
   version = "0.2";
@@ -21,16 +20,16 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  propagatedBuildInputs = [ fmt eqaf ];
+  propagatedBuildInputs = [fmt eqaf];
 
   # alcotest isn't available for OCaml < 4.05 due to fmt
   doCheck = lib.versionAtLeast ocaml.version "4.05";
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
 
   meta = {
     homepage = "https://github.com/oklm-wsh/Callipyge";
     description = "Curve25519 in OCaml";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fufexan ];
+    maintainers = with lib.maintainers; [fufexan];
   };
 }

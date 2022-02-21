@@ -1,5 +1,13 @@
-{ lib, gccStdenv, fetchFromGitHub, cmake, pkg-config, pcre, zlib, sqlite }:
-
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  pcre,
+  zlib,
+  sqlite,
+}:
 gccStdenv.mkDerivation {
   pname = "falcon";
   version = "unstable-2018-10-23";
@@ -15,13 +23,13 @@ gccStdenv.mkDerivation {
   # causing compilation to fail.
   NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ pcre zlib sqlite ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [pcre zlib sqlite];
 
   meta = with lib; {
     description = "Programming language with macros and syntax at once";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = with platforms; unix;
   };
 }

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   generationsDirBuilder = pkgs.substituteAll {
     src = ./generations-dir-builder.sh;
     isExecutable = true;
@@ -11,14 +12,9 @@ let
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
     inherit (config.boot.loader.generationsDir) copyKernels;
   };
-
-in
-
-{
+in {
   options = {
-
     boot.loader.generationsDir = {
-
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -46,17 +42,12 @@ in
           /nix/store is not needed by the boot loader.
         '';
       };
-
     };
-
   };
 
-
   config = mkIf config.boot.loader.generationsDir.enable {
-
     system.build.installBootLoader = generationsDirBuilder;
     system.boot.loader.id = "generationsDir";
     system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
-
   };
 }

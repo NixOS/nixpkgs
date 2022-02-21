@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, zlib, libarchive, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  libarchive,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   version = "1.0";
   pname = "makerpm";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     cp makerpm $out/bin
   '';
 
-  buildInputs = [ zlib libarchive openssl ];
+  buildInputs = [zlib libarchive openssl];
 
   src = fetchFromGitHub {
     owner = "ivan-tkatchev";
@@ -23,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "A clean, simple RPM packager reimplemented completely from scratch";
     license = licenses.free;
     platforms = platforms.all;
-    maintainers = [ maintainers.ivan-tkatchev ];
+    maintainers = [maintainers.ivan-tkatchev];
   };
 }

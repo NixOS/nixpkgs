@@ -1,9 +1,9 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-client-base
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-client-base,
 }:
-
 buildDunePackage {
   pname = "tezos-signer-services";
   inherit (tezos-stdlib) version useDune2;
@@ -15,7 +15,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: descriptions of RPCs exported by `tezos-signer`";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: descriptions of RPCs exported by `tezos-signer`";
+    };
 }

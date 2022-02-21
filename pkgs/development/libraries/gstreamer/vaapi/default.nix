@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gst-plugins-base
-, bzip2
-, libva
-, wayland
-, libdrm
-, udev
-, xorg
-, libGLU
-, libGL
-, gstreamer
-, gst-plugins-bad
-, nasm
-, libvpx
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gst-plugins-base,
+  bzip2,
+  libva,
+  wayland,
+  libdrm,
+  udev,
+  xorg,
+  libGLU,
+  libGL,
+  gstreamer,
+  gst-plugins-bad,
+  nasm,
+  libvpx,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gstreamer-vaapi";
   version = "1.20.0";
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [tstrobel];
     platforms = platforms.linux;
   };
 }

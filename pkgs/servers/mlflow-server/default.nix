@@ -1,16 +1,20 @@
-{lib, python3, writeText}:
-
-let
+{
+  lib,
+  python3,
+  writeText,
+}: let
   py = python3.pkgs;
 in
-py.toPythonApplication
-  (py.mlflow.overridePythonAttrs(old: rec {
+  py.toPythonApplication
+  (py.mlflow.overridePythonAttrs (old: rec {
     pname = "mlflow-server";
 
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [
-      py.boto3
-      py.mysqlclient
-    ];
+    propagatedBuildInputs =
+      old.propagatedBuildInputs
+      ++ [
+        py.boto3
+        py.mysqlclient
+      ];
 
     postPatch = ''
       substituteInPlace mlflow/utils/process.py --replace \
@@ -20,18 +24,18 @@ py.toPythonApplication
 
     gunicornScript = writeText "gunicornMlflow"
     ''
-        #!/usr/bin/env python
-        import re
-        import sys
-        from gunicorn.app.wsgiapp import run
-        if __name__ == '__main__':
-          sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', ''', sys.argv[0])
-          sys.exit(run())
-      '';
+      #!/usr/bin/env python
+      import re
+      import sys
+      from gunicorn.app.wsgiapp import run
+      if __name__ == '__main__':
+        sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', ''', sys.argv[0])
+        sys.exit(run())
+    '';
 
     postInstall = ''
       gpath=$out/bin/gunicornMlflow
       cp ${gunicornScript} $gpath
       chmod 555 $gpath
     '';
-}))
+  }))

@@ -1,7 +1,11 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+import ./make-test-python.nix ({
+  lib,
+  pkgs,
+  ...
+}: {
   name = "riak";
   meta = with lib.maintainers; {
-    maintainers = [ Br1ght0ne ];
+    maintainers = [Br1ght0ne];
   };
 
   machine = {

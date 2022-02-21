@@ -1,19 +1,20 @@
-{ lib, stdenv
-, fetchurl
-, glib
-, pkg-config
-, perl
-, gettext
-, gobject-introspection
-, gnome
-, gtk-doc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  pkg-config,
+  perl,
+  gettext,
+  gobject-introspection,
+  gnome,
+  gtk-doc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libgtop";
   version = "2.40.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

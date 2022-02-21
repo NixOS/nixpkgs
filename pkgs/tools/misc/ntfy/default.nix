@@ -1,5 +1,9 @@
-{ lib, python3Packages, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
@@ -16,8 +20,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    requests ruamel-yaml appdirs
-    sleekxmpp dnspython
+    requests
+    ruamel-yaml
+    appdirs
+    sleekxmpp
+    dnspython
     emoji
     psutil
     matrix-client
@@ -44,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     description = "A utility for sending notifications, on demand and when commands finish";
     homepage = "http://ntfy.rtfd.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jfrankenau kamilchm ];
+    maintainers = with maintainers; [jfrankenau kamilchm];
   };
 }

@@ -1,11 +1,11 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, makeWrapper
-, ncurses
-, stdenv
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  ncurses,
+  stdenv,
 }:
-
 buildGoModule rec {
   pname = "wtf";
   version = "0.41.0";
@@ -21,11 +21,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     mv "$out/bin/wtf" "$out/bin/wtfutil"
@@ -37,7 +37,7 @@ buildGoModule rec {
     homepage = "https://wtfutil.com/";
     changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
     broken = stdenv.isDarwin;
   };

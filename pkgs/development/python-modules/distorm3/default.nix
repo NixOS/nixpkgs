@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, yasm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  yasm,
 }:
-
 buildPythonPackage rec {
   pname = "distorm3";
   version = "3.5.2";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     "test_dummy"
   ];
 
-  pythonImportsCheck = [ "distorm3" ];
+  pythonImportsCheck = ["distorm3"];
 
   meta = with lib; {
     description = "Disassembler library for x86/AMD64";
     homepage = "https://github.com/gdabah/distorm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

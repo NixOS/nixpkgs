@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-mock,
 }:
-
 buildPythonPackage rec {
   pname = "async_stagger";
   version = "0.3.1";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Happy Eyeballs connection algorithm and underlying scheduling logic in asyncio";
     homepage = "https://github.com/twisteroidambassador/async_stagger";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchgit, cmake, perl, libubox, json_c }:
-
+{
+  stdenv,
+  lib,
+  fetchgit,
+  cmake,
+  perl,
+  libubox,
+  json_c,
+}:
 stdenv.mkDerivation {
   pname = "uqmi";
   version = "unstable-2019-06-27";
@@ -15,14 +22,14 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ cmake perl ];
-  buildInputs = [ libubox json_c ];
+  nativeBuildInputs = [cmake perl];
+  buildInputs = [libubox json_c];
 
   meta = with lib; {
     description = "Tiny QMI command line utility";
     homepage = "https://git.openwrt.org/?p=project/uqmi.git;a=summary";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

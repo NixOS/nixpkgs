@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromSourcehut, scdoc }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  scdoc,
+}:
 buildGoModule rec {
   pname = "kiln";
   version = "0.2.1";
@@ -11,7 +15,7 @@ buildGoModule rec {
     hash = "sha256-c6ed62Nn++qw+U/DCiYeGwF77YsBxexWKZ7UQ3LE4fI=";
   };
 
-  nativeBuildInputs = [ scdoc ];
+  nativeBuildInputs = [scdoc];
 
   vendorSha256 = "sha256-bMpzebwbVHAbBtw0uuGyWd4wnM9z6tlsEQN4S/iucgk=";
 
@@ -25,6 +29,6 @@ buildGoModule rec {
     description = "A simple static site generator for Gemini";
     homepage = "https://git.sr.ht/~adnano/kiln";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "libpyfoscam";
   version = "1.1";
@@ -15,12 +15,12 @@ buildPythonPackage rec {
   # tests need access to a camera
   doCheck = false;
 
-  pythonImportsCheck = [ "libpyfoscam" ];
+  pythonImportsCheck = ["libpyfoscam"];
 
   meta = with lib; {
     description = "Python Library for Foscam IP Cameras";
     homepage = "https://github.com/viswa-swami/python-foscam";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

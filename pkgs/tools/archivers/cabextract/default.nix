@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "cabextract";
   version = "1.9.1";
@@ -20,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Free Software for extracting Microsoft cabinet files";
     platforms = platforms.all;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

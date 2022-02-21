@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, freezegun
-, mock
-, pyjwt
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  freezegun,
+  mock,
+  pyjwt,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "notifications-python-client";
   version = "6.3.0";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the GOV.UK Notify API";
     homepage = "https://github.com/alphagov/notifications-python-client";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

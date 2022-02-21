@@ -1,12 +1,9 @@
-import ./make-test-python.nix ({ lib, ... }:
-
-  with lib;
-
-  {
+import ./make-test-python.nix ({lib, ...}:
+  with lib; {
     name = "nzbhydra2";
-    meta.maintainers = with maintainers; [ jamiemagee ];
+    meta.maintainers = with maintainers; [jamiemagee];
 
-    nodes.machine = { pkgs, ... }: { services.nzbhydra2.enable = true; };
+    nodes.machine = {pkgs, ...}: {services.nzbhydra2.enable = true;};
 
     testScript = ''
       machine.start()

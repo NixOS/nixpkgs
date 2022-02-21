@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchhg
-, pkg-config
-, meson
-, ninja
-, gtk3
-, json_c
-, libpulseaudio
-, wayland
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchhg,
+  pkg-config,
+  meson,
+  ninja,
+  gtk3,
+  json_c,
+  libpulseaudio,
+  wayland,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rootbar";
   version = "unstable-2020-11-13";
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config wrapGAppsHook
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
       was designed to address the lack of good bars for wayland.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, rustPlatform
-, yabridge
-, makeWrapper
-, wine
+{
+  lib,
+  rustPlatform,
+  yabridge,
+  makeWrapper,
+  wine,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "yabridgectl";
   version = yabridge.version;
@@ -20,20 +20,20 @@ rustPlatform.buildRustPackage rec {
     ./libyabridge-from-nix-profiles.patch
   ];
 
-  patchFlags = [ "-p3" ];
+  patchFlags = ["-p3"];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postFixup = ''
     wrapProgram "$out/bin/yabridgectl" \
-      --prefix PATH : ${lib.makeBinPath [ wine ]}
+      --prefix PATH : ${lib.makeBinPath [wine]}
   '';
 
   meta = with lib; {
     description = "A small, optional utility to help set up and update yabridge for several directories at once";
     homepage = "https://github.com/robbert-vdh/yabridge/tree/master/tools/yabridgectl";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [kira-bruneau];
     platforms = yabridge.meta.platforms;
   };
 }

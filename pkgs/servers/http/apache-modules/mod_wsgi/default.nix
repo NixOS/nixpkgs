@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, apacheHttpd, python, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  apacheHttpd,
+  python,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "mod_wsgi";
   version = "4.9.0";
@@ -11,11 +17,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-gaWA6m4ENYtm88hCaoqrcIooA0TBI7Kj6fU6pPShoo4=";
   };
 
-  buildInputs = [ apacheHttpd python ncurses ];
+  buildInputs = [apacheHttpd python ncurses];
 
   patchPhase = ''
     sed -r -i -e "s|^LIBEXECDIR=.*$|LIBEXECDIR=$out/modules|" \
-      ${if stdenv.isDarwin then "-e 's|/usr/bin/lipo|lipo|'" else ""} \
+      ${
+      if stdenv.isDarwin
+      then "-e 's|/usr/bin/lipo|lipo|'"
+      else ""
+    } \
       configure
   '';
 

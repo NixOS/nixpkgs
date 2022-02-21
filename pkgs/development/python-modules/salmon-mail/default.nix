@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, dnspython, chardet, lmtpd
-, python-daemon, six, jinja2, mock, click }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dnspython,
+  chardet,
+  lmtpd,
+  python-daemon,
+  six,
+  jinja2,
+  mock,
+  click,
+}:
 buildPythonPackage rec {
   pname = "salmon-mail";
   version = "3.2.0";
@@ -10,8 +20,8 @@ buildPythonPackage rec {
     sha256 = "0q2m6xri1b7qv46rqpv2qfdgk2jvswj8lpaacnxwjna3m685fhfx";
   };
 
-  checkInputs = [ jinja2 mock ];
-  propagatedBuildInputs = [ chardet dnspython lmtpd python-daemon six click ];
+  checkInputs = [jinja2 mock];
+  propagatedBuildInputs = [chardet dnspython lmtpd python-daemon six click];
 
   # Darwin tests fail without this. See:
   # https://github.com/NixOS/nixpkgs/pull/82166#discussion_r399909846
@@ -29,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://salmon-mail.readthedocs.org/";
     description = "Pythonic mail application server";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

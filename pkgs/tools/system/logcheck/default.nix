@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchurl, lockfileProgs, perlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lockfileProgs,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "logcheck";
   version = "1.3.23";
-  _name    = "logcheck_${version}";
+  _name = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
@@ -43,6 +48,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://salsa.debian.org/debian/logcheck";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bluescreen303 ];
+    maintainers = [maintainers.bluescreen303];
   };
 }

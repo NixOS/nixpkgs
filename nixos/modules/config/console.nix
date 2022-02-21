@@ -1,17 +1,18 @@
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.console;
 
-  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
+  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2 * i) 2 x);
 
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
   optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
+    nativeBuildInputs = [pkgs.buildPackages.kbd];
     LOADKEYS_KEYMAP_PATH = "${consoleEnv}/share/keymaps/**";
     preferLocalBuild = true;
   } ''
@@ -26,7 +27,7 @@ let
 
   consoleEnv = pkgs.buildEnv {
     name = "console-env";
-    paths = [ pkgs.kbd ] ++ cfg.packages;
+    paths = [pkgs.kbd] ++ cfg.packages;
     pathsToLink = [
       "/share/consolefonts"
       "/share/consoletrans"
@@ -36,12 +37,10 @@ let
   };
 
   setVconsole = !config.boot.isContainer;
-in
-
-{
+in {
   ###### interface
 
-  options.console  = {
+  options.console = {
     font = mkOption {
       type = with types; either str path;
       default = "Lat2-Terminus16";
@@ -67,10 +66,22 @@ in
       type = types.listOf types.str;
       default = [];
       example = [
-        "002b36" "dc322f" "859900" "b58900"
-        "268bd2" "d33682" "2aa198" "eee8d5"
-        "002b36" "cb4b16" "586e75" "657b83"
-        "839496" "6c71c4" "93a1a1" "fdf6e3"
+        "002b36"
+        "dc322f"
+        "859900"
+        "b58900"
+        "268bd2"
+        "d33682"
+        "2aa198"
+        "eee8d5"
+        "002b36"
+        "cb4b16"
+        "586e75"
+        "657b83"
+        "839496"
+        "6c71c4"
+        "93a1a1"
+        "fdf6e3"
       ];
       description = ''
         The 16 colors palette used by the virtual consoles.
@@ -78,12 +89,11 @@ in
         Colors must be in hexadecimal format and listed in
         order from color 0 to color 15.
       '';
-
     };
 
     packages = mkOption {
       type = types.listOf types.package;
-      default = [ ];
+      default = [];
       description = ''
         List of additional packages that provide console fonts, keymaps and
         other resources for virtual consoles use.
@@ -106,23 +116,23 @@ in
         Enable setting virtual console options as early as possible (in initrd).
       '';
     };
-
   };
-
 
   ###### implementation
 
   config = mkMerge [
-    { console.keyMap = with config.services.xserver;
+    {
+      console.keyMap = with config.services.xserver;
         mkIf cfg.useXkbConfig
-          (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
-            '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
-              ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
-                "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
-              } \
-              -model '${xkbModel}' -layout '${layout}' \
-              -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
-          '');
+        (pkgs.runCommand "xkb-console-keymap" {preferLocalBuild = true;} ''
+          '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
+            ${
+            optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
+            "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
+          } \
+            -model '${xkbModel}' -layout '${layout}' \
+            -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
+        '');
     }
 
     (mkIf (!setVconsole) {
@@ -130,7 +140,8 @@ in
     })
 
     (mkIf setVconsole (mkMerge [
-      { environment.systemPackages = [ pkgs.kbd ];
+      {
+        environment.systemPackages = [pkgs.kbd];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
@@ -139,26 +150,36 @@ in
         environment.etc.kbd.source = "${consoleEnv}/share";
 
         boot.initrd.preLVMCommands = mkBefore ''
-          kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
-          printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
+          kbd_mode ${
+            if isUnicode
+            then "-u"
+            else "-a"
+          } -C /dev/console
+          printf "\033%%${
+            if isUnicode
+            then "G"
+            else "@"
+          }" >> /dev/console
           loadkmap < ${optimizedKeymap}
 
-          ${optionalString cfg.earlySetup ''
-            setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
-          ''}
+          ${
+            optionalString cfg.earlySetup ''
+              setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
+            ''
+          }
         '';
 
-        systemd.services.reload-systemd-vconsole-setup =
-          { description = "Reset console on configuration changes";
-            wantedBy = [ "multi-user.target" ];
-            restartTriggers = [ vconsoleConf consoleEnv ];
-            reloadIfChanged = true;
-            serviceConfig =
-              { RemainAfterExit = true;
-                ExecStart = "${pkgs.coreutils}/bin/true";
-                ExecReload = "/run/current-system/systemd/bin/systemctl restart systemd-vconsole-setup";
-              };
+        systemd.services.reload-systemd-vconsole-setup = {
+          description = "Reset console on configuration changes";
+          wantedBy = ["multi-user.target"];
+          restartTriggers = [vconsoleConf consoleEnv];
+          reloadIfChanged = true;
+          serviceConfig = {
+            RemainAfterExit = true;
+            ExecStart = "${pkgs.coreutils}/bin/true";
+            ExecReload = "/run/current-system/systemd/bin/systemctl restart systemd-vconsole-setup";
           };
+        };
       }
 
       (mkIf (cfg.colors != []) {
@@ -172,11 +193,17 @@ in
       (mkIf cfg.earlySetup {
         boot.initrd.extraUtilsCommands = ''
           mkdir -p $out/share/consolefonts
-          ${if substring 0 1 cfg.font == "/" then ''
-            font="${cfg.font}"
-          '' else ''
-            font="$(echo ${consoleEnv}/share/consolefonts/${cfg.font}.*)"
-          ''}
+          ${
+            if substring 0 1 cfg.font == "/"
+            then
+              ''
+                font="${cfg.font}"
+              ''
+            else
+              ''
+                font="$(echo ${consoleEnv}/share/consolefonts/${cfg.font}.*)"
+              ''
+          }
           if [[ $font == *.gz ]]; then
             gzip -cd $font > $out/share/consolefonts/font.psf
           else
@@ -188,14 +215,14 @@ in
   ];
 
   imports = [
-    (mkRenamedOptionModule [ "i18n" "consoleFont" ] [ "console" "font" ])
-    (mkRenamedOptionModule [ "i18n" "consoleKeyMap" ] [ "console" "keyMap" ])
-    (mkRenamedOptionModule [ "i18n" "consoleColors" ] [ "console" "colors" ])
-    (mkRenamedOptionModule [ "i18n" "consolePackages" ] [ "console" "packages" ])
-    (mkRenamedOptionModule [ "i18n" "consoleUseXkbConfig" ] [ "console" "useXkbConfig" ])
-    (mkRenamedOptionModule [ "boot" "earlyVconsoleSetup" ] [ "console" "earlySetup" ])
-    (mkRenamedOptionModule [ "boot" "extraTTYs" ] [ "console" "extraTTYs" ])
-    (mkRemovedOptionModule [ "console" "extraTTYs" ] ''
+    (mkRenamedOptionModule ["i18n" "consoleFont"] ["console" "font"])
+    (mkRenamedOptionModule ["i18n" "consoleKeyMap"] ["console" "keyMap"])
+    (mkRenamedOptionModule ["i18n" "consoleColors"] ["console" "colors"])
+    (mkRenamedOptionModule ["i18n" "consolePackages"] ["console" "packages"])
+    (mkRenamedOptionModule ["i18n" "consoleUseXkbConfig"] ["console" "useXkbConfig"])
+    (mkRenamedOptionModule ["boot" "earlyVconsoleSetup"] ["console" "earlySetup"])
+    (mkRenamedOptionModule ["boot" "extraTTYs"] ["console" "extraTTYs"])
+    (mkRemovedOptionModule ["console" "extraTTYs"] ''
       Since NixOS switched to systemd (circa 2012), TTYs have been spawned on
       demand, so there is no need to configure them manually.
     '')

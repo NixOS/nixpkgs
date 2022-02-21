@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "mss";
   version = "6.1.0";
@@ -16,12 +20,12 @@ buildPythonPackage rec {
   '';
 
   # Skipping tests due to most relying on DISPLAY being set
-  pythonImportsCheck = [ "mss" ];
+  pythonImportsCheck = ["mss"];
 
   meta = with lib; {
     description = "Cross-platform multiple screenshots module in pure Python";
     homepage = "https://github.com/BoboTiG/python-mss";
     license = licenses.mit;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [austinbutler];
   };
 }

@@ -4,28 +4,29 @@
 #
 # The wrapper has to be static so LD_* environment variables
 # cannot affect the execution of the wrapper itself.
+{
+  lib,
+  stdenv,
+  pkgsStatic,
+  enableDebug ? false,
+}: name: emulator:
+  pkgsStatic.stdenv.mkDerivation {
+    inherit name;
 
-{ lib, stdenv, pkgsStatic, enableDebug ? false }:
+    src = ./binfmt-p-wrapper.c;
 
-name: emulator:
+    dontUnpack = true;
+    dontInstall = true;
 
-pkgsStatic.stdenv.mkDerivation {
-  inherit name;
+    buildPhase = ''
+      runHook preBuild
 
-  src = ./binfmt-p-wrapper.c;
+      mkdir -p $out/bin
+      $CC -o $out/bin/${name} -static -std=c99 -O2 \
+          -DTARGET_QEMU=\"${emulator}\" \
+          ${lib.optionalString enableDebug "-DDEBUG"} \
+          $src
 
-  dontUnpack = true;
-  dontInstall = true;
-
-  buildPhase = ''
-    runHook preBuild
-
-    mkdir -p $out/bin
-    $CC -o $out/bin/${name} -static -std=c99 -O2 \
-        -DTARGET_QEMU=\"${emulator}\" \
-        ${lib.optionalString enableDebug "-DDEBUG"} \
-        $src
-
-    runHook postBuild
-  '';
-}
+      runHook postBuild
+    '';
+  }

@@ -1,11 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, pkg-config, which, perl, libXrandr
-, cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
-, wayland, wayland-protocols
-, libXinerama, libnotify, pango, xorgproto, librsvg
-, testVersion, dunst
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  which,
+  perl,
+  libXrandr,
+  cairo,
+  dbus,
+  systemd,
+  gdk-pixbuf,
+  glib,
+  libX11,
+  libXScrnSaver,
+  wayland,
+  wayland-protocols,
+  libXinerama,
+  libnotify,
+  pango,
+  xorgproto,
+  librsvg,
+  testVersion,
+  dunst,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dunst";
   version = "1.7.3";
@@ -17,15 +35,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8s8g1J8vEogCp29tSwX5eqYTDf1dLoyBznnwAlCMQOU=";
   };
 
-  nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];
+  nativeBuildInputs = [perl pkg-config which systemd makeWrapper];
 
   buildInputs = [
-    cairo dbus gdk-pixbuf glib libX11 libXScrnSaver
-    libXinerama libnotify pango xorgproto librsvg libXrandr
-    wayland wayland-protocols
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    libX11
+    libXScrnSaver
+    libXinerama
+    libnotify
+    pango
+    xorgproto
+    librsvg
+    libXrandr
+    wayland
+    wayland-protocols
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -40,7 +69,7 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
-  passthru.tests.version = testVersion { package = dunst; };
+  passthru.tests.version = testVersion {package = dunst;};
 
   meta = with lib; {
     description = "Lightweight and customizable notification daemon";
@@ -48,6 +77,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure
     platforms = platforms.linux;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

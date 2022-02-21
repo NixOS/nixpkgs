@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+}:
 stdenv.mkDerivation rec {
   pname = "rtl8821ce";
   version = "${kernel.version}-unstable-2021-11-19";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "18ma8a8h1l90dss0k6al7q6plwr57jc9g67p22g9917k1jfbhm97";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
-  nativeBuildInputs = [ bc ];
+  nativeBuildInputs = [bc];
   buildInputs = kernel.moduleBuildDependencies;
 
   prePatch = ''
@@ -36,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
-    maintainers = with maintainers; [ hhm ivar ];
+    maintainers = with maintainers; [hhm ivar];
   };
 }

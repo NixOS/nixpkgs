@@ -1,5 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, which, qtbase, qtsvg, qttools, qtwebkit }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwebkit,
+}:
 mkDerivation rec {
   pname = "notepadqq";
   version = "1.4.8";
@@ -12,11 +21,15 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config which qttools
+    pkg-config
+    which
+    qttools
   ];
 
   buildInputs = [
-    qtbase qtsvg qtwebkit
+    qtbase
+    qtsvg
+    qtwebkit
   ];
 
   preConfigure = ''
@@ -36,6 +49,6 @@ mkDerivation rec {
     description = "Notepad++-like editor for the Linux desktop";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.rszibele ];
+    maintainers = [maintainers.rszibele];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-lazy-fixture";
   version = "0.6.3";
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Helps to use fixtures in pytest.mark.parametrize";
     homepage = "https://github.com/pytest-dev/pytest-repeat";
     license = licenses.mit;
-    maintainers = with maintainers; [ tobim ];
+    maintainers = with maintainers; [tobim];
   };
 }

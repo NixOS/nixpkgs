@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, libxcb, python3 }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libxcb,
+  python3,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "swaywsr";
   version = "1.1.0";
@@ -13,8 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1pmkyw60ggn5filb47nyf97g1arrw7nfa4yjndnx35zw12mkj61d";
 
-  nativeBuildInputs = [ python3 ];
-  buildInputs = [ libxcb ];
+  nativeBuildInputs = [python3];
+  buildInputs = [libxcb];
 
   # has not tests
   doCheck = false;
@@ -28,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/pedroscaff/swaywsr";
     license = licenses.mit;
-    maintainers = [ maintainers.sebbadk ];
+    maintainers = [maintainers.sebbadk];
   };
 }

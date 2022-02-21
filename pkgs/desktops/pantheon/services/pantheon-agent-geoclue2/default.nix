@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, glib
-, gtk3
-, libgee
-, desktop-file-utils
-, geoclue2
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  glib,
+  gtk3,
+  libgee,
+  desktop-file-utils,
+  geoclue2,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-geoclue2";
   version = "1.0.5";

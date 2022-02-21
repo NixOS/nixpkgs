@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   version = "0.9.19";
   pname = "smenu";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0ZA8Op1IMZMJ7g1waK2uOYOCDfqPfiqnnjopGtBW1w8=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   meta = with lib; {
     homepage = "https://github.com/p-gen/smenu";
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
       your selection will be sent to standard output.
     '';
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ matthiasbeyer SuperSandro2000 ];
+    maintainers = with maintainers; [matthiasbeyer SuperSandro2000];
     platforms = platforms.unix;
   };
 }

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, babashka
-, cacert
-, clojure
-, git
-, jdk
-, obb
-, fetchFromGitHub
-, makeWrapper
-, runCommand }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  babashka,
+  cacert,
+  clojure,
+  git,
+  jdk,
+  obb,
+  fetchFromGitHub,
+  makeWrapper,
+  runCommand,
+}:
 stdenv.mkDerivation rec {
   pname = "obb";
   version = "0.0.2";
@@ -22,9 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "1Gxh4IMtytQCuPS+BWOc5AgjEBxa43ebYfDsxLSPeY0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = [ babashka cacert git jdk ];
+  buildInputs = [babashka cacert git jdk];
 
   configurePhase = ''
     runHook preConfigure

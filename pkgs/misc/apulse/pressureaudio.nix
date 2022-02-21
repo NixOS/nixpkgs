@@ -1,12 +1,18 @@
-{ stdenv, apulse, libpulseaudio, pkg-config, intltool, autoreconfHook }:
-
+{
+  stdenv,
+  apulse,
+  libpulseaudio,
+  pkg-config,
+  intltool,
+  autoreconfHook,
+}:
 stdenv.mkDerivation {
   pname = "libpressureaudio";
   version = apulse.version;
 
   src = libpulseaudio.src;
 
-  nativeBuildInputs = [ pkg-config intltool autoreconfHook ];
+  nativeBuildInputs = [pkg-config intltool autoreconfHook];
 
   dontConfigure = true;
   dontBuild = true;
@@ -59,24 +65,26 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  meta = apulse.meta // {
-    description = "libpulse without any sound daemons over pure ALSA";
-    longDescription = ''
-      apulse (${apulse.meta.homepage}) implements most of libpulse
-      API over pure ALSA in 5% LOC of the original PulseAudio.
+  meta =
+    apulse.meta
+    // {
+      description = "libpulse without any sound daemons over pure ALSA";
+      longDescription = ''
+        apulse (${apulse.meta.homepage}) implements most of libpulse
+        API over pure ALSA in 5% LOC of the original PulseAudio.
 
-      But apulse is made to be used as a wrapper that substitutes its
-      replacement libs into LD_LIBRARY_PATH. The problem with that is
-      that you still have to link against the original libpulse.
+        But apulse is made to be used as a wrapper that substitutes its
+        replacement libs into LD_LIBRARY_PATH. The problem with that is
+        that you still have to link against the original libpulse.
 
-      pressureaudio (http://git.r-36.net/pressureaudio/) wraps apulse
-      with everything you need to replace libpulse completely.
+        pressureaudio (http://git.r-36.net/pressureaudio/) wraps apulse
+        with everything you need to replace libpulse completely.
 
-      This derivation is a reimplementation of pressureaudio in pure
-      nix.
+        This derivation is a reimplementation of pressureaudio in pure
+        nix.
 
-      You can simply override libpulse with this and most
-      packages would just work.
-    '';
-  };
+        You can simply override libpulse with this and most
+        packages would just work.
+      '';
+    };
 }

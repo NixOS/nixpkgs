@@ -1,5 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, django }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  django,
+}:
 buildPythonPackage rec {
   pname = "django-csp";
   version = "3.7";
@@ -13,7 +17,7 @@ buildPythonPackage rec {
   # too complicated to setup - needs a running django instance
   doCheck = false;
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [django];
 
   meta = with lib; {
     description = "Adds Content-Security-Policy headers to Django";

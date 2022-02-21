@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, gawk
-, git
-, gnugrep
-, installShellFiles
-, jre
-, makeWrapper
-, crowdin-cli
-, testVersion
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gawk,
+  git,
+  gnugrep,
+  installShellFiles,
+  jre,
+  makeWrapper,
+  crowdin-cli,
+  testVersion,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "crowdin-cli";
   version = "3.7.7";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9YDWuTniXeTr9t7LzTPBljSrgNw3VeZskFRTlekoMT0=";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper unzip ];
+  nativeBuildInputs = [installShellFiles makeWrapper unzip];
 
   installPhase = ''
     runHook preInstall
@@ -33,18 +33,18 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/crowdin \
       --argv0 crowdin \
       --add-flags "-jar $out/lib/crowdin-cli.jar" \
-      --prefix PATH : ${lib.makeBinPath [ gawk gnugrep git ]}
+      --prefix PATH : ${lib.makeBinPath [gawk gnugrep git]}
 
     runHook postInstall
   '';
 
-  passthru.tests.version = testVersion { package = crowdin-cli; };
+  passthru.tests.version = testVersion {package = crowdin-cli;};
 
   meta = with lib; {
     mainProgram = "crowdin";
     homepage = "https://github.com/crowdin/crowdin-cli/";
     description = "A command-line client for the Crowdin API";
     license = licenses.mit;
-    maintainers = with maintainers; [ DamienCassou ];
+    maintainers = with maintainers; [DamienCassou];
   };
 }

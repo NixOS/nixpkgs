@@ -1,17 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, libarchive
-, libb2
-, bzip2
-, expat
-, lz4
-, xz
-, zlib
-, zstd
-, plugincode
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  libarchive,
+  libb2,
+  bzip2,
+  expat,
+  lz4,
+  xz,
+  zlib,
+  zstd,
+  plugincode,
 }:
-
 buildPythonPackage rec {
   pname = "extractcode-libarchive";
   version = "21.5.31";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
     homepage = "https://github.com/nexB/scancode-plugins/tree/main/builtins/extractcode_libarchive-linux";
-    license = with licenses; [ asl20 bsd2 ];
+    license = with licenses; [asl20 bsd2];
     maintainers = teams.determinatesystems.members;
     platforms = platforms.linux;
   };

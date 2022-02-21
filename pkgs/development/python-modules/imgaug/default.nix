@@ -1,17 +1,17 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, imageio
-, imagecorruptions
-, numpy
-, opencv3
-, pytestCheckHook
-, scikitimage
-, scipy
-, shapely
-, six
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  imageio,
+  imagecorruptions,
+  numpy,
+  opencv3,
+  pytestCheckHook,
+  scikitimage,
+  scipy,
+  shapely,
+  six,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "imgaug";
   version = "0.4.0";
@@ -69,13 +69,13 @@ buildPythonPackage rec {
     "test/augmenters/test_pooling.py"
   ];
 
-  pythonImportsCheck = [ "imgaug" ];
+  pythonImportsCheck = ["imgaug"];
 
   meta = with lib; {
     homepage = "https://github.com/aleju/imgaug";
     description = "Image augmentation for machine learning experiments";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai rakesh4g ];
+    maintainers = with maintainers; [cmcdragonkai rakesh4g];
     platforms = platforms.linux;
   };
 }

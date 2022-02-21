@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, snowballstemmer
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  snowballstemmer,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pydocstyle";
   version = "6.1.1";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Python docstring style checker";
     homepage = "https://github.com/PyCQA/pydocstyle";
     license = licenses.mit;
-    maintainers = with maintainers; [ dzabraev ];
+    maintainers = with maintainers; [dzabraev];
   };
 }

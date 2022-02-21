@@ -1,14 +1,14 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-base
-, tezos-shell-services
-, irmin
-, irmin-pack
-, digestif
-, alcotest-lwt
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-base,
+  tezos-shell-services,
+  irmin,
+  irmin-pack,
+  digestif,
+  alcotest-lwt,
 }:
-
 buildDunePackage {
   pname = "tezos-context";
   inherit (tezos-stdlib) version useDune2;
@@ -28,7 +28,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: library of auto-documented RPCs (service and hierarchy descriptions)";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: library of auto-documented RPCs (service and hierarchy descriptions)";
+    };
 }

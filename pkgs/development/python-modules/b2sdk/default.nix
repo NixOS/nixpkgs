@@ -1,19 +1,19 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, isPy27
-, logfury
-, pytestCheckHook
-, pytest-lazy-fixture
-, pytest-mock
-, pythonOlder
-, requests
-, setuptools-scm
-, tqdm
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  isPy27,
+  logfury,
+  pytestCheckHook,
+  pytest-lazy-fixture,
+  pytest-mock,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "b2sdk";
   version = "1.14.0";
@@ -28,14 +28,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    arrow
-    logfury
-    requests
-    tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      arrow
+      logfury
+      requests
+      tqdm
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   checkInputs = [
     pytestCheckHook

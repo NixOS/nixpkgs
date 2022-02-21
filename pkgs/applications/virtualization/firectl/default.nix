@@ -1,10 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "firectl";
   version = "0.1.0";
 
-  patches = [ ./gomod.patch ];
+  patches = [./gomod.patch];
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
@@ -22,6 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/firecracker-microvm/firectl";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [xrelkd];
   };
 }

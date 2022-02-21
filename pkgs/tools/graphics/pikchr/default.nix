@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation {
   pname = "pikchr";
   # To update, use the last check-in in https://pikchr.org/home/timeline?r=trunk
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace open "test -f"
   '';
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   installPhase = ''
     install -Dm755 pikchr $out/bin/pikchr
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     description = "A PIC-like markup language for diagrams in technical documentation";
     homepage = "https://pikchr.org";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }

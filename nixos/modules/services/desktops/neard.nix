@@ -1,9 +1,11 @@
 # neard service.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
   options = {
     services.neard = {
@@ -11,13 +13,12 @@ with lib;
     };
   };
 
-
   ###### implementation
   config = mkIf config.services.neard.enable {
-    environment.systemPackages = [ pkgs.neard ];
+    environment.systemPackages = [pkgs.neard];
 
-    services.dbus.packages = [ pkgs.neard ];
+    services.dbus.packages = [pkgs.neard];
 
-    systemd.packages = [ pkgs.neard ];
+    systemd.packages = [pkgs.neard];
   };
 }

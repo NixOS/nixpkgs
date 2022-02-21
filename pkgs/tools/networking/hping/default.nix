@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libpcap, withTcl ? true, tcl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  withTcl ? true,
+  tcl,
+}:
 stdenv.mkDerivation rec {
   pname = "hping";
   version = "2014-12-26";
@@ -11,17 +17,23 @@ stdenv.mkDerivation rec {
     sha256 = "0y0n1ybij3yg9lfgzcwfmjz1sjg913zcqrv391xx83dm0j80sdpb";
   };
 
-  buildInputs = [ libpcap ] ++ lib.optional withTcl tcl;
+  buildInputs = [libpcap] ++ lib.optional withTcl tcl;
 
-  postPatch = ''
-    substituteInPlace Makefile.in --replace "gcc" "$CC"
-    substituteInPlace version.c --replace "RELEASE_DATE" "\"$version\""
-  '' + lib.optionalString stdenv.isLinux ''
-    sed -i -e 's|#include <net/bpf.h>|#include <pcap/bpf.h>|' \
-      libpcap_stuff.c script.c
-  '';
+  postPatch =
+    ''
+      substituteInPlace Makefile.in --replace "gcc" "$CC"
+      substituteInPlace version.c --replace "RELEASE_DATE" "\"$version\""
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      sed -i -e 's|#include <net/bpf.h>|#include <pcap/bpf.h>|' \
+        libpcap_stuff.c script.c
+    '';
 
-  configureFlags = [ (if withTcl then "TCLSH=${tcl}/bin/tclsh" else "--no-tcl") ];
+  configureFlags = [
+    (if withTcl
+    then "TCLSH=${tcl}/bin/tclsh"
+    else "--no-tcl")
+  ];
 
   installPhase = ''
     install -Dm755 hping3 -t $out/sbin

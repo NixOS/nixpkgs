@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  matplotlib,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "regional";
   version = "1.1.2";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Simple manipualtion and display of spatial regions";
     homepage = "https://github.com/freeman-lab/regional";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

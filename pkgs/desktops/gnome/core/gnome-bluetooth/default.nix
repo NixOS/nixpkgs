@@ -1,33 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, gnome
-, meson
-, ninja
-, pkg-config
-, gtk3
-, gettext
-, glib
-, udev
-, itstool
-, libxml2
-, wrapGAppsHook
-, libnotify
-, libcanberra-gtk3
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, python3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnome,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  gettext,
+  glib,
+  udev,
+  itstool,
+  libxml2,
+  wrapGAppsHook,
+  libnotify,
+  libcanberra-gtk3,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  python3,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
   version = "3.34.5";
 
   # TODO: split out "lib"
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = ["out" "dev" "devdoc" "man"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

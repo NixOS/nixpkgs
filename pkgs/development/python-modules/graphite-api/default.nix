@@ -1,7 +1,22 @@
-{ buildPythonPackage, fetchFromGitHub, lib, flask, flask-caching, cairocffi, pyparsing, pytz, pyyaml
-, raven, six, structlog, tzlocal, nose, mock, cairo, isPyPy
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  flask,
+  flask-caching,
+  cairocffi,
+  pyparsing,
+  pytz,
+  pyyaml,
+  raven,
+  six,
+  structlog,
+  tzlocal,
+  nose,
+  mock,
+  cairo,
+  isPyPy,
 }:
-
 buildPythonPackage rec {
   pname = "graphite-api";
   version = "1.1.3";
@@ -16,7 +31,7 @@ buildPythonPackage rec {
   };
 
   # https://github.com/brutasse/graphite-api/pull/239 rebased onto 1.1.3
-  patches = [ ./flask-caching-rebased.patch ];
+  patches = [./flask-caching-rebased.patch];
 
   checkPhase = "nosetests";
 
@@ -33,7 +48,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  checkInputs = [ nose mock ];
+  checkInputs = [nose mock];
 
   LD_LIBRARY_PATH = "${cairo.out}/lib";
 

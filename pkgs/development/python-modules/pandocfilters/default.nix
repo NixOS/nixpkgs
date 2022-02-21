@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "1.5.0";
   pname = "pandocfilters";
@@ -20,5 +20,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jgm/pandocfilters";
     license = licenses.mit;
   };
-
 }

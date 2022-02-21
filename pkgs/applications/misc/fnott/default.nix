@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, pkg-config
-, meson
-, ninja
-, scdoc
-, wayland-protocols
-, tllist
-, fontconfig
-, freetype
-, pixman
-, libpng
-, wayland
-, wlroots
-, dbus
-, fcft
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  pkg-config,
+  meson,
+  ninja,
+  scdoc,
+  wayland-protocols,
+  tllist,
+  fontconfig,
+  freetype,
+  pixman,
+  libpng,
+  wayland,
+  wlroots,
+  dbus,
+  fcft,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fnott";
   version = "1.2.0";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://codeberg.org/dnkl/fnott";
     description = "Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors.";
     license = licenses.mit;
-    maintainers = with maintainers; [ polykernel ];
+    maintainers = with maintainers; [polykernel];
     platforms = platforms.linux;
   };
 }

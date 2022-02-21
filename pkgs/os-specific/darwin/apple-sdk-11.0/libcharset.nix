@@ -1,5 +1,8 @@
-{ stdenvNoCC, buildPackages, MacOSX-SDK }:
-
+{
+  stdenvNoCC,
+  buildPackages,
+  MacOSX-SDK,
+}:
 stdenvNoCC.mkDerivation {
   pname = "libcharset";
   version = MacOSX-SDK.version;
@@ -7,7 +10,7 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ buildPackages.darwin.checkReexportsHook ];
+  nativeBuildInputs = [buildPackages.darwin.checkReexportsHook];
 
   installPhase = ''
     mkdir -p $out/{include,lib}

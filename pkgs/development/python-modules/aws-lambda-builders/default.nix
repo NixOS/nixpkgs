@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, pathlib
-, pytest
-, mock
-, parameterized
-, isPy27
-, isPy35
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  pathlib,
+  pytest,
+  mock,
+  parameterized,
+  isPy27,
+  isPy35,
 }:
-
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
   version = "1.12.0";
@@ -25,9 +25,11 @@ buildPythonPackage rec {
   # Package is not compatible with Python 3.5
   disabled = isPy35;
 
-  propagatedBuildInputs = [
-    six
-  ] ++ lib.optionals isPy27 [ pathlib ];
+  propagatedBuildInputs =
+    [
+      six
+    ]
+    ++ lib.optionals isPy27 [pathlib];
 
   checkInputs = [
     pytest
@@ -48,6 +50,6 @@ buildPythonPackage rec {
       AWS Lambda functions for several runtimes & frameworks.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ dhkl ];
+    maintainers = with maintainers; [dhkl];
   };
 }

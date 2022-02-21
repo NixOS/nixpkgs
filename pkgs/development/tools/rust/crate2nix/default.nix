@@ -1,13 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-
-, cargo
-, nix
-, nix-prefetch-git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cargo,
+  nix,
+  nix-prefetch-git,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "crate2nix";
   version = "0.10.0";
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-PD7R1vcb3FKd4hfpViKyvfCExJ5H1Xo2HPYden5zpxQ=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   # Tests use nix(1), which tries (and fails) to set up /nix/var inside the
   # sandbox
@@ -31,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/crate2nix \
-        --suffix PATH ":" ${lib.makeBinPath [ cargo nix nix-prefetch-git ]}
+        --suffix PATH ":" ${lib.makeBinPath [cargo nix nix-prefetch-git]}
   '';
 
   meta = with lib; {
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/kolloch/crate2nix";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kolloch cole-h ];
+    maintainers = with maintainers; [kolloch cole-h];
     platforms = platforms.all;
   };
 }

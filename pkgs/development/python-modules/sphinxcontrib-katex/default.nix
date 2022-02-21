@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sphinx,
+}:
 buildPythonPackage rec {
   pname = "sphinxcontrib-katex";
   version = "0.8.6";
@@ -13,16 +18,16 @@ buildPythonPackage rec {
     sha256 = "c3dcdb2984626a0e6c1b11bc2580c7bbc6ab3711879b23bbf26c028a0f4fd4f2";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  propagatedBuildInputs = [sphinx];
 
   # There are no unit tests
   doCheck = false;
-  pythonImportsCheck = [ "sphinxcontrib.katex" ];
+  pythonImportsCheck = ["sphinxcontrib.katex"];
 
   meta = with lib; {
     description = "Sphinx extension using KaTeX to render math in HTML";
     homepage = "https://github.com/hagenw/sphinxcontrib-katex";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

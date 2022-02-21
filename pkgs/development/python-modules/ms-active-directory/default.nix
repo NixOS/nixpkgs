@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, ldap3
-, pyasn1
-, pycryptodome
-, pythonOlder
-, pytz
-, six
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  ldap3,
+  pyasn1,
+  pycryptodome,
+  pythonOlder,
+  pytz,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "ms-active-directory";
   version = "1.12.1";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for integrating with Microsoft Active Directory domains";
     homepage = "https://github.com/zorn96/ms_active_directory/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,6 +1,12 @@
-{ python, lib, stdenv, pyside2
-, cmake, qt5, llvmPackages }:
-
+{
+  python,
+  lib,
+  stdenv,
+  pyside2,
+  cmake,
+  qt5,
+  llvmPackages,
+}:
 stdenv.mkDerivation {
   pname = "shiboken2";
 
@@ -16,8 +22,8 @@ stdenv.mkDerivation {
 
   CLANG_INSTALL_DIR = llvmPackages.libclang.out;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmPackages.libclang python qt5.qtbase qt5.qtxmlpatterns ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [llvmPackages.libclang python qt5.qtbase qt5.qtxmlpatterns];
 
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
@@ -31,9 +37,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Generator for the PySide2 Qt bindings";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [gpl2 lgpl21];
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
     broken = stdenv.isDarwin;
   };
 }

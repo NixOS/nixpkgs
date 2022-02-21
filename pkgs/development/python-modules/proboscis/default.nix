@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "proboscis";
   version = "1.2.6.0";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "b822b243a7c82030fce0de97bdc432345941306d2c24ef227ca561dd019cd238";
   };
 
-  propagatedBuildInputs = [ nose ];
+  propagatedBuildInputs = [nose];
   doCheck = false;
 
   meta = with lib; {

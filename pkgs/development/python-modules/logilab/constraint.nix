@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, logilab_common, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  logilab_common,
+  six,
+}:
 buildPythonPackage rec {
   pname = "logilab-constraint";
   version = "0.6.0";
@@ -10,13 +15,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    logilab_common six
+    logilab_common
+    six
   ];
-
 
   meta = with lib; {
     description = "logilab-database provides some classes to make unified access to different";
     homepage = "https://www.logilab.org/project/logilab-database";
   };
 }
-

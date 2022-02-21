@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, asciidoctor
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  asciidoctor,
+  installShellFiles,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "nux";
   version = "0.1.4";
@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $releaseDir/build/nux-*/out/_nux
 
   '';
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [asciidoctor installShellFiles];
 
   meta = with lib; {
     description = "A wrapper over the nix cli";
     homepage = "https://github.com/NuxPackage/nux";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ drzoidberg ];
+    license = with licenses; [gpl3];
+    maintainers = with maintainers; [drzoidberg];
   };
 }

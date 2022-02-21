@@ -1,6 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles
-, libiconv, Foundation }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  libiconv,
+  Foundation,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "macchina";
   version = "6.0.6";
@@ -14,8 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-mkAklLtG/sB0eLla5cveMqyPXwMCE5ufer8qA5L9chg=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
+  nativeBuildInputs = [installShellFiles];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv Foundation];
 
   postInstall = ''
     installShellCompletion target/completions/*.{bash,fish}
@@ -25,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     description = "A fast, minimal and customizable system information fetcher";
     homepage = "https://github.com/Macchina-CLI/macchina";
     changelog = "https://github.com/Macchina-CLI/macchina/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ _414owen ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [_414owen];
   };
 }

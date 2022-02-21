@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, libzip, glib, libusb1, libftdi1, check
-, libserialport, librevisa, doxygen, glibmm, python
-, version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4", doInstallCheck ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libzip,
+  glib,
+  libusb1,
+  libftdi1,
+  check,
+  libserialport,
+  librevisa,
+  doxygen,
+  glibmm,
+  python,
+  version ? "0.5.1",
+  sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4",
+  doInstallCheck ? true,
 }:
-
 stdenv.mkDerivation rec {
   inherit version doInstallCheck;
   pname = "libsigrok";
@@ -17,8 +31,8 @@ stdenv.mkDerivation rec {
     sha256 = "14sd8xqph4kb109g073daiavpadb20fcz7ch1ipn0waz7nlly4sw";
   };
 
-  nativeBuildInputs = [ doxygen pkg-config python ];
-  buildInputs = [ libzip glib libusb1 libftdi1 check libserialport librevisa glibmm ];
+  nativeBuildInputs = [doxygen pkg-config python];
+  buildInputs = [libzip glib libusb1 libftdi1 check libserialport librevisa glibmm];
 
   strictDeps = true;
 
@@ -39,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
   };
 }

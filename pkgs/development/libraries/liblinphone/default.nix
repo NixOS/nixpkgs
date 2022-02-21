@@ -1,50 +1,51 @@
-{ bcg729
-, bctoolbox
-, bcunit
-, belcard
-, belle-sip
-, belr
-, bzrtp
-, cairo
-, cmake
-, cyrus_sasl
-, doxygen
-, fetchFromGitLab
-, ffmpeg
-, gdk-pixbuf
-, glib
-, graphviz
-, gtk2
-, intltool
-, libexosip
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
-, libxml2
-, lime
-, makeWrapper
-, mbedtls
-, mediastreamer
-, openldap
-, ortp
-, pango
-, pkg-config
-, python3
-, readline
-, soci
-, boost
-, speex
-, sqlite
-, lib, stdenv
-, udev
-, xercesc
-, xsd
-, zlib
+{
+  bcg729,
+  bctoolbox,
+  bcunit,
+  belcard,
+  belle-sip,
+  belr,
+  bzrtp,
+  cairo,
+  cmake,
+  cyrus_sasl,
+  doxygen,
+  fetchFromGitLab,
+  ffmpeg,
+  gdk-pixbuf,
+  glib,
+  graphviz,
+  gtk2,
+  intltool,
+  libexosip,
+  libmatroska,
+  libnotify,
+  libosip,
+  libsoup,
+  libupnp,
+  libX11,
+  libxml2,
+  lime,
+  makeWrapper,
+  mbedtls,
+  mediastreamer,
+  openldap,
+  ortp,
+  pango,
+  pkg-config,
+  python3,
+  readline,
+  soci,
+  boost,
+  speex,
+  sqlite,
+  lib,
+  stdenv,
+  udev,
+  xercesc,
+  xsd,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "liblinphone";
   version = "4.5.17";
@@ -59,13 +60,13 @@ stdenv.mkDerivation rec {
   };
 
   # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+  cmakeFlags = ["-DENABLE_STATIC=NO"];
 
   # TODO: Not sure if all these inputs are actually needed. Most of them were
   # defined when liblinphone and linphone-desktop weren't separated yet, so some
   # of them might not be needed for liblinphone alone.
   buildInputs = [
-    (python3.withPackages (ps: [ ps.pystache ps.six ]))
+    (python3.withPackages (ps: [ps.pystache ps.six]))
     bcg729
     bctoolbox
     belcard
@@ -129,6 +130,6 @@ stdenv.mkDerivation rec {
     description = "Library for SIP calls and instant messaging";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "matrix-corporal";
   version = "2.2.0";
@@ -12,7 +15,13 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w" "-X main.GitCommit=${version}" "-X main.GitBranch=${version}" "-X main.GitState=nixpkgs" "-X main.GitSummary=${version}" "-X main.Version=${version}"
+    "-s"
+    "-w"
+    "-X main.GitCommit=${version}"
+    "-X main.GitBranch=${version}"
+    "-X main.GitState=nixpkgs"
+    "-X main.GitSummary=${version}"
+    "-X main.Version=${version}"
   ];
 
   vendorSha256 = "sha256-sC9JA6VRmHGuO3anaZW2Ih5QnRrUom9IIOE7yi3TTG8=";
@@ -20,7 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/devture/matrix-corporal";
     description = "Reconciliator and gateway for a managed Matrix server";
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with maintainers; [dandellion];
     license = licenses.agpl3Only;
   };
 }

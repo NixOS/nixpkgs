@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, python-dateutil
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  aiohttp,
+  python-dateutil,
 }:
-
 buildPythonPackage rec {
   pname = "pyflick";
   version = "0.0.2";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Python API For Flick Electric in New Zealand";
     homepage = "https://github.com/ZephireNZ/PyFlick";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, isPy3k
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  isPy3k,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "zipfile36";
   version = "0.1.3";

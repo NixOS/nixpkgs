@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "appthreat-depscan";
   version = "2.1.2";
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to audit dependencies based on known vulnerabilities and advisories";
     homepage = "https://github.com/AppThreat/dep-scan";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

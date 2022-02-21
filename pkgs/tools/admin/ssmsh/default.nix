@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ssmsh";
   version = "1.4.7";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = true;
 
-  ldflags = [ "-w" "-s" "-X main.Version=${version}" ];
+  ldflags = ["-w" "-s" "-X main.Version=${version}"];
 
   meta = with lib; {
     homepage = "https://github.com/bwhaley/ssmsh";
     description = "An interactive shell for AWS Parameter Store";
     license = licenses.mit;
-    maintainers = with maintainers; [ dbirks ];
+    maintainers = with maintainers; [dbirks];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "boofuzz";
   version = "0.4.1";
@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Network protocol fuzzing tool";
     homepage = "https://github.com/jtpereyda/boofuzz";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl2Plus];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,36 +1,43 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
 
   # If desktop manager `d' isn't capable of setting a background and
   # the xserver is enabled, `feh' or `xsetroot' are used as a fallback.
-  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
-
-in
-
-{
+  needBGCond = d: !(d ? bgSupport && d.bgSupport) && xcfg.enable;
+in {
   # Note: the order in which desktop manager modules are imported here
   # determines the default: later modules (if enabled) are preferred.
   # E.g., if Plasma 5 is enabled, it supersedes xterm.
   imports = [
-    ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
-    ./lxqt.nix ./enlightenment.nix ./gnome.nix ./retroarch.nix ./kodi.nix
-    ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
+    ./none.nix
+    ./xterm.nix
+    ./xfce.nix
+    ./plasma5.nix
+    ./lumina.nix
+    ./lxqt.nix
+    ./enlightenment.nix
+    ./gnome.nix
+    ./retroarch.nix
+    ./kodi.nix
+    ./mate.nix
+    ./pantheon.nix
+    ./surf-display.nix
+    ./cde.nix
     ./cinnamon.nix
   ];
 
   options = {
-
     services.xserver.desktopManager = {
-
       wallpaper = {
         mode = mkOption {
-          type = types.enum [ "center" "fill" "max" "scale" "tile" ];
+          type = types.enum ["center" "fill" "max" "scale" "tile"];
           default = "scale";
           example = "fill";
           description = ''
@@ -60,24 +67,28 @@ in
         internal = true;
         default = [];
         example = singleton
-          { name = "kde";
-            bgSupport = true;
-            start = "...";
-          };
+        {
+          name = "kde";
+          bgSupport = true;
+          start = "...";
+        };
         description = ''
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
           <varname>displayManager</varname>.
         '';
-        apply = map (d: d // {
-          manage = "desktop";
-          start = d.start
-          + optionalString (needBGCond d) ''
-            if [ -e $HOME/.background-image ]; then
-              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
-            fi
-          '';
-        });
+        apply = map (d:
+          d
+          // {
+            manage = "desktop";
+            start =
+              d.start
+              + optionalString (needBGCond d) ''
+                if [ -e $HOME/.background-image ]; then
+                  ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
+                fi
+              '';
+          });
       };
 
       default = mkOption {
@@ -90,9 +101,7 @@ in
           Default desktop manager loaded if none have been chosen.
         '';
       };
-
     };
-
   };
 
   config.services.xserver.displayManager.session = cfg.session;

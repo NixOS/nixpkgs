@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, filelock
-, idna
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-file
-, responses
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  filelock,
+  idna,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-file,
+  responses,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
-  pname   = "tldextract";
+  pname = "tldextract";
   version = "3.1.2";
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "sha256-0gNMNVhlH32P2t6oP7aBBQstZi3GegDZUDJtyQIClEQ=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
   propagatedBuildInputs = [
     filelock
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     substituteInPlace pytest.ini --replace " --pylint" ""
   '';
 
-  pythonImportsCheck = [ "tldextract" ];
+  pythonImportsCheck = ["tldextract"];
 
   meta = with lib; {
     description = "Python module to accurately separate the TLD from the domain of an URL";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       from the registered domain and subdomains of a URL.
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

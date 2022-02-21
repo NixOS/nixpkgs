@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, libX11}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "3dpong";
   version = "0.5";
@@ -8,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ibb79sbzlbn4ra3n0qk22gqr6fg7q0jy6cm0wg2qj4z64c7hmdi";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [libX11];
 
   preConfigure = ''
     sed -i s,/usr/local,$out, Makefile

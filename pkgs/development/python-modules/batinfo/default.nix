@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "batinfo";
   version = "0.4.2";
@@ -17,6 +20,6 @@ buildPythonPackage rec {
     description = "A simple Python lib to retrieve battery information";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [koral];
   };
 }

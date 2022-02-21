@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "ii";
   version = "1.9";
@@ -9,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hQyzI7WD0mG1G9qZk+5zMzQ1Ko5soeLwK1fBVL9WjBc=";
   };
 
-  makeFlags = [ "CC:=$(CC)" ];
+  makeFlags = ["CC:=$(CC)"];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = {
     homepage = "https://tools.suckless.org/ii/";

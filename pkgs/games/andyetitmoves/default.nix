@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, libvorbis, libogg, libtheora, SDL, libXft, SDL_image, zlib, libX11, libpng, openal, runtimeShell, requireFile, commercialVersion ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libvorbis,
+  libogg,
+  libtheora,
+  SDL,
+  libXft,
+  SDL_image,
+  zlib,
+  libX11,
+  libpng,
+  openal,
+  runtimeShell,
+  requireFile,
+  commercialVersion ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "andyetitmoves";
   version = "1.2.2";
@@ -8,13 +24,16 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux"
     then
       let
-        postfix = if stdenv.hostPlatform.system == "i686-linux" then "i386" else "x86_64";
+        postfix =
+          if stdenv.hostPlatform.system == "i686-linux"
+          then "i386"
+          else "x86_64";
         commercialName = "${pname}-${version}_${postfix}.tar.gz";
         demoUrl = "http://www.andyetitmoves.net/demo/${pname}Demo-${version}_${postfix}.tar.gz";
       in
-      if commercialVersion
-      then
-        requireFile
+        if commercialVersion
+        then
+          requireFile
           {
             message = ''
               We cannot download the commercial version automatically, as you require a license.
@@ -28,16 +47,15 @@ stdenv.mkDerivation rec {
               then "15wvzmmidvykwjrbnq70h5jrvnjx1hcrm0357qj85q4aqbzavh01"
               else "1v8z16qa9ka8sf7qq45knsxj87s6sipvv3a7xq11pb5xk08fb2ql";
           }
-      else
-        fetchurl {
-          url = demoUrl;
-          sha256 =
-            if stdenv.hostPlatform.system == "i686-linux"
-            then "0f14vrrbq05hsbdajrb5y9za65fpng1lc8f0adb4aaz27x7sh525"
-            else "0mg41ya0b27blq3b5498kwl4rj46dj21rcd7qd0rw1kyvr7sx4v4";
-        }
-    else
-      throw "And Yet It Moves nix package only supports linux and intel cpu's.";
+        else
+          fetchurl {
+            url = demoUrl;
+            sha256 =
+              if stdenv.hostPlatform.system == "i686-linux"
+              then "0f14vrrbq05hsbdajrb5y9za65fpng1lc8f0adb4aaz27x7sh525"
+              else "0mg41ya0b27blq3b5498kwl4rj46dj21rcd7qd0rw1kyvr7sx4v4";
+          }
+    else throw "And Yet It Moves nix package only supports linux and intel cpu's.";
 
   installPhase = ''
     mkdir -p $out/{opt/andyetitmoves,bin}
@@ -48,7 +66,11 @@ stdenv.mkDerivation rec {
       fullPath=$fullPath''${fullPath:+:}$i/lib
     done
 
-    binName=${if commercialVersion then "AndYetItMoves" else "AndYetItMovesDemo"}
+    binName=${
+      if commercialVersion
+      then "AndYetItMoves"
+      else "AndYetItMovesDemo"
+    }
 
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $fullPath $out/opt/andyetitmoves/lib/$binName
     cat > $out/bin/$binName << EOF
@@ -59,7 +81,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/$binName
   '';
 
-  buildInputs = [ libvorbis libogg libtheora SDL libXft SDL_image zlib libX11 libpng openal ];
+  buildInputs = [libvorbis libogg libtheora SDL libXft SDL_image zlib libX11 libpng openal];
 
   meta = with lib; {
     description = "Physics/Gravity Platform game";
@@ -68,6 +90,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.andyetitmoves.net/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ bluescreen303 ];
+    maintainers = with maintainers; [bluescreen303];
   };
 }

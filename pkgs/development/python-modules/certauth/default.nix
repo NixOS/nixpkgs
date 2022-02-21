@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyopenssl
-, tldextract
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyopenssl,
+  tldextract,
+  pytestCheckHook,
+  pytest-cov,
 }:
-
 buildPythonPackage rec {
   pname = "certauth";
   version = "1.3.0";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     pytest-cov
   ];
 
-  pythonImportsCheck = [ "certauth" ];
+  pythonImportsCheck = ["certauth"];
 
   meta = with lib; {
     description = "Simple CertificateAuthority and host certificate creation, useful for man-in-the-middle HTTPS proxy";
     homepage = "https://github.com/ikreymer/certauth";
     license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

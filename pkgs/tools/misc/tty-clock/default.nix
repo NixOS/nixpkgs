@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "tty-clock";
   version = "2.3+unstable=2021-04-07";
@@ -22,16 +28,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [ncurses];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://github.com/xorg62/tty-clock";
     license = licenses.free;
     description = "Digital clock in ncurses";
     platforms = platforms.all;
-    maintainers = [ maintainers.koral ];
+    maintainers = [maintainers.koral];
   };
 }

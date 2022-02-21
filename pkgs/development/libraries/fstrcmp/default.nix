@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchzip, libtool, ghostscript, groff, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libtool,
+  ghostscript,
+  groff,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "fstrcmp";
   version = "0.7";
@@ -9,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "0yg3y3k0wz50gmhgigfi2dx725w1gc8snb95ih7vpcnj6kabgz9a";
   };
 
-  patches = [ ./cross.patch ];
+  patches = [./cross.patch];
 
-  outputs = [ "out" "dev" "doc" "man" "devman" ];
+  outputs = ["out" "dev" "doc" "man" "devman"];
 
-  nativeBuildInputs = [ libtool ghostscript groff autoreconfHook ];
+  nativeBuildInputs = [libtool ghostscript groff autoreconfHook];
 
   enableParallelBuilding = true;
 
@@ -27,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://fstrcmp.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/fstrcmp/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.sephalon ];
+    maintainers = [maintainers.sephalon];
     platforms = platforms.unix;
   };
 }

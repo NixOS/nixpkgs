@@ -1,11 +1,17 @@
-{ lib, stdenv, fetchurl, rpmextract, autoreconfHook, file, libjpeg, cups }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  rpmextract,
+  autoreconfHook,
+  file,
+  libjpeg,
+  cups,
+}: let
   version = "1.0.1";
   filterVersion = "1.0.0";
 in
   stdenv.mkDerivation {
-
     pname = "epson-201106w";
     inherit version;
 
@@ -19,9 +25,9 @@ in
       sha256 = "1yig1xrh1ikblbp7sx706n5nnc237wy4mbch23ymy6akbgqg4aig";
     };
 
-    nativeBuildInputs = [ rpmextract autoreconfHook file ];
+    nativeBuildInputs = [rpmextract autoreconfHook file];
 
-    buildInputs = [ libjpeg cups ];
+    buildInputs = [libjpeg cups];
 
     unpackPhase = ''
       rpmextract $src
@@ -70,8 +76,8 @@ in
             drivers = [ pkgs.epson-201106w ];
           };
       '';
-      license = with licenses; [ lgpl21 epson ];
+      license = with licenses; [lgpl21 epson];
       platforms = platforms.linux;
-      maintainers = [ maintainers.nphilou ];
+      maintainers = [maintainers.nphilou];
     };
   }

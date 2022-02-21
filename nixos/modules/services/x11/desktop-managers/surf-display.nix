@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.xserver.desktopManager.surf-display;
 
   surfDisplayConf = ''
@@ -41,7 +43,6 @@ let
 
     ${cfg.extraConfig}
   '';
-
 in {
   options = {
     services.xserver.desktopManager.surf-display = {

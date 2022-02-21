@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, postgresql
-, openssl
-, zlib
-, readline
-, flex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  openssl,
+  zlib,
+  readline,
+  flex,
 }:
-
 stdenv.mkDerivation rec {
   pname = "repmgr";
   version = "5.3.1";
@@ -17,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fHoXbFOF3xj/eNHgQIghF15vbDObnuwl2DAH+zRVGZQ=";
   };
 
-  nativeBuildInputs = [ flex ];
+  nativeBuildInputs = [flex];
 
-  buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = [postgresql openssl zlib readline];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/postgresql/extension}
@@ -35,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "Replication manager for PostgreSQL cluster";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

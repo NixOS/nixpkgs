@@ -1,21 +1,18 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-
-, isPy3k
-, isPyPy
-
-, openpaperwork-core
-, pillow
-, pygobject3
-, distro
-
-, pkgs
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  isPy3k,
+  isPyPy,
+  openpaperwork-core,
+  pillow,
+  pygobject3,
+  distro,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "openpaperwork-gtk";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (import ./src.nix {inherit fetchFromGitLab;}) version src;
 
   sourceRoot = "source/openpaperwork-gtk";
 
@@ -28,7 +25,7 @@ buildPythonPackage rec {
     patchShebangs ../tools
   '';
 
-  nativeBuildInputs = [ pkgs.gettext pkgs.which ];
+  nativeBuildInputs = [pkgs.gettext pkgs.which];
   preBuild = ''
     make l10n_compile
   '';
@@ -48,6 +45,6 @@ buildPythonPackage rec {
     description = "Reusable GTK components of Paperwork";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [aszlig symphorien];
   };
 }

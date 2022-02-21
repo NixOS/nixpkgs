@@ -1,26 +1,26 @@
-{ mkDerivation
-, lib
-, fetchurl
-, extra-cmake-modules
-, kdoctools
-, wrapGAppsHook
-, qtscript
-, kconfig
-, kcrash
-, kdbusaddons
-, kdelibs4support
-, kguiaddons
-, kiconthemes
-, kinit
-, khtml
-, konsole
-, kparts
-, ktexteditor
-, kwindowsystem
-, okular
-, poppler
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  kdoctools,
+  wrapGAppsHook,
+  qtscript,
+  kconfig,
+  kcrash,
+  kdbusaddons,
+  kdelibs4support,
+  kguiaddons,
+  kiconthemes,
+  kinit,
+  khtml,
+  konsole,
+  kparts,
+  ktexteditor,
+  kwindowsystem,
+  okular,
+  poppler,
 }:
-
 mkDerivation rec {
   pname = "kile";
   version = "2.9.93";
@@ -57,12 +57,12 @@ mkDerivation rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  propagatedUserEnvPkgs = [ konsole ];
+  propagatedUserEnvPkgs = [konsole];
 
   meta = {
     description = "User-friendly TeX/LaTeX authoring tool for the KDE desktop environment";
     homepage = "https://www.kde.org/applications/office/kile/";
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [fridh];
     license = lib.licenses.gpl2Plus;
   };
 }

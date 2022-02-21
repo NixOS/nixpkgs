@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, click
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  click,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "click-option-group";
   version = "0.5.3";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/click-contrib/click-option-group";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

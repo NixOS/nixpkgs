@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "skate";
   version = "0.1.3";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X=main.Version=${version}"];
 
   meta = with lib; {
     description = "A personal multi-machine syncable key value store";
     homepage = "https://github.com/charmbracelet/skate";
     license = licenses.mit;
-    maintainers = with maintainers; [ penguwin ];
+    maintainers = with maintainers; [penguwin];
   };
 }

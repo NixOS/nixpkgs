@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "oksh";
   version = "7.0";
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";
     homepage = "https://github.com/ibara/oksh";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
     platforms = platforms.all;
   };
 

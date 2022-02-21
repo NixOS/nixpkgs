@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, pure, faust, libtool }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+  faust,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-faust";
   version = "0.11";
@@ -9,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "51278a3b0807c4770163dc2ce423507dcf0ffec9cd1c1fbc08426d07294f6ae0";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure faust libtool ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure faust libtool];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -19,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-faust.html";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

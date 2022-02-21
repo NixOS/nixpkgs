@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.dwm-status;
 
   order = concatMapStringsSep "," (feature: ''"${feature}"'') cfg.order;
@@ -12,16 +14,11 @@ let
 
     ${cfg.extraConfig}
   '';
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.dwm-status = {
-
       enable = mkEnableOption "dwm-status user service";
 
       package = mkOption {
@@ -35,7 +32,7 @@ in
       };
 
       order = mkOption {
-        type = types.listOf (types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
+        type = types.listOf (types.enum ["audio" "backlight" "battery" "cpu_load" "network" "time"]);
         description = ''
           List of enabled features in order.
         '';
@@ -48,26 +45,20 @@ in
           Extra config in TOML format.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     services.upower.enable = elem "battery" cfg.order;
 
     systemd.user.services.dwm-status = {
       description = "Highly performant and configurable DWM status service";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
+      partOf = ["graphical-session.target"];
 
       serviceConfig.ExecStart = "${cfg.package}/bin/dwm-status ${configFile}";
     };
-
   };
-
 }

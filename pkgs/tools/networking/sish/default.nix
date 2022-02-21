@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "sish";
   version = "2.0.1";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";
     homepage = "https://github.com/antoniomika/sish";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

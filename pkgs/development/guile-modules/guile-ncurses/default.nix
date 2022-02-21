@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, guile
-, libffi
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  guile,
+  libffi,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "guile-ncurses";
   version = "1.7";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       panel, and menu.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = with maintainers; [vyp];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

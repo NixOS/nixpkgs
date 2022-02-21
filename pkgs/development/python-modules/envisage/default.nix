@@ -1,15 +1,15 @@
-{ lib
-, apptools
-, buildPythonPackage
-, fetchPypi
-, ipython
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, traits
+{
+  lib,
+  apptools,
+  buildPythonPackage,
+  fetchPypi,
+  ipython,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  traits,
 }:
-
 buildPythonPackage rec {
   pname = "envisage";
   version = "6.0.1";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Framework for building applications whose functionalities can be extended by adding plug-ins";
     homepage = "https://github.com/enthought/envisage";
     license = licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ knedlsepp ];
+    maintainers = with lib.maintainers; [knedlsepp];
   };
 }

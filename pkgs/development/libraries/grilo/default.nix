@@ -1,29 +1,29 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, vala
-, glib
-, liboauth
-, gtk3
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, libxml2
-, gnome
-, gobject-introspection
-, libsoup
-, totem-pl-parser
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  vala,
+  glib,
+  liboauth,
+  gtk3,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  libxml2,
+  gnome,
+  gobject-introspection,
+  libsoup,
+  totem-pl-parser,
 }:
-
 stdenv.mkDerivation rec {
   pname = "grilo";
   version = "0.3.14"; # if you change minor, also change ./setup-hook.sh
 
-  outputs = [ "out" "dev" "man" "devdoc" ];
+  outputs = ["out" "dev" "man" "devdoc"];
   outputBin = "dev";
 
   setupHook = ./setup-hook.sh;

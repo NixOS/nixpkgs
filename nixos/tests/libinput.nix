@@ -1,27 +1,24 @@
-import ./make-test-python.nix ({ ... }:
-
-{
+import ./make-test-python.nix ({...}: {
   name = "libinput";
 
-  machine = { ... }:
-    {
-      imports = [
-        ./common/x11.nix
-        ./common/user-account.nix
-      ];
+  machine = {...}: {
+    imports = [
+      ./common/x11.nix
+      ./common/user-account.nix
+    ];
 
-      test-support.displayManager.auto.user = "alice";
+    test-support.displayManager.auto.user = "alice";
 
-      services.xserver.libinput = {
-        enable = true;
-        mouse = {
-          naturalScrolling = true;
-          leftHanded = true;
-          middleEmulation = false;
-          horizontalScrolling = false;
-        };
+    services.xserver.libinput = {
+      enable = true;
+      mouse = {
+        naturalScrolling = true;
+        leftHanded = true;
+        middleEmulation = false;
+        horizontalScrolling = false;
       };
     };
+  };
 
   testScript = ''
     def expect_xserver_option(option, value):

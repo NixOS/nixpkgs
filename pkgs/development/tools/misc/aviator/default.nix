@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "aviator";
   version = "1.8.1";
@@ -18,6 +21,6 @@ buildGoModule rec {
     description = "Merge YAML/JSON files in a in a convenient fashion";
     homepage = "https://github.com/herrjulz/aviator";
     license = licenses.mit;
-    maintainers = with maintainers; [ risson ];
+    maintainers = with maintainers; [risson];
   };
 }

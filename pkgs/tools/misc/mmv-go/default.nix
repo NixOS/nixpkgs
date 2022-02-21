@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "mmv-go";
   version = "0.1.4";
@@ -13,13 +16,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-3Xk8S2Em28r5R7894Ubo2OOlGhrKplV/gY4ftCjPvMo=";
 
-  ldflags = [ "-s" "-w" "-X main.revision=${src.rev}" ];
+  ldflags = ["-s" "-w" "-X main.revision=${src.rev}"];
 
   meta = with lib; {
     homepage = "https://github.com/itchyny/mmv";
     description = "Rename multiple files using your $EDITOR";
     license = licenses.mit;
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [zowoq];
     mainProgram = "mmv";
   };
 }

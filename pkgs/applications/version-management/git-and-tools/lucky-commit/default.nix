@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, withOpenCL ? true
-, stdenv
-, OpenCL
-, ocl-icd
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  withOpenCL ? true,
+  stdenv,
+  OpenCL,
+  ocl-icd,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "lucky-commit";
   version = "2.1.0";
@@ -20,7 +20,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-MvopLKhovwXaEmRgXnAzJeuhPgqnMjt0EtKUGSWFpaY=";
 
-  buildInputs = lib.optional withOpenCL (if stdenv.isDarwin then OpenCL else ocl-icd);
+  buildInputs = lib.optional withOpenCL (if stdenv.isDarwin
+  then OpenCL
+  else ocl-icd);
 
   buildNoDefaultFeatures = !withOpenCL;
 
@@ -31,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     description = "Change the start of your git commit hashes to whatever you want";
     homepage = "https://github.com/not-an-aardvark/lucky-commit";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
     mainProgram = "lucky_commit";
   };
 }

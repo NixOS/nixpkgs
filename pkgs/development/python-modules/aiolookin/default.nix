@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, faker
-, fetchFromGitHub
-, pytest-aiohttp
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  faker,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiolookin";
   version = "0.1.0";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for interacting with LOOKin devices";
     homepage = "https://github.com/ANMalko/aiolookin";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

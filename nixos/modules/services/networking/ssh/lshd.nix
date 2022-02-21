@@ -1,23 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   inherit (pkgs) lsh;
 
   cfg = config.services.lshd;
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.lshd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -43,7 +38,7 @@ in
           When providing the empty list, `[]', lshd listens on all
           network interfaces.
         '';
-        example = [ "localhost" "1.2.3.4:443" ];
+        example = ["localhost" "1.2.3.4:443"];
       };
 
       hostKey = mkOption {
@@ -118,24 +113,20 @@ in
           an executable implementing it.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    services.lshd.subsystems = [ ["sftp" "${pkgs.lsh}/sbin/sftp-server"] ];
+    services.lshd.subsystems = [["sftp" "${pkgs.lsh}/sbin/sftp-server"]];
 
     systemd.services.lshd = {
       description = "GNU lshd SSH2 daemon";
 
-      after = [ "network.target" ];
+      after = ["network.target"];
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       environment = {
         LD_LIBRARY_PATH = config.system.nssModules.path;
@@ -165,22 +156,62 @@ in
         ${lsh}/sbin/lshd --daemonic \
           --password-helper="${lsh}/sbin/lsh-pam-checkpw" \
           -p ${toString portNumber} \
-          ${if interfaces == [] then ""
-            else (concatStrings (map (i: "--interface=\"${i}\"")
-                                     interfaces))} \
+          ${
+          if interfaces == []
+          then ""
+          else
+            (concatStrings (map (i: "--interface=\"${i}\"")
+            interfaces))
+        } \
           -h "${hostKey}" \
-          ${if !syslog then "--no-syslog" else ""} \
-          ${if passwordAuthentication then "--password" else "--no-password" } \
-          ${if publicKeyAuthentication then "--publickey" else "--no-publickey" } \
-          ${if rootLogin then "--root-login" else "--no-root-login" } \
-          ${if loginShell != null then "--login-shell=\"${loginShell}\"" else "" } \
-          ${if srpKeyExchange then "--srp-keyexchange" else "--no-srp-keyexchange" } \
-          ${if !tcpForwarding then "--no-tcpip-forward" else "--tcpip-forward"} \
-          ${if x11Forwarding then "--x11-forward" else "--no-x11-forward" } \
-          --subsystems=${concatStringsSep ","
-                                          (map (pair: (head pair) + "=" +
-                                                      (head (tail pair)))
-                                               subsystems)}
+          ${
+          if !syslog
+          then "--no-syslog"
+          else ""
+        } \
+          ${
+          if passwordAuthentication
+          then "--password"
+          else "--no-password"
+        } \
+          ${
+          if publicKeyAuthentication
+          then "--publickey"
+          else "--no-publickey"
+        } \
+          ${
+          if rootLogin
+          then "--root-login"
+          else "--no-root-login"
+        } \
+          ${
+          if loginShell != null
+          then "--login-shell=\"${loginShell}\""
+          else ""
+        } \
+          ${
+          if srpKeyExchange
+          then "--srp-keyexchange"
+          else "--no-srp-keyexchange"
+        } \
+          ${
+          if !tcpForwarding
+          then "--no-tcpip-forward"
+          else "--tcpip-forward"
+        } \
+          ${
+          if x11Forwarding
+          then "--x11-forward"
+          else "--no-x11-forward"
+        } \
+          --subsystems=${
+          concatStringsSep ","
+          (map (pair:
+            (head pair)
+            + "="
+            + (head (tail pair)))
+          subsystems)
+        }
       '';
     };
 

@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+}:
 buildDunePackage rec {
   pname = "ANSITerminal";
   version = "0.8.2";
@@ -24,6 +27,6 @@ buildDunePackage rec {
     '';
     inherit (src.meta) homepage;
     license = licenses.lgpl3;
-    maintainers = [ maintainers.jirkamarsik ];
+    maintainers = [maintainers.jirkamarsik];
   };
 }

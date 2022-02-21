@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, perl
-, pkg-config
-, rustPlatform
-, sqlcipher
-, sqlite
-, fixDarwinDylibNames
-, CoreFoundation
-, Security
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  perl,
+  pkg-config,
+  rustPlatform,
+  sqlcipher,
+  sqlite,
+  fixDarwinDylibNames,
+  CoreFoundation,
+  Security,
+  libiconv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
   version = "1.75.0";
@@ -37,26 +37,31 @@ stdenv.mkDerivation rec {
     hash = "sha256-jti1aY8a9YB8x6fz7UqTY4uDj6gkMnG1hTN/Mgc+mHs=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    perl
-    pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-  ]) ++ lib.optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      perl
+      pkg-config
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      rust.cargo
+    ])
+    ++ lib.optionals stdenv.isDarwin [
+      fixDarwinDylibNames
+    ];
 
-  buildInputs = [
-    openssl
-    sqlcipher
-    sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    Security
-    libiconv
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlcipher
+      sqlite
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      Security
+      libiconv
+    ];
 
   checkInputs = with rustPlatform; [
     cargoCheckHook
@@ -67,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deltachat/deltachat-core-rust/";
     changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
     platforms = platforms.unix;
   };
 }

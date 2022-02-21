@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libusb1,
 }:
-
 stdenv.mkDerivation rec {
   pname = "blink1";
   version = "2.2.0";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       --replace "@git submodule update --init" "true"
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libusb1];
 
   makeFlags = [
     "GIT_TAG=v${version}"
@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     "HIDAPI_TYPE=LIBUSB"
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  installFlags = [ "PREFIX=${placeholder "out"}" ];
+  installFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     description = "Command line client for the blink(1) notification light";
     homepage = "https://blink1.thingm.com/";
-    license = with licenses; [ cc-by-sa-40 ];
-    maintainers = with maintainers; [ cransom ];
+    license = with licenses; [cc-by-sa-40];
+    maintainers = with maintainers; [cransom];
     platforms = platforms.linux;
   };
 }

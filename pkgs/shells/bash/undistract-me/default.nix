@@ -1,15 +1,15 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, fetchpatch
-, coreutils
-, gnused
-, libnotify
-, pulseaudio
-, sound-theme-freedesktop
-, xprop
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchpatch,
+  coreutils,
+  gnused,
+  libnotify,
+  pulseaudio,
+  sound-theme-freedesktop,
+  xprop,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "undistract-me";
   version = "unstable-2020-08-09";
@@ -74,6 +74,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Notifies you when long-running terminal commands complete";
     homepage = "https://github.com/jml/undistract-me";
     license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [kira-bruneau];
   };
 }

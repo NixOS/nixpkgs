@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, mkYarnPackage, nixosTests, writeText, python3 }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mkYarnPackage,
+  nixosTests,
+  writeText,
+  python3,
+}: let
   version = "0.2.4";
   src = fetchFromGitHub {
     owner = "ngoduykhanh";
@@ -22,11 +28,38 @@ let
   };
 
   pythonDeps = with python.pkgs; [
-    flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
-    mysqlclient psycopg2 sqlalchemy
-    cffi configobj cryptography bcrypt requests ldap pyotp qrcode dnspython
-    gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
-    lima pytimeparse pyyaml
+    flask
+    flask_assets
+    flask_login
+    flask_sqlalchemy
+    flask_migrate
+    flask-seasurf
+    flask_mail
+    flask-session
+    flask-sslify
+    mysqlclient
+    psycopg2
+    sqlalchemy
+    cffi
+    configobj
+    cryptography
+    bcrypt
+    requests
+    ldap
+    pyotp
+    qrcode
+    dnspython
+    gunicorn
+    python3-saml
+    pyopenssl
+    pytz
+    cssmin
+    jsmin
+    authlib
+    bravado-core
+    lima
+    pytimeparse
+    pyyaml
   ];
 
   assets = mkYarnPackage {
@@ -71,60 +104,61 @@ let
     assets.register('js_main', 'generated/main.js')
     assets.register('css_main', 'generated/main.css')
   '';
-in stdenv.mkDerivation rec {
-  pname = "powerdns-admin";
+in
+  stdenv.mkDerivation rec {
+    pname = "powerdns-admin";
 
-  inherit src version;
+    inherit src version;
 
-  nativeBuildInputs = [ python.pkgs.wrapPython ];
+    nativeBuildInputs = [python.pkgs.wrapPython];
 
-  pythonPath = pythonDeps;
+    pythonPath = pythonDeps;
 
-  gunicornScript = ''
-    #!/bin/sh
-    if [ ! -z $CONFIG ]; then
-      exec python -m gunicorn.app.wsgiapp "powerdnsadmin:create_app(config='$CONFIG')" "$@"
-    fi
+    gunicornScript = ''
+      #!/bin/sh
+      if [ ! -z $CONFIG ]; then
+        exec python -m gunicorn.app.wsgiapp "powerdnsadmin:create_app(config='$CONFIG')" "$@"
+      fi
 
-    exec python -m gunicorn.app.wsgiapp "powerdnsadmin:create_app()" "$@"
-  '';
+      exec python -m gunicorn.app.wsgiapp "powerdnsadmin:create_app()" "$@"
+    '';
 
-  postPatch = ''
-    rm -r powerdnsadmin/static powerdnsadmin/assets.py
-    sed -i "s/id:/'id':/" migrations/versions/787bdba9e147_init_db.py
-  '';
+    postPatch = ''
+      rm -r powerdnsadmin/static powerdnsadmin/assets.py
+      sed -i "s/id:/'id':/" migrations/versions/787bdba9e147_init_db.py
+    '';
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    # Nasty hack: call wrapPythonPrograms to set program_PYTHONPATH (see tribler)
-    wrapPythonPrograms
+      # Nasty hack: call wrapPythonPrograms to set program_PYTHONPATH (see tribler)
+      wrapPythonPrograms
 
-    mkdir -p $out/share $out/bin
-    cp -r migrations powerdnsadmin $out/share/
+      mkdir -p $out/share $out/bin
+      cp -r migrations powerdnsadmin $out/share/
 
-    ln -s ${assets} $out/share/powerdnsadmin/static
-    ln -s ${assetsPy} $out/share/powerdnsadmin/assets.py
+      ln -s ${assets} $out/share/powerdnsadmin/static
+      ln -s ${assetsPy} $out/share/powerdnsadmin/assets.py
 
-    echo "$gunicornScript" > $out/bin/powerdns-admin
-    chmod +x $out/bin/powerdns-admin
-    wrapProgram $out/bin/powerdns-admin \
-      --set PATH ${python.pkgs.python}/bin \
-      --set PYTHONPATH $out/share:$program_PYTHONPATH
+      echo "$gunicornScript" > $out/bin/powerdns-admin
+      chmod +x $out/bin/powerdns-admin
+      wrapProgram $out/bin/powerdns-admin \
+        --set PATH ${python.pkgs.python}/bin \
+        --set PYTHONPATH $out/share:$program_PYTHONPATH
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  passthru = {
-    # PYTHONPATH of all dependencies used by the package
-    pythonPath = python3.pkgs.makePythonPath pythonDeps;
-    tests = nixosTests.powerdns-admin;
-  };
+    passthru = {
+      # PYTHONPATH of all dependencies used by the package
+      pythonPath = python3.pkgs.makePythonPath pythonDeps;
+      tests = nixosTests.powerdns-admin;
+    };
 
-  meta = with lib; {
-    description = "A PowerDNS web interface with advanced features";
-    homepage = "https://github.com/ngoduykhanh/PowerDNS-Admin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi zhaofengli ];
-  };
-}
+    meta = with lib; {
+      description = "A PowerDNS web interface with advanced features";
+      homepage = "https://github.com/ngoduykhanh/PowerDNS-Admin";
+      license = licenses.mit;
+      maintainers = with maintainers; [Flakebi zhaofengli];
+    };
+  }

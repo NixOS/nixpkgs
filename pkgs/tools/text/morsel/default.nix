@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "morsel";
   version = "0.1.0";
@@ -17,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command line tool to translate morse code input to text in real time";
     homepage = "https://github.com/SamLee514/morsel";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
   };
 }

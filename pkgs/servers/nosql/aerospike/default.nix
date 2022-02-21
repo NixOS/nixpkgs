@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, openssl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  openssl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "aerospike-server";
   version = "4.2.0.4";
@@ -12,8 +20,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ openssl zlib ];
+  nativeBuildInputs = [autoconf automake libtool];
+  buildInputs = [openssl zlib];
 
   preBuild = ''
     patchShebangs build/gen_version
@@ -33,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Flash-optimized, in-memory, NoSQL database";
     homepage = "https://aerospike.com/";
     license = licenses.agpl3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kalbasit ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [kalbasit];
   };
 }

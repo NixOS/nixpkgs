@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, libmpdclient
-, ncurses
-, pcre
-, pkg-config
-, taglib
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libmpdclient,
+  ncurses,
+  pcre,
+  pkg-config,
+  taglib,
+  curl,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.09.2";
   pname = "vimpc";
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libmpdclient ncurses pcre taglib curl ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [libmpdclient ncurses pcre taglib curl];
 
   postInstall = ''
     mkdir -p $out/etc
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/boysetsfrog/vimpc";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

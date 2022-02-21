@@ -1,15 +1,15 @@
-{ buildPythonPackage
-, git
-, gnupg
-, pbr
-, mock
-, sphinx
-, stestr
-, testresources
-, testscenarios
-, virtualenv
+{
+  buildPythonPackage,
+  git,
+  gnupg,
+  pbr,
+  mock,
+  sphinx,
+  stestr,
+  testresources,
+  testscenarios,
+  virtualenv,
 }:
-
 buildPythonPackage rec {
   pname = "pbr";
   inherit (pbr) version;

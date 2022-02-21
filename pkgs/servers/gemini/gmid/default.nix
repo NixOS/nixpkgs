@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, bison, which, libressl, libevent }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  which,
+  libressl,
+  libevent,
+}:
 stdenv.mkDerivation rec {
   pname = "gmid";
   version = "1.8.1";
@@ -11,9 +18,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-XNif164C5b5sVsZW7sy0id4qM/mJzg3RhoHbwJuJqDk=";
   };
 
-  nativeBuildInputs = [ bison which ];
+  nativeBuildInputs = [bison which];
 
-  buildInputs = [ libressl libevent ];
+  buildInputs = [libressl libevent];
 
   configureFlags = [
     "PREFIX=${placeholder "out"}"
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Simple and secure Gemini server";
     homepage = "https://gmid.omarpolo.com/";
     license = licenses.isc;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = platforms.linux;
   };
 }

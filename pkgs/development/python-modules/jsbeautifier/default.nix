@@ -1,11 +1,17 @@
-{ lib, fetchPypi, buildPythonApplication, editorconfig, pytest, six }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonApplication,
+  editorconfig,
+  pytest,
+  six,
+}:
 buildPythonApplication rec {
   pname = "jsbeautifier";
   version = "1.14.0";
 
-  propagatedBuildInputs = [ six editorconfig ];
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [six editorconfig];
+  checkInputs = [pytest];
 
   src = fetchPypi {
     inherit pname version;
@@ -13,9 +19,9 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage    = "http://jsbeautifier.org";
+    homepage = "http://jsbeautifier.org";
     description = "JavaScript unobfuscator and beautifier.";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ apeyroux ];
+    license = licenses.mit;
+    maintainers = with maintainers; [apeyroux];
   };
 }

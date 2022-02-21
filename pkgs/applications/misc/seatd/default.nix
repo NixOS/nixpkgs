@@ -1,13 +1,13 @@
-{ fetchFromSourcehut
-, lib
-, meson
-, ninja
-, pkg-config
-, scdoc
-, stdenv
-, systemd
+{
+  fetchFromSourcehut,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  stdenv,
+  systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "seatd";
   version = "0.6.3";
@@ -19,22 +19,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LLRGi3IACqaIHExLhALnUeiPyUnlhAJzsMFE2p+QSp4=";
   };
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = ["bin" "out" "dev" "man"];
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [pkg-config];
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  nativeBuildInputs = [meson ninja pkg-config scdoc];
 
-  buildInputs = [ systemd ];
+  buildInputs = [systemd];
 
-  mesonFlags = [ "-Dlibseat-logind=systemd" "-Dlibseat-builtin=enabled" ];
+  mesonFlags = ["-Dlibseat-logind=systemd" "-Dlibseat-builtin=enabled"];
 
   meta = with lib; {
     description = "A universal seat management library";
-    changelog   = "https://git.sr.ht/~kennylevinsen/seatd/refs/${version}";
-    homepage    = "https://sr.ht/~kennylevinsen/seatd/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ emantor ];
+    changelog = "https://git.sr.ht/~kennylevinsen/seatd/refs/${version}";
+    homepage = "https://sr.ht/~kennylevinsen/seatd/";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [emantor];
   };
 }

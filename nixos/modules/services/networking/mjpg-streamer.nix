@@ -1,17 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.mjpg-streamer;
-
 in {
-
   options = {
-
     services.mjpg-streamer = {
-
       enable = mkEnableOption "mjpg-streamer webcam streamer";
 
       inputPlugin = mkOption {
@@ -42,13 +39,10 @@ in {
         default = "video";
         description = "mjpg-streamer group name.";
       };
-
     };
-
   };
 
   config = mkIf cfg.enable {
-
     users.users = optionalAttrs (cfg.user == "mjpg-streamer") {
       mjpg-streamer = {
         uid = config.ids.uids.mjpg-streamer;
@@ -58,7 +52,7 @@ in {
 
     systemd.services.mjpg-streamer = {
       description = "mjpg-streamer webcam streamer";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         User = cfg.user;
@@ -74,7 +68,5 @@ in {
         exec ${pkgs.mjpg-streamer}/bin/mjpg_streamer -i "$IPLUGIN" -o "$OPLUGIN"
       '';
     };
-
   };
-
 }

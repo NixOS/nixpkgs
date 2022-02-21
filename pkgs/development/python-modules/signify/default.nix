@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, asn1crypto
-, certvalidator
-, oscrypto
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  asn1crypto,
+  certvalidator,
+  oscrypto,
+  pyasn1,
+  pyasn1-modules,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "signify";
   version = "0.4.0";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ralphje/signify";
     description = "library that verifies PE Authenticode-signed binaries";
     license = licenses.mit;
-    maintainers = with maintainers; [ baloo ];
+    maintainers = with maintainers; [baloo];
   };
 }

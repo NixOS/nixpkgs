@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.clipcat;
 in {
-
-  options.services.clipcat= {
+  options.services.clipcat = {
     enable = mkEnableOption "Clipcat clipboard daemon";
 
     package = mkOption {
@@ -19,13 +20,13 @@ in {
 
   config = mkIf cfg.enable {
     systemd.user.services.clipcat = {
-      enable      = true;
+      enable = true;
       description = "clipcat daemon";
-      wantedBy = [ "graphical-session.target" ];
-      after    = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
+      after = ["graphical-session.target"];
       serviceConfig.ExecStart = "${cfg.package}/bin/clipcatd --no-daemon";
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
 }

@@ -3,13 +3,12 @@
 # not had a release in a long time. Upstream has stated that it should be fine
 # to use master. This file, and its attribute in all-packages, can be removed
 # once rr makes a release.
-
-{ callPackage, fetchFromGitHub }:
-
-let
+{
+  callPackage,
+  fetchFromGitHub,
+}: let
   rr = callPackage ./. {};
 in
-
   rr.overrideAttrs (old: {
     version = "unstable-2021-07-06";
 

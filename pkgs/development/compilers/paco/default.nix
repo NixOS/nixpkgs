@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "paco";
   version = "1.0";
@@ -18,6 +21,6 @@ buildGoPackage rec {
     description = "A simple compiled programming language";
     homepage = "https://github.com/pacolang/paco";
     license = licenses.mit;
-    maintainers = with maintainers; [ hugolgst ];
+    maintainers = with maintainers; [hugolgst];
   };
 }

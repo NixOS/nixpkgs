@@ -1,5 +1,9 @@
-{lib, stdenv, fetchFromGitHub, fontforge}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontforge,
+}:
 stdenv.mkDerivation rec {
   pname = "inconsolata-lgc";
   version = "1.3";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dqjj3mlc28s8ljnph6l086b4j9r5dly4fldq59crycwys72zzai";
   };
 
-  nativeBuildInputs = [ fontforge ];
+  nativeBuildInputs = [fontforge];
 
   installPhase = ''
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
@@ -47,6 +51,6 @@ stdenv.mkDerivation rec {
     # See `License.txt' for details.
     license = licenses.ofl;
     homepage = "https://github.com/MihailJP/Inconsolata-LGC";
-    maintainers = with maintainers; [ avnik rht ];
+    maintainers = with maintainers; [avnik rht];
   };
 }

@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, zlib, curl, protobuf, prime-server, boost, sqlite, libspatialite
-, luajit, geos, python3, zeromq }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  zlib,
+  curl,
+  protobuf,
+  prime-server,
+  boost,
+  sqlite,
+  libspatialite,
+  luajit,
+  geos,
+  python3,
+  zeromq,
+}:
 stdenv.mkDerivation rec {
   pname = "valhalla";
   version = "3.1.0";
@@ -23,10 +37,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
   buildInputs = [
-    zlib curl protobuf prime-server boost sqlite libspatialite
-    luajit geos python3 zeromq
+    zlib
+    curl
+    protobuf
+    prime-server
+    boost
+    sqlite
+    libspatialite
+    luajit
+    geos
+    python3
+    zeromq
   ];
 
   cmakeFlags = [
@@ -38,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Open Source Routing Engine for OpenStreetMap";
     homepage = "https://valhalla.readthedocs.io/";
     license = licenses.mit;
-    maintainers = [ maintainers.Thra11 ];
+    maintainers = [maintainers.Thra11];
     platforms = platforms.linux;
   };
 }

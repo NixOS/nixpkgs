@@ -1,8 +1,8 @@
-{ callPackage
-, fetchhg
-, ...
+{
+  callPackage,
+  fetchhg,
+  ...
 } @ args:
-
 callPackage ./generic.nix args {
   src = fetchhg {
     url = "https://hg.nginx.org/nginx-quic";

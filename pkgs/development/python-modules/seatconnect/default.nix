@@ -1,16 +1,16 @@
-{ lib
-, aiohttp
-, beautifulsoup4
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, lxml
-, pyjwt
-, pythonOlder
-, setuptools-scm
-, xmltodict
+{
+  lib,
+  aiohttp,
+  beautifulsoup4,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  lxml,
+  pyjwt,
+  pythonOlder,
+  setuptools-scm,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "seatconnect";
   version = "1.1.6";
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate with Seat Connect";
     homepage = "https://github.com/farfar/seatconnect";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

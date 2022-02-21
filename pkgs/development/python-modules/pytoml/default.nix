@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "pytoml";
   version = "0.1.20";
@@ -17,18 +17,17 @@ buildPythonPackage rec {
     sha256 = "02hjq44zhh6z0fsbm3hvz34sav6fic90sjrw8g1pkdvskzzl46mz";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     ${python.interpreter} test/test.py
     pytest test
   '';
 
-
   meta = with lib; {
     description = "A TOML parser/writer for Python";
-    homepage    = "https://github.com/avakar/pytoml";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    homepage = "https://github.com/avakar/pytoml";
+    license = licenses.mit;
+    maintainers = with maintainers; [peterhoeg];
   };
 }

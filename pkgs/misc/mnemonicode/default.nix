@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "mnemonicode";
   version = "2015-11-30";
@@ -22,6 +25,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.cstrahan ];
+    maintainers = [maintainers.cstrahan];
   };
 }

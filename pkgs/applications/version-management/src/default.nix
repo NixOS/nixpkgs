@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, python
-, rcs
-, git
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python,
+  rcs,
+  git,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "src";
   version = "1.29";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = ["prefix=${placeholder "out"}"];
 
   postInstall = ''
     wrapProgram $out/bin/src \
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://gitlab.com/esr/src/raw/${version}/NEWS";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ calvertvl AndersonTorres ];
+    maintainers = with maintainers; [calvertvl AndersonTorres];
     inherit (python.meta) platforms;
   };
 }

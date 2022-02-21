@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "assertpy";
   version = "1.1";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Simple assertion library for unit testing with a fluent API";
     homepage = "https://github.com/assertpy/assertpy";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

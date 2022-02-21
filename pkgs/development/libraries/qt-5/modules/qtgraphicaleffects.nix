@@ -1,7 +1,9 @@
-{ qtModule, qtdeclarative }:
-
+{
+  qtModule,
+  qtdeclarative,
+}:
 qtModule {
   pname = "qtgraphicaleffects";
-  qtInputs = [ qtdeclarative ];
-  outputs = [ "out" "dev" ];
+  qtInputs = [qtdeclarative];
+  outputs = ["out" "dev"];
 }

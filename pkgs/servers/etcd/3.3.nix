@@ -1,5 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoPackage rec {
   pname = "etcd";
   version = "3.3.27";
@@ -24,12 +28,12 @@ buildGoPackage rec {
     install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
   '';
 
-  passthru.tests = { inherit (nixosTests) etcd etcd-cluster; };
+  passthru.tests = {inherit (nixosTests) etcd etcd-cluster;};
 
   meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline zowoq ];
+    maintainers = with maintainers; [offline zowoq];
   };
 }

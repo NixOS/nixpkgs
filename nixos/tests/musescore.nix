@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   # Make sure we don't have to go through the startup tutorial
   customMuseScoreConfig = pkgs.writeText "MuseScore3.ini" ''
     [application]
@@ -9,17 +7,14 @@ let
     [ui]
     application\startup\showTours=false
     application\startup\showStartCenter=false
-    '';
-in
-{
+  '';
+in {
   name = "musescore";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ turion ];
+    maintainers = [turion];
   };
 
-  machine = { ... }:
-
-  {
+  machine = {...}: {
     imports = [
       ./common/x11.nix
     ];
@@ -33,7 +28,7 @@ in
 
   enableOCR = true;
 
-  testScript = { ... }: ''
+  testScript = {...}: ''
     start_all()
     machine.wait_for_x()
 

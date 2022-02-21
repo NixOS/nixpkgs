@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "diamond";
   version = "0.8.36";
@@ -15,8 +20,8 @@ stdenv.mkDerivation rec {
     ./diamond-0.8.36-no-warning.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [zlib];
 
   meta = with lib; {
     description = "Accelerated BLAST compatible local sequence aligner";
@@ -39,6 +44,6 @@ stdenv.mkDerivation rec {
       fullName = "University of Tuebingen, Benjamin Buchfink";
       url = "https://raw.githubusercontent.com/bbuchfink/diamond/master/src/COPYING";
     };
-    maintainers = [ maintainers.metabar ];
+    maintainers = [maintainers.metabar];
   };
 }

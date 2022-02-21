@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper, installShellFiles, coreutils }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk,
+  makeWrapper,
+  installShellFiles,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   pname = "spring-boot-cli";
   version = "2.3.2";
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zqfnxz57234227rp303iwis0mjkkjkpcqnj9jgw78gykjnqdmmq";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
   installPhase = ''
     runHook preInstall
@@ -42,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://spring.io/projects/spring-boot";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    maintainers = with maintainers; [moaxcp];
   };
 }

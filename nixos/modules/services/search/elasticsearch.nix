@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.elasticsearch;
 
   es7 = builtins.compareVersions cfg.package.version "7" >= 0;
@@ -37,10 +39,7 @@ let
     paths = cfg.plugins;
     postBuild = "${pkgs.coreutils}/bin/mkdir -p $out/plugins";
   };
-
-in
-{
-
+in {
   ###### interface
 
   options.services.elasticsearch = {
@@ -125,25 +124,25 @@ in
 
     extraCmdLineOptions = mkOption {
       description = "Extra command line options for the elasticsearch launcher.";
-      default = [ ];
+      default = [];
       type = types.listOf types.str;
     };
 
     extraJavaOptions = mkOption {
       description = "Extra command line options for Java.";
-      default = [ ];
+      default = [];
       type = types.listOf types.str;
-      example = [ "-Djava.net.preferIPv4Stack=true" ];
+      example = ["-Djava.net.preferIPv4Stack=true"];
     };
 
     plugins = mkOption {
       description = "Extra elasticsearch plugins";
-      default = [ ];
+      default = [];
       type = types.listOf types.package;
       example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
 
-    restartIfChanged  = mkOption {
+    restartIfChanged = mkOption {
       type = types.bool;
       description = ''
         Automatically restart the service on config change.
@@ -153,7 +152,6 @@ in
       '';
       default = true;
     };
-
   };
 
   ###### implementation
@@ -161,9 +159,9 @@ in
   config = mkIf cfg.enable {
     systemd.services.elasticsearch = {
       description = "Elasticsearch Daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ pkgs.inetutils ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      path = [pkgs.inetutils];
       inherit (cfg) restartIfChanged;
       environment = {
         ES_HOME = cfg.dataDir;
@@ -179,13 +177,15 @@ in
         TimeoutStartSec = "infinity";
       };
       preStart = ''
-        ${optionalString (!config.boot.isContainer) ''
-          # Only set vm.max_map_count if lower than ES required minimum
-          # This avoids conflict if configured via boot.kernel.sysctl
-          if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then
-            ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
-          fi
-        ''}
+        ${
+          optionalString (!config.boot.isContainer) ''
+            # Only set vm.max_map_count if lower than ES required minimum
+            # This avoids conflict if configured via boot.kernel.sysctl
+            if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then
+              ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
+            fi
+          ''
+        }
 
         mkdir -m 0700 -p ${cfg.dataDir}
 
@@ -224,7 +224,7 @@ in
       '';
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     users = {
       groups.elasticsearch.gid = config.ids.gids.elasticsearch;

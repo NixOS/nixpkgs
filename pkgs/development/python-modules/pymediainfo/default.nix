@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
-, libmediainfo
-, setuptools-scm
-, pytest, glibcLocales }:
-
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  libmediainfo,
+  setuptools-scm,
+  pytest,
+  glibcLocales,
+}:
 buildPythonPackage rec {
   pname = "pymediainfo";
   version = "5.1.0";
@@ -22,9 +27,9 @@ buildPythonPackage rec {
                 "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  checkInputs = [ glibcLocales pytest ];
+  checkInputs = [glibcLocales pytest];
 
   checkPhase = ''
     export LC_ALL=en_US.UTF-8
@@ -35,6 +40,6 @@ buildPythonPackage rec {
     description = "Python wrapper for the mediainfo library";
     homepage = "https://github.com/sbraz/pymediainfo";
     license = licenses.mit;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [jfrankenau];
   };
 }

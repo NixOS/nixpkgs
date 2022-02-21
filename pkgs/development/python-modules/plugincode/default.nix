@@ -1,12 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, click
-, commoncode
-, pluggy
-, pytestCheckHook
-, pytest-xdist
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  click,
+  commoncode,
+  pluggy,
+  pytestCheckHook,
+  pytest-xdist,
 }:
 buildPythonPackage rec {
   pname = "plugincode";

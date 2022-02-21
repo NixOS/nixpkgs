@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "evohome-async";
   version = "0.3.15";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "evohomeasync2" ];
+  pythonImportsCheck = ["evohomeasync2"];
 
   meta = with lib; {
     description = "Python client for connecting to Honeywell's TCC RESTful API";
     homepage = "https://github.com/zxdavb/evohome-async";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

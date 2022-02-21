@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, trio
-, outcome
-, sniffio
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  trio,
+  outcome,
+  sniffio,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "trio-asyncio";
   version = "0.12.0";
@@ -55,7 +55,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Re-implementation of the asyncio mainloop on top of Trio";
     homepage = "https://github.com/python-trio/trio-asyncio";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dotlambda ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

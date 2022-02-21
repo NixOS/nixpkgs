@@ -1,17 +1,17 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, lib
-, libsecret
-, libxshmfence
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, udev
-, wrapGAppsHook
+{
+  atomEnv,
+  autoPatchelfHook,
+  dpkg,
+  fetchurl,
+  lib,
+  libsecret,
+  libxshmfence,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  udev,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bitwarden";
   version = "1.31.3";
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [dpkg makeWrapper autoPatchelfHook wrapGAppsHook];
 
-  buildInputs = [ libsecret libxshmfence ] ++ atomEnv.packages;
+  buildInputs = [libsecret libxshmfence] ++ atomEnv.packages;
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper $out/opt/Bitwarden/bitwarden $out/bin/bitwarden \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsecret stdenv.cc.cc ] }" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libsecret stdenv.cc.cc]}" \
       "''${gappsWrapperArgs[@]}"
   '';
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     description = "A secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ kiwi ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [kiwi];
+    platforms = ["x86_64-linux"];
   };
 }

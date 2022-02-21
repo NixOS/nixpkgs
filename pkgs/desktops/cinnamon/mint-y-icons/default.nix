@@ -1,12 +1,12 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, gnome
-, gnome-icon-theme
-, hicolor-icon-theme
-, gtk3
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  gnome,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  gtk3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mint-y-icons";
   version = "1.5.8";

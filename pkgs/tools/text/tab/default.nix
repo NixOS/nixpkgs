@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromBitbucket, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  python3,
+}:
 stdenv.mkDerivation rec {
   version = "8.0";
   pname = "tab";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RcDvghTiqIdH79khwDIo8PhvmcObmix8WBrHToLwcw4=";
   };
 
-  checkInputs = [ python3 ];
+  checkInputs = [python3];
 
   doCheck = !stdenv.isDarwin;
 
@@ -32,9 +36,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Programming language/shell calculator";
-    homepage    = "https://tkatchev.bitbucket.io/tab/";
-    license     = licenses.boost;
-    maintainers = with maintainers; [ mstarzyk ];
-    platforms   = with platforms; unix;
+    homepage = "https://tkatchev.bitbucket.io/tab/";
+    license = licenses.boost;
+    maintainers = with maintainers; [mstarzyk];
+    platforms = with platforms; unix;
   };
 }

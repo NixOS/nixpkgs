@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, doxygen }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+}:
 stdenv.mkDerivation rec {
   name = "uri-${version}";
   version = "1.1.0";
@@ -13,10 +18,12 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=parentheses";
 
-  nativeBuildInputs = [ cmake doxygen ];
+  nativeBuildInputs = [cmake doxygen];
 
   cmakeFlags = [
-    "-DUri_BUILD_TESTS=OFF" "-DUri_BUILD_DOCS=ON" "-DBUILD_SHARED_LIBS=ON"
+    "-DUri_BUILD_TESTS=OFF"
+    "-DUri_BUILD_DOCS=ON"
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
   postBuild = "make doc";

@@ -1,12 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, six
-, numpy
-, scipy # optional, allows spline-related features (see patsy's docs)
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  six,
+  numpy,
+  scipy
+  # optional, allows spline-related features (see patsy's docs)
+  ,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "patsy";
   version = "0.5.2";
@@ -34,7 +36,6 @@ buildPythonPackage rec {
     description = "A Python package for describing statistical models";
     homepage = "https://github.com/pydata/patsy";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ilya-kolpakov ];
+    maintainers = with lib.maintainers; [ilya-kolpakov];
   };
 }
-

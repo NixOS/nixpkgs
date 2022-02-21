@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation {
   pname = "pthreads-w32";
   version = "2.9.1";
@@ -9,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1s8iny7g06z289ahdj0kzaxj0cd3wvjbd8j3bh9xlg7g444lhy9w";
   };
 
-  makeFlags = [ "CROSS=${stdenv.cc.targetPrefix}" "GC-static" ];
+  makeFlags = ["CROSS=${stdenv.cc.targetPrefix}" "GC-static"];
 
   installPhase = ''
     runHook preInstall
@@ -23,7 +26,7 @@ stdenv.mkDerivation {
     description = "POSIX threads library for Windows";
     homepage = "https://sourceware.org/pthreads-win32";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ yana ];
+    maintainers = with maintainers; [yana];
     platforms = platforms.windows;
   };
 }

@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kernelAtLeast }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelAtLeast,
+}:
 stdenv.mkDerivation rec {
   name = "isgx-${version}-${kernel.version}";
   version = "2.14";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kbbf2inaywp44lm8ig26mkb36jq3smsln0yp6kmrirdwc3c53mi";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -38,8 +43,14 @@ stdenv.mkDerivation rec {
       based attestation on the platforms without Flexible Launch Control.
     '';
     homepage = "https://github.com/intel/linux-sgx-driver";
-    license = with licenses; [ bsd3 /* OR */ gpl2Only ];
-    maintainers = with maintainers; [ oxalica ];
-    platforms = [ "x86_64-linux" ];
+    license = with licenses; [
+      bsd3
+      /*
+       OR
+       */
+      gpl2Only
+    ];
+    maintainers = with maintainers; [oxalica];
+    platforms = ["x86_64-linux"];
   };
 }

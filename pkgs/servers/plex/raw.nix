@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, dpkg
-, writeScript
-, curl
-, jq
-, common-updater-scripts
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  writeScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
-
 # The raw package that fetches and extracts the Plex RPM. Override the source
 # and version of this derivation if you want to use a Plex Pass version of the
 # server, and the FHS userenv and corresponding NixOS module should
@@ -16,17 +17,22 @@ stdenv.mkDerivation rec {
   pname = "plexmediaserver";
 
   # Fetch the source
-  src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-    hash = "sha256-8/9r8GMOfnorKpY22QzdnNX7J2ijyv/3BeYWPpseSj0=";
-  } else fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-    hash = "sha256-8n9UFXm+UtPrpoSktU7cjgDIssT9PpGbTk2TRGfn48I=";
-  };
+  src =
+    if stdenv.hostPlatform.system == "aarch64-linux"
+    then
+      fetchurl {
+        url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
+        hash = "sha256-8/9r8GMOfnorKpY22QzdnNX7J2ijyv/3BeYWPpseSj0=";
+      }
+    else
+      fetchurl {
+        url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
+        hash = "sha256-8n9UFXm+UtPrpoSktU7cjgDIssT9PpGbTk2TRGfn48I=";
+      };
 
-  outputs = [ "out" "basedb" ];
+  outputs = ["out" "basedb"];
 
-  nativeBuildInputs = [ dpkg ];
+  nativeBuildInputs = [dpkg];
 
   unpackPhase = ''
     dpkg-deb -R $src .
@@ -80,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://plex.tv/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = ["x86_64-linux" "aarch64-linux"];
     maintainers = with maintainers; [
       badmutex
       forkk

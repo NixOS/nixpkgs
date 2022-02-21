@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  wcwidth,
 }:
-
 buildPythonPackage rec {
   pname = "prompt-toolkit";
   version = "3.0.24";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

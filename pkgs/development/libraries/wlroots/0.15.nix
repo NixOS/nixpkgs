@@ -1,12 +1,33 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, wayland-scanner
-, libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg_4, xcbutilrenderutil, seatd, vulkan-loader, glslang
-, nixosTests
-
-, enableXWayland ? true, xwayland ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  libGL,
+  wayland,
+  wayland-protocols,
+  libinput,
+  libxkbcommon,
+  pixman,
+  xcbutilwm,
+  libX11,
+  libcap,
+  xcbutilimage,
+  xcbutilerrors,
+  mesa,
+  libpng,
+  ffmpeg_4,
+  xcbutilrenderutil,
+  seatd,
+  vulkan-loader,
+  glslang,
+  nixosTests,
+  enableXWayland ? true,
+  xwayland ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wlroots";
   version = "0.15.1";
@@ -20,23 +41,36 @@ stdenv.mkDerivation rec {
   };
 
   # $out for the library and $examples for the example programs (in examples):
-  outputs = [ "out" "examples" ];
+  outputs = ["out" "examples"];
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [pkg-config];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang ];
+  nativeBuildInputs = [meson ninja pkg-config wayland-scanner glslang];
 
-  buildInputs = [
-    libGL wayland wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg_4 xcbutilrenderutil seatd vulkan-loader
-  ]
-    ++ lib.optional enableXWayland xwayland
-  ;
+  buildInputs =
+    [
+      libGL
+      wayland
+      wayland-protocols
+      libinput
+      libxkbcommon
+      pixman
+      xcbutilwm
+      libX11
+      libcap
+      xcbutilimage
+      xcbutilerrors
+      mesa
+      libpng
+      ffmpeg_4
+      xcbutilrenderutil
+      seatd
+      vulkan-loader
+    ]
+    ++ lib.optional enableXWayland xwayland;
 
   mesonFlags =
-    lib.optional (!enableXWayland) "-Dxwayland=disabled"
-  ;
+    lib.optional (!enableXWayland) "-Dxwayland=disabled";
 
   postFixup = ''
     # Install ALL example programs to $examples:
@@ -61,8 +95,8 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [primeos synthetica];
   };
 }

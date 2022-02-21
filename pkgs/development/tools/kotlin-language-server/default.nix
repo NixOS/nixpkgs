@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, unzip, openjdk11, gradle }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  openjdk11,
+  gradle,
+}:
 stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
   version = "1.2.0";
@@ -17,8 +23,8 @@ stdenv.mkDerivation rec {
     cp -r bin/* $out/bin
   '';
 
-  nativeBuildInputs = [ unzip gradle ];
-  buildInputs = [ openjdk11 gradle ];
+  nativeBuildInputs = [unzip gradle];
+  buildInputs = [openjdk11 gradle];
 
   meta = {
     description = "kotlin language server";

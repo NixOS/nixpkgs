@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python2,
+}:
 stdenv.mkDerivation rec {
   version = "0.6.3";
   pname = "docopt.cpp";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cz3vv7g5snfbsqcf3q8bmd6kv5qp84gj3avwkn4vl00krw13bl7";
   };
 
-  nativeBuildInputs = [ cmake python2 ];
+  nativeBuildInputs = [cmake python2];
 
   cmakeFlags = ["-DWITH_TESTS=ON"];
 
@@ -30,8 +35,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C++11 port of docopt";
     homepage = "https://github.com/docopt/docopt.cpp";
-    license = with licenses; [ mit boost ];
+    license = with licenses; [mit boost];
     platforms = platforms.all;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [knedlsepp];
   };
 }

@@ -1,5 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
-
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "chamber";
   version = "2.10.8";
@@ -15,13 +18,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-XpLLolxWu9aMp1cyG4dUQk4YtknbIRMmBUdSeyY4PNk=";
 
-  ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
+  ldflags = ["-s" "-w" "-X main.Version=v${version}"];
 
   meta = with lib; {
-    description =
-      "A tool for managing secrets by storing them in AWS SSM Parameter Store";
+    description = "A tool for managing secrets by storing them in AWS SSM Parameter Store";
     homepage = "https://github.com/segmentio/chamber";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalekseev ];
+    maintainers = with maintainers; [kalekseev];
   };
 }

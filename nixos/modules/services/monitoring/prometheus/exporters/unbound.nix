@@ -1,16 +1,17 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.unbound;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.unbound;
+in {
   port = 9167;
   extraOpts = {
     fetchType = mkOption {
       # TODO: add shm when upstream implemented it
-      type = types.enum [ "tcp" "uds" ];
+      type = types.enum ["tcp" "uds"];
       default = "uds";
       description = ''
         Which methods the exporter uses to get the information from unbound.
@@ -39,25 +40,28 @@ in
     };
   };
 
-  serviceOpts = mkMerge ([{
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.prometheus-unbound-exporter}/bin/unbound-telemetry \
-          ${cfg.fetchType} \
-          --bind ${cfg.listenAddress}:${toString cfg.port} \
-          --path ${cfg.telemetryPath} \
-          ${optionalString (cfg.controlInterface != null) "--control-interface ${cfg.controlInterface}"} \
-          ${toString cfg.extraFlags}
-      '';
-      RestrictAddressFamilies = [
-        # Need AF_UNIX to collect data
-        "AF_UNIX"
-      ];
-    };
-  }] ++ [
+  serviceOpts = mkMerge ([
+    {
+      serviceConfig = {
+        ExecStart = ''
+          ${pkgs.prometheus-unbound-exporter}/bin/unbound-telemetry \
+            ${cfg.fetchType} \
+            --bind ${cfg.listenAddress}:${toString cfg.port} \
+            --path ${cfg.telemetryPath} \
+            ${optionalString (cfg.controlInterface != null) "--control-interface ${cfg.controlInterface}"} \
+            ${toString cfg.extraFlags}
+        '';
+        RestrictAddressFamilies = [
+          # Need AF_UNIX to collect data
+          "AF_UNIX"
+        ];
+      };
+    }
+  ]
+  ++ [
     (mkIf config.services.unbound.enable {
-      after = [ "unbound.service" ];
-      requires = [ "unbound.service" ];
+      after = ["unbound.service"];
+      requires = ["unbound.service"];
     })
   ]);
 }

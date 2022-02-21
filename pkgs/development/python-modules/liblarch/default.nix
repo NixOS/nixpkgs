@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
-, pygobject3
-, xvfb-run
-, gobject-introspection
-, gtk3
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  pygobject3,
+  xvfb-run,
+  gobject-introspection,
+  gtk3,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   version = "3.0.1";
   pname = "liblarch";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/getting-things-gnome/liblarch";
     downloadPage = "https://github.com/getting-things-gnome/liblarch/releases";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ oyren ];
+    maintainers = with maintainers; [oyren];
     platforms = platforms.linux;
   };
 }

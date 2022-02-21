@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, python3, perl, intltool, flex, texinfo, libiconv, libintl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  perl,
+  intltool,
+  flex,
+  texinfo,
+  libiconv,
+  libintl,
+}:
 stdenv.mkDerivation rec {
   pname = "recode";
   version = "3.7.9";
@@ -10,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5DIKaw9c2DfNtFT7WFQBjd+pcJEWCOHwHMLGX2M2csQ=";
   };
 
-  nativeBuildInputs = [ python3 python3.pkgs.cython perl intltool flex texinfo libiconv ];
-  buildInputs = [ libintl ];
+  nativeBuildInputs = [python3 python3.pkgs.cython perl intltool flex texinfo libiconv];
+  buildInputs = [libintl];
 
   doCheck = true;
 
@@ -20,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Converts files between various character sets and usages";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ jcumming ];
+    maintainers = with lib.maintainers; [jcumming];
   };
 }

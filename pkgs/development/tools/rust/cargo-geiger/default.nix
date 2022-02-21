@@ -1,9 +1,16 @@
-{ stdenv, lib, fetchFromGitHub
-, rustPlatform, pkg-config, openssl
-# darwin dependencies
-, Security, CoreFoundation, libiconv
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl
+  # darwin dependencies
+  ,
+  Security,
+  CoreFoundation,
+  libiconv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
   version = "0.11.2";
@@ -16,8 +23,8 @@ rustPlatform.buildRustPackage rec {
   };
   cargoSha256 = "sha256-i7xDEzZAN2ubW1Q6MhY+xsb9XiUajNDHLdtDuO5r6jA=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [openssl] ++ lib.optionals stdenv.isDarwin [Security libiconv];
+  nativeBuildInputs = [pkg-config];
 
   # FIXME: Use impure version of CoreFoundation because of missing symbols.
   # CFURLSetResourcePropertyForKey is defined in the headers but there's no
@@ -52,7 +59,13 @@ rustPlatform.buildRustPackage rec {
       dependency selection but it can not help you decide when and why unsafe
       code is appropriate.
     '';
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ evanjs jk ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [evanjs jk];
   };
 }

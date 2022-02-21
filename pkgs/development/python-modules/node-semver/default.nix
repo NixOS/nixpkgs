@@ -1,10 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytest,
+}:
 buildPythonPackage rec {
   version = "0.8.1";
   pname = "node-semver";
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   src = fetchPypi {
     inherit pname version;

@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, freetype
-, imlib2
-, libSM
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXft
-, libXinerama
-, libXrandr
-, libpulseaudio
-, libsndfile
-, pango
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  freetype,
+  imlib2,
+  libSM,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXft,
+  libXinerama,
+  libXrandr,
+  libpulseaudio,
+  libsndfile,
+  pango,
+  perl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "e16";
   version = "1.0.24";
@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     description = "Enlightenment DR16 window manager";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

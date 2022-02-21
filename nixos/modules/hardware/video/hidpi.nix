@@ -1,7 +1,10 @@
-{ lib, pkgs, config, ...}:
-with lib;
-
 {
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; {
   options.hardware.video.hidpi.enable = mkEnableOption "Font/DPI configuration optimized for HiDPI displays";
 
   config = mkIf config.hardware.video.hidpi.enable {

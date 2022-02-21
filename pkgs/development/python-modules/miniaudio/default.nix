@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cffi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cffi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "miniaudio";
   version = "1.46";
@@ -19,19 +19,19 @@ buildPythonPackage rec {
     sha256 = "16llwmbbd9445rwhl4v66kf5zd7yl3a94zm9xyllq6ij7vnhg5jb";
   };
 
-  propagatedNativeBuildInputs = [ cffi ];
-  propagatedBuildInputs = [ cffi ];
+  propagatedNativeBuildInputs = [cffi];
+  propagatedBuildInputs = [cffi];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "miniaudio" ];
+  pythonImportsCheck = ["miniaudio"];
 
   meta = with lib; {
     description = "Python bindings for the miniaudio library and its decoders";
     homepage = "https://github.com/irmen/pyminiaudio";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

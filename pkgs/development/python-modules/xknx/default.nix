@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, netifaces
-, voluptuous
-, pyyaml
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  netifaces,
+  voluptuous,
+  pyyaml,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "xknx";
   version = "0.19.2";
@@ -45,8 +45,8 @@ buildPythonPackage rec {
       packets. It provides support for KNX/IP routing and tunneling devices.
     '';
     homepage = "https://github.com/XKNX/xknx";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
     platforms = platforms.linux;
   };
 }

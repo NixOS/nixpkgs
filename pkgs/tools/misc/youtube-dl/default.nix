@@ -1,19 +1,30 @@
-{ lib, fetchurl, fetchpatch, buildPythonPackage
-, zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
-# Pandoc is required to build the package's man page. Release tarballs contain a
-# formatted man page already, though, it will still be installed. We keep the
-# manpage argument in place in case someone wants to use this derivation to
-# build a Git version of the tool that doesn't have the formatted man page
-# included.
-, generateManPage ? false
-, ffmpegSupport ? true
-, rtmpSupport ? true
-, phantomjsSupport ? false
-, hlsEncryptedSupport ? true
-, installShellFiles, makeWrapper }:
-
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildPythonPackage,
+  zip,
+  ffmpeg,
+  rtmpdump,
+  phantomjs2,
+  atomicparsley,
+  pycryptodome,
+  pandoc
+  # Pandoc is required to build the package's man page. Release tarballs contain a
+  # formatted man page already, though, it will still be installed. We keep the
+  # manpage argument in place in case someone wants to use this derivation to
+  # build a Git version of the tool that doesn't have the formatted man page
+  # included.
+  ,
+  generateManPage ? false,
+  ffmpegSupport ? true,
+  rtmpSupport ? true,
+  phantomjsSupport ? false,
+  hlsEncryptedSupport ? true,
+  installShellFiles,
+  makeWrapper,
+}:
 buildPythonPackage rec {
-
   pname = "youtube-dl";
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
@@ -39,8 +50,8 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ zip ] ++ lib.optional generateManPage pandoc;
+  nativeBuildInputs = [installShellFiles makeWrapper];
+  buildInputs = [zip] ++ lib.optional generateManPage pandoc;
   propagatedBuildInputs = lib.optional hlsEncryptedSupport pycryptodome;
 
   # Ensure these utilities are available in $PATH:
@@ -48,12 +59,12 @@ buildPythonPackage rec {
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs = let
-      packagesToBinPath =
-        [ atomicparsley ]
-        ++ lib.optional ffmpegSupport ffmpeg
-        ++ lib.optional rtmpSupport rtmpdump
-        ++ lib.optional phantomjsSupport phantomjs2;
-    in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+    packagesToBinPath =
+      [atomicparsley]
+      ++ lib.optional ffmpegSupport ffmpeg
+      ++ lib.optional rtmpSupport rtmpdump
+      ++ lib.optional phantomjsSupport phantomjs2;
+  in [''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''];
 
   setupPyBuildFlags = [
     "build_lazy_extractors"
@@ -77,6 +88,6 @@ buildPythonPackage rec {
     '';
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 AndersonTorres fpletz ma27 ];
+    maintainers = with maintainers; [bluescreen303 AndersonTorres fpletz ma27];
   };
 }

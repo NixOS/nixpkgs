@@ -1,12 +1,12 @@
 {
-  lib, stdenv,
+  lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
   gtest,
   python3,
-  boost
+  boost,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cli11";
   version = "1.9.1";
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0hbch0vk8irgmiaxnfqlqys65v1770rxxdfn3d23m2vqyjh0j9l6";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  checkInputs = [ boost python3 ];
+  checkInputs = [boost python3];
 
   doCheck = true;
 
@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
     description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.bsd3;
   };
-
 }

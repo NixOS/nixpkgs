@@ -1,12 +1,12 @@
-{ lib
-, fetchFromGitHub
-, crystal
-}:
-
-let
-  generic =
-    { version, sha256 }:
-
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+}: let
+  generic = {
+    version,
+    sha256,
+  }:
     crystal.buildCrystalPackage {
       pname = "shards";
       inherit version;
@@ -29,14 +29,11 @@ let
       meta = with lib; {
         description = "Dependency manager for the Crystal language";
         license = licenses.asl20;
-        maintainers = with maintainers; [ peterhoeg ];
+        maintainers = with maintainers; [peterhoeg];
         inherit (crystal.meta) homepage platforms;
       };
     };
-
-in
-rec {
-
+in rec {
   shards_0_15 = generic {
     version = "0.15.0";
     sha256 = "sha256-/C6whh5RbTBkFWqpn0GqyVe0opbrklm8xPv5MIG99VU=";

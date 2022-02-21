@@ -1,5 +1,9 @@
-{lib, stdenv, fetchFromGitHub, perl}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "vmtouch";
   version = "1.3.1";
@@ -13,14 +17,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [perl];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = {
     description = "Portable file system cache diagnostics and control";
     longDescription = "vmtouch is a tool for learning about and controlling the file system cache of unix and unix-like systems.";
     homepage = "https://hoytech.com/vmtouch/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.garrison ];
+    maintainers = [lib.maintainers.garrison];
     platforms = lib.platforms.all;
   };
 }

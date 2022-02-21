@@ -1,10 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, pkg-config
-, nettle
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  pkg-config,
+  nettle,
 }:
-
 buildOctavePackage rec {
   pname = "general";
   version = "2.1.1";
@@ -25,7 +25,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/general/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "General tools for Octave";
   };
 }

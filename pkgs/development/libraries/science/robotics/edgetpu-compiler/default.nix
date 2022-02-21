@@ -1,9 +1,10 @@
-{ autoPatchelfHook
-, dpkg
-, fetchurl
-, lib
-, libcxx
-, stdenv
+{
+  autoPatchelfHook,
+  dpkg,
+  fetchurl,
+  lib,
+  libcxx,
+  stdenv,
 }:
 stdenv.mkDerivation rec {
   pname = "edgetpu-compiler";
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "A command line tool that compiles a TensorFlow Lite model into an Edge TPU compatible file.";
     homepage = "https://coral.ai/docs/edgetpu/compiler";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cpcloud ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [cpcloud];
+    platforms = ["x86_64-linux"];
   };
 }

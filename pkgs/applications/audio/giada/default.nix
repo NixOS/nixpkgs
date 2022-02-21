@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fltk
-, rtmidi
-, libsamplerate
-, libsndfile
-, jack2
-, alsa-lib
-, libpulseaudio
-, libXpm
-, flac
-, libogg
-, libvorbis
-, libopus
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fltk,
+  rtmidi,
+  libsamplerate,
+  libsndfile,
+  jack2,
+  alsa-lib,
+  libpulseaudio,
+  libXpm,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
 }:
-
 stdenv.mkDerivation rec {
   pname = "giada";
   version = "unstable-2021-09-24";
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [petabyteboy];
     platforms = platforms.all;
   };
 }

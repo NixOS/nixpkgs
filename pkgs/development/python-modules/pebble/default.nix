@@ -1,5 +1,11 @@
-{ lib, stdenv, buildPythonPackage, isPy27, fetchPypi, pytestCheckHook }:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "pebble";
   version = "4.6.3";
@@ -21,6 +27,6 @@ buildPythonPackage rec {
     description = "API to manage threads and processes within an application";
     homepage = "https://github.com/noxdafox/pebble";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, unzip, scheme, texinfo }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  unzip,
+  scheme,
+  texinfo,
+}:
 stdenv.mkDerivation rec {
   pname = "slib";
   version = "3b5";
@@ -9,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0q0p2d53p8qw2592yknzgy2y1p5a9k7ppjx0cfrbvk6242c4mdpq";
   };
 
-  patches = [ ./catalog-in-library-vicinity.patch ];
+  patches = [./catalog-in-library-vicinity.patch];
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ scheme texinfo ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [scheme texinfo];
 
   postInstall = ''
     ln -s mklibcat{.scm,}
@@ -48,7 +54,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://people.csail.mit.edu/jaffer/SLIB";
 
-    maintainers = [ ];
+    maintainers = [];
     platforms = lib.platforms.unix;
   };
 }

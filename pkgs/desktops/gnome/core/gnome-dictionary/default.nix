@@ -1,7 +1,24 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, desktop-file-utils, appstream-glib, libxslt
-, libxml2, gettext, itstool, wrapGAppsHook, docbook_xsl, docbook_xml_dtd_43
-, gnome, gtk3, glib, gsettings-desktop-schemas }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  appstream-glib,
+  libxslt,
+  libxml2,
+  gettext,
+  itstool,
+  wrapGAppsHook,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gnome,
+  gtk3,
+  glib,
+  gsettings-desktop-schemas,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-dictionary";
   version = "40.0";
@@ -14,10 +31,20 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja pkg-config wrapGAppsHook libxml2 gettext itstool
-    desktop-file-utils appstream-glib libxslt docbook_xsl docbook_xml_dtd_43
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook
+    libxml2
+    gettext
+    itstool
+    desktop-file-utils
+    appstream-glib
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_43
   ];
-  buildInputs = [ gtk3 glib gsettings-desktop-schemas gnome.adwaita-icon-theme ];
+  buildInputs = [gtk3 glib gsettings-desktop-schemas gnome.adwaita-icon-theme];
 
   passthru = {
     updateScript = gnome.updateScript {

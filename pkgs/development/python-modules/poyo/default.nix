@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   version = "0.5.0";
   pname = "poyo";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     description = "A lightweight YAML Parser for Python";
     license = licenses.mit;
   };
-
 }

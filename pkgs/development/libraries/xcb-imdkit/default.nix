@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, uthash
-, xcbutil
-, xcbutilkeysyms
-, xorgproto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  uthash,
+  xcbutil,
+  xcbutilkeysyms,
+  xorgproto,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xcb-imdkit";
   version = "1.0.3";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "input method development support for xcb";
     homepage = "https://github.com/fcitx/xcb-imdkit";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
+    maintainers = with maintainers; [poscat];
     platforms = platforms.linux;
   };
 }

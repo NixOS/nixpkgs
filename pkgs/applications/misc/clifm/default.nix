@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, libcap, acl, file, readline }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libcap,
+  acl,
+  file,
+  readline,
+}:
 stdenv.mkDerivation rec {
   pname = "clifm";
   version = "1.4";
@@ -11,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-62WxvJsXkzvDqFGFpid9VDB1mARgllkKnb6mFC5pdl8=";
   };
 
-  buildInputs = [ libcap acl file readline ];
+  buildInputs = [libcap acl file readline];
 
   makeFlags = [
     "DESTDIR=${placeholder "out"}"
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/leo-arch/clifm";
     description = "CliFM is a CLI-based, shell-like, and non-curses terminal file manager written in C: simple, fast, extensible, and lightweight as hell";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.unix;
   };
 }

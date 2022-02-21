@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, libftdi1
-, libusb1
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libftdi1,
+  libusb1,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pylibftdi";
   version = "0.20.0";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://pylibftdi.readthedocs.io/";
     description = "Wrapper to Intra2net's libftdi driver for FTDI's USB devices";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthuszagh ];
+    maintainers = with maintainers; [matthuszagh];
   };
 }

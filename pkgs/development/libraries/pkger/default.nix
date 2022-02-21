@@ -1,9 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "pkger";
   version = "0.17.1";
@@ -24,6 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/markbates/pkger";
     changelog = "https://github.com/markbates/pkger/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
   };
 }

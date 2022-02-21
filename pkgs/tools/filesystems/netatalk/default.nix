@@ -1,8 +1,23 @@
-{ fetchurl, lib, stdenv, autoreconfHook, pkg-config, perl, python3
-, db, libgcrypt, avahi, libiconv, pam, openssl, acl
-, ed, libtirpc, libevent, fetchpatch
+{
+  fetchurl,
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+  perl,
+  python3,
+  db,
+  libgcrypt,
+  avahi,
+  libiconv,
+  pam,
+  openssl,
+  acl,
+  ed,
+  libtirpc,
+  libevent,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netatalk";
   version = "3.1.12";
@@ -22,9 +37,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config perl python3 python3.pkgs.wrapPython ];
+  nativeBuildInputs = [autoreconfHook pkg-config perl python3 python3.pkgs.wrapPython];
 
-  buildInputs = [ db libgcrypt avahi libiconv pam openssl acl libevent ];
+  buildInputs = [db libgcrypt avahi libiconv pam openssl acl libevent];
 
   configureFlags = [
     "--with-bdb=${db.dev}"
@@ -62,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = "http://netatalk.sourceforge.net/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jcumming ];
+    maintainers = with lib.maintainers; [jcumming];
   };
 }

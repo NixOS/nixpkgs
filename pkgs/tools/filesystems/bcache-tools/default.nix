@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, util-linux, bash }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  util-linux,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "bcache-tools";
   version = "1.0.7";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ors2xXRrVTf8Cq3BYnSVSfJy/nyGjT5BGLSNpxOcHR4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ util-linux ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [util-linux];
 
   # * Remove broken install rules (they ignore $PREFIX) for stuff we don't need
   #   anyway (it's distro specific stuff).
@@ -58,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://bcache.evilpiepirate.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

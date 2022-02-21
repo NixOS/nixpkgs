@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, python
-, pytestCheckHook
-, six
-, paste
-, pastedeploy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  python,
+  pytestCheckHook,
+  six,
+  paste,
+  pastedeploy,
 }:
-
 buildPythonPackage rec {
   pname = "pastescript";
   version = "3.2.1";
@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   # test suite seems to unset PYTHONPATH
   doCheck = false;
-  checkInputs = [ nose pytestCheckHook ];
+  checkInputs = [nose pytestCheckHook];
 
-  pythonNamespaces = [ "paste" ];
+  pythonNamespaces = ["paste"];
 
   disabledTestPaths = [
     "appsetup/testfiles"
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "A pluggable command-line frontend, including commands to setup package file layouts";
     homepage = "https://github.com/cdent/pastescript/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

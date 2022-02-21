@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, gcc
-, libGLU, libX11, libXext, libXcursor, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gcc,
+  libGLU,
+  libX11,
+  libXext,
+  libXcursor,
+  libpulseaudio,
 }:
 stdenv.mkDerivation {
   pname = "scrolls";
@@ -10,7 +18,7 @@ stdenv.mkDerivation {
     homepage = "https://scrolls.com/";
     # http://www.reddit.com/r/Scrolls/comments/2j3pxw/linux_client_experimental/
 
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
 
     license = lib.licenses.unfree;
   };
@@ -41,5 +49,4 @@ stdenv.mkDerivation {
     mkdir "$out/bin"
     ln -s "$out/opt/Scrolls/Scrolls" "$out/bin/Scrolls"
   '';
-
 }

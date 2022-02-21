@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, qtbase, qtdeclarative, qmake, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qtdeclarative,
+  qmake,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libcommuni";
   version = "3.7.0";
@@ -13,15 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9eYJpmjW1J48RD6wVJOHmsAgTbauNeeCrXe076ufq1I=";
   };
 
-  buildInputs = [ qtbase qtdeclarative ];
-  nativeBuildInputs = [ qmake which ];
+  buildInputs = [qtbase qtdeclarative];
+  nativeBuildInputs = [qmake which];
 
   enableParallelBuilding = true;
 
   dontUseQmakeConfigure = true;
-  configureFlags = [ "-config" "release" ]
+  configureFlags =
+    ["-config" "release"]
     # Build mixes up dylibs/frameworks if one is not explicitely specified.
-    ++ lib.optionals stdenv.isDarwin [ "-config" "qt_framework" ];
+    ++ lib.optionals stdenv.isDarwin ["-config" "qt_framework"];
 
   dontWrapQtApps = true;
 
@@ -43,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://communi.github.io";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ hrdinka ];
+    maintainers = with maintainers; [hrdinka];
   };
 }

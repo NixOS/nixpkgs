@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, perl, readline, rsh, ssh, slurm, slurmSupport ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  readline,
+  rsh,
+  ssh,
+  slurm,
+  slurmSupport ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "pdsh";
   version = "2.34";
@@ -9,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1s91hmhrz7rfb6h3l5k97s393rcm1ww3svp8dx5z8vkkc933wyxl";
   };
 
-  buildInputs = [ perl readline ssh ]
+  buildInputs =
+    [perl readline ssh]
     ++ (lib.optional slurmSupport slurm);
 
   preConfigure = ''
@@ -17,10 +27,26 @@ stdenv.mkDerivation rec {
       "--infodir=$out/share/info"
       "--mandir=$out/share/man"
       "--with-machines=/etc/pdsh/machines"
-      ${if readline == null then "--without-readline" else "--with-readline"}
-      ${if ssh == null then "--without-ssh" else "--with-ssh"}
-      ${if rsh == false then "--without-rsh" else "--with-rsh"}
-      ${if slurmSupport then "--with-slurm" else "--without-slurm"}
+      ${
+      if readline == null
+      then "--without-readline"
+      else "--with-readline"
+    }
+      ${
+      if ssh == null
+      then "--without-ssh"
+      else "--with-ssh"
+    }
+      ${
+      if rsh == false
+      then "--without-rsh"
+      else "--with-rsh"
+    }
+      ${
+      if slurmSupport
+      then "--with-slurm"
+      else "--without-slurm"
+    }
       "--with-dshgroups"
       "--with-xcpu"
       "--disable-debug"

@@ -1,6 +1,13 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper,
-electron, libsecret }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  electron,
+  libsecret,
+}:
 stdenv.mkDerivation rec {
   pname = "tutanota-desktop";
   version = "3.91.10";
@@ -46,7 +53,7 @@ stdenv.mkDerivation rec {
       $out/bin/tutanota-desktop \
       --add-flags $out/share/tutanota-desktop/resources/app.asar \
       --run "mkdir /tmp/tutanota" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libsecret]}
 
     runHook postInstall
   '';
@@ -55,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "Tutanota official desktop client";
     homepage = "https://tutanota.com/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

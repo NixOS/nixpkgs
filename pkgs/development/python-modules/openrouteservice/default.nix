@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, responses, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  responses,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "openrouteservice";
   version = "2.3.3";
@@ -11,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1d5qbygb81fhpwfdm1a118r3xv45xz9n9avfkgxkvw1n8y6ywz2q";
   };
 
-  checkInputs = [ pytestCheckHook responses ];
+  checkInputs = [pytestCheckHook responses];
 
   disabledTests = [
     # touches network
@@ -24,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GIScience/openrouteservice-py";
     description = "The Python API to consume openrouteservice(s) painlessly";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    maintainers = with maintainers; [Scriptkiddi];
   };
 }

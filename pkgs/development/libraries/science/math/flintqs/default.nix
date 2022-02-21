@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gmp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmp,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.0";
   pname = "flintqs";
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/sagemath/FlintQS";
     description = "Highly optimized multi-polynomial quadratic sieve for integer factorization";
-    license = with licenses; [ gpl2 ];
+    license = with licenses; [gpl2];
     maintainers = teams.sage.members;
     platforms = platforms.all;
   };

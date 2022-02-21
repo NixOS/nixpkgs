@@ -1,8 +1,8 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "maligned-unstable";
   version = "2018-07-07";
@@ -24,7 +24,7 @@ buildGoPackage rec {
     description = "Tool to detect Go structs that would take less memory if their fields were sorted";
     homepage = "https://github.com/mdempsky/maligned";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

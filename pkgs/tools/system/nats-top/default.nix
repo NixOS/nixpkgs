@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "nats-top";
   version = "0.4.0";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "top-like tool for monitoring NATS servers";
     homepage = "https://github.com/nats-io/nats-top";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,14 +1,16 @@
-{ buildPecl, lib }:
-
+{
+  buildPecl,
+  lib,
+}:
 buildPecl {
   pname = "igbinary";
 
   version = "3.2.7";
   sha256 = "sha256-0NwNC1aphfT1LOogcXEz09oFNoh2vA+UMXweYOAxnn0=";
 
-  configureFlags = [ "--enable-igbinary" ];
-  makeFlags = [ "phpincludedir=$(dev)/include" ];
-  outputs = [ "out" "dev" ];
+  configureFlags = ["--enable-igbinary"];
+  makeFlags = ["phpincludedir=$(dev)/include"];
+  outputs = ["out" "dev"];
 
   meta = with lib; {
     description = "Binary serialization for PHP";

@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, lib, autoreconfHook, bison, flex }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  autoreconfHook,
+  bison,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "pim6sd";
   version = "unstable-2019-05-31";
@@ -11,13 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "0x7dyark2mp9xqz9cnmmgaf0z143vxn2835clllpji4ylg77zdjw";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex ];
+  nativeBuildInputs = [autoreconfHook bison flex];
 
   meta = with lib; {
     description = "PIM for IPv6 sparse mode daemon";
     homepage = "https://github.com/troglobit/pim6sd";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
     platforms = platforms.unix;
   };
 }

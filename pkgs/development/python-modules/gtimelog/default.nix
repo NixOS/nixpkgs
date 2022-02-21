@@ -1,9 +1,18 @@
-{ lib, fetchFromGitHub, makeWrapper
-, glibcLocales, gobject-introspection, gtk3, libsoup, libsecret
-, buildPythonPackage, python
-, pygobject3, freezegun, mock
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  glibcLocales,
+  gobject-introspection,
+  gtk3,
+  libsoup,
+  libsecret,
+  buildPythonPackage,
+  python,
+  pygobject3,
+  freezegun,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "gtimelog";
   version = "unstable-2020-05-16";
@@ -17,11 +26,17 @@ buildPythonPackage rec {
 
   buildInputs = [
     makeWrapper
-    glibcLocales gobject-introspection gtk3 libsoup libsecret
+    glibcLocales
+    gobject-introspection
+    gtk3
+    libsoup
+    libsecret
   ];
 
   propagatedBuildInputs = [
-    pygobject3 freezegun mock
+    pygobject3
+    freezegun
+    mock
   ];
 
   checkPhase = ''
@@ -29,7 +44,7 @@ buildPythonPackage rec {
     ./runtests
   '';
 
-  pythonImportsCheck = [ "gtimelog" ];
+  pythonImportsCheck = ["gtimelog"];
 
   preFixup = ''
     wrapProgram $out/bin/gtimelog \
@@ -54,7 +69,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://gtimelog.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
     platforms = platforms.unix;
   };
 }

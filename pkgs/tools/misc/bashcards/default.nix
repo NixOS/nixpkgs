@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bashcards";
   version = "0.1.3";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Practice flashcards in bash";
     homepage = "https://github.com/rpearce/bashcards/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rpearce ];
+    maintainers = with maintainers; [rpearce];
     platforms = platforms.all;
   };
 }

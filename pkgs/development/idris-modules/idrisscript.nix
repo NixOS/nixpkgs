@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "idrisscript";
   version = "2017-07-01";
 
@@ -17,6 +18,6 @@ build-idris-package  {
     description = "FFI Bindings to interact with the unsafe world of JavaScript";
     homepage = "https://github.com/idris-hackers/IdrisScript";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

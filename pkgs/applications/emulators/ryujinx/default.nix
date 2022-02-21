@@ -1,9 +1,22 @@
-{ lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
-, dotnetCorePackages, libX11, libgdiplus, ffmpeg
-, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
-, gtk3, gdk-pixbuf, wrapGAppsHook
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  dotnetCorePackages,
+  libX11,
+  libgdiplus,
+  ffmpeg,
+  SDL2_mixer,
+  openal,
+  libsoundio,
+  sndio,
+  pulseaudio,
+  gtk3,
+  gdk-pixbuf,
+  wrapGAppsHook,
 }:
-
 buildDotnetModule rec {
   pname = "ryujinx";
   version = "1.0.7168"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
@@ -21,11 +34,11 @@ buildDotnetModule rec {
   projectFile = "Ryujinx.sln";
   nugetDeps = ./deps.nix;
 
-  dotnetFlags = [ "/p:ExtraDefineConstants=DISABLE_UPDATER" ];
+  dotnetFlags = ["/p:ExtraDefineConstants=DISABLE_UPDATER"];
 
   # TODO: Add the headless frontend. Currently errors on the following:
   # System.Exception: SDL2 initlaization failed with error "No available video device"
-  executables = [ "Ryujinx" ];
+  executables = ["Ryujinx"];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -67,23 +80,25 @@ buildDotnetModule rec {
     done
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Ryujinx";
-    name = "ryujinx";
-    exec = "Ryujinx";
-    icon = "ryujinx";
-    comment = meta.description;
-    type = "Application";
-    categories = "Game;";
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Ryujinx";
+      name = "ryujinx";
+      exec = "Ryujinx";
+      icon = "ryujinx";
+      comment = meta.description;
+      type = "Application";
+      categories = "Game;";
+    })
+  ];
 
   meta = with lib; {
     description = "Experimental Nintendo Switch Emulator written in C#";
     homepage = "https://ryujinx.org/";
     license = licenses.mit;
     changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
-    maintainers = [ maintainers.ivar ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.ivar];
+    platforms = ["x86_64-linux"];
     mainProgram = "Ryujinx";
   };
   passthru.updateScript = ./updater.sh;

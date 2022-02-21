@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fzf }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fzf,
+}:
 stdenv.mkDerivation rec {
   pname = "fzf-zsh-unstable";
   version = "2019-09-09";
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wyntau/fzf-zsh";
     description = "wrap fzf to use in oh-my-zsh";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
     platforms = platforms.unix;
   };
 }

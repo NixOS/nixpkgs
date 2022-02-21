@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, pulseaudio
-, libcanberra-gtk3
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  granite,
+  gtk3,
+  pulseaudio,
+  libcanberra-gtk3,
+  switchboard,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
   version = "2.3.0";

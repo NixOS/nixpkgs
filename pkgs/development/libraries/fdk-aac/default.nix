@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, exampleSupport ? false # Example encoding program
+{
+  lib,
+  stdenv,
+  fetchurl,
+  exampleSupport ? false
+  # Example encoding program
 }:
-
 stdenv.mkDerivation rec {
   pname = "fdk-aac";
   version = "2.0.2";
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "A high-quality implementation of the AAC codec from Android";
     homepage = "https://sourceforge.net/projects/opencore-amr/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ codyopel ];
+    maintainers = with maintainers; [codyopel];
     platforms = platforms.all;
   };
 }

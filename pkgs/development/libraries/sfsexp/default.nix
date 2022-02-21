@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "sfsexp";
   version = "1.3";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Small, fast s-expression library";
     homepage = "http://sexpr.sourceforge.net/";
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [jb55];
     license = licenses.gpl3;
     platforms = with platforms; unix;
   };

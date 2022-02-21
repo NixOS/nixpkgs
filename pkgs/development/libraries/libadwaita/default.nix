@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, docbook-xsl-nons
-, gi-docgen
-, gtk-doc
-, libxml2
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
-, gobject-introspection
-, fribidi
-, glib
-, gtk4
-, gnome
-, gsettings-desktop-schemas
-, xvfb-run
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  docbook-xsl-nons,
+  gi-docgen,
+  gtk-doc,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  gobject-introspection,
+  fribidi,
+  glib,
+  gtk4,
+  gnome,
+  gsettings-desktop-schemas,
+  xvfb-run,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libadwaita";
   version = "1.0.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
   outputBin = "devdoc"; # demo app
 
   src = fetchFromGitLab {
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [dotlambda]);
     platforms = platforms.linux;
   };
 }

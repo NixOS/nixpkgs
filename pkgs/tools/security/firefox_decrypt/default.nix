@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, nss
-, wrapPython
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  nss,
+  wrapPython,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "firefox_decrypt";
   version = "unstable-2021-12-29";
@@ -16,9 +16,9 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "0g219zqbdnhh9j09d9a0b81vr6j44zzk13ckl5fzkr10gqndiscc";
   };
 
-  nativeBuildInputs = [ wrapPython ];
+  nativeBuildInputs = [wrapPython];
 
-  buildInputs = [ nss ];
+  buildInputs = [nss];
 
   installPhase = ''
     runHook preInstall
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  makeWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ nss ]) ];
+  makeWrapperArgs = ["--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [nss])];
 
   postFixup = ''
     wrapPythonPrograms
@@ -40,6 +40,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/unode/firefox_decrypt";
     description = "A tool to extract passwords from profiles of Mozilla Firefox and derivates";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ schnusch ];
+    maintainers = with maintainers; [schnusch];
   };
 }

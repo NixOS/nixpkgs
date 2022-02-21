@@ -1,4 +1,11 @@
-{ fetchFromGitHub, buildGoModule, lib, installShellFiles, libgit2, pkg-config }:
+{
+  fetchFromGitHub,
+  buildGoModule,
+  lib,
+  installShellFiles,
+  libgit2,
+  pkg-config,
+}:
 buildGoModule rec {
   pname = "turbogit";
   version = "3.1.1";
@@ -12,10 +19,10 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-280OcGXZQJD4G6z0b2WnWAS+v7XVptyf2WnlPjG99/0=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  buildInputs = [ libgit2 ];
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs = [libgit2];
+  nativeBuildInputs = [installShellFiles pkg-config];
   postInstall = ''
     # Move turbogit binary to tug
     ln -s $out/bin/turbogit $out/bin/tug
@@ -39,6 +46,6 @@ buildGoModule rec {
     homepage = "https://b4nst.github.io/turbogit";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.yusdacra ];
+    maintainers = [maintainers.yusdacra];
   };
 }

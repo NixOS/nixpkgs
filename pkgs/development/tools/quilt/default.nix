@@ -1,22 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, bash
-, coreutils
-, diffstat
-, diffutils
-, findutils
-, gawk
-, gnugrep
-, gnused
-, patch
-, perl
-, unixtools
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  bash,
+  coreutils,
+  diffstat,
+  diffutils,
+  findutils,
+  gawk,
+  gnugrep,
+  gnused,
+  patch,
+  perl,
+  unixtools,
 }:
-
 stdenv.mkDerivation rec {
-
   pname = "quilt";
   version = "0.66";
 
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "01vfvk4pqigahx82fhaaffg921ivd3k7rylz1yfvy4zbdyd32jri";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   buildInputs = [
     bash
@@ -58,8 +57,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ smancill ];
+    maintainers = with maintainers; [smancill];
     platforms = platforms.all;
   };
-
 }

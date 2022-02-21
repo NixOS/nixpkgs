@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication
-, colorama, decorator, psutil, pyte, six
-, go, mock, pytestCheckHook, pytest-mock
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonApplication,
+  colorama,
+  decorator,
+  psutil,
+  pyte,
+  six,
+  go,
+  mock,
+  pytestCheckHook,
+  pytest-mock,
 }:
-
 buildPythonApplication rec {
   pname = "thefuck";
   version = "3.32";
@@ -14,9 +24,9 @@ buildPythonApplication rec {
     sha256 = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
   };
 
-  propagatedBuildInputs = [ colorama decorator psutil pyte six ];
+  propagatedBuildInputs = [colorama decorator psutil pyte six];
 
-  checkInputs = [ go mock pytestCheckHook pytest-mock ];
+  checkInputs = [go mock pytestCheckHook pytest-mock];
 
   disabledTests = lib.optional stdenv.isDarwin [
     "test_settings_defaults"
@@ -39,6 +49,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/nvbn/thefuck";
     description = "Magnificent app which corrects your previous console command";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

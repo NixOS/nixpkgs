@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "skaffold";
   version = "1.36.0";
@@ -15,14 +19,17 @@ buildGoModule rec {
 
   subPackages = ["cmd/skaffold"];
 
-  ldflags = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in [
-    "-s" "-w"
+  ldflags = let
+    t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold";
+  in [
+    "-s"
+    "-w"
     "-X ${t}/version.version=v${version}"
     "-X ${t}/version.gitCommit=${src.rev}"
     "-X ${t}/version.buildDate=unknown"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -46,6 +53,6 @@ buildGoModule rec {
       It also provides building blocks and describe customizations for a CI/CD pipeline.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester bryanasdev000];
+    maintainers = with maintainers; [vdemeester bryanasdev000];
   };
 }

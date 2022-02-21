@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "cymem";
   version = "2.0.3";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Cython memory pool for RAII-style memory management";
     homepage = "https://github.com/explosion/cymem";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

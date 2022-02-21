@@ -1,9 +1,9 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
+{
+  lib,
+  trivialBuild,
+  fetchFromGitHub,
+  emacs,
 }:
-
 trivialBuild rec {
   pname = "sunrise-commander";
   version = "0.pre+unstable=2021-09-27";
@@ -23,7 +23,7 @@ trivialBuild rec {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";
     description = "Orthodox (two-pane) file manager for Emacs";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.all;
   };
 }

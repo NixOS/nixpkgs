@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hercules";
   version = "3.13";
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
       Mac OS X.
     '';
     license = licenses.qpl;
-    maintainers = [ maintainers.anna328p ];
+    maintainers = [maintainers.anna328p];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, gnome, intltool, itstool, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnome,
+  intltool,
+  itstool,
+  libxml2,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-devel-docs";
   version = "40.3";
@@ -10,10 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-devel-docs"; attrPath = "gnome.gnome-devel-docs"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-devel-docs";
+      attrPath = "gnome.gnome-devel-docs";
+    };
   };
 
-  buildInputs = [ intltool itstool libxml2 ];
+  buildInputs = [intltool itstool libxml2];
 
   meta = with lib; {
     homepage = "https://github.com/GNOME/gnome-devel-docs";

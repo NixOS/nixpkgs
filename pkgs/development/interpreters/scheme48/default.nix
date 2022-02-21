@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "scheme48";
   version = "1.9.2";
@@ -19,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Scheme 48 interpreter for R5RS";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = [ maintainers.siraben ];
+    maintainers = [maintainers.siraben];
   };
 }

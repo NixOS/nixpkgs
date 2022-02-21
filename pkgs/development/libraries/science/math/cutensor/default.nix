@@ -1,9 +1,13 @@
-{ callPackage
-, cudatoolkit_10_1, cudatoolkit_10_2
-, cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2, cudatoolkit_11_3, cudatoolkit_11_4
-}:
-
-rec {
+{
+  callPackage,
+  cudatoolkit_10_1,
+  cudatoolkit_10_2,
+  cudatoolkit_11_0,
+  cudatoolkit_11_1,
+  cudatoolkit_11_2,
+  cudatoolkit_11_3,
+  cudatoolkit_11_4,
+}: rec {
   cutensor_cudatoolkit_10_1 = callPackage ./generic.nix rec {
     version = "1.2.2.5";
     libPath = "lib/10.1";

@@ -1,5 +1,8 @@
-{ lib, python2Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python2Packages,
+  fetchFromGitHub,
+}:
 python2Packages.buildPythonApplication rec {
   pname = "py-wmi-client";
   version = "unstable-20160601";
@@ -11,7 +14,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "1kd12gi1knqv477f1shzqr0h349s5336vzp3fpfp3xl0b502ld8d";
   };
 
-  propagatedBuildInputs = with python2Packages; [ impacket natsort pyasn1 pycrypto ];
+  propagatedBuildInputs = with python2Packages; [impacket natsort pyasn1 pycrypto];
 
   # no tests
   doCheck = false;
@@ -20,6 +23,6 @@ python2Packages.buildPythonApplication rec {
     description = "Python WMI Client implementation";
     homepage = "https://github.com/dlundgren/py-wmi-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

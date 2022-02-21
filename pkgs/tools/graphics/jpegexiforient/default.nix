@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation {
   pname = "jpegexiforient";
   version = "unstable-2002-02-17";
@@ -22,6 +26,6 @@ stdenv.mkDerivation {
     # to be free since it's from IJG, the current maintainers of libjpeg
     license = licenses.free;
     platforms = platforms.all;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [infinisil];
   };
 }

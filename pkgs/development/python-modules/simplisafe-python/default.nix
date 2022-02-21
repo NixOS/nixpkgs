@@ -1,22 +1,22 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, backoff
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
-, types-pytz
-, voluptuous
-, websockets
+{
+  lib,
+  aiohttp,
+  aresponses,
+  asynctest,
+  backoff,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  types-pytz,
+  voluptuous,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "simplisafe-python";
   version = "2022.02.1";
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library the SimpliSafe API";
     homepage = "https://simplisafe-python.readthedocs.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

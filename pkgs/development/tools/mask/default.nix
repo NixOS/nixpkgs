@@ -1,5 +1,8 @@
-{ fetchFromGitHub, lib, rustPlatform }:
-
+{
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "mask";
   version = "0.11.1";
@@ -20,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "A CLI task runner defined by a simple markdown file";
     homepage = "https://github.com/jakedeichert/mask";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

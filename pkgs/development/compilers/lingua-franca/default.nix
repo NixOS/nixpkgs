@@ -1,5 +1,10 @@
-{ lib, pkgs, stdenv, fetchFromGitHub, jdk11_headless }:
-
+{
+  lib,
+  pkgs,
+  stdenv,
+  fetchFromGitHub,
+  jdk11_headless,
+}:
 stdenv.mkDerivation {
   pname = "lfc";
   version = "0.1.0";
@@ -11,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "/qMBOjffvShCPcbh9rJ7aVgdgZQ1hilHakjLyEhSmgs=";
   };
 
-  buildInputs = [ jdk11_headless ];
+  buildInputs = [jdk11_headless];
 
   _JAVA_HOME = "${jdk11_headless}/";
 
@@ -36,6 +41,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/lf-lang/lingua-franca";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ revol-xut ];
+    maintainers = with maintainers; [revol-xut];
   };
 }

@@ -1,6 +1,12 @@
-{ lib, python38Packages, fetchPypi
-, fftw, alsa-lib, pulseaudio, wxPython_4_0 }:
-
+{
+  lib,
+  python38Packages,
+  fetchPypi,
+  fftw,
+  alsa-lib,
+  pulseaudio,
+  wxPython_4_0,
+}:
 python38Packages.buildPythonApplication rec {
   pname = "quisk";
   version = "4.1.73";
@@ -10,9 +16,9 @@ python38Packages.buildPythonApplication rec {
     sha256 = "37dfb02a32341025c086b07d66ddf1608d4ee1ae1c62fb51f87c97662f13e0d8";
   };
 
-  buildInputs = [ fftw alsa-lib pulseaudio ];
+  buildInputs = [fftw alsa-lib pulseaudio];
 
-  propagatedBuildInputs = [ wxPython_4_0 ];
+  propagatedBuildInputs = [wxPython_4_0];
 
   doCheck = false;
 
@@ -33,7 +39,7 @@ python38Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://james.ahlstrom.name/quisk/";
-    maintainers = with maintainers; [ pulsation ];
+    maintainers = with maintainers; [pulsation];
     platforms = platforms.linux;
   };
 }

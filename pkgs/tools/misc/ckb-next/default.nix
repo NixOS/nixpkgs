@@ -1,8 +1,22 @@
-{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev, stdenv
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
-, withPulseaudio ? stdenv.isLinux, libpulseaudio
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  substituteAll,
+  udev,
+  stdenv,
+  pkg-config,
+  qtbase,
+  cmake,
+  zlib,
+  kmod,
+  libXdmcp,
+  qttools,
+  qtx11extras,
+  libdbusmenu,
+  withPulseaudio ? stdenv.isLinux,
+  libpulseaudio,
 }:
-
 mkDerivation rec {
   version = "0.4.4";
   pname = "ckb-next";
@@ -14,15 +28,17 @@ mkDerivation rec {
     sha256 = "1fgvh2hsrm8vqbqq9g45skhyyrhhka4d8ngmyldkldak1fgmrvb7";
   };
 
-  buildInputs = [
-    udev
-    qtbase
-    zlib
-    libXdmcp
-    qttools
-    qtx11extras
-    libdbusmenu
-  ] ++ lib.optional withPulseaudio libpulseaudio;
+  buildInputs =
+    [
+      udev
+      qtbase
+      zlib
+      libXdmcp
+      qttools
+      qtx11extras
+      libdbusmenu
+    ]
+    ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
     pkg-config
@@ -50,6 +66,6 @@ mkDerivation rec {
     homepage = "https://github.com/ckb-next/ckb-next";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kierdavis ];
+    maintainers = with maintainers; [kierdavis];
   };
 }

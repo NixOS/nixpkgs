@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "mapcidr";
   version = "0.0.8";
@@ -29,6 +29,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/mapcidr";
     license = licenses.mit;
-    maintainers = with maintainers; [ hanemile ];
+    maintainers = with maintainers; [hanemile];
   };
 }

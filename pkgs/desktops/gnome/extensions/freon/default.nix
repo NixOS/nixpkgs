@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, substituteAll
-, hddtemp
-, liquidctl
-, lm_sensors
-, netcat-gnu
-, nvme-cli
-, procps
-, smartmontools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  substituteAll,
+  hddtemp,
+  liquidctl,
+  lm_sensors,
+  netcat-gnu,
+  nvme-cli,
+  procps,
+  smartmontools,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-freon";
   version = "45";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tPb7SzHSwvz7VV+kZTmcw1eAdtL1J7FJ3BOtg4Us8jc=";
   };
 
-  nativeBuildInputs = [ glib ];
+  nativeBuildInputs = [glib];
 
   patches = [
     (substituteAll {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNOME Shell extension for displaying CPU, GPU, disk temperatures, voltage and fan RPM in the top panel";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ justinas ];
+    maintainers = with maintainers; [justinas];
     homepage = "https://github.com/UshakovVasilii/gnome-shell-extension-freon";
   };
 }

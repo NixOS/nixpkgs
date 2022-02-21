@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, python2Packages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  python2Packages,
+}:
 stdenv.mkDerivation {
   pname = "phwmon";
   version = "2017-04-10";
@@ -11,11 +15,11 @@ stdenv.mkDerivation {
     sha256 = "1hqmsq66y8bqkpvszw84jyk8haxq3cjnz105hlkmp7786vfmkisq";
   };
 
-  nativeBuildInputs = [ python2Packages.wrapPython ];
+  nativeBuildInputs = [python2Packages.wrapPython];
 
-  buildInputs = [ python2Packages.pygtk python2Packages.psutil ];
+  buildInputs = [python2Packages.pygtk python2Packages.psutil];
 
-  pythonPath = [ python2Packages.pygtk python2Packages.psutil ];
+  pythonPath = [python2Packages.pygtk python2Packages.psutil];
 
   patchPhase = ''
     substituteInPlace install.sh --replace "/usr/local" "$out"
@@ -35,6 +39,6 @@ stdenv.mkDerivation {
     description = "Hardware monitor (CPU, memory, network and disk I/O) for the system tray";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    maintainers = [lib.maintainers.romildo];
   };
 }

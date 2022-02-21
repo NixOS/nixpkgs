@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, attrs
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  attrs,
 }:
-
 buildPythonPackage rec {
   pname = "wheel-filename";
   version = "1.3.0";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/jwodder/wheel-filename";
     description = "Parse wheel filenames";
-    license = with licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ayazhafiz ];
+    license = with licenses; [mit];
+    maintainers = with lib.maintainers; [ayazhafiz];
   };
 }

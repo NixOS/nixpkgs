@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, pkg-config, gtk2, pygobject2, pycairo, pango
-, buildPythonPackage, isPy3k }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  python,
+  pkg-config,
+  gtk2,
+  pygobject2,
+  pycairo,
+  pango,
+  buildPythonPackage,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "pygtk";
   version = "2.24.0";
@@ -24,12 +35,12 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     pango
   ];
 
-  propagatedBuildInputs = [ gtk2 pygobject2 pycairo ];
+  propagatedBuildInputs = [gtk2 pygobject2 pycairo];
 
   configurePhase = "configurePhase";
 
@@ -47,7 +58,8 @@ buildPythonPackage rec {
              -e "s/.*testGlade.*//" \
              -e "s/.*(glade.*//" \
              tests/test_api.py
-    '' + ''
+    ''
+    + ''
       sed -i -e "s/sys.path.insert(0, os.path.join(buildDir, 'gtk'))//" \
              -e "s/sys.path.insert(0, buildDir)//" \
              tests/common.py
@@ -69,6 +81,6 @@ buildPythonPackage rec {
     description = "GTK 2 Python bindings";
     homepage = "https://gitlab.gnome.org/Archive/pygtk";
     platforms = platforms.all;
-    license = with licenses; [ lgpl21Plus ];
+    license = with licenses; [lgpl21Plus];
   };
 }

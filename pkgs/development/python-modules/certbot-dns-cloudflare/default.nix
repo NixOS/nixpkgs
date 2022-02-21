@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, acme
-, certbot
-, cloudflare
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  acme,
+  certbot,
+  cloudflare,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "certbot-dns-cloudflare";
 
@@ -22,11 +22,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+  pytestFlagsArray = ["-o cache_dir=$(mktemp -d)"];
 
   sourceRoot = "source/certbot-dns-cloudflare";
 
-  meta = certbot.meta // {
-    description = "Cloudflare DNS Authenticator plugin for Certbot";
-  };
+  meta =
+    certbot.meta
+    // {
+      description = "Cloudflare DNS Authenticator plugin for Certbot";
+    };
 }

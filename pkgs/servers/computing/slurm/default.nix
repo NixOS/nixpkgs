@@ -1,12 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, curl
-, python3, munge, perl, pam, zlib, shadow, coreutils
-, ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
-, readline, freeipmi, xorg, lz4, rdma-core, nixosTests
-, pmix
-# enable internal X11 support via libssh2
-, enableX11 ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libtool,
+  curl,
+  python3,
+  munge,
+  perl,
+  pam,
+  zlib,
+  shadow,
+  coreutils,
+  ncurses,
+  libmysqlclient,
+  gtk2,
+  lua,
+  hwloc,
+  numactl,
+  readline,
+  freeipmi,
+  xorg,
+  lz4,
+  rdma-core,
+  nixosTests,
+  pmix
+  # enable internal X11 support via libssh2
+  ,
+  enableX11 ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "slurm";
   version = "21.08.5.1";
@@ -21,7 +43,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2ctJnCZCziPnfWeDNvvcE0tPGVdhzjjhqMWJhWhitGo=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   patches = [
     # increase string length to allow for full
@@ -31,29 +53,48 @@ stdenv.mkDerivation rec {
     ./pmix-configure.patch
   ];
 
-  prePatch = ''
-    substituteInPlace src/common/env.c \
-        --replace "/bin/echo" "${coreutils}/bin/echo"
-  '' + (lib.optionalString enableX11 ''
-    substituteInPlace src/common/x11_util.c \
-        --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
-  '');
+  prePatch =
+    ''
+      substituteInPlace src/common/env.c \
+          --replace "/bin/echo" "${coreutils}/bin/echo"
+    ''
+    + (lib.optionalString enableX11 ''
+      substituteInPlace src/common/x11_util.c \
+          --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
+    '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
   # https://groups.google.com/forum/#!topic/slurm-devel/QHOajQ84_Es
   # this doesn't fix tests completely at least makes slurmd to launch
-  hardeningDisable = [ "bindnow" ];
+  hardeningDisable = ["bindnow"];
 
-  nativeBuildInputs = [ pkg-config libtool python3 ];
-  buildInputs = [
-    curl python3 munge perl pam zlib
-      libmysqlclient ncurses gtk2 lz4 rdma-core
-      lua hwloc numactl readline freeipmi shadow.su
+  nativeBuildInputs = [pkg-config libtool python3];
+  buildInputs =
+    [
+      curl
+      python3
+      munge
+      perl
+      pam
+      zlib
+      libmysqlclient
+      ncurses
+      gtk2
+      lz4
+      rdma-core
+      lua
+      hwloc
+      numactl
+      readline
+      freeipmi
+      shadow.su
       pmix
-  ] ++ lib.optionals enableX11 [ xorg.xauth ];
+    ]
+    ++ lib.optionals enableX11 [xorg.xauth];
 
   configureFlags = with lib;
-    [ "--with-freeipmi=${freeipmi}"
+    [
+      "--with-freeipmi=${freeipmi}"
       "--with-hwloc=${hwloc.dev}"
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
@@ -61,9 +102,9 @@ stdenv.mkDerivation rec {
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"
-    ] ++ (optional (gtk2 == null)  "--disable-gtktest")
-      ++ (optional (!enableX11) "--disable-x11");
-
+    ]
+    ++ (optional (gtk2 == null) "--disable-gtktest")
+    ++ (optional (!enableX11) "--disable-x11");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
@@ -83,6 +124,6 @@ stdenv.mkDerivation rec {
     description = "Simple Linux Utility for Resource Management";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jagajaga markuskowa ];
+    maintainers = with maintainers; [jagajaga markuskowa];
   };
 }

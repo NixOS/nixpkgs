@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, cudf }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  cudf,
+}:
 buildDunePackage rec {
   pname = "mccs";
   version = "1.1+13";
@@ -23,7 +27,7 @@ buildDunePackage rec {
     description = "A library providing a multi criteria CUDF solver, part of MANCOOSI project.";
     downloadPage = "https://github.com/AltGr/ocaml-mccs";
     homepage = "https://www.i3s.unice.fr/~cpjm/misc/";
-    license = with licenses; [ lgpl21 gpl3 ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [lgpl21 gpl3];
+    maintainers = with maintainers; [];
   };
 }

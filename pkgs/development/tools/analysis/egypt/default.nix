@@ -1,5 +1,8 @@
-{ lib, fetchurl, perlPackages }:
-
+{
+  lib,
+  fetchurl,
+  perlPackages,
+}:
 perlPackages.buildPerlPackage rec {
   pname = "egypt";
   version = "1.10";
@@ -9,7 +12,7 @@ perlPackages.buildPerlPackage rec {
     url = "https://www.gson.org/egypt/download/${pname}-${version}.tar.gz";
   };
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
   enableParallelBuilding = true;
 
@@ -26,7 +29,7 @@ perlPackages.buildPerlPackage rec {
       together.
     '';
     homepage = "http://www.gson.org/egypt/";
-    license = with licenses; [ artistic1 gpl1Plus ];
+    license = with licenses; [artistic1 gpl1Plus];
     platforms = platforms.unix;
   };
 }

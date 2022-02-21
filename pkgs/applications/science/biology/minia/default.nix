@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, hdf5, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  hdf5,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "minia";
   version = "3.2.1";
@@ -12,12 +18,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches = [ ./no-bundle.patch ];
+  patches = [./no-bundle.patch];
 
-  NIX_CFLAGS_COMPILE = [ "-Wformat" ];
+  NIX_CFLAGS_COMPILE = ["-Wformat"];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ hdf5 boost ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [hdf5 boost];
 
   prePatch = ''
     rm -rf thirdparty/gatb-core/gatb-core/thirdparty/{hdf5,boost}
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Short read genome assembler";
     homepage = "https://github.com/GATB/minia";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ jbedo ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [jbedo];
+    platforms = ["x86_64-linux"];
   };
 }

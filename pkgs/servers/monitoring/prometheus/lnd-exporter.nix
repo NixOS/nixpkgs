@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "lndmon";
   version = "unstable-2021-03-26";
@@ -13,12 +17,12 @@ buildGoModule rec {
 
   vendorSha256 = "06if387b9m02ciqgcissih1x06l33djp87vgspwzz589f77vczk8";
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) lnd; };
+  passthru.tests = {inherit (nixosTests.prometheus-exporters) lnd;};
 
   meta = with lib; {
     homepage = "https://github.com/lightninglabs/lndmon";
     description = "Prometheus exporter for lnd (Lightning Network Daemon)";
     license = licenses.mit;
-    maintainers = with maintainers; [ mmilata ];
+    maintainers = with maintainers; [mmilata];
   };
 }

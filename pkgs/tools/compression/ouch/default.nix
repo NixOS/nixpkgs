@@ -1,15 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, help2man
-, installShellFiles
-, pkg-config
-, bzip2
-, xz
-, zlib
-, zstd
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  help2man,
+  installShellFiles,
+  pkg-config,
+  bzip2,
+  xz,
+  zlib,
+  zstd,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
   version = "0.3.1";
@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-jEprWtIl5LihD9fOMYHGGlk0+h4woUlwUWNfSkd2t10=";
 
-  nativeBuildInputs = [ help2man installShellFiles pkg-config ];
+  nativeBuildInputs = [help2man installShellFiles pkg-config];
 
-  buildInputs = [ bzip2 xz zlib zstd ];
+  buildInputs = [bzip2 xz zlib zstd];
 
-  buildFeatures = [ "zstd/pkg-config" ];
+  buildFeatures = ["zstd/pkg-config"];
 
   postInstall = ''
     help2man $out/bin/ouch > ouch.1
@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     description = "A command-line utility for easily compressing and decompressing files and directories";
     homepage = "https://github.com/ouch-org/ouch";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda psibi ];
+    maintainers = with maintainers; [figsoda psibi];
   };
 }

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, libX11, libXtst, qt4 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libX11,
+  libXtst,
+  qt4,
+}:
 stdenv.mkDerivation rec {
   pname = "qjoypad";
   version = "4.1.0";
@@ -6,8 +14,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/qjoypad/qjoypad-${version}.tar.gz";
     sha256 = "1jlm7i26nfp185xrl41kz5z6fgvyj51bjpz48cg27xx64y40iamm";
   };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXtst qt4 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libX11 libXtst qt4];
   NIX_LDFLAGS = "-lX11";
   patchPhase = ''
     cd src
@@ -35,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://qjoypad.sourceforge.net";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ astsmtl ];
+    maintainers = with lib.maintainers; [astsmtl];
     platforms = with lib.platforms; linux;
   };
 }

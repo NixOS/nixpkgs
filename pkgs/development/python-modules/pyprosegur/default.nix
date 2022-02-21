@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, backoff
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  backoff,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyprosegur";
   version = "0.0.5";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pyprosegur" ];
+  pythonImportsCheck = ["pyprosegur"];
 
   meta = with lib; {
     description = "Python module to communicate with Prosegur Residential Alarms";
     homepage = "https://github.com/dgomes/pyprosegur";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

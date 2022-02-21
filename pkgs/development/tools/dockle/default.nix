@@ -1,5 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, btrfs-progs, lvm2 }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  btrfs-progs,
+  lvm2,
+}:
 buildGoModule rec {
   pname = "dockle";
   version = "0.4.3";
@@ -13,11 +19,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-klTIGmMKA6gp1strgvKnVBtYGQu2407UwxZ8brdGEkQ=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ btrfs-progs lvm2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [btrfs-progs lvm2];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   preCheck = ''
@@ -43,6 +51,6 @@ buildGoModule rec {
       Easy to start.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [jk];
   };
 }

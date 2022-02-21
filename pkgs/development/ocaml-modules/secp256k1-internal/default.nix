@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, gmp
-, dune-configurator
-, cstruct
-, bigstring
-, alcotest
-, hex
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  gmp,
+  dune-configurator,
+  cstruct,
+  bigstring,
+  alcotest,
+  hex,
 }:
-
 buildDunePackage rec {
   pname = "secp256k1-internal";
   version = "0.2";
@@ -43,6 +43,6 @@ buildDunePackage rec {
   meta = {
     description = "Bindings to secp256k1 internal functions (generic operations on the curve)";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

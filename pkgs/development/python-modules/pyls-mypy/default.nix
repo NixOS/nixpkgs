@@ -1,9 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, future, python-language-server, mypy, configparser
-, pytestCheckHook, mock, pytest-cov, coverage
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  future,
+  python-language-server,
+  mypy,
+  configparser,
+  pytestCheckHook,
+  mock,
+  pytest-cov,
+  coverage,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "pyls-mypy";
   version = "0.1.8";
@@ -34,18 +43,22 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ mock pytest-cov coverage pytestCheckHook ];
+  checkInputs = [mock pytest-cov coverage pytestCheckHook];
 
-  propagatedBuildInputs = [
-    mypy python-language-server configparser
-  ] ++ lib.optional (isPy27) [
-    future
-  ];
+  propagatedBuildInputs =
+    [
+      mypy
+      python-language-server
+      configparser
+    ]
+    ++ lib.optional (isPy27) [
+      future
+    ];
 
   meta = with lib; {
     homepage = "https://github.com/tomv564/pyls-mypy";
     description = "Mypy plugin for the Python Language Server";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

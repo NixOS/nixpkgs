@@ -1,8 +1,8 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "merriweather-sans";
   version = "1.008";
@@ -29,6 +29,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Merriweather Sans is a low-contrast semi-condensed sans-serif text typeface family designed to be pleasant to read at very small sizes";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [emily];
   };
 }

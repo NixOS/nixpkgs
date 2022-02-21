@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, libX11
-, libXrandr
-, libXinerama
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXrandr,
+  libXinerama,
 }:
-
 stdenv.mkDerivation rec {
   pname = "srandrd";
   version = "0.6.0";
@@ -16,16 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "07r1ck2ijj30n19ylndgw75ly9k3815kj9inpxblfnjpwbbw6ic0";
   };
 
-  buildInputs = [ libX11 libXrandr libXinerama ];
+  buildInputs = [libX11 libXrandr libXinerama];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://github.com/jceb/srandrd";
     description = "Simple randr daemon";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.utdemir ];
+    maintainers = [maintainers.utdemir];
   };
-
 }

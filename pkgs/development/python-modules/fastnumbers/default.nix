@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fastnumbers
-, fetchFromGitHub
-, hypothesis
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fastnumbers,
+  fetchFromGitHub,
+  hypothesis,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "fastnumbers";
   version = "3.2.1";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python module for number conversion";
     homepage = "https://github.com/SethMMorton/fastnumbers";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

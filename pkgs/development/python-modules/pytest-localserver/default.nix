@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  werkzeug,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-localserver";
   version = "0.5.1.post0";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Plugin for the pytest testing framework to test server connections locally";
     homepage = "https://github.com/pytest-dev/pytest-localserver";
     license = licenses.mit;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [siriobalmelli];
   };
 }

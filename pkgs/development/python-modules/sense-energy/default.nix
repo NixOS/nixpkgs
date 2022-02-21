@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, requests
-, websocket-client
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  requests,
+  websocket-client,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "sense-energy";
   version = "0.10.2";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "API for the Sense Energy Monitor";
     homepage = "https://github.com/scottbonline/sense";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

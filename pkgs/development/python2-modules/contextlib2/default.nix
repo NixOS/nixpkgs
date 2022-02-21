@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittest2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittest2,
 }:
-
 buildPythonPackage rec {
   pname = "contextlib2";
   version = "0.6.0.post1";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "01f490098c18b19d2bd5bb5dc445b2054d2fa97f09a4280ba2c5f3c394c8162e";
   };
 
-  checkInputs = [ unittest2 ];
+  checkInputs = [unittest2];
 
   meta = {
     description = "Backports and enhancements for the contextlib module";

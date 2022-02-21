@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "fsmon";
   version = "1.8.4";
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "FileSystem Monitor utility";
     homepage = "https://github.com/nowsecure/fsmon";
     license = licenses.mit;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = [maintainers.dezgeg];
     platforms = platforms.linux;
   };
 }

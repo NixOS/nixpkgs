@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, isPy27
-, numpy
-, scipy
-, sparse
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  isPy27,
+  numpy,
+  scipy,
+  sparse,
 }:
-
 buildPythonPackage rec {
   pname = "tensorly";
   version = "0.7.0";
@@ -26,17 +26,17 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace ", 'nose'" ""
   '';
 
-  propagatedBuildInputs = [ numpy scipy sparse ];
+  propagatedBuildInputs = [numpy scipy sparse];
 
-  checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tensorly" ];
+  checkInputs = [pytestCheckHook];
+  pytestFlagsArray = ["tensorly"];
 
-  pythonImportsCheck = [ "tensorly" ];
+  pythonImportsCheck = ["tensorly"];
 
   meta = with lib; {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = [maintainers.bcdarwin];
   };
 }

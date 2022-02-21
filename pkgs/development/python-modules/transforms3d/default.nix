@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytest
-, numpy
-, scipy
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytest,
+  numpy,
+  scipy,
+  sympy,
 }:
-
 buildPythonPackage rec {
   pname = "transforms3d";
   version = "unstable-2019-12-17";
@@ -22,15 +22,15 @@ buildPythonPackage rec {
     sha256 = "1z789hgk71a6rj6mqp9srpzamg06g58hs2p1l1p344cfnkj5a4kc";
   };
 
-  propagatedBuildInputs = [ numpy sympy ];
+  propagatedBuildInputs = [numpy sympy];
 
-  checkInputs = [ pytest scipy ];
+  checkInputs = [pytest scipy];
   checkPhase = "pytest transforms3d";
 
   meta = with lib; {
     homepage = "https://matthew-brett.github.io/transforms3d";
     description = "Convert between various geometric transformations";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

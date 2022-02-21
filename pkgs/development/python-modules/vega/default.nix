@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage , fetchPypi, pythonOlder
-, jupyter_core, pandas, ipywidgets, jupyter }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  jupyter_core,
+  pandas,
+  ipywidgets,
+  jupyter,
+}:
 buildPythonPackage rec {
   pname = "vega";
   version = "3.6.0";
@@ -11,11 +18,11 @@ buildPythonPackage rec {
     sha256 = "sha256-cO+7Ynbv/+uoNUOPQvDNZji04llHUBlm95Cyfy+Ny80=";
   };
 
-  propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];
+  propagatedBuildInputs = [jupyter jupyter_core pandas ipywidgets];
 
   # currently, recommonmark is broken on python3
   doCheck = false;
-  pythonImportsCheck = [ "vega" ];
+  pythonImportsCheck = ["vega"];
 
   meta = with lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";
@@ -27,7 +34,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/vega/ipyvega";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    maintainers = with maintainers; [teh];
     platforms = platforms.unix;
   };
 }

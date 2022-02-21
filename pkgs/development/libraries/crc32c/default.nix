@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, gflags
-, staticOnly ? stdenv.hostPlatform.isStatic
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gflags,
+  staticOnly ? stdenv.hostPlatform.isStatic,
 }:
-
 stdenv.mkDerivation rec {
   pname = "crc32c";
   version = "1.1.2";
@@ -18,20 +18,26 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ gflags ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [gflags];
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
 
-  cmakeFlags = [
-    "-DCRC32C_INSTALL=1"
-    "-DCRC32C_BUILD_TESTS=1"
-    "-DCRC32C_BUILD_BENCHMARKS=0"
-    "-DCRC32C_USE_GLOG=0"
-    "-DBUILD_SHARED_LIBS=${if staticOnly then "0" else "1"}"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
-  ];
+  cmakeFlags =
+    [
+      "-DCRC32C_INSTALL=1"
+      "-DCRC32C_BUILD_TESTS=1"
+      "-DCRC32C_BUILD_BENCHMARKS=0"
+      "-DCRC32C_USE_GLOG=0"
+      "-DBUILD_SHARED_LIBS=${
+        if staticOnly
+        then "0"
+        else "1"
+      }"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
+    ];
 
   doCheck = false;
   doInstallCheck = true;
@@ -67,7 +73,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/google/crc32c";
     description = "CRC32C implementation with support for CPU-specific acceleration instructions";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ cpcloud ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [cpcloud];
   };
 }

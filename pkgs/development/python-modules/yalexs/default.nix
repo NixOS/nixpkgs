@@ -1,20 +1,20 @@
-{ lib
-, aiofiles
-, aiohttp
-, aioresponses
-, aiounittest
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pubnub
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aioresponses,
+  aiounittest,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pubnub,
+  pyjwt,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "yalexs";
   version = "1.1.22";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

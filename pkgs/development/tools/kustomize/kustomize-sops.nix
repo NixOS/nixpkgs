@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kustomize-sops";
   version = "3.0.1";
@@ -29,6 +32,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/viaduct-ai/kustomize-sops";
     license = licenses.asl20;
-    maintainers = with maintainers; [ starcraft66 ];
+    maintainers = with maintainers; [starcraft66];
   };
 }

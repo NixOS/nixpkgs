@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ghr";
   version = "0.14.0";
@@ -25,6 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/tcnksm/ghr";
     description = "Upload multiple artifacts to GitHub Release in parallel";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
   };
 }

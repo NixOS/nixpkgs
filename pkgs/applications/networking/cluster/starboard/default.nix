@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "starboard";
   version = "0.14.1";
@@ -24,12 +28,14 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-R7tF724y5WNIByE+9nRoNSZDZzfLtPfK/9tSBkARaN0=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  subPackages = [ "cmd/starboard" ];
+  subPackages = ["cmd/starboard"];
 
   ldflags = [
-    "-s" "-w" "-X main.version=v${version}"
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
   ];
 
   preCheck = ''
@@ -73,6 +79,6 @@ buildGoModule rec {
       tools.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [jk];
   };
 }

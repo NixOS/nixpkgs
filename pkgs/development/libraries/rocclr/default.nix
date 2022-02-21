@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, writeScript
-, rocm-comgr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeScript,
+  rocm-comgr,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rocclr";
   version = "4.5.2";
@@ -42,10 +43,10 @@ stdenv.mkDerivation rec {
     description = "Source package of the Radeon Open Compute common language runtime";
     homepage = "https://github.com/ROCm-Developer-Tools/ROCclr";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
     # rocclr seems to have some AArch64 ifdefs, but does not seem
     # to be supported yet by the build infrastructure. Recheck in
     # the future.
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

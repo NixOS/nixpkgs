@@ -1,5 +1,7 @@
-{ grafanaPlugin, lib }:
-
+{
+  grafanaPlugin,
+  lib,
+}:
 grafanaPlugin rec {
   pname = "grafana-worldmap-panel";
   version = "0.3.3";
@@ -7,7 +9,7 @@ grafanaPlugin rec {
   meta = with lib; {
     description = "World Map panel for Grafana";
     license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with maintainers; [lukegb];
     platforms = platforms.unix;
   };
 }

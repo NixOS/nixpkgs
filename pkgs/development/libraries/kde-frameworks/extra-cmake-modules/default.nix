@@ -1,5 +1,9 @@
-{ mkDerivation, lib, cmake, pkg-config }:
-
+{
+  mkDerivation,
+  lib,
+  cmake,
+  pkg-config,
+}:
 mkDerivation {
   name = "extra-cmake-modules";
 
@@ -7,9 +11,9 @@ mkDerivation {
     ./nix-lib-path.patch
   ];
 
-  outputs = [ "out" ];  # this package has no runtime components
+  outputs = ["out"]; # this package has no runtime components
 
-  propagatedBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = [cmake pkg-config];
 
   setupHook = ./setup-hook.sh;
 

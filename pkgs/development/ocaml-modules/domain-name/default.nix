@@ -1,8 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, alcotest
-, astring, fmt
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  astring,
+  fmt,
 }:
-
 buildDunePackage rec {
   pname = "domain-name";
   version = "0.3.0";
@@ -16,9 +19,9 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
 
-  propagatedBuildInputs = [ astring fmt ];
+  propagatedBuildInputs = [astring fmt];
 
   doCheck = true;
 
@@ -26,6 +29,6 @@ buildDunePackage rec {
     homepage = "https://github.com/hannesm/domain-name";
     description = "RFC 1035 Internet domain names";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

@@ -1,9 +1,10 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "Send2Trash";
   version = "1.8.1b0";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
   checkPhase = "HOME=$TMPDIR pytest";
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";

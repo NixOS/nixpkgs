@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, alsa-lib, freepats }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  alsa-lib,
+  freepats,
+}:
 stdenv.mkDerivation rec {
   pname = "wildmidi";
   version = "0.4.4";
@@ -11,9 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "08fbbsvw6pkwwqarjwcvdp8mq4zn5sgahf025hynwc6rvf4sp167";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ alsa-lib stdenv.cc.libc/*couldn't find libm*/ ];
+  buildInputs = [
+    alsa-lib
+    stdenv.cc.libc
+    /*
+     couldn't find libm
+     */
+  ];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
@@ -36,6 +48,6 @@ stdenv.mkDerivation rec {
     # The library is LGPLv3, the wildmidi executable is GPLv3
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

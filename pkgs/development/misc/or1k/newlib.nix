@@ -1,5 +1,12 @@
-{ stdenv, texinfo, flex, bison, fetchFromGitHub, crossLibcStdenv, buildPackages }:
-
+{
+  stdenv,
+  texinfo,
+  flex,
+  bison,
+  fetchFromGitHub,
+  crossLibcStdenv,
+  buildPackages,
+}:
 crossLibcStdenv.mkDerivation {
   name = "newlib";
   src = fetchFromGitHub {
@@ -9,14 +16,14 @@ crossLibcStdenv.mkDerivation {
     sha256 = "0hzhijmry5slpp6x12pgng8v7jil3mn18ahrhnw431lqrs1cma0s";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
   # newlib expects CC to build for build platform, not host platform
   preConfigure = ''
     export CC=cc
   '';
 
-  configurePlatforms = [ "build" "target" ];
+  configurePlatforms = ["build" "target"];
   configureFlags = [
     "--host=${stdenv.buildPlatform.config}"
 

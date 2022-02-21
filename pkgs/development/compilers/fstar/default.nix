@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  z3,
+  ocamlPackages,
+  makeWrapper,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "fstar";
   version = "2022.01.15";
@@ -11,32 +18,34 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bK3McF/wTjT9q6luihPaEXjx7Lu6+ZbQ9G61Mc4KoB0=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
-  buildInputs = [
-    z3
-  ] ++ (with ocamlPackages; [
-    ocaml
-    findlib
-    ocamlbuild
-    batteries
-    zarith
-    stdint
-    yojson
-    fileutils
-    menhir
-    menhirLib
-    pprint
-    sedlex_2
-    ppxlib
-    ppx_deriving
-    ppx_deriving_yojson
-    process
-  ]);
+  buildInputs =
+    [
+      z3
+    ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      ocamlbuild
+      batteries
+      zarith
+      stdint
+      yojson
+      fileutils
+      menhir
+      menhirLib
+      pprint
+      sedlex_2
+      ppxlib
+      ppx_deriving
+      ppx_deriving_yojson
+      process
+    ]);
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
-  buildFlags = [ "libs" ];
+  buildFlags = ["libs"];
 
   enableParallelBuilding = true;
 
@@ -61,6 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
     platforms = with platforms; darwin ++ linux;
-    maintainers = with maintainers; [ gebner pnmadelaine ];
+    maintainers = with maintainers; [gebner pnmadelaine];
   };
 }

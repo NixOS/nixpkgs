@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, which }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "crunch";
   version = "3.6";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mgy6ghjvzr26yrhj1bn73qzw6v9qsniskc5wqq1kk0hfhy6r3va";
   };
 
-  buildInputs = [ which ];
+  buildInputs = [which];
 
   preBuild = ''
     substituteInPlace Makefile \
@@ -18,13 +22,13 @@ stdenv.mkDerivation rec {
       --replace 'sudo ' ""
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Wordlist generator";
     homepage = "https://sourceforge.net/projects/crunch-wordlist/";
     platforms = platforms.unix;
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ lnl7 ];
+    license = with licenses; [gpl2Only];
+    maintainers = with maintainers; [lnl7];
   };
 }

@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "esbuild";
   version = "0.13.6";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "A fork of esbuild maintained by netlify";
     homepage = "https://github.com/netlify/esbuild";
     license = licenses.mit;
-    maintainers = with maintainers; [ roberth ];
+    maintainers = with maintainers; [roberth];
   };
 }

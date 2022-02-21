@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "testpath";
   version = "0.5.0";
@@ -28,5 +28,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://github.com/jupyter/testpath";
   };
-
 }

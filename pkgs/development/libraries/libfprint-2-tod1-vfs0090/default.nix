@@ -1,4 +1,19 @@
-{ stdenv, lib, fetchFromGitLab, pkg-config, libfprint, libfprint-tod, gusb, udev, nss, openssl, meson, pixman, ninja, glib }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  pkg-config,
+  libfprint,
+  libfprint-tod,
+  gusb,
+  udev,
+  nss,
+  openssl,
+  meson,
+  pixman,
+  ninja,
+  glib,
+}:
 stdenv.mkDerivation {
   pname = "libfprint-2-tod1-vfs0090";
   version = "0.8.5";
@@ -18,8 +33,8 @@ stdenv.mkDerivation {
     ./0002-vfs0090-add-missing-linux-limits.h-include.patch
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = [ libfprint libfprint-tod glib gusb udev nss openssl pixman ];
+  nativeBuildInputs = [pkg-config meson ninja];
+  buildInputs = [libfprint libfprint-tod glib gusb udev nss openssl pixman];
 
   installPhase = ''
     runHook preInstall
@@ -37,6 +52,6 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.freedesktop.org/3v1n0/libfprint-tod-vfs0090";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ valodim ];
+    maintainers = with maintainers; [valodim];
   };
 }

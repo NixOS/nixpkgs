@@ -1,7 +1,14 @@
-{ buildPythonPackage, lib, fetchPypi, glibcLocales, isPy3k, contextvars
-, pythonOlder, pytest, curio
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  glibcLocales,
+  isPy3k,
+  contextvars,
+  pythonOlder,
+  pytest,
+  curio,
 }:
-
 buildPythonPackage rec {
   pname = "sniffio";
   version = "1.2.0";
@@ -13,11 +20,11 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [glibcLocales];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ contextvars ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [contextvars];
 
-  checkInputs = [ pytest curio ];
+  checkInputs = [pytest curio];
 
   checkPhase = ''
     pytest

@@ -1,18 +1,21 @@
-{ stdenv
-, lib
-, addOpenGLRunpath
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, cython
-, numpy
-, six
-, nose
-, Mako
-, cudaSupport ? false, cudatoolkit
-, openclSupport ? true, ocl-icd, clblas
+{
+  stdenv,
+  lib,
+  addOpenGLRunpath,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  cython,
+  numpy,
+  six,
+  nose,
+  Mako,
+  cudaSupport ? false,
+  cudatoolkit,
+  openclSupport ? true,
+  ocl-icd,
+  clblas,
 }:
-
 buildPythonPackage rec {
   pname = "libgpuarray";
   version = "0.7.6";
@@ -30,8 +33,8 @@ buildPythonPackage rec {
   configurePhase = "cmakeConfigurePhase";
 
   libraryPath = lib.makeLibraryPath (
-    lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out ]
-    ++ lib.optionals openclSupport ([ clblas ] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
+    lib.optionals cudaSupport [cudatoolkit.lib cudatoolkit.out]
+    ++ lib.optionals openclSupport ([clblas] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
   );
 
   preBuild = ''
@@ -43,18 +46,21 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  postFixup = ''
-    rm $out/lib/libgpuarray-static.a
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    function fixRunPath {
-      p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "$p:$libraryPath" $1
-    }
+  postFixup =
+    ''
+      rm $out/lib/libgpuarray-static.a
+    ''
+    + lib.optionalString (!stdenv.isDarwin) ''
+      function fixRunPath {
+        p=$(patchelf --print-rpath $1)
+        patchelf --set-rpath "$p:$libraryPath" $1
+      }
 
-    fixRunPath $out/lib/libgpuarray.so
-  '' + lib.optionalString cudaSupport ''
-    addOpenGLRunpath $out/lib/libgpuarray.so
-  '';
+      fixRunPath $out/lib/libgpuarray.so
+    ''
+    + lib.optionalString cudaSupport ''
+      addOpenGLRunpath $out/lib/libgpuarray.so
+    '';
 
   propagatedBuildInputs = [
     numpy
@@ -62,12 +68,13 @@ buildPythonPackage rec {
     Mako
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals cudaSupport [
-    addOpenGLRunpath
-  ];
-
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals cudaSupport [
+      addOpenGLRunpath
+    ];
 
   buildInputs = [
     cython
@@ -78,8 +85,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Theano/libgpuarray";
     description = "Library to manipulate tensors on GPU.";
     license = licenses.free;
-    maintainers = with maintainers; [ artuuge ];
+    maintainers = with maintainers; [artuuge];
     platforms = platforms.unix;
   };
-
 }

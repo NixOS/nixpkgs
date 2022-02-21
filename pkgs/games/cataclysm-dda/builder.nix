@@ -1,49 +1,66 @@
-{ stdenvNoCC, lib, type }:
-
+{
+  stdenvNoCC,
+  lib,
+  type,
+}:
 assert lib.elem type [
   "mod"
   "soundpack"
   "tileset"
 ];
+  {
+    modName,
+    version,
+    src,
+    ...
+  } @ args:
+    stdenvNoCC.mkDerivation (args
+    // rec {
+      pname = args.pname or "cataclysm-dda-${type}-${modName}";
 
-{ modName, version, src, ... } @ args:
+      modRoot = args.modRoot or ".";
 
-stdenvNoCC.mkDerivation (args // rec {
-  pname = args.pname or "cataclysm-dda-${type}-${modName}";
+      configurePhase =
+        args.configurePhase
+        or ''
+          runHook preConfigure
+          runHook postConfigure
+        '';
 
-  modRoot = args.modRoot or ".";
+      buildPhase =
+        args.buildPhase
+        or ''
+          runHook preBuild
+          runHook postBuild
+        '';
 
-  configurePhase = args.configurePhase or ''
-    runHook preConfigure
-    runHook postConfigure
-  '';
+      checkPhase =
+        args.checkPhase
+        or ''
+          runHook preCheck
+          runHook postCheck
+        '';
 
-  buildPhase = args.buildPhase or ''
-    runHook preBuild
-    runHook postBuild
-  '';
+      installPhase = let
+        baseDir =
+          {
+            mod = "mods";
+            soundpack = "sound";
+            tileset = "gfx";
+          }
+          .${type};
+      in
+        args.installPhase
+        or ''
+          runHook preInstall
+          destdir="$out/share/cataclysm-dda/${baseDir}"
+          mkdir -p "$destdir"
+          cp -R "${modRoot}" "$destdir/${modName}"
+          runHook postInstall
+        '';
 
-  checkPhase = args.checkPhase or ''
-    runHook preCheck
-    runHook postCheck
-  '';
-
-  installPhase = let
-    baseDir = {
-      mod = "mods";
-      soundpack = "sound";
-      tileset = "gfx";
-    }.${type};
-  in args.installPhase or ''
-    runHook preInstall
-    destdir="$out/share/cataclysm-dda/${baseDir}"
-    mkdir -p "$destdir"
-    cp -R "${modRoot}" "$destdir/${modName}"
-    runHook postInstall
-  '';
-
-  passthru = {
-    forTiles = true;
-    forCurses = type == "mod";
-  };
-})
+      passthru = {
+        forTiles = true;
+        forCurses = type == "mod";
+      };
+    })

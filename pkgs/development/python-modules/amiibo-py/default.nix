@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiohttp,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "amiibo-py";
   version = "unstable-2021-01-16";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # No tests are available upstream
-  pythonImportsCheck = [ "amiibo" ];
+  pythonImportsCheck = ["amiibo"];
 
   meta = with lib; {
     description = "API Wrapper for amiiboapi.com";
     homepage = "https://github.com/XiehCanCode/amiibo.py";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
   };
 }

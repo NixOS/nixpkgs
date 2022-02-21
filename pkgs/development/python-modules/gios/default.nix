@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  dacite,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "gios";
   version = "2.1.0";
@@ -47,12 +47,12 @@ buildPythonPackage rec {
     "test_invalid_station_id"
   ];
 
-  pythonImportsCheck = [ "gios" ];
+  pythonImportsCheck = ["gios"];
 
   meta = with lib; {
     description = "Python client for getting air quality data from GIOS";
     homepage = "https://github.com/bieniu/gios";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

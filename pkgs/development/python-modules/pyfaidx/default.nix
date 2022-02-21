@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, numpy
-, setuptools-scm
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  numpy,
+  setuptools-scm,
+  six,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyfaidx";
   version = "0.6.3.1";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mdshw5/pyfaidx";
     description = "Python classes for indexing, retrieval, and in-place modification of FASTA files using a samtools compatible index";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jbedo ];
+    maintainers = with maintainers; [jbedo];
   };
 }

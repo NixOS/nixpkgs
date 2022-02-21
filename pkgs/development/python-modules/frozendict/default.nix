@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytestCheckHook
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pytestCheckHook,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "frozendict";
   version = "2.3.0";

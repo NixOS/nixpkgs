@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "minio-client";
   version = "2022-02-13T23-26-13Z";
@@ -13,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-DDtpRKBetVyeUYk0OGddKkAEe3mqL7d+cbSdIbXeZ2s=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   patchPhase = ''
     sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
@@ -29,7 +32,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/minio/mc";
     description = "A replacement for ls, cp, mkdir, diff and rsync commands for filesystems and object storage";
-    maintainers = with maintainers; [ bachp eelco ];
+    maintainers = with maintainers; [bachp eelco];
     platforms = platforms.unix;
     license = licenses.asl20;
   };

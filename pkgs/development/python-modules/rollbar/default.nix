@@ -1,18 +1,18 @@
-{ lib
-, aiocontextvars
-, blinker
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, httpx
-, mock
-, pytestCheckHook
-, requests
-, six
-, pythonOlder
-, webob
+{
+  lib,
+  aiocontextvars,
+  blinker,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  httpx,
+  mock,
+  pytestCheckHook,
+  requests,
+  six,
+  pythonOlder,
+  webob,
 }:
-
 buildPythonPackage rec {
   pname = "rollbar";
   version = "0.16.2";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Error tracking and logging from Python to Rollbar";
     homepage = "https://github.com/rollbar/pyrollbar";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

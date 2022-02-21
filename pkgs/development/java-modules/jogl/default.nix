@@ -1,17 +1,26 @@
-{ lib, stdenv, fetchgit, ant, jdk8, git, xorg, udev, libGL, libGLU }:
-
 {
-  jogl_2_3_2 =
-    let
-      version = "2.3.2";
+  lib,
+  stdenv,
+  fetchgit,
+  ant,
+  jdk8,
+  git,
+  xorg,
+  udev,
+  libGL,
+  libGLU,
+}: {
+  jogl_2_3_2 = let
+    version = "2.3.2";
 
-      gluegen-src = fetchgit {
-        url = "git://jogamp.org/srv/scm/gluegen.git";
-        rev = "v${version}";
-        sha256 = "00hybisjwqs88p24dds652bzrwbbmhn2dpx56kp4j6xpadkp33d0";
-        fetchSubmodules = true;
-      };
-    in stdenv.mkDerivation {
+    gluegen-src = fetchgit {
+      url = "git://jogamp.org/srv/scm/gluegen.git";
+      rev = "v${version}";
+      sha256 = "00hybisjwqs88p24dds652bzrwbbmhn2dpx56kp4j6xpadkp33d0";
+      fetchSubmodules = true;
+    };
+  in
+    stdenv.mkDerivation {
       pname = "jogl";
       inherit version;
 
@@ -29,8 +38,8 @@
       '';
 
       # TODO: upgrade to jdk https://github.com/NixOS/nixpkgs/pull/89731
-      nativeBuildInputs = [ jdk8 ant git ];
-      buildInputs = [ udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender ];
+      nativeBuildInputs = [jdk8 ant git];
+      buildInputs = [udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender];
 
       buildPhase = ''
         cp -r ${gluegen-src} $NIX_BUILD_TOP/gluegen
@@ -59,7 +68,7 @@
         description = "Java libraries for 3D Graphics, Multimedia and Processing";
         homepage = "https://jogamp.org/";
         license = licenses.bsd3;
-        platforms = [ "x86_64-linux" ];
+        platforms = ["x86_64-linux"];
       };
     };
 }

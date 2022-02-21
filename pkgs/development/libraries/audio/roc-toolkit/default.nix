@@ -1,4 +1,5 @@
-{ stdenv,
+{
+  stdenv,
   lib,
   fetchFromGitHub,
   scons,
@@ -11,9 +12,8 @@
   libunwindSupport ? true,
   libunwind,
   pulseaudioSupport ? true,
-  libpulseaudio
+  libpulseaudio,
 }:
-
 stdenv.mkDerivation rec {
   pname = "roc-toolkit";
   version = "0.1.5";
@@ -40,21 +40,26 @@ stdenv.mkDerivation rec {
   ];
 
   sconsFlags =
-    [ "--build=${stdenv.buildPlatform.config}"
+    [
+      "--build=${stdenv.buildPlatform.config}"
       "--host=${stdenv.hostPlatform.config}"
       "--prefix=${placeholder "out"}"
       "--disable-sox"
       "--disable-doc"
-      "--disable-tests" ] ++
-    lib.optional (!libunwindSupport) "--disable-libunwind" ++
-    lib.optional (!pulseaudioSupport) "--disable-pulseaudio" ++
-    (if (!openfecSupport)
-       then ["--disable-openfec"]
-       else [ "--with-libraries=${openfec}/lib"
-              "--with-openfec-includes=${openfec.dev}/include" ]);
+      "--disable-tests"
+    ]
+    ++ lib.optional (!libunwindSupport) "--disable-libunwind"
+    ++ lib.optional (!pulseaudioSupport) "--disable-pulseaudio"
+    ++ (if (!openfecSupport)
+    then ["--disable-openfec"]
+    else
+      [
+        "--with-libraries=${openfec}/lib"
+        "--with-openfec-includes=${openfec.dev}/include"
+      ]);
 
   prePatch = lib.optionalString stdenv.isAarch64
-    "sed -i 's/c++98/c++11/g' SConstruct";
+  "sed -i 's/c++98/c++11/g' SConstruct";
 
   # TODO: Remove these patches in the next version.
   patches = [
@@ -66,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "Roc is a toolkit for real-time audio streaming over the network";
     homepage = "https://github.com/roc-streaming/roc-toolkit";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ bgamari ];
+    maintainers = with maintainers; [bgamari];
     platforms = platforms.unix;
   };
 }

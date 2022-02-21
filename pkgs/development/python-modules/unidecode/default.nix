@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "unidecode";
   version = "1.3.2";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/Unidecode/";
     description = "ASCII transliterations of Unicode text";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

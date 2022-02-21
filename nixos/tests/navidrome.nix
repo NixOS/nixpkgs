@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "navidrome";
 
-  machine = { ... }: {
+  machine = {...}: {
     services.navidrome.enable = true;
   };
 

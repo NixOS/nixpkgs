@@ -1,10 +1,9 @@
-{ runCommand
-, callPackage
-, jdk
-, jre_minimal
-}:
-
-let
+{
+  runCommand,
+  callPackage,
+  jdk,
+  jre_minimal,
+}: let
   hello-logging = callPackage ./hello-logging.nix {
     jdk = jdk;
     jre = jre_minimal.override {

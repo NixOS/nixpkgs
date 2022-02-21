@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, marshmallow-enum
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, typeguard
-, typing-inspect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  marshmallow-enum,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  typeguard,
+  typing-inspect,
 }:
-
 buildPythonPackage rec {
   pname = "marshmallow-dataclass";
   version = "8.5.3";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automatic generation of marshmallow schemas from dataclasses";
     homepage = "https://github.com/lovasoa/marshmallow_dataclass";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

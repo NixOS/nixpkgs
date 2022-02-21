@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, static ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  static ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "libjpeg";
   version = "9e";
@@ -11,12 +15,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional static "--enable-static --disable-shared";
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = ["bin" "dev" "out" "man"];
 
   meta = with lib; {
     homepage = "https://www.ijg.org/";
     description = "A library that implements the JPEG image file format";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.free;
     platforms = platforms.unix;
   };

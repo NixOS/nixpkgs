@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "skjold";
   version = "0.4.1";
@@ -73,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to Python dependencies against security advisory databases";
     homepage = "https://github.com/twu/skjold";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

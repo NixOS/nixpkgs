@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-js-asset
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-js-asset,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "django-mptt";
   version = "0.13.4";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities for implementing a modified pre-order traversal tree in Django";
     homepage = "https://github.com/django-mptt/django-mptt";
-    maintainers = with maintainers; [ hexa ];
-    license = with licenses; [ mit ];
+    maintainers = with maintainers; [hexa];
+    license = with licenses; [mit];
   };
 }

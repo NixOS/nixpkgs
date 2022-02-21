@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, gpgme }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gpgme,
+}:
 stdenv.mkDerivation rec {
   pname = "nasty";
   version = "0.6";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
   # https://sources.debian.net/src/nasty/0.6-3/debian/patches/02_add_largefile_support.patch
   CFLAGS = "-D_FILE_OFFSET_BITS=64";
 
-  buildInputs = [ gpgme ];
+  buildInputs = [gpgme];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,14 +27,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Recover the passphrase of your PGP or GPG-key";
     longDescription = ''
-    Nasty is a program that helps you to recover the passphrase of your PGP or GPG-key
-    in case you forget or lost it. It is mostly a proof-of-concept: with a different implementation
-    this program could be at least 100x faster.
+      Nasty is a program that helps you to recover the passphrase of your PGP or GPG-key
+      in case you forget or lost it. It is mostly a proof-of-concept: with a different implementation
+      this program could be at least 100x faster.
     '';
     homepage = "http://www.vanheusden.com/nasty/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [davidak];
     platforms = platforms.unix;
   };
 }
-

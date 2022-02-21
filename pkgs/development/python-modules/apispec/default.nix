@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pyyaml
-, prance
-, marshmallow
-, pytestCheckHook
-, mock
-, openapi-spec-validator
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pyyaml,
+  prance,
+  marshmallow,
+  pytestCheckHook,
+  mock,
+  openapi-spec-validator,
 }:
-
 buildPythonPackage rec {
   pname = "apispec";
   version = "5.1.1";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "apispec" ];
+  pythonImportsCheck = ["apispec"];
 
   meta = with lib; {
     description = "A pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

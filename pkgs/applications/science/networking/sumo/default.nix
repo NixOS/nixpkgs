@@ -1,8 +1,33 @@
-{ lib, bzip2, cmake, eigen, fetchFromGitHub, ffmpeg, fox_1_6, gdal,
-  git, gl2ps, gpp , gtest, jdk, libGL, libGLU, libX11, libjpeg,
-  libpng, libtiff, openscenegraph , proj, python3, python37Packages,
-  stdenv, swig, xercesc, xorg, zlib }:
-
+{
+  lib,
+  bzip2,
+  cmake,
+  eigen,
+  fetchFromGitHub,
+  ffmpeg,
+  fox_1_6,
+  gdal,
+  git,
+  gl2ps,
+  gpp,
+  gtest,
+  jdk,
+  libGL,
+  libGLU,
+  libX11,
+  libjpeg,
+  libpng,
+  libtiff,
+  openscenegraph,
+  proj,
+  python3,
+  python37Packages,
+  stdenv,
+  swig,
+  xercesc,
+  xorg,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "sumo";
   version = "1.9.2";
@@ -21,36 +46,38 @@ stdenv.mkDerivation rec {
     swig
   ];
 
-  buildInputs = [
-    bzip2
-    eigen
-    ffmpeg
-    fox_1_6
-    gdal
-    gl2ps
-    gpp
-    gtest
-    jdk
-    libGL
-    libGLU
-    libjpeg
-    libpng
-    libtiff
-    openscenegraph
-    proj
-    python37Packages.setuptools
-    xercesc
-    zlib
-    python3
-  ] ++ (with xorg; [
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXft
-    libXrandr
-    libXrender
-  ]);
+  buildInputs =
+    [
+      bzip2
+      eigen
+      ffmpeg
+      fox_1_6
+      gdal
+      gl2ps
+      gpp
+      gtest
+      jdk
+      libGL
+      libGLU
+      libjpeg
+      libpng
+      libtiff
+      openscenegraph
+      proj
+      python37Packages.setuptools
+      xercesc
+      zlib
+      python3
+    ]
+    ++ (with xorg; [
+      libX11
+      libXcursor
+      libXext
+      libXfixes
+      libXft
+      libXrandr
+      libXrender
+    ]);
 
   meta = with lib; {
     description = "The SUMO traffic simulator";
@@ -63,6 +90,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/eclipse/sumo";
     license = licenses.epl20;
-    maintainers = with maintainers; [ mtreca ];
+    maintainers = with maintainers; [mtreca];
   };
 }

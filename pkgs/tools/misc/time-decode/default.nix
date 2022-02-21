@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "time-decode";
   version = "3.2.0";
@@ -22,12 +22,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "time_decode" ];
+  pythonImportsCheck = ["time_decode"];
 
   meta = with lib; {
     description = "Timestamp and date decoder";
     homepage = "https://github.com/digitalsleuth/time_decode";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

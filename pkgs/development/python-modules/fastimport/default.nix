@@ -1,10 +1,10 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "fastimport";
   version = "0.9.14";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover
   '';
 
-  pythonImportsCheck = [ "fastimport" ];
+  pythonImportsCheck = ["fastimport"];
 
   meta = with lib; {
     homepage = "https://github.com/jelmer/python-fastimport";
     description = "VCS fastimport/fastexport parser";
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [koral];
     license = licenses.gpl2Plus;
   };
 }

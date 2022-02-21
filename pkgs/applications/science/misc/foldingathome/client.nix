@@ -1,14 +1,15 @@
-{ lib, stdenv
-, autoPatchelfHook
-, buildFHSUserEnv
-, dpkg
-, fetchurl
-, gcc-unwrapped
-, ocl-icd
-, zlib
-, extraPkgs ? []
-}:
-let
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  buildFHSUserEnv,
+  dpkg,
+  fetchurl,
+  gcc-unwrapped,
+  ocl-icd,
+  zlib,
+  extraPkgs ? [],
+}: let
   majMin = lib.versions.majorMinor version;
   version = "7.6.13";
 
@@ -35,25 +36,27 @@ let
     installPhase = "cp -ar usr $out";
   };
 in
-buildFHSUserEnv {
-  name = fahclient.name;
+  buildFHSUserEnv {
+    name = fahclient.name;
 
-  targetPkgs = pkgs': [
-    fahclient
-    ocl-icd
-  ] ++ extraPkgs;
+    targetPkgs = pkgs':
+      [
+        fahclient
+        ocl-icd
+      ]
+      ++ extraPkgs;
 
-  runScript = "/bin/FAHClient";
+    runScript = "/bin/FAHClient";
 
-  extraInstallCommands = ''
-    mv $out/bin/$name $out/bin/FAHClient
-  '';
+    extraInstallCommands = ''
+      mv $out/bin/$name $out/bin/FAHClient
+    '';
 
-  meta = {
-    description = "Folding@home client";
-    homepage = "https://foldingathome.org/";
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.zimbatm ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = {
+      description = "Folding@home client";
+      homepage = "https://foldingathome.org/";
+      license = lib.licenses.unfree;
+      maintainers = [lib.maintainers.zimbatm];
+      platforms = ["x86_64-linux"];
+    };
+  }

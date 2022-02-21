@@ -1,32 +1,34 @@
-{ lib
-, mkDerivationWith
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, superqt
-, typing-extensions
-, tifffile
-, napari-plugin-engine
-, pint
-, pyyaml
-, numpydoc
-, dask
-, magicgui
-, docstring-parser
-, appdirs
-, imageio
-, pyopengl
-, cachey
-, napari-svg
-, psutil
-, napari-console
-, wrapt
-, pydantic
-, tqdm
-, jsonschema
-, scipy
-, wrapQtAppsHook
-}: mkDerivationWith buildPythonPackage rec {
+{
+  lib,
+  mkDerivationWith,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  superqt,
+  typing-extensions,
+  tifffile,
+  napari-plugin-engine,
+  pint,
+  pyyaml,
+  numpydoc,
+  dask,
+  magicgui,
+  docstring-parser,
+  appdirs,
+  imageio,
+  pyopengl,
+  cachey,
+  napari-svg,
+  psutil,
+  napari-console,
+  wrapt,
+  pydantic,
+  tqdm,
+  jsonschema,
+  scipy,
+  wrapQtAppsHook,
+}:
+mkDerivationWith buildPythonPackage rec {
   pname = "napari";
   version = "0.4.12";
   src = fetchFromGitHub {
@@ -35,7 +37,7 @@
     rev = "v${version}";
     sha256 = "sha256-0QSI0mgDjF70/X58fE7uWwlBUCGY5gsvbCm4oJkp2Yk=";
   };
-  nativeBuildInputs = [ setuptools-scm wrapQtAppsHook ];
+  nativeBuildInputs = [setuptools-scm wrapQtAppsHook];
   propagatedBuildInputs = [
     napari-plugin-engine
     cachey
@@ -70,6 +72,6 @@
     description = "A fast, interactive, multi-dimensional image viewer for python";
     homepage = "https://github.com/napari/napari";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    maintainers = with maintainers; [SomeoneSerge];
   };
 }

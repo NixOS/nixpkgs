@@ -1,5 +1,12 @@
-{ fetchFromGitHub, lib, stdenv, zlib, qtbase, cmake, fixDarwinDylibNames }:
-
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  zlib,
+  qtbase,
+  cmake,
+  fixDarwinDylibNames,
+}:
 stdenv.mkDerivation rec {
   pname = "quazip";
   version = "1.2";
@@ -11,8 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fsEMmbatTB1s8JnUYE18/vj2FZ2b40zHoOlL2OVplLc=";
   };
 
-  buildInputs = [ zlib qtbase ];
-  nativeBuildInputs = [ cmake ]
+  buildInputs = [zlib qtbase];
+  nativeBuildInputs =
+    [cmake]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   dontWrapQtApps = true;

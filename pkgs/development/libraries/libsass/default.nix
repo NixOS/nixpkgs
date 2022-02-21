@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "libsass";
   version = "3.6.5"; # also check sassc for updates
@@ -20,13 +24,13 @@ stdenv.mkDerivation rec {
     export LIBSASS_VERSION=${version}
   '';
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   meta = with lib; {
     description = "A C/C++ implementation of a Sass compiler";
     homepage = "https://github.com/sass/libsass";
     license = licenses.mit;
-    maintainers = with maintainers; [ codyopel offline ];
+    maintainers = with maintainers; [codyopel offline];
     platforms = platforms.unix;
   };
 }

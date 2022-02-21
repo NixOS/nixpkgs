@@ -1,43 +1,43 @@
-{ lib
-, stdenv
-, aiohttp
-, asttokens
-, blinker
-, botocore
-, bottle
-, buildPythonPackage
-, celery
-, certifi
-, chalice
-, django
-, executing
-, fakeredis
-, falcon
-, fetchFromGitHub
-, flask_login
-, gevent
-, httpx
-, iana-etc
-, isPy3k
-, jsonschema
-, libredirect
-, pure-eval
-, pyramid
-, pyspark
-, pytest-django
-, pytest-forked
-, pytest-localserver
-, pytestCheckHook
-, rq
-, sanic
-, sanic-testing
-, sqlalchemy
-, tornado
-, trytond
-, urllib3
-, werkzeug
+{
+  lib,
+  stdenv,
+  aiohttp,
+  asttokens,
+  blinker,
+  botocore,
+  bottle,
+  buildPythonPackage,
+  celery,
+  certifi,
+  chalice,
+  django,
+  executing,
+  fakeredis,
+  falcon,
+  fetchFromGitHub,
+  flask_login,
+  gevent,
+  httpx,
+  iana-etc,
+  isPy3k,
+  jsonschema,
+  libredirect,
+  pure-eval,
+  pyramid,
+  pyspark,
+  pytest-django,
+  pytest-forked,
+  pytest-localserver,
+  pytestCheckHook,
+  rq,
+  sanic,
+  sanic-testing,
+  sqlalchemy,
+  tornado,
+  trytond,
+  urllib3,
+  werkzeug,
 }:
-
 buildPythonPackage rec {
   pname = "sentry-sdk";
   version = "1.5.5";
@@ -55,38 +55,40 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [
-    asttokens
-    blinker
-    botocore
-    bottle
-    chalice
-    django
-    executing
-    fakeredis
-    falcon
-    flask_login
-    gevent
-    jsonschema
-    pure-eval
-    pytest-django
-    pytest-forked
-    pytest-localserver
-    pytestCheckHook
-    rq
-    sqlalchemy
-    tornado
-    trytond
-    werkzeug
-  ] ++ lib.optionals isPy3k [
-    aiohttp
-    celery
-    httpx
-    pyramid
-    pyspark
-    sanic
-    sanic-testing
-  ];
+  checkInputs =
+    [
+      asttokens
+      blinker
+      botocore
+      bottle
+      chalice
+      django
+      executing
+      fakeredis
+      falcon
+      flask_login
+      gevent
+      jsonschema
+      pure-eval
+      pytest-django
+      pytest-forked
+      pytest-localserver
+      pytestCheckHook
+      rq
+      sqlalchemy
+      tornado
+      trytond
+      werkzeug
+    ]
+    ++ lib.optionals isPy3k [
+      aiohttp
+      celery
+      httpx
+      pyramid
+      pyspark
+      sanic
+      sanic-testing
+    ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -136,6 +138,6 @@ buildPythonPackage rec {
     description = "Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fab gebner ];
+    maintainers = with maintainers; [fab gebner];
   };
 }

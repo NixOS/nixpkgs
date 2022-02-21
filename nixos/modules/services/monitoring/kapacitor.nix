@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.kapacitor;
 
   kapacitorConf = pkgs.writeTextFile {
@@ -26,36 +28,41 @@ let
       [storage]
         boltdb = "${cfg.dataDir}/kapacitor.db"
 
-      ${optionalString (cfg.loadDirectory != null) ''
-        [load]
-          enabled = true
-          dir = "${cfg.loadDirectory}"
-      ''}
+      ${
+        optionalString (cfg.loadDirectory != null) ''
+          [load]
+            enabled = true
+            dir = "${cfg.loadDirectory}"
+        ''
+      }
 
-      ${optionalString (cfg.defaultDatabase.enable) ''
-        [[influxdb]]
-          name = "default"
-          enabled = true
-          default = true
-          urls = [ "${cfg.defaultDatabase.url}" ]
-          username = "${cfg.defaultDatabase.username}"
-          password = "${cfg.defaultDatabase.password}"
-      ''}
+      ${
+        optionalString (cfg.defaultDatabase.enable) ''
+          [[influxdb]]
+            name = "default"
+            enabled = true
+            default = true
+            urls = [ "${cfg.defaultDatabase.url}" ]
+            username = "${cfg.defaultDatabase.username}"
+            password = "${cfg.defaultDatabase.password}"
+        ''
+      }
 
-      ${optionalString (cfg.alerta.enable) ''
-        [alerta]
-          enabled = true
-          url = "${cfg.alerta.url}"
-          token = "${cfg.alerta.token}"
-          environment = "${cfg.alerta.environment}"
-          origin = "${cfg.alerta.origin}"
-      ''}
+      ${
+        optionalString (cfg.alerta.enable) ''
+          [alerta]
+            enabled = true
+            url = "${cfg.alerta.url}"
+            token = "${cfg.alerta.token}"
+            environment = "${cfg.alerta.environment}"
+            origin = "${cfg.alerta.origin}"
+        ''
+      }
 
       ${cfg.extraConfig}
     '';
   };
-in
-{
+in {
   options.services.kapacitor = {
     enable = mkEnableOption "kapacitor";
 
@@ -158,7 +165,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.kapacitor ];
+    environment.systemPackages = [pkgs.kapacitor];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
@@ -166,8 +173,8 @@ in
 
     systemd.services.kapacitor = {
       description = "Kapacitor Real-Time Stream Processing Engine";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
       serviceConfig = {
         ExecStart = "${pkgs.kapacitor}/bin/kapacitord -config ${kapacitorConf}";
         User = "kapacitor";

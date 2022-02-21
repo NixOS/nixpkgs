@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, gmp }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+}:
 stdenv.mkDerivation rec {
   pname = "ats";
   version = "0.2.12";
@@ -10,16 +14,16 @@ stdenv.mkDerivation rec {
   };
 
   # this is necessary because atxt files usually include some .hats files
-  patches = [ ./install-atsdoc-hats-files.patch ];
-  buildInputs = [ gmp ];
+  patches = [./install-atsdoc-hats-files.patch];
+  buildInputs = [gmp];
 
   meta = {
     description = "Functional programming language with dependent types";
-    homepage    = "http://www.ats-lang.org";
-    license     = lib.licenses.gpl3Plus;
+    homepage = "http://www.ats-lang.org";
+    license = lib.licenses.gpl3Plus;
     # TODO: it looks like ATS requires gcc specifically. Someone with more knowledge
     # will need to experiment.
-    platforms   = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    platforms = lib.platforms.linux;
+    maintainers = [lib.maintainers.thoughtpolice];
   };
 }

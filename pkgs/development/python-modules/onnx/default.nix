@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, cmake
-, fetchPypi
-, isPy27
-, nbval
-, numpy
-, protobuf
-, pytestCheckHook
-, six
-, tabulate
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  cmake,
+  fetchPypi,
+  isPy27,
+  nbval,
+  numpy,
+  protobuf,
+  pytestCheckHook,
+  six,
+  tabulate,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "onnx";
   version = "1.10.2";
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     description = "Open Neural Network Exchange";
     homepage = "https://onnx.ai";
     license = licenses.asl20;
-    maintainers = with maintainers; [ acairncross ];
+    maintainers = with maintainers; [acairncross];
   };
 }

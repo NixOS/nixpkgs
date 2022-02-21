@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  twisted,
 }:
-
 buildPythonPackage rec {
   pname = "txAMQP";
   version = "0.8.2";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0jd9864k3csc06kipiwzjlk9mq4054s8kzk5q1cfnxj8572s4iv4";
   };
 
-  propagatedBuildInputs = [ twisted ];
+  propagatedBuildInputs = [twisted];
 
   meta = with lib; {
     homepage = "https://github.com/txamqp/txamqp";
@@ -21,5 +21,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = [];
   };
-
 }

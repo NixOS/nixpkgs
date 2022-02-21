@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, qtbase
-, qtsvg
-, obs-studio
-, asio_1_10
-, websocketpp
-, nlohmann_json
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  qtbase,
+  qtsvg,
+  obs-studio,
+  asio_1_10,
+  websocketpp,
+  nlohmann_json,
 }:
-
 stdenv.mkDerivation rec {
   pname = "obs-websocket";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
   buildInputs = [
     qtbase
     qtsvg
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Remote-control OBS Studio through WebSockets";
     homepage = "https://github.com/Palakis/obs-websocket";
-    maintainers = with maintainers; [ erdnaxe ];
+    maintainers = with maintainers; [erdnaxe];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = ["x86_64-linux" "i686-linux"];
   };
 }

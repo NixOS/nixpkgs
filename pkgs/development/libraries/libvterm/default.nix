@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "libvterm";
   version = "0.99.7";
@@ -18,8 +24,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib ncurses ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [glib ncurses];
 
   meta = with lib; {
     homepage = "http://libvterm.sourceforge.net/";

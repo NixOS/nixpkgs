@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, python3, libX11, libXrandr }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  libX11,
+  libXrandr,
+}:
 stdenv.mkDerivation rec {
   pname = "blugon";
   version = "1.12.1";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i67v8jxvavgax3dwvns200iwwdcvgki04liq0x64q52lg0vrh7m";
   };
 
-  buildInputs = [ python3 libX11 libXrandr ];
+  buildInputs = [python3 libX11 libXrandr];
 
   # Remove at next release
   # https://github.com/jumper149/blugon/commit/d262cd05
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
     sed -i 's,CC = gcc,CC ?= gcc,g' backends/scg/Makefile
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Simple and configurable Blue Light Filter for X";
@@ -32,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = "https://github.com/jumper149/blugon";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jumper149 ];
+    maintainers = with maintainers; [jumper149];
   };
 }

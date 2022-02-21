@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, python, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "lhapdf";
   version = "6.4.0";
@@ -15,13 +20,13 @@ stdenv.mkDerivation rec {
     substituteInPlace src/GridPDF.cc --replace '#include <locale>' '#include <xlocale.h>'
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [python];
 
   enableParallelBuilding = true;
 
   passthru = {
-    pdf_sets = import ./pdf_sets.nix { inherit lib stdenv fetchurl; };
+    pdf_sets = import ./pdf_sets.nix {inherit lib stdenv fetchurl;};
   };
 
   postInstall = ''
@@ -30,9 +35,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A general purpose interpolator, used for evaluating Parton Distribution Functions from discretised data files";
-    license     = licenses.gpl2;
-    homepage    = "http://lhapdf.hepforge.org";
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    license = licenses.gpl2;
+    homepage = "http://lhapdf.hepforge.org";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [veprbl];
   };
 }

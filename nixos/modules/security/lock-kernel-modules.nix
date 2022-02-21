@@ -1,10 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; {
   meta = {
-    maintainers = [ maintainers.joachifm ];
+    maintainers = [maintainers.joachifm];
   };
 
   options = {
@@ -23,31 +25,32 @@ with lib;
   config = mkIf config.security.lockKernelModules {
     boot.kernelModules = concatMap (x:
       if x.device != null
-        then
-          if x.fsType == "vfat"
-            then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
-            else [ x.fsType ]
-        else []) config.system.build.fileSystems;
+      then
+        if x.fsType == "vfat"
+        then ["vfat" "nls-cp437" "nls-iso8859-1"]
+        else [x.fsType]
+      else [])
+    config.system.build.fileSystems;
 
     systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";
 
-      wants = [ "systemd-udevd.service" ];
-      wantedBy = [ config.systemd.defaultUnit ];
+      wants = ["systemd-udevd.service"];
+      wantedBy = [config.systemd.defaultUnit];
 
-      after =
-        [ "firewall.service"
-          "systemd-modules-load.service"
-           config.systemd.defaultUnit
-        ];
+      after = [
+        "firewall.service"
+        "systemd-modules-load.service"
+        config.systemd.defaultUnit
+      ];
 
       unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel";
 
-      serviceConfig =
-        { Type = "oneshot";
-          RemainAfterExit = true;
-          TimeoutSec = 180;
-        };
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        TimeoutSec = 180;
+      };
 
       script = ''
         ${pkgs.udev}/bin/udevadm settle

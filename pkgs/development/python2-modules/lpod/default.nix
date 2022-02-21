@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, docutils
-, pillow
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  docutils,
+  pillow,
+  isPy3k,
 }:
-
 buildPythonPackage {
   version = "1.1.7";
   pname = "python-lpod";
   # lpod library currently does not support Python 3.x
   disabled = isPy3k;
 
-  propagatedBuildInputs = [ lxml docutils pillow ];
+  propagatedBuildInputs = [lxml docutils pillow];
 
   src = fetchFromGitHub {
     owner = "lpod";
@@ -27,5 +27,4 @@ buildPythonPackage {
     description = "Library implementing the ISO/IEC 26300 OpenDocument Format standard (ODF) ";
     license = licenses.gpl3;
   };
-
 }

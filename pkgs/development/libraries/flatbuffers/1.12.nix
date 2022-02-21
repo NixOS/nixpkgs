@@ -1,5 +1,9 @@
-{ callPackage, fetchpatch, lib, stdenv }:
-
+{
+  callPackage,
+  fetchpatch,
+  lib,
+  stdenv,
+}:
 callPackage ./generic.nix {
   version = "1.12.0";
   sha256 = "0f7xd66vc1lzjbn7jzd5kyqrgxpsfxi4zc7iymhb5xrwyxipjl1g";
@@ -10,7 +14,7 @@ callPackage ./generic.nix {
       # Should be included in the next release after 1.12.0
       url = "https://github.com/google/flatbuffers/commit/988164f6e1675bbea9c852e2d6001baf4d1fcf59.patch";
       sha256 = "0d8c2bywqmkhdi0a41cry85wy4j58pl0vd6h5xpfqm3fr8w0mi9s";
-      excludes = [ "src/idl_gen_cpp.cpp" ];
+      excludes = ["src/idl_gen_cpp.cpp"];
     })
     (fetchpatch {
       # Fixed a compilation error with GCC 10.0 to 11.0. July 6, 2020.

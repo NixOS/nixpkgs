@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hdl-dump";
   version = "unstable-2021-08-20";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NMExi2pUyj8vRn9beT2YvnEogRw/xzgqE+roaZ/vNZs=";
   };
 
-  makeFlags = [ "RELEASE=yes" ];
+  makeFlags = ["RELEASE=yes"];
 
   installPhase = ''
     install -Dm755 hdl_dump -t $out/bin
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "PlayStation 2 HDLoader image dump/install utility";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
     mainProgram = "hdl_dump";
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, lxml
-, paramiko
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  lxml,
+  paramiko,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "python-gvm";
   version = "21.11.0";
@@ -38,12 +38,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # No running SSH available
-    "test_connect_error"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_feed_xml_error"
-  ];
+  disabledTests =
+    [
+      # No running SSH available
+      "test_connect_error"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_feed_xml_error"
+    ];
 
   pythonImportsCheck = [
     "gvm"
@@ -52,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/python-gvm";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

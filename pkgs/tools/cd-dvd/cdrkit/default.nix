@@ -1,5 +1,13 @@
-{lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libcap,
+  zlib,
+  bzip2,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "cdrkit";
   version = "1.1.11";
@@ -9,13 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "1nj7iv3xrq600i37na9a5idd718piiiqbs4zxvpjs66cdrsk1h6i";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libcap zlib bzip2 perl ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libcap zlib bzip2 perl];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
-  patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ./cdrkit-1.1.11-fno-common.patch ];
+  patches = [./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ./cdrkit-1.1.11-fno-common.patch];
 
   postInstall = ''
     # file name compatibility with the old cdrecord (growisofs wants this name)
@@ -23,7 +31,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/wodim $out/bin/cdrecord
   '';
 
-  makeFlags = [ "PREFIX=\$(out)" ];
+  makeFlags = ["PREFIX=\$(out)"];
 
   meta = {
     description = "Portable command-line CD/DVD recorder software, mostly compatible with cdrtools";

@@ -1,19 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gstreamer
-, gst-plugins-base
-, gettext
-, libav
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gstreamer,
+  gst-plugins-base,
+  gettext,
+  libav,
 }:
-
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See
 # https://gstreamer.freedesktop.org/releases/1.6/ for more info.
-
 stdenv.mkDerivation rec {
   pname = "gst-libav";
   version = "1.20.0";
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Xu5e2NUIKjG1AESOQVNcci7jDNX4Ik8ymCu6ui7t7xc=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     meson

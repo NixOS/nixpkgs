@@ -1,8 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, bash, autoreconfHook
-, zeromq, ndpi, json_c, openssl, libpcap, libcap, curl, libmaxminddb
-, rrdtool, sqlite, libmysqlclient, expat, net-snmp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  bash,
+  autoreconfHook,
+  zeromq,
+  ndpi,
+  json_c,
+  openssl,
+  libpcap,
+  libcap,
+  curl,
+  libmaxminddb,
+  rrdtool,
+  sqlite,
+  libmysqlclient,
+  expat,
+  net-snmp,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ntopng";
   version = "5.2.1";
@@ -21,11 +38,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ bash autoreconfHook pkg-config ];
+  nativeBuildInputs = [bash autoreconfHook pkg-config];
 
   buildInputs = [
-    zeromq ndpi json_c openssl libpcap curl libmaxminddb rrdtool sqlite
-    libmysqlclient expat net-snmp libcap
+    zeromq
+    ndpi
+    json_c
+    openssl
+    libpcap
+    curl
+    libmaxminddb
+    rrdtool
+    sqlite
+    libmysqlclient
+    expat
+    net-snmp
+    libcap
   ];
 
   autoreconfPhase = "bash autogen.sh";
@@ -47,6 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.ntop.org/products/ntop/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

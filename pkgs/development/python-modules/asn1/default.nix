@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  future,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "asn1";
   version = "2.4.2";
@@ -32,14 +32,14 @@ buildPythonPackage rec {
       --replace "enum-compat" ""
   '';
 
-  pytestFlagsArray = [ "tests/test_asn1.py" ];
+  pytestFlagsArray = ["tests/test_asn1.py"];
 
-  pythonImportsCheck = [ "asn1" ];
+  pythonImportsCheck = ["asn1"];
 
   meta = with lib; {
     description = "Python ASN.1 encoder and decoder";
     homepage = "https://github.com/andrivet/python-asn1";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

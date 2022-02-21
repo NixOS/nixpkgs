@@ -1,7 +1,16 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pandas, shapely, fiona, pyproj
-, pytestCheckHook, Rtree }:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pandas,
+  shapely,
+  fiona,
+  pyproj,
+  pytestCheckHook,
+  Rtree,
+}:
 buildPythonPackage rec {
   pname = "geopandas";
   version = "0.10.2";
@@ -26,18 +35,18 @@ buildPythonPackage rec {
     # Wants to write test files into $HOME.
     export HOME="$TMPDIR"
   '';
-  checkInputs = [ pytestCheckHook Rtree ];
+  checkInputs = [pytestCheckHook Rtree];
   disabledTests = [
     # requires network access
     "test_read_file_remote_geojson_url"
     "test_read_file_remote_zipfile_url"
   ];
-  pytestFlagsArray = [ "geopandas" ];
+  pytestFlagsArray = ["geopandas"];
 
   meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [knedlsepp];
   };
 }

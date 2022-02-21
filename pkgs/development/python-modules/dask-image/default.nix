@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dask
-, scipy
-, pims
-, scikitimage
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dask,
+  scipy,
+  pims,
+  scikitimage,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   version = "2021.12.0";
   pname = "dask-image";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "35be49626bd01c3e3892128126a27d5ee3266a198a8e3c7e30d59eaef712fcf9";
   };
 
-  propagatedBuildInputs = [ dask scipy pims ];
+  propagatedBuildInputs = [dask scipy pims];
 
   prePatch = ''
     substituteInPlace setup.cfg --replace "--flake8" ""
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     scikitimage
   ];
 
-  pythonImportsCheck = [ "dask_image" ];
+  pythonImportsCheck = ["dask_image"];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-image";
     description = "Distributed image processing";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

@@ -1,6 +1,13 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config
-, libsodium, libarchive, openssl, zeromq }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  libsodium,
+  libarchive,
+  openssl,
+  zeromq,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "habitat";
   # Newer versions required protobuf, which requires some finesse to get to
@@ -16,8 +23,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1c058sjgd79ps8ahvxp25qyc3a6b2csb41vamrphv9ygai60mng6";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsodium libarchive openssl zeromq ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libsodium libarchive openssl zeromq];
 
   cargoBuildFlags = ["--package hab"];
 
@@ -32,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "An application automation framework";
     homepage = "https://www.habitat.sh";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [rushmorem];
+    platforms = ["x86_64-linux"];
   };
 }

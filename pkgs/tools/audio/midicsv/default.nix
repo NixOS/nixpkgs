@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "midicsv";
   version = "1.1";
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Losslessly translate MIDI to CSV and back";
     homepage = "http://www.fourmilab.ch/webtools/midicsv/";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.all;
   };
 }

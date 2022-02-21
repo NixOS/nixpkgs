@@ -1,6 +1,6 @@
-{ callPackage, ... } @ args:
-
-callPackage ./generic.nix (args // rec {
+{callPackage, ...} @ args:
+callPackage ./generic.nix (args
+// rec {
   brand = "Midas";
   type = "M32";
   version = "4.1";

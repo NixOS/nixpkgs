@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytest,
 }:
-
 buildPythonPackage rec {
   version = "1.0.4";
   pname = "pytest-random-order";
@@ -16,12 +16,12 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
   meta = with lib; {
     homepage = "https://github.com/jbasko/pytest-random-order";
     description = "Randomise the order of tests with some control over the randomness";
     license = licenses.mit;
-    maintainers = [ maintainers.prusnak ];
+    maintainers = [maintainers.prusnak];
   };
 }

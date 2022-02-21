@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, perl, python2, gnuplot, coreutils, gnugrep }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  python2,
+  gnuplot,
+  coreutils,
+  gnugrep,
+}:
 stdenv.mkDerivation rec {
   pname = "gitstats";
   version = "2016-01-08";
@@ -12,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qUQB3aCRbPkbMoMf39kPQ0vil8RjXL8RqjdTryfkzK0=";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [perl];
 
-  buildInputs = [ python2 ];
+  buildInputs = [python2];
 
   strictDeps = true;
 
@@ -39,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "Git history statistics generator";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

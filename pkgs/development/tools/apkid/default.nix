@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "apkid";
   version = "2.1.1";
@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
       --replace "yara-python==3.11.0" "yara-python"
   '';
 
-  pythonImportsCheck = [ "apkid" ];
+  pythonImportsCheck = ["apkid"];
 
   meta = with lib; {
     description = "Android Application Identifier";
     homepage = "https://github.com/rednaga/APKiD";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

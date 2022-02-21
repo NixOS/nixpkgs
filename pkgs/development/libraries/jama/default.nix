@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, unzip, tnt}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  tnt,
+}:
 stdenv.mkDerivation rec {
   pname = "jama";
   version = "1.2.5";
@@ -9,16 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "031ns526fvi2nv7jzzv02i7i5sjcyr0gj884i3an67qhsx8vyckl";
   };
 
-  nativeBuildInputs = [ unzip ];
-  propagatedBuildInputs = [ tnt ];
+  nativeBuildInputs = [unzip];
+  propagatedBuildInputs = [tnt];
 
   unpackPhase = ''
-      mkdir "${pname}-${version}"
-      unzip "$src"
+    mkdir "${pname}-${version}"
+    unzip "$src"
   '';
   installPhase = ''
-      mkdir -p $out/include
-      cp *.h $out/include
+    mkdir -p $out/include
+    cp *.h $out/include
   '';
 
   meta = with lib; {

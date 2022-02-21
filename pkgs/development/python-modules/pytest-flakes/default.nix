@@ -1,8 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest
-, pyflakes
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytest,
+  pyflakes,
 }:
-
 buildPythonPackage rec {
   # upstream has abandoned project in favor of pytest-flake8
   # retaining package to not break other packages
@@ -15,13 +18,13 @@ buildPythonPackage rec {
     sha256 = "953134e97215ae31f6879fbd7368c18d43f709dc2fab5b7777db2bb2bac3a924";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ pyflakes ];
-  checkInputs = [ pytest ];
+  buildInputs = [pytest];
+  propagatedBuildInputs = [pyflakes];
+  checkInputs = [pytest];
 
   # no longer passes
   doCheck = false;
-  pythonImportsCheck = [ "pytest_flakes" ];
+  pythonImportsCheck = ["pytest_flakes"];
   # disable one test case that looks broken
   checkPhase = ''
     py.test test_flakes.py -k 'not test_syntax_error'

@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, apispec
-, colorama
-, click
-, email_validator
-, flask
-, flask-babel
-, flask_login
-, flask-openid
-, flask_sqlalchemy
-, flask_wtf
-, flask-jwt-extended
-, jsonschema
-, marshmallow
-, marshmallow-enum
-, marshmallow-sqlalchemy
-, python-dateutil
-, pythonOlder
-, prison
-, pyjwt
-, pyyaml
-, sqlalchemy-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  apispec,
+  colorama,
+  click,
+  email_validator,
+  flask,
+  flask-babel,
+  flask_login,
+  flask-openid,
+  flask_sqlalchemy,
+  flask_wtf,
+  flask-jwt-extended,
+  jsonschema,
+  marshmallow,
+  marshmallow-enum,
+  marshmallow-sqlalchemy,
+  python-dateutil,
+  pythonOlder,
+  prison,
+  pyjwt,
+  pyyaml,
+  sqlalchemy-utils,
 }:
-
 buildPythonPackage rec {
   pname = "flask-appbuilder";
   version = "3.4.4";
@@ -105,6 +105,6 @@ buildPythonPackage rec {
     description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

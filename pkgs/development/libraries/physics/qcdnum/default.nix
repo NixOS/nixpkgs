@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, gfortran, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gfortran,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "QCDNUM";
   version = "17-01-15";
@@ -9,16 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "0ibk1sppss45qh0g8i2c99alkx82xdbss3p55f5367bxjx4iqvvg";
   };
 
-  nativeBuildInputs = [ gfortran ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [gfortran];
+  buildInputs = [zlib];
 
   enableParallelBuilding = true;
 
   meta = {
     description = "A very fast QCD evolution program written in FORTRAN77";
-    license     = lib.licenses.gpl3;
-    homepage    = "https://www.nikhef.nl/~h24/qcdnum/index.html";
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    license = lib.licenses.gpl3;
+    homepage = "https://www.nikhef.nl/~h24/qcdnum/index.html";
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [veprbl];
   };
 }

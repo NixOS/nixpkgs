@@ -1,7 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  numpy,
 }:
-
 buildPythonPackage rec {
   pname = "arrayqueues";
   version = "1.3.1";
@@ -20,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/portugueslab/arrayqueues";
     description = "Multiprocessing queues for numpy arrays using shared memory";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = with lib.maintainers; [tbenst];
   };
 }

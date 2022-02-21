@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "nlojet++";
   version = "4.1.3";
@@ -14,10 +17,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage    = "http://www.desy.de/~znagy/Site/NLOJet++.html";
-    license     = lib.licenses.gpl2;
+    homepage = "http://www.desy.de/~znagy/Site/NLOJet++.html";
+    license = lib.licenses.gpl2;
     description = "Implementation of calculation of the hadron jet cross sections";
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [veprbl];
   };
 }

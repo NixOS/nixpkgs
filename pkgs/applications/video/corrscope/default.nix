@@ -1,13 +1,13 @@
-{ lib
-, mkDerivationWith
-, python3Packages
-, fetchFromGitHub
-, fetchpatch
-, wrapQtAppsHook
-, ffmpeg
-, qtbase
+{
+  lib,
+  mkDerivationWith,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
+  wrapQtAppsHook,
+  ffmpeg,
+  qtbase,
 }:
-
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
   version = "0.7.1";
@@ -29,11 +29,13 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ] ++ (with python3Packages; [
-    poetry-core
-  ]);
+  nativeBuildInputs =
+    [
+      wrapQtAppsHook
+    ]
+    ++ (with python3Packages; [
+      poetry-core
+    ]);
 
   buildInputs = [
     ffmpeg
@@ -56,7 +58,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ffmpeg]}
       "''${qtWrapperArgs[@]}"
     )
   '';
@@ -72,7 +74,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/corrscope/corrscope";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.all;
   };
 }

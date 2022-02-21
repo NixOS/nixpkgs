@@ -1,7 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, influxdb, graphite_api, memcached
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  influxdb,
+  graphite_api,
+  memcached,
 }:
-
 buildPythonPackage rec {
   pname = "influxgraph";
   version = "1.5.0";
@@ -17,7 +22,7 @@ buildPythonPackage rec {
       -i ./setup.py
   '';
 
-  propagatedBuildInputs = [ influxdb graphite_api memcached ];
+  propagatedBuildInputs = [influxdb graphite_api memcached];
 
   passthru.moduleName = "influxgraph.InfluxDBFinder";
 
@@ -25,6 +30,6 @@ buildPythonPackage rec {
     description = "InfluxDB storage plugin for Graphite-API";
     homepage = "https://github.com/InfluxGraph/influxgraph";
     license = licenses.asl20;
-    maintainers = with maintainers; [ basvandijk ];
+    maintainers = with maintainers; [basvandijk];
   };
 }

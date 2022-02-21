@@ -1,18 +1,18 @@
-{ lib
-, asysocks
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, minikerberos
-, prompt-toolkit
-, pycryptodomex
-, pythonOlder
-, six
-, tqdm
-, winacl
-, winsspi
+{
+  lib,
+  asysocks,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  minikerberos,
+  prompt-toolkit,
+  pycryptodomex,
+  pythonOlder,
+  six,
+  tqdm,
+  winacl,
+  winsspi,
 }:
-
 buildPythonPackage rec {
   pname = "aiosmb";
   version = "0.2.50";
@@ -40,12 +40,12 @@ buildPythonPackage rec {
   # Project doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aiosmb" ];
+  pythonImportsCheck = ["aiosmb"];
 
   meta = with lib; {
     description = "Python SMB library";
     homepage = "https://github.com/skelsec/aiosmb";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

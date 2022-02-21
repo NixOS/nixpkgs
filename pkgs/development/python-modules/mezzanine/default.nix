@@ -1,24 +1,23 @@
-{ lib
-
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pyflakes
-, pep8
-, django
-, django_contrib_comments
-, filebrowser_safe
-, grappelli_safe
-, bleach
-, tzlocal
-, beautifulsoup4
-, requests
-, requests_oauthlib
-, future
-, pillow
-, chardet
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pyflakes,
+  pep8,
+  django,
+  django_contrib_comments,
+  filebrowser_safe,
+  grappelli_safe,
+  bleach,
+  tzlocal,
+  beautifulsoup4,
+  requests,
+  requests_oauthlib,
+  future,
+  pillow,
+  chardet,
 }:
-
 buildPythonPackage rec {
   version = "5.1.0";
   pname = "Mezzanine";
@@ -28,11 +27,13 @@ buildPythonPackage rec {
     sha256 = "ce1117c81416d2e0a77981419312e200aec1cf3cb3ea9630083bd29e74bbb265";
   };
 
-  disabled = isPyPy || lib.versionOlder django.version "1.11"
+  disabled =
+    isPyPy
+    || lib.versionOlder django.version "1.11"
     || lib.versionAtLeast django.version "2.0";
 
-  buildInputs = [ pyflakes pep8 ];
-  propagatedBuildInputs = [ django django_contrib_comments filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4 requests requests_oauthlib future pillow chardet ];
+  buildInputs = [pyflakes pep8];
+  propagatedBuildInputs = [django django_contrib_comments filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4 requests requests_oauthlib future pillow chardet];
 
   # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
   doCheck = false;
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     sed -i 's/==/>=/' setup.py
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = ''
@@ -65,10 +66,9 @@ buildPythonPackage rec {
     homepage = "http://mezzanine.jupo.org/";
     downloadPage = "https://github.com/stephenmcd/mezzanine/releases";
     license = licenses.free;
-    maintainers = with maintainers; [ prikhi ];
+    maintainers = with maintainers; [prikhi];
     platforms = platforms.unix;
     # mezzanine requires django-1.11. Consider overriding python package set to use django_1_11"
     broken = versionOlder django.version "1.11" || versionAtLeast django.version "2.0";
   };
-
 }

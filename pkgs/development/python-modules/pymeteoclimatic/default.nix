@@ -1,12 +1,12 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pymeteoclimatic";
   version = "0.0.6";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "meteoclimatic" ];
+  pythonImportsCheck = ["meteoclimatic"];
 
   meta = with lib; {
     description = "Python wrapper around the Meteoclimatic service";
     homepage = "https://github.com/adrianmo/pymeteoclimatic";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

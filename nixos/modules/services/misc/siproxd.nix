@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.siproxd;
 
   conf = ''
@@ -20,20 +21,20 @@ let
     ${optionalString (cfg.hostsAllowReg != []) "hosts_allow_reg = ${concatStringsSep "," cfg.hostsAllowReg}"}
     ${optionalString (cfg.hostsAllowSip != []) "hosts_allow_sip = ${concatStringsSep "," cfg.hostsAllowSip}"}
     ${optionalString (cfg.hostsDenySip != []) "hosts_deny_sip  = ${concatStringsSep "," cfg.hostsDenySip}"}
-    ${if (cfg.passwordFile != "") then "proxy_auth_pwfile = ${cfg.passwordFile}" else ""}
+    ${
+      if (cfg.passwordFile != "")
+      then "proxy_auth_pwfile = ${cfg.passwordFile}"
+      else ""
+    }
     ${cfg.extraConfig}
   '';
 
   confFile = builtins.toFile "siproxd.conf" conf;
-
-in
-{
+in {
   ##### interface
 
   options = {
-
     services.siproxd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -57,8 +58,8 @@ in
 
       hostsAllowReg = mkOption {
         type = types.listOf types.str;
-        default = [ ];
-        example = [ "192.168.1.0/24" "192.168.2.0/24" ];
+        default = [];
+        example = ["192.168.1.0/24" "192.168.2.0/24"];
         description = ''
           Acess control list for incoming SIP registrations.
         '';
@@ -66,8 +67,8 @@ in
 
       hostsAllowSip = mkOption {
         type = types.listOf types.str;
-        default = [ ];
-        example = [ "123.45.0.0/16" "123.46.0.0/16" ];
+        default = [];
+        example = ["123.45.0.0/16" "123.46.0.0/16"];
         description = ''
           Acess control list for incoming SIP traffic.
         '';
@@ -75,8 +76,8 @@ in
 
       hostsDenySip = mkOption {
         type = types.listOf types.str;
-        default = [ ];
-        example = [ "10.0.0.0/8" "11.0.0.0/8" ];
+        default = [];
+        example = ["10.0.0.0/8" "11.0.0.0/8"];
         description = ''
           Acess control list for denying incoming
           SIP registrations and traffic.
@@ -95,7 +96,7 @@ in
         type = types.int;
         default = 7070;
         description = ''
-         Bottom of UDP port range for incoming and outgoing RTP traffic
+          Bottom of UDP port range for incoming and outgoing RTP traffic
         '';
       };
 
@@ -103,7 +104,7 @@ in
         type = types.int;
         default = 7089;
         description = ''
-         Top of UDP port range for incoming and outgoing RTP traffic
+          Top of UDP port range for incoming and outgoing RTP traffic
         '';
       };
 
@@ -152,28 +153,23 @@ in
           Extra configuration to add to siproxd configuration.
         '';
       };
-
     };
-
   };
 
   ##### implementation
 
   config = mkIf cfg.enable {
-
     users.users.siproxyd = {
       uid = config.ids.uids.siproxd;
     };
 
     systemd.services.siproxd = {
       description = "SIP proxy/masquerading daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
         ExecStart = "${pkgs.siproxd}/sbin/siproxd -c ${confFile}";
       };
     };
-
   };
-
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, kazoo
-, six
-, testtools
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  kazoo,
+  six,
+  testtools,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "zake";
   version = "0.2.2";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
     sha256 = "1rp4xxy7qp0s0wnq3ig4ji8xsl31g901qkdp339ndxn466cqal2s";
   };
 
-  propagatedBuildInputs = [ kazoo six ];
-  buildInputs = [ testtools ];
+  propagatedBuildInputs = [kazoo six];
+  buildInputs = [testtools];
   checkPhase = ''
     # Skip test - fails with our new kazoo version
     substituteInPlace zake/tests/test_client.py \
@@ -32,5 +32,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     broken = true;
   };
-
 }

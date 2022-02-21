@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "numix-icon-theme";
   version = "21.10.31";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wyVvXifdbKR2aiBMrki8y/H0khH4eFD1RHVSC+jAT28=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [gtk3];
 
-  propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
+  propagatedBuildInputs = [gnome-icon-theme hicolor-icon-theme];
 
   dontDropIconThemeCache = true;
 
@@ -36,6 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

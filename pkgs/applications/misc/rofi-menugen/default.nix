@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rofi, gnused }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rofi,
+  gnused,
+}:
 stdenv.mkDerivation rec {
   pname = "rofi-menugen";
   version = "unstable-2015-12-28";
@@ -26,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Generates menu based applications using rofi";
     homepage = "https://github.com/octotep/menugen";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.all;
   };
 }

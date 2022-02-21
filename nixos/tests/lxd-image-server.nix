@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   # Since we don't have access to the internet during the tests, we have to
   # pre-fetch lxd containers beforehand.
   #
@@ -42,16 +40,14 @@ let
             pool: default
             type: disk
   '';
-
-
 in {
   name = "lxd-image-server";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ mkg20001 ];
+    maintainers = [mkg20001];
   };
 
-  machine = { lib, ... }: {
+  machine = {lib, ...}: {
     virtualisation = {
       cores = 2;
 
@@ -85,7 +81,7 @@ in {
     };
 
     networking.hosts = {
-      "::1" = [ "acme.test" ];
+      "::1" = ["acme.test"];
     };
   };
 

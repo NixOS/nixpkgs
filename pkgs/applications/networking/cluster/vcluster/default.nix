@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "vcluster";
   version = "0.5.3";
@@ -13,11 +17,11 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = [ "cmd/vclusterctl" ];
+  subPackages = ["cmd/vclusterctl"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   # Test is disabled because e2e tests expect k8s.
   doCheck = false;
@@ -40,6 +44,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterromfeldhk ];
+    maintainers = with maintainers; [peterromfeldhk];
   };
 }

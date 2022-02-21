@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.postgres;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.postgres;
+in {
   port = 9187;
   extraOpts = {
     telemetryPath = mkOption {
@@ -65,14 +66,13 @@ in
         this exporter is running.
       '';
     };
-
   };
   serviceOpts = {
     environment.DATA_SOURCE_NAME = cfg.dataSourceName;
     serviceConfig = {
       DynamicUser = false;
       User = mkIf cfg.runAsLocalSuperUser (mkForce "postgres");
-      EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+      EnvironmentFile = mkIf (cfg.environmentFile != null) [cfg.environmentFile];
       ExecStart = ''
         ${pkgs.prometheus-postgres-exporter}/bin/postgres_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.pixiecore;
-in
 {
-  meta.maintainers = with maintainers; [ bbigras danderson ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.pixiecore;
+in {
+  meta.maintainers = with maintainers; [bbigras danderson];
 
   options = {
     services.pixiecore = {
@@ -23,7 +24,7 @@ in
       mode = mkOption {
         description = "Which mode to use";
         default = "boot";
-        type = types.enum [ "api" "boot" ];
+        type = types.enum ["api" "boot"];
       };
 
       debug = mkOption {
@@ -97,38 +98,37 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 4011 cfg.port cfg.statusPort ];
-      allowedUDPPorts = [ 67 69 ];
+      allowedTCPPorts = [4011 cfg.port cfg.statusPort];
+      allowedUDPPorts = [67 69];
     };
 
     systemd.services.pixiecore = {
       description = "Pixiecore server";
-      after = [ "network.target"];
-      wants = [ "network.target"];
-      wantedBy = [ "multi-user.target"];
+      after = ["network.target"];
+      wants = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         User = "pixiecore";
         Restart = "always";
-        AmbientCapabilities = [ "cap_net_bind_service" ] ++ optional cfg.dhcpNoBind "cap_net_raw";
-        ExecStart =
-          let
-            argString =
-              if cfg.mode == "boot"
-              then [ "boot" cfg.kernel ]
-                   ++ optional (cfg.initrd != "") cfg.initrd
-                   ++ optionals (cfg.cmdLine != "") [ "--cmdline" cfg.cmdLine ]
-              else [ "api" cfg.apiServer ];
-          in
-            ''
-              ${pkgs.pixiecore}/bin/pixiecore \
-                ${lib.escapeShellArgs argString} \
-                ${optionalString cfg.debug "--debug"} \
-                ${optionalString cfg.dhcpNoBind "--dhcp-no-bind"} \
-                --listen-addr ${lib.escapeShellArg cfg.listen} \
-                --port ${toString cfg.port} \
-                --status-port ${toString cfg.statusPort} \
-                ${escapeShellArgs cfg.extraArguments}
-              '';
+        AmbientCapabilities = ["cap_net_bind_service"] ++ optional cfg.dhcpNoBind "cap_net_raw";
+        ExecStart = let
+          argString =
+            if cfg.mode == "boot"
+            then
+              ["boot" cfg.kernel]
+              ++ optional (cfg.initrd != "") cfg.initrd
+              ++ optionals (cfg.cmdLine != "") ["--cmdline" cfg.cmdLine]
+            else ["api" cfg.apiServer];
+        in ''
+          ${pkgs.pixiecore}/bin/pixiecore \
+            ${lib.escapeShellArgs argString} \
+            ${optionalString cfg.debug "--debug"} \
+            ${optionalString cfg.dhcpNoBind "--dhcp-no-bind"} \
+            --listen-addr ${lib.escapeShellArg cfg.listen} \
+            --port ${toString cfg.port} \
+            --status-port ${toString cfg.statusPort} \
+            ${escapeShellArgs cfg.extraArguments}
+        '';
       };
     };
   };

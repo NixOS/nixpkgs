@@ -1,13 +1,16 @@
-{ lib, symlinkJoin, makeWrapper
-, lilypond, openlilylib-fonts
+{
+  lib,
+  symlinkJoin,
+  makeWrapper,
+  lilypond,
+  openlilylib-fonts,
 }:
-
 lib.appendToName "with-fonts" (symlinkJoin {
-  inherit (lilypond) meta name version ;
+  inherit (lilypond) meta name version;
 
-  paths = [ lilypond ] ++ openlilylib-fonts.all;
+  paths = [lilypond] ++ openlilylib-fonts.all;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postBuild = ''
     for p in $out/bin/*; do

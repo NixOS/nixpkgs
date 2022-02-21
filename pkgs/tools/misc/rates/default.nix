@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rates";
   version = "0.6.0";
@@ -23,7 +23,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI tool that brings currency exchange rates right into your terminal";
     homepage = "https://github.com/lunush/rates";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [fab];
   };
 }

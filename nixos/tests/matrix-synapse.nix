@@ -1,10 +1,9 @@
-import ./make-test-python.nix ({ pkgs, ... } : let
-
-
-  runWithOpenSSL = file: cmd: pkgs.runCommand file {
-    buildInputs = [ pkgs.openssl ];
-  } cmd;
-
+import ./make-test-python.nix ({pkgs, ...}: let
+  runWithOpenSSL = file: cmd:
+    pkgs.runCommand file {
+      buildInputs = [pkgs.openssl];
+    }
+    cmd;
 
   ca_key = runWithOpenSSL "ca-key.pem" "openssl genrsa -out $out 2048";
   ca_pem = runWithOpenSSL "ca.pem" ''
@@ -26,7 +25,6 @@ import ./make-test-python.nix ({ pkgs, ... } : let
       -days 365
   '';
 
-
   mailerCerts = import ./common/acme/server/snakeoil-certs.nix;
   mailerDomain = mailerCerts.domain;
   registrationSharedSecret = "unsecure123";
@@ -34,7 +32,6 @@ import ./make-test-python.nix ({ pkgs, ... } : let
   testPassword = "alicealice";
   testEmail = "alice@example.com";
 in {
-
   name = "matrix-synapse";
   meta = with pkgs.lib; {
     maintainers = teams.matrix.members;
@@ -42,10 +39,13 @@ in {
 
   nodes = {
     # Since 0.33.0, matrix-synapse doesn't allow underscores in server names
-    serverpostgres = { pkgs, nodes, ... }: let
+    serverpostgres = {
+      pkgs,
+      nodes,
+      ...
+    }: let
       mailserverIP = nodes.mailserver.config.networking.primaryIPAddress;
-    in
-    {
+    in {
       services.matrix-synapse = {
         enable = true;
         database_type = "psycopg2";
@@ -87,7 +87,8 @@ in {
       '';
 
       security.pki.certificateFiles = [
-        mailerCerts.ca.cert ca_pem
+        mailerCerts.ca.cert
+        ca_pem
       ];
 
       environment.systemPackages = let
@@ -104,7 +105,7 @@ in {
             smtp.ehlo()
             smtp.sendmail('matrix@${mailerDomain}', '${testEmail}', 'Subject: Test STARTTLS\n\nTest data.')
             smtp.quit()
-         '';
+        '';
 
         obtainTokenAndRegisterEmail = let
           # adding the email through the API is quite complicated as it involves more than one step and some
@@ -113,21 +114,20 @@ in {
             INSERT INTO user_threepids (user_id, medium, address, validated_at, added_at) VALUES ('${testUser}@serverpostgres', 'email', '${testEmail}', '1629149927271', '1629149927270');
           '';
         in
-        pkgs.writeScriptBin "obtain-token-and-register-email" ''
-          #!${pkgs.runtimeShell}
-          set -o errexit
-          set -o pipefail
-          set -o nounset
-          su postgres -c "psql -d matrix-synapse -f ${insertEmailForAlice}"
-          curl --fail -XPOST 'https://localhost:8448/_matrix/client/r0/account/password/email/requestToken' -d '{"email":"${testEmail}","client_secret":"foobar","send_attempt":1}' -v
-        '';
-        in [ sendTestMailStarttls pkgs.matrix-synapse obtainTokenAndRegisterEmail ];
+          pkgs.writeScriptBin "obtain-token-and-register-email" ''
+            #!${pkgs.runtimeShell}
+            set -o errexit
+            set -o pipefail
+            set -o nounset
+            su postgres -c "psql -d matrix-synapse -f ${insertEmailForAlice}"
+            curl --fail -XPOST 'https://localhost:8448/_matrix/client/r0/account/password/email/requestToken' -d '{"email":"${testEmail}","client_secret":"foobar","send_attempt":1}' -v
+          '';
+      in [sendTestMailStarttls pkgs.matrix-synapse obtainTokenAndRegisterEmail];
     };
 
     # test mail delivery
     mailserver = args: let
-    in
-    {
+    in {
       security.pki.certificateFiles = [
         mailerCerts.ca.cert
       ];
@@ -150,7 +150,8 @@ in {
         config = {
           debug_peer_level = "10";
           smtpd_relay_restrictions = [
-            "permit_mynetworks" "reject_unauth_destination"
+            "permit_mynetworks"
+            "reject_unauth_destination"
           ];
 
           # disable obsolete protocols, something old versions of twisted are still using
@@ -189,5 +190,4 @@ in {
     )
     serversqlite.succeed("[ -e /var/lib/matrix-synapse/homeserver.db ]")
   '';
-
 })

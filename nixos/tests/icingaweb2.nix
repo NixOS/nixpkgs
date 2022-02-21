@@ -1,11 +1,15 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "icingaweb2";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ das_j ];
+    maintainers = [das_j];
   };
 
   nodes = {
-    icingaweb2 = { config, pkgs, ... }: {
+    icingaweb2 = {
+      config,
+      pkgs,
+      ...
+    }: {
       services.icingaweb2 = {
         enable = true;
 
@@ -16,7 +20,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
         modules = {
           doc.enable = true;
-          migrate.enable =  true;
+          migrate.enable = true;
           setup.enable = true;
           test.enable = true;
           translation.enable = true;

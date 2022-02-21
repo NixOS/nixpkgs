@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "t1utils";
   version = "1.42";
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     # file...
     license = "Click"; # MIT with extra clause, https://github.com/kohler/t1utils/blob/master/LICENSE
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, bash, flex, bison, valgrind }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  flex,
+  bison,
+  valgrind,
+}:
 stdenv.mkDerivation rec {
   pname = "lockdep";
 
@@ -21,7 +28,7 @@ stdenv.mkDerivation rec {
       --replace 'CONFIG_INCLUDES =' $'CONFIG_INCLUDES = -I../../../usr/include\n#'
   '';
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [flex bison];
 
   buildPhase = ''
     make defconfig
@@ -31,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkInputs = [ valgrind ];
+  checkInputs = [valgrind];
   checkPhase = ''
     # there are more /bin/bash references than just shebangs
     for f in lockdep run_tests.sh tests/*.sh; do
@@ -53,9 +60,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Userspace locking validation tool built on the Linux kernel";
-    homepage    = "https://kernel.org/";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    homepage = "https://kernel.org/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [lib.maintainers.thoughtpolice];
   };
 }

@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf mkOption singleton types;
   inherit (pkgs) coreutils charybdis;
   cfg = config.services.charybdis;
@@ -8,16 +11,11 @@ let
   configFile = pkgs.writeText "charybdis.conf" ''
     ${cfg.config}
   '';
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.charybdis = {
-
       enable = mkEnableOption "Charybdis IRC daemon";
 
       config = mkOption {
@@ -61,11 +59,8 @@ in
           If set, the value of this option will be written to this path.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
@@ -89,7 +84,7 @@ in
 
       systemd.services.charybdis = {
         description = "Charybdis IRC daemon";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
         reloadIfChanged = true;
         restartTriggers = [
           configFile
@@ -98,13 +93,12 @@ in
           BANDB_DBPATH = "${cfg.statedir}/ban.db";
         };
         serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile /etc/charybdis/ircd.conf";
+          ExecStart = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile /etc/charybdis/ircd.conf";
           ExecReload = "${coreutils}/bin/kill -HUP $MAINPID";
           Group = cfg.group;
           User = cfg.user;
         };
       };
-
     }
 
     (mkIf (cfg.motd != null) {

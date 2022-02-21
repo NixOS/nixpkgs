@@ -1,12 +1,12 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, bash
-, gnused
-, gawk
-, coreutils
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  bash,
+  gnused,
+  gawk,
+  coreutils,
 }:
-
 stdenvNoCC.mkDerivation {
   pname = "optparse-bash-unstable";
   version = "2021-06-13";
@@ -23,13 +23,13 @@ stdenvNoCC.mkDerivation {
       --replace sed "${gnused}/bin/sed" \
       --replace awk "${gawk}/bin/awk" \
       --replace printf "${coreutils}/bin/printf"
-'';
+  '';
 
   dontBuild = true;
 
   doCheck = true;
 
-  checkInputs = [ bash ];
+  checkInputs = [bash];
 
   # `#!/usr/bin/env` isn't okay for OfBorg
   # Need external bash to run
@@ -58,6 +58,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/nk412/optparse";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ShamrockLee ];
+    maintainers = with maintainers; [ShamrockLee];
   };
 }

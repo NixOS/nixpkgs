@@ -1,36 +1,36 @@
-{ airspy
-, boost
-, cm256cc
-, cmake
-, codec2
-, fetchFromGitHub
-, fftwFloat
-, glew
-, hackrf
-, lib
-, ffmpeg
-, libiio
-, libopus
-, libpulseaudio
-, libusb1
-, limesuite
-, libbladeRF
-, mkDerivation
-, ocl-icd
-, opencv3
-, pkg-config
-, qtcharts
-, qtlocation
-, qtmultimedia
-, qtserialport
-, qtspeech
-, qtwebsockets
-, rtl-sdr
-, serialdv
-, soapysdr-with-plugins
-, uhd
+{
+  airspy,
+  boost,
+  cm256cc,
+  cmake,
+  codec2,
+  fetchFromGitHub,
+  fftwFloat,
+  glew,
+  hackrf,
+  lib,
+  ffmpeg,
+  libiio,
+  libopus,
+  libpulseaudio,
+  libusb1,
+  limesuite,
+  libbladeRF,
+  mkDerivation,
+  ocl-icd,
+  opencv3,
+  pkg-config,
+  qtcharts,
+  qtlocation,
+  qtmultimedia,
+  qtserialport,
+  qtspeech,
+  qtwebsockets,
+  rtl-sdr,
+  serialdv,
+  soapysdr-with-plugins,
+  uhd,
 }:
-
 mkDerivation rec {
   pname = "sdrangel";
   version = "6.18.1";
@@ -43,7 +43,7 @@ mkDerivation rec {
     fetchSubmodules = false;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   buildInputs = [
     airspy
@@ -89,7 +89,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/f4exb/sdrangel";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alkeryn ];
+    maintainers = with maintainers; [alkeryn];
     platforms = platforms.linux;
   };
 }

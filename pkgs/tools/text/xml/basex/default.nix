@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem, copyDesktopItems }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  jre,
+  coreutils,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 stdenv.mkDerivation rec {
   pname = "basex";
   version = "9.6.3";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-OlIAyGUQKrl+Zu79p6cahHpx59zLozGkUDAEvykGN6Y=";
   };
 
-  nativeBuildInputs = [ unzip copyDesktopItems ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [unzip copyDesktopItems];
+  buildInputs = [jre];
 
   desktopItems = lib.optional (!stdenv.isDarwin) (makeDesktopItem {
     name = "basex";
@@ -62,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://basex.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

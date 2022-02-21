@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, fonttools
-, defcon
-, compreffor
-, booleanoperations
-, cffsubr
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  fonttools,
+  defcon,
+  compreffor,
+  booleanoperations,
+  cffsubr,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "ufo2ft";
   version = "2.25.2";
@@ -51,12 +51,12 @@ buildPythonPackage rec {
     "--deselect=tests/preProcessor_test.py::TTFInterpolatablePreProcessorTest::test_custom_filters_as_argument"
   ];
 
-  pythonImportsCheck = [ "ufo2ft" ];
+  pythonImportsCheck = ["ufo2ft"];
 
   meta = with lib; {
     description = "Bridge from UFOs to FontTools objects";
     homepage = "https://github.com/googlefonts/ufo2ft";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

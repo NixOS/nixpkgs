@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 stdenv.mkDerivation {
   pname = "cups-toshiba-estudio";
   version = "7.89";
@@ -9,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0qz4r7q55i0adf4fv3aqnfqgi2pz3jb1jixkqm9x6nk4vanyjf4r";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   patchPhase = ''
     patchShebangs lib/
@@ -45,6 +49,6 @@ stdenv.mkDerivation {
     '';
     homepage = "https://business.toshiba.com/support/downloads/index.html";
     license = licenses.unfree;
-    maintainers = [ maintainers.jpotier ];
+    maintainers = [maintainers.jpotier];
   };
 }

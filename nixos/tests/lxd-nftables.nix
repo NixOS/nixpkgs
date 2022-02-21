@@ -4,15 +4,14 @@
 # It has been extracted from `lxd.nix` for clarity, and because switching from
 # iptables to nftables requires a full reboot, which is a bit hard inside NixOS
 # tests.
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "lxd-nftables";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ patryk27 ];
+    maintainers = [patryk27];
   };
 
-  machine = { lib, ... }: {
+  machine = {lib, ...}: {
     virtualisation = {
       lxd.enable = true;
     };

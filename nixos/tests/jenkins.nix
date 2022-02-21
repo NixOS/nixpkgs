@@ -3,80 +3,79 @@
 #   2. jenkins user can be extended on both master and slave
 #   3. jenkins service not started on slave node
 #   4. declarative jobs can be added and removed
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "jenkins";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ bjornfor coconnor domenkozar eelco ];
+    maintainers = [bjornfor coconnor domenkozar eelco];
   };
 
   nodes = {
-
-    master =
-      { ... }:
-      { services.jenkins = {
+    master = {...}: {
+      services.jenkins = {
+        enable = true;
+        jobBuilder = {
           enable = true;
-          jobBuilder = {
-            enable = true;
-            nixJobs = [
-              { job = {
-                  name = "job-1";
-                  builders = [
-                    { shell = ''
-                        echo "Running job-1"
-                      '';
-                    }
-                  ];
-                };
-              }
+          nixJobs = [
+            {
+              job = {
+                name = "job-1";
+                builders = [
+                  {
+                    shell = ''
+                      echo "Running job-1"
+                    '';
+                  }
+                ];
+              };
+            }
 
-              { job = {
-                  name = "folder-1";
-                  project-type = "folder";
-                };
-              }
+            {
+              job = {
+                name = "folder-1";
+                project-type = "folder";
+              };
+            }
 
-              { job = {
-                  name = "folder-1/job-2";
-                  builders = [
-                    { shell = ''
-                        echo "Running job-2"
-                      '';
-                    }
-                  ];
-                };
-              }
-            ];
-          };
+            {
+              job = {
+                name = "folder-1/job-2";
+                builders = [
+                  {
+                    shell = ''
+                      echo "Running job-2"
+                    '';
+                  }
+                ];
+              };
+            }
+          ];
         };
-
-        specialisation.noJenkinsJobs.configuration = {
-          services.jenkins.jobBuilder.nixJobs = pkgs.lib.mkForce [];
-        };
-
-        # should have no effect
-        services.jenkinsSlave.enable = true;
-
-        users.users.jenkins.extraGroups = [ "users" ];
-
-        systemd.services.jenkins.serviceConfig.TimeoutStartSec = "6min";
       };
 
-    slave =
-      { ... }:
-      { services.jenkinsSlave.enable = true;
-
-        users.users.jenkins.extraGroups = [ "users" ];
+      specialisation.noJenkinsJobs.configuration = {
+        services.jenkins.jobBuilder.nixJobs = pkgs.lib.mkForce [];
       };
 
+      # should have no effect
+      services.jenkinsSlave.enable = true;
+
+      users.users.jenkins.extraGroups = ["users"];
+
+      systemd.services.jenkins.serviceConfig.TimeoutStartSec = "6min";
+    };
+
+    slave = {...}: {
+      services.jenkinsSlave.enable = true;
+
+      users.users.jenkins.extraGroups = ["users"];
+    };
   };
 
-  testScript = { nodes, ... }:
-    let
-      configWithoutJobs = "${nodes.master.config.system.build.toplevel}/specialisation/noJenkinsJobs";
-      jenkinsPort = nodes.master.config.services.jenkins.port;
-      jenkinsUrl = "http://localhost:${toString jenkinsPort}";
-    in ''
+  testScript = {nodes, ...}: let
+    configWithoutJobs = "${nodes.master.config.system.build.toplevel}/specialisation/noJenkinsJobs";
+    jenkinsPort = nodes.master.config.services.jenkins.port;
+    jenkinsUrl = "http://localhost:${toString jenkinsPort}";
+  in ''
     start_all()
 
     master.wait_for_unit("jenkins")

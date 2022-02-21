@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, xalanc, xercesc, openssl, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xalanc,
+  xercesc,
+  openssl,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "xml-security-c";
   version = "2.0.4";
@@ -15,14 +22,14 @@ stdenv.mkDerivation rec {
     "--with-xalan"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xalanc xercesc openssl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [xalanc xercesc openssl];
 
   meta = {
     homepage = "https://santuario.apache.org/";
     description = "C++ Implementation of W3C security standards for XML";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.jagajaga ];
+    maintainers = [lib.maintainers.jagajaga];
   };
 }

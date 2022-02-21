@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, glibc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glibc,
+}:
 stdenv.mkDerivation rec {
   pname = "dumb-init";
   version = "1.2.5";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aRh0xfmp+ToXIYjYaducTpZUHndZ5HlFZpFhzJ3yKgs=";
   };
 
-  buildInputs = [ glibc.static ];
+  buildInputs = [glibc.static];
 
   installPhase = ''
     runHook preInstall
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A minimal init system for Linux containers";
     homepage = "https://github.com/Yelp/dumb-init";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     platforms = platforms.linux;
   };
 }

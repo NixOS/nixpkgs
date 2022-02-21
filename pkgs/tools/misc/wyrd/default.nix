@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, ocamlPackages, ncurses, remind }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocamlPackages,
+  ncurses,
+  remind,
+}:
 stdenv.mkDerivation rec {
   version = "1.4.6";
   pname = "wyrd";
@@ -13,7 +19,7 @@ stdenv.mkDerivation rec {
     substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
   '';
 
-  buildInputs = [ ocamlPackages.ocaml ncurses remind ocamlPackages.camlp4 ];
+  buildInputs = [ocamlPackages.ocaml ncurses remind ocamlPackages.camlp4];
 
   preferLocalBuild = true;
 
@@ -29,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "http://pessimization.com/software/wyrd/";
     downloadPage = "http://pessimization.com/software/wyrd/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.prikhi ];
+    maintainers = [maintainers.prikhi];
     platforms = platforms.linux;
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "mailchecker";
   version = "4.1.12";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Module for temporary (disposable/throwaway) email detection";
     homepage = "https://github.com/FGRibreau/mailchecker";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

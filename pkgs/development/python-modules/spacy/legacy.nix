@@ -1,8 +1,8 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
-
 buildPythonPackage rec {
   pname = "spacy-legacy";
   version = "3.0.8";
@@ -14,12 +14,12 @@ buildPythonPackage rec {
 
   # checkInputs = [ pytestCheckHook spacy ];
   doCheck = false;
-  pythonImportsCheck = [ "spacy_legacy" ];
+  pythonImportsCheck = ["spacy_legacy"];
 
   meta = with lib; {
     description = "A Path interface for local and cloud bucket storage";
     homepage = "https://github.com/justindujardin/pathy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    maintainers = with maintainers; [melling];
   };
 }

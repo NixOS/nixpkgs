@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, libpcap }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  libpcap,
+}:
 stdenv.mkDerivation rec {
   pname = "tcptrack";
   version = "unstable-2017-04-29";
@@ -21,7 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ncurses libpcap ];
+  buildInputs = [ncurses libpcap];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
@@ -30,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "libpcap based program for live TCP connection monitoring";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor maintainers.vrthra ];
+    maintainers = [maintainers.bjornfor maintainers.vrthra];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "gost";
   version = "2.11.1";
@@ -20,6 +23,6 @@ buildGoModule rec {
     description = "A simple tunnel written in golang";
     homepage = "https://github.com/ginuerzh/gost";
     license = licenses.mit;
-    maintainers = with maintainers; [ pmy ];
+    maintainers = with maintainers; [pmy];
   };
 }

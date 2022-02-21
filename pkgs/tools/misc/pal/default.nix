@@ -1,5 +1,12 @@
-{lib, stdenv, fetchurl, glib, gettext, readline, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  gettext,
+  readline,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "pal";
   version = "0.4.3";
@@ -13,12 +20,12 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/etc/pal\.conf,'$out/etc/pal.conf, src/input.c
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = ["prefix=$(out)"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib gettext readline ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [glib gettext readline];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = {
     homepage = "http://palcal.sourceforge.net/";

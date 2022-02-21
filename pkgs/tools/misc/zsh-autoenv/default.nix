@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runtimeShell,
+}:
 stdenv.mkDerivation {
   pname = "zsh-autoenv";
   version = "unstable-2017-12-16";

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "crd2pulumi";
   version = "1.2.0";
@@ -13,14 +16,14 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-XM1uedApVLkFzUpNPYS5YyMiWrOpzTvqKjWIV7s/1mI=";
 
-  ldflags = [ "-s" "-w" "-X github.com/pulumi/crd2pulumi/gen.Version=${src.rev}" ];
+  ldflags = ["-s" "-w" "-X github.com/pulumi/crd2pulumi/gen.Version=${src.rev}"];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Generate typed CustomResources from a Kubernetes CustomResourceDefinition";
     homepage = "https://github.com/pulumi/crd2pulumi";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
   };
 }

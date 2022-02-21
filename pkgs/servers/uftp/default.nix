@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "uftp";
   version = "5.0";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1q08schd765fsm9647ac4ic2x70ys2x48mqz97mibdi4bbm72bsn";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   patchPhase = ''
     substituteInPlace makefile --replace gcc cc
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Encrypted UDP based FTP with multicast";
     homepage = "http://uftp-multicast.sourceforge.net/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.fadenb ];
+    maintainers = [lib.maintainers.fadenb];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, protozero, expat, zlib, bzip2, boost, lz4 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  protozero,
+  expat,
+  zlib,
+  bzip2,
+  boost,
+  lz4,
+}:
 stdenv.mkDerivation rec {
   pname = "libosmium";
   version = "2.18.0";
@@ -11,11 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IPdaBT6hRNHo8kuOsiKdyiQkRxA/l+44U3qGGG89BTo=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ protozero zlib bzip2 expat boost lz4 ];
+  buildInputs = [protozero zlib bzip2 expat boost lz4];
 
-  cmakeFlags = [ "-DINSTALL_GDALCPP:BOOL=ON" ];
+  cmakeFlags = ["-DINSTALL_GDALCPP:BOOL=ON"];
 
   doCheck = true;
 
@@ -27,6 +37,6 @@ stdenv.mkDerivation rec {
       "https://github.com/osmcode/libosmium/releases/tag/v${version}"
       "https://github.com/osmcode/libosmium/blob/v${version}/CHANGELOG.md"
     ];
-    maintainers = with maintainers; [ das-g ];
+    maintainers = with maintainers; [das-g];
   };
 }

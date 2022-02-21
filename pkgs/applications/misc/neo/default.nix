@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "neo";
   version = "0.6";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-skXLT1td4dGdsu+wbX44Z2u5sDEOKXYVVys4Q6RayIk=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   meta = with lib; {
     description = ''Simulates the digital rain from "The Matrix"'';
@@ -20,6 +24,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/st3w/neo";
     platforms = ncurses.meta.platforms;
-    maintainers = [ maintainers.abbe ];
+    maintainers = [maintainers.abbe];
   };
 }

@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, substituteAll, buildPythonPackage, isPy3k, gnutls
-, twisted, pyopenssl, service-identity }:
-
+{
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  buildPythonPackage,
+  isPy3k,
+  gnutls,
+  twisted,
+  pyopenssl,
+  service-identity,
+}:
 buildPythonPackage rec {
   pname = "python3-gnutls";
   version = "3.1.9";
@@ -14,22 +22,22 @@ buildPythonPackage rec {
     sha256 = "sha256-18T8bAHlNERHobsspUFvSC6ulN55nrFFb5aqNwU8T00=";
   };
 
-  propagatedBuildInputs = [ twisted pyopenssl service-identity ];
+  propagatedBuildInputs = [twisted pyopenssl service-identity];
 
   patches = [
     (substituteAll {
       src = ./libgnutls-path.patch;
       gnutlslib = "${lib.getLib gnutls}/lib";
     })
-   ];
+  ];
 
-  pythonImportsCheck = [ "gnutls" ];
+  pythonImportsCheck = ["gnutls"];
 
   meta = with lib; {
     description = "Python wrapper for the GnuTLS library";
     homepage = "https://github.com/AGProjects/python3-gnutls";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ chanley ];
+    maintainers = with maintainers; [chanley];
     longDescription = ''
       This package provides a high level object oriented wrapper around libgnutls,
       as well as low level bindings to the GnuTLS types and functions via ctypes.

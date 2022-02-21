@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "udatetime";
   version = "0.0.16";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # tests not included on pypi
   doCheck = false;
 
-  pythonImportsCheck = [ "udatetime" ];
+  pythonImportsCheck = ["udatetime"];
 
   meta = with lib; {
     description = "Fast RFC3339 compliant Python date-time library";
     homepage = "https://github.com/freach/udatetime";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [globin];
   };
 }

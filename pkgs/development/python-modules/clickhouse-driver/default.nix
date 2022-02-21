@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytz
-, tzlocal
-, clickhouse-cityhash
-, zstd
-, lz4
-, freezegun
-, mock
-, nose
-, pytestCheckHook
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytz,
+  tzlocal,
+  clickhouse-cityhash,
+  zstd,
+  lz4,
+  freezegun,
+  mock,
+  nose,
+  pytestCheckHook,
+  pytest-xdist,
 }:
-
 buildPythonPackage rec {
   pname = "clickhouse-driver";
   version = "0.2.2";
@@ -55,20 +55,20 @@ buildPythonPackage rec {
   '';
 
   # some test in test_buffered_reader.py doesn't seem to return
-  disabledTestPaths = [ "tests/test_buffered_reader.py" ];
+  disabledTestPaths = ["tests/test_buffered_reader.py"];
 
-  pytestFlagsArray = [ "-n" "$NIX_BUILD_CORES" ];
+  pytestFlagsArray = ["-n" "$NIX_BUILD_CORES"];
 
   # most tests require `clickhouse`
   # TODO: enable tests after `clickhouse` unbroken
   doCheck = false;
 
-  pythonImportsCheck = [ "clickhouse_driver" ];
+  pythonImportsCheck = ["clickhouse_driver"];
 
   meta = with lib; {
     description = "Python driver with native interface for ClickHouse";
     homepage = "https://github.com/mymarilyn/clickhouse-driver";
     license = licenses.mit;
-    maintainers = with maintainers; [ breakds ];
+    maintainers = with maintainers; [breakds];
   };
 }

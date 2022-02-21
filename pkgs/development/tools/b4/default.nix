@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "b4";
   version = "0.6.2";
@@ -32,6 +34,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
     license = licenses.gpl2Only;
     description = "A helper utility to work with patches made available via a public-inbox archive";
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [jb55];
   };
 }

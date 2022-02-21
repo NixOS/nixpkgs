@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, gtk3
-, libconfig
-, libsoup
-, libsecret
-, openssl
-, gettext
-, glib
-, glib-networking
-, appstream-glib
-, dbus-glib
-, python3Packages
-, meson
-, ninja
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  libconfig,
+  libsoup,
+  libsecret,
+  openssl,
+  gettext,
+  glib,
+  glib-networking,
+  appstream-glib,
+  dbus-glib,
+  python3Packages,
+  meson,
+  ninja,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "srain";
   version = "1.3.2";
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://srain.im";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [rewine];
   };
 }

@@ -1,6 +1,17 @@
-{lib, stdenv, fetchurl, fetchpatch, pkg-config, freetype, pango, libpng, libtiff
-, giflib, libjpeg, netpbm}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  freetype,
+  pango,
+  libpng,
+  libtiff,
+  giflib,
+  libjpeg,
+  netpbm,
+}:
 stdenv.mkDerivation rec {
   pname = "xplanet";
   version = "1.3.1";
@@ -10,8 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rzc1alph03j67lrr66499zl0wqndiipmj99nqgvh9xzm1qdb023";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ freetype pango libpng libtiff giflib libjpeg netpbm ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [freetype pango libpng libtiff giflib libjpeg netpbm];
 
   patches = [
     (fetchpatch {
@@ -32,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Renders an image of the earth or other planets into the X root window";
     homepage = "http://xplanet.sourceforge.net";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ lassulus sander ];
+    maintainers = with maintainers; [lassulus sander];
     platforms = platforms.all;
   };
 }

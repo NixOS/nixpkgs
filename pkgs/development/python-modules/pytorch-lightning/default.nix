@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, future
-, pytestCheckHook
-, pytorch
-, pyyaml
-, tensorflow-tensorboard
-, tqdm }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  future,
+  pytestCheckHook,
+  pytorch,
+  pyyaml,
+  tensorflow-tensorboard,
+  tqdm,
+}:
 buildPythonPackage rec {
   pname = "pytorch-lightning";
   version = "1.5.8";
@@ -30,17 +31,17 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   # Some packages are not in NixPkgs; other tests try to build distributed
   # models, which doesn't work in the sandbox.
   doCheck = false;
 
-  pythonImportsCheck = [ "pytorch_lightning" ];
+  pythonImportsCheck = ["pytorch_lightning"];
 
   meta = with lib; {
     description = "Lightweight PyTorch wrapper for machine learning researchers";
     homepage = "https://pytorch-lightning.readthedocs.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tbenst ];
+    maintainers = with maintainers; [tbenst];
   };
 }

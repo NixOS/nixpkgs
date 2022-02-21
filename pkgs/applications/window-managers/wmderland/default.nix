@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libnotify,
+  libX11,
+  xorgproto,
+  nixosTests,
+}:
 stdenv.mkDerivation {
   pname = "wmderland";
   version = "unstable-2020-07-17";
@@ -17,7 +25,7 @@ stdenv.mkDerivation {
 
   cmakeBuildType = "MinSizeRel";
 
-  patches = [ ./0001-remove-flto.patch ];
+  patches = [./0001-remove-flto.patch];
 
   postPatch = ''
     substituteInPlace src/util.cc \
@@ -36,7 +44,7 @@ stdenv.mkDerivation {
 
   passthru = {
     tests.basic = nixosTests.wmderland;
-    providedSessions = [ "wmderland" ];
+    providedSessions = ["wmderland"];
   };
 
   meta = with lib; {
@@ -44,6 +52,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aesophor/wmderland";
     license = licenses.mit;
     platforms = libX11.meta.platforms;
-    maintainers = with maintainers; [ takagiy ];
+    maintainers = with maintainers; [takagiy];
   };
 }

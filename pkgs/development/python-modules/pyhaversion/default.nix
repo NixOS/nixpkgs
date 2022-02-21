@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyhaversion";
   version = "21.11.1";
@@ -40,7 +40,6 @@ buildPythonPackage rec {
       --replace "main" ${version}
   '';
 
-
   pythonImportsCheck = [
     "pyhaversion"
   ];
@@ -49,7 +48,7 @@ buildPythonPackage rec {
     description = "Python module to the newest version number of Home Assistant";
     homepage = "https://github.com/ludeeus/pyhaversion";
     changelog = "https://github.com/ludeeus/pyhaversion/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ makefu ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [makefu];
   };
 }

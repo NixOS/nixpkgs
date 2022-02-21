@@ -1,6 +1,9 @@
-{ lib, nettools, fetchFromGitHub  }:
-
-nettools.overrideAttrs(oa: rec {
+{
+  lib,
+  nettools,
+  fetchFromGitHub,
+}:
+nettools.overrideAttrs (oa: rec {
   pname = "net-tools-mptcp";
   version = "0.95";
 
@@ -16,6 +19,6 @@ nettools.overrideAttrs(oa: rec {
     description = "A set of tools for controlling the network subsystem in Linux";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
   };
 })

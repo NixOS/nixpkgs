@@ -1,19 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.distccd;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.distccd;
+in {
   options = {
     services.distccd = {
       enable = mkEnableOption "distccd";
 
       allowedClients = mkOption {
         type = types.listOf types.str;
-        default = [ "127.0.0.1" ];
-        example = [ "127.0.0.1" "192.168.0.0/24" "10.0.0.0/24" ];
+        default = ["127.0.0.1"];
+        example = ["127.0.0.1" "192.168.0.0/24" "10.0.0.0/24"];
         description = ''
           Client IPs which are allowed to connect to distccd in CIDR notation.
 
@@ -32,7 +33,7 @@ in
       };
 
       logLevel = mkOption {
-        type = types.nullOr (types.enum [ "critical" "error" "warning" "notice" "info" "debug" ]);
+        type = types.nullOr (types.enum ["critical" "error" "warning" "notice" "info" "debug"]);
         default = "warning";
         description = ''
           Set the minimum severity of error that will be included in the log
@@ -48,7 +49,6 @@ in
           Maximum number of tasks distccd should execute at any time.
         '';
       };
-
 
       nice = mkOption {
         type = types.nullOr types.int;
@@ -107,16 +107,17 @@ in
 
   config = mkIf cfg.enable {
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ]
-        ++ optionals cfg.stats.enable [ cfg.stats.port ];
+      allowedTCPPorts =
+        [cfg.port]
+        ++ optionals cfg.stats.enable [cfg.stats.port];
     };
 
     systemd.services.distccd = {
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       description = "Distributed C, C++ and Objective-C compiler";
-      documentation = [ "man:distccd(1)" ];
+      documentation = ["man:distccd(1)"];
 
       serviceConfig = {
         User = "distcc";

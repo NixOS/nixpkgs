@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, perl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "ccrypt";
   version = "1.11";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0kx4a5mhmp73ljknl2lcccmw9z3f5y8lqw0ghaymzvln1984g75i";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [perl];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = {
     homepage = "http://ccrypt.sourceforge.net/";

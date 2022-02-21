@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, twisted }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  twisted,
+}:
 buildPythonPackage rec {
   pname = "Nevow";
   version = "0.14.5";
@@ -10,9 +15,9 @@ buildPythonPackage rec {
     sha256 = "afb6ba85a5351953578c018fcdb9dfbd62f29a8d46c58bc9652bc000a27223f3";
   };
 
-  propagatedBuildInputs = [ twisted ];
+  propagatedBuildInputs = [twisted];
 
-  checkInputs = [ twisted ];
+  checkInputs = [twisted];
 
   checkPhase = ''
     trial formless nevow

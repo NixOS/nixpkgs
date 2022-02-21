@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, coverage
-, python-dateutil
-, freezegun
-, mock
-, requests-mock
-, requests_oauthlib
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  coverage,
+  python-dateutil,
+  freezegun,
+  mock,
+  requests-mock,
+  requests_oauthlib,
+  sphinx,
 }:
-
 buildPythonPackage rec {
   pname = "fitbit";
   version = "0.3.1";
 
-  checkInputs = [ coverage freezegun mock requests-mock sphinx ];
-  propagatedBuildInputs = [ python-dateutil requests_oauthlib ];
+  checkInputs = [coverage freezegun mock requests-mock sphinx];
+  propagatedBuildInputs = [python-dateutil requests_oauthlib];
 
   # The source package on PyPi is missing files required for unit testing.
   # https://github.com/orcasgit/python-fitbit/issues/148
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Fitbit API Python Client Implementation";
     license = licenses.asl20;
     homepage = "https://github.com/orcasgit/python-fitbit";
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [delroth];
   };
 }

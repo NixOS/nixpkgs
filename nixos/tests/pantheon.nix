@@ -1,25 +1,24 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
-
-{
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "pantheon";
 
   meta = with lib; {
     maintainers = teams.pantheon.members;
   };
 
-  machine = { ... }:
-
-  {
-    imports = [ ./common/user-account.nix ];
+  machine = {...}: {
+    imports = [./common/user-account.nix];
 
     services.xserver.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
-
   };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
     bob = nodes.machine.config.users.users.bob;
   in ''

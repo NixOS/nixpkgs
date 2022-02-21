@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
-, libvpx, check, libconfig, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libsodium,
+  ncurses,
+  libopus,
+  libvpx,
+  check,
+  libconfig,
+  pkg-config,
+}:
 stdenv.mkDerivation {
   pname = "tox-core-new";
   version = "unstable-2016-07-27";
 
   src = fetchFromGitHub {
-    owner  = "irungentoo";
-    repo   = "toxcore";
-    rev    = "755f084e8720b349026c85afbad58954cb7ff1d4";
+    owner = "irungentoo";
+    repo = "toxcore";
+    rev = "755f084e8720b349026c85afbad58954cb7ff1d4";
     sha256 = "0ap1gvlyihnfivv235dbrgsxsiiz70bhlmlr5gn1027w3h5kqz8w";
   };
 
@@ -30,15 +40,20 @@ stdenv.mkDerivation {
     "--enable-daemon"
   ];
 
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs =
+    [
+      autoreconfHook
+      libsodium
+      ncurses
+      check
+      libconfig
+    ]
+    ++ lib.optionals (!stdenv.isAarch32) [
+      libopus
+    ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [
-    autoreconfHook libsodium ncurses check libconfig
-  ] ++ lib.optionals (!stdenv.isAarch32) [
-    libopus
-  ];
-
-  propagatedBuildInputs = lib.optionals (!stdenv.isAarch32) [ libvpx ];
+  propagatedBuildInputs = lib.optionals (!stdenv.isAarch32) [libvpx];
 
   # Some tests fail randomly due to timeout. This kind of problem is well known
   # by upstream: https://github.com/irungentoo/toxcore/issues/{950,1054}
@@ -51,7 +66,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.all;
   };
 }

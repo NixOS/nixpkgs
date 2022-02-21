@@ -1,5 +1,8 @@
-{ fetchCrate, lib, rustPlatform }:
-
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "inferno";
   version = "0.10.7";
@@ -26,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jonhoo/inferno";
     changelog = "https://github.com/jonhoo/inferno/blob/v${version}/CHANGELOG.md";
     license = licenses.cddl;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

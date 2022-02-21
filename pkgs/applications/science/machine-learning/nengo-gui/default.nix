@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "nengo-gui";
   version = "0.4.8";
@@ -11,7 +14,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1awb0h2l6yifb77zah7a4qzxqvkk4ac5fynangalidr10sk9rzk3";
   };
 
-  propagatedBuildInputs = with python3Packages; [ nengo ];
+  propagatedBuildInputs = with python3Packages; [nengo];
 
   # checks req missing:
   #   pyimgur
@@ -19,8 +22,8 @@ python3Packages.buildPythonPackage rec {
 
   meta = with lib; {
     description = "Nengo interactive visualizer";
-    homepage    = "https://nengo.ai/";
-    license     = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ arjix ];
+    homepage = "https://nengo.ai/";
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [arjix];
   };
 }

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.virtualisation.anbox;
   kernelPackages = config.boot.kernelPackages;
   addrOpts = v: addr: pref: name: {
@@ -17,20 +18,25 @@ let
 
     prefixLength = mkOption {
       default = pref;
-      type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
+      type = types.addCheck types.int (n:
+        n
+        >= 0
+        && n
+        <= (if v == 4
+        then 32
+        else 128));
       description = ''
         Subnet mask of the ${name} address, specified as the number of
-        bits in the prefix (<literal>${if v == 4 then "24" else "64"}</literal>).
+        bits in the prefix (<literal>${
+          if v == 4
+          then "24"
+          else "64"
+        }</literal>).
       '';
     };
   };
-
-in
-
-{
-
+in {
   options.virtualisation.anbox = {
-
     enable = mkEnableOption "Anbox";
 
     image = mkOption {
@@ -65,16 +71,15 @@ in
   };
 
   config = mkIf cfg.enable {
-
     assertions = singleton {
       assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
       message = "Anbox needs user namespace support to work properly";
     };
 
-    environment.systemPackages = with pkgs; [ anbox ];
+    environment.systemPackages = with pkgs; [anbox];
 
-    boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages = [ kernelPackages.anbox ];
+    boot.kernelModules = ["ashmem_linux" "binder_linux"];
+    boot.extraModulePackages = [kernelPackages.anbox];
 
     services.udev.extraRules = ''
       KERNEL=="ashmem", NAME="%k", MODE="0666"
@@ -83,11 +88,11 @@ in
 
     virtualisation.lxc.enable = true;
     networking.bridges.anbox0.interfaces = [];
-    networking.interfaces.anbox0.ipv4.addresses = [ cfg.ipv4.gateway ];
+    networking.interfaces.anbox0.ipv4.addresses = [cfg.ipv4.gateway];
 
     networking.nat = {
       enable = true;
-      internalInterfaces = [ "anbox0" ];
+      internalInterfaces = ["anbox0"];
     };
 
     systemd.services.anbox-container-manager = let
@@ -95,9 +100,9 @@ in
     in {
       description = "Anbox Container Management Daemon";
 
-      environment.XDG_RUNTIME_DIR="${anboxloc}";
+      environment.XDG_RUNTIME_DIR = "${anboxloc}";
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       preStart = let
         initsh = pkgs.writeText "nixos-init" (''
           #!/system/bin/sh
@@ -109,7 +114,8 @@ in
 
           # speed up boot
           setprop debug.sf.nobootanimation 1
-        '' + cfg.extraInit);
+        ''
+        + cfg.extraInit);
         initshloc = "${anboxloc}/rootfs-overlay/system/etc/init.goldfish.sh";
       in ''
         mkdir -p ${anboxloc}
@@ -134,5 +140,4 @@ in
       };
     };
   };
-
 }

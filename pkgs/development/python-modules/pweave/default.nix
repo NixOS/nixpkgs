@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, matplotlib
-, pkgs
-, nbconvert
-, markdown
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  matplotlib,
+  pkgs,
+  nbconvert,
+  markdown,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "Pweave";
   version = "0.30.3";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  buildInputs = [ mock pkgs.glibcLocales ];
-  propagatedBuildInputs = [ matplotlib nbconvert markdown ];
+  buildInputs = [mock pkgs.glibcLocales];
+  propagatedBuildInputs = [matplotlib nbconvert markdown];
 
   # fails due to trying to run CSS as test
   doCheck = false;
@@ -31,5 +31,4 @@ buildPythonPackage rec {
     homepage = "https://mpastell.com/pweave/";
     license = licenses.bsd3;
   };
-
 }

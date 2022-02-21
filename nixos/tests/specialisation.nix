@@ -1,18 +1,18 @@
 import ./make-test-python.nix {
   name = "specialisation";
-  nodes =  {
-    inheritconf = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.cowsay ];
-      specialisation.inheritconf.configuration = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.hello ];
+  nodes = {
+    inheritconf = {pkgs, ...}: {
+      environment.systemPackages = [pkgs.cowsay];
+      specialisation.inheritconf.configuration = {pkgs, ...}: {
+        environment.systemPackages = [pkgs.hello];
       };
     };
-    noinheritconf = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.cowsay ];
+    noinheritconf = {pkgs, ...}: {
+      environment.systemPackages = [pkgs.cowsay];
       specialisation.noinheritconf = {
         inheritParentConfig = false;
-        configuration = { pkgs, ... }: {
-          environment.systemPackages = [ pkgs.hello ];
+        configuration = {pkgs, ...}: {
+          environment.systemPackages = [pkgs.hello];
         };
       };
     };

@@ -1,13 +1,21 @@
-{ lib, stdenv, dockapps-sources, pkg-config, libX11, libXpm, libXext, alsa-lib }:
-
+{
+  lib,
+  stdenv,
+  dockapps-sources,
+  pkg-config,
+  libX11,
+  libXpm,
+  libXext,
+  alsa-lib,
+}:
 stdenv.mkDerivation rec {
   pname = "AlsaMixer.app";
   version = "0.2.1";
 
   src = dockapps-sources;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXpm libXext alsa-lib ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libX11 libXpm libXext alsa-lib];
 
   setSourceRoot = ''
     export sourceRoot=$(echo */${pname})
@@ -33,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Alsa mixer application for Windowmaker";
     homepage = "https://www.dockapps.net/alsamixerapp";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bstrik ];
+    maintainers = [maintainers.bstrik];
   };
 }

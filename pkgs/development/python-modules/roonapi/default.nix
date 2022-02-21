@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, poetry-core
-, pythonOlder
-, requests
-, six
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  poetry-core,
+  pythonOlder,
+  requests,
+  six,
+  websocket-client,
 }:
-
 buildPythonPackage rec {
   pname = "roonapi";
   version = "0.1.1";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interface with the Roon API";
     homepage = "https://github.com/pavoni/pyroon";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

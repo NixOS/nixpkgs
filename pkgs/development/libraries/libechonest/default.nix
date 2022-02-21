@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, doxygen, qt4, qjson }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  doxygen,
+  qt4,
+  qjson,
+}:
 stdenv.mkDerivation rec {
   pname = "libechonest";
   version = "2.3.1";
@@ -22,8 +30,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake doxygen ];
-  buildInputs = [ qt4 qjson ];
+  nativeBuildInputs = [cmake doxygen];
+  buildInputs = [qt4 qjson];
 
   doCheck = false; # requires network access
 

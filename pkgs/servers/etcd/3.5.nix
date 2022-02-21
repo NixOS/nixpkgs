@@ -1,6 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, symlinkJoin }:
-
-let
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  symlinkJoin,
+}: let
   etcdVersion = "3.5.1";
   etcdSrc = fetchFromGitHub {
     owner = "etcd-io";
@@ -13,7 +16,7 @@ let
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline zowoq endocrimes ];
+    maintainers = with maintainers; [offline zowoq endocrimes];
     platforms = platforms.darwin ++ platforms.linux;
   };
 
@@ -36,7 +39,7 @@ let
     # git is unavailable. This is to avoid doing a full Git Checkout of etcd.
     # User facing version numbers are still available in the binary, just not
     # the sha it was built from.
-    ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
+    ldflags = ["-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound"];
 
     meta = commonMeta;
   };
@@ -69,14 +72,14 @@ let
     meta = commonMeta;
   };
 in
-symlinkJoin {
-  name = "etcd";
-  version = etcdVersion;
-  meta = commonMeta;
+  symlinkJoin {
+    name = "etcd";
+    version = etcdVersion;
+    meta = commonMeta;
 
-  paths = [
-    etcdserver
-    etcdutl
-    etcdctl
-  ];
-}
+    paths = [
+      etcdserver
+      etcdutl
+      etcdctl
+    ];
+  }

@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   meta = {
     maintainers = teams.pantheon.members;
   };
@@ -14,6 +16,6 @@ with lib;
 
   ###### implementation
   config = mkIf config.programs.pantheon-tweaks.enable {
-    services.xserver.desktopManager.pantheon.extraSwitchboardPlugs = [ pkgs.pantheon-tweaks ];
+    services.xserver.desktopManager.pantheon.extraSwitchboardPlugs = [pkgs.pantheon-tweaks];
   };
 }

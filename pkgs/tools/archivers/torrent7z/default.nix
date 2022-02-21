@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "torrent7z";
   version = "1.3";
@@ -14,15 +19,14 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-gcc10-compilation.patch"; # Fix compilation on GCC 10. This patch is included on the latest commit
-      url =
-        "https://github.com/paulyc/torrent7z/commit/5958f42a364c430b3ed4ac68911bbbea1f967fc4.patch";
+      url = "https://github.com/paulyc/torrent7z/commit/5958f42a364c430b3ed4ac68911bbbea1f967fc4.patch";
       sha256 = "vJOv1sG9XwTvvxQiWew0H5ALoUb9wIAouzTsTvKHuPI=";
     })
   ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   postPatch = ''
     # Remove non-free RAR source code
@@ -45,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BubblesInTheTub/torrent7z";
     description = "A fork of torrent7z, viz a derivative of 7zip that produces invariant .7z archives for torrenting";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cirno-999 ];
+    maintainers = with maintainers; [cirno-999];
     mainProgram = "t7z";
     # RAR code is under non-free UnRAR license, but we remove it
     license = licenses.gpl3Only;

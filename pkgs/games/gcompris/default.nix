@@ -1,21 +1,21 @@
-{ mkDerivation
-, cmake
-, fetchurl
-, gettext
-, gst_all_1
-, lib
-, ninja
-, qmlbox2d
-, qtbase
-, qtdeclarative
-, qtgraphicaleffects
-, qtmultimedia
-, qtquickcontrols
-, qtsensors
-, qttools
-, qtxmlpatterns
+{
+  mkDerivation,
+  cmake,
+  fetchurl,
+  gettext,
+  gst_all_1,
+  lib,
+  ninja,
+  qmlbox2d,
+  qtbase,
+  qtdeclarative,
+  qtgraphicaleffects,
+  qtmultimedia,
+  qtquickcontrols,
+  qtsensors,
+  qttools,
+  qtxmlpatterns,
 }:
-
 mkDerivation rec {
   pname = "gcompris";
   version = "2.1";
@@ -29,13 +29,25 @@ mkDerivation rec {
     "-DQML_BOX2D_LIBRARY=${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1"
   ];
 
-  nativeBuildInputs = [ cmake gettext ninja qttools ];
+  nativeBuildInputs = [cmake gettext ninja qttools];
 
-  buildInputs = [
-    qmlbox2d qtbase qtdeclarative qtgraphicaleffects qtmultimedia qtquickcontrols qtsensors qtxmlpatterns
-  ] ++ (with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      qmlbox2d
+      qtbase
+      qtdeclarative
+      qtgraphicaleffects
+      qtmultimedia
+      qtquickcontrols
+      qtsensors
+      qtxmlpatterns
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   postInstall = ''
     install -Dm444 ../org.kde.gcompris.desktop        $out/share/applications/gcompris.desktop
@@ -49,7 +61,7 @@ mkDerivation rec {
     description = "A high quality educational software suite, including a large number of activities for children aged 2 to 10";
     homepage = "https://gcompris.net/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ guibou ];
+    maintainers = with maintainers; [guibou];
     platforms = platforms.linux;
   };
 }

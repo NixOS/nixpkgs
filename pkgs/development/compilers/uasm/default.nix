@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "uasm";
   version = "2.53";
@@ -43,8 +47,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.terraspace.co.uk/uasm.html";
     description = "A free MASM-compatible assembler based on JWasm";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ thiagokokada ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [thiagokokada];
     license = licenses.watcom;
   };
 }

@@ -1,8 +1,10 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
-
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.gotify;
 in {
   options = {
@@ -29,8 +31,8 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.gotify-server = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       description = "Simple server for sending and receiving messages";
 
       environment = {

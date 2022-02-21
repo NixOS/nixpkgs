@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libtool, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libtool,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "ace";
   version = "7.0.6";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config libtool ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [pkg-config libtool];
+  buildInputs = [perl];
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=format-security"
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.dre.vanderbilt.edu/~schmidt/ACE.html";
     description = "ADAPTIVE Communication Environment";
     license = licenses.doc;
-    maintainers = with maintainers; [ nico202 ];
+    maintainers = with maintainers; [nico202];
     platforms = platforms.linux;
   };
 }

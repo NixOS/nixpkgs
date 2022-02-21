@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl, alsa-lib
-, version ? "1.7.1"
-, sourceSha256 ? "051mv6f13c8y13c1iv3279k1hhzpz4fm9sfczhgp9sim2bjdj055"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  version ? "1.7.1",
+  sourceSha256 ? "051mv6f13c8y13c1iv3279k1hhzpz4fm9sfczhgp9sim2bjdj055",
 }:
 stdenv.mkDerivation {
   pname = "pmidi";
@@ -11,12 +15,12 @@ stdenv.mkDerivation {
     sha256 = sourceSha256;
   };
 
-  buildInputs = [ alsa-lib ];
+  buildInputs = [alsa-lib];
 
   meta = with lib; {
     homepage = "https://www.parabola.me.uk/alsa/pmidi.html";
     description = "A straightforward command line program to play midi files through the ALSA sequencer";
-    maintainers = with maintainers; [ lheckemann ];
+    maintainers = with maintainers; [lheckemann];
     license = licenses.gpl2;
   };
 }

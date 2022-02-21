@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, libepoxy
-, ffmpeg_4
-, imagemagick
-, libedit
-, libelf
-, libzip
-, makeDesktopItem
-, minizip
-, pkg-config
-, qtbase
-, qtmultimedia
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  libepoxy,
+  ffmpeg_4,
+  imagemagick,
+  libedit,
+  libelf,
+  libzip,
+  makeDesktopItem,
+  minizip,
+  pkg-config,
+  qtbase,
+  qtmultimedia,
+  qttools,
+  wrapQtAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mgba";
   version = "0.9.3";
@@ -80,8 +80,9 @@ stdenv.mkDerivation rec {
       not support.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ MP2E AndersonTorres ];
+    maintainers = with maintainers; [MP2E AndersonTorres];
     platforms = platforms.linux;
   };
 }
 # TODO: use desktopItem functions
+

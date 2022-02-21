@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation {
   pname = "sta";
   version = "unstable-2020-05-10";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1v20di90ckl405rj5pn6lxlpxh2m2b3y9h2snjvk0k9sihk7w7d5";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   meta = with lib; {
     description = "Simple statistics from the command line interface (CLI), fast";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     '';
     license = licenses.mit;
     homepage = "https://github.com/simonccarter/sta";
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [infinisil];
     platforms = platforms.all;
     badPlatforms = platforms.darwin;
     mainProgram = "sta";

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asgiref
-, django
-, daphne
-, pytest-asyncio
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  asgiref,
+  django,
+  daphne,
+  pytest-asyncio,
+  pytest-django,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "channels";
   version = "3.0.4";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "channels" ];
+  pythonImportsCheck = ["channels"];
 
   meta = with lib; {
     description = "Brings event-driven capabilities to Django with a channel system";
     license = licenses.bsd3;
     homepage = "https://github.com/django/channels";
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

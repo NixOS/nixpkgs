@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-xdist
-, torchvision
-, pythonOlder
-, matplotlib
-, mock
-, pytorch
-, scikit-learn
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-xdist,
+  torchvision,
+  pythonOlder,
+  matplotlib,
+  mock,
+  pytorch,
+  scikit-learn,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "ignite";
   version = "0.4.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
     sha256 = "sha256-S4wL1RyQ6aDW16wbSl+86VhSJ2S9oanYhNtPQdBtdrA=";
   };
 
-  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
-  propagatedBuildInputs = [ pytorch scikit-learn tqdm ];
+  checkInputs = [pytestCheckHook matplotlib mock pytest-xdist torchvision];
+  propagatedBuildInputs = [pytorch scikit-learn tqdm];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "High-level training library for PyTorch";
     homepage = "https://pytorch.org/ignite";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = [maintainers.bcdarwin];
   };
 }

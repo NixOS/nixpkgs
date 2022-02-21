@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, cython
-, devtools
-, email_validator
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  devtools,
+  email_validator,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  python-dotenv,
+  pythonOlder,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "pydantic";
   version = "1.9.0";
@@ -43,12 +43,12 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [ "pydantic" ];
+  pythonImportsCheck = ["pydantic"];
 
   meta = with lib; {
     homepage = "https://github.com/samuelcolvin/pydantic";
     description = "Data validation and settings management using Python type hinting";
     license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    maintainers = with maintainers; [wd15];
   };
 }

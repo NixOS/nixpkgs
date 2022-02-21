@@ -1,8 +1,8 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
-
 buildPythonPackage rec {
   pname = "dpkt";
   version = "1.9.7.2";
@@ -15,13 +15,13 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "dpkt" ];
+  pythonImportsCheck = ["dpkt"];
 
   meta = with lib; {
     description = "Fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols";
     homepage = "https://github.com/kbandla/dpkt";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
     platforms = platforms.all;
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "hijri-converter";
   version = "2.2.3";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Accurate Hijri-Gregorian date converter based on the Umm al-Qura calendar";
     homepage = "https://github.com/dralshehri/hijri-converter";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

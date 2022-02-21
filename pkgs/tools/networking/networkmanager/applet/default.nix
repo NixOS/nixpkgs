@@ -1,28 +1,29 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, pkg-config
-, networkmanager
-, gnome
-, libnotify
-, libsecret
-, polkit
-, modemmanager
-, libnma
-, glib-networking
-, gsettings-desktop-schemas
-, libgudev
-, jansson
-, wrapGAppsHook
-, gobject-introspection
-, python3
-, gtk3
-, libappindicator-gtk3
-, glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  networkmanager,
+  gnome,
+  libnotify,
+  libsecret,
+  polkit,
+  modemmanager,
+  libnma,
+  glib-networking,
+  gsettings-desktop-schemas,
+  libgudev,
+  jansson,
+  wrapGAppsHook,
+  gobject-introspection,
+  python3,
+  gtk3,
+  libappindicator-gtk3,
+  glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "network-manager-applet";
   version = "1.24.0";
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     "-Dappindicator=yes"
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   buildInputs = [
     libnma
@@ -83,7 +84,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/network-manager-applet/";
     description = "NetworkManager control applet for GNOME";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

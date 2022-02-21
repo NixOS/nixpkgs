@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, file }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  file,
+}:
 stdenv.mkDerivation rec {
   pname = "openpa";
   version = "1.0.4";
@@ -17,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Atomic primitives for high performance, concurrent software";
     homepage = "https://trac.mpich.org/projects/openpa";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leenaars ];
+    maintainers = with lib.maintainers; [leenaars];
     platforms = lib.platforms.unix;
     longDescription = ''
       OPA (or sometimes OpenPA or Open Portable Atomics) is an
@@ -29,5 +33,5 @@ stdenv.mkDerivation rec {
       learning new assembly dialects in order improve or maintain application
       portability.
     '';
-   };
+  };
 }

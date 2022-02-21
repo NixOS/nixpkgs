@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
 
   options = {
@@ -23,13 +25,12 @@ with lib;
   ###### implementation
 
   config = mkIf config.hardware.sensor.iio.enable {
+    boot.initrd.availableKernelModules = ["hid-sensor-hub"];
 
-    boot.initrd.availableKernelModules = [ "hid-sensor-hub" ];
+    environment.systemPackages = with pkgs; [iio-sensor-proxy];
 
-    environment.systemPackages = with pkgs; [ iio-sensor-proxy ];
-
-    services.dbus.packages = with pkgs; [ iio-sensor-proxy ];
-    services.udev.packages = with pkgs; [ iio-sensor-proxy ];
-    systemd.packages = with pkgs; [ iio-sensor-proxy ];
+    services.dbus.packages = with pkgs; [iio-sensor-proxy];
+    services.udev.packages = with pkgs; [iio-sensor-proxy];
+    systemd.packages = with pkgs; [iio-sensor-proxy];
   };
 }

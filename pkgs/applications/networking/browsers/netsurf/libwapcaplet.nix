@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildsystem,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netsurf-${libname}";
   libname = "libwapcaplet";
@@ -12,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-myqh3W1mRfjpkrNpf9vYfwwOHaVyH6VO0ptITRMWDFw=";
   };
 
-  buildInputs = [ buildsystem ];
+  buildInputs = [buildsystem];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "String internment library for netsurf browser";
     license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    maintainers = [maintainers.vrthra maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

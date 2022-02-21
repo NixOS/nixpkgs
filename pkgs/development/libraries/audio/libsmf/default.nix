@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, glib, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  glib,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   version = "1.3";
   pname = "libsmf";
@@ -11,14 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OJXJkXvbM2GQNInZXU2ldObquKHhqkdu1zqUDnVZN0Y=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ glib ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [glib];
 
   meta = with lib; {
     description = "A C library for reading and writing Standard MIDI Files";
     homepage = "https://github.com/stump/libsmf";
     license = licenses.bsd2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.unix;
   };
 }

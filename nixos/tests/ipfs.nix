@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "ipfs";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ mguentner ];
+    maintainers = [mguentner];
   };
 
-  nodes.machine = { ... }: {
+  nodes.machine = {...}: {
     services.ipfs = {
       enable = true;
       # Also will add a unix domain socket socket API address, see module.

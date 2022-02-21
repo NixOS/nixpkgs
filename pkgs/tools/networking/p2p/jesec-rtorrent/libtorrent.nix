@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  openssl,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jesec-libtorrent";
   version = "0.13.8-r3";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jesec/libtorrent";
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code (jesec's fork)";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ winter AndersonTorres ];
+    maintainers = with maintainers; [winter AndersonTorres];
     platforms = platforms.linux;
   };
 }

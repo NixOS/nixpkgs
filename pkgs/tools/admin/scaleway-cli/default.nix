@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "scaleway-cli";
   version = "2.4.0";
@@ -20,6 +23,6 @@ buildGoModule rec {
     description = "Interact with Scaleway API from the command line";
     homepage = "https://github.com/scaleway/scaleway-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with maintainers; [nickhu];
   };
 }

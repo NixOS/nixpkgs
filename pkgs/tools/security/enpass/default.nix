@@ -1,11 +1,29 @@
-{ stdenv, fetchurl, dpkg, xorg
-, glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
-, gtk3, pango
-, makeWrapper , python3Packages, lib
-, lsof, curl, libuuid, cups, mesa, xz, libxkbcommon
-}:
-
-let
+{
+  stdenv,
+  fetchurl,
+  dpkg,
+  xorg,
+  glib,
+  libGLU,
+  libGL,
+  libpulseaudio,
+  zlib,
+  dbus,
+  fontconfig,
+  freetype,
+  gtk3,
+  pango,
+  makeWrapper,
+  python3Packages,
+  lib,
+  lsof,
+  curl,
+  libuuid,
+  cups,
+  mesa,
+  xz,
+  libxkbcommon,
+}: let
   all_data = lib.importJSON ./data.json;
   system_map = {
     # i686-linux = "i386"; Uncomment if enpass 6 becomes available on i386
@@ -19,7 +37,8 @@ let
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
     mesa.drivers
-    libGLU libGL
+    libGLU
+    libGL
     fontconfig
     freetype
     libpulseaudio
@@ -42,7 +61,6 @@ let
     libxkbcommon
   ]);
   package = stdenv.mkDerivation {
-
     inherit (data) version;
     pname = "enpass";
 
@@ -55,15 +73,15 @@ let
       description = "A well known password manager";
       homepage = "https://www.enpass.io/";
       license = licenses.unfree;
-      platforms = [ "x86_64-linux" "i686-linux"];
-      maintainers = with maintainers; [ ewok ];
+      platforms = ["x86_64-linux" "i686-linux"];
+      maintainers = with maintainers; [ewok];
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
     buildInputs = [dpkg];
 
     unpackPhase = "dpkg -X $src .";
-    installPhase=''
+    installPhase = ''
       mkdir -p $out/bin
       cp -r opt/enpass/*  $out/bin
       cp -r usr/* $out
@@ -87,13 +105,12 @@ let
   updater = {
     update = stdenv.mkDerivation {
       name = "enpass-update-script";
-      SCRIPT =./update_script.py;
+      SCRIPT = ./update_script.py;
 
-      buildInputs = with python3Packages; [python requests pathlib2 six attrs ];
+      buildInputs = with python3Packages; [python requests pathlib2 six attrs];
       shellHook = ''
         exec python $SCRIPT --target pkgs/tools/security/enpass/data.json --repo ${baseUrl}
       '';
-
     };
   };
 in (package // {refresh = updater;})

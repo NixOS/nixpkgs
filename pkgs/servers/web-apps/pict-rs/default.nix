@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, rustPlatform
-, makeWrapper
-, protobuf
-, Security
-, imagemagick
-, ffmpeg
-, exiftool
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  rustPlatform,
+  makeWrapper,
+  protobuf,
+  Security,
+  imagemagick,
+  ffmpeg,
+  exiftool,
+  nixosTests,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "pict-rs";
   version = "0.3.0-alpha.37";
@@ -29,20 +29,20 @@ rustPlatform.buildRustPackage rec {
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
 
   postInstall = ''
     wrapProgram "$out/bin/pict-rs" \
-        --prefix PATH : "${lib.makeBinPath [ imagemagick ffmpeg exiftool ]}"
+        --prefix PATH : "${lib.makeBinPath [imagemagick ffmpeg exiftool]}"
   '';
 
-  passthru.tests = { inherit (nixosTests) pict-rs; };
+  passthru.tests = {inherit (nixosTests) pict-rs;};
 
   meta = with lib; {
     description = "A simple image hosting service";
     homepage = "https://git.asonix.dog/asonix/pict-rs";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ happysalada ];
+    license = with licenses; [agpl3Plus];
+    maintainers = with maintainers; [happysalada];
   };
 }

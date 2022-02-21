@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchgit, cmake, pcre, doxygen }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  pcre,
+  doxygen,
+}:
 stdenv.mkDerivation rec {
   pname = "editorconfig-core-c";
   version = "0.12.1";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ pcre ];
-  nativeBuildInputs = [ cmake doxygen ];
+  buildInputs = [pcre];
+  nativeBuildInputs = [cmake doxygen];
 
   # Multiple doxygen can not generate man pages in the same base directory in
   # parallel: https://bugzilla.gnome.org/show_bug.cgi?id=791153
@@ -30,8 +36,8 @@ stdenv.mkDerivation rec {
       editors, see the EditorConfig website.
     '';
     downloadPage = "https://github.com/editorconfig/editorconfig-core-c";
-    license = with licenses; [ bsd2 bsd3 ];
-    maintainers = with maintainers; [ dochang ];
+    license = with licenses; [bsd2 bsd3];
+    maintainers = with maintainers; [dochang];
     platforms = platforms.unix;
     mainProgram = "editorconfig";
   };

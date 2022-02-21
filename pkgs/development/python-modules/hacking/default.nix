@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, flake8
-, stestr
-, ddt
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  flake8,
+  stestr,
+  ddt,
+  testscenarios,
 }:
-
 buildPythonPackage rec {
   pname = "hacking";
   version = "4.1.0";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
       --replace "flake8<3.9.0,>=3.8.0" "flake8"
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
   propagatedBuildInputs = [
     flake8
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ")
   '';
 
-  pythonImportsCheck = [ "hacking" ];
+  pythonImportsCheck = ["hacking"];
 
   meta = with lib; {
     description = "OpenStack Hacking Guideline Enforcement";

@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pymazda";
   version = "0.3.2";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python client for interacting with the MyMazda API";
     homepage = "https://github.com/bdr99/pymazda";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

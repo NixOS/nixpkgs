@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, eventlet
-, gevent
-, nose
-, mock
-, coverage
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  eventlet,
+  gevent,
+  nose,
+  mock,
+  coverage,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "kazoo";
   version = "2.8.0";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
     sha256 = "1zpj5cc8624w6i0pxgcxqkjwbkm4pkrv19d7wh5df3jais32g3jq";
   };
 
-  propagatedBuildInputs = [ six ];
-  buildInputs = [ eventlet gevent nose mock coverage pkgs.openjdk8 ];
+  propagatedBuildInputs = [six];
+  buildInputs = [eventlet gevent nose mock coverage pkgs.openjdk8];
 
   # not really needed
   preBuild = ''
@@ -40,5 +40,4 @@ buildPythonPackage rec {
     description = "Higher Level Zookeeper Client";
     license = licenses.asl20;
   };
-
 }

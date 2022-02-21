@@ -1,5 +1,8 @@
-{ lib, gccStdenv, fetchFromGitHub }:
-
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+}:
 gccStdenv.mkDerivation rec {
   pname = "cc65";
   version = "2.19";
@@ -11,7 +14,7 @@ gccStdenv.mkDerivation rec {
     sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   enableParallelBuilding = true;
 
@@ -52,7 +55,7 @@ gccStdenv.mkDerivation rec {
       shouldn't be too much work.
     '';
     license = licenses.zlib;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

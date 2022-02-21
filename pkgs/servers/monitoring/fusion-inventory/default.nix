@@ -1,7 +1,15 @@
-{ lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute2, nettools
-, fetchFromGitHub, makeWrapper
+{
+  lib,
+  perlPackages,
+  nix,
+  dmidecode,
+  pciutils,
+  usbutils,
+  iproute2,
+  nettools,
+  fetchFromGitHub,
+  makeWrapper,
 }:
-
 perlPackages.buildPerlPackage rec {
   pname = "FusionInventory-Agent";
   version = "2.6";
@@ -24,7 +32,7 @@ perlPackages.buildPerlPackage rec {
   '';
 
   buildTools = [];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   buildInputs = (with perlPackages; [
     CGI
     DataStructureUtil
@@ -73,12 +81,12 @@ perlPackages.buildPerlPackage rec {
     done
   '';
 
-  outputs = [ "out" ];
+  outputs = ["out"];
 
   meta = with lib; {
     homepage = "http://www.fusioninventory.org";
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
     license = lib.licenses.gpl2;
-    maintainers = [ maintainers.phile314 ];
+    maintainers = [maintainers.phile314];
   };
 }

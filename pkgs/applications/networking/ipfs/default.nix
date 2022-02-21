@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchurl, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "ipfs";
   version = "0.11.0";
@@ -21,7 +25,7 @@ buildGoModule rec {
 
   sourceRoot = ".";
 
-  subPackages = [ "cmd/ipfs" ];
+  subPackages = ["cmd/ipfs"];
 
   passthru.tests.ipfs = nixosTests.ipfs;
 
@@ -43,6 +47,6 @@ buildGoModule rec {
     homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

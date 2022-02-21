@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "goawk";
   version = "1.16.0";
@@ -20,6 +24,6 @@ buildGoModule rec {
     homepage = "https://benhoyt.com/writings/goawk/";
     license = licenses.mit;
     mainProgram = "goawk";
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with maintainers; [abbe];
   };
 }

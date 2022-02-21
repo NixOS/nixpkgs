@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
   version = "2.4.2";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b4ivyzpg9p3idk48nfvgpz18qlxyycswkaab31j3dp1mniwvjla";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     rm bin/asciidoctorj.bat
@@ -29,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://asciidoctor.org/docs/asciidoctorj/";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    maintainers = with maintainers; [moaxcp];
   };
 }

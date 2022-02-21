@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "docstring-to-markdown";
   version = "0.10";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-lsp/docstring-to-markdown";
     description = "On the fly conversion of Python docstrings to markdown";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
   };
 }

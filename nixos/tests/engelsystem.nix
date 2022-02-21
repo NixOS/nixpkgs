@@ -1,25 +1,26 @@
 import ./make-test-python.nix (
-  { pkgs, lib, ... }:
   {
+    pkgs,
+    lib,
+    ...
+  }: {
     name = "engelsystem";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ talyz ];
+      maintainers = [talyz];
     };
 
-    nodes.engelsystem =
-      { ... }:
-      {
-        services.engelsystem = {
-          enable = true;
-          domain = "engelsystem";
-          createDatabase = true;
-        };
-        networking.firewall.allowedTCPPorts = [ 80 443 ];
-        environment.systemPackages = with pkgs; [
-          xmlstarlet
-          libxml2
-        ];
+    nodes.engelsystem = {...}: {
+      services.engelsystem = {
+        enable = true;
+        domain = "engelsystem";
+        createDatabase = true;
       };
+      networking.firewall.allowedTCPPorts = [80 443];
+      environment.systemPackages = with pkgs; [
+        xmlstarlet
+        libxml2
+      ];
+    };
 
     testScript = ''
       engelsystem.start()
@@ -38,4 +39,5 @@ import ./make-test-python.nix (
           "test 'News - Engelsystem' = \"$(xml sel -T -t -c html/head/title news)\""
       )
     '';
-  })
+  }
+)

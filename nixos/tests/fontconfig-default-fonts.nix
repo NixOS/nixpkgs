@@ -1,12 +1,15 @@
-import ./make-test-python.nix ({ lib, ... }:
-{
+import ./make-test-python.nix ({lib, ...}: {
   name = "fontconfig-default-fonts";
 
   meta.maintainers = with lib.maintainers; [
     jtojnar
   ];
 
-  machine = { config, pkgs, ... }: {
+  machine = {
+    config,
+    pkgs,
+    ...
+  }: {
     fonts.enableDefaultFonts = true; # Background fonts
     fonts.fonts = with pkgs; [
       noto-fonts-emoji
@@ -16,10 +19,10 @@ import ./make-test-python.nix ({ lib, ... }:
       gentium
     ];
     fonts.fontconfig.defaultFonts = {
-      serif = [ "Gentium Plus" ];
-      sansSerif = [ "Cantarell" ];
-      monospace = [ "Source Code Pro" ];
-      emoji = [ "Twitter Color Emoji" ];
+      serif = ["Gentium Plus"];
+      sansSerif = ["Cantarell"];
+      monospace = ["Source Code Pro"];
+      emoji = ["Twitter Color Emoji"];
     };
   };
 

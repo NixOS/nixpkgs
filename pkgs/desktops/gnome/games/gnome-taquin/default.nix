@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook
-, librsvg
-, gsound
-, gettext
-, itstool
-, libxml2
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook,
+  librsvg,
+  gsound,
+  gettext,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  vala,
+  python3,
+  desktop-file-utils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-taquin";
   version = "3.38.1";

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   pname = "akvcam";
   version = "1.2.2";
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Virtual camera driver for Linux";
     homepage = "https://github.com/webcamoid/akvcam";
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };

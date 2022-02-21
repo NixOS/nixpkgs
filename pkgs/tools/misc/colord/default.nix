@@ -1,38 +1,38 @@
-{ lib
-, stdenv
-, fetchurl
-, nixosTests
-, bash-completion
-, glib
-, polkit
-, pkg-config
-, gettext
-, gusb
-, lcms2
-, sqlite
-, systemd
-, dbus
-, gobject-introspection
-, argyllcms
-, meson
-, ninja
-, vala
-, libgudev
-, wrapGAppsHook
-, shared-mime-info
-, sane-backends
-, docbook_xsl
-, docbook_xsl_ns
-, docbook_xml_dtd_412
-, gtk-doc
-, libxslt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  bash-completion,
+  glib,
+  polkit,
+  pkg-config,
+  gettext,
+  gusb,
+  lcms2,
+  sqlite,
+  systemd,
+  dbus,
+  gobject-introspection,
+  argyllcms,
+  meson,
+  ninja,
+  vala,
+  libgudev,
+  wrapGAppsHook,
+  shared-mime-info,
+  sane-backends,
+  docbook_xsl,
+  docbook_xsl_ns,
+  docbook_xml_dtd_412,
+  gtk-doc,
+  libxslt,
 }:
-
 stdenv.mkDerivation rec {
   pname = "colord";
   version = "1.4.6";
 
-  outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
+  outputs = ["out" "dev" "devdoc" "man" "installedTests"];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = "https://www.freedesktop.org/software/colord/";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;
+    maintainers = [maintainers.marcweber] ++ teams.freedesktop.members;
     platforms = platforms.linux;
   };
 }

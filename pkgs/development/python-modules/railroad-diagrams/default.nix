@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "railroad-diagrams";
   version = "1.1.1";
@@ -15,12 +15,12 @@ buildPythonPackage rec {
   # this is a dependency of pyparsing, which is a dependency of pytest
   doCheck = false;
 
-  pythonImportsCheck = [ "railroad" ];
+  pythonImportsCheck = ["railroad"];
 
   meta = with lib; {
     description = "Generate SVG railroad syntax diagrams, like on JSON.org";
     homepage = "https://github.com/tabatkins/railroad-diagrams";
     license = licenses.cc0;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

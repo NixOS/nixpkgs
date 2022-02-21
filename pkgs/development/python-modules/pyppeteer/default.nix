@@ -1,19 +1,19 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-, pyee
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, syncer
-, tqdm
-, urllib3
-, websockets
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  poetry-core,
+  pyee,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  syncer,
+  tqdm,
+  urllib3,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "pyppeteer";
   version = "0.2.6";
@@ -87,6 +87,6 @@ buildPythonPackage rec {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     homepage = "https://github.com/pyppeteer/pyppeteer";
     license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    maintainers = with maintainers; [kmein];
   };
 }

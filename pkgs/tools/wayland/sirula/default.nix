@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, gtk3
-, gtk-layer-shell
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  gtk3,
+  gtk-layer-shell,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "sirula";
   version = "unstable-2021-10-12";
@@ -19,14 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "175rl09jmnj8pd5isyp2chnn66vdz1c16fgqhnjsxvbcasmn8vdj";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ gtk3 gtk-layer-shell ];
+  buildInputs = [gtk3 gtk-layer-shell];
 
   meta = with lib; {
     description = "Simple app launcher for wayland written in rust";
     homepage = "https://github.com/DorianRudolph/sirula";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ twitchyliquid64 ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [twitchyliquid64];
   };
 }

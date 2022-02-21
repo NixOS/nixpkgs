@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scikit-learn
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scikit-learn,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "seqeval";
   version = "1.2.2";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "A Python framework for sequence labeling evaluation";
     homepage = "https://github.com/chakki-works/seqeval";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

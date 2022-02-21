@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, freezegun
-, numpy
-, py
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  freezegun,
+  numpy,
+  py,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pypytools";
   version = "0.6.2";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Collection of tools to use PyPy-specific features";
     homepage = "https://github.com/antocuni/pypytools";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

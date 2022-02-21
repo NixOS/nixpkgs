@@ -1,18 +1,19 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scikitimage
-, openjpeg
-, procps
-, pytestCheckHook
-, contextlib2
-, mock
-, importlib-resources
-, isPy27
-, lxml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scikitimage,
+  openjpeg,
+  procps,
+  pytestCheckHook,
+  contextlib2,
+  mock,
+  importlib-resources,
+  isPy27,
+  lxml,
 }:
-
 buildPythonPackage rec {
   pname = "glymur";
   version = "0.9.3";
@@ -24,9 +25,11 @@ buildPythonPackage rec {
     sha256 = "1xlpax56qg5qqh0s19xidgvv2483sc684zj7rh6zw1m1z9m37drr";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ] ++ lib.optional isPy27 [ contextlib2 mock importlib-resources ];
+  propagatedBuildInputs =
+    [
+      numpy
+    ]
+    ++ lib.optional isPy27 [contextlib2 mock importlib-resources];
 
   checkInputs = [
     scikitimage
@@ -37,7 +40,11 @@ buildPythonPackage rec {
 
   postConfigure = ''
     substituteInPlace glymur/config.py \
-    --replace "path = read_config_file(libname)" "path = '${openjpeg}/lib/lib' + libname + ${if stdenv.isDarwin then "'.dylib'" else "'.so'"}"
+    --replace "path = read_config_file(libname)" "path = '${openjpeg}/lib/lib' + libname + ${
+      if stdenv.isDarwin
+      then "'.dylib'"
+      else "'.so'"
+    }"
   '';
 
   disabledTestPaths = [
@@ -47,11 +54,10 @@ buildPythonPackage rec {
     "tests/test_config.py"
   ];
 
-
   meta = with lib; {
     description = "Tools for accessing JPEG2000 files";
     homepage = "https://github.com/quintusdias/glymur";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

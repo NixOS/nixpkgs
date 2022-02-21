@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, importlib-metadata
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  importlib-metadata,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "freebox-api";
   version = "0.0.10";
@@ -35,20 +35,22 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs =
+    [
+      aiohttp
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [importlib-metadata];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "freebox_api" ];
+  pythonImportsCheck = ["freebox_api"];
 
   meta = with lib; {
     description = "Python module to interact with the Freebox OS API";
     homepage = "https://github.com/hacf-fr/freebox-api";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

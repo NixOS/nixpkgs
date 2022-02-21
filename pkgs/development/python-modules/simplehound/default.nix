@@ -1,12 +1,12 @@
-{ lib
-, requests
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests-mock
+{
+  lib,
+  requests,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "simplehound";
   version = "0.6";
@@ -19,19 +19,19 @@ buildPythonPackage rec {
     sha256 = "1b5m3xjmk0l6ynf0yvarplsfsslgklalfcib7sikxg3v5hiv9qwh";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
   checkInputs = [
     requests-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "simplehound" ];
+  pythonImportsCheck = ["simplehound"];
 
   meta = with lib; {
     description = "Python API for Sighthound";
     homepage = "https://github.com/robmarkcole/simplehound";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

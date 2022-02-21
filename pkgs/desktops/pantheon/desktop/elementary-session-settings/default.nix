@@ -1,29 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, desktop-file-utils
-, pkg-config
-, writeScript
-, gnome-keyring
-, gnome-session
-, wingpanel
-, orca
-, onboard
-, elementary-default-settings
-, gnome-settings-daemon
-, runtimeShell
-, writeText
-, meson
-, ninja
-}:
-
-let
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  desktop-file-utils,
+  pkg-config,
+  writeScript,
+  gnome-keyring,
+  gnome-session,
+  wingpanel,
+  orca,
+  onboard,
+  elementary-default-settings,
+  gnome-settings-daemon,
+  runtimeShell,
+  writeText,
+  meson,
+  ninja,
+}: let
   #
   # ─── ENSURES PLANK GETS ELEMENTARY'S DEFAULT DOCKITEMS ────────────────────────────
   #
-
   #
   # Upstream relies on /etc/skel to initiate a new users home directory with plank's dockitems.
   #
@@ -31,7 +28,6 @@ let
   # them. We then use a xdg autostart and initalize it during the "EarlyInitialization" phase of a gnome session
   # which is most appropriate for installing files into $HOME.
   #
-
   dockitems-script = writeScript "dockitems-script" ''
     #!${runtimeShell}
 
@@ -85,74 +81,72 @@ let
     DesktopNames=Pantheon
     Type=Application
   '';
-
 in
+  stdenv.mkDerivation rec {
+    pname = "elementary-session-settings";
+    version = "6.0.0";
 
-stdenv.mkDerivation rec {
-  pname = "elementary-session-settings";
-  version = "6.0.0";
-
-  src = fetchFromGitHub {
-    owner = "elementary";
-    repo = "session-settings";
-    rev = version;
-    sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
-  };
-
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-  ];
-
-  buildInputs = [
-    gnome-keyring
-    gnome-settings-daemon
-    onboard
-    orca
-  ];
-
-  mesonFlags = [
-    "-Dmimeapps-list=false"
-    "-Dfallback-session=GNOME"
-    "-Ddetect-program-prefixes=true"
-    "--sysconfdir=${placeholder "out"}/etc"
-  ];
-
-  postInstall = ''
-    # our mimeapps patched from upstream to exclude:
-    # * evince.desktop -> org.gnome.Evince.desktop
-    mkdir -p $out/share/applications
-    cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
-
-    # instantiates pantheon's dockitems
-    cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
-
-    # script `Exec` to start pantheon
-    mkdir -p $out/libexec
-    substitute ${executable} $out/libexec/pantheon --subst-var out
-    chmod +x $out/libexec/pantheon
-
-    # absolute path patched xsession
-    substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
-  '';
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
+    src = fetchFromGitHub {
+      owner = "elementary";
+      repo = "session-settings";
+      rev = version;
+      sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
     };
 
-    providedSessions = [
-      "pantheon"
+    nativeBuildInputs = [
+      desktop-file-utils
+      meson
+      ninja
+      pkg-config
     ];
-  };
 
-  meta = with lib; {
-    description = "Session settings for elementary";
-    homepage = "https://github.com/elementary/session-settings";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
-  };
-}
+    buildInputs = [
+      gnome-keyring
+      gnome-settings-daemon
+      onboard
+      orca
+    ];
+
+    mesonFlags = [
+      "-Dmimeapps-list=false"
+      "-Dfallback-session=GNOME"
+      "-Ddetect-program-prefixes=true"
+      "--sysconfdir=${placeholder "out"}/etc"
+    ];
+
+    postInstall = ''
+      # our mimeapps patched from upstream to exclude:
+      # * evince.desktop -> org.gnome.Evince.desktop
+      mkdir -p $out/share/applications
+      cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
+
+      # instantiates pantheon's dockitems
+      cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
+
+      # script `Exec` to start pantheon
+      mkdir -p $out/libexec
+      substitute ${executable} $out/libexec/pantheon --subst-var out
+      chmod +x $out/libexec/pantheon
+
+      # absolute path patched xsession
+      substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
+    '';
+
+    passthru = {
+      updateScript = nix-update-script {
+        attrPath = "pantheon.${pname}";
+      };
+
+      providedSessions = [
+        "pantheon"
+      ];
+    };
+
+    meta = with lib; {
+      description = "Session settings for elementary";
+      homepage = "https://github.com/elementary/session-settings";
+      license = licenses.gpl2Plus;
+      platforms = platforms.linux;
+      maintainers = teams.pantheon.members;
+    };
+  }

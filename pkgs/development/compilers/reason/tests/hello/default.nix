@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, reason }:
-
+{
+  lib,
+  buildDunePackage,
+  reason,
+}:
 buildDunePackage rec {
   pname = "helloreason";
   version = "0.0.1";

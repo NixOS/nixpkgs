@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "speedread";
   version = "unstable-2016-09-21";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h94jx3v18fdlc64lfmj2g5x63fjyqb8c56k5lihl7bva0xgdkxd";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   installPhase = ''
     install -m755 -D speedread $out/bin/speedread
@@ -28,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.oxij ];
+    maintainers = [maintainers.oxij];
   };
 }

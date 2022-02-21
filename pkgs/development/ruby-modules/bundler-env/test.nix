@@ -1,8 +1,14 @@
-{ callPackage, test, stubs, should}:
-let
-  bundlerEnv = callPackage ./default.nix stubs // {
-    basicEnv = callPackage ../bundled-common stubs;
-  };
+{
+  callPackage,
+  test,
+  stubs,
+  should,
+}: let
+  bundlerEnv =
+    callPackage ./default.nix stubs
+    // {
+      basicEnv = callPackage ../bundled-common stubs;
+    };
 
   justName = bundlerEnv {
     name = "test-0.1.2";
@@ -23,7 +29,7 @@ in
     })
     (test.run "bundlerEnv { pname }" pnamed
     [
-      (should.haveKeys [ "name" "env" "postBuild" ])
+      (should.haveKeys ["name" "env" "postBuild"])
       {
         name = should.equal "test-0.1.2";
         env = should.beASet;

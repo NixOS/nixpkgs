@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, py4j
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  py4j,
 }:
-
 buildPythonPackage rec {
   pname = "pyspark";
   version = "3.2.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Python bindings for Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
     license = licenses.asl20;
-    maintainers = [ maintainers.shlevy ];
+    maintainers = [maintainers.shlevy];
   };
 }

@@ -1,23 +1,28 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.dockerRegistry;
 
-  blobCache = if cfg.enableRedisCache
+  blobCache =
+    if cfg.enableRedisCache
     then "redis"
     else "inmemory";
 
   registryConfig = {
-    version =  "0.1";
+    version = "0.1";
     log.fields.service = "registry";
-    storage = {
-      cache.blobdescriptor = blobCache;
-      delete.enabled = cfg.enableDelete;
-    } // (if cfg.storagePath != null
-          then { filesystem.rootdirectory = cfg.storagePath; }
-          else {});
+    storage =
+      {
+        cache.blobdescriptor = blobCache;
+        delete.enabled = cfg.enableDelete;
+      }
+      // (if cfg.storagePath != null
+      then {filesystem.rootdirectory = cfg.storagePath;}
+      else {});
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
@@ -44,7 +49,6 @@ let
   };
 
   configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
-
 in {
   options.services.dockerRegistry = {
     enable = mkEnableOption "Docker Registry";
@@ -115,8 +119,8 @@ in {
   config = mkIf cfg.enable {
     systemd.services.docker-registry = {
       description = "Docker Container Registry";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       script = ''
         ${pkgs.docker-distribution}/bin/registry serve ${configFile}
       '';
@@ -146,11 +150,13 @@ in {
 
     users.users.docker-registry =
       (if cfg.storagePath != null
-      then {
-        createHome = true;
-        home = cfg.storagePath;
-      }
-      else {}) // {
+      then
+        {
+          createHome = true;
+          home = cfg.storagePath;
+        }
+      else {})
+      // {
         group = "docker-registry";
         isSystemUser = true;
       };

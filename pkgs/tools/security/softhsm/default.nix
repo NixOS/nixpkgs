@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl, botan2, libobjc, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  botan2,
+  libobjc,
+  Security,
+}:
 stdenv.mkDerivation rec {
-
   pname = "softhsm";
   version = "2.6.1";
 
@@ -15,12 +20,12 @@ stdenv.mkDerivation rec {
     "--with-botan=${botan2}"
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
-    ];
+  ];
 
   propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ libobjc Security ];
+    lib.optionals stdenv.isDarwin [libobjc Security];
 
-  buildInputs = [ botan2 ];
+  buildInputs = [botan2];
 
   postInstall = "rm -rf $out/var";
 
@@ -39,7 +44,7 @@ stdenv.mkDerivation rec {
       programme of The Commons Conservancy.
     ";
     license = licenses.bsd2;
-    maintainers = [ maintainers.leenaars ];
+    maintainers = [maintainers.leenaars];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,9 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
-
+{
+  lib,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "simplejson";
   namespace = "script.module.simplejson";

@@ -1,36 +1,63 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, libX11, glfw, glew, fftwFloat, volk, AppKit
-# Sources
-, airspy_source ? true, airspy
-, airspyhf_source ? true, airspyhf
-, bladerf_source ? false, libbladeRF
-, file_source ? true
-, hackrf_source ? true, hackrf
-, limesdr_source ? false, limesuite
-, sddc_source ? false
-, rtl_sdr_source ? true, librtlsdr, libusb1
-, rtl_tcp_source ? true
-, sdrplay_source ? false, sdrplay
-, soapy_source ? true, soapysdr
-, spyserver_source ? true
-, plutosdr_source ? stdenv.isLinux, libiio, libad9361
-# Sinks
-, audio_sink ? true, rtaudio
-, portaudio_sink ? false, portaudio
-, network_sink ? true
-# Decoders
-, falcon9_decoder ? false
-, m17_decoder ? false, codec2
-, meteor_demodulator ? true
-, radio ? true
-, weather_sat_decoder ? true
-# Misc
-, discord_presence ? true
-, frequency_manager ? true
-, recorder ? true
-, rigctl_server ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libX11,
+  glfw,
+  glew,
+  fftwFloat,
+  volk,
+  AppKit
+  # Sources
+  ,
+  airspy_source ? true,
+  airspy,
+  airspyhf_source ? true,
+  airspyhf,
+  bladerf_source ? false,
+  libbladeRF,
+  file_source ? true,
+  hackrf_source ? true,
+  hackrf,
+  limesdr_source ? false,
+  limesuite,
+  sddc_source ? false,
+  rtl_sdr_source ? true,
+  librtlsdr,
+  libusb1,
+  rtl_tcp_source ? true,
+  sdrplay_source ? false,
+  sdrplay,
+  soapy_source ? true,
+  soapysdr,
+  spyserver_source ? true,
+  plutosdr_source ? stdenv.isLinux,
+  libiio,
+  libad9361
+  # Sinks
+  ,
+  audio_sink ? true,
+  rtaudio,
+  portaudio_sink ? false,
+  portaudio,
+  network_sink ? true
+  # Decoders
+  ,
+  falcon9_decoder ? false,
+  m17_decoder ? false,
+  codec2,
+  meteor_demodulator ? true,
+  radio ? true,
+  weather_sat_decoder ? true
+  # Misc
+  ,
+  discord_presence ? true,
+  frequency_manager ? true,
+  recorder ? true,
+  rigctl_server ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sdrpp";
   version = "1.0.4";
@@ -42,7 +69,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-g9tpWvVRMXRhPfgvOeJhX6IMouF9+tLUr9wo5r35i/c=";
   };
 
-  patches = [ ./runtime-prefix.patch ];
+  patches = [./runtime-prefix.patch];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -52,9 +79,10 @@ stdenv.mkDerivation rec {
       --replace "codec2.h" "codec2/codec2.h"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ glfw glew fftwFloat volk ]
+  buildInputs =
+    [glfw glew fftwFloat volk]
     ++ lib.optional stdenv.isDarwin AppKit
     ++ lib.optional stdenv.isLinux libX11
     ++ lib.optional airspy_source airspy
@@ -62,15 +90,19 @@ stdenv.mkDerivation rec {
     ++ lib.optional bladerf_source libbladeRF
     ++ lib.optional hackrf_source hackrf
     ++ lib.optional limesdr_source limesuite
-    ++ lib.optionals rtl_sdr_source [ librtlsdr libusb1 ]
+    ++ lib.optionals rtl_sdr_source [librtlsdr libusb1]
     ++ lib.optional sdrplay_source sdrplay
     ++ lib.optional soapy_source soapysdr
-    ++ lib.optionals plutosdr_source [ libiio libad9361 ]
+    ++ lib.optionals plutosdr_source [libiio libad9361]
     ++ lib.optional audio_sink rtaudio
     ++ lib.optional portaudio_sink portaudio
     ++ lib.optional m17_decoder codec2;
 
-  cmakeFlags = lib.mapAttrsToList (k: v: "-D${k}=${if v then "ON" else "OFF"}") {
+  cmakeFlags = lib.mapAttrsToList (k: v: "-D${k}=${
+    if v
+    then "ON"
+    else "OFF"
+  }") {
     OPT_BUILD_AIRSPY_SOURCE = airspy_source;
     OPT_BUILD_AIRSPYHF_SOURCE = airspyhf_source;
     OPT_BUILD_BLADERF_SOURCE = bladerf_source;
@@ -111,6 +143,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AlexandreRouma/SDRPlusPlus";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
   };
 }

@@ -1,9 +1,11 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 # libhdhomerun requires UDP port 65001 to be open in order to detect and communicate with tuners.
 # If your firewall is enabled, make sure to have something like:
 #   networking.firewall.allowedUDPPorts = [ 65001 ];
-
 stdenv.mkDerivation rec {
   pname = "libhdhomerun";
   version = "20210624";
@@ -30,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.silicondust.com/support/linux";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.titanous ];
+    maintainers = [maintainers.titanous];
   };
 }

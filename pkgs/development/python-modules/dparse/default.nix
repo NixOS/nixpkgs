@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, toml
-, pyyaml
-, packaging
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  toml,
+  pyyaml,
+  packaging,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "dparse";
   version = "0.5.1";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "A parser for Python dependency files";
     homepage = "https://github.com/pyupio/dparse";
     license = licenses.mit;
-    maintainers = with maintainers; [ thomasdesr ];
+    maintainers = with maintainers; [thomasdesr];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, ocl-icd, vulkan-loader, linuxPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  ocl-icd,
+  vulkan-loader,
+  linuxPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "geekbench";
   version = "5.4.4";
@@ -12,7 +19,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib
@@ -27,7 +34,7 @@ stdenv.mkDerivation rec {
 
     for f in geekbench5 geekbench_x86_64 ; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) $out/bin/$f
-      wrapProgram $out/bin/$f --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/lib/"
+      wrapProgram $out/bin/$f --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [stdenv.cc.cc.lib]}:$out/lib/"
     done
   '';
 
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform benchmark";
     homepage = "https://geekbench.com/";
     license = licenses.unfree;
-    maintainers = [ maintainers.michalrus ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers.michalrus];
+    platforms = ["x86_64-linux"];
   };
 }

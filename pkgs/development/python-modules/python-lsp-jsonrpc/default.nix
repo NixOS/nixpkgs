@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, ujson
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  ujson,
 }:
-
 buildPythonPackage rec {
   pname = "python-lsp-jsonrpc";
   version = "1.0.0";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
       --replace "--cov pylsp_jsonrpc --cov test" ""
   '';
 
-  pythonImportsCheck = [ "pylsp_jsonrpc" ];
+  pythonImportsCheck = ["pylsp_jsonrpc"];
 
   meta = with lib; {
     description = "Python server implementation of the JSON RPC 2.0 protocol.";
     homepage = "https://github.com/python-lsp/python-lsp-jsonrpc";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

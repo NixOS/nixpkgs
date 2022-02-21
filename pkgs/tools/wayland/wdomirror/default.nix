@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayland
-, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayland,
+  wayland-protocols,
 }:
-
 stdenv.mkDerivation {
   pname = "wdomirror";
   version = "unstable-2021-01-08";
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
     sha256 = "1fz0sajhdjqas3l6mpik8w1k15wbv65hgh9r9vdgfqvw5l6cx7jv";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
+  nativeBuildInputs = [meson ninja pkg-config wayland-protocols];
 
-  buildInputs = [ wayland ];
+  buildInputs = [wayland];
 
   installPhase = ''
     runHook preInstall
@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     description = "Mirrors an output of a wlroots compositor to a window";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jpas ];
+    maintainers = with maintainers; [jpas];
   };
 }

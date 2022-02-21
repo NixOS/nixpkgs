@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchCrate, stdenv, Security }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-supply-chain";
   version = "0.2.0";
@@ -17,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     description = "Gather author, contributor and publisher data on crates in your dependency graph";
     homepage = "https://github.com/rust-secure-code/cargo-supply-chain";
     changelog = "https://github.com/rust-secure-code/cargo-supply-chain/blob/master/CHANGELOG.md";
-    license = with licenses; [ asl20 mit zlib ]; # any of three
-    maintainers = with maintainers; [ figsoda ];
+    license = with licenses; [asl20 mit zlib]; # any of three
+    maintainers = with maintainers; [figsoda];
   };
 }

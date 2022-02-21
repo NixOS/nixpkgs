@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "hugo";
   version = "0.92.2";
@@ -17,11 +21,11 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  tags = [ "extended" ];
+  tags = ["extended"];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     $out/bin/hugo gen man
@@ -36,6 +40,6 @@ buildGoModule rec {
     description = "A fast and modern static website engine";
     homepage = "https://gohugo.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ schneefux Br1ght0ne Frostman ];
+    maintainers = with maintainers; [schneefux Br1ght0ne Frostman];
   };
 }

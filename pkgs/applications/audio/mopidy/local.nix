@@ -1,8 +1,8 @@
-{ lib
-, mopidy
-, python3Packages
+{
+  lib,
+  mopidy,
+  python3Packages,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Local";
   version = "3.2.1";
@@ -25,6 +25,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/mopidy/mopidy-local";
     description = "Mopidy extension for playing music from your local music archive";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ruuda ];
+    maintainers = with maintainers; [ruuda];
   };
 }

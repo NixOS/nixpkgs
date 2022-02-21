@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromSourcehut, port ? "1234" }:
-
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  port ? "1234",
+}:
 stdenv.mkDerivation {
   pname = "among-sus-unstable";
   version = "2021-05-19";
@@ -24,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "https://git.sr.ht/~martijnbraam/among-sus";
     description = "Among us, but it's a text adventure";
     license = licenses.agpl3Plus;
-    maintainers = [ maintainers.eyjhb ];
+    maintainers = [maintainers.eyjhb];
     platforms = platforms.unix;
   };
 }

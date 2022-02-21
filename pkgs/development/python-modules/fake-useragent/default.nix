@@ -1,5 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, six, pytest }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  six,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "fake-useragent";
   version = "0.1.11";
@@ -9,14 +14,14 @@ buildPythonPackage rec {
     sha256 = "0dfz3bpmjmaxlhda6hfgsac7afb65pljibi8zkp9gc0ffn5rj161";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   meta = with lib; {
     description = "Up to date simple useragent faker with real world database";
     homepage = "https://github.com/hellysmile/fake-useragent";
     license = licenses.asl20;
-    maintainers = with maintainers; [ evanjs ];
+    maintainers = with maintainers; [evanjs];
   };
 }

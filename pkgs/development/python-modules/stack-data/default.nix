@@ -1,18 +1,18 @@
-{ asttokens
-, buildPythonPackage
-, executing
-, fetchFromGitHub
-, git
-, lib
-, littleutils
-, pure-eval
-, pygments
-, pytestCheckHook
-, setuptools-scm
-, toml
-, typeguard
+{
+  asttokens,
+  buildPythonPackage,
+  executing,
+  fetchFromGitHub,
+  git,
+  lib,
+  littleutils,
+  pure-eval,
+  pygments,
+  pytestCheckHook,
+  setuptools-scm,
+  toml,
+  typeguard,
 }:
-
 buildPythonPackage rec {
   pname = "stack-data";
   version = "0.1.0";
@@ -51,12 +51,12 @@ buildPythonPackage rec {
     "test_example"
   ];
 
-  pythonImportsCheck = [ "stack_data" ];
+  pythonImportsCheck = ["stack_data"];
 
   meta = with lib; {
     description = "Extract data from stack frames and tracebacks";
     homepage = "https://github.com/alexmojaki/stack_data/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

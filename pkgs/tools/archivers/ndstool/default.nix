@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+}:
 stdenv.mkDerivation rec {
   pname = "ndstool";
   version = "2.1.2";
@@ -11,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "0isnm0is5k6dgi2n2c3mysyr5hpwikp5g0s3ix7ms928z04l8ccm";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [autoconf automake];
 
   preConfigure = "./autogen.sh";
 
   meta = {
     homepage = "https://github.com/devkitPro/ndstool";
     description = "A tool to unpack and repack nds rom";
-    maintainers = [ lib.maintainers.marius851000 ];
+    maintainers = [lib.maintainers.marius851000];
     license = lib.licenses.gpl3;
   };
 }

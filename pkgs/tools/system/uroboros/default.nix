@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "uroboros";
   version = "20210304-${lib.strings.substring 0 7 rev}";
@@ -20,7 +20,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool for monitoring and profiling single processes";
     homepage = "https://github.com/evilsocket/uroboros";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cryptography
-, futures ? null
-, pyopenssl
-, service-identity
-, pytestCheckHook
-, idna
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  cryptography,
+  futures ? null,
+  pyopenssl,
+  service-identity,
+  pytestCheckHook,
+  idna,
 }:
-
 buildPythonPackage rec {
   pname = "trustme";
   version = "0.9.0";
@@ -26,12 +26,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    cryptography
-    idna
-  ] ++ lib.optionals (!isPy3k) [
-    futures
-  ];
+  propagatedBuildInputs =
+    [
+      cryptography
+      idna
+    ]
+    ++ lib.optionals (!isPy3k) [
+      futures
+    ];
 
   # aarch64-darwin forbids W+X memory, but this tests depends on it:
   # * https://github.com/pyca/pyopenssl/issues/873
@@ -42,12 +44,12 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "trustme" ];
+  pythonImportsCheck = ["trustme"];
 
   meta = with lib; {
     description = "High quality TLS certs while you wait, for the discerning tester";
     homepage = "https://github.com/python-trio/trustme";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ catern ];
+    license = with licenses; [mit asl20];
+    maintainers = with maintainers; [catern];
   };
 }

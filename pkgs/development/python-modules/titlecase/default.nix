@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, regex
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "titlecase";
   version = "2.3";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Python library to capitalize strings as specified by the New York Times";
     homepage = "https://github.com/ppannuto/python-titlecase";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

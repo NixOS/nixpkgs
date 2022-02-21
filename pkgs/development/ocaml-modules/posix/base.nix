@@ -1,7 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, ctypes, integers
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ctypes,
+  integers,
 }:
-
 buildDunePackage rec {
   pname = "posix-base";
   version = "2.0.0";
@@ -15,12 +18,12 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [ ctypes integers ];
+  propagatedBuildInputs = [ctypes integers];
 
   meta = {
     homepage = "https://www.liquidsoap.info/ocaml-posix/";
     description = "Base module for the posix bindings";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

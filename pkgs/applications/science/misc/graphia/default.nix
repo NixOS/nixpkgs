@@ -1,7 +1,13 @@
-{ stdenv, lib, cmake, fetchFromGitHub
-, wrapQtAppsHook, qtbase, qtquickcontrols2, qtgraphicaleffects
+{
+  stdenv,
+  lib,
+  cmake,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qtquickcontrols2,
+  qtgraphicaleffects,
 }:
-
 stdenv.mkDerivation rec {
   pname = "graphia";
   version = "2.2";
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "A visualisation tool for the creation and analysis of graphs.";
     homepage = "https://graphia.app";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.bgamari ];
+    maintainers = [maintainers.bgamari];
     platforms = platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/graphia.x86_64-darwin
   };

@@ -1,12 +1,10 @@
-{ system ? builtins.currentSystem,
+{
+  system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. {inherit system config;},
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
-
-let
+with import ../lib/testing-python.nix {inherit system pkgs;};
+with pkgs.lib; let
   initMachine = ''
     start_all()
     machine.wait_for_unit("rspamd.service")
@@ -20,34 +18,34 @@ let
         '[[ "$(stat -c %a ${socket})" == "${mode}" ]]',
     )
   '';
-  simple = name: enableIPv6: makeTest {
-    name = "rspamd-${name}";
-    machine = {
-      services.rspamd.enable = true;
-      networking.enableIPv6 = enableIPv6;
+  simple = name: enableIPv6:
+    makeTest {
+      name = "rspamd-${name}";
+      machine = {
+        services.rspamd.enable = true;
+        networking.enableIPv6 = enableIPv6;
+      };
+      testScript = ''
+        start_all()
+        machine.wait_for_unit("multi-user.target")
+        machine.wait_for_open_port(11334)
+        machine.wait_for_unit("rspamd.service")
+        machine.succeed("id rspamd >/dev/null")
+        ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "660"}
+        machine.sleep(10)
+        machine.log(machine.succeed("cat /etc/rspamd/rspamd.conf"))
+        machine.log(
+            machine.succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf")
+        )
+        machine.log(machine.succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"))
+        machine.log(machine.succeed("systemctl cat rspamd.service"))
+        machine.log(machine.succeed("curl http://localhost:11334/auth"))
+        machine.log(machine.succeed("curl http://127.0.0.1:11334/auth"))
+        ${optionalString enableIPv6 ''machine.log(machine.succeed("curl http://[::1]:11334/auth"))''}
+        # would not reformat
+      '';
     };
-    testScript = ''
-      start_all()
-      machine.wait_for_unit("multi-user.target")
-      machine.wait_for_open_port(11334)
-      machine.wait_for_unit("rspamd.service")
-      machine.succeed("id rspamd >/dev/null")
-      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "660" }
-      machine.sleep(10)
-      machine.log(machine.succeed("cat /etc/rspamd/rspamd.conf"))
-      machine.log(
-          machine.succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf")
-      )
-      machine.log(machine.succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"))
-      machine.log(machine.succeed("systemctl cat rspamd.service"))
-      machine.log(machine.succeed("curl http://localhost:11334/auth"))
-      machine.log(machine.succeed("curl http://127.0.0.1:11334/auth"))
-      ${optionalString enableIPv6 ''machine.log(machine.succeed("curl http://[::1]:11334/auth"))''}
-      # would not reformat
-    '';
-  };
-in
-{
+in {
   simple = simple "simple" true;
   ipv4only = simple "ipv4only" false;
   deprecated = makeTest {
@@ -55,26 +53,30 @@ in
     machine = {
       services.rspamd = {
         enable = true;
-        workers.normal.bindSockets = [{
-          socket = "/run/rspamd/rspamd.sock";
-          mode = "0600";
-          owner = "rspamd";
-          group = "rspamd";
-        }];
-        workers.controller.bindSockets = [{
-          socket = "/run/rspamd/rspamd-worker.sock";
-          mode = "0666";
-          owner = "rspamd";
-          group = "rspamd";
-        }];
+        workers.normal.bindSockets = [
+          {
+            socket = "/run/rspamd/rspamd.sock";
+            mode = "0600";
+            owner = "rspamd";
+            group = "rspamd";
+          }
+        ];
+        workers.controller.bindSockets = [
+          {
+            socket = "/run/rspamd/rspamd-worker.sock";
+            mode = "0666";
+            owner = "rspamd";
+            group = "rspamd";
+          }
+        ];
       };
     };
 
     testScript = ''
       ${initMachine}
       machine.wait_for_file("/run/rspamd/rspamd.sock")
-      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "600" }
-      ${checkSocket "/run/rspamd/rspamd-worker.sock" "rspamd" "rspamd" "666" }
+      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "600"}
+      ${checkSocket "/run/rspamd/rspamd-worker.sock" "rspamd" "rspamd" "666"}
       machine.log(machine.succeed("cat /etc/rspamd/rspamd.conf"))
       machine.log(
           machine.succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf")
@@ -94,21 +96,25 @@ in
     machine = {
       services.rspamd = {
         enable = true;
-        workers.normal.bindSockets = [{
-          socket = "/run/rspamd/rspamd.sock";
-          mode = "0600";
-          owner = "rspamd";
-          group = "rspamd";
-        }];
-        workers.controller.bindSockets = [{
-          socket = "/run/rspamd/rspamd-worker.sock";
-          mode = "0666";
-          owner = "rspamd";
-          group = "rspamd";
-        }];
+        workers.normal.bindSockets = [
+          {
+            socket = "/run/rspamd/rspamd.sock";
+            mode = "0600";
+            owner = "rspamd";
+            group = "rspamd";
+          }
+        ];
+        workers.controller.bindSockets = [
+          {
+            socket = "/run/rspamd/rspamd-worker.sock";
+            mode = "0666";
+            owner = "rspamd";
+            group = "rspamd";
+          }
+        ];
         workers.controller2 = {
           type = "controller";
-          bindSockets = [ "0.0.0.0:11335" ];
+          bindSockets = ["0.0.0.0:11335"];
           extraConfig = ''
             static_dir = "''${WWWDIR}";
             secure_ip = null;
@@ -121,8 +127,8 @@ in
     testScript = ''
       ${initMachine}
       machine.wait_for_file("/run/rspamd/rspamd.sock")
-      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "600" }
-      ${checkSocket "/run/rspamd/rspamd-worker.sock" "rspamd" "rspamd" "666" }
+      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "600"}
+      ${checkSocket "/run/rspamd/rspamd-worker.sock" "rspamd" "rspamd" "666"}
       machine.log(machine.succeed("cat /etc/rspamd/rspamd.conf"))
       machine.log(
           machine.succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf")
@@ -170,7 +176,8 @@ in
       services.rspamd = {
         enable = true;
         locals = {
-          "antivirus.conf" = mkIf false { text = ''
+          "antivirus.conf" = mkIf false {
+            text = ''
               clamav {
                 action = "reject";
                 symbol = "CLAM_VIRUS";
@@ -178,7 +185,8 @@ in
                 log_clean = true;
                 servers = "/run/clamav/clamd.ctl";
               }
-            '';};
+            '';
+          };
           "redis.conf" = {
             enable = false;
             text = ''
@@ -232,7 +240,7 @@ in
       machine.fail("cat /etc/rspamd/local.d/redis.conf >&2")
       # Verify that antivirus.conf was not written
       machine.fail("cat /etc/rspamd/local.d/antivirus.conf >&2")
-      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "660" }
+      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "660"}
       machine.log(
           machine.succeed("curl --unix-socket /run/rspamd/rspamd.sock http://localhost/ping")
       )
@@ -257,7 +265,7 @@ in
   postfixIntegration = makeTest {
     name = "rspamd-postfix-integration";
     machine = {
-      environment.systemPackages = with pkgs; [ msmtp ];
+      environment.systemPackages = with pkgs; [msmtp];
       environment.etc."tests/gtube.eml".text = ''
         From: Sheep1<bah@example.com>
         To: Sheep2<tester@example.com>
@@ -292,7 +300,7 @@ in
       ${initMachine}
       machine.wait_for_open_port(11334)
       machine.wait_for_open_port(25)
-      ${checkSocket "/run/rspamd/rspamd-milter.sock" "rspamd" "postfix" "660" }
+      ${checkSocket "/run/rspamd/rspamd-milter.sock" "rspamd" "postfix" "660"}
       machine.log(machine.succeed("rspamc -h 127.0.0.1:11334 stat"))
       machine.log(
           machine.succeed(

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, minikube }:
-
+{
+  lib,
+  buildGoModule,
+  minikube,
+}:
 buildGoModule rec {
   inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256 doCheck;
 
@@ -17,7 +20,7 @@ buildGoModule rec {
     homepage = "https://minikube.sigs.k8s.io/docs/drivers/hyperkit";
     description = "HyperKit driver for docker-machine";
     license = licenses.asl20;
-    maintainers = with maintainers; [ atkinschang ];
+    maintainers = with maintainers; [atkinschang];
     platforms = platforms.darwin;
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, dtc, libusb1, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  dtc,
+  libusb1,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "sunxi-tools";
   version = "unstable-2021-08-29";
@@ -11,20 +18,20 @@ stdenv.mkDerivation rec {
     sha256 = "1gwamb64vr45iy2ry7jp1k3zc03q5sydmdflrbwr892f0ijh2wjl";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dtc libusb1 zlib ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [dtc libusb1 zlib];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
-  buildFlags = [ "tools" "misc" ];
+  buildFlags = ["tools" "misc"];
 
-  installTargets = [ "install-tools" "install-misc" ];
+  installTargets = ["install-tools" "install-misc"];
 
   meta = with lib; {
     description = "Tools for Allwinner SoC devices";
     homepage = "http://linux-sunxi.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elitak ];
+    maintainers = with maintainers; [elitak];
   };
 }

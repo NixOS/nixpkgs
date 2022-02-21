@@ -1,25 +1,24 @@
-{ lib, gccStdenv, fetchzip
-, boost
-, cmake
-, coreutils
-, fetchpatch
-, ncurses
-, python3
-, z3Support ? true
-, z3 ? null
-, cvc4Support ? gccStdenv.isLinux
-, cvc4 ? null
-, cln ? null
-, gmp ? null
+{
+  lib,
+  gccStdenv,
+  fetchzip,
+  boost,
+  cmake,
+  coreutils,
+  fetchpatch,
+  ncurses,
+  python3,
+  z3Support ? true,
+  z3 ? null,
+  cvc4Support ? gccStdenv.isLinux,
+  cvc4 ? null,
+  cln ? null,
+  gmp ? null,
 }:
-
 # compiling source/libsmtutil/CVC4Interface.cpp breaks on clang on Darwin,
 # general commandline tests fail at abiencoderv2_no_warning/ on clang on NixOS
-
 assert z3Support -> z3 != null && lib.versionAtLeast z3.version "4.6.0";
-assert cvc4Support -> cvc4 != null && cln != null && gmp != null;
-
-let
+assert cvc4Support -> cvc4 != null && cln != null && gmp != null; let
   jsoncppVersion = "1.9.3";
   jsoncppUrl = "https://github.com/open-source-parsers/jsoncpp/archive/${jsoncppVersion}.tar.gz";
   jsoncpp = fetchzip {
@@ -51,19 +50,23 @@ let
         --replace "${range3Url}" ${range3}
     '';
 
-    cmakeFlags = [
-      "-DBoost_USE_STATIC_LIBS=OFF"
-    ] ++ lib.optionals (!z3Support) [
-      "-DUSE_Z3=OFF"
-    ] ++ lib.optionals (!cvc4Support) [
-      "-DUSE_CVC4=OFF"
-    ];
+    cmakeFlags =
+      [
+        "-DBoost_USE_STATIC_LIBS=OFF"
+      ]
+      ++ lib.optionals (!z3Support) [
+        "-DUSE_Z3=OFF"
+      ]
+      ++ lib.optionals (!cvc4Support) [
+        "-DUSE_CVC4=OFF"
+      ];
 
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ boost ]
-      ++ lib.optionals z3Support [ z3 ]
-      ++ lib.optionals cvc4Support [ cvc4 cln gmp ];
-    checkInputs = [ ncurses python3 ];
+    nativeBuildInputs = [cmake];
+    buildInputs =
+      [boost]
+      ++ lib.optionals z3Support [z3]
+      ++ lib.optionals cvc4Support [cvc4 cln gmp];
+    checkInputs = [ncurses python3];
 
     # tests take 60+ minutes to complete, only run as part of passthru tests
     doCheck = false;
@@ -91,14 +94,14 @@ let
     '';
 
     passthru.tests = {
-      solcWithTests = solc.overrideAttrs (attrs: { doCheck = true; });
+      solcWithTests = solc.overrideAttrs (attrs: {doCheck = true;});
     };
 
     meta = with lib; {
       description = "Compiler for Ethereum smart contract language Solidity";
       homepage = "https://github.com/ethereum/solidity";
       license = licenses.gpl3;
-      maintainers = with maintainers; [ dbrock akru lionello sifmelcara ];
+      maintainers = with maintainers; [dbrock akru lionello sifmelcara];
     };
   };
 in

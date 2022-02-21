@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, jsonschema
-, pyee
-, tornado
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  jsonschema,
+  pyee,
+  tornado,
+  zeroconf,
 }:
-
 buildPythonPackage rec {
   pname = "webthing";
   version = "0.15.0";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   # no tests are present
   doCheck = false;
-  pythonImportsCheck = [ "webthing" ];
+  pythonImportsCheck = ["webthing"];
 
   meta = with lib; {
     description = "Python implementation of a Web Thing server";
     homepage = "https://github.com/WebThingsIO/webthing-python";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mpl20];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,15 +1,19 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableMinimal ? false
-# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
-# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
-, useMusl ? stdenv.hostPlatform.libc == "musl", musl
-, extraConfig ? ""
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  fetchFromGitLab,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableMinimal ? false
+  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+  ,
+  useMusl ? stdenv.hostPlatform.libc == "musl",
+  musl,
+  extraConfig ? "",
 }:
-
-assert stdenv.hostPlatform.libc == "musl" -> useMusl;
-
-let
+assert stdenv.hostPlatform.libc == "musl" -> useMusl; let
   configParser = ''
     function parseconfig {
         while read LINE; do
@@ -46,109 +50,119 @@ let
   debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
 in
+  stdenv.mkDerivation rec {
+    pname = "busybox";
+    version = "1.34.1";
 
-stdenv.mkDerivation rec {
-  pname = "busybox";
-  version = "1.34.1";
+    # Note to whoever is updating busybox: please verify that:
+    # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
+    # still builds after the update.
+    src = fetchurl {
+      url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
+      sha256 = "0jfm9fik7nv4w21zqdg830pddgkdjmplmna9yjn9ck1lwn4vsps1";
+    };
 
-  # Note to whoever is updating busybox: please verify that:
-  # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
-  # still builds after the update.
-  src = fetchurl {
-    url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "0jfm9fik7nv4w21zqdg830pddgkdjmplmna9yjn9ck1lwn4vsps1";
-  };
+    hardeningDisable =
+      ["format" "pie"]
+      ++ lib.optionals enableStatic ["fortify"];
 
-  hardeningDisable = [ "format" "pie" ]
-    ++ lib.optionals enableStatic [ "fortify" ];
+    patches =
+      [
+        ./busybox-in-store.patch
+      ]
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
-  patches = [
-    ./busybox-in-store.patch
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+    separateDebugInfo = true;
 
-  separateDebugInfo = true;
+    postPatch = "patchShebangs .";
 
-  postPatch = "patchShebangs .";
+    configurePhase = ''
+      export KCONFIG_NOTIMESTAMP=1
+      make ${
+        if enableMinimal
+        then "allnoconfig"
+        else "defconfig"
+      }
 
-  configurePhase = ''
-    export KCONFIG_NOTIMESTAMP=1
-    make ${if enableMinimal then "allnoconfig" else "defconfig"}
+      ${configParser}
 
-    ${configParser}
+      cat << EOF | parseconfig
 
-    cat << EOF | parseconfig
+      CONFIG_PREFIX "$out"
+      CONFIG_INSTALL_NO_USR y
 
-    CONFIG_PREFIX "$out"
-    CONFIG_INSTALL_NO_USR y
+      CONFIG_LFS y
 
-    CONFIG_LFS y
+      # More features for modprobe.
+      ${
+        lib.optionalString (!enableMinimal) ''
+          CONFIG_FEATURE_MODPROBE_BLACKLIST y
+          CONFIG_FEATURE_MODUTILS_ALIAS y
+          CONFIG_FEATURE_MODUTILS_SYMBOLS y
+          CONFIG_MODPROBE_SMALL n
+        ''
+      }
 
-    # More features for modprobe.
-    ${lib.optionalString (!enableMinimal) ''
-      CONFIG_FEATURE_MODPROBE_BLACKLIST y
-      CONFIG_FEATURE_MODUTILS_ALIAS y
-      CONFIG_FEATURE_MODUTILS_SYMBOLS y
-      CONFIG_MODPROBE_SMALL n
-    ''}
+      ${
+        lib.optionalString enableStatic ''
+          CONFIG_STATIC y
+        ''
+      }
 
-    ${lib.optionalString enableStatic ''
-      CONFIG_STATIC y
-    ''}
+      # Use the external mount.cifs program.
+      CONFIG_FEATURE_MOUNT_CIFS n
+      CONFIG_FEATURE_MOUNT_HELPERS y
 
-    # Use the external mount.cifs program.
-    CONFIG_FEATURE_MOUNT_CIFS n
-    CONFIG_FEATURE_MOUNT_HELPERS y
+      # Set paths for console fonts.
+      CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
 
-    # Set paths for console fonts.
-    CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
+      # Bump from 4KB, much faster I/O
+      CONFIG_FEATURE_COPYBUF_KB 64
 
-    # Bump from 4KB, much faster I/O
-    CONFIG_FEATURE_COPYBUF_KB 64
+      # Set the path for the udhcpc script
+      CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
 
-    # Set the path for the udhcpc script
-    CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
+      ${extraConfig}
+      CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
+      ${libcConfig}
+      EOF
 
-    ${extraConfig}
-    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
-    ${libcConfig}
-    EOF
+      make oldconfig
 
-    make oldconfig
+      runHook postConfigure
+    '';
 
-    runHook postConfigure
-  '';
+    postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
+      makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+    '';
 
-  postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
-    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
-  '';
+    makeFlags = ["SKIP_STRIP=y"];
 
-  makeFlags = [ "SKIP_STRIP=y" ];
+    postInstall = ''
+      sed -e '
+      1 a busybox() { '$out'/bin/busybox "$@"; }\
+      logger() { '$out'/bin/logger "$@"; }\
+      ' ${debianDispatcherScript} > ${outDispatchPath}
+      chmod 555 ${outDispatchPath}
+      HOST_PATH=$out/bin patchShebangs --host ${outDispatchPath}
+    '';
 
-  postInstall = ''
-    sed -e '
-    1 a busybox() { '$out'/bin/busybox "$@"; }\
-    logger() { '$out'/bin/logger "$@"; }\
-    ' ${debianDispatcherScript} > ${outDispatchPath}
-    chmod 555 ${outDispatchPath}
-    HOST_PATH=$out/bin patchShebangs --host ${outDispatchPath}
-  '';
+    strictDeps = true;
 
-  strictDeps = true;
+    depsBuildBuild = [buildPackages.stdenv.cc];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+    buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [stdenv.cc.libc stdenv.cc.libc.static];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
+    enableParallelBuilding = true;
 
-  enableParallelBuilding = true;
+    doCheck = false; # tries to access the net
 
-  doCheck = false; # tries to access the net
-
-  meta = with lib; {
-    description = "Tiny versions of common UNIX utilities in a single small executable";
-    homepage = "https://busybox.net/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ TethysSvensson qyliss ];
-    platforms = platforms.linux;
-    priority = 10;
-  };
-}
+    meta = with lib; {
+      description = "Tiny versions of common UNIX utilities in a single small executable";
+      homepage = "https://busybox.net/";
+      license = licenses.gpl2Only;
+      maintainers = with maintainers; [TethysSvensson qyliss];
+      platforms = platforms.linux;
+      priority = 10;
+    };
+  }

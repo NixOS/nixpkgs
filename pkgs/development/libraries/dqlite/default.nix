@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv
-, raft-canonical, sqlite-replication }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  file,
+  libuv,
+  raft-canonical,
+  sqlite-replication,
+}:
 stdenv.mkDerivation rec {
   pname = "dqlite";
   version = "1.9.0";
@@ -12,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zalsvr0vy7632nhm96a29lrfy18iqsmbxpyz2lvq80mrjlbrzsn";
   };
 
-  nativeBuildInputs = [ autoreconfHook file pkg-config ];
+  nativeBuildInputs = [autoreconfHook file pkg-config];
   buildInputs = [
     libuv
     raft-canonical.dev
@@ -24,7 +32,7 @@ stdenv.mkDerivation rec {
   # tests fail
   doCheck = false;
 
-  outputs = [ "dev" "out" ];
+  outputs = ["dev" "out"];
 
   meta = with lib; {
     description = ''
@@ -33,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://dqlite.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ joko wucke13 ];
+    maintainers = with maintainers; [joko wucke13];
     platforms = platforms.linux;
   };
 }

@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchurl, gtk2, glib, pkg-config, libGLU, libGL, wxGTK, libX11, xorgproto
-, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2,
+  glib,
+  pkg-config,
+  libGLU,
+  libGL,
+  wxGTK,
+  libX11,
+  xorgproto,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "fsg";
   version = "4.4";
@@ -11,10 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "1756y01rkvd3f1pkj88jqh83fqcfl2fy0c48mcq53pjzln9ycv8c";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 glib libGLU libGL wxGTK libX11 xorgproto ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gtk2 glib libGLU libGL wxGTK libX11 xorgproto];
 
   preBuild = ''
     sed -e '

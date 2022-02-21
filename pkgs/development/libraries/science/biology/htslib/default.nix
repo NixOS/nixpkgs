@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, zlib, bzip2, xz, curl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  bzip2,
+  xz,
+  curl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "htslib";
   version = "1.14";
@@ -10,13 +18,13 @@ stdenv.mkDerivation rec {
   };
 
   # perl is only used during the check phase.
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [perl];
 
-  buildInputs = [ zlib bzip2 xz curl ];
+  buildInputs = [zlib bzip2 xz curl];
 
-  configureFlags = [ "--enable-libcurl" ]; # optional but strongly recommended
+  configureFlags = ["--enable-libcurl"]; # optional but strongly recommended
 
-  installFlags = [ "prefix=$(out)" ];
+  installFlags = ["prefix=$(out)"];
 
   preCheck = ''
     patchShebangs test/
@@ -31,6 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "http://www.htslib.org/";
     platforms = platforms.unix;
-    maintainers = [ maintainers.mimame ];
+    maintainers = [maintainers.mimame];
   };
 }

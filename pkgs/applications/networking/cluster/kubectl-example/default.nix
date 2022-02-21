@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kubectl-example";
   version = "1.1.0";
@@ -18,6 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/seredot/kubectl-example";
     changelog = "https://github.com/seredot/kubectl-example/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    maintainers = [maintainers.bryanasdev000];
   };
 }

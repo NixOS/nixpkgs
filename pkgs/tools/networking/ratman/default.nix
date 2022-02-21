@@ -1,12 +1,12 @@
-{ lib
-, fetchurl
-, installShellFiles
-, libsodium
-, pkg-config
-, protobuf
-, rustPlatform
+{
+  lib,
+  fetchurl,
+  installShellFiles,
+  libsodium,
+  pkg-config,
+  protobuf,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "ratman";
   version = "0.3.1";
@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1dkfyy1z34qaavyd3f20hrrrb3kjsdfkyzd535xlds9wivgchmd0";
 
-  nativeBuildInputs = [ protobuf pkg-config installShellFiles ];
+  nativeBuildInputs = [protobuf pkg-config installShellFiles];
 
-  cargoBuildFlags = [ "--all-features" "-p" "ratman" ];
+  cargoBuildFlags = ["--all-features" "-p" "ratman"];
   cargoTestFlags = cargoBuildFlags;
 
-  buildInputs = [ libsodium ];
+  buildInputs = [libsodium];
 
   postInstall = ''
     installManPage docs/man/ratmand.1
@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.irde.st/we/irdest";
     platforms = platforms.unix;
     license = licenses.agpl3;
-    maintainers = with maintainers; [ spacekookie yuka ];
+    maintainers = with maintainers; [spacekookie yuka];
   };
 }

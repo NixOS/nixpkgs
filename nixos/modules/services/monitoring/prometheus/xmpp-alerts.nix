@@ -1,17 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.prometheus.xmpp-alerts;
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "prometheus-xmpp-alerts.yml" cfg.settings;
-in
-{
+in {
   imports = [
     (mkRenamedOptionModule
-      [ "services" "prometheus" "xmpp-alerts" "configuration" ]
-      [ "services" "prometheus" "xmpp-alerts" "settings" ])
+    ["services" "prometheus" "xmpp-alerts" "configuration"]
+    ["services" "prometheus" "xmpp-alerts" "settings"])
   ];
 
   options.services.prometheus.xmpp-alerts = {
@@ -31,9 +32,9 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.prometheus-xmpp-alerts = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
+      wants = ["network-online.target"];
       serviceConfig = {
         ExecStart = "${pkgs.prometheus-xmpp-alerts}/bin/prometheus-xmpp-alerts --config ${configFile}";
         Restart = "on-failure";
@@ -47,8 +48,8 @@ in
         ProtectControlGroups = true;
         NoNewPrivileges = true;
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        SystemCallFilter = [ "@system-service" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
+        SystemCallFilter = ["@system-service"];
       };
     };
   };

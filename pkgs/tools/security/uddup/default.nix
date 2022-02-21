@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "uddup";
   version = "0.9.3";
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool for de-duplication URLs";
     homepage = "https://github.com/rotemreiss/uddup";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

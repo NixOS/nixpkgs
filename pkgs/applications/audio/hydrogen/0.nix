@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, alsa-lib
-, boost
-, glib
-, lash
-, libjack2
-, libarchive
-, libsndfile
-, lrdf
-, qt4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  alsa-lib,
+  boost,
+  glib,
+  lash,
+  libjack2,
+  libarchive,
+  libsndfile,
+  lrdf,
+  qt4,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.9.7";
   pname = "hydrogen";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6ycNUcumtAEl/6XbIpW6JglGv4nNOdMrOJ1nvJg3z/c=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [pkg-config cmake];
   buildInputs = [
     alsa-lib
     boost
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.hydrogen-music.org";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
   };
 }

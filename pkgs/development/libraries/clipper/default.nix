@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, ninja, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  ninja,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   version = "6.4.2";
   pname = "Clipper";
@@ -10,9 +16,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "cpp";
 
-  buildInputs = [ ];
+  buildInputs = [];
 
-  nativeBuildInputs = [ cmake ninja unzip ];
+  nativeBuildInputs = [cmake ninja unzip];
 
   meta = with lib; {
     description = "A polygon and line clipping and offsetting library (C++, C#, Delphi)";
@@ -22,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/polyclipping";
     license = licenses.boost;
-    maintainers = with maintainers; [ mpickering ];
+    maintainers = with maintainers; [mpickering];
     platforms = with platforms; unix;
   };
 }

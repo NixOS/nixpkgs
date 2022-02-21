@@ -1,8 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "yrd";
   version = "0.5.3";
@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Cjdns swiss army knife";
-    maintainers = with maintainers; [ akru ];
+    maintainers = with maintainers; [akru];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
     homepage = "https://github.com/kpcyrd/yrd";

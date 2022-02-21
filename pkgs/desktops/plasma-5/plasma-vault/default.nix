@@ -1,21 +1,19 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
+  lib,
   extra-cmake-modules,
-
   kactivities,
   plasma-framework,
   kwindowsystem,
   networkmanager-qt,
   libksysguard,
-
   encfs,
   cryfs,
-  fuse
+  fuse,
 }:
-
 mkDerivation {
   name = "plasma-vault";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [extra-cmake-modules];
 
   patches = [
     ./0001-encfs-path.patch
@@ -24,7 +22,10 @@ mkDerivation {
   ];
 
   buildInputs = [
-    kactivities plasma-framework kwindowsystem libksysguard
+    kactivities
+    plasma-framework
+    kwindowsystem
+    libksysguard
     networkmanager-qt
   ];
 
@@ -36,5 +37,4 @@ mkDerivation {
 
     ''-DNIXPKGS_FUSERMOUNT=\"${lib.getBin fuse}/bin/fusermount\"''
   ];
-
 }

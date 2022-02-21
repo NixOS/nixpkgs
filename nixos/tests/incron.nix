@@ -1,22 +1,23 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-{
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "incron";
-  meta.maintainers = [ lib.maintainers.aanderse ];
+  meta.maintainers = [lib.maintainers.aanderse];
 
-  machine =
-    { ... }:
-    { services.incron.enable = true;
-      services.incron.extraPackages = [ pkgs.coreutils ];
-      services.incron.systab = ''
-        /test IN_CREATE,IN_MODIFY,IN_CLOSE_WRITE,IN_MOVED_FROM,IN_MOVED_TO echo "$@/$# $%" >> /root/incron.log
-      '';
+  machine = {...}: {
+    services.incron.enable = true;
+    services.incron.extraPackages = [pkgs.coreutils];
+    services.incron.systab = ''
+      /test IN_CREATE,IN_MODIFY,IN_CLOSE_WRITE,IN_MOVED_FROM,IN_MOVED_TO echo "$@/$# $%" >> /root/incron.log
+    '';
 
-      # ensure the directory to be monitored exists before incron is started
-      system.activationScripts.incronTest = ''
-        mkdir /test
-      '';
-    };
+    # ensure the directory to be monitored exists before incron is started
+    system.activationScripts.incronTest = ''
+      mkdir /test
+    '';
+  };
 
   testScript = ''
     start_all()

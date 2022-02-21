@@ -2,19 +2,22 @@ import ./make-test-python.nix {
   name = "opensmtpd";
 
   nodes = {
-    smtp1 = { pkgs, ... }: {
-      imports = [ common/user-account.nix ];
+    smtp1 = {pkgs, ...}: {
+      imports = [common/user-account.nix];
       networking = {
-        firewall.allowedTCPPorts = [ 25 ];
+        firewall.allowedTCPPorts = [25];
         useDHCP = false;
         interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.1"; prefixLength = 24; }
+          {
+            address = "192.168.1.1";
+            prefixLength = 24;
+          }
         ];
       };
-      environment.systemPackages = [ pkgs.opensmtpd ];
+      environment.systemPackages = [pkgs.opensmtpd];
       services.opensmtpd = {
         enable = true;
-        extraServerArgs = [ "-v" ];
+        extraServerArgs = ["-v"];
         serverConfiguration = ''
           listen on 0.0.0.0
           action do_relay relay
@@ -27,19 +30,22 @@ import ./make-test-python.nix {
       };
     };
 
-    smtp2 = { pkgs, ... }: {
-      imports = [ common/user-account.nix ];
+    smtp2 = {pkgs, ...}: {
+      imports = [common/user-account.nix];
       networking = {
-        firewall.allowedTCPPorts = [ 25 143 ];
+        firewall.allowedTCPPorts = [25 143];
         useDHCP = false;
         interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.2"; prefixLength = 24; }
+          {
+            address = "192.168.1.2";
+            prefixLength = 24;
+          }
         ];
       };
-      environment.systemPackages = [ pkgs.opensmtpd ];
+      environment.systemPackages = [pkgs.opensmtpd];
       services.opensmtpd = {
         enable = true;
-        extraServerArgs = [ "-v" ];
+        extraServerArgs = ["-v"];
         serverConfiguration = ''
           listen on 0.0.0.0
           action dovecot_deliver mda \
@@ -51,15 +57,18 @@ import ./make-test-python.nix {
         enable = true;
         enableImap = true;
         mailLocation = "maildir:~/mail";
-        protocols = [ "imap" ];
+        protocols = ["imap"];
       };
     };
 
-    client = { pkgs, ... }: {
+    client = {pkgs, ...}: {
       networking = {
         useDHCP = false;
         interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.3"; prefixLength = 24; }
+          {
+            address = "192.168.1.3";
+            prefixLength = 24;
+          }
         ];
       };
       environment.systemPackages = let
@@ -97,7 +106,7 @@ import ./make-test-python.nix {
             print("===> lastline:", lastline)
             assert lastline.strip() == b'Hello World'
         '';
-      in [ sendTestMail checkMailLanded ];
+      in [sendTestMail checkMailLanded];
     };
   };
 

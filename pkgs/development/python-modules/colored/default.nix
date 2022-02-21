@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "colored";
   version = "1.4.3";
@@ -20,5 +20,4 @@ buildPythonPackage rec {
     description = "Simple library for color and formatting to terminal";
     license = licenses.mit;
   };
-
 }

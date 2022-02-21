@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, git, makeWrapper, which }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  makeWrapper,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "git-subrepo";
   version = "0.4.1";
@@ -53,6 +59,6 @@ stdenv.mkDerivation rec {
     description = "Git submodule alternative";
     license = licenses.mit;
     platforms = platforms.unix ++ platforms.darwin;
-    maintainers = [ maintainers.ryantrinkle ];
+    maintainers = [maintainers.ryantrinkle];
   };
 }

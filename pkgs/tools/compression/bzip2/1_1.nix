@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, python3
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  python3,
+  ninja,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bzip2-unstable";
   version = "2020-08-11";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = ["bin" "dev" "out" "man"];
 
   mesonFlags = [
     "-Ddocs=disabled"

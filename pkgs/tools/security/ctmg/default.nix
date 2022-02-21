@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "ctmg";
   version = "1.2";
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "An encrypted container manager for Linux using cryptsetup";
     homepage = "https://git.zx2c4.com/ctmg/about/";
     license = licenses.isc;
-    maintainers = with maintainers; [ mrVanDalo ];
+    maintainers = with maintainers; [mrVanDalo];
     platforms = platforms.linux;
   };
 }

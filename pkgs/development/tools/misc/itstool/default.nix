@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, python3 }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "itstool";
   version = "2.0.6";
@@ -11,9 +15,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ python3 python3.pkgs.wrapPython ];
-  buildInputs = [ python3 python3.pkgs.libxml2 ];
-  pythonPath = [ python3.pkgs.libxml2 ];
+  nativeBuildInputs = [python3 python3.pkgs.wrapPython];
+  buildInputs = [python3 python3.pkgs.libxml2];
+  pythonPath = [python3.pkgs.libxml2];
 
   postFixup = ''
     wrapPythonPrograms
@@ -24,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "XML to PO and back again";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

@@ -1,15 +1,26 @@
-{ appleDerivation', lib, stdenv, stdenvNoCC, buildPackages
-, bootstrap_cmds, bison, flex
-, gnum4, unifdef, perl, python3
-, headersOnly ? true
+{
+  appleDerivation',
+  lib,
+  stdenv,
+  stdenvNoCC,
+  buildPackages,
+  bootstrap_cmds,
+  bison,
+  flex,
+  gnum4,
+  unifdef,
+  perl,
+  python3,
+  headersOnly ? true,
 }:
+appleDerivation' (if headersOnly
+then stdenvNoCC
+else stdenv) ({
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
-appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [bootstrap_cmds bison flex gnum4 unifdef perl python3];
 
-  nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];
-
-  patches = [ ./python3.patch ];
+  patches = [./python3.patch];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -133,7 +144,8 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
   '';
 
   appleHeaders = builtins.readFile ./headers.txt;
-} // lib.optionalAttrs headersOnly {
+}
+// lib.optionalAttrs headersOnly {
   HOST_CODESIGN = "echo";
   HOST_CODESIGN_ALLOCATE = "echo";
   LIPO = "echo";

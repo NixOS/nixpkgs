@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httpx
-, pythonOlder
-, zeep
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httpx,
+  pythonOlder,
+  zeep,
 }:
-
 buildPythonPackage rec {
   pname = "onvif-zeep-async";
   version = "1.2.0";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "ONVIF Client Implementation in Python";
     homepage = "https://github.com/hunterjm/python-onvif-zeep-async";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

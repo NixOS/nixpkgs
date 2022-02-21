@@ -1,35 +1,37 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook
-, installShellFiles
-, python3
-, gobject-introspection
-, gtk3
-, gdk-pixbuf
-
-# Recommended Dependencies:
-, unrarSupport ? false  # unfree software
-, unrar
-, p7zip
-, lhasa
-, mupdf
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook,
+  installShellFiles,
+  python3,
+  gobject-introspection,
+  gtk3,
+  gdk-pixbuf
+  # Recommended Dependencies:
+  ,
+  unrarSupport ? false
+  # unfree software
+  ,
+  unrar,
+  p7zip,
+  lhasa,
+  mupdf,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "mcomix3";
   version = "unstable-2021-04-23";
 
   # no official release on pypi/github and no build system
   src = fetchFromGitHub {
-    repo   = "${pname}";
-    owner  = "multiSnow";
+    repo = "${pname}";
+    owner = "multiSnow";
     rev = "139344e23898c28484328fc29fd0c6659affb12d";
     sha256 = "0q9xgl60ryf7qmy5vgzgfry4rvw5j9rb4d1ilxmpjmvm7dd3fm2k";
   };
 
-  buildInputs = [ gobject-introspection gtk3 gdk-pixbuf ];
-  nativeBuildInputs = [ wrapGAppsHook installShellFiles ];
-  propagatedBuildInputs = (with python3.pkgs; [ pillow pygobject3 pycairo ]);
+  buildInputs = [gobject-introspection gtk3 gdk-pixbuf];
+  nativeBuildInputs = [wrapGAppsHook installShellFiles];
+  propagatedBuildInputs = (with python3.pkgs; [pillow pygobject3 pycairo]);
 
   format = "other";
 
@@ -79,7 +81,7 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      "--prefix" "PATH" ":" "${lib.makeBinPath ([ p7zip lhasa mupdf ] ++ lib.optional (unrarSupport) unrar)}"
+      "--prefix" "PATH" ":" "${lib.makeBinPath ([p7zip lhasa mupdf] ++ lib.optional (unrarSupport) unrar)}"
     )
   '';
 
@@ -99,7 +101,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/multiSnow/mcomix3";
     changelog = "https://github.com/multiSnow/mcomix3/blob/gtk3/ChangeLog";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ confus ];
+    maintainers = with maintainers; [confus];
     platforms = platforms.all;
   };
 }

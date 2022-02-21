@@ -1,9 +1,9 @@
-{ lib
-, bash
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  bash,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "invoke";
   version = "1.6.0";

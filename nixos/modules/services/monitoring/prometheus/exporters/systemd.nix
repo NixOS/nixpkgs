@@ -1,9 +1,11 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let cfg = config.services.prometheus.exporters.systemd;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.systemd;
 in {
   port = 9558;
 

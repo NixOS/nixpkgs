@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, idna
-, multidict
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  idna,
+  multidict,
+  typing-extensions,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "yarl";
   version = "1.7.2";
@@ -21,12 +21,14 @@ buildPythonPackage rec {
     sed -i '/^addopts/d' setup.cfg
   '';
 
-  propagatedBuildInputs = [
-    idna
-    multidict
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      idna
+      multidict
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+    ];
 
   preCheck = ''
     # don't import yarl from ./ so the C extension is available
@@ -41,12 +43,12 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [ "yarl" ];
+  pythonImportsCheck = ["yarl"];
 
   meta = with lib; {
     description = "Yet another URL library";
     homepage = "https://github.com/aio-libs/yarl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

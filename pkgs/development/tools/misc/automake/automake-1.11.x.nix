@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, perl, autoconf }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  autoconf,
+}:
 stdenv.mkDerivation rec {
   pname = "automake";
   version = "1.11.6";
@@ -16,9 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ffbc6cc41f0ea6c864fbe9485b981679dc5e350f6c4bc6c3512f5a4226936b5";
   };
 
-  patches = [ ./fix-test-autoconf-2.69.patch ./fix-perl-5.26.patch ];
+  patches = [./fix-test-autoconf-2.69.patch ./fix-perl-5.26.patch];
 
-  buildInputs = [ perl autoconf ];
+  buildInputs = [perl autoconf];
 
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.

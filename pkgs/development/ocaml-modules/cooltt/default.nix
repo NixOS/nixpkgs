@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, cmdliner
-, menhir
-, menhirLib
-, ppx_deriving
-, ppxlib
-, uuseg
-, uutf
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  cmdliner,
+  menhir,
+  menhirLib,
+  ppx_deriving,
+  ppxlib,
+  uuseg,
+  uutf,
 }:
-
 buildDunePackage {
   pname = "cooltt";
   version = "unstable-2021-05-25";
@@ -42,6 +42,6 @@ buildDunePackage {
     homepage = "https://github.com/RedPRL/cooltt";
     description = "A cool implementation of normalization by evaluation (nbe) & elaboration for Cartesian cubical type theory";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
   };
 }

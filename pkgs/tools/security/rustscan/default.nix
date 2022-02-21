@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, nmap, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  nmap,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
   version = "2.0.1";
@@ -33,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     description = "Faster Nmap Scanning with Rust";
     homepage = "https://github.com/RustScan/RustScan";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.SuperSandro2000 ];
+    maintainers = [maintainers.SuperSandro2000];
   };
 }

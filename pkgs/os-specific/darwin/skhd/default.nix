@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, Carbon }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Carbon,
+}:
 stdenv.mkDerivation rec {
   pname = "skhd";
   version = "0.3.5";
@@ -11,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0x099979kgpim18r0vi9vd821qnv0rl3rkj0nd1nx3wljxgf7mrg";
   };
 
-  buildInputs = [ Carbon ];
+  buildInputs = [Carbon];
 
-  makeFlags = [ "BUILD_PATH=$(out)/bin" ];
+  makeFlags = ["BUILD_PATH=$(out)/bin"];
 
   postInstall = ''
     mkdir -p $out/Library/LaunchDaemons
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Simple hotkey daemon for macOS";
     homepage = "https://github.com/koekeishiya/skhd";
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ cmacrae lnl7 periklis ];
+    maintainers = with maintainers; [cmacrae lnl7 periklis];
     license = licenses.mit;
   };
 }

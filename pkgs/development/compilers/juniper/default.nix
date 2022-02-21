@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip, makeWrapper, mono }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  mono,
+}:
 stdenv.mkDerivation rec {
   pname = "juniper";
   version = "2.3.0";
@@ -12,9 +17,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = [ mono ];
+  buildInputs = [mono];
 
   installPhase = ''
     runHook preInstall
@@ -35,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.juniper-lang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ wunderbrick ];
+    maintainers = with maintainers; [wunderbrick];
     platforms = platforms.linux;
   };
 }

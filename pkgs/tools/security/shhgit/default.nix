@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "shhgit";
   version = "0.4-${lib.strings.substring 0 7 rev}";
@@ -20,7 +20,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to detect secrets in repositories";
     homepage = "https://github.com/eth0izzle/shhgit";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

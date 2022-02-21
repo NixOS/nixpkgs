@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, docopt
-, requests
-, beautifulsoup4
-, mypy
-, types-requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  docopt,
+  requests,
+  beautifulsoup4,
+  mypy,
+  types-requests,
 }:
-
 buildPythonPackage rec {
   pname = "hydra-check";
   version = "1.2.0";
@@ -41,7 +41,6 @@ buildPythonPackage rec {
     description = "check hydra for the build status of a package";
     homepage = "https://github.com/nix-community/hydra-check";
     license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
 }
-

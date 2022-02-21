@@ -1,10 +1,28 @@
-{ lib, stdenv, fetchurl, openssl, libcap, curl, which
-, eventlog, pkg-config, glib, python2, systemd, perl
-, riemann_c_client, protobufc, pcre, libnet
-, json_c, libuuid, libivykis, mongoc, rabbitmq-c
-, libesmtp
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  libcap,
+  curl,
+  which,
+  eventlog,
+  pkg-config,
+  glib,
+  python2,
+  systemd,
+  perl,
+  riemann_c_client,
+  protobufc,
+  pcre,
+  libnet,
+  json_c,
+  libuuid,
+  libivykis,
+  mongoc,
+  rabbitmq-c,
+  libesmtp,
 }:
-
 stdenv.mkDerivation rec {
   pname = "syslog-ng";
   version = "3.34.1";
@@ -14,7 +32,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zs457BxoyI1JNwXgpSi4PQONo4TonUg4OTzMdfYqLUw=";
   };
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [pkg-config which];
 
   buildInputs = [
     libcap
@@ -50,7 +68,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   enableParallelBuilding = true;
 
@@ -58,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
     platforms = platforms.linux;
   };
 }

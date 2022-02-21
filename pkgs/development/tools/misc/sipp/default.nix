@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, ncurses, libpcap }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libpcap,
+}:
 stdenv.mkDerivation rec {
   version = "3.6.0";
 
@@ -32,4 +37,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

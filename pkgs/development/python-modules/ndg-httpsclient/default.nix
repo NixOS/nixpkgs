@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyopenssl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyopenssl,
 }:
-
 buildPythonPackage rec {
   version = "0.5.1";
   pname = "ndg-httpsclient";
 
-  propagatedBuildInputs = [ pyopenssl ];
+  propagatedBuildInputs = [pyopenssl];
 
   src = fetchFromGitHub {
     owner = "cedadev";
@@ -24,7 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cedadev/ndg_httpsclient/";
     description = "Provide enhanced HTTPS support for httplib and urllib2 using PyOpenSSL";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
-
 }

@@ -1,15 +1,16 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
-, pkg-config
-, djvulibre
-, qtbase
-, qttools
-, xorg
-, libtiff
-, darwin
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchurl,
+  pkg-config,
+  djvulibre,
+  qtbase,
+  qttools,
+  xorg,
+  libtiff,
+  darwin,
 }:
-
 mkDerivation rec {
   pname = "djview";
   version = "4.10.6";
@@ -24,20 +25,24 @@ mkDerivation rec {
     qttools
   ];
 
-  buildInputs = [
-    djvulibre
-    qtbase
-    xorg.libXt
-    libtiff
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
+  buildInputs =
+    [
+      djvulibre
+      qtbase
+      xorg.libXt
+      libtiff
+    ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
 
-  configureFlags = [
-    "--disable-silent-rules"
-    "--disable-dependency-tracking"
-    "--with-x"
-    "--with-tiff"
-    # NOTE: 2019-09-19: experimental "--enable-npdjvu" fails
-  ] ++ lib.optional stdenv.isDarwin "--enable-mac";
+  configureFlags =
+    [
+      "--disable-silent-rules"
+      "--disable-dependency-tracking"
+      "--with-x"
+      "--with-tiff"
+      # NOTE: 2019-09-19: experimental "--enable-npdjvu" fails
+    ]
+    ++ lib.optional stdenv.isDarwin "--enable-mac";
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
@@ -48,7 +53,7 @@ mkDerivation rec {
     homepage = "http://djvu.sourceforge.net/djview4.html";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Anton-Latukha ];
+    maintainers = with maintainers; [Anton-Latukha];
     longDescription = ''
       The portable DjVu viewer (Qt5) and browser (nsdejavu) plugin.
 

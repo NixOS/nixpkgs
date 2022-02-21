@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "uptimed";
   version = "0.4.6";
@@ -11,8 +15,8 @@ stdenv.mkDerivation rec {
     owner = "rpodgorny";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  patches = [ ./no-var-spool-install.patch ];
+  nativeBuildInputs = [autoreconfHook];
+  patches = [./no-var-spool-install.patch];
 
   postPatch = ''
     substituteInPlace libuptimed/urec.h \
@@ -28,8 +32,8 @@ stdenv.mkDerivation rec {
       which can also easily be used to show your records on a web page.
     '';
     homepage = "https://github.com/rpodgorny/uptimed/";
-    license = with licenses; [ gpl2Only lgpl21Plus ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [gpl2Only lgpl21Plus];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

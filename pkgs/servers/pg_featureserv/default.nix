@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "pg_featureserv";
   version = "1.2.0";
@@ -13,13 +16,13 @@ buildGoModule rec {
 
   vendorSha256 = "1jqrkx850ghmpnfjhqky93r8fq7q63m5ivs0lzljzbvn7ya75f2r";
 
-  ldflags = [ "-s" "-w" "-X github.com/CrunchyData/pg_featureserv/conf.setVersion=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/CrunchyData/pg_featureserv/conf.setVersion=${version}"];
 
   meta = with lib; {
     description = "Lightweight RESTful Geospatial Feature Server for PostGIS in Go";
     homepage = "https://github.com/CrunchyData/pg_featureserv";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = platforms.unix;
   };
 }

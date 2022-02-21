@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.programs.light;
-
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.programs.light;
+in {
   options = {
     programs.light = {
       enable = mkOption {
@@ -21,7 +21,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.light ];
-    services.udev.packages = [ pkgs.light ];
+    environment.systemPackages = [pkgs.light];
+    services.udev.packages = [pkgs.light];
   };
 }

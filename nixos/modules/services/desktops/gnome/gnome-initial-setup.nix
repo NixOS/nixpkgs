@@ -1,11 +1,11 @@
 # GNOME Initial Setup.
-
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   # GNOME initial setup's run is conditioned on whether
   # the gnome-initial-setup-done file exists in XDG_CONFIG_HOME
   # Because of this, every existing user will have initial setup
@@ -13,7 +13,6 @@ let
   #
   # To prevent this we create the file if the users stateVersion
   # is older than 20.03 (the release we added this module).
-
   script = pkgs.writeScript "create-gis-stamp-files" ''
     #!${pkgs.runtimeShell}
     setup_done=$HOME/.config/gnome-initial-setup-done
@@ -39,45 +38,36 @@ let
       X-GNOME-Autostart-Phase=EarlyInitialization
     '';
   };
-
-in
-
-{
-
+in {
   meta = {
     maintainers = teams.gnome.members;
   };
 
   # Added 2021-05-07
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-initial-setup" "enable" ]
-      [ "services" "gnome" "gnome-initial-setup" "enable" ]
+    (
+      mkRenamedOptionModule
+      ["services" "gnome3" "gnome-initial-setup" "enable"]
+      ["services" "gnome" "gnome-initial-setup" "enable"]
     )
   ];
 
   ###### interface
 
   options = {
-
     services.gnome.gnome-initial-setup = {
-
       enable = mkEnableOption "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system";
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.gnome.gnome-initial-setup.enable {
-
-    environment.systemPackages = [
-      pkgs.gnome.gnome-initial-setup
-    ]
-    ++ optional (versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart
-    ;
+    environment.systemPackages =
+      [
+        pkgs.gnome.gnome-initial-setup
+      ]
+      ++ optional (versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart;
 
     systemd.packages = [
       pkgs.gnome.gnome-initial-setup
@@ -92,7 +82,5 @@ in
     systemd.user.targets."gnome-session@gnome-initial-setup".wants = [
       "gnome-initial-setup.service"
     ];
-
   };
-
 }

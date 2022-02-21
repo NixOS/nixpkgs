@@ -1,19 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, go-md2man
-, pkg-config
-, libcap
-, libseccomp
-, python3
-, systemd
-, yajl
-, nixosTests
-, criu
-}:
-
-let
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  go-md2man,
+  pkg-config,
+  libcap,
+  libseccomp,
+  python3,
+  systemd,
+  yajl,
+  nixosTests,
+  criu,
+}: let
   # these tests require additional permissions
   disabledTests = [
     "test_capabilities.py"
@@ -33,48 +32,51 @@ let
     "test_update.py"
     "tests_libcrun_utils"
   ];
-
 in
-stdenv.mkDerivation rec {
-  pname = "crun";
-  version = "1.4.2";
+  stdenv.mkDerivation rec {
+    pname = "crun";
+    version = "1.4.2";
 
-  src = fetchFromGitHub {
-    owner = "containers";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-zGtHO8CgpbXTh8nZ6WA0ocakzLjL/PW2IULI5QSEPVI=";
-    fetchSubmodules = true;
-  };
+    src = fetchFromGitHub {
+      owner = "containers";
+      repo = pname;
+      rev = version;
+      sha256 = "sha256-zGtHO8CgpbXTh8nZ6WA0ocakzLjL/PW2IULI5QSEPVI=";
+      fetchSubmodules = true;
+    };
 
-  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
+    nativeBuildInputs = [autoreconfHook go-md2man pkg-config python3];
 
-  buildInputs = [ libcap libseccomp systemd yajl ]
-    # Criu currently only builds on x86_64-linux
-    ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
+    buildInputs =
+      [libcap libseccomp systemd yajl]
+      # Criu currently only builds on x86_64-linux
+      ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
-  # we need this before autoreconfHook does its thing in order to initialize
-  # config.h with the correct values
-  postPatch = ''
-    echo ${version} > .tarball-version
-    echo '#define GIT_VERSION "${src.rev}"' > git-version.h
+    # we need this before autoreconfHook does its thing in order to initialize
+    # config.h with the correct values
+    postPatch = ''
+      echo ${version} > .tarball-version
+      echo '#define GIT_VERSION "${src.rev}"' > git-version.h
 
-    ${lib.concatMapStringsSep "\n" (e:
-      "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
-    ) disabledTests}
-  '';
+      ${
+        lib.concatMapStringsSep "\n" (
+          e: "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+        )
+        disabledTests
+      }
+    '';
 
-  doCheck = true;
+    doCheck = true;
 
-  passthru.tests = { inherit (nixosTests) podman; };
+    passthru.tests = {inherit (nixosTests) podman;};
 
-  meta = with lib; {
-    description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    inherit (src.meta) homepage;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
-  };
-}
+    meta = with lib; {
+      description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
+      license = licenses.gpl2Plus;
+      platforms = platforms.linux;
+      inherit (src.meta) homepage;
+      maintainers = with maintainers; [] ++ teams.podman.members;
+    };
+  }

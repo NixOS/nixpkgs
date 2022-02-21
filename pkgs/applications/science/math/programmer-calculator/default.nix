@@ -1,5 +1,9 @@
-{ lib, gccStdenv, fetchFromGitHub, ncurses }:
-
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 gccStdenv.mkDerivation rec {
   pname = "programmer-calculator";
   version = "2.2";
@@ -11,7 +15,7 @@ gccStdenv.mkDerivation rec {
     sha256 = "sha256-JQcYCYKdjdy8U2XMFzqTH9kAQ7CFv0r+sC1YfuAm7p8=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   installPhase = ''
     runHook preInstall
@@ -28,7 +32,7 @@ gccStdenv.mkDerivation rec {
     homepage = "https://alt-romes.github.io/programmer-calculator";
     changelog = "https://github.com/alt-romes/programmer-calculator/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ cjab ];
+    maintainers = with lib.maintainers; [cjab];
     platforms = platforms.all;
   };
 }

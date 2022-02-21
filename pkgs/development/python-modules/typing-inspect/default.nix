@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, typing-extensions
-, mypy-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  typing-extensions,
+  mypy-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "typing-inspect";
   version = "0.7.1";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Runtime inspection utilities for Python typing module";
     homepage = "https://github.com/ilevkivskyi/typing_inspect";
     license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
+    maintainers = with maintainers; [albakham];
   };
 }

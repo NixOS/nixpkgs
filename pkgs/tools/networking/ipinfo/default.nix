@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "ipinfo";
   version = "2.7.0";
@@ -22,7 +22,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Command Line Interface for the IPinfo API";
     homepage = "https://github.com/ipinfo/cli";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

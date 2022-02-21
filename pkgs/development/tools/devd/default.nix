@@ -1,5 +1,8 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
-
+{
+  buildGoPackage,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoPackage rec {
   pname = "devd";
   version = "0.9";
@@ -10,11 +13,11 @@ buildGoPackage rec {
     sha256 = "1b02fj821k68q7xl48wc194iinqw9jiavzfl136hlzvg4m07p1wf";
   };
   goPackagePath = "github.com/cortesi/devd";
-  subPackages = [ "cmd/devd" ];
+  subPackages = ["cmd/devd"];
   meta = with lib; {
     description = "A local webserver for developers";
     homepage = "https://github.com/cortesi/devd";
     license = licenses.mit;
-    maintainers = with maintainers; [ brianhicks ];
+    maintainers = with maintainers; [brianhicks];
   };
 }

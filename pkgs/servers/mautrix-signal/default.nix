@@ -1,5 +1,8 @@
-{ lib, python3, fetchFromGitHub }:
-
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
   version = "0.2.2";
@@ -50,6 +53,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "A Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [expipiplus1];
   };
 }

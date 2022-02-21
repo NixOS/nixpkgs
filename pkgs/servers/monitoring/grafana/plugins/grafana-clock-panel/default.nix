@@ -1,5 +1,7 @@
-{ grafanaPlugin, lib }:
-
+{
+  grafanaPlugin,
+  lib,
+}:
 grafanaPlugin rec {
   pname = "grafana-clock-panel";
   version = "1.1.3";
@@ -7,7 +9,7 @@ grafanaPlugin rec {
   meta = with lib; {
     description = "Clock panel for Grafana";
     license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with maintainers; [lukegb];
     platforms = platforms.unix;
   };
 }

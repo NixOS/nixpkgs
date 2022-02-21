@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, scdoc
-, gtk3
-, libxkbcommon
-, wayland
-, wayland-protocols
-, gtk-layer-shell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  scdoc,
+  gtk3,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
+  gtk-layer-shell,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wlogout";
   version = "1.1.1";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "cTscfx+erHVFHwwYpN7pADQWt5sq75sQSyXSP/H8kOs=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja scdoc ];
+  nativeBuildInputs = [pkg-config meson ninja scdoc];
   buildInputs = [
     gtk3
     libxkbcommon
@@ -49,8 +49,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ArtsyMacaw/wlogout";
     description = "A wayland based logout menu";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: shell completions
+

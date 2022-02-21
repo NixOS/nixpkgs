@@ -1,7 +1,7 @@
-{ lib
-, python3
+{
+  lib,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "semiphemeral";
   version = "0.6";
@@ -13,14 +13,14 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false; # upstream has no tests
 
-  pythonImportsCheck = [ "semiphemeral" ];
+  pythonImportsCheck = ["semiphemeral"];
 
-  propagatedBuildInputs = with python3.pkgs; [ click sqlalchemy flask tweepy colorama ];
+  propagatedBuildInputs = with python3.pkgs; [click sqlalchemy flask tweepy colorama];
 
   meta = with lib; {
     description = "Automatically delete your old tweets, except for the ones you want to keep";
     homepage = "https://github.com/micahflee/semiphemeral";
     license = licenses.mit;
-    maintainers = with maintainers; [ amanjeev ];
+    maintainers = with maintainers; [amanjeev];
   };
 }

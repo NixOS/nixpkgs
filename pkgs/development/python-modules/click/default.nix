@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, importlib-metadata
-, locale
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  importlib-metadata,
+  locale,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "click";
   version = "8.0.3";

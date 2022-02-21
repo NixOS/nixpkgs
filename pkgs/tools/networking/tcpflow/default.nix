@@ -1,22 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, automake, autoconf
-, openssl, zlib, libpcap, boost
-, useCairo ? false, cairo
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  openssl,
+  zlib,
+  libpcap,
+  boost,
+  useCairo ? false,
+  cairo,
 }:
-
 stdenv.mkDerivation rec {
-  pname   = "tcpflow";
+  pname = "tcpflow";
   version = "1.6.1";
 
   src = fetchFromGitHub {
-    owner  = "simsong";
-    repo   = pname;
-    rev    = "${pname}-${version}";
+    owner = "simsong";
+    repo = pname;
+    rev = "${pname}-${version}";
     sha256 = "0vbm097jhi5n8pg08ia1yhzc225zv9948blb76f4br739l9l22vq";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ automake autoconf ];
-  buildInputs = [ openssl zlib libpcap boost ]
+  nativeBuildInputs = [automake autoconf];
+  buildInputs =
+    [openssl zlib libpcap boost]
     ++ lib.optional useCairo cairo;
 
   prePatch = ''
@@ -39,8 +48,8 @@ stdenv.mkDerivation rec {
       protocol analysis and debugging.
     '';
     inherit (src.meta) homepage;
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ raskin obadz ];
-    platforms   = platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [raskin obadz];
+    platforms = platforms.linux;
   };
 }

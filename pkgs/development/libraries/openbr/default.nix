@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, opencv, qtbase, qtsvg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  opencv,
+  qtbase,
+  qtsvg,
+}:
 stdenv.mkDerivation {
-
   version = "0.5";
   pname = "openbr";
 
@@ -12,9 +18,9 @@ stdenv.mkDerivation {
     sha256 = "12y00cf5dlzp9ciiwbihf6xhlkdxpydhscv5hwp83qjdllid9rrz";
   };
 
-  buildInputs = [ opencv qtbase qtsvg ];
+  buildInputs = [opencv qtbase qtsvg];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = {
     description = "Open Source Biometric Recognition";

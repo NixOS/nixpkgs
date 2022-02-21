@@ -1,9 +1,16 @@
-{ lib, appleDerivation, xcbuildHook
-, openssl_1_0_2, Librpcsvc, xnu, libpcap, developer_cmds }:
-
+{
+  lib,
+  appleDerivation,
+  xcbuildHook,
+  openssl_1_0_2,
+  Librpcsvc,
+  xnu,
+  libpcap,
+  developer_cmds,
+}:
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ openssl_1_0_2 xnu Librpcsvc libpcap developer_cmds ];
+  nativeBuildInputs = [xcbuildHook];
+  buildInputs = [openssl_1_0_2 xnu Librpcsvc libpcap developer_cmds];
 
   NIX_CFLAGS_COMPILE = " -I./unbound -I${xnu}/Library/Frameworks/System.framework/Headers/";
 
@@ -41,10 +48,10 @@ appleDerivation {
 
     # mkdir -p $out/System/Library/LaunchDaemons
     # install kdumpd.tproj/com.apple.kdumpd.plist $out/System/Library/LaunchDaemons
- '';
+  '';
 
   meta = {
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = with lib.maintainers; [matthewbauer];
   };
 }

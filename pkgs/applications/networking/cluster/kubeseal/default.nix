@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kubeseal";
   version = "0.17.0";
@@ -15,14 +18,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/kubeseal" ];
+  subPackages = ["cmd/kubeseal"];
 
-  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+  ldflags = ["-s" "-w" "-X main.VERSION=${version}"];
 
   meta = with lib; {
     description = "A Kubernetes controller and tool for one-way encrypted Secrets";
     homepage = "https://github.com/bitnami-labs/sealed-secrets";
     license = licenses.asl20;
-    maintainers = with maintainers; [ groodt ];
+    maintainers = with maintainers; [groodt];
   };
 }

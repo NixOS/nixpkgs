@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-# build inputs
-, appdirs
-, click
-, diskcache
-, jinja2
-, jsonschema
-, pyyaml
-, yamllint
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm
+  # build inputs
+  ,
+  appdirs,
+  click,
+  diskcache,
+  jinja2,
+  jsonschema,
+  pyyaml,
+  yamllint,
 }:
-
 buildPythonPackage rec {
   pname = "glean_parser";
   version = "5.0.1";
@@ -50,12 +51,12 @@ buildPythonPackage rec {
     "test_validate_ping"
   ];
 
-  pythonImportsCheck = [ "glean_parser" ];
+  pythonImportsCheck = ["glean_parser"];
 
   meta = with lib; {
     description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
     homepage = "https://github.com/mozilla/glean_parser";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [maintainers.kvark];
   };
 }

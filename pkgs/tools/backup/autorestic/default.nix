@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, installShellFiles, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "autorestic";
   version = "1.5.5";
@@ -13,7 +17,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-WzmgV0wUsGfMVeho6M8wXJKD9adaAKRYmaJYaAcXwFc=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installShellCompletion --cmd autorestic \
@@ -26,7 +30,7 @@ buildGoModule rec {
     description = "High level CLI utility for restic";
     homepage = "https://github.com/cupcakearmy/autorestic";
     license = licenses.asl20;
-    maintainers = with maintainers; [ renesat ];
+    maintainers = with maintainers; [renesat];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

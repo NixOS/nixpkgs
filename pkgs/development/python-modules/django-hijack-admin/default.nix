@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python,
-  django_hijack, django_nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  django_hijack,
+  django_nose,
+}:
 buildPythonPackage rec {
   pname = "django-hijack-admin";
   version = "2.1.10";
@@ -12,8 +18,8 @@ buildPythonPackage rec {
     sha256 = "0m98lchp2y43886n67j4s7miyd50pg2r5r966vjnxmd7nx7qkihf";
   };
 
-  checkInputs = [ django_nose ];
-  propagatedBuildInputs = [ django_hijack ];
+  checkInputs = [django_nose];
+  propagatedBuildInputs = [django_hijack];
 
   checkPhase = ''
     runHook preCheck
@@ -33,6 +39,6 @@ buildPythonPackage rec {
     description = "Admin integration for django-hijack";
     homepage = "https://github.com/arteria/django-hijack-admin";
     license = licenses.mit;
-    maintainers = with maintainers; [ lsix ];
+    maintainers = with maintainers; [lsix];
   };
 }

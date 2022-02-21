@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl, autoconf }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+}:
 stdenv.mkDerivation rec {
   version = "1.99.8";
   pname = "dd_rescue";
 
   src = fetchurl {
     sha256 = "1gbxm8gr9sx5g1q9dycs21hkxikcy97q09lp1lvs59pnd9qpdnwh";
-    url="http://www.garloff.de/kurt/linux/ddrescue/${pname}-${version}.tar.bz2";
+    url = "http://www.garloff.de/kurt/linux/ddrescue/${pname}-${version}.tar.bz2";
   };
 
   dd_rhelp_src = fetchurl {
@@ -14,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0br6fs23ybmic3i5s1w4k4l8c2ph85ax94gfp2lzjpxbvl73cz1g";
   };
 
-  buildInputs = [ autoconf ];
+  buildInputs = [autoconf];
 
   preBuild = ''
     substituteInPlace Makefile \
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace "-o root" "" \
       --replace "-g root" ""
   '';
-  makeFlags = [ "LIBDIR=$out" ];
+  makeFlags = ["LIBDIR=$out"];
 
   postInstall = ''
     mkdir -p "$out/share/dd_rescue" "$out/bin"
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool to copy data from a damaged block device";
-    maintainers = with maintainers; [ raskin domenkozar ];
+    maintainers = with maintainers; [raskin domenkozar];
     platforms = platforms.linux;
     homepage = "http://www.garloff.de/kurt/linux/ddrescue/";
     license = licenses.gpl2Plus;

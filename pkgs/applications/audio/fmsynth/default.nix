@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, gtkmm2, lv2, lvtk, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtkmm2,
+  lv2,
+  lvtk,
+  pkg-config,
+}:
 stdenv.mkDerivation {
   pname = "fmsynth-unstable";
   version = "2015-02-07";
@@ -9,8 +17,8 @@ stdenv.mkDerivation {
     sha256 = "1bk0bpr069hzx2508rgfbwpxiqgr7dmdkhqdywmd2i4rmibgrm1q";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtkmm2 lv2 lvtk ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gtkmm2 lv2 lvtk];
 
   buildPhase = ''
     cd lv2
@@ -43,7 +51,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/Themaister/libfmsynth";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
     platforms = lib.platforms.linux;
   };
 }

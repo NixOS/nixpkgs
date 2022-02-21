@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, responses
-, pytestCheckHook
-, python-dotenv
-, pytest-rerunfailures
-, tox
-, requests
-, python-dateutil
-, websocket-client
-, ibm-cloud-sdk-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  responses,
+  pytestCheckHook,
+  python-dotenv,
+  pytest-rerunfailures,
+  tox,
+  requests,
+  python-dateutil,
+  websocket-client,
+  ibm-cloud-sdk-core,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "ibm-watson";
   version = "5.3.1";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Client library to use the IBM Watson Services";
     homepage = "https://github.com/watson-developer-cloud/python-sdk";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin lheckemann ];
+    maintainers = with maintainers; [globin lheckemann];
   };
 }

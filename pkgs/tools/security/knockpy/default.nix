@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "knockpy";
   version = "5.2.0";
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to scan subdomains";
     homepage = "https://github.com/guelfoweb/knock";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

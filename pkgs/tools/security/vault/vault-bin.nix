@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, gawk, glibc }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  gawk,
+  glibc,
+}: let
   version = "1.9.1";
 
   sources = let
@@ -27,37 +33,39 @@ let
       sha256 = "sha256-eU5s15tBuZFThJGNtnjOV07tiBoVjSSHMS9sY2WqO1o=";
     };
   };
+in
+  stdenv.mkDerivation {
+    pname = "vault-bin";
+    inherit version;
 
-in stdenv.mkDerivation {
-  pname = "vault-bin";
-  inherit version;
+    src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+    nativeBuildInputs = [makeWrapper unzip];
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+    sourceRoot = ".";
 
-  sourceRoot = ".";
+    installPhase =
+      ''
+        runHook preInstall
 
-  installPhase = ''
-    runHook preInstall
+        mkdir -p $out/bin $out/share/bash-completion/completions
+        mv vault $out/bin
+        echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
+      ''
+      + lib.optionalString stdenv.isLinux ''
+        wrapProgram $out/bin/vault \
+          --prefix PATH : ${lib.makeBinPath [gawk glibc]}
 
-    mkdir -p $out/bin $out/share/bash-completion/completions
-    mv vault $out/bin
-    echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
-  '' + lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/vault \
-      --prefix PATH : ${lib.makeBinPath [ gawk glibc ]}
+        runHook postInstall
+      '';
 
-    runHook postInstall
-  '';
+    dontStrip = stdenv.isDarwin;
 
-  dontStrip = stdenv.isDarwin;
-
-  meta = with lib; {
-    homepage = "https://www.vaultproject.io";
-    description = "A tool for managing secrets, this binary includes the UI";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
-    license = licenses.mpl20;
-    maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://www.vaultproject.io";
+      description = "A tool for managing secrets, this binary includes the UI";
+      platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux"];
+      license = licenses.mpl20;
+      maintainers = with maintainers; teams.serokell.members ++ [offline psyanticy Chili-Man];
+    };
+  }

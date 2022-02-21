@@ -1,18 +1,18 @@
-{ lib
-, aiohttp
-, aiosqlite
-, asynctest
-, buildPythonPackage
-, crccheck
-, fetchFromGitHub
-, pycryptodome
-, pytest-aiohttp
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  aiohttp,
+  aiosqlite,
+  asynctest,
+  buildPythonPackage,
+  crccheck,
+  fetchFromGitHub,
+  pycryptodome,
+  pytest-aiohttp,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  voluptuous,
 }:
-
 buildPythonPackage rec {
   pname = "zigpy";
   version = "0.43.0";
@@ -35,13 +35,15 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
-    pytest-aiohttp
-    pytest-timeout
-    pytestCheckHook
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-  ];
+  checkInputs =
+    [
+      pytest-aiohttp
+      pytest-timeout
+      pytestCheckHook
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      asynctest
+    ];
 
   disabledTests = [
     # RuntimeError: coroutine 'test_remigrate_forcibly_downgraded_v4' was never awaited
@@ -62,7 +64,7 @@ buildPythonPackage rec {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [etu mvnetbiz];
     platforms = platforms.linux;
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bash
-, curl
-, dnsutils
-, gawk
-, jq
-, ncurses
-, netcat
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bash,
+  curl,
+  dnsutils,
+  gawk,
+  jq,
+  ncurses,
+  netcat,
 }:
-
 stdenv.mkDerivation rec {
   pname = "twa";
   version = "1.10.0";
@@ -24,14 +24,16 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = [ bash
-                  curl
-                  dnsutils
-                  gawk
-                  jq
-                  netcat ];
+  buildInputs = [
+    bash
+    curl
+    dnsutils
+    gawk
+    jq
+    netcat
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -42,12 +44,16 @@ stdenv.mkDerivation rec {
     install -Dm 0644 README.md "$out/share/doc/twa/README.md"
 
     wrapProgram "$out/bin/twa" \
-      --prefix PATH : ${lib.makeBinPath [ curl
-                                          dnsutils
-                                          gawk
-                                          jq
-                                          ncurses
-                                          netcat ]}
+      --prefix PATH : ${
+      lib.makeBinPath [
+        curl
+        dnsutils
+        gawk
+        jq
+        ncurses
+        netcat
+      ]
+    }
 
     runHook postInstall
   '';
@@ -56,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "A tiny web auditor with strong opinions";
     homepage = "https://github.com/trailofbits/twa";
     license = licenses.mit;
-    maintainers = with maintainers; [ avaq ];
+    maintainers = with maintainers; [avaq];
     platforms = platforms.unix;
   };
 }

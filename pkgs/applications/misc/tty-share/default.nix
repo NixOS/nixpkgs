@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 # Upstream has a `./vendor` directory with all deps which we rely upon.
 buildGoPackage rec {
   pname = "tty-share";
@@ -19,6 +22,6 @@ buildGoPackage rec {
     description = "Share terminal via browser for remote work or shared sessions";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ andys8 ];
+    maintainers = with maintainers; [andys8];
   };
 }

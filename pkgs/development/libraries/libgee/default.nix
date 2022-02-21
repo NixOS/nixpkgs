@@ -1,10 +1,19 @@
-{ lib, stdenv, fetchurl, autoconf, vala, pkg-config, glib, gobject-introspection, gnome }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  vala,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  gnome,
+}:
 stdenv.mkDerivation rec {
   pname = "libgee";
   version = "0.20.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -13,8 +22,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkg-config autoconf vala gobject-introspection ];
-  buildInputs = [ glib ];
+  nativeBuildInputs = [pkg-config autoconf vala gobject-introspection];
+  buildInputs = [glib];
 
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "dev"}/share/gir-1.0";
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";

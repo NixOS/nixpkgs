@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "luhn";
   version = "0.2.0";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for generate and verify Luhn check digits";
     homepage = "https://github.com/mmcloughlin/luhn";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

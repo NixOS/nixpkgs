@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "fira-code-symbols-20160811";
 
@@ -20,7 +22,7 @@ fetchzip {
       See https://github.com/tonsky/FiraCode/issues/211.
     '';
     license = licenses.ofl;
-    maintainers = [ maintainers.Profpatsch ];
+    maintainers = [maintainers.Profpatsch];
     homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
 }

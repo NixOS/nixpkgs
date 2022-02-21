@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, rofi }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rofi,
+}:
 stdenv.mkDerivation rec {
   pname = "rofi-power-menu";
   version = "3.0.2";
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Shows a Power/Lock menu with Rofi";
     homepage = "https://github.com/jluttine/rofi-power-menu";
-    maintainers = with maintainers; [ ikervagyok ];
+    maintainers = with maintainers; [ikervagyok];
     platforms = platforms.linux;
   };
 }

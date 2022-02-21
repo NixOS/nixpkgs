@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "python-logstash";
   version = "0.4.6";
@@ -15,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python logging handler for Logstash";
     homepage = "https://github.com/vklochan/python-logstash";
-    maintainers = with maintainers; [ peterromfeldhk ];
+    maintainers = with maintainers; [peterromfeldhk];
     license = licenses.mit;
   };
 }

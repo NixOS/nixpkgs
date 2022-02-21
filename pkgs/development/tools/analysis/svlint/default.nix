@@ -1,8 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "svlint";
   version = "0.5.1";
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "SystemVerilog linter";
     homepage = "https://github.com/dalance/svlint";
     license = licenses.mit;
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [trepetti];
   };
 }

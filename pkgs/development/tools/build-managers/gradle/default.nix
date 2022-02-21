@@ -1,63 +1,77 @@
-{ jdk8, jdk11, jdk17 }:
-
-rec {
-  gen =
-
-    { version, nativeVersion, sha256, defaultJava ? jdk8, supportedPlatforms ? null }:
-
-    { lib, stdenv, fetchurl, makeWrapper, unzip, java ? defaultJava
-    , javaToolchains ? [ ], ncurses5, ncurses6 }:
-
+{
+  jdk8,
+  jdk11,
+  jdk17,
+}: rec {
+  gen = {
+    version,
+    nativeVersion,
+    sha256,
+    defaultJava ? jdk8,
+    supportedPlatforms ? null,
+  }: {
+    lib,
+    stdenv,
+    fetchurl,
+    makeWrapper,
+    unzip,
+    java ? defaultJava,
+    javaToolchains ? [],
+    ncurses5,
+    ncurses6,
+  }:
     stdenv.mkDerivation rec {
       pname = "gradle";
       inherit version;
 
       src = fetchurl {
         inherit sha256;
-        url =
-          "https://services.gradle.org/distributions/gradle-${version}-bin.zip";
+        url = "https://services.gradle.org/distributions/gradle-${version}-bin.zip";
       };
 
       dontBuild = true;
 
-      nativeBuildInputs = [ makeWrapper unzip ];
-      buildInputs = [ java ];
+      nativeBuildInputs = [makeWrapper unzip];
+      buildInputs = [java];
 
       # NOTE: For more information on toolchains,
       # see https://docs.gradle.org/current/userguide/toolchains.html
-      installPhase = with builtins;
-        let
-          toolchain = rec {
-            var = x: "JAVA_TOOLCHAIN_NIX_${toString x}";
-            vars = (lib.imap0 (i: x: ("${var i} ${x}")) javaToolchains);
-            varNames = lib.imap0 (i: x: var i) javaToolchains;
-            property = " -Porg.gradle.java.installations.fromEnv='${
-                 concatStringsSep "," varNames
-               }'";
-          };
-          vars = concatStringsSep "\n" (map (x: "  --set ${x} \\")
-            ([ "JAVA_HOME ${java}" ] ++ toolchain.vars));
-        in ''
-          mkdir -pv $out/lib/gradle/
-          cp -rv lib/ $out/lib/gradle/
+      installPhase = with builtins; let
+        toolchain = rec {
+          var = x: "JAVA_TOOLCHAIN_NIX_${toString x}";
+          vars = (lib.imap0 (i: x: ("${var i} ${x}")) javaToolchains);
+          varNames = lib.imap0 (i: x: var i) javaToolchains;
+          property = " -Porg.gradle.java.installations.fromEnv='${
+            concatStringsSep "," varNames
+          }'";
+        };
+        vars = concatStringsSep "\n" (map (x: "  --set ${x} \\")
+        (["JAVA_HOME ${java}"] ++ toolchain.vars));
+      in ''
+        mkdir -pv $out/lib/gradle/
+        cp -rv lib/ $out/lib/gradle/
 
-          gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
-          test -f $gradle_launcher_jar
-          makeWrapper ${java}/bin/java $out/bin/gradle \
-            ${vars}
-            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
-        '';
+        gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
+        test -f $gradle_launcher_jar
+        makeWrapper ${java}/bin/java $out/bin/gradle \
+          ${vars}
+          --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
+      '';
 
       dontFixup = !stdenv.isLinux;
 
-      fixupPhase = let arch = if stdenv.is64bit then "amd64" else "i386";
+      fixupPhase = let
+        arch =
+          if stdenv.is64bit
+          then "amd64"
+          else "i386";
       in ''
         for variant in "" "-ncurses5" "-ncurses6"; do
           mkdir "patching$variant"
           pushd "patching$variant"
           jar xf $out/lib/gradle/lib/native-platform-linux-${arch}$variant-${nativeVersion}.jar
           patchelf \
-            --set-rpath "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}" \
+            --set-rpath "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [stdenv.cc.cc ncurses5 ncurses6]}" \
             net/rubygrapefruit/platform/linux-${arch}$variant/libnative-platform*.so
           jar cf native-platform-linux-${arch}$variant-${nativeVersion}.jar .
           mv native-platform-linux-${arch}$variant-${nativeVersion}.jar $out/lib/gradle/lib/
@@ -87,8 +101,11 @@ rec {
         changelog = "https://docs.gradle.org/${version}/release-notes.html";
         downloadPage = "https://gradle.org/next-steps/?version=${version}";
         license = licenses.asl20;
-        platforms = if (supportedPlatforms != null) then supportedPlatforms else platforms.unix;
-        maintainers = with maintainers; [ lorenzleutgeb liff ];
+        platforms =
+          if (supportedPlatforms != null)
+          then supportedPlatforms
+          else platforms.unix;
+        maintainers = with maintainers; [lorenzleutgeb liff];
       };
     };
 
@@ -102,7 +119,7 @@ rec {
     defaultJava = jdk17;
     # Gradle 7 ships some binaries that are only available for some platforms
     # See https://github.com/gradle/native-platform#supported-platforms
-    supportedPlatforms =  [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "x86_64-cygwin" "x86_64-windows" "i686-windows"  ];
+    supportedPlatforms = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "x86_64-cygwin" "x86_64-windows" "i686-windows"];
   };
 
   gradle_6 = gen {
@@ -112,7 +129,7 @@ rec {
     defaultJava = jdk11;
     # Gradle 6 ships some binaries that are only available for some platforms
     # See https://github.com/gradle/native-platform#supported-platforms
-    supportedPlatforms =  [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "x86_64-cygwin" "x86_64-windows" "i686-windows"  ];
+    supportedPlatforms = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "x86_64-cygwin" "x86_64-windows" "i686-windows"];
   };
 
   # NOTE: No GitHub Release for the following versions. `update.sh` will not work.

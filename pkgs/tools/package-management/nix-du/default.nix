@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, nix
-, nlohmann_json
-, boost
-, graphviz
-, Security
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  nix,
+  nlohmann_json,
+  boost,
+  graphviz,
+  Security,
+  pkg-config,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "nix-du";
   version = "0.4.1";
@@ -24,21 +24,23 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "11jaks6adsvrvxlqqw3glvn4ff7xh9j35ayfrl89rb4achvqp7xn";
 
   doCheck = true;
-  checkInputs = [ nix graphviz ];
+  checkInputs = [nix graphviz];
 
-  buildInputs = [
-    boost
-    nix
-    nlohmann_json
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs =
+    [
+      boost
+      nix
+      nlohmann_json
+    ]
+    ++ lib.optionals stdenv.isDarwin [Security];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   meta = with lib; {
     description = "A tool to determine which gc-roots take space in your nix store";
     homepage = "https://github.com/symphorien/nix-du";
     license = licenses.lgpl3Only;
-    maintainers = [ maintainers.symphorien ];
+    maintainers = [maintainers.symphorien];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitLab }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+}:
 stdenv.mkDerivation rec {
   pname = "lmdb";
   version = "0.9.29";
@@ -14,36 +17,38 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
-  patches = [ ./hardcoded-compiler.patch ];
-  patchFlags = [ "-p3" ];
+  patches = [./hardcoded-compiler.patch];
+  patchFlags = ["-p3"];
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = ["bin" "out" "dev"];
 
-  makeFlags = [
-    "prefix=$(out)"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ]
+  makeFlags =
+    [
+      "prefix=$(out)"
+      "CC=${stdenv.cc.targetPrefix}cc"
+      "AR=${stdenv.cc.targetPrefix}ar"
+    ]
     ++ lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so";
 
   doCheck = true;
   checkTarget = "test";
 
-  postInstall = ''
-    moveToOutput bin "$bin"
-  ''
+  postInstall =
+    ''
+      moveToOutput bin "$bin"
+    ''
     # add lmdb.pc (dynamic only)
     + ''
-    mkdir -p "$dev/lib/pkgconfig"
-    cat > "$dev/lib/pkgconfig/lmdb.pc" <<EOF
-    Name: lmdb
-    Description: ${meta.description}
-    Version: ${version}
+      mkdir -p "$dev/lib/pkgconfig"
+      cat > "$dev/lib/pkgconfig/lmdb.pc" <<EOF
+      Name: lmdb
+      Description: ${meta.description}
+      Version: ${version}
 
-    Cflags: -I$dev/include
-    Libs: -L$out/lib -llmdb
-    EOF
-  '';
+      Cflags: -I$dev/include
+      Libs: -L$out/lib -llmdb
+      EOF
+    '';
 
   meta = with lib; {
     description = "Lightning memory-mapped database";
@@ -55,7 +60,7 @@ stdenv.mkDerivation rec {
       limited to the size of the virtual address space.
     '';
     homepage = "https://symas.com/lmdb/";
-    maintainers = with maintainers; [ jb55 vcunat ];
+    maintainers = with maintainers; [jb55 vcunat];
     license = licenses.openldap;
     platforms = platforms.all;
   };

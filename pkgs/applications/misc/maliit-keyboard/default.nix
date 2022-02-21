@@ -1,25 +1,23 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-
-, anthy
-, hunspell
-, libchewing
-, libpinyin
-, maliit-framework
-, pcre
-, presage
-, qtfeedback
-, qtmultimedia
-, qtquickcontrols2
-, qtgraphicaleffects
-
-, cmake
-, pkg-config
-, wrapGAppsHook
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  anthy,
+  hunspell,
+  libchewing,
+  libpinyin,
+  maliit-framework,
+  pcre,
+  presage,
+  qtfeedback,
+  qtmultimedia,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  cmake,
+  pkg-config,
+  wrapGAppsHook,
 }:
-
 mkDerivation rec {
   pname = "maliit-keyboard";
   version = "2.0.0";
@@ -76,7 +74,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Virtual keyboard";
     homepage = "http://maliit.github.io/";
-    license = with licenses; [ lgpl3Only bsd3 cc-by-30 ];
-    maintainers = with maintainers; [ samueldr ];
+    license = with licenses; [lgpl3Only bsd3 cc-by-30];
+    maintainers = with maintainers; [samueldr];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjpeg,
+}:
 stdenv.mkDerivation rec {
   pname = "jhead";
   version = "3.06.0.1";
@@ -11,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0zgh36486cpcnf7xg6dwf7rhz2h4gpayqvdk8hmrx6y418b2pfyf";
   };
 
-  buildInputs = [ libjpeg ];
+  buildInputs = [libjpeg];
 
-  makeFlags = [ "CPPFLAGS=" "CFLAGS=-O3" "LDFLAGS=" ];
+  makeFlags = ["CPPFLAGS=" "CFLAGS=-O3" "LDFLAGS="];
 
   installPhase = ''
     mkdir -p \
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.sentex.net/~mwandel/jhead/";
     description = "Exif Jpeg header manipulation tool";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ rycee ];
+    maintainers = with maintainers; [rycee];
     platforms = platforms.all;
   };
 }

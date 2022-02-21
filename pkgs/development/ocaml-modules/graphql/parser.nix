@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchurl, alcotest, fmt, menhir, re }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  fmt,
+  menhir,
+  re,
+}:
 buildDunePackage rec {
   pname = "graphql_parser";
   version = "0.13.0";
@@ -13,10 +20,10 @@ buildDunePackage rec {
     sha256 = "0gb5y99ph0nz5y3pc1gxq1py4wji2hyf2ydbp0hv23v00n50hpsm";
   };
 
-  nativeBuildInputs = [ menhir ];
-  propagatedBuildInputs = [ fmt re ];
+  nativeBuildInputs = [menhir];
+  propagatedBuildInputs = [fmt re];
 
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
 
   doCheck = true;
 
@@ -24,7 +31,6 @@ buildDunePackage rec {
     homepage = "https://github.com/andreas/ocaml-graphql-server";
     description = "Library for parsing GraphQL queries";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
-
 }

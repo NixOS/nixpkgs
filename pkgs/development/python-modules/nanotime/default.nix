@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "nanotime";
   version = "0.5.2";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "c7cc231fc5f6db401b448d7ab51c96d0a4733f4b69fabe569a576f89ffdf966b";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   checkPhase = ''
     nosetests
@@ -22,6 +26,6 @@ buildPythonPackage rec {
     description = "Provides a time object that keeps time as the number of nanoseconds since the UNIX epoch";
     homepage = "https://github.com/jbenet/nanotime/tree/master/python";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [cmcdragonkai];
   };
 }

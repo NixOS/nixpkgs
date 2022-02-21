@@ -1,8 +1,11 @@
-{ config, options, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
 
@@ -14,31 +17,32 @@ let
     then f x
     else f;
 
-  mergeConfig = lhs_: rhs_:
-    let
-      lhs = optCall lhs_ { inherit pkgs; };
-      rhs = optCall rhs_ { inherit pkgs; };
-    in
-    recursiveUpdate lhs rhs //
-    optionalAttrs (lhs ? packageOverrides) {
+  mergeConfig = lhs_: rhs_: let
+    lhs = optCall lhs_ {inherit pkgs;};
+    rhs = optCall rhs_ {inherit pkgs;};
+  in
+    recursiveUpdate lhs rhs
+    // optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
-        optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
-    } //
-    optionalAttrs (lhs ? perlPackageOverrides) {
+        optCall lhs.packageOverrides pkgs
+        // optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
+    }
+    // optionalAttrs (lhs ? perlPackageOverrides) {
       perlPackageOverrides = pkgs:
-        optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
+        optCall lhs.perlPackageOverrides pkgs
+        // optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
     };
 
   configType = mkOptionType {
     name = "nixpkgs-config";
     description = "nixpkgs config";
-    check = x:
-      let traceXIfNot = c:
-            if c x then true
-            else lib.traceSeqN 1 x false;
-      in traceXIfNot isConfig;
+    check = x: let
+      traceXIfNot = c:
+        if c x
+        then true
+        else lib.traceSeqN 1 x false;
+    in
+      traceXIfNot isConfig;
     merge = args: foldr (def: mergeConfig def.value) {};
   };
 
@@ -59,18 +63,17 @@ let
     inherit (cfg) config overlays localSystem crossSystem;
   };
 
-  finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
-
-in
-
-{
+  finalPkgs =
+    if opt.pkgs.isDefined
+    then cfg.pkgs.appendOverlays cfg.overlays
+    else defaultPkgs;
+in {
   imports = [
     ./assertions.nix
     ./meta.nix
   ];
 
   options.nixpkgs = {
-
     pkgs = mkOption {
       defaultText = literalExpression ''
         import "''${nixos}/.." {
@@ -115,9 +118,9 @@ in
     config = mkOption {
       default = {};
       example = literalExpression
-        ''
-          { allowBroken = true; allowUnfree = true; }
-        '';
+      ''
+        { allowBroken = true; allowUnfree = true; }
+      '';
       type = configType;
       description = ''
         The configuration of the Nix Packages collection.  (For
@@ -131,16 +134,16 @@ in
     overlays = mkOption {
       default = [];
       example = literalExpression
-        ''
-          [
-            (self: super: {
-              openssh = super.openssh.override {
-                hpnSupport = true;
-                kerberos = self.libkrb5;
-              };
-            })
-          ]
-        '';
+      ''
+        [
+          (self: super: {
+            openssh = super.openssh.override {
+              hpnSupport = true;
+              kerberos = self.libkrb5;
+            };
+          })
+        ]
+      '';
       type = types.listOf overlayType;
       description = ''
         List of overlays to use with the Nix Packages collection.
@@ -158,13 +161,16 @@ in
 
     localSystem = mkOption {
       type = types.attrs; # TODO utilize lib.systems.parsedPlatform
-      default = { inherit (cfg) system; };
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      default = {inherit (cfg) system;};
+      example = {
+        system = "aarch64-linux";
+        config = "aarch64-unknown-linux-gnu";
+      };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
       defaultText = literalExpression
-        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
+      ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform on which NixOS should be built. When
         <code>nixpkgs.crossSystem</code> is unset, it also specifies
@@ -182,7 +188,10 @@ in
     crossSystem = mkOption {
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = {
+        system = "aarch64-linux";
+        config = "aarch64-unknown-linux-gnu";
+      };
       description = ''
         Specifies the platform for which NixOS should be
         built. Specify this only if it is different from

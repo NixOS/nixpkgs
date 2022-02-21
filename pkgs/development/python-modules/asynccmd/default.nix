@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "asynccmd";
   version = "0.2.4";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
   # Tests are outdated
   doCheck = false;
 
-  pythonImportsCheck = [ "asynccmd" ];
+  pythonImportsCheck = ["asynccmd"];
 
   meta = with lib; {
     description = "Asyncio implementation of Cmd Python library";
     homepage = "https://github.com/valentinmk/asynccmd";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

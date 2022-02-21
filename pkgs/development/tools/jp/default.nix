@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "jp";
   version = "0.1.3";
@@ -16,7 +19,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "A command line interface to the JMESPath expression language for JSON";
     homepage = "https://github.com/jmespath/jp";
-    maintainers = with maintainers; [ cransom ];
+    maintainers = with maintainers; [cransom];
     license = licenses.asl20;
   };
 }

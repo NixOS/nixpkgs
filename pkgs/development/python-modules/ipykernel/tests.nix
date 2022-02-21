@@ -1,15 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, flaky
-, ipykernel
-, ipyparallel
-, nose
-, pytestCheckHook
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  flaky,
+  ipykernel,
+  ipyparallel,
+  nose,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "ipykernel-tests";
   inherit (ipykernel) version;
@@ -39,7 +38,8 @@ buildPythonPackage rec {
 
     # https://github.com/ipython/ipykernel/issues/506
     "test_unc_paths"
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [
     # flaky test https://github.com/ipython/ipykernel/issues/485
     "test_shutdown"
 

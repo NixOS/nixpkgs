@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "docker-buildx";
   version = "0.7.1";
@@ -20,6 +23,6 @@ buildGoModule rec {
   meta = with lib; {
     description = "Docker CLI plugin for extended build capabilities with BuildKit";
     license = licenses.asl20;
-    maintainers = [ maintainers.ivan-babrou ];
+    maintainers = [maintainers.ivan-babrou];
   };
 }

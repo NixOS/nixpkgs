@@ -1,6 +1,37 @@
-{ stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem, pkg-config, wrapGAppsHook
-, boost, cereal, cgal_5, curl, dbus, eigen, expat, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme
-, ilmbase, libpng, mpfr, nlopt, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  pkg-config,
+  wrapGAppsHook,
+  boost,
+  cereal,
+  cgal_5,
+  curl,
+  dbus,
+  eigen,
+  expat,
+  glew,
+  glib,
+  gmp,
+  gtest,
+  gtk3,
+  hicolor-icon-theme,
+  ilmbase,
+  libpng,
+  mpfr,
+  nlopt,
+  openvdb,
+  pcre,
+  qhull,
+  systemd,
+  tbb,
+  wxGTK31-gtk3,
+  xorg,
+  fetchpatch,
 }:
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
@@ -13,30 +44,32 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    boost
-    cereal
-    cgal_5
-    curl
-    dbus
-    eigen
-    expat
-    glew
-    glib
-    gmp
-    gtk3
-    hicolor-icon-theme
-    ilmbase
-    libpng
-    mpfr
-    nlopt
-    openvdb
-    pcre
-    systemd
-    tbb
-    wxGTK31-gtk3
-    xorg.libX11
-  ] ++ checkInputs;
+  buildInputs =
+    [
+      boost
+      cereal
+      cgal_5
+      curl
+      dbus
+      eigen
+      expat
+      glew
+      glib
+      gmp
+      gtk3
+      hicolor-icon-theme
+      ilmbase
+      libpng
+      mpfr
+      nlopt
+      openvdb
+      pcre
+      systemd
+      tbb
+      wxGTK31-gtk3
+      xorg.libX11
+    ]
+    ++ checkInputs;
 
   patches = [
     # Fix detection of TBB, see https://github.com/prusa3d/PrusaSlicer/issues/6355
@@ -47,7 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
+  checkInputs = [gtest];
 
   separateDebugInfo = true;
 
@@ -116,6 +149,6 @@ stdenv.mkDerivation rec {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ moredread tweber ];
+    maintainers = with maintainers; [moredread tweber];
   };
 }

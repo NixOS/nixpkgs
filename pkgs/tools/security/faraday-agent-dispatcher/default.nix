@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
   version = "2.1.3";
@@ -63,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, voluptuous
-, pythonOlder
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  voluptuous,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "hatasmota";
   version = "0.3.1";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to help parse and construct Tasmota MQTT messages";
     homepage = "https://github.com/emontnemery/hatasmota";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

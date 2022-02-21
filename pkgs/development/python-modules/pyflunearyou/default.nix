@@ -1,18 +1,18 @@
-{ lib
-, aiohttp
-, aresponses
-, aiocache
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, msgpack
-, ujson
+{
+  lib,
+  aiohttp,
+  aresponses,
+  aiocache,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  msgpack,
+  ujson,
 }:
-
 buildPythonPackage rec {
   pname = "pyflunearyou";
   version = "2021.10.0";
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for retrieving UV-related information from Flu Near You";
     homepage = "https://github.com/bachya/pyflunearyou";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, hypothesis
-, py
-, pytestCheckHook
-, pytest-benchmark
-, sortedcollections
-, sortedcontainers
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
+  hypothesis,
+  py,
+  pytestCheckHook,
+  pytest-benchmark,
+  sortedcollections,
+  sortedcontainers,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "bidict";
   version = "0.21.4";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  pythonImportsCheck = [ "bidict" ];
+  pythonImportsCheck = ["bidict"];
 
   meta = with lib; {
     homepage = "https://github.com/jab/bidict";
     description = "Efficient, Pythonic bidirectional map data structures and related functionality";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [jakewaksbaum];
   };
 }

@@ -1,10 +1,14 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "containers-ephemeral";
   meta = {
-    maintainers = with lib.maintainers; [ patryk27 ];
+    maintainers = with lib.maintainers; [patryk27];
   };
 
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     virtualisation.writableStore = true;
 
     containers.webserver = {
@@ -22,7 +26,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             '';
           };
         };
-        networking.firewall.allowedTCPPorts = [ 80 ];
+        networking.firewall.allowedTCPPorts = [80];
       };
     };
   };

@@ -1,10 +1,25 @@
-{ lib, stdenv, fetchurl
-, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, pkg-config, python3, xmlto
-, zstd
-, acl, attr, e2fsprogs, libuuid, lzo, systemd, zlib
-, runCommand, btrfs-progs
+{
+  lib,
+  stdenv,
+  fetchurl,
+  asciidoc,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libxslt,
+  pkg-config,
+  python3,
+  xmlto,
+  zstd,
+  acl,
+  attr,
+  e2fsprogs,
+  libuuid,
+  lzo,
+  systemd,
+  zlib,
+  runCommand,
+  btrfs-progs,
 }:
-
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
   version = "5.16";
@@ -15,11 +30,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
-    python3 python3.pkgs.setuptools
+    pkg-config
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
+    python3
+    python3.pkgs.setuptools
   ];
 
-  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ systemd ];
+  buildInputs = [acl attr e2fsprogs libuuid lzo python3 zlib zstd] ++ lib.optionals stdenv.hostPlatform.isGnu [systemd];
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
@@ -34,7 +55,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace --disable-libudev";
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isGnu [ "udevruledir=$(out)/lib/udev/rules.d" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isGnu ["udevruledir=$(out)/lib/udev/rules.d"];
 
   enableParallelBuilding = true;
 
@@ -51,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.wiki.kernel.org/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
   };
 }

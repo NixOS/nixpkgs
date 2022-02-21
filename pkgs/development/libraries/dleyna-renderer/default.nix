@@ -1,21 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, dleyna-connector-dbus
-, dleyna-core
-, gssdp
-, gupnp
-, gupnp-av
-, gupnp-dlna
-, libsoup
-, makeWrapper
-, docbook-xsl-nons
-, libxslt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  dleyna-connector-dbus,
+  dleyna-core,
+  gssdp,
+  gupnp,
+  gupnp-av,
+  gupnp-dlna,
+  libsoup,
+  makeWrapper,
+  docbook-xsl-nons,
+  libxslt,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dleyna-renderer";
   version = "0.7.2";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Library to discover and manipulate Digital Media Renderers";
     homepage = "https://github.com/phako/dleyna-renderer";
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
     license = licenses.lgpl21Only;
   };

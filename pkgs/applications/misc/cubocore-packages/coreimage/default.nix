@@ -1,5 +1,13 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 mkDerivation rec {
   pname = "coreimage";
   version = "4.3.0";
@@ -26,7 +34,7 @@ mkDerivation rec {
     description = "An image viewer from the C Suite";
     homepage = "https://gitlab.com/cubocore/coreapps/coreimage";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

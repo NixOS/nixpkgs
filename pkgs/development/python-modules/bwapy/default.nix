@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, bwa
-, cffi
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  bwa,
+  cffi,
+  zlib,
 }:
-
 buildPythonPackage rec {
   pname = "bwapy";
   version = "0.1.4";
@@ -25,18 +25,18 @@ buildPythonPackage rec {
       --replace 'setuptools>=49.2.0' 'setuptools'
   '';
 
-  buildInputs = [ zlib bwa ];
+  buildInputs = [zlib bwa];
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [cffi];
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "bwapy" ];
+  pythonImportsCheck = ["bwapy"];
 
   meta = with lib; {
     homepage = "https://github.com/ACEnglish/acebinf";
     description = "Python bindings to bwa mem aligner";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ris];
   };
 }

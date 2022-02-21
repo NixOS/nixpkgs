@@ -1,6 +1,12 @@
-{ stdenv, lib, buildPackages, fetchFromGitHub, callPackage, wrapCCWith, overrideCC }:
-
-let
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  callPackage,
+  wrapCCWith,
+  overrideCC,
+}: let
   version = "4.5.2";
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";

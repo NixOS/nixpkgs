@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, intltool, pkg-config,
-gtk3, connman, openconnect, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  intltool,
+  pkg-config,
+  gtk3,
+  connman,
+  openconnect,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "connman-gtk";
   version = "1.1.1";
@@ -38,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jgke/connman-gtk";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

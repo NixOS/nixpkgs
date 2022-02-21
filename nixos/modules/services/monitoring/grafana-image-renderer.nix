@@ -1,11 +1,13 @@
-{ lib, pkgs, config, ... }:
-
-with lib;
-
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.grafana-image-renderer;
 
-  format = pkgs.formats.json { };
+  format = pkgs.formats.json {};
 
   configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
 in {
@@ -37,7 +39,7 @@ in {
               '';
             };
             logging.level = mkOption {
-              type = types.enum [ "error" "warning" "info" "debug" ];
+              type = types.enum ["error" "warning" "info" "debug"];
               default = "info";
               description = ''
                 The log-level of the <filename>grafana-image-renderer.service</filename>-unit.
@@ -61,7 +63,7 @@ in {
             };
             mode = mkOption {
               default = "default";
-              type = types.enum [ "default" "reusable" "clustered" ];
+              type = types.enum ["default" "reusable" "clustered"];
               description = ''
                 Rendering mode of <package>grafana-image-renderer</package>:
                 <itemizedlist>
@@ -78,7 +80,7 @@ in {
             };
             args = mkOption {
               type = types.listOf types.str;
-              default = [ "--no-sandbox" ];
+              default = ["--no-sandbox"];
               description = ''
                 List of CLI flags passed to <package>chromium</package>.
               '';
@@ -100,7 +102,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.provisionGrafana -> config.services.grafana.enable;
+      {
+        assertion = cfg.provisionGrafana -> config.services.grafana.enable;
         message = ''
           To provision a Grafana instance to use grafana-image-renderer,
           `services.grafana.enable` must be set to `true`!
@@ -129,8 +132,8 @@ in {
     };
 
     systemd.services.grafana-image-renderer = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       description = " A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
 
       environment = {
@@ -146,5 +149,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ ma27 ];
+  meta.maintainers = with maintainers; [ma27];
 }

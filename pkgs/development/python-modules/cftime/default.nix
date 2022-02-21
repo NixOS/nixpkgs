@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, numpy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "cftime";
   version = "1.5.2";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Time-handling functionality from netcdf4-python";
     homepage = "https://github.com/Unidata/cftime";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

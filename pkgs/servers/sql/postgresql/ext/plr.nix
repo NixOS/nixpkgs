@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, R, postgresql }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  R,
+  postgresql,
+}:
 stdenv.mkDerivation rec {
   pname = "plr";
   version = "8.4.5";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-G/V3I1JI6dWto/hK6lfOTBYEvbmkovvnvk2TwSQq4no=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ R postgresql ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [R postgresql];
   preBuild = ''
     export USE_PGXS=1
   '';
@@ -24,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PL/R - R Procedural Language for PostgreSQL";
     homepage = "https://github.com/postgres-plr/plr";
-    maintainers = with maintainers; [ qoelet ];
+    maintainers = with maintainers; [qoelet];
     platforms = postgresql.meta.platforms;
     license = licenses.gpl2Only;
   };

@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, aiohttp
-, buildPythonPackage
-, eventlet
-, fetchFromGitHub
-, iana-etc
-, libredirect
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, tornado
-, websocket-client
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  eventlet,
+  fetchFromGitHub,
+  iana-etc,
+  libredirect,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  tornado,
+  websocket-client,
 }:
-
 buildPythonPackage rec {
   pname = "python-engineio";
   version = "4.3.1";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ mic92 ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [mic92];
   };
 }

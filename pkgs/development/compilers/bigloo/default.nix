@@ -1,7 +1,14 @@
-{ fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
-, darwin, libunistring
+{
+  fetchurl,
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  libtool,
+  gmp,
+  darwin,
+  libunistring,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bigloo";
   version = "4.4b";
@@ -11,22 +18,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [autoconf automake libtool];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
     libunistring
   ];
 
-  propagatedBuildInputs = [ gmp ];
+  propagatedBuildInputs = [gmp];
 
   preConfigure =
     # For libuv on darwin
     lib.optionalString stdenv.isDarwin ''
       export LIBTOOLIZE=libtoolize
-    '' +
+    ''
+    +
     # Help libgc's configure.
-    '' export CXXCPP="$CXX -E"
+    ''      export CXXCPP="$CXX -E"
     '';
 
   patchPhase = ''
@@ -50,10 +58,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Efficient Scheme compiler";
-    homepage    = "http://www-sop.inria.fr/indes/fp/Bigloo/";
-    license     = lib.licenses.gpl2Plus;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    homepage = "http://www-sop.inria.fr/indes/fp/Bigloo/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [thoughtpolice];
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

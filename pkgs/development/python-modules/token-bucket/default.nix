@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-runner
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-runner,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "token-bucket";
   version = "0.3.0";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Token Bucket Implementation for Python Web Apps";
     homepage = "https://github.com/falconry/token-bucket";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

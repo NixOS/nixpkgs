@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+}:
 buildPythonPackage rec {
   pname = "robot-detection";
   version = "0.4";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1xd2jm3yn31bnk1kqzggils2rxj26ylxsfz3ap7bhr3ilhnbg3rx";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   # no tests in archive
   doCheck = false;

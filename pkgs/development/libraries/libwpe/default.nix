@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, pkg-config
-, libxkbcommon
-, libGL
-, ninja
-, libX11 }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  pkg-config,
+  libxkbcommon,
+  libGL,
+  ninja,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "libwpe";
   version = "1.12.0";
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "General-purpose library for WPE WebKit";
     license = licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [matthewbauer];
     platforms = platforms.linux;
   };
 }

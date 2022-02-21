@@ -1,23 +1,23 @@
-{ lib
-, appdirs
-, attrs
-, buildPythonPackage
-, bson
-, cattrs
-, fetchFromGitHub
-, itsdangerous
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, requests-mock
-, rich
-, timeout-decorator
-, ujson
-, url-normalize
+{
+  lib,
+  appdirs,
+  attrs,
+  buildPythonPackage,
+  bson,
+  cattrs,
+  fetchFromGitHub,
+  itsdangerous,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  requests-mock,
+  rich,
+  timeout-decorator,
+  ujson,
+  url-normalize,
 }:
-
 buildPythonPackage rec {
   pname = "requests-cache";
   version = "0.9.1";
@@ -74,6 +74,6 @@ buildPythonPackage rec {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

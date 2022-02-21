@@ -1,20 +1,24 @@
-{ lib, stdenv, fetchurl, unzip
-, bdftopcf, mkfontscale, fonttosfnt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  bdftopcf,
+  mkfontscale,
+  fonttosfnt,
 }:
-
 stdenv.mkDerivation {
   pname = "dina-font";
   version = "2.92";
 
-  outputs = [ "out" "bdf" ];
+  outputs = ["out" "bdf"];
 
   src = fetchurl {
     url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
     sha256 = "1kq86lbxxgik82aywwhawmj80vsbz3hfhdyhicnlv9km7yjvnl8z";
   };
 
-  nativeBuildInputs =
-    [ unzip bdftopcf mkfontscale fonttosfnt ];
+  nativeBuildInputs = [unzip bdftopcf mkfontscale fonttosfnt];
 
   postPatch = ''
     sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf
@@ -65,6 +69,6 @@ stdenv.mkDerivation {
     homepage = "https://www.donationcoder.com/Software/Jibz/Dina/";
     downloadPage = "https://www.donationcoder.com/Software/Jibz/Dina/";
     license = licenses.free;
-    maintainers = [ maintainers.prikhi ];
+    maintainers = [maintainers.prikhi];
   };
 }

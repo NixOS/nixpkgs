@@ -1,5 +1,8 @@
-{ lib, stdenvNoCC
-, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "simple-mpv-ui";
   version = "2.1.0";
@@ -21,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "A web based user interface with controls for the mpv mediaplayer";
     homepage = "https://github.com/open-dynaMIX/simple-mpv-webui";
-    maintainers = with maintainers; [ cript0nauta zopieux ];
+    maintainers = with maintainers; [cript0nauta zopieux];
     longDescription = ''
       You can access the webui when accessing http://127.0.0.1:8080 or
       http://[::1]:8080 in your webbrowser. By default it listens on
@@ -30,4 +33,3 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
   };
 }
-

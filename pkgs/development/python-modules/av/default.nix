@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, numpy
-, ffmpeg
-, pkg-config
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  numpy,
+  ffmpeg,
+  pkg-config,
 }:
-
 buildPythonPackage rec {
   pname = "av";
   version = "8.1.0";
@@ -17,10 +17,10 @@ buildPythonPackage rec {
     sha256 = "0402169bc27e38e0f44e0e0e1854cf488337e86206b6d25d6dae2bfd7a1a0230";
   };
 
-  checkInputs = [ numpy ];
+  checkInputs = [numpy];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [ffmpeg];
 
   # Tests require downloading files from internet
   doCheck = false;

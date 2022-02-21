@@ -1,11 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
-, openssl
-, ppp
-, systemd
-, withSystemd ? stdenv.isLinux
-, withPpp ? stdenv.isLinux
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  ppp,
+  systemd,
+  withSystemd ? stdenv.isLinux,
+  withPpp ? stdenv.isLinux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "openfortivpn";
   version = "1.17.1";
@@ -23,19 +27,21 @@ stdenv.mkDerivation rec {
       --replace '$(DESTDIR)$(confdir)' /tmp
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional withPpp ppp;
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional withPpp ppp;
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-  ]
-  ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-  ++ lib.optional withPpp "--with-pppd=${ppp}/bin/pppd";
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+    ]
+    ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    ++ lib.optional withPpp "--with-pppd=${ppp}/bin/pppd";
 
   enableParallelBuilding = true;
 
@@ -43,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Client for PPP+SSL VPN tunnel services";
     homepage = "https://github.com/adrienverge/openfortivpn";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ madjar ];
+    maintainers = with maintainers; [madjar];
     platforms = with platforms; linux ++ darwin;
   };
 }

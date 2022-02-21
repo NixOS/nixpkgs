@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyperclip
-, urwid
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyperclip,
+  urwid,
 }:
-
 buildPythonPackage rec {
   pname = "upass";
   version = "0.2.1";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Console UI for pass";
     homepage = "https://github.com/Kwpolska/upass";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

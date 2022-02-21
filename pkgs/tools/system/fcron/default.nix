@@ -1,8 +1,13 @@
 # restart using 'killall -TERM fcron; fcron -b
 # use convert-fcrontab to update fcrontab files
-
-{ lib, stdenv, fetchurl, perl, busybox, vim }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  busybox,
+  vim,
+}:
 stdenv.mkDerivation rec {
   pname = "fcron";
   version = "3.3.1";
@@ -12,22 +17,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-81naoIpj3ft/4vlkuz9cUiRMJao2+SJaPMVNNvRoEQY=";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
-  patches = [ ./relative-fcronsighup.patch ];
+  patches = [./relative-fcronsighup.patch];
 
-  configureFlags =
-    [ "--with-sendmail=${busybox}/sbin/sendmail"
-      "--with-editor=${vim}/bin/vi"  # TODO customizable
-      "--with-bootinstall=no"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-rootname=root"
-      "--with-rootgroup=root"
-      "--disable-checks"
-    ];
+  configureFlags = [
+    "--with-sendmail=${busybox}/sbin/sendmail"
+    "--with-editor=${vim}/bin/vi" # TODO customizable
+    "--with-bootinstall=no"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-rootname=root"
+    "--with-rootgroup=root"
+    "--disable-checks"
+  ];
 
-  installTargets = [ "install-staged" ]; # install does also try to change permissions of /etc/* files
+  installTargets = ["install-staged"]; # install does also try to change permissions of /etc/* files
 
   # fcron tries to install pid into system directory on install
   installFlags = [
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description="A command scheduler with extended capabilities over cron and anacron";
+    description = "A command scheduler with extended capabilities over cron and anacron";
     homepage = "http://fcron.free.fr";
     license = licenses.gpl2;
     platforms = lib.platforms.all;

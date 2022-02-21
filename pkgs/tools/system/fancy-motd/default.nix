@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, bc, curl, figlet, fortune, gawk, iproute2, procps }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bc,
+  curl,
+  figlet,
+  fortune,
+  gawk,
+  iproute2,
+  procps,
+}:
 stdenv.mkDerivation rec {
   pname = "fancy-motd";
   version = "unstable-2021-07-15";
@@ -11,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "10fxr1grsiwvdc5m2wd4n51lvz0zd4sldg9rzviaim18nw68gdq3";
   };
 
-  buildInputs = [ bc curl figlet fortune gawk iproute2 ];
+  buildInputs = [bc curl figlet fortune gawk iproute2];
 
   postPatch = ''
     substituteInPlace motd.sh \
@@ -40,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Fancy, colorful MOTD written in bash. Server status at a glance.";
     homepage = "https://github.com/bcyran/fancy-motd";
     license = licenses.mit;
-    maintainers = with maintainers; [ rhoriguchi ];
+    maintainers = with maintainers; [rhoriguchi];
     platforms = platforms.linux;
     mainProgram = "motd";
   };

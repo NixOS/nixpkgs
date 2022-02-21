@@ -1,5 +1,11 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase, qtdeclarative }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qtdeclarative,
+}:
 mkDerivation rec {
   pname = "firebird-emu";
   version = "1.5";
@@ -12,11 +18,11 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [qmake];
 
-  buildInputs = [ qtbase qtdeclarative ];
+  buildInputs = [qtbase qtdeclarative];
 
-  makeFlags = [ "INSTALL_ROOT=$(out)" ];
+  makeFlags = ["INSTALL_ROOT=$(out)"];
 
   # Attempts to install to /usr/bin and /usr/share/applications, which Nix does
   # not use.
@@ -29,7 +35,7 @@ mkDerivation rec {
     homepage = "https://github.com/nspire-emus/firebird";
     description = "Third-party multi-platform emulator of the ARM-based TI-Nspire™ calculators";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ pneumaticat ];
+    maintainers = with lib.maintainers; [pneumaticat];
     # Only tested on Linux, but likely possible to build on, e.g. macOS
     platforms = lib.platforms.linux;
   };

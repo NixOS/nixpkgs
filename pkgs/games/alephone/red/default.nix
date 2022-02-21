@@ -1,5 +1,8 @@
-{ alephone, fetchurl, unrar }:
-
+{
+  alephone,
+  fetchurl,
+  unrar,
+}:
 alephone.makeWrapper rec {
   pname = "marathon-red";
   version = "0";
@@ -14,5 +17,4 @@ alephone.makeWrapper rec {
     description = "Survival horror-esque Marathon conversion";
     homepage = "https://alephone.lhowon.org/scenarios.html";
   };
-
 }

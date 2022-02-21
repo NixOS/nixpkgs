@@ -1,14 +1,13 @@
 # Systemd services for openvswitch
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.virtualisation.vswitch;
-
 in {
-
   options.virtualisation.vswitch = {
     enable = mkOption {
       type = types.bool;
@@ -16,7 +15,7 @@ in {
       description = ''
         Whether to enable Open vSwitch. A configuration daemon (ovs-server)
         will be started.
-        '';
+      '';
     };
 
     resetOnStart = mkOption {
@@ -25,7 +24,7 @@ in {
       description = ''
         Whether to reset the Open vSwitch configuration database to a default
         configuration on every start of the systemd <literal>ovsdb.service</literal>.
-        '';
+      '';
     };
 
     package = mkOption {
@@ -39,7 +38,6 @@ in {
   };
 
   config = mkIf cfg.enable (let
-
     # Where the communication sockets live
     runDir = "/run/openvswitch";
 
@@ -53,22 +51,20 @@ in {
       ];
       installPhase = "mkdir -p $out";
     };
-
   in {
-    environment.systemPackages = [ cfg.package ];
-    boot.kernelModules = [ "tun" "openvswitch" ];
+    environment.systemPackages = [cfg.package];
+    boot.kernelModules = ["tun" "openvswitch"];
 
-    boot.extraModulePackages = [ cfg.package ];
+    boot.extraModulePackages = [cfg.package];
 
     systemd.services.ovsdb = {
       description = "Open_vSwitch Database Server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
-      path = [ cfg.package ];
-      restartTriggers = [ db cfg.package ];
+      wantedBy = ["multi-user.target"];
+      after = ["systemd-udev-settle.service"];
+      path = [cfg.package];
+      restartTriggers = [db cfg.package];
       # Create the config database
-      preStart =
-        ''
+      preStart = ''
         mkdir -p ${runDir}
         mkdir -p /var/db/openvswitch
         chmod +w /var/db/openvswitch
@@ -86,10 +82,9 @@ in {
         else
           echo "Database already up to date"
         fi
-        '';
+      '';
       serviceConfig = {
-        ExecStart =
-          ''
+        ExecStart = ''
           ${cfg.package}/bin/ovsdb-server \
             --remote=punix:${runDir}/db.sock \
             --private-key=db:Open_vSwitch,SSL,private_key \
@@ -99,7 +94,7 @@ in {
             --pidfile=/run/openvswitch/ovsdb.pid \
             --detach \
             /var/db/openvswitch/conf.db
-          '';
+        '';
         Restart = "always";
         RestartSec = 3;
         PIDFile = "/run/openvswitch/ovsdb.pid";
@@ -113,10 +108,10 @@ in {
 
     systemd.services.ovs-vswitchd = {
       description = "Open_vSwitch Daemon";
-      wantedBy = [ "multi-user.target" ];
-      bindsTo = [ "ovsdb.service" ];
-      after = [ "ovsdb.service" ];
-      path = [ cfg.package ];
+      wantedBy = ["multi-user.target"];
+      bindsTo = ["ovsdb.service"];
+      after = ["ovsdb.service"];
+      path = [cfg.package];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/ovs-vswitchd \
@@ -130,16 +125,14 @@ in {
         RestartSec = 3;
       };
     };
-
   });
 
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "vswitch" "ipsec" ] ''
+    (mkRemovedOptionModule ["virtualisation" "vswitch" "ipsec"] ''
       OpenVSwitch IPSec functionality has been removed, because it depended on racoon,
       which was removed from nixpkgs, because it was abanoded upstream.
     '')
   ];
 
-  meta.maintainers = with maintainers; [ netixx ];
-
+  meta.maintainers = with maintainers; [netixx];
 }

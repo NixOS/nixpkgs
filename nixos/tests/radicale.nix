@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
-
-let
+import ./make-test-python.nix ({
+  lib,
+  pkgs,
+  ...
+}: let
   user = "someuser";
   password = "some_password";
   port = "5232";
@@ -9,9 +11,9 @@ let
   cli = "${pkgs.calendar-cli}/bin/calendar-cli --caldav-user ${user} --caldav-pass ${password}";
 in {
   name = "radicale3";
-  meta.maintainers = with lib.maintainers; [ dotlambda ];
+  meta.maintainers = with lib.maintainers; [dotlambda];
 
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     services.radicale = {
       enable = true;
       settings = {
@@ -39,9 +41,9 @@ in {
         };
       };
     };
-    systemd.services.radicale.path = [ pkgs.git ];
-    environment.systemPackages = [ pkgs.git ];
-    systemd.tmpfiles.rules = [ "d ${filesystem_folder} 0750 radicale radicale -" ];
+    systemd.services.radicale.path = [pkgs.git];
+    environment.systemPackages = [pkgs.git];
+    systemd.tmpfiles.rules = ["d ${filesystem_folder} 0750 radicale radicale -"];
     # WARNING: DON'T DO THIS IN PRODUCTION!
     # This puts unhashed secrets directly into the Nix store for ease of testing.
     environment.etc."radicale/users".source = pkgs.runCommand "htpasswd" {} ''

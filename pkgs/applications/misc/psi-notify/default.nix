@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, systemd, libnotify, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  systemd,
+  libnotify,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "psi-notify";
   version = "1.2.1";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hn37plim1smmlrjjmz8kybyms8pz3wxcgf8vmqjrsqi6bfcym7g";
   };
 
-  buildInputs = [ systemd libnotify ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [systemd libnotify];
+  nativeBuildInputs = [pkg-config];
 
   installPhase = ''
     runHook preInstall
@@ -34,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/cdown/psi-notify";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduarrrd ];
+    maintainers = with maintainers; [eduarrrd];
   };
 }

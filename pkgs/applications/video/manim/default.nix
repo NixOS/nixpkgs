@@ -1,7 +1,26 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pythonOlder, file, fetchpatch
-, cairo, ffmpeg, sox, xdg-utils, texlive
-, colour, numpy, pillow, progressbar, scipy, tqdm, opencv , pycairo, pydub
-, pbr, fetchPypi
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pythonOlder,
+  file,
+  fetchpatch,
+  cairo,
+  ffmpeg,
+  sox,
+  xdg-utils,
+  texlive,
+  colour,
+  numpy,
+  pillow,
+  progressbar,
+  scipy,
+  tqdm,
+  opencv,
+  pycairo,
+  pydub,
+  pbr,
+  fetchPypi,
 }:
 buildPythonApplication rec {
   pname = "manim";
@@ -13,9 +32,9 @@ buildPythonApplication rec {
     sha256 = "0vg9b3rwypq5zir74pi0pmj47yqlcg7hrvscwrpjzjbqq2yihn49";
   };
 
-  patches = [ ./remove-dependency-constraints.patch ];
+  patches = [./remove-dependency-constraints.patch];
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
   propagatedBuildInputs = [
     colour
@@ -28,14 +47,17 @@ buildPythonApplication rec {
     pycairo
     pydub
 
-    cairo sox ffmpeg xdg-utils
+    cairo
+    sox
+    ffmpeg
+    xdg-utils
   ];
 
   # Test with texlive to see whether it works but don't propagate
   # because it's huge and optional
   # TODO: Use smaller TexLive distribution
   #       Doesn't need everything but it's hard to figure out what it needs
-  checkInputs = [ cairo sox ffmpeg xdg-utils texlive.combined.scheme-full ];
+  checkInputs = [cairo sox ffmpeg xdg-utils texlive.combined.scheme-full];
 
   # Simple test and complex test with LaTeX
   checkPhase = ''
@@ -59,6 +81,6 @@ buildPythonApplication rec {
     '';
     homepage = "https://github.com/3b1b/manim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ johnazoidberg ];
+    maintainers = with lib.maintainers; [johnazoidberg];
   };
 }

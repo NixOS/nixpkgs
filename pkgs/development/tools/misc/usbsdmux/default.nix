@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "usbsdmux";
   version = "0.2.1";
@@ -16,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     description = "Control software for the LXA USB-SD-Mux";
     homepage = "https://github.com/linux-automation/usbsdmux";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with maintainers; [emantor];
     platforms = with platforms; linux;
   };
 }

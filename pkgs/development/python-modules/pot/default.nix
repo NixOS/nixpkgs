@@ -1,19 +1,19 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, scipy
-, cython
-, matplotlib
-, scikit-learn
-, cupy
-, pymanopt
-, autograd
-, pytestCheckHook
-, enableDimensionalityReduction ? false
-, enableGPU ? false
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  cython,
+  matplotlib,
+  scikit-learn,
+  cupy,
+  pymanopt,
+  autograd,
+  pytestCheckHook,
+  enableDimensionalityReduction ? false,
+  enableGPU ? false,
 }:
-
 buildPythonPackage rec {
   pname = "pot";
   version = "0.8.1.0";
@@ -29,11 +29,12 @@ buildPythonPackage rec {
       --replace "--cov-report= --cov=ot" ""
   '';
 
-  nativeBuildInputs = [ numpy cython ];
-  propagatedBuildInputs = [ numpy scipy ]
-    ++ lib.optionals enableGPU [ cupy ]
-    ++ lib.optionals enableDimensionalityReduction [ pymanopt autograd ];
-  checkInputs = [ matplotlib scikit-learn pytestCheckHook ];
+  nativeBuildInputs = [numpy cython];
+  propagatedBuildInputs =
+    [numpy scipy]
+    ++ lib.optionals enableGPU [cupy]
+    ++ lib.optionals enableDimensionalityReduction [pymanopt autograd];
+  checkInputs = [matplotlib scikit-learn pytestCheckHook];
 
   # To prevent importing of an incomplete package from the build directory
   # instead of nix store (`ot` is the top-level package name).
@@ -42,14 +43,14 @@ buildPythonPackage rec {
   '';
 
   # GPU tests are always skipped because of sandboxing
-  disabledTests = [ "warnings" ];
+  disabledTests = ["warnings"];
 
-  pythonImportsCheck = [ "ot" "ot.lp" ];
+  pythonImportsCheck = ["ot" "ot.lp"];
 
   meta = {
     description = "Python Optimal Transport Library";
     homepage = "https://pythonot.github.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    maintainers = with lib.maintainers; [yl3dy];
   };
 }

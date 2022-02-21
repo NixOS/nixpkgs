@@ -1,5 +1,10 @@
-{ lib, nimPackages, fetchurl, gentium, makeDesktopItem }:
-
+{
+  lib,
+  nimPackages,
+  fetchurl,
+  gentium,
+  makeDesktopItem,
+}:
 nimPackages.buildNimPackage rec {
   pname = "hottext";
   version = "1.4";
@@ -35,6 +40,6 @@ nimPackages.buildNimPackage rec {
     description = "Simple RSVP speed-reading utility";
     license = licenses.unlicense;
     homepage = "https://git.sr.ht/~ehmry/hottext";
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ehmry];
   };
 }

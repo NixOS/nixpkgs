@@ -1,16 +1,16 @@
-{ lib
-, betamax
-, buildPythonPackage
-, cachetools
-, coloredlogs
-, emoji
-, fetchPypi
-, nose
-, pythonOlder
-, pytz
-, requests
+{
+  lib,
+  betamax,
+  buildPythonPackage,
+  cachetools,
+  coloredlogs,
+  emoji,
+  fetchPypi,
+  nose,
+  pythonOlder,
+  pytz,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "locationsharinglib";
   version = "4.1.8";
@@ -49,12 +49,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "locationsharinglib" ];
+  pythonImportsCheck = ["locationsharinglib"];
 
   meta = with lib; {
     description = "Python package to retrieve coordinates from a Google account";
     homepage = "https://locationsharinglib.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.apcupsd;
 
   configFile = pkgs.writeText "apcupsd.conf" ''
@@ -43,35 +45,33 @@ let
     chmod a+x "$out/${eventname}"
   '';
 
-  eventToShellCmds = event: if builtins.hasAttr event cfg.hooks then (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks)) else "";
+  eventToShellCmds = event:
+    if builtins.hasAttr event cfg.hooks
+    then (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks))
+    else "";
 
-  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (''
-    mkdir "$out"
-    # Copy SCRIPTDIR from apcupsd package
-    cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/
-    # Make the files writeable (nix will unset the write bits afterwards)
-    chmod u+w "$out"/*
-    # Remove the sample event notification scripts, because they don't work
-    # anyways (they try to send mail to "root" with the "mail" command)
-    (cd "$out" && rm changeme commok commfailure onbattery offbattery)
-    # Remove the sample apcupsd.conf file (we're generating our own)
-    rm "$out/apcupsd.conf"
-    # Set the SCRIPTDIR= line in apccontrol to the dir we're creating now
-    sed -i -e "s|^SCRIPTDIR=.*|SCRIPTDIR=$out|" "$out/apccontrol"
-    '' + concatStringsSep "\n" (map eventToShellCmds eventList)
-
+  scriptDir = pkgs.runCommand "apcupsd-scriptdir" {preferLocalBuild = true;} (
+    ''
+      mkdir "$out"
+      # Copy SCRIPTDIR from apcupsd package
+      cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/
+      # Make the files writeable (nix will unset the write bits afterwards)
+      chmod u+w "$out"/*
+      # Remove the sample event notification scripts, because they don't work
+      # anyways (they try to send mail to "root" with the "mail" command)
+      (cd "$out" && rm changeme commok commfailure onbattery offbattery)
+      # Remove the sample apcupsd.conf file (we're generating our own)
+      rm "$out/apcupsd.conf"
+      # Set the SCRIPTDIR= line in apccontrol to the dir we're creating now
+      sed -i -e "s|^SCRIPTDIR=.*|SCRIPTDIR=$out|" "$out/apccontrol"
+    ''
+    + concatStringsSep "\n" (map eventToShellCmds eventList)
   );
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.apcupsd = {
-
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -118,27 +118,25 @@ in
           doing.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    assertions = [ {
-      assertion = let hooknames = builtins.attrNames cfg.hooks; in all (x: elem x eventList) hooknames;
-      message = ''
-        One (or more) attribute names in services.apcupsd.hooks are invalid.
-        Current attribute names: ${toString (builtins.attrNames cfg.hooks)}
-        Valid attribute names  : ${toString eventList}
-      '';
-    } ];
+    assertions = [
+      {
+        assertion = let hooknames = builtins.attrNames cfg.hooks; in all (x: elem x eventList) hooknames;
+        message = ''
+          One (or more) attribute names in services.apcupsd.hooks are invalid.
+          Current attribute names: ${toString (builtins.attrNames cfg.hooks)}
+          Valid attribute names  : ${toString eventList}
+        '';
+      }
+    ];
 
     # Give users access to the "apcaccess" tool
-    environment.systemPackages = [ pkgs.apcupsd ];
+    environment.systemPackages = [pkgs.apcupsd];
 
     # NOTE 1: apcupsd runs as root because it needs permission to run
     # "shutdown"
@@ -149,7 +147,7 @@ in
     # The message still gets through.
     systemd.services.apcupsd = {
       description = "APC UPS Daemon";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       preStart = "mkdir -p /run/apcupsd/";
       serviceConfig = {
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd -b -f ${configFile} -d1";
@@ -170,9 +168,9 @@ in
     # http://forums.opensuse.org/english/get-technical-help-here/applications/479499-apcupsd-systemd-killpower-issues.html
     systemd.services.apcupsd-killpower = {
       description = "APC UPS Kill Power";
-      after = [ "shutdown.target" ]; # append umount.target?
-      before = [ "final.target" ];
-      wantedBy = [ "shutdown.target" ];
+      after = ["shutdown.target"]; # append umount.target?
+      before = ["final.target"];
+      wantedBy = ["shutdown.target"];
       unitConfig = {
         ConditionPathExists = "/run/apcupsd/powerfail";
         DefaultDependencies = "no";
@@ -185,7 +183,5 @@ in
         RemainAfterExit = "yes";
       };
     };
-
   };
-
 }

@@ -1,31 +1,32 @@
-{ lib, stdenv
-, meson
-, ninja
-, gettext
-, fetchurl
-, evince
-, gjs
-, pkg-config
-, gtk3
-, glib
-, tracker
-, tracker-miners
-, libxslt
-, webkitgtk
-, gnome-desktop
-, libgepub
-, gnome
-, gdk-pixbuf
-, gsettings-desktop-schemas
-, adwaita-icon-theme
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, desktop-file-utils
-, python3
-, gobject-introspection
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  gettext,
+  fetchurl,
+  evince,
+  gjs,
+  pkg-config,
+  gtk3,
+  glib,
+  tracker,
+  tracker-miners,
+  libxslt,
+  webkitgtk,
+  gnome-desktop,
+  libgepub,
+  gnome,
+  gdk-pixbuf,
+  gsettings-desktop-schemas,
+  adwaita-icon-theme,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  desktop-file-utils,
+  python3,
+  gobject-introspection,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-books";
   version = "40.0";

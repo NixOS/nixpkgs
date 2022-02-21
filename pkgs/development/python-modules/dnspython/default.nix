@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "dnspython";
   version = "2.2.0";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonImportsCheck = [ "dns" ];
+  pythonImportsCheck = ["dns"];
 
   meta = with lib; {
     description = "A DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ gador ];
+    license = with licenses; [isc];
+    maintainers = with maintainers; [gador];
   };
 }

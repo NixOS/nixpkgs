@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.miredo;
   pidFile = "/run/miredo.pid";
   miredoConf = pkgs.writeText "miredo.conf" ''
@@ -11,15 +13,11 @@ let
     ${optionalString (cfg.bindAddress != null) "BindAddress ${cfg.bindAddress}"}
     ${optionalString (cfg.bindPort != null) "BindPort ${cfg.bindPort}"}
   '';
-in
-{
-
+in {
   ###### interface
 
   options = {
-
     services.miredo = {
-
       enable = mkEnableOption "the Miredo IPv6 tunneling service";
 
       package = mkOption {
@@ -70,14 +68,12 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-
     systemd.services.miredo = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       description = "Teredo IPv6 Tunneling Daemon";
       serviceConfig = {
         Restart = "always";
@@ -86,7 +82,5 @@ in
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
-
   };
-
 }

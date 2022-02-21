@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libpng, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libpng,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "pngnq";
   version = "1.1";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qmnnl846agg55i7h4vmrn11lgb8kg6gvs8byqz34bdkjh5gwiy1";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpng zlib ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libpng zlib];
 
   patchPhase = ''
     sed -i '/png.h/a \#include <zlib.h>' src/rwpng.c
@@ -20,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://pngnq.sourceforge.net/";
     description = "A PNG quantizer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.linux;
   };
 }

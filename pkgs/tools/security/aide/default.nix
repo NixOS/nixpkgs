@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, flex, bison, libmhash, zlib, acl, attr, libselinux, pcre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  libmhash,
+  zlib,
+  acl,
+  attr,
+  libselinux,
+  pcre,
+}:
 stdenv.mkDerivation rec {
   pname = "aide";
   version = "0.17.4";
@@ -9,20 +20,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yBUFJG8//C52A21Dp3ISroKJW1iB2bniXBNhsam3qEY=";
   };
 
-  buildInputs = [ flex bison libmhash zlib acl attr libselinux pcre ];
-
+  buildInputs = [flex bison libmhash zlib acl attr libselinux pcre];
 
   configureFlags = [
     "--with-posix-acl"
     "--with-selinux"
     "--with-xattr"
-    ];
+  ];
 
   meta = with lib; {
     homepage = "https://aide.github.io/";
     description = "A file and directory integrity checker";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [maintainers.tstrobel];
     platforms = platforms.linux;
   };
 }

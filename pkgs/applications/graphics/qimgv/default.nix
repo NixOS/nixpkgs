@@ -1,19 +1,17 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-
-, cmake
-, pkg-config
-
-, exiv2
-, mpv
-, opencv4
-, qtbase
-, qtimageformats
-, qtsvg
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  exiv2,
+  mpv,
+  opencv4,
+  qtbase,
+  qtimageformats,
+  qtsvg,
 }:
-
 mkDerivation rec {
   pname = "qimgv";
   version = "1.0.2";
@@ -55,6 +53,6 @@ mkDerivation rec {
     homepage = "https://github.com/easymodo/qimgv";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h ];
+    maintainers = with maintainers; [cole-h];
   };
 }

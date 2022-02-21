@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchurl, lwt, ocaml }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  lwt,
+  ocaml,
+}:
 buildDunePackage rec {
   pname = "lwt-dllist";
   version = "1.0.1";
@@ -22,6 +27,6 @@ buildDunePackage rec {
     description = "Mutable doubly-linked list with Lwt iterators";
     homepage = "https://github.com/mirage/lwt-dllist";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

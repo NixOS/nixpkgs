@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeScript,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "rocm-cmake";
   version = "4.5.2";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-5RwhIIOtqeMl/Gyufl5U1gTEpoCjdPJP5MbVnhEKYMM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "CMake modules for common build tasks for the ROCm stack";
     homepage = "https://github.com/RadeonOpenCompute/rocm-cmake";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.unix;
   };
 }

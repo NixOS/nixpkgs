@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "csvdiff";
   version = "1.4.0";
@@ -20,6 +20,6 @@ buildGoModule rec {
     homepage = "https://aswinkarthik.github.io/csvdiff/";
     description = "A fast diff tool for comparing csv files";
     license = licenses.mit;
-    maintainers = with maintainers; [ turion ];
+    maintainers = with maintainers; [turion];
   };
 }

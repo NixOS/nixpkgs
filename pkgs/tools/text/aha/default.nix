@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "aha";
   version = "0.5.1";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "theZiz";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   enableParallelBuilding = true;
 
@@ -21,8 +24,8 @@ stdenv.mkDerivation rec {
       aha takes ANSI SGR-coloured input and produces W3C-conformant HTML code.
     '';
     homepage = "https://github.com/theZiz/aha";
-    license = with licenses; [ lgpl2Plus mpl11 ];
-    maintainers = with maintainers; [ pSub ];
+    license = with licenses; [lgpl2Plus mpl11];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.all;
   };
 }

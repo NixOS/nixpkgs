@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, gd, ncurses
-, sqlite
-, check
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gd,
+  ncurses,
+  sqlite,
+  check,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vnstat";
   version = "2.9";
@@ -21,10 +23,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/cfg.c --replace /usr/local $out
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gd ncurses sqlite ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gd ncurses sqlite];
 
-  checkInputs = [ check ];
+  checkInputs = [check];
 
   doCheck = true;
 
@@ -40,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://humdi.net/vnstat/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ evils ];
+    maintainers = with maintainers; [evils];
   };
 }

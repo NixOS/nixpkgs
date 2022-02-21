@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libzip, boost, wt4, libconfig, pkg-config } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libzip,
+  boost,
+  wt4,
+  libconfig,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "fileshelter";
   version = "4.0.1";
@@ -13,8 +22,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libzip boost wt4 libconfig ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [libzip boost wt4 libconfig];
 
   NIX_LDFLAGS = "-lpthread";
 
@@ -25,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/epoupon/fileshelter";
     description = "FileShelter is a 'one-click' file sharing web application";
-    maintainers = [ maintainers.willibutz ];
+    maintainers = [maintainers.willibutz];
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

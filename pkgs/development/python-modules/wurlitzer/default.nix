@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, mock
-, pytest
-, selectors2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  mock,
+  pytest,
+  selectors2,
 }:
-
 buildPythonPackage rec {
   pname = "wurlitzer";
   version = "3.0.2";
@@ -16,9 +16,9 @@ buildPythonPackage rec {
     sha256 = "36051ac530ddb461a86b6227c4b09d95f30a1d1043de2b4a592e97ae8a84fcdf";
   };
 
-  propagatedBuildInputs = lib.optionals isPy27 [ selectors2 ];
+  propagatedBuildInputs = lib.optionals isPy27 [selectors2];
 
-  checkInputs = [ mock pytest ];
+  checkInputs = [mock pytest];
 
   checkPhase = ''
     py.test test.py

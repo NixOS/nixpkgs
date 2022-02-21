@@ -1,5 +1,4 @@
-{ fetchgit }:
-{
+{fetchgit}: {
   angle2 = fetchgit {
     url = "https://chromium.googlesource.com/angle/angle.git";
     rev = "956ab4d9fab36be9929e63829475d4d69b2c681c";

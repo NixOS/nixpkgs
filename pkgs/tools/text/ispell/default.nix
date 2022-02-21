@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, bison, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "ispell";
   version = "3.4.04";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h7zW8FIdhaCjp4NCFZVtdOvEkxRMx8eR+HvmhyzP4T4=";
   };
 
-  buildInputs = [ bison ncurses ];
+  buildInputs = [bison ncurses];
 
   postPatch = ''
     cat >> local.h <<EOF

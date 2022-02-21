@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, openssl, perl, trousers, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  perl,
+  trousers,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "tboot";
   version = "1.10.3";
@@ -9,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ixFs9Bd6VNT1n5RU6n38hFR+m4+SBNzwrCNXRmCHgOQ=";
   };
 
-  buildInputs = [ openssl trousers zlib ];
+  buildInputs = [openssl trousers zlib];
 
   enableParallelBuilding = true;
 
@@ -22,14 +29,14 @@ stdenv.mkDerivation rec {
     substituteInPlace docs/Makefile --replace /usr/share /share
   '';
 
-  installFlags = [ "DESTDIR=$(out)" ];
+  installFlags = ["DESTDIR=$(out)"];
 
   meta = with lib; {
     description = "A pre-kernel/VMM module that uses Intel(R) TXT to perform a measured and verified launch of an OS kernel/VMM";
-    homepage    = "https://sourceforge.net/projects/tboot/";
-    changelog   = "https://sourceforge.net/p/tboot/code/ci/v${version}/tree/CHANGELOG";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ ak ];
-    platforms   = [ "x86_64-linux" "i686-linux" ];
+    homepage = "https://sourceforge.net/projects/tboot/";
+    changelog = "https://sourceforge.net/p/tboot/code/ci/v${version}/tree/CHANGELOG";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ak];
+    platforms = ["x86_64-linux" "i686-linux"];
   };
 }

@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.services.lorri;
   socketPath = "lorri/daemon.socket";
 in {
@@ -29,7 +32,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.user.sockets.lorri = {
       description = "Socket for Lorri Daemon";
-      wantedBy = [ "sockets.target" ];
+      wantedBy = ["sockets.target"];
       socketConfig = {
         ListenStream = "%t/${socketPath}";
         RuntimeDirectory = "lorri";
@@ -38,9 +41,9 @@ in {
 
     systemd.user.services.lorri = {
       description = "Lorri Daemon";
-      requires = [ "lorri.socket" ];
-      after = [ "lorri.socket" ];
-      path = with pkgs; [ config.nix.package git gnutar gzip ];
+      requires = ["lorri.socket"];
+      after = ["lorri.socket"];
+      path = with pkgs; [config.nix.package git gnutar gzip];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/lorri daemon";
         PrivateTmp = true;
@@ -50,6 +53,6 @@ in {
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
 }

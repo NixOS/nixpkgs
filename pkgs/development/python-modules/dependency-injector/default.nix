@@ -1,19 +1,19 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fastapi
-, fetchFromGitHub
-, flask
-, httpx
-, mypy-boto3-s3
-, numpy
-, scipy
-, pydantic
-, pytestCheckHook
-, pyyaml
-, six
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  httpx,
+  mypy-boto3-s3,
+  numpy,
+  scipy,
+  pydantic,
+  pytestCheckHook,
+  pyyaml,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "dependency-injector";
   version = "4.35.3";
@@ -52,12 +52,12 @@ buildPythonPackage rec {
     "tests/unit/ext/test_aiohttp_py35.py"
   ];
 
-  pythonImportsCheck = [ "dependency_injector" ];
+  pythonImportsCheck = ["dependency_injector"];
 
   meta = with lib; {
     description = "Dependency injection microframework for Python";
     homepage = "https://github.com/ets-labs/python-dependency-injector";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gerschtli ];
+    maintainers = with maintainers; [gerschtli];
   };
 }

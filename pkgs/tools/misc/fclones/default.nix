@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libiconv
-, rustPlatform
-, AppKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libiconv,
+  rustPlatform,
+  AppKit,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
   version = "0.17.1";
@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     description = "Efficient Duplicate File Finder and Remover";
     homepage = "https://github.com/pkolaczk/fclones";
     license = licenses.mit;
-    maintainers = with maintainers; [ cyounkins msfjarvis ];
+    maintainers = with maintainers; [cyounkins msfjarvis];
   };
 }

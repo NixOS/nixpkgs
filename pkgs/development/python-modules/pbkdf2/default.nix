@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "pbkdf2";
   version = "1.3";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

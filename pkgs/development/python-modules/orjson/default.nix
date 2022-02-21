@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, pythonOlder
-, rustPlatform
-, fetchFromGitHub
-, buildPythonPackage
-, libiconv
-, numpy
-, psutil
-, pytestCheckHook
-, python-dateutil
-, pytz
-, xxhash
+{
+  lib,
+  stdenv,
+  pythonOlder,
+  rustPlatform,
+  fetchFromGitHub,
+  buildPythonPackage,
+  libiconv,
+  numpy,
+  psutil,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  xxhash,
 }:
-
 buildPythonPackage rec {
   pname = "orjson";
   version = "3.6.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
 
   checkInputs = [
     numpy
@@ -49,13 +49,13 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  pythonImportsCheck = [ pname ];
+  pythonImportsCheck = [pname];
 
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [asl20 mit];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ misuzu ];
+    maintainers = with maintainers; [misuzu];
   };
 }

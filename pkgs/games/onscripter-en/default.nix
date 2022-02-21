@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchurl
-, libpng, libjpeg, libogg, libvorbis, freetype, smpeg
-, SDL, SDL_image, SDL_mixer, SDL_ttf }:
-
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpng,
+  libjpeg,
+  libogg,
+  libvorbis,
+  freetype,
+  smpeg,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  SDL_ttf,
+}:
 stdenv.mkDerivation {
   pname = "onscripter-en";
   version = "20110930";
@@ -13,11 +23,20 @@ stdenv.mkDerivation {
     sha256 = "1kzm6d894c0ihgkwhd03x3kaqqz0sb6kf0r86xrrz12y309zfam6";
   };
 
-  buildInputs = [ libpng libjpeg libogg libvorbis freetype smpeg
-                  SDL SDL_image SDL_mixer SDL_ttf
-                ];
+  buildInputs = [
+    libpng
+    libjpeg
+    libogg
+    libvorbis
+    freetype
+    smpeg
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+  ];
 
-  configureFlags = [ "--no-werror" ];
+  configureFlags = ["--no-werror"];
 
   # Without this libvorbisfile.so is not getting linked properly for some reason.
   NIX_CFLAGS_LINK = "-lvorbisfile";
@@ -31,6 +50,6 @@ stdenv.mkDerivation {
     homepage = "http://unclemion.com/onscripter/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

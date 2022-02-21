@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, libtool
-, intltool
-, pkg-config
-, glib
-, gtk2
-, curl
-, libmpdclient
-, libsoup
-, gob2
-, vala
-, libunique
-, libSM
-, libICE
-, sqlite
-, hicolor-icon-theme
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtool,
+  intltool,
+  pkg-config,
+  glib,
+  gtk2,
+  curl,
+  libmpdclient,
+  libsoup,
+  gob2,
+  vala,
+  libunique,
+  libSM,
+  libICE,
+  sqlite,
+  hicolor-icon-theme,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gmpc";
   version = "11.8.16";
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
       url = "http://download.sarine.nl/Programs/gmpc/11.8/libmpd-11.8.17.tar.gz";
       sha256 = "10vspwsgr8pwf3qp2bviw6b2l8prgdiswgv7qiqiyr0h1mmk487y";
     };
-    patches = [ ./libmpd-11.8.17-remove-strndup.patch ];
+    patches = [./libmpd-11.8.17-remove-strndup.patch];
 
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ glib ];
+    nativeBuildInputs = [pkg-config];
+    buildInputs = [glib];
   };
 
   src = fetchurl {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b3bnxf98i5lhjyljvgxgx9xmb6p46cn3a9cccrng14nagri9556";
   };
 
-  nativeBuildInputs = [ pkg-config libtool intltool gob2 vala wrapGAppsHook ];
+  nativeBuildInputs = [pkg-config libtool intltool gob2 vala wrapGAppsHook];
   buildInputs = [
     glib
     gtk2
@@ -64,3 +64,4 @@ stdenv.mkDerivation rec {
   };
 }
 # TODO: what is this libmpd derivation embedded above?
+

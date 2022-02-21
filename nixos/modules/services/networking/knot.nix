@@ -1,14 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.knot;
 
   configFile = pkgs.writeTextFile {
     name = "knot.conf";
-    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" +
-           cfg.extraConfig;
+    text =
+      (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles)
+      + "\n"
+      + cfg.extraConfig;
     checkPhase = lib.optionalString (cfg.keyFiles == []) ''
       ${cfg.package}/bin/knotc --config=$out conf-check
     '';
@@ -18,7 +22,7 @@ let
 
   knot-cli-wrappers = pkgs.stdenv.mkDerivation {
     name = "knot-cli-wrappers";
-    buildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [pkgs.makeWrapper];
     buildCommand = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.package}/bin/knotc "$out/bin/knotc" \
@@ -90,9 +94,9 @@ in {
     systemd.services.knot = {
       unitConfig.Documentation = "man:knotd(8) man:knot.conf(5) man:knotc(8) https://www.knot-dns.cz/docs/${cfg.package.version}/html/";
       description = cfg.package.meta.description;
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" ];
-      after = ["network.target" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         Type = "notify";
@@ -133,7 +137,7 @@ in {
           "AF_UNIX"
         ];
         RestrictNamespaces = true;
-        RestrictRealtime =true;
+        RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RuntimeDirectory = "knot";
         StateDirectory = "knot";
@@ -147,6 +151,6 @@ in {
       };
     };
 
-    environment.systemPackages = [ knot-cli-wrappers ];
+    environment.systemPackages = [knot-cli-wrappers];
   };
 }

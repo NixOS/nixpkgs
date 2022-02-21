@@ -1,101 +1,178 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
-, perl, pixman, vde2, alsa-lib, texinfo, flex
-, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, runtimeShell
-, attr, libcap, libcap_ng, socat
-, CoreServices, Cocoa, Hypervisor, rez, setfile
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
-, seccompSupport ? stdenv.isLinux, libseccomp
-, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
-, jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? !nixosTestRunner, libjpeg, libpng
-, smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
-, ncursesSupport ? !nixosTestRunner, ncurses
-, usbredirSupport ? spiceSupport, usbredir
-, xenSupport ? false, xen
-, cephSupport ? false, ceph
-, glusterfsSupport ? false, glusterfs, libuuid
-, openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
-, virglSupport ? openGLSupport, virglrenderer
-, libiscsiSupport ? true, libiscsi
-, smbdSupport ? false, samba
-, tpmSupport ? true
-, uringSupport ? stdenv.isLinux, liburing
-, hostCpuOnly ? false
-, hostCpuTargets ? (if hostCpuOnly
-                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
-                          ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
-                    else null)
-, nixosTestRunner ? false
-, doCheck ? false
-, qemu  # for passthru.tests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  python3,
+  python3Packages,
+  zlib,
+  pkg-config,
+  glib,
+  buildPackages,
+  perl,
+  pixman,
+  vde2,
+  alsa-lib,
+  texinfo,
+  flex,
+  bison,
+  lzo,
+  snappy,
+  libaio,
+  libtasn1,
+  gnutls,
+  nettle,
+  curl,
+  ninja,
+  meson,
+  sigtool,
+  makeWrapper,
+  runtimeShell,
+  attr,
+  libcap,
+  libcap_ng,
+  socat,
+  CoreServices,
+  Cocoa,
+  Hypervisor,
+  rez,
+  setfile,
+  numaSupport ? stdenv.isLinux && !stdenv.isAarch32,
+  numactl,
+  seccompSupport ? stdenv.isLinux,
+  libseccomp,
+  alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner,
+  pulseSupport ? !stdenv.isDarwin && !nixosTestRunner,
+  libpulseaudio,
+  sdlSupport ? !stdenv.isDarwin && !nixosTestRunner,
+  SDL2,
+  SDL2_image,
+  jackSupport ? !stdenv.isDarwin && !nixosTestRunner,
+  libjack2,
+  gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner,
+  gtk3,
+  gettext,
+  vte,
+  wrapGAppsHook,
+  vncSupport ? !nixosTestRunner,
+  libjpeg,
+  libpng,
+  smartcardSupport ? !nixosTestRunner,
+  libcacard,
+  spiceSupport ? !stdenv.isDarwin && !nixosTestRunner,
+  spice,
+  spice-protocol,
+  ncursesSupport ? !nixosTestRunner,
+  ncurses,
+  usbredirSupport ? spiceSupport,
+  usbredir,
+  xenSupport ? false,
+  xen,
+  cephSupport ? false,
+  ceph,
+  glusterfsSupport ? false,
+  glusterfs,
+  libuuid,
+  openGLSupport ? sdlSupport,
+  mesa,
+  libepoxy,
+  libdrm,
+  virglSupport ? openGLSupport,
+  virglrenderer,
+  libiscsiSupport ? true,
+  libiscsi,
+  smbdSupport ? false,
+  samba,
+  tpmSupport ? true,
+  uringSupport ? stdenv.isLinux,
+  liburing,
+  hostCpuOnly ? false,
+  hostCpuTargets ? (if hostCpuOnly
+  then
+    (lib.optional stdenv.isx86_64 "i386-softmmu"
+    ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
+  else null),
+  nixosTestRunner ? false,
+  doCheck ? false,
+  qemu
+  # for passthru.tests
 }:
-
 stdenv.mkDerivation rec {
-  pname = "qemu"
+  pname =
+    "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
   version = "6.2.0";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
     sha256 = "0iavlsy9hin8k38230j8lfmyipx3965zljls1dp34mmc8n75vqb8";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
 
-  nativeBuildInputs = [ makeWrapper pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
-    ++ lib.optionals gtkSupport [ wrapGAppsHook ]
-    ++ lib.optionals stdenv.isDarwin [ sigtool ];
+  nativeBuildInputs =
+    [makeWrapper pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme]
+    ++ lib.optionals gtkSupport [wrapGAppsHook]
+    ++ lib.optionals stdenv.isDarwin [sigtool];
 
-  buildInputs = [ zlib glib perl pixman
-    vde2 texinfo lzo snappy libtasn1
-    gnutls nettle curl
-  ]
-    ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
-    ++ lib.optionals seccompSupport [ libseccomp ]
-    ++ lib.optionals numaSupport [ numactl ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
-    ++ lib.optionals jackSupport [ libjack2 ]
-    ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
-    ++ lib.optionals vncSupport [ libjpeg libpng ]
-    ++ lib.optionals smartcardSupport [ libcacard ]
-    ++ lib.optionals spiceSupport [ spice-protocol spice ]
-    ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals stdenv.isLinux [ libaio libcap_ng libcap attr ]
-    ++ lib.optionals xenSupport [ xen ]
-    ++ lib.optionals cephSupport [ ceph ]
-    ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
-    ++ lib.optionals openGLSupport [ mesa libepoxy libdrm ]
-    ++ lib.optionals virglSupport [ virglrenderer ]
-    ++ lib.optionals libiscsiSupport [ libiscsi ]
-    ++ lib.optionals smbdSupport [ samba ]
-    ++ lib.optionals uringSupport [ liburing ];
+  buildInputs =
+    [
+      zlib
+      glib
+      perl
+      pixman
+      vde2
+      texinfo
+      lzo
+      snappy
+      libtasn1
+      gnutls
+      nettle
+      curl
+    ]
+    ++ lib.optionals ncursesSupport [ncurses]
+    ++ lib.optionals stdenv.isDarwin [CoreServices Cocoa Hypervisor rez setfile]
+    ++ lib.optionals seccompSupport [libseccomp]
+    ++ lib.optionals numaSupport [numactl]
+    ++ lib.optionals alsaSupport [alsa-lib]
+    ++ lib.optionals pulseSupport [libpulseaudio]
+    ++ lib.optionals sdlSupport [SDL2 SDL2_image]
+    ++ lib.optionals jackSupport [libjack2]
+    ++ lib.optionals gtkSupport [gtk3 gettext vte]
+    ++ lib.optionals vncSupport [libjpeg libpng]
+    ++ lib.optionals smartcardSupport [libcacard]
+    ++ lib.optionals spiceSupport [spice-protocol spice]
+    ++ lib.optionals usbredirSupport [usbredir]
+    ++ lib.optionals stdenv.isLinux [libaio libcap_ng libcap attr]
+    ++ lib.optionals xenSupport [xen]
+    ++ lib.optionals cephSupport [ceph]
+    ++ lib.optionals glusterfsSupport [glusterfs libuuid]
+    ++ lib.optionals openGLSupport [mesa libepoxy libdrm]
+    ++ lib.optionals virglSupport [virglrenderer]
+    ++ lib.optionals libiscsiSupport [libiscsi]
+    ++ lib.optionals smbdSupport [samba]
+    ++ lib.optionals uringSupport [liburing];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
-  outputs = [ "out" "ga" ];
+  outputs = ["out" "ga"];
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
   separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
 
-  patches = [
-    ./fix-qemu-ga.patch
-    ./9p-ignore-noatime.patch
-    # Cocoa clipboard support only works on macOS 10.14+
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
-      sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
-      revert = true;
-    })
-  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  patches =
+    [
+      ./fix-qemu-ga.patch
+      ./9p-ignore-noatime.patch
+      # Cocoa clipboard support only works on macOS 10.14+
+      (fetchpatch {
+        url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
+        sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
+        revert = true;
+      })
+    ]
+    ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -128,19 +205,21 @@ stdenv.mkDerivation rec {
       --replace "'VERSION'" "'QEMU_VERSION'"
   '';
 
-  configureFlags = [
-    "--disable-strip" # We'll strip ourselves after separating debug info.
-    "--enable-docs"
-    "--enable-tools"
-    "--enable-guest-agent"
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    # Always use our Meson, not the bundled version, which doesn't
-    # have our patches and will be subtly broken because of that.
-    "--meson=meson"
-    "--cross-prefix=${stdenv.cc.targetPrefix}"
-    "--cpu=${stdenv.hostPlatform.uname.processor}"
-  ] ++ lib.optional numaSupport "--enable-numa"
+  configureFlags =
+    [
+      "--disable-strip" # We'll strip ourselves after separating debug info.
+      "--enable-docs"
+      "--enable-tools"
+      "--enable-guest-agent"
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      # Always use our Meson, not the bundled version, which doesn't
+      # have our patches and will be subtly broken because of that.
+      "--meson=meson"
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
+      "--cpu=${stdenv.hostPlatform.uname.processor}"
+    ]
+    ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
     ++ lib.optional spiceSupport "--enable-spice"
@@ -168,54 +247,58 @@ stdenv.mkDerivation rec {
   # * https://github.com/qemu/qemu/blob/v6.1.0/scripts/entitlement.sh#L25
   dontStrip = stdenv.isDarwin;
 
-  postFixup = ''
-    # the .desktop is both invalid and pointless
-    rm -f $out/share/applications/qemu.desktop
+  postFixup =
+    ''
+      # the .desktop is both invalid and pointless
+      rm -f $out/share/applications/qemu.desktop
 
-    # copy qemu-ga (guest agent) to separate output
-    mkdir -p $ga/bin
-    cp $out/bin/qemu-ga $ga/bin/
-  '' + lib.optionalString gtkSupport ''
-    # wrap GTK Binaries
-    for f in $out/bin/qemu-system-*; do
-      wrapGApp $f
-    done
-  '';
+      # copy qemu-ga (guest agent) to separate output
+      mkdir -p $ga/bin
+      cp $out/bin/qemu-ga $ga/bin/
+    ''
+    + lib.optionalString gtkSupport ''
+      # wrap GTK Binaries
+      for f in $out/bin/qemu-system-*; do
+        wrapGApp $f
+      done
+    '';
   preBuild = "cd build";
 
   # tests can still timeout on slower systems
   inherit doCheck;
-  checkInputs = [ socat ];
-  preCheck = ''
-    # time limits are a little meagre for a build machine that's
-    # potentially under load.
-    substituteInPlace ../tests/unit/meson.build \
-      --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
-    substituteInPlace ../tests/qtest/meson.build \
-      --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
-    substituteInPlace ../tests/fp/meson.build \
-      --replace 'timeout: 90)' 'timeout: 300)'
+  checkInputs = [socat];
+  preCheck =
+    ''
+      # time limits are a little meagre for a build machine that's
+      # potentially under load.
+      substituteInPlace ../tests/unit/meson.build \
+        --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
+      substituteInPlace ../tests/qtest/meson.build \
+        --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
+      substituteInPlace ../tests/fp/meson.build \
+        --replace 'timeout: 90)' 'timeout: 300)'
 
-    # point tests towards correct binaries
-    substituteInPlace ../tests/unit/test-qga.c \
-      --replace '/bin/echo' "$(type -P echo)"
-    substituteInPlace ../tests/unit/test-io-channel-command.c \
-      --replace '/bin/socat' "$(type -P socat)"
+      # point tests towards correct binaries
+      substituteInPlace ../tests/unit/test-qga.c \
+        --replace '/bin/echo' "$(type -P echo)"
+      substituteInPlace ../tests/unit/test-io-channel-command.c \
+        --replace '/bin/socat' "$(type -P socat)"
 
-    # combined with a long package name, some temp socket paths
-    # can end up exceeding max socket name len
-    substituteInPlace ../tests/qtest/bios-tables-test.c \
-      --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
+      # combined with a long package name, some temp socket paths
+      # can end up exceeding max socket name len
+      substituteInPlace ../tests/qtest/bios-tables-test.c \
+        --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
 
-    # get-fsinfo attempts to access block devices, disallowed by sandbox
-    sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
-      ../tests/unit/test-qga.c
-  '' + lib.optionalString stdenv.isDarwin ''
-    # skip test that stalls on darwin, perhaps due to subtle differences
-    # in fifo behaviour
-    substituteInPlace ../tests/unit/meson.build \
-      --replace "'test-io-channel-command'" "#'test-io-channel-command'"
-  '';
+      # get-fsinfo attempts to access block devices, disallowed by sandbox
+      sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
+        ../tests/unit/test-qga.c
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # skip test that stalls on darwin, perhaps due to subtle differences
+      # in fifo behaviour
+      substituteInPlace ../tests/unit/meson.build \
+        --replace "'test-io-channel-command'" "#'test-io-channel-command'"
+    '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
@@ -225,19 +308,19 @@ stdenv.mkDerivation rec {
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
     tests = {
-      qemu-tests = qemu.override { doCheck = true; };
+      qemu-tests = qemu.override {doCheck = true;};
     };
   };
 
   # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
-  requiredSystemFeatures = [ "big-parallel" ];
+  requiredSystemFeatures = ["big-parallel"];
 
   meta = with lib; {
     homepage = "http://www.qemu.org/";
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
     mainProgram = "qemu-kvm";
-    maintainers = with maintainers; [ eelco qyliss ];
+    maintainers = with maintainers; [eelco qyliss];
     platforms = platforms.unix;
   };
 }

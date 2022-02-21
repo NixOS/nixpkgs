@@ -1,5 +1,13 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, nixosTests, Security }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  nixosTests,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "unbound-telemetry";
   version = "unstable-2021-09-18";
@@ -13,9 +21,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-6V39Wfqin2RK73rehsIwmqDkOin4FEiqJQjTKAEx9Vs=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ]
+  buildInputs =
+    [openssl]
     ++ lib.optional stdenv.isDarwin Security;
 
   passthru.tests = {
@@ -26,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     description = "Prometheus exporter for Unbound DNS resolver";
     homepage = "https://github.com/svartalf/unbound-telemetry";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

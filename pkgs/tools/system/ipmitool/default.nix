@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchurl, openssl, fetchpatch, static ? stdenv.hostPlatform.isStatic }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  openssl,
+  fetchpatch,
+  static ? stdenv.hostPlatform.isStatic,
+}:
 stdenv.mkDerivation rec {
   pname = "ipmitool";
   version = "1.8.18";
@@ -26,18 +32,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
-  configureFlags = [
-    "--infodir=${placeholder "out"}/share/info"
-    "--mandir=${placeholder "out"}/share/man"
-  ] ++ lib.optionals static [
-    "LDFLAGS=-static"
-    "--enable-static"
-    "--disable-shared"
-  ] ++ lib.optionals (!static) [
-    "--enable-shared"
-  ];
+  configureFlags =
+    [
+      "--infodir=${placeholder "out"}/share/info"
+      "--mandir=${placeholder "out"}/share/man"
+    ]
+    ++ lib.optionals static [
+      "LDFLAGS=-static"
+      "--enable-static"
+      "--disable-shared"
+    ]
+    ++ lib.optionals (!static) [
+      "--enable-shared"
+    ];
 
   makeFlags = lib.optional static "AM_LDFLAGS=-all-static";
   dontDisableStatic = static;
@@ -47,6 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "https://sourceforge.net/projects/ipmitool/";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

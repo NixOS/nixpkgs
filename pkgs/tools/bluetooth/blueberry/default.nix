@@ -1,17 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, bluez-tools
-, cinnamon
-, gnome
-, gobject-introspection
-, intltool
-, pavucontrol
-, python3Packages
-, util-linux
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bluez-tools,
+  cinnamon,
+  gnome,
+  gobject-introspection,
+  intltool,
+  pavucontrol,
+  python3Packages,
+  util-linux,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "blueberry";
   version = "1.4.7";
@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/blueberry";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

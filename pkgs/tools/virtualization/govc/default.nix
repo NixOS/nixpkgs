@@ -1,12 +1,15 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
+}:
 buildGoPackage rec {
   pname = "govc";
   version = "0.25.0";
 
   goPackagePath = "github.com/vmware/govmomi";
 
-  subPackages = [ "govc" ];
+  subPackages = ["govc"];
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -19,6 +22,6 @@ buildGoPackage rec {
     description = "A vSphere CLI built on top of govmomi";
     homepage = "https://github.com/vmware/govmomi/tree/master/govc";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nicknovitski ];
+    maintainers = with lib.maintainers; [nicknovitski];
   };
 }

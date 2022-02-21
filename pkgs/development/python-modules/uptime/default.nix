@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "uptime";
   version = "3.0.1";
@@ -16,7 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Cairnarvon/uptime";
     description = "Cross-platform way to retrieve system uptime and boot time";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ rob ];
+    maintainers = with maintainers; [rob];
   };
-
 }

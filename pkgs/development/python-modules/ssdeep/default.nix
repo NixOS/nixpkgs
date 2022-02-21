@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, pytestCheckHook
-, six
-, ssdeep
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
+  ssdeep,
 }:
-
 buildPythonPackage rec {
   pname = "ssdeep";
   version = "3.4";
@@ -28,7 +28,6 @@ buildPythonPackage rec {
     six
   ];
 
-
   checkInputs = [
     pytestCheckHook
   ];
@@ -46,6 +45,6 @@ buildPythonPackage rec {
     description = "Python wrapper for the ssdeep library";
     homepage = "https://github.com/DinoTools/python-ssdeep";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

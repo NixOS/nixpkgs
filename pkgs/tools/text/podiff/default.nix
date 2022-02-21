@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation {
   pname = "podiff";
   version = "1.3";
@@ -19,7 +22,7 @@ stdenv.mkDerivation {
     description = "Finds differences in translations between two PO files, or revisions";
     homepage = "http://puszcza.gnu.org.ua/software/podiff";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.unix;
   };
 }

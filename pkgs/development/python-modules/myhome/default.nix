@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "myhome";
   version = "0.2.1";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Python library for interacting with MyHomeSERVER1";
     homepage = "https://github.com/speijnik/myhome";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

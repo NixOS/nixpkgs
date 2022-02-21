@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   version = "6.0.0.1";
   pname = "papi";
@@ -23,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "Library providing access to various hardware performance counters";
     license = licenses.bsdOriginal;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ costrouc zhaofengli ];
+    maintainers = with maintainers; [costrouc zhaofengli];
   };
 }

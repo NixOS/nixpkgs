@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, boost, cairo, lv2, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cairo,
+  lv2,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "string-machine";
   version = "unstable-2020-01-20";
@@ -16,10 +23,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./dpf/utils/generate-ttl.sh
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
-    boost cairo lv2
+    boost
+    cairo
+    lv2
   ];
 
   makeFlags = [
@@ -29,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jpcima/string-machine";
     description = "Digital model of electronic string ensemble instrument";
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = intersectLists platforms.linux platforms.x86;
     license = licenses.boost;
   };

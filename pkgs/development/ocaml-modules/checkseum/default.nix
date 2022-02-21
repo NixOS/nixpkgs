@@ -1,10 +1,20 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, pkg-config
-, bigarray-compat, optint
-, fmt, rresult, bos, fpath, astring, alcotest
-, withFreestanding ? false
-, ocaml-freestanding
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  dune-configurator,
+  pkg-config,
+  bigarray-compat,
+  optint,
+  fmt,
+  rresult,
+  bos,
+  fpath,
+  astring,
+  alcotest,
+  withFreestanding ? false,
+  ocaml-freestanding,
 }:
-
 buildDunePackage rec {
   version = "0.3.2";
   pname = "checkseum";
@@ -22,12 +32,14 @@ buildDunePackage rec {
     dune-configurator
     pkg-config
   ];
-  propagatedBuildInputs = [
-    bigarray-compat
-    optint
-  ] ++ lib.optionals withFreestanding [
-    ocaml-freestanding
-  ];
+  propagatedBuildInputs =
+    [
+      bigarray-compat
+      optint
+    ]
+    ++ lib.optionals withFreestanding [
+      ocaml-freestanding
+    ];
 
   checkInputs = [
     alcotest
@@ -44,6 +56,6 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

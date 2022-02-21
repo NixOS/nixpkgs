@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  testtools,
 }:
-
 buildPythonPackage rec {
   pname = "testscenarios";
   version = "0.5.0";
@@ -19,12 +19,11 @@ buildPythonPackage rec {
       --replace "catch = 1" ""
   '';
 
-  propagatedBuildInputs = [ testtools ];
+  propagatedBuildInputs = [testtools];
 
   meta = with lib; {
     description = "A pyunit extension for dependency injection";
     homepage = "https://pypi.python.org/pypi/testscenarios";
     license = licenses.asl20;
   };
-
 }

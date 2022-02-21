@@ -1,22 +1,23 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.quassel;
   opt = options.services.quassel;
   quassel = cfg.package;
-  user = if cfg.user != null then cfg.user else "quassel";
-in
-
-{
-
+  user =
+    if cfg.user != null
+    then cfg.user
+    else "quassel";
+in {
   ###### interface
 
   options = {
-
     services.quassel = {
-
       enable = mkEnableOption "the Quassel IRC client daemon";
 
       certificateFile = mkOption {
@@ -46,7 +47,7 @@ in
 
       interfaces = mkOption {
         type = types.listOf types.str;
-        default = [ "127.0.0.1" ];
+        default = ["127.0.0.1"];
         description = ''
           The interfaces the Quassel daemon will be listening to.  If `[ 127.0.0.1 ]',
           only clients on the local host can connect to it; if `[ 0.0.0.0 ]', clients
@@ -80,19 +81,18 @@ in
           The existing user the Quassel daemon should run as. If left empty, a default "quassel" user will be created.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.requireSSL -> cfg.certificateFile != null;
+      {
+        assertion = cfg.requireSSL -> cfg.certificateFile != null;
         message = "Quassel needs a certificate file in order to require SSL";
-      }];
+      }
+    ];
 
     users.users = optionalAttrs (cfg.user == null) {
       quassel = {
@@ -114,26 +114,26 @@ in
       "d '${cfg.dataDir}' - ${user} - - -"
     ];
 
-    systemd.services.quassel =
-      { description = "Quassel IRC client daemon";
+    systemd.services.quassel = {
+      description = "Quassel IRC client daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ] ++ optional config.services.postgresql.enable "postgresql.service"
-                                     ++ optional config.services.mysql.enable "mysql.service";
+      wantedBy = ["multi-user.target"];
+      after =
+        ["network.target"]
+        ++ optional config.services.postgresql.enable "postgresql.service"
+        ++ optional config.services.mysql.enable "mysql.service";
 
-        serviceConfig =
-        {
-          ExecStart = concatStringsSep " " ([
-            "${quassel}/bin/quasselcore"
-            "--listen=${concatStringsSep "," cfg.interfaces}"
-            "--port=${toString cfg.portNumber}"
-            "--configdir=${cfg.dataDir}"
-          ] ++ optional cfg.requireSSL "--require-ssl"
-            ++ optional (cfg.certificateFile != null) "--ssl-cert=${cfg.certificateFile}");
-          User = user;
-        };
+      serviceConfig = {
+        ExecStart = concatStringsSep " " ([
+          "${quassel}/bin/quasselcore"
+          "--listen=${concatStringsSep "," cfg.interfaces}"
+          "--port=${toString cfg.portNumber}"
+          "--configdir=${cfg.dataDir}"
+        ]
+        ++ optional cfg.requireSSL "--require-ssl"
+        ++ optional (cfg.certificateFile != null) "--ssl-cert=${cfg.certificateFile}");
+        User = user;
       };
-
+    };
   };
-
 }

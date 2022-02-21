@@ -1,8 +1,16 @@
-{ stdenv, lib, python3, fetchFromGitHub, which, findutils, coreutils
-, perl, installShellFiles
-, doCheck ? true
-}: stdenv.mkDerivation rec {
-
+{
+  stdenv,
+  lib,
+  python3,
+  fetchFromGitHub,
+  which,
+  findutils,
+  coreutils,
+  perl,
+  installShellFiles,
+  doCheck ? true,
+}:
+stdenv.mkDerivation rec {
   pname = "redo-apenwarr";
   version = "0.42d";
 
@@ -13,35 +21,37 @@
     sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
-  postPatch = ''
+  postPatch =
+    ''
 
-    patchShebangs minimal/do
+      patchShebangs minimal/do
 
-  '' + lib.optionalString doCheck ''
-    unset CC CXX
+    ''
+    + lib.optionalString doCheck ''
+      unset CC CXX
 
-    substituteInPlace minimal/do.test \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+      substituteInPlace minimal/do.test \
+        --replace "/bin/pwd" "${coreutils}/bin/pwd"
 
-    substituteInPlace t/105-sympath/all.do \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+      substituteInPlace t/105-sympath/all.do \
+        --replace "/bin/pwd" "${coreutils}/bin/pwd"
 
-    substituteInPlace t/all.do \
-      --replace "/bin/ls" "ls"
+      substituteInPlace t/all.do \
+        --replace "/bin/ls" "ls"
 
-    substituteInPlace t/110-compile/hello.o.do \
-      --replace "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
+      substituteInPlace t/110-compile/hello.o.do \
+        --replace "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
 
-    substituteInPlace t/200-shell/nonshelltest.do \
-      --replace "/usr/bin/env perl" "${perl}/bin/perl"
+      substituteInPlace t/200-shell/nonshelltest.do \
+        --replace "/usr/bin/env perl" "${perl}/bin/perl"
 
-  '';
+    '';
 
   inherit doCheck;
 
   checkTarget = "test";
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   installFlags = [
     "PREFIX=$(out)"
@@ -50,7 +60,7 @@
 
   nativeBuildInputs = [
     python3
-    (with python3.pkgs; [ beautifulsoup4 markdown ])
+    (with python3.pkgs; [beautifulsoup4 markdown])
     which
     findutils
     installShellFiles

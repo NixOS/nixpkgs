@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, traceback2
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  traceback2,
+  pythonAtLeast,
 }:
-
 buildPythonPackage rec {
   version = "1.1.0";
   pname = "unittest2";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0y855kmx7a8rnf81d3lh5lyxai1908xjp0laf4glwa4c8472m212";
   };
 
-  propagatedBuildInputs = [ six traceback2 ];
+  propagatedBuildInputs = [six traceback2];
 
   # 1.0.0 and up create a circle dependency with traceback2/pbr
   doCheck = false;

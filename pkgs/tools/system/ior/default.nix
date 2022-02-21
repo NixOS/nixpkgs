@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, mpi, perl, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mpi,
+  perl,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "ior";
   version = "3.3.0";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pSjptDfiPlaToXe1yHyk9MQMC9PqcVSjqAmWLD11iOM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ mpi perl ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [mpi perl];
 
   enableParallelBuilding = true;
 
@@ -21,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Parallel file system I/O performance test";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bzizou ];
+    maintainers = with maintainers; [bzizou];
   };
 }

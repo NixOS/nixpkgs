@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, zopfli, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  zopfli,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "zopfli";
   version = "0.1.9";
@@ -10,18 +16,18 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  buildInputs = [ zopfli ];
+  buildInputs = [zopfli];
   USE_SYSTEM_ZOPFLI = "True";
 
   # doesn't work with pytestCheckHook
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   meta = with lib; {
     description = "cPython bindings for zopfli";
     homepage = "https://github.com/obp/py-zopfli";
     license = licenses.asl20;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

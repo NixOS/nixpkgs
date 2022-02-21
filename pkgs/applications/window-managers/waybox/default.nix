@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, libxkbcommon
-, wayland
-, wayland-protocols
-, wlroots
-, pixman
-, udev
-, libGL
-, mesa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
+  wlroots,
+  pixman,
+  udev,
+  libGL,
+  mesa,
 }:
-
 stdenv.mkDerivation rec {
   pname = "waybox";
   version = "unstable-2021-04-07";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-G32cGmOwmnuVlj1hCq9NRti6plJbkAktfzM4aYzQ+k8=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [pkg-config meson ninja];
   buildInputs = [
     libxkbcommon
     wayland
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wizbright/waybox";
     description = "An openbox clone on Wayland";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

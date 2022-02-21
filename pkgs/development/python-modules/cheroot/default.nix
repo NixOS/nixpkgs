@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, jaraco_functools
-, jaraco_text
-, more-itertools
-, portend
-, pyopenssl
-, pypytools
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, requests-unixsocket
-, setuptools-scm
-, setuptools-scm-git-archive
-, six
-, trustme
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  jaraco_functools,
+  jaraco_text,
+  more-itertools,
+  portend,
+  pyopenssl,
+  pypytools,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  requests-unixsocket,
+  setuptools-scm,
+  setuptools-scm-git-archive,
+  six,
+  trustme,
 }:
-
 buildPythonPackage rec {
   pname = "cheroot";
   version = "8.6.0";
@@ -66,13 +66,15 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  disabledTests = [
-    "tls" # touches network
-    "peercreds_unix_sock" # test urls no longer allowed
-  ] ++ lib.optionals stdenv.isDarwin [
-    "http_over_https_error"
-    "bind_addr_unix"
-  ];
+  disabledTests =
+    [
+      "tls" # touches network
+      "peercreds_unix_sock" # test urls no longer allowed
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "http_over_https_error"
+      "bind_addr_unix"
+    ];
 
   disabledTestPaths = [
     # avoid attempting to use 3 packages not available on nixpkgs
@@ -91,6 +93,6 @@ buildPythonPackage rec {
     description = "High-performance, pure-Python HTTP";
     homepage = "https://github.com/cherrypy/cheroot";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

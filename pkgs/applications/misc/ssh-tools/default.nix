@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "ssh-tools";
   version = "1.7";
@@ -20,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Collection of various tools using ssh";
     homepage = "https://github.com/vaporup/ssh-tools/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

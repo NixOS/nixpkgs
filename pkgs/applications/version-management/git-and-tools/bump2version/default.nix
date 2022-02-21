@@ -1,11 +1,11 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, testfixtures
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  testfixtures,
 }:
-
 buildPythonApplication rec {
   pname = "bump2version";
   version = "1.0.1";
@@ -31,7 +31,7 @@ buildPythonApplication rec {
     "test_defaults_in_usage_with_config"
   ];
 
-  pythonImportsCheck = [ "bumpversion" ];
+  pythonImportsCheck = ["bumpversion"];
 
   meta = with lib; {
     description = "Version-bump your software with a single command";
@@ -41,6 +41,6 @@ buildPythonApplication rec {
     '';
     homepage = "https://github.com/c4urself/bump2version";
     license = licenses.mit;
-    maintainers = with maintainers; [ jefflabonte ];
+    maintainers = with maintainers; [jefflabonte];
   };
 }

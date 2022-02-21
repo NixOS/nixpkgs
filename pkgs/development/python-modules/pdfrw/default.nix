@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "pdfrw";
   version = "0.4";
@@ -15,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "pdfrw is a pure Python library that reads and writes PDFs.";
     homepage = "https://github.com/pmaupin/pdfrw";
-    maintainers = with maintainers; [ teto ];
-    license =  licenses.mit;
+    maintainers = with maintainers; [teto];
+    license = licenses.mit;
   };
 }

@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, SDL2
-, aalib
-, alsa-lib
-, libXext
-, libXxf86vm
-, libcaca
-, libpulseaudio
-, libsndfile
-, ncurses
-, openssl
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL2,
+  aalib,
+  alsa-lib,
+  libXext,
+  libXxf86vm,
+  libcaca,
+  libpulseaudio,
+  libsndfile,
+  ncurses,
+  openssl,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zesarux";
   version = "10.0";
@@ -82,8 +82,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/chernandezba/zesarux";
     description = " ZX Second-Emulator And Released for UniX";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: Darwin support
+

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation {
   pname = "wavrsocvt";
   version = "1.0.2.0";
@@ -31,7 +34,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://bricxcc.sourceforge.net/";
     license = licenses.mpl11;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
     platforms = with platforms; linux;
   };
 }

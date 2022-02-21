@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, ruamel-yaml
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  msgpack,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  ruamel-yaml,
+  toml,
 }:
-
 buildPythonPackage rec {
   pname = "python-box";
   version = "5.4.1";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "box" ];
+  pythonImportsCheck = ["box"];
 
   meta = with lib; {
     description = "Python dictionaries with advanced dot notation access";
     homepage = "https://github.com/cdgriffith/Box";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

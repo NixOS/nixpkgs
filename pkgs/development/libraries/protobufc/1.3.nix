@@ -1,6 +1,10 @@
-{ callPackage, fetchFromGitHub, ... } @ args:
-
-callPackage ./generic.nix (args // rec {
+{
+  callPackage,
+  fetchFromGitHub,
+  ...
+} @ args:
+callPackage ./generic.nix (args
+// rec {
   version = "1.3.3";
   src = fetchFromGitHub {
     owner = "protobuf-c";

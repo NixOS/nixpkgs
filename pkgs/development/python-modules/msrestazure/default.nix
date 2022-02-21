@@ -1,16 +1,16 @@
-{ pkgs
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, adal
-, msrest
-, mock
-, httpretty
-, pytest
-, pytest-asyncio
+{
+  pkgs,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  adal,
+  msrest,
+  mock,
+  httpretty,
+  pytest,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   version = "0.6.4";
   pname = "msrestazure";
@@ -24,10 +24,11 @@ buildPythonPackage rec {
     sha256 = "0ik81f0n6r27f02gblgm0vl5zl3wc6ijsscihgvc1fgm9f5mk5b5";
   };
 
-  propagatedBuildInputs = [ adal msrest ];
+  propagatedBuildInputs = [adal msrest];
 
-  checkInputs = [ httpretty mock pytest ]
-                ++ lib.optionals isPy3k [ pytest-asyncio ];
+  checkInputs =
+    [httpretty mock pytest]
+    ++ lib.optionals isPy3k [pytest-asyncio];
 
   checkPhase = ''
     pytest tests/
@@ -37,6 +38,6 @@ buildPythonPackage rec {
     description = "The runtime library 'msrestazure' for AutoRest generated Python clients.";
     homepage = "https://azure.microsoft.com/en-us/develop/python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ bendlas jonringer ];
+    maintainers = with maintainers; [bendlas jonringer];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "fscryptctl";
   version = "1.0.0";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hwj726mm0yhlcf6523n07h0yq1rvkv4km64h3ydpjcrcxklhw6l";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     description = "Small C tool for Linux filesystem encryption";
@@ -35,6 +38,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/google/fscryptctl/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

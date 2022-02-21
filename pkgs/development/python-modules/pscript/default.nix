@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, nodejs
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  nodejs,
 }:
-
 buildPythonPackage rec {
   pname = "pscript";
   version = "0.7.6";
@@ -31,9 +31,6 @@ buildPythonPackage rec {
     description = "Python to JavaScript compiler";
     license = licenses.bsd2;
     homepage = "https://pscript.readthedocs.io";
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [maintainers.matthiasbeyer];
   };
 }
-
-
-

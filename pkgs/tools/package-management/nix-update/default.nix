@@ -1,12 +1,12 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, nix
-, nix-prefetch
-, nixpkgs-fmt
-, nixpkgs-review
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  nix,
+  nix-prefetch,
+  nixpkgs-fmt,
+  nixpkgs-review,
 }:
-
 buildPythonApplication rec {
   pname = "nix-update";
   version = "0.5.0";
@@ -19,7 +19,10 @@ buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nix-prefetch nixpkgs-fmt nixpkgs-review ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [nix nix-prefetch nixpkgs-fmt nixpkgs-review])
   ];
 
   checkPhase = ''
@@ -30,7 +33,7 @@ buildPythonApplication rec {
     description = "Swiss-knife for updating nix packages";
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 zowoq ];
+    maintainers = with maintainers; [mic92 zowoq];
     platforms = platforms.all;
   };
 }

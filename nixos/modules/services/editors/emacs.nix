@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.emacs;
 
   editorScript = pkgs.writeScriptBin "emacseditor" ''
@@ -33,10 +34,7 @@ let
       Keywords=Text;Editor;
     '';
   };
-
-in
-{
-
+in {
   options.services.emacs = {
     enable = mkOption {
       type = types.bool;
@@ -62,7 +60,6 @@ in
       '';
     };
 
-
     package = mkOption {
       type = types.package;
       default = pkgs.emacs;
@@ -83,18 +80,20 @@ in
   };
 
   config = mkIf (cfg.enable || cfg.install) {
-    systemd.user.services.emacs = {
-      description = "Emacs: the extensible, self-documenting text editor";
+    systemd.user.services.emacs =
+      {
+        description = "Emacs: the extensible, self-documenting text editor";
 
-      serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.bash}/bin/bash -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --daemon'";
-        ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
-        Restart = "always";
-      };
-    } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
+        serviceConfig = {
+          Type = "forking";
+          ExecStart = "${pkgs.bash}/bin/bash -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --daemon'";
+          ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
+          Restart = "always";
+        };
+      }
+      // optionalAttrs cfg.enable {wantedBy = ["default.target"];};
 
-    environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
+    environment.systemPackages = [cfg.package editorScript desktopApplicationFile];
 
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
   };

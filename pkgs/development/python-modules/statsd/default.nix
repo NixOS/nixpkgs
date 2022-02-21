@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "statsd";
   version = "3.3.0";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "07yxnlalvcglgwa9pjs1clwrmwx7a4575jai7q05jz3g4i6dprp3";
   };
 
-  buildInputs = [ nose mock ];
+  buildInputs = [nose mock];
 
   patchPhase = ''
     # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp
@@ -24,10 +24,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
     description = "A simple statsd client";
     license = licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };
-
 }

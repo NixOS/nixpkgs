@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "witness";
   version = "0.1.1";
@@ -14,12 +17,12 @@ buildGoModule rec {
   vendorSha256 = "sha256-zkLparWJsuqrhOQxxV37dBqt6fwpSinTO+paJkbl+sM=";
 
   # We only want the witness binary, not the helper utilities for generating docs.
-  subPackages = [ "cmd/witness" ];
+  subPackages = ["cmd/witness"];
 
   meta = with lib; {
     description = "A pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
     homepage = "https://github.com/testifysec/witness";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fkautz ];
+    maintainers = with maintainers; [fkautz];
   };
 }

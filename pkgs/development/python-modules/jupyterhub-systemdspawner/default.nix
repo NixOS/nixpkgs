@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jupyterhub
-, tornado
-, bash
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jupyterhub,
+  tornado,
+  bash,
 }:
-
 buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
   version = "0.15";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  buildInputs = [ bash ];
+  buildInputs = [bash];
 
   postPatch = ''
     substituteInPlace systemdspawner/systemd.py \
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "JupyterHub Spawner using systemd for resource isolation";
     homepage = "https://github.com/jupyterhub/systemdspawner";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc erictapen ];
+    maintainers = with maintainers; [costrouc erictapen];
   };
 }

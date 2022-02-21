@@ -1,8 +1,16 @@
-{ lib, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
-  openssl, wrapGAppsHook,
-  avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  xorg,
+  avahi,
+  qtbase,
+  mkDerivation,
+  openssl,
+  wrapGAppsHook,
+  avahiWithLibdnssdCompat ? avahi.override {withLibdnssdCompat = true;},
 }:
-
 mkDerivation rec {
   pname = "barrier";
   version = "2.4.0";
@@ -15,15 +23,15 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
-  nativeBuildInputs = [ cmake wrapGAppsHook ];
+  buildInputs = [curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase];
+  nativeBuildInputs = [cmake wrapGAppsHook];
 
   postFixup = ''
     substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
   '';
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${lib.makeBinPath [ openssl ]}''
+    ''--prefix PATH : ${lib.makeBinPath [openssl]}''
   ];
 
   meta = {
@@ -36,7 +44,7 @@ mkDerivation rec {
     homepage = "https://github.com/debauchee/barrier";
     downloadPage = "https://github.com/debauchee/barrier/releases";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.phryneas ];
+    maintainers = [lib.maintainers.phryneas];
     platforms = lib.platforms.linux;
   };
 }

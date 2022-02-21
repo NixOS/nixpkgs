@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchurl, dpkg, makeWrapper, electron }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  electron,
+}:
 stdenv.mkDerivation rec {
   pname = "clockify";
   version = "2.0.3";
@@ -40,8 +46,7 @@ stdenv.mkDerivation rec {
     description = "Free time tracker and timesheet app that lets you track work hours across projects";
     homepage = "https://clockify.me";
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
-
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

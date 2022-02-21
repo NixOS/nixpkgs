@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, acme
-, certbot
-, dnspython
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  acme,
+  certbot,
+  dnspython,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "certbot-dns-rfc2136";
 
@@ -22,11 +22,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+  pytestFlagsArray = ["-o cache_dir=$(mktemp -d)"];
 
   sourceRoot = "source/certbot-dns-rfc2136";
 
-  meta = certbot.meta // {
-    description = "RFC 2136 DNS Authenticator plugin for Certbot";
-  };
+  meta =
+    certbot.meta
+    // {
+      description = "RFC 2136 DNS Authenticator plugin for Certbot";
+    };
 }

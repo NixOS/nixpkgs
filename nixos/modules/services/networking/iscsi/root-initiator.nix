@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ... }: with lib;
-let
-  cfg = config.boot.iscsi-initiator;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.boot.iscsi-initiator;
+in {
   # If you're booting entirely off another machine you may want to add
   # this snippet to always boot the latest "system" version. It is not
   # enabled by default in case you have an initrd on a local disk:
@@ -108,7 +112,7 @@ in
       # the network not work.
       network.flushBeforeStage2 = false;
 
-      kernelModules = [ "iscsi_tcp" ];
+      kernelModules = ["iscsi_tcp"];
 
       extraUtilsCommands = ''
         copy_bin_and_libs ${pkgs.openiscsi}/bin/iscsid
@@ -138,11 +142,13 @@ in
           fi
         '';
       in ''
-        ${optionalString (!config.boot.initrd.network.ssh.enable) ''
-        # stolen from initrd-ssh.nix
-        echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
-        echo 'passwd: files' > /etc/nsswitch.conf
-      ''}
+        ${
+          optionalString (!config.boot.initrd.network.ssh.enable) ''
+            # stolen from initrd-ssh.nix
+            echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
+            echo 'passwd: files' > /etc/nsswitch.conf
+          ''
+        }
 
         cp -f $extraUtils/etc/hosts /etc/hosts
 
@@ -163,11 +169,17 @@ in
           --portal ${escapeShellArg cfg.discoverPortal} \
           --debug ${toString cfg.logLevel}
 
-        ${if cfg.loginAll then ''
-        iscsiadm --mode node --loginall all
-      '' else ''
-        iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
-      ''}
+        ${
+          if cfg.loginAll
+          then
+            ''
+              iscsiadm --mode node --loginall all
+            ''
+          else
+            ''
+              iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
+            ''
+        }
 
         ${cfg.extraIscsiCommands}
 

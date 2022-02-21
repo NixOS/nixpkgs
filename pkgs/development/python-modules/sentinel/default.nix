@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi}:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "sentinel";
   version = "0.3.0";

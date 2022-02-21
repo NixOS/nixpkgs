@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  python,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "async-dns";
   version = "2.0.0";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest
   '';
 
-  pythonImportsCheck = [ "async_dns" ];
+  pythonImportsCheck = ["async_dns"];
 
   meta = with lib; {
     description = "Python DNS library";
     homepage = "https://github.com/gera2ld/async_dns";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

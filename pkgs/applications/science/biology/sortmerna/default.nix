@@ -1,5 +1,14 @@
-{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, fetchpatch, zlib }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  rocksdb,
+  rapidjson,
+  pkg-config,
+  fetchFromGitHub,
+  fetchpatch,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "sortmerna";
   version = "4.2.0";
@@ -11,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "0r91viylzr069jm7kpcgb45kagvf8sqcj5zc1af4arl9sgfs1f3j";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib rocksdb rapidjson ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [zlib rocksdb rapidjson];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -40,7 +49,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.x86_64;
     homepage = "https://bioinfo.lifl.fr/RNA/sortmerna/";
-    maintainers = with maintainers; [ luispedro ];
+    maintainers = with maintainers; [luispedro];
     broken = stdenv.isDarwin;
   };
 }

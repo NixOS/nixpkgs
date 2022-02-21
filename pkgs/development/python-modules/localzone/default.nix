@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dnspython
-, sphinx
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dnspython,
+  sphinx,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "localzone";
   version = "0.9.8";
@@ -17,9 +17,9 @@ buildPythonPackage rec {
     sha256 = "1cbiv21yryjqy46av9hbjccks95sxznrx8nypd3yzihf1vkjiq5a";
   };
 
-  propagatedBuildInputs = [ dnspython sphinx ];
+  propagatedBuildInputs = [dnspython sphinx];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     pytest
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "A simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ flyfloh ];
+    maintainers = with maintainers; [flyfloh];
   };
 }

@@ -1,9 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder,
-  async_generator, traitlets, nbformat, nest-asyncio, jupyter-client,
-  pytest, xmltodict, nbconvert, ipywidgets
-, doCheck ? true
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  async_generator,
+  traitlets,
+  nbformat,
+  nest-asyncio,
+  jupyter-client,
+  pytest,
+  xmltodict,
+  nbconvert,
+  ipywidgets,
+  doCheck ? true,
 }:
-
 buildPythonPackage rec {
   pname = "nbclient";
   version = "0.5.10";
@@ -15,13 +25,13 @@ buildPythonPackage rec {
   };
 
   inherit doCheck;
-  checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
-  propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
+  checkInputs = [pytest xmltodict nbconvert ipywidgets];
+  propagatedBuildInputs = [async_generator traitlets nbformat nest-asyncio jupyter-client];
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbclient";
     description = "A client library for executing notebooks";
     license = licenses.bsd3;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [maintainers.erictapen];
   };
 }

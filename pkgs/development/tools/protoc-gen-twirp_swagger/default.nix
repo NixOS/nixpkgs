@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule {
   pname = "protoc-gen-twirp_swagger";
   version = "unstable-2021-03-29";
@@ -13,12 +16,12 @@ buildGoModule {
 
   vendorSha256 = "sha256-g0+9l83Fc0XPzsZAKjLBrjD+tv2+Fot57hcilqAhOZk=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Swagger generator for twirp";
     homepage = "https://github.com/elliots/protoc-gen-twirp_swagger";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

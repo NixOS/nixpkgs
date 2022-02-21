@@ -1,18 +1,19 @@
 # GeoClue 2 daemon.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   # the demo agent isn't built by default, but we need it here
-  package = pkgs.geoclue2.override { withDemoAgent = config.services.geoclue2.enableDemoAgent; };
+  package = pkgs.geoclue2.override {withDemoAgent = config.services.geoclue2.enableDemoAgent;};
 
   cfg = config.services.geoclue2;
 
-  defaultWhitelist = [ "gnome-shell" "io.elementary.desktop.agent-geoclue2" ];
+  defaultWhitelist = ["gnome-shell" "io.elementary.desktop.agent-geoclue2"];
 
-  appConfigModule = types.submodule ({ name, ... }: {
+  appConfigModule = types.submodule ({name, ...}: {
     options = {
       desktopID = mkOption {
         type = types.str;
@@ -46,7 +47,13 @@ let
     config.desktopID = mkDefault name;
   });
 
-  appConfigToINICompatible = _: { desktopID, isAllowed, isSystem, users, ... }: {
+  appConfigToINICompatible = _: {
+    desktopID,
+    isAllowed,
+    isSystem,
+    users,
+    ...
+  }: {
     name = desktopID;
     value = {
       allowed = isAllowed;
@@ -54,16 +61,11 @@ let
       users = concatStringsSep ";" users;
     };
   };
-
-in
-{
-
+in {
   ###### interface
 
   options = {
-
     services.geoclue2 = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -171,20 +173,16 @@ in
           Specify extra settings per application.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
   config = mkIf cfg.enable {
+    environment.systemPackages = [package];
 
-    environment.systemPackages = [ package ];
+    services.dbus.packages = [package];
 
-    services.dbus.packages = [ package ];
-
-    systemd.packages = [ package ];
+    systemd.packages = [package];
 
     # we cannot use DynamicUser as we need the the geoclue user to exist for the
     # dbus policy to work
@@ -215,7 +213,7 @@ in
         # this should really be `partOf = [ "geoclue.service" ]`, but
         # we can't be part of a system service, and the agent should
         # be okay with the main service coming and going
-        wantedBy = [ "default.target" ];
+        wantedBy = ["default.target"];
         unitConfig.ConditionUser = "!@system";
         serviceConfig = {
           Type = "exec";
@@ -240,7 +238,7 @@ in
       generators.toINI {} ({
         agent = {
           whitelist = concatStringsSep ";"
-            (optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);
+          (optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);
         };
         network-nmea = {
           enable = cfg.enableNmea;
@@ -261,10 +259,11 @@ in
           submission-url = cfg.submissionUrl;
           submission-nick = cfg.submissionNick;
         };
-      } // mapAttrs' appConfigToINICompatible cfg.appConfig);
+      }
+      // mapAttrs' appConfigToINICompatible cfg.appConfig);
   };
 
   meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [] ++ teams.pantheon.members;
   };
 }

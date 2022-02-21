@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.samba-wsdd;
-
 in {
   options = {
     services.samba-wsdd = {
@@ -60,21 +61,20 @@ in {
       };
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [ "--shortlog" ];
-        example = [ "--verbose" "--no-http" "--ipv4only" "--no-host" ];
+        default = ["--shortlog"];
+        example = ["--verbose" "--no-http" "--ipv4only" "--no-host"];
         description = "Additional wsdd options.";
       };
     };
   };
 
   config = mkIf cfg.enable {
-
-    environment.systemPackages = [ pkgs.wsdd ];
+    environment.systemPackages = [pkgs.wsdd];
 
     systemd.services.samba-wsdd = {
       description = "Web Services Dynamic Discovery host daemon";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         DynamicUser = true;
         Type = "simple";
@@ -108,7 +108,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
         RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, desktop-file-utils
-, gio-sharp
-, glib
-, gstreamer
-, gtk4
-, libadwaita
-, libxml2
-, meson
-, ninja
-, pkg-config
-, poppler
-, python3
-, rustPlatform
-, shared-mime-info
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  gio-sharp,
+  glib,
+  gstreamer,
+  gtk4,
+  libadwaita,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  python3,
+  rustPlatform,
+  shared-mime-info,
+  wrapGAppsHook4,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rnote";
   version = "0.3.5";
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flxzt/rnote";
     description = "Simple drawing application to create handwritten notes";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda yrd ];
+    maintainers = with maintainers; [dotlambda yrd];
     platforms = platforms.linux;
   };
 }

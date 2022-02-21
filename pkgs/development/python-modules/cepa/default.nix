@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "cepa";
   version = "1.8.3";
@@ -16,7 +21,7 @@ buildPythonPackage rec {
     sed -i '/MOCK_VERSION/d' run_tests.py
   '';
 
-  checkInputs = [ mock ];
+  checkInputs = [mock];
 
   checkPhase = ''
     touch .gitignore
@@ -27,6 +32,6 @@ buildPythonPackage rec {
     description = "Controller library that allows applications to interact with Tor";
     homepage = "https://github.com/onionshare/cepa";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [lourkeur];
   };
 }

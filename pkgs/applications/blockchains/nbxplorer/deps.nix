@@ -1,4 +1,4 @@
-{ fetchNuGet }: [
+{fetchNuGet}: [
   (fetchNuGet {
     pname = "DBTrie";
     version = "1.0.39";

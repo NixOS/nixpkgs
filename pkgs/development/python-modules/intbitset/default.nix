@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, six
-, nose
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  six,
+  nose,
 }:
 buildPythonPackage rec {
   pname = "intbitset";

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
-, mock
-, Mako
-, decorator
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  mock,
+  Mako,
+  decorator,
+  stevedore,
 }:
-
 buildPythonPackage rec {
   pname = "dogpile-cache";
   version = "1.1.5";
@@ -30,14 +30,14 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  checkInputs = [ pytestCheckHook mock Mako ];
+  checkInputs = [pytestCheckHook mock Mako];
 
-  propagatedBuildInputs = [ decorator stevedore ];
+  propagatedBuildInputs = [decorator stevedore];
 
   meta = with lib; {
     description = "A caching front-end based on the Dogpile lock";
     homepage = "https://bitbucket.org/zzzeek/dogpile.cache";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

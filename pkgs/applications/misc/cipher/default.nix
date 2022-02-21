@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, gettext
-, glib
-, gtk3
-, libgee
-, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  python3,
+  gettext,
+  glib,
+  gtk3,
+  libgee,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "cipher";
   version = "2.5.0";
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple application for encoding and decoding text, designed for elementary OS";
     homepage = "https://github.com/arshubham/cipher";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [xiorcale] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "com.github.arshubham.cipher";

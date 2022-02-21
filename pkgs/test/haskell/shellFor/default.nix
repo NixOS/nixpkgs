@@ -1,9 +1,13 @@
-{ lib, writeText, haskellPackages, cabal-install }:
-
+{
+  lib,
+  writeText,
+  haskellPackages,
+  cabal-install,
+}:
 (haskellPackages.shellFor {
-  packages = p: [ p.constraints p.linear ];
-  nativeBuildInputs = [ cabal-install ];
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  packages = p: [p.constraints p.linear];
+  nativeBuildInputs = [cabal-install];
+  phases = ["unpackPhase" "buildPhase" "installPhase"];
   unpackPhase = ''
     sourceRoot=$(pwd)/scratch
     mkdir -p "$sourceRoot"
@@ -21,15 +25,16 @@
   installPhase = ''
     touch $out
   '';
-}).overrideAttrs (oldAttrs: {
-  meta =
-    let
-      oldMeta = oldAttrs.meta or {};
-      oldMaintainers = oldMeta.maintainers or [];
-      additionalMaintainers = with lib.maintainers; [ cdepillabout ];
-      allMaintainers = oldMaintainers ++ additionalMaintainers;
-    in
-    oldMeta // {
+})
+.overrideAttrs (oldAttrs: {
+  meta = let
+    oldMeta = oldAttrs.meta or {};
+    oldMaintainers = oldMeta.maintainers or [];
+    additionalMaintainers = with lib.maintainers; [cdepillabout];
+    allMaintainers = oldMaintainers ++ additionalMaintainers;
+  in
+    oldMeta
+    // {
       maintainers = allMaintainers;
       inherit (cabal-install.meta) platforms;
     };

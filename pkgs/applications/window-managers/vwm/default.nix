@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, pkg-config
-, glib
-, libviper
-, libpseudo
-, gpm
-, libvterm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  pkg-config,
+  glib,
+  libviper,
+  libpseudo,
+  gpm,
+  libvterm,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vwm";
   version = "2.1.3";
@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/include
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses glib libviper libpseudo gpm libvterm ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [ncurses glib libviper libpseudo gpm libvterm];
 
   meta = with lib; {
     homepage = "http://vwm.sourceforge.net/";
     description = "Dynamic window manager for the console";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

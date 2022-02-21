@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  callPackage,
+}:
 buildGoModule rec {
   pname = "croc";
   version = "9.5.1";
@@ -15,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   passthru = {
     tests = {
@@ -39,6 +43,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/schollz/croc";
     license = licenses.mit;
-    maintainers = with maintainers; [ hugoreeves equirosa SuperSandro2000 ];
+    maintainers = with maintainers; [hugoreeves equirosa SuperSandro2000];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "tinyscheme";
   version = "1.42";
@@ -27,8 +30,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://tinyscheme.sourceforge.net/";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.ebzzry ];
+    maintainers = [maintainers.ebzzry];
     platforms = platforms.unix;
-    badPlatforms = [ "aarch64-darwin" ];
+    badPlatforms = ["aarch64-darwin"];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonOlder
-, Mako
-, markdown
-, setuptools-git
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pythonOlder,
+  Mako,
+  markdown,
+  setuptools-git,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pdoc3";
   version = "0.10.0";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Auto-generate API documentation for Python projects.";
     homepage = "https://pdoc3.github.io/pdoc/";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ catern ];
+    license = with licenses; [agpl3Plus];
+    maintainers = with maintainers; [catern];
   };
 }

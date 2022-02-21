@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "go-swag";
   version = "1.7.9-p1";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-QphjiJSQRULphWjrJ8RzrUblTDYL/fYoSNT3+g0tP48=";
 
-  subPackages = [ "cmd/swag" ];
+  subPackages = ["cmd/swag"];
 
   meta = with lib; {
     description = "Automatically generate RESTful API documentation with Swagger 2.0 for Go";
     homepage = "https://github.com/swaggo/swag";
     license = licenses.mit;
-    maintainers = with maintainers; [ stephenwithph ];
+    maintainers = with maintainers; [stephenwithph];
   };
 }

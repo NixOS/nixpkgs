@@ -1,20 +1,20 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, meson
-, python3Packages
-, ninja
-, gtk3
-, wrapGAppsHook
-, glib
-, itstool
-, gettext
-, pango
-, gdk-pixbuf
-, gobject-introspection
-, xvfb-run
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  python3Packages,
+  ninja,
+  gtk3,
+  wrapGAppsHook,
+  glib,
+  itstool,
+  gettext,
+  pango,
+  gdk-pixbuf,
+  gobject-introspection,
+  xvfb-run,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "gtg";
   version = "0.5";
@@ -82,7 +82,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://wiki.gnome.org/Apps/GTG";
     downloadPage = "https://github.com/getting-things-gnome/gtg/releases";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ oyren ];
+    maintainers = with maintainers; [oyren];
     platforms = platforms.linux;
   };
 }

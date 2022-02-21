@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, gprolog }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gprolog,
+}:
 stdenv.mkDerivation rec {
   pname = "profetch";
   version = "0.1.7";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JsjpPUXMN0jytRS4yzSjrseqHiEQ+YinklG+tIIy+Zo=";
   };
 
-  nativeBuildInputs = [ gprolog ];
+  nativeBuildInputs = [gprolog];
 
   buildPhase = ''
     runHook preBuild
@@ -32,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/RustemB/profetch";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.vel ];
+    maintainers = [maintainers.vel];
   };
 }

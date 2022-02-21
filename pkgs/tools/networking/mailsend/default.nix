@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "mailsend";
   version = "1.19";
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "CLI email sending tool";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     homepage = "https://github.com/muquit/mailsend";
     downloadPage = "https://github.com/muquit/mailsend/releases";

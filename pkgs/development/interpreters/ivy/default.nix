@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ivy";
   version = "0.1.13";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     homepage = "https://github.com/robpike/ivy";
     description = "ivy, an APL-like calculator";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ smasher164 ];
+    maintainers = with maintainers; [smasher164];
   };
 }

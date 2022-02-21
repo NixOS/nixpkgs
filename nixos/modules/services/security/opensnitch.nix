@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   name = "opensnitch";
   cfg = config.services.opensnitch;
 in {
@@ -13,12 +15,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     systemd = {
-      packages = [ pkgs.opensnitch ];
-      services.opensnitchd.wantedBy = [ "multi-user.target" ];
+      packages = [pkgs.opensnitch];
+      services.opensnitchd.wantedBy = ["multi-user.target"];
     };
-
   };
 }
-

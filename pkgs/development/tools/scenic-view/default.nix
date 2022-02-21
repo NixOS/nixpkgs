@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradle, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk,
+  gradle,
+  makeDesktopItem,
+  copyDesktopItems,
+  perl,
+  writeText,
+  runtimeShell,
+  makeWrapper,
+}: let
   pname = "scenic-view";
   version = "11.0.2";
 
@@ -14,7 +25,7 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk perl gradle ];
+    nativeBuildInputs = [jdk perl gradle];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
@@ -29,7 +40,7 @@ let
         | sh
     '';
 
-    outputHashAlgo =  "sha256";
+    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash = "0d6qs0wg2nfxyq85q46a8dcdqknz9pypb2qmvc8k2w8vcdac1y7n";
   };
@@ -69,42 +80,42 @@ let
     mimeType = "application/java;application/java-vm;application/java-archive";
     categories = "Development";
   };
+in
+  stdenv.mkDerivation rec {
+    inherit pname version src;
+    nativeBuildInputs = [jdk gradle makeWrapper];
 
-in stdenv.mkDerivation rec {
-  inherit pname version src;
-  nativeBuildInputs = [ jdk gradle makeWrapper ];
+    buildPhase = ''
+      runHook preBuild
 
-  buildPhase = ''
-    runHook preBuild
+      export GRADLE_USER_HOME=$(mktemp -d)
+      gradle --offline --no-daemon --info --init-script ${gradleInit} build
 
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle --offline --no-daemon --info --init-script ${gradleInit} build
-
-    runHook postBuild
+      runHook postBuild
     '';
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname}
-    cp build/libs/scenicview.jar $out/share/${pname}/${pname}.jar
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar"
+      mkdir -p $out/bin $out/share/${pname}
+      cp build/libs/scenicview.jar $out/share/${pname}/${pname}.jar
+      makeWrapper ${jdk}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar"
 
-    runHook postInstall
-  '';
-
-  desktopItems = [ desktopItem ];
-
-  meta = with lib; {
-    description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
-    longDescription = ''
-      A JavaFX application designed to make it simple to understand the current state of your application scenegraph
-      and to also easily manipulate properties of the scenegraph without having to keep editing your code.
-      This lets you find bugs and get things pixel perfect without having to do the compile-check-compile dance.
+      runHook postInstall
     '';
-    homepage = "https://github.com/JonathanGiles/scenic-view/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wirew0rm ];
-    platforms = platforms.all;
-  };
-}
+
+    desktopItems = [desktopItem];
+
+    meta = with lib; {
+      description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
+      longDescription = ''
+        A JavaFX application designed to make it simple to understand the current state of your application scenegraph
+        and to also easily manipulate properties of the scenegraph without having to keep editing your code.
+        This lets you find bugs and get things pixel perfect without having to do the compile-check-compile dance.
+      '';
+      homepage = "https://github.com/JonathanGiles/scenic-view/";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [wirew0rm];
+      platforms = platforms.all;
+    };
+  }

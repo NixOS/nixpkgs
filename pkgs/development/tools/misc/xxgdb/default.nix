@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, imake, xlibsWrapper, gccmakedep, libXaw }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  xlibsWrapper,
+  gccmakedep,
+  libXaw,
+}:
 stdenv.mkDerivation rec {
   pname = "xxgdb";
   version = "1.12";
@@ -14,8 +21,8 @@ stdenv.mkDerivation rec {
     ./xxgdb-pty.patch
   ];
 
-  nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ xlibsWrapper libXaw ];
+  nativeBuildInputs = [imake gccmakedep];
+  buildInputs = [xlibsWrapper libXaw];
 
   preConfigure = ''
     mkdir build
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple but powerful graphical interface to gdb";
     license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     platforms = platforms.all;
   };
 }

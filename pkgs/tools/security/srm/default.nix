@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "srm";
   version = "1.2.15";
@@ -19,8 +22,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://srm.sourceforge.net";
     license = licenses.mit;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [edwtjo];
     platforms = platforms.unix;
   };
-
 }

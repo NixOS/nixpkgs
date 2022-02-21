@@ -1,12 +1,12 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, packaging
-, xmltodict
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  packaging,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "axis";
   version = "44";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   # Tests requires a server on localhost
   doCheck = false;
-  pythonImportsCheck = [ "axis" ];
+  pythonImportsCheck = ["axis"];
 
   meta = with lib; {
     description = "Python library for communicating with devices from Axis Communications";
     homepage = "https://github.com/Kane610/axis";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

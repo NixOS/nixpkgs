@@ -1,11 +1,11 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, capstone
-, filebytes
-, pytest
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  capstone,
+  filebytes,
+  pytest,
 }:
-
 buildPythonApplication rec {
   pname = "ropper";
   version = "1.13.6";
@@ -22,11 +22,11 @@ buildPythonApplication rec {
   doCheck = false; # Tests not included in archive
 
   checkInputs = [pytest];
-  propagatedBuildInputs = [ capstone filebytes ];
+  propagatedBuildInputs = [capstone filebytes];
   meta = with lib; {
     homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;
     description = "Show information about files in different file formats";
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [bennofs];
   };
 }

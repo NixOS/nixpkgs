@@ -1,19 +1,19 @@
-{ lib
-, black
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, isort
-, jinja2
-, md-toc
-, mdformat
-, newversion
-, poetry-core
-, pyparsing
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  black,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isort,
+  jinja2,
+  md-toc,
+  mdformat,
+  newversion,
+  poetry-core,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
   version = "7.1.2";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Type annotations builder for boto3";
     homepage = "https://vemel.github.io/mypy_boto3_builder/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

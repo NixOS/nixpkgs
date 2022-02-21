@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "fsmark";
   version = "3.3";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Synchronous write workload file system benchmark";
     homepage = "https://sourceforge.net/projects/fsmark/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = [maintainers.dezgeg];
     platforms = platforms.linux;
   };
 }

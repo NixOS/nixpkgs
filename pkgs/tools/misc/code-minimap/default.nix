@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, libiconv
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libiconv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "code-minimap";
   version = "0.6.4";
@@ -23,7 +23,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A high performance code minimap render";
     homepage = "https://github.com/wfxr/code-minimap";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ bsima ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [bsima];
   };
 }

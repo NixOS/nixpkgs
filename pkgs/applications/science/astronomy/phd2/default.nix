@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK30-gtk3
-, curl, gettext, glib, indi-full, libnova, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  gtk3,
+  wxGTK30-gtk3,
+  curl,
+  gettext,
+  glib,
+  indi-full,
+  libnova,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "phd2";
   version = "2.6.10";
@@ -42,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Telescope auto-guidance application";
     changelog = "https://github.com/OpenPHDGuiding/phd2/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [hjones2199];
     platforms = platforms.linux;
   };
 }

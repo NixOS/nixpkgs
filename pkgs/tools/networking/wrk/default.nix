@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, luajit, openssl, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  luajit,
+  openssl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "wrk";
   version = "4.2.0";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nCfA444p7krXOB3qRtDKWxWj9tsrDZsGf03ThtE1dXM=";
   };
 
-  buildInputs = [ luajit openssl perl ];
+  buildInputs = [luajit openssl perl];
 
-  makeFlags = [ "WITH_LUAJIT=${luajit}" "WITH_OPENSSL=${openssl.dev}" "VER=${version}" ];
+  makeFlags = ["WITH_LUAJIT=${luajit}" "WITH_OPENSSL=${openssl.dev}" "VER=${version}"];
 
   preBuild = ''
     for f in src/*.h; do
@@ -39,7 +45,7 @@ stdenv.mkDerivation rec {
       systems such as epoll and kqueue.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ ragge ];
+    maintainers = with maintainers; [ragge];
     platforms = platforms.unix;
   };
 }

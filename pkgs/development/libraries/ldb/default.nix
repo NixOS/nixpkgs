@@ -1,19 +1,20 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, readline
-, tdb
-, talloc
-, tevent
-, popt
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, cmocka
-, wafHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  pkg-config,
+  readline,
+  tdb,
+  talloc,
+  tevent,
+  popt,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  cmocka,
+  wafHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ldb";
   version = "2.3.0";
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bcjj4gv48ddg44wyxpsvrs26xry6yy9x9k16qgz0bljs2rhilx4";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     "--without-ldb-lmdb"
   ];
 
-  stripDebugList = [ "bin" "lib" "modules" ];
+  stripDebugList = ["bin" "lib" "modules"];
 
   meta = with lib; {
     description = "A LDAP-like embedded database";

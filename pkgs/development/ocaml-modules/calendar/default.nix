@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, ocaml, findlib }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml-calendar";
   version = "2.5";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "04pvhwb664g3s644c7v7419a3kvf5s3pynkhmk5j59dvlfm1yf0f";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ocaml findlib];
 
   createFindlibDestdir = true;
 
@@ -17,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://forge.ocamlcore.org/projects/calendar/";
     description = "An Objective Caml library managing dates and times";
     license = "LGPL";
-    platforms = ocaml.meta.platforms or [ ];
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       lib.maintainers.gal_bolle
     ];

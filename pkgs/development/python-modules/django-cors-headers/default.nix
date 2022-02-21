@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, django
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  django,
+  pytest-django,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "django-cors-headers";
   version = "3.7.0";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Django app for handling server Cross-Origin Resource Sharing (CORS) headers";
     homepage = "https://github.com/OttoYiu/django-cors-headers";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

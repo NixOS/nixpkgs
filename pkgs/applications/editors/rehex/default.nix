@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, which
-, capstone
-, jansson
-, libunistring
-, lua5_3
-, wxGTK31
-, Carbon
-, Cocoa
-, IOKit
-, libicns
-, wxmac
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  capstone,
+  jansson,
+  libunistring,
+  lua5_3,
+  wxGTK31,
+  Carbon,
+  Cocoa,
+  IOKit,
+  libicns,
+  wxmac,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rehex";
   version = "0.4.1";
@@ -32,15 +32,18 @@ stdenv.mkDerivation rec {
       --replace '$(filter-out %@2x.png,$(wildcard $(ICONSET)/*.png))' 'res/icon{16,32,128,256,512}.png'
   '';
 
-  nativeBuildInputs = [ pkg-config which ]
-    ++ lib.optionals stdenv.isDarwin [ libicns ];
+  nativeBuildInputs =
+    [pkg-config which]
+    ++ lib.optionals stdenv.isDarwin [libicns];
 
-  buildInputs = [ capstone jansson libunistring lua5_3 ]
-    ++ lib.optionals (!stdenv.isDarwin) [ wxGTK31 ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit wxmac ];
+  buildInputs =
+    [capstone jansson libunistring lua5_3]
+    ++ lib.optionals (!stdenv.isDarwin) [wxGTK31]
+    ++ lib.optionals stdenv.isDarwin [Carbon Cocoa IOKit wxmac];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ]
-    ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
+  makeFlags =
+    ["prefix=${placeholder "out"}"]
+    ++ lib.optionals stdenv.isDarwin ["-f Makefile.osx"];
 
   enableParallelBuilding = true;
 
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/solemnwarning/rehex";
     changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ markus1189 SuperSandro2000 ];
+    maintainers = with maintainers; [markus1189 SuperSandro2000];
     platforms = platforms.all;
   };
 }

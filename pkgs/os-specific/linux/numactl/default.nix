@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "numactl";
   version = "2.0.14";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hahpdp5xqy9cbg251bdxqkml341djn2h856g435h4ngz63sr9fs";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   postPatch = ''
     patchShebangs test
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     homepage = "https://github.com/numactl/numactl";
-    license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21
+    license = with licenses; [gpl2 lgpl21]; # libnuma is lgpl21
     platforms = platforms.linux;
   };
 }

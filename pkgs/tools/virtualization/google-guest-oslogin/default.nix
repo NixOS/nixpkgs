@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, bashInteractive
-, curl
-, fetchFromGitHub
-, json_c
-, nixosTests
-, pam
+{
+  stdenv,
+  lib,
+  bashInteractive,
+  curl,
+  fetchFromGitHub,
+  json_c,
+  nixosTests,
+  pam,
 }:
-
 stdenv.mkDerivation rec {
   pname = "google-guest-oslogin";
   version = "20220205.00";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/include/compat.h --replace /bin/bash /run/current-system/sw/bin/bash
   '';
 
-  buildInputs = [ curl.dev pam json_c ];
+  buildInputs = [curl.dev pam json_c];
 
-  NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" ];
+  NIX_CFLAGS_COMPILE = ["-I${json_c.dev}/include/json-c"];
 
   makeFlags = [
     "VERSION=${version}"
@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     description = "OS Login Guest Environment for Google Compute Engine";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
   };
 }

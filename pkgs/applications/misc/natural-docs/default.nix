@@ -1,5 +1,10 @@
-{ stdenv, fetchzip, makeWrapper, mono, lib }:
-
+{
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  mono,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "natural-docs";
   version = "2.1.1";
@@ -13,7 +18,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -31,6 +36,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://naturaldocs.org";
     license = licenses.agpl3Only;
-    maintainers = [ maintainers.nkpvk ];
+    maintainers = [maintainers.nkpvk];
   };
 }

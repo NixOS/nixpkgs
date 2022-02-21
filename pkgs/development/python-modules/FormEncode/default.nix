@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, setuptools-scm
-, six
-, dnspython
-, pycountry
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  setuptools-scm,
+  six,
+  dnspython,
+  pycountry,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "FormEncode";
   version = "2.0.1";
@@ -24,9 +24,9 @@ buildPythonPackage rec {
     sed -i '/setuptools_scm_git_archive/d' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   checkInputs = [
     dnspython
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "FormEncode validates and converts nested structures";
     homepage = "http://formencode.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

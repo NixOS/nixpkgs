@@ -1,24 +1,24 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, SDL2
-, cmake
-, curl
-, extra-cmake-modules
-, gtk3
-, libevdev
-, libpulseaudio
-, mesa
-, ninja
-, pkg-config
-, qtbase
-, qttools
-, sndio
-, vulkan-loader
-, wayland
-, wrapQtAppsHook
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  curl,
+  extra-cmake-modules,
+  gtk3,
+  libevdev,
+  libpulseaudio,
+  mesa,
+  ninja,
+  pkg-config,
+  qtbase,
+  qttools,
+  sndio,
+  vulkan-loader,
+  wayland,
+  wrapQtAppsHook,
 }:
-
 mkDerivation rec {
   pname = "duckstation";
   version = "0.pre+date=2022-01-18";
@@ -98,9 +98,10 @@ mkDerivation rec {
     homepage = "https://github.com/stenzek/duckstation";
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ guibou AndersonTorres ];
+    maintainers = with maintainers; [guibou AndersonTorres];
     platforms = platforms.linux;
   };
 }
 # TODO: default sound backend (cubeb) does not work, but SDL does. Strangely,
 # switching to cubeb while a game is running makes it work.
+

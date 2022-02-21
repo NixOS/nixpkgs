@@ -1,5 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+}:
 buildNimPackage rec {
   pname = "tempfile";
   version = "0.1.7";
@@ -11,9 +14,10 @@ buildNimPackage rec {
   };
   doCheck = false; # impure
   meta = with lib;
-    src.meta // {
+    src.meta
+    // {
       description = "Temporary files and folders";
-      license = [ lib.licenses.mit ];
-      maintainers = [ maintainers.ehmry ];
+      license = [lib.licenses.mit];
+      maintainers = [maintainers.ehmry];
     };
 }

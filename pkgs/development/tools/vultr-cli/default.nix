@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "vultr-cli";
   version = "2.12.1";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "Official command line tool for Vultr services";
     homepage = "https://github.com/vultr/vultr-cli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
   };
 }

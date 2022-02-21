@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "editorconfig-checker";
   version = "2.4.0";
@@ -15,9 +19,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  ldflags = [ "-X main.version=${version}" ];
+  ldflags = ["-X main.version=${version}"];
 
   postInstall = ''
     installManPage docs/editorconfig-checker.1
@@ -27,6 +31,6 @@ buildGoModule rec {
     description = "A tool to verify that your files are in harmony with your .editorconfig";
     homepage = "https://editorconfig-checker.github.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ uri-canva zowoq ];
+    maintainers = with maintainers; [uri-canva zowoq];
   };
 }

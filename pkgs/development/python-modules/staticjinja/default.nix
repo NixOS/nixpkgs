@@ -1,20 +1,20 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, poetry-core
-, docopt-ng
-, easywatch
-, jinja2
-, pytestCheckHook
-, pytest-check
-, pythonOlder
-, markdown
-, testVersion
-, tomlkit
-, staticjinja
-, callPackage
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  poetry-core,
+  docopt-ng,
+  easywatch,
+  jinja2,
+  pytestCheckHook,
+  pytest-check,
+  pythonOlder,
+  markdown,
+  testVersion,
+  tomlkit,
+  staticjinja,
+  callPackage,
 }:
-
 buildPythonPackage rec {
   pname = "staticjinja";
   version = "4.1.2";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    version = testVersion { package = staticjinja; };
+    version = testVersion {package = staticjinja;};
     minimal-template = callPackage ./test-minimal-template {};
   };
 
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "A library and cli tool that makes it easy to build static sites using Jinja2";
     homepage = "https://staticjinja.readthedocs.io/en/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
   };
 }

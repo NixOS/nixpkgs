@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "opensensemap-api";
   version = "0.2.0";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
       available information from the sensor can be retrieved.
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-opensensemap-api";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

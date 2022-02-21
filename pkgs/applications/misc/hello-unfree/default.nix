@@ -1,5 +1,8 @@
-{ lib, stdenv, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  runtimeShell,
+}:
 stdenv.mkDerivation {
   pname = "example-unfree-package";
   version = "1.0";
@@ -18,6 +21,6 @@ stdenv.mkDerivation {
   meta = {
     description = "An example package with unfree license (for testing)";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.oxij ];
+    maintainers = [lib.maintainers.oxij];
   };
 }

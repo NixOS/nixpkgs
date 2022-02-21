@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, libogg }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libogg,
+}:
 stdenv.mkDerivation rec {
   pname = "flac";
   version = "1.3.3";
@@ -17,11 +22,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libogg ];
+  buildInputs = [libogg];
 
   #doCheck = true; # takes lots of time
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = ["bin" "dev" "out" "man" "doc"];
 
   meta = with lib; {
     homepage = "https://xiph.org/flac/";

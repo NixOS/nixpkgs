@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rust-motd";
   version = "0.1.1";
@@ -20,14 +20,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-l9Sit+niCLOnL1mdK6i8jea8NWsJlFM6p9lMTXyWOKY=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [openssl] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Beautiful, useful MOTD generation with zero runtime dependencies";
     homepage = "https://github.com/rust-motd/rust-motd";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

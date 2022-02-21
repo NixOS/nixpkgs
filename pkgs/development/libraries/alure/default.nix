@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, openal }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  openal,
+}:
 stdenv.mkDerivation rec {
   pname = "alure";
   version = "1.2";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0w8gsyqki21s1qb2s5ac1kj08i6nc937c0rr08xbw9w9wvd6lpj6";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ openal ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [openal];
 
   meta = with lib; {
     description = "A utility library to help manage common tasks with OpenAL applications";

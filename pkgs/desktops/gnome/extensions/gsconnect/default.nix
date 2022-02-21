@@ -1,27 +1,28 @@
-{ lib, stdenv
-, fetchFromGitHub
-, substituteAll
-, openssl
-, gsound
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook
-, glib
-, glib-networking
-, gtk3
-, openssh
-, gnome
-, gjs
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  openssl,
+  gsound,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsHook,
+  glib,
+  glib-networking,
+  gtk3,
+  openssh,
+  gnome,
+  gjs,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
   version = "48";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = ["out" "installedTests"];
 
   src = fetchFromGitHub {
     owner = "andyholmes";

@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, withGUI ? false, gtk2, pkg-config, sqlite # compile GUI
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  withGUI ? false,
+  gtk2,
+  pkg-config,
+  sqlite
+  # compile GUI
 }:
-
 stdenv.mkDerivation rec {
   pname = "lshw";
   version = "B.02.18";
@@ -24,9 +31,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = lib.optionals withGUI [ gtk2 sqlite ];
+  buildInputs = lib.optionals withGUI [gtk2 sqlite];
 
   # Fix version info.
   preConfigure = ''
@@ -34,11 +41,11 @@ stdenv.mkDerivation rec {
         -i src/core/version.cc
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
-  buildFlags = [ "all" ] ++ lib.optional withGUI "gui";
+  buildFlags = ["all"] ++ lib.optional withGUI "gui";
 
-  installTargets = [ "install" ] ++ lib.optional withGUI "install-gui";
+  installTargets = ["install"] ++ lib.optional withGUI "install-gui";
 
   enableParallelBuilding = true;
 
@@ -46,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ezix.org/project/wiki/HardwareLiSter";
     description = "Provide detailed information on the hardware configuration of the machine";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

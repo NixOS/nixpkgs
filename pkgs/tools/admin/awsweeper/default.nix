@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "awsweeper";
   version = "0.12.0";
@@ -13,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-jzK56x5mzQkD3tSs6X0Z2Zn1OLXFHgWHz0YLZ3m3NS4=";
 
-  ldflags = [ "-s" "-w" "-X github.com/jckuester/awsweeper/internal.version=${version}" "-X github.com/jckuester/awsweeper/internal.commit=${src.rev}" "-X github.com/jckuester/awsweeper/internal.date=unknown" ];
+  ldflags = ["-s" "-w" "-X github.com/jckuester/awsweeper/internal.version=${version}" "-X github.com/jckuester/awsweeper/internal.commit=${src.rev}" "-X github.com/jckuester/awsweeper/internal.date=unknown"];
 
   doCheck = false;
 
@@ -21,6 +24,6 @@ buildGoModule rec {
     description = "A tool to clean out your AWS account";
     homepage = "https://github.com/jckuester/awsweeper";
     license = licenses.mpl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

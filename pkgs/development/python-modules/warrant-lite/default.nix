@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, boto3
-, envs
-, python-jose
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  boto3,
+  envs,
+  python-jose,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "warrant-lite";
   version = "1.0.4";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for process SRP requests for AWS Cognito";
     homepage = "https://github.com/capless/warrant-lite";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

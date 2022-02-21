@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "ent-go";
   version = "0.10.0";
@@ -13,14 +17,14 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-n5dS78SSBAEgE4/9jMZZhbOQZ3IGi9n3ErA0ioP9Tsg=";
 
-  subPackages = [ "cmd/ent" ];
+  subPackages = ["cmd/ent"];
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installShellCompletion --cmd ent \
@@ -34,7 +38,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/ent/ent";
     license = licenses.asl20;
     homepage = "https://entgo.io/";
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [superherointj];
   };
 }
-

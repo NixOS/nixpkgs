@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, pciutils }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pciutils,
+}:
 stdenv.mkDerivation {
   pname = "i810switch";
   version = "0.6.5";
@@ -19,7 +23,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A utility for switching between the LCD and external VGA display on Intel graphics cards";
     homepage = "http://www16.plala.or.jp/mano-a-mano/i810switch.html";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

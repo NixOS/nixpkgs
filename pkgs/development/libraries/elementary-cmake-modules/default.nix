@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+}:
 stdenv.mkDerivation {
   pname = "elementary-cmake-modules";
   version = "0.1.0";
@@ -16,7 +21,7 @@ stdenv.mkDerivation {
       --replace ' ''${CMAKE_ROOT}/Modules' " $out/lib/cmake"
   '';
 
-  propagatedBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = [cmake pkg-config];
 
   setupHook = ./setup-hook.sh;
 
@@ -24,6 +29,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux ++ platforms.darwin;
     homepage = "https://github.com/elementary/cmake-modules";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.samdroid-apps ];
+    maintainers = [maintainers.samdroid-apps];
   };
 }

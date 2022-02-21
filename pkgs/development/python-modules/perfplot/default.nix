@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, dufte
-, matplotlib
-, numpy
-, pipdate
-, tqdm
-, rich
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  dufte,
+  matplotlib,
+  numpy,
+  pipdate,
+  tqdm,
+  rich,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "perfplot";
   version = "0.9.13";
@@ -42,13 +42,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "perfplot" ];
+  pythonImportsCheck = ["perfplot"];
 
   meta = with lib; {
     description = "Performance plots for Python code snippets";
     homepage = "https://github.com/nschloe/perfplot";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
     broken = true; # missing matplotx dependency
   };
 }

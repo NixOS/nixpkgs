@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite, bc, file }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  parallel,
+  sqlite,
+  bc,
+  file,
+}:
 stdenv.mkDerivation rec {
   version = "2.44";
   pname = "profile-cleaner";
@@ -11,12 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OkrZb8skglczJEjwJSZINELeStdsILQO4GfZ1uLSnQY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     PREFIX=\"\" DESTDIR=$out make install
     wrapProgram $out/bin/profile-cleaner \
-      --prefix PATH : "${lib.makeBinPath [ parallel sqlite bc file ]}"
+      --prefix PATH : "${lib.makeBinPath [parallel sqlite bc file]}"
   '';
 
   meta = {
@@ -30,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/graysky2/profile-cleaner";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.devhell ];
+    maintainers = [lib.maintainers.devhell];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "mutesync";
   version = "0.0.2";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # Project has not published tests yet
   doCheck = false;
 
-  pythonImportsCheck = [ "mutesync" ];
+  pythonImportsCheck = ["mutesync"];
 
   meta = with lib; {
     description = "Python module for interacting with mutesync buttons";
     homepage = "https://github.com/currentoor/pymutesync";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

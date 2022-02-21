@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, xorg, i3lock }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  i3lock,
+}:
 stdenv.mkDerivation rec {
   pname = "i3lock-fancy-rapid";
   version = "2019-10-09";
@@ -10,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jhvlj6v6wx70239pgkjxd42z1s2bzfg886ra6n1rzsdclf4rkc6";
   };
 
-  buildInputs = [ xorg.libX11 ];
-  propagatedBuildInputs = [ i3lock ];
+  buildInputs = [xorg.libX11];
+  propagatedBuildInputs = [i3lock];
 
   postPatch = ''
     substituteInPlace i3lock-fancy-rapid.c \
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A faster implementation of i3lock-fancy";
     homepage = "https://github.com/yvbbrjdr/i3lock-fancy-rapid";
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with maintainers; [nickhu];
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

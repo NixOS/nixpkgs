@@ -1,19 +1,27 @@
-import ../make-test-python.nix ({ pkgs, ... }: {
+import ../make-test-python.nix ({pkgs, ...}: {
   name = "ejabberd";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ajs124 ];
+    maintainers = [ajs124];
   };
   nodes = {
-    client = { nodes, pkgs, ... }: {
+    client = {
+      nodes,
+      pkgs,
+      ...
+    }: {
       networking.extraHosts = ''
         ${nodes.server.config.networking.primaryIPAddress} example.com
       '';
 
       environment.systemPackages = [
-        (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = nodes.server.config.networking.primaryIPAddress; })
+        (pkgs.callPackage ./xmpp-sendmessage.nix {connectTo = nodes.server.config.networking.primaryIPAddress;})
       ];
     };
-    server = { config, pkgs, ... }: {
+    server = {
+      config,
+      pkgs,
+      ...
+    }: {
       networking.extraHosts = ''
         ${config.networking.primaryIPAddress} example.com
       '';
@@ -257,7 +265,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
     };
   };
 
-  testScript = { nodes, ... }: ''
+  testScript = {nodes, ...}: ''
     ejabberd_prefix = "su ejabberd -s $(which ejabberdctl) "
 
     server.wait_for_unit("ejabberd.service")

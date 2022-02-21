@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, wayland-scanner, ninja
-, cairo, libinput, pango, wayland, wayland-protocols, libxkbcommon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  wayland-scanner,
+  ninja,
+  cairo,
+  libinput,
+  pango,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wshowkeys-unstable";
   version = "2021-08-01";
@@ -14,8 +24,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/HvNCQWsXOJZeCxHWmsLlbBDhBzF7XP/SPLdDiWMDC4=";
   };
 
-  nativeBuildInputs = [ meson pkg-config wayland-scanner ninja ];
-  buildInputs = [ cairo libinput pango wayland wayland-protocols libxkbcommon ];
+  nativeBuildInputs = [meson pkg-config wayland-scanner ninja];
+  buildInputs = [cairo libinput pango wayland wayland-protocols libxkbcommon];
 
   meta = with lib; {
     description = "Displays keys being pressed on a Wayland session";
@@ -27,10 +37,10 @@ stdenv.mkDerivation rec {
       setuid binary (use "programs.wshowkeys.enable = true;").
     '';
     homepage = "https://github.com/ammgws/wshowkeys";
-    license = with licenses; [ gpl3Only mit ];
+    license = with licenses; [gpl3Only mit];
     # Some portions of the code are taken from Sway which is MIT licensed.
     # TODO: gpl3Only or gpl3Plus (ask upstream)?
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos berbiche ];
+    maintainers = with maintainers; [primeos berbiche];
   };
 }

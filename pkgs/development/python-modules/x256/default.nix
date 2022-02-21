@@ -1,6 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "x256";
   version = "0.0.3";
@@ -16,7 +18,6 @@ buildPythonPackage rec {
     description = "Find the nearest xterm 256 color index for an RGB";
     homepage = "https://github.com/magarcia/python-x256";
     license = licenses.mit;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    maintainers = with maintainers; [Scriptkiddi];
   };
 }
-

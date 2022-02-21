@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, mock, boto, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  mock,
+  boto,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "amazon_kclpy";
   version = "2.0.6";
@@ -17,9 +24,9 @@ buildPythonPackage rec {
       --replace "'argparse'," ""
   '';
 
-  propagatedBuildInputs =  [ mock boto ];
+  propagatedBuildInputs = [mock boto];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     ${python.interpreter} -m pytest
@@ -29,6 +36,6 @@ buildPythonPackage rec {
     description = "Amazon Kinesis Client Library for Python";
     homepage = "https://github.com/awslabs/amazon-kinesis-client-python";
     license = licenses.amazonsl;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

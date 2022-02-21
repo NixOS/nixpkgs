@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, ldns
-, libck
-, nghttp2
-, openssl
-, pkg-config
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  ldns,
+  libck,
+  nghttp2,
+  openssl,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dnsperf";
   version = "2.9.0";
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.dns-oarc.net/tools/dnsperf";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vcunat ];
+    maintainers = with maintainers; [vcunat];
   };
 }

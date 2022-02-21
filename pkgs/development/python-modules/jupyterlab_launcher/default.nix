@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, jsonschema, notebook, pythonOlder }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jsonschema,
+  notebook,
+  pythonOlder,
+}:
 buildPythonPackage rec {
   pname = "jupyterlab_launcher";
   version = "0.13.1";
@@ -19,8 +26,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This package is used to launch an application built using JupyterLab";
-    license = with licenses; [ bsd3 ];
+    license = with licenses; [bsd3];
     homepage = "https://jupyter.org/";
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

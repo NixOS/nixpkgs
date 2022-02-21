@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python-dateutil
-, typing-extensions
-, pytestCheckHook
-, pytest-mock
-, pytz
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  python-dateutil,
+  typing-extensions,
+  pytestCheckHook,
+  pytest-mock,
+  pytz,
+  simplejson,
 }:
-
 buildPythonPackage rec {
   pname = "arrow";
   version = "1.2.1";
@@ -26,8 +26,9 @@ buildPythonPackage rec {
     sed -i "/addopts/d" tox.ini
   '';
 
-  propagatedBuildInputs = [ python-dateutil ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  propagatedBuildInputs =
+    [python-dateutil]
+    ++ lib.optionals (pythonOlder "3.8") [typing-extensions];
 
   checkInputs = [
     pytestCheckHook
@@ -41,12 +42,12 @@ buildPythonPackage rec {
     "test_parse_tz_name_zzz"
   ];
 
-  pythonImportsCheck = [ "arrow" ];
+  pythonImportsCheck = ["arrow"];
 
   meta = with lib; {
     description = "Python library for date manipulation";
     homepage = "https://github.com/crsmithdev/arrow";
     license = licenses.asl20;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

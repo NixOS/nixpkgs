@@ -1,7 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "purl";
   version = "1.6";
@@ -13,12 +15,12 @@ buildPythonPackage rec {
     sha256 = "sha256-Jb3JRW/PtQ7NlO4eQ9DmTPu/sjvFTg2mztphoIF79gc=";
   };
 
-  checkInputs = [ pytestCheckHook];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     description = "Immutable URL class for easy URL-building and manipulation";
     homepage = "https://github.com/codeinthehole/purl";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

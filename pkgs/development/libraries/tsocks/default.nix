@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "tsocks";
   version = "1.8beta5";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ixkymiph771dcdzvssi9dr2pk1bzaw9zv85riv3xl40mzspx7c4";
   };
 
-  patches = [ ./poll.patch ];
+  patches = [./poll.patch];
 
   preConfigure = ''
     sed -i -e "s,\\\/usr,"$(echo $out|sed -e "s,\\/,\\\\\\\/,g")",g" tsocks
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Transparent SOCKS v4 proxying library";
     homepage = "http://tsocks.sourceforge.net/";
     license = lib.licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [edwtjo];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

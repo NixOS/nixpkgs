@@ -1,7 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, six, pathpy, zetup, pytest
-, decorator }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pathpy,
+  zetup,
+  pytest,
+  decorator,
+}:
 buildPythonPackage rec {
   pname = "moretools";
   version = "0.1.12";
@@ -15,9 +21,9 @@ buildPythonPackage rec {
     py.test test
   '';
 
-  nativeBuildInputs = [ zetup ];
-  checkInputs = [ six pathpy pytest ];
-  propagatedBuildInputs = [ decorator ];
+  nativeBuildInputs = [zetup];
+  checkInputs = [six pathpy pytest];
+  propagatedBuildInputs = [decorator];
 
   meta = with lib; {
     description = ''

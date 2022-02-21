@@ -1,5 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, typing, pythonOlder }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  typing,
+  pythonOlder,
+}:
 buildPythonPackage rec {
   pname = "mypy-extensions";
   version = "0.4.3";
@@ -19,6 +24,6 @@ buildPythonPackage rec {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";
     homepage = "http://www.mypy-lang.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
+    maintainers = with maintainers; [martingms lnl7 SuperSandro2000];
   };
 }

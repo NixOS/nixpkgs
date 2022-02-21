@@ -1,11 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, gperf
-, buildsystem
-, libdom
-, libhubbub
-, libparserutils
-, libwapcaplet
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gperf,
+  buildsystem,
+  libdom,
+  libhubbub,
+  libparserutils,
+  libwapcaplet,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netsurf-${libname}";
   libname = "libsvgtiny";
@@ -16,13 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LA3PlS8c2ILD6VQB75RZ8W27U8XT5FEjObL563add4E=";
   };
 
-  nativeBuildInputs = [ pkg-config gperf ];
+  nativeBuildInputs = [pkg-config gperf];
   buildInputs = [
     libdom
     libhubbub
     libparserutils
     libwapcaplet
-    buildsystem ];
+    buildsystem
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "NetSurf SVG decoder";
     license = licenses.mit;
-    maintainers = [ maintainers.samueldr maintainers.AndersonTorres ];
+    maintainers = [maintainers.samueldr maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

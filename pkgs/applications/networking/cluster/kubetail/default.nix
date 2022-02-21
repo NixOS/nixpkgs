@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, lib, ... }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  ...
+}:
 stdenv.mkDerivation rec {
   pname = "kubetail";
   version = "1.6.13";
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/johanhaleby/kubetail";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.all;
   };
 }

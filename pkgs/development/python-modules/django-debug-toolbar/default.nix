@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, buildPythonPackage
-, python
-, django
-, jinja2
-, sqlparse
-, html5lib
+{
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  buildPythonPackage,
+  python,
+  django,
+  jinja2,
+  sqlparse,
+  html5lib,
 }:
-
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
   version = "3.2.4";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     description = "Configurable set of panels that display debug information about the current request/response";
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
-    maintainers =  with lib.maintainers; [ yuu ];
+    maintainers = with lib.maintainers; [yuu];
     license = lib.licenses.bsd3;
   };
 }

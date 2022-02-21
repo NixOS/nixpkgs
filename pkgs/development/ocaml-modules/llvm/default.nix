@@ -1,44 +1,51 @@
-{ stdenv, lib, python2, cmake, libllvm, ocaml, findlib, ctypes }:
+{
+  stdenv,
+  lib,
+  python2,
+  cmake,
+  libllvm,
+  ocaml,
+  findlib,
+  ctypes,
+}: let
+  version = lib.getVersion libllvm;
+in
+  stdenv.mkDerivation {
+    pname = "ocaml-llvm";
+    inherit version;
 
-let version = lib.getVersion libllvm; in
+    inherit (libllvm) src;
 
-stdenv.mkDerivation {
-  pname = "ocaml-llvm";
-  inherit version;
+    nativeBuildInputs = [cmake];
+    buildInputs = [python2 ocaml findlib ctypes];
+    propagatedBuildInputs = [libllvm];
 
-  inherit (libllvm) src;
+    cmakeFlags = [
+      "-DBUILD_SHARED_LIBS=YES" # fixes bytecode builds
+      "-DLLVM_OCAML_OUT_OF_TREE=TRUE"
+      "-DLLVM_OCAML_INSTALL_PATH=${placeholder "out"}/ocaml"
+      "-DLLVM_OCAML_EXTERNAL_LLVM_LIBDIR=${lib.getLib libllvm}/lib"
+    ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ python2 ocaml findlib ctypes ];
-  propagatedBuildInputs = [ libllvm ];
+    buildFlags = ["ocaml_all"];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=YES" # fixes bytecode builds
-    "-DLLVM_OCAML_OUT_OF_TREE=TRUE"
-    "-DLLVM_OCAML_INSTALL_PATH=${placeholder "out"}/ocaml"
-    "-DLLVM_OCAML_EXTERNAL_LLVM_LIBDIR=${lib.getLib libllvm}/lib"
-  ];
+    installFlags = ["-C" "bindings/ocaml"];
 
-  buildFlags = [ "ocaml_all" ];
+    postInstall = ''
+      mkdir -p $OCAMLFIND_DESTDIR/
+      mv $out/ocaml $OCAMLFIND_DESTDIR/llvm
+      mv $OCAMLFIND_DESTDIR/llvm/META{.llvm,}
+      mv $OCAMLFIND_DESTDIR/llvm/stublibs $OCAMLFIND_DESTDIR/stublibs
+    '';
 
-  installFlags = [ "-C" "bindings/ocaml" ];
+    passthru = {
+      inherit libllvm;
+    };
 
-  postInstall = ''
-    mkdir -p $OCAMLFIND_DESTDIR/
-    mv $out/ocaml $OCAMLFIND_DESTDIR/llvm
-    mv $OCAMLFIND_DESTDIR/llvm/META{.llvm,}
-    mv $OCAMLFIND_DESTDIR/llvm/stublibs $OCAMLFIND_DESTDIR/stublibs
-  '';
-
-  passthru = {
-    inherit libllvm;
-  };
-
-  meta = {
-    inherit (libllvm.meta) license homepage;
-    platforms = ocaml.meta.platforms or [];
-    description = "OCaml bindings distributed with LLVM";
-    maintainers = with lib.maintainers; [ vbgl ];
-  };
-
-}
+    meta = {
+      inherit (libllvm.meta) license homepage;
+      platforms = ocaml.meta.platforms or [];
+      description = "OCaml bindings distributed with LLVM";
+      maintainers = with lib.maintainers; [vbgl];
+    };
+  }

@@ -1,16 +1,23 @@
-{ symlinkJoin, lib, makeWrapper, zathura_core, file, plugins ? [] }:
+{
+  symlinkJoin,
+  lib,
+  makeWrapper,
+  zathura_core,
+  file,
+  plugins ? [],
+}:
 symlinkJoin {
   name = "zathura-with-plugins-${zathura_core.version}";
 
-  paths = with zathura_core; [ man dev out ] ++ plugins;
+  paths = with zathura_core; [man dev out] ++ plugins;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postBuild = let
     fishCompletion = "share/fish/vendor_completions.d/zathura.fish";
   in ''
     makeWrapper ${zathura_core.bin}/bin/zathura $out/bin/zathura \
-      --prefix PATH ":" "${lib.makeBinPath [ file ]}" \
+      --prefix PATH ":" "${lib.makeBinPath [file]}" \
       --prefix ZATHURA_PLUGINS_PATH : "$out/lib/zathura"
 
     # zathura fish completion references the zathura_core derivation to
@@ -32,7 +39,7 @@ symlinkJoin {
     '';
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ smironov globin TethysSvensson ];
+    maintainers = with maintainers; [smironov globin TethysSvensson];
     mainProgram = "zathura";
   };
 }

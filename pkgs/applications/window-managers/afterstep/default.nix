@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config
-, libtiff
-, fltk, gtk
-, libICE, libSM
-, dbus
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libtiff,
+  fltk,
+  gtk,
+  libICE,
+  libSM,
+  dbus,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
-
   pname = "afterstep";
   version = "2.2.12";
   sourceName = "AfterStep-${version}";
 
   src = fetchurl {
-    urls = [ "ftp://ftp.afterstep.org/stable/${sourceName}.tar.bz2" ];
+    urls = ["ftp://ftp.afterstep.org/stable/${sourceName}.tar.bz2"];
     sha256 = "1j7vkx1ig4kzwffdxnkqv3kld9qi3sam4w2nhq18waqjsi8xl5gz";
   };
 
@@ -40,12 +44,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libtiff fltk gtk libICE libSM dbus ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libtiff fltk gtk libICE libSM dbus];
 
   # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
-     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
   # Parallel build fails due to missing dependencies between private libaries:
@@ -66,8 +70,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.afterstep.org/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
-
 }

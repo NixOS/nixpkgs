@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, cups, pkgsi686Linux, dpkg, psutils, makeWrapper, ghostscript, bash }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  pkgsi686Linux,
+  dpkg,
+  psutils,
+  makeWrapper,
+  ghostscript,
+  bash,
+}: let
   version = "1.2-0";
 
   libstdcpp5 = fetchurl {
@@ -17,11 +26,11 @@ in
       sha256 = "1dfw75a3kj2aa4iicvlk9kz3jarrsikpnpd4cdpw79scfc5mwm2p";
     };
 
-    patches = [ ./cups-data-dir.patch ./ppd.patch ];
+    patches = [./cups-data-dir.patch ./ppd.patch];
 
-    nativeBuildInputs = [ dpkg makeWrapper ];
+    nativeBuildInputs = [dpkg makeWrapper];
 
-    buildInputs = [ cups pkgsi686Linux.glibc psutils ghostscript bash ];
+    buildInputs = [cups pkgsi686Linux.glibc psutils ghostscript bash];
 
     postUnpack = ''
       dpkg -x ${libstdcpp5} libstdcpp5_i386;
@@ -33,14 +42,18 @@ in
 
     postFixup = ''
       patchelf --set-interpreter ${pkgsi686Linux.glibc}/lib/ld-linux.so.2 \
-        --set-rpath "${lib.makeLibraryPath [
+        --set-rpath "${
+        lib.makeLibraryPath [
           pkgsi686Linux.glibc
           "$out"
-        ]}" $out/bin/alc1100
+        ]
+      }" $out/bin/alc1100
 
-      patchelf --set-rpath "${lib.makeLibraryPath [
+      patchelf --set-rpath "${
+        lib.makeLibraryPath [
           pkgsi686Linux.glibc
-        ]}" $out/lib/libstdc++.so.5.0.7
+        ]
+      }" $out/lib/libstdc++.so.5.0.7
 
       wrapProgram $out/bin/alc1100_lprwrapper.sh \
         --suffix PATH : "\$PATH:${psutils}/bin:/var/lib/cups/path/bin"
@@ -63,9 +76,8 @@ in
           };
       '';
 
-      license = with licenses; [ mit eapl ];
-      maintainers = [ maintainers.eperuffo ];
+      license = with licenses; [mit eapl];
+      maintainers = [maintainers.eperuffo];
       platforms = platforms.linux;
     };
-
   }

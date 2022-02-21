@@ -1,14 +1,15 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy }:
-
+{
+  lib,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  zigpy,
+}:
 buildPythonPackage rec {
   pname = "zigpy-cc";
   version = "0.5.2";
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     description = "A library which communicates with Texas Instruments CC2531 radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-cc";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [etu mvnetbiz];
     platforms = platforms.linux;
   };
 }

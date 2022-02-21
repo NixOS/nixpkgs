@@ -1,8 +1,13 @@
-{ lib
-, buildPythonPackage, fetchPypi
-, numpy, scipy, cython, six, decorator
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  cython,
+  six,
+  decorator,
 }:
-
 buildPythonPackage rec {
   pname = "pysptk";
   version = "0.1.20";
@@ -32,6 +37,6 @@ buildPythonPackage rec {
     description = "A python wrapper for Speech Signal Processing Toolkit (SPTK)";
     homepage = "https://pysptk.readthedocs.io/en/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ hyphon81 ];
+    maintainers = with maintainers; [hyphon81];
   };
 }

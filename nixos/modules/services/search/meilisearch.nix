@@ -1,14 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.meilisearch;
-
-in
 {
-
-  meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.meilisearch;
+in {
+  meta.maintainers = with maintainers; [Br1ght0ne happysalada];
   # Don't edit the docbook xml directly, edit the md and generate it:
   # `pandoc meilisearch.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > meilisearch.xml`
   meta.doc = ./meilisearch.xml;
@@ -40,7 +39,7 @@ in
     environment = mkOption {
       description = "Defines the running environment of MeiliSearch.";
       default = "development";
-      type = types.enum [ "development" "production" ];
+      type = types.enum ["development" "production"];
     };
 
     # TODO change this to LoadCredentials once possible
@@ -102,7 +101,6 @@ in
       default = "104857600";
       type = types.str;
     };
-
   };
 
   ###### implementation
@@ -110,8 +108,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.meilisearch = {
       description = "MeiliSearch daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       environment = {
         MEILI_DB_PATH = "/var/lib/meilisearch";
         MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, mypy
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  mypy,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "globus-sdk";
   version = "3.4.2";
@@ -25,13 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-QdeEaOP+gPWMqtUofTwrHRqLBtjG8Kta0LfZtccTjCQ=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    requests
-    pyjwt
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      cryptography
+      requests
+      pyjwt
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      typing-extensions
+    ];
 
   checkInputs = [
     mypy
@@ -55,8 +57,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
-    homepage =  "https://github.com/globus/globus-sdk-python";
+    homepage = "https://github.com/globus/globus-sdk-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ixxie ];
+    maintainers = with maintainers; [ixxie];
   };
 }

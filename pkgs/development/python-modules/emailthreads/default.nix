@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, python, isPy3k }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "emailthreads";
   version = "0.1.3";
@@ -24,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/emersion/python-emailthreads";
     description = "Python library to parse and format email threads";
     license = licenses.mit;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

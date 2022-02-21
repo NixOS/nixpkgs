@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, pkgs
-, stdenv
-}:
-
-let
+{
+  lib,
+  fetchFromGitHub,
+  pkgs,
+  stdenv,
+}: let
   rtpPath = "share/tmux-plugins";
 
   addRtp = path: rtpFilePath: attrs: derivation:
-    derivation // { rtp = "${derivation}/${path}/${rtpFilePath}"; } // {
+    derivation
+    // {rtp = "${derivation}/${path}/${rtpFilePath}";}
+    // {
       overrideAttrs = f: mkTmuxPlugin (attrs // f attrs);
     };
 
-  mkTmuxPlugin = a@{
+  mkTmuxPlugin = a @ {
     pluginName,
     rtpFilePath ? (builtins.replaceStrings ["-"] ["_"] pluginName) + ".tmux",
     namePrefix ? "tmuxplugin-",
@@ -26,27 +27,29 @@ let
     path ? lib.getName pluginName,
     ...
   }:
-    if lib.hasAttr "dependencies" a then
-      throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034" # added 2021-04-01
-    else addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
-      pname = namePrefix + pluginName;
+    if lib.hasAttr "dependencies" a
+    then throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034"
+    # added 2021-04-01
+    else
+      addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a
+      // {
+        pname = namePrefix + pluginName;
 
-      inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
+        inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
-      installPhase = ''
-        runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-        target=$out/${rtpPath}/${path}
-        mkdir -p $out/${rtpPath}
-        cp -r . $target
-        if [ -n "$addonInfo" ]; then
-          echo "$addonInfo" > $target/addon-info.json
-        fi
+          target=$out/${rtpPath}/${path}
+          mkdir -p $out/${rtpPath}
+          cp -r . $target
+          if [ -n "$addonInfo" ]; then
+            echo "$addonInfo" > $target/addon-info.json
+          fi
 
-        runHook postInstall
-      '';
-    }));
-
+          runHook postInstall
+        '';
+      }));
 in rec {
   inherit mkTmuxPlugin;
 
@@ -76,8 +79,7 @@ in rec {
     meta = {
       homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
       description = "better mouse support for tmux";
-      longDescription =
-      ''
+      longDescription = ''
         Features:
 
           * Emulate mouse-support for full-screen programs like less that don't provide built in mouse support.
@@ -86,7 +88,7 @@ in rec {
       '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ chrispickard ];
+      maintainers = with lib.maintainers; [chrispickard];
     };
   };
 
@@ -102,8 +104,7 @@ in rec {
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
       description = "continous saving of tmux environment";
-      longDescription =
-      ''
+      longDescription = ''
         Features:
         * continuous saving of tmux environment
         * automatic tmux start when computer/server is turned on
@@ -115,7 +116,7 @@ in rec {
       '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ ronanmacf ];
+      maintainers = with lib.maintainers; [ronanmacf];
     };
   };
 
@@ -166,7 +167,7 @@ in rec {
       description = "A feature packed Dracula theme for tmux!";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ethancedwards8 ];
+      maintainers = with maintainers; [ethancedwards8];
     };
   };
 
@@ -179,14 +180,17 @@ in rec {
       rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
       sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
     };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [pkgs.makeWrapper];
     postInstall = ''
-    for f in extrakto.sh open.sh tmux-extrakto.sh; do
-      wrapProgram $target/scripts/$f \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
-        )}
-    done
+      for f in extrakto.sh open.sh tmux-extrakto.sh; do
+        wrapProgram $target/scripts/$f \
+          --prefix PATH : ${
+        with pkgs;
+          lib.makeBinPath (
+            [pkgs.fzf pkgs.python3 pkgs.xclip]
+          )
+      }
+      done
 
     '';
     meta = {
@@ -194,7 +198,7 @@ in rec {
       description = "Fuzzy find your text with fzf instead of selecting it by hand ";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ kidd ];
+      maintainers = with lib.maintainers; [kidd];
     };
   };
 
@@ -209,13 +213,16 @@ in rec {
       sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
       fetchSubmodules = true;
     };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [pkgs.makeWrapper];
     postInstall = ''
       for f in config.sh tmux-fingers.sh setup-fingers-mode-bindings.sh; do
       wrapProgram $target/scripts/$f \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-          [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
-        )}
+        --prefix PATH : ${
+        with pkgs;
+          lib.makeBinPath (
+            [gawk] ++ lib.optionals stdenv.isDarwin [reattach-to-user-namespace]
+          )
+      }
       done
     '';
   };
@@ -276,7 +283,7 @@ in rec {
       description = "Vimium/Easymotion like navigation for tmux";
       license = licenses.gpl3;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ arnarg ];
+      maintainers = with maintainers; [arnarg];
     };
   };
 
@@ -418,28 +425,27 @@ in rec {
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-resurrect";
       description = "Restore tmux environment after system restart";
-      longDescription =
-        ''
-          This plugin goes to great lengths to save and restore all the details
-          from your tmux environment. Here's what's been taken care of:
+      longDescription = ''
+        This plugin goes to great lengths to save and restore all the details
+        from your tmux environment. Here's what's been taken care of:
 
-          * all sessions, windows, panes and their order
-          * current working directory for each pane
-          * exact pane layouts within windows (even when zoomed)
-          * active and alternative session
-          * active and alternative window for each session
-          * windows with focus
-          * active pane for each window
-          * "grouped sessions" (useful feature when using tmux with multiple monitors)
-          * programs running within a pane! More details in the restoring programs doc.
+        * all sessions, windows, panes and their order
+        * current working directory for each pane
+        * exact pane layouts within windows (even when zoomed)
+        * active and alternative session
+        * active and alternative window for each session
+        * windows with focus
+        * active pane for each window
+        * "grouped sessions" (useful feature when using tmux with multiple monitors)
+        * programs running within a pane! More details in the restoring programs doc.
 
-          Optional:
-          * restoring vim and neovim sessions
-          * restoring pane contents
+        Optional:
+        * restoring vim and neovim sessions
+        * restoring pane contents
       '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ ronanmacf ];
+      maintainers = with lib.maintainers; [ronanmacf];
     };
   };
 
@@ -505,7 +511,7 @@ in rec {
       description = "Plugin which makes tmux work and feel like i3wm";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ arnarg ];
+      maintainers = with maintainers; [arnarg];
     };
   };
 
@@ -538,8 +544,7 @@ in rec {
     meta = {
       homepage = "https://github.com/sainnhe/tmux-fzf";
       description = "Use fzf to manage your tmux work environment! ";
-      longDescription =
-        ''
+      longDescription = ''
         Features:
         * Manage sessions (attach, detach*, rename, kill*).
         * Manage windows (switch, link, move, swap, rename, kill*).
@@ -552,7 +557,7 @@ in rec {
       '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ kyleondy ];
+      maintainers = with lib.maintainers; [kyleondy];
     };
   };
 
@@ -585,7 +590,7 @@ in rec {
       description = "Makes FocusGained and FocusLost autocommand events work in vim when using tmux";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ronanmacf ];
+      maintainers = with maintainers; [ronanmacf];
     };
   };
 

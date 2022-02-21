@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-, python
-, apr
-, aprutil
-, bash
-, e2fsprogs
-, expat
-, gcc
-, glibcLocales
-, neon
-, openssl
-, pycxx
-, subversion
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  isPy3k,
+  python,
+  apr,
+  aprutil,
+  bash,
+  e2fsprogs,
+  expat,
+  gcc,
+  glibcLocales,
+  neon,
+  openssl,
+  pycxx,
+  subversion,
 }:
-
 buildPythonPackage rec {
   pname = "pysvn";
   version = "1.9.12";
@@ -27,31 +27,34 @@ buildPythonPackage rec {
     sha256 = "sRPa4wNyjDmGdF1gTOgLS0pnrdyZwkkH4/9UCdh/R9Q=";
   };
 
-  buildInputs = [ bash subversion apr aprutil expat neon openssl ]
-    ++ lib.optionals stdenv.isLinux [ e2fsprogs ]
-    ++ lib.optionals stdenv.isDarwin [ gcc ];
+  buildInputs =
+    [bash subversion apr aprutil expat neon openssl]
+    ++ lib.optionals stdenv.isLinux [e2fsprogs]
+    ++ lib.optionals stdenv.isDarwin [gcc];
 
   postPatch = ''
     sed -i "117s|append(|insert(0, |" Tests/benchmark_diff.py
   '';
 
-  preConfigure = ''
-    cd Source
-    ${python.interpreter} setup.py backport
-    ${python.interpreter} setup.py configure \
-      --apr-inc-dir=${apr.dev}/include \
-      --apu-inc-dir=${aprutil.dev}/include \
-      --pycxx-dir=${pycxx.dev}/include \
-      --svn-inc-dir=${subversion.dev}/include/subversion-1 \
-      --pycxx-src-dir=${pycxx.dev}/src \
-      --apr-lib-dir=${apr.out}/lib \
-      --svn-lib-dir=${subversion.out}/lib \
-      --svn-bin-dir=${subversion.out}/bin
-  '' + (lib.optionalString (stdenv.isDarwin && !isPy3k) ''
-    sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
-  '');
+  preConfigure =
+    ''
+      cd Source
+      ${python.interpreter} setup.py backport
+      ${python.interpreter} setup.py configure \
+        --apr-inc-dir=${apr.dev}/include \
+        --apu-inc-dir=${aprutil.dev}/include \
+        --pycxx-dir=${pycxx.dev}/include \
+        --svn-inc-dir=${subversion.dev}/include/subversion-1 \
+        --pycxx-src-dir=${pycxx.dev}/src \
+        --apr-lib-dir=${apr.out}/lib \
+        --svn-lib-dir=${subversion.out}/lib \
+        --svn-bin-dir=${subversion.out}/bin
+    ''
+    + (lib.optionalString (stdenv.isDarwin && !isPy3k) ''
+      sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
+    '');
 
-  checkInputs = [ glibcLocales  ];
+  checkInputs = [glibcLocales];
   checkPhase = ''
     runHook preCheck
 

@@ -1,13 +1,13 @@
-{ angstrom
-, buildDunePackage
-, fetchzip
-, findlib
-, lib
-, menhir
-, ocaml
-, re
+{
+  angstrom,
+  buildDunePackage,
+  fetchzip,
+  findlib,
+  lib,
+  menhir,
+  ocaml,
+  re,
 }:
-
 buildDunePackage rec {
   pname = "uuuu";
   version = "0.2.0";
@@ -24,17 +24,17 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  nativeBuildInputs = [ menhir ];
+  nativeBuildInputs = [menhir];
 
-  buildInputs = [ angstrom ];
+  buildInputs = [angstrom];
 
-  checkInputs = [ re ];
+  checkInputs = [re];
   doCheck = true;
 
   meta = {
     description = "A library to normalize an ISO-8859 input to Unicode code-point";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/uuuu";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

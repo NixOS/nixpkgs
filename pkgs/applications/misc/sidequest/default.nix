@@ -1,44 +1,57 @@
-{ stdenv, lib, fetchurl, buildFHSUserEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib }:
-  let
-    pname = "sidequest";
-    version = "0.10.24";
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildFHSUserEnv,
+  makeDesktopItem,
+  makeWrapper,
+  atomEnv,
+  libuuid,
+  at-spi2-atk,
+  icu,
+  openssl,
+  zlib,
+}: let
+  pname = "sidequest";
+  version = "0.10.24";
 
-    desktopItem = makeDesktopItem rec {
-      name = "SideQuest";
-      exec = "SideQuest";
-      desktopName = name;
-      genericName = "VR App Store";
-      categories = "Settings;PackageManager;";
+  desktopItem = makeDesktopItem rec {
+    name = "SideQuest";
+    exec = "SideQuest";
+    desktopName = name;
+    genericName = "VR App Store";
+    categories = "Settings;PackageManager;";
+  };
+
+  sidequest = stdenv.mkDerivation {
+    inherit pname version;
+
+    src = fetchurl {
+      url = "https://github.com/SideQuestVR/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
+      sha256 = "0bnd16f22sgy67z3d6rf4z20n56ljxczsql455p2j6kck5f75lh4";
     };
 
-    sidequest = stdenv.mkDerivation {
-      inherit pname version;
+    nativeBuildInputs = [makeWrapper];
 
-      src = fetchurl {
-        url = "https://github.com/SideQuestVR/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
-        sha256 = "0bnd16f22sgy67z3d6rf4z20n56ljxczsql455p2j6kck5f75lh4";
-      };
+    buildCommand = ''
+      mkdir -p "$out/lib/SideQuest" "$out/bin"
+      tar -xJf "$src" -C "$out/lib/SideQuest" --strip-components 1
 
-      nativeBuildInputs = [ makeWrapper ];
+      ln -s "$out/lib/SideQuest/sidequest" "$out/bin"
 
-      buildCommand = ''
-        mkdir -p "$out/lib/SideQuest" "$out/bin"
-        tar -xJf "$src" -C "$out/lib/SideQuest" --strip-components 1
+      fixupPhase
 
-        ln -s "$out/lib/SideQuest/sidequest" "$out/bin"
+      # mkdir -p "$out/share/applications"
+      # ln -s "${desktopItem}/share/applications/*" "$out/share/applications"
 
-        fixupPhase
-
-        # mkdir -p "$out/share/applications"
-        # ln -s "${desktopItem}/share/applications/*" "$out/share/applications"
-
-        patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${atomEnv.libPath}/lib:${lib.makeLibraryPath [libuuid at-spi2-atk]}:$out/lib/SideQuest" \
-          "$out/lib/SideQuest/sidequest"
-      '';
-    };
-  in buildFHSUserEnv {
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${atomEnv.libPath}/lib:${lib.makeLibraryPath [libuuid at-spi2-atk]}:$out/lib/SideQuest" \
+        "$out/lib/SideQuest/sidequest"
+    '';
+  };
+in
+  buildFHSUserEnv {
     name = "SideQuest";
 
     passthru = {
@@ -49,15 +62,17 @@
         homepage = "https://github.com/SideQuestVR/SideQuest";
         downloadPage = "https://github.com/SideQuestVR/SideQuest/releases";
         license = licenses.mit;
-        maintainers = with maintainers; [ joepie91 rvolosatovs ];
-        platforms = [ "x86_64-linux" ];
+        maintainers = with maintainers; [joepie91 rvolosatovs];
+        platforms = ["x86_64-linux"];
       };
     };
 
     targetPkgs = pkgs: [
       sidequest
       # Needed in the environment on runtime, to make QuestSaberPatch work
-      icu openssl zlib
+      icu
+      openssl
+      zlib
     ];
 
     extraInstallCommands = ''

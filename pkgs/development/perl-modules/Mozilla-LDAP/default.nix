@@ -1,5 +1,9 @@
-{ lib, fetchurl, openldap, buildPerlPackage }:
-
+{
+  lib,
+  fetchurl,
+  openldap,
+  buildPerlPackage,
+}:
 buildPerlPackage rec {
   pname = "Mozilla-Ldap";
   version = "1.5.3";
@@ -13,6 +17,6 @@ buildPerlPackage rec {
   meta = {
     description = "Mozilla's ldap client library";
     homepage = "https://metacpan.org/release/perldap";
-    license = with lib.licenses; [ mpl20 lgpl21Plus gpl2Plus ];
+    license = with lib.licenses; [mpl20 lgpl21Plus gpl2Plus];
   };
 }

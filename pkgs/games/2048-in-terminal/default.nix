@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "2048-in-terminal";
   version = "2021-09-12";
@@ -21,15 +27,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ncurses ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ncurses];
+  nativeBuildInputs = [pkg-config];
 
   enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p $out/bin
   '';
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     inherit (src.meta) homepage;

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "pox";
   version = "0.2.7";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     homepage = "https://github.com/uqfoundation/pox/";
   };
-
 }

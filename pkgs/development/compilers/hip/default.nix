@@ -1,34 +1,33 @@
-{ stdenv
-, binutils-unwrapped
-, clang
-, clang-unwrapped
-, cmake
-, compiler-rt
-, fetchFromGitHub
-, fetchpatch
-, file
-, lib
-, libglvnd
-, libX11
-, libxml2
-, lld
-, llvm
-, makeWrapper
-, numactl
-, perl
-, python3
-, rocclr
-, rocm-comgr
-, rocm-device-libs
-, rocm-opencl-runtime
-, rocm-runtime
-, rocm-thunk
-, rocminfo
-, writeScript
-, writeText
-}:
-
-let
+{
+  stdenv,
+  binutils-unwrapped,
+  clang,
+  clang-unwrapped,
+  cmake,
+  compiler-rt,
+  fetchFromGitHub,
+  fetchpatch,
+  file,
+  lib,
+  libglvnd,
+  libX11,
+  libxml2,
+  lld,
+  llvm,
+  makeWrapper,
+  numactl,
+  perl,
+  python3,
+  rocclr,
+  rocm-comgr,
+  rocm-device-libs,
+  rocm-opencl-runtime,
+  rocm-runtime,
+  rocm-thunk,
+  rocminfo,
+  writeScript,
+  writeText,
+}: let
   hip = stdenv.mkDerivation rec {
     pname = "hip";
     version = "4.5.2";
@@ -95,65 +94,65 @@ let
       description = "C++ Heterogeneous-Compute Interface for Portability";
       homepage = "https://github.com/ROCm-Developer-Tools/HIP";
       license = licenses.mit;
-      maintainers = with maintainers; [ lovesegfault ];
+      maintainers = with maintainers; [lovesegfault];
       platforms = platforms.linux;
     };
   };
 in
-stdenv.mkDerivation rec {
-  pname = "hip";
-  version = "4.5.2";
+  stdenv.mkDerivation rec {
+    pname = "hip";
+    version = "4.5.2";
 
-  src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
-    repo = "hipamd";
-    rev = "rocm-${version}";
-    sha256 = "WvOuQu/EN81Kwcoc3ZtGlhb996edQJ3OWFsmPuqeNXE=";
-  };
+    src = fetchFromGitHub {
+      owner = "ROCm-Developer-Tools";
+      repo = "hipamd";
+      rev = "rocm-${version}";
+      sha256 = "WvOuQu/EN81Kwcoc3ZtGlhb996edQJ3OWFsmPuqeNXE=";
+    };
 
-  nativeBuildInputs = [ cmake python3 makeWrapper perl ];
-  buildInputs = [ libxml2 numactl libglvnd libX11 ];
-  propagatedBuildInputs = [
-    clang
-    compiler-rt
-    lld
-    llvm
-    rocm-comgr
-    rocm-device-libs
-    rocm-runtime
-    rocm-thunk
-    rocminfo
-  ];
+    nativeBuildInputs = [cmake python3 makeWrapper perl];
+    buildInputs = [libxml2 numactl libglvnd libX11];
+    propagatedBuildInputs = [
+      clang
+      compiler-rt
+      lld
+      llvm
+      rocm-comgr
+      rocm-device-libs
+      rocm-runtime
+      rocm-thunk
+      rocminfo
+    ];
 
-  preConfigure = ''
-    export HIP_CLANG_PATH=${clang}/bin
-    export DEVICE_LIB_PATH=${rocm-device-libs}/lib
-  '';
+    preConfigure = ''
+      export HIP_CLANG_PATH=${clang}/bin
+      export DEVICE_LIB_PATH=${rocm-device-libs}/lib
+    '';
 
-  cmakeFlags = [
-    "-DHIP_PLATFORM=amd"
-    "-DAMD_OPENCL_PATH=${rocm-opencl-runtime.src}"
-    "-DHIP_COMMON_DIR=${hip}"
-    "-DROCCLR_PATH=${rocclr}"
-  ];
+    cmakeFlags = [
+      "-DHIP_PLATFORM=amd"
+      "-DAMD_OPENCL_PATH=${rocm-opencl-runtime.src}"
+      "-DHIP_COMMON_DIR=${hip}"
+      "-DROCCLR_PATH=${rocclr}"
+    ];
 
-  postInstall = ''
-    wrapProgram $out/bin/hipcc --set HIP_PATH $out --set HSA_PATH ${rocm-runtime} --set HIP_CLANG_PATH ${clang}/bin --prefix PATH : ${lld}/bin --set NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt} 1 --prefix NIX_LDFLAGS ' ' -L${compiler-rt}/lib --prefix NIX_LDFLAGS_FOR_TARGET ' ' -L${compiler-rt}/lib --add-flags "-nogpuinc"
-    wrapProgram $out/bin/hipconfig --set HIP_PATH $out --set HSA_PATH ${rocm-runtime} --set HIP_CLANG_PATH ${clang}/bin
-  '';
+    postInstall = ''
+      wrapProgram $out/bin/hipcc --set HIP_PATH $out --set HSA_PATH ${rocm-runtime} --set HIP_CLANG_PATH ${clang}/bin --prefix PATH : ${lld}/bin --set NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt} 1 --prefix NIX_LDFLAGS ' ' -L${compiler-rt}/lib --prefix NIX_LDFLAGS_FOR_TARGET ' ' -L${compiler-rt}/lib --add-flags "-nogpuinc"
+      wrapProgram $out/bin/hipconfig --set HIP_PATH $out --set HSA_PATH ${rocm-runtime} --set HIP_CLANG_PATH ${clang}/bin
+    '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/hipamd/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version hip "$version"
-  '';
+    passthru.updateScript = writeScript "update.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl jq common-updater-scripts
+      version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/hipamd/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+      update-source-version hip "$version"
+    '';
 
-  meta = with lib; {
-    description = "C++ Heterogeneous-Compute Interface for Portability";
-    homepage = "https://github.com/ROCm-Developer-Tools/hipamd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
-    platforms = platforms.linux;
-  };
-}
+    meta = with lib; {
+      description = "C++ Heterogeneous-Compute Interface for Portability";
+      homepage = "https://github.com/ROCm-Developer-Tools/hipamd";
+      license = licenses.mit;
+      maintainers = with maintainers; [lovesegfault];
+      platforms = platforms.linux;
+    };
+  }

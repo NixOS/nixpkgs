@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wolfssl";
   version = "5.1.1";
@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ openssl ];
+  checkInputs = [openssl];
 
   postInstall = ''
-     # fix recursive cycle:
-     # wolfssl-config points to dev, dev propagates bin
-     moveToOutput bin/wolfssl-config "$dev"
-     # moveToOutput also removes "$out" so recreate it
-     mkdir -p "$out"
+    # fix recursive cycle:
+    # wolfssl-config points to dev, dev propagates bin
+    moveToOutput bin/wolfssl-config "$dev"
+    # moveToOutput also removes "$out" so recreate it
+    mkdir -p "$out"
   '';
 
   meta = with lib; {
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.wolfssl.com/";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,51 +1,53 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 # openafsBin, openafsSrv, mkCellServDB
-with import ./lib.nix { inherit config lib pkgs; };
-
-let
+with import ./lib.nix {inherit config lib pkgs;}; let
   inherit (lib) concatStringsSep literalExpression mkIf mkOption optionalString types;
 
   bosConfig = pkgs.writeText "BosConfig" (''
     restrictmode 1
     restarttime 16 0 0 0 0
     checkbintime 3 0 5 0 0
-  '' + (optionalString cfg.roles.database.enable ''
+  ''
+  + (optionalString cfg.roles.database.enable ''
     bnode simple vlserver 1
     parm ${openafsSrv}/libexec/openafs/vlserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.vlserverArgs}
     end
     bnode simple ptserver 1
     parm ${openafsSrv}/libexec/openafs/ptserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.ptserverArgs}
     end
-  '') + (optionalString cfg.roles.fileserver.enable ''
+  '')
+  + (optionalString cfg.roles.fileserver.enable ''
     bnode dafs dafs 1
     parm ${openafsSrv}/libexec/openafs/dafileserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.fileserverArgs}
     parm ${openafsSrv}/libexec/openafs/davolserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.volserverArgs}
     parm ${openafsSrv}/libexec/openafs/salvageserver ${cfg.roles.fileserver.salvageserverArgs}
     parm ${openafsSrv}/libexec/openafs/dasalvager ${cfg.roles.fileserver.salvagerArgs}
     end
-  '') + (optionalString (cfg.roles.database.enable && cfg.roles.backup.enable) ''
+  '')
+  + (optionalString (cfg.roles.database.enable && cfg.roles.backup.enable) ''
     bnode simple buserver 1
     parm ${openafsSrv}/libexec/openafs/buserver ${cfg.roles.backup.buserverArgs} ${optionalString (cfg.roles.backup.cellServDB != []) "-cellservdb /etc/openafs/backup/"}
     end
   ''));
 
-  netInfo = if (cfg.advertisedAddresses != []) then
-    pkgs.writeText "NetInfo" ((concatStringsSep "\nf " cfg.advertisedAddresses) + "\n")
-  else null;
+  netInfo =
+    if (cfg.advertisedAddresses != [])
+    then pkgs.writeText "NetInfo" ((concatStringsSep "\nf " cfg.advertisedAddresses) + "\n")
+    else null;
 
   buCellServDB = pkgs.writeText "backup-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellName cfg.roles.backup.cellServDB);
 
   cfg = config.services.openafsServer;
 
   udpSizeStr = toString cfg.udpPacketSize;
-
 in {
-
   options = {
-
     services.openafsServer = {
-
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -75,7 +77,7 @@ in {
 
       cellServDB = mkOption {
         default = [];
-        type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
+        type = with types; listOf (submodule [{options = cellServDBConfig;}]);
         description = "Definition of all cell-local database server machines.";
       };
 
@@ -174,7 +176,7 @@ in {
 
           cellServDB = mkOption {
             default = [];
-            type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
+            type = with types; listOf (submodule [{options = cellServDBConfig;}]);
             description = ''
               Definition of all cell-local backup database server machines.
               Use this when your cell uses less backup database servers than
@@ -184,7 +186,7 @@ in {
         };
       };
 
-      dottedPrincipals= mkOption {
+      dottedPrincipals = mkOption {
         default = false;
         type = types.bool;
         description = ''
@@ -204,23 +206,22 @@ in {
           sysctl.
         '';
       };
-
     };
-
   };
 
   config = mkIf cfg.enable {
-
     assertions = [
-      { assertion = cfg.cellServDB != [];
+      {
+        assertion = cfg.cellServDB != [];
         message = "You must specify all cell-local database servers in config.services.openafsServer.cellServDB.";
       }
-      { assertion = cfg.cellName != "";
+      {
+        assertion = cfg.cellName != "";
         message = "You must specify the local cell name in config.services.openafsServer.cellName.";
       }
     ];
 
-    environment.systemPackages = [ openafsBin ];
+    environment.systemPackages = [openafsBin];
 
     environment.etc = {
       bosConfig = {
@@ -248,8 +249,8 @@ in {
     systemd.services = {
       openafs-server = {
         description = "OpenAFS server";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = ["network.target"];
+        wantedBy = ["multi-user.target"];
         restartIfChanged = false;
         unitConfig.ConditionPathExists = [
           "|/etc/openafs/server/KeyFileExt"

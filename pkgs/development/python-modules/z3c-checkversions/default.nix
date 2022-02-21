@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, zc-buildout
-, zope_testrunner
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  zc-buildout,
+  zope_testrunner,
 }:
-
 buildPythonPackage rec {
   pname = "z3c-checkversions";
   version = "1.2";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
     sha256 = "94c7ab0810ee6fdb66a4689b48e537b57e2dbee277cb1de2ece7a7f4d8c83001";
   };
 
-  propagatedBuildInputs = [ zc-buildout ];
-  checkInputs = [ zope_testrunner ];
+  propagatedBuildInputs = [zc-buildout];
+  checkInputs = [zope_testrunner];
   doCheck = !python.pkgs.isPy27;
   checkPhase = ''
     ${python.interpreter} -m zope.testrunner --test-path=src []

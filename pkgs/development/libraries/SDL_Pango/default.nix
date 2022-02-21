@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchpatch, fetchurl, SDL, autoreconfHook, pango, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  SDL,
+  autoreconfHook,
+  pango,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "SDL_Pango";
   version = "0.1.2";
@@ -20,14 +28,14 @@ stdenv.mkDerivation rec {
   preConfigure = "autoreconf -i -f";
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ SDL pango ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
+  buildInputs = [SDL pango];
 
   meta = with lib; {
     description = "Connects the Pango rendering engine to SDL";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
     homepage = "http://sdlpango.sourceforge.net/";
-    maintainers = with maintainers; [ puckipedia ];
+    maintainers = with maintainers; [puckipedia];
   };
 }

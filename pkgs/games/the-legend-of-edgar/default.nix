@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, gettext
-, libpng
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  gettext,
+  libpng,
+  pkg-config,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "the-legend-of-edgar";
   version = "1.35";
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       puzzles and defeating powerful enemies to achieve his quest.
     '';
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };

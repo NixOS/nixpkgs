@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "gnused";
   version = "4.2.2";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.hostPlatform.isMinGW "ac_cv_func__set_invalid_parameter_handler=no";
 
-  outputs = [ "out" "info" ];
+  outputs = ["out" "info"];
 
   meta = {
     homepage = "https://www.gnu.org/software/sed/";
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = [];
     mainProgram = "sed";
   };
 }

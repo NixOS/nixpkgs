@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  poetry-core,
 }:
-
 buildPythonPackage rec {
   pname = "generic";
   version = "1.0.1";
@@ -21,11 +21,11 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  pythonImportsCheck = [ "generic" ];
+  pythonImportsCheck = ["generic"];
 
   meta = with lib; {
     description = "Generic programming (Multiple dispatch) library for Python";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
     homepage = "https://github.com/gaphor/generic";
     license = licenses.bsdOriginal;
   };

@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "cmctl";
   version = "1.7.1";
@@ -13,11 +17,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-4zhdpedOmLl/i1G0QCto4ACxguWRZLzOm5HfMBMtvPY=";
 
-  subPackages = [ "cmd/ctl" ];
+  subPackages = ["cmd/ctl"];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     mv $out/bin/ctl $out/bin/cmctl
@@ -32,7 +36,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/cert-manager/cert-manager";
     license = licenses.asl20;
     homepage = "https://cert-manager.io/";
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [superherointj];
   };
 }
-

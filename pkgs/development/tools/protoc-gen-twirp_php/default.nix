@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchgit }:
-
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+}:
 buildGoModule rec {
   pname = "protoc-gen-twirp_php";
   version = "0.8.0";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-qQFlBviRISEnPBt0q5391RqUrPTI/QDxg3MNfwWE8MI=";
 
-  subPackages = [ "protoc-gen-twirp_php" ];
+  subPackages = ["protoc-gen-twirp_php"];
 
   meta = with lib; {
     description = "PHP port of Twitch's Twirp RPC framework";
     homepage = "https://github.com/twirphp/twirp";
     license = licenses.mit;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

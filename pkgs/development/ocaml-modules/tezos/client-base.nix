@@ -1,11 +1,11 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-shell-services
-, tezos-sapling
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-shell-services,
+  tezos-sapling,
+  alcotest,
 }:
-
 buildDunePackage {
   pname = "tezos-client-base";
   inherit (tezos-stdlib) version useDune2;
@@ -22,7 +22,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: protocol registration for the mockup mode";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: protocol registration for the mockup mode";
+    };
 }

@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyweatherflowrest";
   version = "1.0.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to get data from WeatherFlow Weather Stations";
     homepage = "https://github.com/briis/pyweatherflowrest";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

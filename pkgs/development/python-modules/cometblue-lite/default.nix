@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bluepy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bluepy,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "cometblue-lite";
   version = "0.4.1";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python module for Eurotronic Comet Blue thermostats";
     homepage = "https://github.com/neffs/python-cometblue_lite";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

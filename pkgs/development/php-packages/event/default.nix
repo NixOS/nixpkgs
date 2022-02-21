@@ -1,4 +1,11 @@
-{ buildPecl, lib, php, pkg-config, openssl, libevent }:
+{
+  buildPecl,
+  lib,
+  php,
+  pkg-config,
+  openssl,
+  libevent,
+}:
 buildPecl {
   pname = "event";
 
@@ -18,9 +25,9 @@ buildPecl {
       ':'
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl libevent ];
-  internalDeps = [ php.extensions.sockets ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [openssl libevent];
+  internalDeps = [php.extensions.sockets];
 
   meta = with lib; {
     description = ''

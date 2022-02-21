@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, requests_oauthlib
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  requests_oauthlib,
+  voluptuous,
 }:
-
 buildPythonPackage rec {
   pname = "pybotvac";
   version = "0.0.23";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pybotvac" ];
+  pythonImportsCheck = ["pybotvac"];
 
   meta = with lib; {
     description = "Python module for interacting with Neato Botvac Connected vacuum robots";
     homepage = "https://github.com/stianaske/pybotvac";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [elseym];
   };
 }

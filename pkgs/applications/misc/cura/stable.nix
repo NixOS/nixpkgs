@@ -1,5 +1,11 @@
-{ lib, stdenv, python27Packages, curaengine, makeDesktopItem, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  python27Packages,
+  curaengine,
+  makeDesktopItem,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "cura";
   version = "15.06.03";
@@ -21,18 +27,18 @@ stdenv.mkDerivation rec {
     categories = "GNOME;GTK;Utility;";
   };
 
-  python_deps = with python27Packages; [ pyopengl pyserial numpy wxPython30 power setuptools ];
+  python_deps = with python27Packages; [pyopengl pyserial numpy wxPython30 power setuptools];
 
   pythonPath = python_deps;
 
   propagatedBuildInputs = python_deps;
 
-  buildInputs = [ curaengine python27Packages.wrapPython ];
+  buildInputs = [curaengine python27Packages.wrapPython];
 
   configurePhase = "";
   buildPhase = "";
 
-  patches = [ ./numpy-cast.patch ];
+  patches = [./numpy-cast.patch];
 
   installPhase = ''
     # Install Python code.

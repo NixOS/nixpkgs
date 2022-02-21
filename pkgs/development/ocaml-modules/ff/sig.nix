@@ -1,5 +1,9 @@
-{ lib, fetchFromGitLab, buildDunePackage, zarith }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  zarith,
+}:
 buildDunePackage rec {
   pname = "ff-sig";
   version = "0.6.1";
@@ -22,6 +26,6 @@ buildDunePackage rec {
     homepage = "https://gitlab.com/dannywillems/ocaml-ff";
     description = "Minimal finite field signatures";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

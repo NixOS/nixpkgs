@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, coreutils
-, curl
-, dnsutils
-, gnugrep
-, gnused
-, iproute2
-, makeWrapper
-, openssl
-, socat
-, unixtools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  curl,
+  dnsutils,
+  gnugrep,
+  gnused,
+  iproute2,
+  makeWrapper,
+  openssl,
+  socat,
+  unixtools,
 }:
-
 stdenv.mkDerivation rec {
   pname = "acme.sh";
   version = "3.0.2";
@@ -37,10 +37,11 @@ stdenv.mkDerivation rec {
       gnused
       openssl
       socat
-      (if stdenv.isLinux then iproute2 else unixtools.netstat)
+      (if stdenv.isLinux
+      then iproute2
+      else unixtools.netstat)
     ];
-  in
-    ''
+  in ''
     runHook preInstall
 
     mkdir -p $out $out/bin $out/libexec

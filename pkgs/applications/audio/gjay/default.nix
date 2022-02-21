@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, dbus-glib
-, audacious
-, gtk2
-, gsl
-, libaudclient
-, libmpdclient
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  dbus-glib,
+  audacious,
+  gtk2,
+  gsl,
+  libaudclient,
+  libmpdclient,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gjay";
   version = "0.3.2";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a1vv4r0vnxjdyl0jyv7gga3zfd5azxlwjm1l6hjrf71lb228zn8";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
     libmpdclient
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
     libaudclient
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "Generates playlists such that each song sounds good following the previous song";
     homepage = "http://gjay.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = with platforms; linux;
   };
 }

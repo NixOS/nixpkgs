@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kanshi";
   version = "1.2.0";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RVMeS2qEjTYK6r7IwMeFSqfRpKR8di2eQXhewfhTnYI=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
-  buildInputs = [ wayland ];
+  nativeBuildInputs = [meson ninja pkg-config scdoc];
+  buildInputs = [wayland];
 
   meta = with lib; {
     homepage = "https://github.com/emersion/kanshi";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       wlr-output-management protocol.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ balsoft ];
+    maintainers = with maintainers; [balsoft];
     platforms = platforms.linux;
   };
 }

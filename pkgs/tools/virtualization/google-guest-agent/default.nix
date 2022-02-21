@@ -1,7 +1,16 @@
-{ buildGoModule, fetchFromGitHub, fetchpatch, lib, coreutils, makeWrapper
-, google-guest-configs, google-guest-oslogin, iproute2, dhcp, procps
+{
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  coreutils,
+  makeWrapper,
+  google-guest-configs,
+  google-guest-oslogin,
+  iproute2,
+  dhcp,
+  procps,
 }:
-
 buildGoModule rec {
   pname = "guest-agent";
   version = "20220104.00";
@@ -15,9 +24,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-YcWKSiN715Z9lmNAQx+sHEgxWnhFhenCNXBS7gdMV4M=";
 
-  patches = [ ./disable-etc-mutation.patch ];
+  patches = [./disable-etc-mutation.patch];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postPatch = ''
     substitute ${./fix-paths.patch} fix-paths.patch \
@@ -27,7 +36,7 @@ buildGoModule rec {
   '';
 
   # We don't add `shadow` here; it's added to PATH if `mutableUsers` is enabled.
-  binPath = lib.makeBinPath [ google-guest-configs google-guest-oslogin iproute2 dhcp procps ];
+  binPath = lib.makeBinPath [google-guest-configs google-guest-oslogin iproute2 dhcp procps];
 
   # Skip tests which require networking.
   preCheck = ''
@@ -48,6 +57,6 @@ buildGoModule rec {
     description = "Guest Agent for Google Compute Engine";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

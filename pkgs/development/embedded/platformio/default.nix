@@ -1,7 +1,7 @@
-
-{ newScope, fetchFromGitHub }:
-
-let
+{
+  newScope,
+  fetchFromGitHub,
+}: let
   callPackage = newScope self;
 
   version = "5.2.4";
@@ -15,7 +15,7 @@ let
   };
 
   self = {
-    platformio-chrootenv = callPackage ./chrootenv.nix { inherit version src; };
+    platformio-chrootenv = callPackage ./chrootenv.nix {inherit version src;};
   };
-
-in self
+in
+  self

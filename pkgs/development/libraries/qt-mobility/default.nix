@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, qt4, libX11, coreutils, bluez, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt4,
+  libX11,
+  coreutils,
+  bluez,
+  perl,
+}:
 # possible additional dependencies: pulseaudio udev networkmanager immerson qmf
-
 stdenv.mkDerivation rec {
   version = "1.2.0";
   pname = "qt-mobility";
@@ -11,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "14713pbscysd6d0b9rgm7gg145jzwvgdn22778pf2v13qzvfmy1i";
   };
 
-  NIX_CFLAGS_COMPILE="-fpermissive";
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   configurePhase = ''
     ./configure -prefix $out
@@ -40,15 +48,13 @@ stdenv.mkDerivation rec {
     substituteInPlace bin/pathhelper --replace "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
-  buildInputs = [ qt4 libX11 bluez perl ];
+  buildInputs = [qt4 libX11 bluez perl];
 
   meta = with lib; {
     description = "Qt Mobility";
     homepage = "http://qt.nokia.com/products/qt-addons/mobility";
-    maintainers = [ maintainers.qknight ];
+    maintainers = [maintainers.qknight];
     platforms = platforms.linux;
-    license = with licenses; [ bsd3 fdl13 gpl3 lgpl21 ];
+    license = with licenses; [bsd3 fdl13 gpl3 lgpl21];
   };
 }
-
-

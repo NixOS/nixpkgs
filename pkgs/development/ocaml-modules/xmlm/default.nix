@@ -1,31 +1,36 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+}: let
   pname = "xmlm";
   webpage = "https://erratique.ch/software/${pname}";
 in
+  if !lib.versionAtLeast ocaml.version "4.02"
+  then throw "xmlm is not available for OCaml ${ocaml.version}"
+  else
+    stdenv.mkDerivation rec {
+      name = "ocaml${ocaml.version}-${pname}-${version}";
+      version = "1.3.0";
 
-if !lib.versionAtLeast ocaml.version "4.02"
-then throw "xmlm is not available for OCaml ${ocaml.version}"
-else
+      src = fetchurl {
+        url = "${webpage}/releases/${pname}-${version}.tbz";
+        sha256 = "1rrdxg5kh9zaqmgapy9bhdqyxbbvxxib3bdfg1vhw4rrkp1z0x8n";
+      };
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "1.3.0";
+      buildInputs = [ocaml findlib ocamlbuild topkg];
 
-  src = fetchurl {
-    url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1rrdxg5kh9zaqmgapy9bhdqyxbbvxxib3bdfg1vhw4rrkp1z0x8n";
-  };
+      inherit (topkg) buildPhase installPhase;
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
-
-  inherit (topkg) buildPhase installPhase;
-
-  meta = with lib; {
-    description = "An OCaml streaming codec to decode and encode the XML data format";
-    homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
-    maintainers = [ maintainers.vbgl ];
-    license = licenses.bsd3;
-  };
-}
+      meta = with lib; {
+        description = "An OCaml streaming codec to decode and encode the XML data format";
+        homepage = webpage;
+        platforms = ocaml.meta.platforms or [];
+        maintainers = [maintainers.vbgl];
+        license = licenses.bsd3;
+      };
+    }

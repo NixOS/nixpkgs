@@ -1,5 +1,9 @@
-{ lib, python3, git, mercurial}:
-
+{
+  lib,
+  python3,
+  git,
+  mercurial,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
   version = "2021.1110";
@@ -16,14 +20,14 @@ python3.pkgs.buildPythonApplication rec {
       --replace "package_dir = lib3to6.fix(package_dir)" ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [ pathlib2 click toml lexid colorama setuptools ];
+  propagatedBuildInputs = with python3.pkgs; [pathlib2 click toml lexid colorama setuptools];
 
-  checkInputs = [ python3.pkgs.pytestCheckHook git mercurial];
+  checkInputs = [python3.pkgs.pytestCheckHook git mercurial];
 
   meta = with lib; {
     description = "Bump version numbers in project files";
     homepage = "https://pypi.org/project/bumpver/";
     license = licenses.mit;
-    maintainers = with maintainers; [ kfollesdal ];
+    maintainers = with maintainers; [kfollesdal];
   };
 }

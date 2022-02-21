@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pidgin, glib, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pidgin,
+  glib,
+  libxml2,
+}:
 stdenv.mkDerivation {
   pname = "purple-xmpp-upload";
   version = "unstable-2017-12-31";
@@ -11,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "12l9rqlgb4i50xxrfnvwz9sqfk0d3c0m6l09mnvfixqi8illyvlp";
   };
 
-  buildInputs = [ pidgin glib libxml2 ];
+  buildInputs = [pidgin glib libxml2];
 
   installPhase = ''
     install -Dm644 -t $out/lib/purple-2 jabber_http_file_upload.so
@@ -22,6 +28,6 @@ stdenv.mkDerivation {
     description = "HTTP File Upload plugin for libpurple (XMPP Protocol XEP-0363)";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ emmanuelrosa ];
+    maintainers = with maintainers; [emmanuelrosa];
   };
 }

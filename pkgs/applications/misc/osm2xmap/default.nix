@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libroxml, proj_7, libyamlcpp, boost } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libroxml,
+  proj_7,
+  libyamlcpp,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "osm2xmap";
   version = "2.0";
@@ -21,13 +28,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
-  buildInputs = [ libroxml proj_7 libyamlcpp boost ];
+  buildInputs = [libroxml proj_7 libyamlcpp boost];
 
   meta = with lib; {
     homepage = "https://github.com/sembruk/osm2xmap";
     description = "Converter from OpenStreetMap data format to OpenOrienteering Mapper format";
     license = licenses.gpl3;
-    maintainers = [ maintainers.mpickering ];
+    maintainers = [maintainers.mpickering];
     platforms = with lib.platforms; linux;
   };
 }

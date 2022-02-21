@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, autoPatchelfHook
-, bluez
-, libX11
-, libXtst
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  bluez,
+  libX11,
+  libXtst,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "urserver";
   version = "3.10.0.2467";
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.unifiedremote.com/";
     description = "The one-and-only remote for your computer";
     license = licenses.unfree;
-    maintainers = with maintainers; [ sfrijters ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [sfrijters];
+    platforms = ["x86_64-linux"];
   };
 }

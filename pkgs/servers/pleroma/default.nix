@@ -1,10 +1,14 @@
-{ lib, beamPackages
-, fetchFromGitHub, fetchFromGitLab
-, file, cmake
-, nixosTests, writeText
-, ...
+{
+  lib,
+  beamPackages,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  file,
+  cmake,
+  nixosTests,
+  writeText,
+  ...
 }:
-
 beamPackages.mixRelease rec {
   pname = "pleroma";
   version = "2.4.2";
@@ -34,7 +38,7 @@ beamPackages.mixRelease rec {
           rev = "a4e9beb3c1c479d14b352fd9d6dd7b1f6d7deee5";
           sha256 = "1v0q4bi7sb253i8q016l7gwlv5562wk5zy3l2sa446csvsacnpjk";
         };
-        beamDeps = with final; [ prometheus ];
+        beamDeps = with final; [prometheus];
       };
       captcha = beamPackages.buildMix rec {
         name = "captcha";
@@ -48,7 +52,7 @@ beamPackages.mixRelease rec {
           rev = "e0f16822d578866e186a0974d65ad58cddc1e2ab";
           sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
         };
-        beamDeps = with final; [ ];
+        beamDeps = with final; [];
       };
       remote_ip = beamPackages.buildMix rec {
         name = "remote_ip";
@@ -62,7 +66,7 @@ beamPackages.mixRelease rec {
           rev = "b647d0deecaa3acb140854fe4bda5b7e1dc6d1c8";
           sha256 = "0c7vmakcxlcs3j040018i7bfd6z0yq6fjfig02g5fgakx398s0x6";
         };
-        beamDeps = with final; [ combine plug inet_cidr ];
+        beamDeps = with final; [combine plug inet_cidr];
       };
       concurrent_limiter = beamPackages.buildMix rec {
         name = "concurrent_limiter";
@@ -76,7 +80,7 @@ beamPackages.mixRelease rec {
           rev = "d81be41024569330f296fc472e24198d7499ba78";
           sha256 = "1nci8zz1gy7dnvxf5ydjqbagf4g9f7z5x1v9kdyy7jz9f37z6qw9";
         };
-        beamDeps = with final; [ telemetry ];
+        beamDeps = with final; [telemetry];
       };
       prometheus_phx = beamPackages.buildMix rec {
         name = "prometheus_phx";
@@ -84,7 +88,7 @@ beamPackages.mixRelease rec {
 
         preBuild = ''
           touch config/prod.exs
-       '';
+        '';
         src = fetchFromGitLab {
           domain = "git.pleroma.social";
           group = "pleroma";
@@ -93,7 +97,7 @@ beamPackages.mixRelease rec {
           rev = "9cd8f248c9381ffedc799905050abce194a97514";
           sha256 = "0211z4bxb0bc0zcrhnph9kbbvvi1f2v95madpr96pqzr60y21cam";
         };
-        beamDeps = with final; [ prometheus_ex ];
+        beamDeps = with final; [prometheus_ex];
       };
       majic = beamPackages.buildMix rec {
         name = "majic";
@@ -110,9 +114,9 @@ beamPackages.mixRelease rec {
         patchPhase = ''
           substituteInPlace lib/majic/server.ex --replace "erlang.now" "erlang.time"
         '';
-        buildInputs = [ file ];
+        buildInputs = [file];
 
-        beamDeps = with final; [ nimble_pool mime plug elixir_make ];
+        beamDeps = with final; [nimble_pool mime plug elixir_make];
       };
       crypt = beamPackages.buildRebar3 rec {
         name = "crypt";
@@ -127,7 +131,7 @@ beamPackages.mixRelease rec {
 
         postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so";
 
-        beamDeps = with final; [ elixir_make ];
+        beamDeps = with final; [elixir_make];
       };
       web_push_encryption = beamPackages.buildMix rec {
         name = "web_push_encryption";
@@ -138,7 +142,7 @@ beamPackages.mixRelease rec {
           rev = "026a043037a89db4da8f07560bc8f9c68bcf0cc0";
           sha256 = "0a4x6njqp8v579bc965c9ipsr1z3klrc0pvgj8x1xf69r77gs6sj";
         };
-        beamDeps = with final; [ httpoison jose ];
+        beamDeps = with final; [httpoison jose];
       };
 
       # Some additional build inputs and build fixes
@@ -148,11 +152,11 @@ beamPackages.mixRelease rec {
         '';
       };
       fast_html = prev.fast_html.override {
-        nativeBuildInputs = [ cmake ];
+        nativeBuildInputs = [cmake];
         dontUseCmakeConfigure = true;
       };
       syslog = prev.syslog.override {
-        buildPlugins = with beamPackages; [ pc ];
+        buildPlugins = with beamPackages; [pc];
       };
 
       # This needs a different version (1.0.14 -> 1.0.18) to build properly with
@@ -170,9 +174,9 @@ beamPackages.mixRelease rec {
         patchPhase = ''
           echo '{plugins, [pc]}.' >> rebar.config
         '';
-        buildPlugins = with beamPackages; [ pc ];
+        buildPlugins = with beamPackages; [pc];
 
-        beamDeps = with final; [ p1_utils ];
+        beamDeps = with final; [p1_utils];
       };
 
       mime = prev.mime.override {
@@ -204,7 +208,7 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ petabyteboy ninjatrappeur yuka kloenk ];
+    maintainers = with maintainers; [petabyteboy ninjatrappeur yuka kloenk];
     platforms = platforms.unix;
   };
 }

@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, fuse
-, unrar
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  fuse,
+  unrar,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rar2fs";
   version = "1.29.5";
@@ -21,8 +22,8 @@ stdenv.mkDerivation rec {
       --replace "which echo" "echo"
   '';
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ fuse unrar ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [fuse unrar];
 
   configureFlags = [
     "--with-unrar=${unrar.dev}/include/unrar"
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "FUSE file system for reading RAR archives";
     homepage = "https://hasse69.github.io/rar2fs/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kraem ];
+    maintainers = with maintainers; [kraem];
     platforms = with platforms; linux ++ freebsd;
   };
 }

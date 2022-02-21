@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, guile, pkg-config }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  guile,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "gnu-shepherd";
   version = "0.8.1";
@@ -13,14 +18,14 @@ stdenv.mkDerivation rec {
     "--localstatedir=/"
   ];
 
-  buildInputs = [ guile ];
-  nativeBuildInputs = [ pkg-config guile ];
+  buildInputs = [guile];
+  nativeBuildInputs = [pkg-config guile];
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/shepherd/";
     description = "Service manager that looks after the herd of system services";
-    license = with licenses; [ gpl3Plus ];
+    license = with licenses; [gpl3Plus];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ kloenk ];
+    maintainers = with maintainers; [kloenk];
   };
 }

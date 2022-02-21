@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, cython
-, numpy
-, scipy
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  cython,
+  numpy,
+  scipy,
+  sympy,
 }:
-
 buildPythonPackage rec {
   pname = "pydy";
   version = "0.6.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Python tool kit for multi-body dynamics";
     homepage = "http://pydy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

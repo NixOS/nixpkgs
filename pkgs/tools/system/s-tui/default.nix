@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "s-tui";
   version = "1.0.1";
@@ -20,6 +22,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://amanusk.github.io/s-tui/";
     description = "Stress-Terminal UI monitoring tool";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [infinisil];
   };
 }

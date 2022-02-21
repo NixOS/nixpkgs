@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils
-, pandoc, ethtool, iproute2, libnl, udev, python3, perl
-} :
-
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  docutils,
+  pandoc,
+  ethtool,
+  iproute2,
+  libnl,
+  udev,
+  python3,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "rdma-core";
   version = "39.0";
@@ -15,8 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ cmake pkg-config pandoc docutils python3 ];
-  buildInputs = [ libnl ethtool iproute2 udev perl ];
+  nativeBuildInputs = [cmake pkg-config pandoc docutils python3];
+  buildInputs = [libnl ethtool iproute2 udev perl];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
@@ -47,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linux-rdma/rdma-core";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ markuskowa ];
+    maintainers = with maintainers; [markuskowa];
   };
 }

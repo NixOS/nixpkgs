@@ -1,10 +1,10 @@
-{ lib, ... }:
-{ options = {
+{lib, ...}: {
+  options = {
     server = lib.mkOption {
       type =
         lib.types.either
-          (lib.types.submodule (import ./server-options.nix))
-          (lib.types.path);
+        (lib.types.submodule (import ./server-options.nix))
+        (lib.types.path);
       example = {
         host = "127.0.0.1";
         port = 8888;
@@ -20,13 +20,13 @@
     };
 
     patterns = lib.mkOption {
-      type    = lib.types.listOf lib.types.str;
+      type = lib.types.listOf lib.types.str;
       example = [
         "*.host.net/v1/"
         "host.org/v2/mypath"
         "/somepath"
       ];
-      default     = [];
+      default = [];
       description = ''
         List of nghttpx backend patterns.
 
@@ -36,12 +36,12 @@
     };
 
     params = lib.mkOption {
-      type    = lib.types.nullOr (lib.types.submodule (import ./backend-params-submodule.nix));
+      type = lib.types.nullOr (lib.types.submodule (import ./backend-params-submodule.nix));
       example = {
         proto = "h2";
-        tls   = true;
+        tls = true;
       };
-      default     = null;
+      default = null;
       description = ''
         Parameters to configure a backend.
       '';

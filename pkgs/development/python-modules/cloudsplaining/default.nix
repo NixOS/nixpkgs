@@ -1,20 +1,20 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, cached-property
-, click
-, click-option-group
-, fetchFromGitHub
-, jinja2
-, markdown
-, policy-sentry
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, schema
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  cached-property,
+  click,
+  click-option-group,
+  fetchFromGitHub,
+  jinja2,
+  markdown,
+  policy-sentry,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  schema,
 }:
-
 buildPythonPackage rec {
   pname = "cloudsplaining";
   version = "0.5.0";
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "Python module for AWS IAM security assessment";
     homepage = "https://github.com/salesforce/cloudsplaining";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

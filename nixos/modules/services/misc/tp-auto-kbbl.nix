@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.services.tp-auto-kbbl;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.tp-auto-kbbl;
 in {
-  meta.maintainers = with maintainers; [ sebtm ];
+  meta.maintainers = with maintainers; [sebtm];
 
   options = {
     services.tp-auto-kbbl = {
@@ -20,7 +22,7 @@ in {
 
       arguments = mkOption {
         type = types.listOf types.str;
-        default = [ ];
+        default = [];
         description = ''
           List of arguments appended to <literal>./tp-auto-kbbl --device [device] [arguments]</literal>
         '';
@@ -31,17 +33,16 @@ in {
         default = "/dev/input/event0";
         description = "Device watched for activities.";
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     systemd.services.tp-auto-kbbl = {
       serviceConfig = {
         ExecStart = concatStringsSep " "
-          ([ "${cfg.package}/bin/tp-auto-kbbl" "--device ${cfg.device}" ] ++ cfg.arguments);
+        (["${cfg.package}/bin/tp-auto-kbbl" "--device ${cfg.device}"] ++ cfg.arguments);
         Restart = "always";
         Type = "simple";
       };
@@ -49,10 +50,10 @@ in {
       unitConfig = {
         Description = "Auto toggle keyboard backlight";
         Documentation = "https://github.com/saibotd/tp-auto-kbbl";
-        After = [ "dbus.service" ];
+        After = ["dbus.service"];
       };
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
   };
 }

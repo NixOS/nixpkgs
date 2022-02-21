@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, pure }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-stldict";
   version = "0.8";
@@ -15,9 +20,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -25,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-stldict.html";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

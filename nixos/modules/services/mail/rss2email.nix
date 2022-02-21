@@ -1,17 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.rss2email;
 in {
-
   ###### interface
 
   options = {
-
     services.rss2email = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -30,7 +29,7 @@ in {
       };
 
       config = mkOption {
-        type = with types; attrsOf (oneOf [ str int bool ]);
+        type = with types; attrsOf (oneOf [str int bool]);
         default = {};
         description = ''
           The configuration to give rss2email.
@@ -72,9 +71,7 @@ in {
         });
       };
     };
-
   };
-
 
   ###### implementation
 
@@ -91,7 +88,7 @@ in {
       };
     };
 
-    environment.systemPackages = with pkgs; [ rss2email ];
+    environment.systemPackages = with pkgs; [rss2email];
 
     services.rss2email.config.to = cfg.to;
 
@@ -100,36 +97,38 @@ in {
     ];
 
     systemd.services.rss2email = let
-      conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({
+      conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} (
+        {
           DEFAULT = cfg.config;
-        } // lib.mapAttrs' (name: feed: nameValuePair "feed.${name}" (
-          { inherit (feed) url; } //
-          lib.optionalAttrs (feed.to != null) { inherit (feed) to; }
-        )) cfg.feeds
+        }
+        // lib.mapAttrs' (name: feed:
+          nameValuePair "feed.${name}" (
+            {inherit (feed) url;}
+            // lib.optionalAttrs (feed.to != null) {inherit (feed) to;}
+          ))
+        cfg.feeds
       ));
-    in
-    {
+    in {
       preStart = ''
         cp ${conf} /var/rss2email/conf.cfg
         if [ ! -f /var/rss2email/db.json ]; then
           echo '{"version":2,"feeds":[]}' > /var/rss2email/db.json
         fi
       '';
-      path = [ pkgs.system-sendmail ];
+      path = [pkgs.system-sendmail];
       serviceConfig = {
-        ExecStart =
-          "${pkgs.rss2email}/bin/r2e -c /var/rss2email/conf.cfg -d /var/rss2email/db.json run";
+        ExecStart = "${pkgs.rss2email}/bin/r2e -c /var/rss2email/conf.cfg -d /var/rss2email/db.json run";
         User = "rss2email";
       };
     };
 
     systemd.timers.rss2email = {
-      partOf = [ "rss2email.service" ];
-      wantedBy = [ "timers.target" ];
+      partOf = ["rss2email.service"];
+      wantedBy = ["timers.target"];
       timerConfig.OnBootSec = "0";
       timerConfig.OnUnitActiveSec = cfg.interval;
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ekleog ];
+  meta.maintainers = with lib.maintainers; [ekleog];
 }

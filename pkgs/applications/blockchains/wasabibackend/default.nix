@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, autoPatchelfHook
-, zlib
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  autoPatchelfHook,
+  zlib,
+  openssl,
 }:
-
 buildDotnetModule rec {
   pname = "wasabibackend";
   version = "1.1.13.0";
@@ -25,10 +25,10 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
   dotnet-runtime = dotnetCorePackages.aspnetcore_3_1;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ stdenv.cc.cc.lib zlib ];
+  nativeBuildInputs = [autoPatchelfHook];
+  buildInputs = [stdenv.cc.cc.lib zlib];
 
-  runtimeDeps = [ openssl zlib ];
+  runtimeDeps = [openssl zlib];
 
   preConfigure = ''
     makeWrapperArgs+=(
@@ -44,7 +44,7 @@ buildDotnetModule rec {
     description = "Backend for the Wasabi Wallet";
     homepage = "https://wasabiwallet.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [mmahut];
+    platforms = ["x86_64-linux"];
   };
 }

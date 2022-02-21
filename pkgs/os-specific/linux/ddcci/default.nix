@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
   version = "0.4.2";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sSmL8PqxqHHQiume62si/Kc9El58/b4wkB93iG0dnNM=";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -25,18 +29,20 @@ stdenv.mkDerivation rec {
       --replace depmod \#
   '';
 
-  makeFlags = kernel.makeFlags ++ [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "KVER=${kernel.modDirVersion}"
-    "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
-    "INCLUDEDIR=$(out)/include"
-  ];
+  makeFlags =
+    kernel.makeFlags
+    ++ [
+      "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      "KVER=${kernel.modDirVersion}"
+      "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
+      "INCLUDEDIR=$(out)/include"
+    ];
 
   meta = with lib; {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5.1";
   };

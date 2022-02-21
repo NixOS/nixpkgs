@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "elfinfo";
   version = "1.1.0";
@@ -16,6 +19,6 @@ buildGoPackage rec {
     description = "Small utility for showing information about ELF files";
     homepage = "https://elfinfo.roboticoverlords.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

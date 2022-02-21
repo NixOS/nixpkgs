@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitLab, ff-sig, zarith }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  ff-sig,
+  zarith,
+}:
 buildDunePackage rec {
   pname = "bls12-381";
   version = "1.1.0";
@@ -26,6 +31,6 @@ buildDunePackage rec {
     homepage = "https://gitlab.com/dannywillems/ocaml-bls12-381";
     description = "OCaml binding for bls12-381 from librustzcash";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

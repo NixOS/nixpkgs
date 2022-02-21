@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, lhapdf }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gfortran,
+  lhapdf,
+}:
 stdenv.mkDerivation rec {
   pname = "MCFM";
   version = "10.0.1";
@@ -15,8 +21,8 @@ stdenv.mkDerivation rec {
                 'target_link_libraries(mcfm ''${lhapdf_lib})'
   '';
 
-  nativeBuildInputs = [ cmake gfortran ];
-  buildInputs = [ lhapdf ];
+  nativeBuildInputs = [cmake gfortran];
+  buildInputs = [lhapdf];
 
   cmakeFlags = [
     "-Duse_external_lhapdf=ON"
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Monte Carlo for FeMtobarn processes";
     homepage = "https://mcfm.fnal.gov";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [veprbl];
     platforms = lib.platforms.x86_64;
   };
 }

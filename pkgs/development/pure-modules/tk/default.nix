@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, pure, tcl, tk, xlibsWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+  tcl,
+  tk,
+  xlibsWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-tk";
   version = "0.5";
@@ -9,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "3b6e97e2d723d5a05bf25f4ac62068ac17a1fd81db03e1986366097bf071a516";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure tcl tk xlibsWrapper ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure tcl tk xlibsWrapper];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -19,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-tk.html";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

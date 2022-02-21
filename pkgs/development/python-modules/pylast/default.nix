@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, certifi
-, fetchPypi
-, flaky
-, importlib-metadata
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  fetchPypi,
+  flaky,
+  importlib-metadata,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pylast";
   version = "4.5.0";
@@ -25,11 +25,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    certifi
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      certifi
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -44,6 +46,6 @@ buildPythonPackage rec {
     description = "Python interface to last.fm (and compatibles)";
     homepage = "https://github.com/pylast/pylast";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [rvolosatovs];
   };
 }

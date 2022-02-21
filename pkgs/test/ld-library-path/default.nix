@@ -1,7 +1,8 @@
-{ lib, stdenv }:
-
+{
+  lib,
+  stdenv,
+}:
 # This tests that libraries listed in LD_LIBRARY_PATH take precedence over those listed in RPATH.
-
 let
   # A simple test library: libgreeting.so which exports a single function getGreeting() returning the good old hello greeting.
   libgreeting = stdenv.mkDerivation {
@@ -34,7 +35,7 @@ let
   testProgram = stdenv.mkDerivation {
     name = "greeting-test";
 
-    buildInputs = [ libgreeting ];
+    buildInputs = [libgreeting];
 
     code = ''
       #include <stdio.h>
@@ -68,21 +69,21 @@ let
         [ "$(LD_LIBRARY_PATH=${libgoodbye}/lib greeting-test)" = "Goodbye, world!" ]
       )
     '';
-
   };
-in stdenv.mkDerivation {
-  name = "test-LD_LIBRARY_PATH";
-  nativeBuildInputs = [ testProgram ];
+in
+  stdenv.mkDerivation {
+    name = "test-LD_LIBRARY_PATH";
+    nativeBuildInputs = [testProgram];
 
-  buildCommand = ''
-    # And for good measure, repeat the tests again from a separate derivation,
-    # as fixupPhase done by the stdenv can (and has!) affect the result.
+    buildCommand = ''
+      # And for good measure, repeat the tests again from a separate derivation,
+      # as fixupPhase done by the stdenv can (and has!) affect the result.
 
-    [ "$(greeting-test)" = "Hello, world!" ]
-    [ "$(LD_LIBRARY_PATH=${libgoodbye}/lib greeting-test)" = "Goodbye, world!" ]
+      [ "$(greeting-test)" = "Hello, world!" ]
+      [ "$(LD_LIBRARY_PATH=${libgoodbye}/lib greeting-test)" = "Goodbye, world!" ]
 
-    touch $out
-  '';
+      touch $out
+    '';
 
-  meta.platforms = lib.platforms.linux;
-}
+    meta.platforms = lib.platforms.linux;
+  }

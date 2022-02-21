@@ -1,13 +1,13 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
-, trio
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
+  trio,
 }:
-
 buildPythonPackage rec {
   pname = "asyncclick";
   version = "8.0.1.3";
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     "test_context_invoke_type"
   ];
 
-  pythonImportsCheck = [ "asyncclick" ];
+  pythonImportsCheck = ["asyncclick"];
 
   meta = with lib; {
     description = "Python composable command line utility";
     homepage = "https://github.com/python-trio/asyncclick";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

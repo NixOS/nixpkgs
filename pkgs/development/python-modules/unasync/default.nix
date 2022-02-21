@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "unasync";
   version = "0.5.0";
@@ -34,12 +34,18 @@ buildPythonPackage rec {
     "test_project_structure_after_customized_build_py_packages"
   ];
 
-  pythonImportsCheck = [ "unasync" ];
+  pythonImportsCheck = ["unasync"];
 
   meta = with lib; {
     description = "Project that can transform your asynchronous code into synchronous code";
     homepage = "https://github.com/python-trio/unasync";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ dotlambda ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

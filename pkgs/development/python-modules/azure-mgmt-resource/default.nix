@@ -1,12 +1,11 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-mgmt-core
-, azure-mgmt-common
-, isPy3k
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
+  azure-mgmt-core,
+  azure-mgmt-common,
+  isPy3k,
 }:
-
-
 buildPythonPackage rec {
   version = "20.1.0";
   pname = "azure-mgmt-resource";
@@ -26,14 +25,14 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  pythonNamespaces = [ "azure.mgmt" ];
+  pythonNamespaces = ["azure.mgmt"];
 
-  pythonImportsCheck = [ "azure.mgmt.resource" ];
+  pythonImportsCheck = ["azure.mgmt.resource"];
 
   meta = with pkgs.lib; {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai maxwilson jonringer ];
+    maintainers = with maintainers; [olcai maxwilson jonringer];
   };
 }

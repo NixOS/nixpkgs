@@ -1,8 +1,9 @@
-{ lib, stdenv
-, buildPythonPackage
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pkgs,
 }:
-
 buildPythonPackage {
   name = pkgs.file.name;
 
@@ -12,7 +13,7 @@ buildPythonPackage {
     substituteInPlace python/magic.py --replace "find_library('magic')" "'${pkgs.file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  buildInputs = [ pkgs.file ];
+  buildInputs = [pkgs.file];
 
   preConfigure = "cd python";
 
@@ -24,5 +25,4 @@ buildPythonPackage {
     homepage = "http://www.darwinsys.com/file/";
     license = licenses.lgpl2;
   };
-
 }

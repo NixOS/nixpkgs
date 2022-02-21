@@ -1,25 +1,37 @@
-{ monolithic ? true # build monolithic amule
-, enableDaemon ? false # build amule daemon
-, httpServer ? false # build web interface for the daemon
-, client ? false # build amule remote gui
-, fetchFromGitHub
-, stdenv
-, lib
-, cmake
-, zlib
-, wxGTK30-gtk3 # WxGTK 3.0 must be used because aMule does not yet work well with 3.1
-, perl
-, cryptopp
-, libupnp
-, boost # Not using boost leads to crashes with gtk3
-, gettext
-, libpng
-, autoreconfHook
-, pkg-config
-, makeWrapper
-, libX11
+{
+  monolithic ? true
+  # build monolithic amule
+  ,
+  enableDaemon ? false
+  # build amule daemon
+  ,
+  httpServer ? false
+  # build web interface for the daemon
+  ,
+  client ? false
+  # build amule remote gui
+  ,
+  fetchFromGitHub,
+  stdenv,
+  lib,
+  cmake,
+  zlib,
+  wxGTK30-gtk3
+  # WxGTK 3.0 must be used because aMule does not yet work well with 3.1
+  ,
+  perl,
+  cryptopp,
+  libupnp,
+  boost
+  # Not using boost leads to crashes with gtk3
+  ,
+  gettext,
+  libpng,
+  autoreconfHook,
+  pkg-config,
+  makeWrapper,
+  libX11,
 }:
-
 stdenv.mkDerivation rec {
   pname = "amule";
   version = "2.3.3";
@@ -31,25 +43,48 @@ stdenv.mkDerivation rec {
     sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
   };
 
-  nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
+  nativeBuildInputs = [cmake gettext makeWrapper pkg-config];
 
-  buildInputs = [
-    zlib wxGTK30-gtk3 perl cryptopp.dev libupnp boost
-  ] ++ lib.optional httpServer libpng
+  buildInputs =
+    [
+      zlib
+      wxGTK30-gtk3
+      perl
+      cryptopp.dev
+      libupnp
+      boost
+    ]
+    ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
   cmakeFlags = [
-    "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
-    "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
-    "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
-    "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
+    "-DBUILD_MONOLITHIC=${
+      if monolithic
+      then "ON"
+      else "OFF"
+    }"
+    "-DBUILD_DAEMON=${
+      if enableDaemon
+      then "ON"
+      else "OFF"
+    }"
+    "-DBUILD_REMOTEGUI=${
+      if client
+      then "ON"
+      else "OFF"
+    }"
+    "-DBUILD_WEBSERVER=${
+      if httpServer
+      then "ON"
+      else "OFF"
+    }"
   ];
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
   # find them.
   postInstall = lib.optionalString monolithic ''
     wrapProgram $out/bin/amule \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libupnp ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libupnp]}
   '';
 
   meta = with lib; {
@@ -67,7 +102,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://github.com/amule-project/amule";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.unix;
     # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
     broken = enableDaemon;

@@ -1,18 +1,18 @@
-{ lib
-, aiohttp
-, async-timeout
-, asyncio-dgram
-, asynctest
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, voluptuous
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  asyncio-dgram,
+  asynctest,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  voluptuous,
 }:
-
 buildPythonPackage rec {
   pname = "aioguardian";
   version = "2021.11.0";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
       Guardian line of water valves and sensors from Elexa.
     '';
     homepage = "https://github.com/bachya/aioguardian";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

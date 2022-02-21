@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, ocaml, fetchurl, fmt, alcotest, crowbar, astring }:
-
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  fetchurl,
+  fmt,
+  alcotest,
+  crowbar,
+  astring,
+}:
 buildDunePackage rec {
   pname = "pecu";
   version = "0.6";
@@ -15,12 +23,12 @@ buildDunePackage rec {
 
   # crowbar availability
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ fmt alcotest crowbar astring ];
+  checkInputs = [fmt alcotest crowbar astring];
 
   meta = with lib; {
     description = "Encoder/Decoder of Quoted-Printable (RFC2045 & RFC2047)";
     license = licenses.mit;
     homepage = "https://github.com/mirage/pecu";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

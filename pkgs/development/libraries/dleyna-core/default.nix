@@ -1,17 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gupnp
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gupnp,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dleyna-core";
   version = "0.7.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   setupHook = ./setup-hook.sh;
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Library of utility functions that are used by the higher level dLeyna";
     homepage = "https://github.com/phako/dleyna-core";
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
     license = licenses.lgpl21Only;
   };

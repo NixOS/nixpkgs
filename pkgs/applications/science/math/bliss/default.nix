@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, doxygen }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  doxygen,
+}:
 stdenv.mkDerivation rec {
   pname = "bliss";
   version = "0.73";
@@ -14,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "815868d6586bcd49ff3c28e14ccb536d38b2661151088fe08187c13909c5dab0";
   };
 
-  nativeBuildInputs = [ unzip doxygen ];
+  nativeBuildInputs = [unzip doxygen];
 
   preBuild = ''
     doxygen Doxyfile
@@ -32,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "An open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs";
     homepage = "http://www.tcs.hut.fi/Software/bliss/";
     license = licenses.lgpl3;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

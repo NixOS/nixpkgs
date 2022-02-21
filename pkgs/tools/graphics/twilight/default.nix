@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, libGL, libGLU, freeglut, libX11 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libGL,
+  libGLU,
+  freeglut,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "twilight";
   version = "unstable-2018-04-19";
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mmmi4jj8yd8wnah6kx5na782sjycszgzim33dfalr0ph361m4pz";
   };
 
-  buildInputs = [ libGL libGLU freeglut libX11 ];
+  buildInputs = [libGL libGLU freeglut libX11];
 
   installPhase = ''
     install -Dm755 twilight $out/bin/twilight
@@ -23,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,34 +1,34 @@
-{ lib
-, meson
-, ninja
-, gettext
-, fetchurl
-, gdk-pixbuf
-, tracker
-, libxml2
-, python3
-, libnotify
-, wrapGAppsHook
-, libmediaart
-, gobject-introspection
-, gnome-online-accounts
-, grilo
-, grilo-plugins
-, pkg-config
-, gtk3
-, pango
-, glib
-, desktop-file-utils
-, appstream-glib
-, itstool
-, gnome
-, gst_all_1
-, libdazzle
-, libsoup
-, libhandy
-, gsettings-desktop-schemas
+{
+  lib,
+  meson,
+  ninja,
+  gettext,
+  fetchurl,
+  gdk-pixbuf,
+  tracker,
+  libxml2,
+  python3,
+  libnotify,
+  wrapGAppsHook,
+  libmediaart,
+  gobject-introspection,
+  gnome-online-accounts,
+  grilo,
+  grilo-plugins,
+  pkg-config,
+  gtk3,
+  pango,
+  glib,
+  desktop-file-utils,
+  appstream-glib,
+  itstool,
+  gnome,
+  gst_all_1,
+  libdazzle,
+  libsoup,
+  libhandy,
+  gsettings-desktop-schemas,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
   version = "41.0";
@@ -53,31 +53,33 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    gtk3
-    pango
-    glib
-    libmediaart
-    gnome-online-accounts
-    gobject-introspection
-    gdk-pixbuf
-    gnome.adwaita-icon-theme
-    python3
-    grilo
-    grilo-plugins
-    libnotify
-    libdazzle
-    libsoup
-    libhandy
-    gsettings-desktop-schemas
-    tracker
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ]);
+  buildInputs =
+    [
+      gtk3
+      pango
+      glib
+      libmediaart
+      gnome-online-accounts
+      gobject-introspection
+      gdk-pixbuf
+      gnome.adwaita-icon-theme
+      python3
+      grilo
+      grilo-plugins
+      libnotify
+      libdazzle
+      libsoup
+      libhandy
+      gsettings-desktop-schemas
+      tracker
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+    ]);
 
   pythonPath = with python3.pkgs; [
     pycairo

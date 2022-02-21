@@ -1,8 +1,14 @@
-{xcbuildHook, appleDerivation, apple_sdk, ncurses, libutil, lib}:
-
+{
+  xcbuildHook,
+  appleDerivation,
+  apple_sdk,
+  ncurses,
+  libutil,
+  lib,
+}:
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ apple_sdk.frameworks.IOKit ncurses libutil ];
+  nativeBuildInputs = [xcbuildHook];
+  buildInputs = [apple_sdk.frameworks.IOKit ncurses libutil];
   NIX_LDFLAGS = "-lutil";
   installPhase = ''
     install -D Products/Release/libtop.a $out/lib/libtop.a
@@ -11,6 +17,6 @@ appleDerivation {
   '';
   meta = {
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = with lib.maintainers; [matthewbauer];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, argtable }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  argtable,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.4";
   pname = "clustal-omega";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vm30mzncwdv881vrcwg11vzvrsmwy4wg80j5i0lcfk6dlld50w6";
   };
 
-  buildInputs = [ argtable ];
+  buildInputs = [argtable];
 
   preConfigure = ''
     for f in configure \
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "General purpose multiple sequence alignment program for protein and DNA/RNA";
     homepage = "http://www.clustal.org/omega/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [maintainers.bzizou];
     platforms = platforms.unix;
   };
 }

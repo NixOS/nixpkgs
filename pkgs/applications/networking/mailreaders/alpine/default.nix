@@ -1,7 +1,14 @@
-{lib, stdenv, fetchurl, ncurses, tcl, openssl, pam, libkrb5
-, openldap
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  tcl,
+  openssl,
+  pam,
+  libkrb5,
+  openldap,
 }:
-
 stdenv.mkDerivation rec {
   pname = "alpine";
   version = "2.25";
@@ -12,10 +19,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ncurses tcl openssl pam libkrb5 openldap
+    ncurses
+    tcl
+    openssl
+    pam
+    libkrb5
+    openldap
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
@@ -26,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Console mail reader";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     homepage = "http://alpine.x10host.com/";
   };

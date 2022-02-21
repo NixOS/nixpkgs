@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, fetchurl
-, cmake
-, obs-studio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
+  cmake,
+  obs-studio,
 }:
-
 stdenv.mkDerivation rec {
   pname = "obs-move-transition";
   version = "2.4.3";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/6PcNLOnBBqLZHVKMg1tdX9OktcllEEqnL93nXpuXL0=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [obs-studio];
 
   cmakeFlags = with lib; [
     "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp ${obs-studio.src}/cmake/external/FindLibobs.cmake FindLibobs.cmake
   '';
 
-  patches = [ ./obs-move-transition-use-FindLibobs.cmake.patch ];
+  patches = [./obs-move-transition-use-FindLibobs.cmake.patch];
 
   postPatch = ''
     substituteInPlace move-source-filter.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Plugin for OBS Studio to move source to a new position during scene transition";
     homepage = "https://github.com/exeldro/obs-move-transition";
-    maintainers = with maintainers; [ starcraft66 ];
+    maintainers = with maintainers; [starcraft66];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = ["x86_64-linux" "i686-linux"];
   };
 }

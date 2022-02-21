@@ -1,5 +1,12 @@
-{ fetchurl, lib, stdenv, writeText, jdk, makeWrapper, nixosTests }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  writeText,
+  jdk,
+  makeWrapper,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "soapui";
   version = "5.6.0";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vmj11fswja0ddnbc4vb7gj1al8km7ilma9bv1waaj8h5c8qpayi";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jdk];
 
   installPhase = ''
     runHook preInstall
@@ -46,13 +53,13 @@ stdenv.mkDerivation rec {
     '')
   ];
 
-  passthru.tests = { inherit (nixosTests) soapui; };
+  passthru.tests = {inherit (nixosTests) soapui;};
 
   meta = with lib; {
     description = "The Most Advanced REST & SOAP Testing Tool in the World";
     homepage = "https://www.soapui.org/";
     license = "SoapUI End User License Agreement";
-    maintainers = with maintainers; [ gerschtli ];
+    maintainers = with maintainers; [gerschtli];
     platforms = platforms.all;
   };
 }

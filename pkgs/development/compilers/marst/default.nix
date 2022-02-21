@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "marst";
   version = "2.7";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
         from some other representations to MARST representation.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

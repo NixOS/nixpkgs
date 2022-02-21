@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "offtrac";
   version = "0.1.0";
@@ -19,5 +19,4 @@ buildPythonPackage rec {
     description = "Trac xmlrpc library";
     license = licenses.gpl2;
   };
-
 }

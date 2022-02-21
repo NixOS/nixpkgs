@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, marisa-trie
-, pythonOlder
-, fetchPypi
-, poetry-core
-, pytestCheckHook
-, language-data
+{
+  lib,
+  buildPythonPackage,
+  marisa-trie,
+  pythonOlder,
+  fetchPypi,
+  poetry-core,
+  pytestCheckHook,
+  language-data,
 }:
-
 buildPythonPackage rec {
   pname = "langcodes";
   version = "3.3.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Python toolkit for working with and comparing the standardized codes for languages";
     homepage = "https://github.com/LuminosoInsight/langcodes";
     license = licenses.mit;
-    maintainers = with maintainers; [ ixxie ];
+    maintainers = with maintainers; [ixxie];
   };
 }

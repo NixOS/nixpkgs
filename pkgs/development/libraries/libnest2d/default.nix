@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  clipper,
+  nlopt,
+  boost,
+  python3,
+}:
 stdenv.mkDerivation rec {
   version = "4.12.0";
   pname = "libnest2d";
@@ -14,15 +22,14 @@ stdenv.mkDerivation rec {
     sha256 = "1hzqi4z55x76rss3xk7hfqhy9hcaq2jaav5jqxa1aqmbvarr2gla";
   };
 
-  propagatedBuildInputs = [ clipper nlopt boost ];
-  nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [clipper nlopt boost];
+  nativeBuildInputs = [cmake];
 
   CLIPPER_PATH = "${clipper.out}";
-  cmakeFlags = [ "-DLIBNEST2D_HEADER_ONLY=OFF" ];
+  cmakeFlags = ["-DLIBNEST2D_HEADER_ONLY=OFF"];
 
   meta = with lib; {
-    description =
-      "2D irregular bin packaging and nesting library written in modern C++";
+    description = "2D irregular bin packaging and nesting library written in modern C++";
     homepage = "https://github.com/Ultimaker/libnest2d";
     license = licenses.lgpl3;
     platforms = platforms.all;

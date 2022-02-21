@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl, unzip, makeWrapper, jre8, libXtst, gdal }:
-let
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  jre8,
+  libXtst,
+  gdal,
+}: let
   pname = "udig";
   version = "2.0.0";
 
@@ -18,22 +26,22 @@ let
   meta = with lib; {
     description = "User-friendly Desktop Internet GIS";
     homepage = "http://udig.refractions.net/";
-    license = with licenses; [ epl10 bsd3 ];
-    maintainers = with maintainers; [ sikmir ];
+    license = with licenses; [epl10 bsd3];
+    maintainers = with maintainers; [sikmir];
     platforms = builtins.attrNames srcs;
   };
 
   linux = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ unzip makeWrapper ];
+    nativeBuildInputs = [unzip makeWrapper];
 
     installPhase = ''
       install -dm755 $out/bin $out/opt/udig
       cp -r . $out/opt/udig
       makeWrapper $out/opt/udig/udig.sh $out/bin/udig \
         --prefix PATH : ${jre8}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ libXtst gdal ])}
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([libXtst gdal])}
     '';
 
     postFixup = ''
@@ -46,7 +54,7 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ unzip makeWrapper ];
+    nativeBuildInputs = [unzip makeWrapper];
 
     postPatch = ''
       substituteInPlace configuration/config.ini \
@@ -57,10 +65,10 @@ let
       mkdir -p $out/Applications/udig
       cp -R . $out/Applications/udig
       wrapProgram $out/Applications/udig/udig.app/Contents/MacOS/udig_internal \
-        --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath ([ gdal ])}
+        --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath ([gdal])}
     '';
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+  if stdenv.isDarwin
+  then darwin
+  else linux

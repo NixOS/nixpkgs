@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, asn1crypto
-, asysocks
-, minikerberos
-, prompt-toolkit
-, tqdm
-, winacl
-, winsspi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  asn1crypto,
+  asysocks,
+  minikerberos,
+  prompt-toolkit,
+  tqdm,
+  winacl,
+  winsspi,
 }:
-
 buildPythonPackage rec {
   pname = "msldap";
   version = "0.3.30";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   # Project doesn't have tests
   doCheck = false;
-  pythonImportsCheck = [ "msldap" ];
+  pythonImportsCheck = ["msldap"];
 
   meta = with lib; {
     description = "Python LDAP library for auditing MS AD";
     homepage = "https://github.com/skelsec/msldap";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

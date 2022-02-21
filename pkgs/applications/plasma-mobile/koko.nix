@@ -1,28 +1,25 @@
-{ lib
-, mkDerivation
-
-, fetchurl
-, cmake
-, extra-cmake-modules
-
-, exiv2
-, kconfig
-, kcoreaddons
-, kdeclarative
-, kfilemetadata
-, kguiaddons
-, ki18n
-, kio
-, kirigami2
-, knotifications
-, kpurpose
-, kquickimageedit
-, qtgraphicaleffects
-, qtlocation
-, qtquickcontrols2
-}:
-
-let
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  exiv2,
+  kconfig,
+  kcoreaddons,
+  kdeclarative,
+  kfilemetadata,
+  kguiaddons,
+  ki18n,
+  kio,
+  kirigami2,
+  knotifications,
+  kpurpose,
+  kquickimageedit,
+  qtgraphicaleffects,
+  qtlocation,
+  qtquickcontrols2,
+}: let
   # URLs snapshotted through
   # https://web.archive.org/save/$url
   # Update when stale enough I guess?
@@ -39,43 +36,43 @@ let
     sha256 = "0cwbfff8gzci5zrahh6d53b9b3bfv1cbwlv0k6076531i1c7md9p";
   };
 in
-mkDerivation rec {
-  pname = "koko";
+  mkDerivation rec {
+    pname = "koko";
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+    nativeBuildInputs = [
+      cmake
+      extra-cmake-modules
+    ];
 
-  buildInputs = [
-    exiv2
-    kconfig
-    kcoreaddons
-    kdeclarative
-    kfilemetadata
-    kguiaddons
-    ki18n
-    kio
-    kirigami2
-    knotifications
-    kpurpose
-    kquickimageedit
-    qtgraphicaleffects
-    qtlocation
-    qtquickcontrols2
-  ];
+    buildInputs = [
+      exiv2
+      kconfig
+      kcoreaddons
+      kdeclarative
+      kfilemetadata
+      kguiaddons
+      ki18n
+      kio
+      kirigami2
+      knotifications
+      kpurpose
+      kquickimageedit
+      qtgraphicaleffects
+      qtlocation
+      qtquickcontrols2
+    ];
 
-  prePatch = ''
-    ln -s ${admin1}     src/admin1CodesASCII.txt
-    ln -s ${admin2}     src/admin2Codes.txt
-    ln -s ${cities1000} src/cities1000.zip
-  '';
+    prePatch = ''
+      ln -s ${admin1}     src/admin1CodesASCII.txt
+      ln -s ${admin2}     src/admin2Codes.txt
+      ln -s ${cities1000} src/cities1000.zip
+    '';
 
-  meta = with lib; {
-    description = "Image gallery mobile application";
-    homepage = "https://apps.kde.org/koko/";
-    # LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
-    license = [ licenses.lgpl3Only licenses.lgpl21Only ];
-    maintainers = with maintainers; [ samueldr ];
-  };
-}
+    meta = with lib; {
+      description = "Image gallery mobile application";
+      homepage = "https://apps.kde.org/koko/";
+      # LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
+      license = [licenses.lgpl3Only licenses.lgpl21Only];
+      maintainers = with maintainers; [samueldr];
+    };
+  }

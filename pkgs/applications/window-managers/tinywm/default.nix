@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, libX11 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "tinywm";
   version = "2014-04-22";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1s7r4f2d3lk1i8h089v2vyrr02hh0y9i3ihl9kqgk9s87hqw8q5b";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [libX11];
 
   dontConfigure = true;
 
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
     install -m644 annotated.c README -t $out/share/doc/${pname}-${version}
   '';
 
-  meta = with lib;{
+  meta = with lib; {
     description = "A tiny window manger for X11";
     longDescription = ''
 
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
       - Focus windows with the mouse pointer (X does this on its own)
     '';
     homepage = "http://incise.org/tinywm.html";
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = libX11.meta.platforms;
     license = licenses.publicDomain;
   };

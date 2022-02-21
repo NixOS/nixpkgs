@@ -1,6 +1,4 @@
-{ fetchMaven }:
-
-{
+{fetchMaven}: {
   aether_0_9_0_M2 = fetchMaven {
     version = "0.9.0.M2";
     artifactId = "aether";

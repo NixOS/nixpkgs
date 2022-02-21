@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchurl }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 buildDunePackage rec {
   pname = "semaphore-compat";
   version = "1.0.1";
@@ -15,6 +18,6 @@ buildDunePackage rec {
     description = "Compatibility Semaphore module";
     homepage = "https://github.com/mirage/semaphore-compat";
     license = licenses.lgpl21Only;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config
-, dbus, libconfuse, libjpeg, sane-backends, systemd }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  dbus,
+  libconfuse,
+  libjpeg,
+  sane-backends,
+  systemd,
+}:
 stdenv.mkDerivation rec {
   pname = "scanbd";
   version = "1.5.1";
@@ -10,8 +18,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/scanbd/${pname}-${version}.tgz";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus libconfuse libjpeg sane-backends systemd ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [dbus libconfuse libjpeg sane-backends systemd];
 
   configureFlags = [
     "--disable-Werror"

@@ -1,15 +1,15 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, atk
-, gobject-introspection
-, wrapGAppsHook
-, click
-, hidapi
-, psutil
-, pygobject3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  atk,
+  gobject-introspection,
+  wrapGAppsHook,
+  click,
+  hidapi,
+  psutil,
+  pygobject3,
 }:
-
 buildPythonApplication rec {
   pname = "cm-rgb";
   version = "0.3.6";
@@ -54,6 +54,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/gfduszynski/cm-rgb";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

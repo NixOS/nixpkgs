@@ -1,6 +1,10 @@
-{ stdenvNoCC, lib, fetchurl, undmg, version }:
-
-let
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  undmg,
+  version,
+}: let
   pname = "losslesscut";
   nameRepo = "lossless-cut";
   nameCamel = "LosslessCut";
@@ -12,20 +16,21 @@ let
     name = nameSource;
     sha256 = "0xa1avbwar7x7kv5yn2ldca4vj3nwaz0dhjm3bcdy59q914xn3dj";
   };
-in stdenvNoCC.mkDerivation {
-  inherit pname version src;
+in
+  stdenvNoCC.mkDerivation {
+    inherit pname version src;
 
-  nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [undmg];
 
-  unpackPhase = ''
-    undmg ${src}
-  '';
-  sourceRoot = nameApp;
+    unpackPhase = ''
+      undmg ${src}
+    '';
+    sourceRoot = nameApp;
 
-  installPhase = ''
-    mkdir -p $out/Applications/${nameApp}
-    cp -R . $out/Applications/${nameApp}
-  '';
+    installPhase = ''
+      mkdir -p $out/Applications/${nameApp}
+      cp -R . $out/Applications/${nameApp}
+    '';
 
-  meta.platforms = lib.platforms.darwin;
-}
+    meta.platforms = lib.platforms.darwin;
+  }

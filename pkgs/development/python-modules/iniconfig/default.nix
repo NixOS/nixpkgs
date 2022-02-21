@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "iniconfig";
   version = "1.1.1";
@@ -10,12 +13,12 @@ buildPythonPackage rec {
   };
 
   doCheck = false; # avoid circular import with pytest
-  pythonImportsCheck = [ "iniconfig" ];
+  pythonImportsCheck = ["iniconfig"];
 
   meta = with lib; {
     description = "brain-dead simple parsing of ini files";
     homepage = "https://github.com/RonnyPfannschmidt/iniconfig";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

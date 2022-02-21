@@ -1,9 +1,13 @@
-{ callPackage, fetchurl, dart }:
-let
-  mkFlutter = opts: callPackage (import ./flutter.nix opts) { };
-  getPatches = dir:
-    let files = builtins.attrNames (builtins.readDir dir);
-    in map (f: dir + ("/" + f)) files;
+{
+  callPackage,
+  fetchurl,
+  dart,
+}: let
+  mkFlutter = opts: callPackage (import ./flutter.nix opts) {};
+  getPatches = dir: let
+    files = builtins.attrNames (builtins.readDir dir);
+  in
+    map (f: dir + ("/" + f)) files;
   version = "2.10.0";
   channel = "stable";
   filename = "flutter_linux_${version}-${channel}.tar.xz";

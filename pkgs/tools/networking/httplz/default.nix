@@ -1,16 +1,16 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, makeWrapper
-, pkg-config
-, ronn
-, openssl
-, stdenv
-, libiconv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+  makeWrapper,
+  pkg-config,
+  ronn,
+  openssl,
+  stdenv,
+  libiconv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
   version = "1.12.3";
@@ -30,12 +30,14 @@ rustPlatform.buildRustPackage rec {
     ronn
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
-  ];
+  buildInputs =
+    [openssl]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      Security
+    ];
 
-  cargoBuildFlags = [ "--bin" "httplz" ];
+  cargoBuildFlags = ["--bin" "httplz"];
 
   postInstall = ''
     sed -E 's/http(`| |\(|$)/httplz\1/g' http.md > httplz.1.ronn
@@ -49,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     description = "A basic http server for hosting a folder fast and simply";
     homepage = "https://github.com/thecoshman/http";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

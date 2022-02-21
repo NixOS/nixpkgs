@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 buildPythonPackage rec {
   pname = "naturalsort";
   version = "1.5.1";
@@ -15,6 +18,6 @@ buildPythonPackage rec {
     description = "Simple natural order sorting API for Python that just works";
     homepage = "https://github.com/xolox/python-naturalsort";
     license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    maintainers = with maintainers; [eyjhb];
   };
 }

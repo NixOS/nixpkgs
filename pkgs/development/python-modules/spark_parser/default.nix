@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, click
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  click,
 }:
-
 buildPythonPackage rec {
   pname = "spark_parser";
   version = "1.8.9";
@@ -14,8 +14,8 @@ buildPythonPackage rec {
     sha256 = "0np2y4jcir4a4j18wws7yzkz2zj6nqhdhn41rpq8pyskg6wrgfx7";
   };
 
-  buildInputs = [ nose ];
-  propagatedBuildInputs = [ click ];
+  buildInputs = [nose];
+  propagatedBuildInputs = [click];
 
   meta = with lib; {
     description = "An Early-Algorithm Context-free grammar Parser";
@@ -23,5 +23,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [raskin];
   };
-
 }

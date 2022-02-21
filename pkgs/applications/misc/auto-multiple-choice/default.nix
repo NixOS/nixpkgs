@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, perlPackages
-, makeWrapper
-, wrapGAppsHook
-, cairo
-, dblatex
-, gnumake
-, gobject-introspection
-, graphicsmagick
-, gsettings-desktop-schemas
-, gtk3
-, libnotify
-, librsvg
-, libxslt
-, netpbm
-, opencv
-, pango
-, perl
-, pkg-config
-, poppler
-, auto-multiple-choice
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perlPackages,
+  makeWrapper,
+  wrapGAppsHook,
+  cairo,
+  dblatex,
+  gnumake,
+  gobject-introspection,
+  graphicsmagick,
+  gsettings-desktop-schemas,
+  gtk3,
+  libnotify,
+  librsvg,
+  libxslt,
+  netpbm,
+  opencv,
+  pango,
+  perl,
+  pkg-config,
+  poppler,
+  auto-multiple-choice,
 }:
 stdenv.mkDerivation rec {
   pname = "auto-multiple-choice";
@@ -65,23 +66,26 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/auto-multiple-choice \
     ''${makeWrapperArgs[@]} \
-    --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [
-      ArchiveZip
-      DBDSQLite
-      Cairo
-      CairoGObject
-      DBI
-      Glib
-      GlibObjectIntrospection
-      Gtk3
-      LocaleGettext
-      OpenOfficeOODoc
-      PerlMagick
-      TextCSV
-      XMLParser
-      XMLSimple
-      XMLWriter
-    ]}:"$out/share/perl5 \
+    --prefix PERL5LIB : "${
+      with perlPackages;
+        makeFullPerlPath [
+          ArchiveZip
+          DBDSQLite
+          Cairo
+          CairoGObject
+          DBI
+          Glib
+          GlibObjectIntrospection
+          Gtk3
+          LocaleGettext
+          OpenOfficeOODoc
+          PerlMagick
+          TextCSV
+          XMLParser
+          XMLSimple
+          XMLWriter
+        ]
+    }:"$out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share" \
     --set TEXINPUTS ":.:$out/tex/latex"
   '';
@@ -92,39 +96,41 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    cairo
-    cairo.dev
-    dblatex
-    gnumake
-    gobject-introspection
-    graphicsmagick
-    gsettings-desktop-schemas
-    gtk3
-    libnotify
-    librsvg
-    libxslt
-    netpbm
-    opencv
-    pango
-    poppler
-  ] ++ (with perlPackages; [
-    perl
-    ArchiveZip
-    Cairo
-    CairoGObject
-    DBDSQLite
-    DBI
-    Glib
-    GlibObjectIntrospection
-    Gtk3
-    LocaleGettext
-    PerlMagick
-    TextCSV
-    XMLParser
-    XMLSimple
-    XMLWriter
-  ]);
+  buildInputs =
+    [
+      cairo
+      cairo.dev
+      dblatex
+      gnumake
+      gobject-introspection
+      graphicsmagick
+      gsettings-desktop-schemas
+      gtk3
+      libnotify
+      librsvg
+      libxslt
+      netpbm
+      opencv
+      pango
+      poppler
+    ]
+    ++ (with perlPackages; [
+      perl
+      ArchiveZip
+      Cairo
+      CairoGObject
+      DBDSQLite
+      DBI
+      Glib
+      GlibObjectIntrospection
+      Gtk3
+      LocaleGettext
+      PerlMagick
+      TextCSV
+      XMLParser
+      XMLSimple
+      XMLWriter
+    ]);
 
   meta = with lib; {
     description = "Create and manage multiple choice questionnaires with automated marking.";
@@ -158,7 +164,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.auto-multiple-choice.net/";
     changelog = "https://gitlab.com/jojo_boulix/auto-multiple-choice/-/blob/master/ChangeLog";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.thblt ];
+    maintainers = [maintainers.thblt];
     platforms = platforms.all;
   };
 }

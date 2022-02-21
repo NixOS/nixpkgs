@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, txt2tags, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
-
+{
+  lib,
+  fetchFromGitHub,
+  txt2tags,
+  python3Packages,
+  glib,
+  gobject-introspection,
+  wrapGAppsHook,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
   version = "1.5";
@@ -44,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2Plus;
     # NOTE: exclude darwin from platforms because Travis reports hash mismatch
     platforms = with platforms; filter (x: !(elem x darwin)) unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

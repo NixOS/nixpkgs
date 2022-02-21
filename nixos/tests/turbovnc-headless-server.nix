@@ -1,11 +1,14 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "turbovnc-headless-server";
   meta = {
-    maintainers = with lib.maintainers; [ nh2 ];
+    maintainers = with lib.maintainers; [nh2];
   };
 
-  machine = { pkgs, ... }: {
-
+  machine = {pkgs, ...}: {
     environment.systemPackages = with pkgs; [
       glxinfo
       procps # for `pkill`, `pidof` in the test
@@ -168,5 +171,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.copy_from_vm("/tmp/Xvnc.stdout")
     machine.copy_from_vm("/tmp/Xvnc.stderr")
   '';
-
 })

@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "blockbook-frontend";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with maintainers; [_1000101];
   };
 
-  machine = { ... }: {
+  machine = {...}: {
     services.blockbook-frontend."test" = {
       enable = true;
     };

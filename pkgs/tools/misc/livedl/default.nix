@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "livedl";
   version = "unstable-2021-05-16";
@@ -19,7 +22,7 @@ buildGoModule rec {
     description = "Command-line tool to download nicovideo.jp livestreams";
     homepage = "https://github.com/himananiito/livedl";
     license = licenses.mit;
-    maintainers = with maintainers; [ wakira ];
+    maintainers = with maintainers; [wakira];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

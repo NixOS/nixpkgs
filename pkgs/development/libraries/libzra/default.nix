@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libzra";
   version = "unstable-2020-09-11";
@@ -15,13 +16,13 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     homepage = "https://github.com/zraorg/ZRA";
     description = "Library for ZStandard random access";
     platforms = platforms.all;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
     license = licenses.bsd3;
   };
 }

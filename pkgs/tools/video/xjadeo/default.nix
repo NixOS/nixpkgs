@@ -1,6 +1,19 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg, freetype, libGLU
-, libjack2, liblo, libX11, libXv, pkg-config, portmidi, xorg }:
-
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  ffmpeg,
+  freetype,
+  libGLU,
+  libjack2,
+  liblo,
+  libX11,
+  libXv,
+  pkg-config,
+  portmidi,
+  xorg,
+}:
 stdenv.mkDerivation rec {
   pname = "xjadeo";
   version = "0.8.10";
@@ -12,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dma4cjgbrpy16x63zvfr0xss4lryl0zw7nvixvhq2f6z8day1ds";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   buildInputs = [
     ffmpeg
@@ -43,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "http://xjadeo.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mitchmindtree ];
+    maintainers = with maintainers; [mitchmindtree];
   };
 }

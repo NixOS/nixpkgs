@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk-engine-murrine
-, jdupes
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk-engine-murrine,
+  jdupes,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nordic";
   version = "unstable-2022-01-08";
@@ -77,9 +77,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ jdupes ];
+  nativeBuildInputs = [jdupes];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [gtk-engine-murrine];
 
   installPhase = ''
     runHook preInstall
@@ -120,6 +120,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/EliverLara/Nordic";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

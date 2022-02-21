@@ -1,5 +1,7 @@
-{ lib, python3 }:
-
+{
+  lib,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "kerbrute";
   version = "0.0.2";
@@ -24,6 +26,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/TarlogicSecurity/kerbrute";
     description = "Kerberos bruteforce utility";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ applePrincess ];
+    maintainers = with lib.maintainers; [applePrincess];
   };
 }

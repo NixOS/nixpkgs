@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, protobuf }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  protobuf,
+}:
 stdenv.mkDerivation rec {
   pname = "protoc-gen-grpc-web";
   version = "1.3.0";
@@ -14,13 +18,13 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/javascript/net/grpc/web/generator";
 
   strictDeps = true;
-  nativeBuildInputs = [ protobuf ];
-  buildInputs = [ protobuf ];
+  nativeBuildInputs = [protobuf];
+  buildInputs = [protobuf];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   doCheck = true;
-  checkInputs = [ protobuf ];
+  checkInputs = [protobuf];
   checkPhase = ''
     runHook preCheck
 
@@ -44,7 +48,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/grpc/grpc-web/blob/${version}/CHANGELOG.md";
     description = "gRPC web support for Google's protocol buffers";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [jk];
     platforms = platforms.unix;
   };
 }

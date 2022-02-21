@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "proxy_tools";
   version = "0.1.0";
@@ -14,12 +14,12 @@ buildPythonPackage rec {
 
   # no tests in pypi
   doCheck = false;
-  pythonImportsCheck = [ "proxy_tools" ];
+  pythonImportsCheck = ["proxy_tools"];
 
   meta = with lib; {
     homepage = "https://github.com/jtushman/proxy_tools";
     description = "Simple (hopefuly useful) Proxy (as in the GoF design pattern) implementation for Python";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [jojosch];
   };
 }

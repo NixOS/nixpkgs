@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest-cov, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pytest-cov,
+  pytest,
+}:
 buildPythonPackage rec {
   version = "1.2.0";
   pname = "dockerfile-parse";
@@ -13,14 +19,14 @@ buildPythonPackage rec {
     echo " " > tests/requirements.txt \
   '';
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
-  checkInputs = [ pytest-cov pytest ];
+  checkInputs = [pytest-cov pytest];
 
   meta = with lib; {
     description = "Python library for parsing Dockerfile files";
     homepage = "https://github.com/DBuildService/dockerfile-parse";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

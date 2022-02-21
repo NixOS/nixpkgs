@@ -1,9 +1,27 @@
-{ lib, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
-, gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
-, gnome, buildPythonApplication, python-dateutil, pyinotify, pygobject3
-, bcrypt, gobject-introspection, gsettings-desktop-schemas
-, pango, gdk-pixbuf, atk }:
-
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  libnotify,
+  librsvg,
+  killall,
+  gtk3,
+  libappindicator-gtk3,
+  substituteAll,
+  syncthing,
+  wrapGAppsHook,
+  gnome,
+  buildPythonApplication,
+  python-dateutil,
+  pyinotify,
+  pygobject3,
+  bcrypt,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  pango,
+  gdk-pixbuf,
+  atk,
+}:
 buildPythonApplication rec {
   version = "0.9.4.4";
   pname = "syncthing-gtk";
@@ -19,18 +37,27 @@ buildPythonApplication rec {
     wrapGAppsHook
     # For setup hook populating GI_TYPELIB_PATH
     gobject-introspection
-    pango gdk-pixbuf atk libnotify
+    pango
+    gdk-pixbuf
+    atk
+    libnotify
   ];
 
   buildInputs = [
-    gtk3 librsvg libappindicator-gtk3
-    libnotify gnome.adwaita-icon-theme
+    gtk3
+    librsvg
+    libappindicator-gtk3
+    libnotify
+    gnome.adwaita-icon-theme
     # Schemas with proxy configuration
     gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [
-    python-dateutil pyinotify pygobject3 bcrypt
+    python-dateutil
+    pyinotify
+    pygobject3
+    bcrypt
   ];
 
   patches = [
@@ -44,7 +71,7 @@ buildPythonApplication rec {
   # repo doesn't have any tests
   doCheck = false;
 
-  setupPyBuildFlags = [ "build_py" "--nofinddaemon" "--nostdownloader" ];
+  setupPyBuildFlags = ["build_py" "--nofinddaemon" "--nostdownloader"];
 
   postPatch = ''
     substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
@@ -60,7 +87,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/syncthing/syncthing-gtk";
     license = licenses.gpl2;
     broken = true;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = syncthing.meta.platforms;
   };
 }

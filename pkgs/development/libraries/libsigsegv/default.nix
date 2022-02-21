@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl
-, enableSigbusFix ? false # required by kernels < 3.18.6
+{
+  lib,
+  stdenv,
+  fetchurl,
+  enableSigbusFix ? false
+  # required by kernels < 3.18.6
 }:
-
 stdenv.mkDerivation rec {
   pname = "libsigsegv";
   version = "2.13";
@@ -11,7 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vnjuQXawX3x1/wMpjYSHTbkPS2ydVQPw2hIms6PEgRk=";
   };
 
-  patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else null;
+  patches =
+    if enableSigbusFix
+    then [./sigbus_fix.patch]
+    else null;
 
   doCheck = true; # not cross;
 
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl2Plus;
 
-    maintainers = [ ];
+    maintainers = [];
     platforms = lib.platforms.unix;
   };
 }

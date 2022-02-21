@@ -1,8 +1,8 @@
-{ buildGoModule
-, lib
-, fetchFromGitHub
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "gocyclo";
   version = "0.4.0";
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Calculate cyclomatic complexities of functions in Go source code";
     homepage = "https://github.com/fzipp/gocyclo";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "nats-python";
   version = "0.8.0";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
   # Tests require a running NATS server
   doCheck = false;
 
-  pythonImportsCheck = [ "pynats" ];
+  pythonImportsCheck = ["pynats"];
 
   meta = with lib; {
     description = "Python client for NATS messaging system";
     homepage = "https://github.com/Gr1N/nats-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

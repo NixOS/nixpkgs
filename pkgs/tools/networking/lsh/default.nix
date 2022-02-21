@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
-, nettools, lsof, procps }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gperf,
+  guile,
+  gmp,
+  zlib,
+  liboop,
+  readline,
+  gnum4,
+  pam,
+  nettools,
+  lsof,
+  procps,
+}:
 stdenv.mkDerivation rec {
   pname = "lsh";
   version = "2.0.4";
@@ -10,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "614b9d63e13ad3e162c82b6405d1f67713fc622a8bc11337e72949d613713091";
   };
 
-  patches = [ ./pam-service-name.patch ./lshd-no-root-login.patch ];
+  patches = [./pam-service-name.patch ./lshd-no-root-login.patch];
 
   preConfigure = ''
     # Patch `lsh-make-seed' so that it can gather enough entropy.
@@ -33,7 +46,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-std=gnu90";
 
-  buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam ];
+  buildInputs = [gperf guile gmp zlib liboop readline gnum4 pam];
 
   meta = {
     description = "GPL'd implementation of the SSH protocol";
@@ -47,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.lysator.liu.se/~nisse/lsh/";
     license = lib.licenses.gpl2Plus;
 
-    maintainers = [ ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, gmp
-, flint
-, mpfr
-, libmpc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gmp,
+  flint,
+  mpfr,
+  libmpc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "symengine";
   version = "0.9.0";
@@ -18,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5KpxBusJCuwrfFWHbrRKlH6Ic7YivYqz2m+BCbNfZp0=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ gmp flint mpfr libmpc ];
+  buildInputs = [gmp flint mpfr libmpc];
 
   cmakeFlags = [
     "-DWITH_FLINT=ON"
@@ -41,7 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/symengine/symengine";
     platforms = platforms.unix ++ platforms.windows;
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
-
 }

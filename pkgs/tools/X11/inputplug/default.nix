@@ -1,11 +1,11 @@
-{ fetchCrate
-, installShellFiles
-, lib
-, libbsd
-, pkg-config
-, rustPlatform
+{
+  fetchCrate,
+  installShellFiles,
+  lib,
+  libbsd,
+  pkg-config,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "inputplug";
   version = "0.4.0";
@@ -15,9 +15,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "00gv2i2pxy56l6ysslbscxinr4r0mpk9p2ivkrnjnwhc8j3v8v7h";
   };
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [installShellFiles pkg-config];
 
-  buildInputs = [ libbsd ];
+  buildInputs = [libbsd];
 
   cargoSha256 = "161kz47d4psfvh0vm98k8qappg50lpsw1ybyy7s3g3bp6ivfz8jv";
 
@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Monitor XInput events and run arbitrary scripts on hierarchy change events";
     homepage = "https://github.com/andrewshadura/inputplug";
     license = licenses.mit;
-    maintainers = with maintainers; [ jecaro ];
+    maintainers = with maintainers; [jecaro];
   };
 }
-

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  nwjs,
+  wrapGAppsHook,
+  gsettings-desktop-schemas,
+  gtk3,
+}:
 stdenv.mkDerivation rec {
   pname = "inav-configurator";
   version = "3.0.2";
@@ -14,9 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "1i844dzzc5s5cr4vfpi6k2kdn8jiqq2n6c0fjqvsp4wdidwjahzw";
   };
 
-  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook ];
+  nativeBuildInputs = [copyDesktopItems wrapGAppsHook];
 
-  buildInputs = [ gsettings-desktop-schemas gtk3 ];
+  buildInputs = [gsettings-desktop-schemas gtk3];
 
   installPhase = ''
     runHook preInstall
@@ -51,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/iNavFlight/inav/wiki";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tilcreator wucke13 ];
+    maintainers = with maintainers; [tilcreator wucke13];
     platforms = platforms.linux;
   };
 }

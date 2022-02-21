@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, sfml
-, glm
-, python3
-, glew
-, pkg-config
-, SDL2 }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  sfml,
+  glm,
+  python3,
+  glew,
+  pkg-config,
+  SDL2,
+}:
 stdenv.mkDerivation rec {
   pname = "SHADERed";
   version = "1.5.6";
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lightweight, cross-platform & full-featured shader IDE";
     homepage = "https://github.com/dfranx/SHADERed";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [Scriptkiddi];
   };
 }

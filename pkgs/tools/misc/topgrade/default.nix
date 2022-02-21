@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation, installShellFiles }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  Foundation,
+  installShellFiles,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
   version = "8.2.0";
@@ -15,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Foundation;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installManPage topgrade.8
@@ -25,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Br1ght0ne hugoreeves SuperSandro2000 ];
+    maintainers = with maintainers; [Br1ght0ne hugoreeves SuperSandro2000];
   };
 }

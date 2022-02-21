@@ -1,7 +1,14 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
-, sassc, hyperkitty, postorius, whoosh, setuptools-scm
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  pythonOlder,
+  sassc,
+  hyperkitty,
+  postorius,
+  whoosh,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "mailman-web";
   version = "0.0.5";
@@ -26,19 +33,19 @@ buildPythonPackage rec {
         --replace /opt/mailman/web /var/lib/mailman-web
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ hyperkitty postorius whoosh ];
+  nativeBuildInputs = [setuptools-scm];
+  propagatedBuildInputs = [hyperkitty postorius whoosh];
 
   # Tries to check runtime configuration.
   doCheck = false;
 
   makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ sassc ]}"
+    "--suffix PATH : ${lib.makeBinPath [sassc]}"
   ];
 
   meta = with lib; {
     description = "Django project for Mailman 3 web interface";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ qyliss m1cr0man ];
+    maintainers = with maintainers; [qyliss m1cr0man];
   };
 }

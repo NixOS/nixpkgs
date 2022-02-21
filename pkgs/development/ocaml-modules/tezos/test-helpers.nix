@@ -1,13 +1,13 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, qcheck-alcotest
-, alcotest
-, alcotest-lwt
-, uri
-, tezos-stdlib
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  qcheck-alcotest,
+  alcotest,
+  alcotest-lwt,
+  uri,
+  tezos-stdlib,
 }:
-
 buildDunePackage rec {
   pname = "tezos-test-helpers";
   inherit (tezos-stdlib) version useDune2;
@@ -22,7 +22,9 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: yet-another local-extension of the OCaml standard library";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: yet-another local-extension of the OCaml standard library";
+    };
 }

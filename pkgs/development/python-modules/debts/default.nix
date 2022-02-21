@@ -1,12 +1,12 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitLab
-, isPy27
-, jinja2
-, pytest
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitLab,
+  isPy27,
+  jinja2,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "debts";
   version = "0.5";
@@ -22,9 +22,9 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  propagatedBuildInputs = [ jinja2 ];
+  propagatedBuildInputs = [jinja2];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   # for some reason tests only work if the module is properly installed
   checkPhase = ''
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     inherit (src.meta) homepage;
     description = "A simple library and cli-tool to help you solve some debts settlement scenarios";
     license = licenses.beerware;
-    maintainers = [ maintainers.symphorien ];
+    maintainers = [maintainers.symphorien];
   };
 }

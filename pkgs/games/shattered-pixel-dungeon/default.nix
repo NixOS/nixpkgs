@@ -1,14 +1,14 @@
-{ lib, stdenv
-, makeWrapper
-, fetchFromGitHub
-, nixosTests
-, gradle_6
-, perl
-, jre
-, libpulseaudio
-}:
-
-let
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchFromGitHub,
+  nixosTests,
+  gradle_6,
+  perl,
+  jre,
+  libpulseaudio,
+}: let
   pname = "shattered-pixel-dungeon";
   version = "1.1.2";
 
@@ -33,7 +33,7 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit version src postPatch;
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [gradle_6 perl];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       # https://github.com/gradle/gradle/issues/4426
@@ -49,41 +49,41 @@ let
     outputHashMode = "recursive";
     outputHash = "sha256-UI5/ZJbUtEz1Fr+qn6a8kzi9rrP+lVrpBbuDv8TG5y0=";
   };
+in
+  stdenv.mkDerivation rec {
+    inherit pname version src postPatch;
 
-in stdenv.mkDerivation rec {
-  inherit pname version src postPatch;
+    nativeBuildInputs = [gradle_6 perl makeWrapper];
 
-  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
+    buildPhase = ''
+      export GRADLE_USER_HOME=$(mktemp -d)
+      # https://github.com/gradle/gradle/issues/4426
+      ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
+      # point to offline repo
+      sed -ie "s#repositories {#repositories { maven { url '${deps}' };#g" build.gradle
+      gradle --offline --no-daemon desktop:release
+    '';
 
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-    # https://github.com/gradle/gradle/issues/4426
-    ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
-    # point to offline repo
-    sed -ie "s#repositories {#repositories { maven { url '${deps}' };#g" build.gradle
-    gradle --offline --no-daemon desktop:release
-  '';
+    installPhase = ''
+      install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
+      mkdir $out/bin
+      makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
+        --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
+        --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
+    '';
 
-  installPhase = ''
-    install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
-    mkdir $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
-      --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
-      --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
-  '';
+    passthru.tests = {
+      shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;
+    };
 
-  passthru.tests = {
-    shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;
-  };
-
-  meta = with lib; {
-    homepage = "https://shatteredpixel.com/";
-    downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
-    description = "Traditional roguelike game with pixel-art graphics and simple interface";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
-    # https://github.com/NixOS/nixpkgs/pull/99885#issuecomment-740065005
-    broken = stdenv.isDarwin;
-  };
-}
+    meta = with lib; {
+      homepage = "https://shatteredpixel.com/";
+      downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
+      description = "Traditional roguelike game with pixel-art graphics and simple interface";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [fgaz];
+      platforms = platforms.all;
+      # https://github.com/NixOS/nixpkgs/pull/99885#issuecomment-740065005
+      broken = stdenv.isDarwin;
+    };
+  }

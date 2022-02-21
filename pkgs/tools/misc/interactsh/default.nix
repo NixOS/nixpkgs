@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "interactsh";
   version = "0.0.7";
@@ -34,6 +34,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/interactsh";
     license = licenses.mit;
-    maintainers = with maintainers; [ hanemile ];
+    maintainers = with maintainers; [hanemile];
   };
 }

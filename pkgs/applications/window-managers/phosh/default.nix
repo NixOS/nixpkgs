@@ -1,33 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, libhandy
-, libxkbcommon
-, libgudev
-, callaudiod
-, pulseaudio
-, glib
-, gtk3
-, gnome
-, gcr
-, pam
-, systemd
-, upower
-, wayland
-, dbus
-, xvfb-run
-, phoc
-, feedbackd
-, networkmanager
-, polkit
-, libsecret
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook,
+  libhandy,
+  libxkbcommon,
+  libgudev,
+  callaudiod,
+  pulseaudio,
+  glib,
+  gtk3,
+  gnome,
+  gcr,
+  pam,
+  systemd,
+  upower,
+  wayland,
+  dbus,
+  xvfb-run,
+  phoc,
+  feedbackd,
+  networkmanager,
+  polkit,
+  libsecret,
 }:
-
 stdenv.mkDerivation rec {
   pname = "phosh";
   version = "0.15.0";
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
+  mesonFlags = ["-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc"];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     providedSessions = [
-     "sm.puri.Phosh"
+      "sm.puri.Phosh"
     ];
   };
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [jtojnar masipcat zhaofengli];
     platforms = platforms.linux;
   };
 }

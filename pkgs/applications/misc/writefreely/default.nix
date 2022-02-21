@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go-bindata,
+}:
 buildGoModule rec {
   pname = "writefreely";
   version = "0.13.1";
@@ -13,22 +17,22 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-CBPvtc3K9hr1oEmC+yUe3kPSWx20k6eMRqoxsf3NfCE=";
 
-  nativeBuildInputs = [ go-bindata ];
+  nativeBuildInputs = [go-bindata];
 
   preBuild = ''
     make assets
   '';
 
-  ldflags = [ "-s" "-w" "-X github.com/writeas/writefreely.softwareVer=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/writeas/writefreely.softwareVer=${version}"];
 
-  tags = [ "sqlite" ];
+  tags = ["sqlite"];
 
-  subPackages = [ "cmd/writefreely" ];
+  subPackages = ["cmd/writefreely"];
 
   meta = with lib; {
     description = "Build a digital writing community";
     homepage = "https://github.com/writeas/writefreely";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

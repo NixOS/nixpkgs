@@ -1,13 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, loguru
-, poetry-core
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  poetry-core,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pyaussiebb";
   version = "0.0.11";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with the Aussie Broadband APIs";
     homepage = "https://github.com/yaleman/aussiebb";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

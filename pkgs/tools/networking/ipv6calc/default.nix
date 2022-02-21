@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, getopt
-, ip2location-c
-, openssl
-, perl
-, libmaxminddb ? null
-, geolite-legacy ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  getopt,
+  ip2location-c,
+  openssl,
+  perl,
+  libmaxminddb ? null,
+  geolite-legacy ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
   version = "4.0.1";
@@ -36,20 +36,24 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = [
-    "--prefix=${placeholder "out"}"
-    "--libdir=${placeholder "out"}/lib"
-    "--disable-bundled-getopt"
-    "--disable-bundled-md5"
-    "--disable-dynamic-load"
-    "--enable-shared"
-  ] ++ lib.optional (libmaxminddb != null) [
-    "--enable-mmdb"
-  ] ++ lib.optional (geolite-legacy != null) [
-    "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-  ] ++ lib.optional (ip2location-c != null) [
-    "--enable-ip2location"
-  ];
+  configureFlags =
+    [
+      "--prefix=${placeholder "out"}"
+      "--libdir=${placeholder "out"}/lib"
+      "--disable-bundled-getopt"
+      "--disable-bundled-md5"
+      "--disable-dynamic-load"
+      "--enable-shared"
+    ]
+    ++ lib.optional (libmaxminddb != null) [
+      "--enable-mmdb"
+    ]
+    ++ lib.optional (geolite-legacy != null) [
+      "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+    ]
+    ++ lib.optional (ip2location-c != null) [
+      "--enable-ip2location"
+    ];
 
   enableParallelBuilding = true;
 
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

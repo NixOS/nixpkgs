@@ -1,7 +1,16 @@
-{ lib, buildDunePackage, fetchFromGitHub, alcotest, cryptokit, fmt, yojson
-, ppxlib
-, base64, re, ppx_deriving }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  alcotest,
+  cryptokit,
+  fmt,
+  yojson,
+  ppxlib,
+  base64,
+  re,
+  ppx_deriving,
+}:
 buildDunePackage rec {
   pname = "jwto";
   version = "0.3.0";
@@ -17,12 +26,11 @@ buildDunePackage rec {
     sha256 = "1p799zk8j9c0002xzi2x7ndj1bzqf14744ampcqndrjnsi7mq71s";
   };
 
-  buildInputs = [ ppxlib ];
+  buildInputs = [ppxlib];
 
-  propagatedBuildInputs =
-    [ cryptokit fmt yojson base64 re ppx_deriving ];
+  propagatedBuildInputs = [cryptokit fmt yojson base64 re ppx_deriving];
 
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
 
   doCheck = true;
 
@@ -30,6 +38,6 @@ buildDunePackage rec {
     homepage = "https://github.com/sporto/jwto";
     description = "JSON Web Tokens (JWT) for OCaml";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Zimmi48 jtcoolen ];
+    maintainers = with lib.maintainers; [Zimmi48 jtcoolen];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchurl }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 buildDunePackage rec {
   pname = "path_glob";
   version = "0.2";

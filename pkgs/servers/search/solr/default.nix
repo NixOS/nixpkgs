@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "solr";
   version = "8.6.3";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mbbmamajamxzcvdlrzx9wmv26kg9nhg9bzazk176dhhx3rjajf2";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out $out/bin
@@ -33,7 +39,6 @@ stdenv.mkDerivation rec {
     description = "Open source enterprise search platform from the Apache Lucene project";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ aanderse ];
+    maintainers = with maintainers; [aanderse];
   };
-
 }

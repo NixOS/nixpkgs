@@ -1,30 +1,40 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.pdns-recursor;
 
-  oneOrMore  = type: with types; either type (listOf type);
-  valueType  = with types; oneOf [ int str bool path ];
+  oneOrMore = type: with types; either type (listOf type);
+  valueType = with types; oneOf [int str bool path];
   configType = with types; attrsOf (nullOr (oneOrMore valueType));
 
-  toBool    = val: if val then "yes" else "no";
-  serialize = val: with types;
-         if str.check       val then val
-    else if int.check       val then toString val
-    else if path.check      val then toString val
-    else if bool.check      val then toBool val
-    else if builtins.isList val then (concatMapStringsSep "," serialize val)
-    else "";
+  toBool = val:
+    if val
+    then "yes"
+    else "no";
+  serialize = val:
+    with types;
+      if str.check val
+      then val
+      else if int.check val
+      then toString val
+      else if path.check val
+      then toString val
+      else if bool.check val
+      then toBool val
+      else if builtins.isList val
+      then (concatMapStringsSep "," serialize val)
+      else "";
 
   configDir = pkgs.writeTextDir "recursor.conf"
-    (concatStringsSep "\n"
-      (flip mapAttrsToList cfg.settings
-        (name: val: "${name}=${serialize val}")));
+  (concatStringsSep "\n"
+  (flip mapAttrsToList cfg.settings
+  (name: val: "${name}=${serialize val}")));
 
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
-
 in {
   options.services.pdns-recursor = {
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
@@ -47,8 +57,8 @@ in {
 
     dns.allowFrom = mkOption {
       type = types.listOf types.str;
-      default = [ "10.0.0.0/8" "172.16.0.0/12" "192.168.0.0/16" ];
-      example = [ "0.0.0.0/0" ];
+      default = ["10.0.0.0/8" "172.16.0.0/12" "192.168.0.0/16"];
+      example = ["0.0.0.0/0"];
       description = ''
         IP address ranges of clients allowed to make DNS queries.
       '';
@@ -72,7 +82,7 @@ in {
 
     api.allowFrom = mkOption {
       type = types.listOf types.str;
-      default = [ "0.0.0.0/0" ];
+      default = ["0.0.0.0/0"];
       description = ''
         IP address ranges of clients allowed to make API requests.
       '';
@@ -82,7 +92,7 @@ in {
       type = types.bool;
       default = false;
       description = ''
-       Whether to export names and IP addresses defined in /etc/hosts.
+        Whether to export names and IP addresses defined in /etc/hosts.
       '';
     };
 
@@ -96,7 +106,7 @@ in {
 
     forwardZonesRecurse = mkOption {
       type = types.attrs;
-      example = { eth = "127.0.0.1:5353"; };
+      example = {eth = "127.0.0.1:5353";};
       default = {};
       description = ''
         DNS zones to be forwarded to other recursive servers.
@@ -126,7 +136,7 @@ in {
 
     settings = mkOption {
       type = configType;
-      default = { };
+      default = {};
       example = literalExpression ''
         {
           loglevel = 8;
@@ -153,36 +163,35 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     services.pdns-recursor.settings = mkDefaultAttrs {
       local-address = cfg.dns.address;
-      local-port    = cfg.dns.port;
-      allow-from    = cfg.dns.allowFrom;
+      local-port = cfg.dns.port;
+      allow-from = cfg.dns.allowFrom;
 
-      webserver-address    = cfg.api.address;
-      webserver-port       = cfg.api.port;
+      webserver-address = cfg.api.address;
+      webserver-port = cfg.api.port;
       webserver-allow-from = cfg.api.allowFrom;
 
-      forward-zones         = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
+      forward-zones = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
       forward-zones-recurse = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZonesRecurse;
       export-etc-hosts = cfg.exportHosts;
-      dnssec           = cfg.dnssecValidation;
-      serve-rfc1918    = cfg.serveRFC1918;
-      lua-config-file  = pkgs.writeText "recursor.lua" cfg.luaConfig;
+      dnssec = cfg.dnssecValidation;
+      serve-rfc1918 = cfg.serveRFC1918;
+      lua-config-file = pkgs.writeText "recursor.lua" cfg.luaConfig;
 
-      daemon         = false;
-      write-pid      = false;
-      log-timestamp  = false;
+      daemon = false;
+      write-pid = false;
+      log-timestamp = false;
       disable-syslog = true;
     };
 
-    systemd.packages = [ pkgs.pdns-recursor ];
+    systemd.packages = [pkgs.pdns-recursor];
 
     systemd.services.pdns-recursor = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
-        ExecStart = [ "" "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configDir}" ];
+        ExecStart = ["" "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configDir}"];
       };
     };
 
@@ -193,14 +202,12 @@ in {
     };
 
     users.groups.pdns-recursor = {};
-
   };
 
   imports = [
-   (mkRemovedOptionModule [ "services" "pdns-recursor" "extraConfig" ]
-     "To change extra Recursor settings use services.pdns-recursor.settings instead.")
+    (mkRemovedOptionModule ["services" "pdns-recursor" "extraConfig"]
+    "To change extra Recursor settings use services.pdns-recursor.settings instead.")
   ];
 
-  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
-
+  meta.maintainers = with lib.maintainers; [rnhmjoj];
 }

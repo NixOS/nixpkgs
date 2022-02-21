@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, pytestCheckHook
-, pytz
-, tzlocal
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  pytestCheckHook,
+  pytz,
+  tzlocal,
 }:
-
 buildPythonPackage rec {
   pname = "croniter";
   version = "1.3.4";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Library to iterate over datetime object with cron like format";
     homepage = "https://github.com/kiorky/croniter";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

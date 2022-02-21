@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, aiofiles
-, anyio
-, contextlib2
-, itsdangerous
-, jinja2
-, python-multipart
-, pyyaml
-, requests
-, aiosqlite
-, databases
-, pytestCheckHook
-, pythonOlder
-, trio
-, typing-extensions
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiofiles,
+  anyio,
+  contextlib2,
+  itsdangerous,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  requests,
+  aiosqlite,
+  databases,
+  pytestCheckHook,
+  pythonOlder,
+  trio,
+  typing-extensions,
+  ApplicationServices,
 }:
-
 buildPythonPackage rec {
   pname = "starlette";
   version = "0.17.1";
@@ -38,21 +38,25 @@ buildPythonPackage rec {
     sed -i '/--cov/d' setup.cfg
   '';
 
-  propagatedBuildInputs = [
-    aiofiles
-    anyio
-    itsdangerous
-    jinja2
-    python-multipart
-    pyyaml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextlib2
-  ] ++ lib.optional stdenv.isDarwin [
-    ApplicationServices
-  ];
+  propagatedBuildInputs =
+    [
+      aiofiles
+      anyio
+      itsdangerous
+      jinja2
+      python-multipart
+      pyyaml
+      requests
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      contextlib2
+    ]
+    ++ lib.optional stdenv.isDarwin [
+      ApplicationServices
+    ];
 
   checkInputs = [
     aiosqlite
@@ -76,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    maintainers = with maintainers; [wd15];
   };
 }

@@ -1,8 +1,11 @@
-{ config, lib, pkgs, ... }:
-let
-  cfg = config.services.podgrab;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.services.podgrab;
+in {
   options.services.podgrab = with lib; {
     enable = mkEnableOption "Podgrab, a self-hosted podcast manager";
 
@@ -27,7 +30,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.podgrab = {
       description = "Podgrab podcast manager";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       environment = {
         CONFIG = "/var/lib/podgrab/config";
         DATA = "/var/lib/podgrab/data";
@@ -41,10 +44,10 @@ in
         ];
         ExecStart = "${pkgs.podgrab}/bin/podgrab";
         WorkingDirectory = "${pkgs.podgrab}/share";
-        StateDirectory = [ "podgrab/config" "podgrab/data" ];
+        StateDirectory = ["podgrab/config" "podgrab/data"];
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ambroisie ];
+  meta.maintainers = with lib.maintainers; [ambroisie];
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, authlib
-, httpx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  authlib,
+  httpx,
 }:
-
 buildPythonPackage rec {
   pname = "pypoint";
   version = "2.3.0";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Python module for communicating with Minut Point";
     homepage = "https://github.com/fredrike/pypoint";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

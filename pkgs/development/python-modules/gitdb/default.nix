@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, smmap
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  smmap,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "gitdb";
   version = "4.0.9";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "bac2fd45c0a1c9cf619e63a90d62bdc63892ef92387424b855792a6cabe789aa";
   };
 
-  propagatedBuildInputs = [ smmap ];
+  propagatedBuildInputs = [smmap];
 
   postPatch = ''
     substituteInPlace setup.py --replace ",<4" ""
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Git Object Database";
-    maintainers = [ ];
+    maintainers = [];
     homepage = "https://github.com/gitpython-developers/gitdb";
     license = lib.licenses.bsd3;
   };

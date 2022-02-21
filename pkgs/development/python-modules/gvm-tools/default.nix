@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, python-gvm
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  python-gvm,
+  pythonAtLeast,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "gvm-tools";
   version = "21.10.0";
@@ -34,12 +34,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Don't test sending
-    "SendTargetTestCase"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [
-    "HelpFormattingParserTestCase"
-  ];
+  disabledTests =
+    [
+      # Don't test sending
+      "SendTargetTestCase"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.10") [
+      "HelpFormattingParserTestCase"
+    ];
 
   pythonImportsCheck = [
     "gvmtools"
@@ -48,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/gvm-tools";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "dcrwallet";
   version = "1.6.0";
@@ -15,12 +18,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = {
     homepage = "https://decred.org";
     description = "A secure Decred wallet daemon written in Go (golang)";
-    license = with lib.licenses; [ isc ];
-    maintainers = with lib.maintainers; [ juaningan ];
+    license = with lib.licenses; [isc];
+    maintainers = with lib.maintainers; [juaningan];
   };
 }

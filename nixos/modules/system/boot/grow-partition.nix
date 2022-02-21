@@ -1,14 +1,15 @@
 # This module automatically grows the root partition.
 # This allows an instance to be created with a bigger root filesystem
 # than provided by the machine image.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   imports = [
-    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
+    (mkRenamedOptionModule ["virtualisation" "growPartition"] ["boot" "growPartition"])
   ];
 
   options = {
@@ -16,7 +17,6 @@ with lib;
   };
 
   config = mkIf config.boot.growPartition {
-
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.gawk}/bin/gawk
       copy_bin_and_libs ${pkgs.gnused}/bin/sed
@@ -47,7 +47,5 @@ with lib;
         udevadm settle
       fi
     '';
-
   };
-
 }

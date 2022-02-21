@@ -1,23 +1,26 @@
-{ config, lib, utils, pkgs, ... }:
-
-let
-  inherit (lib)
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}: let
+  inherit
+    (lib)
     attrValues
     literalExpression
     mkEnableOption
     mkIf
     mkOption
-    types;
+    types
+    ;
 
   cfg = config.services.filebeat;
 
   json = pkgs.formats.json {};
-in
-{
+in {
   options = {
-
     services.filebeat = {
-
       enable = mkEnableOption "filebeat";
 
       package = mkOption {
@@ -47,7 +50,7 @@ in
           See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
         '';
         default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
+        type = types.attrsOf (types.submodule ({name, ...}: {
           freeformType = json.type;
           options = {
             type = mkOption {
@@ -97,7 +100,7 @@ in
           See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
         '';
         default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
+        type = types.attrsOf (types.submodule ({name, ...}: {
           freeformType = json.type;
           options = {
             module = mkOption {
@@ -134,11 +137,10 @@ in
           freeformType = json.type;
 
           options = {
-
             output.elasticsearch.hosts = mkOption {
               type = with types; listOf str;
-              default = [ "127.0.0.1:9200" ];
-              example = [ "myEShost:9200" ];
+              default = ["127.0.0.1:9200"];
+              example = ["myEShost:9200"];
               description = ''
                 The list of Elasticsearch nodes to connect to.
 
@@ -220,25 +222,25 @@ in
   };
 
   config = mkIf cfg.enable {
-
     services.filebeat.settings.filebeat.inputs = attrValues cfg.inputs;
     services.filebeat.settings.filebeat.modules = attrValues cfg.modules;
 
     systemd.services.filebeat = {
       description = "Filebeat log shipper";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "elasticsearch.service" ];
-      after = [ "elasticsearch.service" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["elasticsearch.service"];
+      after = ["elasticsearch.service"];
       serviceConfig = {
         ExecStartPre = pkgs.writeShellScript "filebeat-exec-pre" ''
           set -euo pipefail
 
           umask u=rwx,g=,o=
 
-          ${utils.genJqSecretsReplacementSnippet
-              cfg.settings
-              "/var/lib/filebeat/filebeat.yml"
-           }
+          ${
+            utils.genJqSecretsReplacementSnippet
+            cfg.settings
+            "/var/lib/filebeat/filebeat.yml"
+          }
         '';
         ExecStart = ''
           ${cfg.package}/bin/filebeat -e \

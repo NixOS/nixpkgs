@@ -1,16 +1,16 @@
-{ lib
-, mkXfceDerivation
-, autoreconfHook
-, libxslt
-, docbook_xsl
-, autoconf
-, automake
-, glib
-, gtk-doc
-, intltool
-, libtool
+{
+  lib,
+  mkXfceDerivation,
+  autoreconfHook,
+  libxslt,
+  docbook_xsl,
+  autoconf,
+  automake,
+  glib,
+  gtk-doc,
+  intltool,
+  libtool,
 }:
-
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-dev-tools";
@@ -37,6 +37,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Autoconf macros and scripts to augment app build systems";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

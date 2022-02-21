@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, libnl, ncurses, pciutils
-, pkg-config, zlib, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gettext,
+  libnl,
+  ncurses,
+  pciutils,
+  pkg-config,
+  zlib,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "powertop";
   version = "2.14";
@@ -21,12 +31,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ gettext libnl ncurses pciutils zlib ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
+  buildInputs = [gettext libnl ncurses pciutils zlib];
 
-  NIX_LDFLAGS = [ "-lpthread" ];
+  NIX_LDFLAGS = ["-lpthread"];
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
@@ -38,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Analyze power consumption on Intel-based laptops";
     homepage = "https://01.org/powertop";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
     platforms = platforms.linux;
   };
 }

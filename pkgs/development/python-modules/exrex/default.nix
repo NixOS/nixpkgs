@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "exrex";
   version = "0.10.5";
@@ -14,12 +14,12 @@ buildPythonPackage rec {
 
   # Projec thas no released tests
   doCheck = false;
-  pythonImportsCheck = [ "exrex" ];
+  pythonImportsCheck = ["exrex"];
 
   meta = with lib; {
     description = "Irregular methods on regular expressions";
     homepage = "https://github.com/asciimoo/exrex";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [agpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

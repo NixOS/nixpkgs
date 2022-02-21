@@ -1,6 +1,15 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU, libGL }:
-
-
+{
+  mkDerivation,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  vcg,
+  glew,
+  qmake,
+  libGLU,
+  libGL,
+}:
 mkDerivation {
   pname = "openbrf";
   version = "unstable-2016-01-09";
@@ -12,11 +21,11 @@ mkDerivation {
     sha256 = "16254cnr60ihcn7bki7wl1qm6gkvzb99cn66md1pnb7za8nvzf4j";
   };
 
-  buildInputs = [ qtbase vcg glew ];
+  buildInputs = [qtbase vcg glew];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [qmake];
 
-  qmakeFlags = [ "openBrf.pro" ];
+  qmakeFlags = ["openBrf.pro"];
 
   postPatch = ''
     sed -i 's,^VCGLIB .*,VCGLIB = ${vcg}/include,' openBrf.pro
@@ -28,7 +37,7 @@ mkDerivation {
     install -Dm644 reference.brf $out/share/openBrf/reference.brf
 
     patchelf  \
-      --set-rpath "${lib.makeLibraryPath [ qtbase glew stdenv.cc.cc libGLU libGL ]}" \
+      --set-rpath "${lib.makeLibraryPath [qtbase glew stdenv.cc.cc libGLU libGL]}" \
       $out/share/openBrf/openBrf
 
     mkdir -p "$out/bin"
@@ -40,7 +49,7 @@ mkDerivation {
   meta = with lib; {
     description = "A tool to edit resource files (BRF)";
     homepage = "https://github.com/cfcohen/openbrf";
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [abbradar];
     license = licenses.free;
     platforms = platforms.linux;
   };

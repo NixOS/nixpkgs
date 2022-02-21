@@ -1,20 +1,20 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, immutables
-, motor
-, msgpack
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tomlkit
-, typing-extensions
-, ujson
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  immutables,
+  motor,
+  msgpack,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tomlkit,
+  typing-extensions,
+  ujson,
 }:
-
 buildPythonPackage rec {
   pname = "cattrs";
   version = "1.10.0";
@@ -33,11 +33,13 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    attrs
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      attrs
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      typing-extensions
+    ];
 
   checkInputs = [
     hypothesis
@@ -84,7 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python custom class converters for attrs";
     homepage = "https://github.com/python-attrs/cattrs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

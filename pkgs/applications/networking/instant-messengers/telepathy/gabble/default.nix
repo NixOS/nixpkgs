@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, libxslt, telepathy-glib, python2, libxml2, dbus-glib, dbus
-, sqlite, libsoup, libnice, gnutls}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxslt,
+  telepathy-glib,
+  python2,
+  libxml2,
+  dbus-glib,
+  dbus,
+  sqlite,
+  libsoup,
+  libnice,
+  gnutls,
+}:
 stdenv.mkDerivation rec {
   pname = "telepathy-gabble";
   version = "0.18.4";
@@ -10,12 +23,12 @@ stdenv.mkDerivation rec {
     sha256 = "174nlkqm055vrhv11gy73m20jbsggcb0ddi51c7s9m3j5ibr2p0i";
   };
 
-  nativeBuildInputs = [ pkg-config libxslt ];
-  buildInputs = [ libxml2 dbus-glib sqlite libsoup libnice telepathy-glib gnutls python2 ];
+  nativeBuildInputs = [pkg-config libxslt];
+  buildInputs = [libxml2 dbus-glib sqlite libsoup libnice telepathy-glib gnutls python2];
 
-  checkInputs = [ dbus.daemon ];
+  checkInputs = [dbus.daemon];
 
-  configureFlags = [ "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt" ];
+  configureFlags = ["--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt"];
 
   enableParallelBuilding = true;
   doCheck = true;

@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, fcitx5
-, m17n_lib
-, m17n_db
-, gettext
-, fmt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  fcitx5,
+  m17n_lib,
+  m17n_db,
+  gettext,
+  fmt,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fcitx5-m17n";
   version = "5.0.8";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "m17n support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-m17n";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ Technical27 ];
+    maintainers = with maintainers; [Technical27];
     platforms = platforms.linux;
   };
 }

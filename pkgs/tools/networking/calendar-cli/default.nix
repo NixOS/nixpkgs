@@ -1,8 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "calendar-cli";
   version = "0.13.0";
@@ -29,6 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Simple command-line CalDav client";
     homepage = "https://github.com/tobixen/calendar-cli";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

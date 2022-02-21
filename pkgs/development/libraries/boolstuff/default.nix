@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "boolstuff";
   version = "0.1.16";
@@ -8,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "10qynbyw723gz2vrvn4xk2var172kvhlz3l3l80qbdsfb3d12wn0";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   meta = {
     description = "Library for operations on boolean expression binary trees";
     homepage = "http://perso.b2b2c.ca/~sarrazip/dev/boolstuff.html";
     license = "GPL";
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [lib.maintainers.marcweber];
     platforms = lib.platforms.all;
   };
 }

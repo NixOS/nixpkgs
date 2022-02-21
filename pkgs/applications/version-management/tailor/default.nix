@@ -1,5 +1,7 @@
-{ fetchurl, pypy2Packages }:
-
+{
+  fetchurl,
+  pypy2Packages,
+}:
 pypy2Packages.buildPythonApplication rec {
   pname = "tailor";
   version = "0.9.35";
@@ -16,4 +18,3 @@ pypy2Packages.buildPythonApplication rec {
     description = "Version control tools integration tool";
   };
 }
-

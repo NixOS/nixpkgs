@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, Hypervisor, vmnet, xpc, libobjc, zlib }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  Hypervisor,
+  vmnet,
+  xpc,
+  libobjc,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "xhyve";
   version = "20210203";
@@ -11,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pjdg4ppy6qh3vr1ls5zyw3jzcvwny9wydnmfpadwij1hvns7lj3";
   };
 
-  buildInputs = [ Hypervisor vmnet xpc libobjc zlib ];
+  buildInputs = [Hypervisor vmnet xpc libobjc zlib];
 
   # Don't use git to determine version
   prePatch = ''
@@ -19,8 +27,7 @@ stdenv.mkDerivation rec {
       --replace 'shell git describe --abbrev=6 --dirty --always --tags' "$version"
   '';
 
-
-  makeFlags = [ "CFLAGS+=-Wno-shift-sign-overflow" ''CFLAGS+=-DVERSION=\"${version}\"'' ];
+  makeFlags = ["CFLAGS+=-Wno-shift-sign-overflow" ''CFLAGS+=-DVERSION=\"${version}\"''];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lightweight Virtualization on macOS Based on bhyve";
     homepage = "https://github.com/mist64/xhyve";
-    maintainers = [ maintainers.lnl7 ];
+    maintainers = [maintainers.lnl7];
     license = licenses.bsd2;
     platforms = platforms.darwin;
   };

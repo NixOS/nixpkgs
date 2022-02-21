@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  compat24 ? false,
+  compat26 ? true,
+  unicode ? true,
+}:
 stdenv.mkDerivation rec {
   pname = "wxMSW";
   version = "2.8.11";
@@ -10,10 +16,16 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (if compat24 then "--enable-compat24" else "--disable-compat24")
-    (if compat26 then "--enable-compat26" else "--disable-compat26")
+    (if compat24
+    then "--enable-compat24"
+    else "--disable-compat24")
+    (if compat26
+    then "--enable-compat26"
+    else "--disable-compat26")
     "--disable-precomp-headers"
-    (if unicode then "--enable-unicode" else "")
+    (if unicode
+    then "--enable-unicode"
+    else "")
     "--with-opengl"
   ];
 
@@ -28,7 +40,7 @@ stdenv.mkDerivation rec {
     (cd $out/include && ln -s wx-*/* .)
   ";
 
-  passthru = { inherit compat24 compat26 unicode; };
+  passthru = {inherit compat24 compat26 unicode;};
 
   meta = {
     platforms = lib.platforms.windows;

@@ -1,6 +1,9 @@
-{ lib, fetchurl, stdenv }:
-
-stdenv.mkDerivation rec{
+{
+  lib,
+  fetchurl,
+  stdenv,
+}:
+stdenv.mkDerivation rec {
   pname = "antiword";
   version = "0.37";
 
@@ -14,9 +17,9 @@ stdenv.mkDerivation rec{
     substituteInPlace Makefile --replace "gcc" "cc"
   '';
 
-  patches = [ ./10_fix_buffer_overflow_wordole_c_CVE-2014-8123.patch ];
+  patches = [./10_fix_buffer_overflow_wordole_c_CVE-2014-8123.patch];
 
-  installTargets = [ "global_install" ];
+  installTargets = ["global_install"];
 
   meta = {
     homepage = "http://www.winfield.demon.nl/";

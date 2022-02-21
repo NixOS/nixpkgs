@@ -1,22 +1,22 @@
-{ boto3
-, buildPythonPackage
-, crc32c
-, which
-, fetchFromGitHub
-, lib
-, matplotlib
-, moto
-, numpy
-, pillow
-, protobuf3_8
-, pytestCheckHook
-, pytorch
-, six
-, soundfile
-, tensorflow-tensorboard
-, torchvision
+{
+  boto3,
+  buildPythonPackage,
+  crc32c,
+  which,
+  fetchFromGitHub,
+  lib,
+  matplotlib,
+  moto,
+  numpy,
+  pillow,
+  protobuf3_8,
+  pytestCheckHook,
+  pytorch,
+  six,
+  soundfile,
+  tensorflow-tensorboard,
+  torchvision,
 }:
-
 buildPythonPackage rec {
   pname = "tensorboardx";
   version = "2.4";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   # Wanted protobuf version is mentioned here:
   # https://github.com/lanpa/tensorboardX/blob/0d08112618a2bbda4c028a15a137fed3afe77401/compile.sh#L6
-  nativeBuildInputs = [ which protobuf3_8 ];
+  nativeBuildInputs = [which protobuf3_8];
 
   # required to make tests deterministic
   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     description = "Library for writing tensorboard-compatible logs";
     homepage = "https://github.com/lanpa/tensorboardX";
     license = licenses.mit;
-    maintainers = with maintainers; [ lebastr akamaus ];
+    maintainers = with maintainers; [lebastr akamaus];
     platforms = platforms.all;
   };
 }

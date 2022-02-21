@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.kibana;
   opt = options.services.kibana;
 
@@ -10,26 +13,28 @@ let
   lt6_6 = builtins.compareVersions cfg.package.version "6.6" < 0;
 
   cfgFile = pkgs.writeText "kibana.json" (builtins.toJSON (
-    (filterAttrsRecursive (n: v: v != null && v != []) ({
-      server.host = cfg.listenAddress;
-      server.port = cfg.port;
-      server.ssl.certificate = cfg.cert;
-      server.ssl.key = cfg.key;
+    (
+      filterAttrsRecursive (n: v: v != null && v != []) ({
+        server.host = cfg.listenAddress;
+        server.port = cfg.port;
+        server.ssl.certificate = cfg.cert;
+        server.ssl.key = cfg.key;
 
-      kibana.index = cfg.index;
-      kibana.defaultAppId = cfg.defaultAppId;
+        kibana.index = cfg.index;
+        kibana.defaultAppId = cfg.defaultAppId;
 
-      elasticsearch.url = cfg.elasticsearch.url;
-      elasticsearch.hosts = cfg.elasticsearch.hosts;
-      elasticsearch.username = cfg.elasticsearch.username;
-      elasticsearch.password = cfg.elasticsearch.password;
+        elasticsearch.url = cfg.elasticsearch.url;
+        elasticsearch.hosts = cfg.elasticsearch.hosts;
+        elasticsearch.username = cfg.elasticsearch.username;
+        elasticsearch.password = cfg.elasticsearch.password;
 
-      elasticsearch.ssl.certificate = cfg.elasticsearch.cert;
-      elasticsearch.ssl.key = cfg.elasticsearch.key;
-      elasticsearch.ssl.certificateAuthorities = cfg.elasticsearch.certificateAuthorities;
-    } // cfg.extraConf)
-  )));
-
+        elasticsearch.ssl.certificate = cfg.elasticsearch.cert;
+        elasticsearch.ssl.key = cfg.elasticsearch.key;
+        elasticsearch.ssl.certificateAuthorities = cfg.elasticsearch.certificateAuthorities;
+      }
+      // cfg.extraConf)
+    )
+  ));
 in {
   options.services.kibana = {
     enable = mkEnableOption "kibana service";
@@ -130,7 +135,10 @@ in {
 
           This defaults to the singleton list [ca] when the <option>ca</option> option is defined.
         '';
-        default = if cfg.elasticsearch.ca == null then [] else [ca];
+        default =
+          if cfg.elasticsearch.ca == null
+          then []
+          else [ca];
         defaultText = literalExpression ''
           if config.${opt.elasticsearch.ca} == null then [ ] else [ ca ]
         '';
@@ -175,31 +183,30 @@ in {
       {
         assertion = ge7 -> cfg.elasticsearch.url == null;
         message =
-          "The option services.kibana.elasticsearch.url has been removed when using kibana >= 7.0.0. " +
-          "Please use option services.kibana.elasticsearch.hosts instead.";
+          "The option services.kibana.elasticsearch.url has been removed when using kibana >= 7.0.0. "
+          + "Please use option services.kibana.elasticsearch.hosts instead.";
       }
       {
         assertion = lt6_6 -> cfg.elasticsearch.hosts == null;
-        message =
-          "The option services.kibana.elasticsearch.hosts is only valid for kibana >= 6.6.";
+        message = "The option services.kibana.elasticsearch.hosts is only valid for kibana >= 6.6.";
       }
     ];
     systemd.services.kibana = {
       description = "Kibana Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "elasticsearch.service" ];
-      environment = { BABEL_CACHE_PATH = "${cfg.dataDir}/.babelcache.json"; };
+      wantedBy = ["multi-user.target"];
+      after = ["network.target" "elasticsearch.service"];
+      environment = {BABEL_CACHE_PATH = "${cfg.dataDir}/.babelcache.json";};
       serviceConfig = {
         ExecStart =
-          "${cfg.package}/bin/kibana" +
-          " --config ${cfgFile}" +
-          " --path.data ${cfg.dataDir}";
+          "${cfg.package}/bin/kibana"
+          + " --config ${cfgFile}"
+          + " --path.data ${cfg.dataDir}";
         User = "kibana";
         WorkingDirectory = cfg.dataDir;
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     users.users.kibana = {
       isSystemUser = true;

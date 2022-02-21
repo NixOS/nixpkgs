@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, click
-, jinja2
-, terminaltables
-, mock
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  click,
+  jinja2,
+  terminaltables,
+  mock,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "envs";
   version = "1.3";
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Easy access to environment variables from Python";
     homepage = "https://github.com/capless/envs";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

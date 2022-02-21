@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, cryptsetup }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cryptsetup,
+}:
 stdenv.mkDerivation rec {
   pname = "bruteforce-luks";
   version = "1.4.0";
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
     owner = "glv2";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ cryptsetup ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [cryptsetup];
 
   enableParallelBuilding = true;
 

@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "sampradaya-2015-05-26";
 
@@ -12,7 +14,7 @@ fetchzip {
   meta = with lib; {
     homepage = "https://bitbucket.org/OorNaattaan/sampradaya/";
     description = "Unicode-compliant Grantha font";
-    maintainers = with maintainers; [ mathnerd314 ];
+    maintainers = with maintainers; [mathnerd314];
     license = licenses.ofl; # See font metadata
     platforms = platforms.all;
   };

@@ -1,6 +1,16 @@
-{ lib, rustPlatform, pkg-config, cmake, llvmPackages, openssl, fetchFromGitHub
-, installShellFiles, stdenv, Security, libiconv }:
-
+{
+  lib,
+  rustPlatform,
+  pkg-config,
+  cmake,
+  llvmPackages,
+  openssl,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  Security,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "tremor";
   version = "0.11.6";
@@ -14,10 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0ivxd5mhvcpzv9wf859vwyiq1s0bbd9vdk6fy6m81bn5ykihx7ar";
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
+  nativeBuildInputs = [cmake pkg-config installShellFiles];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
+  buildInputs =
+    [openssl]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [Security libiconv];
 
   # TODO export TREMOR_PATH($out/lib) variable
   postInstall = ''
@@ -35,13 +46,13 @@ rustPlatform.buildRustPackage rec {
   # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoBuildFlags = [ "-p tremor-cli" ];
+  cargoBuildFlags = ["-p tremor-cli"];
 
   meta = with lib; {
     description = "Early stage event processing system for unstructured data with rich support for structural pattern matching, filtering and transformation";
     homepage = "https://www.tremor.rs/";
     license = licenses.asl20;
     platforms = platforms.x86_64;
-    maintainers = with maintainers; [ humancalico ];
+    maintainers = with maintainers; [humancalico];
   };
 }

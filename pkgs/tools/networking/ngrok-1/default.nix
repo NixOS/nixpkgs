@@ -1,5 +1,8 @@
-{ buildGoPackage, go-bindata, fetchFromGitHub }:
-
+{
+  buildGoPackage,
+  go-bindata,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "ngrok";
   version = "1.7.1";
@@ -16,7 +19,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ go-bindata ];
+  nativeBuildInputs = [go-bindata];
 
   preConfigure = ''
     sed -e '/jteeuwen\/go-bindata/d' \
@@ -27,7 +30,7 @@ buildGoPackage rec {
     export sourceRoot=$sourceRoot/src/ngrok
   '';
 
-  tags = [ "release" ];
+  tags = ["release"];
 
   meta = {
     homepage = "https://ngrok.com/";

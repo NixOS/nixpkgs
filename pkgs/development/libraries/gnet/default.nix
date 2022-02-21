@@ -1,5 +1,13 @@
-{lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoconf,
+  automake,
+  glib,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "gnet";
   version = "2.0.8";
@@ -10,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake glib libtool ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [autoconf automake glib libtool];
 
   preConfigure = "./autogen.sh";
 
@@ -20,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://developer.gnome.org/gnet/";
     license = licenses.lgpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

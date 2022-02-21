@@ -1,32 +1,34 @@
-{ version
-, urls
-, sha256
-, configureFlags ? []
-, patches ? []
+{
+  version,
+  urls,
+  sha256,
+  configureFlags ? [],
+  patches ? [],
+}: {
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
 }:
+  stdenv.mkDerivation {
+    name = "isl-${version}";
 
-{ lib, stdenv, fetchurl, gmp
-}:
+    src = fetchurl {
+      inherit urls sha256;
+    };
 
-stdenv.mkDerivation {
-  name = "isl-${version}";
+    inherit patches;
 
-  src = fetchurl {
-    inherit urls sha256;
-  };
+    buildInputs = [gmp];
 
-  inherit patches;
+    inherit configureFlags;
 
-  buildInputs = [ gmp ];
+    enableParallelBuilding = true;
 
-  inherit configureFlags;
-
-  enableParallelBuilding = true;
-
-  meta = {
-    homepage = "https://libisl.sourceforge.io/";
-    license = lib.licenses.lgpl21;
-    description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
-    platforms = lib.platforms.all;
-  };
-}
+    meta = {
+      homepage = "https://libisl.sourceforge.io/";
+      license = lib.licenses.lgpl21;
+      description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
+      platforms = lib.platforms.all;
+    };
+  }

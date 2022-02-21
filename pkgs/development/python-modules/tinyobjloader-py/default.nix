@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, pybind11, tinyobjloader }:
-
+{
+  lib,
+  buildPythonPackage,
+  pybind11,
+  tinyobjloader,
+}:
 buildPythonPackage rec {
   pname = "tinyobjloader-py";
   inherit (tinyobjloader) version src;
@@ -9,13 +13,15 @@ buildPythonPackage rec {
     cd python
   '';
 
-  buildInputs = [ pybind11 ];
+  buildInputs = [pybind11];
 
   # No tests are included upstream
   doCheck = false;
-  pythonImportsCheck = [ "tinyobjloader" ];
+  pythonImportsCheck = ["tinyobjloader"];
 
-  meta = with lib; tinyobjloader.meta // {
-    description = "Python wrapper for the C++ wavefront .obj loader tinyobjloader";
-  };
+  meta = with lib;
+    tinyobjloader.meta
+    // {
+      description = "Python wrapper for the C++ wavefront .obj loader tinyobjloader";
+    };
 }

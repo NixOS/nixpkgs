@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
   version = "3.0.9";
@@ -19,30 +19,32 @@ python3.pkgs.buildPythonApplication rec {
     pytest-runner
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiocache
-    aiosqlite
-    beautifulsoup4
-    brotli
-    browser-cookie3
-    cryptography
-    dnspython
-    httpx
-    httpx-ntlm
-    httpx-socks
-    humanize
-    loguru
-    Mako
-    markupsafe
-    pysocks
-    six
-    sslyze
-    sqlalchemy
-    tld
-    yaswfp
-  ] ++ lib.optionals (python3.pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = with python3.pkgs;
+    [
+      aiocache
+      aiosqlite
+      beautifulsoup4
+      brotli
+      browser-cookie3
+      cryptography
+      dnspython
+      httpx
+      httpx-ntlm
+      httpx-socks
+      humanize
+      loguru
+      Mako
+      markupsafe
+      pysocks
+      six
+      sslyze
+      sqlalchemy
+      tld
+      yaswfp
+    ]
+    ++ lib.optionals (python3.pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   checkInputs = with python3.pkgs; [
     respx
@@ -137,7 +139,7 @@ python3.pkgs.buildPythonApplication rec {
       if a script is vulnerable.
     '';
     homepage = "https://wapiti-scanner.github.io/";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl2Only];
+    maintainers = with maintainers; [fab];
   };
 }

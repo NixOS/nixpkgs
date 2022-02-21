@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage {
   pname = "autospotting";
   version = "unstable-2018-11-17";
@@ -21,8 +24,7 @@ buildGoPackage {
     homepage = "https://github.com/AutoSpotting/AutoSpotting";
     description = "Automatically convert your existing AutoScaling groups to up to 90% cheaper spot instances with minimal configuration changes";
     license = licenses.free;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
     platforms = platforms.unix;
   };
-
 }

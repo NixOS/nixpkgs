@@ -1,13 +1,13 @@
-{ lib
-, substituteAll
-, mkDerivation
-, fetchFromGitLab
-, mobile-broadband-provider-info
-, qmake
-, qtbase
-, qtdeclarative
+{
+  lib,
+  substituteAll,
+  mkDerivation,
+  fetchFromGitLab,
+  mobile-broadband-provider-info,
+  qmake,
+  qtbase,
+  qtdeclarative,
 }:
-
 mkDerivation rec {
   pname = "libqofono";
   version = "0.103";
@@ -52,7 +52,7 @@ mkDerivation rec {
     description = "Library for accessing the ofono daemon, and declarative plugin for it";
     homepage = "https://git.sailfishos.org/mer-core/libqofono/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [samueldr];
     platforms = platforms.linux;
   };
 }

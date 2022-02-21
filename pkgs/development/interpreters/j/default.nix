@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, readline, libedit, bc
-, avxSupport ? stdenv.hostPlatform.avxSupport
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  readline,
+  libedit,
+  bc,
+  avxSupport ? stdenv.hostPlatform.avxSupport,
 }:
-
 stdenv.mkDerivation rec {
   pname = "j";
   version = "902";
@@ -14,16 +19,25 @@ stdenv.mkDerivation rec {
     name = "jsource";
   };
 
-  buildInputs = [ readline libedit bc ];
-  bits = if stdenv.is64bit then "64" else "32";
+  buildInputs = [readline libedit bc];
+  bits =
+    if stdenv.is64bit
+    then "64"
+    else "32";
   platform =
-    if (stdenv.isAarch32 || stdenv.isAarch64) then "raspberry" else
-    if stdenv.isLinux then "linux" else
-    if stdenv.isDarwin then "darwin" else
-    "unknown";
-  variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
+    if (stdenv.isAarch32 || stdenv.isAarch64)
+    then "raspberry"
+    else if stdenv.isLinux
+    then "linux"
+    else if stdenv.isDarwin
+    then "darwin"
+    else "unknown";
+  variant =
+    if stdenv.isx86_64 && avxSupport
+    then "avx"
+    else "";
 
-  j64x="j${bits}${variant}";
+  j64x = "j${bits}${variant}";
 
   doCheck = true;
 
@@ -74,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "J programming language, an ASCII-based APL successor";
-    maintainers = with maintainers; [ raskin synthetica ];
+    maintainers = with maintainers; [raskin synthetica];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl3Plus;
     homepage = "http://jsoftware.com/";

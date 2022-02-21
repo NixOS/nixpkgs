@@ -1,46 +1,57 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, zlib, boost, openssl, python, ncurses, SystemConfiguration
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  boost,
+  openssl,
+  python,
+  ncurses,
+  SystemConfiguration,
+}: let
   version = "2.0.5";
 
   # Make sure we override python, so the correct version is chosen
-  boostPython = boost.override { enablePython = true; inherit python; };
-
-in stdenv.mkDerivation {
-  pname = "libtorrent-rasterbar";
-  inherit version;
-
-  src = fetchFromGitHub {
-    owner = "arvidn";
-    repo = "libtorrent";
-    rev = "v${version}";
-    sha256 = "sha256-wTyeGTxihnjTGBsVa0Yq2M/cxhWhZ9KLHVy10ya2gc4=";
-    fetchSubmodules = true;
+  boostPython = boost.override {
+    enablePython = true;
+    inherit python;
   };
+in
+  stdenv.mkDerivation {
+    pname = "libtorrent-rasterbar";
+    inherit version;
 
-  nativeBuildInputs = [ cmake ];
+    src = fetchFromGitHub {
+      owner = "arvidn";
+      repo = "libtorrent";
+      rev = "v${version}";
+      sha256 = "sha256-wTyeGTxihnjTGBsVa0Yq2M/cxhWhZ9KLHVy10ya2gc4=";
+      fetchSubmodules = true;
+    };
 
-  buildInputs = [ boostPython openssl zlib python ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+    nativeBuildInputs = [cmake];
 
-  postInstall = ''
-    moveToOutput "include" "$dev"
-    moveToOutput "lib/${python.libPrefix}" "$python"
-  '';
+    buildInputs =
+      [boostPython openssl zlib python ncurses]
+      ++ lib.optionals stdenv.isDarwin [SystemConfiguration];
 
-  outputs = [ "out" "dev" "python" ];
+    postInstall = ''
+      moveToOutput "include" "$dev"
+      moveToOutput "lib/${python.libPrefix}" "$python"
+    '';
 
-  cmakeFlags = [
-    "-Dpython-bindings=on"
-  ];
+    outputs = ["out" "dev" "python"];
 
-  meta = with lib; {
-    homepage = "https://libtorrent.org/";
-    description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
-    license = licenses.bsd3;
-    maintainers = [ ];
-    platforms = platforms.unix;
-  };
-}
+    cmakeFlags = [
+      "-Dpython-bindings=on"
+    ];
+
+    meta = with lib; {
+      homepage = "https://libtorrent.org/";
+      description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
+      license = licenses.bsd3;
+      maintainers = [];
+      platforms = platforms.unix;
+    };
+  }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "sysv_ipc";
   version = "1.1.0";
@@ -16,7 +16,6 @@ buildPythonPackage rec {
     description = "SysV IPC primitives (semaphores, shared memory and message queues)";
     license = licenses.bsd3;
     homepage = "http://semanchuk.com/philip/sysv_ipc/";
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ris];
   };
-
 }

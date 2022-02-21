@@ -1,9 +1,9 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-protocol-alpha
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-protocol-alpha,
 }:
-
 buildDunePackage {
   pname = "tezos-protocol-plugin-alpha";
   inherit (tezos-stdlib) version useDune2;
@@ -15,7 +15,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: protocol plugin";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos/Protocol: protocol plugin";
+    };
 }

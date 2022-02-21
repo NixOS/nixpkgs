@@ -1,5 +1,14 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2, ronn }:
-
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  openssl,
+  lzo,
+  zlib,
+  iproute2,
+  ronn,
+}:
 stdenv.mkDerivation rec {
   pname = "zerotierone";
   version = "1.8.4";
@@ -20,13 +29,12 @@ stdenv.mkDerivation rec {
       --replace 'armv5' 'armv6'
   '';
 
-
-  nativeBuildInputs = [ ronn ];
-  buildInputs = [ openssl lzo zlib iproute2 ];
+  nativeBuildInputs = [ronn];
+  buildInputs = [openssl lzo zlib iproute2];
 
   enableParallelBuilding = true;
 
-  buildFlags = [ "all" "selftest" ];
+  buildFlags = ["all" "selftest"];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkPhase = ''
@@ -44,13 +52,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
+    maintainers = with maintainers; [sjmackenzie zimbatm ehmry obadz danielfullmer];
     platforms = platforms.all;
   };
 }

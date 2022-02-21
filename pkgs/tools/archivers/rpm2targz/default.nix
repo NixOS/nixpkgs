@@ -1,15 +1,15 @@
-{ bzip2
-, coreutils
-, cpio
-, fetchurl
-, gnutar
-, gzip
-, lib
-, stdenv
-, xz
-, zstd
+{
+  bzip2,
+  coreutils,
+  cpio,
+  fetchurl,
+  gnutar,
+  gzip,
+  lib,
+  stdenv,
+  xz,
+  zstd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rpm2targz";
   version = "2021.03.16";
@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
     sed -i -e '2iexport PATH="${lib.makeBinPath shdeps}"' rpm2targz
   '';
 
-  installFlags = [ "prefix=$(out)" ];
+  installFlags = ["prefix=$(out)"];
 
   meta = with lib; {
     description = "Convert a .rpm file to a .tar.gz archive";
     homepage = "http://slackware.com/config/packages.php";
     license = licenses.bsd1;
-    maintainers = with maintainers; [ zseri ];
+    maintainers = with maintainers; [zseri];
     platforms = platforms.all;
   };
 }

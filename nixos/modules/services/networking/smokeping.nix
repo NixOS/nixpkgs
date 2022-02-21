@@ -1,52 +1,51 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.smokeping;
   smokepingHome = "/var/lib/smokeping";
   smokepingPidDir = "/run";
   configFile =
     if cfg.config == null
-      then
-        ''
-          *** General ***
-          cgiurl   = ${cfg.cgiUrl}
-          contact = ${cfg.ownerEmail}
-          datadir  = ${smokepingHome}/data
-          imgcache = ${smokepingHome}/cache
-          imgurl   = ${cfg.imgUrl}
-          linkstyle = ${cfg.linkStyle}
-          ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
-          owner = ${cfg.owner}
-          pagedir = ${smokepingHome}/cache
-          piddir  = ${smokepingPidDir}
-          ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
-          smokemail = ${cfg.smokeMailTemplate}
-          *** Presentation ***
-          template = ${cfg.presentationTemplate}
-          ${cfg.presentationConfig}
-          *** Alerts ***
-          ${cfg.alertConfig}
-          *** Database ***
-          ${cfg.databaseConfig}
-          *** Probes ***
-          ${cfg.probeConfig}
-          *** Targets ***
-          ${cfg.targetConfig}
-          ${cfg.extraConfig}
-        ''
-      else
-        cfg.config;
+    then
+      ''
+        *** General ***
+        cgiurl   = ${cfg.cgiUrl}
+        contact = ${cfg.ownerEmail}
+        datadir  = ${smokepingHome}/data
+        imgcache = ${smokepingHome}/cache
+        imgurl   = ${cfg.imgUrl}
+        linkstyle = ${cfg.linkStyle}
+        ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
+        owner = ${cfg.owner}
+        pagedir = ${smokepingHome}/cache
+        piddir  = ${smokepingPidDir}
+        ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
+        smokemail = ${cfg.smokeMailTemplate}
+        *** Presentation ***
+        template = ${cfg.presentationTemplate}
+        ${cfg.presentationConfig}
+        *** Alerts ***
+        ${cfg.alertConfig}
+        *** Database ***
+        ${cfg.databaseConfig}
+        *** Probes ***
+        ${cfg.probeConfig}
+        *** Targets ***
+        ${cfg.targetConfig}
+        ${cfg.extraConfig}
+      ''
+    else cfg.config;
 
   configPath = pkgs.writeText "smokeping.conf" configFile;
   cgiHome = pkgs.writeScript "smokeping.fcgi" ''
     #!${pkgs.bash}/bin/bash
     ${cfg.package}/bin/smokeping_cgi ${configPath}
   '';
-in
-
-{
+in {
   options = {
     services.smokeping = {
       enable = mkOption {
@@ -82,8 +81,9 @@ in
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = "Full smokeping config supplied by the user. Overrides " +
-          "and replaces any other configuration supplied.";
+        description =
+          "Full smokeping config supplied by the user. Overrides "
+          + "and replaces any other configuration supplied.";
       };
       databaseConfig = mkOption {
         type = types.lines;
@@ -113,9 +113,9 @@ in
               MAX  0.5 144   7200
               MIN  0.5 144   7200
         '';
-        description = ''Configure the ping frequency and retention of the rrd files.
-          Once set, changing the interval will require deletion or migration of all
-          the collected data.'';
+        description = ''          Configure the ping frequency and retention of the rrd files.
+                    Once set, changing the interval will require deletion or migration of all
+                    the collected data.'';
       };
       extraConfig = mkOption {
         type = types.lines;
@@ -290,7 +290,6 @@ in
         description = "Enable a smokeping web interface";
       };
     };
-
   };
 
   config = mkIf cfg.enable {
@@ -301,14 +300,14 @@ in
       }
     ];
     security.wrappers = {
-      fping =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.fping}/bin/fping";
-        };
+      fping = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.fping}/bin/fping";
+      };
     };
-    environment.systemPackages = [ pkgs.fping ];
+    environment.systemPackages = [pkgs.fping];
     users.users.${cfg.user} = {
       isNormalUser = false;
       isSystemUser = true;
@@ -319,7 +318,7 @@ in
     };
     users.groups.${cfg.user} = {};
     systemd.services.smokeping = {
-      requiredBy = [ "multi-user.target"];
+      requiredBy = ["multi-user.target"];
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
@@ -336,19 +335,19 @@ in
       '';
     };
     systemd.services.thttpd = mkIf cfg.webService {
-      requiredBy = [ "multi-user.target"];
-      requires = [ "smokeping.service"];
-      path = with pkgs; [ bash rrdtool smokeping thttpd ];
+      requiredBy = ["multi-user.target"];
+      requires = ["smokeping.service"];
+      path = with pkgs; [bash rrdtool smokeping thttpd];
       serviceConfig = {
         Restart = "always";
         ExecStart = lib.concatStringsSep " " (lib.concatLists [
-          [ "${pkgs.thttpd}/bin/thttpd" ]
-          [ "-u ${cfg.user}" ]
-          [ ''-c "**.fcgi"'' ]
-          [ "-d ${smokepingHome}" ]
+          ["${pkgs.thttpd}/bin/thttpd"]
+          ["-u ${cfg.user}"]
+          [''-c "**.fcgi"'']
+          ["-d ${smokepingHome}"]
           (lib.optional (cfg.host != null) "-h ${cfg.host}")
-          [ "-p ${builtins.toString cfg.port}" ]
-          [ "-D -nos" ]
+          ["-p ${builtins.toString cfg.port}"]
+          ["-D -nos"]
         ]);
       };
     };
@@ -359,4 +358,3 @@ in
     nh2
   ];
 }
-

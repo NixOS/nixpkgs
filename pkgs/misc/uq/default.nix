@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "uq";
   version = "unstable-2018-05-27";
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "A simple, user-friendly alternative to sort | uniq";
     homepage = "https://github.com/lostutils/uq";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
   };
 }

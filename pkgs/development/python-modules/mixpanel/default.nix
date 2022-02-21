@@ -1,15 +1,14 @@
-
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy37
-, lib
-
-# Python Dependencies
-, mock
-, pytest
-, six
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy37,
+  lib
+  # Python Dependencies
+  ,
+  mock,
+  pytest,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "mixpanel";
   version = "4.5.0";

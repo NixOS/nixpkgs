@@ -1,5 +1,8 @@
-{ bundlerEnv, lib, ruby }:
-
+{
+  bundlerEnv,
+  lib,
+  ruby,
+}:
 bundlerEnv {
   inherit ruby;
   pname = "foreman";
@@ -9,7 +12,7 @@ bundlerEnv {
     description = "Process manager for applications with multiple components";
     homepage = "https://github.com/ddollar/foreman";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
     platforms = ruby.meta.platforms;
   };
 }

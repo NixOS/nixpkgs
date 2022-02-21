@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "python-string-utils";
   version = "1.0.0";
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "A handy Python library to validate, manipulate and generate strings.";
     homepage = "https://github.com/daveoncode/python-string-utils";
     license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
   };
 }

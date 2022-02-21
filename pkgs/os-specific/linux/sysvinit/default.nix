@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchurl, withoutInitTools ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  withoutInitTools ? false,
+}:
 stdenv.mkDerivation rec {
-  pname = if withoutInitTools then "sysvtools" else "sysvinit";
+  pname =
+    if withoutInitTools
+    then "sysvtools"
+    else "sysvinit";
   version = "3.01";
 
   src = fetchurl {
@@ -14,17 +21,17 @@ stdenv.mkDerivation rec {
     sed -i -e "s,/sbin/,$out/sbin/," src/halt.c src/init.c src/paths.h
   '';
 
-  makeFlags = [ "SULOGINLIBS=-lcrypt" "ROOT=$(out)" "MANDIR=/share/man" ];
+  makeFlags = ["SULOGINLIBS=-lcrypt" "ROOT=$(out)" "MANDIR=/share/man"];
 
-  preInstall =
+  preInstall = ''
+    substituteInPlace src/Makefile --replace /usr /
+  '';
+
+  postInstall =
     ''
-      substituteInPlace src/Makefile --replace /usr /
-    '';
-
-  postInstall = ''
-    mv $out/sbin/killall5 $out/bin
-    ln -sf killall5 $out/bin/pidof
-  ''
+      mv $out/sbin/killall5 $out/bin
+      ln -sf killall5 $out/bin/pidof
+    ''
     + lib.optionalString withoutInitTools
     ''
       shopt -s extglob

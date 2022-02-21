@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, libgamemode32
-, meson
-, ninja
-, pkg-config
-, dbus
-, inih
-, systemd
-, appstream
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libgamemode32,
+  meson,
+  ninja,
+  pkg-config,
+  dbus,
+  inih,
+  systemd,
+  appstream,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gamemode";
   version = "1.6.1";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-P00OnZiPZyxBu9zuG+3JNorXHBhJZy+cKPjX+duZrJ0=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "static" ];
+  outputs = ["out" "dev" "lib" "man" "static"];
 
   patches = [
     # Run executables from PATH instead of /usr/bin
@@ -46,12 +46,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace data/gamemoderun \
-      --subst-var-by libraryPath ${lib.makeLibraryPath ([
+      --subst-var-by libraryPath ${
+      lib.makeLibraryPath ([
         (placeholder "lib")
-      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
         # Support wrapping 32bit applications on a 64bit linux system
         libgamemode32
-      ])}
+      ])
+    }
   '';
 
   nativeBuildInputs = [
@@ -98,7 +101,7 @@ stdenv.mkDerivation rec {
     description = "Optimise Linux system performance on demand";
     homepage = "https://github.com/FeralInteractive/GameMode";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [kira-bruneau];
     platforms = platforms.linux;
   };
 }

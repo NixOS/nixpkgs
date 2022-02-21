@@ -1,9 +1,17 @@
-{ pname, version, src, meta, stdenv, binaryName, desktopName, undmg }:
-
+{
+  pname,
+  version,
+  src,
+  meta,
+  stdenv,
+  binaryName,
+  desktopName,
+  undmg,
+}:
 stdenv.mkDerivation {
   inherit pname version src meta;
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [undmg];
 
   sourceRoot = ".";
 

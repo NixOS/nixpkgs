@@ -1,5 +1,10 @@
-{ lib, python3Packages, fetchFromGitHub, glib, wrapGAppsHook }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  glib,
+  wrapGAppsHook,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
   version = "2.0.0rc5";
@@ -11,10 +16,19 @@ python3Packages.buildPythonApplication rec {
     sha256 = "179x8lwrw2h7cxnkq7izny6qcb4nhjnd8zx893i77zfhzsa6kx81";
   };
 
-  nativeBuildInputs = [ glib wrapGAppsHook ];
+  nativeBuildInputs = [glib wrapGAppsHook];
 
   propagatedBuildInputs = with python3Packages; [
-    appdirs cython dbus-python numpy six wxPython_4_0 psutil pyglet pyopengl pyserial
+    appdirs
+    cython
+    dbus-python
+    numpy
+    six
+    wxPython_4_0
+    psutil
+    pyglet
+    pyopengl
+    pyserial
   ];
 
   doCheck = false;

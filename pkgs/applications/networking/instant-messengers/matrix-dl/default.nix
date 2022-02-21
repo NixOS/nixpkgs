@@ -1,5 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "matrix-dl";
   version = "unstable-2020-07-14";
@@ -19,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     description = "Download backlogs from Matrix as raw text";
     homepage = src.meta.homepage;
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ aw ];
+    maintainers = with maintainers; [aw];
     platforms = platforms.unix;
   };
 }

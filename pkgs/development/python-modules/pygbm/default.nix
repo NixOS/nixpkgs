@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scipy
-, numpy
-, numba
-, scikit-learn
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  scipy,
+  numpy,
+  numba,
+  scikit-learn,
+  pytest,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pygbm";
   version = "0.1.0";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Experimental Gradient Boosting Machines in Python";
     homepage = "https://github.com/ogrisel/pygbm";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
     broken = true;
   };
 }

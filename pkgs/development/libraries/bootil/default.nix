@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, premake4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  premake4,
 }:
-
 stdenv.mkDerivation {
   pname = "bootil";
   version = "unstable-2019-11-18";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       --replace 'targetdir ( "../lib/" .. os.get() .. "/" .. _ACTION )' 'targetdir ( ".." )'
   '';
 
-  nativeBuildInputs = [ premake4 ];
+  nativeBuildInputs = [premake4];
 
   premakefile = "projects/premake4.lua";
 
@@ -37,8 +37,8 @@ stdenv.mkDerivation {
     homepage = "https://github.com/garrynewman/bootil";
     # License unsure - see https://github.com/garrynewman/bootil/issues/21
     license = licenses.free;
-    maintainers = with maintainers; [ abigailbuccaneer ];
+    maintainers = with maintainers; [abigailbuccaneer];
     # Build uses `-msse` and `-mfpmath=sse`
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = ["aarch64-linux"];
   };
 }

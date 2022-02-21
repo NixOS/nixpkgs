@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, python, buildPythonPackage, pkg-config, glib, isPy3k, pythonAtLeast }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python,
+  buildPythonPackage,
+  pkg-config,
+  glib,
+  isPy3k,
+  pythonAtLeast,
+}:
 buildPythonPackage rec {
   pname = "pygobject";
   version = "2.28.7";
@@ -11,16 +20,16 @@ buildPythonPackage rec {
     sha256 = "0nkam61rsn7y3wik3vw46wk5q2cjfh2iph57hl9m39rc8jijb7dv";
   };
 
-  outputs = [ "out" "devdoc" ];
+  outputs = ["out" "devdoc"];
 
   patches = lib.optionals stdenv.isDarwin [
     ./pygobject-2.0-fix-darwin.patch
   ];
 
-  configureFlags = [ "--disable-introspection" ];
+  configureFlags = ["--disable-introspection"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [glib];
 
   # in a "normal" setup, pygobject and pygtk are installed into the
   # same site-packages: we need a pth file for both. pygtk.py would be

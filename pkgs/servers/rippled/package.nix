@@ -1,6 +1,7 @@
-{ self, fetchurl ? null }:
-
 {
+  self,
+  fetchurl ? null,
+}: {
   by-spec."abbrev"."1" =
     self.by-version."abbrev"."1.0.5";
   by-version."abbrev"."1.0.5" = self.buildNodePackage {
@@ -17,8 +18,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."abbrev"."1.0.x" =
     self.by-version."abbrev"."1.0.5";
@@ -40,8 +41,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."accepts"."~1.2.7" =
     self.by-version."accepts"."1.2.7";
@@ -61,8 +62,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ansi"."^0.3.0" =
     self.by-version."ansi"."0.3.0";
@@ -80,8 +81,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ansi"."~0.3.0" =
     self.by-version."ansi"."0.3.0";
@@ -101,8 +102,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ansi-regex"."^0.2.1" =
     self.by-version."ansi-regex"."0.2.1";
@@ -122,8 +123,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ansi-regex"."^1.1.0" =
     self.by-version."ansi-regex"."1.1.1";
@@ -143,8 +144,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ansi-styles"."^2.0.1" =
     self.by-version."ansi-styles"."2.0.1";
@@ -162,8 +163,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."are-we-there-yet"."~1.0.0" =
     self.by-version."are-we-there-yet"."1.0.4";
@@ -183,8 +184,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."argparse"."~ 0.1.11" =
     self.by-version."argparse"."0.1.16";
@@ -204,8 +205,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."argparse"."~1.0.2" =
     self.by-version."argparse"."1.0.2";
@@ -225,8 +226,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."asn1"."0.1.11" =
     self.by-version."asn1"."0.1.11";
@@ -244,8 +245,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."assert-diff"."^0.0.4" =
     self.by-version."assert-diff"."0.0.4";
@@ -265,8 +266,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "assert-diff" = self.by-version."assert-diff"."0.0.4";
   by-spec."assert-plus"."0.1.4" =
@@ -285,8 +286,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."assert-plus"."^0.1.5" =
     self.by-version."assert-plus"."0.1.5";
@@ -304,8 +305,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."assertion-error"."1.0.0" =
     self.by-version."assertion-error"."1.0.0";
@@ -323,8 +324,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."async"."0.2.9" =
     self.by-version."async"."0.2.9";
@@ -342,8 +343,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."async"."0.9.x" =
     self.by-version."async"."0.9.0";
@@ -361,8 +362,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."async"."^0.2.9" =
     self.by-version."async"."0.2.10";
@@ -380,8 +381,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "async" = self.by-version."async"."0.2.10";
   by-spec."async"."~0.2.6" =
@@ -406,8 +407,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."balanced-match"."^0.2.0" =
     self.by-version."balanced-match"."0.2.0";
@@ -425,8 +426,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."basic-auth"."~1.0.1" =
     self.by-version."basic-auth"."1.0.1";
@@ -444,8 +445,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bignumber.js"."^1.4.0" =
     self.by-version."bignumber.js"."1.5.0";
@@ -463,8 +464,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "bignumber.js" = self.by-version."bignumber.js"."1.5.0";
   by-spec."bignumber.js"."^2.0.3" =
@@ -483,8 +484,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bignumber.js"."~1.4.0" =
     self.by-version."bignumber.js"."1.4.1";
@@ -502,8 +503,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bindings"."1.2.x" =
     self.by-version."bindings"."1.2.1";
@@ -521,8 +522,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bl"."~0.9.0" =
     self.by-version."bl"."0.9.4";
@@ -541,8 +542,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."block-stream"."*" =
     self.by-version."block-stream"."0.0.7";
@@ -561,8 +562,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bluebird"."^2.0.0" =
     self.by-version."bluebird"."2.9.25";
@@ -580,8 +581,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bluebird"."^2.3.4" =
     self.by-version."bluebird"."2.9.25";
@@ -613,8 +614,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "body-parser" = self.by-version."body-parser"."1.12.4";
   by-spec."boom"."0.4.x" =
@@ -634,8 +635,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."boom"."2.x.x" =
     self.by-version."boom"."2.7.1";
@@ -654,8 +655,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."brace-expansion"."^1.0.0" =
     self.by-version."brace-expansion"."1.1.0";
@@ -675,8 +676,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bufferutil"."1.0.x" =
     self.by-version."bufferutil"."1.0.1";
@@ -696,8 +697,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bytes"."1.0.0" =
     self.by-version."bytes"."1.0.0";
@@ -715,8 +716,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."bytes"."2.0.1" =
     self.by-version."bytes"."2.0.1";
@@ -734,8 +735,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."caseless"."~0.9.0" =
     self.by-version."caseless"."0.9.0";
@@ -753,8 +754,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."chai".">=1.9.2 <3" =
     self.by-version."chai"."2.3.0";
@@ -774,8 +775,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."chai"."^1.10.0" =
     self.by-version."chai"."1.10.0";
@@ -795,8 +796,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "chai" = self.by-version."chai"."1.10.0";
   by-spec."chalk"."^1.0.0" =
@@ -820,8 +821,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."chalk"."~0.5.1" =
     self.by-version."chalk"."0.5.1";
@@ -844,8 +845,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."cli-color"."~0.1.6" =
     self.by-version."cli-color"."0.1.7";
@@ -864,8 +865,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."colors"."1.0.x" =
     self.by-version."colors"."1.0.3";
@@ -883,8 +884,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."combined-stream"."~0.0.4" =
     self.by-version."combined-stream"."0.0.7";
@@ -903,8 +904,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."combined-stream"."~0.0.5" =
     self.by-version."combined-stream"."0.0.7";
@@ -924,8 +925,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."commander"."2.3.0" =
     self.by-version."commander"."2.3.0";
@@ -943,8 +944,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."commander"."^2.2.0" =
     self.by-version."commander"."2.8.1";
@@ -963,8 +964,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."commander"."^2.8.1" =
     self.by-version."commander"."2.8.1";
@@ -984,8 +985,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."component-emitter"."1.1.2" =
     self.by-version."component-emitter"."1.1.2";
@@ -1003,8 +1004,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."compressible"."~2.0.2" =
     self.by-version."compressible"."2.0.2";
@@ -1023,8 +1024,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."compression"."^1.3.0" =
     self.by-version."compression"."1.4.4";
@@ -1048,8 +1049,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "compression" = self.by-version."compression"."1.4.4";
   by-spec."concat-map"."0.0.1" =
@@ -1068,8 +1069,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."content-disposition"."0.5.0" =
     self.by-version."content-disposition"."0.5.0";
@@ -1087,8 +1088,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."content-type"."~1.0.1" =
     self.by-version."content-type"."1.0.1";
@@ -1106,8 +1107,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."cookie"."0.1.2" =
     self.by-version."cookie"."0.1.2";
@@ -1125,8 +1126,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."cookie-signature"."1.0.6" =
     self.by-version."cookie-signature"."1.0.6";
@@ -1144,8 +1145,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."cookiejar"."1.3.2" =
     self.by-version."cookiejar"."1.3.2";
@@ -1163,8 +1164,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."core-util-is"."~1.0.0" =
     self.by-version."core-util-is"."1.0.1";
@@ -1182,8 +1183,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."coveralls"."^2.10.0" =
     self.by-version."coveralls"."2.11.2";
@@ -1205,8 +1206,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "coveralls" = self.by-version."coveralls"."2.11.2";
   by-spec."crc"."3.2.1" =
@@ -1225,8 +1226,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."cryptiles"."0.2.x" =
     self.by-version."cryptiles"."0.2.2";
@@ -1245,8 +1246,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."cryptiles"."2.x.x" =
     self.by-version."cryptiles"."2.0.4";
@@ -1265,8 +1266,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ctype"."0.5.3" =
     self.by-version."ctype"."0.5.3";
@@ -1284,8 +1285,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."cycle"."1.0.x" =
     self.by-version."cycle"."1.0.3";
@@ -1303,8 +1304,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."debug"."2.0.0" =
     self.by-version."debug"."2.0.0";
@@ -1323,8 +1324,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."debug"."~0.7.2" =
     self.by-version."debug"."0.7.4";
@@ -1342,8 +1343,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."debug"."~2.1.3" =
     self.by-version."debug"."2.1.3";
@@ -1362,8 +1363,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."debug"."~2.2.0" =
     self.by-version."debug"."2.2.0";
@@ -1382,8 +1383,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."deep-eql"."0.1.3" =
     self.by-version."deep-eql"."0.1.3";
@@ -1402,8 +1403,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."deep-extend"."~0.2.5" =
     self.by-version."deep-extend"."0.2.11";
@@ -1421,8 +1422,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."delayed-stream"."0.0.5" =
     self.by-version."delayed-stream"."0.0.5";
@@ -1440,8 +1441,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."delegates"."^0.1.0" =
     self.by-version."delegates"."0.1.0";
@@ -1459,8 +1460,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."depd"."~1.0.0" =
     self.by-version."depd"."1.0.1";
@@ -1478,8 +1479,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."depd"."~1.0.1" =
     self.by-version."depd"."1.0.1";
@@ -1499,8 +1500,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."diff"."1.0.8" =
     self.by-version."diff"."1.0.8";
@@ -1518,8 +1519,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."difflib"."~0.2.1" =
     self.by-version."difflib"."0.2.4";
@@ -1538,8 +1539,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."dreamopt"."~0.6.0" =
     self.by-version."dreamopt"."0.6.0";
@@ -1558,8 +1559,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ee-first"."1.1.0" =
     self.by-version."ee-first"."1.1.0";
@@ -1577,8 +1578,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."es5-ext"."0.8.x" =
     self.by-version."es5-ext"."0.8.2";
@@ -1596,8 +1597,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."escape-html"."1.0.1" =
     self.by-version."escape-html"."1.0.1";
@@ -1615,8 +1616,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."escape-string-regexp"."1.0.2" =
     self.by-version."escape-string-regexp"."1.0.2";
@@ -1634,8 +1635,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."escape-string-regexp"."^1.0.0" =
     self.by-version."escape-string-regexp"."1.0.3";
@@ -1653,8 +1654,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."escape-string-regexp"."^1.0.2" =
     self.by-version."escape-string-regexp"."1.0.3";
@@ -1678,8 +1679,8 @@
       "source-map-0.1.43" = self.by-version."source-map"."0.1.43";
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."esprima"."1.2.x" =
     self.by-version."esprima"."1.2.5";
@@ -1697,8 +1698,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."esprima"."~ 1.0.2" =
     self.by-version."esprima"."1.0.4";
@@ -1716,8 +1717,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."esprima"."~1.1.1" =
     self.by-version."esprima"."1.1.1";
@@ -1735,8 +1736,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."esprima"."~2.2.0" =
     self.by-version."esprima"."2.2.0";
@@ -1754,8 +1755,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."estraverse"."~1.5.0" =
     self.by-version."estraverse"."1.5.1";
@@ -1773,8 +1774,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."esutils"."~1.0.0" =
     self.by-version."esutils"."1.0.0";
@@ -1792,8 +1793,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."etag"."~1.5.1" =
     self.by-version."etag"."1.5.1";
@@ -1812,8 +1813,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."express"."^4.8.7" =
     self.by-version."express"."4.12.3";
@@ -1855,8 +1856,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "express" = self.by-version."express"."4.12.3";
   by-spec."extend"."~1.2.1" =
@@ -1875,8 +1876,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."extend"."~1.3.0" =
     self.by-version."extend"."1.3.0";
@@ -1894,8 +1895,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."eyes"."0.1.x" =
     self.by-version."eyes"."0.1.8";
@@ -1913,8 +1914,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."fileset"."0.1.x" =
     self.by-version."fileset"."0.1.5";
@@ -1934,8 +1935,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."finalhandler"."0.3.4" =
     self.by-version."finalhandler"."0.3.4";
@@ -1956,8 +1957,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."findup-sync"."~0.1.2" =
     self.by-version."findup-sync"."0.1.3";
@@ -1977,8 +1978,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."flagged-respawn"."~0.3.0" =
     self.by-version."flagged-respawn"."0.3.1";
@@ -1996,8 +1997,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."forever-agent"."~0.5.0" =
     self.by-version."forever-agent"."0.5.2";
@@ -2015,8 +2016,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."forever-agent"."~0.6.0" =
     self.by-version."forever-agent"."0.6.1";
@@ -2034,8 +2035,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."form-data"."0.1.2" =
     self.by-version."form-data"."0.1.2";
@@ -2056,8 +2057,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."form-data"."~0.1.0" =
     self.by-version."form-data"."0.1.4";
@@ -2078,8 +2079,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."form-data"."~0.2.0" =
     self.by-version."form-data"."0.2.0";
@@ -2100,8 +2101,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."formatio"."1.1.1" =
     self.by-version."formatio"."1.1.1";
@@ -2120,8 +2121,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."formatio"."~1.0" =
     self.by-version."formatio"."1.0.2";
@@ -2140,8 +2141,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."formidable"."1.0.14" =
     self.by-version."formidable"."1.0.14";
@@ -2159,8 +2160,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."forwarded"."~0.1.0" =
     self.by-version."forwarded"."0.1.0";
@@ -2178,8 +2179,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."fresh"."0.2.4" =
     self.by-version."fresh"."0.2.4";
@@ -2197,8 +2198,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."fstream"."^1.0.2" =
     self.by-version."fstream"."1.0.6";
@@ -2220,8 +2221,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."fstream"."~0.1.17" =
     self.by-version."fstream"."0.1.31";
@@ -2243,8 +2244,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."fstream"."~0.1.22" =
     self.by-version."fstream"."0.1.31";
@@ -2269,8 +2270,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."gauge"."~1.2.0" =
     self.by-version."gauge"."1.2.0";
@@ -2293,8 +2294,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."generate-function"."^2.0.0" =
     self.by-version."generate-function"."2.0.0";
@@ -2312,8 +2313,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."generate-object-property"."^1.1.0" =
     self.by-version."generate-object-property"."1.1.1";
@@ -2332,8 +2333,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."generic-pool-redux"."~0.1.0" =
     self.by-version."generic-pool-redux"."0.1.0";
@@ -2351,8 +2352,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."get-stdin"."^4.0.1" =
     self.by-version."get-stdin"."4.0.1";
@@ -2370,8 +2371,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."glob"."3.2.3" =
     self.by-version."glob"."3.2.3";
@@ -2392,8 +2393,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."glob"."3.x" =
     self.by-version."glob"."3.2.11";
@@ -2413,8 +2414,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."glob"."^4.4.2" =
     self.by-version."glob"."4.5.3";
@@ -2436,8 +2437,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."glob"."~3.2.9" =
     self.by-version."glob"."3.2.11";
@@ -2457,8 +2458,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."graceful-fs"."3" =
     self.by-version."graceful-fs"."3.0.6";
@@ -2476,8 +2477,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."graceful-fs"."~2.0.0" =
     self.by-version."graceful-fs"."2.0.3";
@@ -2495,8 +2496,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."graceful-fs"."~3.0.2" =
     self.by-version."graceful-fs"."3.0.6";
@@ -2516,8 +2517,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."growl"."1.8.1" =
     self.by-version."growl"."1.8.1";
@@ -2535,8 +2536,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."handlebars"."1.3.x" =
     self.by-version."handlebars"."1.3.0";
@@ -2556,8 +2557,8 @@
       "uglify-js-2.3.6" = self.by-version."uglify-js"."2.3.6";
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."har-validator"."^1.4.0" =
     self.by-version."har-validator"."1.7.0";
@@ -2579,8 +2580,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."has-ansi"."^0.1.0" =
     self.by-version."has-ansi"."0.1.0";
@@ -2599,8 +2600,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."has-ansi"."^1.0.3" =
     self.by-version."has-ansi"."1.0.3";
@@ -2620,8 +2621,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."has-unicode"."^1.0.0" =
     self.by-version."has-unicode"."1.0.0";
@@ -2639,8 +2640,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."hawk"."1.1.1" =
     self.by-version."hawk"."1.1.1";
@@ -2662,8 +2663,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."hawk"."~2.3.0" =
     self.by-version."hawk"."2.3.1";
@@ -2685,8 +2686,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."heap".">= 0.2.0" =
     self.by-version."heap"."0.2.6";
@@ -2704,8 +2705,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."hoek"."0.9.x" =
     self.by-version."hoek"."0.9.1";
@@ -2723,8 +2724,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."hoek"."2.x.x" =
     self.by-version."hoek"."2.13.0";
@@ -2742,8 +2743,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."http-signature"."~0.10.0" =
     self.by-version."http-signature"."0.10.1";
@@ -2764,8 +2765,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."iconv-lite"."0.4.8" =
     self.by-version."iconv-lite"."0.4.8";
@@ -2783,8 +2784,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."inflight"."^1.0.4" =
     self.by-version."inflight"."1.0.4";
@@ -2804,8 +2805,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."inherits"."2" =
     self.by-version."inherits"."2.0.1";
@@ -2823,8 +2824,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."inherits"."2.0.1" =
     self.by-version."inherits"."2.0.1";
@@ -2848,8 +2849,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ini"."~1.3.0" =
     self.by-version."ini"."1.3.3";
@@ -2869,8 +2870,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ipaddr.js"."1.0.1" =
     self.by-version."ipaddr.js"."1.0.1";
@@ -2888,8 +2889,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."is-my-json-valid"."^2.10.1" =
     self.by-version."is-my-json-valid"."2.11.0";
@@ -2911,8 +2912,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."is-property"."^1.0.0" =
     self.by-version."is-property"."1.0.2";
@@ -2930,8 +2931,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."isarray"."0.0.1" =
     self.by-version."isarray"."0.0.1";
@@ -2949,8 +2950,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."isstream"."0.1.x" =
     self.by-version."isstream"."0.1.2";
@@ -2968,8 +2969,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."isstream"."~0.1.1" =
     self.by-version."isstream"."0.1.2";
@@ -3001,8 +3002,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "istanbul" = self.by-version."istanbul"."0.2.16";
   by-spec."jade"."0.26.3" =
@@ -3023,8 +3024,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."jayschema"."^0.3.1" =
     self.by-version."jayschema"."0.3.1";
@@ -3043,8 +3044,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "jayschema" = self.by-version."jayschema"."0.3.1";
   by-spec."jayschema-error-messages"."^1.0.2" =
@@ -3063,8 +3064,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "jayschema-error-messages" = self.by-version."jayschema-error-messages"."1.0.3";
   by-spec."js-yaml"."3.0.1" =
@@ -3085,8 +3086,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."js-yaml"."3.x" =
     self.by-version."js-yaml"."3.3.1";
@@ -3106,8 +3107,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."json-diff"."0.3.1" =
     self.by-version."json-diff"."0.3.1";
@@ -3128,8 +3129,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."json-stringify-safe"."~5.0.0" =
     self.by-version."json-stringify-safe"."5.0.0";
@@ -3147,8 +3148,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."jsonpointer"."^1.1.0" =
     self.by-version."jsonpointer"."1.1.0";
@@ -3166,8 +3167,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."knex"."^0.7.6" =
     self.by-version."knex"."0.7.6";
@@ -3197,8 +3198,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "knex" = self.by-version."knex"."0.7.6";
   by-spec."lcov-parse"."0.0.6" =
@@ -3217,8 +3218,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."liftoff"."~0.13.2" =
     self.by-version."liftoff"."0.13.6";
@@ -3241,8 +3242,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lodash".">= 3.2.0 < 4.0.0" =
     self.by-version."lodash"."3.8.0";
@@ -3260,8 +3261,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lodash"."^3.1.0" =
     self.by-version."lodash"."3.8.0";
@@ -3286,8 +3287,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lodash"."~2.4.1" =
     self.by-version."lodash"."2.4.2";
@@ -3307,8 +3308,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lodash._createpadding"."^3.0.0" =
     self.by-version."lodash._createpadding"."3.6.0";
@@ -3327,8 +3328,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lodash.pad"."^3.0.0" =
     self.by-version."lodash.pad"."3.1.0";
@@ -3348,8 +3349,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lodash.padleft"."^3.0.0" =
     self.by-version."lodash.padleft"."3.1.1";
@@ -3369,8 +3370,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lodash.padright"."^3.0.0" =
     self.by-version."lodash.padright"."3.1.1";
@@ -3390,8 +3391,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lodash.repeat"."^3.0.0" =
     self.by-version."lodash.repeat"."3.0.0";
@@ -3410,8 +3411,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."log-driver"."1.2.4" =
     self.by-version."log-driver"."1.2.4";
@@ -3429,8 +3430,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lolex"."1.1.0" =
     self.by-version."lolex"."1.1.0";
@@ -3448,8 +3449,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lru-cache"."2" =
     self.by-version."lru-cache"."2.6.2";
@@ -3467,8 +3468,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."lru-cache"."~2.5.0" =
     self.by-version."lru-cache"."2.5.2";
@@ -3486,8 +3487,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."media-typer"."0.3.0" =
     self.by-version."media-typer"."0.3.0";
@@ -3505,8 +3506,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."merge-descriptors"."1.0.0" =
     self.by-version."merge-descriptors"."1.0.0";
@@ -3524,8 +3525,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."methods"."0.0.1" =
     self.by-version."methods"."0.0.1";
@@ -3543,8 +3544,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."methods"."1.0.0" =
     self.by-version."methods"."1.0.0";
@@ -3562,8 +3563,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."methods"."~1.1.1" =
     self.by-version."methods"."1.1.1";
@@ -3581,8 +3582,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mime"."1.2.5" =
     self.by-version."mime"."1.2.5";
@@ -3600,8 +3601,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mime"."1.3.4" =
     self.by-version."mime"."1.3.4";
@@ -3619,8 +3620,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mime"."~1.2.11" =
     self.by-version."mime"."1.2.11";
@@ -3638,8 +3639,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mime-db".">= 1.1.2 < 2" =
     self.by-version."mime-db"."1.9.1";
@@ -3657,8 +3658,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mime-db"."~1.9.1" =
     self.by-version."mime-db"."1.9.1";
@@ -3678,8 +3679,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mime-types"."~2.0.1" =
     self.by-version."mime-types"."2.0.11";
@@ -3698,8 +3699,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mime-types"."~2.0.11" =
     self.by-version."mime-types"."2.0.11";
@@ -3723,8 +3724,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."minimatch"."0.x" =
     self.by-version."minimatch"."0.4.0";
@@ -3744,8 +3745,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."minimatch"."^2.0.1" =
     self.by-version."minimatch"."2.0.7";
@@ -3764,8 +3765,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."minimatch"."~0.2.0" =
     self.by-version."minimatch"."0.2.14";
@@ -3785,8 +3786,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."minimatch"."~0.2.11" =
     self.by-version."minimatch"."0.2.14";
@@ -3806,8 +3807,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."minimist"."~0.0.1" =
     self.by-version."minimist"."0.0.10";
@@ -3825,8 +3826,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."minimist"."~0.0.7" =
     self.by-version."minimist"."0.0.10";
@@ -3846,8 +3847,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mkdirp"."0.3.0" =
     self.by-version."mkdirp"."0.3.0";
@@ -3865,8 +3866,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mkdirp"."0.5" =
     self.by-version."mkdirp"."0.5.1";
@@ -3885,8 +3886,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mkdirp"."0.5.0" =
     self.by-version."mkdirp"."0.5.0";
@@ -3905,8 +3906,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."mkdirp"."0.5.x" =
     self.by-version."mkdirp"."0.5.1";
@@ -3941,8 +3942,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "mocha" = self.by-version."mocha"."2.2.4";
   by-spec."morgan"."^1.3.0" =
@@ -3965,8 +3966,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "morgan" = self.by-version."morgan"."1.5.3";
   by-spec."ms"."0.6.2" =
@@ -3985,8 +3986,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ms"."0.7.0" =
     self.by-version."ms"."0.7.0";
@@ -4004,8 +4005,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ms"."0.7.1" =
     self.by-version."ms"."0.7.1";
@@ -4023,8 +4024,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."nan"."1.6.x" =
     self.by-version."nan"."1.6.2";
@@ -4042,8 +4043,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."nan"."~1.0.0" =
     self.by-version."nan"."1.0.0";
@@ -4061,8 +4062,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."nan"."~1.8.4" =
     self.by-version."nan"."1.8.4";
@@ -4080,8 +4081,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."nconf"."^0.6.9" =
     self.by-version."nconf"."0.6.9";
@@ -4102,8 +4103,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "nconf" = self.by-version."nconf"."0.6.9";
   by-spec."negotiator"."0.5.3" =
@@ -4122,8 +4123,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."node-pre-gyp"."~0.6.7" =
     self.by-version."node-pre-gyp"."0.6.7";
@@ -4150,8 +4151,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."node-uuid"."^1.4.1" =
     self.by-version."node-uuid"."1.4.3";
@@ -4169,8 +4170,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "node-uuid" = self.by-version."node-uuid"."1.4.3";
   by-spec."node-uuid"."~1.4.0" =
@@ -4192,8 +4193,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."nopt"."~3.0.1" =
     self.by-version."nopt"."3.0.1";
@@ -4216,8 +4217,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."oauth-sign"."~0.3.0" =
     self.by-version."oauth-sign"."0.3.0";
@@ -4235,8 +4236,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."oauth-sign"."~0.6.0" =
     self.by-version."oauth-sign"."0.6.0";
@@ -4254,8 +4255,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."on-finished"."~2.2.0" =
     self.by-version."on-finished"."2.2.1";
@@ -4274,8 +4275,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."on-finished"."~2.2.1" =
     self.by-version."on-finished"."2.2.1";
@@ -4295,8 +4296,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."once"."^1.3.0" =
     self.by-version."once"."1.3.2";
@@ -4315,8 +4316,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."once"."~1.1.1" =
     self.by-version."once"."1.1.1";
@@ -4334,8 +4335,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."optimist"."0.6.0" =
     self.by-version."optimist"."0.6.0";
@@ -4355,8 +4356,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."optimist"."~0.3" =
     self.by-version."optimist"."0.3.7";
@@ -4375,8 +4376,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."optimist"."~0.3.5" =
     self.by-version."optimist"."0.3.7";
@@ -4396,8 +4397,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."parseurl"."~1.3.0" =
     self.by-version."parseurl"."1.3.0";
@@ -4415,8 +4416,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."path-to-regexp"."0.1.3" =
     self.by-version."path-to-regexp"."0.1.3";
@@ -4434,8 +4435,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."pkginfo"."0.3.x" =
     self.by-version."pkginfo"."0.3.0";
@@ -4453,8 +4454,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."proxy-addr"."~1.0.7" =
     self.by-version."proxy-addr"."1.0.8";
@@ -4474,8 +4475,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."qs"."0.6.6" =
     self.by-version."qs"."0.6.6";
@@ -4493,8 +4494,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."qs"."2.4.1" =
     self.by-version."qs"."2.4.1";
@@ -4512,8 +4513,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."qs"."2.4.2" =
     self.by-version."qs"."2.4.2";
@@ -4531,8 +4532,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."qs"."~1.0.0" =
     self.by-version."qs"."1.0.2";
@@ -4550,8 +4551,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."qs"."~2.4.0" =
     self.by-version."qs"."2.4.2";
@@ -4571,8 +4572,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."raw-body"."~2.0.1" =
     self.by-version."raw-body"."2.0.1";
@@ -4592,8 +4593,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."rc"."~1.0.1" =
     self.by-version."rc"."1.0.1";
@@ -4615,8 +4616,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."readable-stream"."1.0.27-1" =
     self.by-version."readable-stream"."1.0.27-1";
@@ -4638,8 +4639,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."readable-stream"."^1.1.12" =
     self.by-version."readable-stream"."1.1.13";
@@ -4661,8 +4662,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."readable-stream"."^1.1.13" =
     self.by-version."readable-stream"."1.1.13";
@@ -4686,8 +4687,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."readable-stream"."~1.0.26" =
     self.by-version."readable-stream"."1.0.33";
@@ -4707,8 +4708,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."request"."2.40.0" =
     self.by-version."request"."2.40.0";
@@ -4739,8 +4740,8 @@
       "stringstream-0.0.4" = self.by-version."stringstream"."0.0.4";
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."request"."2.x" =
     self.by-version."request"."2.55.0";
@@ -4776,8 +4777,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."require-directory"."^1.2.0" =
     self.by-version."require-directory"."1.2.0";
@@ -4795,8 +4796,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "require-directory" = self.by-version."require-directory"."1.2.0";
   by-spec."resolve"."0.7.x" =
@@ -4815,8 +4816,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."resolve"."~1.0.0" =
     self.by-version."resolve"."1.0.0";
@@ -4834,8 +4835,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."rimraf"."2" =
     self.by-version."rimraf"."2.3.3";
@@ -4854,8 +4855,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."rimraf"."~2.2.0" =
     self.by-version."rimraf"."2.2.8";
@@ -4873,8 +4874,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."rimraf"."~2.3.2" =
     self.by-version."rimraf"."2.3.3";
@@ -4901,8 +4902,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "ripple-lib" = self.by-version."ripple-lib"."0.12.4";
   by-spec."ripple-lib-transactionparser"."^0.3.2" =
@@ -4923,8 +4924,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "ripple-lib-transactionparser" = self.by-version."ripple-lib-transactionparser"."0.3.2";
   by-spec."ripple-wallet-generator"."^1.0.3" =
@@ -4943,8 +4944,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."samsam"."~1.1" =
     self.by-version."samsam"."1.1.2";
@@ -4962,8 +4963,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."semver"."~4.3.2" =
     self.by-version."semver"."4.3.4";
@@ -4981,8 +4982,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."send"."0.12.2" =
     self.by-version."send"."0.12.2";
@@ -5010,8 +5011,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."serve-static"."~1.9.2" =
     self.by-version."serve-static"."1.9.2";
@@ -5033,8 +5034,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."sigmund"."~1.0.0" =
     self.by-version."sigmund"."1.0.0";
@@ -5052,8 +5053,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."sinon".">=1.4.0 <2" =
     self.by-version."sinon"."1.14.1";
@@ -5074,8 +5075,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."sinon"."~1.10.0" =
     self.by-version."sinon"."1.10.3";
@@ -5095,8 +5096,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "sinon" = self.by-version."sinon"."1.10.3";
   by-spec."sinon-chai"."^2.5.0" =
@@ -5116,9 +5117,10 @@
     };
     peerDependencies = [
       self.by-version."chai"."2.3.0"
-      self.by-version."sinon"."1.14.1"];
-    os = [ ];
-    cpu = [ ];
+      self.by-version."sinon"."1.14.1"
+    ];
+    os = [];
+    cpu = [];
   };
   "sinon-chai" = self.by-version."sinon-chai"."2.7.0";
   by-spec."sntp"."0.2.x" =
@@ -5138,8 +5140,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."sntp"."1.x.x" =
     self.by-version."sntp"."1.0.9";
@@ -5158,8 +5160,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."source-map"."~0.1.33" =
     self.by-version."source-map"."0.1.43";
@@ -5178,8 +5180,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."source-map"."~0.1.7" =
     self.by-version."source-map"."0.1.43";
@@ -5199,8 +5201,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."sqlite3"."^3.0.2" =
     self.by-version."sqlite3"."3.0.8";
@@ -5220,8 +5222,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "sqlite3" = self.by-version."sqlite3"."3.0.8";
   by-spec."stack-trace"."0.0.x" =
@@ -5240,8 +5242,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."string_decoder"."~0.10.x" =
     self.by-version."string_decoder"."0.10.31";
@@ -5259,8 +5261,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."stringstream"."~0.0.4" =
     self.by-version."stringstream"."0.0.4";
@@ -5278,8 +5280,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."strip-ansi"."^0.3.0" =
     self.by-version."strip-ansi"."0.3.0";
@@ -5298,8 +5300,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."strip-ansi"."^2.0.1" =
     self.by-version."strip-ansi"."2.0.1";
@@ -5318,8 +5320,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."strip-json-comments"."0.1.x" =
     self.by-version."strip-json-comments"."0.1.3";
@@ -5337,8 +5339,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."superagent"."0.18.0" =
     self.by-version."superagent"."0.18.0";
@@ -5367,8 +5369,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."supertest"."^0.13.0" =
     self.by-version."supertest"."0.13.0";
@@ -5388,8 +5390,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "supertest" = self.by-version."supertest"."0.13.0";
   by-spec."supports-color"."^0.2.0" =
@@ -5408,8 +5410,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."supports-color"."^1.3.0" =
     self.by-version."supports-color"."1.3.1";
@@ -5427,8 +5429,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."supports-color"."~1.2.0" =
     self.by-version."supports-color"."1.2.1";
@@ -5446,8 +5448,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."tar"."~0.1.17" =
     self.by-version."tar"."0.1.20";
@@ -5468,8 +5470,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."tar"."~2.1.0" =
     self.by-version."tar"."2.1.1";
@@ -5490,8 +5492,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."tar-pack"."~2.0.0" =
     self.by-version."tar-pack"."2.0.0";
@@ -5518,8 +5520,8 @@
       "graceful-fs-1.2.3" = self.by-version."graceful-fs"."1.2.3";
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."tildify"."~1.0.0" =
     self.by-version."tildify"."1.0.0";
@@ -5538,8 +5540,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."tinycolor"."0.x" =
     self.by-version."tinycolor"."0.0.1";
@@ -5557,8 +5559,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."tough-cookie".">=0.12.0" =
     self.by-version."tough-cookie"."1.1.0";
@@ -5576,8 +5578,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."tunnel-agent"."~0.4.0" =
     self.by-version."tunnel-agent"."0.4.0";
@@ -5595,8 +5597,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."type-detect"."0.1.1" =
     self.by-version."type-detect"."0.1.1";
@@ -5614,8 +5616,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."type-is"."~1.6.1" =
     self.by-version."type-is"."1.6.2";
@@ -5635,8 +5637,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."type-is"."~1.6.2" =
     self.by-version."type-is"."1.6.2";
@@ -5659,8 +5661,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."uid-number"."0.0.3" =
     self.by-version."uid-number"."0.0.3";
@@ -5678,8 +5680,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ultron"."1.0.x" =
     self.by-version."ultron"."1.0.1";
@@ -5697,8 +5699,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."underscore"."~1.7.0" =
     self.by-version."underscore"."1.7.0";
@@ -5716,8 +5718,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."underscore.string"."~2.4.0" =
     self.by-version."underscore.string"."2.4.0";
@@ -5735,8 +5737,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."user-home"."^1.0.0" =
     self.by-version."user-home"."1.1.1";
@@ -5754,8 +5756,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."utf-8-validate"."1.0.x" =
     self.by-version."utf-8-validate"."1.0.1";
@@ -5775,8 +5777,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."util".">=0.10.3 <1" =
     self.by-version."util"."0.10.3";
@@ -5795,8 +5797,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."utils-merge"."1.0.0" =
     self.by-version."utils-merge"."1.0.0";
@@ -5814,8 +5816,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."vary"."~1.0.0" =
     self.by-version."vary"."1.0.0";
@@ -5833,8 +5835,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."when"."~3.4.6" =
     self.by-version."when"."3.4.6";
@@ -5852,8 +5854,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."which"."1.0.x" =
     self.by-version."which"."1.0.9";
@@ -5871,8 +5873,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."winston"."^1.0.0" =
     self.by-version."winston"."1.0.0";
@@ -5897,8 +5899,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "winston" = self.by-version."winston"."1.0.0";
   by-spec."wordwrap"."0.0.x" =
@@ -5917,8 +5919,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."wordwrap".">=0.0.2" =
     self.by-version."wordwrap"."1.0.0";
@@ -5936,8 +5938,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."wordwrap"."~0.0.2" =
     self.by-version."wordwrap"."0.0.3";
@@ -5957,8 +5959,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."ws"."^0.4.32" =
     self.by-version."ws"."0.4.32";
@@ -5980,8 +5982,8 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   "ws" = self.by-version."ws"."0.4.32";
   by-spec."ws"."~0.7.1" =
@@ -6004,8 +6006,8 @@
       "utf-8-validate-1.0.1" = self.by-version."utf-8-validate"."1.0.1";
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
   by-spec."xtend"."^4.0.0" =
     self.by-version."xtend"."4.0.0";
@@ -6023,7 +6025,7 @@
     optionalDependencies = {
     };
     peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
+    os = [];
+    cpu = [];
   };
 }

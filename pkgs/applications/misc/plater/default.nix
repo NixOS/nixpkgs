@@ -1,13 +1,13 @@
-{ mkDerivation
-, cmake
-, fetchFromGitHub
-, lib
-, libGLU
-, makeDesktopItem
-, qtbase
-, wrapQtAppsHook
+{
+  mkDerivation,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  libGLU,
+  makeDesktopItem,
+  qtbase,
+  wrapQtAppsHook,
 }:
-
 mkDerivation rec {
   pname = "plater";
   version = "2020-07-30";
@@ -19,8 +19,8 @@ mkDerivation rec {
     sha256 = "0r20mbzd16zv1aiadjqdy7z6sp09rr6lgfxhvir4ll3cpakkynr4";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
-  buildInputs = [ libGLU qtbase ];
+  nativeBuildInputs = [cmake wrapQtAppsHook];
+  buildInputs = [libGLU qtbase];
 
   desktopItem = makeDesktopItem {
     name = pname;
@@ -40,7 +40,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "3D-printer parts placer and plate generator";
     homepage = "https://github.com/Rhoban/Plater";
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
     platforms = platforms.linux;
     license = licenses.cc-by-nc-30;
   };

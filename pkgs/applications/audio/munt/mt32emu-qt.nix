@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, libpulseaudio
-, libmt32emu
-, pkg-config
-, portaudio
-, qtbase
-, qtmultimedia
-, withJack ? stdenv.hostPlatform.isUnix, libjack2
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  libpulseaudio,
+  libmt32emu,
+  pkg-config,
+  portaudio,
+  qtbase,
+  qtmultimedia,
+  withJack ? stdenv.hostPlatform.isUnix,
+  libjack2,
 }:
-
 mkDerivation rec {
   pname = "mt32emu-qt";
   version = "1.9.0";
@@ -20,7 +21,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
-    rev = "mt32emu_qt_${lib.replaceChars [ "." ] [ "_" ] version}";
+    rev = "mt32emu_qt_${lib.replaceChars ["."] ["_"] version}";
     hash = "sha256-9vapBKpl1NC3mIDetuCb452IHV6c7c7NCzSyiBry5oo=";
   };
 
@@ -33,17 +34,18 @@ mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libmt32emu
-    portaudio
-    qtbase
-    qtmultimedia
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libpulseaudio
-  ]
-  ++ lib.optional withJack libjack2;
+  buildInputs =
+    [
+      libmt32emu
+      portaudio
+      qtbase
+      qtmultimedia
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libpulseaudio
+    ]
+    ++ lib.optional withJack libjack2;
 
   dontFixCmake = true;
 
@@ -67,8 +69,8 @@ mkDerivation rec {
       synthesis and conversion of pre-recorded SMF files to WAVE making use of
       the mt32emu library and the Qt framework.
     '';
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.all;
     mainProgram = "mt32emu-qt";
   };

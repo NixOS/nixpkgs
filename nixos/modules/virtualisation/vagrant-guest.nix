@@ -1,7 +1,9 @@
 # Minimal configuration that vagrant depends on
-
-{ config, pkgs, ... }:
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   # Vagrant uses an insecure shared private key by default, but we
   # don't use the authorizedKeys attribute under users because it should be
   # removed on first boot and replaced with a random one. This script sets
@@ -15,8 +17,7 @@ let
       chmod 0600 ~/.ssh/authorized_keys
     fi
   '';
-in
-{
+in {
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
@@ -31,21 +32,21 @@ in
   ];
 
   users.extraUsers.vagrant = {
-    isNormalUser    = true;
-    createHome      = true;
-    description     = "Vagrant user account";
-    extraGroups     = [ "users" "wheel" ];
-    home            = "/home/vagrant";
-    password        = "vagrant";
+    isNormalUser = true;
+    createHome = true;
+    description = "Vagrant user account";
+    extraGroups = ["users" "wheel"];
+    home = "/home/vagrant";
+    password = "vagrant";
     useDefaultShell = true;
-    uid             = 1000;
+    uid = 1000;
   };
 
   systemd.services.install-vagrant-ssh-key = {
     description = "Vagrant SSH key install (if needed)";
-    after = [ "fs.target" ];
-    wants = [ "fs.target" ];
-    wantedBy = [ "multi-user.target" ];
+    after = ["fs.target"];
+    wants = ["fs.target"];
+    wantedBy = ["multi-user.target"];
     serviceConfig = {
       ExecStart = "${install-vagrant-ssh-key}/bin/install-vagrant-ssh-key";
       User = "vagrant";

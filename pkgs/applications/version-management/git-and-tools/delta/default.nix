@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, DiskArbitration
-, Foundation
-, libiconv
-, Security
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  DiskArbitration,
+  Foundation,
+  libiconv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "delta";
   version = "0.12.0";
@@ -22,9 +22,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-4tOeYiRBF4qDUiI6yU093y0Ttq7+CdmGaA5eqdMjgow=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [DiskArbitration Foundation libiconv Security];
 
   postInstall = ''
     installShellCompletion --bash --name delta.bash etc/completion/completion.bash
@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     description = "A syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [marsam zowoq SuperSandro2000];
   };
 }

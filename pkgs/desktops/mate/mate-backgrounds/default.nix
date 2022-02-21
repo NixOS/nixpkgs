@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, meson, ninja, gettext, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-backgrounds";
   version = "1.26.0";
@@ -15,12 +22,12 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "Background images and data for MATE";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus cc-by-sa-40 ];
+    license = with licenses; [gpl2Plus cc-by-sa-40];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

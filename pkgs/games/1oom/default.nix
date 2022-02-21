@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, libsamplerate, SDL2, SDL2_mixer, readline }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  libsamplerate,
+  SDL2,
+  SDL2_mixer,
+  readline,
+}:
 stdenv.mkDerivation rec {
   pname = "1oom";
   version = "1.0";
@@ -11,10 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+HwSykSyAGHtITVOu4nIG87kWwVxGyFXb/NRSjhWlvs=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libsamplerate SDL2 SDL2_mixer readline ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [libsamplerate SDL2 SDL2_mixer readline];
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   postInstall = ''
     install -d $doc/share/doc/${pname}
@@ -27,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "Master of Orion (1993) game engine recreation";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
   };
 }

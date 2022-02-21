@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, pkg-config, boost, lua }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  boost,
+  lua,
+}:
 stdenv.mkDerivation rec {
   pname = "ansifilter";
   version = "2.18";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Zs8BfTakPV9q4gYJzjtYZHSU7mwOQfxoLFmL/859fTk=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ boost lua ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [boost lua];
 
   postPatch = ''
     substituteInPlace src/makefile --replace "CC=g++" "CC=c++"
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.php";
     license = licenses.gpl3;
-    maintainers = [ maintainers.Adjective-Object ];
+    maintainers = [maintainers.Adjective-Object];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

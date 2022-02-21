@@ -1,5 +1,10 @@
-{ pkgs, buildGoModule, fetchFromGitHub, lib, perl }:
-
+{
+  pkgs,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  perl,
+}:
 buildGoModule rec {
   pname = "XD";
   version = "0.4.2";
@@ -13,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-mJZRk3p+D3tCKIYggD5jVBXcKqJotEexljDzLKpn4/E=";
 
-  checkInputs = [ perl ];
+  checkInputs = [perl];
 
   postInstall = ''
     ln -s $out/bin/XD $out/bin/XD-CLI
@@ -22,7 +27,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "i2p bittorrent client";
     homepage = "https://xd-torrent.github.io";
-    maintainers = with maintainers; [ nixbitcoin ];
+    maintainers = with maintainers; [nixbitcoin];
     license = licenses.mit;
     platforms = platforms.linux;
   };

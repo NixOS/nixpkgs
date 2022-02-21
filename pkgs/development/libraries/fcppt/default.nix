@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, catch2, metal }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  catch2,
+  metal,
+}:
 stdenv.mkDerivation rec {
   pname = "fcppt";
   version = "3.5.0";
@@ -10,10 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "045cmn4sym6ria96l4fsc1vrs8l4xrl1gzkmja82f4ddj8qkji2f";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost catch2 metal ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [boost catch2 metal];
 
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=false" "-DENABLE_BOOST=true" "-DENABLE_EXAMPLES=true" "-DENABLE_CATCH=true" "-DENABLE_TEST=true" ];
+  cmakeFlags = ["-DCMAKE_SKIP_BUILD_RPATH=false" "-DENABLE_BOOST=true" "-DENABLE_EXAMPLES=true" "-DENABLE_CATCH=true" "-DENABLE_TEST=true"];
 
   meta = with lib; {
     description = "Freundlich's C++ toolkit";
@@ -26,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://fcppt.org";
     license = licenses.boost;
-    maintainers = with maintainers; [ pmiddend ];
+    maintainers = with maintainers; [pmiddend];
     platforms = platforms.linux;
   };
 }

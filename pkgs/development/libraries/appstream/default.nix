@@ -1,34 +1,34 @@
-{ lib
-, stdenv
-, substituteAll
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gettext
-, xmlto
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, libxslt
-, libstemmer
-, glib
-, xapian
-, libxml2
-, libyaml
-, gobject-introspection
-, pcre
-, itstool
-, gperf
-, vala
-, lmdb
-, curl
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  xmlto,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
+  libxslt,
+  libstemmer,
+  glib,
+  xapian,
+  libxml2,
+  libyaml,
+  gobject-introspection,
+  pcre,
+  itstool,
+  gperf,
+  vala,
+  lmdb,
+  curl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "appstream";
   version = "0.14.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "ximion";
@@ -88,5 +88,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
- };
+  };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.15";
   pname = "zlog";
@@ -11,14 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "10hzifgpml7jm43y6v8c8q0cr9ziyx9qxznafxyw6glhnlqnb7pb";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
-    description= "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
+    description = "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
     homepage = "https://hardysimpson.github.io/zlog/";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [maintainers.matthiasbeyer];
   };
-
 }

@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.ratpoison;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.ratpoison;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.ratpoison.enable = mkEnableOption "ratpoison";
@@ -20,6 +21,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.ratpoison ];
+    environment.systemPackages = [pkgs.ratpoison];
   };
 }

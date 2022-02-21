@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, libX11, xorgproto, libXpm, libXt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  xorgproto,
+  libXpm,
+  libXt,
+}:
 stdenv.mkDerivation rec {
   pname = "xsokoban";
   version = "3.3c";
@@ -9,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "006lp8y22b9pi81x1a9ldfgkl1fbmkdzfw0lqw5y9svmisbafbr9";
   };
 
-  buildInputs = [ libX11 xorgproto libXpm libXt ];
+  buildInputs = [libX11 xorgproto libXpm libXt];
 
   NIX_CFLAGS_COMPILE = "-I${libXpm.dev}/include/X11";
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   prePatch = ''
     substituteInPlace Makefile.in --replace 4755 0755
@@ -48,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "X sokoban";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
   };
 }

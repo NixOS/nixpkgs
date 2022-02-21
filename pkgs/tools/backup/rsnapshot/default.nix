@@ -1,5 +1,12 @@
-{ fetchurl, lib, stdenv, perl, openssh, rsync, logger }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  perl,
+  openssh,
+  rsync,
+  logger,
+}:
 stdenv.mkDerivation rec {
   pname = "rsnapshot";
   version = "1.4.4";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [perl openssh rsync logger];
 
-  configureFlags = [ "--sysconfdir=/etc --prefix=/" ];
-  makeFlags = [ "DESTDIR=$(out)" ];
+  configureFlags = ["--sysconfdir=/etc --prefix=/"];
+  makeFlags = ["DESTDIR=$(out)"];
 
   patchPhase = ''
     substituteInPlace "Makefile.in" --replace \

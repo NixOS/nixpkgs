@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, paste
-, webob
-, pyopenssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  paste,
+  webob,
+  pyopenssl,
 }:
-
 buildPythonPackage rec {
   pname = "poster3";
   version = "0.8.1";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Streaming HTTP uploads and multipart/form-data encoding";
     homepage = "https://atlee.ca/software/poster/";
     license = licenses.mit;
-    maintainers = with maintainers; [ WhittlesJr ];
+    maintainers = with maintainers; [WhittlesJr];
   };
 }

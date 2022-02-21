@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation {
   pname = "clprover";
   version = "1.0.3";
@@ -21,7 +24,7 @@ stdenv.mkDerivation {
     description = "Resolution-based theorem prover for Coalition Logic implemented in C++";
     homepage = "https://cgi.csc.liv.ac.uk/~ullrich/CLProver++/";
     license = licenses.gpl3; # Note that while the website states that it is GPLv2 but the file in the zip as well as the comments in the source state it is GPLv3
-    maintainers = with maintainers; [ mgttlinger ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [mgttlinger];
+    platforms = ["x86_64-linux"];
   };
 }

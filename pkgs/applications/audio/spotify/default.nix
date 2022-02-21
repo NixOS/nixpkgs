@@ -1,10 +1,41 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeWrapper, wrapGAppsHook, openssl, freetype
-, glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome
-, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
-}:
-
-let
+{
+  fetchurl,
+  lib,
+  stdenv,
+  squashfsTools,
+  xorg,
+  alsa-lib,
+  makeWrapper,
+  wrapGAppsHook,
+  openssl,
+  freetype,
+  glib,
+  pango,
+  cairo,
+  atk,
+  gdk-pixbuf,
+  gtk3,
+  cups,
+  nspr,
+  nss,
+  libpng,
+  libnotify,
+  libgcrypt,
+  systemd,
+  fontconfig,
+  dbus,
+  expat,
+  ffmpeg,
+  curl,
+  zlib,
+  gnome,
+  at-spi2-atk,
+  at-spi2-core,
+  libpulseaudio,
+  libdrm,
+  mesa,
+  libxkbcommon,
+}: let
   # TO UPDATE: just execute the ./update.sh script (won't do anything if there is no update)
   # "rev" decides what is actually being downloaded
   # If an update breaks things, one of those might have valuable info:
@@ -63,58 +94,55 @@ let
     xorg.libXtst
     zlib
   ];
-
 in
+  stdenv.mkDerivation {
+    pname = "spotify-unwrapped";
+    inherit version;
 
-stdenv.mkDerivation {
-  pname = "spotify-unwrapped";
-  inherit version;
+    # fetch from snapcraft instead of the debian repository most repos fetch from.
+    # That is a bit more cumbersome. But the debian repository only keeps the last
+    # two versions, while snapcraft should provide versions indefinately:
+    # https://forum.snapcraft.io/t/how-can-a-developer-remove-her-his-app-from-snap-store/512
 
-  # fetch from snapcraft instead of the debian repository most repos fetch from.
-  # That is a bit more cumbersome. But the debian repository only keeps the last
-  # two versions, while snapcraft should provide versions indefinately:
-  # https://forum.snapcraft.io/t/how-can-a-developer-remove-her-his-app-from-snap-store/512
+    # This is the next-best thing, since we're not allowed to re-distribute
+    # spotify ourselves:
+    # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
+    src = fetchurl {
+      url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
+      sha512 = "d9f8fe692db479bcce1f47c87b65c5ac6d62e16b76a0f9b2d693d82d2b9ed2c7cf370cb091ce8ecd291c47d1efdbaa897c9bffb210edd901dc3d5425995229f7";
+    };
 
-  # This is the next-best thing, since we're not allowed to re-distribute
-  # spotify ourselves:
-  # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
-  src = fetchurl {
-    url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "d9f8fe692db479bcce1f47c87b65c5ac6d62e16b76a0f9b2d693d82d2b9ed2c7cf370cb091ce8ecd291c47d1efdbaa897c9bffb210edd901dc3d5425995229f7";
-  };
+    nativeBuildInputs = [makeWrapper wrapGAppsHook squashfsTools];
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook squashfsTools ];
+    dontStrip = true;
+    dontPatchELF = true;
 
-  dontStrip = true;
-  dontPatchELF = true;
+    unpackPhase = ''
+      runHook preUnpack
+      unsquashfs "$src" '/usr/share/spotify' '/usr/bin/spotify' '/meta/snap.yaml'
+      cd squashfs-root
+      if ! grep -q 'grade: stable' meta/snap.yaml; then
+        # Unfortunately this check is not reliable: At the moment (2018-07-26) the
+        # latest version in the "edge" channel is also marked as stable.
+        echo "The snap package is marked as unstable:"
+        grep 'grade: ' meta/snap.yaml
+        echo "You probably chose the wrong revision."
+        exit 1
+      fi
+      if ! grep -q '${version}' meta/snap.yaml; then
+        echo "Package version differs from version found in snap metadata:"
+        grep 'version: ' meta/snap.yaml
+        echo "While the nix package specifies: ${version}."
+        echo "You probably chose the wrong revision or forgot to update the nix version."
+        exit 1
+      fi
+      runHook postUnpack
+    '';
 
-  unpackPhase = ''
-    runHook preUnpack
-    unsquashfs "$src" '/usr/share/spotify' '/usr/bin/spotify' '/meta/snap.yaml'
-    cd squashfs-root
-    if ! grep -q 'grade: stable' meta/snap.yaml; then
-      # Unfortunately this check is not reliable: At the moment (2018-07-26) the
-      # latest version in the "edge" channel is also marked as stable.
-      echo "The snap package is marked as unstable:"
-      grep 'grade: ' meta/snap.yaml
-      echo "You probably chose the wrong revision."
-      exit 1
-    fi
-    if ! grep -q '${version}' meta/snap.yaml; then
-      echo "Package version differs from version found in snap metadata:"
-      grep 'version: ' meta/snap.yaml
-      echo "While the nix package specifies: ${version}."
-      echo "You probably chose the wrong revision or forgot to update the nix version."
-      exit 1
-    fi
-    runHook postUnpack
-  '';
+    # Prevent double wrapping
+    dontWrapGApps = true;
 
-  # Prevent double wrapping
-  dontWrapGApps = true;
-
-  installPhase =
-    ''
+    installPhase = ''
       runHook preInstall
 
       libdir=$out/lib/spotify
@@ -164,11 +192,11 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = with lib; {
-    homepage = "https://www.spotify.com/";
-    description = "Play music from the Spotify music service";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri timokau ma27 ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://www.spotify.com/";
+      description = "Play music from the Spotify music service";
+      license = licenses.unfree;
+      maintainers = with maintainers; [eelco ftrvxmtrx sheenobu mudri timokau ma27];
+      platforms = ["x86_64-linux"];
+    };
+  }

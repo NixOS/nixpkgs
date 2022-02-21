@@ -1,40 +1,40 @@
-{ azure-core
-, bokeh
-, buildPythonPackage
-, click
-, configparser
-, docker_pycreds
-, fetchFromGitHub
-, flask
-, git
-, GitPython
-, jsonref
-, jsonschema
-, lib
-, matplotlib
-, nbformat
-, pandas
-, pathtools
-, promise
-, protobuf
-, psutil
-, pydantic
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, python
-, python-dateutil
-, pyyaml
-, requests
-, scikit-learn
-, sentry-sdk
-, setuptools
-, shortuuid
-, stdenv
-, tqdm
-, yaspin
+{
+  azure-core,
+  bokeh,
+  buildPythonPackage,
+  click,
+  configparser,
+  docker_pycreds,
+  fetchFromGitHub,
+  flask,
+  git,
+  GitPython,
+  jsonref,
+  jsonschema,
+  lib,
+  matplotlib,
+  nbformat,
+  pandas,
+  pathtools,
+  promise,
+  protobuf,
+  psutil,
+  pydantic,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  python,
+  python-dateutil,
+  pyyaml,
+  requests,
+  scikit-learn,
+  sentry-sdk,
+  setuptools,
+  shortuuid,
+  stdenv,
+  tqdm,
+  yaspin,
 }:
-
 buildPythonPackage rec {
   pname = "wandb";
   version = "0.12.10";
@@ -129,12 +129,12 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  pythonImportsCheck = [ "wandb" ];
+  pythonImportsCheck = ["wandb"];
 
   meta = with lib; {
     description = "A CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/client";
     license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    maintainers = with maintainers; [samuela];
   };
 }

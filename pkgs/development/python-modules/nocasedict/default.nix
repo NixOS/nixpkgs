@@ -1,7 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "nocasedict";
   version = "1.0.2";
@@ -23,6 +25,6 @@ buildPythonPackage rec {
     description = "A case-insensitive ordered dictionary for Python";
     homepage = "https://github.com/pywbem/nocasedict";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
   };
 }

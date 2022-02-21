@@ -1,11 +1,12 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.lidarr;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.lidarr;
+in {
   options = {
     services.lidarr = {
       enable = mkEnableOption "Lidarr";
@@ -56,8 +57,8 @@ in
 
     systemd.services.lidarr = {
       description = "Lidarr";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "simple";
@@ -69,7 +70,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8686 ];
+      allowedTCPPorts = [8686];
     };
 
     users.users = mkIf (cfg.user == "lidarr") {

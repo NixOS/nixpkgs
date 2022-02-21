@@ -1,14 +1,17 @@
 # pipewire service.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   json = pkgs.formats.json {};
   cfg = config.services.pipewire;
-  enable32BitAlsaPlugins = cfg.alsa.support32Bit
-                           && pkgs.stdenv.isx86_64
-                           && pkgs.pkgsi686Linux.pipewire != null;
+  enable32BitAlsaPlugins =
+    cfg.alsa.support32Bit
+    && pkgs.stdenv.isx86_64
+    && pkgs.pkgsi686Linux.pipewire != null;
 
   # The package doesn't output to $out/lib/pipewire directly so that the
   # overlays can use the outputs to replace the originals in FHS environments.
@@ -37,7 +40,6 @@ let
     pipewire-pulse = recursiveUpdate defaults.pipewire-pulse cfg.config.pipewire-pulse;
   };
 in {
-
   meta = {
     maintainers = teams.freedesktop.members;
     # uses attributes of the linked package
@@ -140,10 +142,8 @@ in {
           https://github.com/PipeWire/pipewire/blob/master/NEWS
         '';
       };
-
     };
   };
-
 
   ###### implementation
   config = mkIf cfg.enable {
@@ -158,16 +158,18 @@ in {
       }
     ];
 
-    environment.systemPackages = [ cfg.package ]
-                                 ++ lib.optional cfg.jack.enable jack-libs;
+    environment.systemPackages =
+      [cfg.package]
+      ++ lib.optional cfg.jack.enable jack-libs;
 
-    systemd.packages = [ cfg.package ]
-                       ++ lib.optional cfg.pulse.enable cfg.package.pulse;
+    systemd.packages =
+      [cfg.package]
+      ++ lib.optional cfg.pulse.enable cfg.package.pulse;
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
     # into a terminal results in the service crashing with an error.
-    systemd.services.pipewire.bindsTo = [ "dbus.service" ];
-    systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
+    systemd.services.pipewire.bindsTo = ["dbus.service"];
+    systemd.user.services.pipewire.bindsTo = ["dbus.service"];
 
     # Enable either system or user units.  Note that for pipewire-pulse there
     # are only user units, which work in both cases.
@@ -176,24 +178,28 @@ in {
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
     systemd.user.services.pipewire.enable = !cfg.systemWide;
 
-    systemd.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
-    systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
+    systemd.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation ["sockets.target"];
+    systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation ["sockets.target"];
     systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) ["sockets.target"];
 
-    services.udev.packages = [ cfg.package ];
+    services.udev.packages = [cfg.package];
 
     # If any paths are updated here they must also be updated in the package test.
     environment.etc."alsa/conf.d/49-pipewire-modules.conf" = mkIf cfg.alsa.enable {
       text = ''
         pcm_type.pipewire {
           libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
-          ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
+          ${
+          optionalString enable32BitAlsaPlugins
+          "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"
+        }
         }
         ctl_type.pipewire {
           libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
-          ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
+          ${
+          optionalString enable32BitAlsaPlugins
+          "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"
+        }
         }
       '';
     };
@@ -227,10 +233,12 @@ in {
       users.pipewire = {
         uid = config.ids.uids.pipewire;
         group = "pipewire";
-        extraGroups = [
-          "audio"
-          "video"
-        ] ++ lib.optional config.security.rtkit.enable "rtkit";
+        extraGroups =
+          [
+            "audio"
+            "video"
+          ]
+          ++ lib.optional config.security.rtkit.enable "rtkit";
         description = "Pipewire system service user";
         isSystemUser = true;
       };

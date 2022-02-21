@@ -1,27 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook
-, librsvg
-, gsound
-, clutter-gtk
-, gettext
-, itstool
-, vala
-, python3
-, libxml2
-, libgee
-, libgnome-games-support
-, meson
-, ninja
-, desktop-file-utils
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook,
+  librsvg,
+  gsound,
+  clutter-gtk,
+  gettext,
+  itstool,
+  vala,
+  python3,
+  libxml2,
+  libgee,
+  libgnome-games-support,
+  meson,
+  ninja,
+  desktop-file-utils,
+  hicolor-icon-theme,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-nibbles";
   version = "3.38.2";

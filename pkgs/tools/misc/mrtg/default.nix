@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, perl, gd, rrdtool }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  gd,
+  rrdtool,
+}:
 stdenv.mkDerivation rec {
   pname = "mrtg";
   version = "2.17.10";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "The Multi Router Traffic Grapher";
     homepage = "https://oss.oetiker.ch/mrtg/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ robberer ];
+    maintainers = with maintainers; [robberer];
     platforms = platforms.unix;
   };
 }

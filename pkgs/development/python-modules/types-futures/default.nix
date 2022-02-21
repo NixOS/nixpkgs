@@ -1,5 +1,8 @@
-{ buildPythonPackage, fetchPypi, lib }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+}:
 buildPythonPackage rec {
   pname = "types-futures";
   version = "3.3.8";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     description = "Typing stubs for futures";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ andersk ];
+    maintainers = with maintainers; [andersk];
   };
 }

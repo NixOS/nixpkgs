@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "ijson";
   version = "3.1.4";
@@ -15,6 +18,6 @@ buildPythonPackage rec {
     description = "Iterative JSON parser with a standard Python iterator interface";
     homepage = "https://github.com/ICRAR/ijson";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rvl ];
+    maintainers = with maintainers; [rvl];
   };
 }

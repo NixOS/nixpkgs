@@ -1,7 +1,7 @@
-{ lib
-, python3Packages
+{
+  lib,
+  python3Packages,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "tockloader";
   version = "1.6.0";
@@ -31,7 +31,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/tock/tockloader";
     license = licenses.mit;
     description = "Tool for programming Tock onto hardware boards";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }
-

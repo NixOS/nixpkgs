@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, nose
-, pytestCheckHook
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  nose,
+  pytestCheckHook,
+  simplejson,
 }:
-
 buildPythonPackage rec {
   pname = "python-whois";
   version = "0.7.3";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "05jaxbnlw5wck0hl124py364jqrx7a4mmv0hy3d2jzvmp0012sk5";
   };
 
-  propagatedBuildInputs = [ future ];
+  propagatedBuildInputs = [future];
 
   checkInputs = [
     nose
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     "test_ipv4"
     "test_ipv6"
   ];
-  pythonImportsCheck = [ "whois" ];
+  pythonImportsCheck = ["whois"];
 
   meta = with lib; {
     description = "Python module to produce parsed WHOIS data";
     homepage = "https://github.com/richardpenman/whois";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

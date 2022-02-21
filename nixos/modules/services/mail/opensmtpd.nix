@@ -1,30 +1,27 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.opensmtpd;
   conf = pkgs.writeText "smtpd.conf" cfg.serverConfiguration;
   args = concatStringsSep " " cfg.extraServerArgs;
 
-  sendmail = pkgs.runCommand "opensmtpd-sendmail" { preferLocalBuild = true; } ''
+  sendmail = pkgs.runCommand "opensmtpd-sendmail" {preferLocalBuild = true;} ''
     mkdir -p $out/bin
     ln -s ${cfg.package}/sbin/smtpctl $out/bin/sendmail
   '';
-
 in {
-
   ###### interface
 
   imports = [
-    (mkRenamedOptionModule [ "services" "opensmtpd" "addSendmailToSystemPath" ] [ "services" "opensmtpd" "setSendmail" ])
+    (mkRenamedOptionModule ["services" "opensmtpd" "addSendmailToSystemPath"] ["services" "opensmtpd" "setSendmail"])
   ];
 
   options = {
-
     services.opensmtpd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -47,7 +44,7 @@ in {
       extraServerArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "-v" "-P mta" ];
+        example = ["-v" "-P mta"];
         description = ''
           Extra command line arguments provided when the smtpd process
           is started.
@@ -77,9 +74,7 @@ in {
         '';
       };
     };
-
   };
-
 
   ###### implementation
 
@@ -111,7 +106,7 @@ in {
     };
 
     services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail
-      (security.wrappers.smtpctl // { program = "sendmail"; });
+    (security.wrappers.smtpctl // {program = "sendmail";});
 
     systemd.tmpfiles.rules = [
       "d /var/spool/smtpd 711 root - - -"
@@ -122,12 +117,12 @@ in {
     systemd.services.opensmtpd = let
       procEnv = pkgs.buildEnv {
         name = "opensmtpd-procs";
-        paths = [ cfg.package ] ++ cfg.procPackages;
-        pathsToLink = [ "/libexec/opensmtpd" ];
+        paths = [cfg.package] ++ cfg.procPackages;
+        pathsToLink = ["/libexec/opensmtpd"];
       };
     in {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
     };

@@ -1,16 +1,16 @@
-{ lib
-, buildDunePackage
-, alcotest-lwt
-, astring
-, lwt
-, lwt-canceler
-, lwt-watcher
-, ringo
-, tezos-base-test-helpers
-, tezos-p2p-services
-, tezos-stdlib
+{
+  lib,
+  buildDunePackage,
+  alcotest-lwt,
+  astring,
+  lwt,
+  lwt-canceler,
+  lwt-watcher,
+  ringo,
+  tezos-base-test-helpers,
+  tezos-p2p-services,
+  tezos-stdlib,
 }:
-
 buildDunePackage {
   pname = "tezos-p2p";
   inherit (tezos-stdlib) version useDune2;
@@ -32,7 +32,9 @@ buildDunePackage {
 
   doCheck = false; # some tests fail
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: library for a pool of P2P connections";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: library for a pool of P2P connections";
+    };
 }

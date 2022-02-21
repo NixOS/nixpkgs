@@ -1,14 +1,15 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, effects
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  effects,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "hamt";
   version = "2016-11-15";
 
-  idrisDeps = [ contrib effects ];
+  idrisDeps = [contrib effects];
 
   src = fetchFromGitHub {
     owner = "bamboo";
@@ -21,6 +22,6 @@ build-idris-package  {
     description = "Idris Hash Array Mapped Trie";
     homepage = "https://github.com/bamboo/idris-hamt";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

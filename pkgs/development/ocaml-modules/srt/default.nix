@@ -1,9 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, dune-configurator
-, posix-socket
-, srt
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  posix-socket,
+  srt,
 }:
-
 buildDunePackage rec {
   pname = "srt";
   version = "0.1.1";
@@ -17,14 +19,13 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ posix-socket srt ];
+  buildInputs = [dune-configurator];
+  propagatedBuildInputs = [posix-socket srt];
 
   meta = {
     description = "OCaml bindings for the libsrt library";
     license = lib.licenses.gpl2Only;
     inherit (src.meta) homepage;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
-
 }

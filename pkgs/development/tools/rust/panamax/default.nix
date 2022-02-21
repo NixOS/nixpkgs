@@ -1,5 +1,12 @@
-{ lib, rustPlatform, fetchCrate, pkg-config, openssl, stdenv, Security }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  stdenv,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "panamax";
   version = "1.0.3";
@@ -11,14 +18,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-52snmkTFHI26xJo9qJkmqh1M5lLzhDxw8WT6uFd57aw=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [openssl] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Mirror rustup and crates.io repositories for offline Rust and cargo usage";
     homepage = "https://github.com/panamax-rs/panamax";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ figsoda ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [figsoda];
   };
 }

@@ -1,15 +1,22 @@
-{ autoPatchelfHook, fetchurl, lib, stdenv }:
-
+{
+  autoPatchelfHook,
+  fetchurl,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "julia-bin";
   version = "1.6.5";
 
-  src = {
-    x86_64-linux = fetchurl {
-      url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "0b4fmcfd5q5wzvasmsfqq838rivpxn274n5y2kza4m3jakp27zmq";
-    };
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    {
+      x86_64-linux = fetchurl {
+        url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
+        sha256 = "0b4fmcfd5q5wzvasmsfqq838rivpxn274n5y2kza4m3jakp27zmq";
+      };
+    }
+    .${stdenv.hostPlatform.system}
+    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   # Julia’s source files are in different locations for source and binary
   # releases. Thus we temporarily create a symlink to allow us to share patches
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
         '@test_skip ca_roots_path() != bundled_ca_roots()'
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [autoPatchelfHook];
 
   installPhase = ''
     runHook preInstall
@@ -65,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://julialang.org";
     # Bundled and linked with various GPL code, although Julia itself is MIT.
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ninjin raskin ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ninjin raskin];
+    platforms = ["x86_64-linux"];
   };
 }

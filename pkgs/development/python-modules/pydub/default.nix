@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-
-# tests
-, ffmpeg-full
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub
+  # tests
+  ,
+  ffmpeg-full,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "pydub";
   version = "0.25.1";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Manipulate audio with a simple and easy high level interface";
     homepage = "http://pydub.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

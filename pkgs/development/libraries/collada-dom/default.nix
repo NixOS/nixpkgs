@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, libxml2, minizip, readline }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  libxml2,
+  minizip,
+  readline,
+}:
 stdenv.mkDerivation {
   pname = "collada-dom";
   version = "unstable-2020-01-03";
@@ -16,7 +24,7 @@ stdenv.mkDerivation {
     ln -s $out/include/*/* $out/include
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   buildInputs = [
     boost
@@ -29,7 +37,7 @@ stdenv.mkDerivation {
     description = "Lightweight version of collada-dom, with only the parser.";
     homepage = "https://github.com/rdiankov/collada-dom";
     license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 ];
+    maintainers = with maintainers; [marius851000];
     platforms = platforms.all;
   };
 }

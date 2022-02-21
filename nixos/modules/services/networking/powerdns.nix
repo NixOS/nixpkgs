@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.powerdns;
   configDir = pkgs.writeTextDir "pdns.conf" "${cfg.extraConfig}";
 in {
@@ -23,15 +25,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-
-    systemd.packages = [ pkgs.powerdns ];
+    systemd.packages = [pkgs.powerdns];
 
     systemd.services.pdns = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "mysql.service" "postgresql.service" "openldap.service" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target" "mysql.service" "postgresql.service" "openldap.service"];
 
       serviceConfig = {
-        ExecStart = [ "" "${pkgs.powerdns}/bin/pdns_server --config-dir=${configDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no" ];
+        ExecStart = ["" "${pkgs.powerdns}/bin/pdns_server --config-dir=${configDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no"];
       };
     };
 
@@ -42,6 +43,5 @@ in {
     };
 
     users.groups.pdns = {};
-
   };
 }

@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, pcsclite
-, PCSC
-, xcbuild
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  pcsclite,
+  PCSC,
+  xcbuild,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aribb25";
   # FIXME: change the rev for fetchFromGitLab in next release
@@ -23,11 +23,16 @@ stdenv.mkDerivation rec {
     sha256 = "1kb9crfqib0npiyjk4zb63zqlzbhqm35nz8nafsvdjd71qbd2amp";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
-  buildInputs = if stdenv.isDarwin then [ PCSC ] else [ pcsclite ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+    ]
+    ++ lib.optional stdenv.isDarwin xcbuild;
+  buildInputs =
+    if stdenv.isDarwin
+    then [PCSC]
+    else [pcsclite];
 
   patches = let
     url = commit: "https://code.videolan.org/videolan/${pname}/-/commit/${commit}.diff";
@@ -52,6 +57,6 @@ stdenv.mkDerivation rec {
     description = "Sample implementation of the ARIB STD-B25 standard";
     platforms = platforms.all;
     license = licenses.isc;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [midchildan];
   };
 }

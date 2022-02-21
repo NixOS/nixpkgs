@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "miniupnpc";
   version = "2.0.2";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     description = "miniUPnP client";
     homepage = "http://miniupnp.free.fr/";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

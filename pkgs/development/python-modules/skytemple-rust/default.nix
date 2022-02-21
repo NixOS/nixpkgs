@@ -1,5 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, libiconv, rustPlatform, setuptools-rust }:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libiconv,
+  rustPlatform,
+  setuptools-rust,
+}:
 buildPythonPackage rec {
   pname = "skytemple-rust";
   version = "unstable-2021-08-11";
@@ -17,16 +24,16 @@ buildPythonPackage rec {
     sha256 = "0gjvfblyv72m0nqv90m7qvbdnazsh5ind1pxwqz83vm4zjh9a873";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
+  nativeBuildInputs = [setuptools-rust] ++ (with rustPlatform; [cargoSetupHook rust.cargo rust.rustc]);
 
   doCheck = false; # there are no tests
-  pythonImportsCheck = [ "skytemple_rust" ];
+  pythonImportsCheck = ["skytemple_rust"];
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple-rust";
     description = "Binary Rust extensions for SkyTemple";
     license = licenses.mit;
-    maintainers = with maintainers; [ xfix marius851000 ];
+    maintainers = with maintainers; [xfix marius851000];
   };
 }

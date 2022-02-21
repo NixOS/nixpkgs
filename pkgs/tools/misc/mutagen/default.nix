@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchzip }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchzip,
+}:
 buildGoModule rec {
   pname = "mutagen";
   version = "0.11.8";
@@ -26,7 +30,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/mutagen" "cmd/mutagen-agent" ];
+  subPackages = ["cmd/mutagen" "cmd/mutagen-agent"];
 
   postInstall = ''
     install -d $out/libexec
@@ -37,7 +41,7 @@ buildGoModule rec {
     description = "Make remote development work with your local tools";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen/releases/tag/v${version}";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     license = licenses.mit;
   };
 }

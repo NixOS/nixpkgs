@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, unzip, mpg123 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  unzip,
+  mpg123,
+}:
 stdenv.mkDerivation rec {
   pname = "mp3gain";
   version = "1.6.2";
@@ -8,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0varr6y7k8zarr56b42r0ad9g3brhn5vv3xjg1c0v19jxwr4gh2w";
   };
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ mpg123 ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [mpg123];
 
   sourceRoot = ".";
 
@@ -21,7 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildFlags = [ "OSTYPE=linux" ];
+  buildFlags = ["OSTYPE=linux"];
 
   installPhase = ''
     install -vD mp3gain "$out/bin/mp3gain"
@@ -32,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "http://mp3gain.sourceforge.net/";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ devhell ];
+    maintainers = with maintainers; [devhell];
   };
 }

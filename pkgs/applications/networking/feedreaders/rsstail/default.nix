@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cppcheck, libmrss, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cppcheck,
+  libmrss,
+  libiconv,
+}:
 stdenv.mkDerivation {
   pname = "rsstail";
   version = "2.1";
@@ -11,14 +17,14 @@ stdenv.mkDerivation {
     owner = "flok99";
   };
 
-  buildInputs = [ libmrss ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
-  checkInputs = [ cppcheck ];
+  buildInputs = [libmrss] ++ lib.optionals stdenv.isDarwin [libiconv];
+  checkInputs = [cppcheck];
 
   postPatch = ''
     substituteInPlace Makefile --replace -liconv_hook ""
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = ["prefix=$(out)"];
   enableParallelBuilding = true;
 
   doCheck = true;

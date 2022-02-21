@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, deprecation
-, pythonOlder
-, packaging
-, pytestCheckHook
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  deprecation,
+  pythonOlder,
+  packaging,
+  pytestCheckHook,
+  tomlkit,
 }:
-
 buildPythonPackage rec {
   pname = "jupyter-packaging";
   version = "0.11.1";
@@ -19,9 +19,9 @@ buildPythonPackage rec {
     sha256 = "6f5c7eeea98f7f3c8fb41d565a94bf59791768a93f93148b3c2dfb7ebade8eec";
   };
 
-  propagatedBuildInputs = [ deprecation packaging tomlkit ];
+  propagatedBuildInputs = [deprecation packaging tomlkit];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -38,12 +38,12 @@ buildPythonPackage rec {
     "test_ensure_with_skip_npm"
   ];
 
-  pythonImportsCheck = [ "jupyter_packaging" ];
+  pythonImportsCheck = ["jupyter_packaging"];
 
   meta = with lib; {
     description = "Jupyter Packaging Utilities";
     homepage = "https://github.com/jupyter/jupyter-packaging";
     license = licenses.bsd3;
-    maintainers = [ maintainers.elohmeier ];
+    maintainers = [maintainers.elohmeier];
   };
 }

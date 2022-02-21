@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "run";
   version = "0.7.2";
@@ -16,9 +20,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Easily manage and invoke small scripts and wrappers";
-    homepage    = "https://github.com/TekWizely/run";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ rawkode Br1ght0ne ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/TekWizely/run";
+    license = licenses.mit;
+    maintainers = with maintainers; [rawkode Br1ght0ne];
+    platforms = platforms.unix;
   };
 }

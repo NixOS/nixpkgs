@@ -1,14 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, gtk3
-, openssl
-, alsa-lib
-, pkg-config
-, ffmpeg
-, dbus
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gtk3,
+  openssl,
+  alsa-lib,
+  pkg-config,
+  ffmpeg,
+  dbus,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "songrec";
   version = "0.3.0";
@@ -22,9 +22,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-EpkB43rMUJO6ouUV9TmQ+RSnGhX32DZHpKic1E6lUyU=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ alsa-lib dbus gtk3 openssl ffmpeg ];
+  buildInputs = [alsa-lib dbus gtk3 openssl ffmpeg];
 
   postInstall = ''
     mv packaging/rootfs/usr/share $out/share
@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/marin-m/SongRec";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tcbravo ];
+    maintainers = with maintainers; [tcbravo];
   };
 }

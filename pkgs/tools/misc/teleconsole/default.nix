@@ -1,5 +1,9 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "teleconsole";
   version = "0.4.0";
@@ -36,6 +40,6 @@ buildGoPackage rec {
     #  - https://github.com/gravitational/teleport/issues/679
     #  - https://github.com/kr/pty/issues/27
     broken = stdenv.isAarch64;
-    maintainers = [ maintainers.kimburgess ];
+    maintainers = [maintainers.kimburgess];
   };
 }

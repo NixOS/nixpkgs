@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "playsound";
   version = "1.3.0";
@@ -16,13 +16,13 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [ "playsound" ];
+  pythonImportsCheck = ["playsound"];
 
   meta = with lib; {
     homepage = "https://github.com/TaylorSMarks/playsound";
     description = "Pure Python, cross platform, single function module with no dependencies for playing sounds";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [luc65r];
   };
 }

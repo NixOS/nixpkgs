@@ -1,5 +1,8 @@
-{ lib, python3Packages, mopidy }:
-
+{
+  lib,
+  python3Packages,
+  mopidy,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-ytmusic";
   version = "0.3.2";
@@ -21,6 +24,6 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Mopidy extension for playing music from YouTube Music";
     license = licenses.asl20;
-    maintainers = [ maintainers.nickhu ];
+    maintainers = [maintainers.nickhu];
   };
 }

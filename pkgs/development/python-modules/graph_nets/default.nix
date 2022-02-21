@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tensorflow
-, absl-py
-, dm-sonnet
-, networkx
-, numpy
-, setuptools
-, six
-, future
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  tensorflow,
+  absl-py,
+  dm-sonnet,
+  networkx,
+  numpy,
+  setuptools,
+  six,
+  future,
 }:
-
 buildPythonPackage rec {
   pname = "graph_nets";
   version = "1.1.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Build Graph Nets in Tensorflow";
     homepage = "https://github.com/deepmind/graph_nets";
     license = licenses.asl20;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [timokau];
   };
 }

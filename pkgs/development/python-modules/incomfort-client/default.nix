@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "incomfort-client";
   version = "0.4.5";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "incomfortclient" ];
+  pythonImportsCheck = ["incomfortclient"];
 
   meta = with lib; {
     description = "Python module to poll Intergas boilers via a Lan2RF gateway";
     homepage = "https://github.com/zxdavb/incomfort-client";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

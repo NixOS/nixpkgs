@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pybalboa";
   version = "0.13";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = " Python module to interface with a Balboa Spa";
     homepage = "https://github.com/garbled1/pybalboa";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

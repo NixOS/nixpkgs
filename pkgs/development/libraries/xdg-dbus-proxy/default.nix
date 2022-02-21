@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_43
-, dbus
-, glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  dbus,
+  glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xdg-dbus-proxy";
   version = "0.1.2";
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "DBus proxy for Flatpak and others";
     homepage = "https://github.com/flatpak/xdg-dbus-proxy";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

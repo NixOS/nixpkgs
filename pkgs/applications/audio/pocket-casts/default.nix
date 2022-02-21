@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libXScrnSaver, libXtst, mesa, nss }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  alsa-lib,
+  gtk3,
+  libXScrnSaver,
+  libXtst,
+  mesa,
+  nss,
+}:
 stdenv.mkDerivation rec {
   pname = "pocket-casts";
   version = "0.5.0";
@@ -16,7 +28,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ alsa-lib gtk3 libXScrnSaver libXtst mesa nss ];
+  buildInputs = [alsa-lib gtk3 libXScrnSaver libXtst mesa nss];
 
   dontBuild = true;
   dontConfigure = true;
@@ -49,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Pocket Casts webapp, packaged for the Linux Desktop";
     homepage = "https://github.com/felicianotech/pocket-casts-desktop-app";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

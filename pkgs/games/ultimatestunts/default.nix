@@ -1,6 +1,16 @@
-{lib, stdenv, fetchurl, SDL, libGLU, libGL, SDL_image, freealut, openal, libvorbis,
-pkg-config}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  libGLU,
+  libGL,
+  SDL_image,
+  freealut,
+  openal,
+  libvorbis,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "ultimate-stunts";
   version = "0.7.7.1";
@@ -9,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/MBuSi/yxcG9k3ZwrNsHkUDzzg798AV462VZog67JtM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL libGLU libGL SDL_image freealut openal libvorbis ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [SDL libGLU libGL SDL_image freealut openal libvorbis];
 
   postPatch = ''
     sed -e '1i#include <unistd.h>' -i $(find . -name '*.c' -o -name '*.cpp')

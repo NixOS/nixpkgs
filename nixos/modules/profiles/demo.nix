@@ -1,15 +1,13 @@
-{ ... }:
+{...}: {
+  imports = [./graphical.nix];
 
-{
-  imports = [ ./graphical.nix ];
-
-  users.users.demo =
-    { isNormalUser = true;
-      description = "Demo user account";
-      extraGroups = [ "wheel" ];
-      password = "demo";
-      uid = 1000;
-    };
+  users.users.demo = {
+    isNormalUser = true;
+    description = "Demo user account";
+    extraGroups = ["wheel"];
+    password = "demo";
+    uid = 1000;
+  };
 
   services.xserver.displayManager = {
     autoLogin = {

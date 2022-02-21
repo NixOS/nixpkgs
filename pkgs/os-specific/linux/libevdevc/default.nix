@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, pkg-config, glib, jsoncpp }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  pkg-config,
+  glib,
+  jsoncpp,
+}:
 stdenv.mkDerivation rec {
   pname = "libevdevc";
   version = "2.0.1";
@@ -17,13 +24,13 @@ stdenv.mkDerivation rec {
       --replace /usr/include /include
   '';
 
-  makeFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
+  makeFlags = ["DESTDIR=$(out)" "LIBDIR=/lib"];
 
   meta = with lib; {
     description = "ChromiumOS libevdev. Renamed to avoid conflicts with the standard libevdev found in Linux distros";
     license = licenses.bsd3;
     platforms = platforms.linux;
     homepage = "https://chromium.googlesource.com/chromiumos/platform/libevdev/";
-    maintainers = with maintainers; [ kcalvinalvin ];
+    maintainers = with maintainers; [kcalvinalvin];
   };
 }

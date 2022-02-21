@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3
-, wireshark-cli
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  wireshark-cli,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "credslayer";
   version = "0.1.2";
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  pytestFlagsArray = ["tests/tests.py"];
 
   disabledTests = [
     # Requires a telnet setup
@@ -36,17 +36,17 @@ python3.pkgs.buildPythonApplication rec {
     "test_ntlmssp"
   ];
 
-  pythonImportsCheck = [ "credslayer" ];
+  pythonImportsCheck = ["credslayer"];
 
   postInstall = ''
     wrapProgram $out/bin/credslayer \
-       --prefix PATH : "${lib.makeBinPath [ wireshark-cli ]}"
+       --prefix PATH : "${lib.makeBinPath [wireshark-cli]}"
   '';
 
   meta = with lib; {
     description = "Extract credentials and other useful info from network captures";
     homepage = "https://github.com/ShellCode33/CredSLayer";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

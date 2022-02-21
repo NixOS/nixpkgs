@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "poly2tri-c";
   version = "0.1.0";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = ["bin" "out" "dev"];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Library for generating, refining and rendering 2-Dimensional Constrained Delaunay Triangulations";
     homepage = "https://code.google.com/archive/p/poly2tri-c/";
     license = licenses.bsd3;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [jtojnar];
     platforms = platforms.unix;
   };
 }

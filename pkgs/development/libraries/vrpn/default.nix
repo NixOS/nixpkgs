@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, libGLU, libGL }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  libGLU,
+  libGL,
+}:
 stdenv.mkDerivation rec {
-  name    = "${pname}-${date}";
-  pname   = "vrpn";
-  date    = "2016-08-27";
+  name = "${pname}-${date}";
+  pname = "vrpn";
+  date = "2016-08-27";
 
   src = fetchFromGitHub {
-    owner  = "vrpn";
-    repo   = "vrpn";
-    rev    = "9fa0ab3676a43527301c9efd3637f80220eb9462";
+    owner = "vrpn";
+    repo = "vrpn";
+    rev = "9fa0ab3676a43527301c9efd3637f80220eb9462";
     sha256 = "032q295d68w34rk5q8nfqdd29s55n00bfik84y7xzkjrpspaprlh";
   };
 
-  nativeBuildInputs = [ cmake unzip ];
-  buildInputs = [ libGLU libGL ];
+  nativeBuildInputs = [cmake unzip];
+  buildInputs = [libGLU libGL];
 
   doCheck = false; # FIXME: test failure
   checkTarget = "test";
@@ -27,9 +34,9 @@ stdenv.mkDerivation rec {
       set of physical devices (tracker, etc.) used in a virtual-reality
       (VR) system.
     '';
-    homepage    = "https://github.com/vrpn/vrpn";
-    license     = licenses.boost; # see https://github.com/vrpn/vrpn/wiki/License
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ ludo ];
+    homepage = "https://github.com/vrpn/vrpn";
+    license = licenses.boost; # see https://github.com/vrpn/vrpn/wiki/License
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ludo];
   };
 }

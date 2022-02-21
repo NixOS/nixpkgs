@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.interception-tools;
 in {
   options.services.interception-tools = {
@@ -14,7 +16,7 @@ in {
 
     plugins = mkOption {
       type = types.listOf types.package;
-      default = [ pkgs.interception-tools-plugins.caps2esc ];
+      default = [pkgs.interception-tools-plugins.caps2esc];
       defaultText = literalExpression "[ pkgs.interception-tools-plugins.caps2esc ]";
       description = ''
         A list of interception tools plugins that will be made available to use
@@ -46,17 +48,19 @@ in {
   config = mkIf cfg.enable {
     systemd.services.interception-tools = {
       description = "Interception tools";
-      path = [ pkgs.bash pkgs.interception-tools ] ++ cfg.plugins;
+      path = [pkgs.bash pkgs.interception-tools] ++ cfg.plugins;
       serviceConfig = {
         ExecStart = ''
           ${pkgs.interception-tools}/bin/udevmon -c \
-          ${if builtins.typeOf cfg.udevmonConfig == "path"
-          then cfg.udevmonConfig
-          else pkgs.writeText "udevmon.yaml" cfg.udevmonConfig}
+          ${
+            if builtins.typeOf cfg.udevmonConfig == "path"
+            then cfg.udevmonConfig
+            else pkgs.writeText "udevmon.yaml" cfg.udevmonConfig
+          }
         '';
         Nice = -20;
       };
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
   };
 }

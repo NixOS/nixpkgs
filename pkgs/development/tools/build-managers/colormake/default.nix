@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 stdenv.mkDerivation {
   pname = "colormake";
   version = "2.1.0";
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   src = fetchFromGitHub {
     owner = "pagekite";
@@ -23,6 +27,6 @@ stdenv.mkDerivation {
     homepage = "https://bre.klaki.net/programs/colormake/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

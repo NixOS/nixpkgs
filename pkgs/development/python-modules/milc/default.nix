@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, argcomplete
-, colorama
-, halo
-, nose2
-, semver
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  argcomplete,
+  colorama,
+  halo,
+  nose2,
+  semver,
 }:
-
 buildPythonPackage rec {
   pname = "milc";
   version = "1.4.2";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     semver
   ];
 
-  pythonImportsCheck = [ "milc" ];
+  pythonImportsCheck = ["milc"];
 
   meta = with lib; {
     description = "An Opinionated Batteries-Included Python 3 CLI Framework";
     homepage = "https://milc.clueboard.co";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

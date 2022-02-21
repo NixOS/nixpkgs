@@ -1,18 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, SDL2, libpng, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  SDL2,
+  libpng,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "qrencode";
   version = "4.1.1";
 
-  outputs = [ "bin" "out" "man" "dev" ];
+  outputs = ["bin" "out" "man" "dev"];
 
   src = fetchurl {
     url = "https://fukuchi.org/works/qrencode/qrencode-${version}.tar.gz";
     sha256 = "sha256-2kSO1PUqumvLDNSMrA3VG4aSvMxM0SdDFAL8pvgXHo4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL2 libpng ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [SDL2 libpng] ++ lib.optionals stdenv.isDarwin [libiconv];
 
   configureFlags = [
     "--with-tests"
@@ -41,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ adolfogc yana ];
+    maintainers = with maintainers; [adolfogc yana];
     platforms = platforms.all;
   };
 }

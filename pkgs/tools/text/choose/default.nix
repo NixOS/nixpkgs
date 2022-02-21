@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "choose";
   version = "1.3.3";
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "A human-friendly and fast alternative to cut and (sometimes) awk";
     homepage = "https://github.com/theryangeary/choose";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ sohalt ];
+    maintainers = with maintainers; [sohalt];
   };
 }

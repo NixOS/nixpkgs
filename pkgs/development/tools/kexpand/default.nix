@@ -1,12 +1,14 @@
-{ buildGoPackage, fetchFromGitHub }:
-
+{
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage {
   pname = "kexpand";
   version = "unstable-2017-05-12";
 
   goPackagePath = "github.com/kopeio/kexpand";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   src = fetchFromGitHub {
     owner = "kopeio";

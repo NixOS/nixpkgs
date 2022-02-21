@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config, python3Packages
-, boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
-, graphviz, llvmPackages, z3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  python3Packages,
+  boost,
+  rapidjson,
+  qtbase,
+  qtsvg,
+  igraph,
+  spdlog,
+  wrapQtAppsHook,
+  graphviz,
+  llvmPackages,
+  z3,
 }:
-
 stdenv.mkDerivation rec {
   version = "3.3.0";
   pname = "hal-hardware-analyzer";
@@ -21,9 +35,10 @@ stdenv.mkDerivation rec {
     shopt -u extglob
   '';
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
-  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog graphviz wrapQtAppsHook z3 ]
-    ++ (with python3Packages; [ python pybind11 ])
+  nativeBuildInputs = [cmake ninja pkg-config];
+  buildInputs =
+    [qtbase qtsvg boost rapidjson igraph spdlog graphviz wrapQtAppsHook z3]
+    ++ (with python3Packages; [python pybind11])
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = with lib.versions; [
@@ -47,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ris shamilton ];
+    maintainers = with maintainers; [ris shamilton];
   };
 }

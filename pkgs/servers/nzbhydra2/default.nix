@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchzip, makeWrapper, jre, python3, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  jre,
+  python3,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
   version = "3.14.2";
@@ -10,7 +17,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ jre makeWrapper unzip ];
+  nativeBuildInputs = [jre makeWrapper unzip];
 
   installPhase = ''
     runHook preInstall
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    maintainers = with maintainers; [jamiemagee];
     platforms = with platforms; linux;
   };
 }

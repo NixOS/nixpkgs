@@ -1,9 +1,32 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja
-, git, criterion, gtk3, libconfig, gnuplot, opencv, json-glib
-, fftwFloat, cfitsio, gsl, exiv2, librtprocess, wcslib, ffmpeg
-, libraw, libtiff, libpng, libjpeg, libheif, ffms, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  meson,
+  ninja,
+  git,
+  criterion,
+  gtk3,
+  libconfig,
+  gnuplot,
+  opencv,
+  json-glib,
+  fftwFloat,
+  cfitsio,
+  gsl,
+  exiv2,
+  librtprocess,
+  wcslib,
+  ffmpeg,
+  libraw,
+  libtiff,
+  libpng,
+  libjpeg,
+  libheif,
+  ffms,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "siril";
   version = "0.99.10.1";
@@ -16,12 +39,33 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config git criterion wrapGAppsHook
+    meson
+    ninja
+    pkg-config
+    git
+    criterion
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 cfitsio gsl exiv2 gnuplot opencv fftwFloat librtprocess wcslib
-    libconfig libraw libtiff libpng libjpeg libheif ffms ffmpeg json-glib
+    gtk3
+    cfitsio
+    gsl
+    exiv2
+    gnuplot
+    opencv
+    fftwFloat
+    librtprocess
+    wcslib
+    libconfig
+    libraw
+    libtiff
+    libpng
+    libjpeg
+    libheif
+    ffms
+    ffmpeg
+    json-glib
   ];
 
   # Necessary because project uses default build dir for flatpaks/snaps
@@ -40,7 +84,7 @@ stdenv.mkDerivation rec {
     description = "Astrophotographic image processing tool";
     license = licenses.gpl3Plus;
     changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [hjones2199];
     platforms = platforms.linux;
   };
 }

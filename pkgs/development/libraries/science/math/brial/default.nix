@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, boost
-, m4ri
-, gd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  m4ri,
+  gd,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.2.10";
   pname = "brial";

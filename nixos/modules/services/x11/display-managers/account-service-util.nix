@@ -1,11 +1,11 @@
-{ accountsservice
-, glib
-, gobject-introspection
-, python3
-, wrapGAppsHook
-, lib
+{
+  accountsservice,
+  glib,
+  gobject-introspection,
+  python3,
+  wrapGAppsHook,
+  lib,
 }:
-
 python3.pkgs.buildPythonApplication {
   name = "set-session";
 
@@ -39,6 +39,6 @@ python3.pkgs.buildPythonApplication {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [] ++ teams.pantheon.members;
   };
 }

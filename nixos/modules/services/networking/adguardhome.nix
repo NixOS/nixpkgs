@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.adguardhome;
 
   args = concatStringsSep " " ([
@@ -10,7 +12,8 @@ let
     "--pidfile /run/AdGuardHome/AdGuardHome.pid"
     "--work-dir /var/lib/AdGuardHome/"
     "--config /var/lib/AdGuardHome/AdGuardHome.yaml"
-  ] ++ cfg.extraArgs);
+  ]
+  ++ cfg.extraArgs);
 
   baseConfig = {
     bind_host = cfg.host;
@@ -22,7 +25,6 @@ let
     text = builtins.toJSON (recursiveUpdate cfg.settings baseConfig);
     checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
   };
-
 in {
   options.services.adguardhome = with types; {
     enable = mkEnableOption "AdGuard Home network-wide ad blocker";
@@ -62,8 +64,8 @@ in {
     };
 
     settings = mkOption {
-      type = (pkgs.formats.yaml { }).type;
-      default = { };
+      type = (pkgs.formats.yaml {}).type;
+      default = {};
       description = ''
         AdGuard Home configuration. Refer to
         <link xlink:href="https://github.com/AdguardTeam/AdGuardHome/wiki/Configuration#configuration-file"/>
@@ -78,7 +80,7 @@ in {
     };
 
     extraArgs = mkOption {
-      default = [ ];
+      default = [];
       type = listOf str;
       description = ''
         Extra command line parameters to be passed to the adguardhome binary.
@@ -89,30 +91,32 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.settings != { }
-          -> (hasAttrByPath [ "dns" "bind_host" ] cfg.settings)
-          || (hasAttrByPath [ "dns" "bind_hosts" ] cfg.settings);
-        message =
-          "AdGuard setting dns.bind_host or dns.bind_hosts needs to be configured for a minimal working configuration";
+        assertion =
+          cfg.settings
+          != {}
+          -> (hasAttrByPath ["dns" "bind_host"] cfg.settings)
+          || (hasAttrByPath ["dns" "bind_hosts"] cfg.settings);
+        message = "AdGuard setting dns.bind_host or dns.bind_hosts needs to be configured for a minimal working configuration";
       }
       {
-        assertion = cfg.settings != { }
-          -> hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings;
-        message =
-          "AdGuard setting dns.bootstrap_dns needs to be configured for a minimal working configuration";
+        assertion =
+          cfg.settings
+          != {}
+          -> hasAttrByPath ["dns" "bootstrap_dns"] cfg.settings;
+        message = "AdGuard setting dns.bootstrap_dns needs to be configured for a minimal working configuration";
       }
     ];
 
     systemd.services.adguardhome = {
       description = "AdGuard Home: Network-level blocker";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       unitConfig = {
         StartLimitIntervalSec = 5;
         StartLimitBurst = 10;
       };
 
-      preStart = optionalString (cfg.settings != { }) ''
+      preStart = optionalString (cfg.settings != {}) ''
         if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
            && [ "${toString cfg.mutableSettings}" = "1" ]; then
           # Writing directly to AdGuardHome.yaml results in empty file
@@ -127,7 +131,7 @@ in {
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${pkgs.adguardhome}/bin/adguardhome ${args}";
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
         Restart = "always";
         RestartSec = 10;
         RuntimeDirectory = "AdGuardHome";
@@ -135,6 +139,6 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.port];
   };
 }

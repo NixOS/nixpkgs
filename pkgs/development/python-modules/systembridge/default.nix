@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, websockets
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "systembridge";
   version = "2.3.1";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "systembridge" ];
+  pythonImportsCheck = ["systembridge"];
 
   meta = with lib; {
     description = "Python module for connecting to System Bridge";
     homepage = "https://github.com/timmo001/system-bridge-connector-py";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

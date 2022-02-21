@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildPythonPackage }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+}:
 buildPythonPackage {
   pname = "radicale_infcloud";
   version = "2017-07-27";
@@ -16,8 +19,8 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://github.com/Unrud/RadicaleInfCloud/";
     description = "Integrate InfCloud into Radicale's web interface";
-    license = with licenses; [ agpl3 gpl3 ];
+    license = with licenses; [agpl3 gpl3];
     platforms = platforms.all;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [aneeshusa];
   };
 }

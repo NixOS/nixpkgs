@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, guile
-, libssh
-, autoreconfHook
-, pkg-config
-, texinfo
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  guile,
+  libssh,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "guile-ssh";
   version = "0.15.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dcG3Q1K1/CxrMeEUWSZ3Qu57Aesalydg4UjkIqg1NJ0=";
   };
 
-  configureFlags = [ "--with-guilesitedir=\${out}/share/guile/site" ];
+  configureFlags = ["--with-guilesitedir=\${out}/share/guile/site"];
 
   postFixup = ''
     for f in $out/share/guile/site/ssh/**.scm; do \
@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config texinfo which
+    autoreconfHook
+    pkg-config
+    texinfo
+    which
   ];
   buildInputs = [
     guile
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Bindings to Libssh for GNU Guile";
     homepage = "https://github.com/artyom-poptsov/guile-ssh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    maintainers = with maintainers; [ethancedwards8];
     platforms = platforms.linux;
   };
 }

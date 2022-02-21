@@ -1,5 +1,13 @@
-{ lib, cmake, fetchFromGitHub, libGL, libiconv, libX11, openal, stdenv }:
-
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  libGL,
+  libiconv,
+  libX11,
+  openal,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "cen64";
   version = "unstable-2021-03-12";
@@ -11,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0x1fz3z4ffl5xssiyxnmbhpjlf0k0fxsqn4f2ikrn17742dx4c0z";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGL libiconv openal libX11 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libGL libiconv openal libX11];
 
   installPhase = ''
     runHook preInstall
@@ -24,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A Cycle-Accurate Nintendo 64 Emulator";
     license = licenses.bsd3;
     homepage = "https://github.com/n64dev/cen64";
-    maintainers = [ maintainers._414owen ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [maintainers._414owen];
+    platforms = ["x86_64-linux"];
   };
 }

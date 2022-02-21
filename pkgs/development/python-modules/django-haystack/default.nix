@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-
-# build dependencies
-, setuptools-scm
-
-# dependencies
-, django
-
-# tests
-, geopy
-, nose
-, pysolr
-, python-dateutil
-, requests
-, whoosh
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi
+  # build dependencies
+  ,
+  setuptools-scm
+  # dependencies
+  ,
+  django
+  # tests
+  ,
+  geopy,
+  nose,
+  pysolr,
+  python-dateutil,
+  requests,
+  whoosh,
 }:
-
 buildPythonPackage rec {
   pname = "django-haystack";
   version = "3.1.1";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Pluggable search for Django";
     homepage = "http://haystacksearch.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

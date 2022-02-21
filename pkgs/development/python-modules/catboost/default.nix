@@ -1,8 +1,21 @@
-{ buildPythonPackage, fetchFromGitHub, fetchpatch, lib, pythonOlder
-, clang_7, python2
-, graphviz, matplotlib, numpy, pandas, plotly, scipy, six
-, withCuda ? false, cudatoolkit }:
-
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  pythonOlder,
+  clang_7,
+  python2,
+  graphviz,
+  matplotlib,
+  numpy,
+  pandas,
+  plotly,
+  scipy,
+  six,
+  withCuda ? false,
+  cudatoolkit,
+}:
 buildPythonPackage rec {
   pname = "catboost";
   version = "0.24.4";
@@ -16,10 +29,11 @@ buildPythonPackage rec {
     sha256 = "sha256-pzmwEiKziB4ldnKgeCsP2HdnisX8sOkLssAzNfcSEx8=";
   };
 
-  nativeBuildInputs = [ clang_7 python2 ];
+  nativeBuildInputs = [clang_7 python2];
 
-  propagatedBuildInputs = [ graphviz matplotlib numpy pandas scipy plotly six ]
-    ++ lib.optional withCuda [ cudatoolkit ];
+  propagatedBuildInputs =
+    [graphviz matplotlib numpy pandas scipy plotly six]
+    ++ lib.optional withCuda [cudatoolkit];
 
   patches = [
     ./nix-support.patch
@@ -32,14 +46,14 @@ buildPythonPackage rec {
 
   preBuild = ''
     cd catboost/python-package
-    '';
-  setupPyBuildFlags = [ "--with-ymake=no" ];
+  '';
+  setupPyBuildFlags = ["--with-ymake=no"];
   CUDA_ROOT = lib.optional withCuda cudatoolkit;
   enableParallelBuilding = true;
 
   # Tests use custom "ya" tool, not yet supported.
   dontUseSetuptoolsCheck = true;
-  pythonImportsCheck = [ "catboost" ];
+  pythonImportsCheck = ["catboost"];
 
   meta = with lib; {
     description = "High-performance library for gradient boosting on decision trees.";
@@ -49,8 +63,8 @@ buildPythonPackage rec {
       learning tasks for Python, R, Java, C++. Supports computation on CPU and GPU.
     '';
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     homepage = "https://catboost.ai";
-    maintainers = with maintainers; [ PlushBeaver ];
+    maintainers = with maintainers; [PlushBeaver];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, cmake, zlib, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  zlib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "1.1";
   pname = "bloaty";
@@ -12,9 +17,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   doCheck = true;
 
@@ -27,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/bloaty";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

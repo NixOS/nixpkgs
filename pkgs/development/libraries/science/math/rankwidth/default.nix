@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rankwidth";
   version = "0.9";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Calculates rank-width and rank-decompositions";
-    license = with licenses; [ gpl2Plus ];
+    license = with licenses; [gpl2Plus];
     maintainers = teams.sage.members;
     platforms = platforms.unix;
   };

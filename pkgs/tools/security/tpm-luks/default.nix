@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchgit, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  gawk,
+  trousers,
+  cryptsetup,
+  openssl,
+}:
 stdenv.mkDerivation {
   pname = "tpm-luks";
   version = "unstable-2015-07-11";
@@ -15,8 +23,8 @@ stdenv.mkDerivation {
     ./signed-ptr.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ gawk trousers cryptsetup openssl ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [gawk trousers cryptsetup openssl];
 
   installPhase = ''
     mkdir -p $out
@@ -28,9 +36,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "LUKS key storage in TPM NVRAM";
     homepage = "https://github.com/shpedoikal/tpm-luks/";
-    maintainers = [ maintainers.tstrobel ];
-    license = with licenses; [ gpl2Only ];
+    maintainers = [maintainers.tstrobel];
+    license = with licenses; [gpl2Only];
     platforms = platforms.linux;
   };
 }
-

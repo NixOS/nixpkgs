@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.replay-sorcery;
   configFile = generators.toKeyValue {} cfg.settings;
-in
-{
+in {
   options = with types; {
     services.replay-sorcery = {
       enable = mkEnableOption "the ReplaySorcery service for instant-replays";
@@ -23,7 +24,7 @@ in
       };
 
       settings = mkOption {
-        type = attrsOf (oneOf [ str int ]);
+        type = attrsOf (oneOf [str int]);
         default = {};
         description = "System-wide configuration for ReplaySorcery (/etc/replay-sorcery.conf).";
         example = literalExpression ''
@@ -38,7 +39,7 @@ in
 
   config = mkIf cfg.enable {
     environment = {
-      systemPackages = [ pkgs.replay-sorcery ];
+      systemPackages = [pkgs.replay-sorcery];
       etc."replay-sorcery.conf".text = configFile;
     };
 
@@ -52,10 +53,10 @@ in
     };
 
     systemd = {
-      packages = [ pkgs.replay-sorcery ];
+      packages = [pkgs.replay-sorcery];
       user.services.replay-sorcery = {
-        wantedBy = mkIf cfg.autoStart [ "graphical-session.target" ];
-        partOf = mkIf cfg.autoStart [ "graphical-session.target" ];
+        wantedBy = mkIf cfg.autoStart ["graphical-session.target"];
+        partOf = mkIf cfg.autoStart ["graphical-session.target"];
         serviceConfig = {
           ExecStart = mkIf cfg.enableSysAdminCapability [
             "" # Tell systemd to clear the existing ExecStart list, to prevent appending to it.
@@ -67,6 +68,6 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [kira-bruneau];
   };
 }

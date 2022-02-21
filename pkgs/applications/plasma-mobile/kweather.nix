@@ -1,20 +1,18 @@
-{ lib
-, mkDerivation
-
-, cmake
-, extra-cmake-modules
-
-, kconfig
-, ki18n
-, kirigami2
-, knotifications
-, kquickcharts
-, kweathercore
-, plasma-framework
-, qtcharts
-, qtquickcontrols2
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  kconfig,
+  ki18n,
+  kirigami2,
+  knotifications,
+  kquickcharts,
+  kweathercore,
+  plasma-framework,
+  qtcharts,
+  qtquickcontrols2,
 }:
-
 mkDerivation rec {
   pname = "kweather";
 
@@ -38,7 +36,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Weather application for Plasma Mobile";
     homepage = "https://invent.kde.org/plasma-mobile/kweather";
-    license = with licenses; [ gpl2Plus cc-by-40 ];
-    maintainers = with maintainers; [ samueldr ];
+    license = with licenses; [gpl2Plus cc-by-40];
+    maintainers = with maintainers; [samueldr];
   };
 }

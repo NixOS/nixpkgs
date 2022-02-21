@@ -1,7 +1,14 @@
-{ lib, stdenv, autoreconfHook, buildPackages
-, fetchurl, flex, readline, ed, texinfo
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  buildPackages,
+  fetchurl,
+  flex,
+  readline,
+  ed,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bc";
   version = "1.07.1";
@@ -10,19 +17,23 @@ stdenv.mkDerivation rec {
     sha256 = "62adfca89b0a1c0164c2cdca59ca210c1d44c3ffc46daf9931cf4942664cb02a";
   };
 
-  configureFlags = [ "--with-readline" ];
+  configureFlags = ["--with-readline"];
 
   # As of 1.07 cross-compilation is quite complicated as the build system wants
   # to build a code generator, bc/fbc, on the build machine.
-  patches = [ ./cross-bc.patch ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  patches = [./cross-bc.patch];
+  depsBuildBuild = [buildPackages.stdenv.cc];
   nativeBuildInputs = [
     # Tools
-    autoreconfHook ed flex texinfo
+    autoreconfHook
+    ed
+    flex
+    texinfo
     # Libraries for build
-    buildPackages.readline buildPackages.ncurses
+    buildPackages.readline
+    buildPackages.ncurses
   ];
-  buildInputs = [ readline flex ];
+  buildInputs = [readline flex];
 
   doCheck = true; # not cross
 

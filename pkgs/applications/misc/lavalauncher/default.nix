@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchgit
-, meson
-, ninja
-, pkg-config
-, scdoc
-, cairo
-, librsvg
-, libxkbcommon
-, wayland
-, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchgit,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  cairo,
+  librsvg,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lavalauncher";
   version = "2.1.1";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "hobhZ6s9m2xCdAurdj0EF1BeS88j96133zu+2jb1FMM=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  nativeBuildInputs = [meson ninja pkg-config scdoc];
   buildInputs = [
     cairo
     librsvg
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       LavaLauncher to work.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, python
-, pythonOlder
-, fetchFromGitLab
-, substituteAll
-, bubblewrap
-, exiftool
-, ffmpeg
-, mailcap
-, wrapGAppsHook
-, gdk-pixbuf
-, gobject-introspection
-, librsvg
-, poppler_gi
-, mutagen
-, pygobject3
-, pycairo
-, dolphinIntegration ? false, plasma5Packages
+{
+  lib,
+  buildPythonPackage,
+  python,
+  pythonOlder,
+  fetchFromGitLab,
+  substituteAll,
+  bubblewrap,
+  exiftool,
+  ffmpeg,
+  mailcap,
+  wrapGAppsHook,
+  gdk-pixbuf,
+  gobject-introspection,
+  librsvg,
+  poppler_gi,
+  mutagen,
+  pygobject3,
+  pycairo,
+  dolphinIntegration ? false,
+  plasma5Packages,
 }:
-
 buildPythonPackage rec {
   pname = "mat2";
   version = "0.12.3";
@@ -40,7 +41,8 @@ buildPythonPackage rec {
       bwrap = "${bubblewrap}/bin/bwrap";
       exiftool = "${exiftool}/bin/exiftool";
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
-    } // lib.optionalAttrs dolphinIntegration {
+    }
+    // lib.optionalAttrs dolphinIntegration {
       kdialog = "${plasma5Packages.kdialog}/bin/kdialog";
     }))
     # the executable shouldn't be called .mat2-wrapped
@@ -77,15 +79,17 @@ buildPythonPackage rec {
     pycairo
   ];
 
-  postInstall = ''
-    install -Dm 444 data/mat2.svg -t "$out/share/icons/hicolor/scalable/apps"
-    install -Dm 444 doc/mat2.1 -t "$out/share/man/man1"
-    install -Dm 444 nautilus/mat2.py -t "$out/share/nautilus-python/extensions"
-    buildPythonPath "$out $pythonPath $propagatedBuildInputs"
-    patchPythonScript "$out/share/nautilus-python/extensions/mat2.py"
-  '' + lib.optionalString dolphinIntegration ''
-    install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
-  '';
+  postInstall =
+    ''
+      install -Dm 444 data/mat2.svg -t "$out/share/icons/hicolor/scalable/apps"
+      install -Dm 444 doc/mat2.1 -t "$out/share/man/man1"
+      install -Dm 444 nautilus/mat2.py -t "$out/share/nautilus-python/extensions"
+      buildPythonPath "$out $pythonPath $propagatedBuildInputs"
+      patchPythonScript "$out/share/nautilus-python/extensions/mat2.py"
+    ''
+    + lib.optionalString dolphinIntegration ''
+      install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
+    '';
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -v
@@ -96,6 +100,6 @@ buildPythonPackage rec {
     homepage = "https://0xacab.org/jvoisin/mat2";
     changelog = "https://0xacab.org/jvoisin/mat2/-/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

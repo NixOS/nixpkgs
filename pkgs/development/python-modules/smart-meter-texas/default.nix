@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, asn1
-, python-dateutil
-, tenacity
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  asn1,
+  python-dateutil,
+  tenacity,
 }:
-
 buildPythonPackage rec {
   pname = "smart-meter-texas";
   version = "0.5.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Connect to and retrieve data from the unofficial Smart Meter Texas API";
     homepage = "https://github.com/grahamwetzler/smart-meter-texas";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

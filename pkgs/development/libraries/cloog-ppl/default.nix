@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, ppl, autoreconfHook }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ppl,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "cloog-ppl";
   version = "0.15.11";
@@ -9,13 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "0psdm0bn5gx60glfh955x5b3b23zqrd92idmjr0b00dlnb839mkw";
   };
 
-  propagatedBuildInputs = [ ppl ];
+  propagatedBuildInputs = [ppl];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  patches = [ ./fix-ppl-version.patch ];
+  patches = [./fix-ppl-version.patch];
 
-  configureFlags = [ "--with-ppl=${ppl}" ];
+  configureFlags = ["--with-ppl=${ppl}"];
 
   preAutoreconf = ''
     touch NEWS ChangeLog AUTHORS
@@ -45,27 +50,28 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl2Plus;
 
-    maintainers = [ ];
+    maintainers = [];
 
-    /* Leads to an ICE on Cygwin:
-
-       make[3]: Entering directory `/tmp/nix-build-9q5gw5m37q5l4f0kjfv9ar8fsc9plk27-ppl-0.10.2.drv-1/ppl-0.10.2/src'
-       /bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I..  -I.. -I../src    -g -O2 -frounding-math  -W -Wall -c -o Box.lo Box.cc
-       libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I.. -I.. -I../src -g -O2 -frounding-math -W -Wall -c Box.cc  -DDLL_EXPORT -DPIC -o .libs/Box.o
-       In file included from checked.defs.hh:595,
-                        from Checked_Number.defs.hh:27,
-                        from Coefficient.types.hh:15,
-                        from Coefficient.defs.hh:26,
-                        from Box.defs.hh:28,
-                        from Box.cc:24:
-       checked.inlines.hh: In function `Parma_Polyhedra_Library::Result Parma_Polyhedra_Library::Checked::input_generic(Type&, std::istream&, Parma_Polyhedra_Library::Rounding_Dir)':
-       checked.inlines.hh:607: internal compiler error: in invert_truthvalue, at fold-const.c:2719
-       Please submit a full bug report,
-       with preprocessed source if appropriate.
-       See <URL:http://cygwin.com/problems.html> for instructions.
-       make[3]: *** [Box.lo] Error 1
-
-    */
+    /*
+     Leads to an ICE on Cygwin:
+     
+     make[3]: Entering directory `/tmp/nix-build-9q5gw5m37q5l4f0kjfv9ar8fsc9plk27-ppl-0.10.2.drv-1/ppl-0.10.2/src'
+     /bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I..  -I.. -I../src    -g -O2 -frounding-math  -W -Wall -c -o Box.lo Box.cc
+     libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I.. -I.. -I../src -g -O2 -frounding-math -W -Wall -c Box.cc  -DDLL_EXPORT -DPIC -o .libs/Box.o
+     In file included from checked.defs.hh:595,
+                      from Checked_Number.defs.hh:27,
+                      from Coefficient.types.hh:15,
+                      from Coefficient.defs.hh:26,
+                      from Box.defs.hh:28,
+                      from Box.cc:24:
+     checked.inlines.hh: In function `Parma_Polyhedra_Library::Result Parma_Polyhedra_Library::Checked::input_generic(Type&, std::istream&, Parma_Polyhedra_Library::Rounding_Dir)':
+     checked.inlines.hh:607: internal compiler error: in invert_truthvalue, at fold-const.c:2719
+     Please submit a full bug report,
+     with preprocessed source if appropriate.
+     See <URL:http://cygwin.com/problems.html> for instructions.
+     make[3]: *** [Box.lo] Error 1
+     
+     */
     platforms = lib.platforms.unix; # Once had cygwin problems
   };
 }

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, python3, gtk3, pantheon, gnome-icon-theme, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  python3,
+  gtk3,
+  pantheon,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   name = "${package-name}-${version}";
   package-name = "faba-icon-theme";
@@ -34,8 +44,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A sexy and modern icon theme with Tango influences";
     homepage = "https://snwh.org/moka";
-    license = with licenses; [ cc-by-sa-40 gpl3 ];
+    license = with licenses; [cc-by-sa-40 gpl3];
     platforms = platforms.all;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

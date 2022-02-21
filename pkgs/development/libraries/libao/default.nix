@@ -1,16 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, libpulseaudio, alsa-lib, libcap
-, CoreAudio, CoreServices, AudioUnit
-, usePulseAudio }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libpulseaudio,
+  alsa-lib,
+  libcap,
+  CoreAudio,
+  CoreServices,
+  AudioUnit,
+  usePulseAudio,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.2";
   pname = "libao";
 
   # the github mirror is more up to date than downloads.xiph.org
   src = fetchFromGitHub {
-    owner  = "xiph";
-    repo   = "libao";
-    rev    = version;
+    owner = "xiph";
+    repo = "libao";
+    rev = version;
     sha256 = "0svgk4sc9kdhcsfyvbvgm5vpbg3sfr6z5rliflrw49v3x2i4vxq5";
   };
 
@@ -19,14 +29,15 @@ stdenv.mkDerivation rec {
     "--enable-alsa-mmap"
   ];
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = ["out" "dev" "man" "doc"];
 
-  buildInputs = [ ] ++
-    lib.optional  usePulseAudio   libpulseaudio ++
-    lib.optionals stdenv.isLinux  [ alsa-lib libcap ] ++
-    lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
+  buildInputs =
+    []
+    ++ lib.optional usePulseAudio libpulseaudio
+    ++ lib.optionals stdenv.isLinux [alsa-lib libcap]
+    ++ lib.optionals stdenv.isDarwin [CoreAudio CoreServices AudioUnit];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   meta = with lib; {
     longDescription = ''
@@ -36,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://xiph.org/ao/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = with platforms; unix;
   };
 }

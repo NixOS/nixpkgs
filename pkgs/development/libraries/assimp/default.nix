@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "assimp";
   version = "5.1.3";
-  outputs = [ "out" "lib" "dev" ];
+  outputs = ["out" "lib" "dev"];
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
@@ -21,14 +28,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost zlib ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [boost zlib];
 
   meta = with lib; {
     description = "A library to import various 3D model formats";
     homepage = "https://www.assimp.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ehmry];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

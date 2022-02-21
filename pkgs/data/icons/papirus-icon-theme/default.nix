@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  pantheon,
+  breeze-icons,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "papirus-icon-theme";
   version = "20220204";
@@ -11,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DYz2fnn1ZfX09NQcRXmGTYY95K5wOWhlmJeDjEvN1vY=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [gtk3];
 
   propagatedBuildInputs = [
     pantheon.elementary-icon-theme
@@ -39,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo fortuneteller2k ];
+    maintainers = with maintainers; [romildo fortuneteller2k];
   };
 }

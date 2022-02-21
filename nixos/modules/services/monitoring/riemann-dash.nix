@@ -1,10 +1,11 @@
-{ config, pkgs, lib, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with pkgs;
-with lib;
-
-let
-
+with lib; let
   cfg = config.services.riemann-dash;
 
   conf = writeText "config.rb" ''
@@ -17,11 +18,8 @@ let
     #!/bin/sh
     exec ${pkgs.riemann-dash}/bin/riemann-dash ${conf}
   '';
-
 in {
-
   options = {
-
     services.riemann-dash = {
       enable = mkOption {
         type = types.bool;
@@ -46,11 +44,9 @@ in {
         '';
       };
     };
-
   };
 
   config = mkIf cfg.enable {
-
     users.groups.riemanndash.gid = config.ids.gids.riemanndash;
 
     users.users.riemanndash = {
@@ -64,9 +60,9 @@ in {
     ];
 
     systemd.services.riemann-dash = {
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "riemann.service" ];
-      after = [ "riemann.service" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["riemann.service"];
+      after = ["riemann.service"];
       preStart = ''
         mkdir -p '${cfg.dataDir}/config'
       '';
@@ -75,7 +71,5 @@ in {
         ExecStart = "${launcher}/bin/riemann-dash";
       };
     };
-
   };
-
 }

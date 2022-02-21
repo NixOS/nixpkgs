@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "influxdb_exporter";
   version = "0.8.0";
@@ -24,12 +28,12 @@ buildGoModule rec {
     "-X github.com/prometheus/common/version.BuildDate=unknown"
   ];
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) influxdb; };
+  passthru.tests = {inherit (nixosTests.prometheus-exporters) influxdb;};
 
   meta = with lib; {
     description = "Prometheus exporter that accepts InfluxDB metrics";
     homepage = "https://github.com/prometheus/influxdb_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

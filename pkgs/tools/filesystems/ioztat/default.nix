@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ioztat";
   version = "1.1.0";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "wDRcFlXmXTc1J9MQZqILfPp5jUhX6wW4nOnqspIWVjQ=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [installShellFiles];
+  buildInputs = [python3];
 
   prePatch = ''
     patchShebangs .
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd2;
     platforms = with platforms; linux ++ freebsd;
-    maintainers = with maintainers; [ numinit ];
+    maintainers = with maintainers; [numinit];
   };
 }

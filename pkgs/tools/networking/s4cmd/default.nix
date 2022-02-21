@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "s4cmd";
   version = "2.1.0";
@@ -9,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0d4mx98i3qhvlmr9x898mjvf827smzx6x5ji6daiwgjdlxc60mj2";
   };
 
-  propagatedBuildInputs = with python3Packages; [ boto3 pytz ];
+  propagatedBuildInputs = with python3Packages; [boto3 pytz];
 
   # The upstream package tries to install some bash shell completion scripts in /etc.
   # Setuptools is bugged and doesn't handle --prefix properly: https://github.com/pypa/setuptools/issues/130
@@ -30,6 +32,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/bloomreach/s4cmd";
     description = "Super S3 command line tool";
     license = licenses.asl20;
-    maintainers = [ maintainers.bhipple ];
+    maintainers = [maintainers.bhipple];
   };
 }

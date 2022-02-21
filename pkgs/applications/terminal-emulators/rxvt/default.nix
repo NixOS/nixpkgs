@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libtool
-, libX11, libXt, libXpm }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libtool,
+  libX11,
+  libXt,
+  libXpm,
+}:
 stdenv.mkDerivation rec {
   pname = "rxvt";
   version = "2.7.10";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jfl71gz3k7zh3kxdb8lxi06kajjnx7bq1rxjgk680l209jxask1";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libtool libX11 libXt libXpm ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libtool libX11 libXt libXpm];
 
   configurePhase = ''
     LIBTOOL=${libtool}/bin/libtool ./configure --prefix=$out --enable-everything --enable-smart-resize --enable-256-color
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
       omitting some of its little-used features, like Tektronix 4014
       emulation and toolkit-style configurability.
     '';
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     license = licenses.gpl2;
     platforms = platforms.linux;
     knownVulnerabilities = [

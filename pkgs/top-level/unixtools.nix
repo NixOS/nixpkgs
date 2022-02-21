@@ -1,30 +1,32 @@
-{ pkgs, buildEnv, runCommand, lib, stdenv }:
-
+{
+  pkgs,
+  buildEnv,
+  runCommand,
+  lib,
+  stdenv,
+}:
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
 # coreutils, these are commonly assumed to be available by build
 # systems, but we can't assume they are available. In Nix, we list
 # each program by name directly through this unixtools attribute.
-
 # You should always try to use single binaries when available. For
 # instance, if your program needs to use "ps", just list it as a build
 # input, not "procps" which requires Linux.
-
-with lib;
-
-let
+with lib; let
   version = "1003.1-2008";
 
   singleBinary = cmd: providers: let
-      provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
-      bin = "${getBin provider}/bin/${cmd}";
-      manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
-    in runCommand "${cmd}-${provider.name}" {
+    provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
+    bin = "${getBin provider}/bin/${cmd}";
+    manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
+  in
+    runCommand "${cmd}-${provider.name}" {
       meta = {
         priority = 10;
         platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
       };
-      passthru = { inherit provider; };
+      passthru = {inherit provider;};
       preferLocalBuild = true;
     } ''
       if ! [ -x ${bin} ]; then
@@ -66,13 +68,17 @@ let
       linux = pkgs.util-linux;
     };
     getconf = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
-              else pkgs.netbsd.getconf;
+      linux =
+        if stdenv.hostPlatform.libc == "glibc"
+        then pkgs.stdenv.cc.libc
+        else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
-              else pkgs.netbsd.getent;
+      linux =
+        if stdenv.hostPlatform.libc == "glibc"
+        then pkgs.stdenv.cc.libc
+        else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
     };
     getopt = {
@@ -186,10 +192,23 @@ let
 
   # Compatibility derivations
   # Provided for old usage of these commands.
-  compat = with bins; lib.mapAttrs makeCompat {
-    procps = [ ps sysctl top watch ];
-    util-linux = [ fsck fdisk getopt hexdump mount
-                  script umount whereis write col column ];
-    nettools = [ arp hostname ifconfig netstat route ];
-  };
-in bins // compat
+  compat = with bins;
+    lib.mapAttrs makeCompat {
+      procps = [ps sysctl top watch];
+      util-linux = [
+        fsck
+        fdisk
+        getopt
+        hexdump
+        mount
+        script
+        umount
+        whereis
+        write
+        col
+        column
+      ];
+      nettools = [arp hostname ifconfig netstat route];
+    };
+in
+  bins // compat

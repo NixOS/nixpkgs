@@ -1,10 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkg-config
-, curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpg-error, lz4
-, ncurses, numactl, openssl, protobuf, valgrind, xxd, zlib
-, perlPackages
-, version, sha256, extraPatches ? [], extraPostInstall ? "", ...
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  boost,
+  cmake,
+  makeWrapper,
+  pkg-config,
+  curl,
+  cyrus_sasl,
+  libaio,
+  libedit,
+  libev,
+  libevent,
+  libgcrypt,
+  libgpg-error,
+  lz4,
+  ncurses,
+  numactl,
+  openssl,
+  protobuf,
+  valgrind,
+  xxd,
+  zlib,
+  perlPackages,
+  version,
+  sha256,
+  extraPatches ? [],
+  extraPostInstall ? "",
+  ...
 }:
-
 stdenv.mkDerivation rec {
   pname = "percona-xtrabackup";
   inherit version;
@@ -16,12 +41,28 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [bison boost cmake makeWrapper pkg-config];
 
-  buildInputs = [
-    curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpg-error lz4
-    ncurses numactl openssl protobuf valgrind xxd zlib
-  ] ++ (with perlPackages; [ perl DBI DBDmysql ]);
+  buildInputs =
+    [
+      curl
+      cyrus_sasl
+      libaio
+      libedit
+      libev
+      libevent
+      libgcrypt
+      libgpg-error
+      lz4
+      ncurses
+      numactl
+      openssl
+      protobuf
+      valgrind
+      xxd
+      zlib
+    ]
+    ++ (with perlPackages; [perl DBI DBDmysql]);
 
   patches = extraPatches;
 
@@ -43,16 +84,18 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
   ];
 
-  postInstall = ''
-    wrapProgram "$out"/bin/xtrabackup --prefix PERL5LIB : $PERL5LIB
-    rm -r "$out"/lib/plugin/debug
-  '' + extraPostInstall;
+  postInstall =
+    ''
+      wrapProgram "$out"/bin/xtrabackup --prefix PERL5LIB : $PERL5LIB
+      rm -r "$out"/lib/plugin/debug
+    ''
+    + extraPostInstall;
 
   meta = with lib; {
     description = "Non-blocking backup tool for MySQL";
     homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.lgpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with maintainers; [izorkin];
   };
 }

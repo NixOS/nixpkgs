@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "cwcwidth";
   version = "0.1.6";
@@ -10,9 +15,9 @@ buildPythonPackage rec {
     sha256 = "1b31da599c9f0cf41f39ed10c1ceaa01d6024e31c6cd9aea2885b1f2a6d15fba";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [cython];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   preCheck = ''
     # Hack needed to make pytest + cython work
     # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
@@ -27,13 +32,13 @@ buildPythonPackage rec {
   '';
   postCheck = "popd";
 
-  pythonImportsCheck = [ "cwcwidth" ];
+  pythonImportsCheck = ["cwcwidth"];
 
   meta = with lib; {
     description = "Python bindings for wc(s)width";
     homepage = "https://github.com/sebastinas/cwcwidth";
     changelog = "https://github.com/sebastinas/cwcwidth/blob/main/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, pyyaml
-, rdflib
-, ply
-, xmltodict
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  pyyaml,
+  rdflib,
+  ply,
+  xmltodict,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "spdx-tools";
   version = "0.7.0a3";

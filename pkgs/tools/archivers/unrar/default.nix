@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "unrar";
   version = "6.1.4";
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
     mv libunrar.so bin
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   installPhase = ''
     install -Dt "$out/bin" bin/unrar
@@ -48,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
     license = licenses.unfreeRedistributable;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = [maintainers.ehmry];
     platforms = platforms.all;
   };
 }

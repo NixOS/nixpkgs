@@ -1,5 +1,10 @@
-{ buildDunePackage, dns, mirage-stack, ipaddr, lwt }:
-
+{
+  buildDunePackage,
+  dns,
+  mirage-stack,
+  ipaddr,
+  lwt,
+}:
 buildDunePackage {
   pname = "dns-mirage";
 
@@ -12,7 +17,9 @@ buildDunePackage {
     lwt
   ];
 
-  meta = dns.meta // {
-    description = "An opinionated Domain Name System (DNS) library";
-  };
+  meta =
+    dns.meta
+    // {
+      description = "An opinionated Domain Name System (DNS) library";
+    };
 }

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry
-, brotli
-, ijson
-, nose
-, httpretty
-, requests_oauthlib
-, python_magic
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry,
+  brotli,
+  ijson,
+  nose,
+  httpretty,
+  requests_oauthlib,
+  python_magic,
+  pytz,
 }:
-
 buildPythonPackage rec {
   pname = "pysnow";
   version = "0.7.16";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace 'oauthlib = "^3.1.0"' 'oauthlib = "*"'
   '';
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [poetry];
   propagatedBuildInputs = [
     brotli
     ijson
@@ -40,17 +40,16 @@ buildPythonPackage rec {
     requests_oauthlib
   ];
 
-  checkInputs = [ nose httpretty ];
+  checkInputs = [nose httpretty];
   checkPhase = ''
     nosetests --cover-package=pysnow --with-coverage --cover-erase
   '';
-  pythonImportsCheck = [ "pysnow" ];
+  pythonImportsCheck = ["pysnow"];
 
   meta = with lib; {
     description = "ServiceNow HTTP client library written in Python";
     homepage = "https://github.com/rbw/pysnow";
     license = licenses.mit;
-    maintainers = [ maintainers.almac ];
+    maintainers = [maintainers.almac];
   };
-
 }

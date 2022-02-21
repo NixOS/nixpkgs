@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "goreleaser";
   version = "1.5.0";
@@ -26,7 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Deliver Go binaries as fast and easily as possible";
     homepage = "https://goreleaser.com";
-    maintainers = with maintainers; [ c0deaddict endocrimes sarcasticadmin ];
+    maintainers = with maintainers; [c0deaddict endocrimes sarcasticadmin];
     license = licenses.mit;
   };
 }

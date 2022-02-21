@@ -1,17 +1,17 @@
 # Not everyone has a suitable remote builder set up, so the cross-compilation
 # tests that _include_ running the result are separate. That way, most people
 # can run the majority of the test suite without the extra setup.
-
-
-import ./make-test-python.nix ({ pkgs, ... }:
-let
-
+import ./make-test-python.nix ({pkgs, ...}: let
   remoteSystem =
     if pkgs.system == "aarch64-linux"
     then "x86_64-linux"
     else "aarch64-linux";
 
-  remoteCrossPkgs = import ../.. /*nixpkgs*/ {
+  remoteCrossPkgs = import ../..
+  /*
+   nixpkgs
+   */
+  {
     # NOTE: This is the machine that runs the build -  local from the
     #       'perspective' of the build script.
     localSystem = remoteSystem;
@@ -32,15 +32,14 @@ let
     tag = "latest";
     contents = remoteCrossPkgs.hello;
   };
-
 in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ roberth ];
+    maintainers = [roberth];
   };
 
   nodes = {
-    docker = { ... }: {
+    docker = {...}: {
       virtualisation = {
         diskSize = 2048;
         docker.enable = true;

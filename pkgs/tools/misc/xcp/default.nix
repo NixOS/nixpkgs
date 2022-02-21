@@ -1,5 +1,8 @@
-{ rustPlatform, fetchFromGitHub, lib }:
-
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "xcp";
   version = "0.9.0";
@@ -20,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "An extended cp(1)";
     homepage = "https://github.com/tarka/xcp";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [lom];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   version = "unstable-20160819";
   pname = "pybluez";
 
-  propagatedBuildInputs = [ pkgs.bluez ];
+  propagatedBuildInputs = [pkgs.bluez];
 
   src = fetchFromGitHub {
     owner = "karulis";
@@ -23,7 +23,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bluetooth Python extension module";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
-
 }

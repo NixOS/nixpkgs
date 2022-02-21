@@ -1,25 +1,25 @@
-{ ansicolors
-, attrs
-, autobahn
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lib
-, mock
-, pexpect
-, psutil
-, pyserial
-, pytestCheckHook
-, pytest-dependency
-, pytest-mock
-, pyudev
-, pyusb
-, pyyaml
-, requests
-, setuptools-scm
-, xmodem
+{
+  ansicolors,
+  attrs,
+  autobahn,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lib,
+  mock,
+  pexpect,
+  psutil,
+  pyserial,
+  pytestCheckHook,
+  pytest-dependency,
+  pytest-mock,
+  pyudev,
+  pyusb,
+  pyyaml,
+  requests,
+  setuptools-scm,
+  xmodem,
 }:
-
 buildPythonPackage rec {
   pname = "labgrid";
   version = "0.4.1";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     ./0001-serialdriver-remove-pyserial-version-check.patch
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
   propagatedBuildInputs = [
     ansicolors
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     description = "Embedded control & testing library";
     homepage = "https://labgrid.org";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with maintainers; [emantor];
     platforms = with platforms; linux;
   };
 }

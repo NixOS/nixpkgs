@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib, libwpg, libwpd, librevenge }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  pkg-config,
+  cppunit,
+  zlib,
+  libwpg,
+  libwpd,
+  librevenge,
+}:
 stdenv.mkDerivation rec {
   pname = "libmwaw";
   version = "0.3.21";
@@ -9,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6HUBI6eNYblDzveLdzbIp/ILsKZJqhEkAhJPunlPwhw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     boost
     cppunit
@@ -23,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Import library for some old mac text documents";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

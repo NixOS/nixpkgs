@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchurl
-, cairo, fftwSinglePrec, libX11, libXft, libclthreads, libclxclient, libjack2
-, xorgproto, zita-resampler
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cairo,
+  fftwSinglePrec,
+  libX11,
+  libXft,
+  libclthreads,
+  libclxclient,
+  libjack2,
+  xorgproto,
+  zita-resampler,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zita-at1";
   version = "0.6.2";
@@ -13,8 +22,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cairo fftwSinglePrec libX11 libXft libclthreads libclxclient libjack2
-    xorgproto zita-resampler
+    cairo
+    fftwSinglePrec
+    libX11
+    libXft
+    libclthreads
+    libclxclient
+    libjack2
+    xorgproto
+    zita-resampler
   ];
 
   preConfigure = ''
@@ -31,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Autotuner Jack application to correct the pitch of vocal tracks";
     homepage = "https://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
 }

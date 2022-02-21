@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pygments
-, pytestCheckHook
-, uvloop
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pygments,
+  pytestCheckHook,
+  uvloop,
 }:
-
 buildPythonPackage rec {
   pname = "aiorun";
   version = "2021.10.1";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Boilerplate for asyncio applications";
     homepage = "https://github.com/cjrh/aiorun";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "base58check";
   version = "1.0.2";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Implementation of the Base58Check encoding scheme";
     homepage = "https://github.com/joeblackwaslike/base58check";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

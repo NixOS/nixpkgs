@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, gradle_6, perl, makeWrapper, jdk11, gsettings-desktop-schemas }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gradle_6,
+  perl,
+  makeWrapper,
+  jdk11,
+  gsettings-desktop-schemas,
+}: let
   version = "0.9.3-3";
   name = "mucommander-${version}";
 
@@ -36,7 +43,7 @@ let
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src postPatch;
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [gradle_6 perl];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon build
@@ -51,36 +58,36 @@ let
     outputHashMode = "recursive";
     outputHash = "1v5a76pvk7llbyv2rg50wlxc2wf468l2cslz1vi20aihycbyky7j";
   };
+in
+  stdenv.mkDerivation {
+    inherit name src postPatch;
+    nativeBuildInputs = [gradle_6 perl makeWrapper];
 
-in stdenv.mkDerivation {
-  inherit name src postPatch;
-  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
+    buildPhase = ''
+      export GRADLE_USER_HOME=$(mktemp -d)
 
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
+      # point to offline repo
+      find . -type f -name build.gradle \
+        -exec perl -i.bak3 -pe "s#repositories\.jcenter\(\)#
+                                  repositories { mavenLocal(); maven { url '${deps}' } }
+                                 #" {} \;
 
-    # point to offline repo
-    find . -type f -name build.gradle \
-      -exec perl -i.bak3 -pe "s#repositories\.jcenter\(\)#
-                                repositories { mavenLocal(); maven { url '${deps}' } }
-                               #" {} \;
+      gradle --offline --no-daemon distTar
+    '';
 
-    gradle --offline --no-daemon distTar
-  '';
+    installPhase = ''
+      mkdir $out
+      tar xvf build/distributions/mucommander-${version}.tar --directory=$out --strip=1
+      wrapProgram $out/bin/mucommander \
+        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
+        --set JAVA_HOME ${jdk11}
+    '';
 
-  installPhase = ''
-    mkdir $out
-    tar xvf build/distributions/mucommander-${version}.tar --directory=$out --strip=1
-    wrapProgram $out/bin/mucommander \
-      --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-      --set JAVA_HOME ${jdk11}
-  '';
-
-  meta = with lib; {
-    homepage = "http://www.mucommander.com/";
-    description = "Cross-platform file manager";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ volth ];
-    platforms = platforms.all;
-  };
-}
+    meta = with lib; {
+      homepage = "http://www.mucommander.com/";
+      description = "Cross-platform file manager";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [volth];
+      platforms = platforms.all;
+    };
+  }

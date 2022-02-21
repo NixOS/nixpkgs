@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+}:
 buildPythonPackage rec {
   pname = "pytz";
   version = "2021.3";
@@ -13,12 +17,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -s pytz/tests
   '';
 
-  pythonImportsCheck = [ "pytz" ];
+  pythonImportsCheck = ["pytz"];
 
   meta = with lib; {
     description = "World timezone definitions, modern and historical";
     homepage = "https://pythonhosted.org/pytz";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

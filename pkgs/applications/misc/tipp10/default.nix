@@ -1,6 +1,12 @@
-{ cmake, lib, mkDerivation, fetchFromGitLab,
-  qtmultimedia, qttools, ... }:
-
+{
+  cmake,
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  qtmultimedia,
+  qttools,
+  ...
+}:
 mkDerivation rec {
   pname = "tipp10";
   version = "3.2.1";
@@ -12,14 +18,14 @@ mkDerivation rec {
     sha256 = "4cxN2AnvYhZAMuA/qfmdLVICJNk6VCpRnfelbxYRvPg=";
   };
 
-  nativeBuildInputs = [ cmake qttools ];
-  buildInputs = [ qtmultimedia ];
+  nativeBuildInputs = [cmake qttools];
+  buildInputs = [qtmultimedia];
 
   meta = with lib; {
     description = "Learn and train typing with the ten-finger system";
     homepage = "https://gitlab.com/tipp10/tipp10";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [petabyteboy];
     platforms = platforms.all;
   };
 }

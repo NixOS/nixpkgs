@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bluepy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bluepy,
 }:
-
 buildPythonPackage rec {
   pname = "avea";
   version = "1.5.2";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   # no tests are present
   doCheck = false;
-  pythonImportsCheck = [ "avea" ];
+  pythonImportsCheck = ["avea"];
 
   meta = with lib; {
     description = "Python module for interacting with Elgato's Avea bulb";
     homepage = "https://github.com/k0rventen/avea";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

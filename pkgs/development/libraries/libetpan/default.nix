@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch
-, autoconf, automake, libtool, openssl, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  automake,
+  libtool,
+  openssl,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libetpan";
   version = "1.9.4";
@@ -35,9 +42,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  nativeBuildInputs = [autoconf automake libtool pkg-config];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   configureScript = "./autogen.sh";
 
@@ -45,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Mail Framework for the C Language";
     homepage = "http://www.etpan.org/libetpan.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
     platforms = platforms.linux;
   };
 }

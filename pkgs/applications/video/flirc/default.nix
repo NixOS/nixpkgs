@@ -1,13 +1,13 @@
-{ lib
-, mkDerivation
-, fetchurl
-, autoPatchelfHook
-, hidapi
-, readline
-, qtsvg
-, qtxmlpatterns
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  autoPatchelfHook,
+  hidapi,
+  readline,
+  qtsvg,
+  qtxmlpatterns,
 }:
-
 mkDerivation rec {
   pname = "flirc";
   version = "3.24.3";
@@ -17,7 +17,7 @@ mkDerivation rec {
     sha256 = "0p4pp7j70lbw6m25lmjg6ibc67r6jcy7qs3kki9f86ji1jvrxpga";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [autoPatchelfHook];
   buildInputs = [
     hidapi
     readline
@@ -38,8 +38,8 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://flirc.tv/more/flirc-usb";
     description = "Use any Remote with your Media Center";
-    maintainers = with maintainers; [ aanderse ];
+    maintainers = with maintainers; [aanderse];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

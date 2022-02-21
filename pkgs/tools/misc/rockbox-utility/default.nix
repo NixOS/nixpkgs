@@ -1,57 +1,70 @@
-{ lib, stdenv, fetchurl, pkg-config, cryptopp
-, libusb1, qtbase, qttools, makeWrapper
-, qmake, withEspeak ? false, espeak ? null
-, qt5 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cryptopp,
+  libusb1,
+  qtbase,
+  qttools,
+  makeWrapper,
+  qmake,
+  withEspeak ? false,
+  espeak ? null,
+  qt5,
+}: let
+  inherit (lib) getDev;
+in
+  stdenv.mkDerivation rec {
+    pname = "rockbox-utility";
+    version = "1.4.1";
 
-let inherit (lib) getDev; in
+    src = fetchurl {
+      url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
+      sha256 = "0zm9f01a810y7aq0nravbsl0vs9vargwvxnfl4iz9qsqygwlj69y";
+    };
 
-stdenv.mkDerivation  rec {
-  pname = "rockbox-utility";
-  version = "1.4.1";
+    buildInputs =
+      [cryptopp libusb1 qtbase qttools]
+      ++ lib.optional withEspeak espeak;
+    nativeBuildInputs = [makeWrapper pkg-config qmake qt5.wrapQtAppsHook];
 
-  src = fetchurl {
-    url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
-    sha256 = "0zm9f01a810y7aq0nravbsl0vs9vargwvxnfl4iz9qsqygwlj69y";
-  };
+    postPatch = ''
+      sed -i rbutil/rbutilqt/rbutilqt.pro \
+          -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${getDev qttools}/bin/lrelease|'
+    '';
 
-  buildInputs = [ cryptopp libusb1 qtbase qttools ]
-    ++ lib.optional withEspeak espeak;
-  nativeBuildInputs = [ makeWrapper pkg-config qmake qt5.wrapQtAppsHook ];
+    preConfigure = ''
+      cd rbutil/rbutilqt
+      lrelease rbutilqt.pro
+    '';
 
-  postPatch = ''
-    sed -i rbutil/rbutilqt/rbutilqt.pro \
-        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${getDev qttools}/bin/lrelease|'
-  '';
+    installPhase = ''
+      runHook preInstall
 
-  preConfigure = ''
-    cd rbutil/rbutilqt
-    lrelease rbutilqt.pro
-  '';
+      install -Dm755 RockboxUtility $out/bin/rockboxutility
+      ln -s $out/bin/rockboxutility $out/bin/RockboxUtility
+      wrapProgram $out/bin/rockboxutility \
+      ${
+        lib.optionalString withEspeak ''
+          --prefix PATH : ${espeak}/bin
+        ''
+      }
 
-  installPhase = ''
-    runHook preInstall
+      runHook postInstall
+    '';
 
-    install -Dm755 RockboxUtility $out/bin/rockboxutility
-    ln -s $out/bin/rockboxutility $out/bin/RockboxUtility
-    wrapProgram $out/bin/rockboxutility \
-    ${lib.optionalString withEspeak ''
-      --prefix PATH : ${espeak}/bin
-    ''}
+    # `make build/rcc/qrc_rbutilqt-lang.cpp` fails with
+    #      RCC: Error in 'rbutilqt-lang.qrc': Cannot find file 'lang/rbutil_cs.qm'
+    # Do not add `lrelease rbutilqt.pro` into preConfigure, otherwise `make lrelease`
+    # may clobber the files read by the parallel `make build/rcc/qrc_rbutilqt-lang.cpp`.
+    enableParallelBuilding = false;
 
-    runHook postInstall
-  '';
-
-  # `make build/rcc/qrc_rbutilqt-lang.cpp` fails with
-  #      RCC: Error in 'rbutilqt-lang.qrc': Cannot find file 'lang/rbutil_cs.qm'
-  # Do not add `lrelease rbutilqt.pro` into preConfigure, otherwise `make lrelease`
-  # may clobber the files read by the parallel `make build/rcc/qrc_rbutilqt-lang.cpp`.
-  enableParallelBuilding = false;
-
-  meta = with lib; {
-    description = "Open source firmware for mp3 players";
-    homepage = "https://www.rockbox.org";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu ];
-  };
-}
+    meta = with lib; {
+      description = "Open source firmware for mp3 players";
+      homepage = "https://www.rockbox.org";
+      license = licenses.gpl2;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [goibhniu];
+    };
+  }

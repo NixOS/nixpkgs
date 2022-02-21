@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "libwhich";
   version = "1.1.0";
@@ -19,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Like `which`, for dynamic libraries";
     homepage = "https://github.com/vtjnash/libwhich";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

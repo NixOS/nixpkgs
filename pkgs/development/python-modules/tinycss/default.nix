@@ -1,13 +1,13 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, pytest
-, python
-, cython
-, cssutils
-, isPyPy
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  python,
+  cython,
+  cssutils,
+  isPyPy,
 }:
-
 buildPythonPackage rec {
   pname = "tinycss";
   version = "0.4";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
     sha256 = "12306fb50e5e9e7eaeef84b802ed877488ba80e35c672867f548c0924a76716e";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ cssutils ];
+  checkInputs = [pytest];
+  propagatedBuildInputs = [cssutils];
   nativeBuildInputs = [
     cython
   ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Complete yet simple CSS parser for Python";
     license = licenses.bsd3;
     homepage = "https://pythonhosted.org/tinycss/";
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

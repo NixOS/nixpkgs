@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
   version = "0.4.12";
@@ -13,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-TNd4pj4qSKgmmVtSCSKFCxNtv96xD7+24BPsLXPgiEI=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [CoreServices];
 
   meta = with lib; {
     description = "Create books from MarkDown";
     homepage = "https://github.com/rust-lang/mdBook";
-    license = [ licenses.mpl20 ];
-    maintainers = [ maintainers.havvy ];
+    license = [licenses.mpl20];
+    maintainers = [maintainers.havvy];
   };
 }

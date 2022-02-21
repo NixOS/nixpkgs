@@ -1,14 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, qtbase
-, qtquickcontrols2
-, SDL
-, python3
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  qtbase,
+  qtquickcontrols2,
+  SDL,
+  python3,
 }:
-
 mkDerivation rec {
   pname = "sfxr-qt";
   version = "1.4.0";
@@ -24,7 +24,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    (python3.withPackages (pp: with pp; [ pyyaml jinja2 setuptools ]))
+    (python3.withPackages (pp: with pp; [pyyaml jinja2 setuptools]))
   ];
 
   buildInputs = [
@@ -37,7 +37,7 @@ mkDerivation rec {
     homepage = "https://github.com/agateau/sfxr-qt";
     description = "A sound effect generator, QtQuick port of sfxr";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.linux;
   };
 }

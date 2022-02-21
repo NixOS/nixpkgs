@@ -1,5 +1,11 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  gerbil-unstable,
+  gerbil-support,
+  gambit-support,
+}:
 gerbil-support.gerbilPackage {
   pname = "gerbil-persist";
   version = "unstable-2020-08-31";
@@ -19,9 +25,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil Persist: Persistent data and activities";
-    homepage    = "https://github.com/fare/gerbil-persist";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    homepage = "https://github.com/fare/gerbil-persist";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [fare];
   };
 }

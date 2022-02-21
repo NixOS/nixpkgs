@@ -1,5 +1,13 @@
-{ fetchFromGitHub, lib, stdenv, boost, cmake, libX11, libGL, libGLU }:
-
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  boost,
+  cmake,
+  libX11,
+  libGL,
+  libGLU,
+}:
 stdenv.mkDerivation rec {
   pname = "coin";
   version = "2020-12-07-unstable";
@@ -16,14 +24,14 @@ stdenv.mkDerivation rec {
     sed -i /cpack.d/d CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost libX11 libGL libGLU ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [boost libX11 libGL libGLU];
 
   meta = with lib; {
     homepage = "https://github.com/coin3d/coin";
     license = licenses.bsd3;
     description = "High-level, retained-mode toolkit for effective 3D graphics development";
-    maintainers = with maintainers; [ gebner viric ];
+    maintainers = with maintainers; [gebner viric];
     platforms = platforms.linux;
   };
 }

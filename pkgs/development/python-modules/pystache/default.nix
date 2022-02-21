@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
-
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchPypi,
+  isPy3k,
+  glibcLocales,
+}:
 buildPythonPackage rec {
   pname = "pystache";
   version = "0.6.0";
@@ -11,7 +17,7 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [glibcLocales];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover

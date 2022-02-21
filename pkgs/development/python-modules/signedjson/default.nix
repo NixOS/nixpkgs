@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, canonicaljson
-, unpaddedbase64
-, pynacl
-, typing-extensions
-, setuptools-scm
-, importlib-metadata
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  canonicaljson,
+  unpaddedbase64,
+  pynacl,
+  typing-extensions,
+  setuptools-scm,
+  importlib-metadata,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "signedjson";
   version = "1.1.1";
@@ -28,9 +28,10 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ canonicaljson unpaddedbase64 pynacl typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  nativeBuildInputs = [setuptools-scm];
+  propagatedBuildInputs =
+    [canonicaljson unpaddedbase64 pynacl typing-extensions]
+    ++ lib.optionals (pythonOlder "3.8") [importlib-metadata];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/signedjson/";

@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused
-, makeWrapper, nix, nixfmt, openjdk, writeScript, nixosTests, jq, cacert, curl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  common-updater-scripts,
+  coreutils,
+  git,
+  gnused,
+  makeWrapper,
+  nix,
+  nixfmt,
+  openjdk,
+  writeScript,
+  nixosTests,
+  jq,
+  cacert,
+  curl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jenkins";
   version = "2.319.3";
@@ -11,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c92Rs5W89i/iXm0wdHZfFRDJ5YTswen69EBRBkGBtDQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   buildCommand = ''
     mkdir -p "$out/bin" "$out/share" "$out/webapps"
@@ -27,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) jenkins jenkins-cli; };
+    tests = {inherit (nixosTests) jenkins jenkins-cli;};
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
@@ -70,6 +84,6 @@ stdenv.mkDerivation rec {
     homepage = "https://jenkins-ci.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ coconnor fpletz earldouglas nequissimus ];
+    maintainers = with maintainers; [coconnor fpletz earldouglas nequissimus];
   };
 }

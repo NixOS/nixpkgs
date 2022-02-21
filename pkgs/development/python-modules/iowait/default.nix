@@ -1,5 +1,7 @@
-{ buildPythonPackage, fetchPypi }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "iowait";
   version = "0.2";

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libnfc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libnfc,
+}:
 stdenv.mkDerivation rec {
   pname = "mfoc";
   version = "0.10.7";
@@ -22,14 +29,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libnfc ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [libnfc];
 
   meta = with lib; {
     description = "Mifare Classic Offline Cracker";
     license = licenses.gpl2;
     homepage = "https://github.com/nfc-tools/mfoc";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [offline];
     platforms = platforms.unix;
   };
 }

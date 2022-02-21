@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyxbe";
   version = "unstable-2021-01-10";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
       --replace "'xbefiles'" "'tests/xbefiles'"
   '';
 
-  pythonImportsCheck = [ "xbe" ];
+  pythonImportsCheck = ["xbe"];
 
   meta = with lib; {
     description = "Library to work with XBE files";
     homepage = "https://github.com/mborgerson/pyxbe";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchgit, sqlite, wxGTK30, gettext, wrapGAppsHook }:
-
-
-let
+{
+  lib,
+  stdenv,
+  fetchgit,
+  sqlite,
+  wxGTK30,
+  gettext,
+  wrapGAppsHook,
+}: let
   version = "1.3.3";
 in
   stdenv.mkDerivation {

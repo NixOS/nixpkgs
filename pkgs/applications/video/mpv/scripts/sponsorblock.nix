@@ -1,5 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, python3 }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+}:
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
 stdenvNoCC.mkDerivation {
   pname = "mpv_sponsorblock";
@@ -49,6 +54,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/po5/mpv_sponsorblock";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [pacien];
   };
 }

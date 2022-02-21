@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, systemd, inih }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  systemd,
+  inih,
+}:
 stdenv.mkDerivation rec {
   pname = "iptsd";
   version = "0.5";
@@ -11,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-A/0hA4gJwzrRPn57IKYvfcAnx1KXbQl0ZX2TE8mcQhc=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [meson ninja pkg-config];
 
-  buildInputs = [ systemd inih ];
+  buildInputs = [systemd inih];
 
   # Original installs udev rules and service config into global paths
   postPatch = ''
@@ -31,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ tomberek ];
+    maintainers = with maintainers; [tomberek];
     platforms = platforms.linux;
   };
 }

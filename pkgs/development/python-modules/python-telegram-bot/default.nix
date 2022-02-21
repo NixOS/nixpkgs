@@ -1,16 +1,16 @@
-{ lib
-, APScheduler
-, buildPythonPackage
-, cachetools
-, certifi
-, decorator
-, fetchPypi
-, future
-, tornado
-, urllib3
-, pythonOlder
+{
+  lib,
+  APScheduler,
+  buildPythonPackage,
+  cachetools,
+  certifi,
+  decorator,
+  fetchPypi,
+  future,
+  tornado,
+  urllib3,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "python-telegram-bot";
   version = "13.11";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Python library to interface with the Telegram Bot API";
     homepage = "https://python-telegram-bot.org";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ veprbl pingiun ];
+    maintainers = with maintainers; [veprbl pingiun];
   };
 }

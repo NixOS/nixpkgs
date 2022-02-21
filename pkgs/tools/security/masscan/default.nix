@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, libpcap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  libpcap,
 }:
-
 stdenv.mkDerivation rec {
   pname = "masscan";
   version = "1.3.2";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-pm755" "-pDm755"
   '';
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [rnhmjoj];
   };
 }

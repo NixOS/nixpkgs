@@ -1,17 +1,17 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, cachelib
-, cssselect
-, fetchFromGitHub
-, keep
-, lxml
-, pygments
-, pyquery
-, requests
-, pytestCheckHook
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  cachelib,
+  cssselect,
+  fetchFromGitHub,
+  keep,
+  lxml,
+  pygments,
+  pyquery,
+  requests,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "howdoi";
   version = "2.0.19";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Instant coding answers via the command line";
     homepage = "https://pypi.python.org/pypi/howdoi";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

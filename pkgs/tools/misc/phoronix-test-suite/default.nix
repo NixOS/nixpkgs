@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, php, which, gnused, makeWrapper, gnumake, gcc, callPackage }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  php,
+  which,
+  gnused,
+  makeWrapper,
+  gnumake,
+  gcc,
+  callPackage,
+}:
 stdenv.mkDerivation rec {
   pname = "phoronix-test-suite";
   version = "10.8.2";
@@ -9,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hmgTQ9IEFYMasW72w9HDF+I0XncZJeBpiukgoDqeqrY=";
   };
 
-  buildInputs = [ php ];
-  nativeBuildInputs = [ which gnused makeWrapper ];
+  buildInputs = [php];
+  nativeBuildInputs = [which gnused makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -18,19 +28,19 @@ stdenv.mkDerivation rec {
     ./install-sh $out
     wrapProgram $out/bin/phoronix-test-suite \
     --set PHP_BIN ${php}/bin/php \
-    --prefix PATH : ${lib.makeBinPath [ gnumake gcc ]}
+    --prefix PATH : ${lib.makeBinPath [gnumake gcc]}
 
     runHook postInstall
   '';
 
   passthru.tests = {
-    simple-execution = callPackage ./tests.nix { };
+    simple-execution = callPackage ./tests.nix {};
   };
 
   meta = with lib; {
     description = "Open-Source, Automated Benchmarking";
     homepage = "https://www.phoronix-test-suite.com/";
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [davidak];
     license = licenses.gpl3;
     platforms = with platforms; unix;
   };

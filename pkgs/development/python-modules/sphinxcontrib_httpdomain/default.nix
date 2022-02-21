@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
 }:
-
 buildPythonPackage rec {
   pname = "sphinxcontrib-httpdomain";
   version = "1.8.0";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "2059cfabd0cca8fcc3455cc8ffad92f0915a7d3bb03bfddba078a6a0f35beec5";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  propagatedBuildInputs = [sphinx];
 
   # Check is disabled due to this issue:
   # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
@@ -24,5 +24,4 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
     license = licenses.bsd0;
   };
-
 }

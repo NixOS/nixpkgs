@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, vala, libcanberra, gobject-introspection, libtool, gnome, meson, ninja }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  vala,
+  libcanberra,
+  gobject-introspection,
+  libtool,
+  gnome,
+  meson,
+  ninja,
+}:
 stdenv.mkDerivation rec {
   pname = "gsound";
   version = "1.0.3";
@@ -10,9 +22,9 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ pkg-config meson ninja gobject-introspection libtool vala ];
-  buildInputs = [ glib libcanberra ];
+  depsBuildBuild = [pkg-config];
+  nativeBuildInputs = [pkg-config meson ninja gobject-introspection libtool vala];
+  buildInputs = [glib libcanberra];
 
   mesonFlags = [
     "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"

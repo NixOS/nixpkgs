@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, ncurses }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "hexcurse";
   version = "1.60.0";
@@ -10,8 +15,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "17ckkxfzbqvvfdnh10if4aqdcq98q3vl6dn1v6f4lhr4ifnyjdlk";
   };
-  buildInputs = [ ncurses ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=stringop-truncation" ];
+  buildInputs = [ncurses];
+  NIX_CFLAGS_COMPILE = ["-Wno-error=stringop-overflow" "-Wno-error=stringop-truncation"];
   patches = [
     # gcc7 compat
     (fetchpatch {
@@ -46,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LonnyGomes/hexcurse";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [cstrahan];
   };
 }

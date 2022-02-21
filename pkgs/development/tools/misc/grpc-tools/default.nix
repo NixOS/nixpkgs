@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "grpc-tools";
   version = "1.11.2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/packages/grpc-tools";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   installPhase = ''
     install -Dm755 -t $out/bin grpc_node_plugin
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/grpc/grpc-node/tree/master/packages/grpc-tools";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.nzhang-zh ];
+    maintainers = [maintainers.nzhang-zh];
   };
 }

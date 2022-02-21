@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "sjasmplus";
   version = "1.18.3";
@@ -27,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "A Z80 assembly language cross compiler. It is based on the SjASM source code by Sjoerd Mastijn";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ electrified ];
+    maintainers = with maintainers; [electrified];
   };
 }

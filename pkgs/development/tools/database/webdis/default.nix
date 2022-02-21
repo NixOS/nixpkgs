@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, hiredis, http-parser, jansson, libevent, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  hiredis,
+  http-parser,
+  jansson,
+  libevent,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "webdis";
   version = "0.1.19";
@@ -11,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Q5tFEuyTfjXaa/0JOpNjzokstKaQPwR1szqdzYrqXxc=";
   };
 
-  buildInputs = [ hiredis http-parser jansson libevent ];
+  buildInputs = [hiredis http-parser jansson libevent];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -23,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://webd.is/";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with maintainers; [wucke13];
   };
 }

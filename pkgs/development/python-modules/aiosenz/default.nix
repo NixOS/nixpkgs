@@ -1,12 +1,12 @@
-{ lib
-, authlib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  authlib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiosenz";
   version = "1.0.0";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for the nVent Raychem SENZ RestAPI";
     homepage = "https://github.com/milanmeu/aiosenz";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [lgpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,26 +1,21 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   initScriptBuilder = pkgs.substituteAll {
     src = ./init-script-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   };
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     boot.loader.initScript = {
-
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -36,16 +31,11 @@ in
         '';
       };
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.boot.loader.initScript.enable {
-
     system.build.installBootLoader = initScriptBuilder;
-
   };
-
 }

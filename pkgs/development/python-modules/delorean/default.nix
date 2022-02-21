@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, Babel
-, humanize
-, python-dateutil
-, tzlocal
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  Babel,
+  humanize,
+  python-dateutil,
+  tzlocal,
 }:
-
 buildPythonPackage rec {
   pname = "Delorean";
   version = "1.0.0";
@@ -16,9 +16,9 @@ buildPythonPackage rec {
     sha256 = "0d31ay7yq2w7xz7m3ssk5phjbm64b2k8hmgcif22719k29p7hrzy";
   };
 
-  propagatedBuildInputs = [ Babel humanize python-dateutil tzlocal ];
+  propagatedBuildInputs = [Babel humanize python-dateutil tzlocal];
 
-  pythonImportsCheck = [ "delorean" ];
+  pythonImportsCheck = ["delorean"];
 
   # test data not included
   doCheck = false;
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Delorean: Time Travel Made Easy";
     homepage = "https://github.com/myusuf3/delorean";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [globin];
   };
 }

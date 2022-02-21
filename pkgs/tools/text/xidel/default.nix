@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchsvn, fetchFromGitHub, fpc }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  fetchFromGitHub,
+  fpc,
+}: let
   flreSrc = fetchFromGitHub {
     owner = "benibela";
     repo = "flre";
@@ -24,70 +28,71 @@ let
     rev = "c9c5cc3a87271180d4fb5bb0b17040763d2cfe06"; # latest as of 0.9.8 release date
     sha256 = "057hn7cb1vy827gvim3b6vwgfdh2ckjy8h9yj1ry7lv6hw8ynx6n";
   };
-in stdenv.mkDerivation rec {
-  pname = "xidel";
-  version = "0.9.8";
+in
+  stdenv.mkDerivation rec {
+    pname = "xidel";
+    version = "0.9.8";
 
-  src = fetchFromGitHub {
-    owner = "benibela";
-    repo = pname;
-    rev = "Xidel_${version}";
-    sha256 = "0q75jjyciybvj6y17s2283zis9fcw8w5pfsq8bn7diinnbjnzgl6";
-  };
+    src = fetchFromGitHub {
+      owner = "benibela";
+      repo = pname;
+      rev = "Xidel_${version}";
+      sha256 = "0q75jjyciybvj6y17s2283zis9fcw8w5pfsq8bn7diinnbjnzgl6";
+    };
 
-  nativeBuildInputs = [ fpc ];
+    nativeBuildInputs = [fpc];
 
-  patchPhase = ''
-    patchShebangs \
-      build.sh \
-      tests/test.sh \
-      tests/tests-file-module.sh \
-      tests/tests.sh \
-      tests/downloadTest.sh \
-      tests/downloadTests.sh \
-      tests/zorbajsoniq.sh \
-      tests/zorbajsoniq/download.sh
-  '';
+    patchPhase = ''
+      patchShebangs \
+        build.sh \
+        tests/test.sh \
+        tests/tests-file-module.sh \
+        tests/tests.sh \
+        tests/downloadTest.sh \
+        tests/downloadTests.sh \
+        tests/zorbajsoniq.sh \
+        tests/zorbajsoniq/download.sh
+    '';
 
-  preBuildPhase = ''
-    mkdir -p import/{flre,synapse} rcmdline internettools
-    cp -R ${flreSrc}/. import/flre
-    cp -R ${synapseSrc}/. import/synapse
-    cp -R ${rcmdlineSrc}/. rcmdline
-    cp -R ${internettoolsSrc}/. internettools
-  '';
+    preBuildPhase = ''
+      mkdir -p import/{flre,synapse} rcmdline internettools
+      cp -R ${flreSrc}/. import/flre
+      cp -R ${synapseSrc}/. import/synapse
+      cp -R ${rcmdlineSrc}/. rcmdline
+      cp -R ${internettoolsSrc}/. internettools
+    '';
 
-  buildPhase = ''
-    runHook preBuildPhase
-    ./build.sh
-    runHook postBuildPhase
-  '';
+    buildPhase = ''
+      runHook preBuildPhase
+      ./build.sh
+      runHook postBuildPhase
+    '';
 
-  installPhase = ''
-    mkdir -p "$out/bin" "$out/share/man/man1"
-    cp meta/xidel.1 "$out/share/man/man1/"
-    cp xidel "$out/bin/"
-  '';
+    installPhase = ''
+      mkdir -p "$out/bin" "$out/share/man/man1"
+      cp meta/xidel.1 "$out/share/man/man1/"
+      cp xidel "$out/bin/"
+    '';
 
-  doCheck = true;
+    doCheck = true;
 
-  checkPhase = ''
-    # Not all, if any, of these tests are blockers. Failing or not this phase will pass.
-    # As of 2021-08-15, all of 37 failed tests are linked with the lack of network access.
-    ./tests/tests.sh
-  '';
+    checkPhase = ''
+      # Not all, if any, of these tests are blockers. Failing or not this phase will pass.
+      # As of 2021-08-15, all of 37 failed tests are linked with the lack of network access.
+      ./tests/tests.sh
+    '';
 
-  doInstallCheck = true;
+    doInstallCheck = true;
 
-  installCheckPhase = ''
-    $out/bin/xidel --version | grep "${version}"
-  '';
+    installCheckPhase = ''
+      $out/bin/xidel --version | grep "${version}"
+    '';
 
-  meta = with lib; {
-    description = "Command line tool to download and extract data from HTML/XML pages as well as JSON APIs";
-    homepage = "https://www.videlibri.de/xidel.html";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
-  };
-}
+    meta = with lib; {
+      description = "Command line tool to download and extract data from HTML/XML pages as well as JSON APIs";
+      homepage = "https://www.videlibri.de/xidel.html";
+      license = licenses.gpl3Plus;
+      platforms = platforms.linux;
+      maintainers = [maintainers.bjornfor];
+    };
+  }

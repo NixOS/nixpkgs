@@ -1,9 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, netcdf
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  netcdf,
 }:
-
 buildOctavePackage rec {
   pname = "netcdf";
   version = "1.0.14";
@@ -20,7 +20,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/netcdf/index.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "A NetCDF interface for Octave";
   };
 }

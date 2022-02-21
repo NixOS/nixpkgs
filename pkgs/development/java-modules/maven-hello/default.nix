@@ -1,41 +1,46 @@
-{ lib
-, pkgs
-, mavenbuild
-, maven
-, jdk8
+{
+  lib,
+  pkgs,
+  mavenbuild,
+  maven,
+  jdk8,
 }:
-
-with pkgs.javaPackages;
-
-let
-  poms = import ../poms.nix { inherit fetchMaven; };
+with pkgs.javaPackages; let
+  poms = import ../poms.nix {inherit fetchMaven;};
   mavenbuild-jdk8 = mavenbuild.override {
     maven = maven.override {
       jdk = jdk8;
     };
   };
 in rec {
-  mavenHelloRec = { mavenDeps, mavenbuild, sha512, version, skipTests ? true, quiet ? true }: mavenbuild {
-    inherit mavenDeps sha512 version skipTests quiet;
+  mavenHelloRec = {
+    mavenDeps,
+    mavenbuild,
+    sha512,
+    version,
+    skipTests ? true,
+    quiet ? true,
+  }:
+    mavenbuild {
+      inherit mavenDeps sha512 version skipTests quiet;
 
-    name = "maven-hello-${version}";
-    src = pkgs.fetchFromGitHub {
-      inherit sha512;
-      owner = "NeQuissimus";
-      repo = "maven-hello";
-      rev = "v${version}";
-    };
-    m2Path = "/com/nequissimus/maven-hello/${version}";
+      name = "maven-hello-${version}";
+      src = pkgs.fetchFromGitHub {
+        inherit sha512;
+        owner = "NeQuissimus";
+        repo = "maven-hello";
+        rev = "v${version}";
+      };
+      m2Path = "/com/nequissimus/maven-hello/${version}";
 
-    meta = {
-      homepage = "https://github.com/NeQuissimus/maven-hello/";
-      description = "Maven Hello World";
-      license = lib.licenses.unlicense;
-      platforms = lib.platforms.all;
-      maintainers = with lib.maintainers;
-        [ nequissimus ];
+      meta = {
+        homepage = "https://github.com/NeQuissimus/maven-hello/";
+        description = "Maven Hello World";
+        license = lib.licenses.unlicense;
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [nequissimus];
+      };
     };
-  };
 
   mavenHello_1_0 = mavenHelloRec {
     mavenDeps = [];
@@ -45,7 +50,7 @@ in rec {
   };
 
   mavenHello_1_1 = mavenHelloRec {
-    mavenDeps = [ junit_4_12 mavenSurefireJunit4_2_12_4 hamcrestCore_1_3 ] ++ (with poms; [ surefireProviders_2_12_4 ]);
+    mavenDeps = [junit_4_12 mavenSurefireJunit4_2_12_4 hamcrestCore_1_3] ++ (with poms; [surefireProviders_2_12_4]);
     sha512 = "2f13592blvfgwad61174fza99ncb5jlch4sjjindk1pcaixqw26fnjfxb4ck80cknkihvcsylhviyfvhpm1ivvpg0zkicxva37cr4ri";
     version = "1.1";
     skipTests = false;

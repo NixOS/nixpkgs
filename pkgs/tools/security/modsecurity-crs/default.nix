@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "3.3.2";
   pname = "modsecurity-crs";
@@ -37,6 +40,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with maintainers; [izorkin];
   };
 }

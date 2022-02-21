@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchurl, unzip, jre8
-, copyDesktopItems
-, makeDesktopItem
-, iconConvTools
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  jre8,
+  copyDesktopItems,
+  makeDesktopItem,
+  iconConvTools,
 }:
-
 stdenv.mkDerivation rec {
   pname = "protege-distribution";
   version = "5.5.0";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "092x22wyisdnhccx817mqq15sxqdfc7iz4whr4mbvzrd9di6ipjq";
   };
 
-  nativeBuildInputs = [ unzip copyDesktopItems iconConvTools ];
+  nativeBuildInputs = [unzip copyDesktopItems iconConvTools];
 
   patches = [
     # Replace logic for searching the install directory with a static cd into $out
@@ -69,8 +73,8 @@ stdenv.mkDerivation rec {
     description = "The OWL2 ontology editor from Stanford, with third-party plugins included";
     homepage = "https://protege.stanford.edu/";
     downloadPage = "https://protege.stanford.edu/products.php#desktop-protege";
-    maintainers = with maintainers; [ nessdoor ];
-    license = with licenses; [ asl20 bsd2 epl10 lgpl3 ];
+    maintainers = with maintainers; [nessdoor];
+    license = with licenses; [asl20 bsd2 epl10 lgpl3];
     platforms = platforms.linux;
   };
 }

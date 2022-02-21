@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoconf
-, automake
-, gettext
-, libtool
-, perl
-, pkg-config
-, glib
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  gettext,
+  libtool,
+  perl,
+  pkg-config,
+  glib,
+  xorg,
 }:
 stdenv.mkDerivation rec {
   pname = "xdg-launch";
@@ -52,6 +53,6 @@ stdenv.mkDerivation rec {
     description = "A command line XDG compliant launcher and tools";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.ck3d ];
+    maintainers = [maintainers.ck3d];
   };
 }

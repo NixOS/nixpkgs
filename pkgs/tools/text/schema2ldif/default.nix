@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, perlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "schema2ldif";
   version = "1.3";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "00cd9xx9g0mnnfn5lvay3vg166z84jla0ya1x34ljdc8bflxsr9a";
   };
 
-  buildInputs = [ perlPackages.perl ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [perlPackages.perl];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -20,7 +25,7 @@ stdenv.mkDerivation rec {
     gzip -c man/ldap-schema-manager.1 > $out/share/man/man1/ldap-schema-manager.1.gz
 
     wrapProgram $out/bin/schema2ldif \
-       --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.GetoptLong ]}"
+       --prefix PERL5PATH : "${perlPackages.makePerlPath [perlPackages.GetoptLong]}"
   '';
 
   meta = with lib; {
@@ -28,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.fusiondirectory.org/schema2ldif-project-and-components/";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [das_j];
   };
 }

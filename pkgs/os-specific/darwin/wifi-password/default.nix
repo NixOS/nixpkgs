@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "0.1.0";
   pname = "wifi-password";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "Get the password of the wifi you're on";
     platforms = lib.platforms.darwin;
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nikitavoloboev ];
+    maintainers = [lib.maintainers.nikitavoloboev];
   };
 }

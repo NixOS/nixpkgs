@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, geopy
-, requests
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  geopy,
+  requests,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "aemet-opendata";
   version = "0.2.1";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "aemet_opendata.interface" ];
+  pythonImportsCheck = ["aemet_opendata.interface"];
 
   meta = with lib; {
     description = "Python client for AEMET OpenData Rest API";
     homepage = "https://github.com/Noltari/AEMET-OpenData";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

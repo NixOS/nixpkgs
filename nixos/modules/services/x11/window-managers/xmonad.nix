@@ -1,43 +1,52 @@
-{pkgs, lib, config, ...}:
-
-with lib;
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+with lib; let
   inherit (lib) mkOption mkIf optionals literalExpression optionalString;
   cfg = config.services.xserver.windowManager.xmonad;
 
   ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
-  packages = self: cfg.extraPackages self ++
-                   optionals cfg.enableContribAndExtras
-                   [ self.xmonad-contrib self.xmonad-extras ];
+  packages = self:
+    cfg.extraPackages self
+    ++ optionals cfg.enableContribAndExtras
+    [self.xmonad-contrib self.xmonad-extras];
 
   xmonad-vanilla = pkgs.xmonad-with-packages.override {
     inherit ghcWithPackages packages;
   };
 
-  xmonad-config =
-    let
-      xmonadAndPackages = self: [ self.xmonad ] ++ packages self;
-      xmonadEnv = ghcWithPackages xmonadAndPackages;
-      configured = pkgs.writers.writeHaskellBin "xmonad" {
-        ghc = cfg.haskellPackages.ghc;
-        libraries = xmonadAndPackages cfg.haskellPackages;
-        inherit (cfg) ghcArgs;
-      } cfg.config;
-    in
-      pkgs.runCommandLocal "xmonad" {
-        nativeBuildInputs = [ pkgs.makeWrapper ];
-      } (''
-        install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
-        makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
-      '' + optionalString cfg.enableConfiguredRecompile ''
-          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
-      '' + ''
-          --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
-      '');
+  xmonad-config = let
+    xmonadAndPackages = self: [self.xmonad] ++ packages self;
+    xmonadEnv = ghcWithPackages xmonadAndPackages;
+    configured = pkgs.writers.writeHaskellBin "xmonad" {
+      ghc = cfg.haskellPackages.ghc;
+      libraries = xmonadAndPackages cfg.haskellPackages;
+      inherit (cfg) ghcArgs;
+    }
+    cfg.config;
+  in
+    pkgs.runCommandLocal "xmonad" {
+      nativeBuildInputs = [pkgs.makeWrapper];
+    } (''
+      install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
+      makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
+    ''
+    + optionalString cfg.enableConfiguredRecompile ''
+      --set NIX_GHC "${xmonadEnv}/bin/ghc" \
+    ''
+    + ''
+      --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
+    '');
 
-  xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
+  xmonad =
+    if (cfg.config != null)
+    then xmonad-config
+    else xmonad-vanilla;
 in {
-  meta.maintainers = with maintainers; [ lassulus xaverdh ivanbrennan ];
+  meta.maintainers = with maintainers; [lassulus xaverdh ivanbrennan];
 
   options = {
     services.xserver.windowManager.xmonad = {
@@ -184,20 +193,21 @@ in {
           invocation when xmonad.config is set.
         '';
       };
-
     };
   };
   config = mkIf cfg.enable {
     services.xserver.windowManager = {
-      session = [{
-        name = "xmonad";
-        start = ''
-           systemd-cat -t xmonad -- ${xmonad}/bin/xmonad ${lib.escapeShellArgs cfg.xmonadCliArgs} &
-           waitPID=$!
-        '';
-      }];
+      session = [
+        {
+          name = "xmonad";
+          start = ''
+            systemd-cat -t xmonad -- ${xmonad}/bin/xmonad ${lib.escapeShellArgs cfg.xmonadCliArgs} &
+            waitPID=$!
+          '';
+        }
+      ];
     };
 
-    environment.systemPackages = [ xmonad ];
+    environment.systemPackages = [xmonad];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "ueagle";
   version = "0.0.2";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "uEagle" ];
+  pythonImportsCheck = ["uEagle"];
 
   meta = with lib; {
     description = "Python library Rainforest EAGLE devices";
     homepage = "https://github.com/jcalbert/uEagle";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

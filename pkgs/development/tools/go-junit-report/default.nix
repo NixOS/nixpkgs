@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "go-junit-report-unstable";
   version = "2018-06-14";
@@ -16,8 +19,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Converts go test output to an xml report, suitable for applications that expect junit xml reports (e.g. Jenkins)";
-    homepage    = "https://${goPackagePath}";
-    maintainers = with maintainers; [ cryptix ];
-    license     = licenses.mit;
+    homepage = "https://${goPackagePath}";
+    maintainers = with maintainers; [cryptix];
+    license = licenses.mit;
   };
 }

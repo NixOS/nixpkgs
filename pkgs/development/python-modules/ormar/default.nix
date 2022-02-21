@@ -1,27 +1,27 @@
-{ lib
-, aiomysql
-, aiopg
-, aiosqlite
-, asyncpg
-, buildPythonPackage
-, cryptography
-, databases
-, fastapi
-, fetchFromGitHub
-, importlib-metadata
-, mysqlclient
-, orjson
-, poetry-core
-, psycopg2
-, pydantic
-, pymysql
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  aiomysql,
+  aiopg,
+  aiosqlite,
+  asyncpg,
+  buildPythonPackage,
+  cryptography,
+  databases,
+  fastapi,
+  fetchFromGitHub,
+  importlib-metadata,
+  mysqlclient,
+  orjson,
+  poetry-core,
+  psycopg2,
+  pydantic,
+  pymysql,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "ormar";
   version = "0.10.24";
@@ -40,20 +40,22 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    aiomysql
-    aiosqlite
-    asyncpg
-    cryptography
-    databases
-    orjson
-    psycopg2
-    pydantic
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      aiomysql
+      aiosqlite
+      asyncpg
+      cryptography
+      databases
+      orjson
+      psycopg2
+      pydantic
+      sqlalchemy
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+      importlib-metadata
+    ];
 
   checkInputs = [
     aiomysql
@@ -87,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/collerek/ormar";
     description = "Async ORM with fastapi in mind and pydantic validation";
     license = licenses.mit;
-    maintainers = with maintainers; [ andreasfelix ];
+    maintainers = with maintainers; [andreasfelix];
   };
 }

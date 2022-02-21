@@ -1,15 +1,15 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, qtbase
-, qtserialport
-, qtermwidget
-, cmake
-, ninja
-, libcprime
-, libcsys
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  qtserialport,
+  qtermwidget,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
 }:
-
 mkDerivation rec {
   pname = "coreterminal";
   version = "4.3.0";
@@ -38,7 +38,7 @@ mkDerivation rec {
     description = "A terminal emulator from the C Suite";
     homepage = "https://gitlab.com/cubocore/coreapps/coreterminal";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

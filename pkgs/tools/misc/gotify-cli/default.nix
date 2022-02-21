@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "gotify-cli";
   version = "2.2.1";
@@ -18,13 +21,15 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X main.Version=${version}" "-X main.Commit=${version}" "-X main.BuildDate=1970-01-01"
+    "-X main.Version=${version}"
+    "-X main.Commit=${version}"
+    "-X main.BuildDate=1970-01-01"
   ];
 
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://github.com/gotify/cli";
     description = "A command line interface for pushing messages to gotify/server";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

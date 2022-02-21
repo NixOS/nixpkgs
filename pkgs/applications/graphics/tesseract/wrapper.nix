@@ -1,23 +1,26 @@
-{ lib, makeWrapper, tesseractBase, languages
-
-# A list of languages like [ "eng" "spa" … ] or `null` for all available languages
-, enableLanguages ? null
-
-# A list of files or a directory containing files
-, tessdata ? (if enableLanguages == null then languages.all
-              else map (lang: languages.${lang}) enableLanguages)
-
-# This argument is obsolete
-, enableLanguagesHash ? null
-}:
-
-let
-  passthru = { inherit tesseractBase languages tessdata; };
+{
+  lib,
+  makeWrapper,
+  tesseractBase,
+  languages
+  # A list of languages like [ "eng" "spa" … ] or `null` for all available languages
+  ,
+  enableLanguages ? null
+  # A list of files or a directory containing files
+  ,
+  tessdata ? (if enableLanguages == null
+  then languages.all
+  else map (lang: languages.${lang}) enableLanguages)
+  # This argument is obsolete
+  ,
+  enableLanguagesHash ? null,
+}: let
+  passthru = {inherit tesseractBase languages tessdata;};
 
   tesseractWithData = tesseractBase.overrideAttrs (_: {
     inherit tesseractBase tessdata;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
 
     buildCommand = ''
       makeWrapper {$tesseractBase,$out}/bin/tesseract --set-default TESSDATA_PREFIX $out/share/tessdata
@@ -49,10 +52,14 @@ let
     '';
   });
 
-  tesseract = (if enableLanguages == [] then tesseractBase else tesseractWithData) // passthru;
+  tesseract =
+    (if enableLanguages == []
+    then tesseractBase
+    else tesseractWithData)
+    // passthru;
 in
-  if enableLanguagesHash == null then
-    tesseract
+  if enableLanguagesHash == null
+  then tesseract
   else
     lib.warn "Argument `enableLanguagesHash` is obsolete and can be removed."
     tesseract

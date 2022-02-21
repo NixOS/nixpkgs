@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl
-, libiconv
-, libpng
-, ncurses
-, pcre
-, readline
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+  libpng,
+  ncurses,
+  pcre,
+  readline,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "slang";
   version = "2.3.2";
@@ -16,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/J47D8T2fDwfbUPJDBalxC0Re44oRXxbRoMbi1064xo=";
   };
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = ["out" "dev" "man" "doc"];
 
-  patches = [ ./terminfo-dirs.patch ];
+  patches = [./terminfo-dirs.patch];
 
   # Fix some wrong hardcoded paths
   preConfigure = ''
@@ -35,14 +37,16 @@ stdenv.mkDerivation rec {
     "--with-z=${zlib.dev}"
   ];
 
-  buildInputs = [
-    libpng
-    pcre
-    readline
-    zlib
-  ] ++ lib.optionals (stdenv.isDarwin) [ libiconv ];
+  buildInputs =
+    [
+      libpng
+      pcre
+      readline
+      zlib
+    ]
+    ++ lib.optionals (stdenv.isDarwin) [libiconv];
 
-  propagatedBuildInputs = [ ncurses ];
+  propagatedBuildInputs = [ncurses];
 
   # slang 2.3.2 does not support parallel building
   enableParallelBuilding = false;
@@ -76,7 +80,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.jedsoft.org/slang/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

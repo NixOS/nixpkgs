@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+}:
 buildDunePackage rec {
   pname = "pprint";
   version = "20220103";
@@ -17,6 +20,6 @@ buildDunePackage rec {
     inherit (src.meta) homepage;
     description = "An OCaml library for pretty-printing textual documents";
     license = licenses.lgpl2Only;
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [maintainers.vbgl];
   };
 }

@@ -1,10 +1,14 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "freeswitch";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ misuzu ];
+    maintainers = [misuzu];
   };
   nodes = {
-    node0 = { config, lib, ... }: {
+    node0 = {
+      config,
+      lib,
+      ...
+    }: {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
         ipv4.addresses = [

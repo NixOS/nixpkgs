@@ -1,21 +1,19 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-
-, qmake
-, qttools
-
-, curl
-, ffmpeg
-, libmediainfo
-, libzen
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, qtsvg
-, quazip
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  curl,
+  ffmpeg,
+  libmediainfo,
+  libzen,
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  qtsvg,
+  quazip,
 }:
-
 mkDerivation rec {
   pname = "mediaelch";
   version = "2.8.14";
@@ -28,9 +26,9 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [qmake qttools];
 
-  buildInputs = [ curl ffmpeg libmediainfo libzen qtbase qtdeclarative qtmultimedia qtsvg ];
+  buildInputs = [curl ffmpeg libmediainfo libzen qtbase qtdeclarative qtmultimedia qtsvg];
 
   qmakeFlags = [
     "USE_EXTERN_QUAZIP=${quazip}/include/quazip5"
@@ -49,7 +47,7 @@ mkDerivation rec {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ stunkymonkey ];
+    maintainers = with maintainers; [stunkymonkey];
     platforms = platforms.linux;
   };
 }

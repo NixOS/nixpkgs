@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tornado
-, requests
-, httplib2
-, sure
-, nose
-, nose-exclude
-, coverage
-, rednose
-, nose-randomly
-, six
-, mock
-, pytest
-, freezegun
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  tornado,
+  requests,
+  httplib2,
+  sure,
+  nose,
+  nose-exclude,
+  coverage,
+  rednose,
+  nose-randomly,
+  six,
+  mock,
+  pytest,
+  freezegun,
 }:
-
 buildPythonPackage rec {
   pname = "httpretty";
   version = "1.1.4";
@@ -29,11 +29,22 @@ buildPythonPackage rec {
     sha256 = "20de0e5dd5a18292d36d928cc3d6e52f8b2ac73daec40d41eb62dee154933b68";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
-  checkInputs = [ nose sure coverage mock rednose pytest
+  checkInputs = [
+    nose
+    sure
+    coverage
+    mock
+    rednose
+    pytest
     # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude freezegun
+    nose-randomly
+    requests
+    tornado
+    httplib2
+    nose-exclude
+    freezegun
   ];
 
   checkPhase = ''

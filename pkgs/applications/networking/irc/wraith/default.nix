@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "wraith";
   version = "1.4.10";
@@ -7,9 +11,9 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/wraithbotpack/wraith-v${version}.tar.gz";
     sha256 = "1h8159g6wh1hi69cnhqkgwwwa95fa6z1zrzjl219mynbf6vjjzkw";
   };
-  hardeningDisable = [ "format" ];
-  buildInputs = [ openssl ];
-  patches = [ ./configure.patch ./dlopen.patch ];
+  hardeningDisable = ["format"];
+  buildInputs = [openssl];
+  patches = [./configure.patch ./dlopen.patch];
   postPatch = ''
     substituteInPlace configure        --subst-var-by openssl.dev ${openssl.dev} \
                                        --subst-var-by openssl.out ${openssl.out}
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wraith.botpack.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elitak ];
+    maintainers = with maintainers; [elitak];
     platforms = platforms.linux;
   };
 }

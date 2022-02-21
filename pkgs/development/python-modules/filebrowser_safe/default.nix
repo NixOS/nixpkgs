@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "filebrowser-safe";
   version = "1.1.1";
@@ -35,8 +35,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/stephenmcd/filebrowser-safe";
     downloadPage = "https://pypi.python.org/pypi/filebrowser_safe/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ prikhi ];
+    maintainers = with maintainers; [prikhi];
     platforms = platforms.unix;
   };
-
 }

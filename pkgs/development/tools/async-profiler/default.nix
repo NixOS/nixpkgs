@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, jdk8 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk8,
+}:
 stdenv.mkDerivation rec {
   pname = "async-profiler";
   version = "2.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vSBueRNraMgLcaprPsBUriX3WZ7N0UrllnSVLL2F738=";
   };
 
-  buildInputs = [ jdk8 ];
+  buildInputs = [jdk8];
 
   installPhase = ''
     runHook preInstall
@@ -37,9 +41,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A low overhead sampling profiler for Java that does not suffer from Safepoint bias problem";
-    homepage    = "https://github.com/jvm-profiling-tools/async-profiler";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ mschuwalow ];
-    platforms   = platforms.all;
+    homepage = "https://github.com/jvm-profiling-tools/async-profiler";
+    license = licenses.asl20;
+    maintainers = with maintainers; [mschuwalow];
+    platforms = platforms.all;
   };
 }

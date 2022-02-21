@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rust-script";
   version = "0.20.0";
@@ -19,7 +22,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Run Rust files and expressions as scripts without any setup or compilation step";
     homepage = "https://rust-script.org";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ figsoda ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [figsoda];
   };
 }

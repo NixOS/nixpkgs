@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "alertmanager-bot";
   version = "0.4.3";
@@ -18,7 +21,10 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-X main.Version=v${version}" "-X main.Revision=${src.rev}"
+    "-s"
+    "-w"
+    "-X main.Version=v${version}"
+    "-X main.Revision=${src.rev}"
   ];
 
   postInstall = ''
@@ -29,6 +35,6 @@ buildGoModule rec {
     description = "Bot for Prometheus' Alertmanager";
     homepage = "https://github.com/metalmatze/alertmanager-bot";
     license = licenses.mit;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [mmahut];
   };
 }

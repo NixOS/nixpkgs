@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "flatten-dict";
   version = "0.4.2";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Module for flattening and unflattening dict-like objects";
     homepage = "https://github.com/ianlini/flatten-dict";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

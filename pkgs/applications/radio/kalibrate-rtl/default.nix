@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fftw, rtl-sdr, libusb1 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  fftw,
+  rtl-sdr,
+  libusb1,
+}:
 stdenv.mkDerivation {
   pname = "kalibrate-rtl";
   version = "unstable-2013-12-14";
@@ -11,9 +19,9 @@ stdenv.mkDerivation {
     sha256 = "1spbfflkqnw9s8317ppsf7b1nnkicqsmaqsnz1zf8i49ix70i6kn";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [ fftw rtl-sdr libusb1 ];
+  buildInputs = [fftw rtl-sdr libusb1];
 
   meta = with lib; {
     description = "Calculate local oscillator frequency offset in RTL-SDR devices";
@@ -27,6 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/steve-m/kalibrate-rtl";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
   };
 }

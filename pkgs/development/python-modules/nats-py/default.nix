@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, ed25519
-, fetchFromGitHub
-, nats-server
-, pytestCheckHook
-, pythonOlder
-, uvloop
+{
+  lib,
+  buildPythonPackage,
+  ed25519,
+  fetchFromGitHub,
+  nats-server,
+  pytestCheckHook,
+  pythonOlder,
+  uvloop,
 }:
-
 buildPythonPackage rec {
   pname = "nats-py";
   version = "2.0.0";
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for NATS.io";
     homepage = "https://github.com/nats-io/nats.py";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

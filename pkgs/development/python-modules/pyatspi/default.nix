@@ -1,5 +1,13 @@
-{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome }:
-
+{
+  lib,
+  fetchurl,
+  pkg-config,
+  buildPythonPackage,
+  isPy3k,
+  at-spi2-core,
+  pygobject3,
+  gnome,
+}:
 buildPythonPackage rec {
   pname = "pyatspi";
   version = "2.38.2";
@@ -10,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "DnCJwLYwlhS1NiCDazRi1/kShOQ2/kkpuhYZqEHPEYU=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
     at-spi2-core
@@ -31,7 +39,7 @@ buildPythonPackage rec {
     description = "Python client bindings for D-Bus AT-SPI";
     homepage = "https://wiki.linuxfoundation.org/accessibility/d-bus";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = with platforms; unix;
   };
 }

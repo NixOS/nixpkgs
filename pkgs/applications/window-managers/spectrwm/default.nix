@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, xorg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  xorg,
+}:
 stdenv.mkDerivation {
   pname = "spectrwm";
   version = "3.4.1";
@@ -11,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "0bf0d25yr0craksamczn2mdy6cjp27l88smihlw9bw4p6a2qhi41";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = with xorg; [
     libXrandr
     libXcursor
@@ -23,17 +28,20 @@ stdenv.mkDerivation {
   ];
 
   prePatch = let
-    subdir = if stdenv.isDarwin then "osx" else "linux";
+    subdir =
+      if stdenv.isDarwin
+      then "osx"
+      else "linux";
   in "cd ${subdir}";
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     description = "A tiling window manager";
-    homepage    = "https://github.com/conformal/spectrwm";
-    maintainers = with maintainers; [ christianharke ];
-    license     = licenses.isc;
-    platforms   = platforms.all;
+    homepage = "https://github.com/conformal/spectrwm";
+    maintainers = with maintainers; [christianharke];
+    license = licenses.isc;
+    platforms = platforms.all;
 
     longDescription = ''
       spectrwm is a small dynamic tiling window manager for X11. It
@@ -44,5 +52,4 @@ stdenv.mkDerivation {
       strives to be small, compact and fast.
     '';
   };
-
 }

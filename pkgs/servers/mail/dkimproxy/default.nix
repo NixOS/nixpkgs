@@ -1,5 +1,9 @@
-{ lib, stdenv, perlPackages, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  perlPackages,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "dkimproxy";
   version = "1.4.1";
@@ -20,14 +24,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [ perlPackages.perl ];
-  propagatedBuildInputs = with perlPackages; [ Error MailDKIM MIMETools NetServer ];
+  buildInputs = [perlPackages.perl];
+  propagatedBuildInputs = with perlPackages; [Error MailDKIM MIMETools NetServer];
 
   meta = with lib; {
     description = "SMTP-proxy that signs and/or verifies emails";
     homepage = "http://dkimproxy.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ekleog ];
+    maintainers = [maintainers.ekleog];
     platforms = platforms.all;
   };
 }

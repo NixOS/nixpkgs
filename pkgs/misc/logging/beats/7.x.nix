@@ -1,48 +1,54 @@
-{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd }:
+{
+  lib,
+  fetchFromGitHub,
+  elk7Version,
+  buildGoModule,
+  libpcap,
+  nixosTests,
+  systemd,
+}: let
+  beat = package: extraArgs:
+    buildGoModule (rec {
+      pname = package;
+      version = elk7Version;
 
-let beat = package: extraArgs: buildGoModule (rec {
-  pname = package;
-  version = elk7Version;
+      src = fetchFromGitHub {
+        owner = "elastic";
+        repo = "beats";
+        rev = "v${version}";
+        sha256 = "sha256-9Jl5Xo1iKdOY9ZE5JXKSL4ee+NdsN3KCY2dDYuxlzPI=";
+      };
 
-  src = fetchFromGitHub {
-    owner = "elastic";
-    repo = "beats";
-    rev = "v${version}";
-    sha256 = "sha256-9Jl5Xo1iKdOY9ZE5JXKSL4ee+NdsN3KCY2dDYuxlzPI=";
-  };
+      vendorSha256 = "sha256-fiqCccS2IAnTzfPfUqY0Wy9uRUuiYNtiVvpAFZJOPVI=";
 
-  vendorSha256 = "sha256-fiqCccS2IAnTzfPfUqY0Wy9uRUuiYNtiVvpAFZJOPVI=";
+      subPackages = [package];
 
-  subPackages = [ package ];
-
-  meta = with lib; {
-    homepage = "https://www.elastic.co/products/beats";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fadenb basvandijk ];
-    platforms = platforms.linux;
-  };
-} // extraArgs);
-in
-rec {
+      meta = with lib; {
+        homepage = "https://www.elastic.co/products/beats";
+        license = licenses.asl20;
+        maintainers = with maintainers; [fadenb basvandijk];
+        platforms = platforms.linux;
+      };
+    }
+    // extraArgs);
+in rec {
   filebeat7 = beat "filebeat" {
     meta.description = "Lightweight shipper for logfiles";
-    buildInputs = [ systemd ];
-    tags = [ "withjournald" ];
+    buildInputs = [systemd];
+    tags = ["withjournald"];
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
+      patchelf --set-rpath ${lib.makeLibraryPath [(lib.getLib systemd)]} "$out/bin/filebeat"
     '';
   };
-  heartbeat7 = beat "heartbeat" { meta.description = "Lightweight shipper for uptime monitoring"; };
+  heartbeat7 = beat "heartbeat" {meta.description = "Lightweight shipper for uptime monitoring";};
   metricbeat7 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
-    passthru.tests =
-      assert metricbeat7.drvPath == nixosTests.elk.ELK-7.elkPackages.metricbeat.drvPath;
-      {
-        elk = nixosTests.elk.ELK-7;
-      };
+    passthru.tests = assert metricbeat7.drvPath == nixosTests.elk.ELK-7.elkPackages.metricbeat.drvPath; {
+      elk = nixosTests.elk.ELK-7;
+    };
   };
   packetbeat7 = beat "packetbeat" {
-    buildInputs = [ libpcap ];
+    buildInputs = [libpcap];
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''
       Packetbeat is an open source network packet analyzer that ships the

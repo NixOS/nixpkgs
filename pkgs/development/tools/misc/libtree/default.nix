@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, binutils
-, chrpath
-, cmake
-, cxxopts
-, elfio
-, termcolor
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  binutils,
+  chrpath,
+  cmake,
+  cxxopts,
+  elfio,
+  termcolor,
+  gtest,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libtree";
   version = "2.0.0";
@@ -37,21 +37,21 @@ stdenv.mkDerivation rec {
       --replace "std::string chrpath = \"chrpath\";" "std::string chrpath = \"${chrpath}/bin/chrpath\";"
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ cxxopts elfio termcolor ];
+  buildInputs = [cxxopts elfio termcolor];
 
   doCheck = true;
 
-  checkInputs = [ gtest ];
+  checkInputs = [gtest];
 
-  cmakeFlags = [ "-DLIBTREE_BUILD_TESTS=ON" ];
+  cmakeFlags = ["-DLIBTREE_BUILD_TESTS=ON"];
 
   meta = with lib; {
     description = "Tree ldd with an option to bundle dependencies into a single folder";
     homepage = "https://github.com/haampie/libtree";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ prusnak rardiol ];
+    maintainers = with maintainers; [prusnak rardiol];
   };
 }

@@ -1,5 +1,17 @@
-{stdenv, lib, fetchFromGitHub, fetchpatch, cmake, zlib, libxml2, eigen, python3, cairo, pcre, pkg-config }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  zlib,
+  libxml2,
+  eigen,
+  python3,
+  cairo,
+  pcre,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "openbabel";
   version = "2.4.1";
@@ -19,15 +31,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ zlib libxml2 eigen python3 cairo pcre ];
+  buildInputs = [zlib libxml2 eigen python3 cairo pcre];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   meta = with lib; {
     description = "A toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
     platforms = platforms.all;
-    maintainers = with maintainers; [ danielbarter ];
+    maintainers = with maintainers; [danielbarter];
     license = licenses.gpl2Plus;
   };
 }

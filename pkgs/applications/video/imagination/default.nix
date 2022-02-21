@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, autoreconfHook, docbook_xsl, ffmpeg-full, glib, gtk3
-, intltool, libxslt, pkg-config, sox, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  docbook_xsl,
+  ffmpeg-full,
+  glib,
+  gtk3,
+  intltool,
+  libxslt,
+  pkg-config,
+  sox,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "imagination";
   version = "3.6";
@@ -19,7 +31,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [ ffmpeg-full glib gtk3 sox ];
+  buildInputs = [ffmpeg-full glib gtk3 sox];
 
   preBuild = ''
     substituteInPlace src/main-window.c \
@@ -31,7 +43,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-       --prefix PATH : "${lib.makeBinPath [ ffmpeg-full sox ]}"
+       --prefix PATH : "${lib.makeBinPath [ffmpeg-full sox]}"
     )
   '';
 
@@ -39,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight and simple DVD slide show maker";
     homepage = "http://imagination.sourceforge.net";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [austinbutler];
     platforms = platforms.linux;
   };
 }

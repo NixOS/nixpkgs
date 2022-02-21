@@ -1,20 +1,20 @@
-{ lib
-, fetchFromGitLab
-, gettext
-, gtk3
-, python3Packages
-, gdk-pixbuf
-, libnotify
-, gst_all_1
-, libsecret
-, wrapGAppsHook
-, gsettings-desktop-schemas
-, gnome-online-accounts
-, glib
-, gobject-introspection
-, folks
+{
+  lib,
+  fetchFromGitLab,
+  gettext,
+  gtk3,
+  python3Packages,
+  gdk-pixbuf,
+  libnotify,
+  gst_all_1,
+  libsecret,
+  wrapGAppsHook,
+  gsettings-desktop-schemas,
+  gnome-online-accounts,
+  glib,
+  gobject-introspection,
+  folks,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "bubblemail";
   version = "1.4";
@@ -71,6 +71,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://bubblemail.free.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
   };
 }

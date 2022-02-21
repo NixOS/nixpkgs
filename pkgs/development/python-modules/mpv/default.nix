@@ -1,7 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, isPy27
-, mpv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  isPy27,
+  mpv,
 }:
-
 buildPythonPackage rec {
   pname = "mpv";
   version = "0.5.2";
@@ -14,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "0ffskpynhl1252h6a05087lvpjgn1cn2z3caiv3i666dn1n79fjd";
   };
 
-  buildInputs = [ mpv ];
+  buildInputs = [mpv];
 
   postPatch = ''
     substituteInPlace mpv.py \

@@ -1,12 +1,11 @@
-{ libPath
-, pkgsLibPath
-, nixosPath
-, modules
-, stateVersion
-, release
-}:
-
-let
+{
+  libPath,
+  pkgsLibPath,
+  nixosPath,
+  modules,
+  stateVersion,
+  release,
+}: let
   lib = import libPath;
   modulesPath = "${nixosPath}/modules";
   # dummy pkgs set that contains no packages, only `pkgs.lib` from the full set.
@@ -28,21 +27,25 @@ let
     system.stateVersion = stateVersion;
   };
   eval = lib.evalModules {
-    modules = (map (m: "${modulesPath}/${m}") modules) ++ [
-      config
-    ];
+    modules =
+      (map (m: "${modulesPath}/${m}") modules)
+      ++ [
+        config
+      ];
     specialArgs = {
       inherit config pkgs utils;
     };
   };
   docs = import "${nixosPath}/doc/manual" {
-    pkgs = pkgs // {
-      inherit lib;
-      # duplicate of the declaration in all-packages.nix
-      buildPackages.nixosOptionsDoc = attrs:
-        (import "${nixosPath}/lib/make-options-doc")
-          ({ inherit pkgs lib; } // attrs);
-    };
+    pkgs =
+      pkgs
+      // {
+        inherit lib;
+        # duplicate of the declaration in all-packages.nix
+        buildPackages.nixosOptionsDoc = attrs:
+          (import "${nixosPath}/lib/make-options-doc")
+          ({inherit pkgs lib;} // attrs);
+      };
     config = config.config;
     options = eval.options;
     version = release;

@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, halide
-, libpng, libjpeg, libtiff, libraw
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  halide,
+  libpng,
+  libjpeg,
+  libtiff,
+  libraw,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hdr-plus";
   version = "unstable-2021-12-10";
@@ -14,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QV8bGxkwFpbNzJG4kmrWwFQxUo2XzLPnoI1e32UmM6g=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ halide libpng libjpeg libtiff libraw ];
+  buildInputs = [halide libpng libjpeg libtiff libraw];
 
   installPhase = ''
     for bin in hdrplus stack_frames; do
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Burst photography pipeline based on Google's HDR+";
     homepage = "https://www.timothybrooks.com/tech/hdr-plus/";
     license = licenses.mit;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.all;
   };
 }

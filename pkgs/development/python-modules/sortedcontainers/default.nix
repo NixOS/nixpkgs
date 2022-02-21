@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "sortedcontainers";
   version = "2.4.0";
@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
     homepage = "http://www.grantjenks.com/docs/sortedcontainers/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ costrouc ];
+    maintainers = with lib.maintainers; [costrouc];
   };
 }

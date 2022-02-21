@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, curl
-, fetchFromGitHub
-, pkg-config
+{
+  lib,
+  buildGoModule,
+  curl,
+  fetchFromGitHub,
+  pkg-config,
 }:
-
 buildGoModule rec {
   pname = "cameradar";
   version = "5.0.1";
@@ -35,7 +35,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "RTSP stream access tool";
     homepage = "https://github.com/Ullaakut/cameradar";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

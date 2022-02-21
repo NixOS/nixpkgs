@@ -1,10 +1,16 @@
-{ dhall, dhall-docs, haskell, lib, lndir, runCommand, writeText }:
-
-{ name
-
+{
+  dhall,
+  dhall-docs,
+  haskell,
+  lib,
+  lndir,
+  runCommand,
+  writeText,
+}: {
+  name
   # Expressions to add to the cache before interpreting the code
-, dependencies ? []
-
+  ,
+  dependencies ? []
   # A Dhall expression
   #
   # Carefully note that the following expression must be devoid of uncached HTTP
@@ -15,8 +21,8 @@
   #
   # You can add a dependency to the cache using the preceding `dependencies`
   # option
-, code
-
+  ,
+  code
   # `buildDhallPackage` can include both a "source distribution" in
   # `source.dhall` and a "binary distribution" in `binary.dhall`:
   #
@@ -30,22 +36,21 @@
   # By default, `buildDhallPackage` only includes "binary.dhall" to conserve
   # space within the Nix store, but if you set the following `source` option to
   # `true` then the package will also include `source.dhall`.
-, source ? false
-
+  ,
+  source ? false
   # Directory to generate documentation for (i.e. as the `--input` option to the
   # `dhall-docs` command.)
   #
   # If `null`, then no documentation is generated.
-, documentationRoot ? null
-
+  ,
+  documentationRoot ? null
   # Base URL prepended to paths copied to the clipboard
   #
   # This is used in conjunction with `documentationRoot`, and is unused if
   # `documentationRoot` is `null`.
-, baseImportUrl ? null
-}:
-
-let
+  ,
+  baseImportUrl ? null,
+}: let
   # HTTP support is disabled in order to force that HTTP dependencies are built
   # using Nix instead of using Dhall's support for HTTP imports.
   dhallNoHTTP = haskell.lib.compose.appendConfigureFlag "-f-with-http" dhall;
@@ -61,9 +66,8 @@ let
   dataDhall = "${data}/dhall";
 
   sourceFile = "source.dhall";
-
 in
-  runCommand name { inherit dependencies; } ''
+  runCommand name {inherit dependencies;} ''
     set -eu
 
     mkdir -p ${cacheDhall}
@@ -88,15 +92,19 @@ in
 
     ${lib.optionalString (!source) "rm $out/${sourceFile}"}
 
-    ${lib.optionalString (documentationRoot != null) ''
-    mkdir -p $out/${dataDhall}
+    ${
+      lib.optionalString (documentationRoot != null) ''
+        mkdir -p $out/${dataDhall}
 
-    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${lib.cli.toGNUCommandLineShell { } {
-      base-import-url = baseImportUrl;
+        XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${
+          lib.cli.toGNUCommandLineShell {} {
+            base-import-url = baseImportUrl;
 
-      input = documentationRoot;
+            input = documentationRoot;
 
-      package-name = name;
-    }}
-    ''}
+            package-name = name;
+          }
+        }
+      ''
+    }
   ''

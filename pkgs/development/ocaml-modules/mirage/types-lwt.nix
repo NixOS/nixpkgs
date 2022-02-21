@@ -1,13 +1,17 @@
-{ lib, buildDunePackage, mirage-types
+{
+  lib,
+  buildDunePackage,
+  mirage-types,
 }:
-
 buildDunePackage {
   pname = "mirage-types-lwt";
   inherit (mirage-types) version src useDune2;
 
-  propagatedBuildInputs = [ mirage-types ];
+  propagatedBuildInputs = [mirage-types];
 
-  meta = mirage-types.meta // {
-    description = "Lwt module type definitions for MirageOS applications";
-  };
+  meta =
+    mirage-types.meta
+    // {
+      description = "Lwt module type definitions for MirageOS applications";
+    };
 }

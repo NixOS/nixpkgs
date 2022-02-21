@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
-, alsa-lib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
-, qtbase, qttools, qtxmlpatterns
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  alsa-lib,
+  ladspa-sdk,
+  lash,
+  libarchive,
+  libjack2,
+  liblo,
+  libpulseaudio,
+  libsndfile,
+  lrdf,
+  qtbase,
+  qttools,
+  qtxmlpatterns,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hydrogen";
   version = "1.1.1";
@@ -14,10 +29,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-to24PB9cs4vun93uXEWNVsmSLFRuLGfC4hCh7+mbvIo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [cmake pkg-config wrapQtAppsHook];
   buildInputs = [
-    alsa-lib ladspa-sdk lash libarchive libjack2 liblo libpulseaudio libsndfile lrdf
-    qtbase qttools qtxmlpatterns
+    alsa-lib
+    ladspa-sdk
+    lash
+    libarchive
+    libjack2
+    liblo
+    libpulseaudio
+    libsndfile
+    lrdf
+    qtbase
+    qttools
+    qtxmlpatterns
   ];
 
   cmakeFlags = [
@@ -29,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.hydrogen-music.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu orivej ];
+    maintainers = with maintainers; [goibhniu orivej];
   };
 }

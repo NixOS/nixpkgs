@@ -1,13 +1,13 @@
-{ lib
-, blas
-, lapack
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, nose
-, numpy
+{
+  lib,
+  blas,
+  lapack,
+  buildPythonPackage,
+  cffi,
+  fetchFromGitHub,
+  nose,
+  numpy,
 }:
-
 buildPythonPackage {
   pname = "prox-tv";
   version = "3.3.0";
@@ -28,9 +28,9 @@ buildPythonPackage {
     cffi
   ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  propagatedNativeBuildInputs = [cffi];
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [blas lapack];
 
   enableParallelBuilding = true;
 
@@ -38,6 +38,6 @@ buildPythonPackage {
     homepage = "https://github.com/albarji/proxTV";
     description = "A toolbox for fast Total Variation proximity operators";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ multun ];
+    maintainers = with maintainers; [multun];
   };
 }

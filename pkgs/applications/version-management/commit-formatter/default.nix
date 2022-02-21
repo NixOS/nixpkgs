@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "commit-formatter";
   version = "0.2.1";
@@ -16,7 +19,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A CLI tool to help you write git commit";
     homepage = "https://github.com/Eliot00/commit-formatter";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ elliot ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [elliot];
   };
 }

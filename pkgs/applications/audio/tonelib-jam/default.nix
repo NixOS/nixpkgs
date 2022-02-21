@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, freetype
-, libglvnd
-, curl
-, libXcursor
-, libXinerama
-, libXrandr
-, libXrender
-, libjack2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  freetype,
+  libglvnd,
+  curl,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libjack2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tonelib-jam";
   version = "4.7.0";
@@ -28,12 +28,14 @@ stdenv.mkDerivation rec {
     dpkg
   ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-    alsa-lib
-    freetype
-    libglvnd
-  ] ++ runtimeDependencies;
+  buildInputs =
+    [
+      stdenv.cc.cc.lib
+      alsa-lib
+      freetype
+      libglvnd
+    ]
+    ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "ToneLib Jam – the learning and practice software for guitar players";
     homepage = "https://tonelib.net/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [dan4ik605743];
+    platforms = ["x86_64-linux"];
   };
 }

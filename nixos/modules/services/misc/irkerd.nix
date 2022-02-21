@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.irkerd;
-  ports = [ 6659 ];
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.irkerd;
+  ports = [6659];
+in {
   options.services.irkerd = {
     enable = mkOption {
       description = "Whether to enable irker, an IRC notification daemon.";
@@ -43,16 +44,16 @@ in
   config = mkIf cfg.enable {
     systemd.services.irkerd = {
       description = "Internet Relay Chat (IRC) notification daemon";
-      documentation = [ "man:irkerd(8)" "man:irkerhook(1)" "man:irk(1)" ];
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      documentation = ["man:irkerd(8)" "man:irkerhook(1)" "man:irk(1)"];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = "${pkgs.irker}/bin/irkerd -H ${cfg.listenAddress} -n ${cfg.nick}";
         User = "irkerd";
       };
     };
 
-    environment.systemPackages = [ pkgs.irker ];
+    environment.systemPackages = [pkgs.irker];
 
     users.users.irkerd = {
       description = "Irker daemon user";

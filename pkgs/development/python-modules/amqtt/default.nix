@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, fetchpatch
-, hypothesis
-, passlib
-, poetry-core
-, pytest-logdog
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, transitions
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  fetchpatch,
+  hypothesis,
+  passlib,
+  poetry-core,
+  pytest-logdog,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  transitions,
+  websockets,
 }:
-
 buildPythonPackage rec {
   pname = "amqtt";
   version = "unstable-2022-01-11";
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python MQTT client and broker implementation";
     homepage = "https://amqtt.readthedocs.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

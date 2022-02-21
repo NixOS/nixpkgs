@@ -1,29 +1,34 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.dconf;
   cfgDir = pkgs.symlinkJoin {
     name = "dconf-system-config";
     paths = map (x: "${x}/etc/dconf") cfg.packages;
-    postBuild = ''
-      mkdir -p $out/profile
-      mkdir -p $out/db
-    '' + (
-      concatStringsSep "\n" (
-        mapAttrsToList (
-          name: path: ''
-            ln -s ${path} $out/profile/${name}
-          ''
-        ) cfg.profiles
+    postBuild =
+      ''
+        mkdir -p $out/profile
+        mkdir -p $out/db
+      ''
+      + (
+        concatStringsSep "\n" (
+          mapAttrsToList (
+            name: path: ''
+              ln -s ${path} $out/profile/${name}
+            ''
+          )
+          cfg.profiles
+        )
       )
-    ) + ''
-      ${pkgs.dconf}/bin/dconf update $out/db
-    '';
+      + ''
+        ${pkgs.dconf}/bin/dconf update $out/db
+      '';
   };
-in
-{
+in {
   ###### interface
 
   options = {
@@ -52,15 +57,14 @@ in
       source = cfgDir;
     };
 
-    services.dbus.packages = [ pkgs.dconf ];
+    services.dbus.packages = [pkgs.dconf];
 
-    systemd.packages = [ pkgs.dconf ];
+    systemd.packages = [pkgs.dconf];
 
     # For dconf executable
-    environment.systemPackages = [ pkgs.dconf ];
+    environment.systemPackages = [pkgs.dconf];
 
     # Needed for unwrapped applications
-    environment.sessionVariables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.dconf.lib}/lib/gio/modules" ];
+    environment.sessionVariables.GIO_EXTRA_MODULES = mkIf cfg.enable ["${pkgs.dconf.lib}/lib/gio/modules"];
   };
-
 }

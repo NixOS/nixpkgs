@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "venstarcolortouch";
   version = "0.15";
@@ -19,12 +19,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "venstarcolortouch" ];
+  pythonImportsCheck = ["venstarcolortouch"];
 
   meta = with lib; {
     description = "Python interface for Venstar ColorTouch thermostats Resources";
     homepage = "https://github.com/hpeyerl/venstar_colortouch";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

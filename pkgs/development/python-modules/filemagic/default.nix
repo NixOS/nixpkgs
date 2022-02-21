@@ -1,6 +1,13 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, file
-, isPy3k, mock, unittest2 }:
-
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  file,
+  isPy3k,
+  mock,
+  unittest2,
+}:
 buildPythonPackage {
   pname = "filemagic";
   version = "1.6";
@@ -19,12 +26,12 @@ buildPythonPackage {
       "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkInputs = [ mock ] ++ lib.optionals (!isPy3k) [ unittest2 ];
+  checkInputs = [mock] ++ lib.optionals (!isPy3k) [unittest2];
 
   meta = with lib; {
     description = "File type identification using libmagic";
     homepage = "https://github.com/aliles/filemagic";
     license = licenses.asl20;
-    maintainers = with maintainers; [ earvstedt ];
+    maintainers = with maintainers; [earvstedt];
   };
 }

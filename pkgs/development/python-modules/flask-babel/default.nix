@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchPypi
-, flask
-, Babel
-, jinja2
-, pytz
-, speaklater
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchPypi,
+  flask,
+  Babel,
+  jinja2,
+  pytz,
+  speaklater,
 }:
-
 buildPythonPackage rec {
   pname = "Flask-Babel";
   version = "2.0.0";

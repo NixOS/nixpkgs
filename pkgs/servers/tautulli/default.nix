@@ -1,12 +1,18 @@
-{ lib, fetchFromGitHub, buildPythonApplication, setuptools, wrapPython, makeWrapper }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  setuptools,
+  wrapPython,
+  makeWrapper,
+}:
 buildPythonApplication rec {
   pname = "Tautulli";
   version = "2.9.3";
   format = "other";
 
-  pythonPath = [ setuptools ];
-  nativeBuildInputs = [ wrapPython makeWrapper ];
+  pythonPath = [setuptools];
+  nativeBuildInputs = [wrapPython makeWrapper];
 
   src = fetchFromGitHub {
     owner = "Tautulli";
@@ -43,11 +49,11 @@ buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta  = with lib; {
+  meta = with lib; {
     description = "A Python based monitoring and tracking tool for Plex Media Server";
     homepage = "https://tautulli.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ csingley ];
+    maintainers = with maintainers; [csingley];
   };
 }

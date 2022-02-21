@@ -1,5 +1,10 @@
-{ fetchurl, bash, glibc, lib, stdenv }:
-
+{
+  fetchurl,
+  bash,
+  glibc,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "daemontools";
   version = "0.76";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "07scvw88faxkscxi91031pjkpccql6wspk4yrlnsbrrb5c0kamd5";
   };
 
-  patches = [ ./fix-nix-usernamespace-build.patch ];
+  patches = [./fix-nix-usernamespace-build.patch];
 
   configurePhase = ''
     cd daemontools-${version}
@@ -39,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://cr.yp.to/daemontools.html";
     description = "A collection of tools for managing UNIX services";
 
-    maintainers = with lib.maintainers; [ kevincox ];
+    maintainers = with lib.maintainers; [kevincox];
     platforms = lib.platforms.unix;
   };
 }

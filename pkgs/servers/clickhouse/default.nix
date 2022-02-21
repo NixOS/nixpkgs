@@ -1,11 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
-, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
-, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
-, xxHash, zstd
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libtool,
+  llvm-bintools,
+  ninja,
+  boost,
+  brotli,
+  capnproto,
+  cctz,
+  clang-unwrapped,
+  double-conversion,
+  icu,
+  jemalloc,
+  libcpuid,
+  libxml2,
+  lld,
+  llvm,
+  lz4,
+  libmysqlclient,
+  openssl,
+  perl,
+  poco,
+  protobuf,
+  python3,
+  rapidjson,
+  re2,
+  rdkafka,
+  readline,
+  sparsehash,
+  unixODBC,
+  xxHash,
+  zstd,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "clickhouse";
   version = "21.8.12.29";
@@ -13,20 +42,44 @@ stdenv.mkDerivation rec {
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
   src = fetchFromGitHub {
-    owner  = "ClickHouse";
-    repo   = "ClickHouse";
-    rev    = "v${version}-lts";
+    owner = "ClickHouse";
+    repo = "ClickHouse";
+    rev = "v${version}-lts";
     fetchSubmodules = true;
     sha256 = "1qqacb7v7mhr9k162yll8mcbh0cxa347f5hypz0a8l54v1dz5fyl";
   };
 
-  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
-  buildInputs = [
-    boost brotli capnproto cctz clang-unwrapped double-conversion
-    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
-    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
-    xxHash zstd
-  ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
+  nativeBuildInputs = [cmake libtool llvm-bintools ninja];
+  buildInputs =
+    [
+      boost
+      brotli
+      capnproto
+      cctz
+      clang-unwrapped
+      double-conversion
+      icu
+      jemalloc
+      libxml2
+      lld
+      llvm
+      lz4
+      libmysqlclient
+      openssl
+      perl
+      poco
+      protobuf
+      python3
+      rapidjson
+      re2
+      rdkafka
+      readline
+      sparsehash
+      unixODBC
+      xxHash
+      zstd
+    ]
+    ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
 
   postPatch = ''
     patchShebangs src/
@@ -60,10 +113,10 @@ stdenv.mkDerivation rec {
       --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
-  requiredSystemFeatures = [ "big-parallel" ];
+  requiredSystemFeatures = ["big-parallel"];
 
   passthru.tests.clickhouse = nixosTests.clickhouse;
 
@@ -71,7 +124,7 @@ stdenv.mkDerivation rec {
     homepage = "https://clickhouse.tech/";
     description = "Column-oriented database management system";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
 }

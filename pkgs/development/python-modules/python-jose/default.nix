@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ecdsa
-, rsa
-, pycrypto
-, pyasn1
-, pycryptodome
-, cryptography
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ecdsa,
+  rsa,
+  pycrypto,
+  pyasn1,
+  pycryptodome,
+  cryptography,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "python-jose";
   version = "3.3.0";
@@ -39,12 +39,12 @@ buildPythonPackage rec {
       --replace '"pytest-runner",' ""
   '';
 
-  pythonImportsCheck = [ "jose" ];
+  pythonImportsCheck = ["jose"];
 
   meta = with lib; {
     homepage = "https://github.com/mpdavis/python-jose";
     description = "A JOSE implementation in Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jhhuh ];
+    maintainers = with maintainers; [jhhuh];
   };
 }

@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkBefore mkDefault mkEnableOption mkIf mkOption mkRemovedOptionModule types;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
   inherit (lib) optional optionalAttrs optionalString;
@@ -13,7 +16,11 @@ let
     production:
       adapter: ${cfg.database.type}
       database: ${cfg.database.name}
-      host: ${if (cfg.database.type == "postgresql" && cfg.database.socket != null) then cfg.database.socket else cfg.database.host}
+      host: ${
+      if (cfg.database.type == "postgresql" && cfg.database.socket != null)
+      then cfg.database.socket
+      else cfg.database.host
+    }
       port: ${toString cfg.database.port}
       username: ${cfg.database.user}
       password: #dbpass#
@@ -28,22 +35,20 @@ let
   unpack = id: (name: source:
     pkgs.stdenv.mkDerivation {
       name = "redmine-${id}-${name}";
-      nativeBuildInputs = [ pkgs.unzip ];
+      nativeBuildInputs = [pkgs.unzip];
       buildCommand = ''
         mkdir -p $out
         cd $out
         unpackFile ${source}
       '';
-  });
+    });
 
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql2";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "postgresql";
-
-in
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "redmine" "extraConfig" ] "Use services.redmine.settings instead.")
-    (mkRemovedOptionModule [ "services" "redmine" "database" "password" ] "Use services.redmine.database.passwordFile instead.")
+    (mkRemovedOptionModule ["services" "redmine" "extraConfig"] "Use services.redmine.settings instead.")
+    (mkRemovedOptionModule ["services" "redmine" "database" "password"] "Use services.redmine.database.passwordFile instead.")
   ];
 
   # interface
@@ -148,7 +153,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "mysql2" "postgresql" ];
+          type = types.enum ["mysql2" "postgresql"];
           example = "postgresql";
           default = "mysql2";
           description = "Database engine to use.";
@@ -162,7 +167,10 @@ in
 
         port = mkOption {
           type = types.int;
-          default = if cfg.database.type == "postgresql" then 5432 else 3306;
+          default =
+            if cfg.database.type == "postgresql"
+            then 5432
+            else 3306;
           defaultText = literalExpression "3306";
           description = "Database host port.";
         };
@@ -192,8 +200,10 @@ in
         socket = mkOption {
           type = types.nullOr types.path;
           default =
-            if mysqlLocal then "/run/mysqld/mysqld.sock"
-            else if pgsqlLocal then "/run/postgresql"
+            if mysqlLocal
+            then "/run/mysqld/mysqld.sock"
+            else if pgsqlLocal
+            then "/run/postgresql"
             else null;
           defaultText = literalExpression "/run/mysqld/mysqld.sock";
           example = "/run/mysqld/mysqld.sock";
@@ -211,18 +221,21 @@ in
 
   # implementation
   config = mkIf cfg.enable {
-
     assertions = [
-      { assertion = cfg.database.passwordFile != null || cfg.database.socket != null;
+      {
+        assertion = cfg.database.passwordFile != null || cfg.database.socket != null;
         message = "one of services.redmine.database.socket or services.redmine.database.passwordFile must be set";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
         message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.socket != null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.socket != null;
         message = "services.redmine.database.socket must be set if services.redmine.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
         message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
       }
     ];
@@ -246,20 +259,22 @@ in
     services.mysql = mkIf mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = [ cfg.database.name ];
+      ensureDatabases = [cfg.database.name];
       ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+        {
+          name = cfg.database.user;
+          ensurePermissions = {"${cfg.database.name}.*" = "ALL PRIVILEGES";};
         }
       ];
     };
 
     services.postgresql = mkIf pgsqlLocal {
       enable = true;
-      ensureDatabases = [ cfg.database.name ];
+      ensureDatabases = [cfg.database.name];
       ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        {
+          name = cfg.database.user;
+          ensurePermissions = {"DATABASE ${cfg.database.name}" = "ALL PRIVILEGES";};
         }
       ];
     };
@@ -289,8 +304,8 @@ in
     ];
 
     systemd.services.redmine = {
-      after = [ "network.target" ] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      wantedBy = ["multi-user.target"];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
       environment.REDMINE_LANG = "en";
@@ -362,9 +377,8 @@ in
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
-        ExecStart="${bundle} exec rails server webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+        ExecStart = "${bundle} exec rails server webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
       };
-
     };
 
     users.users = optionalAttrs (cfg.user == "redmine") {
@@ -378,7 +392,5 @@ in
     users.groups = optionalAttrs (cfg.group == "redmine") {
       redmine.gid = config.ids.gids.redmine;
     };
-
   };
-
 }

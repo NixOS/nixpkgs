@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-sync-readme";
   version = "1.0";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "A cargo plugin that generates a Markdown section in your README based on your Rust documentation";
     homepage = "https://github.com/phaazon/cargo-sync-readme";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ b4dm4n ];
+    maintainers = with maintainers; [b4dm4n];
   };
 }

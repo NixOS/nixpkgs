@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-# Python bits:
-, buildPythonPackage
-, pytest
-, responses
-, docopt
-, flask
-, markdown
-, path-and-address
-, pygments
-, requests
-, tabulate
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch
+  # Python bits:
+  ,
+  buildPythonPackage,
+  pytest,
+  responses,
+  docopt,
+  flask,
+  markdown,
+  path-and-address,
+  pygments,
+  requests,
+  tabulate,
 }:
-
 buildPythonPackage rec {
   pname = "grip";
   version = "4.5.2";
@@ -33,19 +34,19 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytest responses ];
+  checkInputs = [pytest responses];
 
-  propagatedBuildInputs = [ docopt flask markdown path-and-address pygments requests tabulate ];
+  propagatedBuildInputs = [docopt flask markdown path-and-address pygments requests tabulate];
 
   checkPhase = ''
-      export PATH="$PATH:$out/bin"
-      py.test -xm "not assumption"
+    export PATH="$PATH:$out/bin"
+    py.test -xm "not assumption"
   '';
 
   meta = with lib; {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
     homepage = "https://github.com/joeyespo/grip";
     license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [koral];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "ratelimit";
   version = "2.2.1";
@@ -19,16 +19,16 @@ buildPythonPackage rec {
     sed -i "/--cov/d" pytest.ini
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pytestFlagsArray = [ "tests" ];
+  pytestFlagsArray = ["tests"];
 
-  pythonImportsCheck = [ "ratelimit" ];
+  pythonImportsCheck = ["ratelimit"];
 
   meta = with lib; {
     description = "Python API Rate Limit Decorator";
     homepage = "https://github.com/tomasbasham/ratelimit";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

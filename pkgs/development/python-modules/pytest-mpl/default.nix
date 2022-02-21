@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, matplotlib
-, nose
-, pillow
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  matplotlib,
+  nose,
+  pillow,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-mpl";
   version = "0.13";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to help with testing figures output from Matplotlib";
     homepage = "https://github.com/matplotlib/pytest-mpl";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

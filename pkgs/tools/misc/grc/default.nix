@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
 }:
-
 buildPythonApplication rec {
   pname = "grc";
   version = "1.13";
@@ -37,7 +37,7 @@ buildPythonApplication rec {
       beautifying your logfiles or output of commands.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 AndersonTorres peterhoeg ];
+    maintainers = with maintainers; [lovek323 AndersonTorres peterhoeg];
     platforms = platforms.unix;
   };
 }

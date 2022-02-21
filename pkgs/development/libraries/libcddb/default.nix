@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "libcddb";
   version = "1.3.2";

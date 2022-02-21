@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "quicktemplate";
   version = "1.6.3";
@@ -17,6 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/valyala/quicktemplate";
     description = "Fast, powerful, yet easy to use template engine for Go";
     license = licenses.mit;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [chiiruno];
   };
 }

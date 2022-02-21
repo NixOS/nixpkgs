@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libmnl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libmnl,
+}:
 stdenv.mkDerivation rec {
   version = "1.0.3";
   pname = "libnetfilter_acct";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "06lsjndgfjsgfjr43px2n2wk3nr7whz6r405mks3887y7vpwwl22";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libmnl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libmnl];
 
   meta = with lib; {
     homepage = "https://www.netfilter.org/projects/libnetfilter_acct/";

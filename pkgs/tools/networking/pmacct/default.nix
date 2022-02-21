@@ -1,20 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, libtool
-, libpcap
-, libcdada
-# Optional Dependencies
-, withJansson ? true, jansson
-, withNflog ? true, libnetfilter_log
-, withSQLite ? true, sqlite
-, withPgSQL ? true, postgresql
-, withMysql ? true, libmysqlclient, zlib
-, gnutlsSupport ? false, gnutls
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  libtool,
+  libpcap,
+  libcdada
+  # Optional Dependencies
+  ,
+  withJansson ? true,
+  jansson,
+  withNflog ? true,
+  libnetfilter_log,
+  withSQLite ? true,
+  sqlite,
+  withPgSQL ? true,
+  postgresql,
+  withMysql ? true,
+  libmysqlclient,
+  zlib,
+  gnutlsSupport ? false,
+  gnutls,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.7.6";
   pname = "pmacct";
@@ -31,26 +39,30 @@ stdenv.mkDerivation rec {
     pkg-config
     libtool
   ];
-  buildInputs = [
-    libcdada
-    libpcap
-  ] ++ lib.optional withJansson jansson
-  ++ lib.optional withNflog libnetfilter_log
-  ++ lib.optional withSQLite sqlite
-  ++ lib.optional withPgSQL postgresql
-  ++ lib.optionals withMysql [ libmysqlclient zlib ]
-  ++ lib.optional gnutlsSupport gnutls;
+  buildInputs =
+    [
+      libcdada
+      libpcap
+    ]
+    ++ lib.optional withJansson jansson
+    ++ lib.optional withNflog libnetfilter_log
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withPgSQL postgresql
+    ++ lib.optionals withMysql [libmysqlclient zlib]
+    ++ lib.optional gnutlsSupport gnutls;
 
   MYSQL_CONFIG = lib.optionalString withMysql "${lib.getDev libmysqlclient}/bin/mysql_config";
 
-  configureFlags = [
-    "--with-pcap-includes=${libpcap}/include"
-  ] ++ lib.optional withJansson "--enable-jansson"
-  ++ lib.optional withNflog "--enable-nflog"
-  ++ lib.optional withSQLite "--enable-sqlite3"
-  ++ lib.optional withPgSQL "--enable-pgsql"
-  ++ lib.optional withMysql "--enable-mysql"
-  ++ lib.optional gnutlsSupport "--enable-gnutls";
+  configureFlags =
+    [
+      "--with-pcap-includes=${libpcap}/include"
+    ]
+    ++ lib.optional withJansson "--enable-jansson"
+    ++ lib.optional withNflog "--enable-nflog"
+    ++ lib.optional withSQLite "--enable-sqlite3"
+    ++ lib.optional withPgSQL "--enable-pgsql"
+    ++ lib.optional withMysql "--enable-mysql"
+    ++ lib.optional gnutlsSupport "--enable-gnutls";
 
   meta = with lib; {
     description = "A small set of multi-purpose passive network monitoring tools";
@@ -60,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.pmacct.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [_0x4A6F];
     platforms = platforms.unix;
   };
 }

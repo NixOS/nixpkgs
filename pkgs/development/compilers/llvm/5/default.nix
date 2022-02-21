@@ -1,29 +1,43 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
-, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith
-, buildLlvmTools # tools, but from the previous stage, for cross
-, targetLlvmLibraries # libraries, but from the next stage, for cross
-}:
-
-let
+{
+  lowPrio,
+  newScope,
+  pkgs,
+  lib,
+  stdenv,
+  cmake,
+  gccForLibs,
+  libxml2,
+  python3,
+  isl,
+  fetchurl,
+  overrideCC,
+  wrapCCWith,
+  buildLlvmTools
+  # tools, but from the previous stage, for cross
+  ,
+  targetLlvmLibraries
+  # libraries, but from the next stage, for cross
+}: let
   release_version = "5.0.2";
   version = release_version; # differentiating these is important for rc's
   targetConfig = stdenv.targetPlatform.config;
 
-  fetch = name: sha256: fetchurl {
-    url = "https://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
-    inherit sha256;
-  };
+  fetch = name: sha256:
+    fetchurl {
+      url = "https://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
+      inherit sha256;
+    };
 
   clang-tools-extra_src = fetch "clang-tools-extra" "018b3fiwah8f8br5i26qmzh6sjvzchpn358sn8v079m49f2jldm3";
 
   llvm_meta = {
-    license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
-    platforms   = lib.platforms.all;
+    license = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [lovek323 raskin dtzWill primeos];
+    platforms = lib.platforms.all;
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
+    callPackage = newScope (tools // {inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools;});
     mkExtraBuildCommands = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
@@ -31,44 +45,45 @@ let
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
     '';
-
   in {
-
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputSpecified = false; };
+    llvm = tools.libllvm.out // {outputSpecified = false;};
 
     libllvm-polly = callPackage ./llvm {
       inherit llvm_meta;
       enablePolly = true;
     };
 
-    llvm-polly = tools.libllvm-polly.lib // { outputSpecified = false; };
+    llvm-polly = tools.libllvm-polly.lib // {outputSpecified = false;};
 
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
+    clang-unwrapped = tools.libclang.out // {outputSpecified = false;};
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;
-      python3 = pkgs.python3;  # don't use python-boot
+      python3 = pkgs.python3; # don't use python-boot
     });
 
     clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
-      python3 = pkgs.python3;  # don't use python-boot
+      python3 = pkgs.python3; # don't use python-boot
     });
 
     # pick clang appropriate for package set we are targeting
     clang =
-      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
-      else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
+      /**/
+      if stdenv.targetPlatform.useLLVM or false
+      then tools.clangUseLLVM
+      else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU
+      then tools.libstdcxxClang
       else tools.libcxxClang;
 
     libstdcxxClang = wrapCCWith rec {
@@ -101,9 +116,8 @@ let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
+    callPackage = newScope (libraries // buildLlvmTools // {inherit stdenv cmake libxml2 python3 isl release_version version fetch;});
   in {
-
     compiler-rt = callPackage ./compiler-rt {
       inherit llvm_meta;
     };
@@ -124,5 +138,5 @@ let
       inherit llvm_meta;
     };
   });
-
-in { inherit tools libraries release_version; } // libraries // tools
+in
+  {inherit tools libraries release_version;} // libraries // tools

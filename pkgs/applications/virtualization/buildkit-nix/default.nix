@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "buildkit-nix";
   version = "0.0.2";
@@ -15,13 +18,13 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   meta = with lib; {
     description = "Nix frontend for BuildKit";
     homepage = "https://github.com/AkihiroSuda/buildkit-nix/";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lesuisse ];
+    maintainers = with maintainers; [lesuisse];
   };
 }

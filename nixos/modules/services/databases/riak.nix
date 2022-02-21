@@ -1,21 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.riak;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.riak;
+in {
   ###### interface
 
   options = {
-
     services.riak = {
-
       enable = mkEnableOption "riak";
 
       package = mkOption {
@@ -76,16 +71,13 @@ in
           Additional text to be appended to <filename>advanced.config</filename>.
         '';
       };
-
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
     environment.etc."riak/riak.conf".text = ''
       nodename = ${cfg.nodeName}
       distributed_cookie = ${cfg.distributedCookie}
@@ -113,8 +105,8 @@ in
     systemd.services.riak = {
       description = "Riak Server";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       path = [
         pkgs.util-linux # for `logger`
@@ -156,7 +148,5 @@ in
         "/etc/riak"
       ];
     };
-
   };
-
 }

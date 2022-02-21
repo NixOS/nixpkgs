@@ -1,5 +1,9 @@
-{ buildPythonApplication, fetchPypi, lib, pycryptodome }:
-
+{
+  buildPythonApplication,
+  fetchPypi,
+  lib,
+  pycryptodome,
+}:
 buildPythonApplication rec {
   pname = "dcnnt";
   version = "0.6.0";
@@ -21,6 +25,6 @@ buildPythonApplication rec {
       KDE Connect.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ arnoutkroeze ];
+    maintainers = with maintainers; [arnoutkroeze];
   };
 }

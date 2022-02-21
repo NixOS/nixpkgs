@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
 }:
-
 buildPythonPackage rec {
   pname = "ropgadget";
   version = "6.6";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
     homepage = "http://shell-storm.org/project/ROPgadget/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [bennofs];
   };
 }

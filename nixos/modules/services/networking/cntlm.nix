@@ -1,38 +1,39 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.cntlm;
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "cntlm.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != ""
+    then
+      pkgs.writeText "cntlm.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "lighttpd.conf" ''
-      # Cntlm Authentication Proxy Configuration
-      Username ${cfg.username}
-      Domain ${cfg.domain}
-      Password ${cfg.password}
-      ${optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
-      ${concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
-      ${optionalString (cfg.noproxy != []) "NoProxy ${concatStringsSep ", " cfg.noproxy}"}
+      pkgs.writeText "lighttpd.conf" ''
+        # Cntlm Authentication Proxy Configuration
+        Username ${cfg.username}
+        Domain ${cfg.domain}
+        Password ${cfg.password}
+        ${optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
+        ${concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
+        ${optionalString (cfg.noproxy != []) "NoProxy ${concatStringsSep ", " cfg.noproxy}"}
 
-      ${concatMapStrings (port: ''
-        Listen ${toString port}
-      '') cfg.port}
+        ${
+          concatMapStrings (port: ''
+            Listen ${toString port}
+          '')
+          cfg.port
+        }
 
-      ${cfg.extraConfig}
-    '';
-
-in
-
-{
-
+        ${cfg.extraConfig}
+      '';
+in {
   options.services.cntlm = {
-
     enable = mkEnableOption "cntlm, which starts a local proxy";
 
     username = mkOption {
@@ -70,7 +71,7 @@ in
         number  of  proxies.  Should  one proxy fail, cntlm automatically moves on to the next one. The connect request fails only if the whole
         list of proxies is scanned and (for each request) and found to be invalid. Command-line takes precedence over the configuration file.
       '';
-      example = [ "proxy.example.com:81" ];
+      example = ["proxy.example.com:81"];
     };
 
     noproxy = mkOption {
@@ -79,7 +80,7 @@ in
       '';
       default = [];
       type = types.listOf types.str;
-      example = [ "*.example.com" "example.com" ];
+      example = ["*.example.com" "example.com"];
     };
 
     port = mkOption {
@@ -95,11 +96,10 @@ in
     };
 
     configText = mkOption {
-       type = types.lines;
-       default = "";
-       description = "Verbatim contents of <filename>cntlm.conf</filename>.";
+      type = types.lines;
+      default = "";
+      description = "Verbatim contents of <filename>cntlm.conf</filename>.";
     };
-
   };
 
   ###### implementation
@@ -107,8 +107,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.cntlm = {
       description = "CNTLM is an NTLM / NTLM Session Response / NTLMv2 authenticating HTTP proxy";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         User = "cntlm";
         ExecStart = ''

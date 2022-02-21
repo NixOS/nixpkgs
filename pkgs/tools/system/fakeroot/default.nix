@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, getopt
-, libcap
-, gnused
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  getopt,
+  libcap,
+  gnused,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.27";
   pname = "fakeroot";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ getopt gnused ]
-    ++ lib.optional (!stdenv.isDarwin) libcap
-    ;
+  buildInputs =
+    [getopt gnused]
+    ++ lib.optional (!stdenv.isDarwin) libcap;
 
   postUnpack = ''
     sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${pname}-${version}/scripts/fakeroot.in

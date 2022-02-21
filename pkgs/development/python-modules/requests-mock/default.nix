@@ -1,13 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, mock
-, purl
-, requests
-, six
-, testrepository
-, testtools
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  mock,
+  purl,
+  requests,
+  six,
+  testrepository,
+  testtools,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "requests-mock";
   version = "1.9.3";
@@ -21,14 +24,14 @@ buildPythonPackage rec {
     sed -i 's@python@${python.interpreter}@' .testr.conf
   '';
 
-  propagatedBuildInputs = [ requests six ];
+  propagatedBuildInputs = [requests six];
 
-  checkInputs = [ mock purl testrepository testtools pytest ];
+  checkInputs = [mock purl testrepository testtools pytest];
 
   meta = with lib; {
     description = "Mock out responses from the requests package";
     homepage = "https://requests-mock.readthedocs.io";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

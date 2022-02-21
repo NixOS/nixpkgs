@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, cairo, Carbon, fontconfig
-, libtiff, giflib, libjpeg, libpng
-, libXrender, libexif, autoreconfHook, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  cairo,
+  Carbon,
+  fontconfig,
+  libtiff,
+  giflib,
+  libjpeg,
+  libpng,
+  libXrender,
+  libexif,
+  autoreconfHook,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "libgdiplus";
   version = "6.0.5";
@@ -15,19 +29,27 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lgif";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   configureFlags = lib.optional stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
 
   enableParallelBuilding = true;
 
   buildInputs =
-    [ glib cairo fontconfig libtiff giflib
-      libjpeg libpng libXrender libexif
+    [
+      glib
+      cairo
+      fontconfig
+      libtiff
+      giflib
+      libjpeg
+      libpng
+      libXrender
+      libexif
     ]
     ++ lib.optional stdenv.isDarwin Carbon;
 

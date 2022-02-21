@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, mount, libuuid
-, macfuse-stubs, DiskArbitration
-, crypto ? false, libgcrypt, gnutls
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  mount,
+  libuuid,
+  macfuse-stubs,
+  DiskArbitration,
+  crypto ? false,
+  libgcrypt,
+  gnutls,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
   version = "2021.8.22";
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = ["out" "dev" "man" "doc"];
 
-  buildInputs = [ libuuid ] ++ lib.optionals crypto [ gnutls libgcrypt ]
-    ++ lib.optionals stdenv.isDarwin [ macfuse-stubs DiskArbitration ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs =
+    [libuuid]
+    ++ lib.optionals crypto [gnutls libgcrypt]
+    ++ lib.optionals stdenv.isDarwin [macfuse-stubs DiskArbitration];
+  nativeBuildInputs = [pkg-config];
 
   src = fetchurl {
     url = "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
@@ -32,20 +42,23 @@ stdenv.mkDerivation rec {
     "--enable-mount-helper"
     "--enable-posix-acls"
     "--enable-xattr-mappings"
-    "--${if crypto then "enable" else "disable"}-crypto"
+    "--${
+      if crypto
+      then "enable"
+      else "disable"
+    }-crypto"
     "--enable-extras"
   ];
 
-  postInstall =
-    ''
-      # Prefer ntfs-3g over the ntfs driver in the kernel.
-      ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
-    '';
+  postInstall = ''
+    # Prefer ntfs-3g over the ntfs driver in the kernel.
+    ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/tuxera/ntfs-3g";
     description = "FUSE-based NTFS driver with full write support";
-    maintainers = with maintainers; [ dezgeg ];
+    maintainers = with maintainers; [dezgeg];
     platforms = with platforms; darwin ++ linux;
     license = with licenses; [
       gpl2Plus # ntfs-3g itself

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fastdiff
-, six
-, termcolor
-, pytestCheckHook
-, pytest-cov
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fastdiff,
+  six,
+  termcolor,
+  pytestCheckHook,
+  pytest-cov,
+  django,
 }:
-
 buildPythonPackage rec {
   pname = "snapshottest";
   version = "0.6.0";
@@ -18,16 +18,16 @@ buildPythonPackage rec {
     sha256 = "0g35ggqw4jd9zmazw55kj6gfjdghv49qx4jw5q231qyqj8fzijmv";
   };
 
-  propagatedBuildInputs = [ fastdiff six termcolor ];
+  propagatedBuildInputs = [fastdiff six termcolor];
 
-  checkInputs = [ django pytestCheckHook pytest-cov ];
+  checkInputs = [django pytestCheckHook pytest-cov];
 
-  pythonImportsCheck = [ "snapshottest" ];
+  pythonImportsCheck = ["snapshottest"];
 
   meta = with lib; {
     description = "Snapshot testing for pytest, unittest, Django, and Nose";
     homepage = "https://github.com/syrusakbary/snapshottest";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

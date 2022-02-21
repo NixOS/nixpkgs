@@ -1,21 +1,21 @@
-{ mkDerivation
-, alsa-lib
-, autoPatchelfHook
-, fetchurl
-, flac
-, gcc11
-, lib
-, libmicrohttpd
-, llvmPackages_10
-, qtcharts
-, qtdeclarative
-, qtquickcontrols2
-, qtwebengine
-, qtwebview
-, rpmextract
-, wavpack
+{
+  mkDerivation,
+  alsa-lib,
+  autoPatchelfHook,
+  fetchurl,
+  flac,
+  gcc11,
+  lib,
+  libmicrohttpd,
+  llvmPackages_10,
+  qtcharts,
+  qtdeclarative,
+  qtquickcontrols2,
+  qtwebengine,
+  qtwebview,
+  rpmextract,
+  wavpack,
 }:
-
 mkDerivation rec {
   pname = "hqplayer-desktop";
   version = "4.13.1-38";
@@ -29,7 +29,7 @@ mkDerivation rec {
     ${rpmextract}/bin/rpmextract $src
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook rpmextract ];
+  nativeBuildInputs = [autoPatchelfHook rpmextract];
 
   buildInputs = [
     alsa-lib
@@ -86,6 +86,6 @@ mkDerivation rec {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software HD-audio player";
     license = licenses.unfree;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

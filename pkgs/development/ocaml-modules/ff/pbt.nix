@@ -1,5 +1,11 @@
-{ lib, fetchFromGitLab, buildDunePackage, zarith, ff-sig, alcotest }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  zarith,
+  ff-sig,
+  alcotest,
+}:
 buildDunePackage {
   pname = "ff-pbt";
   inherit (ff-sig) version src doCheck useDune2;
@@ -15,7 +21,9 @@ buildDunePackage {
     ff-sig
   ];
 
-  meta = ff-sig.meta // {
-    description = "Property based testing library for finite fields over the package ff-sig";
-  };
+  meta =
+    ff-sig.meta
+    // {
+      description = "Property based testing library for finite fields over the package ff-sig";
+    };
 }

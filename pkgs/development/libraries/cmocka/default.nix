@@ -1,5 +1,9 @@
-{ fetchurl, lib, stdenv, cmake }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "cmocka";
   majorVersion = "1.1";
@@ -10,40 +14,39 @@ stdenv.mkDerivation rec {
     sha256 = "1dm8pdvkyfa8dsbz9bpq7wwgixjij4sii9bbn5sgvqjm5ljdik7h";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "Lightweight library to simplify and generalize unit tests for C";
 
-    longDescription =
-      ''There are a variety of C unit testing frameworks available however
-        many of them are fairly complex and require the latest compiler
-        technology.  Some development requires the use of old compilers which
-        makes it difficult to use some unit testing frameworks. In addition
-        many unit testing frameworks assume the code being tested is an
-        application or module that is targeted to the same platform that will
-        ultimately execute the test.  Because of this assumption many
-        frameworks require the inclusion of standard C library headers in the
-        code module being tested which may collide with the custom or
-        incomplete implementation of the C library utilized by the code under
-        test.
+    longDescription = ''      There are a variety of C unit testing frameworks available however
+              many of them are fairly complex and require the latest compiler
+              technology.  Some development requires the use of old compilers which
+              makes it difficult to use some unit testing frameworks. In addition
+              many unit testing frameworks assume the code being tested is an
+              application or module that is targeted to the same platform that will
+              ultimately execute the test.  Because of this assumption many
+              frameworks require the inclusion of standard C library headers in the
+              code module being tested which may collide with the custom or
+              incomplete implementation of the C library utilized by the code under
+              test.
 
-        Cmocka only requires a test application is linked with the standard C
-        library which minimizes conflicts with standard C library headers.
-        Also, CMocka tries to avoid the use of some of the newer features of
-        C compilers.
+              Cmocka only requires a test application is linked with the standard C
+              library which minimizes conflicts with standard C library headers.
+              Also, CMocka tries to avoid the use of some of the newer features of
+              C compilers.
 
-        This results in CMocka being a relatively small library that can be
-        used to test a variety of exotic code. If a developer wishes to
-        simply test an application with the latest compiler then other unit
-        testing frameworks may be preferable.
+              This results in CMocka being a relatively small library that can be
+              used to test a variety of exotic code. If a developer wishes to
+              simply test an application with the latest compiler then other unit
+              testing frameworks may be preferable.
 
-        This is the successor of Google's Cmockery.'';
+              This is the successor of Google's Cmockery.'';
 
     homepage = "https://cmocka.org/";
 
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ kragniz rasendubi ];
+    maintainers = with maintainers; [kragniz rasendubi];
   };
 }

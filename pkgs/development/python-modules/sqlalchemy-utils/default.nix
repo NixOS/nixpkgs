@@ -1,8 +1,24 @@
-{ lib, fetchPypi, buildPythonPackage
-, six, sqlalchemy
-, mock, pytz, isort, flake8, jinja2, pg8000, pyodbc, pytest, pymysql, python-dateutil
-, docutils, flexmock, psycopg2, pygments }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  six,
+  sqlalchemy,
+  mock,
+  pytz,
+  isort,
+  flake8,
+  jinja2,
+  pg8000,
+  pyodbc,
+  pytest,
+  pymysql,
+  python-dateutil,
+  docutils,
+  flexmock,
+  psycopg2,
+  pygments,
+}:
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
   version = "0.38.2";
@@ -45,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kvesteri/sqlalchemy-utils";
     description = "Various utility functions and datatypes for SQLAlchemy";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

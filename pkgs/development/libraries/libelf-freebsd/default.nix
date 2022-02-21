@@ -1,5 +1,10 @@
-{ lib, fetchsvn, stdenv, gnum4, tet }:
-
+{
+  lib,
+  fetchsvn,
+  stdenv,
+  gnum4,
+  tet,
+}:
 stdenv.mkDerivation (rec {
   version = "3258";
   pname = "libelf-freebsd";
@@ -11,7 +16,7 @@ stdenv.mkDerivation (rec {
     sha256 = "1rcmddjanlsik0b055x8k914r9rxs8yjsvslia2nh1bhzf1lxmqz";
   };
 
-  buildInputs = [ gnum4 tet ];
+  buildInputs = [gnum4 tet];
 
   buildPhase = ''
     PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:$PATH # use BSD install(1) instead of coreutils and make(1) instead of GNU Make
@@ -33,6 +38,6 @@ stdenv.mkDerivation (rec {
     license = lib.licenses.bsd2;
 
     platforms = lib.platforms.freebsd;
-    maintainers = [ ];
+    maintainers = [];
   };
 })

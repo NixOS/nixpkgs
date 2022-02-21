@@ -1,5 +1,14 @@
-{ lib, buildDunePackage, fetchurl, base64, either, fmt, jsonm, uutf, optint }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  base64,
+  either,
+  fmt,
+  jsonm,
+  uutf,
+  optint,
+}:
 buildDunePackage rec {
   pname = "repr";
   version = "0.5.0";
@@ -25,6 +34,6 @@ buildDunePackage rec {
     description = "Dynamic type representations. Provides no stability guarantee";
     homepage = "https://github.com/mirage/repr";
     license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    maintainers = with maintainers; [sternenseemann];
   };
 }

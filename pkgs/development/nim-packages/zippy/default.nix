@@ -1,10 +1,14 @@
-{ lib, buildNimPackage, fetchFromGitHub, unzip }:
-
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  unzip,
+}:
 buildNimPackage rec {
   pname = "zippy";
   version = "0.7.3";
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   src = fetchFromGitHub {
     owner = "guzba";
@@ -16,9 +20,10 @@ buildNimPackage rec {
   doCheck = true;
 
   meta = with lib;
-    src.meta // {
+    src.meta
+    // {
       description = "Pure Nim implementation of deflate, zlib, gzip and zip";
-      license = [ licenses.mit ];
-      maintainers = [ maintainers.ehmry ];
+      license = [licenses.mit];
+      maintainers = [maintainers.ehmry];
     };
 }

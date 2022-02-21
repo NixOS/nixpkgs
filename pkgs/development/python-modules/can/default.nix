@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, hypothesis
-, parameterized
-, msgpack
-, pyserial
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  hypothesis,
+  parameterized,
+  msgpack,
+  pyserial,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
+  wrapt,
 }:
-
 buildPythonPackage rec {
   pname = "python-can";
   version = "unstable-2022-01-11";
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     description = "CAN support for Python";
     homepage = "python-can.readthedocs.io";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab sorki ];
+    maintainers = with maintainers; [fab sorki];
   };
 }

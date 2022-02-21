@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "asciitree";
   version = "0.3.3";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Draws ASCII trees";
     homepage = "https://github.com/mbr/asciitree";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

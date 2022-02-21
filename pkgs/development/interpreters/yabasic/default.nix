@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, libSM
-, libX11
-, libXt
-, libffi
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libSM,
+  libX11,
+  libXt,
+  libffi,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "yabasic";
   version = "2.90.1";
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
       allows to create standalone programs. Yabasic runs under Unix and Windows
       and has a comprehensive documentation; it is small, simple, open-source
       and free.
-   '';
+    '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }

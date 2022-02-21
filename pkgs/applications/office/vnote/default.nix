@@ -1,11 +1,11 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
-, qtwebengine
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qtwebengine,
 }:
-
 mkDerivation rec {
   pname = "vnote";
   version = "3.12.888";
@@ -31,7 +31,7 @@ mkDerivation rec {
     homepage = "https://vnotex.github.io/vnote";
     description = "A pleasant note-taking platform";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

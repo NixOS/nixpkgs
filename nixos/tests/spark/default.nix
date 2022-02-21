@@ -2,18 +2,26 @@ import ../make-test-python.nix ({...}: {
   name = "spark";
 
   nodes = {
-    worker = { nodes, pkgs, ... }: {
+    worker = {
+      nodes,
+      pkgs,
+      ...
+    }: {
       services.spark.worker = {
         enable = true;
         master = "master:7077";
       };
     };
-    master = { config, pkgs, ... }: {
+    master = {
+      config,
+      pkgs,
+      ...
+    }: {
       services.spark.master = {
         enable = true;
         bind = "0.0.0.0";
       };
-      networking.firewall.allowedTCPPorts = [ 22 7077 8080 ];
+      networking.firewall.allowedTCPPorts = [22 7077 8080];
     };
   };
 

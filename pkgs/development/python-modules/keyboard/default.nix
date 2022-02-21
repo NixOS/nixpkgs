@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 buildPythonPackage rec {
   pname = "keyboard";
   version = "0.13.5";
@@ -13,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-U4GWhPp28azBE3Jn9xpLxudOKx0PjnYO77EM2HsJ9lM=";
   };
 
-  pythonImportsCheck = [ "keyboard" ];
+  pythonImportsCheck = ["keyboard"];
 
   # Specific OS tests are being run for other OS, like
   # winmouse on Linux, which provides the following error:
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     description = "Hook and simulate keyboard events on Windows and Linux";
     homepage = "https://github.com/boppreh/keyboard";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [wolfangaukang];
     platforms = platforms.linux;
   };
 }

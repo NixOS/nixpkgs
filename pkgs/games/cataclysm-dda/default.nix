@@ -1,6 +1,7 @@
-{ newScope, darwin }:
-
-let
+{
+  newScope,
+  darwin,
+}: let
   callPackage = newScope self;
 
   stable = rec {
@@ -8,7 +9,7 @@ let
       inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
     };
 
-    curses = tiles.override { tiles = false; };
+    curses = tiles.override {tiles = false;};
   };
 
   git = rec {
@@ -16,7 +17,7 @@ let
       inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
     };
 
-    curses = tiles.override { tiles = false; };
+    curses = tiles.override {tiles = false;};
   };
 
   lib = callPackage ./lib.nix {};
@@ -25,19 +26,21 @@ let
 
   self = {
     inherit
-    callPackage
-    stable
-    git;
+      callPackage
+      stable
+      git
+      ;
 
-    inherit (lib)
-    buildMod
-    buildSoundPack
-    buildTileSet
-    wrapCDDA
-    attachPkgs;
+    inherit
+      (lib)
+      buildMod
+      buildSoundPack
+      buildTileSet
+      wrapCDDA
+      attachPkgs
+      ;
 
     inherit pkgs;
   };
 in
-
-self
+  self

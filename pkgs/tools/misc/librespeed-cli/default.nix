@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "librespeed-cli";
   version = "1.0.9";
@@ -22,7 +22,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Command line client for LibreSpeed";
     homepage = "https://github.com/librespeed/speedtest-cli";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [lgpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, alsa-lib
-, libpulseaudio
-, gtk2
-, hicolor-icon-theme
-, libsndfile
-, fftw
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  alsa-lib,
+  libpulseaudio,
+  gtk2,
+  hicolor-icon-theme,
+  libsndfile,
+  fftw,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gwc";
   version = "0.22-05";
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "GUI application for removing noise (hiss, pops and clicks) from audio files";
     homepage = "https://github.com/AlisterH/gwc/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [magnetophon];
     platforms = platforms.linux;
   };
 }

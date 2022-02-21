@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, openems
-, csxcad
-, boost
-, python-csxcad
-, numpy
-, h5py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  openems,
+  csxcad,
+  boost,
+  python-csxcad,
+  numpy,
+  h5py,
 }:
-
 buildPythonPackage rec {
   pname = "python-openems";
   version = "unstable-2020-02-15";
@@ -37,13 +37,13 @@ buildPythonPackage rec {
   ];
 
   setupPyBuildFlags = "-I${openems}/include -L${openems}/lib -R${openems}/lib";
-  pythonImportsCheck = [ "openEMS" ];
+  pythonImportsCheck = ["openEMS"];
 
   meta = with lib; {
     description = "Python interface to OpenEMS";
     homepage = "http://openems.de/index.php/Main_Page.html";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ matthuszagh ];
+    maintainers = with maintainers; [matthuszagh];
     platforms = platforms.linux;
   };
 }

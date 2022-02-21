@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, pkg-config
-, rustfmt
-, setuptools-rust
-, openssl
-, Security
-, msgpack
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  pkg-config,
+  rustfmt,
+  setuptools-rust,
+  openssl,
+  Security,
+  msgpack,
 }:
-
 buildPythonPackage rec {
   pname = "etebase";
   version = "0.31.2";
@@ -30,17 +30,19 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = [
-    pkg-config
-    rustfmt
-    setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs =
+    [
+      pkg-config
+      rustfmt
+      setuptools-rust
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [openssl] ++ lib.optionals stdenv.isDarwin [Security];
 
   propagatedBuildInputs = [
     msgpack
@@ -52,13 +54,12 @@ buildPythonPackage rec {
       --replace ', features = ["vendored"]' ""
   '';
 
-  pythonImportsCheck = [ "etebase" ];
-
+  pythonImportsCheck = ["etebase"];
 
   meta = with lib; {
     homepage = "https://www.etebase.com/";
     description = "A Python client library for Etebase";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ _3699n ];
+    maintainers = with maintainers; [_3699n];
   };
 }

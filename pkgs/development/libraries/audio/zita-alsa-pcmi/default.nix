@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl , alsa-lib, }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+}:
 stdenv.mkDerivation rec {
   pname = "zita-alsa-pcmi";
   version = "0.4.0";
@@ -8,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vYyfNg37VB+2DkinE7rx4i1BssdMGaD+ny005y9Q8cU=";
   };
 
-  buildInputs = [ alsa-lib ];
+  buildInputs = [alsa-lib];
 
   buildPhase = ''
     cd source
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
     version = version;
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
     platforms = lib.platforms.linux;
   };
 }

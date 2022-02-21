@@ -1,5 +1,8 @@
-{ buildPythonApplication, lib, minijail }:
-
+{
+  buildPythonApplication,
+  lib,
+  minijail,
+}:
 buildPythonApplication {
   pname = "minijail-tools";
   inherit (minijail) version src;

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libsndfile, libsamplerate, liblo, libjack2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsndfile,
+  libsamplerate,
+  liblo,
+  libjack2,
+}:
 stdenv.mkDerivation {
   pname = "dirt";
   version = "unstable-2018-01-01";
@@ -10,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "13adglk2d31d7mswfvi02b0rjdhzmsv11cc8smhidmrns3f9s96n";
     fetchSubmodules = true;
   };
-  buildInputs = [ libsndfile libsamplerate liblo libjack2 ];
+  buildInputs = [libsndfile libsamplerate liblo libjack2];
   postPatch = ''
     sed -i "s|./samples|$out/share/dirt/samples|" dirt.c
   '';
@@ -24,7 +31,7 @@ stdenv.mkDerivation {
     description = "An unimpressive thingie for playing bits of samples with some level of accuracy";
     homepage = "https://github.com/tidalcycles/Dirt";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ anderspapitto ];
+    maintainers = with maintainers; [anderspapitto];
     platforms = with platforms; linux;
   };
 }

@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blurhash
-, cryptography
-, decorator
-, http-ece
-, python-dateutil
-, python_magic
-, pytz
-, requests
-, six
-, pytestCheckHook
-, pytest-mock
-, pytest-vcr
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  blurhash,
+  cryptography,
+  decorator,
+  http-ece,
+  python-dateutil,
+  python_magic,
+  pytz,
+  requests,
+  six,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-vcr,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "mastodon-py";
   version = "1.5.1";
@@ -50,12 +50,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [ "mastodon" ];
+  pythonImportsCheck = ["mastodon"];
 
   meta = with lib; {
     description = "Python wrapper for the Mastodon API";
     homepage = "https://github.com/halcy/Mastodon.py";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

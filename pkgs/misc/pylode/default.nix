@@ -1,8 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "pylode";
   version = "2.12.0";
@@ -44,6 +44,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/RDFLib/pyLODE";
     # Next release will move to BSD3
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ koslambrou ];
+    maintainers = with maintainers; [koslambrou];
   };
 }

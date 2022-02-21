@@ -1,13 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, astropy
-, pytestCheckHook
-, pytest-doctestplus
-, scipy
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  astropy,
+  pytestCheckHook,
+  pytest-doctestplus,
+  scipy,
 }:
-
 buildPythonPackage rec {
   pname = "radio_beam";
   version = "0.3.3";
@@ -22,9 +22,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ astropy ];
+  propagatedBuildInputs = [astropy];
 
-  checkInputs = [ pytestCheckHook pytest-doctestplus scipy ];
+  checkInputs = [pytestCheckHook pytest-doctestplus scipy];
 
   # Tests must be run in the build directory
   preCheck = ''
@@ -36,8 +36,6 @@ buildPythonPackage rec {
     homepage = "http://radio-astro-tools.github.io";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ smaret ];
+    maintainers = with lib.maintainers; [smaret];
   };
 }
-
-

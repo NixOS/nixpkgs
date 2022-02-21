@@ -1,13 +1,19 @@
-{ config, lib, options, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   pkg = pkgs.moonraker;
   cfg = config.services.moonraker;
   opt = options.services.moonraker;
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
-      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
+      if builtins.length l == 1
+      then generators.mkValueStringDefault {} (head l)
       else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
     mkKeyValue = generators.mkKeyValueDefault {} ":";
   };
@@ -67,11 +73,11 @@ in {
 
       settings = mkOption {
         type = format.type;
-        default = { };
+        default = {};
         example = {
           authorization = {
-            trusted_clients = [ "10.0.0.0/24" ];
-            cors_domains = [ "https://app.fluidd.xyz" ];
+            trusted_clients = ["10.0.0.0/24"];
+            cors_domains = ["https://app.fluidd.xyz"];
           };
         };
         description = ''
@@ -84,7 +90,7 @@ in {
 
   config = mkIf cfg.enable {
     warnings = optional (cfg.settings ? update_manager)
-      ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.'';
+    ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.'';
 
     users.users = optionalAttrs (cfg.user == "moonraker") {
       moonraker = {
@@ -108,7 +114,8 @@ in {
         };
       };
       fullConfig = recursiveUpdate cfg.settings forcedConfig;
-    in format.generate "moonraker.cfg" fullConfig;
+    in
+      format.generate "moonraker.cfg" fullConfig;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
@@ -117,8 +124,9 @@ in {
 
     systemd.services.moonraker = {
       description = "Moonraker, an API web server for Klipper";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ]
+      wantedBy = ["multi-user.target"];
+      after =
+        ["network.target"]
         ++ optional config.services.klipper.enable "klipper.service";
 
       # Moonraker really wants its own config to be writable...

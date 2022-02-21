@@ -1,17 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.boot.initrd.network.openvpn;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.boot.initrd.network.openvpn;
+in {
   options = {
-
     boot.initrd.network.openvpn.enable = mkOption {
       type = types.bool;
       default = false;
@@ -37,7 +33,6 @@ in
       '';
       example = literalExpression "./configuration.ovpn";
     };
-
   };
 
   config = mkIf (config.boot.initrd.network.enable && cfg.enable) {
@@ -49,7 +44,7 @@ in
     ];
 
     # Add kernel modules needed for OpenVPN
-    boot.initrd.kernelModules = [ "tun" "tap" ];
+    boot.initrd.kernelModules = ["tun" "tap"];
 
     # Add openvpn and ip binaries to the initrd
     # The shared libraries are required for DNS resolution
@@ -77,5 +72,4 @@ in
         openvpn /dev/stdin &
     '';
   };
-
 }

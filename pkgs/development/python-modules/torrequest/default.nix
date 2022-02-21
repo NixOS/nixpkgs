@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, requests, pysocks, stem }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pysocks,
+  stem,
+}:
 buildPythonPackage rec {
   pname = "torrequest";
   version = "0.1.0";
@@ -10,7 +16,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pysocks requests stem
+    pysocks
+    requests
+    stem
   ];
 
   # This package does not contain any tests.
@@ -23,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/erdiaker/torrequest";
     description = "Simple Python interface for HTTP(s) requests over Tor";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ applePrincess ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [applePrincess];
   };
 }

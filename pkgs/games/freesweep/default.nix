@@ -1,6 +1,11 @@
-{ fetchFromGitHub, fetchpatch, ncurses, lib, stdenv,
-  updateAutotoolsGnuConfigScriptsHook }:
-
+{
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  lib,
+  stdenv,
+  updateAutotoolsGnuConfigScriptsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "freesweep";
   version = "1.0.1";
@@ -31,8 +36,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [updateAutotoolsGnuConfigScriptsHook];
+  buildInputs = [ncurses];
 
   preConfigure = ''
     configureFlags="$configureFlags --with-prefsdir=$out/share"
@@ -50,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "A console minesweeper-style game written in C for Unix-like systems";
     homepage = "https://github.com/rwestlund/freesweep";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ kierdavis ];
+    maintainers = with maintainers; [kierdavis];
     platforms = platforms.unix;
   };
 }

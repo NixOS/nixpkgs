@@ -1,30 +1,31 @@
-{ lib
-, buildDunePackage
-, paf
-, cohttp-lwt
-, domain-name
-, httpaf
-, ipaddr
-, alcotest-lwt
-, fmt
-, logs
-, mirage-crypto-rng
-, mirage-time-unix
-, tcpip
-, uri
-, lwt
-, astring
+{
+  lib,
+  buildDunePackage,
+  paf,
+  cohttp-lwt,
+  domain-name,
+  httpaf,
+  ipaddr,
+  alcotest-lwt,
+  fmt,
+  logs,
+  mirage-crypto-rng,
+  mirage-time-unix,
+  tcpip,
+  uri,
+  lwt,
+  astring,
 }:
-
 buildDunePackage {
   pname = "paf-cohttp";
 
-  inherit (paf)
+  inherit
+    (paf)
     version
     src
     useDune2
     minimumOCamlVersion
-  ;
+    ;
 
   propagatedBuildInputs = [
     paf
@@ -34,7 +35,7 @@ buildDunePackage {
     ipaddr
   ];
 
-  doCheck = false;  # tests fail
+  doCheck = false; # tests fail
   checkInputs = [
     alcotest-lwt
     fmt
@@ -47,7 +48,9 @@ buildDunePackage {
     astring
   ];
 
-  meta = paf.meta // {
-    description = "A CoHTTP client with its HTTP/AF implementation";
-  };
+  meta =
+    paf.meta
+    // {
+      description = "A CoHTTP client with its HTTP/AF implementation";
+    };
 }

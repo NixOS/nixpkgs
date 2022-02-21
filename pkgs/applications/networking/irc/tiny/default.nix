@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, dbus
-, openssl
-, Foundation
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  dbus,
+  openssl,
+  Foundation,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
   version = "0.10.0";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "05q3f1wp48mwkz8n0102rwb6jzrgpx3dlbxzf3zcw8r1mblgzim1";
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
-  buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
+  buildInputs = lib.optionals stdenv.isLinux [dbus openssl] ++ lib.optional stdenv.isDarwin Foundation;
 
   buildFeatures = lib.optional stdenv.isLinux "desktop-notifications";
 
@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/osa1/tiny";
     changelog = "https://github.com/osa1/tiny/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne vyp ];
+    maintainers = with maintainers; [Br1ght0ne vyp];
   };
 }

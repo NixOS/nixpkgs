@@ -1,5 +1,8 @@
-{ lib, fetchPypi, python3Packages }:
-
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "sabyenc3";
   version = "4.0.2";
@@ -16,7 +19,6 @@ python3Packages.buildPythonPackage rec {
     description = "yEnc Decoding for Python 3";
     homepage = "https://github.com/sabnzbd/sabyenc/";
     license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.lovek323 ];
+    maintainers = [lib.maintainers.lovek323];
   };
-
 }

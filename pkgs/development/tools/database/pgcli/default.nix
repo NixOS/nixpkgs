@@ -1,23 +1,24 @@
-{ lib, stdenv
-, buildPythonApplication
-, fetchPypi
-, isPy3k
-, cli-helpers
-, click
-, configobj
-, humanize
-, prompt-toolkit
-, psycopg2
-, pygments
-, sqlparse
-, pgspecial
-, setproctitle
-, keyring
-, pendulum
-, pytestCheckHook
-, mock
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchPypi,
+  isPy3k,
+  cli-helpers,
+  click,
+  configobj,
+  humanize,
+  prompt-toolkit,
+  psycopg2,
+  pygments,
+  sqlparse,
+  pgspecial,
+  setproctitle,
+  keyring,
+  pendulum,
+  pytestCheckHook,
+  mock,
 }:
-
 buildPythonApplication rec {
   pname = "pgcli";
   version = "3.3.1";
@@ -44,9 +45,9 @@ buildPythonApplication rec {
     pendulum
   ];
 
-  checkInputs = [ pytestCheckHook mock ];
+  checkInputs = [pytestCheckHook mock];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
+  disabledTests = lib.optionals stdenv.isDarwin ["test_application_name_db_uri"];
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";
@@ -57,6 +58,6 @@ buildPythonApplication rec {
     homepage = "https://pgcli.com";
     changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [dywedir];
   };
 }

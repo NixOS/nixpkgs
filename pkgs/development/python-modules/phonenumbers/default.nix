@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "phonenumbers";
   version = "8.12.43";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Python module for handling international phone numbers";
     homepage = "https://github.com/daviddrysdale/python-phonenumbers";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fadenb ];
+    maintainers = with maintainers; [fadenb];
   };
 }

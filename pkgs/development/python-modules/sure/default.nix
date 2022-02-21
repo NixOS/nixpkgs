@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rednose
-, six
-, mock
-, isPyPy
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rednose,
+  six,
+  mock,
+  isPyPy,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "sure";
   version = "2.0.0";
@@ -26,13 +26,12 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ rednose ];
-  propagatedBuildInputs = [ six mock ];
+  buildInputs = [rednose];
+  propagatedBuildInputs = [six mock];
 
   meta = with lib; {
     description = "Utility belt for automated testing";
     homepage = "https://sure.readthedocs.io/en/latest/";
     license = licenses.gpl3Plus;
   };
-
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, expat, zlib, boost, libiconv, darwin }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  expat,
+  zlib,
+  boost,
+  libiconv,
+  darwin,
+}:
 stdenv.mkDerivation rec {
   pname = "exempi";
   version = "2.5.1";
@@ -9,14 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "07i29xmg8bqriviaf4vi1mwha4lrw85kfla29cfym14fp3z8aqa0";
   };
 
-  configureFlags = [
-    "--with-boost=${boost.dev}"
-  ] ++ lib.optionals (!doCheck) [
-    "--enable-unittest=no"
-  ];
+  configureFlags =
+    [
+      "--with-boost=${boost.dev}"
+    ]
+    ++ lib.optionals (!doCheck) [
+      "--enable-unittest=no"
+    ];
 
-  buildInputs = [ expat zlib boost ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs =
+    [expat zlib boost]
+    ++ lib.optionals stdenv.isDarwin [libiconv darwin.apple_sdk.frameworks.CoreServices];
 
   doCheck = stdenv.isLinux && stdenv.is64bit;
 

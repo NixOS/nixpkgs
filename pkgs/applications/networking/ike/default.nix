@@ -1,12 +1,24 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
-, gcc, nettools, iproute2, linuxHeaders }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  openssl,
+  libedit,
+  flex,
+  bison,
+  qt4,
+  makeWrapper,
+  gcc,
+  nettools,
+  iproute2,
+  linuxHeaders,
+}:
 # NOTE: use $out/etc/iked.conf as sample configuration and also set: dhcp_file "/etc/iked.dhcp";
 # launch with "iked -f /etc/iked.conf"
-
 # NOTE: my testings reveal that kernels 3.11.10 and 3.12.6 won't let the traffic through the tunnel,
 # so I'm sticking with 3.4
-
 stdenv.mkDerivation rec {
   pname = "ike";
   version = "2.2.1";
@@ -25,8 +37,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake flex bison makeWrapper ];
-  buildInputs = [ openssl libedit qt4 nettools iproute2 ];
+  nativeBuildInputs = [cmake flex bison makeWrapper];
+  buildInputs = [openssl libedit qt4 nettools iproute2];
 
   postPatch = ''
     # fix build with bison3
@@ -47,7 +59,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     for file in "$out"/bin/* "$out"/sbin/*; do
-        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${lib.makeLibraryPath [ openssl gcc.cc stdenv.cc.libc libedit qt4 ]}"
+        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${lib.makeLibraryPath [openssl gcc.cc stdenv.cc.libc libedit qt4]}"
     done
   '';
 
@@ -55,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.shrew.net/software";
     description = "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = [];
     license = licenses.sleepycat;
   };
 }

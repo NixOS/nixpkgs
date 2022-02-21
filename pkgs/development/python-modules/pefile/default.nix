@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, future
-, fetchFromGitHub
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  future,
+  fetchFromGitHub,
+  setuptools-scm,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pefile";
   version = "2021.9.3";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
   # Test data encrypted
   doCheck = false;
 
-  pythonImportsCheck = [ "pefile" ];
+  pythonImportsCheck = ["pefile"];
 
   meta = with lib; {
     description = "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
     homepage = "https://github.com/erocarrera/pefile";
     license = licenses.mit;
-    maintainers = [ maintainers.pamplemousse ];
+    maintainers = [maintainers.pamplemousse];
   };
 }

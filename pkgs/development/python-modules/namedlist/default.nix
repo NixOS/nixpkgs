@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "namedlist";
   version = "1.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     substituteInPlace test/test_namedlist.py --replace "unittest.main()" ""
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   checkPhase = ''
     py.test
   '';
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Similar to namedtuple, but instances are mutable";
     homepage = "https://gitlab.com/ericvsmith/namedlist";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = with lib.maintainers; [ivan];
   };
 }

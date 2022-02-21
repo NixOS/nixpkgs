@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "keepalive";
   version = "0.5";
@@ -20,5 +20,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/wikier/keepalive";
     license = licenses.asl20;
   };
-
 }

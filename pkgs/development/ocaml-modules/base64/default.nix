@@ -1,5 +1,12 @@
-{ lib, fetchurl, buildDunePackage, ocaml, alcotest, bos, rresult }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  alcotest,
+  bos,
+  rresult,
+}:
 buildDunePackage rec {
   pname = "base64";
   version = "3.5.0";
@@ -15,12 +22,12 @@ buildDunePackage rec {
 
   # otherwise fmt breaks evaluation
   doCheck = lib.versionAtLeast ocaml.version "4.05";
-  checkInputs = [ alcotest bos rresult ];
+  checkInputs = [alcotest bos rresult];
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-base64";
     description = "Base64 encoding and decoding in OCaml";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [vbgl];
   };
 }

@@ -1,9 +1,6 @@
-{ lib } :
-
-with lib;
-{
+{lib}:
+with lib; {
   options = {
-
     interface = mkOption {
       type = types.str;
       description = ''
@@ -12,7 +9,7 @@ with lib;
     };
 
     state = mkOption {
-      type = types.enum [ "MASTER" "BACKUP" ];
+      type = types.enum ["MASTER" "BACKUP"];
       default = "BACKUP";
       description = ''
         Initial state. As soon as the other machine(s) come up, an election will
@@ -62,8 +59,8 @@ with lib;
       type = types.nullOr types.str;
       default = null;
       description = ''
-         Name of the vmac interface to use. keepalived will come up with a name
-         if you don't specify one.
+        Name of the vmac interface to use. keepalived will come up with a name
+        if you don't specify one.
       '';
     };
 
@@ -79,9 +76,9 @@ with lib;
       type = types.nullOr types.str;
       default = null;
       description = ''
-         Default IP for binding vrrpd is the primary IP on interface. If you
-         want to hide location of vrrpd, use this IP as src_addr for unicast
-         vrrp packets.
+        Default IP for binding vrrpd is the primary IP on interface. If you
+        want to hide location of vrrpd, use this IP as src_addr for unicast
+        vrrp packets.
       '';
     };
 
@@ -109,14 +106,14 @@ with lib;
     trackScripts = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "chk_cmd1" "chk_cmd2" ];
+      example = ["chk_cmd1" "chk_cmd2"];
       description = "List of script names to invoke for health tracking.";
     };
 
     trackInterfaces = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "eth0" "eth1" ];
+      example = ["eth0" "eth1"];
       description = "List of network interfaces to monitor for health tracking.";
     };
 
@@ -127,7 +124,5 @@ with lib;
         Extra lines to be added verbatim to the vrrp_instance section.
       '';
     };
-
   };
-
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "replace";
   version = "2.24";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "18hkwhaz25s6209n5mpx9hmkyznlzygqj488p2l7nvp9zrlxb9sf";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   makeFlags = [
     "TREE=\$(out)"

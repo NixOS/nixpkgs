@@ -1,5 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "spaceship-prompt";
   version = "3.16.2";
@@ -33,6 +36,6 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/spaceship-prompt/spaceship-prompt/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nyanloutre fortuneteller2k ];
+    maintainers = with maintainers; [nyanloutre fortuneteller2k];
   };
 }

@@ -1,23 +1,23 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, Theano
-, pandas
-, patsy
-, joblib
-, tqdm
-, six
-, h5py
-, arviz
-, packaging
-, pytest
-, nose
-, parameterized
-, fastprogress
-, typing-extensions
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  Theano,
+  pandas,
+  patsy,
+  joblib,
+  tqdm,
+  six,
+  h5py,
+  arviz,
+  packaging,
+  pytest,
+  nose,
+  parameterized,
+  fastprogress,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "pymc3";
   version = "3.11.4";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   # The test suite is computationally intensive and test failures are not
   # indicative for package usability hence tests are disabled by default.
   doCheck = false;
-  pythonImportsCheck = [ "pymc3" ];
+  pythonImportsCheck = ["pymc3"];
 
   # For some reason tests are run as a part of the *install* phase if enabled.
   # Theano writes compiled code to ~/.theano hence we set $HOME.
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc3";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ilya-kolpakov ];
+    maintainers = with lib.maintainers; [ilya-kolpakov];
     # several dependencies are not declared and in the end it requires theano-pymc3
     # instead of Theano. The former is currently not packaged.
     broken = true;

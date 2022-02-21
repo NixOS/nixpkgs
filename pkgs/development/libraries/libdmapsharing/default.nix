@@ -1,32 +1,32 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, autoconf
-, automake
-, libtool
-, which
-, pkg-config
-, python3
-, vala
-, avahi
-, gdk-pixbuf
-, gst_all_1
-, glib
-, gtk3
-, libgee
-, check
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gobject-introspection
-, libsoup
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  autoconf,
+  automake,
+  libtool,
+  which,
+  pkg-config,
+  python3,
+  vala,
+  avahi,
+  gdk-pixbuf,
+  gst_all_1,
+  glib,
+  gtk3,
+  libgee,
+  check,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  gobject-introspection,
+  libsoup,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libdmapsharing";
   version = "3.9.10";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
   outputBin = "dev";
 
   src = fetchFromGitLab {

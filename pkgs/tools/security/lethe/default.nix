@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "lethe";
   version = "0.6.1";
@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to wipe drives in a secure way";
     homepage = "https://github.com/kostassoid/lethe";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

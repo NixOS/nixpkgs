@@ -1,11 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, beautifulsoup4
-, empty-files
-, numpy
-, pyperclip
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  empty-files,
+  numpy,
+  pyperclip,
+  pytest,
 }:
-
 buildPythonPackage rec {
   version = "3.6.0";
   pname = "approvaltests";
@@ -36,6 +38,6 @@ buildPythonPackage rec {
     description = "Assertion/verification library to aid testing";
     homepage = "https://github.com/approvals/ApprovalTests.Python";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

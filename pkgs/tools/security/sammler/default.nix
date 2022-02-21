@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "sammler";
   version = "20210523-${lib.strings.substring 0 7 rev}";
@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-0ZBPLONUZyazZ22oLO097hdX5xuHx2G6rZCAsCwqq4s=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Tool to extract useful data from documents";
     homepage = "https://github.com/redcode-labs/Sammler";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    maintainers = with maintainers; [fab] ++ teams.redcodelabs.members;
   };
 }

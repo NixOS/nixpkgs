@@ -1,5 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, tkinter }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  tkinter,
+}:
 buildPythonPackage rec {
   pname = "easygui";
   version = "0.98.2";
@@ -19,12 +23,12 @@ buildPythonPackage rec {
 
   doCheck = false; # No tests available
 
-  pythonImportsCheck = [ "easygui" ];
+  pythonImportsCheck = ["easygui"];
 
   meta = with lib; {
     description = "Very simple, very easy GUI programming in Python";
     homepage = "https://github.com/robertlugg/easygui";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [jfrankenau];
   };
 }

@@ -1,54 +1,54 @@
-{ atk
-, cacert
-, fetchpatch
-, dbus
-, cinnamon-control-center
-, cinnamon-desktop
-, cinnamon-menus
-, cinnamon-session
-, cinnamon-translations
-, cjs
-, fetchFromGitHub
-, gdk-pixbuf
-, libgnomekbd
-, glib
-, gobject-introspection
-, gtk3
-, intltool
-, json-glib
-, callPackage
-, libsoup
-, libstartup_notification
-, libXtst
-, libXdamage
-, muffin
-, networkmanager
-, pkg-config
-, polkit
-, lib
-, stdenv
-, wrapGAppsHook
-, libxml2
-, gtk-doc
-, gnome
-, python3
-, keybinder3
-, cairo
-, xapps
-, upower
-, nemo
-, libnotify
-, accountsservice
-, gnome-online-accounts
-, glib-networking
-, pciutils
-, timezonemap
-, libnma
-, meson
-, ninja
-, gst_all_1
+{
+  atk,
+  cacert,
+  fetchpatch,
+  dbus,
+  cinnamon-control-center,
+  cinnamon-desktop,
+  cinnamon-menus,
+  cinnamon-session,
+  cinnamon-translations,
+  cjs,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  libgnomekbd,
+  glib,
+  gobject-introspection,
+  gtk3,
+  intltool,
+  json-glib,
+  callPackage,
+  libsoup,
+  libstartup_notification,
+  libXtst,
+  libXdamage,
+  muffin,
+  networkmanager,
+  pkg-config,
+  polkit,
+  lib,
+  stdenv,
+  wrapGAppsHook,
+  libxml2,
+  gtk-doc,
+  gnome,
+  python3,
+  keybinder3,
+  cairo,
+  xapps,
+  upower,
+  nemo,
+  libnotify,
+  accountsservice,
+  gnome-online-accounts,
+  glib-networking,
+  pciutils,
+  timezonemap,
+  libnma,
+  meson,
+  ninja,
+  gst_all_1,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
   version = "5.2.0";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # TODO: review if we really need this all
-    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro requests ]))
+    (python3.withPackages (pp: with pp; [dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro requests]))
     atk
     cacert
     cinnamon-control-center
@@ -154,13 +154,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    providedSessions = [ "cinnamon" "cinnamon2d" ];
+    providedSessions = ["cinnamon" "cinnamon2d"];
   };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon";
     description = "The Cinnamon desktop environment";
-    license = [ licenses.gpl2 ];
+    license = [licenses.gpl2];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };

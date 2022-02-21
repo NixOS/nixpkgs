@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, python3Packages
-, pandoc
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  python3Packages,
+  pandoc,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
   version = "3.0.2";
@@ -65,12 +65,12 @@ python3Packages.buildPythonApplication rec {
     "httpie.encoding.detect_encoding"
   ];
 
-  pythonImportsCheck = [ "httpie" ];
+  pythonImportsCheck = ["httpie"];
 
   meta = with lib; {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ antono relrod schneefux SuperSandro2000 ];
+    maintainers = with maintainers; [antono relrod schneefux SuperSandro2000];
   };
 }

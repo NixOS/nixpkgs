@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, buildFHSUserEnv
-, fetchurl
-, gsettings-desktop-schemas
-, makeDesktopItem
-, makeWrapper
-, writeTextDir
-, configText ? ""
-}:
-let
+{
+  stdenv,
+  lib,
+  buildFHSUserEnv,
+  fetchurl,
+  gsettings-desktop-schemas,
+  makeDesktopItem,
+  makeWrapper,
+  writeTextDir,
+  configText ? "",
+}: let
   version = "2111";
 
   sysArch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then "x64"
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
   # The downloaded archive also contains ARM binaries, but these have not been tested.
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
-  bins = [ "vmware-view" "vmware-usbarbitrator" ];
+  bins = ["vmware-view" "vmware-usbarbitrator"];
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -36,7 +37,7 @@ let
       url = "https://download3.vmware.com/software/view/viewclients/CART22FH2/VMware-Horizon-Client-Linux-2111-8.4.0-18957622.tar.gz";
       sha256 = "2f79d2d8d34e6f85a5d21a3350618c4763d60455e7d68647ea40715eaff486f7";
     };
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
     installPhase = ''
       mkdir ext $out
       find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf
@@ -55,50 +56,52 @@ let
     '';
   };
 
-  vmwareFHSUserEnv = name: buildFHSUserEnv {
-    inherit name;
+  vmwareFHSUserEnv = name:
+    buildFHSUserEnv {
+      inherit name;
 
-    runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";
+      runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";
 
-    targetPkgs = pkgs: with pkgs; [
-      at-spi2-atk
-      atk
-      cairo
-      dbus
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      gtk2
-      gtk3-x11
-      harfbuzz
-      liberation_ttf
-      libjpeg
-      libpulseaudio
-      libtiff
-      libudev0-shim
-      libuuid
-      libv4l
-      libxml2
-      pango
-      pcsclite
-      pixman
-      vmwareHorizonClientFiles
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libxkbfile
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXScrnSaver
-      xorg.libXtst
-      zlib
+      targetPkgs = pkgs:
+        with pkgs; [
+          at-spi2-atk
+          atk
+          cairo
+          dbus
+          fontconfig
+          freetype
+          gdk-pixbuf
+          glib
+          gtk2
+          gtk3-x11
+          harfbuzz
+          liberation_ttf
+          libjpeg
+          libpulseaudio
+          libtiff
+          libudev0-shim
+          libuuid
+          libv4l
+          libxml2
+          pango
+          pcsclite
+          pixman
+          vmwareHorizonClientFiles
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXext
+          xorg.libXi
+          xorg.libXinerama
+          xorg.libxkbfile
+          xorg.libXrandr
+          xorg.libXrender
+          xorg.libXScrnSaver
+          xorg.libXtst
+          zlib
 
-      (writeTextDir "etc/vmware/config" configText)
-    ];
-  };
+          (writeTextDir "etc/vmware/config" configText)
+        ];
+    };
 
   desktopItem = makeDesktopItem {
     name = "vmware-view";
@@ -109,32 +112,31 @@ let
   };
 
   binLinkCommands = lib.concatMapStringsSep
-    "\n"
-    (bin: "ln -s ${vmwareFHSUserEnv bin}/bin/${bin} $out/bin/")
-    bins;
-
+  "\n"
+  (bin: "ln -s ${vmwareFHSUserEnv bin}/bin/${bin} $out/bin/")
+  bins;
 in
-stdenv.mkDerivation {
-  name = "vmware-horizon-client";
+  stdenv.mkDerivation {
+    name = "vmware-horizon-client";
 
-  dontUnpack = true;
+    dontUnpack = true;
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
-    ${binLinkCommands}
-  '';
+    installPhase = ''
+      mkdir -p $out/bin $out/share/applications
+      cp ${desktopItem}/share/applications/* $out/share/applications/
+      ${binLinkCommands}
+    '';
 
-  unwrapped = vmwareHorizonClientFiles;
+    unwrapped = vmwareHorizonClientFiles;
 
-  passthru.updateScript = ./update.sh;
+    passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
-    mainProgram = "vmware-view";
-    description = "Allows you to connect to your VMware Horizon virtual desktop";
-    homepage = "https://www.vmware.com/go/viewclients";
-    license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ buckley310 ];
-  };
-}
+    meta = with lib; {
+      mainProgram = "vmware-view";
+      description = "Allows you to connect to your VMware Horizon virtual desktop";
+      homepage = "https://www.vmware.com/go/viewclients";
+      license = licenses.unfree;
+      platforms = ["x86_64-linux"];
+      maintainers = with maintainers; [buckley310];
+    };
+  }

@@ -1,6 +1,17 @@
-{ fetchurl, lib, stdenv, gettext, perl, pkg-config, libxml2, pango, cairo, groff
-, tcl-8_5, darwin }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  gettext,
+  perl,
+  pkg-config,
+  libxml2,
+  pango,
+  cairo,
+  groff,
+  tcl-8_5,
+  darwin,
+}:
 perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   pname = "rrdtool";
   version = "1.7.2";
@@ -10,10 +21,11 @@ perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
     sha256 = "1nsqra0g2nja19akmf9x5y9hhgc35ml3w9dcdz2ayz7zgvmzm6d1";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ gettext perl libxml2 pango cairo groff ]
-    ++ lib.optionals stdenv.isDarwin [ tcl-8_5 darwin.apple_sdk.frameworks.ApplicationServices ];
+  buildInputs =
+    [gettext perl libxml2 pango cairo groff]
+    ++ lib.optionals stdenv.isDarwin [tcl-8_5 darwin.apple_sdk.frameworks.ApplicationServices];
 
   postInstall = ''
     # for munin and rrdtool support
@@ -26,6 +38,6 @@ perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
     description = "High performance logging in Round Robin Databases";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 })

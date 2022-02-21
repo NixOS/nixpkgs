@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitLab, isPy3k, plum-py, pytestCheckHook, baseline }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  isPy3k,
+  plum-py,
+  pytestCheckHook,
+  baseline,
+}:
 buildPythonPackage rec {
   pname = "exif";
   version = "1.2.0";
@@ -12,19 +19,19 @@ buildPythonPackage rec {
     sha256 = "0z2if23kmi0iyxviz32mlqs997i3dqpqfz6nznlwkhkkb6rkwwnh";
   };
 
-  propagatedBuildInputs = [ plum-py ];
+  propagatedBuildInputs = [plum-py];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "plum-py==0.3.1" "plum-py>=0.3.1"
   '';
 
-  checkInputs = [ pytestCheckHook baseline ];
+  checkInputs = [pytestCheckHook baseline];
 
   meta = with lib; {
     description = "Read and modify image EXIF metadata using Python";
-    homepage    = "https://gitlab.com/TNThieding/exif";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ dnr ];
+    homepage = "https://gitlab.com/TNThieding/exif";
+    license = licenses.mit;
+    maintainers = with maintainers; [dnr];
   };
 }

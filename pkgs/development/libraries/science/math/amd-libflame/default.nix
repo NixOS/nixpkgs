@@ -1,13 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gfortran
-, python3
-, amd-blis
-
-, withOpenMP ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gfortran,
+  python3,
+  amd-blis,
+  withOpenMP ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "amd-libflame";
   version = "3.0";
@@ -26,30 +25,31 @@ stdenv.mkDerivation rec {
     ./add-lapacke.diff
   ];
 
-  nativeBuildInputs = [ gfortran python3 ];
+  nativeBuildInputs = [gfortran python3];
 
-  buildInputs = [ amd-blis ];
+  buildInputs = [amd-blis];
 
-  configureFlags = [
-    # Build a dynamic library with a LAPACK interface.
-    "--disable-static-build"
-    "--enable-dynamic-build"
-    "--enable-lapack2flame"
+  configureFlags =
+    [
+      # Build a dynamic library with a LAPACK interface.
+      "--disable-static-build"
+      "--enable-dynamic-build"
+      "--enable-lapack2flame"
 
-    # Use C BLAS interface.
-    "--enable-cblas-interfaces"
+      # Use C BLAS interface.
+      "--enable-cblas-interfaces"
 
-    # Avoid overloading maximum number of arguments.
-    "--enable-max-arg-list-hack"
+      # Avoid overloading maximum number of arguments.
+      "--enable-max-arg-list-hack"
 
-    # libflame by default leaves BLAS symbols unresolved and leaves it
-    # up to the application to explicitly link to a BLAS. This is
-    # problematic for us, since then the BLAS library becomes an
-    # implicit dependency. Moreover, since the point of the AMD forks
-    # is to optimized for recent AMD CPUs, link against AMD BLIS.
-    "LDFLAGS=-lcblas"
-  ]
-  ++ lib.optionals withOpenMP [ "--enable-multithreading=openmp" ];
+      # libflame by default leaves BLAS symbols unresolved and leaves it
+      # up to the application to explicitly link to a BLAS. This is
+      # problematic for us, since then the BLAS library becomes an
+      # implicit dependency. Moreover, since the point of the AMD forks
+      # is to optimized for recent AMD CPUs, link against AMD BLIS.
+      "LDFLAGS=-lcblas"
+    ]
+    ++ lib.optionals withOpenMP ["--enable-multithreading=openmp"];
 
   enableParallelBuilding = true;
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     description = "LAPACK-compatible linear algebra library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [];
+    platforms = ["x86_64-linux"];
   };
 }

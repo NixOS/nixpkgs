@@ -1,7 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, jupyter-packaging
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyter-packaging,
 }:
-
 buildPythonPackage rec {
   pname = "jupyterlab-widgets";
   version = "2.0.0b1";
@@ -19,12 +21,12 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "jupyterlab_widgets" ];
+  pythonImportsCheck = ["jupyterlab_widgets"];
 
   meta = with lib; {
     description = "Jupyter Widgets JupyterLab Extension";
     homepage = "https://github.com/jupyter-widgets/ipywidgets";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer SuperSandro2000 ];
+    maintainers = with maintainers; [jonringer SuperSandro2000];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
 }:
-
 stdenv.mkDerivation rec {
   pname = "as31";
   version = "2.3.1";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "http://wiki.erazor-zone.de/wiki:projects:linux:as31";
     description = "An 8031/8051 assembler";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

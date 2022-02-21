@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libX11
-, gtk2
-, fig2dev
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libX11,
+  gtk2,
+  fig2dev,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "chemtool";
   version = "1.6.14";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "hhYaBGE4azNKX/sXzfCUpJGUGIRngnL0V0mBNRTdr8s=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [pkg-config wrapGAppsHook];
   buildInputs = [
     libX11
     gtk2
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ fig2dev ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [fig2dev]}")
   '';
 
   meta = with lib; {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       hexagonal backdrop grids for easier alignment.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

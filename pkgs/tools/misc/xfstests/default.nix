@@ -1,8 +1,36 @@
-{ stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
-, fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
-, libuuid, libxfs, lvm2, openssl, perl, procps, quota
-, time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
-
+{
+  stdenv,
+  acl,
+  attr,
+  autoconf,
+  automake,
+  bash,
+  bc,
+  coreutils,
+  e2fsprogs,
+  fetchgit,
+  fio,
+  gawk,
+  keyutils,
+  killall,
+  lib,
+  libaio,
+  libcap,
+  libtool,
+  libuuid,
+  libxfs,
+  lvm2,
+  openssl,
+  perl,
+  procps,
+  quota,
+  time,
+  util-linux,
+  which,
+  writeScript,
+  xfsprogs,
+  runtimeShell,
+}:
 stdenv.mkDerivation {
   pname = "xfstests";
   version = "unstable-2019-09-08";
@@ -14,13 +42,22 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    autoconf automake libtool
+    autoconf
+    automake
+    libtool
   ];
   buildInputs = [
-    acl attr gawk libaio libuuid libxfs openssl perl
+    acl
+    attr
+    gawk
+    libaio
+    libuuid
+    libxfs
+    openssl
+    perl
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
   enableParallelBuilding = true;
 
   patchPhase = ''
@@ -95,9 +132,26 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils
-                                   libcap lvm2 perl procps killall quota
-                                   util-linux which xfsprogs]}:$PATH
+    export PATH=${
+      lib.makeBinPath [
+        acl
+        attr
+        bc
+        e2fsprogs
+        fio
+        gawk
+        keyutils
+        libcap
+        lvm2
+        perl
+        procps
+        killall
+        quota
+        util-linux
+        which
+        xfsprogs
+      ]
+    }:$PATH
     exec ./check "$@"
   '';
 
@@ -105,7 +159,7 @@ stdenv.mkDerivation {
     description = "Torture test suite for filesystems";
     homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = [maintainers.dezgeg];
     platforms = platforms.linux;
   };
 }

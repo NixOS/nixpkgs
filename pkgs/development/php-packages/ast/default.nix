@@ -1,5 +1,7 @@
-{ buildPecl, lib }:
-
+{
+  buildPecl,
+  lib,
+}:
 buildPecl {
   pname = "ast";
 

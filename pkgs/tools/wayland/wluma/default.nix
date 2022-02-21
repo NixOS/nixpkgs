@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rustPlatform
-, vulkan-loader
-, pkg-config
-, udev
-, v4l-utils
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  rustPlatform,
+  vulkan-loader,
+  pkg-config,
+  udev,
+  v4l-utils,
+  llvmPackages,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
   version = "4.1.0";
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     v4l-utils.lib
   ];
 
-  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   # Works around the issue with rust-bindgen and the Nix gcc wrapper:
   # https://hoverbear.org/blog/rust-bindgen-in-nix/
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/wluma \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [vulkan-loader]}"
   '';
 
   cargoSha256 = "sha256-oOIL18gij7DdvgNOuaHtuyFemNBUB85Ouh/sdhKas+s=";
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     description = "Automatic brightness adjustment based on screen contents and ALS";
     homepage = "https://github.com/maximbaz/wluma";
     license = licenses.isc;
-    maintainers = with maintainers; [ yshym jmc-figueira ];
+    maintainers = with maintainers; [yshym jmc-figueira];
     platforms = platforms.linux;
   };
 }

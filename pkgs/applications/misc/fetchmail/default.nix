@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "fetchmail";
   version = "6.4.27";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nmT55x95jPH+Ini4Ti9YgLgGUnwMAgaSXAhszReRE9w=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
-  configureFlags = [ "--with-ssl=${openssl.dev}" ];
+  configureFlags = ["--with-ssl=${openssl.dev}"];
 
   meta = with lib; {
     homepage = "https://www.fetchmail.info/";

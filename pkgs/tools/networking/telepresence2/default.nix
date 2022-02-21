@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, kubernetes-helm }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  kubernetes-helm,
+}:
 buildGoModule rec {
   pname = "telepresence2";
   version = "2.4.10";
@@ -24,15 +28,17 @@ buildGoModule rec {
   vendorSha256 = "sha256-J7Qj0g479K6k0pXmZzQ3T4VG4Vdj7Sc9Xhuy4Ke/xkU=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
   ];
 
-  subPackages = [ "cmd/telepresence" ];
+  subPackages = ["cmd/telepresence"];
 
   meta = with lib; {
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     homepage = "https://www.getambassador.io/docs/telepresence/2.1/quick-start/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mausch ];
+    maintainers = with maintainers; [mausch];
   };
 }

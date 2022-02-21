@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "kn";
   version = "1.2.0";
@@ -13,9 +17,9 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  subPackages = [ "cmd/kn" ];
+  subPackages = ["cmd/kn"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   ldflags = [
     "-X knative.dev/client/pkg/kn/commands/version.Version=v${version}"
@@ -39,6 +43,6 @@ buildGoModule rec {
     homepage = "https://github.com/knative/client";
     changelog = "https://github.com/knative/client/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    maintainers = with maintainers; [bryanasdev000];
   };
 }

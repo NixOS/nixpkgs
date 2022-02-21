@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, ... }: let
+import ./make-test-python.nix ({pkgs, ...}: let
   snakeOil = pkgs.runCommand "snakeoil-certs" {
-    outputs = [ "out" "cacert" "cert" "key" "crl" ];
-    buildInputs = [ pkgs.gnutls.bin ];
+    outputs = ["out" "cacert" "cert" "key" "crl"];
+    buildInputs = [pkgs.gnutls.bin];
     caTemplate = pkgs.writeText "snakeoil-ca.template" ''
       cn = server
       expiration_days = -1
@@ -55,7 +55,6 @@ import ./make-test-python.nix ({ pkgs, ... }: let
                 --load-ca-certificate "$cacert" \
                 --outfile "$out/alice.cert"
   '';
-
 in {
   name = "taskserver";
 
@@ -65,14 +64,18 @@ in {
       services.taskserver.listenHost = "::";
       services.taskserver.fqdn = "server";
       services.taskserver.organisations = {
-        testOrganisation.users = [ "alice" "foo" ];
-        anotherOrganisation.users = [ "bob" ];
+        testOrganisation.users = ["alice" "foo"];
+        anotherOrganisation.users = ["bob"];
       };
     };
 
     # New generation of the server with manual config
-    newServer = { lib, nodes, ... }: {
-      imports = [ server ];
+    newServer = {
+      lib,
+      nodes,
+      ...
+    }: {
+      imports = [server];
       services.taskserver.pki.manual = {
         ca.cert = snakeOil.cacert;
         server.cert = snakeOil.cert;
@@ -83,13 +86,17 @@ in {
       # generation.
       networking = lib.mapAttrs (lib.const lib.mkForce) {
         interfaces.eth1.ipv4 = nodes.server.config.networking.interfaces.eth1.ipv4;
-        inherit (nodes.server.config.networking)
-          hostName primaryIPAddress extraHosts;
+        inherit
+          (nodes.server.config.networking)
+          hostName
+          primaryIPAddress
+          extraHosts
+          ;
       };
     };
 
-    client1 = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.taskwarrior pkgs.gnutls ];
+    client1 = {pkgs, ...}: {
+      environment.systemPackages = [pkgs.taskwarrior pkgs.gnutls];
       users.users.alice.isNormalUser = true;
       users.users.bob.isNormalUser = true;
       users.users.foo.isNormalUser = true;
@@ -99,7 +106,7 @@ in {
     client2 = client1;
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     cfg = nodes.server.config.services.taskserver;
     portStr = toString cfg.listenPort;
     newServerSystem = nodes.newServer.config.system.build.toplevel;

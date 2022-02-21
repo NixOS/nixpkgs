@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "riemann";
   version = "0.3.8";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MjTUrqdi9K71PhpLzR3lqdOiNM7Ilmh8HWf3BUOr+b0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     substituteInPlace bin/riemann --replace '$top/lib/riemann.jar' "$out/share/java/riemann.jar"

@@ -1,10 +1,17 @@
-{ lib, stdenv, fetchurl, makeWrapper, installShellFiles, pkg-config, libdatrie }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  installShellFiles,
+  pkg-config,
+  libdatrie,
+}:
 stdenv.mkDerivation rec {
   pname = "libthai";
   version = "0.1.29";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "https://github.com/tlwg/libthai/releases/download/v${version}/libthai-${version}.tar.xz";
@@ -13,9 +20,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ installShellFiles (lib.getBin libdatrie) pkg-config ];
+  nativeBuildInputs = [installShellFiles (lib.getBin libdatrie) pkg-config];
 
-  buildInputs = [ libdatrie ];
+  buildInputs = [libdatrie];
 
   postInstall = ''
     installManPage man/man3/*.3
@@ -26,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Set of Thai language support routines";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

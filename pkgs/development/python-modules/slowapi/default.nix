@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fastapi
-, fetchFromGitHub
-, limits
-, mock
-, hiro
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, redis
-, starlette
+{
+  lib,
+  buildPythonPackage,
+  fastapi,
+  fetchFromGitHub,
+  limits,
+  mock,
+  hiro,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  starlette,
 }:
-
 buildPythonPackage rec {
   pname = "slowapi";
   version = "0.1.5";
@@ -48,12 +48,12 @@ buildPythonPackage rec {
     "test_endpoint_response_param_invalid"
   ];
 
-  pythonImportsCheck = [ "slowapi" ];
+  pythonImportsCheck = ["slowapi"];
 
   meta = with lib; {
     description = "Python library for API rate limiting";
     homepage = "https://github.com/laurentS/slowapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

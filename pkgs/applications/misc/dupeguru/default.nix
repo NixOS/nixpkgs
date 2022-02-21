@@ -1,5 +1,10 @@
-{lib, python3Packages, gettext, qt5, fetchFromGitHub}:
-
+{
+  lib,
+  python3Packages,
+  gettext,
+  qt5,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
   version = "4.1.1";
@@ -61,6 +66,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/arsenetar/dupeguru";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.novoxd ];
+    maintainers = [maintainers.novoxd];
   };
 }

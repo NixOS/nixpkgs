@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, colorama
-, pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  colorama,
+  pytest,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-resource-path";
   version = "1.3.0";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to provide path for uniform access to test resources";
     homepage = "https://github.com/yukihiko-shinoda/pytest-resource-path";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, tzdata, fetchpatch, substituteAll }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  tzdata,
+  fetchpatch,
+  substituteAll,
+}:
 stdenv.mkDerivation rec {
   pname = "howard-hinnant-date";
   version = "3.0.1";
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   cmakeFlags = [
     "-DBUILD_TZ_LIB=true"
@@ -36,13 +43,13 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_TZ_DB=true"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   meta = with lib; {
     license = licenses.mit;
     description = "A date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
   };
 }

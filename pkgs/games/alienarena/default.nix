@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchsvn, pkg-config, libjpeg, libX11, libXxf86vm, curl, libogg
-, libvorbis, freetype, openal, libGL }:
-
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  pkg-config,
+  libjpeg,
+  libX11,
+  libXxf86vm,
+  curl,
+  libogg,
+  libvorbis,
+  freetype,
+  openal,
+  libGL,
+}:
 stdenv.mkDerivation rec {
   pname = "alienarena";
   version = "7.71.2";
@@ -11,9 +23,18 @@ stdenv.mkDerivation rec {
     sha256 = "1qfrgrp7nznk5n1jqvjba6l1w8y2ixzyx9swkpvd02rdwlwrp9kw";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjpeg libX11 curl libogg libvorbis
-                  freetype openal libGL libXxf86vm ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [
+    libjpeg
+    libX11
+    curl
+    libogg
+    libvorbis
+    freetype
+    openal
+    libGL
+    libXxf86vm
+  ];
 
   patchPhase = ''
     substituteInPlace ./configure \
@@ -35,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "http://red.planetarena.org";
     # Engine is under GPLv2, everything else is under
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [astsmtl];
     platforms = platforms.linux;
     hydraPlatforms = [];
   };

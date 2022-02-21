@@ -1,10 +1,12 @@
 # NixOS module for Buildbot continous integration server.
-
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.buildbot-master;
   opt = options.services.buildbot-master;
 
@@ -54,11 +56,9 @@ let
     m = BuildMaster(basedir, configfile, umask)
     m.setServiceParent(application)
   '';
-
 in {
   options = {
     services.buildbot-master = {
-
       factorySteps = mkOption {
         type = types.listOf types.str;
         description = "Factory Steps";
@@ -118,7 +118,7 @@ in {
       workers = mkOption {
         type = types.listOf types.str;
         description = "List of Workers.";
-        default = [ "worker.Worker('example-worker', 'pass')" ];
+        default = ["worker.Worker('example-worker', 'pass')"];
       };
 
       reporters = mkOption {
@@ -219,7 +219,7 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.git ];
+        default = [pkgs.git];
         defaultText = literalExpression "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
@@ -227,7 +227,7 @@ in {
 
       pythonPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = pythonPackages: with pythonPackages; [ ];
+        default = pythonPackages: with pythonPackages; [];
         defaultText = literalExpression "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
         example = literalExpression "pythonPackages: with pythonPackages; [ requests ]";
@@ -237,7 +237,7 @@ in {
 
   config = mkIf cfg.enable {
     users.groups = optionalAttrs (cfg.group == "buildbot") {
-      buildbot = { };
+      buildbot = {};
     };
 
     users.users = optionalAttrs (cfg.user == "buildbot") {
@@ -254,10 +254,10 @@ in {
 
     systemd.services.buildbot-master = {
       description = "Buildbot Continuous Integration Server.";
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
-      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [cfg.package])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}"
@@ -279,12 +279,12 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "buildbot-master" "bpPort" ] [ "services" "buildbot-master" "pbPort" ])
-    (mkRemovedOptionModule [ "services" "buildbot-master" "status" ] ''
+    (mkRenamedOptionModule ["services" "buildbot-master" "bpPort"] ["services" "buildbot-master" "pbPort"])
+    (mkRemovedOptionModule ["services" "buildbot-master" "status"] ''
       Since Buildbot 0.9.0, status targets are deprecated and ignored.
       Review your configuration and migrate to reporters (available at services.buildbot-master.reporters).
     '')
   ];
 
-  meta.maintainers = with lib.maintainers; [ mic92 lopsided98 ];
+  meta.maintainers = with lib.maintainers; [mic92 lopsided98];
 }

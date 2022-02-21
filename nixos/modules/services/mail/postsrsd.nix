@@ -1,19 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.postsrsd;
-
 in {
-
   ###### interface
 
   options = {
-
     services.postsrsd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -78,16 +75,12 @@ in {
         default = "postsrsd";
         description = "Group for the daemon";
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     services.postsrsd.domain = mkDefault config.networking.hostName;
 
     users.users = optionalAttrs (cfg.user == "postsrsd") {
@@ -103,11 +96,11 @@ in {
 
     systemd.services.postsrsd = {
       description = "PostSRSd SRS rewriting server";
-      after = [ "network.target" ];
-      before = [ "postfix.service" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      before = ["postfix.service"];
+      wantedBy = ["multi-user.target"];
 
-      path = [ pkgs.coreutils ];
+      path = [pkgs.coreutils];
 
       serviceConfig = {
         ExecStart = ''${pkgs.postsrsd}/sbin/postsrsd "-s${cfg.secretsFile}" "-d${cfg.domain}" -a${cfg.separator} -f${toString cfg.forwardPort} -r${toString cfg.reversePort} -t${toString cfg.timeout} "-X${concatStringsSep "," cfg.excludeDomains}"'';
@@ -130,6 +123,5 @@ in {
         chown "${cfg.user}:${cfg.group}" "${cfg.secretsFile}"
       '';
     };
-
   };
 }

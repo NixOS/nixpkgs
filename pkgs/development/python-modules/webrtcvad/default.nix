@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "webrtcvad";
   version = "2.0.10";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interface to the Google WebRTC Voice Activity Detector (VAD)";
     homepage = "https://github.com/wiseman/py-webrtcvad";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ prusnak ];
+    license = with lib.licenses; [mit];
+    maintainers = with lib.maintainers; [prusnak];
   };
 }

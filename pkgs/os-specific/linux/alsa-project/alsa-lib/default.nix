@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-topology-conf
-, alsa-ucm-conf
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-topology-conf,
+  alsa-ucm-conf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "alsa-lib";
   version = "1.2.6.1";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ln -s ${alsa-topology-conf}/share/alsa/topology $out/share/alsa
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   meta = with lib; {
     homepage = "http://www.alsa-project.org/";
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ l-as ];
+    maintainers = with maintainers; [l-as];
   };
 }

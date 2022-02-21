@@ -1,22 +1,22 @@
-{ lib
-, Babel
-, buildPythonPackage
-, cssselect
-, fetchFromGitHub
-, glibcLocales
-, isodate
-, leather
-, lxml
-, nose
-, parsedatetime
-, PyICU
-, python-slugify
-, pytimeparse
-, pythonOlder
-, pytz
-, six
+{
+  lib,
+  Babel,
+  buildPythonPackage,
+  cssselect,
+  fetchFromGitHub,
+  glibcLocales,
+  isodate,
+  leather,
+  lxml,
+  nose,
+  parsedatetime,
+  PyICU,
+  python-slugify,
+  pytimeparse,
+  pythonOlder,
+  pytz,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "agate";
   version = "1.6.3";
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python data analysis library that is optimized for humans instead of machines";
     homepage = "https://github.com/wireservice/agate";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ vrthra ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [vrthra];
   };
 }

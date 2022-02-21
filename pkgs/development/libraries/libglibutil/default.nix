@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitLab, pkg-config, glib }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  pkg-config,
+  glib,
+}:
 stdenv.mkDerivation rec {
   pname = "libglibutil";
   version = "1.0.55";
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zrxccpyfz4jf14zr6fj9b88p340s66lw5cnqkapfa72kl1rnp4q";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
     "INSTALL_PKGCONFIG_DIR=$(dev)/lib/pkgconfig"
   ];
 
-  installTargets = [ "install" "install-dev" ];
+  installTargets = ["install" "install-dev"];
 
   postInstall = ''
     sed -i -e "s@includedir=/usr@includedir=$dev@g" $dev/lib/pkgconfig/$pname.pc
@@ -40,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sailfishos.org/mer-core/libglibutil";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    maintainers = with maintainers; [mcaju];
   };
 }

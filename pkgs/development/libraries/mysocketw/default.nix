@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, openssl, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "mysocketw";
   version = "3.10.27";
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xqcgwb1lyc2d8834sq5adbmggyn6vvb26jw20862sxa15j0qfd4";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [openssl];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/Makefile \

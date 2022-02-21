@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "mandown";
   version = "0.1.3";
@@ -14,7 +17,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Markdown to groff (man page) converter";
     homepage = "https://gitlab.com/kornelski/mandown";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ zowoq ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [zowoq];
   };
 }

@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, cmake, git, makeWrapper, allegro5, libGL }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  cmake,
+  git,
+  makeWrapper,
+  allegro5,
+  libGL,
+}:
 stdenv.mkDerivation rec {
   pname = "liberation-circuit";
   version = "1.3";
@@ -31,8 +40,8 @@ stdenv.mkDerivation rec {
     substituteInPlace bin/launcher.sh --replace ./libcirc ./liberation-circuit
   '';
 
-  nativeBuildInputs = [ cmake git makeWrapper ];
-  buildInputs = [ allegro5 libGL ];
+  nativeBuildInputs = [cmake git makeWrapper];
+  buildInputs = [allegro5 libGL];
 
   cmakeFlags = [
     "-DALLEGRO_LIBRARY=${lib.getDev allegro5}"
@@ -40,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_LINK = "-lallegro_image -lallegro_primitives -lallegro_color -lallegro_acodec -lallegro_audio -lallegro_dialog -lallegro_font -lallegro_main -lallegro -lm";
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   installPhase = ''
     runHook preInstall
@@ -64,7 +73,7 @@ stdenv.mkDerivation rec {
       Escape from a hostile computer system! Harvest data to create an armada of battle-processes to aid your escape! Take command directly and play the game as an RTS, or use the game's built-in editor and compiler to write your own unit AI in a simplified version of C.
     '';
     homepage = "https://linleyh.itch.io/liberation-circuit";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     license = licenses.gpl3Only;
     platforms = platforms.linux;
   };

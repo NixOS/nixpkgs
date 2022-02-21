@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "trezord";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [ mmahut _1000101 ];
+    maintainers = with maintainers; [mmahut _1000101];
   };
   nodes = {
-    machine = { ... }: {
+    machine = {...}: {
       services.trezord.enable = true;
       services.trezord.emulator.enable = true;
     };

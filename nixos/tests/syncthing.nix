@@ -1,10 +1,14 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+import ./make-test-python.nix ({
+  lib,
+  pkgs,
+  ...
+}: {
   name = "syncthing";
-  meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
+  meta.maintainers = with pkgs.lib.maintainers; [chkno];
 
   nodes = rec {
     a = {
-      environment.systemPackages = with pkgs; [ curl libxml2 syncthing ];
+      environment.systemPackages = with pkgs; [curl libxml2 syncthing];
       services.syncthing = {
         enable = true;
         openDefaultPorts = true;

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, cmake, libuuid, gnutls, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libuuid,
+  gnutls,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "taskserver";
   version = "1.1.0";
@@ -24,18 +31,18 @@ stdenv.mkDerivation rec {
 
       echo wrapping $i
       makeWrapper  $pkipath/$i $out/bin/taskd-pki-$i \
-        --prefix PATH : ${lib.makeBinPath [ gnutls ]}
+        --prefix PATH : ${lib.makeBinPath [gnutls]}
     done
   '';
 
-  buildInputs = [ libuuid gnutls ];
-  nativeBuildInputs = [ cmake makeWrapper ];
+  buildInputs = [libuuid gnutls];
+  nativeBuildInputs = [cmake makeWrapper];
 
   meta = {
     description = "Server for synchronising Taskwarrior clients";
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ matthiasbeyer makefu ];
+    maintainers = with lib.maintainers; [matthiasbeyer makefu];
   };
 }

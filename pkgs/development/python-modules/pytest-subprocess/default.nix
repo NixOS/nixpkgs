@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytest
-, pytestCheckHook
-, docutils
-, pygments
-, pytest-rerunfailures
-, pytest-asyncio
-, anyio
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytest,
+  pytestCheckHook,
+  docutils,
+  pygments,
+  pytest-rerunfailures,
+  pytest-asyncio,
+  anyio,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-subprocess";
   version = "1.4.1";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aklajnert/pytest-subprocess";
     changelog = "https://github.com/aklajnert/pytest-subprocess/blob/${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

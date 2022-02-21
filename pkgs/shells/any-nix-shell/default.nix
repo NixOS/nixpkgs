@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "any-nix-shell";
   version = "1.2.1";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q27rhjhh7k0qgcdcfm8ly5za6wm4rckh633d0sjz87faffkp90k";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   installPhase = ''
     mkdir -p $out/bin
     cp -r bin $out
@@ -22,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "fish and zsh support for nix-shell";
     license = licenses.mit;
     homepage = "https://github.com/haslersn/any-nix-shell";
-    maintainers = with maintainers; [ haslersn ];
+    maintainers = with maintainers; [haslersn];
   };
 }

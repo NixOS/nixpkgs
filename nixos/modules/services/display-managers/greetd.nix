@@ -1,12 +1,14 @@
-{ config, lib, pkgs, ... }:
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.greetd;
   tty = "tty${toString cfg.vt}";
   settingsFormat = pkgs.formats.toml {};
-in
-{
+in {
   options.services.greetd = {
     enable = mkEnableOption "greetd";
 
@@ -32,7 +34,7 @@ in
       '';
     };
 
-    vt = mkOption  {
+    vt = mkOption {
       type = types.int;
       default = 1;
       description = ''
@@ -52,7 +54,6 @@ in
     };
   };
   config = mkIf cfg.enable {
-
     services.greetd.settings.terminal.vt = mkDefault cfg.vt;
     services.greetd.settings.default_session = mkDefault "greeter";
 
@@ -94,7 +95,7 @@ in
       # Don't kill a user session when using nixos-rebuild
       restartIfChanged = false;
 
-      wantedBy = [ "graphical.target" ];
+      wantedBy = ["graphical.target"];
     };
 
     systemd.defaultUnit = "graphical.target";
@@ -107,5 +108,5 @@ in
     users.groups.greeter = {};
   };
 
-  meta.maintainers = with maintainers; [ queezle ];
+  meta.maintainers = with maintainers; [queezle];
 }

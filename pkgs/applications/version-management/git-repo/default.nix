@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, nix-update-script
-, python3, git, gnupg, less, openssh
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  nix-update-script,
+  python3,
+  git,
+  gnupg,
+  less,
+  openssh,
 }:
-
 stdenv.mkDerivation rec {
   pname = "git-repo";
   version = "2.21";
@@ -14,10 +22,10 @@ stdenv.mkDerivation rec {
   };
 
   # Fix 'NameError: name 'ssl' is not defined'
-  patches = [ ./import-ssl-module.patch ];
+  patches = [./import-ssl-module.patch];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [python3];
 
   postPatch = ''
     substituteInPlace repo --replace \
@@ -37,7 +45,7 @@ stdenv.mkDerivation rec {
   # Important runtime dependencies
   postFixup = ''
     wrapProgram $out/bin/repo --prefix PATH ":" \
-      "${lib.makeBinPath [ git gnupg less openssh ]}"
+      "${lib.makeBinPath [git gnupg less openssh]}"
   '';
 
   passthru = {
@@ -56,7 +64,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://android.googlesource.com/tools/repo";
     license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
+    maintainers = with maintainers; [otavio];
     platforms = platforms.unix;
   };
 }

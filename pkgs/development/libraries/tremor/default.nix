@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, libogg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  libogg,
+}:
 stdenv.mkDerivation {
   pname = "tremor";
   version = "unstable-2018-03-16";
@@ -12,10 +18,10 @@ stdenv.mkDerivation {
     sha256 = "0m07gq4zfgigsiz8b518xyb19v7qqp76qmp7lb262825vkqzl3zq";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  propagatedBuildInputs = [ libogg ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  propagatedBuildInputs = [libogg];
 
   preConfigure = ''
     sed -i /XIPH_PATH_OGG/d configure

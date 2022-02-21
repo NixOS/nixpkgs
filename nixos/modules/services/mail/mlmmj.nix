@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   concatMapLines = f: l: lib.concatStringsSep "\n" (map f l);
 
   cfg = config.services.mlmmj;
@@ -25,34 +26,29 @@ let
     "List-Unsubscribe: <mailto:${list}+unsubscribe@${domain}>"
   ];
   footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
-  createList = d: l:
-    let ctlDir = listCtl d l; in
-    ''
-      for DIR in incoming queue queue/discarded archive text subconf unsubconf \
-                 bounce control moderation subscribers.d digesters.d requeue \
-                 nomailsubs.d
-      do
-             mkdir -p '${listDir d l}'/"$DIR"
-      done
-      ${pkgs.coreutils}/bin/mkdir -p ${ctlDir}
-      echo ${listAddress d l} > '${ctlDir}/listaddress'
-      [ ! -e ${ctlDir}/customheaders ] && \
-          echo "${lib.concatStringsSep "\n" (customHeaders d l)}" > '${ctlDir}/customheaders'
-      [ ! -e ${ctlDir}/footer ] && \
-          echo ${footer d l} > '${ctlDir}/footer'
-      [ ! -e ${ctlDir}/prefix ] && \
-          echo ${subjectPrefix l} > '${ctlDir}/prefix'
-    '';
-in
-
-{
-
+  createList = d: l: let
+    ctlDir = listCtl d l;
+  in ''
+    for DIR in incoming queue queue/discarded archive text subconf unsubconf \
+               bounce control moderation subscribers.d digesters.d requeue \
+               nomailsubs.d
+    do
+           mkdir -p '${listDir d l}'/"$DIR"
+    done
+    ${pkgs.coreutils}/bin/mkdir -p ${ctlDir}
+    echo ${listAddress d l} > '${ctlDir}/listaddress'
+    [ ! -e ${ctlDir}/customheaders ] && \
+        echo "${lib.concatStringsSep "\n" (customHeaders d l)}" > '${ctlDir}/customheaders'
+    [ ! -e ${ctlDir}/footer ] && \
+        echo ${footer d l} > '${ctlDir}/footer'
+    [ ! -e ${ctlDir}/prefix ] && \
+        echo ${subjectPrefix l} > '${ctlDir}/prefix'
+  '';
+in {
   ###### interface
 
   options = {
-
     services.mlmmj = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -92,15 +88,12 @@ in
           <manvolnum>7</manvolnum></citerefentry> for format information.
         '';
       };
-
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users.${cfg.user} = {
       description = "mlmmj user";
       home = stateDir;
@@ -116,7 +109,7 @@ in
 
     services.postfix = {
       enable = true;
-      recipientDelimiter= "+";
+      recipientDelimiter = "+";
       masterConfig.mlmmj = {
         type = "unix";
         private = true;
@@ -142,15 +135,15 @@ in
       transport = concatMapLines (transport cfg.listDomain) cfg.mailLists;
     };
 
-    environment.systemPackages = [ pkgs.mlmmj ];
+    environment.systemPackages = [pkgs.mlmmj];
 
     system.activationScripts.mlmmj = ''
-          ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
-          ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
-          ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-          ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
-          ${pkgs.postfix}/bin/postmap /etc/postfix/transport
-      '';
+      ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
+      ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
+      ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
+      ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
+      ${pkgs.postfix}/bin/postmap /etc/postfix/transport
+    '';
 
     systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";
@@ -164,8 +157,7 @@ in
     systemd.timers.mlmmj-maintd = {
       description = "mlmmj maintenance timer";
       timerConfig.OnUnitActiveSec = cfg.maintInterval;
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
     };
   };
-
 }

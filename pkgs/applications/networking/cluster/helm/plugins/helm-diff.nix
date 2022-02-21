@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "helm-diff";
   version = "3.1.3";
@@ -29,6 +32,6 @@ buildGoModule rec {
     description = "A Helm plugin that shows a diff";
     inherit (src.meta) homepage;
     license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [yurrriq];
   };
 }

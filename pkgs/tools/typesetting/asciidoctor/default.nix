@@ -1,8 +1,8 @@
-{ lib
-, bundlerApp
-, bundlerUpdateScript
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
 }:
-
 bundlerApp {
   pname = "asciidoctor";
   gemdir = ./.;
@@ -20,7 +20,7 @@ bundlerApp {
     description = "A faster Asciidoc processor written in Ruby";
     homepage = "https://asciidoctor.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ gpyh nicknovitski ];
+    maintainers = with maintainers; [gpyh nicknovitski];
     platforms = platforms.unix;
   };
 }

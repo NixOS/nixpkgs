@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, aalib, gsl, libpng, libX11, xorgproto, libXext
-, libXt, zlib, gettext, intltool, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  aalib,
+  gsl,
+  libpng,
+  libX11,
+  xorgproto,
+  libXext,
+  libXt,
+  zlib,
+  gettext,
+  intltool,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "xaos";
   version = "3.6";
@@ -10,11 +23,20 @@ stdenv.mkDerivation rec {
     sha256 = "15cd1cx1dyygw6g2nhjqq3bsfdj8sj8m4va9n75i0f3ryww3x7wq";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   buildInputs = [
-    aalib gsl libpng libX11 xorgproto libXext
-    libXt zlib gettext intltool perl
+    aalib
+    gsl
+    libpng
+    libX11
+    xorgproto
+    libXext
+    libXt
+    zlib
+    gettext
+    intltool
+    perl
   ];
 
   preConfigure = ''
@@ -26,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "http://xaos.sourceforge.net/";
     description = "Fractal viewer";
     license = lib.licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

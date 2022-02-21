@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  SDL2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "yapesdl";
   version = "0.70.2";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}c++"];
 
   installPhase = ''
     runHook preInstall
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "http://yape.plus4.net/";
     description = "Multiplatform Commodore 64 and 264 family emulator";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

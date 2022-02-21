@@ -1,9 +1,9 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, boto3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  boto3,
 }:
-
 buildPythonApplication rec {
   pname = "aws-mfa";
   version = "0.0.12";
@@ -28,7 +28,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Manage AWS MFA Security Credentials";
     homepage = "https://github.com/broamski/aws-mfa";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers.srapenne ];
+    license = [licenses.mit];
+    maintainers = [maintainers.srapenne];
   };
 }

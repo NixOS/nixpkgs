@@ -1,6 +1,10 @@
-{ writeText, bazel, bazelTest, runLocal, distDir }:
-
-let
+{
+  writeText,
+  bazel,
+  bazelTest,
+  runLocal,
+  distDir,
+}: let
   WORKSPACE = writeText "WORKSPACE" ''
     workspace(name = "our_workspace")
   '';
@@ -49,5 +53,5 @@ let
           //python:bin
     '';
   };
-
-in testBazel
+in
+  testBazel

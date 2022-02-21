@@ -1,12 +1,20 @@
-{ config, pkgs, lib, utils, ... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  utils,
+  ...
+}: let
   toplevelConfig = config;
   inherit (lib) types;
   inherit (utils.systemdUtils.lib) mkPathSafeName;
 in {
   options.systemd.services = lib.mkOption {
-    type = types.attrsOf (types.submodule ({ name, config, ... }: {
+    type = types.attrsOf (types.submodule ({
+      name,
+      config,
+      ...
+    }: {
       options.confinement.enable = lib.mkOption {
         type = types.bool;
         default = false;
@@ -43,10 +51,15 @@ in {
         in ''
           Additional packages or strings with context to add to the closure of
           the chroot. By default, this includes all the packages from the
-          ${lib.concatMapStringsSep ", " mkScOption [
-            "ExecReload" "ExecStartPost" "ExecStartPre" "ExecStop"
-            "ExecStopPost"
-          ]} and ${mkScOption "ExecStart"} options. If you want to have all the
+          ${
+            lib.concatMapStringsSep ", " mkScOption [
+              "ExecReload"
+              "ExecStartPost"
+              "ExecStartPre"
+              "ExecStop"
+              "ExecStopPost"
+            ]
+          } and ${mkScOption "ExecStart"} options. If you want to have all the
           dependencies of this systemd unit, you can use
           <option>confinement.fullUnit</option>.
 
@@ -76,7 +89,7 @@ in {
       };
 
       options.confinement.mode = lib.mkOption {
-        type = types.enum [ "full-apivfs" "chroot-only" ];
+        type = types.enum ["full-apivfs" "chroot-only"];
         default = "full-apivfs";
         description = ''
           The value <literal>full-apivfs</literal> (the default) sets up
@@ -101,77 +114,98 @@ in {
         rootName = "${mkPathSafeName name}-chroot";
         inherit (config.confinement) binSh fullUnit;
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
-      in lib.mkIf config.confinement.enable {
-        serviceConfig = {
-          RootDirectory = "/var/empty";
-          TemporaryFileSystem = "/";
-          PrivateMounts = lib.mkDefault true;
+      in
+        lib.mkIf config.confinement.enable {
+          serviceConfig = {
+            RootDirectory = "/var/empty";
+            TemporaryFileSystem = "/";
+            PrivateMounts = lib.mkDefault true;
 
-          # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt
-          # to change some of these to default to true.
-          #
-          # If we run in chroot-only mode, having something like PrivateDevices
-          # set to true by default will mount /dev within the chroot, whereas
-          # with "chroot-only" it's expected that there are no /dev, /proc and
-          # /sys file systems available.
-          #
-          # However, if this suddenly becomes true, the attack surface will
-          # increase, so let's explicitly set these options to true/false
-          # depending on the mode.
-          MountAPIVFS = wantsAPIVFS;
-          PrivateDevices = wantsAPIVFS;
-          PrivateTmp = wantsAPIVFS;
-          PrivateUsers = wantsAPIVFS;
-          ProtectControlGroups = wantsAPIVFS;
-          ProtectKernelModules = wantsAPIVFS;
-          ProtectKernelTunables = wantsAPIVFS;
+            # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt
+            # to change some of these to default to true.
+            #
+            # If we run in chroot-only mode, having something like PrivateDevices
+            # set to true by default will mount /dev within the chroot, whereas
+            # with "chroot-only" it's expected that there are no /dev, /proc and
+            # /sys file systems available.
+            #
+            # However, if this suddenly becomes true, the attack surface will
+            # increase, so let's explicitly set these options to true/false
+            # depending on the mode.
+            MountAPIVFS = wantsAPIVFS;
+            PrivateDevices = wantsAPIVFS;
+            PrivateTmp = wantsAPIVFS;
+            PrivateUsers = wantsAPIVFS;
+            ProtectControlGroups = wantsAPIVFS;
+            ProtectKernelModules = wantsAPIVFS;
+            ProtectKernelTunables = wantsAPIVFS;
+          };
+          confinement.packages = let
+            execOpts = [
+              "ExecReload"
+              "ExecStart"
+              "ExecStartPost"
+              "ExecStartPre"
+              "ExecStop"
+              "ExecStopPost"
+            ];
+            execPkgs = lib.concatMap (opt: let
+              isSet = config.serviceConfig ? ${opt};
+            in
+              lib.flatten (lib.optional isSet config.serviceConfig.${opt}))
+            execOpts;
+            unitAttrs = toplevelConfig.systemd.units."${name}.service";
+            allPkgs = lib.singleton (builtins.toJSON unitAttrs);
+            unitPkgs =
+              if fullUnit
+              then allPkgs
+              else execPkgs;
+          in
+            unitPkgs ++ lib.optional (binSh != null) binSh;
         };
-        confinement.packages = let
-          execOpts = [
-            "ExecReload" "ExecStart" "ExecStartPost" "ExecStartPre" "ExecStop"
-            "ExecStopPost"
-          ];
-          execPkgs = lib.concatMap (opt: let
-            isSet = config.serviceConfig ? ${opt};
-          in lib.flatten (lib.optional isSet config.serviceConfig.${opt})) execOpts;
-          unitAttrs = toplevelConfig.systemd.units."${name}.service";
-          allPkgs = lib.singleton (builtins.toJSON unitAttrs);
-          unitPkgs = if fullUnit then allPkgs else execPkgs;
-        in unitPkgs ++ lib.optional (binSh != null) binSh;
-      };
     }));
   };
 
   config.assertions = lib.concatLists (lib.mapAttrsToList (name: cfg: let
-    whatOpt = optName: "The 'serviceConfig' option '${optName}' for"
-                    + " service '${name}' is enabled in conjunction with"
-                    + " 'confinement.enable'";
-  in lib.optionals cfg.confinement.enable [
-    { assertion = !cfg.serviceConfig.RootDirectoryStartOnly or false;
-      message = "${whatOpt "RootDirectoryStartOnly"}, but right now systemd"
-              + " doesn't support restricting bind-mounts to 'ExecStart'."
-              + " Please either define a separate service or find a way to run"
-              + " commands other than ExecStart within the chroot.";
-    }
-    { assertion = !cfg.serviceConfig.DynamicUser or false;
-      message = "${whatOpt "DynamicUser"}. Please create a dedicated user via"
-              + " the 'users.users' option instead as this combination is"
-              + " currently not supported.";
-    }
-    { assertion = cfg.serviceConfig ? ProtectSystem -> cfg.serviceConfig.ProtectSystem == false;
-      message = "${whatOpt "ProtectSystem"}. ProtectSystem is not compatible"
-              + " with service confinement as it fails to remount /usr within"
-              + " our chroot. Please disable the option.";
-    }
-  ]) config.systemd.services);
+    whatOpt = optName:
+      "The 'serviceConfig' option '${optName}' for"
+      + " service '${name}' is enabled in conjunction with"
+      + " 'confinement.enable'";
+  in
+    lib.optionals cfg.confinement.enable [
+      {
+        assertion = !cfg.serviceConfig.RootDirectoryStartOnly or false;
+        message =
+          "${whatOpt "RootDirectoryStartOnly"}, but right now systemd"
+          + " doesn't support restricting bind-mounts to 'ExecStart'."
+          + " Please either define a separate service or find a way to run"
+          + " commands other than ExecStart within the chroot.";
+      }
+      {
+        assertion = !cfg.serviceConfig.DynamicUser or false;
+        message =
+          "${whatOpt "DynamicUser"}. Please create a dedicated user via"
+          + " the 'users.users' option instead as this combination is"
+          + " currently not supported.";
+      }
+      {
+        assertion = cfg.serviceConfig ? ProtectSystem -> cfg.serviceConfig.ProtectSystem == false;
+        message =
+          "${whatOpt "ProtectSystem"}. ProtectSystem is not compatible"
+          + " with service confinement as it fails to remount /usr within"
+          + " our chroot. Please disable the option.";
+      }
+    ])
+  config.systemd.services);
 
   config.systemd.packages = lib.concatLists (lib.mapAttrsToList (name: cfg: let
     rootPaths = let
       contents = lib.concatStringsSep "\n" cfg.confinement.packages;
-    in pkgs.writeText "${mkPathSafeName name}-string-contexts.txt" contents;
+    in
+      pkgs.writeText "${mkPathSafeName name}-string-contexts.txt" contents;
 
     chrootPaths = pkgs.runCommand "${mkPathSafeName name}-chroot-paths" {
-      closureInfo = pkgs.closureInfo { inherit rootPaths; };
+      closureInfo = pkgs.closureInfo {inherit rootPaths;};
       serviceName = "${name}.service";
       excludedPath = rootPaths;
     } ''
@@ -182,11 +216,13 @@ in {
 
       # /bin/sh is special here, because the option value could contain a
       # symlink and we need to properly resolve it.
-      ${lib.optionalString (cfg.confinement.binSh != null) ''
-        binsh=${lib.escapeShellArg cfg.confinement.binSh}
-        realprog="$(readlink -e "$binsh")"
-        echo "BindReadOnlyPaths=$realprog:/bin/sh" >> "$serviceFile"
-      ''}
+      ${
+        lib.optionalString (cfg.confinement.binSh != null) ''
+          binsh=${lib.escapeShellArg cfg.confinement.binSh}
+          realprog="$(readlink -e "$binsh")"
+          echo "BindReadOnlyPaths=$realprog:/bin/sh" >> "$serviceFile"
+        ''
+      }
 
       while read storePath; do
         if [ -L "$storePath" ]; then
@@ -198,5 +234,7 @@ in {
         fi
       done < "$closureInfo/store-paths" >> "$serviceFile"
     '';
-  in lib.optional cfg.confinement.enable chrootPaths) config.systemd.services);
+  in
+    lib.optional cfg.confinement.enable chrootPaths)
+  config.systemd.services);
 }

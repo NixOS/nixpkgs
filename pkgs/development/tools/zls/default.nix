@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, zig }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  zig,
+}:
 stdenv.mkDerivation rec {
   pname = "zls";
   version = "unstable-2021-06-06";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ zig ];
+  nativeBuildInputs = [zig];
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -27,6 +31,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/zigtools/zls/releases/tag/${version}";
     homepage = "https://github.com/zigtools/zls";
     license = licenses.mit;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
   };
 }

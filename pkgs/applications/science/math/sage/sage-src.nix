@@ -1,19 +1,25 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, runtimeShell
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  runtimeShell,
 }:
-
 # This file is responsible for fetching the sage source and adding necessary patches.
 # It does not actually build anything, it just copies the patched sources to $out.
 # This is done because multiple derivations rely on these sources and they should
 # all get the same sources with the same patches applied.
-
 let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
+  fetchSageDiff = {
+    base,
+    name,
+    rev,
+    sha256,
+    squashed ? false,
+    ...
+  } @ args: (
     fetchpatch ({
       inherit name sha256;
 
@@ -43,146 +49,149 @@ let
       # Item 3 could cover all use cases if the sagemath/sagetrack-mirror repo had
       # release tags, but it requires a sha instead of a release number in "base", which
       # is inconvenient.
-      urls = if squashed
-             then [
-               "https://github.com/sagemath/sage/compare/${base}...${rev}.diff"
-               "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
-             ]
-             else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
+      urls =
+        if squashed
+        then
+          [
+            "https://github.com/sagemath/sage/compare/${base}...${rev}.diff"
+            "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
+          ]
+        else ["https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}"];
 
       # We don't care about sage's own build system (which builds all its dependencies).
       # Exclude build system changes to avoid conflicts.
-      excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ])
+      excludes = ["build/*"];
+    }
+    // builtins.removeAttrs args ["rev" "base" "sha256" "squashed"])
   );
 in
-stdenv.mkDerivation rec {
-  version = "9.5";
-  pname = "sage-src";
+  stdenv.mkDerivation rec {
+    version = "9.5";
+    pname = "sage-src";
 
-  src = fetchFromGitHub {
-    owner = "sagemath";
-    repo = "sage";
-    rev = version;
-    sha256 = "sha256-uOsLpsGpcIGs8Xr82X82MElnTB2E908gytyNJ8WVD5w=";
-  };
+    src = fetchFromGitHub {
+      owner = "sagemath";
+      repo = "sage";
+      rev = version;
+      sha256 = "sha256-uOsLpsGpcIGs8Xr82X82MElnTB2E908gytyNJ8WVD5w=";
+    };
 
-  # Patches needed because of particularities of nix or the way this is packaged.
-  # The goal is to upstream all of them and get rid of this list.
-  nixPatches = [
-    # Since https://trac.sagemath.org/ticket/32174, some external features are
-    # marked as "safe" and get auto-detected, in which case the corresponding
-    # optional tests are executed. We disable auto-detection of safe features if
-    # we are doctesting with an "--optional" argument which does not include
-    # "sage", because tests from autodetected features expect context provided
-    # by running basic sage tests. This is necessary to test sagemath_doc_html
-    # separately. See https://trac.sagemath.org/ticket/26110 for a related
-    # upstream discussion (from the time when Sage still had optional py2/py3
-    # tags).
-    ./patches/Only-test-external-software-when-all-of-sage-is.patch
+    # Patches needed because of particularities of nix or the way this is packaged.
+    # The goal is to upstream all of them and get rid of this list.
+    nixPatches = [
+      # Since https://trac.sagemath.org/ticket/32174, some external features are
+      # marked as "safe" and get auto-detected, in which case the corresponding
+      # optional tests are executed. We disable auto-detection of safe features if
+      # we are doctesting with an "--optional" argument which does not include
+      # "sage", because tests from autodetected features expect context provided
+      # by running basic sage tests. This is necessary to test sagemath_doc_html
+      # separately. See https://trac.sagemath.org/ticket/26110 for a related
+      # upstream discussion (from the time when Sage still had optional py2/py3
+      # tags).
+      ./patches/Only-test-external-software-when-all-of-sage-is.patch
 
-    # Fixes a potential race condition which can lead to transient doctest failures.
-    ./patches/fix-ecl-race.patch
+      # Fixes a potential race condition which can lead to transient doctest failures.
+      ./patches/fix-ecl-race.patch
 
-    # Not necessary since library location is set explicitly
-    # https://trac.sagemath.org/ticket/27660#ticket
-    ./patches/do-not-test-find-library.patch
+      # Not necessary since library location is set explicitly
+      # https://trac.sagemath.org/ticket/27660#ticket
+      ./patches/do-not-test-find-library.patch
 
-    # Parallelize docubuild using subprocesses, fixing an isolation issue. See
-    # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
-    ./patches/sphinx-docbuild-subprocesses.patch
-  ];
+      # Parallelize docubuild using subprocesses, fixing an isolation issue. See
+      # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
+      ./patches/sphinx-docbuild-subprocesses.patch
+    ];
 
-  # Since sage unfortunately does not release bugfix releases, packagers must
-  # fix those bugs themselves. This is for critical bugfixes, where "critical"
-  # == "causes (transient) doctest failures / somebody complained".
-  bugfixPatches = [
-    # To help debug the transient error in
-    # https://trac.sagemath.org/ticket/23087 when it next occurs.
-    ./patches/configurationpy-error-verbose.patch
-  ];
+    # Since sage unfortunately does not release bugfix releases, packagers must
+    # fix those bugs themselves. This is for critical bugfixes, where "critical"
+    # == "causes (transient) doctest failures / somebody complained".
+    bugfixPatches = [
+      # To help debug the transient error in
+      # https://trac.sagemath.org/ticket/23087 when it next occurs.
+      ./patches/configurationpy-error-verbose.patch
+    ];
 
-  # Patches needed because of package updates. We could just pin the versions of
-  # dependencies, but that would lead to rebuilds, confusion and the burdons of
-  # maintaining multiple versions of dependencies. Instead we try to make sage
-  # compatible with never dependency versions when possible. All these changes
-  # should come from or be proposed to upstream. This list will probably never
-  # be empty since dependencies update all the time.
-  packageUpgradePatches = [
-    # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
-    # now set the cache dir to be within the .sage directory. This is not
-    # strictly necessary, but keeps us from littering in the user's HOME.
-    ./patches/sympow-cache.patch
+    # Patches needed because of package updates. We could just pin the versions of
+    # dependencies, but that would lead to rebuilds, confusion and the burdons of
+    # maintaining multiple versions of dependencies. Instead we try to make sage
+    # compatible with never dependency versions when possible. All these changes
+    # should come from or be proposed to upstream. This list will probably never
+    # be empty since dependencies update all the time.
+    packageUpgradePatches = [
+      # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
+      # now set the cache dir to be within the .sage directory. This is not
+      # strictly necessary, but keeps us from littering in the user's HOME.
+      ./patches/sympow-cache.patch
 
-    # Upstream will wait until Sage 9.7 to upgrade to linbox 1.7 because it
-    # does not support gcc 6. We can upgrade earlier.
-    # https://trac.sagemath.org/ticket/32959
-    ./patches/linbox-1.7-upgrade.patch
+      # Upstream will wait until Sage 9.7 to upgrade to linbox 1.7 because it
+      # does not support gcc 6. We can upgrade earlier.
+      # https://trac.sagemath.org/ticket/32959
+      ./patches/linbox-1.7-upgrade.patch
 
-    # To emit better tracebacks, IPython 8 parses Python files using the ast
-    # module (via the stack_data package). Since Cython is a superset of Python,
-    # this results in no Cython code being printed in tracebacks. Fixing this
-    # properly is tracked in https://github.com/alexmojaki/stack_data/issues/21,
-    # but for now we just disable the corresponding test. An alternative would
-    # be to revert IPython's IPython/core/ultratb.py, but this would need to be
-    # Sage-specific (since it would worsen tracebacks for pure Python code).
-    # Sage tracks this at https://trac.sagemath.org/ticket/33170
-    ./patches/no-cython-sources-in-tracebacks-on-ipython8.patch
+      # To emit better tracebacks, IPython 8 parses Python files using the ast
+      # module (via the stack_data package). Since Cython is a superset of Python,
+      # this results in no Cython code being printed in tracebacks. Fixing this
+      # properly is tracked in https://github.com/alexmojaki/stack_data/issues/21,
+      # but for now we just disable the corresponding test. An alternative would
+      # be to revert IPython's IPython/core/ultratb.py, but this would need to be
+      # Sage-specific (since it would worsen tracebacks for pure Python code).
+      # Sage tracks this at https://trac.sagemath.org/ticket/33170
+      ./patches/no-cython-sources-in-tracebacks-on-ipython8.patch
 
-    # https://trac.sagemath.org/ticket/32968
-    (fetchSageDiff {
-      base = "9.5";
-      name = "sphinx-4.3-update.patch";
-      rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
-      sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
-    })
+      # https://trac.sagemath.org/ticket/32968
+      (fetchSageDiff {
+        base = "9.5";
+        name = "sphinx-4.3-update.patch";
+        rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
+        sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
+      })
 
-    # https://trac.sagemath.org/ticket/33189
-    (fetchSageDiff {
-      base = "9.5";
-      name = "arb-2.22-update.patch";
-      rev = "53532ddd4e2dc92469c1590ebf0c40f8f69bf579";
-      sha256 = "sha256-6SoSBvIlqvNwZV3jTB6uPdUtaWIOeNmddi2poK/WvGs=";
-    })
+      # https://trac.sagemath.org/ticket/33189
+      (fetchSageDiff {
+        base = "9.5";
+        name = "arb-2.22-update.patch";
+        rev = "53532ddd4e2dc92469c1590ebf0c40f8f69bf579";
+        sha256 = "sha256-6SoSBvIlqvNwZV3jTB6uPdUtaWIOeNmddi2poK/WvGs=";
+      })
 
-    # TODO: This will not be necessary when Sphinx 4.4.1 is released,
-    # since some warnings introduced in 4.4.0 will be disabled by then
-    # (https://github.com/sphinx-doc/sphinx/pull/10126).
-    # https://trac.sagemath.org/ticket/33272
-    (fetchSageDiff {
-      base = "9.5";
-      name = "sphinx-4.4-warnings.patch";
-      rev = "97d7958bed441cf2ccc714d88f83d3a8426bc085";
-      sha256 = "sha256-y1STE0oxswnijGCsBw8eHWWqpmT1XMznIfA0vvX9pFA=";
-    })
-  ];
+      # TODO: This will not be necessary when Sphinx 4.4.1 is released,
+      # since some warnings introduced in 4.4.0 will be disabled by then
+      # (https://github.com/sphinx-doc/sphinx/pull/10126).
+      # https://trac.sagemath.org/ticket/33272
+      (fetchSageDiff {
+        base = "9.5";
+        name = "sphinx-4.4-warnings.patch";
+        rev = "97d7958bed441cf2ccc714d88f83d3a8426bc085";
+        sha256 = "sha256-y1STE0oxswnijGCsBw8eHWWqpmT1XMznIfA0vvX9pFA=";
+      })
+    ];
 
-  patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
+    patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
 
-  postPatch = ''
-    # Make sure sage can at least be imported without setting any environment
-    # variables. It won't be close to feature complete though.
-    sed -i \
-      "s|var(\"SAGE_ROOT\".*|var(\"SAGE_ROOT\", \"$out\")|" \
-      src/sage/env.py
+    postPatch = ''
+      # Make sure sage can at least be imported without setting any environment
+      # variables. It won't be close to feature complete though.
+      sed -i \
+        "s|var(\"SAGE_ROOT\".*|var(\"SAGE_ROOT\", \"$out\")|" \
+        src/sage/env.py
 
-    # src/doc/en/reference/spkg/conf.py expects index.rst in its directory,
-    # a list of external packages in the sage distribution (build/pkgs)
-    # generated by the bootstrap script (which we don't run).  this is not
-    # relevant for other distributions, so remove it.
-    rm src/doc/en/reference/spkg/conf.py
-    sed -i "/spkg/d" src/doc/en/reference/index.rst
+      # src/doc/en/reference/spkg/conf.py expects index.rst in its directory,
+      # a list of external packages in the sage distribution (build/pkgs)
+      # generated by the bootstrap script (which we don't run).  this is not
+      # relevant for other distributions, so remove it.
+      rm src/doc/en/reference/spkg/conf.py
+      sed -i "/spkg/d" src/doc/en/reference/index.rst
 
-    # the bootstrap script also generates installation instructions for
-    # arch, debian, fedora, cygwin and homebrew using data from build/pkgs.
-    # we don't run the bootstrap script, so disable including the generated
-    # files. docbuilding fails otherwise.
-    sed -i "/literalinclude/d" src/doc/en/installation/source.rst
-  '';
+      # the bootstrap script also generates installation instructions for
+      # arch, debian, fedora, cygwin and homebrew using data from build/pkgs.
+      # we don't run the bootstrap script, so disable including the generated
+      # files. docbuilding fails otherwise.
+      sed -i "/literalinclude/d" src/doc/en/installation/source.rst
+    '';
 
-  buildPhase = "# do nothing";
+    buildPhase = "# do nothing";
 
-  installPhase = ''
-    cp -r . "$out"
-  '';
-}
+    installPhase = ''
+      cp -r . "$out"
+    '';
+  }

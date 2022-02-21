@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, ladspaH
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ladspaH,
 }:
-
 stdenv.mkDerivation rec {
   name = "cmt";
   version = "1.17";
@@ -12,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "07xd0xmwpa0j12813jpf87fr9hwzihii5l35mp8ady7xxfmxfmpb";
   };
 
-  buildInputs = [ ladspaH ];
+  buildInputs = [ladspaH];
 
   preBuild = ''
     cd src
   '';
 
-  installFlags = [ "INSTALL_PLUGINS_DIR=${placeholder "out"}/lib/ladspa" ];
+  installFlags = ["INSTALL_PLUGINS_DIR=${placeholder "out"}/lib/ladspa"];
   preInstall = ''
     mkdir -p $out/lib/ladspa
   '';
@@ -28,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.ladspa.org/cmt";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    maintainers = with maintainers; [sjfloat];
   };
 }

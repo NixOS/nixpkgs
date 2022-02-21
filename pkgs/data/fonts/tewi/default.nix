@@ -1,23 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, python3
-, bdftopcf, mkfontscale
-, libfaketime, fonttosfnt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  bdftopcf,
+  mkfontscale,
+  libfaketime,
+  fonttosfnt,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tewi-font";
   version = "2.0.2";
 
   src = fetchFromGitHub {
-    owner  = "lucy";
-    repo   = pname;
-    rev    = version;
+    owner = "lucy";
+    repo = pname;
+    rev = version;
     sha256 = "1axv9bv10xlcmgfyjh3z5kn5fkg3m6n1kskcs5hvlmyb6m1zk91j";
   };
 
-  nativeBuildInputs =
-    [ python3 bdftopcf mkfontscale
-      libfaketime fonttosfnt
-    ];
+  nativeBuildInputs = [
+    python3
+    bdftopcf
+    mkfontscale
+    libfaketime
+    fonttosfnt
+  ];
 
   postPatch = ''
     # make gzip deterministic
@@ -54,6 +62,6 @@ stdenv.mkDerivation rec {
       fullName = "GNU General Public License with a font exception";
       url = "https://www.gnu.org/licenses/gpl-faq.html#FontException";
     };
-    maintainers = [ maintainers.fro_ozen ];
+    maintainers = [maintainers.fro_ozen];
   };
 }

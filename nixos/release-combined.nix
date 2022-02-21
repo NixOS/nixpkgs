@@ -1,27 +1,28 @@
 # This jobset defines the main NixOS channels (such as nixos-unstable
 # and nixos-14.04). The channel is updated every time the ‘tested’ job
 # succeeds, and all other jobs have finished (they may fail).
-
-{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
-, stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" "aarch64-linux" ]
-}:
-
-let
-
+{
+  nixpkgs ? {
+    outPath = (import ../lib).cleanSource ./..;
+    revCount = 56789;
+    shortRev = "gfedcba";
+  },
+  stableBranch ? false,
+  supportedSystems ? ["x86_64-linux"],
+  limitedSupportedSystems ? ["i686-linux" "aarch64-linux"],
+}: let
   nixpkgsSrc = nixpkgs; # urgh
 
   pkgs = import ./.. {};
 
-  removeMaintainers = set: if builtins.isAttrs set
-    then if (set.type or "") == "derivation"
-      then set // { meta = builtins.removeAttrs (set.meta or {}) [ "maintainers" ]; }
+  removeMaintainers = set:
+    if builtins.isAttrs set
+    then
+      if (set.type or "") == "derivation"
+      then set // {meta = builtins.removeAttrs (set.meta or {}) ["maintainers"];}
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
-
 in rec {
-
   nixos = removeMaintainers (import ./release.nix {
     inherit stableBranch;
     supportedSystems = supportedSystems ++ limitedSupportedSystems;
@@ -31,22 +32,23 @@ in rec {
   nixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
     inherit supportedSystems;
     nixpkgs = nixpkgsSrc;
-  })) [ "unstable" ];
+  })) ["unstable"];
 
-  tested =
-    let
-      onFullSupported = x: map (system: "${x}.${system}") supportedSystems;
-      onAllSupported = x: map (system: "${x}.${system}") (supportedSystems ++ limitedSupportedSystems);
-      onSystems = systems: x: map (system: "${x}.${system}")
-        (pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems));
-    in pkgs.releaseTools.aggregate {
+  tested = let
+    onFullSupported = x: map (system: "${x}.${system}") supportedSystems;
+    onAllSupported = x: map (system: "${x}.${system}") (supportedSystems ++ limitedSupportedSystems);
+    onSystems = systems: x:
+      map (system: "${x}.${system}")
+      (pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems));
+  in
+    pkgs.releaseTools.aggregate {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ eelco fpletz ];
+        maintainers = with pkgs.lib.maintainers; [eelco fpletz];
       };
       constituents = pkgs.lib.concatLists [
-        [ "nixos.channel" ]
+        ["nixos.channel"]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
         (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")

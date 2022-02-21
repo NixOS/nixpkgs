@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.1";
   pname = "iptraf-ng";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f91w1bjaayr6ld95z2q55ny983bb0m05k1jrw2bcddvcihaiqb1";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
     "sbindir=/bin"
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "A console-based network monitoring utility (fork of iptraf)";
@@ -44,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/iptraf-ng/iptraf-ng";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ devhell ];
+    maintainers = with maintainers; [devhell];
   };
 }

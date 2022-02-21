@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "starboard-octant-plugin";
   version = "0.12.0";
@@ -14,7 +17,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-1zrB+CobUBgdpBHRJPpfDYCD6oVWY4j4Met9EqNQQbE=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
   ];
 
   meta = with lib; {
@@ -26,6 +30,6 @@ buildGoModule rec {
       Kubernetes workloads stored as custom security resources.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [jk];
   };
 }

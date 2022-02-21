@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, rapidfuzz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  rapidfuzz,
 }:
-
 buildPythonPackage rec {
   pname = "levenshtein";
   version = "0.17.0";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/maxbachmann/Levenshtein";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, bpp-core, bpp-seq }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bpp-core,
+  bpp-seq,
+}:
 stdenv.mkDerivation rec {
   pname = "bpp-popgen";
 
@@ -12,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0bz0fhrq3dri6a0hvfc3zlvrns8mrzzlnicw5pyfa812gc1qwfvh";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ bpp-core bpp-seq ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [bpp-core bpp-seq];
 
   preCheck = ''
     export LD_LIBRARY_PATH=$(pwd)/src
@@ -29,7 +34,9 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = bpp-core.meta // {
-    changelog = "https://github.com/BioPP/bpp-popgen/blob/master/ChangeLog";
-  };
+  meta =
+    bpp-core.meta
+    // {
+      changelog = "https://github.com/BioPP/bpp-popgen/blob/master/ChangeLog";
+    };
 }

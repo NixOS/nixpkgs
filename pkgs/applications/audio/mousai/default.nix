@@ -1,23 +1,23 @@
-{ lib
-, python3
-, fetchFromGitHub
-, substituteAll
-, appstream-glib
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, librsvg
-, meson
-, ninja
-, pkg-config
-, pulseaudio
-, wrapGAppsHook
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  substituteAll,
+  appstream-glib,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gobject-introspection,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  pulseaudio,
+  wrapGAppsHook,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "mousai";
   version = "0.6.6";
@@ -74,6 +74,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Identify any songs in seconds";
     homepage = "https://github.com/SeaDve/Mousai";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

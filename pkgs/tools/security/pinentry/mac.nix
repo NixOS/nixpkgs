@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, xcbuildHook, libiconv, ncurses, Cocoa }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xcbuildHook,
+  libiconv,
+  ncurses,
+  Cocoa,
+}:
 stdenv.mkDerivation {
   pname = "pinentry-mac";
   version = "0.9.4";
@@ -11,8 +18,8 @@ stdenv.mkDerivation {
     sha256 = "0g75302697gqcxyf2hyqzvcbd5pyss1bl2xvfd40wqav7dlyvj83";
   };
 
-  nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ libiconv ncurses Cocoa ];
+  nativeBuildInputs = [xcbuildHook];
+  buildInputs = [libiconv ncurses Cocoa];
 
   preBuild = ''
     # Only build for what we care about (also allows arm64)

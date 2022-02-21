@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "mulpyplexer";
   version = "0.09";
@@ -14,12 +14,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "mulpyplexer" ];
+  pythonImportsCheck = ["mulpyplexer"];
 
   meta = with lib; {
     description = "Multiplex interactions with lists of Python objects";
     homepage = "https://github.com/zardus/mulpyplexer";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd2];
+    maintainers = with maintainers; [fab];
   };
 }

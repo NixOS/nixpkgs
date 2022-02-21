@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "jython";
 
@@ -10,14 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "142285hd9mx0nx5zw0jvkpqkb4kbhgyyy52p5bj061ya8bg5jizy";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontUnpack = true;
 
   installPhase = ''
-     mkdir -pv $out/bin
-     cp $src $out/jython.jar
-     makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
+    mkdir -pv $out/bin
+    cp $src $out/jython.jar
+    makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
   '';
 
   meta = {

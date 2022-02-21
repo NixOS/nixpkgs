@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-let
-  cfg = config.services.pipewire.wireplumber;
-in
 {
-  meta.maintainers = [ lib.maintainers.k900 ];
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.services.pipewire.wireplumber;
+in {
+  meta.maintainers = [lib.maintainers.k900];
 
   options = {
     services.pipewire.wireplumber = {
@@ -29,13 +31,13 @@ in
       }
     ];
 
-    environment.systemPackages = [ cfg.package ];
-    systemd.packages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
+    systemd.packages = [cfg.package];
 
     systemd.services.wireplumber.enable = config.services.pipewire.systemWide;
     systemd.user.services.wireplumber.enable = !config.services.pipewire.systemWide;
 
-    systemd.services.wireplumber.wantedBy = [ "pipewire.service" ];
-    systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
+    systemd.services.wireplumber.wantedBy = ["pipewire.service"];
+    systemd.user.services.wireplumber.wantedBy = ["pipewire.service"];
   };
 }

@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages, libspnav, jq }:
-
-let
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+  libspnav,
+  jq,
+}: let
   self = {
-
     octoprint = stdenv.mkDerivation rec {
       pname = "Cura-OctoPrintPlugin";
       version = "3.5.18";
@@ -28,7 +32,7 @@ let
         description = "Enables printing directly to OctoPrint and monitoring the process";
         homepage = "https://github.com/fieldOfView/Cura-OctoPrintPlugin";
         license = licenses.agpl3;
-        maintainers = with maintainers; [ gebner ];
+        maintainers = with maintainers; [gebner];
       };
     };
 
@@ -43,7 +47,7 @@ let
         sha256 = "0hvi7qwd4xfnqnhbj9dgfjmvv9df7s42asf3fdfxv43n6nx74scw";
       };
 
-      nativeBuildInputs = [ jq ];
+      nativeBuildInputs = [jq];
 
       propagatedBuildInputs = with python3Packages; [
         hidapi
@@ -67,10 +71,9 @@ let
         description = "Cura plugin for HID mice such as 3Dconnexion spacemouse";
         homepage = "https://github.com/smartavionics/RawMouse";
         license = licenses.agpl3Plus;
-        maintainers = with maintainers; [ gebner ];
+        maintainers = with maintainers; [gebner];
       };
     };
-
   };
-
-in self
+in
+  self

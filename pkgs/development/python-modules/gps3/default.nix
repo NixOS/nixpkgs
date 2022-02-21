@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "gps3";
   version = "0.33.3";
@@ -16,12 +16,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "gps3" ];
+  pythonImportsCheck = ["gps3"];
 
   meta = with lib; {
     description = "Python client for GPSD";
     homepage = "https://github.com/onkelbeh/gps3";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

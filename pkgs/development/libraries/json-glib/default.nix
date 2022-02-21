@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, meson
-, ninja
-, pkg-config
-, gettext
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
-, gobject-introspection
-, fixDarwinDylibNames
-, gi-docgen
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform,
+  gobject-introspection,
+  fixDarwinDylibNames,
+  gi-docgen,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "json-glib";
   version = "1.6.6";
 
-  outputs = [ "out" "dev" ]
+  outputs =
+    ["out" "dev"]
     ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
@@ -31,18 +32,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    glib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    gi-docgen
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      glib
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      gi-docgen
+    ];
 
   propagatedBuildInputs = [
     glib

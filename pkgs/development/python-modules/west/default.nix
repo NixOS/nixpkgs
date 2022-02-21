@@ -1,7 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
-, colorama, configobj, packaging, pyyaml, pykwalify
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  colorama,
+  configobj,
+  packaging,
+  pyyaml,
+  pykwalify,
 }:
-
 buildPythonPackage rec {
   version = "0.12.0";
   pname = "west";
@@ -48,6 +55,6 @@ buildPythonPackage rec {
       (https://docs.zephyrproject.org/latest/guides/west/repo-tool.html).
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [siriobalmelli];
   };
 }

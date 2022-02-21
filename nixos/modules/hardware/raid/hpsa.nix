@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   hpssacli = pkgs.stdenv.mkDerivation rec {
     pname = "hpssacli";
     version = "2.40-13.0";
@@ -12,7 +14,7 @@ let
       sha256 = "11w7fwk93lmfw0yya4jpjwdmgjimqxx6412sqa166g1pz4jil4sw";
     };
 
-    nativeBuildInputs = [ pkgs.dpkg ];
+    nativeBuildInputs = [pkgs.dpkg];
 
     unpackPhase = "dpkg -x $src ./";
 
@@ -25,7 +27,7 @@ let
       for file in $out/bin/*; do
         chmod +w $file
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-                 --set-rpath ${lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]} \
+                 --set-rpath ${lib.makeLibraryPath [pkgs.stdenv.cc.cc]} \
                  $file
       done
     '';
@@ -36,8 +38,8 @@ let
       description = "HP Smart Array CLI";
       homepage = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/";
       license = licenses.unfreeRedistributable;
-      platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ volth ];
+      platforms = ["x86_64-linux"];
+      maintainers = with maintainers; [volth];
     };
   };
 in {
@@ -52,10 +54,12 @@ in {
   ###### implementation
 
   config = mkIf config.hardware.raid.HPSmartArray.enable {
+    boot.initrd.kernelModules = ["sg"];
+    /*
+     hpssacli wants it
+     */
+    boot.initrd.availableKernelModules = ["hpsa"];
 
-    boot.initrd.kernelModules = [ "sg" ]; /* hpssacli wants it */
-    boot.initrd.availableKernelModules = [ "hpsa" ];
-
-    environment.systemPackages = [ hpssacli ];
+    environment.systemPackages = [hpssacli];
   };
 }

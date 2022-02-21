@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib, withRootSupport ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  python,
+  root,
+  makeWrapper,
+  zlib,
+  withRootSupport ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "yoda";
   version = "1.9.4";
@@ -9,11 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-KifrhuZH11szennCDC2sJeHxO9JZJbnJWuKK3JN5NwU=";
   };
 
-  nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
-  buildInputs = [ python ]
-    ++ (with python.pkgs; [ numpy matplotlib ])
+  nativeBuildInputs = with python.pkgs; [cython makeWrapper];
+  buildInputs =
+    [python]
+    ++ (with python.pkgs; [numpy matplotlib])
     ++ lib.optional withRootSupport root;
-  propagatedBuildInputs = [ zlib ];
+  propagatedBuildInputs = [zlib];
 
   enableParallelBuilding = true;
 
@@ -28,7 +38,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   doInstallCheck = true;
   installCheckTarget = "check";
@@ -38,6 +48,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     homepage = "https://yoda.hepforge.org";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [veprbl];
   };
 }

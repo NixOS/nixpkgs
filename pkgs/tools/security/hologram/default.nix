@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "hologram";
   version = "unstable-2018-03-19";
@@ -20,7 +23,7 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://github.com/AdRoll/hologram/";
     description = "Easy, painless AWS credentials on developer laptops";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.asl20;
   };
 }

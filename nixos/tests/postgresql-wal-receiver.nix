@@ -1,37 +1,34 @@
-{ system ? builtins.currentSystem,
+{
+  system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. {inherit system config;},
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
-let
+with import ../lib/testing-python.nix {inherit system pkgs;}; let
   lib = pkgs.lib;
 
   # Makes a test for a PostgreSQL package, given by name and looked up from `pkgs`.
-  makePostgresqlWalReceiverTest = postgresqlPackage:
-  {
+  makePostgresqlWalReceiverTest = postgresqlPackage: {
     name = postgresqlPackage;
-    value =
-      let
-        pkg = pkgs."${postgresqlPackage}";
-        postgresqlDataDir = "/var/lib/postgresql/${pkg.psqlSchema}";
-        replicationUser = "wal_receiver_user";
-        replicationSlot = "wal_receiver_slot";
-        replicationConn = "postgresql://${replicationUser}@localhost";
-        baseBackupDir = "/tmp/pg_basebackup";
-        walBackupDir = "/tmp/pg_wal";
-        atLeast12 = lib.versionAtLeast pkg.version "12.0";
+    value = let
+      pkg = pkgs."${postgresqlPackage}";
+      postgresqlDataDir = "/var/lib/postgresql/${pkg.psqlSchema}";
+      replicationUser = "wal_receiver_user";
+      replicationSlot = "wal_receiver_slot";
+      replicationConn = "postgresql://${replicationUser}@localhost";
+      baseBackupDir = "/tmp/pg_basebackup";
+      walBackupDir = "/tmp/pg_wal";
+      atLeast12 = lib.versionAtLeast pkg.version "12.0";
 
-        recoveryFile = if atLeast12
-            then pkgs.writeTextDir "recovery.signal" ""
-            else pkgs.writeTextDir "recovery.conf" "restore_command = 'cp ${walBackupDir}/%f %p'";
-
-      in makeTest {
+      recoveryFile =
+        if atLeast12
+        then pkgs.writeTextDir "recovery.signal" ""
+        else pkgs.writeTextDir "recovery.conf" "restore_command = 'cp ${walBackupDir}/%f %p'";
+    in
+      makeTest {
         name = "postgresql-wal-receiver-${postgresqlPackage}";
-        meta.maintainers = with lib.maintainers; [ pacien ];
+        meta.maintainers = with lib.maintainers; [pacien];
 
-        machine = { ... }: {
+        machine = {...}: {
           services.postgresql = {
             package = pkg;
             enable = true;
@@ -113,7 +110,7 @@ let
           )
         '';
       };
-    };
-
-# Maps the generic function over all attributes of PostgreSQL packages
-in builtins.listToAttrs (map makePostgresqlWalReceiverTest (builtins.attrNames (import ../../pkgs/servers/sql/postgresql { })))
+  };
+  # Maps the generic function over all attributes of PostgreSQL packages
+in
+  builtins.listToAttrs (map makePostgresqlWalReceiverTest (builtins.attrNames (import ../../pkgs/servers/sql/postgresql {})))

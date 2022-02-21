@@ -1,8 +1,16 @@
-{ stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
-, libpthreadstubs, libpciaccess
-, withValgrind ? valgrind-light.meta.available, valgrind-light
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  docutils,
+  libpthreadstubs,
+  libpciaccess,
+  withValgrind ? valgrind-light.meta.available,
+  valgrind-light,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libdrm";
   version = "2.4.109";
@@ -12,22 +20,25 @@ stdenv.mkDerivation rec {
     sha256 = "09kzrdsd14zr0i3izvi5mck4vqccl3c9hr84r9i4is0zikh554v2";
   };
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = ["out" "dev" "bin"];
 
-  nativeBuildInputs = [ pkg-config meson ninja docutils ];
-  buildInputs = [ libpthreadstubs libpciaccess ]
+  nativeBuildInputs = [pkg-config meson ninja docutils];
+  buildInputs =
+    [libpthreadstubs libpciaccess]
     ++ lib.optional withValgrind valgrind-light;
 
-  patches = [ ./cross-build-nm-path.patch ];
+  patches = [./cross-build-nm-path.patch];
 
-  mesonFlags = [
-    "-Dnm-path=${stdenv.cc.targetPrefix}nm"
-    "-Dinstall-test-programs=true"
-    "-Domap=true"
-  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
-    "-Dtegra=true"
-    "-Detnaviv=true"
-  ];
+  mesonFlags =
+    [
+      "-Dnm-path=${stdenv.cc.targetPrefix}nm"
+      "-Dinstall-test-programs=true"
+      "-Domap=true"
+    ]
+    ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
+      "-Dtegra=true"
+      "-Detnaviv=true"
+    ];
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";
@@ -47,6 +58,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

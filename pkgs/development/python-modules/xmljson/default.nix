@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, lxml
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  lxml,
 }:
-
 buildPythonPackage rec {
   pname = "xmljson";
   version = "0.2.1";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Converts XML into dictionary structures and vice-versa";
     homepage = "https://github.com/sanand0/xmljson";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ rakesh4g ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [rakesh4g];
   };
 }

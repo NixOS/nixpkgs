@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, colorlog
-, fetchPypi
-, pythonOlder
-, pyserial
+{
+  lib,
+  buildPythonPackage,
+  colorlog,
+  fetchPypi,
+  pythonOlder,
+  pyserial,
 }:
-
 buildPythonPackage rec {
   pname = "pypca";
   version = "0.0.13";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pypca" ];
+  pythonImportsCheck = ["pypca"];
 
   meta = with lib; {
     description = "Python library for interacting with the PCA 301 smart plugs";
     homepage = "https://github.com/majuss/pypca";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,8 +1,15 @@
-{ buildPythonPackage, fetchPypi
-, pyasn1, pyasn1-modules
-, pythonAtLeast, pytestCheckHook
-, openldap, cyrus_sasl, lib, stdenv }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  pyasn1,
+  pyasn1-modules,
+  pythonAtLeast,
+  pytestCheckHook,
+  openldap,
+  cyrus_sasl,
+  lib,
+  stdenv,
+}:
 buildPythonPackage rec {
   pname = "python-ldap";
   version = "3.4.0";
@@ -12,10 +19,10 @@ buildPythonPackage rec {
     sha256 = "60464c8fc25e71e0fd40449a24eae482dcd0fb7fcf823e7de627a6525b3e0d12";
   };
 
-  propagatedBuildInputs = [ pyasn1 pyasn1-modules ];
+  propagatedBuildInputs = [pyasn1 pyasn1-modules];
 
-  checkInputs = [ pytestCheckHook ];
-  buildInputs = [ openldap cyrus_sasl ];
+  checkInputs = [pytestCheckHook];
+  buildInputs = [openldap cyrus_sasl];
 
   preCheck = ''
     # Needed by tests to setup a mockup ldap server.

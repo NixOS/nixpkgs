@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, perl, curl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  curl,
+}:
 stdenv.mkDerivation {
   pname = "aws";
   version = "2019.06.18";
@@ -9,16 +14,15 @@ stdenv.mkDerivation {
     sha256 = "02bym9wicqpdr7mdim13zw5ssh97xfswzab9q29rsbg7058ddbil";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   dontUnpack = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      sed 's|\[curl|[${curl.bin}/bin/curl|g' $src > $out/bin/aws
-      chmod +x $out/bin/aws
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    sed 's|\[curl|[${curl.bin}/bin/curl|g' $src > $out/bin/aws
+    chmod +x $out/bin/aws
+  '';
 
   meta = {
     homepage = "https://www.timkay.com/aws/";

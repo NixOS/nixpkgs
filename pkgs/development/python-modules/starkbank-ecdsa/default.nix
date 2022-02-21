@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "starkbank-ecdsa";
   version = "2.0.3";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python ECDSA library";
     homepage = "https://github.com/starkbank/ecdsa-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

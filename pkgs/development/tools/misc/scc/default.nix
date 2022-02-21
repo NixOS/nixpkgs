@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "scc";
   version = "3.0.0";
@@ -14,13 +17,19 @@ buildGoModule rec {
   vendorSha256 = null;
 
   # scc has a scripts/ sub-package that's for testing.
-  excludedPackages = [ "scripts" ];
+  excludedPackages = ["scripts"];
 
   meta = with lib; {
     homepage = "https://github.com/boyter/scc";
     description = "A very fast accurate code counter with complexity calculations and COCOMO estimates written in pure Go";
-    maintainers = with maintainers; [ sigma Br1ght0ne ];
-    license = with licenses; [ unlicense /* or */ mit ];
+    maintainers = with maintainers; [sigma Br1ght0ne];
+    license = with licenses; [
+      unlicense
+      /*
+       or
+       */
+      mit
+    ];
     platforms = platforms.unix;
   };
 }

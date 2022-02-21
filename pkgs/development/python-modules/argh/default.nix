@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, iocapture
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  iocapture,
+  mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "argh";
   version = "0.26.2";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "argh" ];
+  pythonImportsCheck = ["argh"];
 
   meta = with lib; {
     homepage = "https://github.com/neithere/argh";
     description = "An unobtrusive argparse wrapper with natural syntax";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

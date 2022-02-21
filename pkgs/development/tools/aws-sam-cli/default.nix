@@ -1,8 +1,8 @@
-{ lib
-, python3
-, enableTelemetry ? false
+{
+  lib,
+  python3,
+  enableTelemetry ? false,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
   version = "1.37.0";
@@ -31,10 +31,14 @@ python3.pkgs.buildPythonApplication rec {
     regex
   ];
 
-  postFixup = if enableTelemetry then "echo aws-sam-cli TELEMETRY IS ENABLED" else ''
-    # Disable telemetry: https://github.com/awslabs/aws-sam-cli/issues/1272
-    wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
-  '';
+  postFixup =
+    if enableTelemetry
+    then "echo aws-sam-cli TELEMETRY IS ENABLED"
+    else
+      ''
+        # Disable telemetry: https://github.com/awslabs/aws-sam-cli/issues/1272
+        wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
+      '';
 
   # fix over-restrictive version bounds
   postPatch = ''
@@ -60,6 +64,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/awslabs/aws-sam-cli";
     description = "CLI tool for local development and testing of Serverless applications";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lo1tuma ];
+    maintainers = with maintainers; [lo1tuma];
   };
 }

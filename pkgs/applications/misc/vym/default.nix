@@ -1,5 +1,12 @@
-{ lib, mkDerivation, fetchurl, pkg-config, qmake, qtscript, qtsvg }:
-
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  pkg-config,
+  qmake,
+  qtscript,
+  qtsvg,
+}:
 mkDerivation rec {
   pname = "vym";
   version = "2.7.1";
@@ -30,10 +37,10 @@ mkDerivation rec {
     done
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  nativeBuildInputs = [ pkg-config qmake ];
-  buildInputs = [ qtscript qtsvg ];
+  nativeBuildInputs = [pkg-config qmake];
+  buildInputs = [qtscript qtsvg];
 
   postInstall = ''
     install -Dm755 -t $out/share/man/man1 doc/*.1.gz
@@ -53,7 +60,7 @@ mkDerivation rec {
     '';
     homepage = "http://www.insilmaril.de/vym/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

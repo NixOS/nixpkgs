@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, freetype, libX11, libXi, libXt, libXft }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  freetype,
+  libX11,
+  libXi,
+  libXt,
+  libXft,
+}:
 stdenv.mkDerivation rec {
   pname = "deadpixi-sam-unstable";
   version = "2020-07-14";
@@ -18,8 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   CFLAGS = "-D_DARWIN_C_SOURCE";
-  makeFlags = [ "DESTDIR=$(out)" ];
-  buildInputs = [ libX11 libXi libXt libXft ];
+  makeFlags = ["DESTDIR=$(out)"];
+  buildInputs = [libX11 libXi libXt libXft];
   # build fails when run in parallel
   enableParallelBuilding = false;
 
@@ -32,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deadpixi/sam";
     description = "Updated version of the sam text editor";
     license = licenses.lpl-102;
-    maintainers = with maintainers; [ ramkromberg ];
+    maintainers = with maintainers; [ramkromberg];
     platforms = platforms.unix;
   };
 }

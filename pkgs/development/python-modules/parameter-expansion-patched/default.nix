@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "parameter-expansion-patched";
   version = "0.2.1b4";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "POSIX parameter expansion in Python";
     homepage = "https://github.com/nexB/commoncode";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

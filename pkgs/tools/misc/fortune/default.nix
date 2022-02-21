@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, recode, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  recode,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
   version = "3.12.0";
@@ -11,36 +17,38 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fVrtfLmZiVDTSeuoOltX/vunGSizSw+ZhQhBn9t0C3E=";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [cmake perl];
 
-  buildInputs = [ recode ];
+  buildInputs = [recode];
 
   cmakeFlags = [
     "-DLOCALDIR=${placeholder "out"}/share/fortunes"
   ];
 
-  patches = [ (builtins.toFile "not-a-game.patch" ''
-    diff --git a/CMakeLists.txt b/CMakeLists.txt
-    index 865e855..5a59370 100644
-    --- a/CMakeLists.txt
-    +++ b/CMakeLists.txt
-    @@ -154,7 +154,7 @@ ENDMACRO()
-     my_exe(
-         "fortune"
-         "fortune/fortune.c"
-    -    "games"
-    +    "bin"
-     )
+  patches = [
+    (builtins.toFile "not-a-game.patch" ''
+      diff --git a/CMakeLists.txt b/CMakeLists.txt
+      index 865e855..5a59370 100644
+      --- a/CMakeLists.txt
+      +++ b/CMakeLists.txt
+      @@ -154,7 +154,7 @@ ENDMACRO()
+       my_exe(
+           "fortune"
+           "fortune/fortune.c"
+      -    "games"
+      +    "bin"
+       )
 
-     my_exe(
-    --
-  '') ];
+       my_exe(
+      --
+    '')
+  ];
 
   meta = with lib; {
     mainProgram = "fortune";
     description = "A program that displays a pseudorandom message from a database of quotations";
     license = licenses.bsdOriginal;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vonfry ];
+    maintainers = with maintainers; [vonfry];
   };
 }

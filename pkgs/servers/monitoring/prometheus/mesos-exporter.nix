@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "mesos_exporter";
   version = "1.1.2";
@@ -17,7 +20,7 @@ buildGoPackage rec {
     description = "Export Mesos metrics to Prometheus";
     homepage = "https://github.com/prometheus/mesos_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [benley];
     platforms = platforms.unix;
   };
 }

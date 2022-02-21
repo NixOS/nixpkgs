@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pypoolstation";
   version = "0.4.1";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python library to interact the the Poolstation platform";
     homepage = "https://github.com/cibernox/PyPoolstation";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

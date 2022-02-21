@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.security.pki;
 
   cacertPackage = pkgs.cacert.override {
@@ -12,13 +13,8 @@ let
     extraCertificateStrings = cfg.certificates;
   };
   caBundle = "${cacertPackage}/etc/ssl/certs/ca-bundle.crt";
-
-in
-
-{
-
+in {
   options = {
-
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
       default = [];
@@ -56,7 +52,8 @@ in
       type = types.listOf types.str;
       default = [];
       example = [
-        "WoSign" "WoSign China"
+        "WoSign"
+        "WoSign China"
         "CA WoSign ECC Root"
         "Certification Authority of WoSign G2"
       ];
@@ -67,11 +64,9 @@ in
         names from that file.
       '';
     };
-
   };
 
   config = {
-
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
 
@@ -83,7 +78,5 @@ in
 
     # P11-Kit trust source.
     environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
-
   };
-
 }

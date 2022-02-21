@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, openssh
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  openssh,
+  makeWrapper,
 }:
-
 buildGoModule rec {
   pname = "assh";
   version = "2.12.2";
@@ -21,10 +21,12 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-s" "-w" "-X moul.io/assh/v2/pkg/version.Version=${version}"
+    "-s"
+    "-w"
+    "-X moul.io/assh/v2/pkg/version.Version=${version}"
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram "$out/bin/assh" \
@@ -41,7 +43,7 @@ buildGoModule rec {
     homepage = "https://github.com/moul/assh";
     changelog = "https://github.com/moul/assh/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ zzamboni ];
+    maintainers = with maintainers; [zzamboni];
     platforms = with platforms; linux ++ darwin;
   };
 }

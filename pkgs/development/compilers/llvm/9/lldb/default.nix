@@ -1,21 +1,23 @@
-{ lib, stdenv, llvm_meta
-, fetch
-, cmake
-, zlib
-, ncurses
-, swig
-, which
-, libedit
-, libxml2
-, libllvm
-, libclang
-, python3
-, version
-, darwin
-, makeWrapper
-, lit
+{
+  lib,
+  stdenv,
+  llvm_meta,
+  fetch,
+  cmake,
+  zlib,
+  ncurses,
+  swig,
+  which,
+  libedit,
+  libxml2,
+  libllvm,
+  libclang,
+  python3,
+  version,
+  darwin,
+  makeWrapper,
+  lit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lldb";
   inherit version;
@@ -27,35 +29,52 @@ stdenv.mkDerivation rec {
     ./gnu-install-dirs.patch
   ];
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = ["out" "lib" "dev"];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit makeWrapper
+    cmake
+    python3
+    which
+    swig
+    lit
+    makeWrapper
   ];
 
-  buildInputs = [
-    ncurses zlib libedit libxml2 libllvm
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-    darwin.apple_sdk.libs.xpc
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.bootstrap_cmds
-    darwin.apple_sdk.frameworks.Carbon
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs =
+    [
+      ncurses
+      zlib
+      libedit
+      libxml2
+      libllvm
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.libobjc
+      darwin.apple_sdk.libs.xpc
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.bootstrap_cmds
+      darwin.apple_sdk.frameworks.Carbon
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   CXXFLAGS = "-fno-rtti";
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  cmakeFlags = [
-    "-DLLDB_INCLUDE_TESTS=${if doCheck then "YES" else "NO"}"
-    "-DClang_DIR=${libclang.dev}/lib/cmake"
-    "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
-    "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
-  ] ++ lib.optionals doCheck [
-    "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
-  ];
+  cmakeFlags =
+    [
+      "-DLLDB_INCLUDE_TESTS=${
+        if doCheck
+        then "YES"
+        else "NO"
+      }"
+      "-DClang_DIR=${libclang.dev}/lib/cmake"
+      "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
+      "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+    ]
+    ++ lib.optionals doCheck [
+      "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+      "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
+    ];
 
   doCheck = false;
 
@@ -79,14 +98,16 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/llvm-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
   '';
 
-  meta = llvm_meta // {
-    homepage = "https://lldb.llvm.org/";
-    description = "A next-generation high-performance debugger";
-    longDescription = ''
-      LLDB is a next generation, high-performance debugger. It is built as a set
-      of reusable components which highly leverage existing libraries in the
-      larger LLVM Project, such as the Clang expression parser and LLVM
-      disassembler.
-    '';
-  };
+  meta =
+    llvm_meta
+    // {
+      homepage = "https://lldb.llvm.org/";
+      description = "A next-generation high-performance debugger";
+      longDescription = ''
+        LLDB is a next generation, high-performance debugger. It is built as a set
+        of reusable components which highly leverage existing libraries in the
+        larger LLVM Project, such as the Clang expression parser and LLVM
+        disassembler.
+      '';
+    };
 }

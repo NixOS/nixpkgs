@@ -1,13 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.bosun;
 
   configFile = pkgs.writeText "bosun.conf" ''
-    ${optionalString (cfg.opentsdbHost !=null) "tsdbHost = ${cfg.opentsdbHost}"}
-    ${optionalString (cfg.influxHost !=null) "influxHost = ${cfg.influxHost}"}
+    ${optionalString (cfg.opentsdbHost != null) "tsdbHost = ${cfg.opentsdbHost}"}
+    ${optionalString (cfg.influxHost != null) "influxHost = ${cfg.influxHost}"}
     httpListen = ${cfg.listenAddress}
     stateFile = ${cfg.stateFile}
     ledisDir = ${cfg.ledisDir}
@@ -15,13 +17,9 @@ let
 
     ${cfg.extraConfig}
   '';
-
 in {
-
   options = {
-
     services.bosun = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -69,7 +67,7 @@ in {
         default = null;
         example = "localhost:8086";
         description = ''
-           Host and port of the influxdb database.
+          Host and port of the influxdb database.
         '';
       };
 
@@ -117,16 +115,13 @@ in {
           http://bosun.org/configuration.html
         '';
       };
-
     };
-
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.bosun = {
       description = "bosun metrics collector (part of Bosun)";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       preStart = ''
         mkdir -p "$(dirname "${cfg.stateFile}")";
@@ -159,7 +154,5 @@ in {
     };
 
     users.groups.bosun.gid = config.ids.gids.bosun;
-
   };
-
 }

@@ -1,13 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, gtk3
-, stdenv
-, rust
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  gtk3,
+  stdenv,
+  rust,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "effitask";
   version = "1.4.1";
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-aCjZRJNsxx75ghK0N95Q9w0h5H5mW9/77j/fumDrvyM=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl gtk3 ];
+  buildInputs = [openssl gtk3];
 
   # default installPhase don't install assets
   installPhase = ''
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
       like described in the projects readme.
     '';
     homepage = "https://github.com/sanpii/effitask";
-    maintainers = with maintainers; [ davidak ];
-    license = with licenses; [ mit ];
+    maintainers = with maintainers; [davidak];
+    license = with licenses; [mit];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+}:
 stdenv.mkDerivation rec {
   pname = "gbenchmark";
   version = "1.6.1";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yUiFxi80FWBmTZgqmqTMf9oqcBeg3o4I4vKd4djyRWY=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   postPatch = ''
     cp -r ${gtest.src} googletest
@@ -25,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

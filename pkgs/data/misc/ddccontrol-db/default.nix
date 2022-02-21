@@ -1,11 +1,12 @@
-{ lib, stdenv
-, autoconf
-, automake
-, libtool
-, intltool
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  libtool,
+  intltool,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ddccontrol-db";
   version = "20220216";
@@ -21,19 +22,18 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  buildInputs =
-    [
-      autoconf
-      automake
-      libtool
-      intltool
-    ];
+  buildInputs = [
+    autoconf
+    automake
+    libtool
+    intltool
+  ];
 
   meta = with lib; {
     description = "Monitor database for DDCcontrol";
     homepage = "https://github.com/ddccontrol/ddccontrol-db";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ lib.maintainers.pakhfn ];
+    maintainers = [lib.maintainers.pakhfn];
   };
 }

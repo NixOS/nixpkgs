@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, wrapGAppsHook
-, libxml2
-, gtk
-, libSM
-, shared-mime-info
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wrapGAppsHook,
+  libxml2,
+  gtk,
+  libSM,
+  shared-mime-info,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rox-filer";
   version = "2.11";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook
   ];
-  buildInputs = [ libxml2 gtk shared-mime-info libSM ];
+  buildInputs = [libxml2 gtk shared-mime-info libSM];
   NIX_LDFLAGS = "-ldl -lm";
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   setSourceRoot = "export sourceRoot=rox-filer-${version}/ROX-Filer/";
 
   # patch source with defined patches
-  patchFlags = [ "-p0" ];
+  patchFlags = ["-p0"];
 
   # patch the main.c to disable the lookup of the APP_DIR environment variable,
   # which is used to lookup the location for certain images when rox-filer
@@ -82,8 +82,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast, lightweight, gtk2 file manager";
     homepage = "http://rox.sourceforge.net/desktop";
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [gpl2 lgpl2];
     platforms = platforms.linux;
-    maintainers = [ maintainers.eleanor ];
+    maintainers = [maintainers.eleanor];
   };
 }

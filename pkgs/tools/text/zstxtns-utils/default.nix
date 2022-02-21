@@ -1,12 +1,12 @@
-{ coreutils
-, fetchurl
-, gnugrep
-, lib
-, makeWrapper
-, moreutils
-, stdenvNoCC
+{
+  coreutils,
+  fetchurl,
+  gnugrep,
+  lib,
+  makeWrapper,
+  moreutils,
+  stdenvNoCC,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "zstxtns-utils";
   version = "0.0.3";
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "I/Gm7vHUr29NClYWQ1kwu8HrNZpdLXfE/nutTNoqcdU=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     description = "utilities to deal with text based name service databases";
     homepage = "https://ytrizja.de/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zseri ];
+    maintainers = with maintainers; [zseri];
     platforms = platforms.all;
   };
 }

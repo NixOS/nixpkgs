@@ -1,10 +1,12 @@
-{ config, lib, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.hardware.cpu.intel.sgx;
   defaultPrvGroup = "sgx_prv";
-in
-{
+in {
   options.hardware.cpu.intel.sgx.enableDcapCompat = mkOption {
     description = ''
       Whether to enable backward compatibility for SGX software build for the
@@ -52,7 +54,7 @@ in
       ];
 
       users.groups = optionalAttrs (cfg.provision.group == defaultPrvGroup) {
-        "${cfg.provision.group}" = { };
+        "${cfg.provision.group}" = {};
       };
 
       services.udev.extraRules = with cfg.provision; ''

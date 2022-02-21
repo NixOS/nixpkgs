@@ -1,11 +1,22 @@
 {
-  mkDerivation, lib, fetchurl,
-  extra-cmake-modules, makeWrapper,
-  libpthreadstubs, libXdmcp,
-  qtsvg, qtx11extras, ki18n, kdelibs4support, kio, kmediaplayer, kwidgetsaddons,
-  phonon, cairo, mplayer
+  mkDerivation,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  makeWrapper,
+  libpthreadstubs,
+  libXdmcp,
+  qtsvg,
+  qtx11extras,
+  ki18n,
+  kdelibs4support,
+  kio,
+  kmediaplayer,
+  kwidgetsaddons,
+  phonon,
+  cairo,
+  mplayer,
 }:
-
 mkDerivation rec {
   majorMinorVersion = "0.12";
   patchVersion = "0b";
@@ -27,12 +38,20 @@ mkDerivation rec {
       -e "s,^Exec.*,Exec=$out/bin/kmplayer -qwindowtitle %c %i %U,"
   '';
 
-  nativeBuildInputs = [ extra-cmake-modules makeWrapper ];
+  nativeBuildInputs = [extra-cmake-modules makeWrapper];
 
   buildInputs = [
-    libpthreadstubs libXdmcp
-    qtsvg qtx11extras ki18n kdelibs4support kio kmediaplayer kwidgetsaddons
-    phonon cairo
+    libpthreadstubs
+    libXdmcp
+    qtsvg
+    qtx11extras
+    ki18n
+    kdelibs4support
+    kio
+    kmediaplayer
+    kwidgetsaddons
+    phonon
+    cairo
   ];
 
   postInstall = ''
@@ -41,8 +60,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "MPlayer front-end for KDE";
-    license = with licenses; [ gpl2 lgpl2 fdl12 ];
+    license = with licenses; [gpl2 lgpl2 fdl12];
     homepage = "https://kmplayer.kde.org/";
-    maintainers = with maintainers; [ sander zraexy ];
+    maintainers = with maintainers; [sander zraexy];
   };
 }

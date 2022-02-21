@@ -1,8 +1,11 @@
-{ mkDiscoursePlugin, newScope, fetchFromGitHub, ... }@args:
-let
-  callPackage = newScope args;
-in
 {
+  mkDiscoursePlugin,
+  newScope,
+  fetchFromGitHub,
+  ...
+} @ args: let
+  callPackage = newScope args;
+in {
   discourse-assign = callPackage ./discourse-assign {};
   discourse-calendar = callPackage ./discourse-calendar {};
   discourse-canned-replies = callPackage ./discourse-canned-replies {};

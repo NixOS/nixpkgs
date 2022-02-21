@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.ngircd;
 
   configFile = pkgs.stdenv.mkDerivation {
@@ -44,7 +46,7 @@ in {
     systemd.services.ngircd = {
       description = "The ngircd IRC server";
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig.ExecStart = "${cfg.package}/sbin/ngircd --config ${configFile} --nodaemon";
 
@@ -57,6 +59,5 @@ in {
       description = "ngircd user.";
     };
     users.groups.ngircd = {};
-
   };
 }

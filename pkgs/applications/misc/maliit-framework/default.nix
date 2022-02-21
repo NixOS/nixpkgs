@@ -1,26 +1,24 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-
-, at-spi2-atk
-, at-spi2-core
-, libepoxy
-, gtk3
-, libdatrie
-, libselinux
-, libsepol
-, libthai
-, pcre
-, util-linux
-, wayland
-, xorg
-
-, cmake
-, doxygen
-, pkg-config
-, wayland-protocols
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  at-spi2-atk,
+  at-spi2-core,
+  libepoxy,
+  gtk3,
+  libdatrie,
+  libselinux,
+  libsepol,
+  libthai,
+  pcre,
+  util-linux,
+  wayland,
+  xorg,
+  cmake,
+  doxygen,
+  pkg-config,
+  wayland-protocols,
 }:
-
 mkDerivation rec {
   pname = "maliit-framework";
   version = "2.0.0";
@@ -63,6 +61,6 @@ mkDerivation rec {
     description = "Core libraries of Maliit and server";
     homepage = "http://maliit.github.io/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [samueldr];
   };
 }

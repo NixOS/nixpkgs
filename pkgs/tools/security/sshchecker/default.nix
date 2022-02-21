@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "sshchecker";
   version = "1.0";
@@ -23,7 +23,7 @@ buildGoModule rec {
       SSH login on the giving IP list.
     '';
     homepage = "https://github.com/lazytools/sshchecker";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

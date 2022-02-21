@@ -1,14 +1,14 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, fetchpatch
-, gettext
-, ncurses
-, readline
-, stdenv
-, texinfo
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  fetchpatch,
+  gettext,
+  ncurses,
+  readline,
+  stdenv,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pinfo";
   version = "0.6.13";
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/baszoetekouw/pinfo";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

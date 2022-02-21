@@ -1,8 +1,11 @@
-{ config, options, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.cfssl;
 in {
   options.services.cfssl = {
@@ -150,7 +153,7 @@ in {
 
     logLevel = mkOption {
       default = 1;
-      type = types.enum [ 0 1 2 3 4 5 ];
+      type = types.enum [0 1 2 3 4 5];
       description = "Log level (0 = DEBUG, 5 = FATAL).";
     };
   };
@@ -169,8 +172,8 @@ in {
 
     systemd.services.cfssl = {
       description = "CFSSL CA API server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = lib.mkMerge [
         {

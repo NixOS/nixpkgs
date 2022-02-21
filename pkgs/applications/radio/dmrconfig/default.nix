@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, libusb1, systemd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
+  systemd,
+}:
 stdenv.mkDerivation rec {
   pname = "dmrconfig";
   version = "1.1";
@@ -13,7 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libusb1 systemd
+    libusb1
+    systemd
   ];
 
   preConfigure = ''
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
-  makeFlags = [ "VERSION=${version}" "GITCOUNT=0" ];
+  makeFlags = ["VERSION=${version}" "GITCOUNT=0"];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/udev/rules.d
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/sergev/dmrconfig";
     license = licenses.asl20;
-    maintainers = [ maintainers.etu ];
+    maintainers = [maintainers.etu];
     platforms = platforms.linux;
   };
 }

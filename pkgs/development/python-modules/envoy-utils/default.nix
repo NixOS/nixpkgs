@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  zeroconf,
 }:
-
 buildPythonPackage rec {
   pname = "envoy-utils";
   version = "0.0.1";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "envoy_utils" ];
+  pythonImportsCheck = ["envoy_utils"];
 
   meta = with lib; {
     description = "Python utilities for the Enphase Envoy";
     homepage = "https://pypi.org/project/envoy-utils/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

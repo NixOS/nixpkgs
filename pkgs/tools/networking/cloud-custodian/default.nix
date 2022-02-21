@@ -1,16 +1,18 @@
-{ lib, buildPythonApplication, fetchPypi
-, argcomplete
-, boto3
-, botocore
-, certifi
-, python-dateutil
-, jsonpatch
-, jsonschema
-, pyyaml
-, tabulate
-, urllib3
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  argcomplete,
+  boto3,
+  botocore,
+  certifi,
+  python-dateutil,
+  jsonpatch,
+  jsonschema,
+  pyyaml,
+  tabulate,
+  urllib3,
 }:
-
 buildPythonApplication rec {
   pname = "cloud-custodian";
   version = "0.8.45.1";
@@ -43,6 +45,6 @@ buildPythonApplication rec {
     description = "Rules engine for cloud security, cost optimization, and governance";
     homepage = "https://cloudcustodian.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

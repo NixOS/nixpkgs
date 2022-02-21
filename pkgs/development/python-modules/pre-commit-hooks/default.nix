@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, toml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  toml,
 }:
-
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
   version = "4.1.0";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Some out-of-the-box hooks for pre-commit";
     homepage = "https://github.com/pre-commit/pre-commit-hooks";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
   };
 }

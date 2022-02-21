@@ -1,46 +1,41 @@
 # This module defines global configuration for the Bash shell, in
 # particular /etc/bashrc and /etc/profile.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfge = config.environment;
 
   cfg = config.programs.bash;
 
   bashAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
-      (filterAttrs (k: v: v != null) cfg.shellAliases)
+    (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
-
-in
-
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
+    (mkRemovedOptionModule ["programs" "bash" "enable"] "")
   ];
 
   options = {
-
     programs.bash = {
-
       /*
-      enable = mkOption {
-        default = true;
-        description = ''
-          Whenever to configure Bash as an interactive shell.
-          Note that this tries to make Bash the default
-          <option>users.defaultUserShell</option>,
-          which in turn means that you might need to explicitly
-          set this variable if you have another shell configured
-          with NixOS.
-        '';
-        type = types.bool;
-      };
-      */
+       enable = mkOption {
+         default = true;
+         description = ''
+           Whenever to configure Bash as an interactive shell.
+           Note that this tries to make Bash the default
+           <option>users.defaultUserShell</option>,
+           which in turn means that you might need to explicitly
+           set this variable if you have another shell configured
+           with NixOS.
+         '';
+         type = types.bool;
+       };
+       */
 
       shellAliases = mkOption {
         default = {};
@@ -106,45 +101,43 @@ in
         type = types.lines;
         internal = true;
       };
-
     };
-
   };
 
-  config = /* mkIf cfg.enable */ {
+  config =
+    /*
+     mkIf cfg.enable
+     */
+    {
+      programs.bash = {
+        shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
-    programs.bash = {
+        shellInit = ''
+          if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+              . ${config.system.build.setEnvironment}
+          fi
 
-      shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
+          ${cfge.shellInit}
+        '';
 
-      shellInit = ''
-        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
-            . ${config.system.build.setEnvironment}
-        fi
+        loginShellInit = cfge.loginShellInit;
 
-        ${cfge.shellInit}
-      '';
+        interactiveShellInit = ''
+          # Check the window size after every command.
+          shopt -s checkwinsize
 
-      loginShellInit = cfge.loginShellInit;
+          # Disable hashing (i.e. caching) of command lookups.
+          set +h
 
-      interactiveShellInit = ''
-        # Check the window size after every command.
-        shopt -s checkwinsize
+          ${cfg.promptInit}
+          ${cfg.promptPluginInit}
+          ${bashAliases}
 
-        # Disable hashing (i.e. caching) of command lookups.
-        set +h
+          ${cfge.interactiveShellInit}
+        '';
+      };
 
-        ${cfg.promptInit}
-        ${cfg.promptPluginInit}
-        ${bashAliases}
-
-        ${cfge.interactiveShellInit}
-      '';
-
-    };
-
-    environment.etc.profile.text =
-      ''
+      environment.etc.profile.text = ''
         # /etc/profile: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for login shells.
 
@@ -168,8 +161,7 @@ in
         fi
       '';
 
-    environment.etc.bashrc.text =
-      ''
+      environment.etc.bashrc.text = ''
         # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
 
         # Only execute this file once per shell.
@@ -194,24 +186,22 @@ in
         fi
       '';
 
-    # Configuration for readline in bash. We use "option default"
-    # priority to allow user override using both .text and .source.
-    environment.etc.inputrc.source = mkOptionDefault ./inputrc;
+      # Configuration for readline in bash. We use "option default"
+      # priority to allow user override using both .text and .source.
+      environment.etc.inputrc.source = mkOptionDefault ./inputrc;
 
-    users.defaultUserShell = mkDefault pkgs.bashInteractive;
+      users.defaultUserShell = mkDefault pkgs.bashInteractive;
 
-    environment.pathsToLink = optionals cfg.enableCompletion [
-      "/etc/bash_completion.d"
-      "/share/bash-completion"
-    ];
+      environment.pathsToLink = optionals cfg.enableCompletion [
+        "/etc/bash_completion.d"
+        "/share/bash-completion"
+      ];
 
-    environment.shells =
-      [ "/run/current-system/sw/bin/bash"
+      environment.shells = [
+        "/run/current-system/sw/bin/bash"
         "/run/current-system/sw/bin/sh"
         "${pkgs.bashInteractive}/bin/bash"
         "${pkgs.bashInteractive}/bin/sh"
       ];
-
-  };
-
+    };
 }

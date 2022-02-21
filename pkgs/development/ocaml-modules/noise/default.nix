@@ -1,21 +1,20 @@
-{ lib
-, buildDunePackage
-, fetchurl
-
-, callipyge
-, chacha
-, digestif
-, hex
-, lwt
-, lwt_ppx
-, nocrypto
-, ounit
-, ppxlib
-, ppx_let
-, ppx_deriving
-, ppx_deriving_yojson
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  callipyge,
+  chacha,
+  digestif,
+  hex,
+  lwt,
+  lwt_ppx,
+  nocrypto,
+  ounit,
+  ppxlib,
+  ppx_let,
+  ppx_deriving,
+  ppx_deriving_yojson,
 }:
-
 buildDunePackage rec {
   pname = "noise";
   version = "0.2.0";
@@ -55,6 +54,6 @@ buildDunePackage rec {
     homepage = "https://github.com/emillon/ocaml-noise";
     description = "OCaml implementation of the Noise Protocol Framework";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fufexan ];
+    maintainers = with lib.maintainers; [fufexan];
   };
 }

@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, writeText
-, pkg-config
-, libX11
-, libXft
-, libXi
-, libXinerama
-, libXtst
-, layout ? null
-, conf ? null
-, patches ? [ ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  pkg-config,
+  libX11,
+  libXft,
+  libXi,
+  libXinerama,
+  libXtst,
+  layout ? null,
+  conf ? null,
+  patches ? [],
 }:
-
 stdenv.mkDerivation rec {
   pname = "svkbd";
   version = "0.4.1";
@@ -25,13 +25,14 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   postPatch = let
-    configFile = if lib.isDerivation conf || lib.isPath conf then
-      conf
-    else
-      writeText "config.def.h" conf;
-  in lib.optionalString (conf != null) ''
-    cp ${configFile} config.def.h
-  '';
+    configFile =
+      if lib.isDerivation conf || lib.isPath conf
+      then conf
+      else writeText "config.def.h" conf;
+  in
+    lib.optionalString (conf != null) ''
+      cp ${configFile} config.def.h
+    '';
 
   nativeBuildInputs = [
     pkg-config
@@ -45,15 +46,17 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ] ++ lib.optional (layout != null) "LAYOUT=${layout}";
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+    ]
+    ++ lib.optional (layout != null) "LAYOUT=${layout}";
 
   meta = with lib; {
     description = "Simple virtual keyboard";
     homepage = "https://tools.suckless.org/x/svkbd/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

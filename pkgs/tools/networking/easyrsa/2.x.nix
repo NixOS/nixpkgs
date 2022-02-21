@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, makeWrapper
-, gnugrep
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  makeWrapper,
+  gnugrep,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "easyrsa";
   version = "2.2.0";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/easy-rsa
   '';
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ];
-  buildInputs = [ gnugrep openssl ];
+  nativeBuildInputs = [autoreconfHook makeWrapper];
+  buildInputs = [gnugrep openssl];
 
   # Make sane defaults and patch default config vars
   postInstall = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Simple shell based CA utility";
     homepage = "https://openvpn.net/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.offline ];
+    maintainers = [maintainers.offline];
     platforms = platforms.linux;
   };
 }

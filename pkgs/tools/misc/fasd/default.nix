@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "fasd";
   version = "unstable-2016-08-11";
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     mainProgram = "fasd";
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, libusb1, AppKit }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  libusb1,
+  AppKit,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "ecpdap";
   version = "0.1.7";
@@ -13,9 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-2YARNoHVDBwGr8FE/oRlNZMX/vCPIre7OnZbr04eF/M=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libusb1 ]
+  buildInputs =
+    [libusb1]
     ++ lib.optional stdenv.isDarwin AppKit;
 
   postInstall = ''
@@ -31,7 +39,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/adamgreig/ecpdap";
     license = licenses.asl20;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [expipiplus1];
   };
 }
-

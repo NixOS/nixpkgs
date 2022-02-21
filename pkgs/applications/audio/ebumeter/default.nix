@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl
-, libX11, libXft, libclthreads, libclxclient, libjack2, libpng, libsndfile, zita-resampler
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXft,
+  libclthreads,
+  libclxclient,
+  libjack2,
+  libpng,
+  libsndfile,
+  zita-resampler,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ebumeter";
   version = "0.4.2";
@@ -12,14 +21,21 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 libXft libclthreads libclxclient libjack2 libpng libsndfile zita-resampler
+    libX11
+    libXft
+    libclthreads
+    libclxclient
+    libjack2
+    libpng
+    libsndfile
+    zita-resampler
   ];
 
   preConfigure = ''
     cd source
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   enableParallelBuilding = true;
 
@@ -27,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Level metering according to the EBU R-128 recommendation";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
 }

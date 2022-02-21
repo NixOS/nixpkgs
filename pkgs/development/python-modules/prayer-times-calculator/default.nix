@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "prayer-times-calculator";
   version = "0.0.5";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "prayer_times_calculator" ];
+  pythonImportsCheck = ["prayer_times_calculator"];
 
   meta = with lib; {
     description = "Python client for the Prayer Times API";
     homepage = "https://github.com/uchagani/prayer-times-calculator";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

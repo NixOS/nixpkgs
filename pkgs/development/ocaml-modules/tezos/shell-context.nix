@@ -1,9 +1,9 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-protocol-environment
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-protocol-environment,
 }:
-
 buildDunePackage {
   pname = "tezos-shell-context";
   inherit (tezos-stdlib) version useDune2;
@@ -15,7 +15,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: economic-protocols environment implementation for `tezos-node`";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: economic-protocols environment implementation for `tezos-node`";
+    };
 }

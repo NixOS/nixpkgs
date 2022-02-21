@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "logutils";
   version = "0.3.5";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/vinay.sajip/logutils/";
     license = licenses.bsd0;
   };
-
 }

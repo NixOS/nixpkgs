@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "dnadd";
   version = "1.0.0";
@@ -11,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1vzbgz8y9gj4lszsx4iczfbrj373sl4wi43j7rp46zfcbw323d4r";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     homepage = "https://github.com/joelancaster/dnadd";
     description = "Adds packages declaratively on the command line";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joelancaster ];
+    maintainers = with maintainers; [joelancaster];
   };
 }

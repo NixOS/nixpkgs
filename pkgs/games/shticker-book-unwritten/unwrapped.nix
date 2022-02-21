@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchCrate, pkg-config, openssl }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "shticker-book-unwritten";
   version = "1.0.3";
@@ -12,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-SniyLp/4R0MkJYQmW3RFvOFeBKTvRlSzEI5Y+ELHfy8=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 }

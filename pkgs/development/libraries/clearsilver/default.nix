@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  python2,
+}:
 stdenv.mkDerivation rec {
   pname = "clearsilver";
   version = "0.10.5";

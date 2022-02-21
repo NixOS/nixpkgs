@@ -1,27 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-, click
-, cryptography
-, construct
-, zeroconf
-, attrs
-, pytz
-, appdirs
-, tqdm
-, netifaces
-, android-backup
-, importlib-metadata
-, croniter
-, defusedxml
-, pytestCheckHook
-, pytest-mock
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  poetry-core,
+  click,
+  cryptography,
+  construct,
+  zeroconf,
+  attrs,
+  pytz,
+  appdirs,
+  tqdm,
+  netifaces,
+  android-backup,
+  importlib-metadata,
+  croniter,
+  defusedxml,
+  pytestCheckHook,
+  pytest-mock,
+  pyyaml,
 }:
-
-
 buildPythonPackage rec {
   pname = "python-miio";
   version = "0.5.10";
@@ -38,23 +37,25 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    android-backup
-    appdirs
-    attrs
-    click
-    construct
-    croniter
-    cryptography
-    defusedxml
-    netifaces
-    pytz
-    pyyaml
-    tqdm
-    zeroconf
-  ] ++ lib.optional (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      android-backup
+      appdirs
+      attrs
+      click
+      construct
+      croniter
+      cryptography
+      defusedxml
+      netifaces
+      pytz
+      pyyaml
+      tqdm
+      zeroconf
+    ]
+    ++ lib.optional (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -78,6 +79,6 @@ buildPythonPackage rec {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ flyfloh ];
+    maintainers = with maintainers; [flyfloh];
   };
 }

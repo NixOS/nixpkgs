@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule {
   pname = "goofys";
   version = "unstable-2021-03-26";
@@ -18,7 +18,7 @@ buildGoModule {
 
   vendorSha256 = "15yq0msh9icxd5n2zkkqrlwxifizhpa99d4aznv8clg32ybs61fj";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   # Tests are using networking
   postPatch = ''
@@ -28,9 +28,8 @@ buildGoModule {
   meta = {
     homepage = "https://github.com/kahing/goofys";
     description = "A high-performance, POSIX-ish Amazon S3 file system written in Go.";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.adisbladis ];
+    license = [lib.licenses.mit];
+    maintainers = [lib.maintainers.adisbladis];
     broken = stdenv.isDarwin; # needs to update gopsutil to at least v3.21.3 to include https://github.com/shirou/gopsutil/pull/1042
   };
-
 }

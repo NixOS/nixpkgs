@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "dalfox";
   version = "2.7.1";
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Tool for analysing parameter and XSS scanning";
     homepage = "https://github.com/hahwul/dalfox";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

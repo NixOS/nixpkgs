@@ -1,2 +1,2 @@
-{ pkgs }:
-pkgs.haskellPackages.callPackage ./client-ip-echo.nix { }
+{pkgs}:
+pkgs.haskellPackages.callPackage ./client-ip-echo.nix {}

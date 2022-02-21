@@ -1,28 +1,28 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, guessit
-, babelfish
-, enzyme
-, beautifulsoup4
-, requests
-, click
-, dogpile-cache
-, stevedore
-, chardet
-, pysrt
-, six
-, appdirs
-, rarfile
-, pytz
-, sympy
-, vcrpy
-, pytest
-, pytest-flakes
-, pytest-cov
-, pytest-runner
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  guessit,
+  babelfish,
+  enzyme,
+  beautifulsoup4,
+  requests,
+  click,
+  dogpile-cache,
+  stevedore,
+  chardet,
+  pysrt,
+  six,
+  appdirs,
+  rarfile,
+  pytz,
+  sympy,
+  vcrpy,
+  pytest,
+  pytest-flakes,
+  pytest-cov,
+  pytest-runner,
 }:
-
 buildPythonPackage rec {
   pname = "subliminal";
   version = "2.1.0";
@@ -33,19 +33,34 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    guessit babelfish enzyme beautifulsoup4 requests
-    click dogpile-cache stevedore chardet pysrt six
-    appdirs rarfile pytz
+    guessit
+    babelfish
+    enzyme
+    beautifulsoup4
+    requests
+    click
+    dogpile-cache
+    stevedore
+    chardet
+    pysrt
+    six
+    appdirs
+    rarfile
+    pytz
   ];
 
   checkInputs = [
-    sympy vcrpy pytest pytest-flakes
-    pytest-cov pytest-runner
+    sympy
+    vcrpy
+    pytest
+    pytest-flakes
+    pytest-cov
+    pytest-runner
   ];
 
   # https://github.com/Diaoul/subliminal/pull/963
   doCheck = false;
-  pythonImportsCheck = [ "subliminal" ];
+  pythonImportsCheck = ["subliminal"];
 
   meta = with lib; {
     homepage = "https://github.com/Diaoul/subliminal";

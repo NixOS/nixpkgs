@@ -1,8 +1,8 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "ircdog";
   version = "0.2.1";
@@ -21,8 +21,6 @@ buildGoPackage rec {
     description = "ircdog is a simple wrapper over the raw IRC protocol that can respond to pings, and interprets formatting codes";
     homepage = "https://github.com/goshuirc/ircdog";
     license = licenses.isc;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }
-
-

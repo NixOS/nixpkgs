@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gobject-introspection
-, wrapGAppsHook
-, gjs
-, glib
-, gtk3
-, gdk-pixbuf
-, gst_all_1
-, gnome
-, meson
-, ninja
-, python3
-, desktop-file-utils
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gobject-introspection,
+  wrapGAppsHook,
+  gjs,
+  glib,
+  gtk3,
+  gdk-pixbuf,
+  gst_all_1,
+  gnome,
+  meson,
+  ninja,
+  python3,
+  desktop-file-utils,
+  libhandy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
   version = "40.0";
@@ -37,18 +38,20 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    gjs
-    glib
-    gtk3
-    gdk-pixbuf
-    libhandy
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad # for gstreamer-player-1.0
-  ]);
+  buildInputs =
+    [
+      gjs
+      glib
+      gtk3
+      gdk-pixbuf
+      libhandy
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad # for gstreamer-player-1.0
+    ]);
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

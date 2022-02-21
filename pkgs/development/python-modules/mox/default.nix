@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchurl
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
 }:
-
 buildPythonPackage rec {
   pname = "mox";
   version = "0.5.3";
@@ -20,5 +20,4 @@ buildPythonPackage rec {
     description = "A mock object framework for Python";
     license = licenses.asl20;
   };
-
 }

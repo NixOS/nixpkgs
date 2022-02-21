@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3
-, anki
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  anki,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "ankisyncd";
   version = "2.2.0";
@@ -44,9 +44,9 @@ python3.pkgs.buildPythonApplication rec {
     webtest
   ];
 
-  buildInputs = [ ];
+  buildInputs = [];
 
-  propagatedBuildInputs = [ anki ];
+  propagatedBuildInputs = [anki];
 
   checkPhase = ''
     # Exclude tests that require sqlite's sqldiff command, since
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Self-hosted Anki sync server";
-    maintainers = with maintainers; [ matt-snider ];
+    maintainers = with maintainers; [matt-snider];
     homepage = "https://github.com/ankicommunity/anki-sync-server";
     license = licenses.agpl3Only;
     platforms = platforms.linux;

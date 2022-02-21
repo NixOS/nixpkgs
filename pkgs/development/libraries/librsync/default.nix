@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, perl, zlib, bzip2, popt }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  zlib,
+  bzip2,
+  popt,
+}:
 stdenv.mkDerivation rec {
   pname = "librsync";
   version = "2.3.2";
@@ -11,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GNwOIZ2UjvsYIthotiPDBrabYzCGFG/YVEbwVa9Nwi4=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ perl zlib bzip2 popt ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [perl zlib bzip2 popt];
 
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 

@@ -1,5 +1,16 @@
-{ lib, stdenv, buildPackages, fetchurl, zlib, bzip2, perl, cpio, gawk, coreutils, ApplicationServices }:
-
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  zlib,
+  bzip2,
+  perl,
+  cpio,
+  gawk,
+  coreutils,
+  ApplicationServices,
+}:
 stdenv.mkDerivation rec {
   pname = "blast";
   version = "2.12.0";
@@ -16,10 +27,10 @@ stdenv.mkDerivation rec {
     # These extra cause clang to hang on Darwin.
     "--with-flat-makefile"
     "--without-makefile-auto-update"
-    "--with-dll"  # build dynamic libraries (static are default)
-    ];
+    "--with-dll" # build dynamic libraries (static are default)
+  ];
 
-  makeFlags = [ "all_projects=app/" ];
+  makeFlags = ["all_projects=app/"];
 
   preConfigure = ''
     export NCBICXX_RECONF_POLICY=warn
@@ -75,20 +86,21 @@ stdenv.mkDerivation rec {
         --replace /bin/date ${coreutils}/bin/date
   '';
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
+  nativeBuildInputs = [perl];
 
   # perl is necessary in buildInputs so that installed perl scripts get patched
   # correctly
-  buildInputs = [ coreutils perl gawk zlib bzip2 cpio ]
-    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
-  hardeningDisable = [ "format" ];
+  buildInputs =
+    [coreutils perl gawk zlib bzip2 cpio]
+    ++ lib.optionals stdenv.isDarwin [ApplicationServices];
+  hardeningDisable = ["format"];
 
   postInstall = ''
     substituteInPlace $out/bin/get_species_taxids.sh \
         --replace /bin/rm ${coreutils}/bin/rm
   '';
-  patches = [ ./no_slash_bin.patch ];
+  patches = [./no_slash_bin.patch];
 
   enableParallelBuilding = true;
 
@@ -96,14 +108,14 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = ''Basic Local Alignment Search Tool (BLAST) finds regions of
-    similarity between biological sequences'';
+    description = ''      Basic Local Alignment Search Tool (BLAST) finds regions of
+          similarity between biological sequences'';
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
     license = licenses.publicDomain;
 
     # Version 2.10.0 fails on Darwin
     # See https://github.com/NixOS/nixpkgs/pull/61430
     platforms = platforms.linux;
-    maintainers = with maintainers; [ luispedro ];
+    maintainers = with maintainers; [luispedro];
   };
 }

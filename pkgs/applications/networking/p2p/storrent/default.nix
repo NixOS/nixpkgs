@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "storrent-unstable";
   version = "2021-10-10";
@@ -17,6 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/jech/storrent";
     description = "An implementation of the BitTorrent protocol that is optimised for streaming media";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

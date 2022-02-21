@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, construct
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  construct,
+  fetchFromGitHub,
+  isPy3k,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "snapcast";
   version = "2.1.3";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "snapcast" ];
+  pythonImportsCheck = ["snapcast"];
 
   meta = with lib; {
     description = "Control Snapcast, a multi-room synchronous audio solution";
     homepage = "https://github.com/happyleavesaoc/python-snapcast/";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

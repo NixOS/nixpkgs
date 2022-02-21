@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, python3, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   version = "2.4.2";
   pname = "weather";
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "http://fungi.yuggoth.org/weather";
     description = "Quick access to current weather conditions and forecasts";
     license = licenses.isc;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [maintainers.matthiasbeyer];
     platforms = platforms.unix;
   };
 }

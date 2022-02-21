@@ -1,32 +1,37 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.datadog-agent;
 
-  ddConf = {
-    skip_ssl_validation = false;
-    confd_path          = "/etc/datadog-agent/conf.d";
-    additional_checksd  = "/etc/datadog-agent/checks.d";
-    use_dogstatsd       = true;
-  }
-  // optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
-  // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
-  // optionalAttrs (cfg.ddUrl != null) { dd_url = cfg.ddUrl; }
-  // optionalAttrs (cfg.site != null) { site = cfg.site; }
-  // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
-  // optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
-  // optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
-  // cfg.extraConfig;
+  ddConf =
+    {
+      skip_ssl_validation = false;
+      confd_path = "/etc/datadog-agent/conf.d";
+      additional_checksd = "/etc/datadog-agent/checks.d";
+      use_dogstatsd = true;
+    }
+    // optionalAttrs (cfg.logLevel != null) {log_level = cfg.logLevel;}
+    // optionalAttrs (cfg.hostname != null) {inherit (cfg) hostname;}
+    // optionalAttrs (cfg.ddUrl != null) {dd_url = cfg.ddUrl;}
+    // optionalAttrs (cfg.site != null) {site = cfg.site;}
+    // optionalAttrs (cfg.tags != null) {tags = concatStringsSep ", " cfg.tags;}
+    // optionalAttrs (cfg.enableLiveProcessCollection) {process_config = {enabled = "true";};}
+    // optionalAttrs (cfg.enableTraceAgent) {apm_config = {enabled = true;};}
+    // cfg.extraConfig;
 
   # Generate Datadog configuration files for each configured checks.
   # This works because check configurations have predictable paths,
   # and because JSON is a valid subset of YAML.
-  makeCheckConfigs = entries: mapAttrs' (name: conf: {
-    name = "datadog-agent/conf.d/${name}.d/conf.yaml";
-    value.source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
-  }) entries;
+  makeCheckConfigs = entries:
+    mapAttrs' (name: conf: {
+      name = "datadog-agent/conf.d/${name}.d/conf.yaml";
+      value.source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
+    })
+    entries;
 
   defaultChecks = {
     disk = cfg.diskCheck;
@@ -35,11 +40,14 @@ let
 
   # Assemble all check configurations and the top-level agent
   # configuration.
-  etcfiles = with pkgs; with builtins;
-  { "datadog-agent/datadog.yaml" = {
-      source = writeText "datadog.yaml" (toJSON ddConf);
-    };
-  } // makeCheckConfigs (cfg.checks // defaultChecks);
+  etcfiles = with pkgs;
+  with builtins;
+    {
+      "datadog-agent/datadog.yaml" = {
+        source = writeText "datadog.yaml" (toJSON ddConf);
+      };
+    }
+    // makeCheckConfigs (cfg.checks // defaultChecks);
 
   # Apply the configured extraIntegrations to the provided agent
   # package. See the documentation of `dd-agent/integrations-core.nix`
@@ -101,7 +109,7 @@ in {
 
     tags = mkOption {
       description = "The tags to mark this Datadog agent";
-      example = [ "test" "service" ];
+      example = ["test" "service"];
       default = null;
       type = types.nullOr (types.listOf types.str);
     };
@@ -121,7 +129,7 @@ in {
 
     extraIntegrations = mkOption {
       default = {};
-      type    = types.attrs;
+      type = types.attrs;
 
       description = ''
         Extra integrations from the Datadog core-integrations
@@ -149,7 +157,7 @@ in {
         Extra configuration options that will be merged into the
         main config file <filename>datadog.yaml</filename>.
       '';
-     };
+    };
 
     enableLiveProcessCollection = mkOption {
       description = ''
@@ -193,7 +201,7 @@ in {
             {
               name = "some-service";
               url = "http://localhost:1337/healthz";
-              tags = [ "some-service" ];
+              tags = ["some-service"];
             }
           ];
         };
@@ -211,7 +219,7 @@ in {
       type = types.attrs;
       default = {
         init_config = {};
-        instances = [ { use_mount = "false"; } ];
+        instances = [{use_mount = "false";}];
       };
     };
 
@@ -221,13 +229,17 @@ in {
       default = {
         init_config = {};
         # Network check only supports one configured instance
-        instances = [ { collect_connection_state = false;
-          excluded_interfaces = [ "lo" "lo0" ]; } ];
+        instances = [
+          {
+            collect_connection_state = false;
+            excluded_interfaces = ["lo" "lo0"];
+          }
+        ];
       };
     };
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
+    environment.systemPackages = [datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2];
 
     users.users.datadog = {
       description = "Datadog Agent User";
@@ -240,17 +252,19 @@ in {
     users.groups.datadog.gid = config.ids.gids.datadog;
 
     systemd.services = let
-      makeService = attrs: recursiveUpdate {
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute2 ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          User = "datadog";
-          Group = "datadog";
-          Restart = "always";
-          RestartSec = 2;
-        };
-        restartTriggers = [ datadogPkg ] ++  map (x: x.source) (attrValues etcfiles);
-      } attrs;
+      makeService = attrs:
+        recursiveUpdate {
+          path = [datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute2];
+          wantedBy = ["multi-user.target"];
+          serviceConfig = {
+            User = "datadog";
+            Group = "datadog";
+            Restart = "always";
+            RestartSec = 2;
+          };
+          restartTriggers = [datadogPkg] ++ map (x: x.source) (attrValues etcfiles);
+        }
+        attrs;
     in {
       datadog-agent = makeService {
         description = "Datadog agent monitor";
@@ -267,13 +281,13 @@ in {
 
       dd-jmxfetch = lib.mkIf (lib.hasAttr "jmx" cfg.checks) (makeService {
         description = "Datadog JMX Fetcher";
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
+        path = [datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk];
         serviceConfig.ExecStart = "${datadogPkg}/bin/dd-jmxfetch";
       });
 
       datadog-process-agent = lib.mkIf cfg.enableLiveProcessCollection (makeService {
         description = "Datadog Live Process Agent";
-        path = [ ];
+        path = [];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
           ${pkgs.datadog-process-agent}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
@@ -282,13 +296,12 @@ in {
 
       datadog-trace-agent = lib.mkIf cfg.enableTraceAgent (makeService {
         description = "Datadog Trace Agent";
-        path = [ ];
+        path = [];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
           ${datadogPkg}/bin/trace-agent -config /etc/datadog-agent/datadog.yaml
         '';
       });
-
     };
 
     environment.etc = etcfiles;

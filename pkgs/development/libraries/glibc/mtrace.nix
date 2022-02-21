@@ -1,5 +1,7 @@
-{ glibc, perl }:
-
+{
+  glibc,
+  perl,
+}:
 # Small wrapper which only exposes `mtrace(3)` from `glibc`. This can't be placed
 # into `glibc` itself because it depends on Perl which would mean that the final
 # `glibc` inside a stdenv bootstrap has a dependency `glibc -> perl -> bootstrap tools`,
@@ -7,8 +9,7 @@
 #
 # `glibc` needs to be overridden here because it's still needed to `./configure` the source in order
 # to have a build environment where we can call the needed make target.
-
-glibc.overrideAttrs ({ meta ? {}, ... }: {
+glibc.overrideAttrs ({meta ? {}, ...}: {
   pname = "glibc-mtrace";
 
   buildPhase = ''
@@ -26,13 +27,15 @@ glibc.overrideAttrs ({ meta ? {}, ... }: {
   '';
 
   # Perl interpreter used for `mtrace`.
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   # Reset a few things declared by `pkgs.glibc`.
-  outputs = [ "out" ];
+  outputs = ["out"];
   separateDebugInfo = false;
 
-  meta = meta // {
-    description = "Perl script used to interpret and provide human readable output of the trace log contained in the file mtracedata, whose contents were produced by mtrace(3).";
-  };
+  meta =
+    meta
+    // {
+      description = "Perl script used to interpret and provide human readable output of the trace log contained in the file mtracedata, whose contents were produced by mtrace(3).";
+    };
 })

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, chameleon
-, pyramid
-, zope_interface
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chameleon,
+  pyramid,
+  zope_interface,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "pyramid_chameleon";
   version = "0.3";
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     ./test-renderers-pyramid-import.patch
   ];
 
-  propagatedBuildInputs = [ chameleon pyramid zope_interface setuptools ];
+  propagatedBuildInputs = [chameleon pyramid zope_interface setuptools];
 
-  pythonImportsCheck = [ "pyramid_chameleon" ];
+  pythonImportsCheck = ["pyramid_chameleon"];
 
   meta = with lib; {
     description = "Chameleon template compiler for pyramid";
     homepage = "https://github.com/Pylons/pyramid_chameleon";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

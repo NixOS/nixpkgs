@@ -1,17 +1,15 @@
-{ lib
-, stdenv
-, runCommand
-, fetchFromGitHub
-, bash
-, btrfs-progs
-, coreutils
-, python3Packages
-, util-linux
-, nixosTests
-}:
-
-let
-
+{
+  lib,
+  stdenv,
+  runCommand,
+  fetchFromGitHub,
+  bash,
+  btrfs-progs,
+  coreutils,
+  python3Packages,
+  util-linux,
+  nixosTests,
+}: let
   bees = stdenv.mkDerivation rec {
     pname = "bees";
     version = "0.7";
@@ -58,25 +56,24 @@ let
       description = "Block-oriented BTRFS deduplication service";
       license = licenses.gpl3;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ chaduffy ];
+      maintainers = with maintainers; [chaduffy];
       longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
     };
   };
-
 in
-
-(runCommand "bees-service"
+  (runCommand "bees-service"
   {
     inherit bash bees coreutils;
     utillinux = util-linux; # needs to be a valid shell variable name
     btrfsProgs = btrfs-progs; # needs to be a valid shell variable name
   } ''
-  mkdir -p -- "$out/bin"
-  substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
-  chmod +x "$out"/bin/bees-service-wrapper
-  ln -s ${bees}/bin/beesd "$out"/bin/beesd
-'').overrideAttrs (old: {
-  passthru.tests = {
-    smoke-test = nixosTests.bees;
-  };
-})
+    mkdir -p -- "$out/bin"
+    substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
+    chmod +x "$out"/bin/bees-service-wrapper
+    ln -s ${bees}/bin/beesd "$out"/bin/beesd
+  '')
+  .overrideAttrs (old: {
+    passthru.tests = {
+      smoke-test = nixosTests.bees;
+    };
+  })

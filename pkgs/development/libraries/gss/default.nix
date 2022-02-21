@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl
-, withShishi ? !stdenv.isDarwin, shishi
+{
+  lib,
+  stdenv,
+  fetchurl,
+  withShishi ? !stdenv.isDarwin,
+  shishi,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gss";
   version = "1.0.3";
@@ -14,7 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional withShishi shishi;
 
   configureFlags = [
-    "--${if withShishi then "enable" else "disable"}-kerberos5"
+    "--${
+      if withShishi
+      then "enable"
+      else "disable"
+    }-kerberos5"
   ];
 
   doCheck = true;
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/gss/";
     description = "Generic Security Service";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjg ];
+    maintainers = with maintainers; [bjg];
     platforms = platforms.all;
   };
 }

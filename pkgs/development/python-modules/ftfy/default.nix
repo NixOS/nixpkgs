@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, wcwidth
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  wcwidth,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "ftfy";
   version = "6.0.3";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Given Unicode text, make its representation consistent and possibly less broken";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu ];
+    maintainers = with maintainers; [aborsu];
   };
 }

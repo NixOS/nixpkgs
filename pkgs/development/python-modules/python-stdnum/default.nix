@@ -1,5 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, nose }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  nose,
+}:
 buildPythonPackage rec {
   version = "1.17";
   pname = "python-stdnum";
@@ -8,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "374e2b5e13912ccdbf50b0b23fca2c3e0531174805c32d74e145f37756328340";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   checkPhase = ''
     nosetests
@@ -17,7 +21,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://arthurdejong.org/python-stdnum/";
     description = "Python module to handle standardized numbers and codes";
-    maintainers = with lib.maintainers; [ johbo ];
+    maintainers = with lib.maintainers; [johbo];
     license = lib.licenses.lgpl2Plus;
   };
 }

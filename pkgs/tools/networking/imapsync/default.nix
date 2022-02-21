@@ -1,5 +1,12 @@
-{lib, stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
-
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  perl,
+  openssl,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "imapsync";
   version = "1.727";
@@ -17,13 +24,31 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/imapsync --set PERL5LIB $PERL5LIB
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  buildInputs = with perlPackages; [ perl openssl MailIMAPClient TermReadKey
-    IOSocketSSL DigestHMAC URI FileCopyRecursive IOTee UnicodeString
-    DataUniqid JSONWebToken TestMockGuard LWP CryptOpenSSLRSA
-    LWPProtocolHttps Readonly TestPod TestMockObject ParseRecDescent
-    IOSocketInet6 NTLM
+  buildInputs = with perlPackages; [
+    perl
+    openssl
+    MailIMAPClient
+    TermReadKey
+    IOSocketSSL
+    DigestHMAC
+    URI
+    FileCopyRecursive
+    IOTee
+    UnicodeString
+    DataUniqid
+    JSONWebToken
+    TestMockGuard
+    LWP
+    CryptOpenSSLRSA
+    LWPProtocolHttps
+    Readonly
+    TestPod
+    TestMockObject
+    ParseRecDescent
+    IOSocketInet6
+    NTLM
   ];
 
   meta = with lib; {
@@ -31,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "Mail folder synchronizer between IMAP servers";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

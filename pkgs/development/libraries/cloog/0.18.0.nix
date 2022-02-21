@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, gmp, isl }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  gmp,
+  isl,
+}:
 stdenv.mkDerivation rec {
   pname = "cloog";
   version = "0.18.0";
@@ -9,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1c4aa8dde7886be9cbe0f9069c334843b21028f61d344a2d685f88cb1dcf2228";
   };
 
-  buildInputs = [ gmp ];
+  buildInputs = [gmp];
 
-  propagatedBuildInputs = [ isl ];
+  propagatedBuildInputs = [isl];
 
-  configureFlags = [ "--with-isl=system" ];
+  configureFlags = ["--with-isl=system"];
 
   enableParallelBuilding = true;
 
@@ -40,25 +45,26 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl2Plus;
 
-    /* Leads to an ICE on Cygwin:
-
-       make[3]: Entering directory `/tmp/nix-build-9q5gw5m37q5l4f0kjfv9ar8fsc9plk27-ppl-0.10.2.drv-1/ppl-0.10.2/src'
-       /bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I..  -I.. -I../src    -g -O2 -frounding-math  -W -Wall -c -o Box.lo Box.cc
-       libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I.. -I.. -I../src -g -O2 -frounding-math -W -Wall -c Box.cc  -DDLL_EXPORT -DPIC -o .libs/Box.o
-       In file included from checked.defs.hh:595,
-                        from Checked_Number.defs.hh:27,
-                        from Coefficient.types.hh:15,
-                        from Coefficient.defs.hh:26,
-                        from Box.defs.hh:28,
-                        from Box.cc:24:
-       checked.inlines.hh: In function `Parma_Polyhedra_Library::Result Parma_Polyhedra_Library::Checked::input_generic(Type&, std::istream&, Parma_Polyhedra_Library::Rounding_Dir)':
-       checked.inlines.hh:607: internal compiler error: in invert_truthvalue, at fold-const.c:2719
-       Please submit a full bug report,
-       with preprocessed source if appropriate.
-       See <URL:http://cygwin.com/problems.html> for instructions.
-       make[3]: *** [Box.lo] Error 1
-
-    */
+    /*
+     Leads to an ICE on Cygwin:
+     
+     make[3]: Entering directory `/tmp/nix-build-9q5gw5m37q5l4f0kjfv9ar8fsc9plk27-ppl-0.10.2.drv-1/ppl-0.10.2/src'
+     /bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I..  -I.. -I../src    -g -O2 -frounding-math  -W -Wall -c -o Box.lo Box.cc
+     libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I.. -I.. -I../src -g -O2 -frounding-math -W -Wall -c Box.cc  -DDLL_EXPORT -DPIC -o .libs/Box.o
+     In file included from checked.defs.hh:595,
+                      from Checked_Number.defs.hh:27,
+                      from Coefficient.types.hh:15,
+                      from Coefficient.defs.hh:26,
+                      from Box.defs.hh:28,
+                      from Box.cc:24:
+     checked.inlines.hh: In function `Parma_Polyhedra_Library::Result Parma_Polyhedra_Library::Checked::input_generic(Type&, std::istream&, Parma_Polyhedra_Library::Rounding_Dir)':
+     checked.inlines.hh:607: internal compiler error: in invert_truthvalue, at fold-const.c:2719
+     Please submit a full bug report,
+     with preprocessed source if appropriate.
+     See <URL:http://cygwin.com/problems.html> for instructions.
+     make[3]: *** [Box.lo] Error 1
+     
+     */
     platforms = lib.platforms.unix; # Once had cygwin problems
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyrect
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyrect,
 }:
 buildPythonPackage rec {
   pname = "PyGetWindow";
@@ -24,6 +25,6 @@ buildPythonPackage rec {
     description = "A simple, cross-platform module for obtaining GUI information on applications' windows.";
     homepage = "https://github.com/asweigart/PyGetWindow";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lucasew ];
+    maintainers = with maintainers; [lucasew];
   };
 }

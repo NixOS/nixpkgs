@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "VASSAL";
   version = "3.6.5";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wnaT0+r599/RboeUfpCZTNd/M2kaCsckI9F+7r7leEE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -28,13 +33,13 @@ stdenv.mkDerivation rec {
   '';
 
   # Don't move doc to share/, VASSAL expects it to be in the root
-  forceShare = [ "man" "info" ];
+  forceShare = ["man" "info"];
 
   meta = with lib; {
-      description = "A free, open-source boardgame engine";
-      homepage = "https://vassalengine.org/";
-      license = licenses.lgpl21Only;
-      maintainers = with maintainers; [ tvestelind ];
-      platforms = platforms.unix;
+    description = "A free, open-source boardgame engine";
+    homepage = "https://vassalengine.org/";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [tvestelind];
+    platforms = platforms.unix;
   };
 }

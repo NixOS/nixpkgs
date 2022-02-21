@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchurl }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 buildDunePackage rec {
   pname = "mmap";
   version = "1.1.0";
@@ -15,6 +18,6 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/mmap";
     description = "Function for mapping files in memory";
     license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

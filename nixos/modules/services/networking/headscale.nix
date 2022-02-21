@@ -1,15 +1,18 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.headscale;
 
   dataDir = "/var/lib/headscale";
   runDir = "/run/headscale";
 
-  settingsFormat = pkgs.formats.yaml { };
+  settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "headscale.yaml" cfg.settings;
-in
-{
+in {
   options = {
     services.headscale = {
       enable = mkEnableOption "headscale, Open Source coordination server for Tailscale";
@@ -87,7 +90,7 @@ in
       derp = {
         urls = mkOption {
           type = types.listOf types.str;
-          default = [ "https://controlplane.tailscale.com/derpmap/default" ];
+          default = ["https://controlplane.tailscale.com/derpmap/default"];
           description = ''
             List of urls containing DERP maps.
             See <link xlink:href="https://tailscale.com/blog/how-tailscale-works/">How Tailscale works</link> for more information on DERP maps.
@@ -96,13 +99,12 @@ in
 
         paths = mkOption {
           type = types.listOf types.path;
-          default = [ ];
+          default = [];
           description = ''
             List of file paths containing DERP maps.
             See <link xlink:href="https://tailscale.com/blog/how-tailscale-works/">How Tailscale works</link> for more information on DERP maps.
           '';
         };
-
 
         autoUpdate = mkOption {
           type = types.bool;
@@ -121,7 +123,6 @@ in
           '';
           example = "5m";
         };
-
       };
 
       ephemeralNodeInactivityTimeout = mkOption {
@@ -135,7 +136,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "sqlite3" "postgres" ];
+          type = types.enum ["sqlite3" "postgres"];
           example = "postgres";
           default = "sqlite3";
           description = "Database engine to use.";
@@ -198,7 +199,7 @@ in
       dns = {
         nameservers = mkOption {
           type = types.listOf types.str;
-          default = [ "1.1.1.1" ];
+          default = ["1.1.1.1"];
           description = ''
             List of nameservers to pass to Tailscale clients.
           '';
@@ -206,11 +207,11 @@ in
 
         domains = mkOption {
           type = types.listOf types.str;
-          default = [ ];
+          default = [];
           description = ''
             Search domains to inject to Tailscale clients.
           '';
-          example = [ "mydomain.internal" ];
+          example = ["mydomain.internal"];
         };
 
         magicDns = mkOption {
@@ -264,7 +265,7 @@ in
 
         domainMap = mkOption {
           type = types.attrsOf types.str;
-          default = { };
+          default = {};
           description = ''
             Domain map is used to map incomming users (by their email) to
             a namespace. The key can be a string, or regex.
@@ -273,7 +274,6 @@ in
             ".*" = "default-namespace";
           };
         };
-
       };
 
       tls = {
@@ -286,7 +286,7 @@ in
             '';
           };
           challengeType = mkOption {
-            type = types.enum [ "TLS_ALPN-01" "HTTP-01" ];
+            type = types.enum ["TLS_ALPN-01" "HTTP-01"];
             default = "HTTP-01";
             description = ''
               Type of ACME challenge to use, currently supported types:
@@ -330,7 +330,7 @@ in
 
       settings = mkOption {
         type = settingsFormat.type;
-        default = { };
+        default = {};
         description = ''
           Overrides to <filename>config.yaml</filename> as a Nix attribute set.
           This option is ideal for overriding settings not exposed as Nix options.
@@ -338,83 +338,89 @@ in
           for possible options.
         '';
       };
-
-
     };
-
   };
   config = mkIf cfg.enable {
+    services.headscale.settings =
+      {
+        server_url = mkDefault cfg.serverUrl;
+        listen_addr = mkDefault "${cfg.address}:${toString cfg.port}";
 
-    services.headscale.settings = {
-      server_url = mkDefault cfg.serverUrl;
-      listen_addr = mkDefault "${cfg.address}:${toString cfg.port}";
+        private_key_path = mkDefault cfg.privateKeyFile;
 
-      private_key_path = mkDefault cfg.privateKeyFile;
+        derp = {
+          urls = mkDefault cfg.derp.urls;
+          paths = mkDefault cfg.derp.paths;
+          auto_update_enable = mkDefault cfg.derp.autoUpdate;
+          update_frequency = mkDefault cfg.derp.updateFrequency;
+        };
 
-      derp = {
-        urls = mkDefault cfg.derp.urls;
-        paths = mkDefault cfg.derp.paths;
-        auto_update_enable = mkDefault cfg.derp.autoUpdate;
-        update_frequency = mkDefault cfg.derp.updateFrequency;
+        # Turn off update checks since the origin of our package
+        # is nixpkgs and not Github.
+        disable_check_updates = true;
+
+        ephemeral_node_inactivity_timeout = mkDefault cfg.ephemeralNodeInactivityTimeout;
+
+        db_type = mkDefault cfg.database.type;
+        db_path = mkDefault cfg.database.path;
+
+        log_level = mkDefault cfg.logLevel;
+
+        dns_config = {
+          nameservers = mkDefault cfg.dns.nameservers;
+          domains = mkDefault cfg.dns.domains;
+          magic_dns = mkDefault cfg.dns.magicDns;
+          base_domain = mkDefault cfg.dns.baseDomain;
+        };
+
+        unix_socket = "${runDir}/headscale.sock";
+
+        # OpenID Connect
+        oidc = {
+          issuer = mkDefault cfg.openIdConnect.issuer;
+          client_id = mkDefault cfg.openIdConnect.clientId;
+          domain_map = mkDefault cfg.openIdConnect.domainMap;
+        };
+
+        tls_letsencrypt_cache_dir = "${dataDir}/.cache";
+      }
+      // optionalAttrs (cfg.database.host != null) {
+        db_host = mkDefault cfg.database.host;
+      }
+      // optionalAttrs (cfg.database.port != null) {
+        db_port = mkDefault cfg.database.port;
+      }
+      // optionalAttrs (cfg.database.name != null) {
+        db_name = mkDefault cfg.database.name;
+      }
+      // optionalAttrs (cfg.database.user != null) {
+        db_user = mkDefault cfg.database.user;
+      }
+      // optionalAttrs (cfg.tls.letsencrypt.hostname != null) {
+        tls_letsencrypt_hostname = mkDefault cfg.tls.letsencrypt.hostname;
+      }
+      // optionalAttrs (cfg.tls.letsencrypt.challengeType != null) {
+        tls_letsencrypt_challenge_type = mkDefault cfg.tls.letsencrypt.challengeType;
+      }
+      // optionalAttrs (cfg.tls.letsencrypt.httpListen != null) {
+        tls_letsencrypt_listen = mkDefault cfg.tls.letsencrypt.httpListen;
+      }
+      // optionalAttrs (cfg.tls.certFile != null) {
+        tls_cert_path = mkDefault cfg.tls.certFile;
+      }
+      // optionalAttrs (cfg.tls.keyFile != null) {
+        tls_key_path = mkDefault cfg.tls.keyFile;
+      }
+      // optionalAttrs (cfg.aclPolicyFile != null) {
+        acl_policy_path = mkDefault cfg.aclPolicyFile;
       };
-
-      # Turn off update checks since the origin of our package
-      # is nixpkgs and not Github.
-      disable_check_updates = true;
-
-      ephemeral_node_inactivity_timeout = mkDefault cfg.ephemeralNodeInactivityTimeout;
-
-      db_type = mkDefault cfg.database.type;
-      db_path = mkDefault cfg.database.path;
-
-      log_level = mkDefault cfg.logLevel;
-
-      dns_config = {
-        nameservers = mkDefault cfg.dns.nameservers;
-        domains = mkDefault cfg.dns.domains;
-        magic_dns = mkDefault cfg.dns.magicDns;
-        base_domain = mkDefault cfg.dns.baseDomain;
-      };
-
-      unix_socket = "${runDir}/headscale.sock";
-
-      # OpenID Connect
-      oidc = {
-        issuer = mkDefault cfg.openIdConnect.issuer;
-        client_id = mkDefault cfg.openIdConnect.clientId;
-        domain_map = mkDefault cfg.openIdConnect.domainMap;
-      };
-
-      tls_letsencrypt_cache_dir = "${dataDir}/.cache";
-
-    } // optionalAttrs (cfg.database.host != null) {
-      db_host = mkDefault cfg.database.host;
-    } // optionalAttrs (cfg.database.port != null) {
-      db_port = mkDefault cfg.database.port;
-    } // optionalAttrs (cfg.database.name != null) {
-      db_name = mkDefault cfg.database.name;
-    } // optionalAttrs (cfg.database.user != null) {
-      db_user = mkDefault cfg.database.user;
-    } // optionalAttrs (cfg.tls.letsencrypt.hostname != null) {
-      tls_letsencrypt_hostname = mkDefault cfg.tls.letsencrypt.hostname;
-    } // optionalAttrs (cfg.tls.letsencrypt.challengeType != null) {
-      tls_letsencrypt_challenge_type = mkDefault cfg.tls.letsencrypt.challengeType;
-    } // optionalAttrs (cfg.tls.letsencrypt.httpListen != null) {
-      tls_letsencrypt_listen = mkDefault cfg.tls.letsencrypt.httpListen;
-    } // optionalAttrs (cfg.tls.certFile != null) {
-      tls_cert_path = mkDefault cfg.tls.certFile;
-    } // optionalAttrs (cfg.tls.keyFile != null) {
-      tls_key_path = mkDefault cfg.tls.keyFile;
-    } // optionalAttrs (cfg.aclPolicyFile != null) {
-      acl_policy_path = mkDefault cfg.aclPolicyFile;
-    };
 
     # Setup the headscale configuration in a known path in /etc to
     # allow both the Server and the Client use it to find the socket
     # for communication.
     environment.etc."headscale/config.yaml".source = configFile;
 
-    users.groups.headscale = mkIf (cfg.group == "headscale") { };
+    users.groups.headscale = mkIf (cfg.group == "headscale") {};
 
     users.users.headscale = mkIf (cfg.user == "headscale") {
       description = "headscale user";
@@ -425,66 +431,66 @@ in
 
     systemd.services.headscale = {
       description = "headscale coordination server for Tailscale";
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ configFile ];
+      after = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
+      restartTriggers = [configFile];
 
       script = ''
-        ${optionalString (cfg.database.passwordFile != null) ''
-          export HEADSCALE_DB_PASS="$(head -n1 ${escapeShellArg cfg.database.passwordFile})"
-        ''}
+        ${
+          optionalString (cfg.database.passwordFile != null) ''
+            export HEADSCALE_DB_PASS="$(head -n1 ${escapeShellArg cfg.database.passwordFile})"
+          ''
+        }
 
         export HEADSCALE_OIDC_CLIENT_SECRET="$(head -n1 ${escapeShellArg cfg.openIdConnect.clientSecretFile})"
         exec ${cfg.package}/bin/headscale serve
       '';
 
-      serviceConfig =
-        let
-          capabilityBoundingSet = [ "CAP_CHOWN" ] ++ optional (cfg.port < 1024) "CAP_NET_BIND_SERVICE";
-        in
-        {
-          Restart = "always";
-          Type = "simple";
-          User = cfg.user;
-          Group = cfg.group;
+      serviceConfig = let
+        capabilityBoundingSet = ["CAP_CHOWN"] ++ optional (cfg.port < 1024) "CAP_NET_BIND_SERVICE";
+      in {
+        Restart = "always";
+        Type = "simple";
+        User = cfg.user;
+        Group = cfg.group;
 
-          # Hardening options
-          RuntimeDirectory = "headscale";
-          # Allow headscale group access so users can be added and use the CLI.
-          RuntimeDirectoryMode = "0750";
+        # Hardening options
+        RuntimeDirectory = "headscale";
+        # Allow headscale group access so users can be added and use the CLI.
+        RuntimeDirectoryMode = "0750";
 
-          StateDirectory = "headscale";
-          StateDirectoryMode = "0750";
+        StateDirectory = "headscale";
+        StateDirectoryMode = "0750";
 
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          ProtectKernelTunables = true;
-          ProtectControlGroups = true;
-          RestrictSUIDSGID = true;
-          PrivateMounts = true;
-          ProtectKernelModules = true;
-          ProtectKernelLogs = true;
-          ProtectHostname = true;
-          ProtectClock = true;
-          ProtectProc = "invisible";
-          ProcSubset = "pid";
-          RestrictNamespaces = true;
-          RemoveIPC = true;
-          UMask = "0077";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        RestrictNamespaces = true;
+        RemoveIPC = true;
+        UMask = "0077";
 
-          CapabilityBoundingSet = capabilityBoundingSet;
-          AmbientCapabilities = capabilityBoundingSet;
-          NoNewPrivileges = true;
-          LockPersonality = true;
-          RestrictRealtime = true;
-          SystemCallFilter = [ "@system-service" "~@priviledged" "@chown" ];
-          SystemCallArchitectures = "native";
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
-        };
+        CapabilityBoundingSet = capabilityBoundingSet;
+        AmbientCapabilities = capabilityBoundingSet;
+        NoNewPrivileges = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        SystemCallFilter = ["@system-service" "~@priviledged" "@chown"];
+        SystemCallArchitectures = "native";
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+      };
     };
   };
 
-  meta.maintainers = with maintainers; [ kradalby ];
+  meta.maintainers = with maintainers; [kradalby];
 }

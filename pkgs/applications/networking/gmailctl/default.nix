@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
-
 buildGoModule rec {
   pname = "gmailctl";
   version = "0.10.0";
@@ -34,6 +34,6 @@ buildGoModule rec {
     description = "Declarative configuration for Gmail filters";
     homepage = "https://github.com/mbrt/gmailctl";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar SuperSandro2000 ];
+    maintainers = with maintainers; [doronbehar SuperSandro2000];
   };
 }

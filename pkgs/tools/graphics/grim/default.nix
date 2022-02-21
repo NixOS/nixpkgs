@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pixman, libpng, libjpeg, meson, ninja, wayland, pkg-config, scdoc, wayland-protocols }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pixman,
+  libpng,
+  libjpeg,
+  meson,
+  ninja,
+  wayland,
+  pkg-config,
+  scdoc,
+  wayland-protocols,
+}:
 stdenv.mkDerivation rec {
   pname = "grim";
   version = "1.4.0";
@@ -31,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emersion/grim";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ buffet ];
+    maintainers = with maintainers; [buffet];
   };
 }

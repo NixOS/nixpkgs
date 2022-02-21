@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "widevine";
   version = "4.10.2391.0";
@@ -11,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7gH808C67m/s09e4rQUQHb/t+iGVdzW+YzrB1ZxGIdo=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   unpackPhase = ''
     unzip $src
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Widevine support for Vivaldi";
     homepage = "https://www.widevine.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ betaboon ];
-    platforms   = [ "x86_64-linux" ];
+    maintainers = with maintainers; [betaboon];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,33 +1,36 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch
   # C Inputs
-, blas
-, catch2
-, cmake
-, cython
-, fmt
-, muparserx
-, ninja
-, nlohmann_json
-, spdlog
+  ,
+  blas,
+  catch2,
+  cmake,
+  cython,
+  fmt,
+  muparserx,
+  ninja,
+  nlohmann_json,
+  spdlog
   # Python Inputs
-, cvxpy
-, numpy
-, pybind11
-, scikit-build
+  ,
+  cvxpy,
+  numpy,
+  pybind11,
+  scikit-build
   # Check Inputs
-, pytestCheckHook
-, ddt
-, fixtures
-, pytest-timeout
-, qiskit-terra
-, setuptools
-, testtools
+  ,
+  pytestCheckHook,
+  ddt,
+  fixtures,
+  pytest-timeout,
+  qiskit-terra,
+  setuptools,
+  testtools,
 }:
-
 buildPythonPackage rec {
   pname = "qiskit-aer";
   version = "0.10.3";
@@ -69,7 +72,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cvxpy
-    cython  # generates some cython files at runtime that need to be cython-ized
+    cython # generates some cython files at runtime that need to be cython-ized
     numpy
   ];
 
@@ -121,7 +124,7 @@ buildPythonPackage rec {
     fixtures
     pytest-timeout
     qiskit-terra
-    setuptools  # temporary workaround for pbr missing setuptools, see https://github.com/NixOS/nixpkgs/pull/132614
+    setuptools # temporary workaround for pbr missing setuptools, see https://github.com/NixOS/nixpkgs/pull/132614
     testtools
   ];
   pytestFlagsArray = [
@@ -146,6 +149,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

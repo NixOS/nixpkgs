@@ -1,15 +1,17 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-# Octave dependencies
-, linear-algebra
-, miscellaneous
-, struct
-, statistics
-# Runtime dependencies
-, freewrl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl
+  # Octave dependencies
+  ,
+  linear-algebra,
+  miscellaneous,
+  struct,
+  statistics
+  # Runtime dependencies
+  ,
+  freewrl,
 }:
-
 buildOctavePackage rec {
   pname = "vrml";
   version = "1.0.13";
@@ -32,8 +34,8 @@ buildOctavePackage rec {
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/vrml/index.html";
-    license = with licenses; [ gpl3Plus fdl12Plus ];
-    maintainers = with maintainers; [ KarlJoad ];
+    license = with licenses; [gpl3Plus fdl12Plus];
+    maintainers = with maintainers; [KarlJoad];
     description = "3D graphics using VRML";
     # Marked this way until KarlJoad gets freewrl as a runtime dependency.
     broken = true;

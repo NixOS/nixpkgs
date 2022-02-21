@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, boost175
-, fetchFromGitHub
-, libpcap
-, ndn-cxx
-, openssl
-, pkg-config
-, sphinx
-, systemd
-, wafHook
-, websocketpp
-, withSystemd ? stdenv.isLinux
-, withWebSocket ? true
+{
+  lib,
+  stdenv,
+  boost175,
+  fetchFromGitHub,
+  libpcap,
+  ndn-cxx,
+  openssl,
+  pkg-config,
+  sphinx,
+  systemd,
+  wafHook,
+  websocketpp,
+  withSystemd ? stdenv.isLinux,
+  withWebSocket ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nfd";
   version = "0.7.1";
@@ -26,14 +26,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config sphinx wafHook ];
-  buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
+  nativeBuildInputs = [pkg-config sphinx wafHook];
+  buildInputs = [libpcap ndn-cxx openssl websocketpp] ++ lib.optional withSystemd systemd;
 
-  wafConfigureFlags = [
-    "--boost-includes=${boost175.dev}/include"
-    "--boost-libs=${boost175.out}/lib"
-    "--with-tests"
-  ] ++ lib.optional (!withWebSocket) "--without-websocket";
+  wafConfigureFlags =
+    [
+      "--boost-includes=${boost175.dev}/include"
+      "--boost-libs=${boost175.out}/lib"
+      "--with-tests"
+    ]
+    ++ lib.optional (!withWebSocket) "--without-websocket";
 
   doCheck = true;
   checkPhase = ''
@@ -50,6 +52,6 @@ stdenv.mkDerivation rec {
     description = "Named Data Neworking (NDN) Forwarding Daemon";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bertof ];
+    maintainers = [maintainers.bertof];
   };
 }

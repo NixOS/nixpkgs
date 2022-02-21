@@ -1,290 +1,349 @@
 # DARWIN-SPECIFIC OVERRIDES FOR THE HASKELL PACKAGE SET IN NIXPKGS
-
-{ pkgs, haskellLib }:
-
-let
+{
+  pkgs,
+  haskellLib,
+}: let
   inherit (pkgs) lib darwin;
 in
+  with haskellLib;
+    self: super: ({
+      # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
+      # see: https://github.com/psibi/shell-conduit/issues/12
+      shell-conduit = dontCheck super.shell-conduit;
 
-with haskellLib;
+      conduit-extra = super.conduit-extra.overrideAttrs (drv: {
+        __darwinAllowLocalNetworking = true;
+      });
 
-self: super: ({
+      halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
 
-  # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
-  # see: https://github.com/psibi/shell-conduit/issues/12
-  shell-conduit = dontCheck super.shell-conduit;
+      # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
+      hakyll = overrideCabal {
+        testToolDepends = [];
+        doCheck = false;
+      }
+      super.hakyll;
 
-  conduit-extra = super.conduit-extra.overrideAttrs (drv: {
-    __darwinAllowLocalNetworking = true;
-  });
+      barbly = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.barbly;
 
-  halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
+      double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
-  # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = overrideCabal {
-    testToolDepends = [];
-    doCheck = false;
-  } super.hakyll;
+      apecs-physics = addPkgconfigDepends [
+        darwin.apple_sdk.frameworks.ApplicationServices
+      ]
+      super.apecs-physics;
 
-  barbly = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.barbly;
+      # "erf table" test fails on Darwin
+      # https://github.com/bos/math-functions/issues/63
+      math-functions = dontCheck super.math-functions;
 
-  double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
+      # darwin doesn't have sub-second resolution
+      # https://github.com/hspec/mockery/issues/11
+      mockery = overrideCabal (drv: {
+        preCheck =
+          ''
+            export TRAVIS=true
+          ''
+          + (drv.preCheck or "");
+      })
+      super.mockery;
 
-  apecs-physics = addPkgconfigDepends [
-    darwin.apple_sdk.frameworks.ApplicationServices
-  ] super.apecs-physics;
+      # https://github.com/ndmitchell/shake/issues/206
+      shake = dontCheck super.shake;
 
-  # "erf table" test fails on Darwin
-  # https://github.com/bos/math-functions/issues/63
-  math-functions = dontCheck super.math-functions;
+      filecache = dontCheck super.filecache;
 
-  # darwin doesn't have sub-second resolution
-  # https://github.com/hspec/mockery/issues/11
-  mockery = overrideCabal (drv: {
-    preCheck = ''
-      export TRAVIS=true
-    '' + (drv.preCheck or "");
-  }) super.mockery;
+      # gtk/gtk3 needs to be told on Darwin to use the Quartz
+      # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
+      gtk3 = appendConfigureFlag "-f have-quartz-gtk" super.gtk3;
+      gtk = appendConfigureFlag "-f have-quartz-gtk" super.gtk;
 
-  # https://github.com/ndmitchell/shake/issues/206
-  shake = dontCheck super.shake;
+      OpenAL = addExtraLibrary darwin.apple_sdk.frameworks.OpenAL super.OpenAL;
 
-  filecache = dontCheck super.filecache;
+      al = overrideCabal (drv: {
+        libraryFrameworkDepends =
+          [
+            darwin.apple_sdk.frameworks.OpenAL
+          ]
+          ++ (drv.libraryFrameworkDepends or []);
+      })
+      super.al;
 
-  # gtk/gtk3 needs to be told on Darwin to use the Quartz
-  # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
-  gtk3 = appendConfigureFlag "-f have-quartz-gtk" super.gtk3;
-  gtk = appendConfigureFlag "-f have-quartz-gtk" super.gtk;
+      proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
 
-  OpenAL = addExtraLibrary darwin.apple_sdk.frameworks.OpenAL super.OpenAL;
+      # the system-fileio tests use canonicalizePath, which fails in the sandbox
+      system-fileio = dontCheck super.system-fileio;
 
-  al = overrideCabal (drv: {
-    libraryFrameworkDepends = [
-      darwin.apple_sdk.frameworks.OpenAL
-    ] ++ (drv.libraryFrameworkDepends or []);
-  }) super.al;
+      # Prevents needing to add `security_tool` as a run-time dependency for
+      # everything using x509-system to give access to the `security` executable.
+      #
+      # darwin.security_tool is broken in Mojave (#45042)
+      #
+      # We will use the system provided security for now.
+      # Beware this WILL break in sandboxes!
+      #
+      # TODO(matthewbauer): If someone really needs this to work in sandboxes,
+      # I think we can add a propagatedImpureHost dep here, but I’m hoping to
+      # get a proper fix available soonish.
+      x509-system = overrideCabal (drv:
+        lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+          postPatch =
+            ''
+              substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+            ''
+            + (drv.postPatch or "");
+        })
+      super.x509-system;
 
-  proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
+      # https://github.com/haskell-foundation/foundation/pull/412
+      foundation = dontCheck super.foundation;
 
-  # the system-fileio tests use canonicalizePath, which fails in the sandbox
-  system-fileio = dontCheck super.system-fileio;
+      llvm-hs = overrideCabal (oldAttrs: {
+        # One test fails on darwin.
+        doCheck = false;
+        # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
+        # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
+        # when called from GHC, probably because clang is version 7, but we are
+        # using LLVM8.
+        preCompileBuildDriver =
+          ''
+            substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
+          ''
+          + (oldAttrs.preCompileBuildDriver or "");
+      })
+      super.llvm-hs;
 
-  # Prevents needing to add `security_tool` as a run-time dependency for
-  # everything using x509-system to give access to the `security` executable.
-  #
-  # darwin.security_tool is broken in Mojave (#45042)
-  #
-  # We will use the system provided security for now.
-  # Beware this WILL break in sandboxes!
-  #
-  # TODO(matthewbauer): If someone really needs this to work in sandboxes,
-  # I think we can add a propagatedImpureHost dep here, but I’m hoping to
-  # get a proper fix available soonish.
-  x509-system = overrideCabal (drv:
-    lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
-      postPatch = ''
-        substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
-      '' + (drv.postPatch or "");
-    }) super.x509-system;
+      yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
 
-  # https://github.com/haskell-foundation/foundation/pull/412
-  foundation = dontCheck super.foundation;
+      hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
 
-  llvm-hs = overrideCabal (oldAttrs: {
-    # One test fails on darwin.
-    doCheck = false;
-    # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
-    # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
-    # when called from GHC, probably because clang is version 7, but we are
-    # using LLVM8.
-    preCompileBuildDriver = ''
-      substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
-    '' + (oldAttrs.preCompileBuildDriver or "");
-  }) super.llvm-hs;
+      blas-hs = overrideCabal (drv: {
+        libraryFrameworkDepends =
+          [
+            darwin.apple_sdk.frameworks.Accelerate
+          ]
+          ++ (drv.libraryFrameworkDepends or []);
+      })
+      super.blas-hs;
 
-  yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
+      # Ensure the necessary frameworks are propagatedBuildInputs on darwin
+      OpenGLRaw = overrideCabal (drv: {
+        librarySystemDepends = [];
+        libraryHaskellDepends =
+          drv.libraryHaskellDepends
+          ++ [
+            darwin.apple_sdk.frameworks.OpenGL
+          ];
+        preConfigure =
+          ''
+            frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
+            frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
+            configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
+          ''
+          + (drv.preConfigure or "");
+      })
+      super.OpenGLRaw;
+      GLURaw = overrideCabal (drv: {
+        librarySystemDepends = [];
+        libraryHaskellDepends =
+          drv.libraryHaskellDepends
+          ++ [
+            darwin.apple_sdk.frameworks.OpenGL
+          ];
+      })
+      super.GLURaw;
+      bindings-GLFW = overrideCabal (drv: {
+        librarySystemDepends = [];
+        libraryHaskellDepends =
+          drv.libraryHaskellDepends
+          ++ [
+            darwin.apple_sdk.frameworks.AGL
+            darwin.apple_sdk.frameworks.Cocoa
+            darwin.apple_sdk.frameworks.OpenGL
+            darwin.apple_sdk.frameworks.IOKit
+            darwin.apple_sdk.frameworks.Kernel
+            darwin.apple_sdk.frameworks.CoreVideo
+            darwin.CF
+          ];
+      })
+      super.bindings-GLFW;
+      OpenCL = overrideCabal (drv: {
+        librarySystemDepends = [];
+        libraryHaskellDepends =
+          drv.libraryHaskellDepends
+          ++ [
+            darwin.apple_sdk.frameworks.OpenCL
+          ];
+      })
+      super.OpenCL;
 
-  hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
+      # cabal2nix likes to generate dependencies on hinotify when hfsevents is
+      # really required on darwin: https://github.com/NixOS/cabal2nix/issues/146.
+      hinotify = self.hfsevents;
 
-  blas-hs = overrideCabal (drv: {
-    libraryFrameworkDepends = [
-      darwin.apple_sdk.frameworks.Accelerate
-    ] ++ (drv.libraryFrameworkDepends or []);
-  }) super.blas-hs;
+      # FSEvents API is very buggy and tests are unreliable. See
+      # http://openradar.appspot.com/10207999 and similar issues.
+      fsnotify = addBuildDepend darwin.apple_sdk.frameworks.Cocoa
+      (dontCheck super.fsnotify);
 
-  # Ensure the necessary frameworks are propagatedBuildInputs on darwin
-  OpenGLRaw = overrideCabal (drv: {
-    librarySystemDepends = [];
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-      darwin.apple_sdk.frameworks.OpenGL
-    ];
-    preConfigure = ''
-      frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
-      frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
-      configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
-    '' + (drv.preConfigure or "");
-  }) super.OpenGLRaw;
-  GLURaw = overrideCabal (drv: {
-    librarySystemDepends = [];
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-      darwin.apple_sdk.frameworks.OpenGL
-    ];
-  }) super.GLURaw;
-  bindings-GLFW = overrideCabal (drv: {
-    librarySystemDepends = [];
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-      darwin.apple_sdk.frameworks.AGL
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.OpenGL
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.Kernel
-      darwin.apple_sdk.frameworks.CoreVideo
-      darwin.CF
-    ];
-  }) super.bindings-GLFW;
-  OpenCL = overrideCabal (drv: {
-    librarySystemDepends = [];
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-      darwin.apple_sdk.frameworks.OpenCL
-    ];
-  }) super.OpenCL;
+      FractalArt = overrideCabal (drv: {
+        librarySystemDepends =
+          [
+            darwin.libobjc
+            darwin.apple_sdk.frameworks.AppKit
+          ]
+          ++ (drv.librarySystemDepends or []);
+      })
+      super.FractalArt;
 
-  # cabal2nix likes to generate dependencies on hinotify when hfsevents is
-  # really required on darwin: https://github.com/NixOS/cabal2nix/issues/146.
-  hinotify = self.hfsevents;
+      arbtt = overrideCabal (drv: {
+        librarySystemDepends =
+          [
+            darwin.apple_sdk.frameworks.Foundation
+            darwin.apple_sdk.frameworks.Carbon
+            darwin.apple_sdk.frameworks.IOKit
+          ]
+          ++ (drv.librarySystemDepends or []);
+      })
+      super.arbtt;
 
-  # FSEvents API is very buggy and tests are unreliable. See
-  # http://openradar.appspot.com/10207999 and similar issues.
-  fsnotify = addBuildDepend darwin.apple_sdk.frameworks.Cocoa
-    (dontCheck super.fsnotify);
+      HTF = overrideCabal (drv: {
+        # GNU find is not prefixed in stdenv
+        postPatch =
+          ''
+            substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
+          ''
+          + (drv.postPatch or "");
+      })
+      super.HTF;
 
-  FractalArt = overrideCabal (drv: {
-    librarySystemDepends = [
-      darwin.libobjc
-      darwin.apple_sdk.frameworks.AppKit
-    ] ++ (drv.librarySystemDepends or []);
-  }) super.FractalArt;
+      # conditional dependency via a cabal flag
+      cas-store = overrideCabal (drv: {
+        libraryHaskellDepends =
+          [
+            self.kqueue
+          ]
+          ++ (drv.libraryHaskellDepends or []);
+      })
+      super.cas-store;
 
-  arbtt = overrideCabal (drv: {
-    librarySystemDepends = [
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.Carbon
-      darwin.apple_sdk.frameworks.IOKit
-    ] ++ (drv.librarySystemDepends or []);
-  }) super.arbtt;
+      # 2021-05-25: Tests fail and I have no way to debug them.
+      hls-class-plugin = dontCheck super.hls-class-plugin;
+      hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
+      hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
+      hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+      hls-splice-plugin = dontCheck super.hls-splice-plugin;
+      hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
+      hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+      hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+      hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
+      hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
 
-  HTF = overrideCabal (drv: {
-    # GNU find is not prefixed in stdenv
-    postPatch = ''
-      substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
-    '' + (drv.postPatch or "");
-  }) super.HTF;
+      # We are lacking pure pgrep at the moment for tests to work
+      tmp-postgres = dontCheck super.tmp-postgres;
 
-  # conditional dependency via a cabal flag
-  cas-store = overrideCabal (drv: {
-    libraryHaskellDepends = [
-      self.kqueue
-    ] ++ (drv.libraryHaskellDepends or []);
-  }) super.cas-store;
+      # On darwin librt doesn't exist and will fail to link against,
+      # however linking against it is also not necessary there
+      GLHUI = overrideCabal (drv: {
+        postPatch =
+          ''
+            substituteInPlace GLHUI.cabal --replace " rt" ""
+          ''
+          + (drv.postPatch or "");
+      })
+      super.GLHUI;
 
-  # 2021-05-25: Tests fail and I have no way to debug them.
-  hls-class-plugin = dontCheck super.hls-class-plugin;
-  hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
-  hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
-  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
-  hls-splice-plugin = dontCheck super.hls-splice-plugin;
-  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
-  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
-  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
-  hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
-  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+      SDL-image = overrideCabal (drv: {
+        # Prevent darwin-specific configuration code path being taken
+        # which doesn't work with nixpkgs' SDL libraries
+        postPatch =
+          ''
+            substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+          ''
+          + (drv.postPatch or "");
+        patches = [
+          # Work around SDL_main.h redefining main to SDL_main
+          ./patches/SDL-image-darwin-hsc.patch
+        ];
+      })
+      super.SDL-image;
 
-  # We are lacking pure pgrep at the moment for tests to work
-  tmp-postgres = dontCheck super.tmp-postgres;
+      # Prevent darwin-specific configuration code path being taken which
+      # doesn't work with nixpkgs' SDL libraries
+      SDL-mixer = overrideCabal (drv: {
+        postPatch =
+          ''
+            substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+          ''
+          + (drv.postPatch or "");
+      })
+      super.SDL-mixer;
 
-  # On darwin librt doesn't exist and will fail to link against,
-  # however linking against it is also not necessary there
-  GLHUI = overrideCabal (drv: {
-    postPatch = ''
-      substituteInPlace GLHUI.cabal --replace " rt" ""
-    '' + (drv.postPatch or "");
-  }) super.GLHUI;
-
-  SDL-image = overrideCabal (drv: {
-    # Prevent darwin-specific configuration code path being taken
-    # which doesn't work with nixpkgs' SDL libraries
-    postPatch = ''
-      substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
-    '' + (drv.postPatch or "");
-    patches = [
       # Work around SDL_main.h redefining main to SDL_main
-      ./patches/SDL-image-darwin-hsc.patch
-    ];
-  }) super.SDL-image;
+      SDL-ttf = appendPatch ./patches/SDL-ttf-darwin-hsc.patch super.SDL-ttf;
 
-  # Prevent darwin-specific configuration code path being taken which
-  # doesn't work with nixpkgs' SDL libraries
-  SDL-mixer = overrideCabal (drv: {
-    postPatch = ''
-      substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
-    '' + (drv.postPatch or "");
-  }) super.SDL-mixer;
+      # Disable a bunch of test suites that fail because of darwin's case insensitive
+      # file system: When a test suite has a test suite file that has the same name
+      # as a module in scope, but in different case (e. g. hedgehog.hs and Hedgehog
+      # in scope), GHC will complain that the file name and module name differ (in
+      # the example hedgehog.hs would be Main).
+      # These failures can easily be fixed by upstream by renaming files, so we
+      # should create issues for them.
+      # https://github.com/typeclasses/aws-cloudfront-signed-cookies/issues/2
+      aws-cloudfront-signed-cookies = dontCheck super.aws-cloudfront-signed-cookies;
 
-  # Work around SDL_main.h redefining main to SDL_main
-  SDL-ttf = appendPatch ./patches/SDL-ttf-darwin-hsc.patch super.SDL-ttf;
+      # https://github.com/acid-state/acid-state/issues/133
+      acid-state = dontCheck super.acid-state;
 
-  # Disable a bunch of test suites that fail because of darwin's case insensitive
-  # file system: When a test suite has a test suite file that has the same name
-  # as a module in scope, but in different case (e. g. hedgehog.hs and Hedgehog
-  # in scope), GHC will complain that the file name and module name differ (in
-  # the example hedgehog.hs would be Main).
-  # These failures can easily be fixed by upstream by renaming files, so we
-  # should create issues for them.
-  # https://github.com/typeclasses/aws-cloudfront-signed-cookies/issues/2
-  aws-cloudfront-signed-cookies = dontCheck super.aws-cloudfront-signed-cookies;
+      # Otherwise impure gcc is used, which is Apple's weird wrapper
+      c2hsc = addTestToolDepends [pkgs.gcc] super.c2hsc;
 
-  # https://github.com/acid-state/acid-state/issues/133
-  acid-state = dontCheck super.acid-state;
+      # streamly depends on Cocoa starting with 0.8.0
+      streamly_0_8_1_1 = overrideCabal (drv: {
+        libraryFrameworkDepends =
+          [
+            darwin.apple_sdk.frameworks.Cocoa
+          ]
+          ++ (drv.libraryFrameworkDepends or []);
+      })
+      super.streamly_0_8_1_1;
 
-  # Otherwise impure gcc is used, which is Apple's weird wrapper
-  c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
+      http-client-tls = overrideCabal (drv: {
+        postPatch =
+          ''
+            # This comment has been inserted, so the derivation hash changes, forcing
+            # a rebuild of this derivation which has succeeded to build on Hydra before,
+            # but apparently been corrupted, causing reverse dependencies to fail.
+            #
+            # This workaround can be removed upon the next darwin stdenv rebuild,
+            # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
+            # full haskellPackages rebuild.
+          ''
+          + drv.postPatch or "";
+      })
+      super.http-client-tls;
 
-  # streamly depends on Cocoa starting with 0.8.0
-  streamly_0_8_1_1 = overrideCabal (drv: {
-    libraryFrameworkDepends = [
-      darwin.apple_sdk.frameworks.Cocoa
-    ] ++ (drv.libraryFrameworkDepends or []);
-  }) super.streamly_0_8_1_1;
+      foldl = overrideCabal (drv: {
+        postPatch =
+          ''
+            # This comment has been inserted, so the derivation hash changes, forcing
+            # a rebuild of this derivation which has succeeded to build on Hydra before,
+            # but apparently been corrupted, causing reverse dependencies to fail.
+            #
+            # This workaround can be removed upon the next darwin stdenv rebuild,
+            # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
+            # full haskellPackages rebuild.
+          ''
+          + drv.postPatch or "";
+      })
+      super.foldl;
+    }
+    // lib.optionalAttrs pkgs.stdenv.isAarch64 {
+      # aarch64-darwin
 
-  http-client-tls = overrideCabal (drv: {
-    postPatch = ''
-      # This comment has been inserted, so the derivation hash changes, forcing
-      # a rebuild of this derivation which has succeeded to build on Hydra before,
-      # but apparently been corrupted, causing reverse dependencies to fail.
-      #
-      # This workaround can be removed upon the next darwin stdenv rebuild,
-      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
-      # full haskellPackages rebuild.
-    '' + drv.postPatch or "";
-  }) super.http-client-tls;
+      # https://github.com/fpco/unliftio/issues/87
+      unliftio = dontCheck super.unliftio;
 
-  foldl = overrideCabal (drv: {
-    postPatch = ''
-      # This comment has been inserted, so the derivation hash changes, forcing
-      # a rebuild of this derivation which has succeeded to build on Hydra before,
-      # but apparently been corrupted, causing reverse dependencies to fail.
-      #
-      # This workaround can be removed upon the next darwin stdenv rebuild,
-      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
-      # full haskellPackages rebuild.
-    '' + drv.postPatch or "";
-  }) super.foldl;
-
-} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
-
-  # https://github.com/fpco/unliftio/issues/87
-  unliftio = dontCheck super.unliftio;
-
-  # https://github.com/fpco/inline-c/issues/127
-  inline-c-cpp = dontCheck super.inline-c-cpp;
-})
+      # https://github.com/fpco/inline-c/issues/127
+      inline-c-cpp = dontCheck super.inline-c-cpp;
+    })

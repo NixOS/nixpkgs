@@ -1,10 +1,13 @@
-{ lib, pkgs, config, ... }:
-with lib;
-let cfg = config.services.owncast;
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.services.owncast;
 in {
-
   options.services.owncast = {
-
     enable = mkEnableOption "owncast";
 
     dataDir = mkOption {
@@ -57,14 +60,12 @@ in {
         TCP port where owncast rtmp service listens.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.owncast = {
       description = "A self-hosted live video and web chat server";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = mkMerge [
         {
@@ -88,11 +89,10 @@ in {
       };
     };
 
-    users.groups = mkIf (cfg.group == "owncast") { owncast = { }; };
+    users.groups = mkIf (cfg.group == "owncast") {owncast = {};};
 
     networking.firewall =
-      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.rtmp-port ] ++ optional (cfg.listen != "127.0.0.1") cfg.port; };
-
+      mkIf cfg.openFirewall {allowedTCPPorts = [cfg.rtmp-port] ++ optional (cfg.listen != "127.0.0.1") cfg.port;};
   };
-  meta = { maintainers = with lib.maintainers; [ MayNiklas ]; };
+  meta = {maintainers = with lib.maintainers; [MayNiklas];};
 }

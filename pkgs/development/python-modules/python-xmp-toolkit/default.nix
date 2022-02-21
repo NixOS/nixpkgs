@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, exempi
-, fetchFromGitHub
-, mock
-, pythonOlder
-, pytz
-, lib, stdenv
+{
+  buildPythonPackage,
+  exempi,
+  fetchFromGitHub,
+  mock,
+  pythonOlder,
+  pytz,
+  lib,
+  stdenv,
 }:
-
 buildPythonPackage {
   pname = "python-xmp-toolkit";
   version = "2.0.2";
@@ -24,11 +25,11 @@ buildPythonPackage {
     sha256 = "16bylcm183ilzp7mrpdzw0pzp6csv9v5v247914qsv2abg0hgl5y";
   };
 
-  buildInputs = [ exempi ];
+  buildInputs = [exempi];
 
-  checkInputs = lib.optionals (pythonOlder "3.3") [ mock ];
+  checkInputs = lib.optionals (pythonOlder "3.3") [mock];
 
-  propagatedBuildInputs = [ pytz ];
+  propagatedBuildInputs = [pytz];
 
   postPatch = ''
     substituteInPlace libxmp/exempi.py \
@@ -42,6 +43,6 @@ buildPythonPackage {
     homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
     license = licenses.bsd3;
-    maintainers = [ maintainers.kiwi ];
+    maintainers = [maintainers.kiwi];
   };
 }

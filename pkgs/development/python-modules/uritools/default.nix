@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "uritools";
   version = "4.0.0";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
     homepage = "https://github.com/tkem/uritools/";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [rvolosatovs];
   };
 }

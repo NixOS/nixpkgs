@@ -1,20 +1,17 @@
 # This module adds Memtest86+/Memtest86 to the GRUB boot menu.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   memtest86 = pkgs.memtest86plus;
   efiSupport = config.boot.loader.grub.efiSupport;
   cfg = config.boot.loader.grub.memtest86;
-in
-
-{
+in {
   options = {
-
     boot.loader.grub.memtest86 = {
-
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -29,7 +26,7 @@ in
 
       params = mkOption {
         default = [];
-        example = [ "console=ttyS0,115200" ];
+        example = ["console=ttyS0,115200"];
         type = types.listOf types.str;
         description = ''
           Parameters added to the Memtest86+ command line. As of memtest86+ 5.01
@@ -75,7 +72,6 @@ in
           Memtest86+ source code.
         '';
       };
-
     };
   };
 
@@ -101,14 +97,14 @@ in
 
     (mkIf (cfg.enable && !efiSupport) {
       boot.loader.grub.extraEntries =
-        if config.boot.loader.grub.version == 2 then
+        if config.boot.loader.grub.version == 2
+        then
           ''
             menuentry "Memtest86+" {
               linux16 @bootRoot@/memtest.bin ${toString cfg.params}
             }
           ''
-        else
-          throw "Memtest86+ is not supported with GRUB 1.";
+        else throw "Memtest86+ is not supported with GRUB 1.";
 
       boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
     })

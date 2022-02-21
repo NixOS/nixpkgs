@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, gmp
-, halibut
-, ncurses
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gmp,
+  halibut,
+  ncurses,
+  perl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "spigot";
   version = "20210527";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   strictDeps = true;
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/";
     description = "A command-line exact real calculator";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres mcbeth ];
+    maintainers = with maintainers; [AndersonTorres mcbeth];
     platforms = platforms.unix;
   };
 }

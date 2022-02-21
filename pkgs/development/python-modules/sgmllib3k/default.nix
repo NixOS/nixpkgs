@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
-
 buildPythonPackage rec {
   pname = "sgmllib3k";
   version = "1.0.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/sgmllib3k/";
     description = "Python 3 port of sgmllib";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

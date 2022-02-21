@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, automake
-, SDL
-, SDL_mixer
-, SDL_image
-, libmikmod
-, tinyxml
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  SDL,
+  SDL_mixer,
+  SDL_image,
+  libmikmod,
+  tinyxml,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tecnoballz";
   version = "0.93.1";
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       game. This game was ported from the Commodore Amiga.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }

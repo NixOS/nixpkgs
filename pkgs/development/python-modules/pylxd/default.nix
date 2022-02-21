@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
-, python-dateutil
-, requests
-, requests-toolbelt
-, requests-unixsocket
-, ws4py
-, ddt
-, mock-services
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  python-dateutil,
+  requests,
+  requests-toolbelt,
+  requests-unixsocket,
+  ws4py,
+  ddt,
+  mock-services,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pylxd";
   version = "2.3.1";
@@ -43,12 +43,12 @@ buildPythonPackage rec {
     "migration"
   ];
 
-  pythonImportsCheck = [ "pylxd" ];
+  pythonImportsCheck = ["pylxd"];
 
   meta = with lib; {
     description = "A Python library for interacting with the LXD REST API";
     homepage = "https://pylxd.readthedocs.io/en/latest/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [petabyteboy];
   };
 }

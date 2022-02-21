@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "gitlab-ci-pipelines-exporter";
   version = "0.4.9";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "Prometheus / OpenMetrics exporter for GitLab CI pipelines insights";
     homepage = "https://github.com/mvisonneau/gitlab-ci-pipelines-exporter";
     license = licenses.asl20;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = [maintainers.mmahut];
   };
 }

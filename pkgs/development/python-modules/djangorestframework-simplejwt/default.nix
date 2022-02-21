@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, django
-, djangorestframework
-, fetchPypi
-, pyjwt
-, python-jose
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  django,
+  djangorestframework,
+  fetchPypi,
+  pyjwt,
+  python-jose,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "djangorestframework-simplejwt";
   version = "5.0.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "JSON Web Token authentication plugin for Django REST Framework";
     homepage = "https://github.com/davesque/django-rest-framework-simplejwt";
     license = licenses.mit;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    maintainers = with maintainers; [arnoldfarkas];
   };
 }

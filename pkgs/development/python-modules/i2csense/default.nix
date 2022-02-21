@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, smbus-cffi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  smbus-cffi,
 }:
-
 buildPythonPackage rec {
   pname = "i2csense";
   version = "0.0.4";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "A library to handle i2c sensors with the Raspberry Pi";
     homepage = "https://github.com/azogue/i2csense";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

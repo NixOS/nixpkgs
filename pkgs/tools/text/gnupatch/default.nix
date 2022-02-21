@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl
-, ed, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ed,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "patch";
   version = "2.7.6";
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
     ./CVE-2019-13638-and-CVE-2018-20969.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
@@ -43,17 +46,16 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNU Patch, a program to apply differences to files";
 
-    longDescription =
-      '' GNU Patch takes a patch file containing a difference listing
-         produced by the diff program and applies those differences to one or
-         more original files, producing patched versions.
-      '';
+    longDescription = ''      GNU Patch takes a patch file containing a difference listing
+              produced by the diff program and applies those differences to one or
+              more original files, producing patched versions.
+    '';
 
     homepage = "https://savannah.gnu.org/projects/patch";
 
     license = lib.licenses.gpl3Plus;
 
-    maintainers = [ ];
+    maintainers = [];
     platforms = lib.platforms.all;
   };
 }

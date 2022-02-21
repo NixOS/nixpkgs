@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, urwid
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  urwid,
 }:
-
 buildPythonPackage rec {
   pname = "hachoir";
   version = "3.1.2";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "hachoir" ];
+  pythonImportsCheck = ["hachoir"];
 
   meta = with lib; {
     description = "Python library to view and edit a binary stream";
     homepage = "https://hachoir.readthedocs.io/";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl2Only];
+    maintainers = with maintainers; [fab];
   };
 }

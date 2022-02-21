@@ -1,10 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cross";
   version = "0.2.1";
@@ -34,8 +34,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Zero setup cross compilation and cross testing";
     homepage = "https://github.com/rust-embedded/cross";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ otavio ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [otavio];
     mainProgram = "cross";
   };
 }

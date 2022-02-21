@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, efl
-, gst_all_1
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  efl,
+  gst_all_1,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rage";
   version = "0.4.0";
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc ftrvxmtrx romildo ];
+    maintainers = with maintainers; [matejc ftrvxmtrx romildo];
   };
 }

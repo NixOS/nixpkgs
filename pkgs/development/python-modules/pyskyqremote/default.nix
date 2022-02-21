@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycountry
-, pythonOlder
-, requests
-, websocket-client
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycountry,
+  pythonOlder,
+  requests,
+  websocket-client,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "pyskyqremote";
   version = "0.3.2";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for accessing SkyQ boxes";
     homepage = "https://github.com/RogerSelwyn/skyq_remote";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

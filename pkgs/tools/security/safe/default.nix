@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "safe";
   version = "1.6.1";
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-7hX35FfFxfoiI/dSxWhZH8iJoRWa4slAJF0lULq8KL4=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   ldflags = [
     "-X main.Version=${version}"
@@ -26,6 +26,6 @@ buildGoModule rec {
     description = "A Vault CLI";
     homepage = "https://github.com/starkandwayne/safe";
     license = licenses.mit;
-    maintainers = with maintainers; [ eonpatapon ];
+    maintainers = with maintainers; [eonpatapon];
   };
 }

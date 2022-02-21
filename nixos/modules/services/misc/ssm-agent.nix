@@ -1,7 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.ssm-agent;
 
   # The SSM agent doesn't pay attention to our /etc/os-release yet, and the lsb-release tool
@@ -22,7 +25,7 @@ in {
     package = mkOption {
       type = types.path;
       description = "The SSM agent package to use";
-      default = pkgs.ssm-agent.override { overrideEtc = false; };
+      default = pkgs.ssm-agent.override {overrideEtc = false;};
       defaultText = literalExpression "pkgs.ssm-agent.override { overrideEtc = false; }";
     };
   };
@@ -30,10 +33,10 @@ in {
   config = mkIf cfg.enable {
     systemd.services.ssm-agent = {
       inherit (cfg.package.meta) description;
-      after    = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
-      path = [ fake-lsb-release pkgs.coreutils ];
+      path = [fake-lsb-release pkgs.coreutils];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/amazon-ssm-agent";
         KillMode = "process";
@@ -48,11 +51,11 @@ in {
     # This is consistent with Amazon Linux 2 images.
     security.sudo.extraRules = [
       {
-        users = [ "ssm-user" ];
+        users = ["ssm-user"];
         commands = [
           {
             command = "ALL";
-            options = [ "NOPASSWD" ];
+            options = ["NOPASSWD"];
           }
         ];
       }
@@ -67,7 +70,6 @@ in {
 
     environment.etc."amazon/ssm/seelog.xml".source = "${cfg.package}/seelog.xml.template";
 
-    environment.etc."amazon/ssm/amazon-ssm-agent.json".source =  "${cfg.package}/etc/amazon/ssm/amazon-ssm-agent.json.template";
-
+    environment.etc."amazon/ssm/amazon-ssm-agent.json".source = "${cfg.package}/etc/amazon/ssm/amazon-ssm-agent.json.template";
   };
 }

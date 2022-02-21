@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, flex }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "wcslib";
   version = "7.7";
@@ -9,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pwjmtOkOLNZCdDRxW1kbucPUAFyZcl7ElLjgvtLeU1U=";
   };
 
-  nativeBuildInputs = [ flex ];
+  nativeBuildInputs = [flex];
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   meta = with lib; {
     homepage = "https://www.atnf.csiro.au/people/mcalabre/WCS/";
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
       and their conversion to image coordinate systems. This is the
       standard library for this purpose in astronomy.
     '';
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [hjones2199];
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
   };

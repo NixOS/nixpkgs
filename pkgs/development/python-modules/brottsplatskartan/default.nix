@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov,
+  pytestCheckHook,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "brottsplatskartan";
   version = "1.0.5";
@@ -17,19 +17,19 @@ buildPythonPackage rec {
     sha256 = "07iwmnchvpw156j23yfccg4c32izbwm8b02bjr1xgmcwzbq21ks9";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
   checkInputs = [
     pytest-cov
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "brottsplatskartan" ];
+  pythonImportsCheck = ["brottsplatskartan"];
 
   meta = with lib; {
     description = "Python API wrapper for brottsplatskartan.se";
     homepage = "https://github.com/chrillux/brottsplatskartan";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

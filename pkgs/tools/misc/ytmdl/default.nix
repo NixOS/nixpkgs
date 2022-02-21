@@ -1,15 +1,15 @@
-{ lib
-, python3Packages
-, ffmpeg
+{
+  lib,
+  python3Packages,
+  ffmpeg,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "ytmdl";
   version = "2021.08.01";
 
   src = python3Packages.fetchPypi {
     inherit pname;
-    version = builtins.replaceStrings [ ".0" ] [ "." ] version;
+    version = builtins.replaceStrings [".0"] ["."] version;
     sha256 = "f5ef23dcba89aaf2307baf4ffc2326dc5c02324f646e5e5748219ed328202af4";
   };
 
@@ -40,7 +40,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ffmpeg])
   ];
 
   # This application has no tests
@@ -50,6 +53,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/deepjyoti30/ytmdl";
     description = "YouTube Music Downloader";
     license = licenses.mit;
-    maintainers = with maintainers; [ j0hax ];
+    maintainers = with maintainers; [j0hax];
   };
 }

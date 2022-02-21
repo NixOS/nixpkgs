@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, lib }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+}:
 stdenv.mkDerivation {
   pname = "wasilibc";
   version = "20190712";
@@ -23,9 +26,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "WASI libc implementation for WebAssembly";
-    homepage    = "https://wasi.dev";
-    platforms   = platforms.wasi;
-    maintainers = [ maintainers.matthewbauer ];
-    license = with licenses; [ asl20 mit llvm-exception ];
+    homepage = "https://wasi.dev";
+    platforms = platforms.wasi;
+    maintainers = [maintainers.matthewbauer];
+    license = with licenses; [asl20 mit llvm-exception];
   };
 }

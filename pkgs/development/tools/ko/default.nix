@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  installShellFiles,
 }:
-
 buildGoModule rec {
   pname = "ko";
   version = "0.10.0";
@@ -17,14 +17,14 @@ buildGoModule rec {
   };
   vendorSha256 = null;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   # Pin so that we don't build the several other development tools
   subPackages = ".";
 
-  ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}"];
 
-  checkInputs = [ git ];
+  checkInputs = [git];
   preCheck = ''
     # Feed in all the tests for testing
     # This is because subPackages above limits what is built to just what we
@@ -55,6 +55,6 @@ buildGoModule rec {
       ko also includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao jk ];
+    maintainers = with maintainers; [nickcao jk];
   };
 }

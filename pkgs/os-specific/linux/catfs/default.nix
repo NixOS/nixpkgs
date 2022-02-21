@@ -1,9 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub
-, fetchpatch
-, fuse
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  fuse,
+  pkg-config,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "catfs";
   version = "unstable-2020-03-21";
@@ -25,9 +27,9 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ fuse ];
+  buildInputs = [fuse];
 
   # require fuse module to be active to run tests
   # instead, run command
@@ -42,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kahing/catfs";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

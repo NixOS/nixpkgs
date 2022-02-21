@@ -1,5 +1,7 @@
-{ callPackage, fetchFromGitHub }:
-
+{
+  callPackage,
+  fetchFromGitHub,
+}:
 callPackage ./generic.nix {
   variant = "3.2";
   version = "2019-07-27";
@@ -14,11 +16,11 @@ callPackage ./generic.nix {
     # Note: __ev.encode is actually defined, but it happens in a
     # quoted arg to eval, which resholve currently doesn't (and may
     # never) parse into. See abathur/resholve/issues/2.
-    function = [ "__ev.encode" ];
+    function = ["__ev.encode"];
   };
   keep = {
     # allow vars in eval
-    eval = [ "e" "f" "q" "r" ];
+    eval = ["e" "f" "q" "r"];
     # allow vars executed as commands
     "$f" = true;
     "$n" = true;

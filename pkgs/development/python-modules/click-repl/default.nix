@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, prompt-toolkit
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  prompt-toolkit,
+  six,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "click-repl";
   version = "0.2.0";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
     license = licenses.mit;
-    maintainers = with maintainers; [ twey ];
+    maintainers = with maintainers; [twey];
   };
 }

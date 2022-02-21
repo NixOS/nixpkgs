@@ -1,19 +1,28 @@
-{ stdenv, lib, ShellCheck, haskell, pandoc }:
-
+{
+  stdenv,
+  lib,
+  ShellCheck,
+  haskell,
+  pandoc,
+}:
 # this wraps around the haskell package
 # and puts the documentation into place
-
 let
   # TODO: move to lib/ in separate PR
-  overrideMeta = drv: overrideFn:
-    let
-      drv' = if drv ? meta then drv else drv // { meta = {}; };
-      pos = (builtins.unsafeGetAttrPos "pname" drv');
-      meta' = drv'.meta // {
+  overrideMeta = drv: overrideFn: let
+    drv' =
+      if drv ? meta
+      then drv
+      else drv // {meta = {};};
+    pos = (builtins.unsafeGetAttrPos "pname" drv');
+    meta' =
+      drv'.meta
+      // {
         # copied from the mkDerivation code
         position = pos.file + ":" + toString pos.line;
       };
-    in drv' // { meta = meta' // overrideFn meta'; };
+  in
+    drv' // {meta = meta' // overrideFn meta';};
 
   bin = haskell.lib.compose.justStaticExecutables ShellCheck;
 
@@ -23,9 +32,9 @@ let
 
     inherit (ShellCheck) meta src;
 
-    nativeBuildInputs = [ pandoc ];
+    nativeBuildInputs = [pandoc];
 
-    outputs = [ "bin" "man" "doc" "out" ];
+    outputs = ["bin" "man" "doc" "out"];
 
     buildPhase = ''
       pandoc -s -f markdown-smart -t man shellcheck.1.md -o shellcheck.1
@@ -38,9 +47,8 @@ let
       mkdir $out
     '';
   };
-
 in
   overrideMeta shellcheck (old: {
-    maintainers = with lib.maintainers; [ Profpatsch ];
-    outputsToInstall = [ "bin" "man" "doc" ];
+    maintainers = with lib.maintainers; [Profpatsch];
+    outputsToInstall = ["bin" "man" "doc"];
   })

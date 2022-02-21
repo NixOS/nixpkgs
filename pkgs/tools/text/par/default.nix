@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, fetchpatch}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 stdenv.mkDerivation {
   pname = "par";
   version = "1.52";
@@ -30,7 +34,6 @@ stdenv.mkDerivation {
     mkdir -p $out/share/man/man1
     cp  par.1 $out/share/man/man1
   '';
-
 
   meta = with lib; {
     homepage = "http://www.nicemice.net/par/";

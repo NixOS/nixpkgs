@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-logdog";
   version = "0.1.0";
@@ -31,7 +31,6 @@ buildPythonPackage rec {
     pytest
   ];
 
-
   checkInputs = [
     pytestCheckHook
   ];
@@ -44,6 +43,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to test logging";
     homepage = "https://github.com/ods/pytest-logdog";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

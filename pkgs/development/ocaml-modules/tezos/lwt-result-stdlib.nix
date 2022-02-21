@@ -1,12 +1,12 @@
-{ lib
-, buildDunePackage
-, ocaml
-, tezos-stdlib
-, lwt
-, alcotest-lwt
-, tezos-test-helpers
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  tezos-stdlib,
+  lwt,
+  alcotest-lwt,
+  tezos-test-helpers,
 }:
-
 buildDunePackage {
   pname = "tezos-lwt-result-stdlib";
   inherit (tezos-stdlib) version useDune2;
@@ -25,7 +25,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: error-aware stdlib replacement";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: error-aware stdlib replacement";
+    };
 }

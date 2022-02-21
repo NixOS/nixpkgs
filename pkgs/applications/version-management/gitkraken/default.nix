@@ -1,15 +1,57 @@
-{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsa-lib
-, libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
-, libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-, nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems
+{
+  lib,
+  stdenv,
+  libXcomposite,
+  libgnome-keyring,
+  makeWrapper,
+  udev,
+  curl,
+  alsa-lib,
+  libXfixes,
+  atk,
+  gtk3,
+  libXrender,
+  pango,
+  gnome,
+  cairo,
+  freetype,
+  fontconfig,
+  libX11,
+  libXi,
+  libxcb,
+  libXext,
+  libXcursor,
+  glib,
+  libXScrnSaver,
+  libxkbfile,
+  libXtst,
+  nss,
+  nspr,
+  cups,
+  fetchzip,
+  expat,
+  gdk-pixbuf,
+  libXdamage,
+  libXrandr,
+  dbus,
+  makeDesktopItem,
+  openssl,
+  wrapGAppsHook,
+  at-spi2-atk,
+  at-spi2-core,
+  libuuid,
+  e2fsprogs,
+  krb5,
+  libdrm,
+  mesa,
+  unzip,
+  copyDesktopItems,
 }:
-
-with lib;
-
-let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
+with lib; let
+  curlWithGnuTls = curl.override {
+    gnutlsSupport = true;
+    opensslSupport = false;
+  };
   pname = "gitkraken";
   version = "8.2.1";
 
@@ -36,7 +78,7 @@ let
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ xnwdd evanjs arkivm ];
+    maintainers = with maintainers; [xnwdd evanjs arkivm];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -87,18 +129,20 @@ let
       mesa
     ];
 
-    desktopItems = [ (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      desktopName = "GitKraken";
-      genericName = "Git Client";
-      categories = "Development;";
-      comment = "Graphical Git client from Axosoft";
-    }) ];
+    desktopItems = [
+      (makeDesktopItem {
+        name = pname;
+        exec = pname;
+        icon = pname;
+        desktopName = "GitKraken";
+        genericName = "Git Client";
+        categories = "Development;";
+        comment = "Graphical Git client from Axosoft";
+      })
+    ];
 
-    nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
-    buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
+    nativeBuildInputs = [copyDesktopItems makeWrapper wrapGAppsHook];
+    buildInputs = [gtk3 gnome.adwaita-icon-theme];
 
     installPhase = ''
       runHook preInstall
@@ -129,7 +173,7 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [unzip];
 
     installPhase = ''
       mkdir -p $out/Applications/GitKraken.app
@@ -137,6 +181,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+  if stdenv.isDarwin
+  then darwin
+  else linux

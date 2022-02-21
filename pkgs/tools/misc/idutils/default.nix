@@ -1,5 +1,19 @@
-{ fetchurl, lib, stdenv, emacs, gnulib, autoconf, bison, automake, gettext, gperf, texinfo, perl, rsync, gawk}:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  emacs,
+  gnulib,
+  autoconf,
+  bison,
+  automake,
+  gettext,
+  gperf,
+  texinfo,
+  perl,
+  rsync,
+  gawk,
+}:
 stdenv.mkDerivation rec {
   pname = "idutils";
   version = "4.6";
@@ -14,14 +28,14 @@ stdenv.mkDerivation rec {
     bash -O extglob -c "cd gnulib-tests; rm -r !(Makefile.am)"
     substituteInPlace ./configure.ac --replace "AC_PREREQ(2.61)" "AC_PREREQ(2.64)"
     ./bootstrap --force --gnulib-srcdir=${gnulib} --skip-po --bootstrap-sync --no-git
-    '';
+  '';
 
   buildInputs = lib.optional stdenv.isLinux emacs;
-  nativeBuildInputs = [ gnulib autoconf bison automake gettext gperf texinfo perl rsync gawk ];
+  nativeBuildInputs = [gnulib autoconf bison automake gettext gperf texinfo perl rsync gawk];
 
   doCheck = !stdenv.isDarwin;
 
-  patches = [ ./nix-mapping.patch ];
+  patches = [./nix-mapping.patch];
 
   meta = with lib; {
     description = "Text searching utility";
@@ -50,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/idutils/";
     license = licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ gfrascadorio ];
+    maintainers = with maintainers; [gfrascadorio];
     platforms = lib.platforms.all;
   };
 }

@@ -1,18 +1,18 @@
-{ lib
-, boost
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, mkDerivation
-, muparser
-, pkg-config
-, qmake
-, qtbase
-, qtsvg
-, qttools
-, runtimeShell
+{
+  lib,
+  boost,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  mkDerivation,
+  muparser,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtsvg,
+  qttools,
+  runtimeShell,
 }:
-
 mkDerivation rec {
   pname = "librecad";
   version = "2.2.0-rc2";
@@ -83,7 +83,7 @@ mkDerivation rec {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kiwi viric ];
+    maintainers = with maintainers; [kiwi viric];
     platforms = platforms.linux;
   };
 }

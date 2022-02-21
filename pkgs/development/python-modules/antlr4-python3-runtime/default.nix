@@ -1,7 +1,10 @@
-{ lib, buildPythonPackage, isPy3k, python
-, antlr4
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  python,
+  antlr4,
 }:
-
 buildPythonPackage rec {
   pname = "antlr4-python3-runtime";
   inherit (antlr4.runtime.cpp) version src;

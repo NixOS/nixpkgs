@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+}:
 buildPythonPackage rec {
   version = "0.3.3";
   pname = "ofxhome";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1rpyfqr2q9pnin47rjd4qapl8ngk1m9jx36iqckhdhr8s8gla445";
   };
 
-  buildInputs = [ nose ];
+  buildInputs = [nose];
 
   # ImportError: No module named tests
   doCheck = false;

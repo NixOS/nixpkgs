@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, protobuf, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  protobuf,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "jumanpp";
   version = "2.0.0-rc3";
@@ -9,8 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ASdr6qbkSe71M7QmuuwidCa4xQhDVoXBJ2XqvSY53pQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ protobuf ]
+  nativeBuildInputs = [cmake];
+  buildInputs =
+    [protobuf]
     ++ lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
@@ -22,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://nlp.ist.i.kyoto-u.ac.jp/index.php?JUMAN++";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mt-caret ];
+    maintainers = with maintainers; [mt-caret];
     platforms = platforms.all;
   };
 }

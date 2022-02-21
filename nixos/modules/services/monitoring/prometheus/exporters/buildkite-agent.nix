@@ -1,16 +1,20 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.buildkite-agent;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.buildkite-agent;
+in {
   port = 9876;
   extraOpts = {
     tokenPath = mkOption {
       type = types.nullOr types.path;
-      apply = final: if final == null then null else toString final;
+      apply = final:
+        if final == null
+        then null
+        else toString final;
       description = ''
         The token from your Buildkite "Agents" page.
 
@@ -43,19 +47,17 @@ in
     };
   };
   serviceOpts = {
-    script =
-      let
-        queues = concatStringsSep " " (map (q: "-queue ${q}") cfg.queues);
-      in
-      ''
-        export BUILDKITE_AGENT_TOKEN="$(cat ${toString cfg.tokenPath})"
-        exec ${pkgs.buildkite-agent-metrics}/bin/buildkite-agent-metrics \
-          -backend prometheus \
-          -interval ${cfg.interval} \
-          -endpoint ${cfg.endpoint} \
-          ${optionalString (cfg.queues != null) queues} \
-          -prometheus-addr "${cfg.listenAddress}:${toString cfg.port}" ${concatStringsSep " " cfg.extraFlags}
-      '';
+    script = let
+      queues = concatStringsSep " " (map (q: "-queue ${q}") cfg.queues);
+    in ''
+      export BUILDKITE_AGENT_TOKEN="$(cat ${toString cfg.tokenPath})"
+      exec ${pkgs.buildkite-agent-metrics}/bin/buildkite-agent-metrics \
+        -backend prometheus \
+        -interval ${cfg.interval} \
+        -endpoint ${cfg.endpoint} \
+        ${optionalString (cfg.queues != null) queues} \
+        -prometheus-addr "${cfg.listenAddress}:${toString cfg.port}" ${concatStringsSep " " cfg.extraFlags}
+    '';
     serviceConfig = {
       DynamicUser = false;
       RuntimeDirectory = "buildkite-agent-metrics";

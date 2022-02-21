@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, packaging
-, setuptools-scm
-, shapely
-, sqlalchemy
-, psycopg2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  packaging,
+  setuptools-scm,
+  shapely,
+  sqlalchemy,
+  psycopg2,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "GeoAlchemy2";
   version = "0.10.2";
@@ -45,9 +45,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Toolkit for working with spatial databases";
-    homepage =  "http://geoalchemy.org/";
+    homepage = "http://geoalchemy.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
-
 }

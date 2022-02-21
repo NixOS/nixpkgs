@@ -1,5 +1,9 @@
-{ lib, buildNimPackage, fetchFromGitHub, SDL2 }:
-
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  SDL2,
+}:
 buildNimPackage rec {
   pname = "c2nim";
   version = "0.9.18";
@@ -11,9 +15,10 @@ buildNimPackage rec {
     hash = "sha256-127ux36mfC+PnS2HIQffw+z0TSvzdQXnKRxqYV3XahU=";
   };
   meta = with lib;
-    src.meta // {
+    src.meta
+    // {
       description = "Tool to translate Ansi C code to Nim";
       license = licenses.mit;
-      maintainers = [ maintainers.ehmry ];
+      maintainers = [maintainers.ehmry];
     };
 }

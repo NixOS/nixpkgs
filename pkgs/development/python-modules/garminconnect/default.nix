@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, cloudscraper
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cloudscraper,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "garminconnect";
   version = "0.1.44";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Garmin Connect Python API wrapper";
     homepage = "https://github.com/cyberjunky/python-garminconnect";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,6 +1,12 @@
-{ lib, buildGoPackage, fetchFromGitHub, fetchpatch
-, pkg-config, zlib, geoip }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  zlib,
+  geoip,
+}:
 buildGoPackage rec {
   pname = "mirrorbits";
   version = "0.4";
@@ -33,8 +39,8 @@ buildGoPackage rec {
   deleteVendor = true;
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib geoip ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [zlib geoip];
 
   meta = {
     description = "geographical download redirector for distributing files efficiently across a set of mirrors";
@@ -48,7 +54,7 @@ buildGoPackage rec {
       of traffic.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [fpletz];
     platforms = lib.platforms.unix;
   };
 }

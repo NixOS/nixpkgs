@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl,  openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "popa3d";
   version = "1.0.3";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g48cd74sqhl496wmljhq44iyfpghaz363a1ip8nyhpjz7d57f03";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   patches = [
     ./fix-mail-spool-path.patch

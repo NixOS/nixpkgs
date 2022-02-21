@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, fuse3, trio, pytestCheckHook, pytest-trio, which }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkg-config,
+  fuse3,
+  trio,
+  pytestCheckHook,
+  pytest-trio,
+  which,
+}:
 buildPythonPackage rec {
   pname = "pyfuse3";
   version = "3.2.1";
@@ -9,11 +18,11 @@ buildPythonPackage rec {
     sha256 = "22d146dac59a8429115e9a93317975ea54b35e0278044a94d3fac5b4ad5f7e33";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ fuse3 ];
+  buildInputs = [fuse3];
 
-  propagatedBuildInputs = [ trio ];
+  propagatedBuildInputs = [trio];
 
   checkInputs = [
     pytestCheckHook
@@ -23,12 +32,12 @@ buildPythonPackage rec {
   ];
 
   # Checks if a /usr/bin directory exists, can't work on NixOS
-  disabledTests = [ "test_listdir" ];
+  disabledTests = ["test_listdir"];
 
   meta = with lib; {
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [nyanloutre];
   };
 }

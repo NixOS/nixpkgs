@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "unqlite";
   version = "1.1.9";
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WLsyGEt7Xe6ZrOGMO7+3TU2sBgDTSmfD1WzD70pcDjo=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     homepage = "https://unqlite.org/";
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
       freely copy a database between 32-bit and 64-bit systems or between
       big-endian and little-endian architectures.
     '';
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     license = licenses.bsd2;
   };
 }

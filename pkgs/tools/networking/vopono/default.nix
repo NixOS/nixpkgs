@@ -1,8 +1,8 @@
-{ lib
-, fetchCrate
-, rustPlatform
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "vopono";
   version = "0.8.10";
@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jamesmcm/vopono";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

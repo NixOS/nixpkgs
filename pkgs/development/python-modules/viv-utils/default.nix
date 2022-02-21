@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, funcy
-, pefile
-, vivisect
-, intervaltree
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  funcy,
+  pefile,
+  vivisect,
+  intervaltree,
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "viv-utils";

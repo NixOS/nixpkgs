@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "quantomatic";
   version = "0.7";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "04dd5p73a7plb4l4x2balam8j7mxs8df06rjkalxycrr1id52q4r";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   dontUnpack = true;
 
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "A piece of software for reasoning about monoidal theories; in particular, quantum information processing";
     license = licenses.gpl3;
     homepage = "https://quantomatic.github.io/";
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with maintainers; [nickhu];
     platforms = platforms.all;
   };
 }

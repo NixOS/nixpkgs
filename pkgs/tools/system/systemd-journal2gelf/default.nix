@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "SystemdJournal2Gelf-unstable";
   version = "20200813";
@@ -17,7 +20,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Export entries from systemd's journal and send them to a graylog server using gelf";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fadenb fpletz ];
+    maintainers = with maintainers; [fadenb fpletz];
     platforms = platforms.unix;
   };
 }

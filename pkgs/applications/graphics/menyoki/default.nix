@@ -1,15 +1,15 @@
-{ fetchFromGitHub
-, installShellFiles
-, lib
-, pkg-config
-, rustPlatform
-, stdenv
-, libX11
-, libXrandr
-, AppKit
-, withSki ? true
+{
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  libX11,
+  libXrandr,
+  AppKit,
+  withSki ? true,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "menyoki";
   version = "1.5.6";
@@ -23,10 +23,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-NLPqJepg0WRt/X3am9J7vwIE9bn+dt2UHE26Dc/QRMM=";
 
-  nativeBuildInputs = [ installShellFiles ]
+  nativeBuildInputs =
+    [installShellFiles]
     ++ lib.optional stdenv.isLinux pkg-config;
 
-  buildInputs = lib.optionals stdenv.isLinux [ libX11 libXrandr ]
+  buildInputs =
+    lib.optionals stdenv.isLinux [libX11 libXrandr]
     ++ lib.optional stdenv.isDarwin AppKit;
 
   buildNoDefaultFeatures = !withSki;
@@ -41,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://menyoki.cli.rs/";
     changelog = "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

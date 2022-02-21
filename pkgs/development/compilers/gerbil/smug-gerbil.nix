@@ -1,5 +1,11 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  gerbil-unstable,
+  gerbil-support,
+  gambit-support,
+}:
 gerbil-support.gerbilPackage {
   pname = "smug-gerbil";
   version = "unstable-2019-12-24";
@@ -19,10 +25,10 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Super Monadic Über Go-into : Parsers and Gerbil Scheme";
-    homepage    = "https://github.com/drewc/smug-gerbil";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    homepage = "https://github.com/drewc/smug-gerbil";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [fare];
   };
   buildScript = ''
     for i in primitive simple tokens smug ; do gxc -O $i.ss ; done

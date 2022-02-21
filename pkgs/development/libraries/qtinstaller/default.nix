@@ -1,10 +1,16 @@
-{ stdenv, fetchurl, qtdeclarative , qttools, qtbase, qmake }:
-
+{
+  stdenv,
+  fetchurl,
+  qtdeclarative,
+  qttools,
+  qtbase,
+  qmake,
+}:
 stdenv.mkDerivation rec {
   pname = "qtinstaller";
 
-  propagatedBuildInputs = [ qtdeclarative qttools ];
-  nativeBuildInputs = [ qmake ];
+  propagatedBuildInputs = [qtdeclarative qttools];
+  nativeBuildInputs = [qmake];
 
   version = "2.0.3";
   src = fetchurl {
@@ -13,7 +19,7 @@ stdenv.mkDerivation rec {
     name = "qt-installer-framework-opensource-src-${version}.tar.gz";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
   setOutputFlags = false;
   NIX_QT_SUBMODULE = true;

@@ -1,22 +1,23 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, unzip
-, pythonOlder
-, libGL
-, libGLU
-, xorg
-, pytestCheckHook
-, glibc
-, gtk2-x11
-, gdk-pixbuf
-, fontconfig
-, freetype
-, ffmpeg-full
-, openal
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  unzip,
+  pythonOlder,
+  libGL,
+  libGLU,
+  xorg,
+  pytestCheckHook,
+  glibc,
+  gtk2-x11,
+  gdk-pixbuf,
+  fontconfig,
+  freetype,
+  ffmpeg-full,
+  openal,
+  libpulseaudio,
 }:
-
 buildPythonPackage rec {
   version = "1.5.21";
   pname = "pyglet";
@@ -78,7 +79,7 @@ buildPythonPackage rec {
     EOF
   '';
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   # needs GL set up which isn't really possible in a build environment even in headless mode.
   # tests do run and pass in nix-shell, however.
@@ -100,7 +101,7 @@ buildPythonPackage rec {
     "tests/unit/text/test_layout.py"
   ];
 
-  pythonImportsCheck = [ "pyglet" ];
+  pythonImportsCheck = ["pyglet"];
 
   meta = with lib; {
     homepage = "http://www.pyglet.org/";

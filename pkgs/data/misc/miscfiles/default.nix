@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   name = "miscfiles-1.5";
 
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/miscfiles/";
     license = licenses.gpl2Plus;
     description = "Collection of files not of crucial importance for sysadmins";
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = with platforms; unix;
   };
 }

@@ -1,9 +1,11 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let cfg = config.services.ombi;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.ombi;
 in {
   options = {
     services.ombi = {
@@ -52,8 +54,8 @@ in {
 
     systemd.services.ombi = {
       description = "Ombi";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "simple";
@@ -65,7 +67,7 @@ in {
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [cfg.port];
     };
 
     users.users = mkIf (cfg.user == "ombi") {
@@ -76,6 +78,6 @@ in {
       };
     };
 
-    users.groups = mkIf (cfg.group == "ombi") { ombi = { }; };
+    users.groups = mkIf (cfg.group == "ombi") {ombi = {};};
   };
 }

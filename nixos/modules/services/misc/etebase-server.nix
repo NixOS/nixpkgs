@@ -1,33 +1,33 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.etebase-server;
 
-  pythonEnv = pkgs.python3.withPackages (ps: with ps;
-    [ etebase-server daphne ]);
+  pythonEnv = pkgs.python3.withPackages (ps: with ps; [etebase-server daphne]);
 
   iniFmt = pkgs.formats.ini {};
 
   configIni = iniFmt.generate "etebase-server.ini" cfg.settings;
 
   defaultUser = "etebase-server";
-in
-{
+in {
   imports = [
     (mkRemovedOptionModule
-      [ "services" "etebase-server" "customIni" ]
-      "Set the option `services.etebase-server.settings' instead.")
+    ["services" "etebase-server" "customIni"]
+    "Set the option `services.etebase-server.settings' instead.")
     (mkRemovedOptionModule
-      [ "services" "etebase-server" "database" ]
-      "Set the option `services.etebase-server.settings.database' instead.")
+    ["services" "etebase-server" "database"]
+    "Set the option `services.etebase-server.settings.database' instead.")
     (mkRenamedOptionModule
-      [ "services" "etebase-server" "secretFile" ]
-      [ "services" "etebase-server" "settings" "secret_file" ])
+    ["services" "etebase-server" "secretFile"]
+    ["services" "etebase-server" "settings" "secret_file"])
     (mkRenamedOptionModule
-      [ "services" "etebase-server" "host" ]
-      [ "services" "etebase-server" "settings" "allowed_hosts" "allowed_host1" ])
+    ["services" "etebase-server" "host"]
+    ["services" "etebase-server" "settings" "allowed_hosts" "allowed_host1"])
   ];
 
   options = {
@@ -119,7 +119,7 @@ in
             };
             database = {
               engine = mkOption {
-                type = types.enum [ "django.db.backends.sqlite3" "django.db.backends.postgresql" ];
+                type = types.enum ["django.db.backends.sqlite3" "django.db.backends.postgresql"];
                 default = "django.db.backends.sqlite3";
                 description = "The database engine to use.";
               };
@@ -159,10 +159,9 @@ in
   };
 
   config = mkIf cfg.enable {
-
     environment.systemPackages = with pkgs; [
       (runCommand "etebase-server" {
-        buildInputs = [ makeWrapper ];
+        buildInputs = [makeWrapper];
       } ''
         makeWrapper ${pythonEnv}/bin/etebase-server \
           $out/bin/etebase-server \
@@ -177,8 +176,8 @@ in
 
     systemd.services.etebase-server = {
       description = "An Etebase (EteSync 2.0) server";
-      after = [ "network.target" "systemd-tmpfiles-setup.service" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target" "systemd-tmpfiles-setup.service"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         User = cfg.user;
         Restart = "always";
@@ -197,16 +196,16 @@ in
           echo ${pkgs.etebase-server} > "$versionFile"
         fi
       '';
-      script =
-        let
-          networking = if cfg.unixSocket != null
+      script = let
+        networking =
+          if cfg.unixSocket != null
           then "-u ${cfg.unixSocket}"
           else "-b 0.0.0.0 -p ${toString cfg.port}";
-        in ''
-          cd "${pythonEnv}/lib/etebase-server";
-          ${pythonEnv}/bin/daphne ${networking} \
-            etebase_server.asgi:application
-        '';
+      in ''
+        cd "${pythonEnv}/lib/etebase-server";
+        ${pythonEnv}/bin/daphne ${networking} \
+          etebase_server.asgi:application
+      '';
     };
 
     users = optionalAttrs (cfg.user == defaultUser) {
@@ -220,7 +219,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [cfg.port];
     };
   };
 }

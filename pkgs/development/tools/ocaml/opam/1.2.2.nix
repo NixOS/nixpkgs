@@ -1,10 +1,15 @@
-{ stdenv, lib, fetchurl, makeWrapper,
-  ocaml, unzip, ncurses, curl, aspcud
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  ocaml,
+  unzip,
+  ncurses,
+  curl,
+  aspcud,
 }:
-
-assert lib.versionAtLeast ocaml.version "3.12.1";
-
-let
+assert lib.versionAtLeast ocaml.version "3.12.1"; let
   srcs = {
     cudf = fetchurl {
       url = "https://gforge.inria.fr/frs/download.php/file/33593/cudf-0.7.tar.gz";
@@ -43,51 +48,52 @@ let
       sha256 = "c590ce55ae69ec74f46215cf16a156a02b23c5f3ecb22f23a3ad9ba3d91ddb6e";
     };
   };
-in stdenv.mkDerivation {
-  pname = "opam";
-  version = "1.2.2";
+in
+  stdenv.mkDerivation {
+    pname = "opam";
+    version = "1.2.2";
 
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ curl ncurses ocaml ];
+    nativeBuildInputs = [makeWrapper unzip];
+    buildInputs = [curl ncurses ocaml];
 
-  src = srcs.opam;
+    src = srcs.opam;
 
-  postUnpack = ''
-    ln -sv ${srcs.cudf} $sourceRoot/src_ext/${srcs.cudf.name}
-    ln -sv ${srcs.extlib} $sourceRoot/src_ext/${srcs.extlib.name}
-    ln -sv ${srcs.ocaml_re} $sourceRoot/src_ext/${srcs.ocaml_re.name}
-    ln -sv ${srcs.ocamlgraph} $sourceRoot/src_ext/${srcs.ocamlgraph.name}
-    ln -sv ${srcs.dose3} $sourceRoot/src_ext/${srcs.dose3.name}
-    ln -sv ${srcs.cmdliner} $sourceRoot/src_ext/${srcs.cmdliner.name}
-    ln -sv ${srcs.uutf} $sourceRoot/src_ext/${srcs.uutf.name}
-    ln -sv ${srcs.jsonm} $sourceRoot/src_ext/${srcs.jsonm.name}
-  '';
+    postUnpack = ''
+      ln -sv ${srcs.cudf} $sourceRoot/src_ext/${srcs.cudf.name}
+      ln -sv ${srcs.extlib} $sourceRoot/src_ext/${srcs.extlib.name}
+      ln -sv ${srcs.ocaml_re} $sourceRoot/src_ext/${srcs.ocaml_re.name}
+      ln -sv ${srcs.ocamlgraph} $sourceRoot/src_ext/${srcs.ocamlgraph.name}
+      ln -sv ${srcs.dose3} $sourceRoot/src_ext/${srcs.dose3.name}
+      ln -sv ${srcs.cmdliner} $sourceRoot/src_ext/${srcs.cmdliner.name}
+      ln -sv ${srcs.uutf} $sourceRoot/src_ext/${srcs.uutf.name}
+      ln -sv ${srcs.jsonm} $sourceRoot/src_ext/${srcs.jsonm.name}
+    '';
 
-  preConfigure = ''
-    substituteInPlace ./src_ext/Makefile --replace "%.stamp: %.download" "%.stamp:"
-  '';
+    preConfigure = ''
+      substituteInPlace ./src_ext/Makefile --replace "%.stamp: %.download" "%.stamp:"
+    '';
 
-  postConfigure = "make lib-ext";
+    postConfigure = "make lib-ext";
 
-  # Dirty, but apparently ocp-build requires a TERM
-  makeFlags = ["TERM=screen"];
+    # Dirty, but apparently ocp-build requires a TERM
+    makeFlags = ["TERM=screen"];
 
-  # change argv0 to "opam" as a workaround for
-  # https://github.com/ocaml/opam/issues/2142
-  postInstall = ''
-    mv $out/bin/opam $out/bin/.opam-wrapped
-    makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
-      --argv0 "opam" \
-      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin
-  '';
+    # change argv0 to "opam" as a workaround for
+    # https://github.com/ocaml/opam/issues/2142
+    postInstall = ''
+      mv $out/bin/opam $out/bin/.opam-wrapped
+      makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
+        --argv0 "opam" \
+        --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin
+    '';
 
-  doCheck = false;
+    doCheck = false;
 
-  meta = with lib; {
-    description = "A package manager for OCaml";
-    homepage = "http://opam.ocamlpro.com/";
-    maintainers = [ maintainers.henrytill ];
-    platforms = platforms.all;
-    license = licenses.lgpl21Plus;
-  };
-}
+    meta = with lib; {
+      description = "A package manager for OCaml";
+      homepage = "http://opam.ocamlpro.com/";
+      maintainers = [maintainers.henrytill];
+      platforms = platforms.all;
+      license = licenses.lgpl21Plus;
+    };
+  }

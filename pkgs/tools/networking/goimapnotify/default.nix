@@ -1,5 +1,9 @@
-{ buildGoModule, fetchFromGitLab, lib, runtimeShell }:
-
+{
+  buildGoModule,
+  fetchFromGitLab,
+  lib,
+  runtimeShell,
+}:
 buildGoModule rec {
   pname = "goimapnotify";
   version = "2.3.7";
@@ -20,11 +24,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description =
-      "Execute scripts on IMAP mailbox changes (new/deleted/updated messages) using IDLE";
+    description = "Execute scripts on IMAP mailbox changes (new/deleted/updated messages) using IDLE";
     homepage = "https://gitlab.com/shackra/goimapnotify";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wohanley ];
+    maintainers = with maintainers; [wohanley];
   };
 }

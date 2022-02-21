@@ -1,16 +1,14 @@
-{ lib, pkgs, config, ... }:
-
-with lib;
-
-let
-
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.domoticz;
   pkgDesc = "Domoticz home automation";
-
 in {
-
   options = {
-
     services.domoticz = {
       enable = mkEnableOption pkgDesc;
 
@@ -25,17 +23,14 @@ in {
         default = 8080;
         description = "Port to bind to for HTTP, set to 0 to disable HTTP.";
       };
-
     };
-
   };
 
   config = mkIf cfg.enable {
-
     systemd.services."domoticz" = {
       description = pkgDesc;
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "domoticz";
@@ -45,7 +40,5 @@ in {
         '';
       };
     };
-
   };
-
 }

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, ncurses, ocamlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  ncurses,
+  ocamlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "prooftree";
   version = "0.13";
@@ -9,12 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "0z1z4wqbqwgppkh2bm89fgy07a0y2m6g4lvcyzs09sm1ysklk2dh";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [
-    ocaml findlib camlp5 lablgtk ]);
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [ncurses]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      camlp5
+      lablgtk
+    ]);
 
   dontAddPrefix = true;
-  configureFlags = [ "--prefix" "$(out)" ];
+  configureFlags = ["--prefix" "$(out)"];
 
   meta = with lib; {
     description = "A program for proof-tree visualization";
@@ -37,7 +49,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://askra.de/software/prooftree";
     platforms = platforms.unix;
-    maintainers = [ maintainers.jwiegley ];
+    maintainers = [maintainers.jwiegley];
     license = licenses.gpl3;
   };
 }

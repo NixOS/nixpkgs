@@ -1,16 +1,21 @@
-{ stdenv, lib, makeWrapper, ghcWithPackages, packages ? (_:[]) }:
-let
-  blucontrolEnv = ghcWithPackages (self: [ self.blucontrol ] ++ packages self);
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  ghcWithPackages,
+  packages ? (_: []),
+}: let
+  blucontrolEnv = ghcWithPackages (self: [self.blucontrol] ++ packages self);
 in
   stdenv.mkDerivation {
     pname = "blucontrol-with-packages";
     version = blucontrolEnv.version;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
 
     buildCommand = ''
       makeWrapper ${blucontrolEnv}/bin/blucontrol $out/bin/blucontrol \
-        --prefix PATH : ${lib.makeBinPath [ blucontrolEnv ]}
+        --prefix PATH : ${lib.makeBinPath [blucontrolEnv]}
     '';
 
     # trivial derivation
@@ -27,6 +32,6 @@ in
       license = licenses.bsd3;
       homepage = "https://github.com/jumper149/blucontrol";
       platforms = platforms.unix;
-      maintainers = with maintainers; [ jumper149 ];
+      maintainers = with maintainers; [jumper149];
     };
   }

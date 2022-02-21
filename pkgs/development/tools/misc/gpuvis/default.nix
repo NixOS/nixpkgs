@@ -1,15 +1,15 @@
-{ fetchFromGitHub
-, freetype
-, gtk3
-, lib
-, meson
-, ninja
-, pkg-config
-, SDL2
-, stdenv
-, wrapGAppsHook
+{
+  fetchFromGitHub,
+  freetype,
+  gtk3,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  SDL2,
+  stdenv,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gpuvis";
   version = "20211204";
@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
       --replace "libgtk-3.so" "${lib.getLib gtk3}/lib/libgtk-3.so"
   '';
 
-  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook ];
+  nativeBuildInputs = [pkg-config meson ninja wrapGAppsHook];
 
-  buildInputs = [ SDL2 gtk3 freetype ];
+  buildInputs = [SDL2 gtk3 freetype];
 
   meta = with lib; {
     description = "GPU Trace Visualizer";
     homepage = "https://github.com/mikesart/gpuvis";
     license = licenses.mit;
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with maintainers; [emantor];
     platforms = with platforms; linux;
   };
 }

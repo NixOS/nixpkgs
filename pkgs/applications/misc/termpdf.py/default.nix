@@ -1,18 +1,18 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, fetchPypi
-, bibtool
-, pybtex
-, pymupdf
-, pynvim
-, pyperclip
-, roman
-, pdfrw
-, pagelabels
-, setuptools
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  fetchPypi,
+  bibtool,
+  pybtex,
+  pymupdf,
+  pynvim,
+  pyperclip,
+  roman,
+  pdfrw,
+  pagelabels,
+  setuptools,
 }:
-
 buildPythonApplication {
   pname = "termpdf.py";
   version = "2019-10-03";
@@ -45,7 +45,7 @@ buildPythonApplication {
       inside the kitty terminal.
     '';
     homepage = "https://github.com/dsanson/termpdf.py";
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
     license = licenses.mit;
   };
 }

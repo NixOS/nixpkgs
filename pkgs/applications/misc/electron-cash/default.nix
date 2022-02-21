@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
-, secp256k1 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  qtbase,
+  fetchpatch,
+  wrapQtAppsHook,
+  secp256k1,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
   version = "4.2.5";
@@ -44,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     pysatochip
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [wrapQtAppsHook];
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
@@ -54,7 +61,7 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  checkInputs = with python3Packages; [ pytest ];
+  checkInputs = with python3Packages; [pytest];
 
   checkPhase = ''
     unset HOME
@@ -93,7 +100,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://www.electroncash.org/";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lassulus nyanloutre oxalica ];
+    maintainers = with maintainers; [lassulus nyanloutre oxalica];
     license = licenses.mit;
   };
 }

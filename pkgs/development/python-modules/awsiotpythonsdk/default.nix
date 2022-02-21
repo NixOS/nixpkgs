@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "AWSIoTPythonSDK";
   version = "1.5.0";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for connecting to AWS IoT";
     homepage = "https://github.com/aws/aws-iot-device-sdk-python";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,16 @@
-{ lib, stdenv, coreutils, dpkg, fetchurl, ghostscript, gnugrep, gnused, makeWrapper, perl, which }:
-
+{
+  lib,
+  stdenv,
+  coreutils,
+  dpkg,
+  fetchurl,
+  ghostscript,
+  gnugrep,
+  gnused,
+  makeWrapper,
+  perl,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "mfcl2700dnlpr";
   version = "3.2.0-1";
@@ -9,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "170qdzxlqikzvv2wphvfb37m19mn13az4aj88md87ka3rl5knk4m";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [dpkg makeWrapper];
 
   dontUnpack = true;
 
@@ -24,9 +35,15 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"MFCL2700DN\"; #"
 
     wrapProgram $dir/lpd/filter_MFCL2700DN \
-      --prefix PATH : ${lib.makeBinPath [
-        coreutils ghostscript gnugrep gnused which
-      ]}
+      --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        ghostscript
+        gnugrep
+        gnused
+        which
+      ]
+    }
 
     interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
     patchelf --set-interpreter "$interpreter" $dir/inf/braddprinter
@@ -38,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Brother MFC-L2700DN LPR driver";
     homepage = "http://www.brother.com/";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.tv ];
-    platforms = [ "i686-linux" ];
+    maintainers = [lib.maintainers.tv];
+    platforms = ["i686-linux"];
   };
 }

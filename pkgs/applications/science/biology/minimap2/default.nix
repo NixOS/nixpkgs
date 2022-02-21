@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "minimap2";
   version = "2.24";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sEp7/Y5ifV9LTqrkhlkfykTJYMMuc+VtF7PvmIpBxUw=";
   };
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     badPlatforms = platforms.aarch64;
-    maintainers = [ maintainers.arcadio ];
+    maintainers = [maintainers.arcadio];
   };
 }

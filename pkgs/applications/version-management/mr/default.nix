@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchgit, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  perl,
+}:
 stdenv.mkDerivation {
   pname = "mr";
   version = "1.20180726";
@@ -16,9 +20,9 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = {
     description = "Multiple Repository management tool";
@@ -33,6 +37,6 @@ stdenv.mkDerivation {
     homepage = "http://myrepos.branchable.com/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ antono henrytill ];
+    maintainers = with lib.maintainers; [antono henrytill];
   };
 }

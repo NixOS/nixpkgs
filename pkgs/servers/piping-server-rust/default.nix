@@ -1,5 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreServices, Security }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  CoreServices,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "piping-server-rust";
   version = "0.10.2";
@@ -13,14 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-8xUhYyjc4560PowCRwYeZMUJLhZFTHcMRLe/iQAwaWE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [CoreServices Security];
 
   meta = with lib; {
     description = "Infinitely transfer between every device over pure HTTP with pipes or browsers";
     homepage = "https://github.com/nwtgck/piping-server-rust";
     changelog = "https://github.com/nwtgck/piping-server-rust/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
     mainProgram = "piping-server";
   };
 }

@@ -1,7 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, openssh
-, nose, bc, hostname, coreutils, bash, gnused
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  openssh,
+  nose,
+  bc,
+  hostname,
+  coreutils,
+  bash,
+  gnused,
 }:
-
 buildPythonPackage rec {
   pname = "ClusterShell";
   version = "1.8.4";
@@ -11,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "ff6fba688a06e5e577315d899f0dab3f4fe479cef99d444a4e651af577b7d081";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  propagatedBuildInputs = [pyyaml];
 
   postPatch = ''
     substituteInPlace lib/ClusterShell/Worker/Ssh.py \
@@ -22,7 +31,7 @@ buildPythonPackage rec {
       --replace '"/bin/sh"' '"${bash}/bin/sh"'
   '';
 
-  checkInputs = [ nose bc hostname coreutils gnused ];
+  checkInputs = [nose bc hostname coreutils gnused];
 
   # Many tests want to open network connections
   # https://github.com/cea-hpc/clustershell#test-suite
@@ -84,6 +93,6 @@ buildPythonPackage rec {
     description = "Scalable Python framework for cluster administration";
     homepage = "https://cea-hpc.github.io/clustershell";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.alexvorobiev ];
+    maintainers = [maintainers.alexvorobiev];
   };
 }

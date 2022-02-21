@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libpcap, pcre }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libpcap,
+  pcre,
+}:
 stdenv.mkDerivation rec {
   pname = "ngrep";
   version = "1.47";
@@ -18,8 +25,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libpcap pcre ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [libpcap pcre];
 
   configureFlags = [
     "--enable-ipv6"
@@ -47,8 +54,8 @@ stdenv.mkDerivation rec {
     # <ngrep>/doc/README.txt says that ngrep itself is licensed under a
     # 'BSD-like' license but that the 'regex' library (in the ngrep tarball) is
     # GPLv2.
-    license = "ngrep";  # Some custom BSD-style, see LICENSE.txt
+    license = "ngrep"; # Some custom BSD-style, see LICENSE.txt
     platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

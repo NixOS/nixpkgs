@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libelf
-, libpcap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libelf,
+  libpcap,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dynamips";
   version = "0.2.21";
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-JQJa3NZ9mQqqvuTzU7XmAr1WRB4zuLIwBx18OY3GbV8=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libelf libpcap ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libelf libpcap];
 
-  cmakeFlags = [ "-DDYNAMIPS_CODE=stable" ];
+  cmakeFlags = ["-DDYNAMIPS_CODE=stable"];
 
   meta = with lib; {
     inherit (src.meta) homepage;
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

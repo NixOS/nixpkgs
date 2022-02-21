@@ -1,13 +1,13 @@
-{ lib
-, astral
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  astral,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
 }:
-
 buildPythonPackage rec {
   pname = "hdate";
   version = "0.10.4";
@@ -42,12 +42,12 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  pythonImportsCheck = [ "hdate" ];
+  pythonImportsCheck = ["hdate"];
 
   meta = with lib; {
     description = "Python module for Jewish/Hebrew date and Zmanim";
     homepage = "https://github.com/py-libhdate/py-libhdate";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

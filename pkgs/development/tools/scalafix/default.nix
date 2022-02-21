@@ -1,6 +1,11 @@
-{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
-
-let
+{
+  lib,
+  stdenv,
+  jdk,
+  jre,
+  coursier,
+  makeWrapper,
+}: let
   baseName = "scalafix";
   version = "0.9.0";
   deps = stdenv.mkDerivation {
@@ -13,31 +18,31 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "19j260prx7k010nxyvc1m9jj1ncxr73m2cym7if39360v5dc05c0";
+    outputHash = "19j260prx7k010nxyvc1m9jj1ncxr73m2cym7if39360v5dc05c0";
   };
 in
-stdenv.mkDerivation {
-  pname = baseName;
-  inherit version;
+  stdenv.mkDerivation {
+    pname = baseName;
+    inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+    nativeBuildInputs = [makeWrapper];
+    buildInputs = [jdk deps];
 
-  dontUnpack = true;
+    dontUnpack = true;
 
-  installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
-      --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
-  '';
+    installPhase = ''
+      makeWrapper ${jre}/bin/java $out/bin/${baseName} \
+        --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
+    '';
 
-  installCheckPhase = ''
-    $out/bin/${baseName} --version | grep -q "${version}"
-  '';
+    installCheckPhase = ''
+      $out/bin/${baseName} --version | grep -q "${version}"
+    '';
 
-  meta = with lib; {
-    description = "Refactoring and linting tool for Scala";
-    homepage = "https://scalacenter.github.io/scalafix/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.tomahna ];
-  };
-}
+    meta = with lib; {
+      description = "Refactoring and linting tool for Scala";
+      homepage = "https://scalacenter.github.io/scalafix/";
+      license = licenses.bsd3;
+      maintainers = [maintainers.tomahna];
+    };
+  }

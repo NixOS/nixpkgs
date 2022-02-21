@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, numpy
-, cvxopt
-, python
-, networkx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  numpy,
+  cvxopt,
+  python,
+  networkx,
 }:
-
 buildPythonPackage rec {
   pname = "picos";
   version = "2.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "A Python interface to conic optimization solvers";
     homepage = "https://gitlab.com/picos-api/picos";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ tobiasBora ];
+    maintainers = with maintainers; [tobiasBora];
   };
 }

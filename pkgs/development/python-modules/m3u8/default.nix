@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, requests, iso8601, bottle, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  requests,
+  iso8601,
+  bottle,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "m3u8";
   version = "0.9.0";
@@ -19,9 +27,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ requests iso8601 ];
+  propagatedBuildInputs = [requests iso8601];
 
-  checkInputs = [ bottle pytestCheckHook ];
+  checkInputs = [bottle pytestCheckHook];
 
   pytestFlagsArray = [
     "tests/test_parser.py"
@@ -33,7 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/globocom/m3u8";
     description = "Python m3u8 parser";
     license = licenses.mit;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    maintainers = with maintainers; [Scriptkiddi];
   };
 }
-

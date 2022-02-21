@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, cython
-, enum34
-, fetchPypi
-, nine
-, numpy
-, pytestCheckHook
-, python-utils
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  enum34,
+  fetchPypi,
+  nine,
+  numpy,
+  pytestCheckHook,
+  python-utils,
 }:
-
 buildPythonPackage rec {
   pname = "numpy-stl";
   version = "2.16.3";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "stl" ];
+  pythonImportsCheck = ["stl"];
 
   meta = with lib; {
     description = "Library to make reading, writing and modifying both binary and ascii STL files easy";
     homepage = "https://github.com/WoLpH/numpy-stl/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

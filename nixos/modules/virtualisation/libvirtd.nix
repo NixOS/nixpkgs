@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
@@ -11,19 +12,26 @@ let
     auth_unix_rw = "polkit"
     ${cfg.extraConfig}
   '';
-  ovmfFilePrefix = if pkgs.stdenv.isAarch64 then "AAVMF" else "OVMF";
+  ovmfFilePrefix =
+    if pkgs.stdenv.isAarch64
+    then "AAVMF"
+    else "OVMF";
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
-    ${optionalString cfg.qemu.ovmf.enable ''
-      nvram = [ "/run/libvirt/nix-ovmf/${ovmfFilePrefix}_CODE.fd:/run/libvirt/nix-ovmf/${ovmfFilePrefix}_VARS.fd" ]
-    ''}
-    ${optionalString (!cfg.qemu.runAsRoot) ''
-      user = "qemu-libvirtd"
-      group = "qemu-libvirtd"
-    ''}
+    ${
+      optionalString cfg.qemu.ovmf.enable ''
+        nvram = [ "/run/libvirt/nix-ovmf/${ovmfFilePrefix}_CODE.fd:/run/libvirt/nix-ovmf/${ovmfFilePrefix}_VARS.fd" ]
+      ''
+    }
+    ${
+      optionalString (!cfg.qemu.runAsRoot) ''
+        user = "qemu-libvirtd"
+        group = "qemu-libvirtd"
+      ''
+    }
     ${cfg.qemu.verbatimConfig}
   '';
   dirName = "libvirt";
-  subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
+  subDirs = list: [dirName] ++ map (e: "${dirName}/${e}") list;
 
   ovmfModule = types.submodule {
     options = {
@@ -108,7 +116,7 @@ let
 
       ovmf = mkOption {
         type = ovmfModule;
-        default = { };
+        default = {};
         description = ''
           QEMU's OVMF options.
         '';
@@ -116,43 +124,40 @@ let
 
       swtpm = mkOption {
         type = swtpmModule;
-        default = { };
+        default = {};
         description = ''
           QEMU's swtpm options.
         '';
       };
     };
   };
-in
-{
-
+in {
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
-      "Set the option `virtualisation.libvirtd.qemu.package' instead.")
+    (mkRemovedOptionModule ["virtualisation" "libvirtd" "enableKVM"]
+    "Set the option `virtualisation.libvirtd.qemu.package' instead.")
     (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuPackage" ]
-      [ "virtualisation" "libvirtd" "qemu" "package" ])
+    ["virtualisation" "libvirtd" "qemuPackage"]
+    ["virtualisation" "libvirtd" "qemu" "package"])
     (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuRunAsRoot" ]
-      [ "virtualisation" "libvirtd" "qemu" "runAsRoot" ])
+    ["virtualisation" "libvirtd" "qemuRunAsRoot"]
+    ["virtualisation" "libvirtd" "qemu" "runAsRoot"])
     (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuVerbatimConfig" ]
-      [ "virtualisation" "libvirtd" "qemu" "verbatimConfig" ])
+    ["virtualisation" "libvirtd" "qemuVerbatimConfig"]
+    ["virtualisation" "libvirtd" "qemu" "verbatimConfig"])
     (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuOvmf" ]
-      [ "virtualisation" "libvirtd" "qemu" "ovmf" "enable" ])
+    ["virtualisation" "libvirtd" "qemuOvmf"]
+    ["virtualisation" "libvirtd" "qemu" "ovmf" "enable"])
     (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
-      [ "virtualisation" "libvirtd" "qemu" "ovmf" "package" ])
+    ["virtualisation" "libvirtd" "qemuOvmfPackage"]
+    ["virtualisation" "libvirtd" "qemu" "ovmf" "package"])
     (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuSwtpm" ]
-      [ "virtualisation" "libvirtd" "qemu" "swtpm" "enable" ])
+    ["virtualisation" "libvirtd" "qemuSwtpm"]
+    ["virtualisation" "libvirtd" "qemu" "swtpm" "enable"])
   ];
 
   ###### interface
 
   options.virtualisation.libvirtd = {
-
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -184,15 +189,15 @@ in
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [ ];
-      example = [ "--verbose" ];
+      default = [];
+      example = ["--verbose"];
       description = ''
         Extra command line arguments passed to libvirtd on startup.
       '';
     };
 
     onBoot = mkOption {
-      type = types.enum [ "start" "ignore" ];
+      type = types.enum ["start" "ignore"];
       default = "start";
       description = ''
         Specifies the action to be done to / on the guests when the host boots.
@@ -204,7 +209,7 @@ in
     };
 
     onShutdown = mkOption {
-      type = types.enum [ "shutdown" "suspend" ];
+      type = types.enum ["shutdown" "suspend"];
       default = "suspend";
       description = ''
         When shutting down / restarting the host what method should
@@ -216,7 +221,7 @@ in
 
     allowedBridges = mkOption {
       type = types.listOf types.str;
-      default = [ "virbr0" ];
+      default = ["virbr0"];
       description = ''
         List of bridge devices that can be used by qemu:///session
       '';
@@ -224,18 +229,16 @@ in
 
     qemu = mkOption {
       type = qemuModule;
-      default = { };
+      default = {};
       description = ''
         QEMU related options.
       '';
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-
     assertions = [
       {
         assertion = config.security.polkit.enable;
@@ -250,14 +253,13 @@ in
     environment = {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n"
-        (e:
-          "allow ${e}")
-        cfg.allowedBridges;
-      systemPackages = with pkgs; [ libressl.nc iptables cfg.package cfg.qemu.package ];
+      (e: "allow ${e}")
+      cfg.allowedBridges;
+      systemPackages = with pkgs; [libressl.nc iptables cfg.package cfg.qemu.package];
       etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
-    boot.kernelModules = [ "tun" ];
+    boot.kernelModules = ["tun"];
 
     users.groups.libvirtd.gid = config.ids.gids.libvirtd;
 
@@ -276,7 +278,7 @@ in
       source = "/run/${dirName}/nix-helpers/qemu-bridge-helper";
     };
 
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [cfg.package];
 
     systemd.services.libvirtd-config = {
       description = "Libvirt Virtual Machine Management Daemon - configuration";
@@ -303,24 +305,27 @@ in
           ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
         done
 
-        ${optionalString cfg.qemu.ovmf.enable ''
-          ln -s --force ${cfg.qemu.ovmf.package.fd}/FV/${ovmfFilePrefix}_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${cfg.qemu.ovmf.package.fd}/FV/${ovmfFilePrefix}_VARS.fd /run/${dirName}/nix-ovmf/
-        ''}
+        ${
+          optionalString cfg.qemu.ovmf.enable ''
+            ln -s --force ${cfg.qemu.ovmf.package.fd}/FV/${ovmfFilePrefix}_CODE.fd /run/${dirName}/nix-ovmf/
+            ln -s --force ${cfg.qemu.ovmf.package.fd}/FV/${ovmfFilePrefix}_VARS.fd /run/${dirName}/nix-ovmf/
+          ''
+        }
       '';
 
       serviceConfig = {
         Type = "oneshot";
         RuntimeDirectoryPreserve = "yes";
-        LogsDirectory = subDirs [ "qemu" ];
-        RuntimeDirectory = subDirs [ "nix-emulators" "nix-helpers" "nix-ovmf" ];
-        StateDirectory = subDirs [ "dnsmasq" ];
+        LogsDirectory = subDirs ["qemu"];
+        RuntimeDirectory = subDirs ["nix-emulators" "nix-helpers" "nix-ovmf"];
+        StateDirectory = subDirs ["dnsmasq"];
       };
     };
 
     systemd.services.libvirtd = {
-      requires = [ "libvirtd-config.service" ];
-      after = [ "libvirtd-config.service" ]
+      requires = ["libvirtd-config.service"];
+      after =
+        ["libvirtd-config.service"]
         ++ optional vswitch.enable "ovs-vswitchd.service";
 
       environment.LIBVIRTD_ARGS = escapeShellArgs (
@@ -329,10 +334,13 @@ in
           configFile
           "--timeout"
           "120" # from ${libvirt}/var/lib/sysconfig/libvirtd
-        ] ++ cfg.extraOptions
+        ]
+        ++ cfg.extraOptions
       );
 
-      path = [ cfg.qemu.package ] # libvirtd requires qemu-img to manage disk images
+      path =
+        [cfg.qemu.package]
+        # libvirtd requires qemu-img to manage disk images
         ++ optional vswitch.enable vswitch.package
         ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 
@@ -345,8 +353,8 @@ in
     };
 
     systemd.services.libvirt-guests = {
-      wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ coreutils gawk cfg.package ];
+      wantedBy = ["multi-user.target"];
+      path = with pkgs; [coreutils gawk cfg.package];
       restartIfChanged = false;
 
       environment.ON_BOOT = "${cfg.onBoot}";
@@ -355,8 +363,8 @@ in
 
     systemd.sockets.virtlogd = {
       description = "Virtual machine log manager socket";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/${dirName}/virtlogd-sock" ];
+      wantedBy = ["sockets.target"];
+      listenStreams = ["/run/${dirName}/virtlogd-sock"];
     };
 
     systemd.services.virtlogd = {
@@ -367,8 +375,8 @@ in
 
     systemd.sockets.virtlockd = {
       description = "Virtual machine lock manager socket";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/${dirName}/virtlockd-sock" ];
+      wantedBy = ["sockets.target"];
+      listenStreams = ["/run/${dirName}/virtlockd-sock"];
     };
 
     systemd.services.virtlockd = {
@@ -378,7 +386,7 @@ in
     };
 
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
-    systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
+    systemd.sockets.libvirtd.wantedBy = ["sockets.target"];
 
     security.polkit.extraConfig = ''
       polkit.addRule(function(action, subject) {

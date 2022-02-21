@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
-, buildsystem
-, libparserutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  perl,
+  buildsystem,
+  libparserutils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netsurf-${libname}";
   libname = "libhubbub";
@@ -13,11 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nnriU+bJBp51frmtTkhG84tNtSwMoBUURqn6Spd3NbY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     perl
     libparserutils
-    buildsystem ];
+    buildsystem
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -38,7 +43,7 @@ stdenv.mkDerivation rec {
       content well.
     '';
     license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    maintainers = [maintainers.vrthra maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

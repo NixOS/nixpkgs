@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, unzip, puredata, fftw }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  puredata,
+  fftw,
+}:
 stdenv.mkDerivation rec {
   version = "0.7.0";
   pname = "timbreid";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "14k2xk5zrzrw1zprdbwx45hrlc7ck8vq4drpd3l455i5r8yk4y6b";
   };
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ puredata fftw ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [puredata fftw];
 
   unpackPhase = ''
     mkdir source
@@ -20,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make tIDLib.o all
- '';
+  '';
 
   installPhase = ''
     mkdir -p $out/
@@ -34,13 +40,13 @@ stdenv.mkDerivation rec {
   postFixup = ''
     mv $out/share/doc/ $out/
     rm -rf $out/share/
-    '';
+  '';
 
   meta = {
     description = "A collection of audio feature analysis externals for puredata";
     homepage = "http://williambrent.conflations.com/pages/research.html";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
     platforms = lib.platforms.linux;
   };
 }

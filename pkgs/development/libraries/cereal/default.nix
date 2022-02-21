@@ -1,9 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "cereal";
   version = "1.3.0";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   src = fetchFromGitHub {
     owner = "USCiLab";
@@ -24,12 +30,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = [ "-DJUST_INSTALL_CEREAL=yes" ];
+  cmakeFlags = ["-DJUST_INSTALL_CEREAL=yes"];
 
   meta = with lib; {
     description = "A header-only C++11 serialization library";
-    homepage    = "https://uscilab.github.io/cereal/";
-    platforms   = platforms.all;
-    license     = licenses.mit;
+    homepage = "https://uscilab.github.io/cereal/";
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

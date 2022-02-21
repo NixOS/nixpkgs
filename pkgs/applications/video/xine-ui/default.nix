@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, curl
-, libjpeg
-, libpng
-, lirc
-, ncurses
-, pkg-config
-, readline
-, shared-mime-info
-, xine-lib
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  curl,
+  libjpeg,
+  libpng,
+  lirc,
+  ncurses,
+  pkg-config,
+  readline,
+  shared-mime-info,
+  xine-lib,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xine-ui";
   version = "0.99.13";
@@ -38,30 +38,32 @@ stdenv.mkDerivation rec {
     pkg-config
     shared-mime-info
   ];
-  buildInputs = [
-    curl
-    libjpeg
-    libpng
-    lirc
-    ncurses
-    readline
-    xine-lib
-  ] ++ (with xorg; [
-    libXext
-    libXft
-    libXi
-    libXinerama
-    libXtst
-    libXv
-    libXxf86vm
-    xlibsWrapper
-    xorgproto
-  ]);
+  buildInputs =
+    [
+      curl
+      libjpeg
+      libpng
+      lirc
+      ncurses
+      readline
+      xine-lib
+    ]
+    ++ (with xorg; [
+      libXext
+      libXft
+      libXi
+      libXinerama
+      libXtst
+      libXv
+      libXxf86vm
+      xlibsWrapper
+      xorgproto
+    ]);
 
-  configureFlags = [ "--with-readline=${readline.dev}" ];
+  configureFlags = ["--with-readline=${readline.dev}"];
 
-  LIRC_CFLAGS="-I${lirc}/include";
-  LIRC_LIBS="-L ${lirc}/lib -llirc_client";
+  LIRC_CFLAGS = "-I${lirc}/include";
+  LIRC_LIBS = "-L ${lirc}/lib -llirc_client";
 
   postInstall = ''
     substituteInPlace $out/share/applications/xine.desktop \
@@ -72,7 +74,7 @@ stdenv.mkDerivation rec {
     homepage = "http://xine.sourceforge.net/";
     description = "Xlib-based frontend for Xine video player";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

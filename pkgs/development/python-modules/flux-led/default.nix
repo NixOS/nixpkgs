@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, webcolors
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  webcolors,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "flux-led";
   version = "0.28.26";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Python library to communicate with the flux_led smart bulbs";
     homepage = "https://github.com/Danielhiversen/flux_led";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [colemickens];
     platforms = platforms.linux;
   };
 }

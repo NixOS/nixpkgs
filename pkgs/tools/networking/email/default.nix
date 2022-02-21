@@ -1,6 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, openssl }:
-
-let
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  openssl,
+}: let
   eMailSrc = fetchFromGitHub {
     owner = "deanproxy";
     repo = "eMail";
@@ -16,26 +19,24 @@ let
     rev = "f62f29e918748b7cea476220f7492672be81c9de";
     sha256 = "0h34cikch98sb7nsqjnb9wl384c8ndln3m6yb1172l4y89qjg9rr";
   };
-
 in
+  stdenv.mkDerivation {
+    pname = "email-git";
+    version = "unstable-2016-01-31";
+    src = eMailSrc;
 
-stdenv.mkDerivation {
-  pname = "email-git";
-  version = "unstable-2016-01-31";
-  src = eMailSrc;
+    buildInputs = [openssl];
 
-  buildInputs = [ openssl ];
+    unpackPhase = ''
+      unpackPhase;
+      cp -Rp ${dlibSrc}/* ${srcRoot}/dlib;
+      chmod -R +w ${srcRoot}/dlib;
+    '';
 
-  unpackPhase = ''
-    unpackPhase;
-    cp -Rp ${dlibSrc}/* ${srcRoot}/dlib;
-    chmod -R +w ${srcRoot}/dlib;
-  '';
-
-  meta = {
-    description = "Command line SMTP client";
-    license = with lib.licenses; [ gpl2 ];
-    homepage = "https://deanproxy.com/code";
-    platforms = lib.platforms.unix;
-  };
-}
+    meta = {
+      description = "Command line SMTP client";
+      license = with lib.licenses; [gpl2];
+      homepage = "https://deanproxy.com/code";
+      platforms = lib.platforms.unix;
+    };
+  }

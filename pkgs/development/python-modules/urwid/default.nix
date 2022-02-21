@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, isPy27, glibcLocales }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  isPy27,
+  glibcLocales,
+}:
 buildPythonPackage rec {
   pname = "urwid";
   version = "2.1.2";
@@ -12,18 +18,18 @@ buildPythonPackage rec {
 
   # tests need to be able to set locale
   LC_ALL = "en_US.UTF-8";
-  checkInputs = [ glibcLocales ];
+  checkInputs = [glibcLocales];
 
   # tests which assert on strings don't decode results correctly
   doCheck = isPy3k;
 
-  pythonImportsCheck = [ "urwid" ];
+  pythonImportsCheck = ["urwid"];
 
   meta = with lib; {
     description = "A full-featured console (xterm et al.) user interface library";
     homepage = "https://excess.org/urwid";
     repositories.git = "git://github.com/wardi/urwid.git";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

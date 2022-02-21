@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "ucspi-tcp";
   version = "0.88";
@@ -82,6 +85,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cr.yp.to/ucspi-tcp.html";
     license = licenses.publicDomain;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

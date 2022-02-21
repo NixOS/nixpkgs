@@ -1,44 +1,44 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, vala
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, babl
-, libpng
-, cairo
-, libjpeg
-, librsvg
-, lensfun
-, libspiro
-, maxflow
-, netsurf
-, pango
-, poly2tri-c
-, poppler
-, bzip2
-, json-glib
-, gettext
-, meson
-, ninja
-, libraw
-, gexiv2
-, libwebp
-, luajit
-, openexr
-, OpenCL
-, suitesparse
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  glib,
+  babl,
+  libpng,
+  cairo,
+  libjpeg,
+  librsvg,
+  lensfun,
+  libspiro,
+  maxflow,
+  netsurf,
+  pango,
+  poly2tri-c,
+  poppler,
+  bzip2,
+  json-glib,
+  gettext,
+  meson,
+  ninja,
+  libraw,
+  gexiv2,
+  libwebp,
+  luajit,
+  openexr,
+  OpenCL,
+  suitesparse,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gegl";
   version = "0.4.34";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
   outputBin = "dev";
 
   src = fetchurl {
@@ -58,26 +58,28 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [
-    libpng
-    cairo
-    libjpeg
-    librsvg
-    lensfun
-    libspiro
-    maxflow
-    netsurf.libnsgif
-    pango
-    poly2tri-c
-    poppler
-    bzip2
-    libraw
-    libwebp
-    gexiv2
-    luajit
-    openexr
-    suitesparse
-  ] ++ lib.optional stdenv.isDarwin OpenCL;
+  buildInputs =
+    [
+      libpng
+      cairo
+      libjpeg
+      librsvg
+      lensfun
+      libspiro
+      maxflow
+      netsurf.libnsgif
+      pango
+      poly2tri-c
+      poppler
+      bzip2
+      libraw
+      libwebp
+      gexiv2
+      luajit
+      openexr
+      suitesparse
+    ]
+    ++ lib.optional stdenv.isDarwin OpenCL;
 
   # for gegl-4.0.pc
   propagatedBuildInputs = [
@@ -115,7 +117,7 @@ stdenv.mkDerivation rec {
     description = "Graph-based image processing framework";
     homepage = "https://www.gegl.org";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.unix;
   };
 }

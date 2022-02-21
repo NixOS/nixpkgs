@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite, pkg-config, darwin }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  libnotify,
+  makeWrapper,
+  pcsclite,
+  pkg-config,
+  darwin,
+}:
 buildGoModule rec {
   pname = "yubikey-agent";
   version = "0.1.5";
@@ -15,7 +24,7 @@ buildGoModule rec {
     lib.optional stdenv.isLinux (lib.getDev pcsclite)
     ++ lib.optional stdenv.isDarwin (darwin.apple_sdk.frameworks.PCSC);
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [makeWrapper pkg-config];
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
@@ -25,7 +34,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p $out/lib/systemd/user
@@ -37,7 +46,7 @@ buildGoModule rec {
     description = "A seamless ssh-agent for YubiKeys";
     license = licenses.bsd3;
     homepage = "https://filippo.io/yubikey-agent";
-    maintainers = with lib.maintainers; [ philandstuff rawkode ];
+    maintainers = with lib.maintainers; [philandstuff rawkode];
     platforms = platforms.darwin ++ platforms.linux;
   };
 }

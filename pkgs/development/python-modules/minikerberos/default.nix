@@ -1,12 +1,12 @@
-{ lib
-, asn1crypto
-, asysocks
-, buildPythonPackage
-, fetchPypi
-, oscrypto
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  asysocks,
+  buildPythonPackage,
+  fetchPypi,
+  oscrypto,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "minikerberos";
   version = "0.2.17";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kerberos manipulation library in Python";
     homepage = "https://github.com/skelsec/minikerberos";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,8 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitHub
-, click, numpy, pyparsing
-, pytest, hypothesis
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  click,
+  numpy,
+  pyparsing,
+  pytest,
+  hypothesis,
 }:
-
 buildPythonPackage rec {
   pname = "snuggs";
   version = "1.4.7";
@@ -15,15 +20,15 @@ buildPythonPackage rec {
     sha256 = "1p3lh9s2ylsnrzbs931y2vn7mp2y2xskgqmh767c9l1a33shfgwf";
   };
 
-  propagatedBuildInputs = [ click numpy pyparsing ];
+  propagatedBuildInputs = [click numpy pyparsing];
 
-  checkInputs = [ pytest hypothesis ];
+  checkInputs = [pytest hypothesis];
   checkPhase = "pytest test_snuggs.py";
 
   meta = with lib; {
     description = "S-expressions for Numpy";
     license = licenses.mit;
     homepage = "https://github.com/mapbox/snuggs";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [mredaelli];
   };
 }

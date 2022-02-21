@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "pyvlx";
   version = "0.2.20";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
       devices, e.g. Velux Windows.
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
-    license = with licenses; [ lgpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [lgpl2Only];
+    maintainers = with maintainers; [fab];
   };
 }

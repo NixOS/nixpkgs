@@ -1,15 +1,23 @@
-{ stdenv, fetchFromGitHub, lib, python3, fetchpatch
-, cmake, lingeling, btor2tools, gtest, gmp
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  python3,
+  fetchpatch,
+  cmake,
+  lingeling,
+  btor2tools,
+  gtest,
+  gmp,
 }:
-
 stdenv.mkDerivation rec {
   pname = "boolector";
   version = "3.2.2";
 
   src = fetchFromGitHub {
-    owner  = "boolector";
-    repo   = "boolector";
-    rev    = version;
+    owner = "boolector";
+    repo = "boolector";
+    rev = version;
     sha256 = "1smcy6yp8wvnw2brgnv5bf40v87k4v4fbdbrhi7987vja632k50z";
   };
 
@@ -26,28 +34,34 @@ stdenv.mkDerivation rec {
     sed s@REPLACEME@file://${gtest.src}@ ${./cmake-gtest.patch} | patch -p1
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ lingeling btor2tools gmp ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [lingeling btor2tools gmp];
 
   cmakeFlags =
-    [ "-DBUILD_SHARED_LIBS=ON"
+    [
+      "-DBUILD_SHARED_LIBS=ON"
       "-DUSE_LINGELING=YES"
-    ] ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
+    ]
+    ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
 
-  checkInputs = [ python3 ];
+  checkInputs = [python3];
   doCheck = true;
-  preCheck =
-    let var = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
-    in
-      # tests modelgen and modelgensmt2 spawn boolector in another processes and
-      # macOS strips DYLD_LIBRARY_PATH, hardcode it for testing
-      lib.optionalString stdenv.isDarwin ''
-        cp -r bin bin.back
-        install_name_tool -change libboolector.dylib $(pwd)/lib/libboolector.dylib bin/boolector
-      '' + ''
-        export ${var}=$(readlink -f lib)
-        patchShebangs ..
-      '';
+  preCheck = let
+    var =
+      if stdenv.isDarwin
+      then "DYLD_LIBRARY_PATH"
+      else "LD_LIBRARY_PATH";
+  in
+    # tests modelgen and modelgensmt2 spawn boolector in another processes and
+    # macOS strips DYLD_LIBRARY_PATH, hardcode it for testing
+    lib.optionalString stdenv.isDarwin ''
+      cp -r bin bin.back
+      install_name_tool -change libboolector.dylib $(pwd)/lib/libboolector.dylib bin/boolector
+    ''
+    + ''
+      export ${var}=$(readlink -f lib)
+      patchShebangs ..
+    '';
 
   postCheck = lib.optionalString stdenv.isDarwin ''
     rm -rf bin
@@ -62,9 +76,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An extremely fast SMT solver for bit-vectors and arrays";
-    homepage    = "https://boolector.github.io";
-    license     = licenses.mit;
-    platforms   = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ thoughtpolice ];
+    homepage = "https://boolector.github.io";
+    license = licenses.mit;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

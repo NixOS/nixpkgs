@@ -1,20 +1,20 @@
-{ lib
-, fetchFromGitHub
-, substituteAll
-, python3Packages
-, gst_all_1
-, wrapGAppsHook
-, gobject-introspection
-, gtk3
-, libwnck
-, keybinder3
-, intltool
-, libcanberra-gtk3
-, libappindicator-gtk3
-, libpulseaudio
-, libgudev
+{
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  python3Packages,
+  gst_all_1,
+  wrapGAppsHook,
+  gobject-introspection,
+  gtk3,
+  libwnck,
+  keybinder3,
+  intltool,
+  libcanberra-gtk3,
+  libappindicator-gtk3,
+  libpulseaudio,
+  libgudev,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "kazam";
   version = "unstable-2021-06-22";
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1jk6khwgdv3nmagdgp5ivz3156pl0ljhf7b6i4b52w1h5ywsg9ah";
   };
 
-  nativeBuildInputs = [ gobject-introspection python3Packages.distutils_extra intltool wrapGAppsHook ];
+  nativeBuildInputs = [gobject-introspection python3Packages.distutils_extra intltool wrapGAppsHook];
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     libgudev
   ];
 
-  propagatedBuildInputs = with python3Packages; [ pygobject3 pyxdg pycairo dbus-python xlib ];
+  propagatedBuildInputs = with python3Packages; [pygobject3 pyxdg pycairo dbus-python xlib];
 
   # workaround https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
@@ -60,6 +60,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/niknah/kazam";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [maintainers.domenkozar];
   };
 }

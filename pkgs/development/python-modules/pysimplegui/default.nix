@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tkinter
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  tkinter,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pysimplegui";
   version = "4.57.0";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Python GUIs for Humans";
     homepage = "https://github.com/PySimpleGUI/PySimpleGUI";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ lucasew ];
+    maintainers = with maintainers; [lucasew];
   };
 }

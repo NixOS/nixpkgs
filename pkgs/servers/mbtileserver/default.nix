@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "mbtileserver";
   version = "0.8.2";
@@ -18,7 +21,7 @@ buildGoModule rec {
     homepage = "https://github.com/consbio/mbtileserver";
     changelog = "https://github.com/consbio/mbtileserver/blob/v${version}/CHANGELOG.md";
     license = licenses.isc;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = platforms.unix;
   };
 }

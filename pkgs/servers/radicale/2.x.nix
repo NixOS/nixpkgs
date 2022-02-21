@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3 }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "Radicale";
   version = "2.1.12";
@@ -41,6 +44,6 @@ python3.pkgs.buildPythonApplication rec {
       on mobile phones or computers.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo pSub aneeshusa infinisil ];
+    maintainers = with maintainers; [edwtjo pSub aneeshusa infinisil];
   };
 }

@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, fetchpatch
-, static ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fetchpatch,
+  static ? stdenv.hostPlatform.isStatic,
 }:
-
 stdenv.mkDerivation rec {
   pname = "snappy";
   version = "1.1.9";
@@ -30,12 +33,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+    "-DBUILD_SHARED_LIBS=${
+      if static
+      then "OFF"
+      else "ON"
+    }"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DSNAPPY_BUILD_TESTS=OFF"
     "-DSNAPPY_BUILD_BENCHMARKS=OFF"

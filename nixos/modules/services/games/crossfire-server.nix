@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.crossfire-server;
   serverPort = 13327;
 in {
@@ -105,11 +107,11 @@ in {
 
   config = mkIf cfg.enable {
     users.users.crossfire = {
-      description     = "Crossfire server daemon user";
-      home            = cfg.stateDir;
-      createHome      = false;
-      isSystemUser    = true;
-      group           = "crossfire";
+      description = "Crossfire server daemon user";
+      home = cfg.stateDir;
+      createHome = false;
+      isSystemUser = true;
+      group = "crossfire";
     };
     users.groups.crossfire = {};
 
@@ -119,29 +121,31 @@ in {
     # and appending the user setting to it; the motd, news, and rules are handled
     # specially, with user-provided values completely replacing the original.
     environment.etc = lib.attrsets.mapAttrs'
-      (name: value: lib.attrsets.nameValuePair "crossfire/${name}" {
+    (name: value:
+      lib.attrsets.nameValuePair "crossfire/${name}" {
         mode = "0644";
         text =
           (optionalString (!elem name ["motd" "news" "rules"])
-            (fileContents "${cfg.package}/etc/crossfire/${name}"))
+          (fileContents "${cfg.package}/etc/crossfire/${name}"))
           + "\n${value}";
       }) ({
-        ban_file = "";
-        dm_file = "";
-        exp_table = "";
-        forbid = "";
-        metaserver2 = "";
-        motd = (fileContents "${cfg.package}/etc/crossfire/motd");
-        news = (fileContents "${cfg.package}/etc/crossfire/news");
-        rules = (fileContents "${cfg.package}/etc/crossfire/rules");
-        settings = "";
-        stat_bonus = "";
-      } // cfg.configFiles);
+      ban_file = "";
+      dm_file = "";
+      exp_table = "";
+      forbid = "";
+      metaserver2 = "";
+      motd = (fileContents "${cfg.package}/etc/crossfire/motd");
+      news = (fileContents "${cfg.package}/etc/crossfire/news");
+      rules = (fileContents "${cfg.package}/etc/crossfire/rules");
+      settings = "";
+      stat_bonus = "";
+    }
+    // cfg.configFiles);
 
     systemd.services.crossfire-server = {
-      description   = "Crossfire Server Daemon";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Crossfire Server Daemon";
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = mkMerge [
         {
@@ -173,7 +177,7 @@ in {
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ serverPort ];
+      allowedTCPPorts = [serverPort];
     };
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, gcc11Stdenv
-, fetchFromGitLab
-, makeWrapper
-, cmake
-, spdlog
-, nlohmann_json
-, systemd
+{
+  lib,
+  gcc11Stdenv,
+  fetchFromGitLab,
+  makeWrapper,
+  cmake,
+  spdlog,
+  nlohmann_json,
+  systemd,
 }:
-
 gcc11Stdenv.mkDerivation rec {
   pname = "ananicy-cpp";
   version = "unstable-2021-10-13";
@@ -41,6 +41,6 @@ gcc11Stdenv.mkDerivation rec {
     description = "Rewrite of ananicy in c++ for lower cpu and memory usage";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
   };
 }

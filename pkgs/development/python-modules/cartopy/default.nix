@@ -1,11 +1,29 @@
-{ buildPythonPackage, lib, fetchPypi
-, pytestCheckHook, filelock, mock, pep8
-, cython, setuptools-scm
-, six, pyshp, shapely, geos, numpy
-, gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
-, proj, flufl_lock
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  pytestCheckHook,
+  filelock,
+  mock,
+  pep8,
+  cython,
+  setuptools-scm,
+  six,
+  pyshp,
+  shapely,
+  geos,
+  numpy,
+  gdal,
+  pillow,
+  matplotlib,
+  pyepsg,
+  pykdtree,
+  scipy,
+  owslib,
+  fiona,
+  proj,
+  flufl_lock,
 }:
-
 buildPythonPackage rec {
   pname = "cartopy";
   version = "0.20.2";
@@ -31,22 +49,35 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    geos proj
+    geos
+    proj
   ];
 
   propagatedBuildInputs = [
     # required
-    six pyshp shapely numpy
+    six
+    pyshp
+    shapely
+    numpy
 
     # optional
-    gdal pillow matplotlib pyepsg pykdtree scipy fiona owslib
+    gdal
+    pillow
+    matplotlib
+    pyepsg
+    pykdtree
+    scipy
+    fiona
+    owslib
   ];
 
-  checkInputs = [ pytestCheckHook filelock mock pep8 flufl_lock ];
+  checkInputs = [pytestCheckHook filelock mock pep8 flufl_lock];
 
   pytestFlagsArray = [
-    "--pyargs" "cartopy"
-    "-m" "'not network and not natural_earth'"
+    "--pyargs"
+    "cartopy"
+    "-m"
+    "'not network and not natural_earth'"
   ];
 
   disabledTests = [
@@ -59,6 +90,6 @@ buildPythonPackage rec {
     description = "Process geospatial data to create maps and perform analyses";
     license = licenses.lgpl3Plus;
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [mredaelli];
   };
 }

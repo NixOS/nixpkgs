@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, mpi
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  mpi,
 }:
-
 stdenv.mkDerivation rec {
   pname = "parmetis";
   version = "4.0.3";
@@ -13,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pvfpvb36djvqlcc3lq7si0c5xpb2cqndjg8wvzg35ygnwqs5ngj";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ mpi ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [mpi];
 
   # metis and GKlib are packaged with distribution
   # AUR https://aur.archlinux.org/packages/parmetis/ has reported that
@@ -29,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview";
     platforms = platforms.all;
     license = licenses.unfree;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

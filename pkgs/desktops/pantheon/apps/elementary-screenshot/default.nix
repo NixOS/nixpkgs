@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, libcanberra
-, elementary-icon-theme
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  python3,
+  desktop-file-utils,
+  gtk3,
+  granite,
+  libgee,
+  libhandy,
+  libcanberra,
+  elementary-icon-theme,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
   version = "6.0.2";

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ...}:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.znc;
 
   defaultUser = "znc";
@@ -14,70 +15,79 @@ let
   };
 
   listenerPorts = concatMap (l: optional (l ? Port) l.Port)
-    (attrValues (cfg.config.Listener or {}));
+  (attrValues (cfg.config.Listener or {}));
 
   # Converts the config option to a string
   semanticString = let
-
-      sortedAttrs = set: sort (l: r:
-        if l == "extraConfig" then false # Always put extraConfig last
-        else if isAttrs set.${l} == isAttrs set.${r} then l < r
-        else isAttrs set.${r} # Attrsets should be last, makes for a nice config
+    sortedAttrs = set:
+      sort (
+        l: r:
+          if l == "extraConfig"
+          then false
+          # Always put extraConfig last
+          else if isAttrs set.${l} == isAttrs set.${r}
+          then l < r
+          else isAttrs set.${r}
+        # Attrsets should be last, makes for a nice config
         # This last case occurs when any side (but not both) is an attrset
         # The order of these is correct when the attrset is on the right
         # which we're just returning
       ) (attrNames set);
 
-      # Specifies an attrset that encodes the value according to its type
-      encode = name: value: {
-          null = [];
-          bool = [ "${name} = ${boolToString value}" ];
-          int = [ "${name} = ${toString value}" ];
+    # Specifies an attrset that encodes the value according to its type
+    encode = name: value:
+      {
+        null = [];
+        bool = ["${name} = ${boolToString value}"];
+        int = ["${name} = ${toString value}"];
 
-          # extraConfig should be inserted verbatim
-          string = [ (if name == "extraConfig" then value else "${name} = ${value}") ];
+        # extraConfig should be inserted verbatim
+        string = [
+          (if name == "extraConfig"
+          then value
+          else "${name} = ${value}")
+        ];
 
-          # Values like `Foo = [ "bar" "baz" ];` should be transformed into
-          #   Foo=bar
-          #   Foo=baz
-          list = concatMap (encode name) value;
+        # Values like `Foo = [ "bar" "baz" ];` should be transformed into
+        #   Foo=bar
+        #   Foo=baz
+        list = concatMap (encode name) value;
 
-          # Values like `Foo = { bar = { Baz = "baz"; Qux = "qux"; Florps = null; }; };` should be transmed into
-          #   <Foo bar>
-          #     Baz=baz
-          #     Qux=qux
-          #   </Foo>
-          set = concatMap (subname: optionals (value.${subname} != null) ([
-              "<${name} ${subname}>"
-            ] ++ map (line: "\t${line}") (toLines value.${subname}) ++ [
-              "</${name}>"
-            ])) (filter (v: v != null) (attrNames value));
+        # Values like `Foo = { bar = { Baz = "baz"; Qux = "qux"; Florps = null; }; };` should be transmed into
+        #   <Foo bar>
+        #     Baz=baz
+        #     Qux=qux
+        #   </Foo>
+        set = concatMap (subname:
+          optionals (value.${subname} != null) ([
+            "<${name} ${subname}>"
+          ]
+          ++ map (line: "\t${line}") (toLines value.${subname})
+          ++ [
+            "</${name}>"
+          ])) (filter (v: v != null) (attrNames value));
+      }
+      .${builtins.typeOf value};
 
-        }.${builtins.typeOf value};
-
-      # One level "above" encode, acts upon a set and uses encode on each name,value pair
-      toLines = set: concatMap (name: encode name set.${name}) (sortedAttrs set);
-
-    in
-      concatStringsSep "\n" (toLines cfg.config);
+    # One level "above" encode, acts upon a set and uses encode on each name,value pair
+    toLines = set: concatMap (name: encode name set.${name}) (sortedAttrs set);
+  in
+    concatStringsSep "\n" (toLines cfg.config);
 
   semanticTypes = with types; rec {
-    zncAtom = nullOr (oneOf [ int bool str ]);
+    zncAtom = nullOr (oneOf [int bool str]);
     zncAttr = attrsOf (nullOr zncConf);
-    zncAll = oneOf [ zncAtom (listOf zncAtom) zncAttr ];
-    zncConf = attrsOf (zncAll // {
+    zncAll = oneOf [zncAtom (listOf zncAtom) zncAttr];
+    zncConf = attrsOf (zncAll
+    // {
       # Since this is a recursive type and the description by default contains
       # the description of its subtypes, infinite recursion would occur without
       # explicitly breaking this cycle
       description = "znc values (null, atoms (str, int, bool), list of atoms, or attrsets of znc values)";
     });
   };
-
-in
-
-{
-
-  imports = [ ./options.nix ];
+in {
+  imports = [./options.nix];
 
   options = {
     services.znc = {
@@ -194,7 +204,7 @@ in
 
       modulePackages = mkOption {
         type = types.listOf types.package;
-        default = [ ];
+        default = [];
         example = literalExpression "[ pkgs.zncModules.fish pkgs.zncModules.push ]";
         description = ''
           A list of global znc module packages to add to znc.
@@ -221,8 +231,8 @@ in
       };
 
       extraFlags = mkOption {
-        default = [ ];
-        example = [ "--debug" ];
+        default = [];
+        example = ["--debug"];
         type = types.listOf types.str;
         description = ''
           Extra arguments to use for executing znc.
@@ -231,11 +241,9 @@ in
     };
   };
 
-
   ###### Implementation
 
   config = mkIf cfg.enable {
-
     services.znc = {
       configFile = mkDefault (pkgs.writeText "znc-generated.conf" semanticString);
       config = {
@@ -249,8 +257,8 @@ in
 
     systemd.services.znc = {
       description = "ZNC Server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -259,7 +267,7 @@ in
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
         # Hardening
-        CapabilityBoundingSet = [ "" ];
+        CapabilityBoundingSet = [""];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -277,24 +285,26 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        ReadWritePaths = [ cfg.dataDir ];
+        ReadWritePaths = [cfg.dataDir];
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
         UMask = "0027";
       };
       preStart = ''
         mkdir -p ${cfg.dataDir}/configs
 
         # If mutable, regenerate conf file every time.
-        ${optionalString (!cfg.mutable) ''
-          echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
-          rm -f ${cfg.dataDir}/configs/znc.conf
-        ''}
+        ${
+          optionalString (!cfg.mutable) ''
+            echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
+            rm -f ${cfg.dataDir}/configs/znc.conf
+          ''
+        }
 
         # Ensure essential files exist.
         if [[ ! -f ${cfg.dataDir}/configs/znc.conf ]]; then
@@ -315,21 +325,20 @@ in
     };
 
     users.users = optionalAttrs (cfg.user == defaultUser) {
-      ${defaultUser} =
-        { description = "ZNC server daemon owner";
-          group = defaultUser;
-          uid = config.ids.uids.znc;
-          home = cfg.dataDir;
-          createHome = true;
-        };
+      ${defaultUser} = {
+        description = "ZNC server daemon owner";
+        group = defaultUser;
+        uid = config.ids.uids.znc;
+        home = cfg.dataDir;
+        createHome = true;
       };
-
-    users.groups = optionalAttrs (cfg.user == defaultUser) {
-      ${defaultUser} =
-        { gid = config.ids.gids.znc;
-          members = [ defaultUser ];
-        };
     };
 
+    users.groups = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} = {
+        gid = config.ids.gids.znc;
+        members = [defaultUser];
+      };
+    };
   };
 }

@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "roogle";
   version = "0.1.4";
@@ -21,7 +24,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A Rust API search engine which allows you to search functions by names and type signatures";
     homepage = "https://github.com/hkmatsumoto/roogle";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ figsoda ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [figsoda];
   };
 }

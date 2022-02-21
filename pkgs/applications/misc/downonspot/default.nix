@@ -1,13 +1,13 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, makeWrapper
-, alsa-lib
-, lame
-, openssl
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  makeWrapper,
+  alsa-lib,
+  lame,
+  openssl,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "downonspot";
   version = "unstable-2021-10-13";
@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/oSumAtrIX/DownOnSpot";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
   };
 }

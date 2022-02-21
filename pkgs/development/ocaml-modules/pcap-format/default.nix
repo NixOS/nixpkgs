@@ -1,8 +1,13 @@
-{ lib, buildDunePackage, fetchurl
-, ppx_cstruct, ppx_tools
-, cstruct, ounit, mmap
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_cstruct,
+  ppx_tools,
+  cstruct,
+  ounit,
+  mmap,
 }:
-
 buildDunePackage rec {
   pname = "pcap-format";
   version = "0.5.2";
@@ -36,6 +41,6 @@ buildDunePackage rec {
     description = "Decode and encode PCAP (packet capture) files";
     homepage = "https://mirage.github.io/ocaml-pcap";
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

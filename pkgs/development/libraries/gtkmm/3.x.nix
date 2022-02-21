@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, libepoxy, gnome }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  gtk3,
+  glibmm,
+  cairomm,
+  pangomm,
+  atkmm,
+  libepoxy,
+  gnome,
+}:
 stdenv.mkDerivation rec {
   pname = "gtkmm";
   version = "3.24.5";
@@ -9,12 +23,12 @@ stdenv.mkDerivation rec {
     sha256 = "1ri2msp3cmzi6r65ghwb8gfavfaxv0axpwi3q60nm7v8hvg36qw5";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ pkg-config meson ninja python3 ];
-  buildInputs = [ libepoxy ];
+  nativeBuildInputs = [pkg-config meson ninja python3];
+  buildInputs = [libepoxy];
 
-  propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
+  propagatedBuildInputs = [glibmm gtk3 atkmm cairomm pangomm];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=764521
   doCheck = false;
@@ -45,7 +59,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

@@ -1,6 +1,7 @@
-{ pkgs, javaPackages }:
-
-let
+{
+  pkgs,
+  javaPackages,
+}: let
   javaIndexer = javaPackages.mavenbuild {
     name = "sourcetrail-java-indexer-${pkgs.sourcetrail.version}";
     src = pkgs.sourcetrail.src;
@@ -20,8 +21,8 @@ let
     };
   };
 in
-javaIndexer.overrideAttrs (drv: {
-  postUnpack = ''
-    export sourceRoot=''${sourceRoot}/java_indexer
-  '';
-})
+  javaIndexer.overrideAttrs (drv: {
+    postUnpack = ''
+      export sourceRoot=''${sourceRoot}/java_indexer
+    '';
+  })

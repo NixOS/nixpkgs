@@ -1,14 +1,43 @@
-{ stdenv, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
-
-# Dynamic libraries
-, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
-, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
-, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
-, libxcb, libuuid, libxshmfence, nspr, nss, pango, mesa
-
-, systemd
+{
+  stdenv,
+  lib,
+  fetchurl,
+  rpmextract,
+  autoPatchelfHook,
+  wrapGAppsHook
+  # Dynamic libraries
+  ,
+  alsa-lib,
+  atk,
+  at-spi2-atk,
+  at-spi2-core,
+  cairo,
+  dbus,
+  cups,
+  expat,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libxcb,
+  libuuid,
+  libxshmfence,
+  nspr,
+  nss,
+  pango,
+  mesa,
+  systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "drawio";
   version = "16.5.1";
@@ -97,7 +126,7 @@ stdenv.mkDerivation rec {
     homepage = "https://about.draw.io/";
     license = licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [darkonion0];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, webob
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  webob,
 }:
-
 buildPythonPackage rec {
   pname = "WSGIProxy2";
   version = "0.4.2";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "13kf9bdxrc95y9vriaz0viry3ah11nz4rlrykcfvb8nlqpx3dcm4";
   };
 
-  propagatedBuildInputs = [ six webob ];
+  propagatedBuildInputs = [six webob];
 
   # circular dep on webtest
   doCheck = false;
@@ -24,7 +24,6 @@ buildPythonPackage rec {
     homepage = "http://pythonpaste.org/wsgiproxy/";
     description = "HTTP proxying tools for WSGI apps";
     license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
-
 }

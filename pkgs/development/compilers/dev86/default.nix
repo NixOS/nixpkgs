@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "dev86";
   version = "0.16.21";
@@ -9,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "154dyr2ph4n0kwi8yx0n78j128kw29rk9r9f7s2gddzrdl712jr3";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   # Parallel builds are not supported due to build process structure:
   # tools are built sequentially in submakefiles and are reusing the

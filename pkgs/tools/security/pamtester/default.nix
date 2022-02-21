@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, pam }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pam,
+}:
 stdenv.mkDerivation rec {
   pname = "pamtester";
   version = "0.1.2";
@@ -9,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "1mdj1wj0adcnx354fs17928yn2xfr1hj5mfraq282dagi873sqw3";
   };
 
-  buildInputs = [ pam ];
+  buildInputs = [pam];
 
   meta = with lib; {
     description = "Utility program to test the PAM facility";
     homepage = "http://pamtester.sourceforge.net/";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

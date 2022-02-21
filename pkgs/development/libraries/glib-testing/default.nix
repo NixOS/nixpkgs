@@ -1,20 +1,21 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  glib,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "glib-testing";
   version = "0.1.0";
 
-  outputs = [ "out" "dev" "devdoc" "installedTests" ];
+  outputs = ["out" "dev" "devdoc" "installedTests"];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "Test library providing test harnesses and mock classes complementing the classes provided by GLib";
     homepage = "https://gitlab.gnome.org/pwithnall/libglib-testing";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.unix;
   };
 }

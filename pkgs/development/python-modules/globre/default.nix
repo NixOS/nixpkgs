@@ -1,11 +1,11 @@
-{ lib
-, pythonAtLeast
-, buildPythonPackage
-, fetchPypi
-, nose
-, coverage
+{
+  lib,
+  pythonAtLeast,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  coverage,
 }:
-
 buildPythonPackage rec {
   pname = "globre";
   version = "0.1.5";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
     sha256 = "1qhjpg0722871dm5m7mmldf6c7mx58fbdvk1ix5i3s9py82448gf";
   };
 
-  checkInputs = [ nose coverage ];
+  checkInputs = [nose coverage];
 
   meta = with lib; {
     homepage = "https://github.com/metagriffin/globre";
     description = "A python glob-like regular expression generation library.";
-    maintainers = with maintainers; [ glittershark ];
+    maintainers = with maintainers; [glittershark];
     license = licenses.gpl3;
   };
 }

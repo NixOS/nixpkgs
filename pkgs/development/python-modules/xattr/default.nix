@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  cffi,
 }:
-
 buildPythonPackage rec {
   pname = "xattr";
   version = "0.9.9";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "09cb7e1efb3aa1b4991d6be4eb25b73dc518b4fe894f0915f5b0dcede972f346";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [cffi];
 
   # https://github.com/xattr/xattr/issues/43
   doCheck = false;
@@ -28,5 +28,4 @@ buildPythonPackage rec {
     description = "Python wrapper for extended filesystem attributes";
     license = licenses.mit;
   };
-
 }

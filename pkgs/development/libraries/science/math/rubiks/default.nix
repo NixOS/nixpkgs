@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  coreutils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rubiks";
   version = "20070912";

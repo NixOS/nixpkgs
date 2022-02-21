@@ -1,38 +1,48 @@
-{ lib, stdenv, fetchurl, cmake, extra-cmake-modules
-, karchive, kcrash, ki18n, kio, solid
-, boost, gmp, qca-qt5, libgcrypt
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  karchive,
+  kcrash,
+  ki18n,
+  kio,
+  solid,
+  boost,
+  gmp,
+  qca-qt5,
+  libgcrypt,
+}: let
   mainVersion = "5.1.2";
+in
+  stdenv.mkDerivation rec {
+    pname = "libktorrent";
+    version = "2.1.1";
 
-in stdenv.mkDerivation rec {
-  pname = "libktorrent";
-  version = "2.1.1";
+    src = fetchurl {
+      url = "mirror://kde/stable/ktorrent/${mainVersion}/${pname}-${version}.tar.xz";
+      sha256 = "0051zh8bb4p9wmcfn5ql987brhsaiw9880xdck7b5dm1a05mri2w";
+    };
 
-  src = fetchurl {
-    url    = "mirror://kde/stable/ktorrent/${mainVersion}/${pname}-${version}.tar.xz";
-    sha256 = "0051zh8bb4p9wmcfn5ql987brhsaiw9880xdck7b5dm1a05mri2w";
-  };
+    outputs = ["out" "dev"];
 
-  outputs = [ "out" "dev" ];
+    nativeBuildInputs = [cmake extra-cmake-modules];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+    buildInputs = [karchive kcrash ki18n kio solid qca-qt5 libgcrypt];
 
-  buildInputs = [ karchive kcrash ki18n kio solid qca-qt5 libgcrypt ];
+    propagatedBuildInputs = [gmp boost];
 
-  propagatedBuildInputs = [ gmp boost ];
+    passthru = {
+      inherit mainVersion;
+    };
 
-  passthru = {
-    inherit mainVersion;
-  };
+    dontWrapQtApps = true;
 
-  dontWrapQtApps = true;
-
-  meta = with lib; {
-    description = "A BitTorrent library used by KTorrent";
-    homepage    = "https://www.kde.org/applications/internet/ktorrent/";
-    maintainers = with maintainers; [ eelco ];
-    platforms   = platforms.linux;
-  };
-}
+    meta = with lib; {
+      description = "A BitTorrent library used by KTorrent";
+      homepage = "https://www.kde.org/applications/internet/ktorrent/";
+      maintainers = with maintainers; [eelco];
+      platforms = platforms.linux;
+    };
+  }

@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "tektoncd-cli";
   version = "0.22.0";
@@ -13,9 +17,9 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  ldflags = [ "-s" "-w" "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   # third_party/VENDOR-LICENSE breaks build/check as go files are still included
   # docs is a tool for generating docs
@@ -58,6 +62,6 @@ buildGoModule rec {
       For your convenience, it is recommended that you install the Tekton CLI, tkn, together with the core component of Tekton, Tekton Pipelines.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk mstrangfeld vdemeester ];
+    maintainers = with maintainers; [jk mstrangfeld vdemeester];
   };
 }

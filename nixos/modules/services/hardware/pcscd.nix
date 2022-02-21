@@ -1,18 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
 
   pluginEnv = pkgs.buildEnv {
     name = "pcscd-plugins";
     paths = map (p: "${p}/pcsc/drivers") config.services.pcscd.plugins;
   };
-
-in
-{
-
+in {
   ###### interface
 
   options.services.pcscd = {
@@ -20,7 +19,7 @@ in
 
     plugins = mkOption {
       type = types.listOf types.package;
-      default = [ pkgs.ccid ];
+      default = [pkgs.ccid];
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
       description = "Plugin packages to be used for PCSC-Lite.";
@@ -47,17 +46,16 @@ in
   ###### implementation
 
   config = mkIf config.services.pcscd.enable {
-
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ pkgs.pcsclite ];
-    systemd.packages = [ (getBin pkgs.pcsclite) ];
+    environment.systemPackages = [pkgs.pcsclite];
+    systemd.packages = [(getBin pkgs.pcsclite)];
 
-    systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
+    systemd.sockets.pcscd.wantedBy = ["sockets.target"];
 
     systemd.services.pcscd = {
       environment.PCSCLITE_HP_DROPDIR = pluginEnv;
-      restartTriggers = [ "/etc/reader.conf" ];
+      restartTriggers = ["/etc/reader.conf"];
 
       # If the cfgFile is empty and not specified (in which case the default
       # /etc/reader.conf is assumed), pcscd will happily start going through the
@@ -67,7 +65,7 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${getBin pkgs.pcsclite}/bin/pcscd -f -x -c ${cfgFile}" ];
+      serviceConfig.ExecStart = ["" "${getBin pkgs.pcsclite}/bin/pcscd -f -x -c ${cfgFile}"];
     };
   };
 }

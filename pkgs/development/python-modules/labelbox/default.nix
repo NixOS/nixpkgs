@@ -1,22 +1,22 @@
-{ lib
-, backoff
-, backports-datetime-fromisoformat
-, buildPythonPackage
-, dataclasses
-, fetchFromGitHub
-, google-api-core
-, jinja2
-, ndjson
-, pillow
-, pydantic
-, pytest-cases
-, pytestCheckHook
-, pythonOlder
-, rasterio
-, requests
-, shapely
+{
+  lib,
+  backoff,
+  backports-datetime-fromisoformat,
+  buildPythonPackage,
+  dataclasses,
+  fetchFromGitHub,
+  google-api-core,
+  jinja2,
+  ndjson,
+  pillow,
+  pydantic,
+  pytest-cases,
+  pytestCheckHook,
+  pythonOlder,
+  rasterio,
+  requests,
+  shapely,
 }:
-
 buildPythonPackage rec {
   pname = "labelbox";
   version = "3.11.1";
@@ -57,12 +57,12 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  pythonImportsCheck = [ "labelbox" ];
+  pythonImportsCheck = ["labelbox"];
 
   meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rakesh4g ];
+    maintainers = with maintainers; [rakesh4g];
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, libpng, bzip2, libusb-compat-0_1, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  libpng,
+  bzip2,
+  libusb-compat-0_1,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "xpwn";
   version = "0.5.8git";
@@ -21,13 +30,13 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib libpng bzip2 libusb-compat-0_1 openssl ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [zlib libpng bzip2 libusb-compat-0_1 openssl];
 
   meta = with lib; {
-    homepage    = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
+    homepage = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
     description = "Custom NOR firmware loader/IPSW generator for the iPhone";
-    license     = licenses.gpl3Plus;
-    platforms   = with platforms; linux ++ darwin;
+    license = licenses.gpl3Plus;
+    platforms = with platforms; linux ++ darwin;
   };
 }

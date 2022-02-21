@@ -1,10 +1,10 @@
-{ lib
-, makeWrapper
-, buildGoModule
-, fetchFromGitHub
-, gopass
+{
+  lib,
+  makeWrapper,
+  buildGoModule,
+  fetchFromGitHub,
+  gopass,
 }:
-
 buildGoModule rec {
   pname = "gopass-summon-provider";
   version = "1.12.0";
@@ -18,22 +18,25 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-fiV4rtel2jOw6y/ukOZHeFuNVqxHS3rnYhXJ6JZ+a/8=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/gopass-summon-provider --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+    wrapProgram $out/bin/gopass-summon-provider --prefix PATH : "${lib.makeBinPath [gopass]}"
   '';
 
   meta = with lib; {
     description = "Gopass Summon Provider";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
   };
 }

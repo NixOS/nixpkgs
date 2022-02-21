@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+}:
 stdenv.mkDerivation rec {
   pname = "freetube";
   version = "0.16.0";
@@ -18,7 +24,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -44,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "An Open Source YouTube app for privacy";
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ryneeverett alyaeanyx ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ryneeverett alyaeanyx];
+    platforms = ["x86_64-linux"];
   };
 }

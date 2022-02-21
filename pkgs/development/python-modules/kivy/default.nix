@@ -1,14 +1,28 @@
-{ lib, stdenv
-, buildPythonPackage, fetchFromGitHub, fetchpatch
-, pkg-config, cython, docutils
-, kivy-garden
-, mesa, mtdev, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
-, ApplicationServices, AVFoundation, libcxx
-, withGstreamer ? true
-, gst_all_1
-, pillow, requests, pygments
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cython,
+  docutils,
+  kivy-garden,
+  mesa,
+  mtdev,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
+  SDL2_mixer,
+  ApplicationServices,
+  AVFoundation,
+  libcxx,
+  withGstreamer ? true,
+  gst_all_1,
+  pillow,
+  requests,
+  pygments,
 }:
-
 buildPythonPackage rec {
   pname = "Kivy";
   version = "2.0.0";
@@ -34,25 +48,29 @@ buildPythonPackage rec {
     docutils
   ];
 
-  buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_ttf
-    SDL2_mixer
-  ] ++ lib.optionals stdenv.isLinux [
-    mesa
-    mtdev
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    AVFoundation
-    libcxx
-  ] ++ lib.optionals withGstreamer (with gst_all_1; [
-    # NOTE: The degree to which gstreamer actually works is unclear
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      SDL2
+      SDL2_image
+      SDL2_ttf
+      SDL2_mixer
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      mesa
+      mtdev
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      AVFoundation
+      libcxx
+    ]
+    ++ lib.optionals withGstreamer (with gst_all_1; [
+      # NOTE: The degree to which gstreamer actually works is unclear
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   propagatedBuildInputs = [
     kivy-garden
@@ -75,16 +93,16 @@ buildPythonPackage rec {
   '';
 
   /*
-    We cannot run tests as Kivy tries to import itself before being fully
-    installed.
-  */
+   We cannot run tests as Kivy tries to import itself before being fully
+   installed.
+   */
   doCheck = false;
-  pythonImportsCheck = [ "kivy" ];
+  pythonImportsCheck = ["kivy"];
 
   meta = with lib; {
     description = "Library for rapid development of hardware-accelerated multitouch applications.";
     homepage = "https://pypi.python.org/pypi/kivy";
     license = licenses.mit;
-    maintainers = with maintainers; [ risson ];
+    maintainers = with maintainers; [risson];
   };
 }

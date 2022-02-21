@@ -1,10 +1,11 @@
-{ config, lib, ... }:
-
-with lib;
-let
-  cfg = config.hardware.xpadneo;
-in
 {
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.hardware.xpadneo;
+in {
   options.hardware.xpadneo = {
     enable = mkEnableOption "the xpadneo driver for Xbox One wireless controllers";
   };
@@ -15,15 +16,15 @@ in
       # https://wiki.archlinux.org/index.php/Gamepad#Connect_Xbox_Wireless_Controller_with_Bluetooth
       extraModprobeConfig =
         mkIf
-          config.hardware.bluetooth.enable
-          "options bluetooth disable_ertm=1";
+        config.hardware.bluetooth.enable
+        "options bluetooth disable_ertm=1";
 
-      extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
-      kernelModules = [ "hid_xpadneo" ];
+      extraModulePackages = with config.boot.kernelPackages; [xpadneo];
+      kernelModules = ["hid_xpadneo"];
     };
   };
 
   meta = {
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [kira-bruneau];
   };
 }

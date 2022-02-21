@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "pcm";
   version = "202112";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Processor counter monitor";
     homepage = "https://www.intel.com/software/pcm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ roosemberth ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [roosemberth];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go-bindata,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "waypoint";
   version = "0.7.1";
@@ -13,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "0v4xk1ia6zhh4h2rgpinfl0hs300lk84vabm35mjahch7kmvfhvb";
 
-  nativeBuildInputs = [ go-bindata installShellFiles ];
+  nativeBuildInputs = [go-bindata installShellFiles];
 
   # GIT_{COMMIT,DIRTY} filled in blank to prevent trying to run git and ending up blank anyway
   buildPhase = ''
@@ -76,6 +81,6 @@ buildGoModule rec {
       through a consistent and repeatable workflow.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ winpat jk techknowlogick ];
+    maintainers = with maintainers; [winpat jk techknowlogick];
   };
 }

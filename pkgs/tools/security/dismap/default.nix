@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "dismap";
   version = "0.2";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Asset discovery and identification tools";
     homepage = "https://github.com/zhzyker/dismap";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

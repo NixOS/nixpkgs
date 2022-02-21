@@ -1,7 +1,12 @@
-{ lib, pkg-config, fetchPypi, buildPythonPackage
-, buildPackages
-, zstd, pytest }:
-
+{
+  lib,
+  pkg-config,
+  fetchPypi,
+  buildPythonPackage,
+  buildPackages,
+  zstd,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "zstd";
   version = "1.5.1.0";
@@ -16,8 +21,8 @@ buildPythonPackage rec {
       --replace "/usr/bin/pkg-config" "${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zstd ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [zstd];
 
   setupPyBuildFlags = [
     "--external"
@@ -31,7 +36,7 @@ buildPythonPackage rec {
   VERSION = zstd.version;
   PKG_VERSION = version;
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   checkPhase = ''
     pytest
   '';

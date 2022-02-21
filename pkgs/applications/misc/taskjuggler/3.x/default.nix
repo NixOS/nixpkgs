@@ -1,5 +1,8 @@
-{ lib, bundlerEnv, ruby }:
-
+{
+  lib,
+  bundlerEnv,
+  ruby,
+}:
 bundlerEnv {
   name = "taskjuggler-3.5.0";
 
@@ -8,8 +11,8 @@ bundlerEnv {
 
   meta = {
     description = "A modern and powerful project management tool";
-    homepage    = "https://taskjuggler.org/";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.unix;
+    homepage = "https://taskjuggler.org/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

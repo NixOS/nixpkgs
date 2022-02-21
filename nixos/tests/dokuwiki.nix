@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   template-bootstrap3 = pkgs.stdenv.mkDerivation {
     name = "bootstrap3";
     # Download the theme from the dokuwiki site
@@ -9,11 +7,10 @@ let
       sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
     };
     # We need unzip to build this package
-    nativeBuildInputs = [ pkgs.unzip ];
+    nativeBuildInputs = [pkgs.unzip];
     # Installing simply means copying all files to the output directory
     installPhase = "mkdir -p $out; cp -R * $out/";
   };
-
 
   # Let's package the icalevents plugin
   plugin-icalevents = pkgs.stdenv.mkDerivation {
@@ -24,12 +21,11 @@ let
       sha256 = "e40ed7dd6bbe7fe3363bbbecb4de481d5e42385b5a0f62f6a6ce6bf3a1f9dfa8";
     };
     # We need unzip to build this package
-    nativeBuildInputs = [ pkgs.unzip ];
+    nativeBuildInputs = [pkgs.unzip];
     sourceRoot = ".";
     # Installing simply means copying all files to the output directory
     installPhase = "mkdir -p $out; cp -R * $out/";
   };
-
 in {
   name = "dokuwiki";
   meta = with pkgs.lib; {
@@ -50,14 +46,14 @@ in {
           "site2.local" = {
             usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
             superUser = "admin";
-            templates = [ template-bootstrap3 ];
-            plugins = [ plugin-icalevents ];
+            templates = [template-bootstrap3];
+            plugins = [plugin-icalevents];
           };
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+      networking.firewall.allowedTCPPorts = [80];
+      networking.hosts."127.0.0.1" = ["site1.local" "site2.local"];
     };
 
     dokuwiki_caddy = {...}: {
@@ -71,16 +67,15 @@ in {
           "site2.local" = {
             usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
             superUser = "admin";
-            templates = [ template-bootstrap3 ];
-            plugins = [ plugin-icalevents ];
+            templates = [template-bootstrap3];
+            plugins = [plugin-icalevents];
           };
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+      networking.firewall.allowedTCPPorts = [80];
+      networking.hosts."127.0.0.1" = ["site1.local" "site2.local"];
     };
-
   };
 
   testScript = ''

@@ -1,23 +1,23 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, httpx
-, iso8601
-, poetry-core
-, pydantic
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, respx
-, retrying
-, rfc3339
-, toml
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  httpx,
+  iso8601,
+  poetry-core,
+  pydantic,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  respx,
+  retrying,
+  rfc3339,
+  toml,
 }:
-
 buildPythonPackage rec {
   pname = "qcs-api-client";
   version = "0.20.10";
@@ -85,6 +85,6 @@ buildPythonPackage rec {
     description = "Python library for accessing the Rigetti QCS API";
     homepage = "https://pypi.org/project/qcs-api-client/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

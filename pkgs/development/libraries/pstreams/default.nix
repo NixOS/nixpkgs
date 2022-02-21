@@ -1,25 +1,30 @@
-{ lib, stdenv
-, fetchgit
+{
+  lib,
+  stdenv,
+  fetchgit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "PStreams";
   version = "1.0.1";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/pstreams/code";
-    rev = let dot2Underscore = lib.strings.stringAsChars (c: if c == "." then "_" else c);
-          in "RELEASE_${dot2Underscore version}";
+    rev = let
+      dot2Underscore = lib.strings.stringAsChars (c:
+        if c == "."
+        then "_"
+        else c);
+    in "RELEASE_${dot2Underscore version}";
     sha256 = "0r8aj0nh5mkf8cvnzl8bdy4nm7i74vs83axxfimcd74kjfn0irys";
   };
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = ["prefix=${placeholder "out"}"];
   dontBuild = true;
   doCheck = true;
 
   preInstall = "rm INSTALL";
-    # `make install` fails on case-insensitive file systems (e.g. APFS by
-    # default) because this target exists
+  # `make install` fails on case-insensitive file systems (e.g. APFS by
+  # default) because this target exists
 
   meta = with lib; {
     description = "POSIX Process Control in C++";
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://pstreams.sourceforge.net/";
     downloadPage = "http://pstreams.sourceforge.net/download/";
-    maintainers = with maintainers; [ arthur ];
+    maintainers = with maintainers; [arthur];
     license = licenses.boost;
     platforms = platforms.all;
   };

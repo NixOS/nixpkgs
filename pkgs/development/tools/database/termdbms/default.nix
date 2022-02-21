@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "termdbms";
   version = "unstable-2021-09-04";
@@ -13,14 +16,14 @@ buildGoModule rec {
 
   vendorSha256 = "0h9aw68niizd9gs0i890g6ij13af04qgpfy1g5pskyr4ryx0gn26";
 
-  patches = [ ./viewer.patch ];
+  patches = [./viewer.patch];
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X=main.Version=${version}"];
 
   meta = with lib; {
     homepage = "https://github.com/mathaou/termdbms/";
     description = "A TUI for viewing and editing database files";
     license = licenses.mit;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with maintainers; [izorkin];
   };
 }

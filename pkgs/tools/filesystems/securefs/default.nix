@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake
-, fuse }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fuse,
+}:
 stdenv.mkDerivation rec {
   pname = "securefs";
   version = "0.11.1";
@@ -20,8 +23,8 @@ stdenv.mkDerivation rec {
     ./add-macfuse-support.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ fuse ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [fuse];
 
   meta = with lib; {
     inherit (src.meta) homepage;
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
       automatically updated to contain the encrypted and authenticated
       contents.
     '';
-    license = with licenses; [ bsd2 mit ];
+    license = with licenses; [bsd2 mit];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,10 @@
-{stdenv, lib, fetchurl, fetchpatch, autoreconfHook}:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "arj";
   version = "3.10.22";
@@ -126,7 +131,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace environ.c \
@@ -149,7 +154,7 @@ stdenv.mkDerivation rec {
       provided by ARJ Software, Inc.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sander ];
+    maintainers = [maintainers.sander];
     platforms = platforms.unix;
   };
 }

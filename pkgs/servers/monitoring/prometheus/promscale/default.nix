@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, promscale
-, testVersion
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  promscale,
+  testVersion,
 }:
-
 buildGoModule rec {
   pname = "promscale";
   version = "0.10.0";
@@ -51,6 +51,6 @@ buildGoModule rec {
     changelog = "https://github.com/timescale/promscale/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [_0x4A6F];
   };
 }

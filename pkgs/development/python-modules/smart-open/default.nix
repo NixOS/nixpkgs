@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, azure-common
-, azure-core
-, azure-storage-blob
-, boto3
-, google-cloud-storage
-, requests
-, moto
-, parameterizedtestcase
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  azure-common,
+  azure-core,
+  azure-storage-blob,
+  boto3,
+  google-cloud-storage,
+  requests,
+  moto,
+  parameterizedtestcase,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "smart-open";
   version = "5.2.1";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "smart_open" ];
+  pytestFlagsArray = ["smart_open"];
 
   disabledTestPaths = [
     "smart_open/tests/test_http.py"
@@ -64,12 +64,12 @@ buildPythonPackage rec {
     "test_write"
   ];
 
-  pythonImportsCheck = [ "smart_open" ];
+  pythonImportsCheck = ["smart_open"];
 
   meta = with lib; {
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/RaRe-Technologies/smart_open";
     license = licenses.mit;
-    maintainers = with maintainers; [ jyp ];
+    maintainers = with maintainers; [jyp];
   };
 }

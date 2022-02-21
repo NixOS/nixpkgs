@@ -1,5 +1,12 @@
-{ lib, isPy3k, buildPythonPackage, fetchFromGitHub, fetchpatch, zope_interface, twisted }:
-
+{
+  lib,
+  isPy3k,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  zope_interface,
+  twisted,
+}:
 buildPythonPackage rec {
   pname = "python3-application";
   version = "3.0.3";
@@ -22,15 +29,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ zope_interface twisted ];
+  propagatedBuildInputs = [zope_interface twisted];
 
-  pythonImportsCheck = [ "application" ];
+  pythonImportsCheck = ["application"];
 
   meta = with lib; {
     description = "A collection of modules that are useful when building python applications";
     homepage = "https://github.com/AGProjects/python3-application";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ chanley ];
+    maintainers = with maintainers; [chanley];
     longDescription = ''
       This package is a collection of modules that are useful when building python applications. Their purpose is to eliminate the need to divert resources into implementing the small tasks that every application needs to do in order to run successfully and focus instead on the application logic itself.
       The modules that the application package provides are:

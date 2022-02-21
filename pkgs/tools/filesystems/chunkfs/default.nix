@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, perl, fuse }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  fuse,
+}:
 stdenv.mkDerivation rec {
   version = "0.7";
   pname = "chunkfs";

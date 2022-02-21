@@ -1,5 +1,9 @@
-{ buildDunePackage, resto, resto-directory, cohttp-lwt }:
-
+{
+  buildDunePackage,
+  resto,
+  resto-directory,
+  cohttp-lwt,
+}:
 buildDunePackage {
   pname = "resto-cohttp";
   inherit (resto) src version meta useDune2 doCheck;

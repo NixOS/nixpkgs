@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  fetchgit,
+  cmake,
 }:
-
 buildPythonPackage rec {
   pname = "editorconfig";
   version = "0.12.3";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
     ctest -E "utf_8_char" .
   '';
 
-  pythonImportsCheck = [ "editorconfig" ];
+  pythonImportsCheck = ["editorconfig"];
 
   meta = with lib; {
     description = "EditorConfig File Locator and Interpreter for Python";
     homepage = "https://editorconfig.org";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

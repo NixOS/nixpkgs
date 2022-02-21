@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchurl, libfaketime
-, fonttosfnt, mkfontscale
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libfaketime,
+  fonttosfnt,
+  mkfontscale,
 }:
-
 stdenv.mkDerivation {
   name = "envypn-font-1.7.1";
 
@@ -10,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "bda67b6bc6d5d871a4d46565d4126729dfb8a0de9611dae6c68132a7b7db1270";
   };
 
-  nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
+  nativeBuildInputs = [libfaketime fonttosfnt mkfontscale];
 
   unpackPhase = ''
     tar -xzf $src --strip-components=1

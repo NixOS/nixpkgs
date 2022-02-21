@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
 }:
-
 stdenv.mkDerivation rec {
   pname = "usb-reset";
   # not tagged, but changelog has this with the date of the e9a9d6c commit
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k9qmhqi206gcnv3z4vwya82g5nm225972ylf67zjiikk8pn8m0s";
   };
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [libusb1];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ralight/usb-reset";
     changelog = "https://github.com/ralight/usb-reset/blob/master/ChangeLog.txt";
     license = licenses.mit;
-    maintainers = [ maintainers.evils ];
+    maintainers = [maintainers.evils];
     platforms = platforms.all;
   };
 }

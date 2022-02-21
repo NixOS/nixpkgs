@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ocaml }:
-
-stdenv.mkDerivation  rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+}:
+stdenv.mkDerivation rec {
   pname = "coq2html";
   version = "1.3";
 
@@ -11,7 +15,7 @@ stdenv.mkDerivation  rec {
     sha256 = "sha256:1ad825yifn518wk1c2y2ji10q3m468r8ajjgw2nzzy7d608nx7yq";
   };
 
-  nativeBuildInputs = [ ocaml ];
+  nativeBuildInputs = [ocaml];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,7 +34,7 @@ stdenv.mkDerivation  rec {
     '';
     homepage = "https://github.com/xavierleroy/coq2html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jwiegley siraben ];
+    maintainers = with maintainers; [jwiegley siraben];
     platforms = platforms.unix;
   };
 }

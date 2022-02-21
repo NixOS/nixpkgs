@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, udev
-, glib
-, gnome
-, vala
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  udev,
+  glib,
+  gnome,
+  vala,
+  withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform),
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libgudev";
   version = "237";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -24,30 +25,38 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [pkg-config];
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    vala
-    glib # for glib-mkenums needed during the build
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      meson
+      ninja
+      vala
+      glib # for glib-mkenums needed during the build
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
   buildInputs = [
     udev
     glib
   ];
 
-  mesonFlags = [
-    # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
-    "-Dtests=disabled"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dvapi=disabled"
-  ];
+  mesonFlags =
+    [
+      # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
+      "-Dtests=disabled"
+      "-Dintrospection=${
+        if withIntrospection
+        then "enabled"
+        else "disabled"
+      }"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-Dvapi=disabled"
+    ];
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -59,7 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A library that provides GObject bindings for libudev";
     homepage = "https://wiki.gnome.org/Projects/libgudev";
-    maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
+    maintainers = [maintainers.eelco] ++ teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

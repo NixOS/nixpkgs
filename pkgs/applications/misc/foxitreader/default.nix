@@ -1,5 +1,17 @@
-{ mkDerivation, lib, fetchzip, libarchive, autoPatchelfHook, libsecret, libGL, zlib, openssl, qtbase, qtwebkit, qtxmlpatterns }:
-
+{
+  mkDerivation,
+  lib,
+  fetchzip,
+  libarchive,
+  autoPatchelfHook,
+  libsecret,
+  libGL,
+  zlib,
+  openssl,
+  qtbase,
+  qtwebkit,
+  qtxmlpatterns,
+}:
 mkDerivation rec {
   pname = "foxitreader";
   version = "2.4.4.0911";
@@ -10,9 +22,9 @@ mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [ libGL libsecret openssl qtbase qtwebkit qtxmlpatterns zlib ];
+  buildInputs = [libGL libsecret openssl qtbase qtwebkit qtxmlpatterns zlib];
 
-  nativeBuildInputs = [ autoPatchelfHook libarchive ];
+  nativeBuildInputs = [autoPatchelfHook libarchive];
 
   buildPhase = ''
     runHook preBuild
@@ -68,12 +80,12 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  qtWrapperArgs = [ "--set appname FoxitReader" "--set selfpath $out/lib" ];
+  qtWrapperArgs = ["--set appname FoxitReader" "--set selfpath $out/lib"];
 
   meta = with lib; {
     description = "A viewer for PDF documents";
     homepage = "https://www.foxitsoftware.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ p-h rhoriguchi ];
+    maintainers = with maintainers; [p-h rhoriguchi];
   };
 }

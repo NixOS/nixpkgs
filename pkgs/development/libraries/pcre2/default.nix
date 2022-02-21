@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pcre2";
   version = "10.39";
@@ -12,14 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  configureFlags = [
-    "--enable-pcre2-16"
-    "--enable-pcre2-32"
-  ] ++ lib.optional (!stdenv.hostPlatform.isRiscV &&
-                     !(stdenv.hostPlatform.isDarwin &&
-                       stdenv.hostPlatform.isAarch64)) "--enable-jit";
+  configureFlags =
+    [
+      "--enable-pcre2-16"
+      "--enable-pcre2-32"
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isRiscV
+    && !(stdenv.hostPlatform.isDarwin
+    && stdenv.hostPlatform.isAarch64)) "--enable-jit";
 
-  outputs = [ "bin" "dev" "out" "doc" "man" "devdoc" ];
+  outputs = ["bin" "dev" "out" "doc" "man" "devdoc"];
 
   postFixup = ''
     moveToOutput bin/pcre2-config "$dev"
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.pcre.org/";
     description = "Perl Compatible Regular Expressions";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ttuegel];
     platforms = platforms.all;
   };
 }

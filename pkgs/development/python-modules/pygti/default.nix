@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, aiohttp
-, pytz
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools-scm,
+  aiohttp,
+  pytz,
+  voluptuous,
 }:
-
 buildPythonPackage rec {
   pname = "pygti";
   version = "0.9.2";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Access public transport information in Hamburg, Germany";
     homepage = "https://github.com/vigonotion/pygti";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

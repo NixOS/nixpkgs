@@ -1,25 +1,26 @@
-{ lib, fetchzip }:
-
-let
+{
+  lib,
+  fetchzip,
+}: let
   version = "3.19";
-in fetchzip {
-  name = "inter-${version}";
+in
+  fetchzip {
+    name = "inter-${version}";
 
-  url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+    url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-  '';
+    postFetch = ''
+      mkdir -p $out/share/fonts/opentype
+      unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+    '';
 
-  sha256 = "sha256-8p15thg3xyvCA/8dH2jGQoc54nzESFDyv5m47FgWrSI=";
+    sha256 = "sha256-8p15thg3xyvCA/8dH2jGQoc54nzESFDyv5m47FgWrSI=";
 
-  meta = with lib; {
-    homepage = "https://rsms.me/inter/";
-    description = "A typeface specially designed for user interfaces";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ demize dtzWill ];
-  };
-}
-
+    meta = with lib; {
+      homepage = "https://rsms.me/inter/";
+      description = "A typeface specially designed for user interfaces";
+      license = licenses.ofl;
+      platforms = platforms.all;
+      maintainers = with maintainers; [demize dtzWill];
+    };
+  }

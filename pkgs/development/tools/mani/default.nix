@@ -1,5 +1,11 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles, git, makeWrapper}:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+  git,
+  makeWrapper,
+}:
 buildGoModule rec {
   pname = "mani";
   version = "0.12.0";
@@ -13,9 +19,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-NnXQAf8m2cGLvwSOzQWXffiG1zyVqDPQnGAeqe7EUHY=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [installShellFiles makeWrapper];
 
-  ldflags = [ "-s" "-w" "-X github.com/alajmo/mani/cmd.version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/alajmo/mani/cmd.version=${version}"];
 
   postInstall = ''
     installShellCompletion --cmd mani \
@@ -24,7 +30,7 @@ buildGoModule rec {
       --zsh <($out/bin/mani completion zsh)
 
     wrapProgram $out/bin/mani \
-      --prefix PATH : ${lib.makeBinPath [ git ]}
+      --prefix PATH : ${lib.makeBinPath [git]}
   '';
 
   # Skip tests

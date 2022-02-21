@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiosenseme";
   version = "0.6.1";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with SenseME fans and lights by Big Ass Fans";
     homepage = "https://github.com/bdraco/aiosenseme";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

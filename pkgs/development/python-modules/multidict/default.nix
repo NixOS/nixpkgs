@@ -1,10 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "multidict";
   version = "5.2.0";
@@ -20,14 +20,14 @@ buildPythonPackage rec {
     sed -i '/^addopts/d' setup.cfg
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "multidict" ];
+  pythonImportsCheck = ["multidict"];
 
   meta = with lib; {
     description = "Multidict implementation";
     homepage = "https://github.com/aio-libs/multidict/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

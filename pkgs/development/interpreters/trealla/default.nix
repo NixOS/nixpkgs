@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, readline, openssl, withThread ? true, withSSL ? true, xxd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  readline,
+  openssl,
+  withThread ? true,
+  withSSL ? true,
+  xxd,
+}:
 stdenv.mkDerivation rec {
   pname = "trealla";
   version = "1.20.31";
@@ -25,8 +33,8 @@ stdenv.mkDerivation rec {
     (lib.optionalString stdenv.isDarwin "NOLDLIBS=1")
   ];
 
-  nativeBuildInputs = [ xxd ];
-  buildInputs = [ readline openssl ];
+  nativeBuildInputs = [xxd];
+  buildInputs = [readline openssl];
 
   installPhase = ''
     install -Dm755 -t $out/bin tpl
@@ -42,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "A compact, efficient Prolog interpreter written in ANSI C";
     homepage = "https://github.com/infradig/trealla";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
     platforms = platforms.all;
   };
 }

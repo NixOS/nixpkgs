@@ -1,32 +1,32 @@
-{ lib
-, attrs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, hypothesis
-, isPy3k
-, jbig2dec
-, lxml
-, mupdf
-, packaging
-, pillow
-, psutil
-, pybind11
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, python-xmp-toolkit
-, qpdf
-, setuptools
-, setuptools-scm
-, setuptools-scm-git-archive
-, substituteAll
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  hypothesis,
+  isPy3k,
+  jbig2dec,
+  lxml,
+  mupdf,
+  packaging,
+  pillow,
+  psutil,
+  pybind11,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  python-xmp-toolkit,
+  qpdf,
+  setuptools,
+  setuptools-scm,
+  setuptools-scm-git-archive,
+  substituteAll,
 }:
-
 buildPythonPackage rec {
   pname = "pikepdf";
   version = "4.4.1";
-  disabled = ! isPy3k;
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -79,13 +79,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonImportsCheck = [ "pikepdf" ];
+  pythonImportsCheck = ["pikepdf"];
 
   meta = with lib; {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ kiwi dotlambda ];
+    maintainers = with maintainers; [kiwi dotlambda];
     changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
   };
 }

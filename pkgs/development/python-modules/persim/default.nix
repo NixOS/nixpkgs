@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, deprecated
-, hopcroftkarp
-, joblib
-, matplotlib
-, numpy
-, scikit-learn
-, scipy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  deprecated,
+  hopcroftkarp,
+  joblib,
+  matplotlib,
+  numpy,
+  scikit-learn,
+  scipy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "persim";
   version = "0.3.1";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

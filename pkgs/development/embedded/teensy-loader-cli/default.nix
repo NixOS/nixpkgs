@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, libusb-compat-0_1
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  libusb-compat-0_1,
 }:
-
 stdenv.mkDerivation rec {
   pname = "teensy-loader-cli";
   version = "2.1+unstable=2021-04-10";

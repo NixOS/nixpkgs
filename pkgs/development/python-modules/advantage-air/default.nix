@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "advantage-air";
   version = "0.3.1";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "API helper for Advantage Air's MyAir and e-zone API";
     homepage = "https://github.com/Bre77/advantage_air";
     license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    maintainers = with maintainers; [jamiemagee];
   };
 }

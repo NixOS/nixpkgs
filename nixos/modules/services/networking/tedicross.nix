@@ -1,15 +1,16 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   dataDir = "/var/lib/tedicross";
   cfg = config.services.tedicross;
   configJSON = pkgs.writeText "tedicross-settings.json" (builtins.toJSON cfg.config);
-  configYAML = pkgs.runCommand "tedicross-settings.yaml" { preferLocalBuild = true; } ''
+  configYAML = pkgs.runCommand "tedicross-settings.yaml" {preferLocalBuild = true;} ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
   '';
-
 in {
   options = {
     services.tedicross = {
@@ -81,9 +82,9 @@ in {
     # from https://github.com/TediCross/TediCross/blob/master/guides/autostart/Linux.md
     systemd.services.tedicross = {
       description = "TediCross Telegram-Discord bridge service";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"];
+      after = ["network-online.target"];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.nodePackages.tedicross}/bin/tedicross --config='${configYAML}' --data-dir='${dataDir}'";
@@ -95,6 +96,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with maintainers; [pacien];
 }
-

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   pkg = pkgs.sane-backends.override {
     scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
     scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
@@ -29,22 +30,20 @@ let
 
   env = {
     SANE_CONFIG_DIR = config.hardware.sane.configDir;
-    LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
+    LD_LIBRARY_PATH = ["${saneConfig}/lib/sane"];
   };
 
-  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
+  backends = [pkg netConf] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
+  saneConfig = pkgs.mkSaneConfig {
+    paths = backends;
+    inherit (config.hardware.sane) disabledDefaultBackends;
+  };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     hardware.sane.enable = mkOption {
       type = types.bool;
       default = false;
@@ -79,7 +78,7 @@ in
     hardware.sane.disabledDefaultBackends = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "v4l" ];
+      example = ["v4l"];
       description = ''
         Names of backends which are enabled by default but should be disabled.
         See <literal>$SANE_CONFIG_DIR/dll.conf</literal> for the list of possible names.
@@ -144,9 +143,7 @@ in
         Extra saned configuration lines.
       '';
     };
-
   };
-
 
   ###### implementation
 
@@ -162,7 +159,7 @@ in
     })
 
     (mkIf config.services.saned.enable {
-      networking.firewall.connectionTrackingModules = [ "sane" ];
+      networking.firewall.connectionTrackingModules = ["sane"];
 
       systemd.services."saned@" = {
         description = "Scanner Service";
@@ -176,8 +173,8 @@ in
 
       systemd.sockets.saned = {
         description = "saned incoming socket";
-        wantedBy = [ "sockets.target" ];
-        listenStreams = [ "0.0.0.0:6566" "[::]:6566" ];
+        wantedBy = ["sockets.target"];
+        listenStreams = ["0.0.0.0:6566" "[::]:6566"];
         socketConfig = {
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";
@@ -189,9 +186,8 @@ in
       users.users.scanner = {
         uid = config.ids.uids.scanner;
         group = "scanner";
-        extraGroups = [ "lp" ] ++ optionals config.services.avahi.enable [ "avahi" ];
+        extraGroups = ["lp"] ++ optionals config.services.avahi.enable ["avahi"];
       };
     })
   ];
-
 }

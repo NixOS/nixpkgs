@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-python-client
-, oauth2client
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-python-client,
+  oauth2client,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "pydrive";
   version = "1.3.1";

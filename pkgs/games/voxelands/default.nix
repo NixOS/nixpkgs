@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchFromGitLab
-, bzip2
-, cmake
-, expat
-, irrlicht
-, libGL
-, libGLU
-, libXxf86vm
-, libjpeg
-, libpng
-, libvorbis
-, openal
-, pkg-config
-, sqlite
-, xlibsWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  bzip2,
+  cmake,
+  expat,
+  irrlicht,
+  libGL,
+  libGLU,
+  libXxf86vm,
+  libjpeg,
+  libpng,
+  libvorbis,
+  openal,
+  pkg-config,
+  sqlite,
+  xlibsWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "voxelands";
   version = "1704.00";
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Infinite-world block sandbox game based on Minetest";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
-    broken = stdenv.isAarch64;  # build fails with "libIrrlicht.so: undefined reference to `png_init_filter_functions_neon'"
+    maintainers = with maintainers; [];
+    broken = stdenv.isAarch64; # build fails with "libIrrlicht.so: undefined reference to `png_init_filter_functions_neon'"
   };
 }

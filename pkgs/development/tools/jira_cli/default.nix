@@ -1,5 +1,9 @@
-{ lib, libffi, openssl, python3Packages }:
-let
+{
+  lib,
+  libffi,
+  openssl,
+  python3Packages,
+}: let
   inherit (python3Packages) fetchPypi buildPythonApplication vcrpy mock hiro;
 in
   buildPythonApplication rec {
@@ -16,17 +20,23 @@ in
 
     # Tests rely on VCR cassettes being written during tests. R/O nix store prevents this.
     doCheck = false;
-    checkInputs = with python3Packages; [ vcrpy mock hiro ];
-    buildInputs = [ libffi openssl ];
+    checkInputs = with python3Packages; [vcrpy mock hiro];
+    buildInputs = [libffi openssl];
     propagatedBuildInputs = with python3Packages; [
-      ordereddict requests six suds-jurko termcolor keyring
-      jira  keyrings-alt
+      ordereddict
+      requests
+      six
+      suds-jurko
+      termcolor
+      keyring
+      jira
+      keyrings-alt
     ];
 
     meta = with lib; {
       description = "A command line interface to Jira";
       homepage = "https://github.com/alisaifee/jira-cli";
-      maintainers = with maintainers; [ nyarly ];
+      maintainers = with maintainers; [nyarly];
       license = licenses.mit;
     };
   }

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, libSM, libX11, libICE, SDL, alsa-lib, gcc-unwrapped, libXext }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libSM,
+  libX11,
+  libICE,
+  SDL,
+  alsa-lib,
+  gcc-unwrapped,
+  libXext,
+}:
 stdenv.mkDerivation rec {
   pname = "atari++";
   version = "1.83";
@@ -9,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "04fm2ic2qi4a52mi72wcaxyrpll4k8vvchx3qrik8rhg3jrxgm47";
   };
 
-  buildInputs = [ libSM libX11 SDL libICE alsa-lib gcc-unwrapped libXext ];
+  buildInputs = [libSM libX11 SDL libICE alsa-lib gcc-unwrapped libXext];
 
   postFixup = ''
     patchelf --set-rpath ${lib.makeLibraryPath buildInputs} "$out/bin/atari++"
@@ -25,7 +35,7 @@ stdenv.mkDerivation rec {
       is auto-configurable and will compile on a variety of systems
       (Linux, Solaris, Irix).
     '';
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     license = licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

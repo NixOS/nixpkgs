@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, python-dateutil
-, docopt
-, fetchPypi
-, pytestCheckHook
-, pyyaml
-, ruamel-yaml
-, testfixtures
+{
+  lib,
+  buildPythonPackage,
+  python-dateutil,
+  docopt,
+  fetchPypi,
+  pytestCheckHook,
+  pyyaml,
+  ruamel-yaml,
+  testfixtures,
 }:
-
 buildPythonPackage rec {
   version = "1.8.0";
   pname = "pykwalify";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     "test_multi_file_support"
   ];
 
-  pythonImportsCheck = [ "pykwalify" ];
+  pythonImportsCheck = ["pykwalify"];
 
   meta = with lib; {
     homepage = "https://github.com/Grokzen/pykwalify";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
       http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [siriobalmelli];
   };
 }

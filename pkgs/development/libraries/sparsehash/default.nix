@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "sparsehash";
   version = "2.0.4";
@@ -16,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "An extremely memory-efficient hash_map implementation";
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

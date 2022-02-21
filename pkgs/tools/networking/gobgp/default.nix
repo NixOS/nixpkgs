@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "gobgp";
   version = "2.34.0";
@@ -18,15 +21,17 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-extldflags '-static'"
+    "-s"
+    "-w"
+    "-extldflags '-static'"
   ];
 
-  subPackages = [ "cmd/gobgp" ];
+  subPackages = ["cmd/gobgp"];
 
   meta = with lib; {
     description = "A CLI tool for GoBGP";
     homepage = "https://osrg.github.io/gobgp/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ higebu ];
+    maintainers = with maintainers; [higebu];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "tableaudocumentapi";
   version = "0.9";
@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "A Python module for working with Tableau files";
     homepage = "https://github.com/tableau/document-api-python";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

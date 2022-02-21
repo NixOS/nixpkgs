@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, ffmpeg_4
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  ffmpeg_4,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ffms";
   version = "2.40";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/FFMS/ffms2/";
     description = "FFmpeg based source library for easy frame accurate access";
     license = licenses.mit;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = with maintainers; [tadeokondrak];
     platforms = platforms.unix;
   };
 }

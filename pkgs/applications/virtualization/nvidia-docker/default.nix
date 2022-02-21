@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, callPackage }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  callPackage,
+}:
 stdenv.mkDerivation rec {
   pname = "nvidia-docker";
   version = "2.5.0";
@@ -27,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "NVIDIA container runtime for Docker";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

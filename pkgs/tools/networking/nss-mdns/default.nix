@@ -1,5 +1,9 @@
-{ fetchurl, lib, stdenv, fetchpatch }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "nss-mdns";
   version = "0.10";
@@ -13,13 +17,13 @@ stdenv.mkDerivation rec {
   # doesn't depend on the Avahi libraries.  Instead, it contains
   # hand-written D-Bus code to talk to the Avahi daemon.
 
-  configureFlags =
-    [ # Try to use the Avahi daemon before resolving on our own.
-      "--enable-avahi"
+  configureFlags = [
+    # Try to use the Avahi daemon before resolving on our own.
+    "--enable-avahi"
 
-      # Connect to the daemon at `/var/run/avahi-daemon/socket'.
-      "--localstatedir=/var"
-    ];
+    # Connect to the daemon at `/var/run/avahi-daemon/socket'.
+    "--localstatedir=/var"
+  ];
 
   patches = [
     # Provide compat definition for libc lacking <nss.h> (e.g. musl)
@@ -28,7 +32,6 @@ stdenv.mkDerivation rec {
       sha256 = "1l1kjbdw8z31br4vib3l5b85jy7kxin760a2f24lww8v6lqdpgds";
     })
   ];
-
 
   meta = {
     description = "The mDNS Name Service Switch (NSS) plug-in";
@@ -46,6 +49,6 @@ stdenv.mkDerivation rec {
     # Supports both the GNU and FreeBSD NSS.
     platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.freebsd;
 
-    maintainers = [ ];
+    maintainers = [];
   };
 }

@@ -4,10 +4,17 @@
 # There is no reason that we couldn't change the file path that slack-cli uses
 # for token storage, except that it would make the Nix package inconsistent with
 # upstream and other distributions.
-
-{ stdenv, lib, fetchFromGitHub, curl, jq, coreutils, gnugrep, gnused
-, runtimeShell }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  curl,
+  jq,
+  coreutils,
+  gnugrep,
+  gnused,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "slack-cli";
   version = "0.18.0";
@@ -34,7 +41,7 @@ stdenv.mkDerivation rec {
 
     MESSAGE
 
-    export PATH=${lib.makeBinPath [ curl jq coreutils gnugrep gnused ]}:"\$PATH"
+    export PATH=${lib.makeBinPath [curl jq coreutils gnugrep gnused]}:"\$PATH"
     exec "$out/bin/.slack-wrapped" "\$@"
     WRAPPER
 
@@ -43,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.qyliss ];
+    maintainers = [lib.maintainers.qyliss];
     platforms = lib.platforms.unix;
   };
 }

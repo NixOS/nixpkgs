@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, mock
-, dcm2niix
-, nibabel
-, pydicom
-, nipype
-, dcmstack
-, etelemetry
-, filelock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytest,
+  mock,
+  dcm2niix,
+  nibabel,
+  pydicom,
+  nipype,
+  dcmstack,
+  etelemetry,
+  filelock,
 }:
-
 buildPythonPackage rec {
   version = "0.8.0";
   pname = "heudiconv";
@@ -31,10 +31,16 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    dcm2niix nibabel pydicom nipype dcmstack etelemetry filelock
+    dcm2niix
+    nibabel
+    pydicom
+    nipype
+    dcmstack
+    etelemetry
+    filelock
   ];
 
-  checkInputs = [ dcm2niix pytest mock ];
+  checkInputs = [dcm2niix pytest mock];
 
   # test_monitor and test_dlad require 'inotify' and 'datalad' respectively,
   # and these aren't in Nixpkgs
@@ -44,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://heudiconv.readthedocs.io";
     description = "Flexible DICOM converter for organizing imaging data";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

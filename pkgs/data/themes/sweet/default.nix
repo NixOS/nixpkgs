@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, gtk-engine-murrine }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  gtk-engine-murrine,
+}:
 stdenv.mkDerivation rec {
   pname = "sweet";
   version = "3.0";
@@ -27,9 +32,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [gtk-engine-murrine];
 
   sourceRoot = ".";
 
@@ -45,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Light and dark colorful Gtk3.20+ theme";
     homepage = "https://github.com/EliverLara/Sweet";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fuzen ];
+    maintainers = with maintainers; [fuzen];
     platforms = platforms.linux;
   };
 }

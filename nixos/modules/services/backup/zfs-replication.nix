@@ -1,8 +1,10 @@
-{ lib, pkgs, config, ... }:
-
-with lib;
-
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.zfs.autoReplication;
   recursive = optionalString cfg.recursive " --recursive";
   followDelete = optionalString cfg.followDelete " --follow-delete";
@@ -85,6 +87,6 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ alunduil ];
+    maintainers = with lib.maintainers; [alunduil];
   };
 }

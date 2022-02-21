@@ -1,12 +1,12 @@
-{ lib
-, boolean-py
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  boolean-py,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "license-expression";
   version = "21.6.14";
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "license_expression" ];
+  pythonImportsCheck = ["license_expression"];
 
   meta = with lib; {
     description = "Utility library to parse, normalize and compare License expressions for Python";
     homepage = "https://github.com/nexB/license-expression";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

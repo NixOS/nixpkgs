@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "zsh-you-should-use";
   version = "1.7.3";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";
     license = licenses.gpl3;
     description = "ZSH plugin that reminds you to use existing aliases for commands you just typed";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

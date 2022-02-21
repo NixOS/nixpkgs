@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchgit
-, bison, flex, rasdaemon
-}:
-
 {
+  lib,
+  stdenv,
+  fetchgit,
+  bison,
+  flex,
+  rasdaemon,
+}: {
   edac-inject = rasdaemon.inject;
 
   mce-inject = stdenv.mkDerivation rec {
@@ -15,9 +18,9 @@
       sha256 = "0gjapg2hrlxp8ssrnhvc19i3r1xpcnql7xv0zjgbv09zyha08g6z";
     };
 
-    nativeBuildInputs = [ bison flex ];
+    nativeBuildInputs = [bison flex];
 
-    makeFlags = [ "destdir=${placeholder "out"}" ];
+    makeFlags = ["destdir=${placeholder "out"}"];
 
     postInstall = ''
       mkdir $out/sbin
@@ -31,7 +34,7 @@
       description = "MCE error injection tool";
       license = licenses.gpl2Only;
       platforms = platforms.linux;
-      maintainers = [ maintainers.evils ];
+      maintainers = [maintainers.evils];
     };
   };
 
@@ -45,10 +48,10 @@
       sha256 = "0bh6mzpk2mr4xidkammmkfk21b4dbq793qjg25ryyxd1qv0c6cg4";
     };
 
-    nativeBuildInputs = [ bison flex ];
+    nativeBuildInputs = [bison flex];
 
     # how is this necessary?
-    makeFlags = [ "DESTDIR=${placeholder "out"}" ];
+    makeFlags = ["DESTDIR=${placeholder "out"}"];
 
     postInstall = ''
       mkdir $out/bin
@@ -62,7 +65,7 @@
       description = "PCIE AER error injection tool";
       license = licenses.gpl2Only;
       platforms = platforms.linux;
-      maintainers = [ maintainers.evils ];
+      maintainers = [maintainers.evils];
     };
   };
 }

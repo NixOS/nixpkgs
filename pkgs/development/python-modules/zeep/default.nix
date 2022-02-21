@@ -1,30 +1,30 @@
-{ lib
-, aiohttp
-, aioresponses
-, attrs
-, buildPythonPackage
-, cached-property
-, defusedxml
-, fetchFromGitHub
-, freezegun
-, httpx
-, isodate
-, lxml
-, mock
-, platformdirs
-, pretend
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, requests-toolbelt
-, requests-file
-, requests-mock
-, xmlsec
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  attrs,
+  buildPythonPackage,
+  cached-property,
+  defusedxml,
+  fetchFromGitHub,
+  freezegun,
+  httpx,
+  isodate,
+  lxml,
+  mock,
+  platformdirs,
+  pretend,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  requests-toolbelt,
+  requests-file,
+  requests-mock,
+  xmlsec,
 }:
-
 buildPythonPackage rec {
   pname = "zeep";
   version = "4.1.0";
@@ -86,6 +86,6 @@ buildPythonPackage rec {
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvl ];
+    maintainers = with maintainers; [rvl];
   };
 }

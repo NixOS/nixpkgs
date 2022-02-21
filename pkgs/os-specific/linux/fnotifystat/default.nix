@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "fnotifystat";
   version = "0.02.07";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/fnotifystat";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo dtzWill ];
+    maintainers = with maintainers; [womfoo dtzWill];
   };
 }

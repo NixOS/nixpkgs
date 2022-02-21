@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "zeronet";
   version = "0.7.1";
@@ -13,8 +16,19 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    gevent msgpack base58 merkletools rsa pysocks pyasn1 websocket-client
-    gevent-websocket rencode bitcoinlib maxminddb pyopenssl
+    gevent
+    msgpack
+    base58
+    merkletools
+    rsa
+    pysocks
+    pyasn1
+    websocket-client
+    gevent-websocket
+    rencode
+    bitcoinlib
+    maxminddb
+    pyopenssl
   ];
 
   buildPhase = ''
@@ -36,6 +50,6 @@ python3Packages.buildPythonApplication rec {
     description = "Decentralized websites using Bitcoin crypto and BitTorrent network";
     homepage = "https://zeronet.io/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
   };
 }

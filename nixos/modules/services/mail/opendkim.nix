@@ -1,33 +1,39 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.opendkim;
 
   defaultSock = "local:/run/opendkim/opendkim.sock";
 
   keyFile = "${cfg.keyPath}/${cfg.selector}.private";
 
-  args = [ "-f" "-l"
-           "-p" cfg.socket
-           "-d" cfg.domains
-           "-k" keyFile
-           "-s" cfg.selector
-         ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
-
+  args =
+    [
+      "-f"
+      "-l"
+      "-p"
+      cfg.socket
+      "-d"
+      cfg.domains
+      "-k"
+      keyFile
+      "-s"
+      cfg.selector
+    ]
+    ++ optionals (cfg.configFile != null) ["-x" cfg.configFile];
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
+    (mkRenamedOptionModule ["services" "opendkim" "keyFile"] ["services" "opendkim" "keyPath"])
   ];
 
   ###### interface
 
   options = {
-
     services.opendkim = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -82,16 +88,12 @@ in {
         default = null;
         description = "Additional opendkim configuration.";
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users = optionalAttrs (cfg.user == "opendkim") {
       opendkim = {
         group = cfg.group;
@@ -103,7 +105,7 @@ in {
       opendkim.gid = config.ids.gids.opendkim;
     };
 
-    environment.systemPackages = [ pkgs.opendkim ];
+    environment.systemPackages = [pkgs.opendkim];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -"
@@ -111,8 +113,8 @@ in {
 
     systemd.services.opendkim = {
       description = "OpenDKIM signing and verification daemon";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       preStart = ''
         cd "${cfg.keyPath}"
@@ -132,7 +134,7 @@ in {
         RuntimeDirectory = optional (cfg.socket == defaultSock) "opendkim";
         StateDirectory = "opendkim";
         StateDirectoryMode = "0700";
-        ReadWritePaths = [ cfg.keyPath ];
+        ReadWritePaths = [cfg.keyPath];
 
         AmbientCapabilities = [];
         CapabilityBoundingSet = "";
@@ -153,15 +155,14 @@ in {
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6 AF_UNIX" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6 AF_UNIX"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        SystemCallFilter = ["@system-service" "~@privileged @resources"];
         UMask = "0077";
       };
     };
-
   };
 }

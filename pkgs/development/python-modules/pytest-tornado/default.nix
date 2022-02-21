@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pytest
-, tornado
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pytest,
+  tornado,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-tornado";
   version = "0.8.1";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
   # package has no tests
   doCheck = false;
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
-  propagatedBuildInputs = [ tornado ];
+  propagatedBuildInputs = [tornado];
 
   meta = with lib; {
     description = "A py.test plugin providing fixtures and markers to simplify testing of asynchronous tornado applications.";
-    homepage =  "https://github.com/eugeniy/pytest-tornado";
+    homepage = "https://github.com/eugeniy/pytest-tornado";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ixxie ];
+    maintainers = with maintainers; [ixxie];
   };
 }

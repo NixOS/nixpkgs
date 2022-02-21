@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "cooper-hewitt-2014-06-09";
 
@@ -17,6 +19,6 @@ fetchzip {
     description = "A contemporary sans serif, with characters composed of modified-geometric curves and arches";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

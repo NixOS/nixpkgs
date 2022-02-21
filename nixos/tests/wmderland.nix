@@ -1,18 +1,18 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "wmderland";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ takagiy ];
+    maintainers = [takagiy];
   };
 
-  machine = { lib, ... }: {
-    imports = [ ./common/x11.nix ./common/user-account.nix ];
+  machine = {lib, ...}: {
+    imports = [./common/x11.nix ./common/user-account.nix];
     test-support.displayManager.auto.user = "alice";
     services.xserver.displayManager.defaultSession = lib.mkForce "none+wmderland";
     services.xserver.windowManager.wmderland.enable = true;
 
     systemd.services.setupWmderlandConfig = {
-      wantedBy = [ "multi-user.target" ];
-      before = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
+      before = ["multi-user.target"];
       environment = {
         HOME = "/home/alice";
       };
@@ -23,8 +23,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       };
       script = let
         config = pkgs.writeText "config" ''
-             set $Mod = Mod1
-             bindsym $Mod+Return exec ${pkgs.xterm}/bin/xterm -cm -pc
+          set $Mod = Mod1
+          bindsym $Mod+Return exec ${pkgs.xterm}/bin/xterm -cm -pc
         '';
       in ''
         mkdir -p $HOME/.config/wmderland
@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
   };
 
-  testScript = { ... }: ''
+  testScript = {...}: ''
     with subtest("ensure x starts"):
         machine.wait_for_x()
         machine.wait_for_file("/home/alice/.Xauthority")

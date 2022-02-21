@@ -1,94 +1,109 @@
-{ stdenv, writeText, elixir, erlang, hex, lib }:
+{
+  stdenv,
+  writeText,
+  elixir,
+  erlang,
+  hex,
+  lib,
+}: {
+  name,
+  version,
+  src,
+  buildInputs ? [],
+  nativeBuildInputs ? [],
+  beamDeps ? [],
+  propagatedBuildInputs ? [],
+  postPatch ? "",
+  compilePorts ? false,
+  meta ? {},
+  enableDebugInfo ? false,
+  mixEnv ? "prod",
+  ...
+} @ attrs:
+  with lib; let
+    shell = drv:
+      stdenv.mkDerivation {
+        name = "interactive-shell-${drv.name}";
+        buildInputs = [drv];
+      };
 
-{ name
-, version
-, src
-, buildInputs ? [ ]
-, nativeBuildInputs ? [ ]
-, beamDeps ? [ ]
-, propagatedBuildInputs ? [ ]
-, postPatch ? ""
-, compilePorts ? false
-, meta ? { }
-, enableDebugInfo ? false
-, mixEnv ? "prod"
-, ...
-}@attrs:
+    pkg = self:
+      stdenv.mkDerivation (attrs
+      // {
+        name = "${name}-${version}";
+        inherit version src;
 
-with lib;
-let
-  shell = drv: stdenv.mkDerivation {
-    name = "interactive-shell-${drv.name}";
-    buildInputs = [ drv ];
-  };
+        MIX_ENV = mixEnv;
+        MIX_DEBUG =
+          if enableDebugInfo
+          then 1
+          else 0;
+        HEX_OFFLINE = 1;
 
-  pkg = self: stdenv.mkDerivation (attrs // {
-    name = "${name}-${version}";
-    inherit version src;
+        # add to ERL_LIBS so other modules can find at runtime.
+        # http://erlang.org/doc/man/code.html#code-path
+        # Mix also searches the code path when compiling with the --no-deps-check flag
+        setupHook = attrs.setupHook
+        or writeText "setupHook.sh" ''
+          addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
+        '';
 
-    MIX_ENV = mixEnv;
-    MIX_DEBUG = if enableDebugInfo then 1 else 0;
-    HEX_OFFLINE = 1;
+        buildInputs = buildInputs ++ [];
+        nativeBuildInputs = nativeBuildInputs ++ [elixir hex];
+        propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
 
-    # add to ERL_LIBS so other modules can find at runtime.
-    # http://erlang.org/doc/man/code.html#code-path
-    # Mix also searches the code path when compiling with the --no-deps-check flag
-    setupHook = attrs.setupHook or
-      writeText "setupHook.sh" ''
-      addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
-    '';
+        configurePhase =
+          attrs.configurePhase
+          or ''
+            runHook preConfigure
 
-    buildInputs = buildInputs ++ [ ];
-    nativeBuildInputs = nativeBuildInputs ++ [ elixir hex ];
-    propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
+            ${./mix-configure-hook.sh}
 
-    configurePhase = attrs.configurePhase or ''
-      runHook preConfigure
+            runHook postConfigure
+          '';
 
-      ${./mix-configure-hook.sh}
+        buildPhase =
+          attrs.buildPhase
+          or ''
+            runHook preBuild
+            export HEX_HOME="$TEMPDIR/hex"
+            export MIX_HOME="$TEMPDIR/mix"
+            mix compile --no-deps-check
+            runHook postBuild
+          '';
 
-      runHook postConfigure
-    '';
+        installPhase =
+          attrs.installPhase
+          or ''
+            runHook preInstall
 
-    buildPhase = attrs.buildPhase or ''
-      runHook preBuild
-      export HEX_HOME="$TEMPDIR/hex"
-      export MIX_HOME="$TEMPDIR/mix"
-      mix compile --no-deps-check
-      runHook postBuild
-    '';
+            # This uses the install path convention established by nixpkgs maintainers
+            # for all beam packages. Changing this will break compatibility with other
+            # builder functions like buildRebar3 and buildErlangMk.
+            mkdir -p "$out/lib/erlang/lib/${name}-${version}"
 
-    installPhase = attrs.installPhase or ''
-      runHook preInstall
+            # Some packages like db_connection will use _build/shared instead of
+            # honoring the $MIX_ENV variable.
+            for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do
+              if test -d $reldir ; then
+                # Some builds produce symlinks (eg: phoenix priv dircetory). They must
+                # be followed with -H flag.
+                cp  -Hrt "$out/lib/erlang/lib/${name}-${version}" "$reldir"
+              fi
+            done
 
-      # This uses the install path convention established by nixpkgs maintainers
-      # for all beam packages. Changing this will break compatibility with other
-      # builder functions like buildRebar3 and buildErlangMk.
-      mkdir -p "$out/lib/erlang/lib/${name}-${version}"
+            runHook postInstall
+          '';
 
-      # Some packages like db_connection will use _build/shared instead of
-      # honoring the $MIX_ENV variable.
-      for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do
-        if test -d $reldir ; then
-          # Some builds produce symlinks (eg: phoenix priv dircetory). They must
-          # be followed with -H flag.
-          cp  -Hrt "$out/lib/erlang/lib/${name}-${version}" "$reldir"
-        fi
-      done
+        # stripping does not have any effect on beam files
+        # it is however needed for dependencies with NIFs like bcrypt for example
+        dontStrip = false;
 
-      runHook postInstall
-    '';
-
-    # stripping does not have any effect on beam files
-    # it is however needed for dependencies with NIFs like bcrypt for example
-    dontStrip = false;
-
-    passthru = {
-      packageName = name;
-      env = shell self;
-      inherit beamDeps;
-    };
-  });
-in
-fix pkg
-
+        passthru = {
+          packageName = name;
+          env = shell self;
+          inherit beamDeps;
+        };
+      });
+  in
+    fix pkg

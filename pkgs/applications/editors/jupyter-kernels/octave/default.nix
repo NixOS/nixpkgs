@@ -1,28 +1,24 @@
-{ lib
-, stdenv
-, callPackage
-, runCommand
-, makeWrapper
-, octave
-, imagemagick
-, python3
+{
+  lib,
+  stdenv,
+  callPackage,
+  runCommand,
+  makeWrapper,
+  octave,
+  imagemagick,
+  python3,
 }:
-
 # To test:
 # $(nix-build -E 'with import <nixpkgs> {}; jupyter.override { definitions = { octave = octave-kernel.definition; }; }')/bin/jupyter-notebook
-
 let
   kernel = callPackage ./kernel.nix {
     python3Packages = python3.pkgs;
   };
-
-in
-
-rec {
+in rec {
   launcher = runCommand "octave-kernel-launcher" {
     inherit octave;
-    python = python3.withPackages (ps: [ ps.traitlets ps.jupyter_core ps.ipykernel ps.metakernel kernel ]);
-    buildInputs = [ makeWrapper ];
+    python = python3.withPackages (ps: [ps.traitlets ps.jupyter_core ps.ipykernel ps.metakernel kernel]);
+    buildInputs = [makeWrapper];
   } ''
     mkdir -p $out/bin
 
@@ -31,20 +27,21 @@ rec {
       --suffix PATH : $octave/bin
   '';
 
-  sizedLogo = size: stdenv.mkDerivation {
-    name = ''octave-logo-${octave.version}-${size}x${size}.png'';
+  sizedLogo = size:
+    stdenv.mkDerivation {
+      name = ''octave-logo-${octave.version}-${size}x${size}.png'';
 
-    src = octave.src;
+      src = octave.src;
 
-    buildInputs = [ imagemagick ];
+      buildInputs = [imagemagick];
 
-    dontConfigure = true;
-    dontInstall = true;
+      dontConfigure = true;
+      dontInstall = true;
 
-    buildPhase = ''
-      convert ./libgui/src/icons/logo.png -resize ${size}x${size} $out
-    '';
-  };
+      buildPhase = ''
+        convert ./libgui/src/icons/logo.png -resize ${size}x${size} $out
+      '';
+    };
 
   definition = {
     displayName = "Octave";

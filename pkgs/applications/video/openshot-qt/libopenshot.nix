@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, cppzmq
-, doxygen
-, ffmpeg
-, imagemagick
-, jsoncpp
-, libopenshot-audio
-, llvmPackages
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, swig
-, zeromq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  cppzmq,
+  doxygen,
+  ffmpeg,
+  imagemagick,
+  jsoncpp,
+  libopenshot-audio,
+  llvmPackages,
+  pkg-config,
+  python3,
+  qtbase,
+  qtmultimedia,
+  swig,
+  zeromq,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libopenshot";
   version = "0.2.7";
@@ -43,25 +43,27 @@ stdenv.mkDerivation rec {
     swig
   ];
 
-  buildInputs = [
-    cppzmq
-    ffmpeg
-    imagemagick
-    jsoncpp
-    libopenshot-audio
-    python3
-    qtbase
-    qtmultimedia
-    zeromq
-  ] ++ lib.optionals stdenv.isDarwin [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      cppzmq
+      ffmpeg
+      imagemagick
+      jsoncpp
+      libopenshot-audio
+      python3
+      qtbase
+      qtmultimedia
+      zeromq
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      llvmPackages.openmp
+    ];
 
   dontWrapQtApps = true;
 
   doCheck = false;
 
-  cmakeFlags = [ "-DENABLE_RUBY=OFF" ];
+  cmakeFlags = ["-DENABLE_RUBY=OFF"];
 
   meta = with lib; {
     homepage = "http://openshot.org/";
@@ -72,7 +74,7 @@ stdenv.mkDerivation rec {
       to the world. API currently supports C++, Python, and Ruby.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 

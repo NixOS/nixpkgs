@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "figlet";
   version = "2.2.5";
@@ -18,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "prefix=$(out)" "CC:=$(CC)" "LD:=$(CC)" ];
+  makeFlags = ["prefix=$(out)" "CC:=$(CC)" "LD:=$(CC)"];
 
   doCheck = true;
 

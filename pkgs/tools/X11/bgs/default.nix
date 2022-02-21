@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, libXinerama, imlib2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libX11,
+  libXinerama,
+  imlib2,
+}:
 stdenv.mkDerivation rec {
-
   pname = "bgs";
   version = "0.8";
 
@@ -12,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "V8GP+xLSiCvaYZt8Bi3/3KlTBaGnMYQUeNCHwH6Ejzo=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libX11 libXinerama imlib2 ];
+  buildInputs = [libX11 libXinerama imlib2];
 
   preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
@@ -22,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Extremely fast and small background setter for X";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

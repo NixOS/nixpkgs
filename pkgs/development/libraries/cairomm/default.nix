@@ -1,5 +1,16 @@
-{ fetchurl, lib, stdenv, pkg-config, darwin, cairo, fontconfig, freetype, libsigcxx, meson, ninja }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  darwin,
+  cairo,
+  fontconfig,
+  freetype,
+  libsigcxx,
+  meson,
+  ninja,
+}:
 stdenv.mkDerivation rec {
   pname = "cairomm";
   version = "1.14.3";
@@ -11,14 +22,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DTfgZ8XEyngIt87dq/4ZMsW9KnUK1k+zIeEhNTYpfng=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  propagatedBuildInputs = [ cairo libsigcxx ];
-  buildInputs = [ fontconfig freetype ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices
-  ]);
+  nativeBuildInputs = [pkg-config meson ninja];
+  propagatedBuildInputs = [cairo libsigcxx];
+  buildInputs =
+    [fontconfig freetype]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      ApplicationServices
+    ]);
 
   doCheck = true;
 
@@ -39,7 +51,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.cairographics.org/";
 
-    license = with licenses; [ lgpl2Plus mpl10 ];
+    license = with licenses; [lgpl2Plus mpl10];
     platforms = platforms.unix;
   };
 }

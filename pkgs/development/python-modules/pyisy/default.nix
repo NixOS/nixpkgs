@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, python-dateutil
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  python-dateutil,
+  aiohttp,
 }:
-
 buildPythonPackage rec {
   pname = "pyisy";
   version = "3.0.2";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "pyisy" ];
+  pythonImportsCheck = ["pyisy"];
 
   meta = with lib; {
     description = "Python module to talk to ISY994 from UDI";
     homepage = "https://github.com/automicus/PyISY";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

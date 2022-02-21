@@ -1,10 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, gdcm
-, cmake
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  gdcm,
+  cmake,
 }:
-
 buildOctavePackage rec {
   pname = "dicom";
   version = "0.4.0";
@@ -27,7 +27,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/dicom/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Digital communications in medicine (DICOM) file io";
   };
 }

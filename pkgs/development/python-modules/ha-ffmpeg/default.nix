@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, async-timeout }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  async-timeout,
+}:
 buildPythonPackage rec {
   pname = "ha-ffmpeg";
   version = "3.0.2";
@@ -12,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "8d92f2f5790da038d828ac862673e0bb43e8e972e4c70b1714dd9a0fb776c8d1";
   };
 
-  propagatedBuildInputs = [ async-timeout ];
+  propagatedBuildInputs = [async-timeout];
 
   # only manual tests
   doCheck = false;

@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, farbfeld, libX11, libXft, makeWrapper
-, patches ? [] }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  farbfeld,
+  libX11,
+  libXft,
+  makeWrapper,
+  patches ? [],
+}:
 stdenv.mkDerivation rec {
   pname = "sent";
   version = "1";
@@ -10,15 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "0cxysz5lp25mgww73jl0mgip68x7iyvialyzdbriyaff269xxwvv";
   };
 
-  buildInputs = [ libX11 libXft ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [libX11 libXft];
+  nativeBuildInputs = [makeWrapper];
 
   # unpacking doesn't create a directory
   sourceRoot = ".";
 
   inherit patches;
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
   postInstall = ''
     wrapProgram "$out/bin/sent" --prefix PATH : "${farbfeld}/bin"
   '';
@@ -28,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tools.suckless.org/sent/";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, scikit-learn
-, matplotlib
-, numba
-, umap-learn
-, cython
-, ripser
-, persim
-, pillow
-, kmapper
-, tadasets
-, pytest
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  scikit-learn,
+  matplotlib,
+  numba,
+  umap-learn,
+  cython,
+  ripser,
+  persim,
+  pillow,
+  kmapper,
+  tadasets,
+  pytest,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "scikit-tda";
   version = "1.0.0";
@@ -59,6 +59,6 @@ buildPythonPackage rec {
     description = "Topological Data Analysis for humans";
     homepage = "https://github.com/scikit-tda/scikit-tda";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

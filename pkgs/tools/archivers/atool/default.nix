@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, perl, bash}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "atool";
   version = "0.39.0";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "aaf60095884abb872e25f8e919a8a63d0dabaeca46faeba87d12812d6efc703b";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
   configureScript = "${bash}/bin/bash configure";
 
   meta = {

@@ -1,14 +1,14 @@
-{ lib
-, aiohttp
-, aioresponses
-, asynccmd
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  asynccmd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyspcwebgw";
   version = "0.5.0";
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyspcwebgw" ];
+  pythonImportsCheck = ["pyspcwebgw"];
 
   meta = with lib; {
     description = "Python module for the SPC Web Gateway REST API";
     homepage = "https://github.com/mbrrg/pyspcwebgw";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

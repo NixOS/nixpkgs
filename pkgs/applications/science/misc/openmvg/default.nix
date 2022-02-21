@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
-, libjpeg ? null
-, zlib ? null
-, libpng ? null
-, eigen ? null
-, libtiff ? null
-, enableExamples ? false
-, enableDocs ? false }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libjpeg ? null,
+  zlib ? null,
+  libpng ? null,
+  eigen ? null,
+  libtiff ? null,
+  enableExamples ? false,
+  enableDocs ? false,
+}:
 stdenv.mkDerivation rec {
   version = "2.0";
   pname = "openmvg";
@@ -19,14 +24,22 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ libjpeg zlib libpng eigen libtiff ];
+  buildInputs = [libjpeg zlib libpng eigen libtiff];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-std=c++11"
-    "-DOpenMVG_BUILD_EXAMPLES=${if enableExamples then "ON" else "OFF"}"
-    "-DOpenMVG_BUILD_DOC=${if enableDocs then "ON" else "OFF"}"
+    "-DOpenMVG_BUILD_EXAMPLES=${
+      if enableExamples
+      then "ON"
+      else "OFF"
+    }"
+    "-DOpenMVG_BUILD_DOC=${
+      if enableDocs
+      then "ON"
+      else "OFF"
+    }"
   ];
 
   cmakeDir = "./src";
@@ -37,13 +50,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   # Without hardeningDisable, certain flags are passed to the compile that break the build (primarily string format errors)
-  hardeningDisable = [ "all" ];
+  hardeningDisable = ["all"];
 
   meta = {
     description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mdaiter ];
+    maintainers = with lib.maintainers; [mdaiter];
   };
 }

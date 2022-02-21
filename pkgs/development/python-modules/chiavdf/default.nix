@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, substituteAll
-, cmake
-, boost
-, gmp
-, pybind11
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  substituteAll,
+  cmake,
+  boost,
+  gmp,
+  pybind11,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "chiavdf";
   version = "1.0.5";
@@ -33,9 +33,9 @@ buildPythonPackage rec {
   # x86 instructions are needed for this component
   BUILD_VDF_CLIENT = lib.optionalString (!stdenv.isx86_64) "N";
 
-  nativeBuildInputs = [ cmake setuptools-scm ];
+  nativeBuildInputs = [cmake setuptools-scm];
 
-  buildInputs = [ boost gmp pybind11 ];
+  buildInputs = [boost gmp pybind11];
 
   checkInputs = [
     pytestCheckHook

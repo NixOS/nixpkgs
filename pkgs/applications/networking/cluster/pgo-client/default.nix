@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "pgo-client";
   version = "4.7.4";
@@ -13,13 +16,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-4Vz7Lioj6iLU7dbz/B2BSAgfaCl2MyC8MM9yiyWLi2o=";
 
-  subPackages = [ "cmd/pgo" ];
+  subPackages = ["cmd/pgo"];
 
   meta = with lib; {
     description = "A CLI client for Crunchy PostgreSQL Kubernetes Operator";
     homepage = "https://github.com/CrunchyData/postgres-operator";
     changelog = "https://github.com/CrunchyData/postgres-operator/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    maintainers = [maintainers.bryanasdev000];
   };
 }

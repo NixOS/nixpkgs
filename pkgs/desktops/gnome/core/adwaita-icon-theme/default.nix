@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gnome
-, iconnamingutils, gtk3, gdk-pixbuf, librsvg, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  gnome,
+  iconnamingutils,
+  gtk3,
+  gdk-pixbuf,
+  librsvg,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "adwaita-icon-theme";
   version = "41.0";
@@ -11,16 +21,16 @@ stdenv.mkDerivation rec {
   };
 
   # For convenience, we can specify adwaita-icon-theme only in packages
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [hicolor-icon-theme];
 
-  buildInputs = [ gdk-pixbuf librsvg ];
+  buildInputs = [gdk-pixbuf librsvg];
 
-  nativeBuildInputs = [ pkg-config intltool iconnamingutils gtk3 ];
+  nativeBuildInputs = [pkg-config intltool iconnamingutils gtk3];
 
   dontDropIconThemeCache = true;
 
   # remove a tree of dirs with no files within
-  postInstall = '' rm -rf "$out/locale" '';
+  postInstall = ''rm -rf "$out/locale" '';
 
   passthru = {
     updateScript = gnome.updateScript {

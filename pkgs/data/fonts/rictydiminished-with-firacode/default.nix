@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchgit, fontforge, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fontforge,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "rictydiminished-with-firacode";
   version = "1.2.2";
@@ -42,7 +47,6 @@ stdenv.mkDerivation rec {
     description = "The best Japanese programming font meets the awesome ligatures of Firacode";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mt-caret ];
+    maintainers = with maintainers; [mt-caret];
   };
 }
-

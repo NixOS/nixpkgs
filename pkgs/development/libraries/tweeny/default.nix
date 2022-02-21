@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tweeny";
   version = "3.2.0";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "A modern C++ tweening library";
     license = licenses.mit;
     homepage = "http://mobius3.github.io/tweeny";
-    maintainers = [ maintainers.doronbehar ];
+    maintainers = [maintainers.doronbehar];
     platforms = with platforms; darwin ++ linux;
   };
 }

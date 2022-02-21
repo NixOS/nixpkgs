@@ -1,7 +1,8 @@
-{ lib, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gobi_loader";
   version = "0.7";
@@ -21,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Firmware loader for Qualcomm Gobi USB chipsets";
     homepage = "https://www.codon.org.uk/~mjg59/gobi_loader/";
-    license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = with licenses; [gpl2];
+    maintainers = with maintainers; [_0x4A6F];
     platforms = platforms.linux;
   };
 }

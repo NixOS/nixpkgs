@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, apacheHttpd, jdk }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  apacheHttpd,
+  jdk,
+}:
 stdenv.mkDerivation rec {
   pname = "tomcat-connectors";
   version = "1.2.48";
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
     cp apache-2.0/mod_jk.so $out/modules
   '';
 
-  buildInputs = [ apacheHttpd jdk ];
+  buildInputs = [apacheHttpd jdk];
 
   meta = with lib; {
     description = "Provides web server plugins to connect web servers with Tomcat";

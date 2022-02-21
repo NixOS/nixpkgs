@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, python
-, py-multiaddr
-, requests
-, pytestCheckHook
-, pytest-cov
-, pytest-dependency
-, pytest-localserver
-, pytest-mock
-, pytest-order
-, pytest-cid
-, mock
-, ipfs
-, httpx
-, httpcore
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  python,
+  py-multiaddr,
+  requests,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-dependency,
+  pytest-localserver,
+  pytest-mock,
+  pytest-order,
+  pytest-cid,
+  mock,
+  ipfs,
+  httpx,
+  httpcore,
 }:
-
 buildPythonPackage rec {
   pname = "ipfshttpclient";
   version = "0.8.0a2";
@@ -79,12 +79,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "ipfshttpclient" ];
+  pythonImportsCheck = ["ipfshttpclient"];
 
   meta = with lib; {
     description = "A python client library for the IPFS API";
     homepage = "https://github.com/ipfs-shipyard/py-ipfs-http-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner Luflosi ];
+    maintainers = with maintainers; [mguentner Luflosi];
   };
 }

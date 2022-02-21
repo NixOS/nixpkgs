@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, srt, ffmpeg }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  srt,
+  ffmpeg,
+}:
 buildGoModule rec {
   pname = "srtrelay";
   version = "1.1.0";
@@ -13,13 +18,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-xTYlfdijSo99ei+ZMX6N9gl+yw0DrPQ2wOhn6SS9S/E=";
 
-  buildInputs = [ srt ];
-  checkInputs = [ ffmpeg ];
+  buildInputs = [srt];
+  checkInputs = [ffmpeg];
 
   meta = with lib; {
     description = "Streaming-Relay for the SRT-protocol";
     homepage = "https://github.com/voc/srtrelay";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

@@ -1,22 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, substituteAll
-, makeWrapper
-
-, autoreconfHook
-, pkg-config
-
-, cairo
-, glib
-, libnotify
-, rofi-unwrapped
-, wl-clipboard
-, xclip
-, xsel
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  substituteAll,
+  makeWrapper,
+  autoreconfHook,
+  pkg-config,
+  cairo,
+  glib,
+  libnotify,
+  rofi-unwrapped,
+  wl-clipboard,
+  xclip,
+  xsel,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rofi-emoji";
   version = "2.3.0";
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     chmod +x $out/share/rofi-emoji/clipboard-adapter.sh
     wrapProgram $out/share/rofi-emoji/clipboard-adapter.sh \
-      --prefix PATH ":" ${lib.makeBinPath [ libnotify wl-clipboard xclip xsel ]}
+      --prefix PATH ":" ${lib.makeBinPath [libnotify wl-clipboard xclip xsel]}
   '';
 
   nativeBuildInputs = [
@@ -63,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "An emoji selector plugin for Rofi";
     homepage = "https://github.com/Mange/rofi-emoji";
     license = licenses.mit;
-    maintainers = with maintainers; [ cole-h ];
+    maintainers = with maintainers; [cole-h];
     platforms = platforms.linux;
   };
 }

@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, fontconfig
-, freealut
-, freeglut
-, ftgl
-, gettext
-, glpng
-, libGL
-, libGLU
-, openal
-, pkg-config
-, quesoglc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  fontconfig,
+  freealut,
+  freeglut,
+  ftgl,
+  gettext,
+  glpng,
+  libGL,
+  libGLU,
+  openal,
+  pkg-config,
+  quesoglc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "chromium-bsu";
   version = "0.9.16.1";
@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     "--disable-sdlmixer"
   ];
 
-
   postInstall = ''
     install -D misc/chromium-bsu.png $out/share/pixmaps/chromium-bsu.png
     install -D misc/chromium-bsu.desktop $out/share/applications/chromium-bsu.desktop
@@ -61,8 +60,9 @@ stdenv.mkDerivation rec {
     homepage = "http://chromium-bsu.sourceforge.net/";
     description = "A fast paced, arcade-style, top-scrolling space shooter";
     license = licenses.artistic1;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO [ AndersonTorres ]: joystick; gothic uralic font
+

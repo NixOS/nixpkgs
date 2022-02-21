@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pytestCheckHook
-, pythonOlder
-, twine
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  twine,
 }:
-
 buildPythonPackage rec {
   pname = "nagiosplugin";
   version = "1.3.3";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Python class library which helps with writing Nagios (Icinga) compatible plugins";
     homepage = "https://github.com/mpounsett/nagiosplugin";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ symphorien ];
+    maintainers = with maintainers; [symphorien];
   };
 }

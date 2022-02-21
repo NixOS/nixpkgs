@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, bash }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "pax-utils";
   version = "1.3.3";
@@ -11,9 +15,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [ bash ];
+  buildInputs = [bash];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "ELF utils that can check files for security relevant properties";
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gentoo.org/wiki/Hardened/PaX_Utilities";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice joachifm ];
+    maintainers = with maintainers; [thoughtpolice joachifm];
   };
 }

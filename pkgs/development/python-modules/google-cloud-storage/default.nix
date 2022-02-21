@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-auth
-, google-cloud-iam
-, google-cloud-core
-, google-cloud-kms
-, google-cloud-testutils
-, google-resumable-media
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  google-auth,
+  google-cloud-iam,
+  google-cloud-core,
+  google-cloud-kms,
+  google-cloud-testutils,
+  google-resumable-media,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-storage";
   version = "2.1.0";
@@ -65,12 +65,12 @@ buildPythonPackage rec {
     rm tests/conformance/test_conformance.py
   '';
 
-  pythonImportsCheck = [ "google.cloud.storage" ];
+  pythonImportsCheck = ["google.cloud.storage"];
 
   meta = with lib; {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

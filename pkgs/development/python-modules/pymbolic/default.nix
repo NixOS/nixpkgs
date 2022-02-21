@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytools
-, pytest
-, six
-, sympy
-, pexpect
-, symengine
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytools,
+  pytest,
+  six,
+  sympy,
+  pexpect,
+  symengine,
 }:
-
 buildPythonPackage rec {
   pname = "pymbolic";
   version = "2021.1";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
       --replace "\"pytest>=2.3\"," ""
   '';
 
-  checkInputs = [ sympy pexpect symengine pytest ];
+  checkInputs = [sympy pexpect symengine pytest];
   propagatedBuildInputs = [
     pytools
     six
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "A package for symbolic computation";
     homepage = "https://mathema.tician.de/software/pymbolic";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

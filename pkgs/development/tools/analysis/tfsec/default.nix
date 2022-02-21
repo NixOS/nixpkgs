@@ -1,8 +1,8 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "tfsec";
   version = "1.2.1";
@@ -26,6 +26,6 @@ buildGoPackage rec {
     description = "Static analysis powered security scanner for terraform code";
     homepage = "https://github.com/aquasecurity/tfsec";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab marsam ];
+    maintainers = with maintainers; [fab marsam];
   };
 }

@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, substituteAll
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, libxml2
-, switchboard
-, tzdata
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  meson,
+  ninja,
+  substituteAll,
+  pkg-config,
+  vala,
+  libgee,
+  granite,
+  gtk3,
+  libxml2,
+  switchboard,
+  tzdata,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
   version = "2.2.0";

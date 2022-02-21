@@ -1,19 +1,19 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, hex
-, lwt
-, zarith
-, alcotest
-, alcotest-lwt
-, crowbar
-, bigstring
-, lwt_log
-, ppx_inline_test
-, qcheck-alcotest
-, tezos-test-helpers
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  hex,
+  lwt,
+  zarith,
+  alcotest,
+  alcotest-lwt,
+  crowbar,
+  bigstring,
+  lwt_log,
+  ppx_inline_test,
+  qcheck-alcotest,
+  tezos-test-helpers,
 }:
-
 buildDunePackage rec {
   pname = "tezos-stdlib";
   version = "11.0";
@@ -59,6 +59,6 @@ buildDunePackage rec {
   meta = {
     description = "Tezos: yet-another local-extension of the OCaml standard library";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

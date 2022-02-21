@@ -1,10 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, lua, gettext, which, groff, xmessage, xterm
-, readline, fontconfig, libX11, libXext, libSM
-, libXinerama, libXrandr, libXft
-, xlibsWrapper, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  lua,
+  gettext,
+  which,
+  groff,
+  xmessage,
+  xterm,
+  readline,
+  fontconfig,
+  libX11,
+  libXext,
+  libSM,
+  libXinerama,
+  libXrandr,
+  libXft,
+  xlibsWrapper,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "notion";
   version = "4.0.2";
@@ -16,13 +31,25 @@ stdenv.mkDerivation rec {
     sha256 = "14swd0yqci8lxn259fkd9w92bgyf4rmjwgvgyqp78wlfix6ai4mv";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper groff ];
-  buildInputs = [ lua gettext which readline fontconfig libX11 libXext libSM
-                  libXinerama libXrandr libXft xlibsWrapper ];
+  nativeBuildInputs = [pkg-config makeWrapper groff];
+  buildInputs = [
+    lua
+    gettext
+    which
+    readline
+    fontconfig
+    libX11
+    libXext
+    libSM
+    libXinerama
+    libXrandr
+    libXft
+    xlibsWrapper
+  ];
 
-  buildFlags = [ "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" ];
+  buildFlags = ["LUA_DIR=${lua}" "X11_PREFIX=/no-such-path"];
 
-  makeFlags = [ "NOTION_RELEASE=${version}" "PREFIX=\${out}" ];
+  makeFlags = ["NOTION_RELEASE=${version}" "PREFIX=\${out}"];
 
   postInstall = ''
     wrapProgram $out/bin/notion \
@@ -32,8 +59,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tiling tabbed window manager";
     homepage = "https://notionwm.net";
-    license   = licenses.lgpl21;
-    maintainers = with maintainers; [ jfb AndersonTorres raboof ];
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [jfb AndersonTorres raboof];
     platforms = platforms.linux;
   };
 }

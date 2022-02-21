@@ -1,5 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 stdenvNoCC.mkDerivation {
   pname = "video-cutter";
   version = "unstable-2021-02-03";
@@ -14,7 +18,7 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
   dontCheck = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postPatch = ''
     substituteInPlace cutter.lua \
@@ -42,6 +46,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/rushmj/mpv-video-cutter";
     # repo doesn't have a license
     license = licenses.unfree;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [lom];
   };
 }

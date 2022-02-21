@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, tcl, tk, libX11, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tcl,
+  tk,
+  libX11,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "chessdb";
   version = "3.6.19-beta-1";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0brc3wln3bxp979iqj2w1zxpfd0pch8zzazhdmwf7acww4hrsz62";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ tcl tk libX11 ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [tcl tk libX11];
 
   makeFlags = [
     "BINDIR=$(out)/bin"

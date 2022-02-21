@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, paho-mqtt
-, poetry-core
-, psutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  paho-mqtt,
+  poetry-core,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "notus-scanner";
   version = "unstable-2021-09-05";
@@ -45,12 +45,12 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [ "notus.scanner" ];
+  pythonImportsCheck = ["notus.scanner"];
 
   meta = with lib; {
     description = "Helper to create results from local security checks";
     homepage = "https://github.com/greenbone/notus-scanner";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [agpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

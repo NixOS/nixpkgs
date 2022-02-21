@@ -1,13 +1,13 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, pyparsing
-, graphviz
-, texlive
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  pyparsing,
+  graphviz,
+  texlive,
 }:
-
 buildPythonPackage rec {
   pname = "dot2tex";
   version = "2.11.3";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     ./test.patch # https://github.com/kjellmf/dot2tex/issues/5
   ];
 
-  propagatedBuildInputs = [ pyparsing ];
+  propagatedBuildInputs = [pyparsing];
 
   checkInputs = [
     (texlive.combine {
@@ -42,5 +42,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/kjellmf/dot2tex";
     license = licenses.mit;
   };
-
 }

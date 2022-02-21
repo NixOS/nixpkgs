@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchurl }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   name = "rubygems";
   version = "3.2.26";
@@ -24,7 +27,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Package management framework for Ruby";
     homepage = "https://rubygems.org/";
-    license = with licenses; [ mit /* or */ ruby ];
-    maintainers = with maintainers; [ zimbatm ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      ruby
+    ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

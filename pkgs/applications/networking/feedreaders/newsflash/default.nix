@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, gdk-pixbuf
-, glib
-, gtk3
-, libhandy
-, openssl
-, sqlite
-, webkitgtk
-, glib-networking
-, librsvg
-, xdg-utils
-, gst_all_1
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libhandy,
+  openssl,
+  sqlite,
+  webkitgtk,
+  glib-networking,
+  librsvg,
+  xdg-utils,
+  gst_all_1,
 }:
-
 stdenv.mkDerivation rec {
   pname = "newsflash";
   version = "1.5.1";
@@ -49,51 +49,55 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      wrapGAppsHook
 
-    # Provides setup hook to fix "Unrecognized image file format"
-    gdk-pixbuf
+      # Provides setup hook to fix "Unrecognized image file format"
+      gdk-pixbuf
 
-    # Provides glib-compile-resources to compile gresources
-    glib
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+      # Provides glib-compile-resources to compile gresources
+      glib
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
 
-  buildInputs = [
-    gtk3
-    libhandy
-    openssl
-    sqlite
-    webkitgtk
+  buildInputs =
+    [
+      gtk3
+      libhandy
+      openssl
+      sqlite
+      webkitgtk
 
-    # TLS support for loading external content in webkitgtk WebView
-    glib-networking
+      # TLS support for loading external content in webkitgtk WebView
+      glib-networking
 
-    # SVG support for gdk-pixbuf
-    librsvg
+      # SVG support for gdk-pixbuf
+      librsvg
 
-    # Open links in browser
-    xdg-utils
-  ] ++ (with gst_all_1; [
-    # Audio & video support for webkitgtk WebView
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+      # Open links in browser
+      xdg-utils
+    ]
+    ++ (with gst_all_1; [
+      # Audio & video support for webkitgtk WebView
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau stunkymonkey ];
+    maintainers = with maintainers; [kira-bruneau stunkymonkey];
     platforms = platforms.unix;
   };
 }

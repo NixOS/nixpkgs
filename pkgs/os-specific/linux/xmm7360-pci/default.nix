@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, perl, bc, breakpointHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  kernel,
+  perl,
+  bc,
+  breakpointHook,
+}:
 stdenv.mkDerivation rec {
   pname = "xmm7360-pci";
   version = "unstable-2021-07-19";
@@ -11,18 +19,18 @@ stdenv.mkDerivation rec {
     sha256 = "1wdb0phqg9rj9g9ycqdya0m7lx24kzjlh25yw0ifp898ddxrrr0c";
   };
 
-  makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = ["KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   INSTALL_MOD_PATH = placeholder "out";
-  installFlags = [ "DEPMOD=true" ];
+  installFlags = ["DEPMOD=true"];
 
   meta = with lib; {
     homepage = "https://github.com/xmm7360/xmm7360-pci";
     description = "PCI driver for Fibocom L850-GL modem based on Intel XMM7360 modem";
     downloadPage = "https://github.com/xmm7360/xmm7360-pci";
     license = licenses.isc;
-    maintainers = with maintainers; [ flokli hexa ];
+    maintainers = with maintainers; [flokli hexa];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "4.10" || kernel.kernelAtLeast "5.14";
   };

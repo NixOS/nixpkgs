@@ -1,16 +1,14 @@
-{ lib
-, buildDunePackage
-, fetchurl
-
-, ppx_fields_conv
-, ppx_sexp_conv
-
-, cohttp-lwt
-, ezjsonm
-, hmap
-, sexplib
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_fields_conv,
+  ppx_sexp_conv,
+  cohttp-lwt,
+  ezjsonm,
+  hmap,
+  sexplib,
 }:
-
 buildDunePackage rec {
   pname = "opium_kernel";
   version = "0.18.0";
@@ -27,17 +25,21 @@ buildDunePackage rec {
   doCheck = true;
 
   buildInputs = [
-    ppx_sexp_conv ppx_fields_conv
+    ppx_sexp_conv
+    ppx_fields_conv
   ];
 
   propagatedBuildInputs = [
-    hmap cohttp-lwt ezjsonm sexplib
+    hmap
+    cohttp-lwt
+    ezjsonm
+    sexplib
   ];
 
   meta = {
     description = "Sinatra like web toolkit for OCaml based on cohttp & lwt";
     homepage = "https://github.com/rgrinberg/opium";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.pmahoney ];
+    maintainers = [lib.maintainers.pmahoney];
   };
 }

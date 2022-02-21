@@ -1,21 +1,15 @@
 # NixOS module for atftpd TFTP server
-
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.atftpd;
-
-in
-
 {
-
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.atftpd;
+in {
   options = {
-
     services.atftpd = {
-
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -45,21 +39,16 @@ in
           Document root directory for the atftpd.
         '';
       };
-
     };
-
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.atftpd = {
       description = "TFTP Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       # runs as nobody
       serviceConfig.ExecStart = "${pkgs.atftp}/sbin/atftpd --daemon --no-fork ${lib.concatStringsSep " " cfg.extraOptions} ${cfg.root}";
     };
-
   };
-
 }

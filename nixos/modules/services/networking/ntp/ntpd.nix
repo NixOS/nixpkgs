@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   inherit (pkgs) ntp;
 
   cfg = config.services.ntp;
@@ -26,17 +27,11 @@ let
   '';
 
   ntpFlags = "-c ${configFile} -u ntp:ntp ${toString cfg.extraFlags}";
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.ntp = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -60,7 +55,7 @@ in
           recommended in section 6.5.1.1.3, answer "No" of
           http://support.ntp.org/bin/view/Support/AccessRestrictions
         '';
-        default = [ "limited" "kod" "nomodify" "notrap" "noquery" "nopeer" ];
+        default = ["limited" "kod" "nomodify" "notrap" "noquery" "nopeer"];
       };
 
       restrictSource = mkOption {
@@ -72,7 +67,7 @@ in
           The default flags allow peers to be added by ntpd from configured
           pool(s), but not by other means.
         '';
-        default = [ "limited" "kod" "nomodify" "notrap" "noquery" ];
+        default = ["limited" "kod" "nomodify" "notrap" "noquery"];
       };
 
       servers = mkOption {
@@ -101,50 +96,44 @@ in
         example = literalExpression ''[ "--interface=eth0" ]'';
         default = [];
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.ntp.enable {
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+    meta.maintainers = with lib.maintainers; [thoughtpolice];
 
     # Make tools such as ntpq available in the system path.
-    environment.systemPackages = [ pkgs.ntp ];
+    environment.systemPackages = [pkgs.ntp];
     services.timesyncd.enable = mkForce false;
 
-    systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
+    systemd.services.systemd-timedated.environment = {SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service";};
 
-    users.users.ntp =
-      { isSystemUser = true;
-        group = "ntp";
-        description = "NTP daemon user";
-        home = stateDir;
-      };
+    users.users.ntp = {
+      isSystemUser = true;
+      group = "ntp";
+      description = "NTP daemon user";
+      home = stateDir;
+    };
     users.groups.ntp = {};
 
-    systemd.services.ntpd =
-      { description = "NTP Daemon";
+    systemd.services.ntpd = {
+      description = "NTP Daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "time-sync.target" ];
-        before = [ "time-sync.target" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["time-sync.target"];
+      before = ["time-sync.target"];
 
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ntp ${stateDir}
-          '';
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+        chown ntp ${stateDir}
+      '';
 
-        serviceConfig = {
-          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
-          Type = "forking";
-        };
+      serviceConfig = {
+        ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
+        Type = "forking";
       };
-
+    };
   };
-
 }

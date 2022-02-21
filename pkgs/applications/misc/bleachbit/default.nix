@@ -1,15 +1,15 @@
-{ lib
-, python3Packages
-, fetchurl
-, gettext
-, gobject-introspection
-, wrapGAppsHook
-, glib
-, gtk3
-, libnotify
-, scandir ? null
+{
+  lib,
+  python3Packages,
+  fetchurl,
+  gettext,
+  gobject-introspection,
+  wrapGAppsHook,
+  glib,
+  gtk3,
+  libnotify,
+  scandir ? null,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "bleachbit";
   version = "4.4.0";
@@ -66,6 +66,6 @@ python3Packages.buildPythonApplication rec {
     description = "A program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ leonardoce mbprtpmnr ];
+    maintainers = with maintainers; [leonardoce mbprtpmnr];
   };
 }

@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
-, dbus, dbus-glib, libgaminggear, libgudev, lua
-, harfbuzz
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  gettext,
+  dbus,
+  dbus-glib,
+  libgaminggear,
+  libgudev,
+  lua,
+  harfbuzz,
 }:
-
 stdenv.mkDerivation rec {
   pname = "roccat-tools";
   version = "5.9.0";
@@ -21,8 +30,8 @@ stdenv.mkDerivation rec {
     }' libroccat/roccat_helper.c
   '';
 
-  nativeBuildInputs = [ cmake pkg-config gettext ];
-  buildInputs = [ dbus dbus-glib libgaminggear libgudev lua ];
+  nativeBuildInputs = [cmake pkg-config gettext];
+  buildInputs = [dbus dbus-glib libgaminggear libgudev lua];
 
   cmakeFlags = [
     "-DUDEVDIR=\${out}/lib/udev/rules.d"
@@ -31,7 +40,7 @@ stdenv.mkDerivation rec {
     "-DLIBDIR=lib"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+  NIX_CFLAGS_COMPILE = ["-I${harfbuzz.dev}/include/harfbuzz"];
 
   meta = {
     description = "Tools to configure ROCCAT devices";

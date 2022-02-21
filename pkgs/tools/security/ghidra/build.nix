@@ -1,22 +1,21 @@
-{ stdenv
-, fetchzip
-, fetchurl
-, fetchFromGitHub
-, lib
-, gradle
-, perl
-, makeWrapper
-, openjdk11
-, unzip
-, makeDesktopItem
-, autoPatchelfHook
-, icoutils
-, xcbuild
-, protobuf3_17
-, libredirect
-}:
-
-let
+{
+  stdenv,
+  fetchzip,
+  fetchurl,
+  fetchFromGitHub,
+  lib,
+  gradle,
+  perl,
+  makeWrapper,
+  openjdk11,
+  unzip,
+  makeDesktopItem,
+  autoPatchelfHook,
+  icoutils,
+  xcbuild,
+  protobuf3_17,
+  libredirect,
+}: let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
   version = "10.1.2";
@@ -40,37 +39,37 @@ let
   # postPatch scripts.
   # Tells ghidra to use our own protoc binary instead of the prebuilt one.
   fixProtoc = ''
-    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
-protobuf {
-  protoc {
-    path = '${protobuf3_17}/bin/protoc'
-  }
-}
-HERE
+        cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
+    protobuf {
+      protoc {
+        path = '${protobuf3_17}/bin/protoc'
+      }
+    }
+    HERE
   '';
 
   # Adds a gradle step that downloads all the dependencies to the gradle cache.
   addResolveStep = ''
-    cat >>build.gradle <<HERE
-task resolveDependencies {
-  doLast {
-    project.rootProject.allprojects.each { subProject ->
-      subProject.buildscript.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
-      }
-      subProject.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+        cat >>build.gradle <<HERE
+    task resolveDependencies {
+      doLast {
+        project.rootProject.allprojects.each { subProject ->
+          subProject.buildscript.configurations.each { configuration ->
+            resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
+          }
+          subProject.configurations.each { configuration ->
+            resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+          }
+        }
       }
     }
-  }
-}
-void resolveConfiguration(subProject, configuration, name) {
-  if (configuration.canBeResolved) {
-    logger.info("Resolving project {} {}", subProject.name, name)
-    configuration.resolve()
-  }
-}
-HERE
+    void resolveConfiguration(subProject, configuration, name) {
+      if (configuration.canBeResolved) {
+        logger.info("Resolving project {} {}", subProject.name, name)
+        configuration.resolve()
+      }
+    }
+    HERE
   '';
 
   # fake build to pre-download deps into fixed-output derivation
@@ -79,10 +78,10 @@ HERE
     pname = "${pname}-deps";
     inherit version src;
 
-    patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
+    patches = [./0001-Use-protobuf-gradle-plugin.patch];
     postPatch = fixProtoc + addResolveStep;
 
-    nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
+    nativeBuildInputs = [gradle perl] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
 
@@ -103,76 +102,82 @@ HERE
     outputHashMode = "recursive";
     outputHash = "sha256-UHV7Z2HaVTOCY5U0zjUtkchJicrXMBfYBHvL8AA7NTg=";
   };
+in
+  stdenv.mkDerivation rec {
+    inherit pname version src;
 
-in stdenv.mkDerivation rec {
-  inherit pname version src;
+    nativeBuildInputs =
+      [
+        gradle
+        unzip
+        makeWrapper
+        icoutils
+      ]
+      ++ lib.optional stdenv.isDarwin xcbuild;
 
-  nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+    dontStrip = true;
 
-  dontStrip = true;
+    patches = [./0001-Use-protobuf-gradle-plugin.patch];
+    postPatch = fixProtoc;
 
-  patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-  postPatch = fixProtoc;
+    buildPhase =
+      (lib.optionalString stdenv.isDarwin ''
+        export HOME=$(mktemp -d)
 
-  buildPhase = (lib.optionalString stdenv.isDarwin ''
-    export HOME=$(mktemp -d)
+        # construct a dummy /etc/passwd file - something attempts to determine
+        # the user's "real" home using this
+        DUMMY_PASSWD=$(realpath ../dummy-passwd)
+        cat > $DUMMY_PASSWD <<EOF
+        $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
+        EOF
 
-    # construct a dummy /etc/passwd file - something attempts to determine
-    # the user's "real" home using this
-    DUMMY_PASSWD=$(realpath ../dummy-passwd)
-    cat > $DUMMY_PASSWD <<EOF
-    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
-    EOF
+        export NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
+        export DYLD_INSERT_LIBRARIES=${libredirect}/lib/libredirect.dylib
+      '')
+      + ''
 
-    export NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
-    export DYLD_INSERT_LIBRARIES=${libredirect}/lib/libredirect.dylib
-  '') + ''
+        export GRADLE_USER_HOME=$(mktemp -d)
 
-    export GRADLE_USER_HOME=$(mktemp -d)
+        ln -s ${deps}/dependencies dependencies
 
-    ln -s ${deps}/dependencies dependencies
+        sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
 
-    sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
+        gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk11} buildGhidra
+      '';
 
-    gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk11} buildGhidra
-  '';
+    installPhase = ''
+      mkdir -p "${pkg_path}" "$out/share/applications"
 
-  installPhase = ''
-    mkdir -p "${pkg_path}" "$out/share/applications"
+      ZIP=build/dist/$(ls build/dist)
+      echo $ZIP
+      unzip $ZIP -d ${pkg_path}
+      f=("${pkg_path}"/*)
+      mv "${pkg_path}"/*/* "${pkg_path}"
+      rmdir "''${f[@]}"
 
-    ZIP=build/dist/$(ls build/dist)
-    echo $ZIP
-    unzip $ZIP -d ${pkg_path}
-    f=("${pkg_path}"/*)
-    mv "${pkg_path}"/*/* "${pkg_path}"
-    rmdir "''${f[@]}"
+      ln -s ${desktopItem}/share/applications/* $out/share/applications
 
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
+      icotool -x "Ghidra/RuntimeScripts/Windows/support/ghidra.ico"
+      rm ghidra_4_40x40x32.png
+      for f in ghidra_*.png; do
+        res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -d"x" -f1-2)
+        mkdir -pv "$out/share/icons/hicolor/$res/apps"
+        mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
+      done;
+    '';
 
-    icotool -x "Ghidra/RuntimeScripts/Windows/support/ghidra.ico"
-    rm ghidra_4_40x40x32.png
-    for f in ghidra_*.png; do
-      res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -d"x" -f1-2)
-      mkdir -pv "$out/share/icons/hicolor/$res/apps"
-      mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
-    done;
-  '';
+    postFixup = ''
+      mkdir -p "$out/bin"
+      ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
+      wrapProgram "${pkg_path}/support/launch.sh" \
+        --prefix PATH : ${lib.makeBinPath [openjdk11]}
+    '';
 
-  postFixup = ''
-    mkdir -p "$out/bin"
-    ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
-    wrapProgram "${pkg_path}/support/launch.sh" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
-  '';
-
-  meta = with lib; {
-    description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
-    homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    license = licenses.asl20;
-    maintainers = [ "roblabla" ];
-  };
-
-}
+    meta = with lib; {
+      description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
+      homepage = "https://ghidra-sre.org/";
+      platforms = ["x86_64-linux" "x86_64-darwin"];
+      license = licenses.asl20;
+      maintainers = ["roblabla"];
+    };
+  }

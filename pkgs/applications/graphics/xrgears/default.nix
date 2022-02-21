@@ -1,20 +1,21 @@
-{ lib, stdenv
-, fetchFromGitLab
-, glm
-, glslang
-, meson
-, ninja
-, openxr-loader
-, pkg-config
-, vulkan-headers
-, vulkan-loader
-, xxd
-, SDL2
-, makeWrapper
-, libGL
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glm,
+  glslang,
+  meson,
+  ninja,
+  openxr-loader,
+  pkg-config,
+  vulkan-headers,
+  vulkan-loader,
+  xxd,
+  SDL2,
+  makeWrapper,
+  libGL,
+  glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xrgears";
   version = "unstable-2021-06-19";
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
 
   fixupPhase = ''
     wrapProgram $out/bin/xrgears \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ SDL2 libGL ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [SDL2 libGL]}
   '';
 
   meta = with lib; {
@@ -54,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "An OpenXR example using Vulkan for rendering";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [expipiplus1];
   };
 }

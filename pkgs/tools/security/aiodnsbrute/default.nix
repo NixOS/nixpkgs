@@ -1,12 +1,12 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, aiodns
-, click
-, tqdm
-, uvloop
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  aiodns,
+  click,
+  tqdm,
+  uvloop,
 }:
-
 buildPythonApplication rec {
   pname = "aiodnsbrute";
   version = "0.3.2";
@@ -24,22 +24,22 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-     aiodns
-     click
-     tqdm
-     uvloop
+    aiodns
+    click
+    tqdm
+    uvloop
   ];
 
   # no tests present
   doCheck = false;
 
-  pythonImportsCheck = [ "aiodnsbrute.cli" ];
+  pythonImportsCheck = ["aiodnsbrute.cli"];
 
   meta = with lib; {
     description = "DNS brute force utility";
     homepage = "https://github.com/blark/aiodnsbrute";
     # https://github.com/blark/aiodnsbrute/issues/5
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

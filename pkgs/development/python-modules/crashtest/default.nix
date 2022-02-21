@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+}:
 buildPythonPackage rec {
   pname = "crashtest";
   version = "0.3.1";
@@ -20,6 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdispater/crashtest";
     description = "Manage Python errors with ease";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

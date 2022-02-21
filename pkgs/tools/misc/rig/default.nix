@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl } :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   version = "1.11";
   pname = "rig";
@@ -11,9 +14,9 @@ stdenv.mkDerivation rec {
 
   # Note: diff modified from Debian: Norbert Veber <nveber@debian.org>
   # http://deb.debian.org/debian/pool/main/r/rig/rig_1.11-1.diff.gz
-  patches = [ ./rig_1.11-1.diff ];
+  patches = [./rig_1.11-1.diff];
 
-  makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
+  makeFlags = ["CXX=${stdenv.cc.targetPrefix}c++"];
 
   meta = {
     homepage = "http://rig.sourceforge.net/";
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
       cross-check the city, state, zip, or area code, it will check out.
     '';
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ tomberek ];
+    maintainers = with lib.maintainers; [tomberek];
     platforms = with lib.platforms; all;
   };
 }

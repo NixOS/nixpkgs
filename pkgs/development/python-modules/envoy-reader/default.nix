@@ -1,18 +1,18 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, envoy-utils
-, fetchFromGitHub
-, fetchpatch
-, httpx
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, pytest-raises
-, pythonOlder
-, respx
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  envoy-utils,
+  fetchFromGitHub,
+  fetchpatch,
+  httpx,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-raises,
+  pythonOlder,
+  respx,
 }:
-
 buildPythonPackage rec {
   pname = "envoy-reader";
   version = "0.21.3";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Python module to read from Enphase Envoy units";
     homepage = "https://github.com/jesserizzo/envoy_reader";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

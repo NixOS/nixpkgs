@@ -1,15 +1,15 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, typecode
-, patch
-, extractcode-libarchive
-, extractcode-7z
-, pytestCheckHook
-, pytest-xdist
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  typecode,
+  patch,
+  extractcode-libarchive,
+  extractcode-7z,
+  pytestCheckHook,
+  pytest-xdist,
 }:
-
 buildPythonPackage rec {
   pname = "extractcode";
   version = "30.0.0";

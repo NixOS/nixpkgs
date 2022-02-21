@@ -1,5 +1,10 @@
-{ lib, fetchurl, stdenv, emacs, python }:
-
+{
+  lib,
+  fetchurl,
+  stdenv,
+  emacs,
+  python,
+}:
 stdenv.mkDerivation rec {
   pname = "cedet";
   version = "1.1";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p2bwlpwwa019axvgj09xkxbr53j0pq23d46s4la9jfhl47nbh22";
   };
 
-  buildInputs = [ emacs python ];
+  buildInputs = [emacs python];
 
   doCheck = true;
   checkPhase = "make utest";

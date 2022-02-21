@@ -1,5 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, rply, pytestCheckHook, isPy3k }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  rply,
+  pytestCheckHook,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "baron";
   version = "0.10.1";
@@ -9,9 +15,9 @@ buildPythonPackage rec {
     sha256 = "af822ad44d4eb425c8516df4239ac4fdba9fdb398ef77e4924cd7c9b4045bc2f";
   };
 
-  propagatedBuildInputs = [ rply ];
+  propagatedBuildInputs = [rply];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   doCheck = isPy3k;
 
@@ -19,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gristlabs/asttokens";
     description = "Abstraction on top of baron, a FST for python to make writing refactoring code a realistic task";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ marius851000 ];
+    maintainers = with maintainers; [marius851000];
   };
 }

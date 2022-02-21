@@ -1,28 +1,26 @@
-let requiredVersion = import ./lib/minver.nix; in
+let
+  requiredVersion = import ./lib/minver.nix;
+in
+  if !builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.nixVersion == 1
+  then
+    abort ''
 
-if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.nixVersion == 1 then
+      This version of Nixpkgs requires Nix >= ${requiredVersion}, please upgrade:
 
-  abort ''
+      - If you are running NixOS, `nixos-rebuild' can be used to upgrade your system.
 
-    This version of Nixpkgs requires Nix >= ${requiredVersion}, please upgrade:
+      - Alternatively, with Nix > 2.0 `nix upgrade-nix' can be used to imperatively
+        upgrade Nix. You may use `nix-env --version' to check which version you have.
 
-    - If you are running NixOS, `nixos-rebuild' can be used to upgrade your system.
+      - If you installed Nix using the install script (https://nixos.org/nix/install),
+        it is safe to upgrade by running it again:
 
-    - Alternatively, with Nix > 2.0 `nix upgrade-nix' can be used to imperatively
-      upgrade Nix. You may use `nix-env --version' to check which version you have.
+            curl -L https://nixos.org/nix/install | sh
 
-    - If you installed Nix using the install script (https://nixos.org/nix/install),
-      it is safe to upgrade by running it again:
+      For more information, please see the NixOS release notes at
+      https://nixos.org/nixos/manual or locally at
+      ${toString ./nixos/doc/manual/release-notes}.
 
-          curl -L https://nixos.org/nix/install | sh
-
-    For more information, please see the NixOS release notes at
-    https://nixos.org/nixos/manual or locally at
-    ${toString ./nixos/doc/manual/release-notes}.
-
-    If you need further help, see https://nixos.org/nixos/support.html
-  ''
-
-else
-
-  import ./pkgs/top-level/impure.nix
+      If you need further help, see https://nixos.org/nixos/support.html
+    ''
+  else import ./pkgs/top-level/impure.nix

@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "cni-plugins";
   version = "1.0.1";
@@ -38,13 +42,13 @@ buildGoModule rec {
     "plugins/meta/vrf"
   ];
 
-  passthru.tests = { inherit (nixosTests) cri-o podman; };
+  passthru.tests = {inherit (nixosTests) cri-o podman;};
 
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";
     homepage = "https://www.cni.dev/plugins/";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ] ++ teams.podman.members;
+    maintainers = with maintainers; [cstrahan] ++ teams.podman.members;
   };
 }

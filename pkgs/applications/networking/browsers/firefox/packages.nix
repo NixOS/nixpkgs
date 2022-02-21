@@ -1,10 +1,13 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests }:
-
-let
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchurl,
+  fetchpatch,
+  nixosTests,
+}: let
   common = opts: callPackage (import ./common.nix opts) {};
-in
-
-rec {
+in rec {
   firefox = common rec {
     pname = "firefox";
     version = "97.0.1";
@@ -16,15 +19,15 @@ rec {
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
-      maintainers = with lib.maintainers; [ eelco lovesegfault hexa ];
+      maintainers = with lib.maintainers; [eelco lovesegfault hexa];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
     };
-    tests = [ nixosTests.firefox ];
+    tests = [nixosTests.firefox];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
     };
@@ -41,42 +44,42 @@ rec {
     meta = {
       description = "A web browser built from Firefox Extended Support Release source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
-      maintainers = with lib.maintainers; [ hexa ];
+      maintainers = with lib.maintainers; [hexa];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
     };
-    tests = [ nixosTests.firefox-esr-91 ];
+    tests = [nixosTests.firefox-esr-91];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-91-unwrapped";
       versionSuffix = "esr";
     };
   };
 
-  librewolf =
-  let
-    librewolf-src = callPackage ./librewolf { };
+  librewolf = let
+    librewolf-src = callPackage ./librewolf {};
   in
-  (common rec {
-    pname = "librewolf";
-    binaryName = "librewolf";
-    version = librewolf-src.packageVersion;
-    src = librewolf-src.firefox;
-    inherit (librewolf-src) extraConfigureFlags extraPostPatch extraPassthru;
+    (common rec {
+      pname = "librewolf";
+      binaryName = "librewolf";
+      version = librewolf-src.packageVersion;
+      src = librewolf-src.firefox;
+      inherit (librewolf-src) extraConfigureFlags extraPostPatch extraPassthru;
 
-    meta = {
-      description = "A fork of Firefox, focused on privacy, security and freedom";
-      homepage = "https://librewolf.net/";
-      maintainers = with lib.maintainers; [ squalus ];
-      inherit (firefox.meta) platforms badPlatforms broken maxSilent license;
+      meta = {
+        description = "A fork of Firefox, focused on privacy, security and freedom";
+        homepage = "https://librewolf.net/";
+        maintainers = with lib.maintainers; [squalus];
+        inherit (firefox.meta) platforms badPlatforms broken maxSilent license;
+      };
+      updateScript = callPackage ./librewolf/update.nix {
+        attrPath = "librewolf-unwrapped";
+      };
+    })
+    .override {
+      crashreporterSupport = false;
+      enableOfficialBranding = false;
     };
-    updateScript = callPackage ./librewolf/update.nix {
-      attrPath = "librewolf-unwrapped";
-    };
-  }).override {
-    crashreporterSupport = false;
-    enableOfficialBranding = false;
-  };
 }

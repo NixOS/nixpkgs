@@ -1,11 +1,16 @@
-{ buildPythonPackage, fetchPypi, lib, isPy27, pytest }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  isPy27,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "ordered-set";
   version = "4.0.2";
   disabled = isPy27;
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +24,6 @@ buildPythonPackage rec {
   meta = {
     description = "A MutableSet that remembers its order, so that every entry has an index.";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.MostAwesomeDude ];
+    maintainers = [lib.maintainers.MostAwesomeDude];
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildGoPackage
-, btrfs-progs
-, go-md2man
-, installShellFiles
-, util-linux
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
+  btrfs-progs,
+  go-md2man,
+  installShellFiles,
+  util-linux,
+  nixosTests,
 }:
-
 buildGoPackage rec {
   pname = "containerd";
   version = "1.4.11";
@@ -20,11 +20,11 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
+  nativeBuildInputs = [go-md2man installShellFiles util-linux];
 
-  buildInputs = [ btrfs-progs ];
+  buildInputs = [btrfs-progs];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
@@ -39,13 +39,13 @@ buildGoPackage rec {
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
   '';
 
-  passthru.tests = { inherit (nixosTests) docker; };
+  passthru.tests = {inherit (nixosTests) docker;};
 
   meta = with lib; {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, argp-standalone
-, curl
-, meson
-, ninja
-, pkg-config
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  argp-standalone,
+  curl,
+  meson,
+  ninja,
+  pkg-config,
+  zstd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zchunk";
   version = "1.1.16";
@@ -26,12 +26,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    curl
-    zstd
-  ] ++ lib.optional stdenv.isDarwin argp-standalone;
+  buildInputs =
+    [
+      curl
+      zstd
+    ]
+    ++ lib.optional stdenv.isDarwin argp-standalone;
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = ["out" "lib" "dev"];
 
   meta = with lib; {
     homepage = "https://github.com/zchunk/zchunk";
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
       you downloaded is, in fact, the file you wanted.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

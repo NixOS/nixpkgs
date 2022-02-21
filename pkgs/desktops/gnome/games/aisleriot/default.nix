@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchFromGitLab
-, nix-update-script
-, pkg-config
-, itstool
-, gtk3
-, wrapGAppsHook
-, meson
-, librsvg
-, libxml2
-, desktop-file-utils
-, pysolfc
-, guile
-, libcanberra-gtk3
-, ninja
-, appstream-glib
-, yelp-tools
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  nix-update-script,
+  pkg-config,
+  itstool,
+  gtk3,
+  wrapGAppsHook,
+  meson,
+  librsvg,
+  libxml2,
+  desktop-file-utils,
+  pysolfc,
+  guile,
+  libcanberra-gtk3,
+  ninja,
+  appstream-glib,
+  yelp-tools,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aisleriot";
   version = "3.22.20";

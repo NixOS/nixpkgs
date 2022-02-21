@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, llvmPackages
-, gobject-introspection
-, glib
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  llvmPackages,
+  gobject-introspection,
+  glib,
+  unstableGitUpdater,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tartan";
   version = "unstable-2021-12-23";
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://freedesktop.org/wiki/Software/tartan";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

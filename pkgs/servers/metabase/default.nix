@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk11, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk11,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "metabase";
   version = "0.42.1";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-PmcVVAS/5mDhmOSoFvkZeYkbvFD/KOcgVYuScwD4Olg=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontUnpack = true;
 
@@ -21,10 +27,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The easy, open source way for everyone in your company to ask questions and learn from data";
-    homepage    = "https://metabase.com";
-    license     = licenses.agpl3Only;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
+    homepage = "https://metabase.com";
+    license = licenses.agpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [schneefux thoughtpolice mmahut];
   };
   passthru.tests = {
     inherit (nixosTests) metabase;

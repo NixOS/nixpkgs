@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.dspam;
 
   dspam = pkgs.dspam;
@@ -19,22 +20,20 @@ let
     SystemLog on
     UserLog on
 
-    ${optionalString (cfg.domainSocket != null) ''
-      ServerDomainSocketPath "${cfg.domainSocket}"
-      ClientHost "${cfg.domainSocket}"
-    ''}
+    ${
+      optionalString (cfg.domainSocket != null) ''
+        ServerDomainSocketPath "${cfg.domainSocket}"
+        ClientHost "${cfg.domainSocket}"
+      ''
+    }
 
     ${cfg.extraConfig}
   '';
-
 in {
-
   ###### interface
 
   options = {
-
     services.dspam = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -56,7 +55,7 @@ in {
       storageDriver = mkOption {
         type = types.str;
         default = "hash";
-        description =  "Storage driver backend to use for dspam.";
+        description = "Storage driver backend to use for dspam.";
       };
 
       domainSocket = mkOption {
@@ -76,11 +75,8 @@ in {
         default = null;
         description = "If set, maintenance script will be run at specified (in systemd.timer format) interval";
       };
-
     };
-
   };
-
 
   ###### implementation
 
@@ -97,15 +93,15 @@ in {
         dspam.gid = config.ids.gids.dspam;
       };
 
-      environment.systemPackages = [ dspam ];
+      environment.systemPackages = [dspam];
 
       environment.etc."dspam/dspam.conf".source = cfgfile;
 
       systemd.services.dspam = {
         description = "dspam spam filtering daemon";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "postgresql.service" ];
-        restartTriggers = [ cfgfile ];
+        wantedBy = ["multi-user.target"];
+        after = ["postgresql.service"];
+        restartTriggers = [cfgfile];
 
         serviceConfig = {
           ExecStart = "${dspam}/bin/dspam --daemon --nofork";
@@ -127,7 +123,7 @@ in {
     (mkIf (cfg.maintenanceInterval != null) {
       systemd.timers.dspam-maintenance = {
         description = "Timer for dspam maintenance script";
-        wantedBy = [ "timers.target" ];
+        wantedBy = ["timers.target"];
         timerConfig = {
           OnCalendar = cfg.maintenanceInterval;
           Unit = "dspam-maintenance.service";
@@ -136,7 +132,7 @@ in {
 
       systemd.services.dspam-maintenance = {
         description = "dspam maintenance script";
-        restartTriggers = [ cfgfile ];
+        restartTriggers = [cfgfile];
 
         serviceConfig = {
           ExecStart = "${dspam}/bin/dspam_maintenance --verbose";

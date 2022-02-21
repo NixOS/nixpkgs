@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "durden";
   version = "0.6.1+date=2021-10-17";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       of the desktop environment spectrum.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }

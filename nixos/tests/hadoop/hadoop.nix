@@ -2,7 +2,6 @@
 # Run this when updating the Hadoop package or making significant changes to the hadoop module.
 # For a more basic test, see hdfs.nix and yarn.nix
 import ../make-test-python.nix ({pkgs, ...}: {
-
   nodes = let
     package = pkgs.hadoop;
     coreSite = {
@@ -46,20 +45,28 @@ import ../make-test-python.nix ({pkgs, ...}: {
       "yarn.resourcemanager.webapp.address.rm2" = "rm2:8088";
     };
   in {
-    zk1 = { ... }: {
+    zk1 = {...}: {
       services.zookeeper.enable = true;
-      networking.firewall.allowedTCPPorts = [ 2181 ];
+      networking.firewall.allowedTCPPorts = [2181];
     };
 
     # HDFS cluster
-    nn1 = {pkgs, options, ...}: {
+    nn1 = {
+      pkgs,
+      options,
+      ...
+    }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.namenode.enable = true;
         hdfs.zkfc.enable = true;
       };
     };
-    nn2 = {pkgs, options, ...}: {
+    nn2 = {
+      pkgs,
+      options,
+      ...
+    }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.namenode.enable = true;
@@ -67,26 +74,42 @@ import ../make-test-python.nix ({pkgs, ...}: {
       };
     };
 
-    jn1 = {pkgs, options, ...}: {
+    jn1 = {
+      pkgs,
+      options,
+      ...
+    }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.journalnode.enable = true;
       };
     };
-    jn2 = {pkgs, options, ...}: {
+    jn2 = {
+      pkgs,
+      options,
+      ...
+    }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.journalnode.enable = true;
       };
     };
-    jn3 = {pkgs, options, ...}: {
+    jn3 = {
+      pkgs,
+      options,
+      ...
+    }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.journalnode.enable = true;
       };
     };
 
-    dn1 = {pkgs, options, ...}: {
+    dn1 = {
+      pkgs,
+      options,
+      ...
+    }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         hdfs.datanode.enable = true;
@@ -94,21 +117,33 @@ import ../make-test-python.nix ({pkgs, ...}: {
     };
 
     # YARN cluster
-    rm1 = {pkgs, options, ...}: {
+    rm1 = {
+      pkgs,
+      options,
+      ...
+    }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
         yarn.resourcemanager.enable = true;
       };
     };
-    rm2 = {pkgs, options, ...}: {
+    rm2 = {
+      pkgs,
+      options,
+      ...
+    }: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
         yarn.resourcemanager.enable = true;
       };
     };
-    nm1 = {pkgs, options, ...}: {
+    nm1 = {
+      pkgs,
+      options,
+      ...
+    }: {
       virtualisation.memorySize = 2048;
       services.hadoop = {
         inherit package coreSite hdfsSite;

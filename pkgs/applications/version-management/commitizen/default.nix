@@ -1,24 +1,24 @@
-{ buildPythonApplication
-, lib
-, fetchFromGitHub
-, poetry
-, termcolor
-, questionary
-, colorama
-, decli
-, tomlkit
-, jinja2
-, pyyaml
-, argcomplete
-, typing-extensions
-, packaging
-, pytestCheckHook
-, pytest-freezegun
-, pytest-mock
-, pytest-regressions
-, git
+{
+  buildPythonApplication,
+  lib,
+  fetchFromGitHub,
+  poetry,
+  termcolor,
+  questionary,
+  colorama,
+  decli,
+  tomlkit,
+  jinja2,
+  pyyaml,
+  argcomplete,
+  typing-extensions,
+  packaging,
+  pytestCheckHook,
+  pytest-freezegun,
+  pytest-mock,
+  pytest-regressions,
+  git,
 }:
-
 buildPythonApplication rec {
   pname = "commitizen";
   version = "2.20.4";
@@ -33,7 +33,7 @@ buildPythonApplication rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [poetry];
 
   propagatedBuildInputs = [
     termcolor
@@ -104,6 +104,6 @@ buildPythonApplication rec {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

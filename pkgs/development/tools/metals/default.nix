@@ -1,5 +1,11 @@
-{ stdenv, lib, coursier, jdk, jre, makeWrapper }:
-
+{
+  stdenv,
+  lib,
+  coursier,
+  jdk,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "metals";
   version = "0.11.1";
@@ -16,11 +22,11 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "sha256-wYIuRTvkPqS4SE5RnkBgmLCwmNv+cYB/iPb9TYip9s0=";
+    outputHash = "sha256-wYIuRTvkPqS4SE5RnkBgmLCwmNv+cYB/iPb9TYip9s0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jdk deps];
 
   dontUnpack = true;
 
@@ -32,24 +38,24 @@ stdenv.mkDerivation rec {
     # This variant is not targeted at any particular client, clients are
     # expected to declare their supported features in initialization options.
     makeWrapper ${jre}/bin/java $out/bin/metals \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+      --prefix PATH : ${lib.makeBinPath [jdk]} \
       --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
 
     # Further variants targeted at clients with featuresets pre-set.
     makeWrapper ${jre}/bin/java $out/bin/metals-emacs \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+      --prefix PATH : ${lib.makeBinPath [jdk]} \
       --add-flags "${extraJavaOpts} -Dmetals.client=emacs -cp $CLASSPATH scala.meta.metals.Main"
 
     makeWrapper ${jre}/bin/java $out/bin/metals-vim \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+      --prefix PATH : ${lib.makeBinPath [jdk]} \
       --add-flags "${extraJavaOpts} -Dmetals.client=coc.nvim -cp $CLASSPATH scala.meta.metals.Main"
 
     makeWrapper ${jre}/bin/java $out/bin/metals-vim-lsc \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+      --prefix PATH : ${lib.makeBinPath [jdk]} \
       --add-flags "${extraJavaOpts} -Dmetals.client=vim-lsc -cp $CLASSPATH scala.meta.metals.Main"
 
     makeWrapper ${jre}/bin/java $out/bin/metals-sublime \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+      --prefix PATH : ${lib.makeBinPath [jdk]} \
       --add-flags "${extraJavaOpts} -Dmetals.client=sublime -cp $CLASSPATH scala.meta.metals.Main"
   '';
 
@@ -57,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
     description = "Work-in-progress language server for Scala";
-    maintainers = with maintainers; [ fabianhjr tomahna ];
+    maintainers = with maintainers; [fabianhjr tomahna];
   };
 }

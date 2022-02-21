@@ -1,14 +1,17 @@
-{ pkgs ? import ../../../.. { config = { }; overlays = [ ]; } }:
-let
-  inherit (pkgs)
+{pkgs ?
+    import ../../../.. {
+      config = {};
+      overlays = [];
+    }}: let
+  inherit
+    (pkgs)
     figlet
     zlib
     hello
     writeText
     runCommand
     ;
-in
-{
+in {
   hello = hello;
   figlet = figlet;
   zlib = zlib;
@@ -22,8 +25,9 @@ in
   helloFigletRef = writeText "hi" "hello ${hello} ${figlet}";
   selfRef = runCommand "self-ref-1" {} "echo $out >$out";
   selfRef2 = runCommand "self-ref-2" {} ''echo "${figlet}, $out" >$out'';
-  inherit (pkgs)
+  inherit
+    (pkgs)
     emptyFile
     emptyDirectory
-  ;
+    ;
 }

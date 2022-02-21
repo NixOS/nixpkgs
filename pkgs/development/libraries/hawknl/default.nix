@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, unzip}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "hawknl";
   version = "1.68";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "11shn2fbxj3w0j77w0234pqyj1368x686kkgv09q5yqhi1cdp028";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   makefile = "makefile.linux";
 

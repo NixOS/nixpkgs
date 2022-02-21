@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin, json-glib, glib, http-parser, sqlite, olm, libgcrypt } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  pidgin,
+  json-glib,
+  glib,
+  http-parser,
+  sqlite,
+  olm,
+  libgcrypt,
+}:
 stdenv.mkDerivation rec {
   pname = "purple-matrix-unstable";
   version = "2019-06-06";
@@ -15,24 +26,25 @@ stdenv.mkDerivation rec {
     # glib-2.62 deprecations
     "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
     # override "-O0 -Werror" set by build system
-    "-O3" "-Wno-error"
+    "-O3"
+    "-Wno-error"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pidgin json-glib glib http-parser sqlite olm libgcrypt ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [pidgin json-glib glib http-parser sqlite olm libgcrypt];
 
   makeFlags = [
     "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"
     "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
-  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; # fix build on darwin
+  buildFlags = ["CC=${stdenv.cc.targetPrefix}cc"]; # fix build on darwin
 
   meta = with lib; {
     homepage = "https://github.com/matrix-org/purple-matrix";
     description = "Matrix support for Pidgin / libpurple";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ symphorien ];
+    maintainers = with maintainers; [symphorien];
   };
 }

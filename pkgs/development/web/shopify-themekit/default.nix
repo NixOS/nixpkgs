@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "shopify-themekit";
   version = "1.0.3";
@@ -19,6 +22,6 @@ buildGoPackage rec {
     description = "A command line tool for shopify themes";
     homepage = "https://shopify.github.io/themekit/";
     license = licenses.mit;
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with maintainers; [_1000101];
   };
 }

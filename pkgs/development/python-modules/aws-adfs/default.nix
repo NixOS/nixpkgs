@@ -1,20 +1,20 @@
-{ lib
-, botocore
-, buildPythonPackage
-, click
-, configparser
-, fetchPypi
-, fido2
-, glibcLocales
-, isPy27
-, lxml
-, mock
-, pyopenssl
-, pytestCheckHook
-, requests
-, requests-kerberos
+{
+  lib,
+  botocore,
+  buildPythonPackage,
+  click,
+  configparser,
+  fetchPypi,
+  fido2,
+  glibcLocales,
+  isPy27,
+  lxml,
+  mock,
+  pyopenssl,
+  pytestCheckHook,
+  requests,
+  requests-kerberos,
 }:
-
 buildPythonPackage rec {
   pname = "aws-adfs";
   version = "1.24.5";
@@ -55,12 +55,12 @@ buildPythonPackage rec {
   # Required for python3 tests, along with glibcLocales
   LC_ALL = "en_US.UTF-8";
 
-  pythonImportsCheck = [ "aws_adfs" ];
+  pythonImportsCheck = ["aws_adfs"];
 
   meta = with lib; {
     description = "Command line tool to ease aws cli authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
     license = licenses.psfl;
-    maintainers = [ maintainers.bhipple ];
+    maintainers = [maintainers.bhipple];
   };
 }

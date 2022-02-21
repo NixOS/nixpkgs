@@ -1,6 +1,15 @@
-{ lib, fetchFromGitHub, fetchpatch, elk6Version, buildGoPackage, libpcap, nixosTests, systemd }:
-
-let beat = package : extraArgs : buildGoPackage (rec {
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  elk6Version,
+  buildGoPackage,
+  libpcap,
+  nixosTests,
+  systemd,
+}: let
+  beat = package: extraArgs:
+    buildGoPackage (rec {
       name = "${package}-${version}";
       version = elk6Version;
 
@@ -13,7 +22,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
 
       goPackagePath = "github.com/elastic/beats";
 
-      subPackages = [ package ];
+      subPackages = [package];
 
       patches = [
         (fetchpatch {
@@ -26,23 +35,22 @@ let beat = package : extraArgs : buildGoPackage (rec {
       meta = with lib; {
         homepage = "https://www.elastic.co/products/beats";
         license = licenses.asl20;
-        maintainers = with maintainers; [ fadenb basvandijk ];
+        maintainers = with maintainers; [fadenb basvandijk];
         platforms = platforms.linux;
       };
-    } // extraArgs);
+    }
+    // extraArgs);
 in rec {
-  filebeat6   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
-  heartbeat6  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
+  filebeat6 = beat "filebeat" {meta.description = "Lightweight shipper for logfiles";};
+  heartbeat6 = beat "heartbeat" {meta.description = "Lightweight shipper for uptime monitoring";};
   metricbeat6 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
-    passthru.tests =
-      assert metricbeat6.drvPath == nixosTests.elk.ELK-6.elkPackages.metricbeat.drvPath;
-      {
-        elk = nixosTests.elk.ELK-6;
-      };
+    passthru.tests = assert metricbeat6.drvPath == nixosTests.elk.ELK-6.elkPackages.metricbeat.drvPath; {
+      elk = nixosTests.elk.ELK-6;
+    };
   };
   packetbeat6 = beat "packetbeat" {
-    buildInputs = [ libpcap ];
+    buildInputs = [libpcap];
     meta.broken = true;
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''
@@ -55,13 +63,15 @@ in rec {
       PostgreSQL, Redis or Thrift and correlate the messages into transactions.
     '';
   };
-  journalbeat6  = beat "journalbeat" {
+  journalbeat6 = beat "journalbeat" {
     meta.description = ''
       Journalbeat is an open source data collector to read and forward
       journal entries from Linuxes with systemd.
     '';
-    buildInputs = [ systemd.dev ];
-    postFixup = let libPath = lib.makeLibraryPath [ (lib.getLib systemd) ]; in ''
+    buildInputs = [systemd.dev];
+    postFixup = let
+      libPath = lib.makeLibraryPath [(lib.getLib systemd)];
+    in ''
       patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
     '';
   };

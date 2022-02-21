@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyusb,
 }:
-
 buildPythonPackage {
   pname = "openant-unstable";
   version = "2017-02-11";
@@ -26,7 +26,7 @@ buildPythonPackage {
     install -m644 resources/ant-usb-sticks.rules "$out/etc/udev/rules.d/99-ant-usb-sticks.rules"
   '';
 
-  propagatedBuildInputs = [ pyusb ];
+  propagatedBuildInputs = [pyusb];
 
   meta = with lib; {
     homepage = "https://github.com/Tigge/openant";
@@ -34,5 +34,4 @@ buildPythonPackage {
     license = licenses.mit;
     platforms = platforms.unix;
   };
-
 }

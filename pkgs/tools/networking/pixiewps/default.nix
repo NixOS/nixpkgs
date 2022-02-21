@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "pixiewps";
   version = "1.2.2";
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "An offline WPS bruteforce utility";
     homepage = "https://github.com/wiire/pixiewps";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.nico202 ];
+    maintainers = [lib.maintainers.nico202];
     platforms = lib.platforms.all;
   };
 }

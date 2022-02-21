@@ -1,33 +1,33 @@
-{ alsa-lib
-, aubio
-, cmake
-, dssi
-, fetchurl
-, flac
-, libjack2
-, ladspaH
-, ladspaPlugins
-, liblo
-, libmad
-, libsamplerate
-, libsndfile
-, libtool
-, libvorbis
-, lilv
-, lv2
-, mkDerivation
-, opusfile
-, pkg-config
-, qttools
-, qtbase
-, rubberband
-, serd
-, sord
-, sratom
-, lib
-, suil
+{
+  alsa-lib,
+  aubio,
+  cmake,
+  dssi,
+  fetchurl,
+  flac,
+  libjack2,
+  ladspaH,
+  ladspaPlugins,
+  liblo,
+  libmad,
+  libsamplerate,
+  libsndfile,
+  libtool,
+  libvorbis,
+  lilv,
+  lv2,
+  mkDerivation,
+  opusfile,
+  pkg-config,
+  qttools,
+  qtbase,
+  rubberband,
+  serd,
+  sord,
+  sratom,
+  lib,
+  suil,
 }:
-
 mkDerivation rec {
   pname = "qtractor";
   version = "0.9.25";
@@ -73,7 +73,7 @@ mkDerivation rec {
     description = "Audio/MIDI multi-track sequencer";
     homepage = "https://qtractor.sourceforge.io";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [goibhniu];
     platforms = platforms.linux;
   };
 }

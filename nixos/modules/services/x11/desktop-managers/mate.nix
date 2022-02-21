@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   addToXDGDirs = p: ''
     if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
       export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
@@ -17,12 +18,8 @@ let
 
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.mate;
-
-in
-
-{
+in {
   options = {
-
     services.xserver.desktopManager.mate = {
       enable = mkOption {
         type = types.bool;
@@ -39,11 +36,9 @@ in
       type = types.listOf types.package;
       description = "Which MATE packages to exclude from the default environment";
     };
-
   };
 
   config = mkIf cfg.enable {
-
     services.xserver.displayManager.sessionPackages = [
       pkgs.mate.mate-session-manager
     ];
@@ -56,11 +51,14 @@ in
           export CAJA_EXTENSION_DIRS=$CAJA_EXTENSION_DIRS''${CAJA_EXTENSION_DIRS:+:}${config.system.path}/lib/caja/extensions-2.0
 
           # Let caja extensions find gsettings schemas
-          ${concatMapStrings (p: ''
+          ${
+        concatMapStrings (p: ''
           if [ -d "${p}/lib/caja/extensions-2.0" ]; then
               ${addToXDGDirs p}
           fi
-          '') config.environment.systemPackages}
+        '')
+        config.environment.systemPackages
+      }
 
           # Add mate-control-center paths to some XDG variables because its schemas are needed by mate-settings-daemon, and mate-settings-daemon is a dependency for mate-control-center (that is, they are mutually recursive)
           ${addToXDGDirs pkgs.mate.mate-control-center}
@@ -75,11 +73,11 @@ in
     environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
     environment.systemPackages =
-      pkgs.mate.basePackages ++
-      (pkgs.gnome.removePackagesByName
-        pkgs.mate.extraPackages
-        config.environment.mate.excludePackages) ++
-      [
+      pkgs.mate.basePackages
+      ++ (pkgs.gnome.removePackagesByName
+      pkgs.mate.extraPackages
+      config.environment.mate.excludePackages)
+      ++ [
         pkgs.desktop-file-utils
         pkgs.glib
         pkgs.gtk3.out
@@ -99,13 +97,12 @@ in
 
     services.gnome.at-spi2-core.enable = true;
     services.gnome.gnome-keyring.enable = true;
-    services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
+    services.udev.packages = [pkgs.mate.mate-settings-daemon];
     services.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
     security.pam.services.mate-screensaver.unixAuth = true;
 
-    environment.pathsToLink = [ "/share" ];
+    environment.pathsToLink = ["/share"];
   };
-
 }

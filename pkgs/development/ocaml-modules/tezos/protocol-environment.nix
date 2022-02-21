@@ -1,19 +1,19 @@
-{ lib
-, ocaml
-, buildDunePackage
-, bls12-381
-, bls12-381-legacy
-, tezos-stdlib
-, tezos-base
-, tezos-sapling
-, tezos-context
-, tezos-protocol-environment-sigs
-, tezos-protocol-environment-structs
-, tezos-test-helpers
-, zarith
-, alcotest-lwt
+{
+  lib,
+  ocaml,
+  buildDunePackage,
+  bls12-381,
+  bls12-381-legacy,
+  tezos-stdlib,
+  tezos-base,
+  tezos-sapling,
+  tezos-context,
+  tezos-protocol-environment-sigs,
+  tezos-protocol-environment-structs,
+  tezos-test-helpers,
+  zarith,
+  alcotest-lwt,
 }:
-
 buildDunePackage {
   pname = "tezos-protocol-environment";
   inherit (tezos-stdlib) version useDune2;
@@ -37,7 +37,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: custom economic-protocols environment implementation for `tezos-client` and testing";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: custom economic-protocols environment implementation for `tezos-client` and testing";
+    };
 }

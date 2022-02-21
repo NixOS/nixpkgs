@@ -1,9 +1,21 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, makeWrapper
-, boost, xercesc, hunspell, zlib, pcre16
-, qtbase, qttools, qtwebengine, qtxmlpatterns
-, python3Packages
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  boost,
+  xercesc,
+  hunspell,
+  zlib,
+  pcre16,
+  qtbase,
+  qttools,
+  qtwebengine,
+  qtxmlpatterns,
+  python3Packages,
 }:
-
 mkDerivation rec {
   pname = "sigil";
   version = "1.8.0";
@@ -15,12 +27,17 @@ mkDerivation rec {
     sha256 = "sha256-luX4/KERB4GwpID7zVnd6F/mN8SHTy9zmqSUzJ1CYPk=";
   };
 
-  pythonPath = with python3Packages; [ lxml ];
+  pythonPath = with python3Packages; [lxml];
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  nativeBuildInputs = [cmake pkg-config makeWrapper];
 
   buildInputs = [
-    boost xercesc qtbase qttools qtwebengine qtxmlpatterns
+    boost
+    xercesc
+    qtbase
+    qttools
+    qtwebengine
+    qtxmlpatterns
     python3Packages.lxml
   ];
 

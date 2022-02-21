@@ -1,10 +1,16 @@
-{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
-, tiles ? true, Cocoa
-, debug ? false
-, useXdgDir ? false
-}:
-
-let
+{
+  lib,
+  callPackage,
+  CoreFoundation,
+  fetchFromGitHub,
+  pkgs,
+  wrapCDDA,
+  attachPkgs,
+  tiles ? true,
+  Cocoa,
+  debug ? false,
+  useXdgDir ? false,
+}: let
   common = callPackage ./common.nix {
     inherit CoreFoundation tiles Cocoa debug useXdgDir;
   };
@@ -19,16 +25,19 @@ let
       sha256 = "sha256-2su1uQaWl9WG41207dRvOTdVKcQsEz/y0uTi9JX52uI=";
     };
 
-    makeFlags = common.makeFlags ++ [
-      # Makefile declares version as 0.F, with no minor release number
-      "VERSION=${version}"
-    ];
+    makeFlags =
+      common.makeFlags
+      ++ [
+        # Makefile declares version as 0.F, with no minor release number
+        "VERSION=${version}"
+      ];
 
-    meta = common.meta // {
-      maintainers = with lib.maintainers;
-      common.meta.maintainers ++ [ skeidel ];
-    };
+    meta =
+      common.meta
+      // {
+        maintainers = with lib.maintainers;
+          common.meta.maintainers ++ [skeidel];
+      };
   });
 in
-
-attachPkgs pkgs self
+  attachPkgs pkgs self

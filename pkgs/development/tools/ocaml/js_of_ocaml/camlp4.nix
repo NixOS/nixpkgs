@@ -1,7 +1,10 @@
-{ buildDunePackage, fetchFromGitHub, js_of_ocaml-compiler
-, camlp4, ocsigen_deriving
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  js_of_ocaml-compiler,
+  camlp4,
+  ocsigen_deriving,
 }:
-
 buildDunePackage rec {
   version = "3.2.1";
   pname = "js_of_ocaml-camlp4";
@@ -15,5 +18,5 @@ buildDunePackage rec {
 
   inherit (js_of_ocaml-compiler) meta;
 
-  buildInputs = [ camlp4 ocsigen_deriving ];
+  buildInputs = [camlp4 ocsigen_deriving];
 }

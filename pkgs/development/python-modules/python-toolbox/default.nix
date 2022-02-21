@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  isPy27,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   version = "1.0.10";
   pname = "python_toolbox";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Tools for testing PySnooper";
     homepage = "https://github.com/cool-RR/python_toolbox";
     license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    maintainers = with maintainers; [seqizz];
   };
 }

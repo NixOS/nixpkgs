@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchgit, libowfat, zlib, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libowfat,
+  zlib,
+  nixosTests,
+}:
 stdenv.mkDerivation {
   pname = "opentracker";
   version = "unstable-2018-05-26";
@@ -10,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "110nfb6n4clykwdzpk54iccsfjawq0krjfqhg114i1z0ri5dyl8j";
   };
 
-  buildInputs = [ libowfat zlib ];
+  buildInputs = [libowfat zlib];
 
   makeFlags = [
     "LIBOWFAT_HEADERS=${libowfat}/include/libowfat"
@@ -33,6 +39,6 @@ stdenv.mkDerivation {
     license = licenses.beerware;
     platforms = platforms.linux;
     description = "Bittorrent tracker project which aims for minimal resource usage and is intended to run at your wlan router";
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
 }

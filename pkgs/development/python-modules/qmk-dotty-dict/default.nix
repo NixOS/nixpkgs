@@ -1,5 +1,9 @@
-{ buildPythonPackage, fetchPypi, lib, setuptools-scm }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  setuptools-scm,
+}:
 buildPythonPackage rec {
   pname = "qmk_dotty_dict";
   version = "1.3.0.post1";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-O2EeOTZgv6poNcaOlHhLroD+B7hJCXi17KsDoNL8fqI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
   doCheck = false;
 
@@ -22,6 +26,6 @@ buildPythonPackage rec {
       some non-UTF8 locale settings.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ babariviere ];
+    maintainers = with maintainers; [babariviere];
   };
 }

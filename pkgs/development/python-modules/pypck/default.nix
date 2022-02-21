@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pypck";
   version = "0.7.14";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
-    license = with licenses; [ epl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [epl20];
+    maintainers = with maintainers; [fab];
   };
 }

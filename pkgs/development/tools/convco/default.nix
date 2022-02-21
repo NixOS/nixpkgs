@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, libiconv
-, openssl
-, pkg-config
-, Security
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  libiconv,
+  openssl,
+  pkg-config,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "convco";
   version = "0.3.8";
@@ -22,14 +22,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-FHiX9XpNjBFfs9fwi3Wzq7bAwRi7e/sqtji5WWPA5Qo=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [openssl] ++ lib.optionals stdenv.isDarwin [libiconv Security];
 
   meta = with lib; {
     description = "A Conventional commit cli";
     homepage = "https://github.com/convco/convco";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ hoverbear ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [hoverbear];
   };
 }

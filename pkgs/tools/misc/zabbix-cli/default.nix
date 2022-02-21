@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "zabbix-cli";
   version = "2.2.1";
@@ -33,6 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command-line interface for Zabbix";
     homepage = "https://github.com/unioslo/zabbix-cli";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

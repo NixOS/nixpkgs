@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.gollum;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.gollum;
+in {
   options.services.gollum = {
     enable = mkOption {
       type = types.bool;
@@ -39,7 +39,7 @@ in
     };
 
     allowUploads = mkOption {
-      type = types.nullOr (types.enum [ "dir" "page" ]);
+      type = types.nullOr (types.enum ["dir" "page"]);
       default = null;
       description = "Enable uploads of external files";
     };
@@ -68,11 +68,9 @@ in
       default = "/var/lib/gollum";
       description = "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
     };
-
   };
 
   config = mkIf cfg.enable {
-
     users.users.gollum = {
       group = config.users.users.gollum.name;
       description = "Gollum user";
@@ -80,7 +78,7 @@ in
       isSystemUser = true;
     };
 
-    users.groups.gollum = { };
+    users.groups.gollum = {};
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${config.users.users.gollum.name} ${config.users.groups.gollum.name} - -"
@@ -88,9 +86,9 @@ in
 
     systemd.services.gollum = {
       description = "Gollum wiki";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.git ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
+      path = [pkgs.git];
 
       preStart = ''
         # This is safe to be run on an existing repo
@@ -117,5 +115,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen ];
+  meta.maintainers = with lib.maintainers; [erictapen];
 }

@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, cython
-, scipy
-, scikit-learn
-, matplotlib
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  cython,
+  scipy,
+  scikit-learn,
+  matplotlib,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "scikit-learn-extra";
   version = "0.2.0";
@@ -20,9 +20,9 @@ buildPythonPackage rec {
     sha256 = "09v7a9jdycdrlqq349m1gbn8ppzv1bl5g3l72k6ywsx2xb01qw13";
   };
 
-  nativeBuildInputs = [ numpy cython ];
-  propagatedBuildInputs = [ numpy scipy scikit-learn ];
-  checkInputs = [ matplotlib pytestCheckHook ];
+  nativeBuildInputs = [numpy cython];
+  propagatedBuildInputs = [numpy scipy scikit-learn];
+  checkInputs = [matplotlib pytestCheckHook];
 
   preCheck = ''
     # Remove the package in the build dir, because Python defaults to it and
@@ -30,14 +30,14 @@ buildPythonPackage rec {
     rm -r sklearn_extra
   '';
 
-  pytestFlagsArray = [ "--pyargs sklearn_extra" ];
+  pytestFlagsArray = ["--pyargs sklearn_extra"];
   disabledTestPaths = [
     "benchmarks"
     "examples"
     "doc"
   ];
   disabledTests = [
-    "build"   # needs network connection
+    "build" # needs network connection
   ];
 
   # Check packages with cythonized modules
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "A set of tools for scikit-learn";
     homepage = "https://github.com/scikit-learn-contrib/scikit-learn-extra";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    maintainers = with lib.maintainers; [yl3dy];
   };
 }

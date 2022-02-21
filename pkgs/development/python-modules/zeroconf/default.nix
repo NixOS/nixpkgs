@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, pytest-asyncio
-, pythonOlder
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  pytest-asyncio,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "zeroconf";
   version = "0.38.3";
@@ -31,17 +31,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # tests that require network interaction
-    "test_close_multiple_times"
-    "test_launch_and_close"
-    "test_launch_and_close_context_manager"
-    "test_launch_and_close_v4_v6"
-    "test_launch_and_close_v6_only"
-    "test_integration_with_listener_ipv6"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_lots_of_names"
-  ];
+  disabledTests =
+    [
+      # tests that require network interaction
+      "test_close_multiple_times"
+      "test_launch_and_close"
+      "test_launch_and_close_context_manager"
+      "test_launch_and_close_v4_v6"
+      "test_launch_and_close_v6_only"
+      "test_integration_with_listener_ipv6"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_lots_of_names"
+    ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -54,6 +56,6 @@ buildPythonPackage rec {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

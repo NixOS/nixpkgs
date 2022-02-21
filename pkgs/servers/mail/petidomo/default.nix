@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, flex, bison, sendmailPath ? "/run/wrappers/bin/sendmail" }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  sendmailPath ? "/run/wrappers/bin/sendmail",
+}:
 stdenv.mkDerivation rec {
   pname = "petidomo";
   version = "4.3";
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0x4dbxc4fcfg1rw5ywpcypvylnzn3y4rh0m6fz4h4cdnzb8p1lvm";
   };
 
-  buildInputs = [ flex bison ];
+  buildInputs = [flex bison];
 
-  configureFlags = [ "--with-mta=${sendmailPath}" ];
+  configureFlags = ["--with-mta=${sendmailPath}"];
 
   enableParallelBuilding = true;
 
@@ -23,6 +29,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.peti ];
+    maintainers = [lib.maintainers.peti];
   };
 }

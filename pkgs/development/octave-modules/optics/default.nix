@@ -1,8 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
-
 buildOctavePackage rec {
   pname = "optics";
   version = "0.1.4";
@@ -15,7 +15,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/optics/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Functions covering various aspects of optics";
   };
 }

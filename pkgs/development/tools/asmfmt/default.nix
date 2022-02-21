@@ -1,8 +1,8 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "asmfmt";
   version = "1.2.3";
@@ -20,13 +20,13 @@ buildGoPackage rec {
 
   # This package comes with its own version of goimports, gofmt and goreturns
   # but these binaries are outdated and are offered by other packages.
-  subPackages = [ "cmd/asmfmt" ];
+  subPackages = ["cmd/asmfmt"];
 
   meta = with lib; {
     description = "Go Assembler Formatter";
     homepage = "https://github.com/klauspost/asmfmt";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, glib
-, autoreconfHook
-, pkg-config
-, systemd
-, fetchFromGitLab
-, nix-update-script
+{
+  stdenv,
+  lib,
+  glib,
+  autoreconfHook,
+  pkg-config,
+  systemd,
+  fetchFromGitLab,
+  nix-update-script,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-desktop-testing";
   version = "2021.1";
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.jtojnar ];
+    maintainers = [maintainers.jtojnar];
   };
 }

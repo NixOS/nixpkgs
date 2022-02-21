@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
   version = "2021-06-28";
@@ -50,6 +53,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/RPi-Distro/firmware-nonfree";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [lopsided98];
   };
 }

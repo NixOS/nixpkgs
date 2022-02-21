@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchgit, autoreconfHook, scheme48 }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  scheme48,
+}:
 stdenv.mkDerivation {
   pname = "scsh";
   version = "0.7pre";
@@ -11,15 +16,15 @@ stdenv.mkDerivation {
     sha256 = "0ci2h9hhv8pl12sdyl2qwal3dhmd7zgm1pjnmd4kg8r1hnm6vidx";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ scheme48 ];
-  configureFlags = [ "--with-scheme48=${scheme48}" ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [scheme48];
+  configureFlags = ["--with-scheme48=${scheme48}"];
 
   meta = with lib; {
     description = "A Scheme shell";
     homepage = "http://www.scsh.net/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [joachifm];
     platforms = with platforms; unix;
   };
 }

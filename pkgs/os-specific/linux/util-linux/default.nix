@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, pam, systemd ? null
-, nlsSupport ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  zlib,
+  shadow,
+  libcap_ng,
+  ncurses ? null,
+  pam,
+  systemd ? null,
+  nlsSupport ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "util-linux";
   version = "2.37.3";
@@ -16,7 +24,7 @@ stdenv.mkDerivation rec {
     ./rtcwake-search-PATH-for-shutdown.patch
   ];
 
-  outputs = [ "bin" "dev" "out" "lib" "man" ];
+  outputs = ["bin" "dev" "out" "lib" "man"];
   separateDebugInfo = true;
 
   postPatch = ''
@@ -32,22 +40,24 @@ stdenv.mkDerivation rec {
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
   # root...
-  configureFlags = [
-    "--localstatedir=/var"
-    "--enable-write"
-    "--disable-use-tty-group"
-    "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
-    "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
-    "--disable-su" # provided by shadow
-    (lib.enableFeature nlsSupport "nls")
-    (lib.withFeature (ncurses != null) "ncursesw")
-    (lib.withFeature (systemd != null) "systemd")
-    (lib.withFeatureAs (systemd != null)
-       "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
-    "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       "scanf_cv_type_modifier=ms"
-  ;
+  configureFlags =
+    [
+      "--localstatedir=/var"
+      "--enable-write"
+      "--disable-use-tty-group"
+      "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
+      "--disable-makeinstall-setuid"
+      "--disable-makeinstall-chown"
+      "--disable-su" # provided by shadow
+      (lib.enableFeature nlsSupport "nls")
+      (lib.withFeature (ncurses != null) "ncursesw")
+      (lib.withFeature (systemd != null) "systemd")
+      (lib.withFeatureAs (systemd != null)
+      "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+      "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
+    ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    "scanf_cv_type_modifier=ms";
 
   makeFlags = [
     "usrbin_execdir=${placeholder "bin"}/bin"
@@ -55,10 +65,10 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs =
-    [ zlib pam libcap_ng ]
-    ++ lib.filter (p: p != null) [ ncurses systemd ];
+    [zlib pam libcap_ng]
+    ++ lib.filter (p: p != null) [ncurses systemd];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
@@ -69,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "A set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
-    license = with licenses; [ gpl2Only gpl2Plus gpl3Plus lgpl21Plus bsd3 bsdOriginalUC publicDomain ];
+    license = with licenses; [gpl2Only gpl2Plus gpl3Plus lgpl21Plus bsd3 bsdOriginalUC publicDomain];
     platforms = platforms.linux;
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };

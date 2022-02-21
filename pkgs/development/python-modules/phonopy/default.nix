@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pyyaml
-, matplotlib
-, h5py
-, scipy
-, spglib
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pyyaml,
+  matplotlib,
+  h5py,
+  scipy,
+  spglib,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "phonopy";
   version = "2.13.1";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "A package for phonon calculations at harmonic and quasi-harmonic levels";
     homepage = "https://atztogo.github.io/phonopy/";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

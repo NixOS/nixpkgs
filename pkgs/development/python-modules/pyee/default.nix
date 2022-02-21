@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, vcversioner
-, mock
-, pytestCheckHook
-, pytest-asyncio
-, pytest-trio
-, twisted
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  vcversioner,
+  mock,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-trio,
+  twisted,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyee";
   version = "8.2.2";
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     twisted
   ];
 
-  pythonImportsCheck = [ "pyee" ];
+  pythonImportsCheck = ["pyee"];
 
   meta = with lib; {
     description = "A port of Node.js's EventEmitter to Python";
     homepage = "https://github.com/jfhbrook/pyee";
     license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    maintainers = with maintainers; [kmein];
   };
 }

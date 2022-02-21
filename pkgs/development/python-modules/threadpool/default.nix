@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "threadpool";
   version = "1.3.2";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     description = "Easy to use object-oriented thread pool framework";
     license = licenses.mit;
   };
-
 }

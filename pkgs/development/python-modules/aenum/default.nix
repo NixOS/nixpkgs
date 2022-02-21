@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pyparsing
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pyparsing,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "aenum";
   version = "3.1.8";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
     homepage = "https://github.com/ethanfurman/aenum";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
   };
 }

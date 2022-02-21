@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "kubesec";
   version = "2.11.4";
@@ -23,7 +23,7 @@ buildGoModule rec {
     description = "Security risk analysis tool for Kubernetes resources";
     homepage = "https://github.com/controlplaneio/kubesec";
     changelog = "https://github.com/controlplaneio/kubesec/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

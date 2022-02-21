@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libminc, bicpl, freeglut, mesa_glu, GLUT }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libminc,
+  bicpl,
+  freeglut,
+  mesa_glu,
+  GLUT,
+}:
 stdenv.mkDerivation rec {
   pname = "bicgl";
   version = "unstable-2018-04-06";
@@ -13,10 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "0lzirdi1mf4yl8srq7vjn746sbydz7h0wjh7wy8gycy6hq04qrg4";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libminc bicpl mesa_glu ]
-    ++ lib.optionals stdenv.isDarwin [ GLUT ]
-    ++ lib.optionals stdenv.isLinux [ freeglut ];
+  nativeBuildInputs = [cmake];
+  buildInputs =
+    [libminc bicpl mesa_glu]
+    ++ lib.optionals stdenv.isDarwin [GLUT]
+    ++ lib.optionals stdenv.isLinux [freeglut];
 
   cmakeFlags = [
     "-DLIBMINC_DIR=${libminc}/lib/cmake"
@@ -26,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/${owner}/${pname}";
     description = "Brain Imaging Centre graphics library";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
     platforms = platforms.unix;
     license = licenses.free;
   };

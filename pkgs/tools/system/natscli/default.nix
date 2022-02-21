@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "natscli";
   version = "0.0.29";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "NATS Command Line Interface";
     homepage = "https://github.com/nats-io/natscli";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

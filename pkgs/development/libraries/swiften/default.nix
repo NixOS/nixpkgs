@@ -1,18 +1,18 @@
-{ stdenv
-, lib
-, python2
-, libidn
-, lua
-, miniupnpc
-, expat
-, zlib
-, fetchurl
-, fetchpatch
-, openssl
-, boost
-, sconsPackages
+{
+  stdenv,
+  lib,
+  python2,
+  libidn,
+  lua,
+  miniupnpc,
+  expat,
+  zlib,
+  fetchurl,
+  fetchpatch,
+  openssl,
+  boost,
+  sconsPackages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "swiften";
   version = "4.0.2";
@@ -82,6 +82,6 @@ stdenv.mkDerivation rec {
     homepage = "http://swift.im/swiften.html";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.twey ];
+    maintainers = [maintainers.twey];
   };
 }

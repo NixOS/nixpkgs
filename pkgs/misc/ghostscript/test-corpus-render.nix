@@ -1,8 +1,8 @@
-{ stdenv
-, fetchgit
-, ghostscript
+{
+  stdenv,
+  fetchgit,
+  ghostscript,
 }:
-
 stdenv.mkDerivation {
   pname = "ghostscript-test-corpus-render";
   version = "unstable-2020-02-19";

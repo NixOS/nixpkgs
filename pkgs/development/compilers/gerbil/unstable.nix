@@ -1,5 +1,9 @@
-{ callPackage, fetchFromGitHub, gambit-unstable, gambit-support }:
-
+{
+  callPackage,
+  fetchFromGitHub,
+  gambit-unstable,
+  gambit-support,
+}:
 callPackage ./build.nix rec {
   version = "unstable-2020-11-05";
   git-version = "0.16-152-g808929ae";

@@ -1,5 +1,8 @@
-{ fetchurl, stdenv, texinfo }:
-
+{
+  fetchurl,
+  stdenv,
+  texinfo,
+}:
 import ./common.nix {
   inherit fetchurl stdenv texinfo;
   revision = 5;

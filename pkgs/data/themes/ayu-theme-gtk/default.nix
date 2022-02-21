@@ -1,16 +1,16 @@
-{ stdenv
-, autoreconfHook
-, fetchFromGitHub
-, gnome
-, gtk-engine-murrine
-, gtk3
-, inkscape
-, lib
-, optipng
-, pkg-config
-, sassc
+{
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  gnome,
+  gtk-engine-murrine,
+  gtk3,
+  inkscape,
+  lib,
+  optipng,
+  pkg-config,
+  sassc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ayu-theme-gtk";
   version = "unstable-2017-05-12";
@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dnordstrom/ayu-theme/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }
-

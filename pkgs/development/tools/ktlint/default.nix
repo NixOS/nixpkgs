@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre_headless,
+}:
 stdenv.mkDerivation rec {
   pname = "ktlint";
   version = "0.44.0";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l2pmvqw8rjl2xmsdp31j8015clshab6p81i3i05h40rjjz57mvr";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontUnpack = true;
 
@@ -26,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ktlint.github.io/";
     license = licenses.mit;
     platforms = jre_headless.meta.platforms;
-    maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
+    maintainers = with maintainers; [tadfisher SubhrajyotiSen];
   };
 }

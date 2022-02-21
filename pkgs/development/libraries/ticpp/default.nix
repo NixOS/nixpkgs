@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation {
   pname = "ticpp";
   version = "unstable-2019-01-09";
@@ -14,9 +15,9 @@ stdenv.mkDerivation {
     sha256 = "0xk4cy0xbkr6326cqd1vd6b2x0rfsx4iz2sq8f5jz3yl3slxgjm2";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  cmakeFlags = [ "-DBUILD_TICPP_DLL=1" ];
+  cmakeFlags = ["-DBUILD_TICPP_DLL=1"];
 
   installPhase = ''
     cd ..
@@ -31,5 +32,4 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     homepage = "https://github.com/wxFormBuilder/ticpp";
   };
-
 }

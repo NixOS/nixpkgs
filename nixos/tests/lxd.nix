@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   # Since we don't have access to the internet during the tests, we have to
   # pre-fetch lxd containers beforehand.
   #
@@ -42,16 +40,14 @@ let
             pool: default
             type: disk
   '';
-
-
 in {
   name = "lxd";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ patryk27 ];
+    maintainers = [patryk27];
   };
 
-  machine = { lib, ... }: {
+  machine = {lib, ...}: {
     virtualisation = {
       # Since we're testing `limits.cpu`, we've gotta have a known number of
       # cores to lean on

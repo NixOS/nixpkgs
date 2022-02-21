@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, aioresponses
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  aioresponses,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "bond-api";
   version = "0.1.16";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Asynchronous Python wrapper library over Bond Local API";
     homepage = "https://github.com/prystupa/bond-api";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

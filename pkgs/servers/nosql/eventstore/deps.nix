@@ -1,10 +1,15 @@
-{ fetchurl }:
-let
+{fetchurl}: let
   nugetUrlBase = "https://www.nuget.org/api/v2/package";
-  fetchNuGet = { pname, version, sha256 }: fetchurl { inherit sha256; url = "${nugetUrlBase}/${pname}/${version}"; };
-in
-[
-
+  fetchNuGet = {
+    pname,
+    version,
+    sha256,
+  }:
+    fetchurl {
+      inherit sha256;
+      url = "${nugetUrlBase}/${pname}/${version}";
+    };
+in [
   (fetchNuGet {
     pname = "hdrhistogram";
     version = "2.5.0";

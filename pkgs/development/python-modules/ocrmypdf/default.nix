@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, coloredlogs
-, fetchFromGitHub
-, ghostscript
-, img2pdf
-, importlib-metadata
-, importlib-resources
-, jbig2enc
-, pdfminer
-, pikepdf
-, pillow
-, pluggy
-, pngquant
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, reportlab
-, setuptools-scm
-, setuptools-scm-git-archive
-, stdenv
-, substituteAll
-, tesseract4
-, tqdm
-, unpaper
+{
+  lib,
+  buildPythonPackage,
+  coloredlogs,
+  fetchFromGitHub,
+  ghostscript,
+  img2pdf,
+  importlib-metadata,
+  importlib-resources,
+  jbig2enc,
+  pdfminer,
+  pikepdf,
+  pillow,
+  pluggy,
+  pngquant,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  reportlab,
+  setuptools-scm,
+  setuptools-scm-git-archive,
+  stdenv,
+  substituteAll,
+  tesseract4,
+  tqdm,
+  unpaper,
 }:
-
 buildPythonPackage rec {
   pname = "ocrmypdf";
   version = "13.3.0";
@@ -60,20 +60,23 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    coloredlogs
-    img2pdf
-    pdfminer
-    pikepdf
-    pillow
-    pluggy
-    reportlab
-    tqdm
-  ] ++ (lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ]) ++ (lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ]);
+  propagatedBuildInputs =
+    [
+      coloredlogs
+      img2pdf
+      pdfminer
+      pikepdf
+      pillow
+      pluggy
+      reportlab
+      tqdm
+    ]
+    ++ (lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ])
+    ++ (lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ]);
 
   checkInputs = [
     pytest-xdist
@@ -87,8 +90,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = with licenses; [ mpl20 mit ];
-    maintainers = with maintainers; [ kiwi dotlambda ];
+    license = with licenses; [mpl20 mit];
+    maintainers = with maintainers; [kiwi dotlambda];
     changelog = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
   };
 }

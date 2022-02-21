@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, glpk
-, gmp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  glpk,
+  gmp,
 }:
-
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "4ti2";
   version = "1.6.9";
 
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec{
     gmp
   ];
 
-  installFlags = [ "install-exec" ];
+  installFlags = ["install-exec"];
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://4ti2.github.io/";
     description = "A software package for algebraic, geometric and combinatorial problems on linear spaces";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with licenses; [gpl2Plus];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }

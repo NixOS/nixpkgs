@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "k6";
   version = "0.36.0";
@@ -11,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-yWEh0sPMGe6mNcLKhbmJEUCHzZKFGMcTRNQrHgiQ+BQ=";
   };
 
-  subPackages = [ "./" ];
+  subPackages = ["./"];
 
   vendorSha256 = null;
 
@@ -26,6 +29,6 @@ buildGoModule rec {
     homepage = "https://k6.io/";
     changelog = "https://github.com/grafana/k6/releases/tag/v${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ offline bryanasdev000 ];
+    maintainers = with maintainers; [offline bryanasdev000];
   };
 }

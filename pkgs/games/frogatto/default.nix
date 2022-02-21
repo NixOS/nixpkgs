@@ -1,9 +1,13 @@
-{ buildEnv, lib, callPackage, makeWrapper, makeDesktopItem }:
-
-let
+{
+  buildEnv,
+  lib,
+  callPackage,
+  makeWrapper,
+  makeDesktopItem,
+}: let
   description = "Action-adventure game, starring a certain quixotic frog";
-  engine = callPackage ./engine.nix { };
-  data = callPackage ./data.nix { };
+  engine = callPackage ./engine.nix {};
+  data = callPackage ./data.nix {};
   desktopItem = makeDesktopItem {
     name = "frogatto";
     exec = "frogatto";
@@ -15,29 +19,30 @@ let
     categories = "Game;ArcadeGame;";
   };
   version = "unstable-2020-12-04";
-in buildEnv {
-  name = "frogatto-${version}";
+in
+  buildEnv {
+    name = "frogatto-${version}";
 
-  buildInputs = [ makeWrapper ];
-  paths = [ engine data desktopItem ];
-  pathsToLink = [
-    "/bin"
-    "/share/frogatto/data"
-    "/share/frogatto/images"
-    "/share/frogatto/modules"
-    "/share/applications"
-  ];
+    buildInputs = [makeWrapper];
+    paths = [engine data desktopItem];
+    pathsToLink = [
+      "/bin"
+      "/share/frogatto/data"
+      "/share/frogatto/images"
+      "/share/frogatto/modules"
+      "/share/applications"
+    ];
 
-  postBuild = ''
-    wrapProgram $out/bin/frogatto \
-      --run "cd $out/share/frogatto"
-  '';
+    postBuild = ''
+      wrapProgram $out/bin/frogatto \
+        --run "cd $out/share/frogatto"
+    '';
 
-  meta = with lib; {
-    homepage = "https://frogatto.com";
-    description = description;
-    license = with licenses; [ cc-by-30 unfree ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ astro ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://frogatto.com";
+      description = description;
+      license = with licenses; [cc-by-30 unfree];
+      platforms = platforms.linux;
+      maintainers = with maintainers; [astro];
+    };
+  }

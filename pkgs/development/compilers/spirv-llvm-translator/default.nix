@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lit
-, llvm_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  lit,
+  llvm_11,
 }:
-
 stdenv.mkDerivation rec {
   pname = "SPIRV-LLVM-Translator";
   version = "unstable-2021-06-13";
@@ -17,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1s3lVNTQDl+pUvbzSMsp3cOUSm6I4DzqJxnLMeeE3F4=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake llvm_11.dev ];
+  nativeBuildInputs = [pkg-config cmake llvm_11.dev];
 
-  buildInputs = [ llvm_11 ];
+  buildInputs = [llvm_11];
 
-  checkInputs = [ lit ];
+  checkInputs = [lit];
 
   cmakeFlags = [
     "-DLLVM_INCLUDE_TESTS=ON"
@@ -31,10 +32,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
+    homepage = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
-    license     = licenses.ncsa;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ gloaming ];
+    license = licenses.ncsa;
+    platforms = platforms.all;
+    maintainers = with maintainers; [gloaming];
   };
 }

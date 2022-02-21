@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "upterm";
   version = "0.6.7";
@@ -16,7 +17,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     $out/bin/gendoc
@@ -34,6 +35,6 @@ buildGoModule rec {
     description = "Secure terminal-session sharing";
     homepage = "https://upterm.dev";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hax404 ];
+    maintainers = with maintainers; [hax404];
   };
 }

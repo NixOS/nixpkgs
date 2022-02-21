@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, ncurses
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  SDL,
 }:
-
 stdenv.mkDerivation rec {
   pname = "curseofwar";
   version = "1.3.0";
@@ -20,18 +21,21 @@ stdenv.mkDerivation rec {
     SDL
   ];
 
-  makeFlags = (if isNull SDL then [] else [ "SDL=yes" ]) ++ [
-    "PREFIX=$(out)"
-    # force platform's cc on darwin, otherwise gcc is used
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags =
+    (if isNull SDL
+    then []
+    else ["SDL=yes"])
+    ++ [
+      "PREFIX=$(out)"
+      # force platform's cc on darwin, otherwise gcc is used
+      "CC=${stdenv.cc.targetPrefix}cc"
+    ];
 
   meta = with lib; {
     description = "A fast-paced action strategy game";
     homepage = "https://a-nikolaev.github.io/curseofwar/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }
-

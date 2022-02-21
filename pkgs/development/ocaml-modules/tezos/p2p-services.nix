@@ -1,9 +1,9 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-base
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-base,
 }:
-
 buildDunePackage {
   pname = "tezos-p2p-services";
   inherit (tezos-stdlib) version useDune2;
@@ -13,7 +13,9 @@ buildDunePackage {
     tezos-base
   ];
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: descriptions of RPCs exported by `tezos-p2p`";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: descriptions of RPCs exported by `tezos-p2p`";
+    };
 }

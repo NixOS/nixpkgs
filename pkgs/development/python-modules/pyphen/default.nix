@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyphen";
   version = "0.12.0";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Pure Python module to hyphenate text";
     homepage = "https://github.com/Kozea/Pyphen";
     license = with licenses; [gpl2 lgpl21 mpl20];
-    maintainers = with maintainers; [ rvl ];
+    maintainers = with maintainers; [rvl];
   };
 }

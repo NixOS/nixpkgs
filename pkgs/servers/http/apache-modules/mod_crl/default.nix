@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
-
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  mod_ca,
+  apr,
+  aprutil,
+}:
 stdenv.mkDerivation rec {
   pname = "mod_crl";
   version = "0.2.3";
@@ -10,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1x186kp6fr8nwg0jlv5phagxndvw4rjqfga9mkibmn6dx252p61d";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ mod_ca apr aprutil ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [mod_ca apr aprutil];
   inherit (mod_ca) configureFlags installFlags;
 
   meta = with lib; {
@@ -20,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://redwax.eu";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dirkx ];
+    maintainers = with maintainers; [dirkx];
   };
 }

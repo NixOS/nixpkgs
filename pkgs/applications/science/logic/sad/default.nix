@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, haskell, spass }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  haskell,
+  spass,
+}:
 stdenv.mkDerivation rec {
   pname = "system-for-automated-deduction";
   version = "2.3.25";
@@ -7,7 +12,7 @@ stdenv.mkDerivation rec {
     url = "http://nevidal.org/download/sad-${version}.tar.gz";
     sha256 = "10jd93xgarik7xwys5lq7fx4vqp7c0yg1gfin9cqfch1k1v8ap4b";
   };
-  buildInputs = [ haskell.compiler.ghc844 spass ];
+  buildInputs = [haskell.compiler.ghc844 spass];
   patches = [
     ./patch.patch
     # Since the LTS 12.0 update, <> is an operator in Prelude, colliding with
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
       written in a special language called ForTheL (FORmal THEory Language) or in a traditional first-order language
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.schmitthenner ];
+    maintainers = [lib.maintainers.schmitthenner];
     homepage = "http://nevidal.org/sad.en.html";
     platforms = lib.platforms.linux;
     broken = true; # ghc-8.4.4 is gone from Nixpkgs

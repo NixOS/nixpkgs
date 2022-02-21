@@ -1,7 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi,
-  flake8, py, pyflakes, six, tox
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flake8,
+  py,
+  pyflakes,
+  six,
+  tox,
 }:
-
 buildPythonPackage rec {
   pname = "serpy";
   version = "0.3.1";
@@ -17,8 +23,8 @@ buildPythonPackage rec {
     sha256 = "3772b2a9923fbf674000ff51abebf6ea8f0fca0a2cfcbfa0d63ff118193d1ec5";
   };
 
-  buildInputs = [ flake8 py pyflakes tox ];
-  propagatedBuildInputs = [ six ];
+  buildInputs = [flake8 py pyflakes tox];
+  propagatedBuildInputs = [six];
 
   # ImportError: No module named 'tests
   doCheck = false;

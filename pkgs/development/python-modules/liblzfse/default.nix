@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lzfse
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lzfse,
 }:
 buildPythonPackage rec {
   pname = "pyliblzfse";

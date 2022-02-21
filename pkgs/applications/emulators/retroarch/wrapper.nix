@@ -1,10 +1,15 @@
-{ stdenv, lib, makeWrapper, retroarch, cores ? [ ] }:
-
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  retroarch,
+  cores ? [],
+}:
 stdenv.mkDerivation {
   pname = "retroarch";
   version = lib.getVersion retroarch;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   buildCommand = ''
     mkdir -p $out/lib

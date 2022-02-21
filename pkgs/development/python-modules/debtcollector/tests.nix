@@ -1,8 +1,8 @@
-{ buildPythonPackage
-, debtcollector
-, stestr
+{
+  buildPythonPackage,
+  debtcollector,
+  stestr,
 }:
-
 buildPythonPackage rec {
   pname = "debtcollector-tests";
   inherit (debtcollector) version;

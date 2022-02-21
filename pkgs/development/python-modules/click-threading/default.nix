@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, click
-, isPy3k
-, futures ? null
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  click,
+  isPy3k,
+  futures ? null,
 }:
-
 buildPythonPackage rec {
   pname = "click-threading";
   version = "0.5.0";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
     sha256 = "sha256-rc/mI8AqWVwQfDFAcvZ6Inj+TrQLcsDRoskDzHivNDk=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ click ] ++ lib.optional (!isPy3k) futures;
+  checkInputs = [pytest];
+  propagatedBuildInputs = [click] ++ lib.optional (!isPy3k) futures;
 
   checkPhase = ''
     py.test

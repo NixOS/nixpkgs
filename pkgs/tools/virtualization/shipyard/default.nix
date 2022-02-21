@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "shipyard";
   version = "0.3.44";
@@ -13,7 +16,9 @@ buildGoModule rec {
   vendorSha256 = "sha256-mXYnmDppVqhjlkGVkvp1YaEwBEkHBUddxLof389huMQ=";
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   # Tests require a large variety of tools and resources to run including
@@ -24,6 +29,6 @@ buildGoModule rec {
     description = "Shipyard is a tool for building modern cloud native development environments";
     homepage = "https://shipyard.run";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

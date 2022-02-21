@@ -1,11 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
-, dbus
-, signal-cli
-, xclip
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  dbus,
+  signal-cli,
+  xclip,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "scli";
   version = "0.7.0";
@@ -40,13 +40,16 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ dbus signal-cli xclip ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [dbus signal-cli xclip])
   ];
 
   meta = with lib; {
     description = "Simple terminal user interface for Signal";
     homepage = "https://github.com/isamert/scli";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ alex-eyre ];
+    maintainers = with maintainers; [alex-eyre];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pandas
-, pycryptodome
-, pythonOlder
-, requests
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pandas,
+  pycryptodome,
+  pythonOlder,
+  requests,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "pyezviz";
   version = "0.2.0.6";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface for for Ezviz cameras";
     homepage = "https://github.com/baqs/pyEzviz/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, lxml
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
 }:
-
 buildPythonPackage rec {
   pname = "pykmtronic";
   version = "0.3.0";
@@ -14,16 +14,16 @@ buildPythonPackage rec {
     sha256 = "sha256-8qLyBJp7C93x0PWbgDAtNEDJ5VLNfwZ3DRZfudRCBgo=";
   };
 
-  propagatedBuildInputs = [ aiohttp lxml ];
+  propagatedBuildInputs = [aiohttp lxml];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pykmtronic" ];
+  pythonImportsCheck = ["pykmtronic"];
 
   meta = with lib; {
     description = "Python client to interface with KM-Tronic web relays";
     homepage = "https://github.com/dgomes/pykmtronic";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

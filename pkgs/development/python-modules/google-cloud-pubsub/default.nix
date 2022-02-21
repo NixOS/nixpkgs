@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-api-core
-, google-cloud-testutils
-, grpc-google-iam-v1
-, grpcio-status
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  google-api-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  grpcio-status,
+  libcst,
+  mock,
+  proto-plus,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
   version = "2.9.0";
@@ -47,12 +47,12 @@ buildPythonPackage rec {
     "tests/unit/pubsub_v1"
   ];
 
-  pythonImportsCheck = [ "google.cloud.pubsub" ];
+  pythonImportsCheck = ["google.cloud.pubsub"];
 
   meta = with lib; {
     description = "Google Cloud Pub/Sub API client library";
     homepage = "https://pypi.org/project/google-cloud-pubsub";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

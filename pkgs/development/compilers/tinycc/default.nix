@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromRepoOrCz
-, perl
-, texinfo
-, which
+{
+  lib,
+  stdenv,
+  fetchFromRepoOrCz,
+  perl,
+  texinfo,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tcc";
   version = "0.9.27+date=2022-01-11";
@@ -26,17 +26,19 @@ stdenv.mkDerivation rec {
     patchShebangs texi2pod.pl
   '';
 
-  configureFlags = [
-    "--cc=$CC"
-    "--ar=$AR"
-    "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
-    "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
-    "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
-    # build cross compilers
-    "--enable-cross"
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    "--config-musl"
-  ];
+  configureFlags =
+    [
+      "--cc=$CC"
+      "--ar=$AR"
+      "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
+      "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
+      "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
+      # build cross compilers
+      "--enable-cross"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      "--config-musl"
+    ];
 
   preConfigure = ''
     echo ${version} > VERSION
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/lib/pkgconfig libtcc.pc -m 444
   '';
 
-  outputs = [ "out" "info" "man" ];
+  outputs = ["out" "info" "man"];
 
   doCheck = true;
   checkTarget = "test";
@@ -84,9 +86,10 @@ stdenv.mkDerivation rec {
       With libtcc, you can use TCC as a backend for dynamic code generation.
     '';
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ joachifm AndersonTorres ];
+    maintainers = with maintainers; [joachifm AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: more multiple outputs
 # TODO: self-compilation
+

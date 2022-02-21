@@ -1,4 +1,14 @@
-{ rustPlatform, lib, fetchFromGitHub, xz, pkg-config, openssl, dbus, efibootmgr, makeWrapper }:
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+  xz,
+  pkg-config,
+  openssl,
+  dbus,
+  efibootmgr,
+  makeWrapper,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "system76-firmware";
   # Check Makefile when updating, make sure postInstall matches make install
@@ -11,11 +21,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-EV7byqfoz0sAIkf/hgZh+m7D2+54DEnE4td4CTX6c4s=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [pkg-config makeWrapper];
 
-  buildInputs = [ xz openssl dbus ];
+  buildInputs = [xz openssl dbus];
 
-  cargoBuildFlags = [ "--workspace" ];
+  cargoBuildFlags = ["--workspace"];
 
   cargoSha256 = "sha256-/bf5JQgyFN8TH7o2TWHX5sv/NkxBLJ495iVW8c9Vqis=";
 
@@ -33,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     description = "Tools for managing firmware updates for system76 devices";
     homepage = "https://github.com/pop-os/system76-firmware";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ shlevy ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [shlevy];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

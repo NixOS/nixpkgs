@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "chart-testing";
   version = "3.5.0";
@@ -26,7 +30,7 @@ buildGoModule rec {
     "-X github.com/helm/chart-testing/v3/ct/cmd.BuildDate=19700101-00:00:00"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     install -Dm644 -t $out/etc/ct etc/chart_schema.yaml
@@ -42,7 +46,7 @@ buildGoModule rec {
     description = "A tool for testing Helm charts";
     homepage = "https://github.com/helm/chart-testing";
     license = licenses.asl20;
-    maintainers = with maintainers; [ atkinschang ];
+    maintainers = with maintainers; [atkinschang];
     mainProgram = "ct";
   };
 }

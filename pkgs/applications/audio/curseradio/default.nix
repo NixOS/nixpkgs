@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, substituteAll, python3Packages, mpv }:
-
+{
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  python3Packages,
+  mpv,
+}:
 python3Packages.buildPythonApplication rec {
   version = "0.2";
   pname = "curseradio";
@@ -31,6 +36,6 @@ python3Packages.buildPythonApplication rec {
     description = "Command line radio player";
     homepage = "https://github.com/chronitis/curseradio";
     license = licenses.mit;
-    maintainers = [ maintainers.eyjhb ];
+    maintainers = [maintainers.eyjhb];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, python3, fetchurl }:
-
+{
+  lib,
+  python3,
+  fetchurl,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "csv2odf";
   version = "2.09";
@@ -23,6 +26,6 @@ python3.pkgs.buildPythonApplication rec {
       template file that you can design in your office application of choice.
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

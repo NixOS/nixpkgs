@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   name = "it87-${version}-${kernel.version}";
   version = "2018-08-14";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ygi4mwds4q7byhg8gqnh3syamdj5rpjy3jj012k7vl54gdgrmgm";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Patched module for IT87xx superio chip sensors support";
     homepage = "https://github.com/hannesha/it87";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ yorickvp ];
+    platforms = ["x86_64-linux" "i686-linux"];
+    maintainers = with maintainers; [yorickvp];
   };
 }

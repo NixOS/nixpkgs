@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, alsa-lib
-, gtk3
-, gtksourceview3
-, libGL
-, libGLU
-, libX11
-, libXv
-, libao
-, libpulseaudio
-, openal
-, pkg-config
-, runtimeShell
-, udev
-# Darwin dependencies
-, libicns
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  alsa-lib,
+  gtk3,
+  gtksourceview3,
+  libGL,
+  libGLU,
+  libX11,
+  libXv,
+  libao,
+  libpulseaudio,
+  openal,
+  pkg-config,
+  runtimeShell,
+  udev
+  # Darwin dependencies
+  ,
+  libicns,
+  darwin,
 }:
-
 stdenv.mkDerivation rec {
   pname = "higan";
   version = "115+unstable=2021-08-18";
@@ -31,33 +32,37 @@ stdenv.mkDerivation rec {
     hash = "sha256-HZItJ97x20OjFKv2OVbMja7g+c1ZXcgcaC/XDe3vMZM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    libicns
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libicns
+    ];
 
-  buildInputs = [
-    SDL2
-    libao
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-    gtk3
-    gtksourceview3
-    libGL
-    libGLU
-    libX11
-    libXv
-    libpulseaudio
-    openal
-    udev
-  ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Carbon
-    Cocoa
-    OpenAL
-    OpenGL
-  ]);
+  buildInputs =
+    [
+      SDL2
+      libao
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+      gtk3
+      gtksourceview3
+      libGL
+      libGLU
+      libX11
+      libXv
+      libpulseaudio
+      openal
+      udev
+    ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      Carbon
+      Cocoa
+      OpenAL
+      OpenGL
+    ]);
 
   patches = [
     # Includes cmath header
@@ -82,55 +87,66 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-  '' + (if stdenv.isDarwin then ''
-    mkdir ${placeholder "out"}
-    mv higan/out/higan.app ${placeholder "out"}/
-    mv icarus/out/icarus.app ${placeholder "out"}/
-  '' else ''
-    install -d ${placeholder "out"}/bin
-    install higan-ui/out/higan -t ${placeholder "out"}/bin/
-    install icarus/out/icarus -t ${placeholder "out"}/bin/
+    ''
+    + (if stdenv.isDarwin
+    then
+      ''
+        mkdir ${placeholder "out"}
+        mv higan/out/higan.app ${placeholder "out"}/
+        mv icarus/out/icarus.app ${placeholder "out"}/
+      ''
+    else
+      ''
+        install -d ${placeholder "out"}/bin
+        install higan-ui/out/higan -t ${placeholder "out"}/bin/
+        install icarus/out/icarus -t ${placeholder "out"}/bin/
 
-    install -d ${placeholder "out"}/share/applications
-    install higan-ui/resource/higan.desktop -t ${placeholder "out"}/share/applications/
-    install icarus/resource/icarus.desktop -t ${placeholder "out"}/share/applications/
+        install -d ${placeholder "out"}/share/applications
+        install higan-ui/resource/higan.desktop -t ${placeholder "out"}/share/applications/
+        install icarus/resource/icarus.desktop -t ${placeholder "out"}/share/applications/
 
-    install -d ${placeholder "out"}/share/pixmaps
-    install higan/higan/resource/higan.svg ${placeholder "out"}/share/pixmaps/higan-icon.svg
-    install higan/higan/resource/logo.png ${placeholder "out"}/share/pixmaps/higan-icon.png
-    install icarus/resource/icarus.svg ${placeholder "out"}/share/pixmaps/icarus-icon.svg
-    install icarus/resource/icarus.png ${placeholder "out"}/share/pixmaps/icarus-icon.png
-  '') + ''
-    install -d ${placeholder "out"}/share/higan
-    cp -rd extras/ higan/System/ ${placeholder "out"}/share/higan/
+        install -d ${placeholder "out"}/share/pixmaps
+        install higan/higan/resource/higan.svg ${placeholder "out"}/share/pixmaps/higan-icon.svg
+        install higan/higan/resource/logo.png ${placeholder "out"}/share/pixmaps/higan-icon.png
+        install icarus/resource/icarus.svg ${placeholder "out"}/share/pixmaps/icarus-icon.svg
+        install icarus/resource/icarus.png ${placeholder "out"}/share/pixmaps/icarus-icon.png
+      '')
+    + ''
+      install -d ${placeholder "out"}/share/higan
+      cp -rd extras/ higan/System/ ${placeholder "out"}/share/higan/
 
-    install -d ${placeholder "out"}/share/icarus
-    cp -rd icarus/Database icarus/Firmware ${placeholder "out"}/share/icarus/
-  '' + (
-    # A dirty workaround, suggested by @cpages:
-    # we create a first-run script to populate
-    # $HOME with all the stuff needed at runtime
-    let
-      dest = if stdenv.isDarwin
-           then "\\$HOME/Library/Application Support/higan"
-           else "\\$HOME/higan";
-    in ''
-    mkdir -p ${placeholder "out"}/bin
-    cat <<EOF > ${placeholder "out"}/bin/higan-init.sh
-    #!${runtimeShell}
+      install -d ${placeholder "out"}/share/icarus
+      cp -rd icarus/Database icarus/Firmware ${placeholder "out"}/share/icarus/
+    ''
+    + (
+      # A dirty workaround, suggested by @cpages:
+      # we create a first-run script to populate
+      # $HOME with all the stuff needed at runtime
+      let
+        dest =
+          if stdenv.isDarwin
+          then "\\$HOME/Library/Application Support/higan"
+          else "\\$HOME/higan";
+      in ''
+        mkdir -p ${placeholder "out"}/bin
+        cat <<EOF > ${placeholder "out"}/bin/higan-init.sh
+        #!${runtimeShell}
 
-    cp --recursive --update ${placeholder "out"}/share/higan/System/ "${dest}"/
+        cp --recursive --update ${placeholder "out"}/share/higan/System/ "${dest}"/
 
-    EOF
+        EOF
 
-    chmod +x ${placeholder "out"}/bin/higan-init.sh
-  '') + ''
+        chmod +x ${placeholder "out"}/bin/higan-init.sh
+      ''
+    )
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/higan-emu/higan";
@@ -147,9 +163,10 @@ stdenv.mkDerivation rec {
       Challenge V2.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };
 }
 # TODO: select between Qt, GTK2 and GTK3
+

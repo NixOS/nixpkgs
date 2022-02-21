@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "imap-tools";
   version = "0.51.0";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     "test_live"
   ];
 
-  pythonImportsCheck = [ "imap_tools" ];
+  pythonImportsCheck = ["imap_tools"];
 
   meta = with lib; {
     description = "Work with email and mailbox by IMAP";
     homepage = "https://github.com/ikvk/imap_tools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

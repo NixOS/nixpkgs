@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, nix }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  nix,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rnix-lsp";
   version = "0.2.4";
@@ -18,6 +23,6 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A work-in-progress language server for Nix, with syntax checking and basic completion";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# propagates
-, blinker
-, cryptography
-, pyjwt
-
-# test
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub
+  # propagates
+  ,
+  blinker,
+  cryptography,
+  pyjwt
+  # test
+  ,
+  mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "oauthlib";
   version = "3.1.1";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/idan/oauthlib";
     description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
-    maintainers = with maintainers; [ prikhi ];
+    maintainers = with maintainers; [prikhi];
     license = licenses.bsd3;
   };
 }

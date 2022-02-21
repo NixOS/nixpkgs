@@ -1,37 +1,37 @@
-{ lib
-, pkg-config
-, fetchurl
-, buildPythonApplication
-, autoreconfHook
-, wrapGAppsHook
-, gobject-introspection
-, gettext
-, yelp-tools
-, itstool
-, python
-, pygobject3
-, gtk3
-, gnome
-, substituteAll
-, at-spi2-atk
-, at-spi2-core
-, pyatspi
-, dbus
-, dbus-python
-, pyxdg
-, xkbcomp
-, procps
-, lsof
-, coreutils
-, gsettings-desktop-schemas
-, speechd
-, brltty
-, liblouis
-, setproctitle
-, gst_all_1
-, gst-python
+{
+  lib,
+  pkg-config,
+  fetchurl,
+  buildPythonApplication,
+  autoreconfHook,
+  wrapGAppsHook,
+  gobject-introspection,
+  gettext,
+  yelp-tools,
+  itstool,
+  python,
+  pygobject3,
+  gtk3,
+  gnome,
+  substituteAll,
+  at-spi2-atk,
+  at-spi2-core,
+  pyatspi,
+  dbus,
+  dbus-python,
+  pyxdg,
+  xkbcomp,
+  procps,
+  lsof,
+  coreutils,
+  gsettings-desktop-schemas,
+  speechd,
+  brltty,
+  liblouis,
+  setproctitle,
+  gst_all_1,
+  gst-python,
 }:
-
 buildPythonApplication rec {
   pname = "orca";
   version = "41.2";
@@ -108,7 +108,7 @@ buildPythonApplication rec {
 
       Needs `services.gnome.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with maintainers; [ berce ] ++ teams.gnome.members;
+    maintainers = with maintainers; [berce] ++ teams.gnome.members;
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

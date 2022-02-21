@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nbformat
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nbformat,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "nbmerge";
   version = "unstable-2017-10-23";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
     sha256 = "1cn550kjadnxc1sx2xy814248fpzrj3lgvrmsbrwmk03vwaa2hmi";
   };
 
-  propagatedBuildInputs = [ nbformat ];
-  checkInputs = [ nose ];
+  propagatedBuildInputs = [nbformat];
+  checkInputs = [nose];
 
   checkPhase = ''
     patchShebangs .
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "A tool to merge/concatenate Jupyter (IPython) notebooks";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

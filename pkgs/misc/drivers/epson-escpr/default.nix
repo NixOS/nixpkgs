@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, cups }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+}:
 stdenv.mkDerivation {
   pname = "epson-escpr";
   version = "1.7.16";
@@ -17,9 +21,9 @@ stdenv.mkDerivation {
     sha256 = "18n6fgyrii8084vdjhys94lr6nhhbmn7zzjd8jckvv1grb0iz9nv";
   };
 
-  patches = [ ./cups-filter-ppd-dirs.patch ];
+  patches = [./cups-filter-ppd-dirs.patch];
 
-  buildInputs = [ cups ];
+  buildInputs = [cups];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
@@ -43,7 +47,7 @@ stdenv.mkDerivation {
           nssmdns = true;
         };'';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artuuge ];
+    maintainers = with maintainers; [artuuge];
     platforms = platforms.linux;
   };
 }

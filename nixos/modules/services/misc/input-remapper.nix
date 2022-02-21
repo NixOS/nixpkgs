@@ -1,9 +1,12 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
-
-let cfg = config.services.input-remapper; in
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.services.input-remapper;
+in {
   options = {
     services.input-remapper = {
       enable = mkEnableOption "input-remapper, an easy to use tool to change the mapping of your input device buttons.";
@@ -24,6 +27,6 @@ let cfg = config.services.input-remapper; in
     services.dbus.packages = cfg.package;
     systemd.packages = cfg.package;
     environment.systemPackages = cfg.package;
-    systemd.services.input-remapper.wantedBy = [ "graphical.target" ];
+    systemd.services.input-remapper.wantedBy = ["graphical.target"];
   };
 }

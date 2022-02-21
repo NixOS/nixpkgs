@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "hid-listen";
   version = "1.01";
@@ -18,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "A tool thats prints debugging information from usb HID devices";
     homepage = "https://www.pjrc.com/teensy/hid_listen.html";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ tomsmeets ];
+    maintainers = with maintainers; [tomsmeets];
     platforms = platforms.linux;
   };
 }

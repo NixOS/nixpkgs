@@ -1,13 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, robloxSupport ? true
-, pkg-config
-, openssl
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  robloxSupport ? true,
+  pkg-config,
+  openssl,
+  stdenv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "selene";
   version = "0.16.0";
@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optional robloxSupport pkg-config;
 
-  buildInputs = lib.optional robloxSupport openssl
+  buildInputs =
+    lib.optional robloxSupport openssl
     ++ lib.optional (robloxSupport && stdenv.isDarwin) Security;
 
   buildNoDefaultFeatures = !robloxSupport;
@@ -33,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kampfkarren/selene";
     changelog = "https://github.com/kampfkarren/selene/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

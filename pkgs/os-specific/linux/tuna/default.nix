@@ -1,17 +1,17 @@
-{ lib
-, buildPythonApplication
-, fetchgit
-, pygobject3
-, pytestCheckHook
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, gtk3
-, python-linux-procfs
-, python-ethtool
-, wrapGAppsHook
+{
+  lib,
+  buildPythonApplication,
+  fetchgit,
+  pygobject3,
+  pytestCheckHook,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk3,
+  python-linux-procfs,
+  python-ethtool,
+  wrapGAppsHook,
 }:
-
 buildPythonApplication rec {
   pname = "tuna";
   version = "0.15";
@@ -41,7 +41,7 @@ buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = [ pygobject3 python-linux-procfs python-ethtool ];
+  propagatedBuildInputs = [pygobject3 python-linux-procfs python-ethtool];
 
   postInstall = ''
     mkdir -p $out/share/tuna
@@ -50,13 +50,13 @@ buildPythonApplication rec {
 
   # contains no tests
   doCheck = false;
-  pythonImportsCheck = [ "tuna" ];
+  pythonImportsCheck = ["tuna"];
 
   meta = with lib; {
     description = "Thread and IRQ affinity setting GUI and cmd line tool";
     homepage = "https://git.kernel.org/pub/scm/utils/tuna/tuna.git";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = with maintainers; [elohmeier];
   };
 }

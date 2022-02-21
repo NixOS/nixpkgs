@@ -1,6 +1,16 @@
-{ fetchurl, lib, stdenv, pkg-config, fuse, openssl, asciidoc
-, docbook_xml_dtd_45, docbook_xsl , libxml2, libxslt }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  fuse,
+  openssl,
+  asciidoc,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libxml2,
+  libxslt,
+}:
 stdenv.mkDerivation rec {
   pname = "httpfs2";
   version = "0.1.5";
@@ -10,18 +20,23 @@ stdenv.mkDerivation rec {
     sha256 = "1h8ggvhw30n2r6w11n1s458ypggdqx6ldwd61ma4yd7binrlpjq1";
   };
 
-  buildInputs =
-    [ pkg-config fuse openssl
-      asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-    ];
+  buildInputs = [
+    pkg-config
+    fuse
+    openssl
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2
+    libxslt
+  ];
 
-  installPhase =
-    '' mkdir -p "$out/bin"
-       cp -v httpfs2 "$out/bin"
+  installPhase = ''    mkdir -p "$out/bin"
+          cp -v httpfs2 "$out/bin"
 
-       mkdir -p "$out/share/man/man1"
-       cp -v *.1 "$out/share/man/man1"
-    '';
+          mkdir -p "$out/share/man/man1"
+          cp -v *.1 "$out/share/man/man1"
+  '';
 
   meta = {
     description = "FUSE-based HTTP filesystem for Linux";
@@ -31,6 +46,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

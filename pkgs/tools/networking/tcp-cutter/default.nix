@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "tcp-cutter";
   version = "1.04";
@@ -18,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.digitage.co.uk/digitage/software/linux-security/cutter";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.offline ];
+    maintainers = [maintainers.offline];
   };
 }

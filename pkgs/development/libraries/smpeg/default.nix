@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  SDL,
+  autoconf,
+  automake,
+  libtool,
+  gtk2,
+  m4,
+  pkg-config,
+  libGLU,
+  libGL,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "smpeg-svn";
   version = "390";
@@ -18,9 +31,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ SDL gtk2 libGLU libGL ];
+  buildInputs = [SDL gtk2 libGLU libGL];
 
-  nativeBuildInputs = [ autoconf automake libtool m4 pkg-config makeWrapper ];
+  nativeBuildInputs = [autoconf automake libtool m4 pkg-config makeWrapper];
 
   preConfigure = ''
     touch NEWS AUTHORS ChangeLog

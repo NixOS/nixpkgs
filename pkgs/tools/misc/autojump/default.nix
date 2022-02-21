@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, bash }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "autojump";
   version = "22.5.3";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rgpsh70manr2dydna9da4x7p8ahii7dgdgwir5fka340n1wrcws";
   };
 
-  buildInputs = [ python3 bash ];
+  buildInputs = [python3 bash];
   dontBuild = true;
 
   installPhase = ''
@@ -48,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wting/autojump";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ domenkozar yurrriq ];
+    maintainers = with maintainers; [domenkozar yurrriq];
   };
 }

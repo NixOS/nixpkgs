@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "galer";
   version = "0.0.2";
@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to fetch URLs from HTML attributes";
     homepage = "https://github.com/dwisiswant0/galer";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

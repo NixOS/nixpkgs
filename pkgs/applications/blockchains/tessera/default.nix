@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "tessera";
   version = "0.10.2";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zn8w7q0q5man0407kb82lw4mlvyiy9whq2f6izf2b5415f9s0m4";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontUnpack = true;
 
@@ -21,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Enterprise Implementation of Quorum's transaction manager";
     homepage = "https://github.com/jpmorganchase/tessera";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [mmahut];
   };
 }

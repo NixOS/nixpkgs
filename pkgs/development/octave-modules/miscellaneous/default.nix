@@ -1,11 +1,14 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-# Build-time dependencies
-, ncurses # >= 5
-, units
+{
+  buildOctavePackage,
+  lib,
+  fetchurl
+  # Build-time dependencies
+  ,
+  ncurses
+  # >= 5
+  ,
+  units,
 }:
-
 buildOctavePackage rec {
   pname = "miscellaneous";
   version = "1.3.0";
@@ -26,7 +29,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/miscellaneous/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Miscellaneous tools that don't fit somewhere else";
   };
 }

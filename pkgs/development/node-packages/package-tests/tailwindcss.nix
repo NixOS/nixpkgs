@@ -1,7 +1,8 @@
-{ runCommand, tailwindcss, nodePackages }:
-
-let
-
+{
+  runCommand,
+  tailwindcss,
+  nodePackages,
+}: let
   inherit (tailwindcss) packageName version;
 
   tailwindcssInput = builtins.toFile "input.css" ''
@@ -24,10 +25,8 @@ let
       ],
     }
   '';
-
 in
-
-runCommand "${packageName}-tests" { meta.timeout = 60; }
+  runCommand "${packageName}-tests" {meta.timeout = 60;}
   ''
     mkdir $out
 

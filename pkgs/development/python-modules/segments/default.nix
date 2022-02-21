@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, regex
-, csvw
-, clldutils
-, mock
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  regex,
+  csvw,
+  clldutils,
+  mock,
+  pytestCheckHook,
+  pytest-mock,
 }:
-
 buildPythonPackage rec {
   pname = "segments";
   version = "2.2.0";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Unicode Standard tokenization routines and orthography profile segmentation";
     homepage = "https://github.com/cldf/segments";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

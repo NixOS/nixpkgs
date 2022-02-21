@@ -1,11 +1,11 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, uvloop
+{
+  lib,
+  isPy27,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  uvloop,
 }:
-
 buildPythonPackage rec {
   pname = "pproxy";
   version = "2.3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
     uvloop
   ];
 
-  pythonImportsCheck = [ "pproxy" ];
-  disabledTests = [ "api_server" "api_client" ];  # try to connect to outside Internet, so disabled
+  pythonImportsCheck = ["pproxy"];
+  disabledTests = ["api_server" "api_client"]; # try to connect to outside Internet, so disabled
   # test suite doesn't use test runner. so need to run ``python ./tests/*``
   checkPhase = ''
     shopt -s extglob
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Proxy server that can tunnel among remote servers by regex rules";
     homepage = "https://github.com/qwj/python-proxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

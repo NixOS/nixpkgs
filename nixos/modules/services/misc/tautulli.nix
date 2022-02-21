@@ -1,13 +1,14 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.tautulli;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.tautulli;
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "plexpy" ] [ "services" "tautulli" ])
+    (mkRenamedOptionModule ["services" "plexpy"] ["services" "tautulli"])
   ];
 
   options = {
@@ -62,8 +63,8 @@ in
 
     systemd.services.tautulli = {
       description = "Tautulli Plex Monitor";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -75,7 +76,10 @@ in
     };
 
     users.users = mkIf (cfg.user == "plexpy") {
-      plexpy = { group = cfg.group; uid = config.ids.uids.plexpy; };
+      plexpy = {
+        group = cfg.group;
+        uid = config.ids.uids.plexpy;
+      };
     };
   };
 }

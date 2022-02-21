@@ -1,16 +1,14 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "plotinus";
   meta = {
     maintainers = pkgs.plotinus.meta.maintainers;
   };
 
-  machine =
-    { pkgs, ... }:
-
-    { imports = [ ./common/x11.nix ];
-      programs.plotinus.enable = true;
-      environment.systemPackages = [ pkgs.gnome.gnome-calculator pkgs.xdotool ];
-    };
+  machine = {pkgs, ...}: {
+    imports = [./common/x11.nix];
+    programs.plotinus.enable = true;
+    environment.systemPackages = [pkgs.gnome.gnome-calculator pkgs.xdotool];
+  };
 
   testScript = ''
     machine.wait_for_x()

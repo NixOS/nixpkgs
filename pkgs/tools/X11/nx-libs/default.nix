@@ -1,7 +1,19 @@
-{ lib, stdenv, autoconf, automake, fetchFromGitHub, fetchpatch
-, libgcc, libjpeg_turbo
-, libpng, libtool, libxml2, pkg-config, which, xorg
-, libtirpc
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  fetchpatch,
+  libgcc,
+  libjpeg_turbo,
+  libpng,
+  libtool,
+  libxml2,
+  pkg-config,
+  which,
+  xorg,
+  libtirpc,
 }:
 stdenv.mkDerivation rec {
   pname = "nx-libs";
@@ -21,16 +33,38 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config which
-    xorg.gccmakedep xorg.imake ];
-  buildInputs = [ libgcc libjpeg_turbo libpng libxml2 xorg.fontutil
-    xorg.libXcomposite xorg.libXdamage xorg.libXdmcp xorg.libXext xorg.libXfont2
-    xorg.libXinerama xorg.libXpm xorg.libXrandr xorg.libXtst xorg.pixman
-    xorg.xkbcomp xorg.xkeyboardconfig libtirpc
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    which
+    xorg.gccmakedep
+    xorg.imake
+  ];
+  buildInputs = [
+    libgcc
+    libjpeg_turbo
+    libpng
+    libxml2
+    xorg.fontutil
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXdmcp
+    xorg.libXext
+    xorg.libXfont2
+    xorg.libXinerama
+    xorg.libXpm
+    xorg.libXrandr
+    xorg.libXtst
+    xorg.pixman
+    xorg.xkbcomp
+    xorg.xkeyboardconfig
+    libtirpc
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  NIX_CFLAGS_COMPILE = ["-I${libtirpc.dev}/include/tirpc"];
+  NIX_LDFLAGS = ["-ltirpc"];
 
   postPatch = ''
     patchShebangs .
@@ -38,7 +72,7 @@ stdenv.mkDerivation rec {
     ln -s libNX_X11.so.6.3.0
   '';
 
-  PREFIX=""; # Don't install to $out/usr/local
+  PREFIX = ""; # Don't install to $out/usr/local
   installPhase = ''
     make DESTDIR="$out" install
     # See:
@@ -51,7 +85,7 @@ stdenv.mkDerivation rec {
     description = "NX X server based on Xnest";
     homepage = "https://github.com/ArcticaProject/nx-libs";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
     platforms = lib.platforms.linux;
   };
 }

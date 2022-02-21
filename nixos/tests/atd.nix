@@ -1,16 +1,13 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "atd";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ bjornfor ];
+    maintainers = [bjornfor];
   };
 
-  machine =
-    { ... }:
-    { services.atd.enable = true;
-      users.users.alice = { isNormalUser = true; };
-    };
+  machine = {...}: {
+    services.atd.enable = true;
+    users.users.alice = {isNormalUser = true;};
+  };
 
   # "at" has a resolution of 1 minute
   testScript = ''

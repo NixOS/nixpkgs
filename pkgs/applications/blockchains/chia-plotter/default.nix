@@ -1,12 +1,12 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, libsodium
-, cmake
-, substituteAll
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  libsodium,
+  cmake,
+  substituteAll,
+  python3Packages,
 }:
-
 stdenv.mkDerivation {
   pname = "chia-plotter";
   version = "1.1.7";
@@ -33,9 +33,9 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ libsodium ];
+  buildInputs = [libsodium];
 
   # These flags come from the upstream build script:
   # https://github.com/madMAx43v3r/chia-plotter/blob/974d6e5f1440f68c48492122ca33828a98864dfc/make_devel.sh#L7
@@ -60,6 +60,6 @@ stdenv.mkDerivation {
     description = "New implementation of a chia plotter which is designed as a processing pipeline";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ilyakooo0 ];
+    maintainers = with maintainers; [ilyakooo0];
   };
 }

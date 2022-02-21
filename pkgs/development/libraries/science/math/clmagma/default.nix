@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchurl, gfortran, opencl-headers, clblas, ocl-icd, mkl, intel-ocl }:
-
-with lib;
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gfortran,
+  opencl-headers,
+  clblas,
+  ocl-icd,
+  mkl,
+  intel-ocl,
+}:
+with lib; let
   version = "1.3.0";
   incfile = builtins.toFile "make.inc.custom" ''
     CC        = g++
@@ -32,44 +39,45 @@ let
     INC       = -I$(clBLAS)/include
                #-I$(AMDAPP)/include
   '';
-in stdenv.mkDerivation {
-  name = "clmagma-${version}";
-  src = fetchurl {
-    url = "http://icl.cs.utk.edu/projectsfiles/magma/cl/clmagma-${version}.tar.gz";
-    sha256 = "1n27ny0xhwirw2ydn46pfcwy53gzia9zbam4irx44fd4d7f9ydv7";
-    name = "clmagma-${version}.tar.gz";
-  };
+in
+  stdenv.mkDerivation {
+    name = "clmagma-${version}";
+    src = fetchurl {
+      url = "http://icl.cs.utk.edu/projectsfiles/magma/cl/clmagma-${version}.tar.gz";
+      sha256 = "1n27ny0xhwirw2ydn46pfcwy53gzia9zbam4irx44fd4d7f9ydv7";
+      name = "clmagma-${version}.tar.gz";
+    };
 
-  buildInputs = [
-    gfortran
-    clblas
-    opencl-headers
-    ocl-icd
-    mkl
-    intel-ocl
-  ];
+    buildInputs = [
+      gfortran
+      clblas
+      opencl-headers
+      ocl-icd
+      mkl
+      intel-ocl
+    ];
 
-  enableParallelBuilding=true;
+    enableParallelBuilding = true;
 
-  MKLROOT   = "${mkl}";
-  clBLAS    = "${clblas}";
+    MKLROOT = "${mkl}";
+    clBLAS = "${clblas}";
 
-  # Otherwise build looks for it in /run/opengl-driver/etc/OpenCL/vendors,
-  # which is not available.
-  OPENCL_VENDOR_PATH="${intel-ocl}/etc/OpenCL/vendors";
+    # Otherwise build looks for it in /run/opengl-driver/etc/OpenCL/vendors,
+    # which is not available.
+    OPENCL_VENDOR_PATH = "${intel-ocl}/etc/OpenCL/vendors";
 
-  preBuild = ''
-    # By default it tries to use GPU, and thus fails for CPUs
-    sed -i "s/CL_DEVICE_TYPE_GPU/CL_DEVICE_TYPE_DEFAULT/" interface_opencl/clmagma_runtime.cpp
-    sed -i "s%/usr/local/clmagma%/$out%" Makefile.internal
-    cp ${incfile} make.inc
-  '';
+    preBuild = ''
+      # By default it tries to use GPU, and thus fails for CPUs
+      sed -i "s/CL_DEVICE_TYPE_GPU/CL_DEVICE_TYPE_DEFAULT/" interface_opencl/clmagma_runtime.cpp
+      sed -i "s%/usr/local/clmagma%/$out%" Makefile.internal
+      cp ${incfile} make.inc
+    '';
 
-  meta = with lib; {
-    description = "Matrix Algebra on GPU and Multicore Architectures, OpenCL port";
-    license = licenses.bsd3;
-    homepage = "http://icl.cs.utk.edu/magma/index.html";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ volhovm ];
-  };
-}
+    meta = with lib; {
+      description = "Matrix Algebra on GPU and Multicore Architectures, OpenCL port";
+      license = licenses.bsd3;
+      homepage = "http://icl.cs.utk.edu/magma/index.html";
+      platforms = platforms.linux;
+      maintainers = with maintainers; [volhovm];
+    };
+  }

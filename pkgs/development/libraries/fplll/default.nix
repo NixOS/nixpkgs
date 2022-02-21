@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, gettext
-, autoreconfHook
-, gmp
-, mpfr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gettext,
+  autoreconfHook,
+  gmp,
+  mpfr,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fplll";
   version = "5.4.1";

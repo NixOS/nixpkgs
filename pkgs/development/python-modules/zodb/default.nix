@@ -1,19 +1,19 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, python
-, zope_testrunner
-, transaction
-, six
-, zope_interface
-, zodbpickle
-, zconfig
-, persistent
-, zc_lockfile
-, BTrees
-, manuel
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  python,
+  zope_testrunner,
+  transaction,
+  six,
+  zope_interface,
+  zodbpickle,
+  zconfig,
+  persistent,
+  zc_lockfile,
+  BTrees,
+  manuel,
 }:
-
 buildPythonPackage rec {
   pname = "ZODB";
   version = "5.6.0";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Zope Object Database: object database and persistence";
     homepage = "https://pypi.python.org/pypi/ZODB";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [goibhniu];
   };
 }

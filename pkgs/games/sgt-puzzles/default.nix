@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchurl, desktop-file-utils
-, gtk3, libX11
-, makeWrapper, pkg-config, perl, autoreconfHook, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  desktop-file-utils,
+  gtk3,
+  libX11,
+  makeWrapper,
+  pkg-config,
+  perl,
+  autoreconfHook,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
   version = "20200610.9aa7b7c";
@@ -17,12 +25,18 @@ stdenv.mkDerivation rec {
     sha256 = "088w0x9g3j8pn725ix8ny8knhdsfgjr3hpswsh9fvfkz5vlg2xkm";
   };
 
-  nativeBuildInputs = [ autoreconfHook desktop-file-utils makeWrapper
-    pkg-config perl wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    desktop-file-utils
+    makeWrapper
+    pkg-config
+    perl
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ gtk3 libX11 ];
+  buildInputs = [gtk3 libX11];
 
-  makeFlags = [ "prefix=$(out)" "gamesdir=$(out)/bin"];
+  makeFlags = ["prefix=$(out)" "gamesdir=$(out)/bin"];
 
   preInstall = ''
     mkdir -p "$out"/{bin,share/doc/sgtpuzzles}
@@ -66,7 +80,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simon Tatham's portable puzzle collection";
     license = licenses.mit;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";
   };

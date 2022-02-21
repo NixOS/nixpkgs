@@ -1,7 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, cookiecutter, networkx , pandas, tornado, tqdm
-, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  cookiecutter,
+  networkx,
+  pandas,
+  tornado,
+  tqdm,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "mesa";
   version = "0.8.7";
@@ -16,19 +24,19 @@ buildPythonPackage rec {
     sha256 = "0i1bpdqjrx4avgrzyqxpwxx86j11yhrq1j4kca854xahvhmwis19";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   # Ignore test which tries to mkdir in unreachable location.
   checkPhase = ''
     pytest tests -k "not scaffold"
   '';
 
-  propagatedBuildInputs = [ cookiecutter networkx pandas tornado tqdm ];
+  propagatedBuildInputs = [cookiecutter networkx pandas tornado tqdm];
 
   meta = with lib; {
     homepage = "https://github.com/projectmesa/mesa";
     description = "An agent-based modeling (or ABM) framework in Python";
     license = licenses.asl20;
-    maintainers = [ maintainers.dpaetzel ];
+    maintainers = [maintainers.dpaetzel];
   };
 }

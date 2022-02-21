@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, curl, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "html-xml-utils";
   version = "8.2";

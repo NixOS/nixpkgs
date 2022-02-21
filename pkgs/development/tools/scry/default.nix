@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, crystal, coreutils, makeWrapper }:
-
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  coreutils,
+  makeWrapper,
+}:
 crystal.buildCrystalPackage rec {
   pname = "scry";
   version = "0.9.1";
@@ -18,13 +23,13 @@ crystal.buildCrystalPackage rec {
 
   format = "shards";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   shardsFile = ./shards.nix;
 
   postFixup = ''
     wrapProgram $out/bin/scry \
-      --prefix PATH : ${lib.makeBinPath [ crystal coreutils ]}
+      --prefix PATH : ${lib.makeBinPath [crystal coreutils]}
   '';
 
   # the binary doesn't take any arguments, so this will hang
@@ -34,6 +39,6 @@ crystal.buildCrystalPackage rec {
     description = "Code analysis server for the Crystal programming language";
     homepage = "https://github.com/crystal-lang-tools/scry";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg Br1ght0ne ];
+    maintainers = with maintainers; [peterhoeg Br1ght0ne];
   };
 }

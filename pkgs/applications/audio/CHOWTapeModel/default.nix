@@ -1,9 +1,38 @@
-{ alsa-lib, at-spi2-core, cmake, curl, dbus, libepoxy, fetchFromGitHub, freeglut
-, freetype, gcc-unwrapped, gtk3, lib, libGL, libXcursor, libXdmcp, libXext
-, libXinerama, libXrandr, libXtst, libdatrie, libjack2, libpsl, libselinux
-, libsepol, libsysprof-capture, libthai, libxkbcommon, lv2, pcre, pkg-config
-, python3, sqlite, stdenv }:
-
+{
+  alsa-lib,
+  at-spi2-core,
+  cmake,
+  curl,
+  dbus,
+  libepoxy,
+  fetchFromGitHub,
+  freeglut,
+  freetype,
+  gcc-unwrapped,
+  gtk3,
+  lib,
+  libGL,
+  libXcursor,
+  libXdmcp,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXtst,
+  libdatrie,
+  libjack2,
+  libpsl,
+  libselinux,
+  libsepol,
+  libsysprof-capture,
+  libthai,
+  libxkbcommon,
+  lv2,
+  pcre,
+  pkg-config,
+  python3,
+  sqlite,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "CHOWTapeModel";
   version = "2.10.0";
@@ -16,7 +45,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [pkg-config cmake];
 
   buildInputs = [
     alsa-lib
@@ -69,10 +98,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
-    description =
-      "Physical modelling signal processing for analog tape recording. LV2, VST3 and standalone";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ magnetophon ];
+    description = "Physical modelling signal processing for analog tape recording. LV2, VST3 and standalone";
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [magnetophon];
     platforms = platforms.linux;
   };
 }

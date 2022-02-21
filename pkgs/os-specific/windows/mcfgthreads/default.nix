@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation {
   pname = "mcfgthreads";
   version = "git";
@@ -11,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1ib90lrd4dz8irq4yvzwhxqa86i5vxl2q2z3z04sf1i8hw427p2f";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   # Don't want prebuilt binaries sneaking in.
   postUnpack = ''

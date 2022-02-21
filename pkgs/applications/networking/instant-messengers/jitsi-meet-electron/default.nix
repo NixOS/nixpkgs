@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, appimageTools
-, makeWrapper
-, electron
-, xorg
-, pipewire
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+  xorg,
+  pipewire,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-electron";
   version = "2022.1.1";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc xorg.libXtst pipewire ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [stdenv.cc.cc xorg.libXtst pipewire]}"
   '';
 
   meta = with lib; {
@@ -54,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

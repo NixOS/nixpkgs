@@ -1,9 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, oscSupport ? false
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  oscSupport ? false,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "mpv-youtube-quality";
   version = "unstable-2020-02-11";
@@ -17,15 +17,18 @@ stdenvNoCC.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/mpv/scripts
-    cp youtube-quality.lua $out/share/mpv/scripts
-  '' + lib.optionalString oscSupport ''
-    cp youtube-quality-osc.lua $out/share/mpv/scripts
-  '' + ''
-    runHook postInstall
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+      mkdir -p $out/share/mpv/scripts
+      cp youtube-quality.lua $out/share/mpv/scripts
+    ''
+    + lib.optionalString oscSupport ''
+      cp youtube-quality-osc.lua $out/share/mpv/scripts
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   passthru.scriptName = "youtube-quality.lua";
 
@@ -34,6 +37,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/jgreco/mpv-youtube-quality";
     license = licenses.unfree;
     platforms = platforms.all;
-    maintainers = with maintainers; [ lunik1 ];
+    maintainers = with maintainers; [lunik1];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, vscode-utils, terraform-ls }:
+{
+  lib,
+  vscode-utils,
+  terraform-ls,
+}:
 vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "terraform";
@@ -7,7 +11,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     sha256 = "sha256-k/fcEJuELz0xkwivSrP6Nxtz861BLq1wR2ZDMXVrvkY=";
   };
 
-  patches = [ ./fix-terraform-ls.patch ];
+  patches = [./fix-terraform-ls.patch];
 
   postPatch = ''
     substituteInPlace out/serverPath.js --replace TERRAFORM-LS-PATH ${terraform-ls}/bin/terraform-ls
@@ -15,6 +19,6 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
 
   meta = with lib; {
     license = licenses.mit;
-    maintainers = with maintainers; [ rhoriguchi ];
+    maintainers = with maintainers; [rhoriguchi];
   };
 }

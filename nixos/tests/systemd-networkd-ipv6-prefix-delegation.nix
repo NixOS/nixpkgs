@@ -6,14 +6,12 @@
 # There are two VLANs in this test:
 # - VLAN 1 is the connection between the ISP and the router
 # - VLAN 2 is the connection between the router and the client
-
 import ./make-test-python.nix ({pkgs, ...}: {
   name = "systemd-networkd-ipv6-prefix-delegation";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ andir ];
+    maintainers = [andir];
   };
   nodes = {
-
     # The ISP's routers job is to delegate IPv6 prefixes via DHCPv6. Like with
     # regular IPv6 auto-configuration it will also emit IPv6 router
     # advertisements (RAs). Those RA's will not carry a prefix but in contrast
@@ -24,21 +22,27 @@ import ./make-test-python.nix ({pkgs, ...}: {
     # this example. That being said we can't use it (yet) as networkd doesn't
     # implement the serving side of DHCPv6. We will use ISC's well aged dhcpd6
     # for that task.
-    isp = { lib, pkgs, ... }: {
-      virtualisation.vlans = [ 1 ];
+    isp = {
+      lib,
+      pkgs,
+      ...
+    }: {
+      virtualisation.vlans = [1];
       networking = {
         useDHCP = false;
         firewall.enable = false;
         interfaces.eth1.ipv4.addresses = lib.mkForce []; # no need for legacy IP
         interfaces.eth1.ipv6.addresses = lib.mkForce [
-          { address = "2001:DB8::1"; prefixLength = 64; }
+          {
+            address = "2001:DB8::1";
+            prefixLength = 64;
+          }
         ];
       };
 
       # Since we want to program the routes that we delegate to the "customer"
       # into our routing table we must give dhcpd the required privs.
-      systemd.services.dhcpd6.serviceConfig.AmbientCapabilities =
-        [ "CAP_NET_ADMIN" ];
+      systemd.services.dhcpd6.serviceConfig.AmbientCapabilities = ["CAP_NET_ADMIN"];
 
       services = {
         # Configure the DHCPv6 server
@@ -51,7 +55,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
         # 2001:DB8:0000:0000:FFFF::/112.
         dhcpd6 = {
           enable = true;
-          interfaces = [ "eth1" ];
+          interfaces = ["eth1"];
           extraConfig = ''
             subnet6 2001:DB8::/36 {
               range6 2001:DB8:0000:0000:FFFF:: 2001:DB8:0000:0000:FFFF::FFFF;
@@ -98,7 +102,6 @@ import ./make-test-python.nix ({pkgs, ...}: {
             };
           '';
         };
-
       };
     };
 
@@ -107,7 +110,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
     #
     # Here we will actually start using networkd.
     router = {
-      virtualisation.vlans = [ 1 2 ];
+      virtualisation.vlans = [1 2];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
 
       boot.kernel.sysctl = {
@@ -156,7 +159,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
               # always force that option on the DHPCv6 server since there are
               # certain CPEs that are just not setting this field but happily
               # accept the delegated prefix.
-              PrefixDelegationHint  = "::/48";
+              PrefixDelegationHint = "::/48";
             };
             ipv6SendRAConfig = {
               # Let networkd know that we would very much like to use DHCPv6
@@ -182,9 +185,9 @@ import ./make-test-python.nix ({pkgs, ...}: {
 
             # In a production environment you should consider setting these as well:
             # ipv6SendRAConfig = {
-              #EmitDNS = true;
-              #EmitDomains = true;
-              #DNS= = "fe80::1"; # or whatever "well known" IP your router will have on the inside.
+            #EmitDNS = true;
+            #EmitDomains = true;
+            #DNS= = "fe80::1"; # or whatever "well known" IP your router will have on the inside.
             # };
 
             # This adds a "random" ULA prefix to the interface that is being
@@ -207,21 +210,21 @@ import ./make-test-python.nix ({pkgs, ...}: {
           "01-lo" = {
             name = "lo";
             addresses = [
-              { addressConfig.Address = "FD42::1/128"; }
+              {addressConfig.Address = "FD42::1/128";}
             ];
           };
         };
       };
 
       # make the network-online target a requirement, we wait for it in our test script
-      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
+      systemd.targets.network-online.wantedBy = ["multi-user.target"];
     };
 
     # This is the client behind the router. We should be receving router
     # advertisements for both the ULA and the delegated prefix.
     # All we have to do is boot with the default (networkd) configuration.
     client = {
-      virtualisation.vlans = [ 2 ];
+      virtualisation.vlans = [2];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking = {
         useNetworkd = true;
@@ -229,7 +232,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
       };
 
       # make the network-online target a requirement, we wait for it in our test script
-      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
+      systemd.targets.network-online.wantedBy = ["multi-user.target"];
     };
   };
 

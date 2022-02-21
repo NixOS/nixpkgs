@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchurl, python3
-, bdftopcf, mkfontscale
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  bdftopcf,
+  mkfontscale,
 }:
-
 stdenv.mkDerivation rec {
   pname = "terminus-font";
   version = "4.49.1";
@@ -11,10 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0yggffiplk22lgqklfmd2c0rw8gwchynjh5kz4bz8yv2h6vw2qfr";
   };
 
-  patches = [ ./SOURCE_DATE_EPOCH-for-otb.patch ];
+  patches = [./SOURCE_DATE_EPOCH-for-otb.patch];
 
-  nativeBuildInputs =
-    [ python3 bdftopcf mkfontscale ];
+  nativeBuildInputs = [python3 bdftopcf mkfontscale];
 
   enableParallelBuilding = true;
 
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'gzip'     'gzip -n'
   '';
 
-  installTargets = [ "install" "install-otb" "fontdir" ];
+  installTargets = ["install" "install-otb" "fontdir"];
 
   meta = with lib; {
     description = "A clean fixed width font";
@@ -41,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://terminus-font.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [astsmtl];
   };
 }

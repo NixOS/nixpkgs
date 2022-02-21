@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.services.unclutter;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.unclutter;
 in {
   options.services.unclutter = {
-
     enable = mkOption {
       description = "Enable unclutter to hide your mouse cursor when inactive";
       type = types.bool;
@@ -42,28 +43,28 @@ in {
       description = "Names of windows where unclutter should not apply";
       type = types.listOf types.str;
       default = [];
-      example = [ "" ];
+      example = [""];
     };
 
     extraOptions = mkOption {
       description = "More arguments to pass to the unclutter command";
       type = types.listOf types.str;
       default = [];
-      example = [ "noevent" "grab" ];
+      example = ["noevent" "grab"];
     };
   };
 
   config = mkIf cfg.enable {
     systemd.user.services.unclutter = {
       description = "unclutter";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
+      partOf = ["graphical-session.target"];
       serviceConfig.ExecStart = ''
         ${cfg.package}/bin/unclutter \
           -idle ${toString cfg.timeout} \
           -jitter ${toString (cfg.threshold - 1)} \
           ${optionalString cfg.keystroke "-keystroke"} \
-          ${concatMapStrings (x: " -"+x) cfg.extraOptions} \
+          ${concatMapStrings (x: " -" + x) cfg.extraOptions} \
           -not ${concatStringsSep " " cfg.excluded} \
       '';
       serviceConfig.PassEnvironment = "DISPLAY";
@@ -73,10 +74,9 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "unclutter" "threeshold" ]
-                           [ "services"  "unclutter" "threshold" ])
+    (mkRenamedOptionModule ["services" "unclutter" "threeshold"]
+    ["services" "unclutter" "threshold"])
   ];
 
-  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
-
+  meta.maintainers = with lib.maintainers; [rnhmjoj];
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "e17gtk";
   version = "3.22.2";
@@ -22,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/E17gtk";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    maintainers = [lib.maintainers.romildo];
   };
 }

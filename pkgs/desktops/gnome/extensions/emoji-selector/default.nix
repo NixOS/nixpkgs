@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, glib, gettext }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  gettext,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-emoji-selector";
   version = "20";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "emoji-selector";
   };
 
-  nativeBuildInputs = [ glib ];
+  nativeBuildInputs = [glib];
 
   buildPhase = ''
     runHook preBuild
@@ -32,10 +37,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "GNOME Shell extension providing a searchable popup menu displaying most emojis";
+    description = "GNOME Shell extension providing a searchable popup menu displaying most emojis";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rawkode ];
+    maintainers = with maintainers; [rawkode];
     homepage = "https://github.com/maoschanz/emoji-selector-for-gnome";
   };
 }

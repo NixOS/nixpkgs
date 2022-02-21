@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gtk3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "usbview";
   version = "2.0";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "USB viewer for Linux";
     license = licenses.gpl2Only;
     homepage = "http://www.kroah.com/linux-usb/";
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [shamilton];
     platforms = platforms.linux;
   };
 }

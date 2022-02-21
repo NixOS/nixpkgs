@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "EasyProcess";
   version = "0.3";
@@ -16,6 +19,6 @@ buildPythonPackage rec {
     description = "Easy to use python subprocess interface";
     homepage = "https://github.com/ponty/EasyProcess";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ layus ];
+    maintainers = with maintainers; [layus];
   };
 }

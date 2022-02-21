@@ -1,14 +1,14 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pythonOlder
-, pytz
-, requests
-, setuptools-scm
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "snscrape";
   version = "unstable-2021-08-30";
@@ -28,13 +28,15 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-    lxml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    pytz
-  ];
+  propagatedBuildInputs =
+    [
+      beautifulsoup4
+      lxml
+      requests
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      pytz
+    ];
 
   # There are no tests; make sure the executable works.
   checkPhase = ''
@@ -42,12 +44,12 @@ buildPythonPackage rec {
     snscrape --help
   '';
 
-  pythonImportsCheck = [ "snscrape" ];
+  pythonImportsCheck = ["snscrape"];
 
   meta = with lib; {
     homepage = "https://github.com/JustAnotherArchivist/snscrape";
     description = "A social networking service scraper in Python";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with maintainers; [ivan];
   };
 }

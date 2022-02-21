@@ -1,5 +1,8 @@
-{ lib, config, ... }:
-let
+{
+  lib,
+  config,
+  ...
+}: let
   inherit (lib) types;
 in {
   options = {
@@ -18,8 +21,8 @@ in {
   };
 
   config.fun = lib.mkMerge [
-    (input: { inherit (input) a; })
-    (input: { inherit (input) b; })
+    (input: {inherit (input) a;})
+    (input: {inherit (input) b;})
     (input: {
       b = lib.mkForce input.c;
     })

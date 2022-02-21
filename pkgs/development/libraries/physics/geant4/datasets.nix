@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchurl, geant_version }:
-
-let
-  mkDataset = { name, version, sha256, envvar }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  geant_version,
+}: let
+  mkDataset = {
+    name,
+    version,
+    sha256,
+    envvar,
+  }:
     stdenv.mkDerivation {
       inherit name version;
       inherit geant_version;
@@ -32,7 +40,10 @@ let
       };
     };
 in
-  builtins.listToAttrs (map (a: { inherit (a) name; value = mkDataset a; }) [
+  builtins.listToAttrs (map (a: {
+    inherit (a) name;
+    value = mkDataset a;
+  }) [
     {
       name = "G4NDL";
       version = "4.6";

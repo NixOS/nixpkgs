@@ -1,8 +1,26 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
-, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
-, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
-}@args:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  isPy3k,
+  olefile,
+  freetype,
+  libjpeg,
+  zlib,
+  libtiff,
+  libwebp,
+  tcl,
+  lcms2,
+  tk,
+  libX11,
+  openjpeg,
+  libimagequant,
+  pyroma,
+  numpy,
+  pytestCheckHook,
+} @ args:
 import ./generic.nix (rec {
   pname = "Pillow";
   version = "6.2.2";
@@ -24,7 +42,7 @@ import ./generic.nix (rec {
       processing and graphics capabilities.
     '';
     license = "http://www.pythonware.com/products/pil/license.htm";
-    maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
+    maintainers = with maintainers; [goibhniu prikhi SuperSandro2000];
     knownVulnerabilities = [
       "CVE-2020-10177"
       "CVE-2020-10378"
@@ -44,4 +62,5 @@ import ./generic.nix (rec {
       "CVE-2021-27923"
     ];
   };
-} // args )
+}
+// args)

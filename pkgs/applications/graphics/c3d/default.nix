@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, itk, Cocoa }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  itk,
+  Cocoa,
+}:
 stdenv.mkDerivation rec {
-  pname   = "c3d";
+  pname = "c3d";
   version = "unstable-2021-09-14";
 
   src = fetchFromGitHub {
@@ -11,16 +17,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1ql1y6694njsmdapywhppb54viyw8wdpaxxr1b3hm2rqhvwmhn52";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ itk ]
+  nativeBuildInputs = [cmake];
+  buildInputs =
+    [itk]
     ++ lib.optional stdenv.isDarwin Cocoa;
 
-  cmakeFlags = [ "-DCONVERT3D_USE_ITK_REMOTE_MODULES=OFF" ];
+  cmakeFlags = ["-DCONVERT3D_USE_ITK_REMOTE_MODULES=OFF"];
 
   meta = with lib; {
     homepage = "https://github.com/pyushkevich/c3d";
     description = "Medical imaging processing tool";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
     platforms = platforms.unix;
     license = licenses.gpl3;
     broken = stdenv.isAarch64;

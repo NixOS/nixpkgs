@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, flex, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "gnuchess";
   version = "6.2.9";
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     flex
   ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram $out/bin/gnuchessx --set PATH "$out/bin"
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNU Chess engine";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
   };

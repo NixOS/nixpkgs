@@ -1,25 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, alsa-lib
-, audiofile
-, libjack2
-, liblo
-, liboil
-, libsamplerate
-, libsndfile
-, lilv
-, lv2
-, ncurses
-, readline
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  alsa-lib,
+  audiofile,
+  libjack2,
+  liblo,
+  liboil,
+  libsamplerate,
+  libsndfile,
+  lilv,
+  lv2,
+  ncurses,
+  readline,
 }:
-
 # TODO: fix python. See configure log.
 # fix -Dnullptr=0 cludge below.
 # The error is
 # /nix/store/*-lilv-0.24.10/include/lilv-0/lilv/lilvmm.hpp:272:53: error: 'nullptr' was not declared in this scope
-
 stdenv.mkDerivation rec {
   pname = "ecasound";
   version = "2.9.3";
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Software package designed for multitrack audio processing";
-    license = with lib.licenses;  [ gpl2 lgpl21 ];
+    license = with lib.licenses; [gpl2 lgpl21];
     homepage = "http://nosignal.fi/ecasound/";
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk3
-, breeze-icons
-, hicolor-icon-theme
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  hicolor-icon-theme,
+  pantheon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "luna-icons";
   version = "1.9";
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Icon pack based on marwaita and papirus icons";
     homepage = "https://github.com/darkomarko42/Luna-Icons";
-    license = [ licenses.gpl3Only ];
+    license = [licenses.gpl3Only];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

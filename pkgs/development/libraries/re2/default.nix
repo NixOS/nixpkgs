@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+}:
 stdenv.mkDerivation rec {
   pname = "re2";
   version = "2021-11-01";
@@ -26,7 +31,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile  --replace "SED_INPLACE=sed -i '''" "SED_INPLACE=sed -i"
   '';
 
-  buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
+  buildFlags = lib.optionals stdenv.hostPlatform.isStatic ["static"];
 
   enableParallelBuilding = true;
 
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
+  installTargets = lib.optionals stdenv.hostPlatform.isStatic ["static-install"];
 
   doInstallCheck = true;
   installCheckTarget = "testinstall";

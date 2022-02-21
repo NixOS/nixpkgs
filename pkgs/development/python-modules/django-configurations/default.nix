@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, dj-email-url
-, dj-search-url
-, django
-, django-cache-url
-, django-discover-runner
-, fetchPypi
-, importlib-metadata
-, mock
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  dj-email-url,
+  dj-search-url,
+  django,
+  django-cache-url,
+  django-discover-runner,
+  fetchPypi,
+  importlib-metadata,
+  mock,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "django-configurations";
   version = "2.3.1";
@@ -29,11 +29,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    django
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      django
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   checkInputs = [
     django-discover-runner
@@ -62,6 +64,6 @@ buildPythonPackage rec {
     description = "A helper for organizing Django settings";
     homepage = "https://django-configurations.readthedocs.io/";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,10 +1,14 @@
-{ lib, nettools, python3Packages, texinfo, fetchFromGitHub }:
-
+{
+  lib,
+  nettools,
+  python3Packages,
+  texinfo,
+  fetchFromGitHub,
+}:
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
 # store path. The problem appears to be non-fatal, but there's probably
 # some loss of functionality because of it.
-
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
   version = "unstable-2021-07-09";
@@ -16,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-MuD/ZY+die7RCsuVdcePSD0DdwatXRi7CxW2iFt22L0=";
   };
 
-  outputs = [ "out" "doc" "info" ];
+  outputs = ["out" "doc" "info"];
 
   postPatch = ''
     sed -i "src/allmydata/util/iputil.py" \
@@ -52,17 +56,37 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  nativeBuildInputs = with python3Packages; [ sphinx texinfo ];
+  nativeBuildInputs = with python3Packages; [sphinx texinfo];
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with python3Packages; [
-    appdirs beautifulsoup4 characteristic distro eliot fixtures foolscap future
-    html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
-    service-identity simplejson sphinx_rtd_theme testtools treq twisted zfec
+    appdirs
+    beautifulsoup4
+    characteristic
+    distro
+    eliot
+    fixtures
+    foolscap
+    future
+    html5lib
+    magic-wormhole
+    netifaces
+    pyasn1
+    pycrypto
+    pyutil
+    pyyaml
+    recommonmark
+    service-identity
+    simplejson
+    sphinx_rtd_theme
+    testtools
+    treq
+    twisted
+    zfec
     zope_interface
   ];
 
-  checkInputs = with python3Packages; [ mock hypothesis twisted ];
+  checkInputs = with python3Packages; [mock hypothesis twisted];
 
   # Install the documentation.
   postInstall = ''
@@ -92,8 +116,14 @@ python3Packages.buildPythonApplication rec {
       are unavailable, malfunctioning, or malicious.
     '';
     homepage = "https://tahoe-lafs.org/";
-    license = [ licenses.gpl2Plus /* or */ "TGPPLv1+" ];
-    maintainers = with lib.maintainers; [ MostAwesomeDude ];
+    license = [
+      licenses.gpl2Plus
+      /*
+       or
+       */
+      "TGPPLv1+"
+    ];
+    maintainers = with lib.maintainers; [MostAwesomeDude];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

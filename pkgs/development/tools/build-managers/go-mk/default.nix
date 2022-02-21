@@ -1,8 +1,8 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "go-mk";
   version = "0.pre+date=2015-03-24";
@@ -25,7 +25,7 @@ buildGoPackage rec {
       bullshit.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

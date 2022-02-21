@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, expat, curl, fftw }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  expat,
+  curl,
+  fftw,
+}:
 stdenv.mkDerivation rec {
   pname = "libofa";
   version = "0.9.3";
@@ -15,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rfkyz13cm8izm90c1xflp4rvsa24aqs6qpbbbqqcbmvzsj6j9yn";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   setOutputFlags = false;
 
@@ -23,7 +29,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(--includedir=$dev/include --libdir=$out/lib)
   '';
 
-  propagatedBuildInputs = [ expat curl fftw ];
+  propagatedBuildInputs = [expat curl fftw];
 
   meta = with lib; {
     homepage = "https://code.google.com/archive/p/musicip-libofa/";

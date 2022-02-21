@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, openssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  openssl,
 }:
-
 buildPythonPackage rec {
   pname = "scrypt";
   version = "0.8.19";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "ad143035ae0cf5e97c4b399f4e4686adf442c5f0f06f9f198a0cc6c091335fb7";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
   doCheck = false;
 
   meta = with lib; {

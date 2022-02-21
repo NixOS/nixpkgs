@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools-scm
-, pyserial
-, pyusb
-, pyvisa
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools-scm,
+  pyserial,
+  pyusb,
+  pyvisa,
+  typing-extensions,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyvisa-py";
   version = "0.5.1";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "PyVISA backend that implements a large part of the Virtual Instrument Software Architecture in pure Python";
     homepage = "https://github.com/pyvisa/pyvisa-py";
     license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [mvnetbiz];
   };
 }

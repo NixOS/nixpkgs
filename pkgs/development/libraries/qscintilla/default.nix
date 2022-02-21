@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, unzip
-, qtbase
-, qtmacextras
-, qmake
-, fixDarwinDylibNames
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  qtbase,
+  qtmacextras,
+  qmake,
+  fixDarwinDylibNames,
 }:
-
 stdenv.mkDerivation rec {
   pname = "qscintilla-qt5";
   version = "2.13.1";
@@ -19,12 +19,13 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "QScintilla_src-${version}/src";
 
-  buildInputs = [ qtbase ];
+  buildInputs = [qtbase];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ qtmacextras ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [qtmacextras];
 
-  nativeBuildInputs = [ unzip qmake ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs =
+    [unzip qmake]
+    ++ lib.optionals stdenv.isDarwin [fixDarwinDylibNames];
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
@@ -60,8 +61,8 @@ stdenv.mkDerivation rec {
       background colours and multiple fonts.
     '';
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
-    license = with licenses; [ gpl3 ]; # and commercial
-    maintainers = with maintainers; [ peterhoeg ];
+    license = with licenses; [gpl3]; # and commercial
+    maintainers = with maintainers; [peterhoeg];
     platforms = platforms.unix;
   };
 }

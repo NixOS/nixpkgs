@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, cairo
-, expat
-, guile
-, guile-lib
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cairo,
+  expat,
+  guile,
+  guile-lib,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "guile-cairo";
   version = "1.11.2";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = false; # Cannot find unit-test module from guile-lib
-  checkInputs = [ guile-lib ];
+  checkInputs = [guile-lib];
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/guile-cairo/";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       management, exceptions, macros, and a dynamic programming environment.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = with maintainers; [vyp];
     platforms = platforms.linux;
   };
 }

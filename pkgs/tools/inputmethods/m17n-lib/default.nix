@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, m17n_db, autoreconfHook, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m17n_db,
+  autoreconfHook,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
   version = "1.8.0";
@@ -12,7 +19,8 @@ stdenv.mkDerivation rec {
 
   # reconf needed to sucesfully cross-compile
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook
+    pkg-config
     # requires m17n-db tool at build time
     m17n_db
   ];
@@ -27,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "Multilingual text processing library (runtime)";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ astsmtl ];
+    maintainers = with lib.maintainers; [astsmtl];
   };
 }

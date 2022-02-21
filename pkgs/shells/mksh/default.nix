@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mksh";
   version = "59c";
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       systems.
     '';
     homepage = "https://www.mirbsd.org/mksh.htm";
-    license = with licenses; [ miros isc unicode-dfs-2016 ];
-    maintainers = with maintainers; [ AndersonTorres joachifm ];
+    license = with licenses; [miros isc unicode-dfs-2016];
+    maintainers = with maintainers; [AndersonTorres joachifm];
     platforms = platforms.unix;
   };
 
@@ -57,3 +57,4 @@ stdenv.mkDerivation rec {
 }
 # TODO [ AndersonTorres ]: lksh
 # TODO [ AndersonTorres ]: a more accurate licensing info
+

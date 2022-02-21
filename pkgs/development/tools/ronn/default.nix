@@ -1,5 +1,12 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, groff, callPackage }:
-
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+  groff,
+  callPackage,
+}:
 stdenv.mkDerivation rec {
   pname = "ronn";
   version = env.gems.ronn.version;
@@ -11,7 +18,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,13 +28,13 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = bundlerUpdateScript "ronn";
 
-  passthru.tests.reproducible-html-manpage = callPackage ./test-reproducible-html.nix { };
+  passthru.tests.reproducible-html-manpage = callPackage ./test-reproducible-html.nix {};
 
   meta = with lib; {
     description = "markdown-based tool for building manpages";
     homepage = "https://rtomayko.github.io/ronn/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm nicknovitski ];
+    maintainers = with maintainers; [zimbatm nicknovitski];
     platforms = env.ruby.meta.platforms;
   };
 }

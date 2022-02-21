@@ -1,4 +1,11 @@
-{lib, stdenv, fetchurl, ant, jre, jdk}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ant,
+  jre,
+  jdk,
+}:
 stdenv.mkDerivation rec {
   pname = "abcl";
   version = "1.8.0";
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [jre ant jdk jre];
   meta = {
     description = "A JVM-based Common Lisp implementation";
-    license = lib.licenses.gpl3 ;
+    license = lib.licenses.gpl3;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     homepage = "https://common-lisp.net/project/armedbear/";

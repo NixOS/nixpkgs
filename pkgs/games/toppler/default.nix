@@ -1,20 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-
-, pkg-config
-, gettext
-, povray
-, imagemagick
-, gimp
-
-, SDL2
-, SDL2_mixer
-, SDL2_image
-, libpng
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  gettext,
+  povray,
+  imagemagick,
+  gimp,
+  SDL2,
+  SDL2_mixer,
+  SDL2_image,
+  libpng,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "toppler";
   version = "1.3";
@@ -47,15 +45,15 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "Jump and run game, reimplementation of Tower Toppler/Nebulus";
     homepage = "https://gitlab.com/roever/toppler";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }

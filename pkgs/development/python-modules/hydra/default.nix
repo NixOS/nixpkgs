@@ -1,14 +1,14 @@
-{ lib
-, antlr4-python3-runtime
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-resources
-, jre_headless
-, omegaconf
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  antlr4-python3-runtime,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-resources,
+  jre_headless,
+  omegaconf,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "hydra";
   version = "1.1.1";
@@ -27,12 +27,14 @@ buildPythonPackage rec {
     jre_headless
   ];
 
-  propagatedBuildInputs = [
-    antlr4-python3-runtime
-    omegaconf
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      antlr4-python3-runtime
+      omegaconf
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -57,6 +59,6 @@ buildPythonPackage rec {
     description = "A framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

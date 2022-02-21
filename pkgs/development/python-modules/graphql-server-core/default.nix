@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, black
-, graphql-core
-, promise
-, fetchpatch
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  black,
+  graphql-core,
+  promise,
+  fetchpatch,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "graphql-server-core";
   version = "2.0.0";

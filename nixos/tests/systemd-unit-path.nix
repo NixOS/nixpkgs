@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   exampleScript = pkgs.writeTextFile {
     name = "example.sh";
     text = ''
@@ -27,12 +25,15 @@ let
       WantedBy=multi-user.target
     '';
   };
-in
-{
+in {
   name = "systemd-unit-path";
 
-  machine = { pkgs, lib, ... }: {
-    boot.extraSystemdUnitPaths = [ "/etc/systemd-rw/system" ];
+  machine = {
+    pkgs,
+    lib,
+    ...
+  }: {
+    boot.extraSystemdUnitPaths = ["/etc/systemd-rw/system"];
   };
 
   testScript = ''

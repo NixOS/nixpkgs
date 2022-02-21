@@ -1,11 +1,11 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, runCommand
-, ran
-, curl
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  runCommand,
+  ran,
+  curl,
 }:
-
 buildGoModule rec {
   pname = "ran";
   version = "0.1.6";
@@ -21,12 +21,14 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   ldflags = [
-    "-X" "main._version_=v${version}"
-    "-X" "main._branch_=master"
+    "-X"
+    "main._version_=v${version}"
+    "-X"
+    "main._branch_=master"
   ];
 
   passthru.tests = {
-    simple = runCommand "ran-test" { } ''
+    simple = runCommand "ran-test" {} ''
       echo hello world > index.html
       ${ran}/bin/ran &
       # Allow ran to fully initialize
@@ -41,6 +43,6 @@ buildGoModule rec {
     homepage = "https://github.com/m3ng9i/ran";
     description = "Ran is a simple web server for serving static files";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomberek ];
+    maintainers = with maintainers; [tomberek];
   };
 }

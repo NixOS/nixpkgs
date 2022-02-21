@@ -1,13 +1,14 @@
-{ autoreconfHook
-, cmake
-, fetchFromGitLab
-, fetchpatch
-, mediastreamer
-, openh264
-, pkg-config
-, lib, stdenv
+{
+  autoreconfHook,
+  cmake,
+  fetchFromGitLab,
+  fetchpatch,
+  mediastreamer,
+  openh264,
+  pkg-config,
+  lib,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "msopenh264";
   # Using master branch for linphone-desktop caused a chain reaction that many
@@ -23,8 +24,8 @@ stdenv.mkDerivation rec {
     sha256 = "140hs5lzpshzswvl39klcypankq3v2qck41696j22my7s4wsa0hr";
   };
 
-  nativeBuildInputs = [ autoreconfHook cmake pkg-config ];
-  buildInputs = [ mediastreamer openh264 ];
+  nativeBuildInputs = [autoreconfHook cmake pkg-config];
+  buildInputs = [mediastreamer openh264];
 
   # Do not build static libraries
   cmakeFlags = [
@@ -44,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

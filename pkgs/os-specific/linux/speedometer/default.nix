@@ -1,5 +1,8 @@
-{ lib, fetchurl, python2Packages }:
-
+{
+  lib,
+  fetchurl,
+  python2Packages,
+}:
 python2Packages.buildPythonApplication rec {
   pname = "speedometer";
   version = "2.8";
@@ -9,7 +12,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "060bikv3gwr203jbdmvawsfhc0yq0bg1m42dk8czx1nqvwvgv6fm";
   };
 
-  propagatedBuildInputs = [ python2Packages.urwid ];
+  propagatedBuildInputs = [python2Packages.urwid];
 
   postPatch = ''
     sed -i "/'entry_points': {/d" setup.py
@@ -21,6 +24,6 @@ python2Packages.buildPythonApplication rec {
     homepage = "https://excess.org/speedometer/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ Baughn ];
+    maintainers = with maintainers; [Baughn];
   };
 }

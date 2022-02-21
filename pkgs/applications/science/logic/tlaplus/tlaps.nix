@@ -1,14 +1,14 @@
-{ fetchurl
-, lib
-, stdenv
-, ocaml
-, isabelle
-, cvc3
-, perl
-, wget
-, which
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ocaml,
+  isabelle,
+  cvc3,
+  perl,
+  wget,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tlaps";
   version = "1.4.3";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w5z3ns5xxmhmp8r4x2kjmy3clqam935gmvx82imyxrr1bamx6gf";
   };
 
-  buildInputs = [ ocaml isabelle cvc3 perl wget which ];
+  buildInputs = [ocaml isabelle cvc3 perl wget which];
 
   installPhase = ''
     mkdir -pv "$out"
@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tla.msr-inria.inria.fr/tlaps/content/Home.html";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [];
   };
-
 }

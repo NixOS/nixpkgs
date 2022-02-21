@@ -1,12 +1,13 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, pkutils
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkutils
   # Check Inputs
-, nose
+  ,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "pygogo";
   version = "0.13.2";
@@ -48,6 +49,6 @@ buildPythonPackage rec {
     description = "Python logging library";
     homepage = "https://github.com/reubano/pygogo/";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

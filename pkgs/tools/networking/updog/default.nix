@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "updog";
   version = "1.4";
@@ -10,7 +12,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    colorama flask flask-httpauth werkzeug pyopenssl
+    colorama
+    flask
+    flask-httpauth
+    werkzeug
+    pyopenssl
   ];
 
   checkPhase = ''
@@ -21,6 +27,6 @@ python3Packages.buildPythonApplication rec {
     description = "Updog is a replacement for Python's SimpleHTTPServer";
     homepage = "https://github.com/sc0tfree/updog";
     license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    maintainers = with maintainers; [ethancedwards8];
   };
 }

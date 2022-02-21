@@ -1,14 +1,14 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, importlib-metadata
-, typing ? null
-, pythonOlder
-, python
+{
+  lib,
+  isPy27,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  importlib-metadata,
+  typing ? null,
+  pythonOlder,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "importlib-resources";
   version = "5.4.0";
@@ -24,11 +24,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.5") [
-    typing
-  ];
+  propagatedBuildInputs =
+    [
+      importlib-metadata
+    ]
+    ++ lib.optional (pythonOlder "3.5") [
+      typing
+    ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover
@@ -42,6 +44,6 @@ buildPythonPackage rec {
     description = "Read resources from Python packages";
     homepage = "https://importlib-resources.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

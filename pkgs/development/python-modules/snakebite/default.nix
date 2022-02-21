@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, tox
-, virtualenv
-, protobuf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  tox,
+  virtualenv,
+  protobuf,
 }:
-
 buildPythonPackage rec {
   pname = "snakebite";
   version = "2.11.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Pure Python HDFS client";
     homepage = "https://github.com/spotify/snakebite";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

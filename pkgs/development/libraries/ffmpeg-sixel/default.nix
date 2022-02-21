@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsixel, yasm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libsixel,
+  yasm,
 }:
-
 stdenv.mkDerivation {
-
   pname = "ffmpeg-sixel";
   version = "nightly-2.3.x";
 
@@ -13,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "00s2lggfdj2ibpngpyqqg7360p7yb69ys1ppg59yvv0m0mxk5x3k";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     libsixel
     yasm
@@ -32,6 +36,6 @@ stdenv.mkDerivation {
     homepage = "http://www.ffmpeg.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
   };
 }

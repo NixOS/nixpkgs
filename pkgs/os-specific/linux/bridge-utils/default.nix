@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "bridge-utils";
   version = "1.7.1";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ph2L5PGhQFxgyO841UTwwYwFszubB+W0sxAzU2Fl5g4=";
   };
 
-  patches = [ ./autoconf-ar.patch ];
+  patches = [./autoconf-ar.patch];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   meta = {
     description = "An userspace tool to configure linux bridges (deprecated in favour or iproute2).";

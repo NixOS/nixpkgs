@@ -1,16 +1,15 @@
-{ lib
-, buildPythonPackage
-, dpkt
-, fetchFromGitHub
-, fetchpatch
-, libpcap
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  dpkt,
+  fetchFromGitHub,
+  fetchpatch,
+  libpcap,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pypcap";
   version = "1.2.3";
-
 
   src = fetchFromGitHub {
     owner = "pynetwork";
@@ -35,21 +34,21 @@ buildPythonPackage rec {
     sed -i "/--cov/d" setup.cfg
   '';
 
-  buildInputs = [ libpcap ];
+  buildInputs = [libpcap];
 
   checkInputs = [
     dpkt
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  pytestFlagsArray = ["tests"];
 
-  pythonImportsCheck = [ "pcap" ];
+  pythonImportsCheck = ["pcap"];
 
   meta = with lib; {
     homepage = "https://github.com/pynetwork/pypcap";
     description = "Simplified object-oriented Python wrapper for libpcap";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }

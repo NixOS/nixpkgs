@@ -1,6 +1,14 @@
-{ mkDerivation, lib, fetchurl, cmake, pkg-config, makeWrapper
-, httrack, qtbase, qtmultimedia }:
-
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  httrack,
+  qtbase,
+  qtmultimedia,
+}:
 mkDerivation rec {
   pname = "httraqt";
   version = "1.4.9";
@@ -10,9 +18,9 @@ mkDerivation rec {
     sha256 = "0pjxqnqchpbla4xiq4rklc06484n46cpahnjy03n9rghwwcad25b";
   };
 
-  buildInputs = [ httrack qtbase qtmultimedia ];
+  buildInputs = [httrack qtbase qtmultimedia];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [cmake makeWrapper pkg-config];
 
   prePatch = ''
     substituteInPlace cmake/HTTRAQTFindHttrack.cmake \
@@ -30,9 +38,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Easy-to-use offline browser / website mirroring utility - QT frontend";
-    homepage    = "http://www.httrack.com";
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms   = with platforms; unix;
+    homepage = "http://www.httrack.com";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [peterhoeg];
+    platforms = with platforms; unix;
   };
 }

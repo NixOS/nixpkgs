@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, boost, libGL
-, qtbase, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  boost,
+  libGL,
+  qtbase,
+  python3,
+}:
 stdenv.mkDerivation rec {
-
   pname = "nano-wallet";
   version = "21.3";
 
@@ -27,10 +35,11 @@ stdenv.mkDerivation rec {
       Qt5Widgets_INCLUDE_DIRS = "${qtbase.dev}/include/QtWidgets";
     };
     optionToFlag = name: value: "-D${name}=${value}";
-  in lib.mapAttrsToList optionToFlag options;
+  in
+    lib.mapAttrsToList optionToFlag options;
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ boost libGL qtbase ];
+  nativeBuildInputs = [cmake pkg-config wrapQtAppsHook];
+  buildInputs = [boost libGL qtbase];
 
   strictDeps = true;
 
@@ -53,7 +62,6 @@ stdenv.mkDerivation rec {
     # Fails on Darwin. See:
     # https://github.com/NixOS/nixpkgs/pull/39295#issuecomment-386800962
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jluttine ];
+    maintainers = with lib.maintainers; [jluttine];
   };
-
 }

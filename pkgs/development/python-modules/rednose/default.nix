@@ -1,6 +1,15 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
-, nose, six, colorama, termstyle }:
-
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pythonAtLeast,
+  nose,
+  six,
+  colorama,
+  termstyle,
+}:
 buildPythonPackage rec {
   pname = "rednose";
   version = "1.3.0";
@@ -19,8 +28,8 @@ buildPythonPackage rec {
   # Also macOS tests are broken on python38
   doCheck = !(isPy27 || (stdenv.isDarwin && pythonAtLeast "3.8"));
 
-  checkInputs = [ six ];
-  propagatedBuildInputs = [ nose colorama termstyle ];
+  checkInputs = [six];
+  propagatedBuildInputs = [nose colorama termstyle];
 
   meta = with lib; {
     description = "A python nose plugin adding color to console results";

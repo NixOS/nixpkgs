@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "goss";
   version = "0.3.16";
@@ -15,7 +18,9 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
   ldflags = [
-    "-s" "-w" "-X main.version=v${version}"
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
   ];
 
   meta = with lib; {
@@ -29,6 +34,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual jk ];
+    maintainers = with maintainers; [hyzual jk];
   };
 }

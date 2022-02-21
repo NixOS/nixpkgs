@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, pkg-config, wrapGAppsHook, CoreServices
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  wrapGAppsHook,
+  CoreServices,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "muso";
   version = "2.0.0";
@@ -13,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1dnfslliss173igympl7h1zc0qz0g10kf96dwrcj6aglmvvw426p";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [pkg-config wrapGAppsHook];
   buildInputs = lib.optional stdenv.isDarwin CoreServices;
 
   preConfigure = ''
@@ -31,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An automatic music sorter (based on ID3 tags)";
     homepage = "https://github.com/quebin31/muso";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ bloomvdomino ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [bloomvdomino];
   };
 }

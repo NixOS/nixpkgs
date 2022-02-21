@@ -1,14 +1,14 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, pytest-mypy
-, pythonOlder
-, tenacity
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov,
+  pytestCheckHook,
+  pytest-mypy,
+  pythonOlder,
+  tenacity,
 }:
-
 buildPythonPackage rec {
   pname = "aiokef";
   version = "0.2.17";
@@ -32,13 +32,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests" ];
-  pythonImportsCheck = [ "aiokef" ];
+  pytestFlagsArray = ["tests"];
+  pythonImportsCheck = ["aiokef"];
 
   meta = with lib; {
     description = "Python API for KEF speakers";
     homepage = "https://github.com/basnijholt/aiokef";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

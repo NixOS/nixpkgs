@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  aws-c-common,
+}:
 stdenv.mkDerivation rec {
   pname = "aws-checksums";
   version = "0.1.11";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fXu7GI2UR9QiBGP2n2pEFRjz9ZwA+BAK9zxhNnoYWt4=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ aws-c-common ];
+  buildInputs = [aws-c-common];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -24,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-checksums";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej eelco ];
+    maintainers = with maintainers; [orivej eelco];
   };
 }

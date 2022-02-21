@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, openssh
-, ps
-, psutil
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  openssh,
+  ps,
+  psutil,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "plumbum";
   version = "1.7.2";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = " Plumbum: Shell Combinators ";
     homepage = " https://github.com/tomerfiliba/plumbum ";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

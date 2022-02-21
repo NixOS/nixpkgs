@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.xserver.gdk-pixbuf;
 
   # Get packages to generate the cache for. We always include gdk-pixbuf.
@@ -10,7 +12,7 @@ let
 
   # Generate the cache file by running gdk-pixbuf-query-loaders for each
   # package and concatenating the results.
-  loadersCache = pkgs.runCommand "gdk-pixbuf-loaders.cache" { preferLocalBuild = true; } ''
+  loadersCache = pkgs.runCommand "gdk-pixbuf-loaders.cache" {preferLocalBuild = true;} ''
     (
       for package in ${concatStringsSep " " effectivePackages}; do
         module_dir="$package/${pkgs.gdk-pixbuf.moduleDir}"
@@ -23,13 +25,11 @@ let
       done
     ) > "$out"
   '';
-in
-
-{
+in {
   options = {
     services.xserver.gdk-pixbuf.modulePackages = mkOption {
       type = types.listOf types.package;
-      default = [ ];
+      default = [];
       description = "Packages providing GDK-Pixbuf modules, for cache generation.";
     };
   };

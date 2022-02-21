@@ -1,11 +1,10 @@
-{ stdenv
-, pkgs
-, lib
-, nodejs
-, runtimeShell
-}:
-
-let
+{
+  stdenv,
+  pkgs,
+  lib,
+  nodejs,
+  runtimeShell,
+}: let
   nodePackages = import ./node-packages.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
@@ -29,7 +28,7 @@ let
       description = "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
       license = licenses.agpl3Plus;
       homepage = "https://github.com/lovasoa/whitebophir";
-      maintainers = with maintainers; [ iblech ];
+      maintainers = with maintainers; [iblech];
       platforms = platforms.unix;
     };
   };

@@ -1,5 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, greenlet }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  greenlet,
+}:
 buildPythonPackage rec {
   pname = "meinheld";
   version = "1.0.2";
@@ -15,7 +19,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "greenlet>=0.4.5,<0.5" "greenlet>=0.4.5,<2.0.0"
   '';
 
-  propagatedBuildInputs = [ greenlet ];
+  propagatedBuildInputs = [greenlet];
 
   # No tests
   doCheck = false;

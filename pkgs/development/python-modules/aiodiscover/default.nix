@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, ifaddr
-, netifaces
-, pyroute2
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  ifaddr,
+  netifaces,
+  pyroute2,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiodiscover";
   version = "1.4.7";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to discover hosts via ARP and PTR lookup";
     homepage = "https://github.com/bdraco/aiodiscover";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

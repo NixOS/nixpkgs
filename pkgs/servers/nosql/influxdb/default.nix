@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "influxdb";
   version = "1.8.10";
@@ -15,7 +18,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
   excludedPackages = "test";
 
@@ -23,6 +26,6 @@ buildGoModule rec {
     description = "An open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ offline zimbatm ];
+    maintainers = with maintainers; [offline zimbatm];
   };
 }

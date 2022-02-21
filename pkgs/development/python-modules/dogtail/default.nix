@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, python
-, pygobject3
-, pyatspi
-, pycairo
-, at-spi2-core
-, gobject-introspection
-, gtk3
-, gsettings-desktop-schemas
-, fetchurl
-, dbus
-, xvfb-run
-, wrapGAppsHook
-# , fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  python,
+  pygobject3,
+  pyatspi,
+  pycairo,
+  at-spi2-core,
+  gobject-introspection,
+  gtk3,
+  gsettings-desktop-schemas,
+  fetchurl,
+  dbus,
+  xvfb-run,
+  wrapGAppsHook
+  # , fetchPypi
 }:
-
 buildPythonPackage {
   pname = "dogtail";
   version = "0.9.11";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   # https://gitlab.com/dogtail/dogtail/issues/1
   # src = fetchPypi {
@@ -35,8 +35,8 @@ buildPythonPackage {
     ./nix-support.patch
   ];
 
-  nativeBuildInputs = [ gobject-introspection dbus xvfb-run wrapGAppsHook ]; # for setup hooks
-  propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
+  nativeBuildInputs = [gobject-introspection dbus xvfb-run wrapGAppsHook]; # for setup hooks
+  propagatedBuildInputs = [at-spi2-core gtk3 pygobject3 pyatspi pycairo];
   strictDeps = false; # issue 56943
 
   checkPhase = ''
@@ -57,6 +57,6 @@ buildPythonPackage {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
     homepage = "https://gitlab.com/dogtail/dogtail";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [jtojnar];
   };
 }

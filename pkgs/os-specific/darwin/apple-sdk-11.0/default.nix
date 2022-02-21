@@ -1,7 +1,13 @@
-{ stdenvNoCC, fetchurl, newScope, pkgs
-, xar, cpio, python3, pbzx }:
-
-let
+{
+  stdenvNoCC,
+  fetchurl,
+  newScope,
+  pkgs,
+  xar,
+  cpio,
+  python3,
+  pbzx,
+}: let
   MacOSX-SDK = stdenvNoCC.mkDerivation rec {
     pname = "MacOSX-SDK";
     version = "11.0.0";
@@ -15,9 +21,9 @@ let
     dontBuild = true;
     darwinDontCodeSign = true;
 
-    nativeBuildInputs = [ cpio pbzx ];
+    nativeBuildInputs = [cpio pbzx];
 
-    outputs = [ "out" ];
+    outputs = ["out"];
 
     unpackPhase = ''
       pbzx $src | cpio -idm
@@ -35,7 +41,7 @@ let
     };
   };
 
-  callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });
+  callPackage = newScope (packages // pkgs.darwin // {inherit MacOSX-SDK;});
 
   packages = {
     inherit (callPackage ./apple_sdk.nix {}) frameworks libs;
@@ -55,4 +61,5 @@ let
     configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
     IOKit = pkgs.darwin.apple_sdk.frameworks.IOKit;
   };
-in packages
+in
+  packages

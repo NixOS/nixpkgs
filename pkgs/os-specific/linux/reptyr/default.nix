@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, python2 }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python2,
+}:
 stdenv.mkDerivation rec {
   version = "0.7.0";
   pname = "reptyr";
@@ -19,9 +24,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
+  makeFlags = ["PREFIX=" "DESTDIR=$(out)"];
 
-  checkInputs = [ (python2.withPackages (p: [ p.pexpect ])) ];
+  checkInputs = [(python2.withPackages (p: [p.pexpect]))];
   doCheck = true;
 
   meta = {

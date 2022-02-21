@@ -1,8 +1,10 @@
-{ pkgs, modulesPath, ... }:
-
-let username = "azurenixosuser";
-in
 {
+  pkgs,
+  modulesPath,
+  ...
+}: let
+  username = "azurenixosuser";
+in {
   imports = [
     "${modulesPath}/virtualisation/azure-common.nix"
     "${modulesPath}/virtualisation/azure-image.nix"
@@ -15,9 +17,9 @@ in
     isNormalUser = true;
     home = "/home/${username}";
     description = "Azure NixOS Test User";
-    openssh.authorizedKeys.keys = [ (builtins.readFile ~/.ssh/id_ed25519.pub) ];
+    openssh.authorizedKeys.keys = [(builtins.readFile ~/.ssh/id_ed25519.pub)];
   };
-  nix.settings.trusted-users = [ username ];
+  nix.settings.trusted-users = [username];
 
   virtualisation.azureImage.diskSize = 2500;
 
@@ -29,6 +31,10 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [
-    git file htop wget curl
+    git
+    file
+    htop
+    wget
+    curl
   ];
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "flex-ncat";
   version = "0.1-20211223.0";
@@ -17,6 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/kc2g-flex-tools/nCAT";
     description = "FlexRadio remote control (CAT) via hamlib/rigctl protocol";
     license = licenses.mit;
-    maintainers = with maintainers; [ mvs ];
+    maintainers = with maintainers; [mvs];
   };
 }

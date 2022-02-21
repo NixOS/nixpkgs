@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.jicofo;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.jicofo;
+in {
   options.services.jicofo = with types; {
     enable = mkEnableOption "Jitsi Conference Focus - component of Jitsi Meet";
 
@@ -69,7 +70,7 @@ in
 
     config = mkOption {
       type = attrsOf str;
-      default = { };
+      default = {};
       example = literalExpression ''
         {
           "org.jitsi.jicofo.auth.URL" = "XMPP:jitsi-meet.example.com";
@@ -94,11 +95,10 @@ in
         "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "jicofo";
         "-Djava.util.logging.config.file" = "/etc/jitsi/jicofo/logging.properties";
       };
-    in
-    {
+    in {
       description = "JItsi COnference FOcus";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       restartTriggers = [
         config.environment.etc."jitsi/jicofo/sip-communicator.properties".source
@@ -108,7 +108,11 @@ in
       script = ''
         ${pkgs.jicofo}/bin/jicofo \
           --host=${cfg.xmppHost} \
-          --domain=${if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain} \
+          --domain=${
+          if cfg.xmppDomain == null
+          then cfg.xmppHost
+          else cfg.xmppDomain
+        } \
           --secret=$(cat ${cfg.componentPasswordFile}) \
           --user_name=${cfg.userName} \
           --user_domain=${cfg.userDomain} \
@@ -132,7 +136,7 @@ in
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6" "AF_UNIX"];
         RestrictNamespaces = true;
         LockPersonality = true;
         RestrictRealtime = true;

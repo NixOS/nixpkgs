@@ -1,23 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, ocaml
-, findlib
-, omake
-, graphicsmagick
-, libpng
-, libjpeg
-, libexif
-, libtiff
-, libXpm
-, freetype
-, giflib
-, ghostscript
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  ocaml,
+  findlib,
+  omake,
+  graphicsmagick,
+  libpng,
+  libjpeg,
+  libexif,
+  libtiff,
+  libXpm,
+  freetype,
+  giflib,
+  ghostscript,
 }:
-
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02" && lib.versionOlder ocaml.version "4.10")
-  "camlimages 4.2.4 is not available for OCaml ${ocaml.version}"
-
+"camlimages 4.2.4 is not available for OCaml ${ocaml.version}"
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
   pname = "camlimages";

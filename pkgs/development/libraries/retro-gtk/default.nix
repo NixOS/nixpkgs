@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, cmake
-, meson
-, ninja
-, pkg-config
-, libepoxy
-, glib
-, gtk3
-, libpulseaudio
-, libsamplerate
-, gobject-introspection
-, vala
-, gtk-doc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  meson,
+  ninja,
+  pkg-config,
+  libepoxy,
+  glib,
+  gtk3,
+  libpulseaudio,
+  libsamplerate,
+  gobject-introspection,
+  vala,
+  gtk-doc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "retro-gtk";
   version = "1.0.2";
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/retro-gtk";
     changelog = "https://gitlab.gnome.org/GNOME/retro-gtk/-/blob/master/NEWS";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.DamienCassou ];
+    maintainers = [maintainers.DamienCassou];
     platforms = platforms.all;
   };
 }

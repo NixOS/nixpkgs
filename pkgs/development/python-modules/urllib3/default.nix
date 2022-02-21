@@ -1,21 +1,21 @@
-{ lib
-, brotli
-, buildPythonPackage
-, cryptography
-, python-dateutil
-, fetchPypi
-, idna
-, isPy27
-, mock
-, pyopenssl
-, pysocks
-, pytest-freezegun
-, pytest-timeout
-, pytestCheckHook
-, tornado
-, trustme
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  cryptography,
+  python-dateutil,
+  fetchPypi,
+  idna,
+  isPy27,
+  mock,
+  pyopenssl,
+  pysocks,
+  pytest-freezegun,
+  pytest-timeout,
+  pytestCheckHook,
+  tornado,
+  trustme,
 }:
-
 buildPythonPackage rec {
   pname = "urllib3";
   version = "1.26.8";
@@ -26,14 +26,16 @@ buildPythonPackage rec {
     hash = "sha256-Dnwz2aY+fd/LhngKrIe+/C+930bFjbtIfghV987sKDw=";
   };
 
-  propagatedBuildInputs = [
-    brotli
-    pysocks
-  ] ++ lib.optionals isPy27 [
-    cryptography
-    idna
-    pyopenssl
-  ];
+  propagatedBuildInputs =
+    [
+      brotli
+      pysocks
+    ]
+    ++ lib.optionals isPy27 [
+      cryptography
+      idna
+      pyopenssl
+    ];
 
   checkInputs = [
     python-dateutil
@@ -70,6 +72,6 @@ buildPythonPackage rec {
     description = "Powerful, sanity-friendly HTTP client for Python";
     homepage = "https://github.com/shazow/urllib3";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,8 +1,11 @@
-{ lib, python3Packages, ffmpeg }:
-
+{
+  lib,
+  python3Packages,
+  ffmpeg,
+}:
 python3Packages.buildPythonApplication rec {
   version = "2.2";
-  pname   = "sigal";
+  pname = "sigal";
 
   src = python3Packages.fetchPypi {
     inherit version pname;
@@ -27,18 +30,20 @@ python3Packages.buildPythonApplication rec {
     cryptography
   ];
 
-  checkInputs = [
-    ffmpeg
-  ] ++ (with python3Packages; [
-    pytestCheckHook
-  ]);
+  checkInputs =
+    [
+      ffmpeg
+    ]
+    ++ (with python3Packages; [
+      pytestCheckHook
+    ]);
 
-  makeWrapperArgs = [ "--prefix PATH : ${ffmpeg}/bin" ];
+  makeWrapperArgs = ["--prefix PATH : ${ffmpeg}/bin"];
 
   meta = with lib; {
     description = "Yet another simple static gallery generator";
-    homepage    = "http://sigal.saimon.org/en/latest/index.html";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ domenkozar matthiasbeyer ];
+    homepage = "http://sigal.saimon.org/en/latest/index.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [domenkozar matthiasbeyer];
   };
 }

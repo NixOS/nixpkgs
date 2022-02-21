@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 stdenv.mkDerivation rec {
   pname = "g203-led";
@@ -13,9 +15,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (python3.withPackages (ps: with ps; [
-      pyusb
-    ]))
+    (python3.withPackages (ps:
+      with ps; [
+        pyusb
+      ]))
   ];
 
   postPatch = ''
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
       Inspired by and based on g810-led.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
     homepage = "https://github.com/smasty/g203-led";
     platforms = platforms.linux;
   };

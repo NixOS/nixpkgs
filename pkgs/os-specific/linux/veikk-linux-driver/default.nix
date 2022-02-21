@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   pname = "veikk-linux-driver";
   version = "2.0";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildInputs = [ kernel ];
+  buildInputs = [kernel];
 
   buildPhase = ''
     make BUILD_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jlam55555/veikk-linux-driver/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nicbk ];
+    maintainers = with maintainers; [nicbk];
     broken = kernel.kernelOlder "4.19";
   };
 }

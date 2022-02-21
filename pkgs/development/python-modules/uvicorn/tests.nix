@@ -1,14 +1,14 @@
-{ stdenv
-, buildPythonPackage
-, uvicorn
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, pytest-mock
-, requests
-, trustme
+{
+  stdenv,
+  buildPythonPackage,
+  uvicorn,
+  httpx,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-mock,
+  requests,
+  trustme,
 }:
-
 buildPythonPackage rec {
   pname = "uvicorn-tests";
   inherit (uvicorn) version;
@@ -37,4 +37,3 @@ buildPythonPackage rec {
     "test_invalid_upgrade"
   ];
 }
-

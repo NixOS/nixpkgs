@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, nodePackages, alsa-lib, gtk3, libxshmfence, mesa, nss }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  nodePackages,
+  alsa-lib,
+  gtk3,
+  libxshmfence,
+  mesa,
+  nss,
+}:
 stdenv.mkDerivation rec {
   pname = "morgen";
   version = "2.4.3";
@@ -17,7 +29,7 @@ stdenv.mkDerivation rec {
     nodePackages.asar
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
+  buildInputs = [alsa-lib gtk3 libxshmfence mesa nss];
 
   dontBuild = true;
   dontConfigure = true;
@@ -53,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "All-in-one Calendars, Tasks and Scheduler";
     homepage = "https://morgen.so/download";
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

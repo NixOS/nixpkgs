@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, fuse, curl, expat }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  fuse,
+  curl,
+  expat,
+}:
 stdenv.mkDerivation rec {
   pname = "s3backer";
   version = "1.6.3";
@@ -13,8 +19,8 @@ stdenv.mkDerivation rec {
     owner = "archiecobbs";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fuse curl expat ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [fuse curl expat];
 
   # AC_CHECK_DECLS doesn't work with clang
   postPatch = lib.optionalString stdenv.cc.isClang ''

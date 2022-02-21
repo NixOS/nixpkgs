@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, result }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  result,
+}:
 buildDunePackage rec {
   pname = "linenoise";
   version = "1.3.0";
@@ -15,12 +19,12 @@ buildDunePackage rec {
     sha256 = "0m9mm1arsawi5w5aqm57z41sy1wfxvhfgbdiw7hzy631i391144g";
   };
 
-  propagatedBuildInputs = [ result ];
+  propagatedBuildInputs = [result];
 
   meta = {
     description = "OCaml bindings to linenoise";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     inherit (src.meta) homepage;
   };
 }

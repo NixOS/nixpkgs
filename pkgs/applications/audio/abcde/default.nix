@@ -1,9 +1,21 @@
-{ lib, stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
-, lame, flac, glyr
-, perlPackages
-, makeWrapper }:
-
-let version = "2.9.3";
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libcdio-paranoia,
+  cddiscid,
+  wget,
+  which,
+  vorbis-tools,
+  id3v2,
+  eyeD3,
+  lame,
+  flac,
+  glyr,
+  perlPackages,
+  makeWrapper,
+}: let
+  version = "2.9.3";
 in
   stdenv.mkDerivation {
     pname = "abcde";
@@ -28,27 +40,38 @@ in
         --replace "/etc/abcde.conf" "$out/etc/abcde.conf"
     '';
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [makeWrapper];
 
-    buildInputs = with perlPackages; [ perl MusicBrainz MusicBrainzDiscID ];
+    buildInputs = with perlPackages; [perl MusicBrainz MusicBrainzDiscID];
 
-    installFlags = [ "sysconfdir=$(out)/etc" ];
+    installFlags = ["sysconfdir=$(out)/etc"];
 
     postFixup = ''
       for cmd in abcde cddb-tool abcde-musicbrainz-tool; do
         wrapProgram "$out/bin/$cmd" \
           --prefix PERL5LIB : "$PERL5LIB" \
-          --prefix PATH ":" ${lib.makeBinPath [
-            "$out" which libcdio-paranoia cddiscid wget
-            vorbis-tools id3v2 eyeD3 lame flac glyr
-          ]}
+          --prefix PATH ":" ${
+        lib.makeBinPath [
+          "$out"
+          which
+          libcdio-paranoia
+          cddiscid
+          wget
+          vorbis-tools
+          id3v2
+          eyeD3
+          lame
+          flac
+          glyr
+        ]
+      }
       done
     '';
 
     meta = with lib; {
       homepage = "http://abcde.einval.com/wiki/";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [gebner];
       description = "Command-line audio CD ripper";
       longDescription = ''
         abcde is a front-end command-line utility (actually, a shell

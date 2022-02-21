@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, desktop-file-utils
-, SDL
-, gtk3
-, gsettings-desktop-schemas
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  desktop-file-utils,
+  SDL,
+  gtk3,
+  gsettings-desktop-schemas,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sfxr";
   version = "1.2.1";
@@ -43,14 +44,13 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = ["DESTDIR=$(out)"];
 
   meta = with lib; {
     homepage = "http://www.drpetter.se/project_sfxr.html";
     description = "A videogame sound effect generator";
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.unix;
   };
 }
-

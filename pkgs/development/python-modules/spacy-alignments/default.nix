@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, isPy3k
-, rustPlatform
-, setuptools-rust
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  isPy3k,
+  rustPlatform,
+  setuptools-rust,
+  libiconv,
 }:
-
 buildPythonPackage rec {
   pname = "spacy-alignments";
   version = "0.8.4";
@@ -26,25 +26,27 @@ buildPythonPackage rec {
     sha256 = "sha256-oFSruBnoodv6/0/OrmJ/2SVoWm3u3FGtzVJ9xgp0+Cg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs =
+    [
+      setuptools-rust
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
 
   # Fails because spacy_alignments module cannot be loaded correctly.
   doCheck = false;
 
-  pythonImportsCheck = [ "spacy_alignments" ];
+  pythonImportsCheck = ["spacy_alignments"];
 
   meta = with lib; {
     description = "Align tokenizations for spaCy and transformers";
     homepage = "https://github.com/explosion/spacy-alignments";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

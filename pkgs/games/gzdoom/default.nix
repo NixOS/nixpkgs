@@ -1,8 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth
-, soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, mpg123
-, game-music-emu, pkg-config, copyDesktopItems, makeDesktopItem }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  openal,
+  fluidsynth,
+  soundfont-fluid,
+  libGL,
+  SDL2,
+  bzip2,
+  zlib,
+  libjpeg,
+  libsndfile,
+  mpg123,
+  game-music-emu,
+  pkg-config,
+  copyDesktopItems,
+  makeDesktopItem,
+}: let
   zmusic-src = fetchFromGitHub {
     owner = "coelckers";
     repo = "zmusic";
@@ -15,7 +31,7 @@ let
 
     src = zmusic-src;
 
-    nativeBuildInputs = [ cmake pkg-config ];
+    nativeBuildInputs = [cmake pkg-config];
 
     preConfigure = ''
       sed -i \
@@ -23,7 +39,6 @@ let
         -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
         source/mididevices/music_fluidsynth_mididevice.cpp
     '';
-
   };
 
   gzdoom = stdenv.mkDerivation rec {
@@ -38,7 +53,7 @@ let
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs = [ cmake makeWrapper pkg-config copyDesktopItems ];
+    nativeBuildInputs = [cmake makeWrapper pkg-config copyDesktopItems];
     buildInputs = [
       SDL2
       libGL
@@ -85,12 +100,11 @@ let
 
     meta = with lib; {
       homepage = "https://github.com/coelckers/gzdoom";
-      description =
-        "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
+      description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
       license = licenses.gpl3;
-      platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ lassulus ];
+      platforms = ["x86_64-linux"];
+      maintainers = with maintainers; [lassulus];
     };
   };
-
-in gzdoom
+in
+  gzdoom

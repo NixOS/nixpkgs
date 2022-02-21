@@ -1,5 +1,8 @@
-{ fetchFromGitHub, lib, stdenv }:
-
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "kitty-themes";
   version = "unstable-2022-02-03";
@@ -22,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Themes for the kitty terminal emulator";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nelsonjeppesen ];
+    maintainers = with maintainers; [nelsonjeppesen];
   };
 }

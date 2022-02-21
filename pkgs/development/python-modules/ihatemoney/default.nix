@@ -1,47 +1,49 @@
-{ buildPythonPackage
-, lib
-, isPy27
-, nixosTests
-, fetchPypi
-, alembic
-, aniso8601
-, Babel
-, blinker
-, cachetools
-, click
-, dnspython
-, email_validator
-, flask
-, flask-babel
-, flask-cors
-, flask_mail
-, flask_migrate
-, flask-restful
-, flask_sqlalchemy
-, flask-talisman
-, flask_wtf
-, debts
-, idna
-, itsdangerous
-, jinja2
-, Mako
-, markupsafe
-, python-dateutil
-, pytz
-, requests
-, six
-, sqlalchemy
-, sqlalchemy-utils
-, sqlalchemy-continuum
-, sqlalchemy-i18n
-, werkzeug
-, wtforms
-, psycopg2 # optional, for postgresql support
-, flask_testing
-, pytestCheckHook
-, fetchpatch
+{
+  buildPythonPackage,
+  lib,
+  isPy27,
+  nixosTests,
+  fetchPypi,
+  alembic,
+  aniso8601,
+  Babel,
+  blinker,
+  cachetools,
+  click,
+  dnspython,
+  email_validator,
+  flask,
+  flask-babel,
+  flask-cors,
+  flask_mail,
+  flask_migrate,
+  flask-restful,
+  flask_sqlalchemy,
+  flask-talisman,
+  flask_wtf,
+  debts,
+  idna,
+  itsdangerous,
+  jinja2,
+  Mako,
+  markupsafe,
+  python-dateutil,
+  pytz,
+  requests,
+  six,
+  sqlalchemy,
+  sqlalchemy-utils,
+  sqlalchemy-continuum,
+  sqlalchemy-i18n,
+  werkzeug,
+  wtforms,
+  psycopg2
+  # optional, for postgresql support
+  ,
+  flask_testing,
+  pytestCheckHook,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "ihatemoney";
   version = "5.1.1";
@@ -90,7 +92,7 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/spiral-project/ihatemoney/commit/40ce32d9fa58a60d26a4d0df547b8deb709c330d.patch";
       sha256 = "sha256-2ewOu21qhq/AOZaE9qrF5J6HH0h6ohFgjDb+BYjJnuQ=";
-      excludes = [ "setup.cfg" ];
+      excludes = ["setup.cfg"];
     })
   ];
 
@@ -106,11 +108,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportChecks = [ "ihatemoney" ];
+  pythonImportChecks = ["ihatemoney"];
 
   disabledTests = [
-    "test_notifications"  # requires running service.
-    "test_invite"         # requires running service.
+    "test_notifications" # requires running service.
+    "test_invite" # requires running service.
     "test_invitation_email_failure" # requires dns resolution
   ];
 
@@ -122,6 +124,6 @@ buildPythonPackage rec {
     homepage = "https://ihatemoney.org";
     description = "A simple shared budget manager web application";
     license = licenses.beerware;
-    maintainers = [ maintainers.symphorien ];
+    maintainers = [maintainers.symphorien];
   };
 }

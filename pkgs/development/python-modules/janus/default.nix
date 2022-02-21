@@ -1,7 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, pytest-asyncio
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-asyncio,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "janus";
   version = "1.0.0";
@@ -17,15 +22,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [ pytest-asyncio pytestCheckHook ];
+  checkInputs = [pytest-asyncio pytestCheckHook];
 
   # also fails upstream: https://github.com/aio-libs/janus/pull/258
-  disabledTests = [ "test_format" ];
+  disabledTests = ["test_format"];
 
   meta = with lib; {
     description = "Mixed sync-async queue";
     homepage = "https://github.com/aio-libs/janus";
     license = licenses.asl20;
-    maintainers = [ maintainers.simonchatts ];
+    maintainers = [maintainers.simonchatts];
   };
 }

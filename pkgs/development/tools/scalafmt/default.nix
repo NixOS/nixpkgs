@@ -1,6 +1,11 @@
-{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
-
-let
+{
+  lib,
+  stdenv,
+  jdk,
+  jre,
+  coursier,
+  makeWrapper,
+}: let
   baseName = "scalafmt";
   version = "3.4.0";
   deps = stdenv.mkDerivation {
@@ -13,35 +18,35 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "l5F09bjRev2eBHKTMzojC7+USkW7qf3YtA2KSoN7MxM=";
+    outputHash = "l5F09bjRev2eBHKTMzojC7+USkW7qf3YtA2KSoN7MxM=";
   };
 in
-stdenv.mkDerivation {
-  pname = baseName;
-  inherit version;
+  stdenv.mkDerivation {
+    pname = baseName;
+    inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+    nativeBuildInputs = [makeWrapper];
+    buildInputs = [jdk deps];
 
-  dontUnpack = true;
+    dontUnpack = true;
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
-      --add-flags "-cp $CLASSPATH org.scalafmt.cli.Cli"
+      makeWrapper ${jre}/bin/java $out/bin/${baseName} \
+        --add-flags "-cp $CLASSPATH org.scalafmt.cli.Cli"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  installCheckPhase = ''
-    $out/bin/${baseName} --version | grep -q "${version}"
-  '';
+    installCheckPhase = ''
+      $out/bin/${baseName} --version | grep -q "${version}"
+    '';
 
-  meta = with lib; {
-    description = "Opinionated code formatter for Scala";
-    homepage = "http://scalameta.org/scalafmt";
-    license = licenses.asl20;
-    maintainers = [ maintainers.markus1189 ];
-  };
-}
+    meta = with lib; {
+      description = "Opinionated code formatter for Scala";
+      homepage = "http://scalameta.org/scalafmt";
+      license = licenses.asl20;
+      maintainers = [maintainers.markus1189];
+    };
+  }

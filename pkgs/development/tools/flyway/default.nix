@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, jre_headless, makeWrapper }:
-stdenv.mkDerivation rec{
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre_headless,
+  makeWrapper,
+}:
+stdenv.mkDerivation rec {
   pname = "flyway";
   version = "7.13.0";
   src = fetchurl {
     url = "mirror://maven/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
     sha256 = "sha256-rZUVxswJdCFKwuXlzko+t+ZO1plRgH2VcZFJ5kkiM2s=";
   };
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   dontBuild = true;
   dontStrip = true;
   installPhase = ''
@@ -31,6 +37,6 @@ stdenv.mkDerivation rec{
     homepage = "https://flywaydb.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.cmcdragonkai ];
+    maintainers = [maintainers.cmcdragonkai];
   };
 }

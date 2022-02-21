@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, libX11, libXi, libXtst, pkg-config, xorgproto }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXi,
+  libXtst,
+  pkg-config,
+  xorgproto,
+}:
 stdenv.mkDerivation rec {
   pname = "libfakekey";
   version = "0.1";
@@ -9,15 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "10msplyn535hmzbmbdnx4zc20hkaw6d81if5lzxs82k8sq2mkx9k";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXi libXtst xorgproto ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libX11 libXi libXtst xorgproto];
   NIX_LDFLAGS = "-lX11";
 
   meta = with lib; {
     description = "X virtual keyboard library";
     homepage = "https://www.yoctoproject.org/tools-resources/projects/matchbox";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
   };
 }

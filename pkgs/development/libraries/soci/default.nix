@@ -1,12 +1,13 @@
-{ cmake
-, fetchFromGitHub
-, fetchpatch
-, sqlite
-, postgresql
-, boost
-, lib, stdenv
+{
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  sqlite,
+  postgresql,
+  boost,
+  lib,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "soci";
   version = "4.0.2";
@@ -27,9 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   # Do not build static libraries
-  cmakeFlags = [ "-DSOCI_STATIC=OFF" "-DCMAKE_CXX_STANDARD=11" ];
+  cmakeFlags = ["-DSOCI_STATIC=OFF" "-DCMAKE_CXX_STANDARD=11"];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
   buildInputs = [
     sqlite
     postgresql
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "http://soci.sourceforge.net/";
     license = licenses.boost;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

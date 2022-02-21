@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "PyRSS2Gen";
   version = "1.1";
@@ -19,7 +19,6 @@ buildPythonPackage rec {
     homepage = "http://www.dalkescientific.om/Python/PyRSS2Gen.html";
     description = "Library for generating RSS 2.0 feeds";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
-
 }

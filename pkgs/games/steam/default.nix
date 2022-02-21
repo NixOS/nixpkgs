@@ -1,20 +1,31 @@
-{ lib, newScope, splicePackages, steamPackagesAttr ? "steamPackages"
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
-, stdenv, buildFHSUserEnv, pkgsi686Linux
-}:
-
-let
+{
+  lib,
+  newScope,
+  splicePackages,
+  steamPackagesAttr ? "steamPackages",
+  pkgsBuildBuild,
+  pkgsBuildHost,
+  pkgsBuildTarget,
+  pkgsHostHost,
+  pkgsTargetTarget,
+  stdenv,
+  buildFHSUserEnv,
+  pkgsi686Linux,
+}: let
   steamPackagesFun = self: let
     inherit (self) callPackage;
   in {
-    steamArch = if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-                else if stdenv.hostPlatform.system == "i686-linux" then "i386"
-                else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+    steamArch =
+      if stdenv.hostPlatform.system == "x86_64-linux"
+      then "amd64"
+      else if stdenv.hostPlatform.system == "i686-linux"
+      then "i386"
+      else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
 
-    steam-runtime = callPackage ./runtime.nix { };
-    steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
-    steam = callPackage ./steam.nix { };
-    steam-fonts = callPackage ./fonts.nix { };
+    steam-runtime = callPackage ./runtime.nix {};
+    steam-runtime-wrapped = callPackage ./runtime-wrapped.nix {};
+    steam = callPackage ./steam.nix {};
+    steam-fonts = callPackage ./fonts.nix {};
     steam-fhsenv = callPackage ./fhsenv.nix {
       glxinfo-i686 = pkgsi686Linux.glxinfo;
       steam-runtime-wrapped-i686 =
@@ -23,7 +34,7 @@ let
         else null;
       inherit buildFHSUserEnv;
     };
-    steamcmd = callPackage ./steamcmd.nix { };
+    steamcmd = callPackage ./steamcmd.nix {};
   };
   otherSplices = {
     selfBuildBuild = pkgsBuildBuild.${steamPackagesAttr};
@@ -32,6 +43,7 @@ let
     selfHostHost = pkgsHostHost.${steamPackagesAttr};
     selfTargetTarget = pkgsTargetTarget.${steamPackagesAttr};
   };
-  keep = self: { };
-  extra = spliced0: { };
-in lib.makeScopeWithSplicing splicePackages newScope otherSplices keep extra steamPackagesFun
+  keep = self: {};
+  extra = spliced0: {};
+in
+  lib.makeScopeWithSplicing splicePackages newScope otherSplices keep extra steamPackagesFun

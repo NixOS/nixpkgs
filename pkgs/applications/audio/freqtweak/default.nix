@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, fftwFloat, libjack2, libsigcxx, libxml2, wxGTK }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  pkg-config,
+  fftwFloat,
+  libjack2,
+  libsigcxx,
+  libxml2,
+  wxGTK,
+}:
 stdenv.mkDerivation rec {
   pname = "freqtweak";
   version = "unstable-2019-08-03";
@@ -11,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "10cq27mdgrrc54a40al9ahi0wqd0p2c1wxbdg518q8pzfxaxs5fi";
   };
 
-  nativeBuildInputs = [ autoconf automake pkg-config ];
-  buildInputs = [ fftwFloat libjack2 libsigcxx libxml2 wxGTK ];
+  nativeBuildInputs = [autoconf automake pkg-config];
+  buildInputs = [fftwFloat libjack2 libsigcxx libxml2 wxGTK];
 
   preConfigure = ''
     sh autogen.sh
@@ -23,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://essej.net/freqtweak/";
     description = "Realtime audio frequency spectral manipulation";
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

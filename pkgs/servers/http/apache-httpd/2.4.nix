@@ -1,14 +1,29 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
-, nixosTests
-, proxySupport ? true
-, sslSupport ? true, openssl
-, http2Support ? true, nghttp2
-, ldapSupport ? true, openldap
-, libxml2Support ? true, libxml2
-, brotliSupport ? true, brotli
-, luaSupport ? false, lua5
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  zlib,
+  apr,
+  aprutil,
+  pcre,
+  libiconv,
+  lynx,
+  nixosTests,
+  proxySupport ? true,
+  sslSupport ? true,
+  openssl,
+  http2Support ? true,
+  nghttp2,
+  ldapSupport ? true,
+  openldap,
+  libxml2Support ? true,
+  libxml2,
+  brotliSupport ? true,
+  brotli,
+  luaSupport ? false,
+  lua5,
 }:
-
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
   version = "2.4.52";
@@ -19,16 +34,19 @@ stdenv.mkDerivation rec {
   };
 
   # FIXME: -dev depends on -doc
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = ["out" "dev" "man" "doc"];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [ perl ] ++
-    lib.optional brotliSupport brotli ++
-    lib.optional sslSupport openssl ++
-    lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
-    lib.optional libxml2Support libxml2 ++
-    lib.optional http2Support nghttp2 ++
-    lib.optional stdenv.isDarwin libiconv;
+  buildInputs =
+    [perl]
+    ++ lib.optional brotliSupport brotli
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional ldapSupport openldap
+    ++
+    # there is no --with-ldap flag
+    lib.optional libxml2Support libxml2
+    ++ lib.optional http2Support nghttp2
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
@@ -68,7 +86,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  stripDebugList = [ "lib" "modules" "bin" ];
+  stripDebugList = ["lib" "modules" "bin"];
 
   postInstall = ''
     mkdir -p $doc/share/doc/httpd
@@ -88,9 +106,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage    = "https://httpd.apache.org/";
-    license     = licenses.asl20;
-    platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ lovek323 ];
+    homepage = "https://httpd.apache.org/";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [lovek323];
   };
 }

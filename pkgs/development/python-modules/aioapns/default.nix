@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, fetchPypi
-, h2
-, lib
-, pyjwt
-, pyopenssl
+{
+  buildPythonPackage,
+  fetchPypi,
+  h2,
+  lib,
+  pyjwt,
+  pyopenssl,
 }:
-
 buildPythonPackage rec {
   pname = "aioapns";
   version = "2.1";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aioapns" ];
+  pythonImportsCheck = ["aioapns"];
 
   meta = with lib; {
     description = "An efficient APNs Client Library for Python/asyncio";
     homepage = "https://github.com/Fatal1ty/aioapns";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

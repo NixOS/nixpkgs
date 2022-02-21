@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, enaml
-, pyqtgraph
-, pythonocc-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  enaml,
+  pyqtgraph,
+  pythonocc-core,
 }:
-
 buildPythonPackage rec {
   pname = "enamlx";
   version = "0.6.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/frmdstryr/enamlx";
     description = "Additional Qt Widgets for Enaml";
     license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    maintainers = with maintainers; [raboof];
   };
 }

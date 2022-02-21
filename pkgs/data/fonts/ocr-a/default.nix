@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "OCR-A";
   version = "1.0";
@@ -19,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "ANSI OCR font from the '60s. CYBER";
     homepage = "https://sourceforge.net/projects/ocr-a-font/";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ V ];
+    maintainers = with maintainers; [V];
   };
 }

@@ -1,13 +1,14 @@
-{ lib, stdenv
-, autoconf
-, automake
-, darwin
-, fetchsvn
-, makeWrapper
-, pkg-config
-, SDL2
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  darwin,
+  fetchsvn,
+  makeWrapper,
+  pkg-config,
+  SDL2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "smpeg2";
   version = "unstable-2017-10-18";
@@ -22,9 +23,10 @@ stdenv.mkDerivation rec {
     ./hufftable-uint_max.patch
   ];
 
-  nativeBuildInputs = [ autoconf automake makeWrapper pkg-config ];
+  nativeBuildInputs = [autoconf automake makeWrapper pkg-config];
 
-  buildInputs = [ SDL2 ]
+  buildInputs =
+    [SDL2]
     ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
   preConfigure = ''
@@ -44,6 +46,6 @@ stdenv.mkDerivation rec {
     description = "SDL2 MPEG Player Library";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

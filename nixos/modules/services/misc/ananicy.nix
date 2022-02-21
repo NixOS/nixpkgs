@@ -1,14 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.ananicy;
-  configFile = pkgs.writeText "ananicy.conf" (generators.toKeyValue { } cfg.settings);
-  extraRules = pkgs.writeText "extraRules" cfg.extraRules;
-  servicename = if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then "ananicy-cpp" else "ananicy";
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.ananicy;
+  configFile = pkgs.writeText "ananicy.conf" (generators.toKeyValue {} cfg.settings);
+  extraRules = pkgs.writeText "extraRules" cfg.extraRules;
+  servicename =
+    if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp))
+    then "ananicy-cpp"
+    else "ananicy";
+in {
   options = {
     services.ananicy = {
       enable = mkEnableOption "Ananicy, an auto nice daemon";
@@ -24,8 +28,8 @@ in
       };
 
       settings = mkOption {
-        type = with types; attrsOf (oneOf [ int bool str ]);
-        default = { };
+        type = with types; attrsOf (oneOf [int bool str]);
+        default = {};
         example = {
           apply_nice = false;
         };
@@ -48,15 +52,14 @@ in
             { "name": "fdupes", "type": "BG_CPUIO" }
           '''
         '';
-
       };
     };
   };
 
   config = mkIf cfg.enable {
     environment = {
-      systemPackages = [ cfg.package ];
-      etc."ananicy.d".source = pkgs.runCommandLocal "ananicyfiles" { } ''
+      systemPackages = [cfg.package];
+      etc."ananicy.d".source = pkgs.runCommandLocal "ananicyfiles" {} ''
         mkdir -p $out
         # ananicy-cpp does not include rules or settings on purpose
         cp -r ${pkgs.ananicy}/etc/ananicy.d/* $out
@@ -67,10 +70,9 @@ in
     };
 
     # ananicy and ananicy-cpp have different default settings
-    services.ananicy.settings =
-      let
-        mkOD = mkOptionDefault;
-      in
+    services.ananicy.settings = let
+      mkOD = mkOptionDefault;
+    in
       {
         cgroup_load = mkOD true;
         type_load = mkOD true;
@@ -81,27 +83,32 @@ in
         apply_sched = mkOD true;
         apply_oom_score_adj = mkOD true;
         apply_cgroup = mkOD true;
-      } // (if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then {
-        # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/blob/master/src/config.cpp#L12
-        loglevel = mkOD "warn"; # default is info but its spammy
-        cgroup_realtime_workaround = mkOD config.systemd.enableUnifiedCgroupHierarchy;
-      } else {
-        # https://github.com/Nefelim4ag/Ananicy/blob/master/ananicy.d/ananicy.conf
-        check_disks_schedulers = mkOD true;
-        check_freq = mkOD 5;
-      });
+      }
+      // (if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp))
+      then
+        {
+          # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/blob/master/src/config.cpp#L12
+          loglevel = mkOD "warn"; # default is info but its spammy
+          cgroup_realtime_workaround = mkOD config.systemd.enableUnifiedCgroupHierarchy;
+        }
+      else
+        {
+          # https://github.com/Nefelim4ag/Ananicy/blob/master/ananicy.d/ananicy.conf
+          check_disks_schedulers = mkOD true;
+          check_freq = mkOD 5;
+        });
 
     systemd = {
       # https://gitlab.com/ananicy-cpp/ananicy-cpp/#cgroups applies to both ananicy and -cpp
       enableUnifiedCgroupHierarchy = mkDefault false;
-      packages = [ cfg.package ];
+      packages = [cfg.package];
       services."${servicename}" = {
-        wantedBy = [ "default.target" ];
+        wantedBy = ["default.target"];
       };
     };
   };
 
   meta = {
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
   };
 }

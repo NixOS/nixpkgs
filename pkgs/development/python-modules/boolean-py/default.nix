@@ -1,6 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "boolean.py";
   version = "3.8";
@@ -17,5 +19,4 @@ buildPythonPackage rec {
     description = "Implements boolean algebra in one module";
     license = licenses.bsd2;
   };
-
 }

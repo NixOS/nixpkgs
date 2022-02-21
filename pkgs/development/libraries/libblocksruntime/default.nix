@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, clang }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  clang,
+}:
 stdenv.mkDerivation {
   pname = "blocksruntime";
   version = "unstable-2014-06-24";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "0ic4lagagkylcvwgf10mg0s1i57h4i25ds2fzvms22xj4zwzk1sd";
   };
 
-  buildInputs = [ clang ];
+  buildInputs = [clang];
 
   configurePhase = ''
     export CC=clang

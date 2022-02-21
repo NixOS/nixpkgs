@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, findutils, getopt, gnugrep, gnused, sops, vault }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  findutils,
+  getopt,
+  gnugrep,
+  gnused,
+  sops,
+  vault,
+}:
 stdenv.mkDerivation rec {
   pname = "helm-secrets";
   version = "3.8.3";
@@ -11,8 +22,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-FpF/d+e5T6nb0OENaYLY+3ATZ+qcAeih5/yKI+AtfKA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ getopt sops ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [getopt sops];
 
   # NOTE: helm-secrets is comprised of shell scripts.
   dontBuild = true;
@@ -29,7 +40,7 @@ stdenv.mkDerivation rec {
     install -m644 -Dt $out/${pname} plugin.yaml
     cp -r scripts/* $out/${pname}/scripts
     wrapProgram $out/${pname}/scripts/run.sh \
-        --prefix PATH : ${lib.makeBinPath [ coreutils findutils getopt gnugrep gnused sops vault ]}
+        --prefix PATH : ${lib.makeBinPath [coreutils findutils getopt gnugrep gnused sops vault]}
 
     runHook postInstall
   '';
@@ -38,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "A Helm plugin that helps manage secrets";
     inherit (src.meta) homepage;
     license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [yurrriq];
     platforms = platforms.all;
   };
 }

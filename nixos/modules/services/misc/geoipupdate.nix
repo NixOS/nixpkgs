@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-let
-  cfg = config.services.geoipupdate;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.services.geoipupdate;
+in {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "geoip-updater" ] "services.geoip-updater has been removed, use services.geoipupdate instead.")
+    (lib.mkRemovedOptionModule ["services" "geoip-updater"] "services.geoip-updater has been removed, use services.geoipupdate instead.")
   ];
 
   options = {
@@ -34,15 +36,12 @@ in
           for a full list of available options.
         '';
         type = lib.types.submodule {
-          freeformType =
-            with lib.types;
-            let
-              type = oneOf [str int bool];
-            in
-              attrsOf (either type (listOf type));
+          freeformType = with lib.types; let
+            type = oneOf [str int bool];
+          in
+            attrsOf (either type (listOf type));
 
           options = {
-
             AccountID = lib.mkOption {
               type = lib.types.int;
               description = ''
@@ -85,16 +84,13 @@ in
                 sensitive contents.
               '';
             };
-
           };
         };
       };
     };
-
   };
 
   config = lib.mkIf cfg.enable {
-
     services.geoipupdate.settings = {
       LockFile = "/run/geoipupdate/.lock";
     };
@@ -109,41 +105,45 @@ in
 
     systemd.services.geoipupdate = {
       description = "GeoIP Updater";
-      requires = [ "geoipupdate-create-db-dir.service" ];
+      requires = ["geoipupdate-create-db-dir.service"];
       after = [
         "geoipupdate-create-db-dir.service"
         "network-online.target"
         "nss-lookup.target"
       ];
-      wants = [ "network-online.target" ];
+      wants = ["network-online.target"];
       startAt = cfg.interval;
       serviceConfig = {
-        ExecStartPre =
-          let
-            geoipupdateKeyValue = lib.generators.toKeyValue {
-              mkKeyValue = lib.flip lib.generators.mkKeyValueDefault " " rec {
-                mkValueString = v: with builtins;
-                  if isInt           v then toString v
-                  else if isString   v then v
-                  else if true  ==   v then "1"
-                  else if false ==   v then "0"
-                  else if isList     v then lib.concatMapStringsSep " " mkValueString v
+        ExecStartPre = let
+          geoipupdateKeyValue = lib.generators.toKeyValue {
+            mkKeyValue = lib.flip lib.generators.mkKeyValueDefault " " rec {
+              mkValueString = v:
+                with builtins;
+                  if isInt v
+                  then toString v
+                  else if isString v
+                  then v
+                  else if true == v
+                  then "1"
+                  else if false == v
+                  then "0"
+                  else if isList v
+                  then lib.concatMapStringsSep " " mkValueString v
                   else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
-              };
             };
+          };
 
-            geoipupdateConf = pkgs.writeText "geoipupdate.conf" (geoipupdateKeyValue cfg.settings);
+          geoipupdateConf = pkgs.writeText "geoipupdate.conf" (geoipupdateKeyValue cfg.settings);
 
-            script = ''
-              chown geoip "${cfg.settings.DatabaseDirectory}"
+          script = ''
+            chown geoip "${cfg.settings.DatabaseDirectory}"
 
-              cp ${geoipupdateConf} /run/geoipupdate/GeoIP.conf
-              ${pkgs.replace-secret}/bin/replace-secret '${cfg.settings.LicenseKey}' \
-                                                        '${cfg.settings.LicenseKey}' \
-                                                        /run/geoipupdate/GeoIP.conf
-            '';
-          in
-            "+${pkgs.writeShellScript "start-pre-full-privileges" script}";
+            cp ${geoipupdateConf} /run/geoipupdate/GeoIP.conf
+            ${pkgs.replace-secret}/bin/replace-secret '${cfg.settings.LicenseKey}' \
+                                                      '${cfg.settings.LicenseKey}' \
+                                                      /run/geoipupdate/GeoIP.conf
+          '';
+        in "+${pkgs.writeShellScript "start-pre-full-privileges" script}";
         ExecStart = "${pkgs.geoipupdate}/bin/geoipupdate -f /run/geoipupdate/GeoIP.conf";
         User = "geoip";
         DynamicUser = true;
@@ -163,8 +163,8 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProcSubset = "pid";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
         RestrictRealtime = true;
         RestrictNamespaces = true;
         MemoryDenyWriteExecute = true;
@@ -174,7 +174,7 @@ in
     };
 
     systemd.timers.geoipupdate-initial-run = {
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
       unitConfig.ConditionPathExists = "!${cfg.settings.DatabaseDirectory}";
       timerConfig = {
         Unit = "geoipupdate.service";
@@ -183,5 +183,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.talyz ];
+  meta.maintainers = [lib.maintainers.talyz];
 }

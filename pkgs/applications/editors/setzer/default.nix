@@ -1,21 +1,21 @@
-{ lib
-, python3
-, fetchFromGitHub
-, meson
-, ninja
-, gettext
-, appstream
-, appstream-glib
-, wrapGAppsHook
-, desktop-file-utils
-, gobject-introspection
-, gtksourceview4
-, gspell
-, poppler_gi
-, webkitgtk
-, librsvg
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gettext,
+  appstream,
+  appstream-glib,
+  wrapGAppsHook,
+  desktop-file-utils,
+  gobject-introspection,
+  gtksourceview4,
+  gspell,
+  poppler_gi,
+  webkitgtk,
+  librsvg,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
   version = "0.4.3";
@@ -64,6 +64,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "LaTeX editor written in Python with Gtk";
     homepage = src.meta.homepage;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

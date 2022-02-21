@@ -1,122 +1,136 @@
-{ lib
-, stdenv
-, SDL
-, alsa-lib
-, boost
-, buildPackages
-, bzip2
-, cmake
-, curl
-, fetchFromGitHub
-, ffmpeg
-, fluidsynth
-, gettext
-, hexdump
-, hidapi
-, icu
-, libaio
-, libGL
-, libGLU
-, libevdev
-, libjpeg
-, libpcap
-, libpng
-, libvorbis
-, libxml2
-, libzip
-, makeWrapper
-, nasm
-, openssl
-, pcre
-, pkg-config
-, portaudio
-, python3
-, retroarch
-, sfml
-, snappy
-, udev
-, which
-, xorg
-, xxd
-, xz
-, zlib
-}:
-
-let
+{
+  lib,
+  stdenv,
+  SDL,
+  alsa-lib,
+  boost,
+  buildPackages,
+  bzip2,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  ffmpeg,
+  fluidsynth,
+  gettext,
+  hexdump,
+  hidapi,
+  icu,
+  libaio,
+  libGL,
+  libGLU,
+  libevdev,
+  libjpeg,
+  libpcap,
+  libpng,
+  libvorbis,
+  libxml2,
+  libzip,
+  makeWrapper,
+  nasm,
+  openssl,
+  pcre,
+  pkg-config,
+  portaudio,
+  python3,
+  retroarch,
+  sfml,
+  snappy,
+  udev,
+  which,
+  xorg,
+  xxd,
+  xz,
+  zlib,
+}: let
   hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   getCoreSrc = core:
     fetchFromGitHub (builtins.getAttr core hashesFile);
 
-  mkLibRetroCore =
-    { core
-    , description
-      # Check https://github.com/libretro/libretro-core-info for license information
-    , license
-    , src ? (getCoreSrc core)
-    , broken ? false
-    , version ? "unstable-2022-01-21"
-    , platforms ? retroarch.meta.platforms
-      # The resulting core file is based on core name
-      # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
-    , normalizeCore ? true
-    , ...
-    }@args:
+  mkLibRetroCore = {
+    core,
+    description
+    # Check https://github.com/libretro/libretro-core-info for license information
+    ,
+    license,
+    src ? (getCoreSrc core),
+    broken ? false,
+    version ? "unstable-2022-01-21",
+    platforms ? retroarch.meta.platforms
+    # The resulting core file is based on core name
+    # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
+    ,
+    normalizeCore ? true,
+    ...
+  } @ args:
     stdenv.mkDerivation (
       let
-        d2u = if normalizeCore then (lib.replaceChars [ "-" ] [ "_" ]) else (x: x);
+        d2u =
+          if normalizeCore
+          then (lib.replaceChars ["-"] ["_"])
+          else (x: x);
       in
-      (rec {
-        pname = "libretro-${core}";
-        inherit version src;
+        (rec {
+          pname = "libretro-${core}";
+          inherit version src;
 
-        buildInputs = [ zlib ] ++ args.extraBuildInputs or [ ];
-        nativeBuildInputs = [ makeWrapper ] ++ args.extraNativeBuildInputs or [ ];
+          buildInputs = [zlib] ++ args.extraBuildInputs or [];
+          nativeBuildInputs = [makeWrapper] ++ args.extraNativeBuildInputs or [];
 
-        makefile = "Makefile.libretro";
-        makeFlags = [
-          "platform=${{
-            linux = "unix";
-            darwin = "osx";
-            windows = "win";
-          }.${stdenv.hostPlatform.parsed.kernel.name} or stdenv.hostPlatform.parsed.kernel.name}"
-          "ARCH=${{
-            armv7l = "arm";
-            armv6l = "arm";
-            i686 = "x86";
-          }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name}"
-        ] ++ (args.makeFlags or [ ]);
+          makefile = "Makefile.libretro";
+          makeFlags =
+            [
+              "platform=${
+                {
+                  linux = "unix";
+                  darwin = "osx";
+                  windows = "win";
+                }
+                .${stdenv.hostPlatform.parsed.kernel.name}
+                or stdenv.hostPlatform.parsed.kernel.name
+              }"
+              "ARCH=${
+                {
+                  armv7l = "arm";
+                  armv6l = "arm";
+                  i686 = "x86";
+                }
+                .${stdenv.hostPlatform.parsed.cpu.name}
+                or stdenv.hostPlatform.parsed.cpu.name
+              }"
+            ]
+            ++ (args.makeFlags or []);
 
-        coreDir = "${placeholder "out"}/lib/retroarch/cores";
+          coreDir = "${placeholder "out"}/lib/retroarch/cores";
 
-        installPhase = ''
-          runHook preInstall
+          installPhase = ''
+            runHook preInstall
 
-          mkdir -p $out/bin
-          mkdir -p $coreDir
-          mv ${d2u args.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $coreDir
-          makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
-            --add-flags "-L $coreDir/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
+            mkdir -p $out/bin
+            mkdir -p $coreDir
+            mv ${d2u args.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $coreDir
+            makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
+              --add-flags "-L $coreDir/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
 
-          runHook postInstall
-        '';
+            runHook postInstall
+          '';
 
-        enableParallelBuilding = true;
+          enableParallelBuilding = true;
 
-        passthru = {
-          inherit core;
-          libretroCore = "/lib/retroarch/cores";
-        };
+          passthru = {
+            inherit core;
+            libretroCore = "/lib/retroarch/cores";
+          };
 
-        meta = with lib; {
-          inherit broken description license platforms;
-          homepage = "https://www.libretro.com/";
-          maintainers = with maintainers; [ edwtjo hrdinka MP2E thiagokokada ];
-        };
-      }) // builtins.removeAttrs args [ "core" "src" "description" "license" "makeFlags" ]
+          meta = with lib; {
+            inherit broken description license platforms;
+            homepage = "https://www.libretro.com/";
+            maintainers = with maintainers; [edwtjo hrdinka MP2E thiagokokada];
+          };
+        })
+        // builtins.removeAttrs args ["core" "src" "description" "license" "makeFlags"]
     );
-in
-{
+in {
   inherit mkLibRetroCore;
 
   atari800 = mkLibRetroCore {
@@ -124,7 +138,7 @@ in
     description = "Port of Atari800 to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
-    makeFlags = [ "GIT_VERSION=" ];
+    makeFlags = ["GIT_VERSION="];
   };
 
   beetle-gba = mkLibRetroCore {
@@ -173,7 +187,7 @@ in
     description = "Port of Mednafen's PSX Engine core to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
-    makeFlags = [ "HAVE_HW=0" "HAVE_LIGHTREC=1" ];
+    makeFlags = ["HAVE_HW=0" "HAVE_LIGHTREC=1"];
   };
 
   beetle-psx-hw = mkLibRetroCore {
@@ -181,9 +195,9 @@ in
     src = getCoreSrc "beetle-psx";
     description = "Port of Mednafen's PSX Engine (with HW accel) core to libretro";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ libGL libGLU ];
+    extraBuildInputs = [libGL libGLU];
     makefile = "Makefile";
-    makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
+    makeFlags = ["HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1"];
   };
 
   beetle-saturn = mkLibRetroCore {
@@ -192,7 +206,7 @@ in
     description = "Port of Mednafen's Saturn core to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = ["x86_64-linux" "aarch64-linux"];
   };
 
   beetle-snes = mkLibRetroCore {
@@ -246,12 +260,14 @@ in
     makefile = "Makefile";
   };
 
-  bsnes-hd =
-    let
-      # linux = bsd
-      # https://github.com/DerKoun/bsnes-hd/blob/f0b6cf34e9780d53516977ed2de64137a8bcc3c5/bsnes/GNUmakefile#L37
-      platform = if stdenv.isDarwin then "macos" else "linux";
-    in
+  bsnes-hd = let
+    # linux = bsd
+    # https://github.com/DerKoun/bsnes-hd/blob/f0b6cf34e9780d53516977ed2de64137a8bcc3c5/bsnes/GNUmakefile#L37
+    platform =
+      if stdenv.isDarwin
+      then "macos"
+      else "linux";
+  in
     mkLibRetroCore {
       core = "bsnes-hd-beta";
       src = getCoreSrc "bsnes-hd";
@@ -264,7 +280,7 @@ in
         "target=libretro"
         "platform=${platform}"
       ];
-      extraBuildInputs = [ xorg.libX11 xorg.libXext ];
+      extraBuildInputs = [xorg.libX11 xorg.libXext];
       postBuild = "cd bsnes/out";
     };
 
@@ -274,7 +290,7 @@ in
     description = "Fork of bsnes with HLE DSP emulation restored";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
-    makeFlags = [ "PROFILE=accuracy" ];
+    makeFlags = ["PROFILE=accuracy"];
   };
 
   bsnes-mercury-balanced = mkLibRetroCore {
@@ -283,7 +299,7 @@ in
     description = "Fork of bsnes with HLE DSP emulation restored";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
-    makeFlags = [ "PROFILE=balanced" ];
+    makeFlags = ["PROFILE=balanced"];
   };
 
   bsnes-mercury-performance = mkLibRetroCore {
@@ -292,15 +308,15 @@ in
     description = "Fork of bsnes with HLE DSP emulation restored";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
-    makeFlags = [ "PROFILE=performance" ];
+    makeFlags = ["PROFILE=performance"];
   };
 
   citra = mkLibRetroCore {
     core = "citra";
     description = "Port of Citra to libretro";
     license = lib.licenses.gpl2Plus;
-    extraNativeBuildInputs = [ cmake pkg-config ];
-    extraBuildInputs = [ libGLU libGL boost ];
+    extraNativeBuildInputs = [cmake pkg-config];
+    extraBuildInputs = [libGLU libGL boost];
     makefile = "Makefile";
     cmakeFlags = [
       "-DENABLE_LIBRETRO=ON"
@@ -317,8 +333,8 @@ in
     core = "citra-canary";
     description = "Port of Citra Canary/Experimental to libretro";
     license = lib.licenses.gpl2Plus;
-    extraNativeBuildInputs = [ cmake pkg-config ];
-    extraBuildInputs = [ libGLU libGL boost ];
+    extraNativeBuildInputs = [cmake pkg-config];
+    extraBuildInputs = [libGLU libGL boost];
     makefile = "Makefile";
     cmakeFlags = [
       "-DENABLE_LIBRETRO=ON"
@@ -335,9 +351,10 @@ in
     core = "desmume";
     description = "libretro wrapper for desmume NDS emulator";
     license = lib.licenses.gpl2Plus;
-    extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
+    extraBuildInputs = [libpcap libGLU libGL xorg.libX11];
     preBuild = "cd desmume/src/frontend/libretro";
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
+    makeFlags =
+      lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
       ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
   };
 
@@ -345,8 +362,9 @@ in
     core = "desmume2015";
     description = "libretro wrapper for desmume NDS emulator from 2015";
     license = lib.licenses.gpl2Plus;
-    extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
+    extraBuildInputs = [libpcap libGLU libGL xorg.libX11];
+    makeFlags =
+      lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
       ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
     preBuild = "cd desmume";
   };
@@ -356,17 +374,19 @@ in
     description = "Port of Dolphin to libretro";
     license = lib.licenses.gpl2Plus;
 
-    extraNativeBuildInputs = [ cmake curl pkg-config ];
-    extraBuildInputs = [
-      libGLU
-      libGL
-      pcre
-      sfml
-      gettext
-      hidapi
-      libevdev
-      udev
-    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
+    extraNativeBuildInputs = [cmake curl pkg-config];
+    extraBuildInputs =
+      [
+        libGLU
+        libGL
+        pcre
+        sfml
+        gettext
+        hidapi
+        libevdev
+        udev
+      ]
+      ++ (with xorg; [libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm]);
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
@@ -418,10 +438,10 @@ in
     core = "flycast";
     description = "Flycast libretro port";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ libGL libGLU ];
+    extraBuildInputs = [libGL libGLU];
     makefile = "Makefile";
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 ["platform=arm64"];
+    platforms = ["aarch64-linux" "x86_64-linux"];
   };
 
   fmsx = mkLibRetroCore {
@@ -475,19 +495,19 @@ in
     core = "hatari";
     description = "Port of Hatari to libretro";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ SDL zlib ];
-    extraNativeBuildInputs = [ cmake which ];
+    extraBuildInputs = [SDL zlib];
+    extraNativeBuildInputs = [cmake which];
     dontUseCmakeConfigure = true;
     dontConfigure = true;
-    makeFlags = [ "EXTERNAL_ZLIB=1" ];
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    makeFlags = ["EXTERNAL_ZLIB=1"];
+    depsBuildBuild = [buildPackages.stdenv.cc];
   };
 
   mame = mkLibRetroCore {
     core = "mame";
     description = "Port of MAME to libretro";
-    license = with lib.licenses; [ bsd3 gpl2Plus ];
-    extraBuildInputs = [ alsa-lib libGLU libGL portaudio python3 xorg.libX11 ];
+    license = with lib.licenses; [bsd3 gpl2Plus];
+    extraBuildInputs = [alsa-lib libGLU libGL portaudio python3 xorg.libX11];
     makefile = "Makefile.libretro";
   };
 
@@ -521,7 +541,7 @@ in
     description = "Port of MAME ~2010 to libretro";
     license = "MAME";
     makefile = "Makefile";
-    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
+    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 ["PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1"];
     enableParallelBuilding = false;
   };
 
@@ -529,9 +549,9 @@ in
     core = "mame2015";
     description = "Port of MAME ~2015 to libretro";
     license = "MAME";
-    makeFlags = [ "PYTHON=python3" ];
-    extraNativeBuildInputs = [ python3 ];
-    extraBuildInputs = [ alsa-lib ];
+    makeFlags = ["PYTHON=python3"];
+    extraNativeBuildInputs = [python3];
+    extraBuildInputs = [alsa-lib];
     makefile = "Makefile";
     enableParallelBuilding = false;
   };
@@ -539,10 +559,10 @@ in
   mame2016 = mkLibRetroCore {
     core = "mame2016";
     description = "Port of MAME ~2016 to libretro";
-    license = with lib.licenses; [ bsd3 gpl2Plus ];
-    extraNativeBuildInputs = [ python3 ];
-    extraBuildInputs = [ alsa-lib ];
-    makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
+    license = with lib.licenses; [bsd3 gpl2Plus];
+    extraNativeBuildInputs = [python3];
+    extraBuildInputs = [alsa-lib];
+    makeFlags = ["PYTHON_EXECUTABLE=python3"];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -555,7 +575,7 @@ in
     core = "melonds";
     description = "Port of MelonDS to libretro";
     license = lib.licenses.gpl3Only;
-    extraBuildInputs = [ libGL libGLU ];
+    extraBuildInputs = [libGL libGLU];
     makefile = "Makefile";
   };
 
@@ -595,7 +615,7 @@ in
     src = getCoreSrc "mupen64plus";
     description = "Libretro port of Mupen64 Plus, GL only";
     license = lib.licenses.gpl3Only;
-    extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
+    extraBuildInputs = [libGLU libGL libpng nasm xorg.libX11];
     makefile = "Makefile";
   };
 
@@ -640,14 +660,14 @@ in
     description = "Opera is a port of 4DO/libfreedo to libretro";
     license = "Non-commercial";
     makefile = "Makefile";
-    makeFlags = [ "CC_PREFIX=${stdenv.cc.targetPrefix}" ];
+    makeFlags = ["CC_PREFIX=${stdenv.cc.targetPrefix}"];
   };
 
   parallel-n64 = mkLibRetroCore {
     core = "parallel-n64";
     description = "Parallel Mupen64plus rewrite for libretro.";
     license = lib.licenses.gpl3Only;
-    extraBuildInputs = [ libGLU libGL libpng ];
+    extraBuildInputs = [libGLU libGL libpng];
     makefile = "Makefile";
     postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
       sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \
@@ -698,21 +718,21 @@ in
     description = "Fast MegaDrive/MegaCD/32X emulator";
     license = "MAME";
 
-    extraBuildInputs = [ libpng SDL ];
+    extraBuildInputs = [libpng SDL];
     SDL_CONFIG = "${SDL.dev}/bin/sdl-config";
     dontAddPrefix = true;
-    configurePlatforms = [ ];
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
+    configurePlatforms = [];
+    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 ["platform=aarch64"];
   };
 
   play = mkLibRetroCore {
     core = "play";
     description = "Port of Play! to libretro";
     license = lib.licenses.bsd2;
-    extraBuildInputs = [ boost bzip2 curl openssl icu libGL libGLU xorg.libX11 ];
-    extraNativeBuildInputs = [ cmake ];
+    extraBuildInputs = [boost bzip2 curl openssl icu libGL libGLU xorg.libX11];
+    extraNativeBuildInputs = [cmake];
     makefile = "Makefile";
-    cmakeFlags = [ "-DBUILD_PLAY=OFF" "-DBUILD_LIBRETRO_CORE=ON" ];
+    cmakeFlags = ["-DBUILD_PLAY=OFF" "-DBUILD_LIBRETRO_CORE=ON"];
     postBuild = "cd Source/ui_libretro";
   };
 
@@ -720,8 +740,8 @@ in
     core = "ppsspp";
     description = "ppsspp libretro port";
     license = lib.licenses.gpl2Plus;
-    extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
+    extraNativeBuildInputs = [cmake pkg-config python3];
+    extraBuildInputs = [libGLU libGL libzip ffmpeg snappy xorg.libX11];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
@@ -758,7 +778,7 @@ in
     core = "sameboy";
     description = "SameBoy libretro port";
     license = lib.licenses.mit;
-    extraNativeBuildInputs = [ which hexdump ];
+    extraNativeBuildInputs = [which hexdump];
     preBuild = "cd libretro";
     makefile = "Makefile";
   };
@@ -767,7 +787,7 @@ in
     core = "scummvm";
     description = "Libretro port of ScummVM";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL SDL ];
+    extraBuildInputs = [fluidsynth libjpeg libvorbis libGLU libGL SDL];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";
   };
@@ -807,7 +827,7 @@ in
     description = "Optimized port/rewrite of SNES9x 1.43 to Libretro, with Blargg's APU";
     license = "Non-commercial";
     makefile = "Makefile";
-    makeFlags = [ "USE_BLARGG_APU=1" ];
+    makeFlags = ["USE_BLARGG_APU=1"];
   };
 
   snes9x2010 = mkLibRetroCore {
@@ -820,7 +840,7 @@ in
     core = "stella";
     description = "Port of Stella to libretro";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ libpng pkg-config SDL ];
+    extraBuildInputs = [libpng pkg-config SDL];
     makefile = "Makefile";
     preBuild = "cd src/libretro";
     dontConfigure = true;
@@ -837,7 +857,7 @@ in
     core = "swanstation";
     description = "Port of SwanStation (a fork of DuckStation) to libretro";
     license = lib.licenses.gpl3Only;
-    extraNativeBuildInputs = [ cmake ];
+    extraNativeBuildInputs = [cmake];
     makefile = "Makefile";
     cmakeFlags = [
       "-DBUILD_LIBRETRO_CORE=ON"
@@ -855,7 +875,7 @@ in
     core = "thepowdertoy";
     description = "Port of The Powder Toy to libretro";
     license = lib.licenses.gpl3Only;
-    extraNativeBuildInputs = [ cmake ];
+    extraNativeBuildInputs = [cmake];
     makefile = "Makefile";
     postBuild = "cd src";
   };
@@ -864,7 +884,7 @@ in
     core = "tic80";
     description = "Port of TIC-80 to libretro";
     license = lib.licenses.mit;
-    extraNativeBuildInputs = [ cmake pkg-config libGL libGLU ];
+    extraNativeBuildInputs = [cmake pkg-config libGL libGLU];
     makefile = "Makefile";
     cmakeFlags = [
       "-DBUILD_LIBRETRO=ON"
@@ -897,7 +917,7 @@ in
     core = "vecx";
     description = "Port of Vecx to libretro";
     license = lib.licenses.gpl3Only;
-    extraBuildInputs = [ libGL libGLU ];
+    extraBuildInputs = [libGL libGLU];
   };
 
   virtualjaguar = mkLibRetroCore {

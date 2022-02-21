@@ -1,11 +1,11 @@
-{ lib
-, copyDesktopItems
-, makeDesktopItem
-, python3
-, qtsvg
-, wrapQtAppsHook
+{
+  lib,
+  copyDesktopItems,
+  makeDesktopItem,
+  python3,
+  qtsvg,
+  wrapQtAppsHook,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "pyspread";
   version = "2.0.2";
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false; # it fails miserably with a core dump
 
-  pythonImportsCheck = [ "pyspread" ];
+  pythonImportsCheck = ["pyspread"];
 
   desktopItems = [
     (makeDesktopItem rec {
@@ -68,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
       anything including lists or matrices.
     '';
     license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; all;
   };
 }

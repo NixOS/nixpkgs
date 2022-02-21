@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, desktop-file-utils
-, gettext
-, glibcLocales
-, itstool
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, cpio
-, file
-, glib
-, gnome
-, gtk3
-, json-glib
-, libarchive
-, libnotify
-, nautilus
-, pantheon
-, unzip
-, withPantheon ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  desktop-file-utils,
+  gettext,
+  glibcLocales,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook,
+  cpio,
+  file,
+  glib,
+  gnome,
+  gtk3,
+  json-glib,
+  libarchive,
+  libnotify,
+  nautilus,
+  pantheon,
+  unzip,
+  withPantheon ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "file-roller";
   version = "3.40.0";
@@ -59,19 +59,21 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    cpio
-    file
-    glib
-    gnome.adwaita-icon-theme
-    gtk3
-    json-glib
-    libarchive
-    libnotify
-    nautilus
-  ] ++ lib.optionals withPantheon [
-    pantheon.granite
-  ];
+  buildInputs =
+    [
+      cpio
+      file
+      glib
+      gnome.adwaita-icon-theme
+      gtk3
+      json-glib
+      libarchive
+      libnotify
+      nautilus
+    ]
+    ++ lib.optionals withPantheon [
+      pantheon.granite
+    ];
 
   PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
@@ -84,7 +86,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # Workaround because of https://gitlab.gnome.org/GNOME/file-roller/issues/40
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
+      --prefix PATH : ${lib.makeBinPath [unzip]}
     )
   '';
 

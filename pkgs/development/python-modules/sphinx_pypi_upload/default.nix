@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "Sphinx-PyPI-upload";
   version = "0.2.1";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/jezdez/sphinx-pypi-upload/";
     license = licenses.bsd0;
   };
-
 }

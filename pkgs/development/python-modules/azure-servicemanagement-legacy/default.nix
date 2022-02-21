@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  requests,
 }:
-
 buildPythonPackage rec {
   version = "0.20.7";
   pname = "azure-servicemanagement-legacy";
@@ -20,15 +20,15 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonNamespaces = [ "azure" ];
+  pythonNamespaces = ["azure"];
   # has no tests
   doCheck = false;
-  pythonImportsCheck = [ "azure.servicemanagement" ];
+  pythonImportsCheck = ["azure.servicemanagement"];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Service Management Legacy Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai maxwilson ];
+    maintainers = with maintainers; [olcai maxwilson];
   };
 }

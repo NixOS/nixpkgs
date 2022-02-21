@@ -1,16 +1,36 @@
-{ lib, fetchFromGitHub
-, python3Packages, wrapGAppsHook, gobject-introspection
-, gtk-layer-shell, pango, gdk-pixbuf, atk
-# Extra packages called by various internal nwg-panel modules
-, sway             # swaylock, swaymsg
-, systemd          # systemctl
-, wlr-randr        # wlr-randr
-, nwg-menu         # nwg-menu
-, light            # light
-, pamixer          # pamixer
-, pulseaudio       # pactl
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook,
+  gobject-introspection,
+  gtk-layer-shell,
+  pango,
+  gdk-pixbuf,
+  atk
+  # Extra packages called by various internal nwg-panel modules
+  ,
+  sway
+  # swaylock, swaymsg
+  ,
+  systemd
+  # systemctl
+  ,
+  wlr-randr
+  # wlr-randr
+  ,
+  nwg-menu
+  # nwg-menu
+  ,
+  light
+  # light
+  ,
+  pamixer
+  # pamixer
+  ,
+  pulseaudio
+  # pactl
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
   version = "0.5.7";
@@ -29,9 +49,9 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
   dontWrapGApps = true;
 
-  buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango ];
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
-  propagatedBuildInputs = with python3Packages; [ i3ipc netifaces psutil pybluez pygobject3 ];
+  buildInputs = [atk gdk-pixbuf gtk-layer-shell pango];
+  nativeBuildInputs = [wrapGAppsHook gobject-introspection];
+  propagatedBuildInputs = with python3Packages; [i3ipc netifaces psutil pybluez pygobject3];
 
   postInstall = ''
     mkdir -p $out/share/{applications,pixmaps}
@@ -43,7 +63,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       --prefix XDG_DATA_DIRS : "$out/share"
-      --prefix PATH : "${lib.makeBinPath [ light nwg-menu pamixer pulseaudio sway systemd wlr-randr ]}"
+      --prefix PATH : "${lib.makeBinPath [light nwg-menu pamixer pulseaudio sway systemd wlr-randr]}"
     )
   '';
 
@@ -52,6 +72,6 @@ python3Packages.buildPythonApplication rec {
     description = "GTK3-based panel for Sway window manager";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ berbiche ];
+    maintainers = with maintainers; [berbiche];
   };
 }

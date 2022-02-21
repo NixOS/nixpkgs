@@ -1,9 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, optim
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  optim,
 }:
-
 buildOctavePackage rec {
   pname = "econometrics";
   version = "1.1.2";
@@ -20,7 +20,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/econometrics/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Econometrics functions including MLE and GMM based techniques";
   };
 }

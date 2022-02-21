@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, invoke
-, mock
-, paramiko
-, pytestCheckHook
-, pytest-relaxed
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  invoke,
+  mock,
+  paramiko,
+  pytestCheckHook,
+  pytest-relaxed,
 }:
-
 buildPythonPackage rec {
   pname = "fabric";
   version = "2.6.0";
@@ -24,9 +24,9 @@ buildPythonPackage rec {
         --replace ', "pathlib2"' ' '
   '';
 
-  propagatedBuildInputs = [ invoke paramiko cryptography ];
+  propagatedBuildInputs = [invoke paramiko cryptography];
 
-  checkInputs = [ pytestCheckHook pytest-relaxed mock ];
+  checkInputs = [pytestCheckHook pytest-relaxed mock];
 
   # ==================================== ERRORS ====================================
   # ________________________ ERROR collecting test session _________________________
@@ -34,12 +34,12 @@ buildPythonPackage rec {
   # See https://docs.pytest.org/en/stable/deprecations.html#node-construction-changed-to-node-from-parent for more details.
   doCheck = false;
 
-  pythonImportsCheck = [ "fabric" ];
+  pythonImportsCheck = ["fabric"];
 
   meta = with lib; {
     description = "Pythonic remote execution";
     homepage = "https://www.fabfile.org/";
     license = licenses.bsd2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

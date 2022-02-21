@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   version = "1.2.0";
   pname = "2fa";
@@ -16,7 +19,7 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://rsc.io/2fa";
     description = "Two-factor authentication on the command line";
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [rvolosatovs];
     license = licenses.bsd3;
   };
 }

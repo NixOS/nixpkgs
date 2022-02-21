@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "incremental";
   version = "21.3.0";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/treq";
     description = "Incremental is a small library that versions your Python projects";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

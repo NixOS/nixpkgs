@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromSourcehut }:
-
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+}:
 stdenv.mkDerivation rec {
   pname = "scdoc";
   version = "1.11.2";
@@ -29,6 +32,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

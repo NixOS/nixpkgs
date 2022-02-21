@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, boost
-, curl
-, libgcrypt
-, libmpdclient
-, systemd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  boost,
+  curl,
+  libgcrypt,
+  libmpdclient,
+  systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mpdscribble";
   version = "0.23";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s66zqscb44p88cl3kcv5jkjcqsskcnrv7xgrjhzrchf2kcpwf53";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [pkg-config meson ninja];
   buildInputs = [
     libmpdclient
     curl
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "A MPD client which submits info about tracks being played to a scrobbler";
     homepage = "https://www.musicpd.org/clients/mpdscribble/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sohalt ];
+    maintainers = [maintainers.sohalt];
     platforms = platforms.linux;
   };
 }

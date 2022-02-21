@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "git-hound";
   version = "1.3";
@@ -24,7 +24,7 @@ buildGoModule rec {
       and a unique result scoring system.
     '';
     homepage = "https://github.com/tillson/git-hound";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

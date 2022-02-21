@@ -1,5 +1,9 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "yex-lang";
   version = "unstable-2021-12-25";
@@ -17,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nonamesc/yex-lang";
     description = "A cool functional scripting language written in rust";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
     broken = stdenv.isAarch64 && stdenv.isLinux;
   };

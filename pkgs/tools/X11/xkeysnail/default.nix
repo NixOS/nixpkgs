@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, makeWrapper, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "xkeysnail";
   version = "0.4.0";
@@ -11,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0plcpb4ndzfsd5hj32m0g32swnhyph9sd759cdhhzmjvlq3j8q6p";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   propagatedBuildInputs = with python3Packages; [
     evdev
     xlib
@@ -37,6 +41,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/mooz/xkeysnail";
     platforms = platforms.linux;
     license = licenses.gpl1Only;
-    maintainers = with maintainers; [ bb2020 ];
+    maintainers = with maintainers; [bb2020];
   };
 }

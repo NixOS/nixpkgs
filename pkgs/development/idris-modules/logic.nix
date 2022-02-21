@@ -1,13 +1,14 @@
-{ build-idris-package
-, fetchFromGitHub
-, bifunctors
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  bifunctors,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "logic";
   version = "2016-12-02";
 
-  idrisDeps = [ bifunctors ];
+  idrisDeps = [bifunctors];
 
   src = fetchFromGitHub {
     owner = "yurrriq";
@@ -23,6 +24,6 @@ build-idris-package  {
     description = "Propositional logic tools, inspired by the Coq standard library";
     homepage = "https://github.com/yurrriq/idris-logic";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

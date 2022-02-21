@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf mkOption types literalExpression;
 
   cfg = config.services.timetagger;
 in {
-
   options = {
     services.timetagger = {
       enable = mkOption {
@@ -47,7 +49,10 @@ in {
           If you do so, the 'bindAddr' and 'port' options are ignored.
         '';
 
-        default = pkgs.timetagger.override { addr = cfg.bindAddr; port = cfg.port; };
+        default = pkgs.timetagger.override {
+          addr = cfg.bindAddr;
+          port = cfg.port;
+        };
         defaultText = literalExpression ''
           pkgs.timetagger.override {
             addr = ${cfg.bindAddr};
@@ -62,7 +67,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.timetagger = {
       description = "Timetagger service";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         User = "timetagger";
@@ -77,4 +82,3 @@ in {
     };
   };
 }
-

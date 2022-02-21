@@ -1,5 +1,12 @@
-{ lib, fetchFromGitLab, buildDunePackage, bigstring, alcotest, cstruct, hex }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  bigstring,
+  alcotest,
+  cstruct,
+  hex,
+}:
 buildDunePackage rec {
   pname = "uecc";
   version = "0.3";
@@ -29,6 +36,6 @@ buildDunePackage rec {
     description = "Bindings for ECDH and ECDSA for 8-bit, 32-bit, and 64-bit processors";
     homepage = "https://gitlab.com/nomadic-labs/ocaml-uecc";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

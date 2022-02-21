@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "kawkab-mono-20151015";
 
@@ -18,5 +20,3 @@ fetchzip {
     license = lib.licenses.ofl;
   };
 }
-
-

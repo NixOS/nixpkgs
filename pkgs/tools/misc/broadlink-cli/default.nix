@@ -1,5 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "broadlink-cli";
   version = "0.18.0";
@@ -7,9 +10,9 @@ python3Packages.buildPythonApplication rec {
   # the tools are available as part of the source distribution from GH but
   # not pypi, so we have to fetch them here.
   src = fetchFromGitHub {
-    owner  = "mjg59";
-    repo   = "python-broadlink";
-    rev    = version;
+    owner = "mjg59";
+    repo = "python-broadlink";
+    rev = version;
     sha256 = "0nh9rn1zpc44qsc50360ycg02gwbgq59784mnkp01nhavnwwwx10";
   };
 
@@ -30,7 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tools for interfacing with Broadlink RM2/3 (Pro) remote controls, A1 sensor platforms and SP2/3 smartplugs";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     inherit (python3Packages.broadlink.meta) homepage license;
   };
 }

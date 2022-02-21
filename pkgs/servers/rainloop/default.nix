@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
-  common = { edition, sha256 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  pkgs,
+  dataPath ? "/var/lib/rainloop",
+}: let
+  common = {
+    edition,
+    sha256,
+  }:
     stdenv.mkDerivation (rec {
       pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
       version = "1.16.0";
 
-      nativeBuildInputs = [ unzip ];
+      nativeBuildInputs = [unzip];
 
       unpackPhase = ''
         mkdir rainloop
@@ -42,9 +52,12 @@
         description = "Simple, modern & fast web-based email client";
         homepage = "https://www.rainloop.net";
         downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
-        license = with licenses; if edition == "" then unfree else agpl3;
+        license = with licenses;
+          if edition == ""
+          then unfree
+          else agpl3;
         platforms = platforms.all;
-        maintainers = with maintainers; [ das_j ];
+        maintainers = with maintainers; [das_j];
       };
     });
 in {

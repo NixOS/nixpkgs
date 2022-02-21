@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, py, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  py,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "pytest-datafiles";
   version = "2.0";
@@ -8,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1yfvaqbqvjfikz215kwn6qiwwn9girka93zq4jphgfyvn75jjcql";
   };
 
-  buildInputs = [ py pytest ];
+  buildInputs = [py pytest];
 
   meta = with lib; {
     license = licenses.mit;

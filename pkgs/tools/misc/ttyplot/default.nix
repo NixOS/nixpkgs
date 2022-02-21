@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "ttyplot";
   version = "1.4";
@@ -11,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "19qm0hx9ljdw9qg78lydn3c627xy7xnx3knq5f7caw9lf0cdp7kf";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   buildPhase = ''
-   ${stdenv.cc}/bin/cc ./ttyplot.c -lncurses -o ttyplot
+    ${stdenv.cc}/bin/cc ./ttyplot.c -lncurses -o ttyplot
   '';
 
   installPhase = ''
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "A simple general purpose plotting utility for tty with data input from stdin";
     homepage = "https://github.com/tenox7/ttyplot";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ lassulus ];
+    maintainers = with maintainers; [lassulus];
   };
 }

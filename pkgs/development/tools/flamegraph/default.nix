@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "FlameGraph";
   version = "2019-02-16";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1flvkmv2gbb003d51myl7r0wyhyw1bk9p7v19xagb8xjj4ci947b";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   installPhase = ''
     runHook preInstall
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    license = with licenses; [ asl20 cddl gpl2Plus ];
+    license = with licenses; [asl20 cddl gpl2Plus];
     homepage = "http://www.brendangregg.com/flamegraphs.html";
     description = "Visualization for profiled code";
     platforms = platforms.unix;

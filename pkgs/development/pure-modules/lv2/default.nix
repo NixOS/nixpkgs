@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, pure, lv2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+  lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-lv2";
   version = "0.2";
@@ -9,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "721cacd831781d8309e7ecabb0ee7c01da17e75c5642a5627cf158bfb36093e1";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure lv2 ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure lv2];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -19,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-lv2.html";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

@@ -1,6 +1,17 @@
-{ stdenv, lib, fetchzip, wxGTK31, coreutils, SDL2, openal, alsa-lib, pkg-config
-, autoreconfHook, withNetworking ? true, withALSA ? true }:
-
+{
+  stdenv,
+  lib,
+  fetchzip,
+  wxGTK31,
+  coreutils,
+  SDL2,
+  openal,
+  alsa-lib,
+  pkg-config,
+  autoreconfHook,
+  withNetworking ? true,
+  withALSA ? true,
+}:
 stdenv.mkDerivation rec {
   pname = "pcem";
   version = "17";
@@ -11,11 +22,13 @@ stdenv.mkDerivation rec {
     sha256 = "067pbnc15h6a4pnnym82klr1w8qwfm6p0pkx93gx06wvwqsxvbdv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ wxGTK31 coreutils SDL2 openal ]
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs =
+    [wxGTK31 coreutils SDL2 openal]
     ++ lib.optional withALSA alsa-lib;
 
-  configureFlags = [ "--enable-release-build" ]
+  configureFlags =
+    ["--enable-release-build"]
     ++ lib.optional withNetworking "--enable-networking"
     ++ lib.optional withALSA "--enable-alsa";
 
@@ -23,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Emulator for IBM PC computers and clones";
     homepage = "https://pcem-emulator.co.uk/";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.terin ];
+    maintainers = [maintainers.terin];
     platforms = platforms.linux ++ platforms.windows;
   };
 }

@@ -1,44 +1,45 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, dbus
-, glib
-, libgudev
-, udisks2
-, libgcrypt
-, libcap
-, polkit
-, libgphoto2
-, avahi
-, libarchive
-, fuse3
-, libcdio
-, libxml2
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_42
-, samba
-, libmtp
-, gnomeSupport ? false
-, gnome
-, gcr
-, glib-networking
-, gnome-online-accounts
-, wrapGAppsHook
-, libimobiledevice
-, libbluray
-, libcdio-paranoia
-, libnfs
-, openssh
-, libsecret
-, libgdata
-, python3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  dbus,
+  glib,
+  libgudev,
+  udisks2,
+  libgcrypt,
+  libcap,
+  polkit,
+  libgphoto2,
+  avahi,
+  libarchive,
+  fuse3,
+  libcdio,
+  libxml2,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  samba,
+  libmtp,
+  gnomeSupport ? false,
+  gnome,
+  gcr,
+  glib-networking,
+  gnome-online-accounts,
+  wrapGAppsHook,
+  libimobiledevice,
+  libbluray,
+  libcdio-paranoia,
+  libnfs,
+  openssh,
+  libsecret,
+  libgdata,
+  python3,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gvfs";
   version = "1.48.1";
@@ -68,50 +69,55 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
   ];
 
-  buildInputs = [
-    glib
-    libgudev
-    udisks2
-    libgcrypt
-    dbus
-    libgphoto2
-    avahi
-    libarchive
-    fuse3
-    libcdio
-    samba
-    libmtp
-    libcap
-    polkit
-    libimobiledevice
-    libbluray
-    libcdio-paranoia
-    libnfs
-    openssh
-    gsettings-desktop-schemas
-    # TODO: a ligther version of libsoup to have FTP/HTTP support?
-  ] ++ lib.optionals gnomeSupport [
-    gnome.libsoup
-    gcr
-    glib-networking # TLS support
-    gnome-online-accounts
-    libsecret
-    libgdata
-  ];
+  buildInputs =
+    [
+      glib
+      libgudev
+      udisks2
+      libgcrypt
+      dbus
+      libgphoto2
+      avahi
+      libarchive
+      fuse3
+      libcdio
+      samba
+      libmtp
+      libcap
+      polkit
+      libimobiledevice
+      libbluray
+      libcdio-paranoia
+      libnfs
+      openssh
+      gsettings-desktop-schemas
+      # TODO: a ligther version of libsoup to have FTP/HTTP support?
+    ]
+    ++ lib.optionals gnomeSupport [
+      gnome.libsoup
+      gcr
+      glib-networking # TLS support
+      gnome-online-accounts
+      libsecret
+      libgdata
+    ];
 
-  mesonFlags = [
-    "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    "-Dtmpfilesdir=no"
-  ] ++ lib.optionals (!gnomeSupport) [
-    "-Dgcr=false"
-    "-Dgoa=false"
-    "-Dkeyring=false"
-    "-Dhttp=false"
-    "-Dgoogle=false"
-  ] ++ lib.optionals (samba == null) [
-    # Xfce don't want samba
-    "-Dsmb=false"
-  ];
+  mesonFlags =
+    [
+      "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+      "-Dtmpfilesdir=no"
+    ]
+    ++ lib.optionals (!gnomeSupport) [
+      "-Dgcr=false"
+      "-Dgoa=false"
+      "-Dkeyring=false"
+      "-Dhttp=false"
+      "-Dgoogle=false"
+    ]
+    ++ lib.optionals (samba == null) [
+      # Xfce don't want samba
+      "-Dsmb=false"
+    ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
   doInstallCheck = doCheck;
@@ -127,6 +133,6 @@ stdenv.mkDerivation rec {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ] ++ teams.gnome.members;
+    maintainers = [] ++ teams.gnome.members;
   };
 }

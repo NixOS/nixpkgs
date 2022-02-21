@@ -1,5 +1,8 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
-
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 mkDiscoursePlugin {
   name = "discourse-spoiler-alert";
   src = fetchFromGitHub {
@@ -10,7 +13,7 @@ mkDiscoursePlugin {
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-spoiler-alert";
-    maintainers = with maintainers; [ talyz ];
+    maintainers = with maintainers; [talyz];
     license = licenses.mit;
     description = "Hide spoilers behind the spoiler-alert jQuery plugin";
   };

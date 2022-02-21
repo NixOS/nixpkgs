@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "python-hpilo";
   version = "4.4.3";
@@ -16,12 +16,12 @@ buildPythonPackage rec {
 
   # Most tests requires an actual iLO to run
   doCheck = false;
-  pythonImportsCheck = [ "hpilo" ];
+  pythonImportsCheck = ["hpilo"];
 
   meta = with lib; {
     description = "Python module to access the HP iLO XML interface";
     homepage = "https://seveas.github.io/python-hpilo/";
-    license = with licenses; [ asl20 gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20 gpl3Plus];
+    maintainers = with maintainers; [fab];
   };
 }

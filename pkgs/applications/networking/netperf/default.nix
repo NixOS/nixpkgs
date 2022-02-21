@@ -1,5 +1,10 @@
-{ libsmbios, lib, stdenv, autoreconfHook, fetchFromGitHub }:
-
+{
+  libsmbios,
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "netperf";
   version = "20180613";
@@ -12,11 +17,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = lib.optional (with stdenv.hostPlatform; isx86 && isLinux) libsmbios;
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
   '';
-  configureFlags = [ "--enable-demo" ];
+  configureFlags = ["--enable-demo"];
   enableParallelBuilding = true;
 
   meta = {
@@ -25,6 +30,6 @@ stdenv.mkDerivation {
     license = "Hewlett-Packard BSD-like license";
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.mmlb ];
+    maintainers = [lib.maintainers.mmlb];
   };
 }

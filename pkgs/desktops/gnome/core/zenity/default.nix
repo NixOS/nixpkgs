@@ -1,18 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, libxml2
-, gnome
-, gtk3
-, gettext
-, libX11
-, itstool
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  libxml2,
+  gnome,
+  gtk3,
+  gettext,
+  libX11,
+  itstool,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zenity";
   version = "3.41.0";

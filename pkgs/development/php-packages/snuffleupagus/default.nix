@@ -1,11 +1,11 @@
-{ buildPecl
-, lib
-, php
-, fetchFromGitHub
-, pcre2
-, fetchpatch
+{
+  buildPecl,
+  lib,
+  php,
+  fetchFromGitHub,
+  pcre2,
+  fetchpatch,
 }:
-
 buildPecl rec {
   pname = "snuffleupagus";
   version = "0.7.0";
@@ -20,11 +20,13 @@ buildPecl rec {
     pcre2
   ];
 
-  internalDeps = with php.extensions; [
-    session
-  ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
-    hash
-  ];
+  internalDeps = with php.extensions;
+    [
+      session
+    ]
+    ++ lib.optionals (lib.versionOlder php.version "7.4") [
+      hash
+    ];
 
   patches = [
     (fetchpatch {
@@ -48,6 +50,6 @@ buildPecl rec {
     description = "Security module for php7 and php8 - Killing bugclasses and virtual-patching the rest!";
     license = licenses.lgpl3Only;
     homepage = "https://github.com/jvoisin/snuffleupagus";
-    maintainers = teams.php.members ++ [ maintainers.zupo ];
+    maintainers = teams.php.members ++ [maintainers.zupo];
   };
 }

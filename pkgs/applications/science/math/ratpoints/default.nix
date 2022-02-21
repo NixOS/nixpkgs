@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, gmp }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  gmp,
+}:
 stdenv.mkDerivation rec {
   pname = "ratpoints";
   version = "2.1.3.p4";
@@ -17,11 +23,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ gmp ];
+  buildInputs = [gmp];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
   buildFlags = lib.optional stdenv.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
-  installFlags = [ "INSTALL_DIR=$(out)" ];
+  installFlags = ["INSTALL_DIR=$(out)"];
 
   preInstall = ''mkdir -p "$out"/{bin,share,lib,include}'';
 

@@ -1,7 +1,14 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub
-, fetchpatch
-, cmake, sip_4, protobuf, pythonOlder }:
-
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  sip_4,
+  protobuf,
+  pythonOlder,
+}:
 buildPythonPackage rec {
   pname = "libarcus";
   version = "4.12.0";
@@ -25,9 +32,9 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.4";
 
-  propagatedBuildInputs = [ sip_4 ];
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ protobuf ];
+  propagatedBuildInputs = [sip_4];
+  nativeBuildInputs = [cmake];
+  buildInputs = [protobuf];
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
@@ -38,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Ultimaker/libArcus";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar gebner ];
+    maintainers = with maintainers; [abbradar gebner];
   };
 }

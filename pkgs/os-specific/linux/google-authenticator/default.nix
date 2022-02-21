@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pam, qrencode }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pam,
+  qrencode,
+}:
 stdenv.mkDerivation rec {
   pname = "google-authenticator-libpam";
   version = "1.09";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-DS0h6FWMNKnSSj039bH6iyWrERa5M7LBSkbyig6pyxY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ pam ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [pam];
 
   preConfigure = ''
     sed -i "s|libqrencode.so.4|${qrencode.out}/lib/libqrencode.so.4|" src/google-authenticator.c
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/google-authenticator-libpam";
     description = "Two-step verification, with pam module";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [aneeshusa];
     platforms = platforms.linux;
   };
 }

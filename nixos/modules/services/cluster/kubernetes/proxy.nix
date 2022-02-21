@@ -1,20 +1,21 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.proxy;
-in
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "kubernetes" "proxy" "address" ] ["services" "kubernetes" "proxy" "bindAddress"])
+    (mkRenamedOptionModule ["services" "kubernetes" "proxy" "address"] ["services" "kubernetes" "proxy" "bindAddress"])
   ];
 
   ###### interface
   options.services.kubernetes.proxy = with lib.types; {
-
     bindAddress = mkOption {
       description = "Kubernetes proxy listening address.";
       default = "0.0.0.0";
@@ -53,28 +54,31 @@ in
       default = null;
       type = nullOr int;
     };
-
   };
 
   ###### implementation
   config = mkIf cfg.enable {
     systemd.services.kube-proxy = {
       description = "Kubernetes Proxy Service";
-      wantedBy = [ "kubernetes.target" ];
-      after = [ "kube-apiserver.service" ];
-      path = with pkgs; [ iptables conntrack-tools ];
+      wantedBy = ["kubernetes.target"];
+      after = ["kube-apiserver.service"];
+      path = with pkgs; [iptables conntrack-tools];
       serviceConfig = {
         Slice = "kubernetes.slice";
-        ExecStart = ''${top.package}/bin/kube-proxy \
-          --bind-address=${cfg.bindAddress} \
-          ${optionalString (top.clusterCidr!=null)
-            "--cluster-cidr=${top.clusterCidr}"} \
-          ${optionalString (cfg.featureGates != [])
-            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --hostname-override=${cfg.hostname} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
-          ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-          ${cfg.extraOpts}
+        ExecStart = ''          ${top.package}/bin/kube-proxy \
+                    --bind-address=${cfg.bindAddress} \
+                    ${
+            optionalString (top.clusterCidr != null)
+            "--cluster-cidr=${top.clusterCidr}"
+          } \
+                    ${
+            optionalString (cfg.featureGates != [])
+            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"
+          } \
+                    --hostname-override=${cfg.hostname} \
+                    --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
+                    ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
+                    ${cfg.extraOpts}
         '';
         WorkingDirectory = top.dataDir;
         Restart = "on-failure";

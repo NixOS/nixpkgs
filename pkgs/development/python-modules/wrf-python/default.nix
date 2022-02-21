@@ -1,5 +1,16 @@
-{lib, fetchFromGitHub, pythonOlder, buildPythonPackage, gfortran, mock, xarray, wrapt, numpy, netcdf4, setuptools}:
-
+{
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  buildPythonPackage,
+  gfortran,
+  mock,
+  xarray,
+  wrapt,
+  numpy,
+  netcdf4,
+  setuptools,
+}:
 buildPythonPackage rec {
   pname = "wrf-python";
   version = "1.3.2.6";
@@ -22,9 +33,11 @@ buildPythonPackage rec {
     gfortran
   ];
 
-  checkInputs = [
-    netcdf4
-  ] ++ lib.optional (pythonOlder "3.3") mock;
+  checkInputs =
+    [
+      netcdf4
+    ]
+    ++ lib.optional (pythonOlder "3.3") mock;
 
   doCheck = true;
   checkPhase = ''
@@ -38,6 +51,6 @@ buildPythonPackage rec {
     description = "WRF postprocessing library for Python";
     homepage = "http://wrf-python.rtfd.org";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mhaselsteiner ];
+    maintainers = with lib.maintainers; [mhaselsteiner];
   };
 }

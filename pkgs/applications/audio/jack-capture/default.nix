@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, libjack2, libsndfile, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjack2,
+  libsndfile,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "jack_capture";
   version = "0.9.73";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pji0zdwm3kxjrkbzj7fnxhr8ncrc8pyqnwyrh47fhypgqjv1br1";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjack2 libsndfile ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libjack2 libsndfile];
 
   buildPhase = "PREFIX=$out make jack_capture";
 
@@ -19,13 +25,13 @@ stdenv.mkDerivation rec {
     cp jack_capture $out/bin/
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "A program for recording soundfiles with jack";
     homepage = "http://archive.notam02.no/arkiv/src";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = lib.platforms.linux;
   };
 }

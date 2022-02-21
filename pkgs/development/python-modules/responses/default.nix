@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
-, requests
-, six
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-localserver,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  six,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "responses";
   version = "0.17.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Python module for mocking out the requests Python library";
     homepage = "https://github.com/getsentry/responses";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,13 @@
-{lib, stdenv, fetchurl, libogg, libvorbis, pkg-config, autoreconfHook, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libogg,
+  libvorbis,
+  pkg-config,
+  autoreconfHook,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "libtheora";
   version = "1.1.1";
@@ -17,17 +25,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
   outputDoc = "devdoc";
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  propagatedBuildInputs = [ libogg libvorbis ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
+  propagatedBuildInputs = [libogg libvorbis];
 
   meta = with lib; {
     homepage = "https://www.theora.org/";
     description = "Library for Theora, a free and open video compression format";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt ];
+    maintainers = with maintainers; [spwhitt];
     platforms = platforms.unix;
   };
 }

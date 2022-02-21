@@ -1,13 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
-, util-linux, open-isns, openssl, kmod, perl, systemd, pkgconf, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  libtool,
+  gettext,
+  util-linux,
+  open-isns,
+  openssl,
+  kmod,
+  perl,
+  systemd,
+  pkgconf,
+  nixosTests,
 }:
-
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
   version = "2.1.4";
 
-  nativeBuildInputs = [ autoconf automake gettext libtool perl pkgconf ];
-  buildInputs = [ kmod open-isns.lib openssl systemd util-linux ];
+  nativeBuildInputs = [autoconf automake gettext libtool perl pkgconf];
+  buildInputs = [kmod open-isns.lib openssl systemd util-linux];
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
@@ -42,13 +55,13 @@ stdenv.mkDerivation rec {
     sed -i "s|/sbin/iscsiadm|$out/bin/iscsiadm|" $out/bin/iscsi_fw_login
   '';
 
-  passthru.tests = { inherit (nixosTests) iscsi-root iscsi-multipath-root; };
+  passthru.tests = {inherit (nixosTests) iscsi-root iscsi-multipath-root;};
 
   meta = with lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
     license = licenses.gpl2Plus;
     homepage = "https://www.open-iscsi.com";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cleverca22 zaninime ];
+    maintainers = with maintainers; [cleverca22 zaninime];
   };
 }

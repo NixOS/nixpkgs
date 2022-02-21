@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ffmpeg
-, rtmpdump
-, phantomjs2
-, atomicparsley
-, pycryptodomex
-, websockets
-, mutagen
-, ffmpegSupport ? true
-, rtmpSupport ? true
-, phantomjsSupport ? false
-, hlsEncryptedSupport ? true
-, withAlias ? false # Provides bin/youtube-dl for backcompat
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ffmpeg,
+  rtmpdump,
+  phantomjs2,
+  atomicparsley,
+  pycryptodomex,
+  websockets,
+  mutagen,
+  ffmpegSupport ? true,
+  rtmpSupport ? true,
+  phantomjsSupport ? false,
+  hlsEncryptedSupport ? true,
+  withAlias ? false
+  # Provides bin/youtube-dl for backcompat
 }:
-
 buildPythonPackage rec {
   pname = "yt-dlp";
   # The websites yt-dlp deals with are a very moving target. That means that
@@ -24,25 +25,25 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname;
-    version = builtins.replaceStrings [ ".0" ] [ "." ] version;
+    version = builtins.replaceStrings [".0"] ["."] version;
     sha256 = "sha256-gbUO18+c/MBC2PWhrS0c17E8SLNsB/rxiAaW6sCn3bU=";
   };
 
-  propagatedBuildInputs = [ websockets mutagen ]
+  propagatedBuildInputs =
+    [websockets mutagen]
     ++ lib.optional hlsEncryptedSupport pycryptodomex;
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
-  makeWrapperArgs =
-    let
-      packagesToBinPath = [ atomicparsley ]
-        ++ lib.optional ffmpegSupport ffmpeg
-        ++ lib.optional rtmpSupport rtmpdump
-        ++ lib.optional phantomjsSupport phantomjs2;
-    in
-    [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+  makeWrapperArgs = let
+    packagesToBinPath =
+      [atomicparsley]
+      ++ lib.optional ffmpegSupport ffmpeg
+      ++ lib.optional rtmpSupport rtmpdump
+      ++ lib.optional phantomjsSupport phantomjs2;
+  in [''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''];
 
   setupPyBuildFlags = [
     "build_lazy_extractors"
@@ -52,7 +53,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString withAlias ''
-      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+    ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
   meta = with lib; {
@@ -68,6 +69,6 @@ buildPythonPackage rec {
       you can modify it, redistribute it or use it however you like.
     '';
     license = licenses.unlicense;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
   };
 }

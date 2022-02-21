@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, nasm }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  nasm,
+}:
 stdenv.mkDerivation rec {
   pname = "libvmaf";
   version = "2.3.0";
@@ -13,11 +19,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/libvmaf";
 
-  nativeBuildInputs = [ meson ninja nasm ];
+  nativeBuildInputs = [meson ninja nasm];
 
-  mesonFlags = [ "-Denable_avx512=true" ];
+  mesonFlags = ["-Denable_avx512=true"];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
   doCheck = false;
 
   meta = with lib; {
@@ -26,7 +32,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Netflix/vmaf/raw/v${version}/CHANGELOG.md";
     platforms = platforms.unix;
     license = licenses.bsd2Patent;
-    maintainers = [ maintainers.cfsmp3 maintainers.marsam ];
+    maintainers = [maintainers.cfsmp3 maintainers.marsam];
   };
-
 }

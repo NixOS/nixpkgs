@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitLab }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "ristate";
   version = "unstable-2021-09-10";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "A river-status client written in Rust";
     homepage = "https://gitlab.com/snakedye/ristate";
     license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [kranzes];
   };
 }

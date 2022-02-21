@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "nvidia-texture-tools";
   version = "unstable-2019-10-27";
@@ -18,9 +23,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = ["out" "dev" "lib"];
 
   postPatch = ''
     # Make a recently added pure virtual function just virtual,

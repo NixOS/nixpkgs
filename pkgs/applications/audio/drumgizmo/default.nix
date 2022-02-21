@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchurl, alsa-lib, expat, glib, libjack2, libXext, libX11, libpng
-, libpthreadstubs, libsmf, libsndfile, lv2, pkg-config, zita-resampler
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  expat,
+  glib,
+  libjack2,
+  libXext,
+  libX11,
+  libpng,
+  libpthreadstubs,
+  libsmf,
+  libsndfile,
+  lv2,
+  pkg-config,
+  zita-resampler,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.9.19";
   pname = "drumgizmo";
@@ -11,13 +25,23 @@ stdenv.mkDerivation rec {
     sha256 = "18x28vhif0c97xz02k22xwqxxig6fi6j0356mlz2vf7vb25z69kl";
   };
 
-  configureFlags = [ "--enable-lv2" ];
+  configureFlags = ["--enable-lv2"];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
-    alsa-lib expat glib libjack2 libXext libX11 libpng libpthreadstubs
-    libsmf libsndfile lv2 zita-resampler
+    alsa-lib
+    expat
+    glib
+    libjack2
+    libXext
+    libX11
+    libpng
+    libpthreadstubs
+    libsmf
+    libsndfile
+    lv2
+    zita-resampler
   ];
 
   meta = with lib; {
@@ -25,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.drumgizmo.org";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu maintainers.nico202 ];
+    maintainers = [maintainers.goibhniu maintainers.nico202];
   };
 }

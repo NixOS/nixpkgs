@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, sphinx, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  sphinx,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "guzzle_sphinx_theme";
   version = "0.7.11";
@@ -10,13 +14,13 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  propagatedBuildInputs = [ sphinx ];
+  propagatedBuildInputs = [sphinx];
 
   meta = with lib; {
     description = "Sphinx theme used by Guzzle: http://guzzlephp.org";
     homepage = "https://github.com/guzzle/guzzle_sphinx_theme/";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
     platforms = platforms.unix;
   };
 }

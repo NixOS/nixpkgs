@@ -1,19 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.tiny;
-
-in
-{
+in {
   options = {
-
     services.xserver.displayManager.lightdm.greeters.tiny = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -44,7 +41,6 @@ in
         };
       };
 
-
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -52,17 +48,13 @@ in
           Section to describe style and ui.
         '';
       };
-
     };
-
   };
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
-
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
-    nixpkgs.config.lightdm-tiny-greeter.conf =
-    let
+    nixpkgs.config.lightdm-tiny-greeter.conf = let
       configHeader = ''
         #include <gtk/gtk.h>
         static const char *user_text = "${cfg.label.user}";
@@ -71,7 +63,7 @@ in
       '';
     in
       optionalString (cfg.extraConfig != "")
-        (configHeader + cfg.extraConfig);
+      (configHeader + cfg.extraConfig);
 
     services.xserver.displayManager.lightdm.greeter =
       mkDefault {
@@ -87,6 +79,5 @@ in
         '';
       }
     ];
-
   };
 }

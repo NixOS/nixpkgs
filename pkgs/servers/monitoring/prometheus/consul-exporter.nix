@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "consul_exporter";
   version = "0.7.1";
@@ -17,7 +20,7 @@ buildGoPackage rec {
     description = "Prometheus exporter for Consul metrics";
     homepage = "https://github.com/prometheus/consul_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hectorj ];
+    maintainers = with maintainers; [hectorj];
     platforms = platforms.unix;
   };
 }

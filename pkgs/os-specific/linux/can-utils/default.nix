@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "can-utils";
   # There are no releases (source archives or git tags), so use the date of the
@@ -26,6 +29,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-can/can-utils";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

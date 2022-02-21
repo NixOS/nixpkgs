@@ -1,12 +1,12 @@
-import ./make-test-python.nix ({ lib, ...} : {
+import ./make-test-python.nix ({lib, ...}: {
   name = "flannel";
 
   meta = with lib.maintainers; {
-    maintainers = [ offline ];
+    maintainers = [offline];
   };
 
   nodes = let
-    flannelConfig = { pkgs, ... } : {
+    flannelConfig = {pkgs, ...}: {
       services.flannel = {
         enable = true;
         backend = {
@@ -18,10 +18,10 @@ import ./make-test-python.nix ({ lib, ...} : {
         etcd.endpoints = ["http://etcd:2379"];
       };
 
-      networking.firewall.allowedUDPPorts = [ 8285 ];
+      networking.firewall.allowedUDPPorts = [8285];
     };
   in {
-    etcd = { ... }: {
+    etcd = {...}: {
       services = {
         etcd = {
           enable = true;
@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ lib, ...} : {
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 2379 ];
+      networking.firewall.allowedTCPPorts = [2379];
     };
 
     node1 = flannelConfig;

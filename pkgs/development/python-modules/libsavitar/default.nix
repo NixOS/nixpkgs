@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, python, pythonOlder, fetchFromGitHub, cmake, sip_4 }:
-
+{
+  lib,
+  buildPythonPackage,
+  python,
+  pythonOlder,
+  fetchFromGitHub,
+  cmake,
+  sip_4,
+}:
 buildPythonPackage rec {
   pname = "libsavitar";
   version = "4.12.0";
@@ -16,9 +23,9 @@ buildPythonPackage rec {
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  propagatedBuildInputs = [ sip_4 ];
+  propagatedBuildInputs = [sip_4];
 
   disabled = pythonOlder "3.4.0";
 
@@ -27,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Ultimaker/libSavitar";
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar orivej gebner ];
+    maintainers = with maintainers; [abbradar orivej gebner];
   };
 }

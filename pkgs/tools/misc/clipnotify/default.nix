@@ -1,4 +1,10 @@
-{ libX11, libXfixes, lib, stdenv, fetchFromGitHub }:
+{
+  libX11,
+  libXfixes,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "clipnotify";
   version = "unstable-2018-02-20";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x9avjq0fgw0svcbw6b6873qnsqxbacls9sipmcv86xia4bxh8dn";
   };
 
-  buildInputs = [ libX11 libXfixes ];
+  buildInputs = [libX11 libXfixes];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -20,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Notify on new X clipboard events";
     inherit (src.meta) homepage;
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [jb55];
     license = licenses.publicDomain;
   };
 }

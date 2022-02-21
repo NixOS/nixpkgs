@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "auth0-python";
   version = "3.20.0";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.lwm;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.lwm;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.lwm.enable = mkEnableOption "lwm";
@@ -20,6 +21,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.lwm ];
+    environment.systemPackages = [pkgs.lwm];
   };
 }

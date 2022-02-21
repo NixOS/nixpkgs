@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, libpcap }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  libpcap,
+}:
 stdenv.mkDerivation rec {
   pname = "ucarp";
   version = "1.5.2";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qidz5sr55nxlmnl8kcbjsrff2j97b44h9l1dmhvvjl46iji7q7j";
   };
 
-  buildInputs = [ libpcap ];
+  buildInputs = [libpcap];
 
   meta = with lib; {
     description = "Userspace implementation of CARP";
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
       Warning: This package has not received any upstream updates for a long
       time and can be considered as unmaintained.
     '';
-    license = with licenses; [ isc bsdOriginal bsd2 gpl2Plus ];
-    maintainers = with maintainers; [ oxzi ];
+    license = with licenses; [isc bsdOriginal bsd2 gpl2Plus];
+    maintainers = with maintainers; [oxzi];
   };
 }

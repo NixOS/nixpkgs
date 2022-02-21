@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pycryptodome
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pycryptodome,
 }:
-
 buildPythonPackage rec {
   pname = "temescal";
   version = "0.3";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Module for interacting with LG speaker systems";
     homepage = "https://github.com/google/python-temescal";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

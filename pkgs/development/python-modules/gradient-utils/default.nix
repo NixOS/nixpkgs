@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hyperopt
-, mock
-, numpy
-, poetry-core
-, prometheus-client
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hyperopt,
+  mock,
+  numpy,
+  poetry-core,
+  prometheus-client,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "gradient-utils";
   version = "0.5.0";
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Paperspace/gradient-utils";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
   };
 }

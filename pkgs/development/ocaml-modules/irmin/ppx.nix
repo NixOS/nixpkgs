@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage, ppxlib, ppx_repr }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ppxlib,
+  ppx_repr,
+}:
 buildDunePackage rec {
   pname = "ppx_irmin";
   version = "2.9.1";
@@ -22,6 +27,6 @@ buildDunePackage rec {
     homepage = "https://irmin.org/";
     description = "PPX deriver for Irmin generics";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ vbgl sternenseemann ];
+    maintainers = with lib.maintainers; [vbgl sternenseemann];
   };
 }

@@ -1,8 +1,14 @@
-{ lib, fetchurl, buildDunePackage
-, logs, lwt, mirage-clock, mirage-profile, ptime
-, alcotest
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  logs,
+  lwt,
+  mirage-clock,
+  mirage-profile,
+  ptime,
+  alcotest,
 }:
-
 buildDunePackage rec {
   pname = "mirage-logs";
   version = "1.2.0";
@@ -14,15 +20,15 @@ buildDunePackage rec {
     sha256 = "0h0amzjxy067jljscib7fvw5q8k0adqa8m86affha9hq5jsh07a1";
   };
 
-  propagatedBuildInputs = [ logs lwt mirage-clock mirage-profile ptime ];
+  propagatedBuildInputs = [logs lwt mirage-clock mirage-profile ptime];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
 
   meta = {
     description = "A reporter for the Logs library that writes log messages to stderr, using a Mirage `CLOCK` to add timestamps";
     homepage = "https://github.com/mirage/mirage-logs";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

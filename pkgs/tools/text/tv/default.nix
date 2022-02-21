@@ -1,5 +1,8 @@
-{ fetchFromGitHub, lib, rustPlatform }:
-
+{
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "tv";
   version = "0.7.0";
@@ -18,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/uzimaru0000/tv";
     changelog = "https://github.com/uzimaru0000/tv/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

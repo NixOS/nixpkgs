@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cython
-, numpy
-, scipy
-, scikit-learn
-, persim
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  cython,
+  numpy,
+  scipy,
+  scikit-learn,
+  persim,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "ripser";
   version = "0.6.1";
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "A Lean Persistent Homology Library for Python";
     homepage = "https://ripser.scikit-tda.org";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

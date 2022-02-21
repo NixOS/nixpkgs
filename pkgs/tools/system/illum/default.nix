@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ninja, libevdev, libev, udev }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  ninja,
+  libevdev,
+  libev,
+  udev,
+}:
 stdenv.mkDerivation rec {
   pname = "illum";
   version = "0.5";
@@ -12,8 +20,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ninja libevdev libev udev ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [ninja libevdev libev udev];
 
   configurePhase = ''
     bash ./configure
@@ -28,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jmesmon/illum";
     description = "Daemon that wires button presses to screen backlight level";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.dancek ];
+    maintainers = [lib.maintainers.dancek];
     license = lib.licenses.agpl3;
   };
 }

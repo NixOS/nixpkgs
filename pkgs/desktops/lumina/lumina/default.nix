@@ -1,21 +1,21 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fluxbox
-, hicolor-icon-theme
-, libarchive
-, numlockx
-, qmake
-, qtbase
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, xorg
-, xscreensaver
-, wrapGAppsHook
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fluxbox,
+  hicolor-icon-theme,
+  libarchive,
+  numlockx,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  xorg,
+  xscreensaver,
+  wrapGAppsHook,
 }:
-
 mkDerivation rec {
   pname = "lumina";
   version = "1.6.2";
@@ -96,7 +96,7 @@ mkDerivation rec {
     "LRELEASE=${lib.getDev qttools}/bin/lrelease"
   ];
 
-  passthru.providedSessions = [ "Lumina-DE" ];
+  passthru.providedSessions = ["Lumina-DE"];
 
   meta = with lib; {
     description = "A lightweight, portable desktop environment";
@@ -108,6 +108,6 @@ mkDerivation rec {
     homepage = "https://lumina-desktop.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cl-wordle";
   version = "0.4.0";
@@ -16,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/conradludgate/wordle";
     # repo has no license, but crates.io says it's MIT
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [lom];
     mainProgram = "wordle";
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nodenv";
   version = "1.4.0";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nodenv/nodenv/";
     changelog = "https://github.com/nodenv/nodenv/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ alexnortung ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [alexnortung];
+    platforms = ["x86_64-linux"];
   };
 }

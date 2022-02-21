@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pytestCheckHook,
+  responses,
 }:
-
 buildPythonPackage rec {
   pname = "upcloud-api";
   version = "2.0.0";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [ "upcloud_api" ];
+  pythonImportsCheck = ["upcloud_api"];
 
   meta = with lib; {
     description = "UpCloud API Client";
     homepage = "https://github.com/UpCloudLtd/upcloud-python-api";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

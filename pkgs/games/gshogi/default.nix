@@ -1,7 +1,12 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gtk3, gobject-introspection
-, wrapGAppsHook, python3Packages }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gtk3,
+  gobject-introspection,
+  wrapGAppsHook,
+  python3Packages,
+}:
 buildPythonApplication rec {
   pname = "gshogi";
   version = "0.5.1";
@@ -13,14 +18,14 @@ buildPythonApplication rec {
     sha256 = "06vgndfgwyfi50wg3cw92zspc9z0k7xn2pp6qsjih0l5yih8iwqh";
   };
 
-  doCheck = false;  # no tests available
+  doCheck = false; # no tests available
 
   buildInputs = [
     gtk3
     gobject-introspection
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [wrapGAppsHook];
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3
@@ -32,6 +37,6 @@ buildPythonApplication rec {
     homepage = "http://johncheetham.com/projects/gshogi/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.ciil ];
+    maintainers = [maintainers.ciil];
   };
 }

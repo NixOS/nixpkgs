@@ -1,7 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  websocket-client,
 }:
-
 buildPythonPackage rec {
   pname = "samsungctl";
   version = "0.7.1";
@@ -18,12 +20,12 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "samsungctl" ];
+  pythonImportsCheck = ["samsungctl"];
 
   meta = with lib; {
     description = "Remote control Samsung televisions via a TCP/IP connection";
     homepage = "https://github.com/Ape/samsungctl";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

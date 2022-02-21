@@ -1,12 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "systemd";
 
-  machine = { lib, ... }: {
-    imports = [ common/user-account.nix common/x11.nix ];
+  machine = {lib, ...}: {
+    imports = [common/user-account.nix common/x11.nix];
 
-    virtualisation.emptyDiskImages = [ 512 512 ];
+    virtualisation.emptyDiskImages = [512 512];
 
-    environment.systemPackages = [ pkgs.cryptsetup ];
+    environment.systemPackages = [pkgs.cryptsetup];
 
     virtualisation.fileSystems = {
       "/test-x-initrd-mount" = {
@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         fsType = "ext2";
         autoFormat = true;
         noCheck = true;
-        options = [ "x-initrd.mount" ];
+        options = ["x-initrd.mount"];
       };
     };
 
@@ -25,7 +25,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
       #!${pkgs.runtimeShell}
-      PATH=${lib.makeBinPath (with pkgs; [ util-linux coreutils ])}
+      PATH=${lib.makeBinPath (with pkgs; [util-linux coreutils])}
       mount -t 9p shared -o trans=virtio,version=9p2000.L /tmp/shared
       touch /tmp/shared/shutdown-test
       umount /tmp/shared
@@ -40,7 +40,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     systemd.services.testservice1 = {
       description = "Test Service 1";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig.Type = "oneshot";
       script = ''
         if [ "$XXX_SYSTEM" = foo ]; then
@@ -51,7 +51,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     systemd.user.services.testservice2 = {
       description = "Test Service 2";
-      wantedBy = [ "default.target" ];
+      wantedBy = ["default.target"];
       serviceConfig.Type = "oneshot";
       script = ''
         if [ "$XXX_USER" = bar ]; then

@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gnome, gtk3, wrapGAppsHook
-, libxml2, gettext, itstool, meson, ninja, python3
-, vala, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook,
+  libxml2,
+  gettext,
+  itstool,
+  meson,
+  ninja,
+  python3,
+  vala,
+  desktop-file-utils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-tetravex";
   version = "3.38.2";
@@ -13,12 +25,24 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-tetravex"; attrPath = "gnome.gnome-tetravex"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-tetravex";
+      attrPath = "gnome.gnome-tetravex";
+    };
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook itstool libxml2 gnome.adwaita-icon-theme
-    pkg-config gettext meson ninja python3 vala desktop-file-utils
+    wrapGAppsHook
+    itstool
+    libxml2
+    gnome.adwaita-icon-theme
+    pkg-config
+    gettext
+    meson
+    ninja
+    python3
+    vala
+    desktop-file-utils
   ];
   buildInputs = [
     gtk3

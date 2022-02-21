@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libxshmfence, mesa, nss, popt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  alsa-lib,
+  gtk3,
+  libxshmfence,
+  mesa,
+  nss,
+  popt,
+}:
 stdenv.mkDerivation rec {
   pname = "binance";
   version = "1.30.1";
@@ -16,7 +28,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss popt ];
+  buildInputs = [alsa-lib gtk3 libxshmfence mesa nss popt];
 
   libPath = lib.makeLibraryPath buildInputs;
 
@@ -49,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Binance Cryptoexchange Official Desktop Client";
     homepage = "https://www.binance.com/en/desktop-download";
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

@@ -20,8 +20,12 @@
 #     wantedBy = [ "sleep.target" ];
 #     before = [ "sleep.target" ];
 #   };
-
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 stdenv.mkDerivation rec {
   pname = "zenstates";
   version = "0.0.1";
@@ -33,20 +37,20 @@ stdenv.mkDerivation rec {
     sha256 = "1h1h2n50d2cwcyw3zp4lamfvrdjy1gjghffvl3qrp6arfsfa615y";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
   installPhase = ''
     mkdir -p $out/bin
     cp $src/zenstates.py $out/bin/zenstates
     chmod +x $out/bin/zenstates
     patchShebangs --build $out/bin/zenstates
-    '';
+  '';
 
   meta = with lib; {
     description = "Linux utility for Ryzen processors and motherboards";
     homepage = "https://github.com/r4m0n/ZenStates-Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ savannidgerinel ];
+    maintainers = with maintainers; [savannidgerinel];
     platforms = platforms.linux;
   };
 }

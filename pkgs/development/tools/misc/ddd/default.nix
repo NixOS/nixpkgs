@@ -1,5 +1,12 @@
-{lib, stdenv, fetchurl, motif, ncurses, libX11, libXt}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  motif,
+  ncurses,
+  libX11,
+  libXt,
+}:
 stdenv.mkDerivation rec {
   pname = "ddd";
   version = "3.3.12";
@@ -8,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p5nx387857w3v2jbgvps2p6mlm0chajcdw5sfrddcglsxkwvmis";
   };
   buildInputs = [motif ncurses libX11 libXt];
-  configureFlags = [ "--with-x" ];
+  configureFlags = ["--with-x"];
 
   patches = [
     # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=504868
@@ -26,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Graphical front-end for command-line debuggers";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [emilytrau];
   };
 }

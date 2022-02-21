@@ -1,5 +1,13 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, gnused, ncurses, xorg, rlwrap }:
-
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  gnused,
+  ncurses,
+  xorg,
+  rlwrap,
+}:
 stdenv.mkDerivation {
   pname = "stumpish";
   version = "0.0.1";
@@ -12,7 +20,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    gnused xorg.xprop rlwrap ncurses
+    gnused
+    xorg.xprop
+    rlwrap
+    ncurses
   ];
 
   patches = [
@@ -37,7 +48,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/stumpwm/stumpwm-contrib";
     description = "STUMPwm Interactive SHell";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ebzzry ];
+    maintainers = [maintainers.ebzzry];
     platforms = platforms.unix;
   };
 }

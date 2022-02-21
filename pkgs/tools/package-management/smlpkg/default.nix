@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mlton, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mlton,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "smlpkg";
   version = "0.1.5";
@@ -13,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ mlton ];
+  nativeBuildInputs = [mlton];
 
   # Set as an environment variable in all the phase scripts.
   MLCOMP = "mlton";
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ unzip ];
+  checkInputs = [unzip];
 
   # We cannot run the pkgtests, as Nix does not allow network
   # connections.
@@ -37,6 +42,6 @@ stdenv.mkDerivation rec {
     description = "Generic package manager for Standard ML libraries and programs";
     homepage = "https://github.com/diku-dk/smlpkg";
     license = licenses.mit;
-    maintainers = with maintainers; [ athas ];
+    maintainers = with maintainers; [athas];
   };
 }

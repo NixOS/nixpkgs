@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, bison, flex, postgresql }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+  postgresql,
+}:
 stdenv.mkDerivation rec {
   pname = "age";
   version = "0.6.0";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cl6p9qz2yhgm603ljlyjdn0msk3hzga1frjqsmqmpp3nw4dbkka";
   };
 
-  buildInputs = [ postgresql ];
+  buildInputs = [postgresql];
 
   makeFlags = [
     "BISON=${bison}/bin/bison"
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
     dontConfigure = true;
 
     buildPhase = let
-      postgresqlAge = postgresql.withPackages (ps: [ ps.age ]);
+      postgresqlAge = postgresql.withPackages (ps: [ps.age]);
     in ''
       # The regression tests need to be run in the order specified in the Makefile.
       echo -e "include Makefile\nfiles:\n\t@echo \$(REGRESS)" > Makefile.regress
@@ -57,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "A graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/incubator-age/releases/tag/v${version}";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
     broken = versionOlder postgresql.version "11.0";

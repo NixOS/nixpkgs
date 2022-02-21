@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromSourcehut }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+}:
 buildGoModule rec {
   pname = "alps";
   version = "2021-09-29";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "A simple and extensible webmail.";
     homepage = "https://git.sr.ht/~migadu/alps";
     license = licenses.mit;
-    maintainers = with maintainers; [ gordias ];
+    maintainers = with maintainers; [gordias];
   };
 }

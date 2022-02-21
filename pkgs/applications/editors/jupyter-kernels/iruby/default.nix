@@ -1,17 +1,17 @@
-{ lib
-, bundlerApp
+{
+  lib,
+  bundlerApp,
 }:
-
 bundlerApp {
   pname = "iruby";
   gemdir = ./.;
-  exes = [ "iruby" ];
+  exes = ["iruby"];
 
   meta = with lib; {
     description = "Ruby kernel for Jupyter";
-    homepage    = "https://github.com/SciRuby/iruby";
-    license     = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/SciRuby/iruby";
+    license = licenses.mit;
+    maintainers = [maintainers.costrouc];
+    platforms = platforms.unix;
   };
 }

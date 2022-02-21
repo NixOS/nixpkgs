@@ -1,10 +1,12 @@
-{ config, lib, name, ... }:
-let
-  inherit (lib) literalExpression mkOption nameValuePair types;
-in
 {
+  config,
+  lib,
+  name,
+  ...
+}: let
+  inherit (lib) literalExpression mkOption nameValuePair types;
+in {
   options = {
-
     hostName = mkOption {
       type = types.str;
       default = name;
@@ -21,29 +23,40 @@ in
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule ({
-        options = {
-          port = mkOption {
-            type = types.port;
-            description = "Port to listen on";
+      type = with types;
+        listOf (submodule ({
+          options = {
+            port = mkOption {
+              type = types.port;
+              description = "Port to listen on";
+            };
+            ip = mkOption {
+              type = types.str;
+              default = "*";
+              description = "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
+            };
+            ssl = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Whether to enable SSL (https) support.";
+            };
           };
-          ip = mkOption {
-            type = types.str;
-            default = "*";
-            description = "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
-          };
-          ssl = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Whether to enable SSL (https) support.";
-          };
-        };
-      }));
+        }));
       default = [];
       example = [
-        { ip = "195.154.1.1"; port = 443; ssl = true;}
-        { ip = "192.154.1.1"; port = 80; }
-        { ip = "*"; port = 8080; }
+        {
+          ip = "195.154.1.1";
+          port = 443;
+          ssl = true;
+        }
+        {
+          ip = "192.154.1.1";
+          port = 80;
+        }
+        {
+          ip = "*";
+          port = 8080;
+        }
       ];
       description = ''
         Listen addresses and ports for this virtual host.
@@ -66,8 +79,8 @@ in
         Compared to <literal>listen</literal> this only sets the addreses
         and the ports are chosen automatically.
       '';
-      default = [ "*" ];
-      example = [ "127.0.0.1" ];
+      default = ["*"];
+      example = ["127.0.0.1"];
     };
 
     enableSSL = mkOption {
@@ -185,7 +198,8 @@ in
       type = types.listOf types.attrs;
       default = [];
       example = [
-        { urlPath = "/nix";
+        {
+          urlPath = "/nix";
           dir = "/home/eelco/Dev/nix-homepage";
         }
       ];
@@ -198,7 +212,8 @@ in
       type = types.listOf types.attrs;
       default = [];
       example = [
-        { urlPath = "/foo/bar.png";
+        {
+          urlPath = "/foo/bar.png";
           file = "/home/eelco/some-file.png";
         }
       ];
@@ -284,12 +299,9 @@ in
         xlink:href="https://httpd.apache.org/docs/2.4/mod/core.html#location"/> for details.
       '';
     };
-
   };
 
   config = {
-
-    locations = builtins.listToAttrs (map (elem: nameValuePair elem.urlPath { alias = elem.file; }) config.servedFiles);
-
+    locations = builtins.listToAttrs (map (elem: nameValuePair elem.urlPath {alias = elem.file;}) config.servedFiles);
   };
 }

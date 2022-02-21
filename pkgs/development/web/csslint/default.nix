@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, nodejs }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nodejs,
+}:
 stdenv.mkDerivation rec {
   version = "0.10.0";
   pname = "csslint";
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   # node is the interpreter used to run this script
-  buildInputs = [ nodejs ];
+  buildInputs = [nodejs];
 
   installPhase = ''
     sed -i "s/path\.join/path\.resolve/g" cli.js # fixes csslint issue #167
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
       write your own or omit ones you don't want. '';
     homepage = "https://nodejs.org";
     license = licenses.bsd2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
   };
 }

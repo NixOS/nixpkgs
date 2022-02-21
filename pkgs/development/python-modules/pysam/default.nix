@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bzip2
-, bcftools
-, curl
-, cython
-, htslib
-, libdeflate
-, xz
-, pytest
-, samtools
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bzip2,
+  bcftools,
+  curl,
+  cython,
+  htslib,
+  libdeflate,
+  xz,
+  pytest,
+  samtools,
+  zlib,
 }:
-
 buildPythonPackage rec {
-  pname   = "pysam";
+  pname = "pysam";
   version = "0.18.0";
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sha256 = "042ca27r6634xg2ixgvq1079cp714wmm6ml7bwc1snn0wxxzywfg";
   };
 
-  nativeBuildInputs = [ samtools ];
+  nativeBuildInputs = [samtools];
   buildInputs = [
     bzip2
     curl
@@ -107,8 +107,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A python module for reading, manipulating and writing genome data sets";
     homepage = "https://pysam.readthedocs.io/";
-    maintainers = with maintainers; [ unode ];
+    maintainers = with maintainers; [unode];
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

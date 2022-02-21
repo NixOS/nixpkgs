@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, graphviz
-, appdirs
-, ifaddr
-, pythonOlder
-, mock
-, nix-update-script
-, pytestCheckHook
-, requests
-, requests-mock
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphviz,
+  appdirs,
+  ifaddr,
+  pythonOlder,
+  mock,
+  nix-update-script,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "soco";
   version = "0.26.3";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "CLI and library to control Sonos speakers";
     homepage = "http://python-soco.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

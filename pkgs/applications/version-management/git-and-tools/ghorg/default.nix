@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "ghorg";
   version = "1.5.1";
@@ -14,9 +17,9 @@ buildGoModule rec {
   doCheck = false;
   vendorSha256 = null;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
   meta = with lib; {
     description = "Quickly clone an entire org/users repositories into one directory";
@@ -31,6 +34,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gabrie30/ghorg";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vidbina ];
+    maintainers = with maintainers; [vidbina];
   };
 }

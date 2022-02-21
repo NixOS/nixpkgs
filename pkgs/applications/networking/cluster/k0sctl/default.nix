@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "k0sctl";
   version = "0.11.4";
@@ -27,6 +27,6 @@ buildGoModule rec {
     description = "A bootstrapping and management tool for k0s clusters.";
     homepage = "https://k0sproject.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with maintainers; [nickcao];
   };
 }

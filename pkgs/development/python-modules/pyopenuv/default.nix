@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  asynctest,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyopenuv";
   version = "2021.11.0";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API to retrieve data from openuv.io";
     homepage = "https://github.com/bachya/pyopenuv";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

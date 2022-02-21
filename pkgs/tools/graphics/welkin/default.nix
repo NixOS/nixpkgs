@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchsvn, jre, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "welkin";
   version = "1.1";
@@ -12,8 +17,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "welkin-r9638/tags/${version}";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   installPhase = ''
     mkdir -p $out/{bin,share}

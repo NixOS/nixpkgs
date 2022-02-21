@@ -1,5 +1,8 @@
-{ runCommand, purescript, nodejs }:
-
+{
+  runCommand,
+  purescript,
+  nodejs,
+}:
 runCommand "purescript-test-minimal-module" {} ''
   ${purescript}/bin/purs compile -o ./output ${./.}/Main.purs
 

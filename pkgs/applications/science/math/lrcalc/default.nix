@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromBitbucket
-, fetchpatch
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  fetchpatch,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.2";
   pname = "lrcalc";

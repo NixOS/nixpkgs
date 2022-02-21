@@ -1,6 +1,8 @@
-{ stdenv, buildPackages, callPackage }:
-
-let
+{
+  stdenv,
+  buildPackages,
+  callPackage,
+}: let
   chezSystemMap = {
     # See `/workarea` of source code for list of systems
     "aarch64-darwin" = "tarm64osx";
@@ -20,7 +22,7 @@ let
       ./configure --pb ZLIB=$ZLIB LZ4=$LZ4
       runHook postConfigure
     '';
-    makeFlags = [ "${chezSystem}.bootquick" ];
+    makeFlags = ["${chezSystem}.bootquick"];
     installPhase = ''
       runHook preInstall
       mkdir -p $out
@@ -49,4 +51,4 @@ let
   };
   final = callPackage (import ./shared.nix forFinal) {};
 in
-final
+  final

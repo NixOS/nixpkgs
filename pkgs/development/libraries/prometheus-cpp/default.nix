@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, gbenchmark
-, gtest
-, civetweb
-, zlib
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gbenchmark,
+  gtest,
+  civetweb,
+  zlib,
+  curl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "prometheus-cpp";
   version = "0.9.0";
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pjz29ywzfg3blhg2v8fn7gjvq46k3bqn7y0xvmn468ixxhv21fi";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ gbenchmark civetweb gtest zlib curl ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [gbenchmark civetweb gtest zlib curl];
 
   strictDeps = true;
 
@@ -41,7 +42,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Prometheus Client Library for Modern C++";
     homepage = "https://github.com/jupp0r/prometheus-cpp";
-    license = [ lib.licenses.mit ];
+    license = [lib.licenses.mit];
   };
-
 }

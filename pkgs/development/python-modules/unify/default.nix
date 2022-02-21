@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, untokenize
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  untokenize,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "unify";
   version = "0.5";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1l6xxygaigacsxf0g5f7w5gpqha1ava6mcns81kqqy6vw91pyrbi";
   };
 
-  propagatedBuildInputs = [ untokenize ];
+  propagatedBuildInputs = [untokenize];
 
   checkPhase = "${python.interpreter} -m unittest discover";
 
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Modifies strings to all use the same quote where possible";
     homepage = "https://github.com/myint/unify";
     license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with maintainers; [FlorianFranzen];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, getmac
-, requests
-, semver
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  getmac,
+  requests,
+  semver,
+  pytestCheckHook,
+  responses,
 }:
-
 buildPythonPackage rec {
   pname = "vilfo-api-client";
   version = "0.4.1";
@@ -42,12 +42,12 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [ "vilfo" ];
+  pythonImportsCheck = ["vilfo"];
 
   meta = with lib; {
     description = "Simple wrapper client for the Vilfo router API";
     homepage = "https://github.com/ManneW/vilfo-api-client-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

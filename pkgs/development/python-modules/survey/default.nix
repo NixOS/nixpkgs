@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, wrapio
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  wrapio,
 }:
-
 buildPythonPackage rec {
   pname = "survey";
   version = "3.4.3";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
   ];
 
   doCheck = false;
-  pythonImportsCheck = [ "survey" ];
+  pythonImportsCheck = ["survey"];
 
   meta = with lib; {
     homepage = "https://github.com/Exahilosys/survey";
     description = "A simple library for creating beautiful interactive prompts";
     license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    maintainers = with maintainers; [sfrijters];
   };
 }

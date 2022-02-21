@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, async-timeout
-, attrs
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  async-timeout,
+  attrs,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "snitun";
   version = "0.30.0";
@@ -40,13 +40,13 @@ buildPythonPackage rec {
     "test_peer_listener_timeout"
   ];
 
-  pythonImportsCheck = [ "snitun" ];
+  pythonImportsCheck = ["snitun"];
 
   meta = with lib; {
     homepage = "https://github.com/nabucasa/snitun";
     description = "SNI proxy with TCP multiplexer";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    maintainers = with maintainers; [Scriptkiddi];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "kanboard";
   version = "1.2.22";
@@ -22,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Kanban project management software";
     homepage = "https://kanboard.net";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz lheckemann ];
+    maintainers = with maintainers; [fpletz lheckemann];
   };
 }

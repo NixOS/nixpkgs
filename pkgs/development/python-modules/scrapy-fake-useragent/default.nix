@@ -1,5 +1,14 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytestCheckHook, pytest-cov, pytest-mock, fake-useragent, faker, scrapy }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-mock,
+  fake-useragent,
+  faker,
+  scrapy,
+}:
 buildPythonPackage rec {
   pname = "scrapy-fake-useragent";
   version = "1.4.4";
@@ -12,9 +21,9 @@ buildPythonPackage rec {
     sha256 = "0yb7d51jws665rdfqkmi077w0pjxmb2ni7ysphj7lx7b18whq54j";
   };
 
-  propagatedBuildInputs = [ fake-useragent faker ];
+  propagatedBuildInputs = [fake-useragent faker];
 
-  checkInputs = [ pytestCheckHook scrapy pytest-cov pytest-mock ];
+  checkInputs = [pytestCheckHook scrapy pytest-cov pytest-mock];
 
   meta = with lib; {
     description = "Random User-Agent middleware based on fake-useragent";

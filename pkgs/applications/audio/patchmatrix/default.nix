@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libjack2
-, lv2
-, meson
-, ninja
-, pkg-config
-, glew
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libjack2,
+  lv2,
+  meson,
+  ninja,
+  pkg-config,
+  glew,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "patchmatrix";
   version = "0.26.0";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "A JACK patchbay in flow matrix style";
     homepage = "https://github.com/OpenMusicKontrollers/patchmatrix";
     license = licenses.artistic2;
-    maintainers = with maintainers; [ pennae ];
+    maintainers = with maintainers; [pennae];
     platforms = platforms.linux;
   };
 }

@@ -1,19 +1,20 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, bash-completion
-, gst-plugins-base
-, gst-plugins-bad
-, gst-devtools
-, libxml2
-, flex
-, gettext
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  bash-completion,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-devtools,
+  libxml2,
+  flex,
+  gettext,
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gst-editing-services";
   version = "1.20.0";
@@ -53,11 +54,13 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ];
 
-  mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-Dintrospection=disabled"
+    ];
 
   postPatch = ''
     patchShebangs \

@@ -1,15 +1,15 @@
-{ mkDerivation
-, lib
-, pkg-config
-, zlib
-, qtbase
-, qtsvg
-, qttools
-, qtmultimedia
-, qmake
-, fetchurl
+{
+  mkDerivation,
+  lib,
+  pkg-config,
+  zlib,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtmultimedia,
+  qmake,
+  fetchurl,
 }:
-
 mkDerivation rec {
   pname = "chessx";
   version = "1.5.7";
@@ -50,7 +50,7 @@ mkDerivation rec {
     homepage = "http://chessx.sourceforge.net/";
     description = "Browse and analyse chess games";
     license = licenses.gpl2;
-    maintainers = [ maintainers.luispedro ];
+    maintainers = [maintainers.luispedro];
     platforms = platforms.linux;
   };
 }

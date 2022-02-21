@@ -1,12 +1,20 @@
-{ config, pkgs, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib) mkOption types mkIf;
 
   cfg = config.services.kmscon;
 
   autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
 
-  configDir = pkgs.writeTextFile { name = "kmscon-config"; destination = "/kmscon.conf"; text = cfg.extraConfig; };
+  configDir = pkgs.writeTextFile {
+    name = "kmscon-config";
+    destination = "/kmscon.conf";
+    text = cfg.extraConfig;
+  };
 in {
   options = {
     services.kmscon = {
@@ -82,8 +90,8 @@ in {
       X-RestartIfChanged=false
     '';
 
-    systemd.suppressedSystemUnits = [ "autovt@.service" ];
-    systemd.units."kmsconvt@.service".aliases = [ "autovt@.service" ];
+    systemd.suppressedSystemUnits = ["autovt@.service"];
+    systemd.units."kmsconvt@.service".aliases = ["autovt@.service"];
 
     systemd.services.systemd-vconsole-setup.enable = false;
 

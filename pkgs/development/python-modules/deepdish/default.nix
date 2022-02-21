@@ -1,11 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, scipy
-, tables
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  tables,
 }:
-
 buildPythonPackage rec {
   pname = "deepdish";
   version = "0.3.7";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Flexible HDF5 saving/loading and other data science tools from the University of Chicago.";
     homepage = "https://github.com/uchicago-cs/deepdish";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

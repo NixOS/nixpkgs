@@ -1,38 +1,39 @@
-{ lib, stdenv
-, meson
-, ninja
-, gettext
-, fetchurl
-, fetchpatch
-, evince
-, gjs
-, pkg-config
-, gtk3
-, glib
-, tracker
-, tracker-miners
-, itstool
-, libxslt
-, webkitgtk
-, libgdata
-, gnome-desktop
-, libzapojit
-, libgepub
-, gnome
-, gdk-pixbuf
-, libsoup
-, docbook_xsl
-, docbook_xml_dtd_42
-, gobject-introspection
-, inkscape
-, poppler_utils
-, desktop-file-utils
-, wrapGAppsHook
-, python3
-, appstream-glib
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  gettext,
+  fetchurl,
+  fetchpatch,
+  evince,
+  gjs,
+  pkg-config,
+  gtk3,
+  glib,
+  tracker,
+  tracker-miners,
+  itstool,
+  libxslt,
+  webkitgtk,
+  libgdata,
+  gnome-desktop,
+  libzapojit,
+  libgepub,
+  gnome,
+  gdk-pixbuf,
+  libsoup,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  gobject-introspection,
+  inkscape,
+  poppler_utils,
+  desktop-file-utils,
+  wrapGAppsHook,
+  python3,
+  appstream-glib,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-documents";
   version = "3.34.0";
@@ -105,9 +106,9 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     # To silence inkscape warnings regarding profile directory
-  ''
-    export INKSCAPE_PROFILE_DIR="$(mktemp -d)"
-  '';
+    ''
+      export INKSCAPE_PROFILE_DIR="$(mktemp -d)"
+    '';
 
   passthru = {
     updateScript = gnome.updateScript {

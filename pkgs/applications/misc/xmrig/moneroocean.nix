@@ -1,5 +1,8 @@
-{ fetchFromGitHub, lib, xmrig }:
-
+{
+  fetchFromGitHub,
+  lib,
+  xmrig,
+}:
 xmrig.overrideAttrs (oldAttrs: rec {
   pname = "xmrig-mo";
   version = "6.16.4-mo1";
@@ -15,7 +18,7 @@ xmrig.overrideAttrs (oldAttrs: rec {
     description = "A fork of the XMRig CPU miner with support for algorithm switching";
     homepage = "https://github.com/MoneroOcean/xmrig";
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ j0hax ];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
+    maintainers = with maintainers; [j0hax];
   };
 })

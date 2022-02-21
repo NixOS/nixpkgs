@@ -1,5 +1,7 @@
-{ lib, python3 }:
-
+{
+  lib,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "flashfocus";
   version = "2.2.3";
@@ -31,13 +33,13 @@ python3.pkgs.buildPythonApplication rec {
   # Tests require access to a X session
   doCheck = false;
 
-  pythonImportsCheck = [ "flashfocus" ];
+  pythonImportsCheck = ["flashfocus"];
 
   meta = with lib; {
     homepage = "https://github.com/fennerm/flashfocus";
     description = "Simple focus animations for tiling window managers";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
   };
 }

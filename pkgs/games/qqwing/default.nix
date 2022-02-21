@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake, libtool }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  autoconf,
+  automake,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "qqwing";
   version = "1.3.4";
@@ -21,15 +28,15 @@ stdenv.mkDerivation rec {
       --replace "sudo " ""
   '';
 
-  buildInputs = [ perl autoconf automake libtool ];
+  buildInputs = [perl autoconf automake libtool];
 
-  makeFlags = [ "prefix=$(out)" "tgz" ];
+  makeFlags = ["prefix=$(out)" "tgz"];
 
   meta = with lib; {
     homepage = "https://qqwing.com";
     description = "Sudoku generating and solving software";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

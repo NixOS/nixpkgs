@@ -1,7 +1,11 @@
-{ lib, fetchFromGitHub, buildGoModule
-, pkg-config, ffmpeg, gnutls
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  ffmpeg,
+  gnutls,
 }:
-
 buildGoModule rec {
   pname = "livepeer";
   version = "0.5.20";
@@ -17,16 +21,16 @@ buildGoModule rec {
   };
 
   # livepeer_cli has a vendoring problem
-  subPackages = [ "cmd/livepeer" ];
+  subPackages = ["cmd/livepeer"];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ ffmpeg gnutls ];
+  buildInputs = [ffmpeg gnutls];
 
   meta = with lib; {
     description = "Official Go implementation of the Livepeer protocol";
     homepage = "https://livepeer.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ elitak ];
+    maintainers = with maintainers; [elitak];
   };
 }

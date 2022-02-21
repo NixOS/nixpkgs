@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub
   # pythonPackages
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+  ,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "oyaml";
   version = "unstable-2021-12-03";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Drop-in replacement for PyYAML which preserves dict ordering";
     homepage = "https://github.com/wimglenn/oyaml";
     license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    maintainers = with maintainers; [kamadorueda];
   };
 }

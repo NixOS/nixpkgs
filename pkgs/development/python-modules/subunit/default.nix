@@ -1,28 +1,29 @@
-{ buildPythonPackage
-# pkgs dependencies
-, check
-, cppunit
-, pkg-config
-, subunit
-, pythonOlder
-
-# python dependencies
-, fixtures
-, hypothesis
-, pytest
-, testscenarios
-, testtools
-, unittest2
+{
+  buildPythonPackage
+  # pkgs dependencies
+  ,
+  check,
+  cppunit,
+  pkg-config,
+  subunit,
+  pythonOlder
+  # python dependencies
+  ,
+  fixtures,
+  hypothesis,
+  pytest,
+  testscenarios,
+  testtools,
+  unittest2,
 }:
-
 buildPythonPackage {
   inherit (subunit) name src meta;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ check cppunit ];
-  propagatedBuildInputs = [ testtools ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [check cppunit];
+  propagatedBuildInputs = [testtools];
 
-  checkInputs = [ testscenarios hypothesis fixtures pytest unittest2 ];
+  checkInputs = [testscenarios hypothesis fixtures pytest unittest2];
 
   # requires unittest2, which no longer supported in 3.10
   doCheck = pythonOlder "3.10";

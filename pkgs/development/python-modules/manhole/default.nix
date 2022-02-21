@@ -1,11 +1,12 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytest
-, requests
-, process-tests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  requests,
+  process-tests,
 }:
-
 buildPythonPackage rec {
   pname = "manhole";
   version = "1.8.0";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   # https://github.com/ionelmc/python-manhole/issues/54 is fixed
   doCheck = false;
 
-  checkInputs = [ pytest requests process-tests ];
+  checkInputs = [pytest requests process-tests];
   checkPhase = ''
     # Based on its tox.ini
     export PYTHONUNBUFFERED=yes
@@ -42,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ionelmc/python-manhole";
     description = "Debugging manhole for Python applications";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with maintainers; [ivan];
   };
 }

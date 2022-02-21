@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libuvc";
   version = "unstable-2020-11-29";
@@ -16,15 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "0kranb0x1k5qad8rwxnn1w9963sbfj2cfzdgpfmlivb04544m2j7";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ libusb1 ];
+  buildInputs = [libusb1];
 
   meta = with lib; {
     homepage = "https://ken.tossell.net/libuvc/";
     description = "Cross-platform library for USB video devices";
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
   };
 }

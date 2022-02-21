@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  libsamplerate,
+  alsa-lib,
+  AppKit,
+}:
 stdenv.mkDerivation rec {
   pname = "pjsip";
   version = "2.11.1";
@@ -15,7 +22,8 @@ stdenv.mkDerivation rec {
     ./fix-aarch64.patch
   ];
 
-  buildInputs = [ openssl libsamplerate ]
+  buildInputs =
+    [openssl libsamplerate]
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional stdenv.isDarwin AppKit;
 
@@ -37,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ olynch ];
+    maintainers = with maintainers; [olynch];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

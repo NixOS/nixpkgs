@@ -1,50 +1,50 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, cmake
-, wxGTK
-, pkg-config
-, python3
-, gettext
-, glib
-, file
-, lame
-, libvorbis
-, libmad
-, libjack2
-, lv2
-, lilv
-, makeWrapper
-, serd
-, sord
-, sqlite
-, sratom
-, suil
-, alsa-lib
-, libsndfile
-, soxr
-, flac
-, twolame
-, expat
-, libid3tag
-, libopus
-, ffmpeg
-, soundtouch
-, pcre
-, portaudio
-, linuxHeaders
-, at-spi2-core
-, dbus
-, libepoxy
-, libXdmcp
-, libXtst
-, libpthreadstubs
-, libselinux
-, libsepol
-, libxkbcommon
-, util-linux
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  cmake,
+  wxGTK,
+  pkg-config,
+  python3,
+  gettext,
+  glib,
+  file,
+  lame,
+  libvorbis,
+  libmad,
+  libjack2,
+  lv2,
+  lilv,
+  makeWrapper,
+  serd,
+  sord,
+  sqlite,
+  sratom,
+  suil,
+  alsa-lib,
+  libsndfile,
+  soxr,
+  flac,
+  twolame,
+  expat,
+  libid3tag,
+  libopus,
+  ffmpeg,
+  soundtouch,
+  pcre,
+  portaudio,
+  linuxHeaders,
+  at-spi2-core,
+  dbus,
+  libepoxy,
+  libXdmcp,
+  libXtst,
+  libpthreadstubs,
+  libselinux,
+  libsepol,
+  libxkbcommon,
+  util-linux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tenacity";
   version = "unstable-2021-10-18";
@@ -87,62 +87,66 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    gettext
-    makeWrapper
-    pkg-config
-    python3
-  ] ++ lib.optionals stdenv.isLinux [
-    linuxHeaders
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      gettext
+      makeWrapper
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      linuxHeaders
+    ];
 
-  buildInputs = [
-    alsa-lib
-    expat
-    ffmpeg
-    file
-    flac
-    glib
-    lame
-    libid3tag
-    libjack2
-    libmad
-    libopus
-    libsndfile
-    libvorbis
-    lilv
-    lv2
-    pcre
-    portaudio
-    serd
-    sord
-    soundtouch
-    soxr
-    sqlite
-    sratom
-    suil
-    twolame
-    wxGTK
-    wxGTK.gtk
-  ] ++ lib.optionals stdenv.isLinux [
-    at-spi2-core
-    dbus
-    libepoxy
-    libXdmcp
-    libXtst
-    libpthreadstubs
-    libxkbcommon
-    libselinux
-    libsepol
-    util-linux
-  ];
+  buildInputs =
+    [
+      alsa-lib
+      expat
+      ffmpeg
+      file
+      flac
+      glib
+      lame
+      libid3tag
+      libjack2
+      libmad
+      libopus
+      libsndfile
+      libvorbis
+      lilv
+      lv2
+      pcre
+      portaudio
+      serd
+      sord
+      soundtouch
+      soxr
+      sqlite
+      sratom
+      suil
+      twolame
+      wxGTK
+      wxGTK.gtk
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      at-spi2-core
+      dbus
+      libepoxy
+      libXdmcp
+      libXtst
+      libpthreadstubs
+      libxkbcommon
+      libselinux
+      libsepol
+      util-linux
+    ];
 
   meta = with lib; {
     description = "Sound editor with graphical UI";
     homepage = "https://tenacityaudio.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ irenes lheckemann ];
+    maintainers = with maintainers; [irenes lheckemann];
     platforms = platforms.linux;
   };
 }

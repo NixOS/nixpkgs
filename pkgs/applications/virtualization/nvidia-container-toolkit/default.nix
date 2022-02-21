@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, nvidia-container-runtime
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  nvidia-container-runtime,
 }:
 buildGoModule rec {
   pname = "nvidia-container-toolkit";
@@ -16,8 +17,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "17zpiyvf22skfcisflsp6pn56y6a793jcx89kw976fq2x5br1bz7";
-  ldflags = [ "-s" "-w" ];
-  nativeBuildInputs = [ makeWrapper ];
+  ldflags = ["-s" "-w"];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     mv $out/bin/{pkg,${pname}}
@@ -32,6 +33,6 @@ buildGoModule rec {
     description = "NVIDIA container runtime hook";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

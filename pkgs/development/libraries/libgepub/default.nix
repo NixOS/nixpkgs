@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, gnome
-, webkitgtk, libsoup, libxml2, libarchive }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  gnome,
+  webkitgtk,
+  libsoup,
+  libxml2,
+  libarchive,
+}:
 stdenv.mkDerivation rec {
   pname = "libgepub";
   version = "0.6.0";
@@ -12,8 +24,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection ];
-  buildInputs = [ glib webkitgtk libsoup libxml2 libarchive ];
+  nativeBuildInputs = [meson ninja pkg-config gobject-introspection];
+  buildInputs = [glib webkitgtk libsoup libxml2 libarchive];
 
   passthru = {
     updateScript = gnome.updateScript {

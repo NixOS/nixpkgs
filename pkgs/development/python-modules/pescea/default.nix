@@ -1,13 +1,13 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pescea";
   version = "1.0.10";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Python interface to Escea fireplaces";
     homepage = "https://github.com/lazdavila/pescea";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

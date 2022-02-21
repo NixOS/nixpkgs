@@ -1,5 +1,6 @@
-{ lib
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
 }: rec {
   version = "3.1.0";
   src = fetchFromGitHub {
@@ -11,7 +12,7 @@
   meta = with lib; {
     homepage = "https://openrazer.github.io/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ roelvandijk evanjs ];
+    maintainers = with maintainers; [roelvandijk evanjs];
     platforms = platforms.linux;
   };
 }

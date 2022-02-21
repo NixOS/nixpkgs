@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, lv2, pkg-config, libGLU, libGL, cairo, pango, libjack2 }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lv2,
+  pkg-config,
+  libGLU,
+  libGL,
+  cairo,
+  pango,
+  libjack2,
+}: let
   name = "sisco.lv2-${version}";
   version = "0.7.0";
 
@@ -21,24 +30,24 @@ let
     sha256 = "0gk16nrvnrffqqw0yd015kja9wkgbzvb648bl1pagriabhznhfxl";
   };
 in
-stdenv.mkDerivation rec {
-  inherit name;
+  stdenv.mkDerivation rec {
+    inherit name;
 
-  srcs = [ src robtkSrc ];
-  sourceRoot = src.name;
+    srcs = [src robtkSrc];
+    sourceRoot = src.name;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ lv2 pango cairo libjack2 libGLU libGL ];
+    nativeBuildInputs = [pkg-config];
+    buildInputs = [lv2 pango cairo libjack2 libGLU libGL];
 
-  postUnpack = "chmod u+w -R ${robtkName}-src; mv ${robtkName}-src/* ${sourceRoot}/robtk";
-  sisco_VERSION = version;
-  preConfigure = "makeFlagsArray=(PREFIX=$out)";
+    postUnpack = "chmod u+w -R ${robtkName}-src; mv ${robtkName}-src/* ${sourceRoot}/robtk";
+    sisco_VERSION = version;
+    preConfigure = "makeFlagsArray=(PREFIX=$out)";
 
-  meta = with lib; {
-    description = "Simple audio oscilloscope with variable time scale, triggering, cursors and numeric readout in LV2 plugin format";
-    homepage = "http://x42.github.io/sisco.lv2/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.e-user ];
-    platforms = platforms.linux;
-  };
-}
+    meta = with lib; {
+      description = "Simple audio oscilloscope with variable time scale, triggering, cursors and numeric readout in LV2 plugin format";
+      homepage = "http://x42.github.io/sisco.lv2/";
+      license = licenses.gpl2;
+      maintainers = [maintainers.e-user];
+      platforms = platforms.linux;
+    };
+  }

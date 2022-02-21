@@ -1,14 +1,15 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, pkgs
-, numpy
-, scipy
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkgs,
+  numpy,
+  scipy
   # check inputs
-, nose
+  ,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "ecos";
   version = "2.0.8";
@@ -32,19 +33,19 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     # Run tests
     cd ./src
     nosetests test_interface.py test_interface_bb.py
   '';
-  pythonImportsCheck = [ "ecos" ];
+  pythonImportsCheck = ["ecos"];
 
   meta = with lib; {
     description = "Python package for ECOS: Embedded Cone Solver";
     downloadPage = "https://github.com/embotech/ecos-python/releases";
     homepage = pkgs.ecos.meta.homepage;
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

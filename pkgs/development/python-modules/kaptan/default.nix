@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "kaptan";
   version = "0.5.12";
@@ -20,15 +20,14 @@ buildPythonPackage rec {
     substituteInPlace requirements/base.txt --replace 'PyYAML>=3.13,<6' 'PyYAML>=3.13'
   '';
 
-  propagatedBuildInputs = [ pyyaml ];
+  propagatedBuildInputs = [pyyaml];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   meta = with lib; {
     description = "Configuration manager for python applications";
     homepage = "https://kaptan.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
-
 }

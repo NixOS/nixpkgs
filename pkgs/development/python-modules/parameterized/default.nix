@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, isPy3k
-, mock
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  isPy3k,
+  mock,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "parameterized";
   version = "0.8.1";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "parameterized" ];
+  pythonImportsCheck = ["parameterized"];
 
   meta = with lib; {
     description = "Parameterized testing with any Python test framework";
     homepage = "https://github.com/wolever/parameterized";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

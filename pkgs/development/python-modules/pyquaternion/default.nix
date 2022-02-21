@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "pyquaternion";
   version = "0.9.9";
@@ -20,15 +20,15 @@ buildPythonPackage rec {
     echo "${version}" > VERSION.txt
   '';
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [numpy];
 
-  checkInputs = [ nose ];
-  pythonImportsCheck = [ "pyquaternion" ];
+  checkInputs = [nose];
+  pythonImportsCheck = ["pyquaternion"];
 
   meta = with lib; {
     description = "Library for representing and using quaternions.";
     homepage = "http://kieranwynn.github.io/pyquaternion/";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucasew ];
+    maintainers = with maintainers; [lucasew];
   };
 }

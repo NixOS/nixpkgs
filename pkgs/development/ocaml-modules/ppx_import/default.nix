@@ -1,15 +1,14 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, ounit
-, ppx_deriving
-, ppx_sexp_conv
-, ppxlib
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ounit,
+  ppx_deriving,
+  ppx_sexp_conv,
+  ppxlib,
 }:
-
 lib.throwIfNot (lib.versionAtLeast ppxlib.version "0.24.0")
-  "ppx_import is not available with ppxlib-${ppxlib.version}"
-
+"ppx_import is not available with ppxlib-${ppxlib.version}"
 buildDunePackage rec {
   pname = "ppx_import";
   version = "1.9.1";

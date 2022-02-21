@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "paste";
   version = "3.5.0";
@@ -20,9 +20,9 @@ buildPythonPackage rec {
     patchShebangs tests/cgiapp_data/
   '';
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   disabledTests = [
     # broken test
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     "test_proxy_to_website"
   ];
 
-  pythonNamespaces = [ "paste" ];
+  pythonNamespaces = ["paste"];
 
   meta = with lib; {
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "http://pythonpaste.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, SystemConfiguration
-, python3
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  SystemConfiguration,
+  python3,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rustpython";
   version = "unstable-2021-12-09";
@@ -22,15 +22,15 @@ rustPlatform.buildRustPackage rec {
   # freeze the stdlib into the rustpython binary
   cargoBuildFlags = "--features=freeze-stdlib";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isDarwin [SystemConfiguration];
 
-  checkInputs = [ python3 ];
+  checkInputs = [python3];
 
   meta = with lib; {
     description = "Python 3 interpreter in written Rust";
     homepage = "https://rustpython.github.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [prusnak];
 
     # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
     # Probably macOS SDK 10.13 or later. Check the current version in

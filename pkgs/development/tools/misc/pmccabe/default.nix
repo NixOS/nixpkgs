@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "pmccabe";
   version = "2.6";
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
       -e "s,^DESTDIR =.*$,DESTDIR = $out," \
       -e "s,^INSTALL = install.*$,INSTALL = install," \
       -e "s,^all:.*$,all: \$(PROGS),"
-    '';
+  '';
 
   checkPhase = "make test";
 
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
       trees or files; and vifn, to invoke vi given a function name rather
       than a file name.
     '';
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
     platforms = platforms.unix;
   };
 }

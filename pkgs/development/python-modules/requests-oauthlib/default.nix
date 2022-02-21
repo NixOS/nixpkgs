@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, oauthlib
-, pytestCheckHook
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  oauthlib,
+  pytestCheckHook,
+  requests,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "requests-oauthlib";
   version = "1.3.0";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0smaxs5ixng4z0k6dsgmm6s972ka3p6a2ykdpnl23mqzlw0ic9ml";
   };
 
-  propagatedBuildInputs = [ oauthlib requests ];
+  propagatedBuildInputs = [oauthlib requests];
 
   checkInputs = [
     mock
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     "test_url_is_native_str"
   ];
 
-  pythonImportsCheck = [ "requests_oauthlib" ];
+  pythonImportsCheck = ["requests_oauthlib"];
 
   meta = with lib; {
     description = "OAuthlib authentication support for Requests";
     homepage = "https://github.com/requests/requests-oauthlib";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ prikhi ];
+    license = with licenses; [isc];
+    maintainers = with maintainers; [prikhi];
   };
 }

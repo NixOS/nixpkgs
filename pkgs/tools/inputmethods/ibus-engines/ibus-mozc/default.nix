@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, which, ninja, pkg-config, protobuf
-, ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese, python3Packages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  ninja,
+  pkg-config,
+  protobuf,
+  ibus,
+  gtk2,
+  zinnia,
+  qt5,
+  libxcb,
+  tegaki-zinnia-japanese,
+  python3Packages,
+}:
 stdenv.mkDerivation rec {
   pname = "ibus-mozc";
   version = "2.26.4423.100";
@@ -14,11 +27,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    which ninja python3Packages.python python3Packages.six
-    python3Packages.gyp pkg-config qt5.wrapQtAppsHook
+    which
+    ninja
+    python3Packages.python
+    python3Packages.six
+    python3Packages.gyp
+    pkg-config
+    qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
+  buildInputs = [protobuf ibus gtk2 zinnia qt5.qtbase libxcb];
 
   postUnpack = lib.optionalString stdenv.isLinux ''
     sed -i 's/-lc++/-lstdc++/g' $sourceRoot/src/gyp/common.gypi
@@ -83,6 +101,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/mozc";
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ericsagnes ];
+    maintainers = with maintainers; [gebner ericsagnes];
   };
 }

@@ -1,10 +1,11 @@
-{ clang
-, fetchFromGitHub
-, lib
-, llvmPackages
-, protobuf
-, rustPlatform
-, writeShellScriptBin
+{
+  clang,
+  fetchFromGitHub,
+  lib,
+  llvmPackages,
+  protobuf,
+  rustPlatform,
+  writeShellScriptBin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
@@ -26,26 +27,24 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-PIORMTzQbMdlrKwuF4MiGrLlg2nQpgLRsaHHeiCbqrg=";
 
-  nativeBuildInputs =
-    let
-      # the build process of polkadot requires a .git folder in order to determine
-      # the git commit hash that is being built and add it to the version string.
-      # since having a .git folder introduces reproducibility issues to the nix
-      # build, we check the git commit hash after fetching the source and save it
-      # into a .git_commit file, and then delete the .git folder. then we create a
-      # fake git command that will just return the contents of this file, which will
-      # be used when the polkadot build calls `git rev-parse` to fetch the commit
-      # hash.
-      fakeGit = writeShellScriptBin "git" ''
-        if [[ $@ = "rev-parse --short HEAD" ]]; then
-          cat /build/source/.git_commit
-        else
-          >&2 echo "Unknown command: $@"
-          exit 1
-        fi
-      '';
-    in
-    [ clang fakeGit ];
+  nativeBuildInputs = let
+    # the build process of polkadot requires a .git folder in order to determine
+    # the git commit hash that is being built and add it to the version string.
+    # since having a .git folder introduces reproducibility issues to the nix
+    # build, we check the git commit hash after fetching the source and save it
+    # into a .git_commit file, and then delete the .git folder. then we create a
+    # fake git command that will just return the contents of this file, which will
+    # be used when the polkadot build calls `git rev-parse` to fetch the commit
+    # hash.
+    fakeGit = writeShellScriptBin "git" ''
+      if [[ $@ = "rev-parse --short HEAD" ]]; then
+        cat /build/source/.git_commit
+      else
+        >&2 echo "Unknown command: $@"
+        exit 1
+      fi
+    '';
+  in [clang fakeGit];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
@@ -63,7 +62,7 @@ rustPlatform.buildRustPackage rec {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
+    maintainers = with maintainers; [akru andresilva asymmetric FlorianFranzen RaghavSood];
     platforms = platforms.linux;
   };
 }

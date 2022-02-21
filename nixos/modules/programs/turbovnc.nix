@@ -1,17 +1,15 @@
 # Global configuration for the SSH client.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.programs.turbovnc;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.programs.turbovnc;
+in {
   options = {
-
     programs.turbovnc = {
-
       ensureHeadlessSoftwareOpenGL = mkOption {
         type = types.bool;
         default = false;
@@ -31,13 +29,10 @@ in
           in TurboVNC.
         '';
       };
-
     };
-
   };
 
   config = mkIf cfg.ensureHeadlessSoftwareOpenGL {
-
     # TurboVNC has builtin support for Mesa llvmpipe's `swrast`
     # software rendering to implemnt GLX (OpenGL on Xorg).
     # However, just building TurboVNC with support for that is not enough
@@ -49,6 +44,5 @@ in
     # This comment exists to explain why `hardware.` is involved,
     # even though 100% software rendering is used.
     hardware.opengl.enable = true;
-
   };
 }

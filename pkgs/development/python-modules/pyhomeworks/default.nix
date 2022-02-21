@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyhomeworks";
   version = "0.0.6";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python interface to Lutron Homeworks Series 4/8";
     homepage = "https://github.com/dubnom/pyhomeworks";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

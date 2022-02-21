@@ -1,18 +1,30 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk-doc, gobject-introspection, python2, gtk3, cairo, glib, gnome }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk-doc,
+  gobject-introspection,
+  python2,
+  gtk3,
+  cairo,
+  glib,
+  gnome,
+}:
 stdenv.mkDerivation rec {
   pname = "goocanvas";
   version = "2.0.4";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/goocanvas/2.0/${pname}-${version}.tar.xz";
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 
-  nativeBuildInputs = [ pkg-config gettext gtk-doc python2 ];
-  buildInputs = [ gtk3 cairo glib gobject-introspection ];
+  nativeBuildInputs = [pkg-config gettext gtk-doc python2];
+  buildInputs = [gtk3 cairo glib gobject-introspection];
 
   configureFlags = [
     "--disable-python"
@@ -33,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Canvas widget for GTK based on the the Cairo 2D library";
     homepage = "https://wiki.gnome.org/Projects/GooCanvas";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.unix;
   };
 }

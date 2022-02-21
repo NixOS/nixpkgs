@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, networkx
-, python-dateutil
-, rdflib
-, pydot
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  networkx,
+  python-dateutil,
+  rdflib,
+  pydot,
 }:
-
 buildPythonPackage rec {
   pname = "prov";
   version = "2.0.0";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Python library for W3C Provenance Data Model (PROV)";
     homepage = "https://github.com/trungdong/prov";
     license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    maintainers = with maintainers; [ashgillman];
   };
 }

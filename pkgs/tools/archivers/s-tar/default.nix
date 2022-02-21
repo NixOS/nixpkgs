@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "s-tar";
   version = "1.6";
@@ -10,8 +13,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "rm configure";
   preBuild = "sed 's_/bin/__g' -i RULES/*";
-  makeFlags = [ "GMAKE_NOWARN=true" ];
-  installFlags = [ "DESTDIR=$(out)" "INS_BASE=/" ];
+  makeFlags = ["GMAKE_NOWARN=true"];
+  installFlags = ["DESTDIR=$(out)" "INS_BASE=/"];
   postInstall = ''
     find $out/bin -type l -delete
     rm -r $out/etc $out/include $out/sbin
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://cdrtools.sourceforge.net/private/star.html";
     license = lib.licenses.cddl;
-    maintainers = [ lib.maintainers.wucke13 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [lib.maintainers.wucke13];
+    platforms = ["x86_64-linux"];
   };
 }

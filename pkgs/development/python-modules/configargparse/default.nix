@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "configargparse";
   version = "1.5.3";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "configargparse" ];
+  pythonImportsCheck = ["configargparse"];
 
   meta = with lib; {
     description = "A drop-in replacement for argparse";
     homepage = "https://github.com/bw2/ConfigArgParse";
     license = licenses.mit;
-    maintainers = [ maintainers.willibutz ];
+    maintainers = [maintainers.willibutz];
   };
 }

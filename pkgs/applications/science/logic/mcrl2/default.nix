@@ -1,5 +1,13 @@
-{lib, stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libGLU,
+  libGL,
+  qt5,
+  boost,
+}:
 stdenv.mkDerivation rec {
   version = "201707";
   build_nr = "1";
@@ -10,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1c8h94ja7271ph61zrcgnjgblxppld6v22f7f900prjgzbcfy14m";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGLU libGL qt5.qtbase boost ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libGLU libGL qt5.qtbase boost];
 
   dontWrapQtApps = true;
 
@@ -24,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.mcrl2.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ moretea ];
+    maintainers = with maintainers; [moretea];
     platforms = platforms.unix;
   };
 }

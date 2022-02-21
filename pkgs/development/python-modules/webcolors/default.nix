@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, python
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  python,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "webcolors";
   version = "1.11.1";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "76f360636957d1c976db7466bc71dcb713bb95ac8911944dffc55c01cb516de6";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [six];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests

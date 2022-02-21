@@ -1,9 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-}:
-
-let
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}: let
   py = python3.override {
     packageOverrides = self: super: {
       # Upstream is pinning releases incl. dependencies of their dependencies
@@ -35,35 +34,34 @@ let
     };
   };
 in
-with py.pkgs;
+  with py.pkgs;
+    buildPythonApplication rec {
+      pname = "catt";
+      version = "0.12.2";
 
-buildPythonApplication rec {
-  pname = "catt";
-  version = "0.12.2";
+      disabled = python3.pythonOlder "3.4";
 
-  disabled = python3.pythonOlder "3.4";
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "sha256-BOETKTkcbLOu5SubiejswU7D47qWS13QZ7rU9x3jf5Y=";
+      };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-BOETKTkcbLOu5SubiejswU7D47qWS13QZ7rU9x3jf5Y=";
-  };
+      propagatedBuildInputs = [
+        click
+        ifaddr
+        PyChromecast
+        requests
+        youtube-dl
+      ];
 
-  propagatedBuildInputs = [
-    click
-    ifaddr
-    PyChromecast
-    requests
-    youtube-dl
-  ];
+      doCheck = false; # attempts to access various URLs
 
-  doCheck = false; # attempts to access various URLs
+      pythonImportsCheck = ["catt"];
 
-  pythonImportsCheck = [ "catt" ];
-
-  meta = with lib; {
-    description = "Tool to send media from online sources to Chromecast devices";
-    homepage = "https://github.com/skorokithakis/catt";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill ];
-  };
-}
+      meta = with lib; {
+        description = "Tool to send media from online sources to Chromecast devices";
+        homepage = "https://github.com/skorokithakis/catt";
+        license = licenses.bsd2;
+        maintainers = with maintainers; [dtzWill];
+      };
+    }

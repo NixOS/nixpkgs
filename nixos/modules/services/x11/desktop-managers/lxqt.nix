@@ -1,16 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.lxqt;
-
-in
-
-{
+in {
   options = {
-
     services.xserver.desktopManager.lxqt.enable = mkOption {
       type = types.bool;
       default = false;
@@ -23,11 +21,9 @@ in
       type = types.listOf types.package;
       description = "Which LXQt packages to exclude from the default environment";
     };
-
   };
 
   config = mkIf cfg.enable {
-
     services.xserver.desktopManager.session = singleton {
       name = "lxqt";
       bgSupport = true;
@@ -49,19 +45,18 @@ in
     };
 
     environment.systemPackages =
-      pkgs.lxqt.preRequisitePackages ++
-      pkgs.lxqt.corePackages ++
-      (pkgs.gnome.removePackagesByName
-        pkgs.lxqt.optionalPackages
-        config.environment.lxqt.excludePackages);
+      pkgs.lxqt.preRequisitePackages
+      ++ pkgs.lxqt.corePackages
+      ++ (pkgs.gnome.removePackagesByName
+      pkgs.lxqt.optionalPackages
+      config.environment.lxqt.excludePackages);
 
     # Link some extra directories in /run/current-system/software/share
-    environment.pathsToLink = [ "/share" ];
+    environment.pathsToLink = ["/share"];
 
     # virtual file systems support for PCManFM-QT
     services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
   };
-
 }

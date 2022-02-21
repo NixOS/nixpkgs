@@ -1,32 +1,33 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, gettext
-, itstool
-, pkg-config
-, libxml2
-, libjpeg
-, libpeas
-, libportal-gtk3
-, gnome
-, gtk3
-, glib
-, gsettings-desktop-schemas
-, adwaita-icon-theme
-, gnome-desktop
-, lcms2
-, gdk-pixbuf
-, exempi
-, shared-mime-info
-, wrapGAppsHook
-, librsvg
-, libexif
-, gobject-introspection
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  gettext,
+  itstool,
+  pkg-config,
+  libxml2,
+  libjpeg,
+  libpeas,
+  libportal-gtk3,
+  gnome,
+  gtk3,
+  glib,
+  gsettings-desktop-schemas,
+  adwaita-icon-theme,
+  gnome-desktop,
+  lcms2,
+  gdk-pixbuf,
+  exempi,
+  shared-mime-info,
+  wrapGAppsHook,
+  librsvg,
+  libexif,
+  gobject-introspection,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "eog";
   version = "41.1";

@@ -1,9 +1,19 @@
-{ lib, mkDerivation, fetchFromGitHub
-, cmake, qttools, kirigami2, qtquickcontrols2, qtlocation, qtsensors
-, nemo-qml-plugin-dbus, mapbox-gl-qml, s2geometry
-, python3, pyotherside
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  kirigami2,
+  qtquickcontrols2,
+  qtlocation,
+  qtsensors,
+  nemo-qml-plugin-dbus,
+  mapbox-gl-qml,
+  s2geometry,
+  python3,
+  pyotherside,
 }:
-
 mkDerivation rec {
   pname = "pure-maps";
   version = "2.9.2";
@@ -17,17 +27,26 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake python3 qttools python3.pkgs.wrapPython
+    cmake
+    python3
+    qttools
+    python3.pkgs.wrapPython
   ];
 
   buildInputs = [
-    kirigami2 qtquickcontrols2 qtlocation qtsensors
-    nemo-qml-plugin-dbus pyotherside mapbox-gl-qml s2geometry
+    kirigami2
+    qtquickcontrols2
+    qtlocation
+    qtsensors
+    nemo-qml-plugin-dbus
+    pyotherside
+    mapbox-gl-qml
+    s2geometry
   ];
 
-  cmakeFlags = [ "-DFLAVOR=kirigami" ];
+  cmakeFlags = ["-DFLAVOR=kirigami"];
 
-  pythonPath = with python3.pkgs; [ gpxpy ];
+  pythonPath = with python3.pkgs; [gpxpy];
 
   preInstall = ''
     buildPythonPath "$pythonPath"
@@ -38,7 +57,7 @@ mkDerivation rec {
     description = "Display vector and raster maps, places, routes, and provide navigation instructions with a flexible selection of data and service providers";
     homepage = "https://github.com/rinigus/pure-maps";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.Thra11 ];
+    maintainers = [maintainers.Thra11];
     platforms = platforms.linux;
   };
 }

@@ -1,11 +1,12 @@
-{ fetchFromGitHub
-, bashInteractive
-, jq
-, makeWrapper
-, p7zip
-, lib, stdenv
+{
+  fetchFromGitHub,
+  bashInteractive,
+  jq,
+  makeWrapper,
+  p7zip,
+  lib,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "r2mod_cli";
   version = "1.2.1";
@@ -17,21 +18,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FS9P/uTZU4d6zpM3TlEW6i6PLGHxqqO2fc8D7VsPCig=";
   };
 
-  buildInputs = [ bashInteractive ];
+  buildInputs = [bashInteractive];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
-    wrapProgram $out/bin/r2mod --prefix PATH : "${lib.makeBinPath [ jq p7zip ]}";
+    wrapProgram $out/bin/r2mod --prefix PATH : "${lib.makeBinPath [jq p7zip]}";
   '';
 
   meta = with lib; {
     description = "A Risk of Rain 2 Mod Manager in Bash";
     homepage = "https://github.com/foldex/r2mod_cli";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.reedrw ];
+    maintainers = [maintainers.reedrw];
     platforms = platforms.unix;
   };
 }

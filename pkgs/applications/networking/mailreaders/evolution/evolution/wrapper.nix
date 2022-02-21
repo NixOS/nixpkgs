@@ -1,10 +1,15 @@
-{ lib, makeWrapper, symlinkJoin, gnome, plugins }:
-
+{
+  lib,
+  makeWrapper,
+  symlinkJoin,
+  gnome,
+  plugins,
+}:
 symlinkJoin {
   name = "evolution-with-plugins";
-  paths = [ gnome.evolution-data-server ] ++ plugins;
+  paths = [gnome.evolution-data-server] ++ plugins;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postBuild = ''
     for i in $out/bin/* $out/libexec/**; do

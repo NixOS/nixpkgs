@@ -1,7 +1,30 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, pango,
-atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsa-lib, dbus, at-spi2-atk,
-cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  glib,
+  systemd,
+  nss,
+  nspr,
+  gtk3-x11,
+  pango,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  xorg,
+  xorg_sys_opengl,
+  util-linux,
+  alsa-lib,
+  dbus,
+  at-spi2-atk,
+  cups,
+  vivaldi-ffmpeg-codecs,
+  libpulseaudio,
+  at-spi2-core,
+  libxkbcommon,
+  mesa,
+}:
 stdenv.mkDerivation rec {
   pname = "exodus";
   version = "21.12.3";
@@ -13,7 +36,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
   unpackCmd = ''
-      ${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
+    ${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
   '';
 
   installPhase = ''
@@ -78,6 +101,6 @@ stdenv.mkDerivation rec {
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mmahut rople380 ];
+    maintainers = with maintainers; [mmahut rople380];
   };
 }

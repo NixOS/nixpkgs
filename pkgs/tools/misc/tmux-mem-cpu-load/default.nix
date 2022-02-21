@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "tmux-mem-cpu-load";
   version = "3.5.1";
@@ -11,13 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-4ZMF+RacZL9dJRCz63XPNuigTKHOW+ZcA4vB4jsnASc=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "CPU, RAM, and load monitor for use with tmux";
     homepage = "https://github.com/thewtex/tmux-mem-cpu-load";
     license = licenses.asl20;
-    maintainers = with maintainers; [ thomasjm ];
+    maintainers = with maintainers; [thomasjm];
     platforms = platforms.all;
   };
 }

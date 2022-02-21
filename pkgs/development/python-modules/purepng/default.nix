@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchFromGitHub
-, fetchpatch
-, cython ? null
-, numpy ? null
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchFromGitHub,
+  fetchpatch,
+  cython ? null,
+  numpy ? null,
 }:
-
 buildPythonPackage {
   pname = "purepng";
   version = "0.2.0";
@@ -25,13 +25,13 @@ buildPythonPackage {
       sha256 = "1ag0pji3p012hmj8kadcd0vydv9702188c0isizsi964qcl4va6m";
     })
   ];
-  patchFlags = [ "-p1" "-d" "code" ];
+  patchFlags = ["-p1" "-d" "code"];
 
   # cython is optional - if not supplied, the "pure python" implementation will be used
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [cython];
 
   # numpy is optional - if not supplied, tests simply have less coverage
-  checkInputs = [ numpy ];
+  checkInputs = [numpy];
   # checkPhase begins by deleting source dir to force test execution against installed version
   checkPhase = ''
     rm -r code/png
@@ -40,9 +40,8 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";
-    homepage    = "https://github.com/scondo/purepng";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    homepage = "https://github.com/scondo/purepng";
+    license = licenses.mit;
+    maintainers = with maintainers; [ris];
   };
-
 }

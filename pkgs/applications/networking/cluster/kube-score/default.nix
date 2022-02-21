@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kube-score";
   version = "1.14.0";
@@ -15,8 +18,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";
-    homepage    = "https://github.com/zegl/kube-score";
-    license     = licenses.mit;
-    maintainers = [ maintainers.j4m3s ];
+    homepage = "https://github.com/zegl/kube-score";
+    license = licenses.mit;
+    maintainers = [maintainers.j4m3s];
   };
 }

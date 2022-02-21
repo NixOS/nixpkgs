@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, python, gurobi }:
-
+{
+  lib,
+  buildPythonPackage,
+  python,
+  gurobi,
+}:
 buildPythonPackage {
   pname = "gurobipy";
   version = "9.1.2";
@@ -8,7 +12,7 @@ buildPythonPackage {
 
   setSourceRoot = "sourceRoot=$(echo gurobi*/*64)";
 
-  patches = [ ./no-clever-setup.patch ];
+  patches = [./no-clever-setup.patch];
 
   postInstall = ''
     mv lib/libgurobi*.so* $out/lib
@@ -23,6 +27,6 @@ buildPythonPackage {
     description = "The Gurobi Python interface";
     homepage = "https://www.gurobi.com";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

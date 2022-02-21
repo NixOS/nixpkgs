@@ -1,16 +1,16 @@
-{ lib
-, bitstring
-, buildPythonApplication
-, fetchFromGitHub
-, fetchpatch
-, flask
-, mido
-, numpy
-, pyserial
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bitstring,
+  buildPythonApplication,
+  fetchFromGitHub,
+  fetchpatch,
+  flask,
+  mido,
+  numpy,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonApplication rec {
   pname = "cantoolz";
   version = "3.7.0";
@@ -39,9 +39,9 @@ buildPythonApplication rec {
     bitstring
   ];
 
-  checkInputs = [ pytestCheckHook ];
-  disabledTests = [ "test_process" ];
-  pythonImportsCheck = [ "cantoolz" ];
+  checkInputs = [pytestCheckHook];
+  disabledTests = ["test_process"];
+  pythonImportsCheck = ["cantoolz"];
 
   meta = with lib; {
     description = "Black-box CAN network analysis framework";
@@ -56,7 +56,7 @@ buildPythonApplication rec {
       implemented with a new module.
     '';
     homepage = "https://github.com/CANToolz/CANToolz";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

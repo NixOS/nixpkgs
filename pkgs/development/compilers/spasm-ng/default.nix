@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, gcc, gmp, openssl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gcc,
+  gmp,
+  openssl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "spasm-ng";
 
@@ -12,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "0xspxmp2fir604b4xsk4hi1gjv61rnq2ypppr7cj981jlhicmvjj";
   };
 
-  nativeBuildInputs = [ gcc ];
+  nativeBuildInputs = [gcc];
 
-  buildInputs = [ gmp openssl zlib ];
+  buildInputs = [gmp openssl zlib];
 
   enableParallelBuilding = true;
 
@@ -23,10 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/alberthdev/spasm-ng";
+    homepage = "https://github.com/alberthdev/spasm-ng";
     description = "Z80 assembler with extra features to support development for TI calculators";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [siraben];
+    platforms = platforms.unix;
   };
 }

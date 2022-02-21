@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, requests
-, lxml
-, pandas
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  requests,
+  lxml,
+  pandas,
 }:
-
 buildPythonPackage rec {
   pname = "pytrends";
   version = "4.8.0";
@@ -17,16 +17,15 @@ buildPythonPackage rec {
     sha256 = "sha256-BLezPrbfwSCqictGQGiKi2MzNydrbdzqRP8Mf2tiQ9I=";
   };
 
-  propagatedBuildInputs = [ requests lxml pandas ];
+  propagatedBuildInputs = [requests lxml pandas];
 
   doCheck = false;
-  pythonImportsCheck = [ "pytrends" ];
+  pythonImportsCheck = ["pytrends"];
 
   meta = with lib; {
     description = "Pseudo API for Google Trends";
     homepage = "https://github.com/GeneralMills/pytrends";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.mmahut ];
+    license = [licenses.asl20];
+    maintainers = [maintainers.mmahut];
   };
-
 }

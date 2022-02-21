@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, requests
-, six
-, pytestCheckHook
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  requests,
+  six,
+  pytestCheckHook,
+  pyyaml,
 }:
-
 buildPythonPackage rec {
   pname = "pynetbox";
   version = "6.6.0";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "API client library for Netbox";
     homepage = "https://github.com/netbox-community/pynetbox";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

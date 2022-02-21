@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "yahooweather";
   version = "0.10";
@@ -18,6 +22,6 @@ buildPythonPackage rec {
     description = "Provide an interface to the Yahoo! Weather RSS feed";
     homepage = "https://github.com/pvizeli/yahooweather";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, coursier }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  coursier,
+}:
 stdenv.mkDerivation rec {
   pname = "scala-runners";
   version = "unstable-2021-07-28";
@@ -27,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "An alternative implementation of the Scala distribution's runners";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ hrhino ];
+    maintainers = with maintainers; [hrhino];
   };
 }

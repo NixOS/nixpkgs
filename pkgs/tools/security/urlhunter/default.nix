@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "urlhunter";
   version = "0.1.1";
@@ -23,7 +23,7 @@ buildGoModule rec {
       exposed via shortener services such as bit.ly and goo.gl.
     '';
     homepage = "https://github.com/utkusen/urlhunter";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

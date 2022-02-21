@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, dill
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "multiprocess";
   version = "0.70.12.2";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Multiprocessing and multithreading in Python";
     homepage = "https://github.com/uqfoundation/multiprocess";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiofiles
-, asgi-csrf
-, click
-, click-default-group
-, itsdangerous
-, janus
-, jinja2
-, hupper
-, mergedeep
-, pint
-, pluggy
-, python-baseconv
-, pyyaml
-, uvicorn
-, httpx
-# Check Inputs
-, pytestCheckHook
-, pytest-asyncio
-, pytest-timeout
-, aiohttp
-, beautifulsoup4
-, asgiref
-, setuptools
-, trustme
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiofiles,
+  asgi-csrf,
+  click,
+  click-default-group,
+  itsdangerous,
+  janus,
+  jinja2,
+  hupper,
+  mergedeep,
+  pint,
+  pluggy,
+  python-baseconv,
+  pyyaml,
+  uvicorn,
+  httpx
+  # Check Inputs
+  ,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-timeout,
+  aiohttp,
+  beautifulsoup4,
+  asgiref,
+  setuptools,
+  trustme,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "datasette";
   version = "0.60.2";
@@ -107,6 +108,6 @@ buildPythonPackage rec {
     description = "Multi-tool for exploring and publishing data";
     homepage = "https://datasette.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

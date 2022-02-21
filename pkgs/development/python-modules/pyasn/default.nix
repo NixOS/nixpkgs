@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "pyasn";
   version = "1.6.1";
@@ -11,12 +14,12 @@ buildPythonPackage rec {
 
   doCheck = false; # Tests require internet connection which wont work
 
-  pythonImportsCheck = [ "pyasn" ];
+  pythonImportsCheck = ["pyasn"];
 
   meta = with lib; {
     description = "Offline IP address to Autonomous System Number lookup module";
     homepage = "https://github.com/hadiasghari/pyasn";
-    license = with licenses; [ bsdOriginal mit ];
-    maintainers = with maintainers; [ onny ];
+    license = with licenses; [bsdOriginal mit];
+    maintainers = with maintainers; [onny];
   };
 }

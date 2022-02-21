@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "nampa";
   version = "1.0";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
       --replace "0.1.1" "${version}"
   '';
 
-  pythonImportsCheck = [ "nampa" ];
+  pythonImportsCheck = ["nampa"];
 
   meta = with lib; {
     description = "Python implementation of the FLIRT technology";
     homepage = "https://github.com/thebabush/nampa";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

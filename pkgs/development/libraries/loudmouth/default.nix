@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, openssl, libidn, glib, pkg-config, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  libidn,
+  glib,
+  pkg-config,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   version = "1.5.3";
   pname = "loudmouth";
@@ -12,11 +20,11 @@ stdenv.mkDerivation rec {
   patches = [
   ];
 
-  configureFlags = [ "--with-ssl=openssl" ];
+  configureFlags = ["--with-ssl=openssl"];
 
-  propagatedBuildInputs = [ openssl libidn glib zlib ];
+  propagatedBuildInputs = [openssl libidn glib zlib];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   meta = with lib; {
     description = "A lightweight C library for the Jabber protocol";

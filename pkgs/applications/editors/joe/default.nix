@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl } :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "joe";
   version = "4.6";
@@ -40,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://joe-editor.sourceforge.io";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

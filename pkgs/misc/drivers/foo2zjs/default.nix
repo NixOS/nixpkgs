@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, foomatic-filters, bc, ghostscript, systemd, vim, time }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  foomatic-filters,
+  bc,
+  ghostscript,
+  systemd,
+  vim,
+  time,
+}:
 stdenv.mkDerivation rec {
   pname = "foo2zjs";
   version = "20210116";
@@ -9,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "14x3wizvncdy0xgvmcx541qanwb7bg76abygqy17bxycn1zh5r1x";
   };
 
-  buildInputs = [ foomatic-filters bc ghostscript systemd vim ];
+  buildInputs = [foomatic-filters bc ghostscript systemd vim];
 
   patches = [
     ./no-hardcode-fw.diff
@@ -33,7 +42,7 @@ stdenv.mkDerivation rec {
     "MODEL=$(out)/share/cups/model"
   ];
 
-  installFlags = [ "install-hotplug" ];
+  installFlags = ["install-hotplug"];
 
   postPatch = ''
     touch all-test
@@ -47,7 +56,7 @@ stdenv.mkDerivation rec {
     sed -e "/PRINTERID=/s@=.*@=$out/bin/usb_printerid@" -i hplj1000
   '';
 
-  checkInputs = [ time ];
+  checkInputs = [time];
   doCheck = false; # fails to find its own binary. Also says "Tests will pass only if you are using ghostscript-8.71-16.fc14".
 
   preInstall = ''
@@ -62,8 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ZjStream printer drivers";
-    maintainers = with maintainers;
-    [
+    maintainers = with maintainers; [
       raskin
     ];
     platforms = platforms.linux;

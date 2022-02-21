@@ -1,54 +1,65 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "mediatomb";
 
   nodes = {
-    serverGerbera =
-      { ... }:
-      let port = 49152;
-      in {
-        imports = [ ../modules/profiles/minimal.nix ];
-        services.mediatomb = {
-          enable = true;
-          serverName = "Gerbera";
-          package = pkgs.gerbera;
-          interface = "eth1";  # accessible from test
-          openFirewall = true;
-          mediaDirectories = [
-            { path = "/var/lib/gerbera/pictures"; recursive = false; hidden-files = false; }
-            { path = "/var/lib/gerbera/audio"; recursive = true; hidden-files = false; }
-          ];
-        };
+    serverGerbera = {...}: let
+      port = 49152;
+    in {
+      imports = [../modules/profiles/minimal.nix];
+      services.mediatomb = {
+        enable = true;
+        serverName = "Gerbera";
+        package = pkgs.gerbera;
+        interface = "eth1"; # accessible from test
+        openFirewall = true;
+        mediaDirectories = [
+          {
+            path = "/var/lib/gerbera/pictures";
+            recursive = false;
+            hidden-files = false;
+          }
+          {
+            path = "/var/lib/gerbera/audio";
+            recursive = true;
+            hidden-files = false;
+          }
+        ];
       };
+    };
 
-    serverMediatomb =
-      { ... }:
-      let port = 49151;
-      in {
-        imports = [ ../modules/profiles/minimal.nix ];
-        services.mediatomb = {
-          enable = true;
-          serverName = "Mediatomb";
-          package = pkgs.mediatomb;
-          interface = "eth1";
-          inherit port;
-          mediaDirectories = [
-            { path = "/var/lib/mediatomb/pictures"; recursive = false; hidden-files = false; }
-            { path = "/var/lib/mediatomb/audio"; recursive = true; hidden-files = false; }
-          ];
-        };
-        networking.firewall.interfaces.eth1 = {
-          allowedUDPPorts = [ 1900 port ];
-          allowedTCPPorts = [ port ];
-        };
+    serverMediatomb = {...}: let
+      port = 49151;
+    in {
+      imports = [../modules/profiles/minimal.nix];
+      services.mediatomb = {
+        enable = true;
+        serverName = "Mediatomb";
+        package = pkgs.mediatomb;
+        interface = "eth1";
+        inherit port;
+        mediaDirectories = [
+          {
+            path = "/var/lib/mediatomb/pictures";
+            recursive = false;
+            hidden-files = false;
+          }
+          {
+            path = "/var/lib/mediatomb/audio";
+            recursive = true;
+            hidden-files = false;
+          }
+        ];
       };
+      networking.firewall.interfaces.eth1 = {
+        allowedUDPPorts = [1900 port];
+        allowedTCPPorts = [port];
+      };
+    };
 
-      client = { ... }: { };
+    client = {...}: {};
   };
 
-  testScript =
-  ''
+  testScript = ''
     start_all()
 
     port = 49151

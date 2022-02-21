@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, pcsclite, libzip, help2man }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pcsclite,
+  libzip,
+  help2man,
+}:
 stdenv.mkDerivation rec {
   pname = "libykneomgr";
   version = "0.1.8";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "12gqblz400kr11m1fdr1vvwr85lgy5v55zy0cf782whpk8lyyj97";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcsclite libzip help2man ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [pcsclite libzip help2man];
 
   configureFlags = [
     "--with-backend=pcsc"

@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, flex
-, bison
-, openssl
-, libpcap
-, zlib
-, file
-, curl
-, libmaxminddb
-, gperftools
-, python3
-, swig
-, gettext
-, coreutils
-, ncurses
-, caf
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  flex,
+  bison,
+  openssl,
+  libpcap,
+  zlib,
+  file,
+  curl,
+  libmaxminddb,
+  gperftools,
+  python3,
+  swig,
+  gettext,
+  coreutils,
+  ncurses,
+  caf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zeek";
   version = "4.2.0";
@@ -35,21 +35,23 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  buildInputs = [
-    curl
-    gperftools
-    libmaxminddb
-    libpcap
-    ncurses
-    openssl
-    python3
-    swig
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    gettext
-  ];
+  buildInputs =
+    [
+      curl
+      gperftools
+      libmaxminddb
+      libpcap
+      ncurses
+      openssl
+      python3
+      swig
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      gettext
+    ];
 
-  outputs = [ "out" "lib" "py" ];
+  outputs = ["out" "lib" "py"];
 
   cmakeFlags = [
     "-DCAF_ROOT=${caf}"
@@ -75,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.zeek.org";
     changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub marsam tobim ];
+    maintainers = with maintainers; [pSub marsam tobim];
     platforms = platforms.unix;
   };
 }

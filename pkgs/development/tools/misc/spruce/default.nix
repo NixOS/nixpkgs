@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "spruce";
   version = "unstable-2022-02-10";
@@ -18,6 +21,6 @@ buildGoModule rec {
     description = "A BOSH template merge tool";
     homepage = "https://github.com/geofffranks/spruce";
     license = licenses.mit;
-    maintainers = with maintainers; [ risson ];
+    maintainers = with maintainers; [risson];
   };
 }

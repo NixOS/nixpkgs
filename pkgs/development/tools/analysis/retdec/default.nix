@@ -1,30 +1,29 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, fetchzip
-, lib
-, callPackage
-, openssl
-, cmake
-, autoconf
-, automake
-, libtool
-, pkg-config
-, bison
-, flex
-, groff
-, perl
-, python3
-, time
-, upx
-, ncurses
-, libffi
-, libxml2
-, zlib
-, withPEPatterns ? false
-}:
-
-let
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchzip,
+  lib,
+  callPackage,
+  openssl,
+  cmake,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  bison,
+  flex,
+  groff,
+  perl,
+  python3,
+  time,
+  upx,
+  ncurses,
+  libffi,
+  libxml2,
+  zlib,
+  withPEPatterns ? false,
+}: let
   capstone = fetchFromGitHub {
     owner = "avast-tl";
     repo = "capstone";
@@ -37,7 +36,8 @@ let
     rev = "998374baace397ea98f3b1d768e81c978b4fba41";
     sha256 = "09n34rdp0wpm8zy30zx40wkkc4gbv2k3cv181y6c1260rllwk5d1";
   };
-  keystone = fetchFromGitHub { # only for tests
+  keystone = fetchFromGitHub {
+    # only for tests
     owner = "keystone-engine";
     repo = "keystone";
     rev = "d7ba8e378e5284e6384fc9ecd660ed5f6532e922";
@@ -80,7 +80,8 @@ let
     rev = "1.8.4";
     sha256 = "1z0gj7a6jypkijmpknis04qybs1hkd04d1arr3gy89lnxmp6qzlm";
   };
-  googletest = fetchFromGitHub { # only for tests
+  googletest = fetchFromGitHub {
+    # only for tests
     owner = "google";
     repo = "googletest";
     rev = "83fa0cb17dad47a1d905526dcdddb5b96ed189d2";
@@ -95,18 +96,22 @@ let
 
   retdec-support = let
     version = "2018-02-08"; # make sure to adjust both hashes (once with withPEPatterns=true and once withPEPatterns=false)
-  in fetchzip {
-    url = "https://github.com/avast-tl/retdec-support/releases/download/${version}/retdec-support_${version}.tar.xz";
-    sha256 = if withPEPatterns then "148i8flbyj1y4kfdyzsz7jsj38k4h97npjxj18h6v4wksd4m4jm7"
-                               else "0ixv9qyqq40pzyqy6v9jf5rxrvivjb0z0zn260nbmb9gk765bacy";
-    stripRoot = false;
-    # Removing PE signatures reduces this from 3.8GB -> 642MB (uncompressed)
-    extraPostFetch = lib.optionalString (!withPEPatterns) ''
-      rm -r "$out/generic/yara_patterns/static-code/pe"
-    '';
-  } // {
-    inherit version; # necessary to check the version against the expected version
-  };
+  in
+    fetchzip {
+      url = "https://github.com/avast-tl/retdec-support/releases/download/${version}/retdec-support_${version}.tar.xz";
+      sha256 =
+        if withPEPatterns
+        then "148i8flbyj1y4kfdyzsz7jsj38k4h97npjxj18h6v4wksd4m4jm7"
+        else "0ixv9qyqq40pzyqy6v9jf5rxrvivjb0z0zn260nbmb9gk765bacy";
+      stripRoot = false;
+      # Removing PE signatures reduces this from 3.8GB -> 642MB (uncompressed)
+      extraPostFetch = lib.optionalString (!withPEPatterns) ''
+        rm -r "$out/generic/yara_patterns/static-code/pe"
+      '';
+    }
+    // {
+      inherit version; # necessary to check the version against the expected version
+    };
 
   # patch CMakeLists.txt for a dependency and compare the versions to the ones expected by upstream
   # this has to be applied for every dependency (which it is in postPatch)
@@ -122,112 +127,114 @@ let
     # patch the CMakeLists.txt file to use our local copy of the dependency instead of fetching it at build time
     sed -i -e 's|URL .*|URL ${dep}|' "deps/${dep.dep_name}/CMakeLists.txt"
   '';
+in
+  stdenv.mkDerivation rec {
+    pname = "retdec";
 
-in stdenv.mkDerivation rec {
-  pname = "retdec";
+    # If you update this you will also need to adjust the versions of the updated dependencies. You can do this by first just updating retdec
+    # itself and trying to build it. The build should fail and tell you which dependencies you have to upgrade to which versions.
+    # I've notified upstream about this problem here:
+    # https://github.com/avast-tl/retdec/issues/412
+    # gcc is pinned to gcc8 in all-packages.nix. That should probably be re-evaluated on update.
+    version = "3.2";
 
-  # If you update this you will also need to adjust the versions of the updated dependencies. You can do this by first just updating retdec
-  # itself and trying to build it. The build should fail and tell you which dependencies you have to upgrade to which versions.
-  # I've notified upstream about this problem here:
-  # https://github.com/avast-tl/retdec/issues/412
-  # gcc is pinned to gcc8 in all-packages.nix. That should probably be re-evaluated on update.
-  version = "3.2";
+    src = fetchFromGitHub {
+      owner = "avast-tl";
+      repo = pname;
+      rev = "refs/tags/v${version}";
+      sha256 = "0chky656lsddn20bnm3pmz6ix20y4a0y8swwr42hrhi01vkhmzrp";
+    };
 
-  src = fetchFromGitHub {
-    owner = "avast-tl";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "0chky656lsddn20bnm3pmz6ix20y4a0y8swwr42hrhi01vkhmzrp";
-  };
+    nativeBuildInputs = [
+      cmake
+      autoconf
+      automake
+      libtool
+      pkg-config
+      bison
+      flex
+      groff
+      perl
+      python3
+    ];
 
-  nativeBuildInputs = [
-    cmake
-    autoconf
-    automake
-    libtool
-    pkg-config
-    bison
-    flex
-    groff
-    perl
-    python3
-  ];
+    buildInputs = [
+      openssl
+      ncurses
+      libffi
+      libxml2
+      zlib
+    ];
 
-  buildInputs = [
-    openssl
-    ncurses
-    libffi
-    libxml2
-    zlib
-  ];
+    cmakeFlags = [
+      "-DRETDEC_TESTS=ON" # build tests
+    ];
 
-  cmakeFlags = [
-    "-DRETDEC_TESTS=ON" # build tests
-  ];
+    # all dependencies that are normally fetched during build time (the subdirectories of `deps`)
+    # all of these need to be fetched through nix and the CMakeLists files need to be patched not to fetch them themselves
+    external_deps = [
+      (capstone // {dep_name = "capstone";})
+      (elfio // {dep_name = "elfio";})
+      (googletest // {dep_name = "googletest";})
+      (jsoncpp // {dep_name = "jsoncpp";})
+      (keystone // {dep_name = "keystone";})
+      (libdwarf // {dep_name = "libdwarf";})
+      (llvm // {dep_name = "llvm";})
+      (pelib // {dep_name = "pelib";})
+      (rapidjson // {dep_name = "rapidjson";})
+      (tinyxml2 // {dep_name = "tinyxml2";})
+      (yaracpp // {dep_name = "yaracpp";})
+      (yaramod // {dep_name = "yaramod";})
+    ];
 
-  # all dependencies that are normally fetched during build time (the subdirectories of `deps`)
-  # all of these need to be fetched through nix and the CMakeLists files need to be patched not to fetch them themselves
-  external_deps = [
-    (capstone // { dep_name = "capstone"; })
-    (elfio // { dep_name = "elfio"; })
-    (googletest // { dep_name = "googletest"; })
-    (jsoncpp // { dep_name = "jsoncpp"; })
-    (keystone // { dep_name = "keystone"; })
-    (libdwarf // { dep_name = "libdwarf"; })
-    (llvm // { dep_name = "llvm"; })
-    (pelib // { dep_name = "pelib"; })
-    (rapidjson // { dep_name = "rapidjson"; })
-    (tinyxml2 // { dep_name = "tinyxml2"; })
-    (yaracpp // { dep_name = "yaracpp"; })
-    (yaramod // { dep_name = "yaramod"; })
-  ];
+    # Use newer yaramod to fix w/bison 3.2+
+    patches = [
+      # 2.1.2 -> 2.2.1
+      (fetchpatch {
+        url = "https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch";
+        sha256 = "0hdq634f72fihdy10nx2ajbps561w03dfdsy5r35afv9fapla6mv";
+      })
+      # 2.2.1 -> 2.2.2
+      (fetchpatch {
+        url = "https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch";
+        sha256 = "0a8mwmwb39pr5ag3q11nv81ncdk51shndqrkm92shqrmdq14va52";
+      })
+    ];
 
-  # Use newer yaramod to fix w/bison 3.2+
-  patches = [
-    # 2.1.2 -> 2.2.1
-    (fetchpatch {
-      url = "https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch";
-      sha256 = "0hdq634f72fihdy10nx2ajbps561w03dfdsy5r35afv9fapla6mv";
-    })
-    # 2.2.1 -> 2.2.2
-    (fetchpatch {
-      url = "https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch";
-      sha256 = "0a8mwmwb39pr5ag3q11nv81ncdk51shndqrkm92shqrmdq14va52";
-    })
-  ];
+    postPatch =
+      (lib.concatMapStrings patchDep external_deps)
+      + ''
+        # install retdec-support
+        echo "Checking version of retdec-support"
+        expected_version="$( sed -n -e "s|^version = '\(.*\)'$|\1|p" 'cmake/install-share.py' )"
+        if [ "$expected_version" != '${retdec-support.version}' ]; then
+          echo "The retdec-support dependency has the wrong version: ${retdec-support.version} while $expected_version is expected."
+          exit 1
+        fi
+        mkdir -p "$out/share/retdec"
+        cp -r ${retdec-support} "$out/share/retdec/support" # write permission needed during install
+        chmod -R u+w "$out/share/retdec/support"
+        # python file originally responsible for fetching the retdec-support archive to $out/share/retdec
+        # that is not necessary anymore, so empty the file
+        echo > cmake/install-share.py
 
-  postPatch = (lib.concatMapStrings patchDep external_deps) + ''
-    # install retdec-support
-    echo "Checking version of retdec-support"
-    expected_version="$( sed -n -e "s|^version = '\(.*\)'$|\1|p" 'cmake/install-share.py' )"
-    if [ "$expected_version" != '${retdec-support.version}' ]; then
-      echo "The retdec-support dependency has the wrong version: ${retdec-support.version} while $expected_version is expected."
-      exit 1
-    fi
-    mkdir -p "$out/share/retdec"
-    cp -r ${retdec-support} "$out/share/retdec/support" # write permission needed during install
-    chmod -R u+w "$out/share/retdec/support"
-    # python file originally responsible for fetching the retdec-support archive to $out/share/retdec
-    # that is not necessary anymore, so empty the file
-    echo > cmake/install-share.py
+        # call correct `time` and `upx` programs
+        substituteInPlace scripts/retdec-config.py --replace /usr/bin/time ${time}/bin/time
+        substituteInPlace scripts/retdec-unpacker.py --replace "'upx'" "'${upx}/bin/upx'"
+      '';
 
-    # call correct `time` and `upx` programs
-    substituteInPlace scripts/retdec-config.py --replace /usr/bin/time ${time}/bin/time
-    substituteInPlace scripts/retdec-unpacker.py --replace "'upx'" "'${upx}/bin/upx'"
-  '';
+    doInstallCheck = true;
+    installCheckPhase = ''
+      ${python3.interpreter} "$out/bin/retdec-tests-runner.py"
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    ${python3.interpreter} "$out/bin/retdec-tests-runner.py"
+      rm -rf $out/bin/__pycache__
+    '';
 
-    rm -rf $out/bin/__pycache__
-  '';
-
-  meta = with lib; {
-    description = "A retargetable machine-code decompiler based on LLVM";
-    homepage = "https://retdec.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill timokau ];
-    platforms = ["x86_64-linux" "i686-linux"];
-  };
-}
+    meta = with lib; {
+      description = "A retargetable machine-code decompiler based on LLVM";
+      homepage = "https://retdec.com";
+      license = licenses.mit;
+      maintainers = with maintainers; [dtzWill timokau];
+      platforms = ["x86_64-linux" "i686-linux"];
+    };
+  }

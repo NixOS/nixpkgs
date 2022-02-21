@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   version = "1.1.0";
   pname = "pysnooper";
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "A poor man's debugger for Python";
     homepage = "https://github.com/cool-RR/PySnooper";
     license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    maintainers = with maintainers; [seqizz];
   };
 }

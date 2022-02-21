@@ -1,4 +1,9 @@
-{lib, stdenv, fetchFromGitHub, libX11}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+}:
 stdenv.mkDerivation rec {
   pname = "wayv";
   version = "0.3";
@@ -10,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "046dvaq6na1fyxz5nrjg13aaz6ific9wbygck0dknqqfmmjrsv3b";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [libX11];
 
   postInstall = ''
     make -C doc install
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A gesture control for X11";
-    license = lib.licenses.gpl2Plus ;
+    license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     homepage = "https://github.com/mikemb/wayV";

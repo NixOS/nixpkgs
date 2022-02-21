@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, cloudpickle
-, fetchPypi
-, future
-, networkx
-, numpy
-, py4j
-, pymongo
-, pyspark
-, scipy
-, six
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  fetchPypi,
+  future,
+  networkx,
+  numpy,
+  py4j,
+  pymongo,
+  pyspark,
+  scipy,
+  six,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "hyperopt";
   version = "0.2.7";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "http://hyperopt.github.io/hyperopt/";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
   };
 }

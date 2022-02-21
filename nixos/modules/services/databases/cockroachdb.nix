@@ -1,54 +1,57 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.cockroachdb;
   crdb = cfg.package;
 
-  escape    = builtins.replaceStrings ["%"] ["%%"];
+  escape = builtins.replaceStrings ["%"] ["%%"];
   ifNotNull = v: s: optionalString (v != null) s;
 
   startupCommand = lib.concatStringsSep " "
-    [ # Basic startup
-      "${crdb}/bin/cockroach start"
-      "--logtostderr"
-      "--store=/var/lib/cockroachdb"
-      (ifNotNull cfg.locality "--locality='${cfg.locality}'")
+  [
+    # Basic startup
+    "${crdb}/bin/cockroach start"
+    "--logtostderr"
+    "--store=/var/lib/cockroachdb"
+    (ifNotNull cfg.locality "--locality='${cfg.locality}'")
 
-      # WebUI settings
-      "--http-addr='${cfg.http.address}:${toString cfg.http.port}'"
+    # WebUI settings
+    "--http-addr='${cfg.http.address}:${toString cfg.http.port}'"
 
-      # Cluster listen address
-      "--listen-addr='${cfg.listen.address}:${toString cfg.listen.port}'"
+    # Cluster listen address
+    "--listen-addr='${cfg.listen.address}:${toString cfg.listen.port}'"
 
-      # Cluster configuration
-      (ifNotNull cfg.join "--join=${cfg.join}")
+    # Cluster configuration
+    (ifNotNull cfg.join "--join=${cfg.join}")
 
-      # Cache and memory settings. Must be escaped.
-      "--cache='${escape cfg.cache}'"
-      "--max-sql-memory='${escape cfg.maxSqlMemory}'"
+    # Cache and memory settings. Must be escaped.
+    "--cache='${escape cfg.cache}'"
+    "--max-sql-memory='${escape cfg.maxSqlMemory}'"
 
-      # Certificate/security settings.
-      (if cfg.insecure then "--insecure" else "--certs-dir=${cfg.certsDir}")
-    ];
+    # Certificate/security settings.
+    (if cfg.insecure
+    then "--insecure"
+    else "--certs-dir=${cfg.certsDir}")
+  ];
 
-    addressOption = descr: defaultPort: {
-      address = mkOption {
-        type = types.str;
-        default = "localhost";
-        description = "Address to bind to for ${descr}";
-      };
-
-      port = mkOption {
-        type = types.port;
-        default = defaultPort;
-        description = "Port to bind to for ${descr}";
-      };
+  addressOption = descr: defaultPort: {
+    address = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Address to bind to for ${descr}";
     };
-in
 
-{
+    port = mkOption {
+      type = types.port;
+      default = defaultPort;
+      description = "Port to bind to for ${descr}";
+    };
+  };
+in {
   options = {
     services.cockroachdb = {
       enable = mkEnableOption "CockroachDB Server";
@@ -164,18 +167,19 @@ in
 
   config = mkIf config.services.cockroachdb.enable {
     assertions = [
-      { assertion = !cfg.insecure -> cfg.certsDir != null;
+      {
+        assertion = !cfg.insecure -> cfg.certsDir != null;
         message = "CockroachDB must have a set of SSL certificates (.certsDir), or run in Insecure Mode (.insecure = true)";
       }
     ];
 
-    environment.systemPackages = [ crdb ];
+    environment.systemPackages = [crdb];
 
     users.users = optionalAttrs (cfg.user == "cockroachdb") {
       cockroachdb = {
         description = "CockroachDB Server User";
-        uid         = config.ids.uids.cockroachdb;
-        group       = cfg.group;
+        uid = config.ids.uids.cockroachdb;
+        group = cfg.group;
       };
     };
 
@@ -184,34 +188,34 @@ in
     };
 
     networking.firewall.allowedTCPPorts = lib.optionals cfg.openPorts
-      [ cfg.http.port cfg.listen.port ];
+    [cfg.http.port cfg.listen.port];
 
-    systemd.services.cockroachdb =
-      { description   = "CockroachDB Server";
-        documentation = [ "man:cockroach(1)" "https://www.cockroachlabs.com" ];
+    systemd.services.cockroachdb = {
+      description = "CockroachDB Server";
+      documentation = ["man:cockroach(1)" "https://www.cockroachlabs.com"];
 
-        after    = [ "network.target" "time-sync.target" ];
-        requires = [ "time-sync.target" ];
-        wantedBy = [ "multi-user.target" ];
+      after = ["network.target" "time-sync.target"];
+      requires = ["time-sync.target"];
+      wantedBy = ["multi-user.target"];
 
-        unitConfig.RequiresMountsFor = "/var/lib/cockroachdb";
+      unitConfig.RequiresMountsFor = "/var/lib/cockroachdb";
 
-        serviceConfig =
-          { ExecStart = startupCommand;
-            Type = "notify";
-            User = cfg.user;
-            StateDirectory = "cockroachdb";
-            StateDirectoryMode = "0700";
+      serviceConfig = {
+        ExecStart = startupCommand;
+        Type = "notify";
+        User = cfg.user;
+        StateDirectory = "cockroachdb";
+        StateDirectoryMode = "0700";
 
-            Restart = "always";
+        Restart = "always";
 
-            # A conservative-ish timeout is alright here, because for Type=notify
-            # cockroach will send systemd pings during startup to keep it alive
-            TimeoutStopSec = 60;
-            RestartSec = 10;
-          };
+        # A conservative-ish timeout is alright here, because for Type=notify
+        # cockroach will send systemd pings during startup to keep it alive
+        TimeoutStopSec = 60;
+        RestartSec = 10;
       };
+    };
   };
 
-  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+  meta.maintainers = with lib.maintainers; [thoughtpolice];
 }

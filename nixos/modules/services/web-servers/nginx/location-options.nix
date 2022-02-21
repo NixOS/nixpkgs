@@ -2,12 +2,8 @@
 # main server configuration, and for the virtual hosts.  (The latter
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
-
-{ lib }:
-
-with lib;
-
-{
+{lib}:
+with lib; {
   options = {
     basicAuth = mkOption {
       type = types.attrsOf types.str;

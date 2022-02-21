@@ -1,6 +1,12 @@
-{ buildRubyGem, fetchFromGitHub, makeWrapper, lib, bundler, nix,
-  nix-prefetch-git }:
-
+{
+  buildRubyGem,
+  fetchFromGitHub,
+  makeWrapper,
+  lib,
+  bundler,
+  nix,
+  nix-prefetch-git,
+}:
 buildRubyGem rec {
   inherit (bundler) ruby;
 
@@ -15,8 +21,8 @@ buildRubyGem rec {
     sha256 = "sha256-iMp6Yj7TSWDqge3Lw855/igOWdTIuFH1LGeIN/cpq7U=";
   };
 
-  buildInputs = [ ruby bundler ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ruby bundler];
+  nativeBuildInputs = [makeWrapper];
 
   preFixup = ''
     wrapProgram $out/bin/bundix \
@@ -37,7 +43,7 @@ buildRubyGem rec {
     '';
     homepage = "https://github.com/manveru/bundix";
     license = "MIT";
-    maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
+    maintainers = with lib.maintainers; [manveru marsam zimbatm];
     platforms = lib.platforms.all;
   };
 }

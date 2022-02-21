@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiodns
-, aiohttp
-, backports-zoneinfo
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiodns,
+  aiohttp,
+  backports-zoneinfo,
 }:
-
 buildPythonPackage rec {
   pname = "forecast-solar";
   version = "2.1.0";
@@ -20,22 +20,24 @@ buildPythonPackage rec {
 
   PACKAGE_VERSION = version;
 
-  propagatedBuildInputs = [
-    aiodns
-    aiohttp
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  propagatedBuildInputs =
+    [
+      aiodns
+      aiohttp
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      backports-zoneinfo
+    ];
 
   # no unit tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "forecast_solar" ];
+  pythonImportsCheck = ["forecast_solar"];
 
   meta = with lib; {
     description = "Asynchronous Python client for getting forecast solar information";
     homepage = "https://github.com/home-assistant-libs/forecast_solar";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

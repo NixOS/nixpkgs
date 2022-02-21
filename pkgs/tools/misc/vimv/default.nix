@@ -1,5 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation {
   pname = "vimv";
   version = "unstable-2019-10-31";
@@ -22,7 +25,7 @@ stdenvNoCC.mkDerivation {
     description = "Batch-rename files using Vim";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ kmein ];
+    maintainers = with maintainers; [kmein];
     mainProgram = "vimv";
   };
 }

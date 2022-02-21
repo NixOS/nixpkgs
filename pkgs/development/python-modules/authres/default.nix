@@ -1,5 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, python }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  python,
+}:
 buildPythonPackage rec {
   pname = "authres";
   version = "1.2.0";
@@ -23,6 +27,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://launchpad.net/authentication-results-python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [leenaars];
   };
 }

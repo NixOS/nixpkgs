@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   # linux kernel above 5.7 comes with its own exfat implementation https://github.com/arter97/exfat-linux/issues/27
   # Assertion moved here due to some tests unintenionally triggering it,
@@ -16,16 +21,18 @@ stdenv.mkDerivation rec {
     sha256 = "14jahy7n6pr482fjfrlf9ck3f2rkr5ds0n5r85xdfsla37ria26d";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags =
+    [
+      "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+    ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ];
 
   installPhase = ''
     install -m644 -b -D exfat.ko $out/lib/modules/${kernel.modDirVersion}/kernel/fs/exfat/exfat.ko
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "exfat kernel module";
     inherit (src.meta) homepage;
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ makefu ];
+    maintainers = with lib.maintainers; [makefu];
     platforms = lib.platforms.linux;
     broken = true;
   };

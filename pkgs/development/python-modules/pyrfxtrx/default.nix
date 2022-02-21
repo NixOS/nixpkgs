@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyrfxtrx";
   version = "0.27.1";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Library to communicate with the RFXtrx family of devices";
     homepage = "https://github.com/Danielhiversen/pyRFXtrx";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

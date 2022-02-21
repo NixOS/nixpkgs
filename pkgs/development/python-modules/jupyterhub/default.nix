@@ -1,34 +1,33 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchzip
-, alembic
-, async_generator
-, certipy
-, python-dateutil
-, entrypoints
-, jinja2
-, jupyter-telemetry
-, oauthlib
-, pamela
-, prometheus-client
-, requests
-, sqlalchemy
-, tornado
-, traitlets
-, nodePackages
-, beautifulsoup4
-, cryptography
-, notebook
-, pytest-asyncio
-, pytestCheckHook
-, requests-mock
-, virtualenv
-}:
-
-let
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchzip,
+  alembic,
+  async_generator,
+  certipy,
+  python-dateutil,
+  entrypoints,
+  jinja2,
+  jupyter-telemetry,
+  oauthlib,
+  pamela,
+  prometheus-client,
+  requests,
+  sqlalchemy,
+  tornado,
+  traitlets,
+  nodePackages,
+  beautifulsoup4,
+  cryptography,
+  notebook,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests-mock,
+  virtualenv,
+}: let
   # js/css assets that setup.py tries to fetch via `npm install` when building
   # from source. https://github.com/jupyterhub/jupyterhub/blob/master/package.json
   bootstrap =
@@ -56,109 +55,107 @@ let
       url = "https://registry.npmjs.org/requirejs/-/requirejs-2.3.6.tgz";
       sha256 = "165hkli3qcd59cjqvli9r5f92i0h7czkmhcg1cgwamw2d0b7xibz";
     };
-
 in
+  buildPythonPackage rec {
+    pname = "jupyterhub";
+    version = "1.3.0";
+    disabled = pythonOlder "3.6";
 
-buildPythonPackage rec {
-  pname = "jupyterhub";
-  version = "1.3.0";
-  disabled = pythonOlder "3.6";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "13pf6qhimpaxj20871ff5rvwwan59320cdhhrn9cfh6314971zq5";
+    };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "13pf6qhimpaxj20871ff5rvwwan59320cdhhrn9cfh6314971zq5";
-  };
+    # Most of this only applies when building from source (e.g. js/css assets are
+    # pre-built and bundled in the official release tarball on pypi).
+    #
+    # Stuff that's always needed:
+    #   * At runtime, we need configurable-http-proxy, so we substitute the store
+    #     path.
+    #
+    # Other stuff that's only needed when building from source:
+    #   * js/css assets are fetched from npm.
+    #   * substitute store path for `lessc` commmand.
+    #   * set up NODE_PATH so `lessc` can find `less-plugin-clean-css`.
+    #   * don't run `npm install`.
+    preBuild = ''
+      export NODE_PATH=${nodePackages.less-plugin-clean-css}/lib/node_modules
 
-  # Most of this only applies when building from source (e.g. js/css assets are
-  # pre-built and bundled in the official release tarball on pypi).
-  #
-  # Stuff that's always needed:
-  #   * At runtime, we need configurable-http-proxy, so we substitute the store
-  #     path.
-  #
-  # Other stuff that's only needed when building from source:
-  #   * js/css assets are fetched from npm.
-  #   * substitute store path for `lessc` commmand.
-  #   * set up NODE_PATH so `lessc` can find `less-plugin-clean-css`.
-  #   * don't run `npm install`.
-  preBuild = ''
-    export NODE_PATH=${nodePackages.less-plugin-clean-css}/lib/node_modules
+      substituteInPlace jupyterhub/proxy.py --replace \
+        "'configurable-http-proxy'" \
+        "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
 
-    substituteInPlace jupyterhub/proxy.py --replace \
-      "'configurable-http-proxy'" \
-      "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
+      substituteInPlace jupyterhub/tests/test_proxy.py --replace \
+        "'configurable-http-proxy'" \
+        "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
 
-    substituteInPlace jupyterhub/tests/test_proxy.py --replace \
-      "'configurable-http-proxy'" \
-      "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
+      substituteInPlace setup.py --replace \
+        "'npm'" "'true'"
 
-    substituteInPlace setup.py --replace \
-      "'npm'" "'true'"
+      declare -A deps
+      deps[bootstrap]=${bootstrap}
+      deps[font-awesome]=${font-awesome}
+      deps[jquery]=${jquery}
+      deps[moment]=${moment}
+      deps[requirejs]=${requirejs}
 
-    declare -A deps
-    deps[bootstrap]=${bootstrap}
-    deps[font-awesome]=${font-awesome}
-    deps[jquery]=${jquery}
-    deps[moment]=${moment}
-    deps[requirejs]=${requirejs}
+      mkdir -p share/jupyter/hub/static/components
+      for dep in "''${!deps[@]}"; do
+        if [ ! -e share/jupyter/hub/static/components/$dep ]; then
+          cp -r ''${deps[$dep]} share/jupyter/hub/static/components/$dep
+        fi
+      done
+    '';
 
-    mkdir -p share/jupyter/hub/static/components
-    for dep in "''${!deps[@]}"; do
-      if [ ! -e share/jupyter/hub/static/components/$dep ]; then
-        cp -r ''${deps[$dep]} share/jupyter/hub/static/components/$dep
-      fi
-    done
-  '';
+    propagatedBuildInputs = [
+      # https://github.com/jupyterhub/jupyterhub/blob/master/requirements.txt
+      alembic
+      async_generator
+      certipy
+      python-dateutil
+      entrypoints
+      jinja2
+      jupyter-telemetry
+      oauthlib
+      pamela
+      prometheus-client
+      requests
+      sqlalchemy
+      tornado
+      traitlets
+    ];
 
-  propagatedBuildInputs = [
-    # https://github.com/jupyterhub/jupyterhub/blob/master/requirements.txt
-    alembic
-    async_generator
-    certipy
-    python-dateutil
-    entrypoints
-    jinja2
-    jupyter-telemetry
-    oauthlib
-    pamela
-    prometheus-client
-    requests
-    sqlalchemy
-    tornado
-    traitlets
-  ];
+    preCheck = ''
+      substituteInPlace jupyterhub/tests/test_spawner.py --replace \
+        "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
+    '';
 
-  preCheck = ''
-    substituteInPlace jupyterhub/tests/test_spawner.py --replace \
-      "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
-  '';
+    checkInputs = [
+      # https://github.com/jupyterhub/jupyterhub/blob/master/dev-requirements.txt
+      beautifulsoup4
+      cryptography
+      notebook
+      pytest-asyncio
+      pytestCheckHook
+      requests-mock
+      virtualenv
+    ];
 
-  checkInputs = [
-    # https://github.com/jupyterhub/jupyterhub/blob/master/dev-requirements.txt
-    beautifulsoup4
-    cryptography
-    notebook
-    pytest-asyncio
-    pytestCheckHook
-    requests-mock
-    virtualenv
-  ];
+    disabledTests = [
+      # Tries to install older versions through pip
+      "test_upgrade"
+      # Testcase fails to find requests import
+      "test_external_service"
+      # attempts to do ssl connection
+      "test_connection_notebook_wrong_certs"
+    ];
 
-  disabledTests = [
-    # Tries to install older versions through pip
-    "test_upgrade"
-    # Testcase fails to find requests import
-    "test_external_service"
-    # attempts to do ssl connection
-    "test_connection_notebook_wrong_certs"
-  ];
-
-  meta = with lib; {
-    description = "Serves multiple Jupyter notebook instances";
-    homepage = "https://jupyter.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ixxie cstrahan ];
-    # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = stdenv.isDarwin;
-  };
-}
+    meta = with lib; {
+      description = "Serves multiple Jupyter notebook instances";
+      homepage = "https://jupyter.org/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ixxie cstrahan];
+      # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
+      broken = stdenv.isDarwin;
+    };
+  }

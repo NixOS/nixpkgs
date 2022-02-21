@@ -1,18 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, sassc
-, meson
-, ninja
-, pkg-config
-, gtk3
-, glib
-, gnome
-, gtk-engine-murrine
-, optipng
-, inkscape
-, cinnamon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sassc,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  glib,
+  gnome,
+  gtk-engine-murrine,
+  optipng,
+  inkscape,
+  cinnamon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "arc-theme";
   version = "20211018";
@@ -60,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jnsh/arc-theme";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ simonvandel romildo ];
+    maintainers = with maintainers; [simonvandel romildo];
   };
 }

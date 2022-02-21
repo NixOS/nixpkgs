@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   version = "2.4.19";
   pname = "swagger-codegen";
@@ -28,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
     homepage = "https://github.com/swagger-api/swagger-codegen";
     license = licenses.asl20;
-    maintainers = [ maintainers.jraygauthier ];
+    maintainers = [maintainers.jraygauthier];
   };
 }

@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-
+{
+  lib,
+  fetchFromGitHub,
+}:
 fetchFromGitHub rec {
   rev = "7e8f02dadcc23ba42b491b39e5bdf16e7b383031";
   name = "et-book-${builtins.substring 0 6 rev}";
@@ -17,6 +19,6 @@ fetchFromGitHub rec {
     description = "The typeface used in Edward Tufte’s books.";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jethro ];
+    maintainers = with maintainers; [jethro];
   };
 }

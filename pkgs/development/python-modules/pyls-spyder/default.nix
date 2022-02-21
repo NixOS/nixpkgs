@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-lsp-server
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-lsp-server,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyls-spyder";
   version = "0.4.0";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyls_spyder" ];
+  pythonImportsCheck = ["pyls_spyder"];
 
   meta = with lib; {
     description = "Spyder extensions for the python-language-server";
     homepage = "https://github.com/spyder-ide/pyls-spyder";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

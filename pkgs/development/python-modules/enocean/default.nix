@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, enum-compat
-, pyserial
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  enum-compat,
+  pyserial,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "enocean";
   version = "0.60.1";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "EnOcean serial protocol implementation";
     homepage = "https://github.com/kipe/enocean";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

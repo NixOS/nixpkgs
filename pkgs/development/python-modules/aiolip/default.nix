@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiolip";
   version = "1.1.6";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'pytest-runner'," ""
   '';
 
-  pythonImportsCheck = [ "aiolip" ];
+  pythonImportsCheck = ["aiolip"];
 
   meta = with lib; {
     description = "Python module for the Lutron Integration Protocol";
     homepage = "https://github.com/bdraco/aiolip";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

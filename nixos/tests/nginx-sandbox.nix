@@ -1,12 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "nginx-sandbox";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ izorkin ];
+    maintainers = [izorkin];
   };
 
   # This test checks the creation and reading of a file in sandbox mode. Used simple lua script.
 
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     nixpkgs.overlays = [
       (self: super: {
         nginx-lua = super.nginx.override {

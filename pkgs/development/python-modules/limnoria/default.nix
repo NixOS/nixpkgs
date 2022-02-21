@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, chardet
-, cryptography
-, feedparser
-, fetchPypi
-, mock
-, pysocks
-, pytestCheckHook
-, python-dateutil
-, python-gnupg
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  cryptography,
+  feedparser,
+  fetchPypi,
+  mock,
+  pysocks,
+  pytestCheckHook,
+  python-dateutil,
+  python-gnupg,
+  pythonOlder,
+  pytz,
 }:
-
 buildPythonPackage rec {
   pname = "limnoria";
   version = "2022.2.3";
@@ -25,17 +25,19 @@ buildPythonPackage rec {
     hash = "sha256-Jc11hS+WrRnjgYOUpc+GdkRoNV/DUJhQK6rI2lUkEIA=";
   };
 
-  propagatedBuildInputs = [
-    chardet
-    cryptography
-    feedparser
-    mock
-    pysocks
-    python-dateutil
-    python-gnupg
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    pytz
-  ];
+  propagatedBuildInputs =
+    [
+      chardet
+      cryptography
+      feedparser
+      mock
+      pysocks
+      python-dateutil
+      python-gnupg
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      pytz
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -62,6 +64,6 @@ buildPythonPackage rec {
     description = "A modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [goibhniu];
   };
 }

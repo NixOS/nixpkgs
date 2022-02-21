@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, setuptools
-, unicorn-emu
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  setuptools,
+  unicorn-emu,
 }:
-
 buildPythonPackage rec {
   pname = "unicorn";
   version = lib.getVersion unicorn-emu;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   # needed on non-x86 linux
-  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
+  setupPyBuildFlags = lib.optionals stdenv.isLinux ["--plat-name" "linux"];
 
   propagatedBuildInputs = [
     setuptools
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python bindings for Unicorn CPU emulator engine";
     homepage = "https://www.unicorn-engine.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bennofs ris ];
+    maintainers = with maintainers; [bennofs ris];
   };
 }

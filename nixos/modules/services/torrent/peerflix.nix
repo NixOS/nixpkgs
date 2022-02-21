@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.peerflix;
   opt = options.services.peerflix;
 
@@ -12,9 +15,7 @@ let
       "tmp": "${cfg.downloadDir}"
     }
   '';
-
 in {
-
   ###### interface
 
   options.services.peerflix = {
@@ -47,8 +48,8 @@ in {
 
     systemd.services.peerflix = {
       description = "Peerflix Daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       environment.HOME = cfg.stateDir;
 
       preStart = ''

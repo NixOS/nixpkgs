@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "voluptuous";
   version = "0.12.2";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  pythonImportsCheck = [ "voluptuous" ];
+  pythonImportsCheck = ["voluptuous"];
 
   meta = with lib; {
     description = "Python data validation library";
     homepage = "http://alecthomas.github.io/voluptuous/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

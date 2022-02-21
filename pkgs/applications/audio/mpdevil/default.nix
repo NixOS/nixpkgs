@@ -1,10 +1,15 @@
-{ lib, fetchFromGitHub
-, python3Packages
-, gdk-pixbuf, glib, gobject-introspection, gtk3
-, libnotify
-, intltool
-, wrapGAppsHook }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  intltool,
+  wrapGAppsHook,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "mpdevil";
   version = "1.4.1";
@@ -17,15 +22,26 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    glib.dev gobject-introspection gtk3 intltool wrapGAppsHook
+    glib.dev
+    gobject-introspection
+    gtk3
+    intltool
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gdk-pixbuf glib libnotify
+    gdk-pixbuf
+    glib
+    libnotify
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    beautifulsoup4 distutils_extra mpd2 notify-py pygobject3 requests
+    beautifulsoup4
+    distutils_extra
+    mpd2
+    notify-py
+    pygobject3
+    requests
   ];
 
   postInstall = ''
@@ -48,6 +64,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/SoongNoonien/mpdevil";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [bloomvdomino];
   };
 }

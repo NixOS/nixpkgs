@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gettext, xorg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  glib,
+  gettext,
+  xorg,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-no-title-bar";
   version = "11";
@@ -11,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "07ddw47binlsbyvgy4xkdjvd40zyp7nwd17r6k7w54d50vmnwhvb";
   };
 
-  nativeBuildInputs = [ glib gettext ];
+  nativeBuildInputs = [glib gettext];
 
   patches = [
     (substituteAll {
@@ -21,7 +28,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
+  makeFlags = ["INSTALLBASE=$(out)/share/gnome-shell/extensions"];
 
   passthru = {
     extensionUuid = "no-title-bar@jonaspoehler.de";
@@ -31,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Integrates maximized windows with the top panel";
     homepage = "https://github.com/poehlerj/no-title-bar";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jonafato svsdep maxeaubrey ];
+    maintainers = with maintainers; [jonafato svsdep maxeaubrey];
     platforms = platforms.linux;
   };
 }

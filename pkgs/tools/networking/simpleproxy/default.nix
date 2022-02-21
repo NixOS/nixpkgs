@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "simpleproxy";
   version = "3.5";
@@ -16,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vzaliva/simpleproxy";
     description = "A simple TCP proxy";
     license = licenses.gpl2;
-    maintainers = [ maintainers.montag451 ];
+    maintainers = [maintainers.montag451];
   };
 }

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  SDL2,
+  gzip,
+  libvorbis,
+  libmad,
+  vulkan-headers,
+  vulkan-loader,
+}:
 stdenv.mkDerivation rec {
   pname = "vkquake";
   version = "1.12.2";
@@ -26,13 +36,13 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ];
 
-  buildFlags = [ "DO_USERDIRS=1" ];
+  buildFlags = ["DO_USERDIRS=1"];
 
   preInstall = ''
     mkdir -p "$out/bin"
   '';
 
-  makeFlags = [ "prefix=$(out) bindir=$(out)/bin" ];
+  makeFlags = ["prefix=$(out) bindir=$(out)/bin"];
 
   postFixup = ''
     wrapProgram $out/bin/vkquake \
@@ -54,6 +64,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

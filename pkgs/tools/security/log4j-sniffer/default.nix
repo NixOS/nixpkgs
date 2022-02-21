@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
 }:
-
 buildGoModule rec {
   pname = "log4j-sniffer";
   version = "1.8.0";
@@ -30,7 +30,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool that scans archives to check for vulnerable log4j versions";
     homepage = "https://github.com/palantir/log4j-sniffer";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

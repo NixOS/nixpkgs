@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.jira;
 
   pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
@@ -22,10 +23,7 @@ let
       session.lastvalidation                  session.lastvalidation
     '';
   });
-
-in
-
-{
+in {
   options = {
     services.jira = {
       enable = mkEnableOption "Atlassian JIRA service";
@@ -63,7 +61,7 @@ in
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "-Xms1024m" "-Xmx2048m" ];
+        example = ["-Xms1024m" "-Xmx2048m"];
         description = "Java options to pass to catalina/tomcat.";
       };
 
@@ -169,11 +167,11 @@ in
     systemd.services.atlassian-jira = {
       description = "Atlassian JIRA";
 
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "postgresql.service" ];
-      after = [ "postgresql.service" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["postgresql.service"];
+      after = ["postgresql.service"];
 
-      path = [ cfg.jrePackage pkgs.bash ];
+      path = [cfg.jrePackage pkgs.bash];
 
       environment = {
         JIRA_USER = cfg.user;
@@ -182,15 +180,18 @@ in
         CATALINA_OPTS = concatStringsSep " " cfg.catalinaOptions;
       };
 
-      preStart = ''
-        mkdir -p ${cfg.home}/{logs,work,temp,deploy}
+      preStart =
+        ''
+          mkdir -p ${cfg.home}/{logs,work,temp,deploy}
 
-        sed -e 's,port="8080",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
-        '' + (lib.optionalString cfg.proxy.enable ''
+          sed -e 's,port="8080",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
+        ''
+        + (lib.optionalString cfg.proxy.enable ''
           -e 's,protocol="HTTP/1.1",protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${toString cfg.proxy.secure}",' \
-        '') + ''
+        '')
+        + ''
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
-      '';
+        '';
 
       serviceConfig = {
         User = cfg.user;

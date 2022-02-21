@@ -1,18 +1,37 @@
-{ stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
-, wrapQtAppsHook
-
-, akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
-, kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
-, kitemmodels, libical, libofx, qgpgme
-
-, sqlcipher
-
-# Needed for running tests:
-, qtbase, xvfb-run
-
-, python2, python3Packages
+{
+  stdenv,
+  lib,
+  fetchurl,
+  doxygen,
+  extra-cmake-modules,
+  graphviz,
+  kdoctools,
+  wrapQtAppsHook,
+  akonadi,
+  alkimia,
+  aqbanking,
+  gmp,
+  gwenhywfar,
+  kactivities,
+  karchive,
+  kcmutils,
+  kcontacts,
+  kdewebkit,
+  kdiagram,
+  kholidays,
+  kidentitymanagement,
+  kitemmodels,
+  libical,
+  libofx,
+  qgpgme,
+  sqlcipher
+  # Needed for running tests:
+  ,
+  qtbase,
+  xvfb-run,
+  python2,
+  python3Packages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kmymoney";
   version = "5.1.1";
@@ -26,14 +45,33 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2
-    python3Packages.wrapPython wrapQtAppsHook
+    doxygen
+    extra-cmake-modules
+    graphviz
+    kdoctools
+    python2
+    python3Packages.wrapPython
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
-    kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
-    libical libofx qgpgme
+    akonadi
+    alkimia
+    aqbanking
+    gmp
+    gwenhywfar
+    kactivities
+    karchive
+    kcmutils
+    kcontacts
+    kdewebkit
+    kdiagram
+    kholidays
+    kidentitymanagement
+    kitemmodels
+    libical
+    libofx
+    qgpgme
     sqlcipher
 
     # Put it into buildInputs so that CMake can find it, even though we patch
@@ -41,7 +79,7 @@ stdenv.mkDerivation rec {
     python3Packages.weboob
   ];
 
-  weboobPythonPath = [ python3Packages.weboob ];
+  weboobPythonPath = [python3Packages.weboob];
 
   postInstall = ''
     buildPythonPath "$weboobPythonPath"
@@ -55,7 +93,7 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  installCheckInputs = [ xvfb-run ];
+  installCheckInputs = [xvfb-run];
   installCheckPhase =
     lib.optionalString doInstallCheck ''
       xvfb-run -s '-screen 0 1024x768x24' make test \

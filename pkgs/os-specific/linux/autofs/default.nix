@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
-, libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  linuxHeaders,
+  libtirpc,
+  mount,
+  umount,
+  nfs-utils,
+  e2fsprogs,
+  libxml2,
+  libkrb5,
+  kmod,
+  openldap,
+  sssd,
+  cyrus_sasl,
+  openssl,
+  rpcsvc-proto,
+}:
 stdenv.mkDerivation rec {
   version = "5.1.6";
   pname = "autofs";
@@ -27,23 +45,33 @@ stdenv.mkDerivation rec {
   '';
 
   # configure script is not finding the right path
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_CFLAGS_COMPILE = ["-I${libtirpc.dev}/include/tirpc"];
 
   installPhase = ''
     make install SUBDIRS="lib daemon modules man" # all but samples
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [ linuxHeaders libtirpc libxml2 libkrb5 kmod openldap sssd
-                  openssl cyrus_sasl rpcsvc-proto ];
+  buildInputs = [
+    linuxHeaders
+    libtirpc
+    libxml2
+    libkrb5
+    kmod
+    openldap
+    sssd
+    openssl
+    cyrus_sasl
+    rpcsvc-proto
+  ];
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [flex bison];
 
   meta = {
     description = "Kernel-based automounter";
     homepage = "https://www.kernel.org/pub/linux/daemons/autofs/";
     license = lib.licenses.gpl2Plus;
-    executables = [ "automount" ];
+    executables = ["automount"];
     platforms = lib.platforms.linux;
   };
 }

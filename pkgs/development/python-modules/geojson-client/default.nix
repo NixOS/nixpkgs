@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, haversine
-, pytz
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geojson,
+  haversine,
+  pytz,
+  requests,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "geojson-client";
   version = "0.6";
@@ -26,14 +26,14 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "geojson_client" ];
+  pythonImportsCheck = ["geojson_client"];
 
   meta = with lib; {
     description = "Python module for convenient access to GeoJSON feeds";
     homepage = "https://github.com/exxamalte/python-geojson-client";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

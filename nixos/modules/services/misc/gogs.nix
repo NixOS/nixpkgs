@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.gogs;
   opt = options.services.gogs;
   configFile = pkgs.writeText "app.ini" ''
@@ -40,9 +43,7 @@ let
 
     ${cfg.extraConfig}
   '';
-in
-
-{
+in {
   options = {
     services.gogs = {
       enable = mkOption {
@@ -77,7 +78,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "sqlite3" "mysql" "postgres" ];
+          type = types.enum ["sqlite3" "mysql" "postgres"];
           example = "mysql";
           default = "sqlite3";
           description = "Database engine to use.";
@@ -190,12 +191,11 @@ in
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.gogs = {
       description = "Gogs (Go Git Service)";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.gogs ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
+      path = [pkgs.gogs];
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
@@ -204,21 +204,23 @@ in
         mkdir -p ${cfg.stateDir}
 
         # copy custom configuration and generate a random secret key if needed
-        ${optionalString (cfg.useWizard == false) ''
-          mkdir -p ${cfg.stateDir}/custom/conf
-          cp -f ${configFile} ${runConfig}
+        ${
+          optionalString (cfg.useWizard == false) ''
+            mkdir -p ${cfg.stateDir}/custom/conf
+            cp -f ${configFile} ${runConfig}
 
-          if [ ! -e ${secretKey} ]; then
-              head -c 16 /dev/urandom | base64 > ${secretKey}
-          fi
+            if [ ! -e ${secretKey} ]; then
+                head -c 16 /dev/urandom | base64 > ${secretKey}
+            fi
 
-          KEY=$(head -n1 ${secretKey})
-          DBPASS=$(head -n1 ${cfg.database.passwordFile})
-          sed -e "s,#secretkey#,$KEY,g" \
-              -e "s,#dbpass#,$DBPASS,g" \
-              -i ${runConfig}
-          chmod 440 ${runConfig} ${secretKey}
-        ''}
+            KEY=$(head -n1 ${secretKey})
+            DBPASS=$(head -n1 ${cfg.database.passwordFile})
+            sed -e "s,#secretkey#,$KEY,g" \
+                -e "s,#dbpass#,$DBPASS,g" \
+                -i ${runConfig}
+            chmod 440 ${runConfig} ${secretKey}
+          ''
+        }
 
         mkdir -p ${cfg.repositoryRoot}
         # update all hooks' binary paths
@@ -261,14 +263,13 @@ in
     };
 
     warnings = optional (cfg.database.password != "")
-      ''config.services.gogs.database.password will be stored as plaintext
-        in the Nix store. Use database.passwordFile instead.'';
+    ''      config.services.gogs.database.password will be stored as plaintext
+              in the Nix store. Use database.passwordFile instead.'';
 
     # Create database passwordFile default when password is configured.
-    services.gogs.database.passwordFile =
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "gogs-database-password";
-        text = cfg.database.password;
-      })));
+    services.gogs.database.passwordFile = (mkDefault (toString (pkgs.writeTextFile {
+      name = "gogs-database-password";
+      text = cfg.database.password;
+    })));
   };
 }

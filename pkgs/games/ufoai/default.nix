@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, libtheora, xvidcore, libGLU, libGL, SDL, SDL_ttf, SDL_mixer
-, curl, libjpeg, libpng, gettext, cunit, enableEditor?false }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtheora,
+  xvidcore,
+  libGLU,
+  libGL,
+  SDL,
+  SDL_ttf,
+  SDL_mixer,
+  curl,
+  libjpeg,
+  libpng,
+  gettext,
+  cunit,
+  enableEditor ? false,
+}:
 stdenv.mkDerivation rec {
   pname = "ufoai";
   version = "2.4";
@@ -16,12 +31,23 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''tar xvf "${srcData}"'';
 
-  configureFlags = [ "--enable-release" "--enable-sse" ]
+  configureFlags =
+    ["--enable-release" "--enable-sse"]
     ++ lib.optional enableEditor "--enable-uforadiant";
 
   buildInputs = [
-    libtheora xvidcore libGLU libGL SDL SDL_ttf SDL_mixer
-    curl libjpeg libpng gettext cunit
+    libtheora
+    xvidcore
+    libGLU
+    libGL
+    SDL
+    SDL_ttf
+    SDL_mixer
+    curl
+    libjpeg
+    libpng
+    gettext
+    cunit
   ];
 
   NIX_CFLAGS_LINK = "-lgcc_s"; # to avoid occasional runtime error in finding libgcc_s.so.1

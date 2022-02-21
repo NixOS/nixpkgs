@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, regex
-, pytest-runner, pytestCheckHook, pytest-mypy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  colorama,
+  regex,
+  pytest-runner,
+  pytestCheckHook,
+  pytest-mypy,
 }:
-
 buildPythonPackage rec {
   pname = "tatsu";
   version = "5.7.3";
@@ -16,11 +22,11 @@ buildPythonPackage rec {
     sha256 = "1d6rnlybj971b5j5glvq288hd4r204nkmssqb0k8rm6cqcwhz292";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ colorama regex ];
-  checkInputs = [ pytestCheckHook pytest-mypy ];
+  nativeBuildInputs = [pytest-runner];
+  propagatedBuildInputs = [colorama regex];
+  checkInputs = [pytestCheckHook pytest-mypy];
 
-  pythonImportsCheck = [ "tatsu" ];
+  pythonImportsCheck = ["tatsu"];
 
   meta = with lib; {
     description = "Generates Python parsers from grammars in a variation of EBNF";
@@ -31,7 +37,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://tatsu.readthedocs.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
-
 }

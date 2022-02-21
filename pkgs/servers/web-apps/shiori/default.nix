@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "shiori";
   version = "1.5.1";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "Simple bookmark manager built with Go";
     homepage = "https://github.com/go-shiori/shiori";
     license = licenses.mit;
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = with maintainers; [minijackson];
   };
 }

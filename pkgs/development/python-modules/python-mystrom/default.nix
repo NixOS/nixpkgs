@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, click
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  click,
+  requests,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "python-mystrom";
   version = "2.0.0";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
       There is support for bulbs, motion sensors, plugs and buttons.
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-mystrom";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

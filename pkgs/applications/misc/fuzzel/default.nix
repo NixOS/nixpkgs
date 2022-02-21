@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, pkg-config
-, meson
-, ninja
-, wayland-scanner
-, wayland
-, pixman
-, wayland-protocols
-, libxkbcommon
-, scdoc
-, tllist
-, fcft
-, enableCairo ? true
-, withPNGBackend ? "libpng"
-, withSVGBackend ? "librsvg"
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  pkg-config,
+  meson,
+  ninja,
+  wayland-scanner,
+  wayland,
+  pixman,
+  wayland-protocols,
+  libxkbcommon,
+  scdoc,
+  tllist,
+  fcft,
+  enableCairo ? true,
+  withPNGBackend ? "libpng",
+  withSVGBackend ? "librsvg"
   # Optional dependencies
-, cairo
-, librsvg
-, libpng
+  ,
+  cairo,
+  librsvg,
+  libpng,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fuzzel";
   version = "1.7.0";
@@ -41,21 +42,27 @@ stdenv.mkDerivation rec {
     scdoc
   ];
 
-  buildInputs = [
-    wayland
-    pixman
-    wayland-protocols
-    libxkbcommon
-    tllist
-    fcft
-  ] ++ lib.optional enableCairo cairo
-  ++ lib.optional (withPNGBackend == "libpng") libpng
-  ++ lib.optional (withSVGBackend == "librsvg") librsvg;
+  buildInputs =
+    [
+      wayland
+      pixman
+      wayland-protocols
+      libxkbcommon
+      tllist
+      fcft
+    ]
+    ++ lib.optional enableCairo cairo
+    ++ lib.optional (withPNGBackend == "libpng") libpng
+    ++ lib.optional (withSVGBackend == "librsvg") librsvg;
 
   mesonBuildType = "release";
 
   mesonFlags = [
-    "-Denable-cairo=${if enableCairo then "enabled" else "disabled"}"
+    "-Denable-cairo=${
+      if enableCairo
+      then "enabled"
+      else "disabled"
+    }"
     "-Dpng-backend=${withPNGBackend}"
     "-Dsvg-backend=${withSVGBackend}"
   ];
@@ -64,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
     license = licenses.mit;
-    maintainers = with maintainers; [ fionera polykernel ];
+    maintainers = with maintainers; [fionera polykernel];
     platforms = with platforms; linux;
     changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${version}";
   };

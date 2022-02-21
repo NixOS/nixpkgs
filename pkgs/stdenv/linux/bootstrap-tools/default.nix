@@ -1,11 +1,14 @@
-{ system, bootstrapFiles, extraAttrs }:
-
+{
+  system,
+  bootstrapFiles,
+  extraAttrs,
+}:
 derivation ({
   name = "bootstrap-tools";
 
   builder = bootstrapFiles.busybox;
 
-  args = [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
+  args = ["ash" "-e" ./scripts/unpack-bootstrap-tools.sh];
 
   tarball = bootstrapFiles.bootstrapTools;
 
@@ -15,4 +18,5 @@ derivation ({
   langC = true;
   langCC = true;
   isGNU = true;
-} // extraAttrs)
+}
+// extraAttrs)

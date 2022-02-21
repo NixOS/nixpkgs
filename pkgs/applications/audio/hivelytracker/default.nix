@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, SDL
-, SDL_image
-, SDL_ttf
-, gtk2
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  SDL,
+  SDL_image,
+  SDL_ttf,
+  gtk2,
+  glib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hivelytracker";
   version = "unstable-2020-08-19";
@@ -82,8 +82,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     broken = stdenv.isDarwin; # TODO: try to use xcbuild
   };
 }
-

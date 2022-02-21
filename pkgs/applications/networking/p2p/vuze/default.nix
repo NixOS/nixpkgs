@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchsvn, jdk, jre, ant, swt, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  jdk,
+  jre,
+  ant,
+  swt,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "vuze";
   version = "5750";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "07w6ipyiy8hi88d6yxbbf3vkv26mj7dcz9yr8141hb2ig03v0h0p";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk ant ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jdk ant];
 
   buildPhase = "ant";
 
@@ -25,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.vuze.com";
     license = licenses.unfree;
     platforms = platforms.all;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [volth];
   };
 }

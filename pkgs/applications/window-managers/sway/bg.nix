@@ -1,9 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc
-, wayland, wayland-protocols, cairo, gdk-pixbuf
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-protocols,
+  cairo,
+  gdk-pixbuf,
+  wayland-scanner,
 }:
-
 stdenv.mkDerivation rec {
   pname = "swaybg";
   version = "1.1";
@@ -15,12 +23,13 @@ stdenv.mkDerivation rec {
     sha256 = "17508q9wsw6c1lsxlcbxj74z2naqhwi5c7lkbq24m4lk8qmy0576";
   };
 
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];
+  depsBuildBuild = [pkg-config];
+  nativeBuildInputs = [meson ninja pkg-config scdoc wayland-scanner];
+  buildInputs = [wayland wayland-protocols cairo gdk-pixbuf];
 
   mesonFlags = [
-    "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
+    "-Dgdk-pixbuf=enabled"
+    "-Dman-pages=enabled"
   ];
 
   meta = with lib; {
@@ -33,6 +42,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

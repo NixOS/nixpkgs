@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fish
-, runtimeShell
-, writeShellScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fish,
+  runtimeShell,
+  writeShellScript,
 }:
-
 stdenv.mkDerivation rec {
   pname = "oh-my-fish";
   version = "7+unstable=2021-03-03";
@@ -53,8 +53,9 @@ stdenv.mkDerivation rec {
       easy to use.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = fish.meta.platforms;
   };
 }
 # TODO: customize the omf-install script
+

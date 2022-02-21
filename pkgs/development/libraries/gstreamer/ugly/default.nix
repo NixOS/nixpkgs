@@ -1,32 +1,32 @@
-{ stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gst-plugins-base
-, orc
-, gettext
-, a52dec
-, libcdio
-, libdvdread
-, libmad
-, libmpeg2
-, x264
-, libintl
-, lib
-, opencore-amr
-, IOKit
-, CoreFoundation
-, DiskArbitration
-, enableGplPlugins ? true
+{
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gst-plugins-base,
+  orc,
+  gettext,
+  a52dec,
+  libcdio,
+  libdvdread,
+  libmad,
+  libmpeg2,
+  x264,
+  libintl,
+  lib,
+  opencore-amr,
+  IOKit,
+  CoreFoundation,
+  DiskArbitration,
+  enableGplPlugins ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
   version = "1.20.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
@@ -41,37 +41,46 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    gst-plugins-base
-    orc
-    libintl
-    opencore-amr
-  ] ++ lib.optionals enableGplPlugins [
-    a52dec
-    libcdio
-    libdvdread
-    libmad
-    libmpeg2
-    x264
-  ] ++ lib.optionals stdenv.isDarwin [
-    IOKit
-    CoreFoundation
-    DiskArbitration
-  ];
+  buildInputs =
+    [
+      gst-plugins-base
+      orc
+      libintl
+      opencore-amr
+    ]
+    ++ lib.optionals enableGplPlugins [
+      a52dec
+      libcdio
+      libdvdread
+      libmad
+      libmpeg2
+      x264
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      IOKit
+      CoreFoundation
+      DiskArbitration
+    ];
 
-  mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-    "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
-  ] ++ (if enableGplPlugins then [
-    "-Dgpl=enabled"
-  ] else [
-    "-Da52dec=disabled"
-    "-Dcdio=disabled"
-    "-Ddvdread=disabled"
-    "-Dmpeg2dec=disabled"
-    "-Dsidplay=disabled"
-    "-Dx264=disabled"
-  ]);
+  mesonFlags =
+    [
+      "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+      "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
+    ]
+    ++ (if enableGplPlugins
+    then
+      [
+        "-Dgpl=enabled"
+      ]
+    else
+      [
+        "-Da52dec=disabled"
+        "-Dcdio=disabled"
+        "-Ddvdread=disabled"
+        "-Dmpeg2dec=disabled"
+        "-Dsidplay=disabled"
+        "-Dx264=disabled"
+      ]);
 
   postPatch = ''
     patchShebangs \
@@ -87,8 +96,11 @@ stdenv.mkDerivation rec {
       the plug-ins or the supporting libraries might not be how we'd
       like. The code might be widely known to present patent problems.
     '';
-    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
+    license =
+      if enableGplPlugins
+      then licenses.gpl2Plus
+      else licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [matthewbauer];
   };
 }

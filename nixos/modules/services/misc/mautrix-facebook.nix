@@ -1,19 +1,21 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.mautrix-facebook;
   settingsFormat = pkgs.formats.json {};
   settingsFile = settingsFormat.generate "mautrix-facebook-config.json" cfg.settings;
 
   puppetRegex = concatStringsSep
-    ".*"
-    (map
-      escapeRegex
-      (splitString
-        "{userid}"
-        cfg.settings.bridge.username_template));
+  ".*"
+  (map
+  escapeRegex
+  (splitString
+  "{userid}"
+  cfg.settings.bridge.username_template));
 in {
   options = {
     services.mautrix-facebook = {
@@ -126,19 +128,23 @@ in {
 
     services.postgresql = mkIf cfg.configurePostgresql {
       ensureDatabases = ["mautrix-facebook"];
-      ensureUsers = [{
-        name = "mautrix-facebook";
-        ensurePermissions = {
-          "DATABASE \"mautrix-facebook\"" = "ALL PRIVILEGES";
-        };
-      }];
+      ensureUsers = [
+        {
+          name = "mautrix-facebook";
+          ensurePermissions = {
+            "DATABASE \"mautrix-facebook\"" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
     systemd.services.mautrix-facebook = rec {
-      wantedBy = [ "multi-user.target" ];
-      wants = [
-        "network-online.target"
-      ] ++ optional config.services.matrix-synapse.enable "matrix-synapse.service"
+      wantedBy = ["multi-user.target"];
+      wants =
+        [
+          "network-online.target"
+        ]
+        ++ optional config.services.matrix-synapse.enable "matrix-synapse.service"
         ++ optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 
@@ -191,5 +197,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ kevincox ];
+  meta.maintainers = with maintainers; [kevincox];
 }

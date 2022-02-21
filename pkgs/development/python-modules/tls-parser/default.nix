@@ -1,10 +1,10 @@
-{ lib
-, pythonOlder
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
+{
+  lib,
+  pythonOlder,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "tls-parser";
   version = "1.2.2";
@@ -17,15 +17,15 @@ buildPythonPackage rec {
     sha256 = "12qj3vg02r5a51w6gbgb1gcxicqc10lbbsdi57jkkfvbqiindbd0";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "tls_parser" ];
+  pythonImportsCheck = ["tls_parser"];
 
   meta = with lib; {
     homepage = "https://github.com/nabla-c0d3/tls_parser";
     description = "Small library to parse TLS records";
     platforms = with platforms; linux ++ darwin;
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch ];
+    maintainers = with maintainers; [veehaitch];
   };
 }

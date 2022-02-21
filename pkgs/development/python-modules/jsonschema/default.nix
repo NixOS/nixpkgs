@@ -1,18 +1,18 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, importlib-resources
-, pyperf
-, pyrsistent
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, twisted
-, typing-extensions
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  importlib-resources,
+  pyperf,
+  pyrsistent,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  twisted,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "jsonschema";
   version = "4.4.0";
@@ -31,15 +31,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    pyrsistent
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      attrs
+      pyrsistent
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+      typing-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   checkInputs = [
     pyperf
@@ -55,6 +58,6 @@ buildPythonPackage rec {
     description = "An implementation of JSON Schema validation for Python";
     homepage = "https://github.com/Julian/jsonschema";
     license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

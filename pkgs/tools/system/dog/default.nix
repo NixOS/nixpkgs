@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "dog";
   version = "1.7";
@@ -25,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "http://lwn.net/Articles/421072/";
     description = "cat replacement";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qknight ];
+    maintainers = with maintainers; [qknight];
     platforms = platforms.all;
   };
 }

@@ -1,6 +1,14 @@
-{ buildPackages, fetchFromGitHub, perl, buildLinux, libelf, util-linux, ... } @ args:
-
-buildLinux (args // rec {
+{
+  buildPackages,
+  fetchFromGitHub,
+  perl,
+  buildLinux,
+  libelf,
+  util-linux,
+  ...
+} @ args:
+buildLinux (args
+// rec {
   version = "4.14.180-176";
 
   # modDirVersion needs to be x.y.z.
@@ -19,15 +27,17 @@ buildLinux (args // rec {
   defconfig = "odroidxu4_defconfig";
 
   # This extraConfig is (only) required because the gator module fails to build as-is.
-  extraConfig = ''
+  extraConfig =
+    ''
 
-    GATOR n
+      GATOR n
 
-    # This attempted fix applies correctly but does not fix the build.
-    #GATOR_MALI_MIDGARD_PATH ${src}/drivers/gpu/arm/midgard
+      # This attempted fix applies correctly but does not fix the build.
+      #GATOR_MALI_MIDGARD_PATH ${src}/drivers/gpu/arm/midgard
 
-  '' + (args.extraConfig or "");
+    ''
+    + (args.extraConfig or "");
 
-  extraMeta.platforms = [ "armv7l-linux" ];
-
-} // (args.argsOverride or {}))
+  extraMeta.platforms = ["armv7l-linux"];
+}
+// (args.argsOverride or {}))

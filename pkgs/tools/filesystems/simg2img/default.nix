@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "simg2img";
   version = "1.1.4";
@@ -11,15 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "1xm9kaqs2w8c7a4psv78gv66gild88mpgjn5lj087d7jh1jxy7bf";
   };
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Tool to convert Android sparse images to raw images";
     homepage = "https://github.com/anestisb/android-simg2img";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = [maintainers.dezgeg];
   };
 }

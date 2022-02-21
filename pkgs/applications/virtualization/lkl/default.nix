@@ -1,21 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, bc, python3, bison, flex, fuse, libarchive
-, buildPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bc,
+  python3,
+  bison,
+  flex,
+  fuse,
+  libarchive,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "lkl";
   version = "2019-10-04";
-  rev  = "06ca3ddb74dc5b84fa54fa1746737f2df502e047";
+  rev = "06ca3ddb74dc5b84fa54fa1746737f2df502e047";
 
-  outputs = [ "dev" "lib" "out" ];
+  outputs = ["dev" "lib" "out"];
 
-  nativeBuildInputs = [ bc bison flex python3 ];
+  nativeBuildInputs = [bc bison flex python3];
 
-  buildInputs = [ fuse libarchive ];
+  buildInputs = [fuse libarchive];
 
   src = fetchFromGitHub {
     inherit rev;
-    owner  = "lkl";
-    repo   = "linux";
+    owner = "lkl";
+    repo = "linux";
     sha256 = "0qjp0r338bwgrqdsvy5mkdh7ryas23m47yvxfwdknfyl0k3ylq62";
   };
 
@@ -42,7 +51,7 @@ stdenv.mkDerivation rec {
   # We turn off format and fortify because of these errors (fortify implies -O2, which breaks the jitter entropy code):
   #   fs/xfs/xfs_log_recover.c:2575:3: error: format not a string literal and no format arguments [-Werror=format-security]
   #   crypto/jitterentropy.c:54:3: error: #error "The CPU Jitter random number generator must not be compiled with optimizations. See documentation. Use the compiler switch -O0 for compiling jitterentropy.c."
-  hardeningDisable = [ "format" "fortify" ];
+  hardeningDisable = ["format" "fortify"];
 
   makeFlags = [
     "-C tools/lkl"
@@ -60,9 +69,9 @@ stdenv.mkDerivation rec {
       extensively as possible with minimal effort and reduced maintenance
       overhead
     '';
-    homepage    = "https://github.com/lkl/linux/";
-    platforms   = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ]; # Darwin probably works too but I haven't tested it
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ copumpkin ];
+    homepage = "https://github.com/lkl/linux/";
+    platforms = ["x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux"]; # Darwin probably works too but I haven't tested it
+    license = licenses.gpl2;
+    maintainers = with maintainers; [copumpkin];
   };
 }

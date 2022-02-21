@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "pure-pcapy3";
   version = "1.0.1";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     description = "Pure Python reimplementation of pcapy. This package is API compatible and a drop-in replacement.";
     homepage = "https://bitbucket.org/viraptor/pure-pcapy";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [etu];
   };
 }

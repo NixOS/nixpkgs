@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, docker
-, dockerfile-parse
-, requests
-, stevedore
-, pbr
-, debian-inspector
-, regex
-, GitPython
-, prettytable
-, idna
-, packageurl-python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  docker,
+  dockerfile-parse,
+  requests,
+  stevedore,
+  pbr,
+  debian-inspector,
+  regex,
+  GitPython,
+  prettytable,
+  idna,
+  packageurl-python,
 }:
-
 buildPythonPackage rec {
   pname = "tern";
   version = "2.9.1";

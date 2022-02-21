@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flexmock
-, pytest
-, pytest-cov
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flexmock,
+  pytest,
+  pytest-cov,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "iocapture";
   version = "0.1.2";

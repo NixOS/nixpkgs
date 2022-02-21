@@ -1,8 +1,5 @@
-{ pkgs }:
-
-with pkgs.javaPackages;
-
-{
+{pkgs}:
+with pkgs.javaPackages; {
   mavenLibs_2_0_1 = [
     mavenArtifact_2_0_1
     mavenArtifactManager_2_0_1

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, gnumake,
-  libX11, libXinerama, libXrandr, libXpm, libXft, imlib2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnumake,
+  libX11,
+  libXinerama,
+  libXrandr,
+  libXpm,
+  libXft,
+  imlib2,
+}:
 stdenv.mkDerivation {
   pname = "wmfs";
 
@@ -36,7 +46,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Window manager from scratch";
     license = licenses.bsd2;
-    maintainers = [ maintainers.balsoft ];
+    maintainers = [maintainers.balsoft];
     platforms = platforms.linux;
   };
 }

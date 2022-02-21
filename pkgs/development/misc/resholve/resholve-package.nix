@@ -1,28 +1,31 @@
-{ stdenv, lib, resholve, resholve-utils }:
-
-{ pname
-, src
-, version
-, passthru ? { }
-, solutions
-, ...
-}@attrs:
-let
+{
+  stdenv,
+  lib,
+  resholve,
+  resholve-utils,
+}: {
+  pname,
+  src,
+  version,
+  passthru ? {},
+  solutions,
+  ...
+} @ attrs: let
   inherit stdenv;
 
-  self = (stdenv.mkDerivation ((removeAttrs attrs [ "solutions" ])
-    // {
+  self = (stdenv.mkDerivation ((removeAttrs attrs ["solutions"])
+  // {
     inherit pname version src;
-    buildInputs = (lib.optionals (builtins.hasAttr "buildInputs" attrs) attrs.buildInputs) ++ [ resholve ];
+    buildInputs = (lib.optionals (builtins.hasAttr "buildInputs" attrs) attrs.buildInputs) ++ [resholve];
 
     # enable below for verbose debug info if needed
     # supports default python.logging levels
     # LOGLEVEL="INFO";
     /*
-      subshell/PS4/set -x and : command to output resholve envs
-      and invocation. Extra context makes it clearer what the
-      Nix API is doing, makes nix-shell debugging easier, etc.
-    */
+     subshell/PS4/set -x and : command to output resholve envs
+     and invocation. Extra context makes it clearer what the
+     Nix API is doing, makes nix-shell debugging easier, etc.
+     */
     preFixup = ''
       (
         cd "$out"
@@ -34,4 +37,4 @@ let
     '';
   }));
 in
-lib.extendDerivation true passthru self
+  lib.extendDerivation true passthru self

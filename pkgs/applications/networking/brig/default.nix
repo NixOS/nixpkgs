@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "brig";
   version = "0.4.1";
@@ -20,6 +23,6 @@ buildGoPackage rec {
     homepage = "https://github.com/sahib/brig";
     license = licenses.agpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [offline];
   };
 }

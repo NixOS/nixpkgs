@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, gtk3
-, itstool
-, libxml2
-, brasero
-, libcanberra-gtk3
-, gnome
-, gst_all_1
-, libmusicbrainz5
-, libdiscid
-, isocodes
-, gsettings-desktop-schemas
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gtk3,
+  itstool,
+  libxml2,
+  brasero,
+  libcanberra-gtk3,
+  gnome,
+  gst_all_1,
+  libmusicbrainz5,
+  libdiscid,
+  isocodes,
+  gsettings-desktop-schemas,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sound-juicer";
   version = "3.38.0";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A Gnome CD Ripper";
     homepage = "https://wiki.gnome.org/Apps/SoundJuicer";
-    maintainers = [ maintainers.bdimcheff ];
+    maintainers = [maintainers.bdimcheff];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "tlslite";
   version = "0.4.9";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/tlslite";
     license = licenses.bsd3;
   };
-
 }

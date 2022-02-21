@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, selectors2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  selectors2,
 }:
-
 buildPythonPackage rec {
   pname = "rfc6555";
   version = "0.1.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python implementation of the Happy Eyeballs Algorithm";
     homepage = "https://github.com/sethmlarson/rfc6555";
     license = licenses.asl20;
-    maintainers = with maintainers; [ endocrimes ];
+    maintainers = with maintainers; [endocrimes];
   };
 }

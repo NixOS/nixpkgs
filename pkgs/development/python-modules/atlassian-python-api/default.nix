@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, deprecated
-, oauthlib
-, requests
-, requests_oauthlib
-, six
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  deprecated,
+  oauthlib,
+  requests,
+  requests_oauthlib,
+  six,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "atlassian-python-api";
   version = "3.19.0";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python Atlassian REST API Wrapper";
     homepage = "https://github.com/atlassian-api/atlassian-python-api";
     license = licenses.asl20;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    maintainers = with maintainers; [arnoldfarkas];
   };
 }

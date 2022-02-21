@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchurl, SDL2, ftgl, pkg-config, libpng, libjpeg, pcre
-, SDL2_image, freetype, glew, libGLU, libGL, boost, glm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL2,
+  ftgl,
+  pkg-config,
+  libpng,
+  libjpeg,
+  pcre,
+  SDL2_image,
+  freetype,
+  glew,
+  libGLU,
+  libGL,
+  boost,
+  glm,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.51";
   pname = "gource";
@@ -11,13 +25,23 @@ stdenv.mkDerivation rec {
     sha256 = "16p7b1x4r0915w883lp374jcdqqja37fnb7m8vnsfnl2n64gi8qr";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    glew SDL2 ftgl libpng libjpeg pcre SDL2_image libGLU libGL
-    boost glm freetype
+    glew
+    SDL2
+    ftgl
+    libpng
+    libjpeg
+    pcre
+    SDL2_image
+    libGLU
+    libGL
+    boost
+    glm
+    freetype
   ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
+  configureFlags = ["--with-boost-libdir=${boost.out}/lib"];
 
   enableParallelBuilding = true;
 
@@ -36,6 +60,6 @@ stdenv.mkDerivation rec {
       by several third party tools for CVS repositories.
     '';
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

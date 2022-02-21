@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl, readline }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  perl,
+  readline,
+}:
 stdenv.mkDerivation rec {
   pname = "rlwrap";
   version = "0.45.2";
@@ -16,15 +22,15 @@ stdenv.mkDerivation rec {
       --replace "if(*p >= 0 && *p < ' ')" "if(*p >= 0 && (*p >= 0) && (*p < ' '))"
   '';
 
-  nativeBuildInputs = [ autoreconfHook perl ];
+  nativeBuildInputs = [autoreconfHook perl];
 
-  buildInputs = [ readline ];
+  buildInputs = [readline];
 
   meta = with lib; {
     description = "Readline wrapper for console programs";
     homepage = "https://github.com/hanslub42/rlwrap";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

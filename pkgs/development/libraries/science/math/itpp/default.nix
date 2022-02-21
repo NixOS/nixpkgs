@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, gtest
-, blas
-, fftw
-, liblapack
-, gfortran
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gtest,
+  blas,
+  fftw,
+  liblapack,
+  gfortran,
 }:
-
 stdenv.mkDerivation rec {
   pname = "it++";
   version = "4.3.1";
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xxqag9wi0lg78xgw7b40rp6wxqp5grqlbs9z0ifvdfzqlhpcwah";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [cmake gfortran];
   buildInputs = [
     fftw
     liblapack
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "http://itpp.sourceforge.net/";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = with maintainers; [andrew-d];
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/itpp.x86_64-darwin
   };
 }

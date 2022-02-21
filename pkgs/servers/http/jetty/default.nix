@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "jetty";
   version = "9.4.45.v20220203";
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "A Web server and javax.servlet container";
     homepage = "https://www.eclipse.org/jetty/";
     platforms = platforms.all;
-    license = with licenses; [ asl20 epl10 ];
-    maintainers = with maintainers; [ emmanuelrosa ];
+    license = with licenses; [asl20 epl10];
+    maintainers = with maintainers; [emmanuelrosa];
   };
 }

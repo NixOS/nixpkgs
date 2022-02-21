@@ -1,8 +1,8 @@
-{ lib
-, python3
-, qt5
+{
+  lib,
+  python3,
+  qt5,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "patray";
   version = "0.1.1";
@@ -27,17 +27,15 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [qt5.wrapQtAppsHook];
   postFixup = ''
     wrapQtApp $out/bin/patray
   '';
-
-
 
   meta = with lib; {
     description = "Yet another tray pulseaudio frontend";
     homepage = "https://github.com/pohmelie/patray";
     license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

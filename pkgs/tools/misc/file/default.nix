@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, file, zlib, libgnurx }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  file,
+  zlib,
+  libgnurx,
+}:
 stdenv.mkDerivation rec {
   pname = "file";
   version = "5.41";
@@ -13,7 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
-  buildInputs = [ zlib ]
+  buildInputs =
+    [zlib]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   doCheck = true;
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://darwinsys.com/file";
     description = "A program that shows the type of files";
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
     license = licenses.bsd2;
     platforms = platforms.all;
   };

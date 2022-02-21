@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, karton-core
-, malduck
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  karton-core,
+  malduck,
 }:
-
 buildPythonPackage rec {
   pname = "karton-config-extractor";
   version = "2.0.1";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "karton.config_extractor" ];
+  pythonImportsCheck = ["karton.config_extractor"];
 
   meta = with lib; {
     description = "Static configuration extractor for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-config-extractor";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,4 @@
-{ fetchzip }:
-
+{fetchzip}:
 fetchzip {
   name = "lmodern-2.004.5";
 
@@ -23,4 +22,3 @@ fetchzip {
     description = "Latin Modern font";
   };
 }
-

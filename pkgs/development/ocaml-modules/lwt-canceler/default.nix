@@ -1,5 +1,9 @@
-{ lib, fetchFromGitLab, buildDunePackage, lwt }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  lwt,
+}:
 buildDunePackage rec {
   pname = "lwt-canceler";
   version = "0.3";
@@ -22,6 +26,6 @@ buildDunePackage rec {
     homepage = "https://gitlab.com/nomadic-labs/lwt-canceler";
     description = "Cancellation synchronization object";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

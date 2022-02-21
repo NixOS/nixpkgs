@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gevent
-, gunicorn
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gevent,
+  gunicorn,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "gevent-websocket";
   version = "0.10.1";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Websocket handler for the gevent pywsgi server";
     homepage = "https://www.gitlab.com/noppo/gevent-websocket";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

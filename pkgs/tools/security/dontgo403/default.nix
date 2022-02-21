@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "dontgo403";
   version = "0.3";
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Tool to bypass 40X response codes";
     homepage = "https://github.com/devploit/dontgo403";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

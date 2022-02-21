@@ -1,20 +1,26 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, cmake
-, meson
-, ninja
-, bash-completion
-, libGL
-, libglvnd
-, makeWrapper
-, pkg-config
-, python3
-, x11Support ? true, libxcb, libX11
-, waylandSupport ? true, wayland, wayland-protocols
-, useGbm ? true, mesa, udev
+{
+  stdenv,
+  fetchFromGitLab,
+  lib,
+  cmake,
+  meson,
+  ninja,
+  bash-completion,
+  libGL,
+  libglvnd,
+  makeWrapper,
+  pkg-config,
+  python3,
+  x11Support ? true,
+  libxcb,
+  libX11,
+  waylandSupport ? true,
+  wayland,
+  wayland-protocols,
+  useGbm ? true,
+  mesa,
+  udev,
 }:
-
 stdenv.mkDerivation rec {
   pname = "waffle";
   version = "1.7.0";
@@ -27,21 +33,26 @@ stdenv.mkDerivation rec {
     sha256 = "iY+dAgXutD/uDFocwd9QXjq502IOsk+3RQMA2S/CMV4=";
   };
 
-  buildInputs = [
-    bash-completion
-    libGL
-  ] ++ lib.optionals (with stdenv.hostPlatform; isUnix && !isDarwin) [
-    libglvnd
-  ] ++ lib.optionals x11Support [
-    libX11
-    libxcb
-  ] ++ lib.optionals waylandSupport [
-    wayland
-    wayland-protocols
-  ] ++ lib.optionals useGbm [
-    udev
-    mesa
-  ];
+  buildInputs =
+    [
+      bash-completion
+      libGL
+    ]
+    ++ lib.optionals (with stdenv.hostPlatform; isUnix && !isDarwin) [
+      libglvnd
+    ]
+    ++ lib.optionals x11Support [
+      libX11
+      libxcb
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland
+      wayland-protocols
+    ]
+    ++ lib.optionals useGbm [
+      udev
+      mesa
+    ];
 
   dontUseCmakeConfigure = true;
 
@@ -54,11 +65,11 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libglvnd ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL libglvnd]}
   '';
 
   meta = with lib; {
@@ -66,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.waffle-gl.org/";
     license = licenses.bsd2;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with maintainers; [Flakebi];
   };
 }

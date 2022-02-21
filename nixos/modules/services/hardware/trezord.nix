@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.trezord;
 in {
-
   ### docs
 
   meta = {
@@ -28,15 +30,15 @@ in {
         default = false;
         description = ''
           Enable Trezor emulator support.
-          '';
-       };
+        '';
+      };
 
       emulator.port = mkOption {
         type = types.port;
         default = 21324;
         description = ''
           Listening port for the Trezor emulator.
-          '';
+        '';
       };
     };
   };
@@ -44,12 +46,12 @@ in {
   ### implementation
 
   config = mkIf cfg.enable {
-    services.udev.packages = [ pkgs.trezor-udev-rules ];
+    services.udev.packages = [pkgs.trezor-udev-rules];
 
     systemd.services.trezord = {
       description = "Trezor Bridge";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       path = [];
       serviceConfig = {
         Type = "simple";
@@ -67,4 +69,3 @@ in {
     users.groups.trezord = {};
   };
 }
-

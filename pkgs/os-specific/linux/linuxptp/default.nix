@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl, linuxHeaders } :
-
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  linuxHeaders,
+}:
 stdenv.mkDerivation rec {
   pname = "linuxptp";
   version = "3.1.1";
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
        '/usr/include/linux/' "${linuxHeaders}/include/linux/"
   '';
 
-  makeFlags = [ "prefix=" ];
+  makeFlags = ["prefix="];
 
   preInstall = ''
     export DESTDIR=$out
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
     homepage = "http://linuxptp.sourceforge.net/";
-    maintainers = [ maintainers.markuskowa ];
+    maintainers = [maintainers.markuskowa];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
   };

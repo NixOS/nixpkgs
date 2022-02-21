@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, jupyter-client
-, ipykernel
-, holoviews
-, nbformat
-, nbconvert
-, pyflakes
-, requests
-, beautifulsoup4
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  jupyter-client,
+  ipykernel,
+  holoviews,
+  nbformat,
+  nbconvert,
+  pyflakes,
+  requests,
+  beautifulsoup4,
 }:
-
 buildPythonPackage rec {
   pname = "nbsmoke";
   version = "0.6.0";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
 
   # tests not included with pypi release
   doCheck = false;
-  pythonImportsCheck = [ "nbsmoke" ];
+  pythonImportsCheck = ["nbsmoke"];
 
   meta = with lib; {
     description = "Basic notebook checks and linting";
     homepage = "https://github.com/pyviz/nbsmoke";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

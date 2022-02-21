@@ -1,6 +1,8 @@
-{ invalidateFetcherByDrvHash, fetchgit, ... }:
-
 {
+  invalidateFetcherByDrvHash,
+  fetchgit,
+  ...
+}: {
   simple = invalidateFetcherByDrvHash fetchgit {
     name = "nix-source";
     url = "https://github.com/NixOS/nix";

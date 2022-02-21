@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeFontsConf
-, inkscape, xcursorgen, bc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeFontsConf,
+  inkscape,
+  xcursorgen,
+  bc,
+}:
 stdenv.mkDerivation rec {
   pname = "capitaine-cursors";
   version = "4";
@@ -26,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Complains about not being able to find the fontconfig config file otherwise
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  FONTCONFIG_FILE = makeFontsConf {fontDirectories = [];};
 
   buildInputs = [
     inkscape
@@ -52,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/keeferrourke/capitaine-cursors";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

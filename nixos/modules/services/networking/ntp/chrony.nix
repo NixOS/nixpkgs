@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.chrony;
   chronyPkg = cfg.package;
 
@@ -13,7 +15,8 @@ let
   configFile = pkgs.writeText "chrony.conf" ''
     ${concatMapStringsSep "\n" (server: "server " + server + " " + cfg.serverOption + optionalString (cfg.enableNTS) " nts") cfg.servers}
 
-    ${optionalString
+    ${
+      optionalString
       (cfg.initstepslew.enabled && (cfg.servers != []))
       "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.servers}"
     }
@@ -28,8 +31,7 @@ let
   '';
 
   chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
-in
-{
+in {
   options = {
     services.chrony = {
       enable = mkOption {
@@ -61,7 +63,7 @@ in
 
       serverOption = mkOption {
         default = "iburst";
-        type = types.enum [ "iburst" "offline" ];
+        type = types.enum ["iburst" "offline"];
         description = ''
           Set option for server directives.
 
@@ -121,7 +123,7 @@ in
 
       extraFlags = mkOption {
         default = [];
-        example = [ "-s" ];
+        example = ["-s"];
         type = types.listOf types.str;
         description = "Extra flags passed to the chronyd command.";
       };
@@ -129,22 +131,22 @@ in
   };
 
   config = mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+    meta.maintainers = with lib.maintainers; [thoughtpolice];
 
-    environment.systemPackages = [ chronyPkg ];
+    environment.systemPackages = [chronyPkg];
 
     users.groups.chrony.gid = config.ids.gids.chrony;
 
-    users.users.chrony =
-      { uid = config.ids.uids.chrony;
-        group = "chrony";
-        description = "chrony daemon user";
-        home = stateDir;
-      };
+    users.users.chrony = {
+      uid = config.ids.uids.chrony;
+      group = "chrony";
+      description = "chrony daemon user";
+      home = stateDir;
+    };
 
     services.timesyncd.enable = mkForce false;
 
-    systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service"; };
+    systemd.services.systemd-timedated.environment = {SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service";};
 
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0755 chrony chrony - -"
@@ -152,27 +154,26 @@ in
       "f ${keyFile} 0640 chrony chrony -"
     ];
 
-    systemd.services.chronyd =
-      { description = "chrony NTP daemon";
+    systemd.services.chronyd = {
+      description = "chrony NTP daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        wants    = [ "time-sync.target" ];
-        before   = [ "time-sync.target" ];
-        after    = [ "network.target" "nss-lookup.target" ];
-        conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["time-sync.target"];
+      before = ["time-sync.target"];
+      after = ["network.target" "nss-lookup.target"];
+      conflicts = ["ntpd.service" "systemd-timesyncd.service"];
 
-        path = [ chronyPkg ];
+      path = [chronyPkg];
 
-        unitConfig.ConditionCapability = "CAP_SYS_TIME";
-        serviceConfig =
-          { Type = "simple";
-            ExecStart = "${chronyPkg}/bin/chronyd ${chronyFlags}";
+      unitConfig.ConditionCapability = "CAP_SYS_TIME";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${chronyPkg}/bin/chronyd ${chronyFlags}";
 
-            ProtectHome = "yes";
-            ProtectSystem = "full";
-            PrivateTmp = "yes";
-          };
-
+        ProtectHome = "yes";
+        ProtectSystem = "full";
+        PrivateTmp = "yes";
       };
+    };
   };
 }

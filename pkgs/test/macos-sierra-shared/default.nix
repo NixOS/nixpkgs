@@ -1,29 +1,33 @@
-{ lib, clangStdenv, clang-sierraHack-stdenv, stdenvNoCC }:
-
-let
+{
+  lib,
+  clangStdenv,
+  clang-sierraHack-stdenv,
+  stdenvNoCC,
+}: let
   makeBigExe = stdenv: prefix: rec {
-
     count = 320;
 
-    sillyLibs = lib.genList (i: stdenv.mkDerivation rec {
-      name = "${prefix}-fluff-${toString i}";
-      unpackPhase = ''
-        src=$PWD
-        cat << 'EOF' > ${name}.c
-        unsigned int asdf_${toString i}(void) {
-          return ${toString i};
-        }
-        EOF
-      '';
-      buildPhase = ''
-        $CC -std=c99 -shared ${name}.c -o lib${name}.dylib -Wl,-install_name,$out/lib/lib${name}.dylib
-      '';
-      installPhase = ''
-        mkdir -p "$out/lib"
-        mv lib${name}.dylib "$out/lib"
-      '';
-      meta.platforms = lib.platforms.darwin;
-    }) count;
+    sillyLibs = lib.genList (i:
+      stdenv.mkDerivation rec {
+        name = "${prefix}-fluff-${toString i}";
+        unpackPhase = ''
+          src=$PWD
+          cat << 'EOF' > ${name}.c
+          unsigned int asdf_${toString i}(void) {
+            return ${toString i};
+          }
+          EOF
+        '';
+        buildPhase = ''
+          $CC -std=c99 -shared ${name}.c -o lib${name}.dylib -Wl,-install_name,$out/lib/lib${name}.dylib
+        '';
+        installPhase = ''
+          mkdir -p "$out/lib"
+          mv lib${name}.dylib "$out/lib"
+        '';
+        meta.platforms = lib.platforms.darwin;
+      })
+    count;
 
     finalExe = stdenv.mkDerivation {
       name = "${prefix}-final-asdf";
@@ -63,28 +67,27 @@ let
       '';
       meta.platforms = lib.platforms.darwin;
     };
-
   };
 
   good = makeBigExe clang-sierraHack-stdenv "good";
 
-  bad  = makeBigExe clangStdenv             "bad";
+  bad = makeBigExe clangStdenv "bad";
+in
+  stdenvNoCC.mkDerivation {
+    name = "macos-sierra-shared-test";
+    buildInputs = [good.finalExe bad.finalExe];
+    # TODO(@Ericson2314): Be impure or require exact MacOS version of builder?
+    buildCommand = ''
+      if bad-asdf &> /dev/null
+      then echo "WARNING: bad-asdf did not fail, not running on sierra?" >&2
+      else echo "bad-asdf should fail on sierra, OK" >&2
+      fi
 
-in stdenvNoCC.mkDerivation {
-  name = "macos-sierra-shared-test";
-  buildInputs = [ good.finalExe bad.finalExe ];
-  # TODO(@Ericson2314): Be impure or require exact MacOS version of builder?
-  buildCommand = ''
-    if bad-asdf &> /dev/null
-    then echo "WARNING: bad-asdf did not fail, not running on sierra?" >&2
-    else echo "bad-asdf should fail on sierra, OK" >&2
-    fi
+      # Must succeed on all supported MacOS versions
+      good-asdf
+      echo "good-asdf should succeed on sierra, OK"
 
-    # Must succeed on all supported MacOS versions
-    good-asdf
-    echo "good-asdf should succeed on sierra, OK"
-
-    touch $out
-  '';
-  meta.platforms = lib.platforms.darwin;
-}
+      touch $out
+    '';
+    meta.platforms = lib.platforms.darwin;
+  }

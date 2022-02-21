@@ -1,9 +1,13 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, numpy
-, scipySupport ? false, scipy
-, scikitSupport ? false, scikit-learn
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  scipySupport ? false,
+  scipy,
+  scikitSupport ? false,
+  scikit-learn,
 }:
-
 buildPythonPackage rec {
   pname = "nengo";
   version = "3.2.0";
@@ -15,9 +19,10 @@ buildPythonPackage rec {
     sha256 = "12lz8lzirxvwnpa74k9k48c64gs6gi092928rh97siya3i6gjs6i";
   };
 
-  propagatedBuildInputs = [ numpy ]
-    ++ lib.optionals scipySupport [ scipy ]
-    ++ lib.optionals scikitSupport [ scikit-learn ];
+  propagatedBuildInputs =
+    [numpy]
+    ++ lib.optionals scipySupport [scipy]
+    ++ lib.optionals scikitSupport [scikit-learn];
 
   # checks req missing:
   #   pytest-allclose
@@ -25,12 +30,12 @@ buildPythonPackage rec {
   #   pytest-rng
   doCheck = false;
 
-  pythonImportsCheck = [ "nengo" ];
+  pythonImportsCheck = ["nengo"];
 
   meta = with lib; {
     description = "A Python library for creating and simulating large-scale brain models";
-    homepage    = "https://nengo.ai/";
-    license     = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ arjix ];
+    homepage = "https://nengo.ai/";
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [arjix];
   };
 }

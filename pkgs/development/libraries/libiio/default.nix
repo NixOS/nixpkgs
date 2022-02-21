@@ -1,20 +1,20 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, flex
-, bison
-, libxml2
-, python
-, libusb1
-, runtimeShell
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  flex,
+  bison,
+  libxml2,
+  python,
+  libusb1,
+  runtimeShell,
+  lib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libiio";
   version = "0.21";
 
-  outputs = [ "out" "lib" "dev" "python" ];
+  outputs = ["out" "lib" "dev" "python"];
 
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   # Revert after https://github.com/NixOS/nixpkgs/issues/125008 is
   # fixed properly
-  patches = [ ./cmake-fix-libxml2-find-package.patch ];
+  patches = [./cmake-fix-libxml2-find-package.patch];
 
   nativeBuildInputs = [
     cmake
@@ -33,11 +33,13 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [
-    python
-    libxml2
-    libusb1
-  ] ++ lib.optional python.isPy3k python.pkgs.setuptools;
+  buildInputs =
+    [
+      python
+      libxml2
+      libusb1
+    ]
+    ++ lib.optional python.isPy3k python.pkgs.setuptools;
 
   cmakeFlags = [
     "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"
@@ -62,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/analogdevicesinc/libiio";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, dbus
-, gettext
-, gnutls
-, libfilezilla
-, libidn
-, nettle
-, pkg-config
-, pugixml
-, sqlite
-, tinyxml
-, wrapGAppsHook
-, wxGTK30-gtk3
-, xdg-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  dbus,
+  gettext,
+  gnutls,
+  libfilezilla,
+  libidn,
+  nettle,
+  pkg-config,
+  pugixml,
+  sqlite,
+  tinyxml,
+  wrapGAppsHook,
+  wxGTK30-gtk3,
+  xdg-utils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "filezilla";
   version = "3.58.0";
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [autoreconfHook pkg-config wrapGAppsHook];
 
   buildInputs = [
     dbus
@@ -66,6 +67,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

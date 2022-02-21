@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "codec2";
   version = "1.0.3";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-2/Ef5cEe7Kr3a/D8u4BgvTQM6M6vglXsF+ccstFHDUw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   # Swap keyword order to satisfy SWIG parser
   postFixup = ''
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.rowetel.com/codec2.html";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ markuskowa ];
+    maintainers = with maintainers; [markuskowa];
   };
 }

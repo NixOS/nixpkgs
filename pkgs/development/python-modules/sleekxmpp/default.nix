@@ -1,10 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage, dnspython, pyasn1 }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  dnspython,
+  pyasn1,
+}:
 buildPythonPackage rec {
   pname = "sleekxmpp";
   version = "1.3.3";
 
-  propagatedBuildInputs = [ dnspython pyasn1 ];
+  propagatedBuildInputs = [dnspython pyasn1];
 
   patches = [
     ./dnspython-ip6.patch
@@ -20,5 +25,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = "http://sleekxmpp.com/";
   };
-
 }

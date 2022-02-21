@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.trickster;
-in
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.trickster;
+in {
   options = {
     services.trickster = {
       enable = mkOption {
@@ -81,15 +81,14 @@ in
           Port that the Proxy server will listen on.
         '';
       };
-
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.trickster = {
       description = "Dashboard Accelerator for Prometheus";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         DynamicUser = true;
         ExecStart = ''
@@ -108,6 +107,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ _1000101 ];
-
+  meta.maintainers = with maintainers; [_1000101];
 }

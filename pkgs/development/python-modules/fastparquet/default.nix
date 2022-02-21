@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, numba
-, numpy
-, pandas
-, cramjam
-, fsspec
-, thrift
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  numba,
+  numpy,
+  pandas,
+  cramjam,
+  fsspec,
+  thrift,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "fastparquet";
   version = "0.7.1";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
       --replace "oldest-supported-numpy" "numpy"
   '';
 
-  propagatedBuildInputs = [ cramjam fsspec numba numpy pandas thrift ];
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [cramjam fsspec numba numpy pandas thrift];
+  checkInputs = [pytestCheckHook];
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''
@@ -43,12 +43,12 @@ buildPythonPackage rec {
     rm "$fastparquet_test"
   '';
 
-  pythonImportsCheck = [ "fastparquet" ];
+  pythonImportsCheck = ["fastparquet"];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [veprbl];
   };
 }

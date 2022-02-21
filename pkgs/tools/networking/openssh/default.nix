@@ -1,9 +1,13 @@
-{ callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
-let
-  common = opts: callPackage (import ./common.nix opts) { };
-in
 {
-
+  callPackage,
+  lib,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitHub,
+  autoreconfHook,
+}: let
+  common = opts: callPackage (import ./common.nix opts) {};
+in {
   openssh = common rec {
     pname = "openssh";
     version = "8.8p1";
@@ -13,8 +17,8 @@ in
       sha256 = "1s8z6f7mi1pwsl79cqai8cr350m5lf2ifcxff57wx6mvm478k425";
     };
 
-    extraPatches = [ ./ssh-keysign-8.5.patch ];
-    extraMeta.maintainers = with lib.maintainers; [ das_j ];
+    extraPatches = [./ssh-keysign-8.5.patch];
+    extraMeta.maintainers = with lib.maintainers; [das_j];
   };
 
   openssh_hpn = common rec {
@@ -39,10 +43,10 @@ in
       })
     ];
 
-    extraNativeBuildInputs = [ autoreconfHook ];
+    extraNativeBuildInputs = [autoreconfHook];
 
-    extraConfigureFlags = [ "--with-hpn" ];
-    extraMeta.maintainers = with lib.maintainers; [ abbe ];
+    extraConfigureFlags = ["--with-hpn"];
+    extraMeta.maintainers = with lib.maintainers; [abbe];
   };
 
   openssh_gssapi = common rec {
@@ -68,7 +72,7 @@ in
       })
     ];
 
-    extraNativeBuildInputs = [ autoreconfHook ];
+    extraNativeBuildInputs = [autoreconfHook];
 
     extraMeta.knownVulnerabilities = [
       "CVE-2021-28041"

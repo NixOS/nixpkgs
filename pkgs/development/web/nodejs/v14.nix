@@ -1,6 +1,10 @@
-{ callPackage, python3, lib, stdenv, enableNpm ? true }:
-
-let
+{
+  callPackage,
+  python3,
+  lib,
+  stdenv,
+  enableNpm ? true,
+}: let
   buildNodejs = callPackage ./nodejs.nix {
     python = python3;
   };

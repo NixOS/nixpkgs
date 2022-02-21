@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, nose
-, lxml
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  nose,
+  lxml,
+  requests,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "pyxnat";
   version = "1.4";
@@ -32,16 +32,16 @@ buildPythonPackage rec {
       --replace "future>=0.16" ""
   '';
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = "nosetests pyxnat/tests";
-  doCheck = false;  # requires a docker container running an XNAT server
+  doCheck = false; # requires a docker container running an XNAT server
 
-  pythonImportsCheck = [ "pyxnat" ];
+  pythonImportsCheck = ["pyxnat"];
 
   meta = with lib; {
     homepage = "https://pyxnat.github.io/pyxnat";
     description = "Python API to XNAT";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

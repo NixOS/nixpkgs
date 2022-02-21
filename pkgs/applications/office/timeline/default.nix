@@ -1,11 +1,11 @@
-{ lib
-, fetchurl
-, python3
-, gettext
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  fetchurl,
+  python3,
+  gettext,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
   version = "2.4.0";
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1pa0whqci6c2p20xf7gbndrrpr1xg42ixhql595ibdd4p3l37v23";
   };
 
-  nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems ];
+  nativeBuildInputs = [python3.pkgs.wrapPython copyDesktopItems];
 
   pythonPath = with python3.pkgs; [
     wxPython_4_1
@@ -82,8 +82,8 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://thetimelineproj.sourceforge.net/";
     changelog = "http://thetimelineproj.sourceforge.net/changelog.html";
     description = "Display and navigate information on a timeline";
-    license = with licenses; [ gpl3Only cc-by-sa-30 ];
+    license = with licenses; [gpl3Only cc-by-sa-30];
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [davidak];
   };
 }

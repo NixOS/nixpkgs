@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage {
   pname = "easyjson";
   version = "unstable-2019-06-26";
@@ -16,6 +19,6 @@ buildGoPackage {
     homepage = "https://github.com/mailru/easyjson";
     description = "Fast JSON serializer for golang";
     license = licenses.mit;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [chiiruno];
   };
 }

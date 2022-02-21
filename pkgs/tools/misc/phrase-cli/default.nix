@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "phrase-cli";
   version = "2.4.4";
@@ -21,6 +24,6 @@ buildGoModule rec {
     homepage = "http://docs.phraseapp.com";
     description = "PhraseApp API v2 Command Line Client";
     license = licenses.mit;
-    maintainers = with maintainers; [ juboba ];
+    maintainers = with maintainers; [juboba];
   };
 }

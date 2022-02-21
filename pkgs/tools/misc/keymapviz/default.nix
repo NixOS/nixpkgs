@@ -1,5 +1,8 @@
-{ fetchFromGitHub, lib, python3 }:
-
+{
+  fetchFromGitHub,
+  lib,
+  python3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "keymapviz";
   version = "1.10.1";
@@ -11,12 +14,12 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-I16iJ6/CrjpDOmlewIxa5Xu/b/97VNH3ATwDNi3SuP8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ regex ];
+  propagatedBuildInputs = with python3.pkgs; [regex];
 
   meta = with lib; {
     description = "A qmk keymap.c visualizer";
     homepage = "https://github.com/yskoht/keymapviz";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [lom];
   };
 }

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blas
-, lapack
-, numpy
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  blas,
+  lapack,
+  numpy,
+  scipy
   # check inputs
-, pytestCheckHook
+  ,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "scs";
   version = "3.0.0";
@@ -31,8 +32,8 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "scs" ];
+  checkInputs = [pytestCheckHook];
+  pythonImportsCheck = ["scs"];
 
   meta = with lib; {
     description = "Python interface for SCS: Splitting Conic Solver";
@@ -44,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cvxgrp/scs"; # upstream C package
     downloadPage = "https://github.com/bodono/scs-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

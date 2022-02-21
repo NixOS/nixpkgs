@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, meson
-, ninja
-, pantheon
-, pkg-config
-, vala
-, gettext
-, wrapGAppsHook
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  meson,
+  ninja,
+  pantheon,
+  pkg-config,
+  vala,
+  gettext,
+  wrapGAppsHook,
+  unstableGitUpdater,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vala-lint";
   version = "unstable-2021-12-28";

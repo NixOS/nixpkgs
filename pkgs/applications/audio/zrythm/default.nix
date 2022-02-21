@@ -1,63 +1,63 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, SDL2
-, alsa-lib
-, libaudec
-, bash
-, bash-completion
-, breeze-icons
-, carla
-, chromaprint
-, cmake
-, curl
-, dconf
-, libepoxy
-, fftw
-, fftwFloat
-, flex
-, glib
-, gtk3
-, gtksourceview3
-, guile
-, graphviz
-, help2man
-, json-glib
-, jq
-, libbacktrace
-, libcyaml
-, libgtop
-, libjack2
-, libpulseaudio
-, libsamplerate
-, libsndfile
-, libsoundio
-, libxml2
-, libyaml
-, lilv
-, lv2
-, meson
-, ninja
-, pandoc
-, pcre
-, pcre2
-, pkg-config
-, python3
-, reproc
-, rtaudio
-, rtmidi
-, rubberband
-, serd
-, sord
-, sratom
-, texi2html
-, wrapGAppsHook
-, xdg-utils
-, xxHash
-, vamp-plugin-sdk
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  SDL2,
+  alsa-lib,
+  libaudec,
+  bash,
+  bash-completion,
+  breeze-icons,
+  carla,
+  chromaprint,
+  cmake,
+  curl,
+  dconf,
+  libepoxy,
+  fftw,
+  fftwFloat,
+  flex,
+  glib,
+  gtk3,
+  gtksourceview3,
+  guile,
+  graphviz,
+  help2man,
+  json-glib,
+  jq,
+  libbacktrace,
+  libcyaml,
+  libgtop,
+  libjack2,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  libsoundio,
+  libxml2,
+  libyaml,
+  lilv,
+  lv2,
+  meson,
+  ninja,
+  pandoc,
+  pcre,
+  pcre2,
+  pkg-config,
+  python3,
+  reproc,
+  rtaudio,
+  rtmidi,
+  rubberband,
+  serd,
+  sord,
+  sratom,
+  texi2html,
+  wrapGAppsHook,
+  xdg-utils,
+  xxHash,
+  vamp-plugin-sdk,
+  zstd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "zrythm";
   version = "1.0.0-alpha.26.0.13";
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zrythm.org";
     description = "Highly automated and intuitive digital audio workstation";
-    maintainers = with maintainers; [ tshaynik magnetophon ];
+    maintainers = with maintainers; [tshaynik magnetophon];
     platforms = platforms.linux;
     license = licenses.agpl3Plus;
   };

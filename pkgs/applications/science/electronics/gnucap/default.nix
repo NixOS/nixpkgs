@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "gnucap";
   version = "20210107";
@@ -14,14 +17,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Gnu Circuit Analysis Package";
     longDescription = ''
-Gnucap is a modern general purpose circuit simulator with several advantages over Spice derivatives.
-It performs nonlinear dc and transient analyses, fourier analysis, and ac analysis.
+      Gnucap is a modern general purpose circuit simulator with several advantages over Spice derivatives.
+      It performs nonlinear dc and transient analyses, fourier analysis, and ac analysis.
     '';
     homepage = "http://www.gnucap.org/";
     changelog = "https://git.savannah.gnu.org/cgit/gnucap.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     broken = stdenv.isDarwin; # Relies on LD_LIBRARY_PATH
-    maintainers = [ maintainers.raboof ];
+    maintainers = [maintainers.raboof];
   };
 }

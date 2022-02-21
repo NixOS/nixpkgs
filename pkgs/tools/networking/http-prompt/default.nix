@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, python3Packages, httpie }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  httpie,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "http-prompt";
   version = "1.0.0";
@@ -28,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     homepage = "https://github.com/eliangcs/http-prompt";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

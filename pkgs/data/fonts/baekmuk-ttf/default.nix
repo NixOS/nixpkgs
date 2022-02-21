@@ -1,5 +1,4 @@
-{ fetchzip }:
-
+{fetchzip}:
 fetchzip rec {
   name = "baekmuk-ttf-2.2";
 
@@ -17,4 +16,3 @@ fetchzip rec {
     license = "BSD-like";
   };
 }
-

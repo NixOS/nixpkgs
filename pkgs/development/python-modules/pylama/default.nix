@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, git
-, eradicate
-, mccabe
-, mypy
-, pycodestyle
-, pydocstyle
-, pyflakes
-, vulture
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
+  git,
+  eradicate,
+  mccabe,
+  mypy,
+  pycodestyle,
+  pydocstyle,
+  pyflakes,
+  vulture,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pylama";
   version = "8.3.6";
@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "Code audit tool for python";
     homepage = "https://github.com/klen/pylama";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

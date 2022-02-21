@@ -1,5 +1,13 @@
-{ lib, menhir, easy-format, fetchurl, buildDunePackage, which, re, nixosTests }:
-
+{
+  lib,
+  menhir,
+  easy-format,
+  fetchurl,
+  buildDunePackage,
+  which,
+  re,
+  nixosTests,
+}:
 buildDunePackage rec {
   pname = "atd";
   version = "2.2.1";
@@ -13,8 +21,8 @@ buildDunePackage rec {
     sha256 = "17jm79np69ixp53a4njxnlb1pg8sd1g47nm3nyki9clkc8d4qsyv";
   };
 
-  buildInputs = [ which menhir ];
-  propagatedBuildInputs = [ easy-format re ];
+  buildInputs = [which menhir];
+  propagatedBuildInputs = [easy-format re];
 
   doCheck = true;
 
@@ -26,6 +34,6 @@ buildDunePackage rec {
     homepage = "https://github.com/mjambon/atd";
     description = "Syntax for cross-language type definitions";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ aij jwilberding ];
+    maintainers = with maintainers; [aij jwilberding];
   };
 }

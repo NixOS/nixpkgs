@@ -1,9 +1,9 @@
-{ python3Packages
-, fetchFromGitHub
-, wrapQtAppsHook
-, lib
+{
+  python3Packages,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  lib,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
   version = "1.5.0";
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+  makeWrapperArgs = ["\${qtWrapperArgs[@]}"];
 
   # All tests are sandbox-incompatible and disabled for now
   doCheck = false;
@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication rec {
     description = "An application firewall";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.raboof ];
+    maintainers = [maintainers.raboof];
     platforms = platforms.linux;
   };
 }

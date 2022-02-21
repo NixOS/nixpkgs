@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, gtk2, hicolor-icon-theme, intltool, pkg-config
-, which, wrapGAppsHook, xdotool }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk2,
+  hicolor-icon-theme,
+  intltool,
+  pkg-config,
+  which,
+  wrapGAppsHook,
+  xdotool,
+}:
 stdenv.mkDerivation rec {
   pname = "parcellite";
   version = "1.2.1";
@@ -13,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "19q4x6x984s6gxk1wpzaxawgvly5vnihivrhmja2kcxhzqrnfhiy";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
-  buildInputs = [ gtk2 hicolor-icon-theme ];
+  nativeBuildInputs = [autoreconfHook intltool pkg-config wrapGAppsHook];
+  buildInputs = [gtk2 hicolor-icon-theme];
   NIX_LDFLAGS = "-lgio-2.0";
 
   preFixup = ''

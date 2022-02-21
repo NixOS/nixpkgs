@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, xmlto
-, docbook_xml_dtd_44
-, docbook_xsl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  xmlto,
+  docbook_xml_dtd_44,
+  docbook_xsl,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vms-empire";
   version = "1.16";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-XETIbt/qVU+TpamPc2WQynqqUuZqkTUnItBprjg+gPk=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
   buildInputs = [
     ncurses
     xmlto
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     homepage = "http://catb.org/~esr/vms-empire/";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       Master of Orion.
     '';
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.unix;
   };
 }

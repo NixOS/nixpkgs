@@ -1,4 +1,7 @@
-{stdenv, perl}:
+{
+  stdenv,
+  perl,
+}:
 stdenv.mkDerivation {
   name = "mono-dll-fixer";
   dllFixer = ./dll-fixer.pl;

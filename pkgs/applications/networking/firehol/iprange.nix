@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "iprange";
   version = "1.0.4";
@@ -13,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "manage IP ranges";
     homepage = "https://github.com/firehol/iprange";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }

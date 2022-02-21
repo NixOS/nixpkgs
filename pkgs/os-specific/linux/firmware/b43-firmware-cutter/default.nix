@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "b43-fwcutter";
   version = "019";
@@ -9,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ki1f5fy3yrw843r697f8mqqdz0pbsbqnvg4yzkhibpn1lqqbsnn";
   };
 
-  patches = [ ./no-root-install.patch ];
+  patches = [./no-root-install.patch];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = {
     description = "Firmware extractor for cards supported by the b43 kernel module";

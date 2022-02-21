@@ -1,15 +1,15 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, asyncpg
-, aiosmtpd
-, pygit2
-, emailthreads
-, redis
-, python
+{
+  lib,
+  fetchFromSourcehut,
+  buildPythonPackage,
+  srht,
+  asyncpg,
+  aiosmtpd,
+  pygit2,
+  emailthreads,
+  redis,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "listssrht";
   version = "0.51.7";
@@ -42,12 +42,12 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  pythonImportsCheck = [ "listssrht" ];
+  pythonImportsCheck = ["listssrht"];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, brotli
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "whitenoise";
   version = "5.3.0";
@@ -40,12 +40,12 @@ buildPythonPackage rec {
     "test_modified"
   ];
 
-  pythonImportsCheck = [ "whitenoise" ];
+  pythonImportsCheck = ["whitenoise"];
 
   meta = with lib; {
     description = "Radically simplified static file serving for WSGI applications";
     homepage = "http://whitenoise.evans.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

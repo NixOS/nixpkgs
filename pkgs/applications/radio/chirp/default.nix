@@ -1,6 +1,7 @@
-{ lib
-, fetchurl
-, python2
+{
+  lib,
+  fetchurl,
+  python2,
 }:
 python2.pkgs.buildPythonApplication rec {
   pname = "chirp-daily";
@@ -12,7 +13,10 @@ python2.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python2.pkgs; [
-    pygtk pyserial libxml2 future
+    pygtk
+    pyserial
+    libxml2
+    future
   ];
 
   meta = with lib; {

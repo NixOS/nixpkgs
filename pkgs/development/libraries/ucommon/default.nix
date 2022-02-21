@@ -1,42 +1,44 @@
-{ lib, stdenv, fetchurl, pkg-config
-, openssl ? null, zlib ? null, gnutls ? null
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  openssl ? null,
+  zlib ? null,
+  gnutls ? null,
+}: let
   xor = a: b: (a || b) && (!(a && b));
 in
+  assert xor (openssl != null) (gnutls != null);
+  assert !(xor (openssl != null) (zlib != null));
+    stdenv.mkDerivation rec {
+      pname = "ucommon";
+      version = "7.0.0";
 
-assert xor (openssl != null) (gnutls != null);
-assert !(xor (openssl != null) (zlib != null));
+      src = fetchurl {
+        url = "mirror://gnu/commoncpp/${pname}-${version}.tar.gz";
+        sha256 = "6ac9f76c2af010f97e916e4bae1cece341dc64ca28e3881ff4ddc3bc334060d7";
+      };
 
-stdenv.mkDerivation rec {
-  pname = "ucommon";
-  version = "7.0.0";
+      nativeBuildInputs = [pkg-config];
 
-  src = fetchurl {
-    url = "mirror://gnu/commoncpp/${pname}-${version}.tar.gz";
-    sha256 = "6ac9f76c2af010f97e916e4bae1cece341dc64ca28e3881ff4ddc3bc334060d7";
-  };
+      # disable flaky networking test
+      postPatch = ''
+        substituteInPlace test/stream.cpp \
+          --replace 'ifndef UCOMMON_SYSRUNTIME' 'if 0'
+      '';
 
-  nativeBuildInputs = [ pkg-config ];
+      # ucommon.pc has link time depdendencies on -lssl, -lcrypto, -lz, -lgnutls
+      propagatedBuildInputs = [openssl zlib gnutls];
 
-  # disable flaky networking test
-  postPatch = ''
-    substituteInPlace test/stream.cpp \
-      --replace 'ifndef UCOMMON_SYSRUNTIME' 'if 0'
-  '';
+      doCheck = true;
 
-  # ucommon.pc has link time depdendencies on -lssl, -lcrypto, -lz, -lgnutls
-  propagatedBuildInputs = [ openssl zlib gnutls ];
+      meta = {
+        description = "C++ library to facilitate using C++ design patterns";
+        homepage = "https://www.gnu.org/software/commoncpp/";
+        license = lib.licenses.lgpl3Plus;
 
-  doCheck = true;
-
-  meta = {
-    description = "C++ library to facilitate using C++ design patterns";
-    homepage = "https://www.gnu.org/software/commoncpp/";
-    license = lib.licenses.lgpl3Plus;
-
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
-  };
-}
+        maintainers = with lib.maintainers; [];
+        platforms = lib.platforms.linux;
+      };
+    }

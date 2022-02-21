@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, python3
-, zlib
-, libssh2
-, openssl
-, pcre
-, http-parser
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  python3,
+  zlib,
+  libssh2,
+  openssl,
+  pcre,
+  http-parser,
+  libiconv,
+  Security,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libgit2";
   version = "1.4.0";
@@ -39,9 +39,10 @@ stdenv.mkDerivation rec {
     "-DUSE_SSH=ON"
   ];
 
-  nativeBuildInputs = [ cmake python3 pkg-config ];
+  nativeBuildInputs = [cmake python3 pkg-config];
 
-  buildInputs = [ zlib libssh2 openssl pcre http-parser ]
+  buildInputs =
+    [zlib libssh2 openssl pcre http-parser]
     ++ lib.optional stdenv.isDarwin Security;
 
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
@@ -53,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://libgit2.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

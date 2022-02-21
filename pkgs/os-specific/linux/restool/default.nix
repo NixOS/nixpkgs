@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchgit, bash, coreutils, dtc, file, gawk, gnugrep, gnused }:
-
+{
+  stdenv,
+  lib,
+  fetchgit,
+  bash,
+  coreutils,
+  dtc,
+  file,
+  gawk,
+  gnugrep,
+  gnused,
+}:
 stdenv.mkDerivation rec {
   pname = "restool";
   version = "20.12";
@@ -10,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "137xvvms3n4wwb5v2sv70vsib52s3s314306qa0mqpgxf9fb19zl";
   };
 
-  nativeBuildInputs = [ file ];
-  buildInputs = [ bash coreutils dtc gawk gnugrep gnused ];
+  nativeBuildInputs = [file];
+  buildInputs = [bash coreutils dtc gawk gnugrep gnused];
 
   makeFlags = [
     "prefix=$(out)"
@@ -37,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://source.codeaurora.org/external/qoriq/qoriq-components/restool/about/";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [delroth];
   };
 }

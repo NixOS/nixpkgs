@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, inotify-simple
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  inotify-simple,
 }:
-
 buildPythonPackage rec {
   pname = "inotifyrecursive";
   version = "0.3.5";
@@ -13,16 +13,16 @@ buildPythonPackage rec {
     sha256 = "osRQsxdpPkU4QW+Q6x14WFBtr+a4uIUDe9LdmuLa+h4=";
   };
 
-  propagatedBuildInputs = [ inotify-simple ];
+  propagatedBuildInputs = [inotify-simple];
 
   # No tests included
   doCheck = false;
-  pythonImportsCheck = [ pname ];
+  pythonImportsCheck = [pname];
 
   meta = with lib; {
     description = "Simple recursive inotify watches for Python";
     homepage = "https://github.com/letorbi/inotifyrecursive";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with maintainers; [Flakebi];
   };
 }

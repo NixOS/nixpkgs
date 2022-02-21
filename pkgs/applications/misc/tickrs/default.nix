@@ -1,5 +1,11 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, perl, Security }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  perl,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
   version = "0.14.4";
@@ -13,14 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-HAkJKqoz4vrY4mGFSz6sylV6DdrjWvPfwb4BiLWEyKY=";
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [perl];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
 
   meta = with lib; {
     description = "Realtime ticker data in your terminal";
     homepage = "https://github.com/tarkah/tickrs";
     license = licenses.mit;
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [mredaelli];
   };
 }

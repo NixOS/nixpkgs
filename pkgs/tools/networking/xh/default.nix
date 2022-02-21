@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, pkg-config
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, withNativeTls ? true
-, Security
-, libiconv
-, openssl }:
-
+{
+  stdenv,
+  lib,
+  pkg-config,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  withNativeTls ? true,
+  Security,
+  libiconv,
+  openssl,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "xh";
   version = "0.15.0";
@@ -24,10 +25,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [installShellFiles pkg-config];
 
   buildInputs = lib.optionals withNativeTls
-    (if stdenv.isDarwin then [ Security libiconv ] else [ openssl ]);
+  (if stdenv.isDarwin
+  then [Security libiconv]
+  else [openssl]);
 
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;
@@ -56,6 +59,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ payas SuperSandro2000 ];
+    maintainers = with maintainers; [payas SuperSandro2000];
   };
 }

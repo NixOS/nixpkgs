@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.shiori;
 in {
   options = {
@@ -35,7 +38,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.shiori = with cfg; {
       description = "Shiori simple bookmarks manager";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       environment.SHIORI_DIR = "/var/lib/shiori";
 
@@ -76,7 +79,7 @@ in {
         ProtectKernelTunables = true;
 
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
 
@@ -86,11 +89,18 @@ in {
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@resources" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@resources"
+          "~@setuid"
         ];
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ minijackson ];
+  meta.maintainers = with maintainers; [minijackson];
 }

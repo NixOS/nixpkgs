@@ -1,11 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, gnupg
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  gnupg,
+  setuptools,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pycoin";
   version = "0.92.20220213";
@@ -15,13 +15,13 @@ buildPythonPackage rec {
     sha256 = "sha256-qb2jtb/bHJSmtnQbYTFgCgBY0OCsrxsWJ7SJFeEDytc=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [setuptools];
 
   postPatch = ''
     substituteInPlace ./pycoin/cmds/tx.py --replace '"gpg"' '"${gnupg}/bin/gpg"'
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   dontUseSetuptoolsCheck = true;
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
     homepage = "https://github.com/richardkiss/pycoin";
     license = licenses.mit;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [nyanloutre];
   };
 }

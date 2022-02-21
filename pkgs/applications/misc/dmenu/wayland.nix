@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config, wayland-protocols
-, glib, wayland, libxkbcommon, makeWrapper, wayland-scanner
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  cairo,
+  pango,
+  pkg-config,
+  wayland-protocols,
+  glib,
+  wayland,
+  libxkbcommon,
+  makeWrapper,
+  wayland-scanner,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dmenu-wayland-unstable";
   version = "2020-07-06";
@@ -14,11 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = "0rkpmpk7xkcfbnv9vpg8n65423z5xpgp0hm2vg0rxf9354bjin7k";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config makeWrapper wayland-scanner ];
-  buildInputs = [ cairo pango wayland-protocols glib wayland libxkbcommon ];
+  depsBuildBuild = [pkg-config];
+  nativeBuildInputs = [meson ninja pkg-config makeWrapper wayland-scanner];
+  buildInputs = [cairo pango wayland-protocols glib wayland libxkbcommon];
 
   # Patch to support cross-compilation, see https://github.com/nyyManni/dmenu-wayland/pull/23/
   patches = [
@@ -39,6 +51,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     description = "dmenu for wayland-compositors";
     homepage = "https://github.com/nyyManni/dmenu-wayland";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

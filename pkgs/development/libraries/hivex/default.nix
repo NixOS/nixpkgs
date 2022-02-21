@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
-, perlPackages, libxml2, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  makeWrapper,
+  perlPackages,
+  libxml2,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "hivex";
   version = "1.3.21";
@@ -10,14 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ms4+9KL/LKUKmb4Gi2D7H9vJ6rivU+NF6XznW6S2O1Y=";
   };
 
-  patches = [ ./hivex-syms.patch ];
+  patches = [./hivex-syms.patch];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    autoreconfHook makeWrapper libxml2
-  ]
-  ++ (with perlPackages; [ perl IOStringy ])
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [
+      autoreconfHook
+      makeWrapper
+      libxml2
+    ]
+    ++ (with perlPackages; [perl IOStringy])
+    ++ lib.optionals stdenv.isDarwin [libiconv];
 
   postInstall = ''
     wrapProgram $out/bin/hivexregedit \

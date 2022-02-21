@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.kubernetes;
   opt = options.services.kubernetes;
 
@@ -31,37 +34,50 @@ let
     };
   };
 
-  mkKubeConfig = name: conf: pkgs.writeText "${name}-kubeconfig" (builtins.toJSON {
-    apiVersion = "v1";
-    kind = "Config";
-    clusters = [{
-      name = "local";
-      cluster.certificate-authority = conf.caFile or cfg.caFile;
-      cluster.server = conf.server;
-    }];
-    users = [{
-      inherit name;
-      user = {
-        client-certificate = conf.certFile;
-        client-key = conf.keyFile;
-      };
-    }];
-    contexts = [{
-      context = {
-        cluster = "local";
-        user = name;
-      };
-      name = "local";
-    }];
-    current-context = "local";
-  });
+  mkKubeConfig = name: conf:
+    pkgs.writeText "${name}-kubeconfig" (builtins.toJSON {
+      apiVersion = "v1";
+      kind = "Config";
+      clusters = [
+        {
+          name = "local";
+          cluster.certificate-authority = conf.caFile or cfg.caFile;
+          cluster.server = conf.server;
+        }
+      ];
+      users = [
+        {
+          inherit name;
+          user = {
+            client-certificate = conf.certFile;
+            client-key = conf.keyFile;
+          };
+        }
+      ];
+      contexts = [
+        {
+          context = {
+            cluster = "local";
+            user = name;
+          };
+          name = "local";
+        }
+      ];
+      current-context = "local";
+    });
 
   caCert = secret "ca";
 
   etcdEndpoints = ["https://${cfg.masterAddress}:2379"];
 
-  mkCert = { name, CN, hosts ? [], fields ? {}, action ? "",
-             privateKeyOwner ? "kubernetes" }: rec {
+  mkCert = {
+    name,
+    CN,
+    hosts ? [],
+    fields ? {},
+    action ? "",
+    privateKeyOwner ? "kubernetes",
+  }: rec {
     inherit name caCert CN hosts fields action;
     cert = secret name;
     key = secret "${name}-key";
@@ -101,10 +117,9 @@ let
     };
   };
 in {
-
   imports = [
-    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
-    (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
+    (mkRemovedOptionModule ["services" "kubernetes" "addons" "dashboard"] "Removed due to it being an outdated version")
+    (mkRemovedOptionModule ["services" "kubernetes" "verbose"] "")
   ];
 
   ###### interface
@@ -205,7 +220,6 @@ in {
   ###### implementation
 
   config = mkMerge [
-
     (mkIf cfg.easyCerts {
       services.kubernetes.pki.enable = mkDefault true;
       services.kubernetes.caFile = caCert;
@@ -229,7 +243,6 @@ in {
         };
       };
     })
-
 
     (mkIf (all (el: el == "master") cfg.roles) {
       # if this node is only a master make it unschedulable by default
@@ -275,16 +288,16 @@ in {
     })
 
     (mkIf (
-        cfg.apiserver.enable ||
-        cfg.scheduler.enable ||
-        cfg.controllerManager.enable ||
-        cfg.kubelet.enable ||
-        cfg.proxy.enable ||
-        cfg.addonManager.enable
+      cfg.apiserver.enable
+      || cfg.scheduler.enable
+      || cfg.controllerManager.enable
+      || cfg.kubelet.enable
+      || cfg.proxy.enable
+      || cfg.addonManager.enable
     ) {
       systemd.targets.kubernetes = {
         description = "Kubernetes";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
       };
 
       systemd.tmpfiles.rules = [
@@ -305,9 +318,11 @@ in {
       # dns addon is enabled by default
       services.kubernetes.addons.dns.enable = mkDefault true;
 
-      services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
-                          then cfg.apiserver.advertiseAddress
-                          else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
+      services.kubernetes.apiserverAddress = mkDefault ("https://${
+        if cfg.apiserver.advertiseAddress != null
+        then cfg.apiserver.advertiseAddress
+        else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"
+      }");
     })
   ];
 

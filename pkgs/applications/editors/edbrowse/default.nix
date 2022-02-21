@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, curl
-, duktape
-, html-tidy
-, openssl
-, pcre
-, perl
-, pkg-config
-, quickjs
-, readline
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  duktape,
+  html-tidy,
+  openssl,
+  pcre,
+  perl,
+  pkg-config,
+  quickjs,
+  readline,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "edbrowse";
   version = "3.8.0";
@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "-C" "src"
+    "-C"
+    "src"
     "PREFIX=${placeholder "out"}"
   ];
 
@@ -72,8 +73,9 @@ stdenv.mkDerivation rec {
       into databases through odbc. It was primarily written by Karl Dahlke.
     '';
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
+    maintainers = with maintainers; [schmitthenner vrthra equirosa];
     platforms = platforms.linux;
   };
 }
 # TODO: send the patch to upstream developers
+

@@ -1,5 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
-
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "frp";
   version = "0.39.1";
@@ -15,7 +18,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/frpc" "cmd/frps" ];
+  subPackages = ["cmd/frpc" "cmd/frps"];
 
   meta = with lib; {
     description = "Fast reverse proxy";
@@ -27,6 +30,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/fatedier/frp";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
   };
 }

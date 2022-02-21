@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, tor
-, firejail
-, iptables
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  tor,
+  firejail,
+  iptables,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "orjail";
   version = "1.1";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "06bwqb3l7syy4c1d8xynxwakmdxvm3qfm8r834nidsknvpdckd9z";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postPatch = ''
     patchShebangs make-helper.bsh
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Force programs to exclusively use tor network";
     homepage = "https://github.com/orjail/orjail";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
     platforms = platforms.linux;
   };
 }

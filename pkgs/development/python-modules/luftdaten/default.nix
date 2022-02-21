@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, httpx
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  httpx,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "luftdaten";
   version = "0.7.2";
@@ -37,12 +37,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "luftdaten" ];
+  pythonImportsCheck = ["luftdaten"];
 
   meta = with lib; {
     description = "Python API for interacting with luftdaten.info";
     homepage = "https://github.com/home-assistant-ecosystem/python-luftdaten";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda fab ];
+    maintainers = with maintainers; [dotlambda fab];
   };
 }

@@ -1,28 +1,31 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-# buildInputs
-, glibcLocales
-, pkginfo
-, check-manifest
-# propagatedBuildInputs
-, py
-, devpi-common
-, pluggy
-, setuptools
-# CheckInputs
-, pytest
-, pytest-flake8
-, webtest
-, mock
-, devpi-server
-, tox
-, sphinx
-, wheel
-, git
-, mercurial
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi
+  # buildInputs
+  ,
+  glibcLocales,
+  pkginfo,
+  check-manifest
+  # propagatedBuildInputs
+  ,
+  py,
+  devpi-common,
+  pluggy,
+  setuptools
+  # CheckInputs
+  ,
+  pytest,
+  pytest-flake8,
+  webtest,
+  mock,
+  devpi-server,
+  tox,
+  sphinx,
+  wheel,
+  git,
+  mercurial,
 }:
-
 buildPythonApplication rec {
   pname = "devpi-client";
   version = "5.2.3";
@@ -32,14 +35,21 @@ buildPythonApplication rec {
     sha256 = "362eb26e95136a792491861cc2728d14a6309a9d4c4f13a7b9c3e6fd39de58ec";
   };
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [glibcLocales];
 
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
+  propagatedBuildInputs = [py devpi-common pluggy setuptools check-manifest pkginfo];
 
   checkInputs = [
-    pytest pytest-flake8 webtest mock
-    devpi-server tox
-    sphinx wheel git mercurial
+    pytest
+    pytest-flake8
+    webtest
+    mock
+    devpi-server
+    tox
+    sphinx
+    wheel
+    git
+    mercurial
   ];
 
   # --fast skips tests which try to start a devpi-server improperly
@@ -55,7 +65,6 @@ buildPythonApplication rec {
     homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
     license = licenses.mit;
-    maintainers = with maintainers; [ lewo makefu ];
+    maintainers = with maintainers; [lewo makefu];
   };
-
 }

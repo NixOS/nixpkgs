@@ -1,9 +1,10 @@
 # This module defines the software packages included in the "minimal"
 # installation CD.  It might be useful elsewhere.
-
-{ lib, pkgs, ... }:
-
 {
+  lib,
+  pkgs,
+  ...
+}: {
   # Include some utilities that are useful for installing or repairing
   # the system.
   environment.systemPackages = [
@@ -51,7 +52,7 @@
   ];
 
   # Include support for various filesystems.
-  boot.supportedFilesystems = [ "btrfs" "reiserfs" "vfat" "f2fs" "xfs" "zfs" "ntfs" "cifs" ];
+  boot.supportedFilesystems = ["btrfs" "reiserfs" "vfat" "f2fs" "xfs" "zfs" "ntfs" "cifs"];
 
   # Configure host id for ZFS to work
   networking.hostId = lib.mkDefault "8425e349";

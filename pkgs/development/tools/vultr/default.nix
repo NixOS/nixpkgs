@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "vultr";
   version = "2.0.3";
@@ -16,6 +19,6 @@ buildGoPackage rec {
     description = "A command line tool for Vultr services, a provider for cloud virtual private servers";
     homepage = "https://github.com/JamesClonk/vultr";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.zauberpony ];
+    maintainers = [lib.maintainers.zauberpony];
   };
 }

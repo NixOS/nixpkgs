@@ -1,10 +1,12 @@
-{ lib, stdenv, fetchurl
-, darwin
-, abseil-cpp_202111
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchurl,
+  darwin,
+  abseil-cpp_202111,
+  meson,
+  ninja,
 }:
-
 stdenv.mkDerivation rec {
   pname = "webrtc-audio-processing";
   version = "1.0";
@@ -19,18 +21,22 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    abseil-cpp_202111
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+  buildInputs =
+    [
+      abseil-cpp_202111
+    ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ApplicationServices]);
 
-  patchPhase = ''
-    # this is just incorrect upstream
-    # see https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/4
-    substituteInPlace meson.build \
-      --replace "absl_flags_registry" "absl_flags_reflection"
-    '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1
-  '';
+  patchPhase =
+    ''
+      # this is just incorrect upstream
+      # see https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/4
+      substituteInPlace meson.build \
+        --replace "absl_flags_registry" "absl_flags_reflection"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1
+    '';
 
   meta = with lib; {
     homepage = "http://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";

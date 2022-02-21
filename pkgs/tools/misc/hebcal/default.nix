@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   version = "4.24";
   pname = "hebcal";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-iWp2S3s8z/y4dZ66Ogqu7Yf4gTUvSS1J5F7d0ifRbcY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   doCheck = true;
 
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A perpetual Jewish Calendar";
     longDescription = "Hebcal is a program which prints out the days in the Jewish calendar for a given Gregorian year. Hebcal is fairly flexible in terms of which events in the Jewish calendar it displays.";
     license = licenses.gpl2;
-    maintainers = [ maintainers.hhm ];
+    maintainers = [maintainers.hhm];
     platforms = platforms.all;
   };
 }

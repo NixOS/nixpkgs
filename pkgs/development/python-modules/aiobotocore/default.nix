@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, wrapt
-, aioitertools
-, aiohttp
-, botocore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  wrapt,
+  aioitertools,
+  aiohttp,
+  botocore,
 }:
-
 buildPythonPackage rec {
   pname = "aiobotocore";
   version = "2.1.1";
@@ -24,16 +24,16 @@ buildPythonPackage rec {
     sed -i "s/'botocore>=.*'/'botocore'/" setup.py
   '';
 
-  propagatedBuildInputs = [ wrapt aiohttp aioitertools botocore ];
+  propagatedBuildInputs = [wrapt aiohttp aioitertools botocore];
 
   # tests not distributed on pypi
   doCheck = false;
-  pythonImportsCheck = [ "aiobotocore" ];
+  pythonImportsCheck = ["aiobotocore"];
 
   meta = with lib; {
     description = "Python client for amazon services";
     license = licenses.asl20;
     homepage = "https://github.com/aio-libs/aiobotocore";
-    maintainers = with maintainers; [ teh ];
+    maintainers = with maintainers; [teh];
   };
 }

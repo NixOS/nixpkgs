@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake } :
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "spglib";
   version = "1.16.3";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sM6+RBAVc2aJYlWatdD4nYZkFnaTFVjBzd/VDSSA+kk=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   checkTarget = "check";
   doCheck = true;
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "C library for finding and handling crystal symmetries";
     homepage = "https://atztogo.github.io/spglib/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    maintainers = [maintainers.markuskowa];
     platforms = platforms.all;
   };
 }

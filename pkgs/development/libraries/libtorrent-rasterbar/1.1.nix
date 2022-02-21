@@ -1,51 +1,64 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, ncurses
-}:
-
-let
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  automake,
+  autoconf,
+  zlib,
+  boost,
+  openssl,
+  libtool,
+  python,
+  libiconv,
+  ncurses,
+}: let
   version = "1.1.11";
   formattedVersion = lib.replaceChars ["."] ["_"] version;
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
-  boostPython = boost.override { enablePython = true; inherit python; };
-
-in stdenv.mkDerivation {
-  pname = "libtorrent-rasterbar";
-  inherit version;
-
-  src = fetchFromGitHub {
-    owner = "arvidn";
-    repo = "libtorrent";
-    rev = "libtorrent_${formattedVersion}";
-    sha256 = "0nwdsv6d2gkdsh7l5a46g6cqx27xwh3msify5paf02l1qzjy4s5l";
+  boostPython = boost.override {
+    enablePython = true;
+    inherit python;
   };
+in
+  stdenv.mkDerivation {
+    pname = "libtorrent-rasterbar";
+    inherit version;
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ automake autoconf libtool pkg-config ];
-  buildInputs = [ boostPython openssl zlib python libiconv ncurses ];
-  preConfigure = "./autotool.sh";
+    src = fetchFromGitHub {
+      owner = "arvidn";
+      repo = "libtorrent";
+      rev = "libtorrent_${formattedVersion}";
+      sha256 = "0nwdsv6d2gkdsh7l5a46g6cqx27xwh3msify5paf02l1qzjy4s5l";
+    };
 
-  postInstall = ''
-    moveToOutput "include" "$dev"
-    moveToOutput "lib/${python.libPrefix}" "$python"
-  '';
+    enableParallelBuilding = true;
+    nativeBuildInputs = [automake autoconf libtool pkg-config];
+    buildInputs = [boostPython openssl zlib python libiconv ncurses];
+    preConfigure = "./autotool.sh";
 
-  outputs = [ "out" "dev" "python" ];
+    postInstall = ''
+      moveToOutput "include" "$dev"
+      moveToOutput "lib/${python.libPrefix}" "$python"
+    '';
 
-  configureFlags = [
-    "--enable-python-binding"
-    "--with-libiconv=yes"
-    "--with-boost=${boostPython.dev}"
-    "--with-boost-libdir=${boostPython.out}/lib"
-  ];
+    outputs = ["out" "dev" "python"];
 
-  meta = with lib; {
-    homepage = "https://libtorrent.org/";
-    description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
-    license = licenses.bsd3;
-    maintainers = [ ];
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/libtorrent-rasterbar-1_1_x.x86_64-darwin
-  };
-}
+    configureFlags = [
+      "--enable-python-binding"
+      "--with-libiconv=yes"
+      "--with-boost=${boostPython.dev}"
+      "--with-boost-libdir=${boostPython.out}/lib"
+    ];
+
+    meta = with lib; {
+      homepage = "https://libtorrent.org/";
+      description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
+      license = licenses.bsd3;
+      maintainers = [];
+      platforms = platforms.unix;
+      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/libtorrent-rasterbar-1_1_x.x86_64-darwin
+    };
+  }

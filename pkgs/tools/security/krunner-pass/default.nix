@@ -1,7 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, extra-cmake-modules
-, kauth, krunner
-, pass, pass-otp ? null }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  extra-cmake-modules,
+  kauth,
+  krunner,
+  pass,
+  pass-otp ? null,
+}:
 mkDerivation rec {
   pname = "krunner-pass";
   version = "1.3.0";
@@ -13,12 +21,14 @@ mkDerivation rec {
     sha256 = "032fs2174ls545kjixbhzyd65wgxkw4s5vg8b20irc5c9ak3pxm0";
   };
 
-  buildInputs  = [
-    kauth krunner
-    pass pass-otp
+  buildInputs = [
+    kauth
+    krunner
+    pass
+    pass-otp
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [cmake extra-cmake-modules];
 
   patches = [
     (fetchpatch {
@@ -37,7 +47,7 @@ mkDerivation rec {
     description = "Integrates krunner with pass the unix standard password manager (https://www.passwordstore.org/)";
     homepage = "https://github.com/akermu/krunner-pass";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ysndr ];
+    maintainers = with maintainers; [ysndr];
     platforms = platforms.unix;
   };
 }

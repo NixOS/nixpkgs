@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "goreman";
   version = "0.3.9";
@@ -26,6 +29,6 @@ buildGoModule rec {
     description = "foreman clone written in go language";
     homepage = "https://github.com/mattn/goreman";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
   };
 }

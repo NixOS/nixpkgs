@@ -1,5 +1,11 @@
-{ lib, fetchurl, perlPackages, ncurses, lynx, makeWrapper }:
-
+{
+  lib,
+  fetchurl,
+  perlPackages,
+  ncurses,
+  lynx,
+  makeWrapper,
+}:
 perlPackages.buildPerlPackage {
   pname = "wml";
   version = "2.0.11";
@@ -23,12 +29,11 @@ perlPackages.buildPerlPackage {
     sed -i '/p2_mp4h\/doc/d' Makefile.in
   '';
 
-  buildInputs = with perlPackages;
-    [ perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize ];
+  buildInputs = with perlPackages; [perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize];
 
-  patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
+  patches = [./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   postPatch = ''
     substituteInPlace wml_frontend/wml.src \
@@ -46,14 +51,19 @@ perlPackages.buildPerlPackage {
 
   preFixup = ''
     wrapProgram $out/bin/wml \
-      --set PERL5LIB ${with perlPackages; makePerlPath [
-        BitVector TermReadKey ImageSize
-      ]}
+      --set PERL5LIB ${
+      with perlPackages;
+        makePerlPath [
+          BitVector
+          TermReadKey
+          ImageSize
+        ]
+    }
   '';
 
   enableParallelBuilding = false;
 
-  installTargets = [ "install" ];
+  installTargets = ["install"];
 
   meta = with lib; {
     homepage = "https://www.shlomifish.org/open-source/projects/website-meta-language/";

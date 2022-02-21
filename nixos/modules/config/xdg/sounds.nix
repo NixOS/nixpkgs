@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   meta = {
     maintainers = teams.freedesktop.members;
   };
@@ -26,5 +29,4 @@ with lib;
       "/share/sounds"
     ];
   };
-
 }

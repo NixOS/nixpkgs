@@ -1,11 +1,14 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage {
   pname = "marathonctl-unstable";
   version = "2017-03-06";
 
   goPackagePath = "github.com/shoenig/marathonctl";
-  subPackages = [ "." ];
+  subPackages = ["."];
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
@@ -19,6 +22,6 @@ buildGoPackage {
     homepage = "https://github.com/shoenig/marathonctl";
     description = "CLI tool for Marathon";
     license = licenses.mit;
-    maintainers = with maintainers; [ manveru ];
+    maintainers = with maintainers; [manveru];
   };
 }

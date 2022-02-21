@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "flask-paranoid";
   version = "0.2";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "flask_paranoid" ];
+  pythonImportsCheck = ["flask_paranoid"];
 
   meta = with lib; {
     homepage = "https://github.com/miguelgrinberg/flask-paranoid/";
     description = "Simple user session protection";
     license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [gador];
   };
 }

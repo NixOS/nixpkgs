@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-cal
-, aws-c-common
-, aws-c-compression
-, aws-c-http
-, aws-c-io
-, aws-c-sdkutils
-, cmake
-, s2n-tls
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aws-c-cal,
+  aws-c-common,
+  aws-c-compression,
+  aws-c-http,
+  aws-c-io,
+  aws-c-sdkutils,
+  cmake,
+  s2n-tls,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aws-c-auth";
   version = "0.6.8";
@@ -48,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-c-auth";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; [r-burns];
   };
 }

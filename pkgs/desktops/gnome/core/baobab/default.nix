@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, gettext
-, fetchurl
-, vala
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, gtk3
-, libhandy
-, glib
-, libxml2
-, wrapGAppsHook
-, itstool
-, gnome
+{
+  stdenv,
+  lib,
+  gettext,
+  fetchurl,
+  vala,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gtk3,
+  libhandy,
+  glib,
+  libxml2,
+  wrapGAppsHook,
+  itstool,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "baobab";
   version = "41.0";

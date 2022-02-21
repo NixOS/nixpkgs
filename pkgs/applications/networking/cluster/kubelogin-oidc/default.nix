@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kubelogin";
   version = "1.25.1";
@@ -25,6 +28,6 @@ buildGoModule rec {
     description = "A Kubernetes credential plugin implementing OpenID Connect (OIDC) authentication";
     inherit (src.meta) homepage;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [benley];
   };
 }

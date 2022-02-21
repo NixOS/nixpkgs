@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "groestlcoin_hash";
   version = "1.0.3";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bindings for groestl key derivation function library used in Groestlcoin";
     homepage = "https://pypi.org/project/groestlcoin_hash/";
-    maintainers = with maintainers; [ gruve-p ];
+    maintainers = with maintainers; [gruve-p];
     license = licenses.unfree;
   };
 }

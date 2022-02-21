@@ -1,16 +1,16 @@
-{ stdenv
-, fetchFromGitHub
-, pkg-config
-, glib
-, pandoc
-, systemd
-, libyaml
-, python3
-, libuuid
-, bash-completion
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  pandoc,
+  systemd,
+  libyaml,
+  python3,
+  libuuid,
+  bash-completion,
+  lib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netplan";
   version = "0.103";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     systemd
     glib
     libyaml
-    (python3.withPackages (p: with p; [ pyyaml netifaces ]))
+    (python3.withPackages (p: with p; [pyyaml netifaces]))
     libuuid
     bash-completion
   ];
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Backend-agnostic network configuration in YAML";
     homepage = "https://netplan.io";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
     platforms = platforms.linux;
   };
 }

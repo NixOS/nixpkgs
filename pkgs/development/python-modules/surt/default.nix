@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, tldextract
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  tldextract,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "surt";
   version = "0.3.1";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "surt" ];
+  pythonImportsCheck = ["surt"];
 
   meta = with lib; {
     description = "Sort-friendly URI Reordering Transform (SURT) python module";
     homepage = "https://github.com/internetarchive/surt";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

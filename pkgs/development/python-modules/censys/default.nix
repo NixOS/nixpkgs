@@ -1,18 +1,18 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, parameterized
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, responses
-, rich
+{
+  lib,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  parameterized,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  responses,
+  rich,
 }:
-
 buildPythonPackage rec {
   pname = "censys";
   version = "2.1.2";
@@ -60,12 +60,12 @@ buildPythonPackage rec {
     mkdir -p $HOME
   '';
 
-  pythonImportsCheck = [ "censys" ];
+  pythonImportsCheck = ["censys"];
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

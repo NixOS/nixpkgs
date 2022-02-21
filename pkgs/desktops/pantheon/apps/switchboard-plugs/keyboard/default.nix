@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, gnome-settings-daemon
-, granite
-, gsettings-desktop-schemas
-, gtk3
-, libhandy
-, libxml2
-, libgnomekbd
-, libxklavier
-, ibus
-, onboard
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  gnome-settings-daemon,
+  granite,
+  gsettings-desktop-schemas,
+  gtk3,
+  libhandy,
+  libxml2,
+  libgnomekbd,
+  libxklavier,
+  ibus,
+  onboard,
+  switchboard,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
   version = "2.6.0";

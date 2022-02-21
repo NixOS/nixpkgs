@@ -1,36 +1,37 @@
-{ lib, stdenv
-, fetchurl
-, gnome
-, pkg-config
-, meson
-, ninja
-, exiv2
-, libheif
-, libjpeg
-, libtiff
-, gst_all_1
-, libraw
-, libsoup
-, libsecret
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, libchamplain
-, librsvg
-, libwebp
-, json-glib
-, webkitgtk
-, lcms2
-, bison
-, flex
-, clutter-gtk
-, wrapGAppsHook
-, shared-mime-info
-, python3
-, desktop-file-utils
-, itstool
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnome,
+  pkg-config,
+  meson,
+  ninja,
+  exiv2,
+  libheif,
+  libjpeg,
+  libtiff,
+  gst_all_1,
+  libraw,
+  libsoup,
+  libsecret,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  libchamplain,
+  librsvg,
+  libwebp,
+  json-glib,
+  webkitgtk,
+  lcms2,
+  bison,
+  flex,
+  clutter-gtk,
+  wrapGAppsHook,
+  shared-mime-info,
+  python3,
+  desktop-file-utils,
+  itstool,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gthumb";
   version = "3.12.0";
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    (gst_all_1.gst-plugins-good.override {gtkSupport = true;})
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
@@ -108,6 +109,6 @@ stdenv.mkDerivation rec {
     description = "Image browser and viewer for GNOME";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimame ];
+    maintainers = [maintainers.mimame];
   };
 }

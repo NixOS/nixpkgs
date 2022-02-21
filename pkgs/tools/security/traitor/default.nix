@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "traitor";
   version = "0.0.9";
@@ -24,7 +24,7 @@ buildGoModule rec {
       (including most of GTFOBins) in order to pop a root shell.
     '';
     homepage = "https://github.com/liamg/traitor";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

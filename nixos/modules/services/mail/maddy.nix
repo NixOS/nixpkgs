@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   name = "maddy";
 
   cfg = config.services.maddy;
@@ -134,11 +135,9 @@ let
       storage &local_mailboxes
     }
   '';
-
 in {
   options = {
     services.maddy = {
-
       enable = mkEnableOption "Maddy, a free an open source mail server";
 
       user = mkOption {
@@ -221,22 +220,20 @@ in {
           Open the configured incoming and outgoing mail server ports.
         '';
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-
     systemd = {
-      packages = [ pkgs.maddy ];
+      packages = [pkgs.maddy];
       services.maddy = {
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
-          StateDirectory = [ "maddy" ];
+          StateDirectory = ["maddy"];
         };
-        restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
-        wantedBy = [ "multi-user.target" ];
+        restartTriggers = [config.environment.etc."maddy/maddy.conf".source];
+        wantedBy = ["multi-user.target"];
       };
     };
 
@@ -259,11 +256,11 @@ in {
     };
 
     users.groups = optionalAttrs (cfg.group == name) {
-      ${cfg.group} = { };
+      ${cfg.group} = {};
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 25 143 587 ];
+      allowedTCPPorts = [25 143 587];
     };
 
     environment.systemPackages = [

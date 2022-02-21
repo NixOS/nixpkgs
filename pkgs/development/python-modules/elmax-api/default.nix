@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pyjwt
-, pythonOlder
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pyjwt,
+  pythonOlder,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "elmax-api";
   version = "0.0.2";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with the Elmax cloud";
     homepage = "https://github.com/albertogeniola/elmax-api";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

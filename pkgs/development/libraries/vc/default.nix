@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "Vc";
   version = "1.4.2";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rh2vcn58xDsbxxABrxneCq6TKIyT51KxGB7sOtHpvYE=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   postPatch = ''
     sed -i '/OptimizeForArchitecture()/d' cmake/VcMacros.cmake
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/VcDevel/Vc";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

@@ -1,25 +1,24 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.qt5;
 
   isQGnome = cfg.platformTheme == "gnome" && builtins.elem cfg.style ["adwaita" "adwaita-dark"];
   isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
 
-  packages = if isQGnome then [ pkgs.qgnomeplatform pkgs.adwaita-qt ]
-    else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
+  packages =
+    if isQGnome
+    then [pkgs.qgnomeplatform pkgs.adwaita-qt]
+    else if isQtStyle
+    then [pkgs.libsForQt5.qtstyleplugins]
     else throw "`qt5.platformTheme` ${cfg.platformTheme} and `qt5.style` ${cfg.style} are not compatible.";
-
-in
-
-{
-
+in {
   options = {
     qt5 = {
-
       enable = mkEnableOption "Qt5 theming configuration";
 
       platformTheme = mkOption {
@@ -93,12 +92,10 @@ in
   };
 
   config = mkIf cfg.enable {
-
     environment.variables.QT_QPA_PLATFORMTHEME = cfg.platformTheme;
 
     environment.variables.QT_STYLE_OVERRIDE = cfg.style;
 
     environment.systemPackages = packages;
-
   };
 }

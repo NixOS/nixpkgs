@@ -1,6 +1,8 @@
-{ lib, python3, glibcLocales }:
-let
-
+{
+  lib,
+  python3,
+  glibcLocales,
+}: let
   localPython = python3.override {
     packageOverrides = self: super: {
       cement = super.cement.overridePythonAttrs (oldAttrs: rec {
@@ -53,45 +55,65 @@ let
       });
     };
   };
-in with localPython.pkgs; buildPythonApplication rec {
-  pname = "awsebcli";
-  version = "3.12.4";
+in
+  with localPython.pkgs;
+    buildPythonApplication rec {
+      pname = "awsebcli";
+      version = "3.12.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
-  };
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
+      };
 
-  buildInputs = [
-    glibcLocales
-  ];
+      buildInputs = [
+        glibcLocales
+      ];
 
-  LC_ALL = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
 
-  checkInputs = [
-    pytest mock nose pathspec colorama requests docutils
-  ];
+      checkInputs = [
+        pytest
+        mock
+        nose
+        pathspec
+        colorama
+        requests
+        docutils
+      ];
 
-  doCheck = false;
+      doCheck = false;
 
-  propagatedBuildInputs = [
-    # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
-    # Otherwise, awsebcli will try to install it using pip when using some
-    # commands (like "eb local run").
-    blessed botocore cement colorama dockerpty docopt pathspec pyyaml
-    requests semantic-version setuptools tabulate termcolor websocket-client
-  ];
+      propagatedBuildInputs = [
+        # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
+        # Otherwise, awsebcli will try to install it using pip when using some
+        # commands (like "eb local run").
+        blessed
+        botocore
+        cement
+        colorama
+        dockerpty
+        docopt
+        pathspec
+        pyyaml
+        requests
+        semantic-version
+        setuptools
+        tabulate
+        termcolor
+        websocket-client
+      ];
 
-  postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    mv $out/bin/eb_completion.bash $out/share/bash-completion/completions/
-  '';
+      postInstall = ''
+        mkdir -p $out/share/bash-completion/completions
+        mv $out/bin/eb_completion.bash $out/share/bash-completion/completions/
+      '';
 
-  meta = with lib; {
-    homepage = "https://aws.amazon.com/elasticbeanstalk/";
-    description = "A command line interface for Elastic Beanstalk";
-    maintainers = with maintainers; [ eqyiel ];
-    license = licenses.asl20;
-    broken = true;
-  };
-}
+      meta = with lib; {
+        homepage = "https://aws.amazon.com/elasticbeanstalk/";
+        description = "A command line interface for Elastic Beanstalk";
+        maintainers = with maintainers; [eqyiel];
+        license = licenses.asl20;
+        broken = true;
+      };
+    }

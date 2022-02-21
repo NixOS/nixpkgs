@@ -1,10 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  azure-common,
+  azure-mgmt-core,
+  msrest,
+  msrestazure,
 }:
-
 buildPythonPackage rec {
   pname = "azure-mgmt-synapse";
   version = "2.0.0";
@@ -23,12 +26,12 @@ buildPythonPackage rec {
     msrestazure
   ];
 
-  pythonImportsCheck = [ "azure.mgmt.synapse" ];
+  pythonImportsCheck = ["azure.mgmt.synapse"];
 
   meta = with lib; {
     description = "Azure python SDK";
     homepage = "https://github.com/Azure/azure-sdk-for-python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

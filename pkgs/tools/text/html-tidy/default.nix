@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libxslt }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libxslt,
+}:
 stdenv.mkDerivation rec {
   pname = "html-tidy";
   version = "5.8.0";
@@ -11,7 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZMz0NySxzX2XHiqB8f5asvwjIG6kdIcq8Gb3EbAxBaU=";
   };
 
-  nativeBuildInputs = [ cmake libxslt/*manpage*/ ];
+  nativeBuildInputs = [
+    cmake
+    libxslt
+    /*
+     manpage
+     */
+  ];
 
   cmakeFlags = [];
 
@@ -27,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.libpng; # very close to it - the 3 clauses are identical
     homepage = "http://html-tidy.org";
     platforms = platforms.all;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [edwtjo];
   };
 }

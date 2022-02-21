@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, libpcap
-, openssl
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  libpcap,
+  openssl,
+  bash,
 }:
-
 stdenv.mkDerivation rec {
   version = "2.4.9";
   pname = "ppp";
@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
       lgpl2
     ];
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

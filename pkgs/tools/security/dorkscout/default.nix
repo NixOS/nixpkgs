@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "dorkscout";
   version = "1.0";
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Tool to automate the work with Google dorks";
     homepage = "https://github.com/R4yGM/dorkscout";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

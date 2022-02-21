@@ -1,9 +1,8 @@
-
-{ buildGoPackage
-, lib
-, fetchFromGitHub
+{
+  buildGoPackage,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildGoPackage rec {
   pname = "unconvert-unstable";
   version = "2018-07-03";
@@ -25,7 +24,7 @@ buildGoPackage rec {
     description = "Remove unnecessary type conversions from Go source";
     homepage = "https://github.com/mdempsky/unconvert";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

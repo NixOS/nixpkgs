@@ -1,9 +1,9 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
+{
+  lib,
+  trivialBuild,
+  fetchFromGitHub,
+  emacs,
 }:
-
 trivialBuild rec {
   pname = "evil-markdown";
   version = "0.pre+unstable=2021-07-21";
@@ -15,9 +15,11 @@ trivialBuild rec {
     hash = "sha256-HBBuZ1VWIn6kwK5CtGIvHM1+9eiNiKPH0GUsyvpUVN8=";
   };
 
-  buildInputs = [
-    emacs
-  ] ++ propagatedUserEnvPkgs;
+  buildInputs =
+    [
+      emacs
+    ]
+    ++ propagatedUserEnvPkgs;
 
   propagatedUserEnvPkgs = with emacs.pkgs; [
     evil
@@ -28,7 +30,7 @@ trivialBuild rec {
     homepage = "https://github.com/Somelauw/evil-markdown";
     description = "Integrates Emacs evil and markdown";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ leungbk ];
+    maintainers = with maintainers; [leungbk];
     inherit (emacs.meta) platforms;
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, gevent
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  gevent,
 }:
-
 buildPythonPackage rec {
   pname = "grequests";
   version = "0.6.0";
@@ -17,13 +17,12 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  propagatedBuildInputs = [ requests gevent ];
+  propagatedBuildInputs = [requests gevent];
 
   meta = with lib; {
     description = "Asynchronous HTTP requests";
     homepage = "https://github.com/kennethreitz/grequests";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ matejc ];
+    license = with licenses; [bsd2];
+    maintainers = with maintainers; [matejc];
   };
-
 }

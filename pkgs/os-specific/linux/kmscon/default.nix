@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libtsm
-, systemd
-, libxkbcommon
-, libdrm
-, libGLU, libGL
-, pango
-, pixman
-, pkg-config
-, docbook_xsl
-, libxslt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtsm,
+  systemd,
+  libxkbcommon,
+  libdrm,
+  libGLU,
+  libGL,
+  pango,
+  pixman,
+  pkg-config,
+  docbook_xsl,
+  libxslt,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kmscon";
   version = "unstable-2018-09-07";
@@ -25,7 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGLU libGL
+    libGLU
+    libGL
     libdrm
     libtsm
     libxkbcommon
@@ -54,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "KMS/DRM based System Console";
     homepage = "http://www.freedesktop.org/wiki/Software/kmscon/";
     license = licenses.mit;
-    maintainers = with maintainers; [ omasanori ];
+    maintainers = with maintainers; [omasanori];
     platforms = platforms.linux;
   };
 }

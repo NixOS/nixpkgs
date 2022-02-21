@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, pure }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pure,
+}:
 stdenv.mkDerivation rec {
   pname = "pure-mpfr";
   version = "0.5";
@@ -9,9 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "39d2255c2c0c2d60ce727be178b5e5a06f7c92eb365976c49c4a34b1edc576e7";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ pure ];
-  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
+  nativeBuildInputs = [pkg-config];
+  propagatedBuildInputs = [pure];
+  makeFlags = ["libdir=$(out)/lib" "prefix=$(out)/"];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
@@ -19,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "http://puredocs.bitbucket.org/pure-mpfr.html";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [asppsa];
   };
 }

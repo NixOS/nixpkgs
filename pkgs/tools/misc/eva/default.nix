@@ -1,5 +1,9 @@
-{ lib, rustPlatform, fetchCrate, fetchpatch }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  fetchpatch,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "eva";
   version = "0.2.7";
@@ -29,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "A calculator REPL, similar to bc";
     homepage = "https://github.com/NerdyPepper/eva";
     license = licenses.mit;
-    maintainers = with maintainers; [ nrdxp ma27 ];
+    maintainers = with maintainers; [nrdxp ma27];
   };
 }

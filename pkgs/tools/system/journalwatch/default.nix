@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, systemd, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  systemd,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "journalwatch";
   version = "1.1.0";
@@ -18,9 +24,8 @@ buildPythonPackage rec {
       --replace "U Thu Jan  1 00:00:00 1970 prio foo [1337]" "U Thu Jan  1 00:00:00 1970 pprio foo [1337]"
   '';
 
-
   doCheck = true;
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   checkPhase = ''
     pytest
   '';
@@ -29,11 +34,10 @@ buildPythonPackage rec {
     systemd
   ];
 
-
   meta = with lib; {
     description = "journalwatch is a tool to find error messages in the systemd journal.";
     homepage = "https://github.com/The-Compiler/journalwatch";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ florianjacob ];
+    maintainers = with maintainers; [florianjacob];
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, openssl
-, paramiko
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  openssl,
+  paramiko,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "proxy-py";
   version = "2.3.1";
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python proxy framework";
     homepage = "https://github.com/abhinavsingh/proxy.py";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

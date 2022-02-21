@@ -1,32 +1,32 @@
-{ lib
-, stdenv
-, nix-update-script
-, appstream
-, appstream-glib
-, dbus
-, desktop-file-utils
-, elementary-icon-theme
-, fetchFromGitHub
-, flatpak
-, gettext
-, glib
-, granite
-, gtk3
-, json-glib
-, libgee
-, libhandy
-, libsoup
-, libxml2
-, meson
-, ninja
-, packagekit
-, pkg-config
-, python3
-, vala
-, polkit
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  nix-update-script,
+  appstream,
+  appstream-glib,
+  dbus,
+  desktop-file-utils,
+  elementary-icon-theme,
+  fetchFromGitHub,
+  flatpak,
+  gettext,
+  glib,
+  granite,
+  gtk3,
+  json-glib,
+  libgee,
+  libhandy,
+  libsoup,
+  libxml2,
+  meson,
+  ninja,
+  packagekit,
+  pkg-config,
+  python3,
+  vala,
+  polkit,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "appcenter";
   version = "3.9.1";

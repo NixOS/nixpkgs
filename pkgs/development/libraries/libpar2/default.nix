@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libsigcxx }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libsigcxx,
+}:
 stdenv.mkDerivation rec {
   pname = "libpar2";
   version = "0.4";
@@ -9,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1m4ncws1h03zq7zyqbaymvjzzbh1d3lc4wb1aksrdf0ync76yv9i";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsigcxx ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libsigcxx];
 
-  patches = [ ./libpar2-0.4-external-verification.patch ];
+  patches = [./libpar2-0.4-external-verification.patch];
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 

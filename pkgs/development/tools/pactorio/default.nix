@@ -1,13 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, bzip2
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  bzip2,
+  stdenv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "pactorio";
   version = "0.5.2";
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-FIn+6wflDAjshP2Vz/rXRTrrjPQFW63XtXo8hBHMdkg=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [installShellFiles pkg-config];
 
-  buildInputs = [ bzip2 ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [bzip2] ++ lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     completions=($releaseDir/build/pactorio-*/out/completions)
@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/figsoda/pactorio";
     changelog = "https://github.com/figsoda/pactorio/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

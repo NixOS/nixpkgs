@@ -1,5 +1,17 @@
-{ stdenv, lib, qt5, fetchurl, autoPatchelfHook, dpkg, glibc, cpio, xar, undmg, gtk3, pango }:
-let
+{
+  stdenv,
+  lib,
+  qt5,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  glibc,
+  cpio,
+  xar,
+  undmg,
+  gtk3,
+  pango,
+}: let
   pname = "synology-drive-client";
   buildNumber = "12682";
   version = "3.0.2";
@@ -8,8 +20,8 @@ let
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server.";
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jcouyang MoritzBoehme ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [jcouyang MoritzBoehme];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
   };
 
   linux = qt5.mkDerivation {
@@ -20,9 +32,9 @@ let
       sha256 = "19fd2r39lb7bb6vkxfxyq0gp3l7pk5wy9fl0r7qwhym2jpi8yv6l";
     };
 
-    nativeBuildInputs = [ autoPatchelfHook dpkg ];
+    nativeBuildInputs = [autoPatchelfHook dpkg];
 
-    buildInputs = [ glibc gtk3 pango ];
+    buildInputs = [glibc gtk3 pango];
 
     unpackPhase = ''
       mkdir -p $out
@@ -50,7 +62,7 @@ let
       sha256 = "1mlv8gxzivgxm59mw1pd63yq9d7as79ihm7166qyy0h0b0m04q2m";
     };
 
-    nativeBuildInputs = [ cpio xar undmg ];
+    nativeBuildInputs = [cpio xar undmg];
 
     postUnpack = ''
       xar -xf 'Install Synology Drive Client.pkg'
@@ -65,4 +77,7 @@ let
       cp -R 'Synology Drive Client.app' $out/Applications/
     '';
   };
-in if stdenv.isDarwin then darwin else linux
+in
+  if stdenv.isDarwin
+  then darwin
+  else linux

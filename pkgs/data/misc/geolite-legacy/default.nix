@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, zstd }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zstd,
+}:
 stdenv.mkDerivation {
   pname = "geolite-legacy";
   version = "2022-01-25";
@@ -15,7 +19,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-xrTnuJvuvtvn+uIARtbuJUlHco3Q+9BXLljt35V3ip0=";
   };
 
-  nativeBuildInputs = [ zstd ];
+  nativeBuildInputs = [zstd];
 
   buildCommand = ''
     tar -xaf "$geoip"
@@ -29,6 +33,6 @@ stdenv.mkDerivation {
     homepage = "https://mailfud.org/geoip-legacy/";
     license = licenses.cc-by-sa-40;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

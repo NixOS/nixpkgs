@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
 }:
-
 stdenv.mkDerivation rec {
   pname = "librtlsdr";
   version = "0.8.0";
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
       --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [pkg-config cmake];
 
-  propagatedBuildInputs = [ libusb1 ];
+  propagatedBuildInputs = [libusb1];
 
   meta = with lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
     homepage = "https://github.com/librtlsdr/librtlsdr";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

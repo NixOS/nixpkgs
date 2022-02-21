@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "bwa";
   version = "0.7.17";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zfhv2zg9v1icdlq4p9ssc8k01mca5d1bd87w71py2swfi74s6yy";
   };
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   # Avoid hardcoding gcc to allow environments with a different
   # C compiler to build
@@ -30,9 +34,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A software package for mapping low-divergent sequences against a large reference genome, such as the human genome";
-    license     = licenses.gpl3;
-    homepage    = "http://bio-bwa.sourceforge.net/";
-    maintainers = with maintainers; [ luispedro ];
+    license = licenses.gpl3;
+    homepage = "http://bio-bwa.sourceforge.net/";
+    maintainers = with maintainers; [luispedro];
     platforms = platforms.x86_64;
   };
 }

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, udev, libcec_platform, libraspberrypi ? null }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  udev,
+  libcec_platform,
+  libraspberrypi ? null,
+}:
 stdenv.mkDerivation rec {
   pname = "libcec";
   version = "6.0.2";
@@ -11,11 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OWqCn7Z0KG8sLlfMWd0btJIFJs79ET3Y1AV/y/Kj2TU=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ udev libcec_platform ] ++
-    lib.optional (libraspberrypi != null) libraspberrypi;
+  nativeBuildInputs = [pkg-config cmake];
+  buildInputs =
+    [udev libcec_platform]
+    ++ lib.optional (libraspberrypi != null) libraspberrypi;
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=1" ];
+  cmakeFlags = ["-DBUILD_SHARED_LIBS=1"];
 
   # Fix dlopen path
   patchPhase = ''
@@ -28,6 +37,6 @@ stdenv.mkDerivation rec {
     repositories.git = "https://github.com/Pulse-Eight/libcec.git";
     license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.titanous ];
+    maintainers = [maintainers.titanous];
   };
 }

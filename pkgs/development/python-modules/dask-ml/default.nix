@@ -1,21 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, dask
-, numpy, toolz # dask[array]
-, numba
-, pandas
-, scikit-learn
-, scipy
-, dask-glm
-, six
-, multipledispatch
-, packaging
-, distributed
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  dask,
+  numpy,
+  toolz
+  # dask[array]
+  ,
+  numba,
+  pandas,
+  scikit-learn,
+  scipy,
+  dask-glm,
+  six,
+  multipledispatch,
+  packaging,
+  distributed,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   version = "2022.1.22";
   pname = "dask-ml";
@@ -60,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dask/dask-ml";
     description = "Scalable Machine Learn with Dask";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

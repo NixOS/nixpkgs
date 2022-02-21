@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, substituteAll }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  substituteAll,
+}:
 stdenv.mkDerivation rec {
   pname = "libelfin";
   version = "unstable-2018-08-25";
@@ -18,15 +23,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [python3];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     homepage = "https://github.com/aclements/libelfin/";
     license = licenses.mit;
     description = "C++11 ELF/DWARF parser";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

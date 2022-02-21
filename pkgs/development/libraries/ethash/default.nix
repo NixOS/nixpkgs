@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gbenchmark, gtest }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gbenchmark,
+  gtest,
+}:
 stdenv.mkDerivation rec {
   pname = "ethash";
   version = "0.8.0";
@@ -41,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "PoW algorithm for Ethereum 1.0 based on Dagger-Hashimoto";
     homepage = "https://github.com/ethereum/ethash";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.asl20;
   };
 }

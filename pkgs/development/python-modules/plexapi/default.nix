@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, tqdm
-, websocket-client
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  tqdm,
+  websocket-client,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "plexapi";
   version = "4.9.2";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python bindings for the Plex API";
     homepage = "https://github.com/pkkid/python-plexapi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [colemickens];
   };
 }

@@ -1,8 +1,15 @@
-{ lib, appleDerivation, xcbuildHook, ncurses, bzip2, zlib, xz }:
-
+{
+  lib,
+  appleDerivation,
+  xcbuildHook,
+  ncurses,
+  bzip2,
+  zlib,
+  xz,
+}:
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ ncurses bzip2 zlib xz ];
+  nativeBuildInputs = [xcbuildHook];
+  buildInputs = [ncurses bzip2 zlib xz];
 
   # patches to use ncursees
   # disables md5
@@ -20,10 +27,10 @@ appleDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE=[ "-Wno-error=format-security" ]; # hardeningDisable doesn't cut it
+  NIX_CFLAGS_COMPILE = ["-Wno-error=format-security"]; # hardeningDisable doesn't cut it
 
   meta = {
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = with lib.maintainers; [matthewbauer];
   };
 }

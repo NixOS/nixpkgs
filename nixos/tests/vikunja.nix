@@ -1,12 +1,16 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "vikunja";
 
   meta = with lib.maintainers; {
-    maintainers = [ em0lar ];
+    maintainers = [em0lar];
   };
 
   nodes = {
-    vikunjaSqlite = { ... }: {
+    vikunjaSqlite = {...}: {
       services.vikunja = {
         enable = true;
         database = {
@@ -17,7 +21,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
       services.nginx.enable = true;
     };
-    vikunjaPostgresql = { pkgs, ... }: {
+    vikunjaPostgresql = {pkgs, ...}: {
       services.vikunja = {
         enable = true;
         database = {
@@ -31,10 +35,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
       services.postgresql = {
         enable = true;
-        ensureDatabases = [ "vikunja-api" ];
+        ensureDatabases = ["vikunja-api"];
         ensureUsers = [
-          { name = "vikunja-api";
-            ensurePermissions = { "DATABASE \"vikunja-api\"" = "ALL PRIVILEGES"; };
+          {
+            name = "vikunja-api";
+            ensurePermissions = {"DATABASE \"vikunja-api\"" = "ALL PRIVILEGES";};
           }
         ];
       };
@@ -42,24 +47,23 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
   };
 
-  testScript =
-    ''
-      vikunjaSqlite.wait_for_unit("vikunja-api.service")
-      vikunjaSqlite.wait_for_open_port(3456)
-      vikunjaSqlite.succeed("curl --fail http://localhost:3456/api/v1/info")
+  testScript = ''
+    vikunjaSqlite.wait_for_unit("vikunja-api.service")
+    vikunjaSqlite.wait_for_open_port(3456)
+    vikunjaSqlite.succeed("curl --fail http://localhost:3456/api/v1/info")
 
-      vikunjaSqlite.wait_for_unit("nginx.service")
-      vikunjaSqlite.wait_for_open_port(80)
-      vikunjaSqlite.succeed("curl --fail http://localhost/api/v1/info")
-      vikunjaSqlite.succeed("curl --fail http://localhost")
+    vikunjaSqlite.wait_for_unit("nginx.service")
+    vikunjaSqlite.wait_for_open_port(80)
+    vikunjaSqlite.succeed("curl --fail http://localhost/api/v1/info")
+    vikunjaSqlite.succeed("curl --fail http://localhost")
 
-      vikunjaPostgresql.wait_for_unit("vikunja-api.service")
-      vikunjaPostgresql.wait_for_open_port(3456)
-      vikunjaPostgresql.succeed("curl --fail http://localhost:3456/api/v1/info")
+    vikunjaPostgresql.wait_for_unit("vikunja-api.service")
+    vikunjaPostgresql.wait_for_open_port(3456)
+    vikunjaPostgresql.succeed("curl --fail http://localhost:3456/api/v1/info")
 
-      vikunjaPostgresql.wait_for_unit("nginx.service")
-      vikunjaPostgresql.wait_for_open_port(80)
-      vikunjaPostgresql.succeed("curl --fail http://localhost/api/v1/info")
-      vikunjaPostgresql.succeed("curl --fail http://localhost")
-    '';
+    vikunjaPostgresql.wait_for_unit("nginx.service")
+    vikunjaPostgresql.wait_for_open_port(80)
+    vikunjaPostgresql.succeed("curl --fail http://localhost/api/v1/info")
+    vikunjaPostgresql.succeed("curl --fail http://localhost")
+  '';
 })

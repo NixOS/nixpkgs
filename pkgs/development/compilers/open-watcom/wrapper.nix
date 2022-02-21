@@ -1,42 +1,46 @@
 # Arguments that this derivation gets when it is created with `callPackage`
-{ stdenv
-, lib
-, symlinkJoin
-, makeWrapper
-, runCommand
-, file
-}:
-
-open-watcom:
-
-let
-  wrapper =
-    {}:
-    let
-      binDirs = with stdenv.hostPlatform; if isWindows then [
-        (lib.optionalString is64bit "binnt64")
-        "binnt"
-        (lib.optionalString is32bit "binw")
-      ] else if (isDarwin && is64bit) then [
-        "osx64"
-      ] else [
-        (lib.optionalString is64bit "binl64")
-        "binl"
-      ];
-      includeDirs = with stdenv.hostPlatform; [
+{
+  stdenv,
+  lib,
+  symlinkJoin,
+  makeWrapper,
+  runCommand,
+  file,
+}: open-watcom: let
+  wrapper = {}: let
+    binDirs = with stdenv.hostPlatform;
+      if isWindows
+      then
+        [
+          (lib.optionalString is64bit "binnt64")
+          "binnt"
+          (lib.optionalString is32bit "binw")
+        ]
+      else if (isDarwin && is64bit)
+      then
+        [
+          "osx64"
+        ]
+      else
+        [
+          (lib.optionalString is64bit "binl64")
+          "binl"
+        ];
+    includeDirs = with stdenv.hostPlatform;
+      [
         "h"
       ]
       ++ lib.optional isWindows "h/nt"
       ++ lib.optional isLinux "lh";
-      listToDirs = list: lib.strings.concatMapStringsSep ":" (dir: "${placeholder "out"}/${dir}") list;
-      name = "${open-watcom.pname}-${open-watcom.version}";
-    in
+    listToDirs = list: lib.strings.concatMapStringsSep ":" (dir: "${placeholder "out"}/${dir}") list;
+    name = "${open-watcom.pname}-${open-watcom.version}";
+  in
     symlinkJoin {
       inherit name;
 
-      paths = [ open-watcom ];
+      paths = [open-watcom];
 
-      buildInputs = [ makeWrapper ];
+      buildInputs = [makeWrapper];
 
       postBuild = ''
         mkdir $out/bin
@@ -60,9 +64,9 @@ let
       passthru = {
         unwrapped = open-watcom;
         tests = let
-          wrapped = wrapper { };
+          wrapped = wrapper {};
         in {
-          simple = runCommand "${name}-test-simple" { nativeBuildInputs = [ wrapped ]; } ''
+          simple = runCommand "${name}-test-simple" {nativeBuildInputs = [wrapped];} ''
             cat <<EOF >test.c
             #include <stdio.h>
             int main() {
@@ -96,7 +100,7 @@ let
             ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "./test_cpp"}
             touch $out
           '';
-          cross = runCommand "${name}-test-cross" { nativeBuildInputs = [ wrapped file ]; } ''
+          cross = runCommand "${name}-test-cross" {nativeBuildInputs = [wrapped file];} ''
             cat <<EOF >test.c
             #include <stdio.h>
             int main() {
@@ -127,4 +131,4 @@ let
       inherit (open-watcom) meta;
     };
 in
-lib.makeOverridable wrapper
+  lib.makeOverridable wrapper

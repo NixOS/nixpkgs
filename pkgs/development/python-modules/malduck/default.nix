@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, capstone
-, click
-, cryptography
-, fetchFromGitHub
-, pefile
-, pycryptodomex
-, pyelftools
-, pythonOlder
-, typing-extensions
-, yara-python
+{
+  lib,
+  buildPythonPackage,
+  capstone,
+  click,
+  cryptography,
+  fetchFromGitHub,
+  pefile,
+  pycryptodomex,
+  pyelftools,
+  pythonOlder,
+  typing-extensions,
+  yara-python,
 }:
-
 buildPythonPackage rec {
   pname = "malduck";
   version = "4.1.0";
@@ -43,12 +43,12 @@ buildPythonPackage rec {
   # Project has no tests. They will come with the next release
   doCheck = false;
 
-  pythonImportsCheck = [ "malduck" ];
+  pythonImportsCheck = ["malduck"];
 
   meta = with lib; {
     description = "Helper for malware analysis";
     homepage = "https://github.com/CERT-Polska/malduck";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

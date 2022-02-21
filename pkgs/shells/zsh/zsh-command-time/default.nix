@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 # To make use of this plugin, need to add
 #   programs.zsh.interactiveShellInit = ''
 #     source ${pkgs.zsh-command-time}/share/zsh/plugins/command-time/command-time.plugin.zsh
@@ -7,7 +10,6 @@
 #     ZSH_COMMAND_TIME_MIN_SECONDS=3
 #     ZSH_COMMAND_TIME_ECHO=1
 #   '';
-
 stdenv.mkDerivation {
   version = "2018-04-30";
   pname = "zsh-command-time";

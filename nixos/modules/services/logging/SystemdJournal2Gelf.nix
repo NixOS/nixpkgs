@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.services.SystemdJournal2Gelf;
-in
-
-{ options = {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.SystemdJournal2Gelf;
+in {
+  options = {
     services.SystemdJournal2Gelf = {
       enable = mkOption {
         type = types.bool;
@@ -41,15 +43,14 @@ in
           SystemdJournal2Gelf package to use.
         '';
       };
-
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.SystemdJournal2Gelf = {
       description = "SystemdJournal2Gelf";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/SystemdJournal2Gelf ${cfg.graylogServer} --follow ${cfg.extraOptions}";
         Restart = "on-failure";

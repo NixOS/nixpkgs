@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gengetopt, m4, gnupg
-, git, perl, autoconf, automake, help2man, boehmgc }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gengetopt,
+  m4,
+  gnupg,
+  git,
+  perl,
+  autoconf,
+  automake,
+  help2man,
+  boehmgc,
+}:
 stdenv.mkDerivation rec {
   pname = "mmv";
   version = "2.1";
@@ -17,14 +29,14 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  nativeBuildInputs = [ gengetopt m4 git gnupg perl autoconf automake help2man pkg-config ];
-  buildInputs = [ boehmgc ];
+  nativeBuildInputs = [gengetopt m4 git gnupg perl autoconf automake help2man pkg-config];
+  buildInputs = [boehmgc];
 
   meta = {
     homepage = "https://github.com/rrthomas/mmv";
     description = "Utility for wildcard renaming, copying, etc";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ siraben ];
+    maintainers = with lib.maintainers; [siraben];
   };
 }

@@ -1,5 +1,4 @@
-{ fetchNimble }:
-
+{fetchNimble}:
 fetchNimble {
   pname = "chroma";
   version = "0.2.5";

@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "gitleaks";
   version = "8.2.7";
@@ -32,7 +32,7 @@ buildGoModule rec {
       API keys and tokens in git repos.
     '';
     homepage = "https://github.com/zricethezav/gitleaks";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

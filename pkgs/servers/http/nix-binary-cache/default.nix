@@ -1,6 +1,17 @@
-{lib, stdenv
-, coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
-, lighttpd, iproute2 }:
+{
+  lib,
+  stdenv,
+  coreutils,
+  findutils,
+  nix,
+  xz,
+  bzip2,
+  gnused,
+  gnugrep,
+  openssl,
+  lighttpd,
+  iproute2,
+}:
 stdenv.mkDerivation rec {
   version = "2014-06-29-1";
   pname = "nix-binary-cache";

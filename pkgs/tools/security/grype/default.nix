@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
-
 buildGoModule rec {
   pname = "grype";
   version = "0.33.0";
@@ -65,7 +65,7 @@ buildGoModule rec {
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.
     '';
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab jk ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab jk];
   };
 }

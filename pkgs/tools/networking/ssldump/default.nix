@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, json_c
-, libnet
-, libpcap
-, openssl
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  json_c,
+  libnet,
+  libpcap,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ssldump";
   version = "1.4";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "An SSLv3/TLS network protocol analyzer";
     homepage = "http://ssldump.sourceforge.net";
     license = "BSD-style";
-    maintainers = with maintainers; [ aycanirican ];
+    maintainers = with maintainers; [aycanirican];
     platforms = platforms.unix;
   };
 }

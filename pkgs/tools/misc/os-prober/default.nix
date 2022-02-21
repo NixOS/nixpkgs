@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchFromGitLab, makeWrapper, nixosTests,
-# optional dependencies, the command(s) they provide
-coreutils,  # mktemp
-grub2,      # grub-mount and grub-probe
-cryptsetup, # cryptsetup
-libuuid,    # blkid and blockdev
-udev,    # udevadm udevinfo
-ntfs3g,     # ntfs3g
-dmraid,     # dmraid
-lvm2        # lvs
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  makeWrapper,
+  nixosTests,
+  # optional dependencies, the command(s) they provide
+  coreutils,
+  # mktemp
+  grub2,
+  # grub-mount and grub-probe
+  cryptsetup,
+  # cryptsetup
+  libuuid,
+  # blkid and blockdev
+  udev,
+  # udevadm udevinfo
+  ntfs3g,
+  # ntfs3g
+  dmraid,
+  # dmraid
+  lvm2
+  # lvs
 }:
-
 stdenv.mkDerivation rec {
   version = "1.79";
   pname = "os-prober";
@@ -21,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ntwH5TIA18IOgYPkHMLU0EVykkHs6Z0wseYEPsU0KvQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   installPhase = ''
     # executables
     install -Dt $out/bin os-prober linux-boot-prober
@@ -56,7 +68,7 @@ stdenv.mkDerivation rec {
     done;
     for file in $out/bin/*; do
       wrapProgram $file \
-        --suffix PATH : ${lib.makeBinPath [ grub2 udev coreutils cryptsetup libuuid ntfs3g lvm2 dmraid ]} \
+        --suffix PATH : ${lib.makeBinPath [grub2 udev coreutils cryptsetup libuuid ntfs3g lvm2 dmraid]} \
         --run "[ -d /var/lib/os-prober ] || mkdir /var/lib/os-prober"
     done;
   '';
@@ -68,6 +80,6 @@ stdenv.mkDerivation rec {
     description = "Utility to detect other OSs on a set of drives";
     homepage = "http://packages.debian.org/source/sid/os-prober";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ symphorien ];
+    maintainers = with maintainers; [symphorien];
   };
 }

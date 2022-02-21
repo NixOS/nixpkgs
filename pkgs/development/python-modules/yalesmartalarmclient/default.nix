@@ -1,11 +1,11 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "yalesmartalarmclient";
   version = "0.3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interface with Yale Smart Alarm Systems";
     homepage = "https://github.com/domwillcode/yale-smart-alarm-client";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

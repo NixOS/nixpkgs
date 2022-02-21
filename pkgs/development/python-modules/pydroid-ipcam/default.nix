@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "pydroid-ipcam";
   version = "unstable-2021-06-01";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pydroid_ipcam" ];
+  pythonImportsCheck = ["pydroid_ipcam"];
 
   meta = with lib; {
     description = "Python library for Android IP Webcam";
     homepage = "https://github.com/home-assistant-libs/pydroid-ipcam";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

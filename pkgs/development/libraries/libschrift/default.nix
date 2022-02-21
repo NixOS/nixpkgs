@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "libschrift";
   version = "0.10.0";
@@ -24,13 +28,13 @@ stdenv.mkDerivation rec {
       --replace "PREFIX = /usr/local" "PREFIX = $out"
   '';
 
-  makeFlags = [ "libschrift.a" ];
+  makeFlags = ["libschrift.a"];
 
   meta = with lib; {
     homepage = "https://github.com/tomolt/libschrift";
     description = "A lightweight TrueType font rendering library";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

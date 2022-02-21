@@ -1,9 +1,11 @@
 # Nagios system/network monitoring daemon.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.nagios;
 
   nagiosState = "/var/lib/nagios";
@@ -13,32 +15,32 @@ let
   nagiosObjectDefs = cfg.objectDefs;
 
   nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {
-      inherit nagiosObjectDefs;
-      preferLocalBuild = true;
-    } "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
+    inherit nagiosObjectDefs;
+    preferLocalBuild = true;
+  } "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
 
   nagiosCfgFile = let
     default = {
-      log_file="${nagiosLogDir}/current";
-      log_archive_path="${nagiosLogDir}/archive";
-      status_file="${nagiosState}/status.dat";
-      object_cache_file="${nagiosState}/objects.cache";
-      temp_file="${nagiosState}/nagios.tmp";
-      lock_file="/run/nagios.lock";
-      state_retention_file="${nagiosState}/retention.dat";
-      query_socket="${nagiosState}/nagios.qh";
-      check_result_path="${nagiosState}";
-      command_file="${nagiosState}/nagios.cmd";
-      cfg_dir="${nagiosObjectDefsDir}";
-      nagios_user="nagios";
-      nagios_group="nagios";
-      illegal_macro_output_chars="`~$&|'\"<>";
-      retain_state_information="1";
+      log_file = "${nagiosLogDir}/current";
+      log_archive_path = "${nagiosLogDir}/archive";
+      status_file = "${nagiosState}/status.dat";
+      object_cache_file = "${nagiosState}/objects.cache";
+      temp_file = "${nagiosState}/nagios.tmp";
+      lock_file = "/run/nagios.lock";
+      state_retention_file = "${nagiosState}/retention.dat";
+      query_socket = "${nagiosState}/nagios.qh";
+      check_result_path = "${nagiosState}";
+      command_file = "${nagiosState}/nagios.cmd";
+      cfg_dir = "${nagiosObjectDefsDir}";
+      nagios_user = "nagios";
+      nagios_group = "nagios";
+      illegal_macro_output_chars = "`~$&|'\"<>";
+      retain_state_information = "1";
     };
     lines = mapAttrsToList (key: value: "${key}=${value}") (default // cfg.extraConfig);
     content = concatStringsSep "\n" lines;
     file = pkgs.writeText "nagios.cfg" content;
-    validated =  pkgs.runCommand "nagios-checked.cfg" {preferLocalBuild=true;} ''
+    validated = pkgs.runCommand "nagios-checked.cfg" {preferLocalBuild = true;} ''
       cp ${file} nagios.cfg
       # nagios checks the existence of /var/lib/nagios, but
       # it does not exist in the build sandbox, so we fake it
@@ -47,44 +49,46 @@ let
       sed -i s@=${nagiosState}@=$lib@ nagios.cfg
       ${pkgs.nagios}/bin/nagios -v nagios.cfg && cp ${file} $out
     '';
-    defaultCfgFile = if cfg.validateConfig then validated else file;
+    defaultCfgFile =
+      if cfg.validateConfig
+      then validated
+      else file;
   in
-  if cfg.mainConfigFile == null then defaultCfgFile else cfg.mainConfigFile;
+    if cfg.mainConfigFile == null
+    then defaultCfgFile
+    else cfg.mainConfigFile;
 
   # Plain configuration for the Nagios web-interface with no
   # authentication.
   nagiosCGICfgFile = pkgs.writeText "nagios.cgi.conf"
-    ''
-      main_config_file=${cfg.mainConfigFile}
-      use_authentication=0
-      url_html_path=${urlPath}
-    '';
+  ''
+    main_config_file=${cfg.mainConfigFile}
+    use_authentication=0
+    url_html_path=${urlPath}
+  '';
 
-  extraHttpdConfig =
-    ''
-      ScriptAlias ${urlPath}/cgi-bin ${pkgs.nagios}/sbin
+  extraHttpdConfig = ''
+    ScriptAlias ${urlPath}/cgi-bin ${pkgs.nagios}/sbin
 
-      <Directory "${pkgs.nagios}/sbin">
-        Options ExecCGI
-        Require all granted
-        SetEnv NAGIOS_CGI_CONFIG ${cfg.cgiConfigFile}
-      </Directory>
+    <Directory "${pkgs.nagios}/sbin">
+      Options ExecCGI
+      Require all granted
+      SetEnv NAGIOS_CGI_CONFIG ${cfg.cgiConfigFile}
+    </Directory>
 
-      Alias ${urlPath} ${pkgs.nagios}/share
+    Alias ${urlPath} ${pkgs.nagios}/share
 
-      <Directory "${pkgs.nagios}/share">
-        Options None
-        Require all granted
-      </Directory>
-    '';
-
-in
-{
+    <Directory "${pkgs.nagios}/share">
+      Options None
+      Require all granted
+    </Directory>
+  '';
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "nagios" "urlPath" ] "The urlPath option has been removed as it is hard coded to /nagios in the nagios package.")
+    (mkRemovedOptionModule ["services" "nagios" "urlPath"] "The urlPath option has been removed as it is hard coded to /nagios in the nagios package.")
   ];
 
-  meta.maintainers = with lib.maintainers; [ symphorien ];
+  meta.maintainers = with lib.maintainers; [symphorien];
 
   options = {
     services.nagios = {
@@ -102,7 +106,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = with pkgs; [ monitoring-plugins ssmtp mailutils ];
+        default = with pkgs; [monitoring-plugins ssmtp mailutils];
         defaultText = literalExpression "[pkgs.monitoring-plugins pkgs.ssmtp pkgs.mailutils]";
         description = "
           Packages to be added to the Nagios <envar>PATH</envar>.
@@ -172,28 +176,27 @@ in
     };
   };
 
-
   config = mkIf cfg.enable {
     users.users.nagios = {
       description = "Nagios user ";
-      uid         = config.ids.uids.nagios;
-      home        = nagiosState;
-      group       = "nagios";
+      uid = config.ids.uids.nagios;
+      home = nagiosState;
+      group = "nagios";
     };
 
-    users.groups.nagios = { };
+    users.groups.nagios = {};
 
     # This isn't needed, it's just so that the user can type "nagiostats
     # -c /etc/nagios.cfg".
     environment.etc."nagios.cfg".source = nagiosCfgFile;
 
-    environment.systemPackages = [ pkgs.nagios ];
+    environment.systemPackages = [pkgs.nagios];
     systemd.services.nagios = {
       description = "Nagios monitoring daemon";
-      path     = [ pkgs.nagios ] ++ cfg.plugins;
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
-      restartTriggers = [ nagiosCfgFile ];
+      path = [pkgs.nagios] ++ cfg.plugins;
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      restartTriggers = [nagiosCfgFile];
 
       serviceConfig = {
         User = "nagios";
@@ -207,7 +210,7 @@ in
     };
 
     services.httpd.virtualHosts = optionalAttrs cfg.enableWebInterface {
-      ${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost { extraConfig = extraHttpdConfig; } ];
+      ${cfg.virtualHost.hostName} = mkMerge [cfg.virtualHost {extraConfig = extraHttpdConfig;}];
     };
   };
 }

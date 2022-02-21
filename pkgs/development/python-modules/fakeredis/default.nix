@@ -1,20 +1,20 @@
-{ lib
-, aioredis
-, async_generator
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, hypothesis
-, lupa
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, six
-, sortedcontainers
+{
+  lib,
+  aioredis,
+  async_generator,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  hypothesis,
+  lupa,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  six,
+  sortedcontainers,
 }:
-
 buildPythonPackage rec {
   pname = "fakeredis";
   version = "1.7.0";
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/jamesls/fakeredis";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

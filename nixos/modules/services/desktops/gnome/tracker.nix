@@ -1,32 +1,30 @@
 # Tracker daemon.
-
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.gnome.tracker;
-in
 {
-
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.gnome.tracker;
+in {
   meta = {
     maintainers = teams.gnome.members;
   };
 
   imports = [
     # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "tracker" "enable" ]
-      [ "services" "gnome" "tracker" "enable" ]
+    (
+      mkRenamedOptionModule
+      ["services" "gnome3" "tracker" "enable"]
+      ["services" "gnome" "tracker" "enable"]
     )
   ];
 
   ###### interface
 
   options = {
-
     services.gnome.tracker = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -38,39 +36,31 @@ in
 
       subcommandPackages = mkOption {
         type = types.listOf types.package;
-        default = [ ];
+        default = [];
         internal = true;
         description = ''
           List of packages containing tracker3 subcommands.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [pkgs.tracker];
 
-    environment.systemPackages = [ pkgs.tracker ];
+    services.dbus.packages = [pkgs.tracker];
 
-    services.dbus.packages = [ pkgs.tracker ];
-
-    systemd.packages = [ pkgs.tracker ];
+    systemd.packages = [pkgs.tracker];
 
     environment.variables = {
-      TRACKER_CLI_SUBCOMMANDS_DIR =
-        let
-          subcommandPackagesTree = pkgs.symlinkJoin {
-            name = "tracker-with-subcommands-${pkgs.tracker.version}";
-            paths = [ pkgs.tracker ] ++ cfg.subcommandPackages;
-          };
-        in
-        "${subcommandPackagesTree}/libexec/tracker3";
+      TRACKER_CLI_SUBCOMMANDS_DIR = let
+        subcommandPackagesTree = pkgs.symlinkJoin {
+          name = "tracker-with-subcommands-${pkgs.tracker.version}";
+          paths = [pkgs.tracker] ++ cfg.subcommandPackages;
+        };
+      in "${subcommandPackagesTree}/libexec/tracker3";
     };
-
   };
-
 }

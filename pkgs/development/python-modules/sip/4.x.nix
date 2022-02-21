@@ -1,5 +1,11 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
-
+{
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  python,
+  isPyPy,
+  sip-module ? "sip",
+}:
 buildPythonPackage rec {
   pname = sip-module;
   version = "4.19.25";
@@ -36,9 +42,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 sander ];
-    platforms   = platforms.all;
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [lovek323 sander];
+    platforms = platforms.all;
   };
 }

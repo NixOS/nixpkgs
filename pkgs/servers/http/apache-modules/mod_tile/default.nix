@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, apacheHttpd, apr, cairo, iniparser, mapnik }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  apacheHttpd,
+  apr,
+  cairo,
+  iniparser,
+  mapnik,
+}:
 stdenv.mkDerivation rec {
   pname = "mod_tile";
   version = "unstable-2017-01-08";
@@ -11,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "12c96avka1dfb9wxqmjd57j30w9h8yx4y4w34kyq6xnf6lwnkcxp";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ apacheHttpd apr cairo iniparser mapnik ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [apacheHttpd apr cairo iniparser mapnik];
 
   configureFlags = [
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"
@@ -29,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/openstreetmap/mod_tile";
     description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jglukasik ];
+    maintainers = with maintainers; [jglukasik];
     platforms = platforms.linux;
   };
 }

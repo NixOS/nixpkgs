@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  coverage,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "xmltodict";
   version = "0.12.0";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21";
   };
 
-  checkInputs = [ coverage nose ];
+  checkInputs = [coverage nose];
 
   checkPhase = ''
     nosetests

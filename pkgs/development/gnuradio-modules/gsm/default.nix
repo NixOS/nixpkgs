@@ -1,17 +1,17 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, cppunit
-, swig
-, boost
-, log4cpp
-, python
-, libosmocore
-, osmosdr
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cppunit,
+  swig,
+  boost,
+  log4cpp,
+  python,
+  libosmocore,
+  osmosdr,
 }:
-
 mkDerivation {
   pname = "gr-gsm";
   version = "2016-08-25";
@@ -43,6 +43,6 @@ mkDerivation {
     homepage = "https://github.com/ptrkrysik/gr-gsm";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mog ];
+    maintainers = with maintainers; [mog];
   };
 }

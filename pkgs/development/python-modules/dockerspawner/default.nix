@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyterhub
-, escapism
-, docker
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyterhub,
+  escapism,
+  docker,
 }:
-
 buildPythonPackage rec {
   pname = "dockerspawner";
   version = "12.1.0";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # tests require docker
   doCheck = false;
 
-  pythonImportsCheck = [ "dockerspawner" ];
+  pythonImportsCheck = ["dockerspawner"];
 
   meta = with lib; {
     description = "Dockerspawner: A custom spawner for Jupyterhub";
     homepage = "https://jupyter.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

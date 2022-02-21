@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gmp
-, python2
-, tune ? false # tune to hardware, impure
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gmp,
+  python2,
+  tune ? false
+  # tune to hardware, impure
 }:
-
 stdenv.mkDerivation rec {
   version = "0.9.1";
   pname = "zn_poly";
@@ -33,12 +34,12 @@ stdenv.mkDerivation rec {
   libbasename = "libzn_poly";
   libext = stdenv.targetPlatform.extensions.sharedLibrary;
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   # Tuning (either autotuning or with hand-written paramters) is possible
   # but not implemented here.
   # It seems buggy anyways (see homepage).
-  buildFlags = [ "all" "${libbasename}${libext}" ];
+  buildFlags = ["all" "${libbasename}${libext}"];
 
   configureFlags = lib.optionals (!tune) [
     "--disable-tuning"
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://web.maths.unsw.edu.au/~davidharvey/code/zn_poly/";
     description = "Polynomial arithmetic over Z/nZ";
-    license = with licenses; [ gpl3 ];
+    license = with licenses; [gpl3];
     maintainers = teams.sage.members;
     platforms = platforms.unix;
   };

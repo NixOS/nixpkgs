@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "viu";
   version = "1.4.0";
@@ -20,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "A command-line application to view images from the terminal written in Rust";
     homepage = "https://github.com/atanunq/viu";
     license = licenses.mit;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [petabyteboy];
   };
 }

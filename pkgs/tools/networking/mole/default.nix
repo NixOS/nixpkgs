@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "mole";
   version = "2.0.0";
@@ -25,7 +25,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "CLI application to create SSH tunnels";
     homepage = "https://github.com/davrodpin/mole";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

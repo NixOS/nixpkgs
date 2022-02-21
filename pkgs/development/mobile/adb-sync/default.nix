@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, python3, platform-tools, makeWrapper
-, socat, go-mtpfs, adbfs-rootless
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  platform-tools,
+  makeWrapper,
+  socat,
+  go-mtpfs,
+  adbfs-rootless,
 }:
-
 stdenv.mkDerivation {
   pname = "adb-sync-unstable";
   version = "2019-01-01";
@@ -13,13 +20,13 @@ stdenv.mkDerivation {
     sha256 = "1kfpdqs8lmnh144jcm1qmfnmigzrbrz5lvwvqqb7021b2jlf69cl";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [python3];
 
   dontBuild = true;
 
   installPhase = let
-    dependencies = lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
+    dependencies = lib.makeBinPath [platform-tools socat go-mtpfs adbfs-rootless];
   in ''
     runHook preInstall
 
@@ -38,6 +45,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     platforms = platforms.unix;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ scolobb ma27 ];
+    maintainers = with maintainers; [scolobb ma27];
   };
 }

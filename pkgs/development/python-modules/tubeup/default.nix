@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, internetarchive
-, fetchPypi
-, yt-dlp
-, docopt
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  internetarchive,
+  fetchPypi,
+  yt-dlp,
+  docopt,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "tubeup";
   version = "0.0.27";
@@ -24,9 +24,9 @@ buildPythonPackage rec {
       --replace "internetarchive==2.0.3" "internetarchive"
   '';
 
-  propagatedBuildInputs = [ internetarchive docopt yt-dlp ];
+  propagatedBuildInputs = [internetarchive docopt yt-dlp];
 
-  pythonImportsCheck = [ "tubeup" ];
+  pythonImportsCheck = ["tubeup"];
 
   # Tests failing upstream
   doCheck = false;
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Youtube (and other video site) to Internet Archive Uploader";
     homepage = "https://github.com/bibanon/tubeup";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

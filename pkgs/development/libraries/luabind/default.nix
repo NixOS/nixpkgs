@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, boost-build, lua, boost }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost-build,
+  lua,
+  boost,
+}:
 stdenv.mkDerivation rec {
   pname = "luabind";
   version = "0.9.1";
@@ -11,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sK1ca2Oj9yXdmxyXeDO3k8YZ1g+HxIXLhvdTWdPDdag=";
   };
 
-  patches = [ ./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ./0.9.1_discover_luajit.patch ];
+  patches = [./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ./0.9.1_discover_luajit.patch];
 
-  buildInputs = [ boost-build lua boost ];
+  buildInputs = [boost-build lua boost];
 
-  propagatedBuildInputs = [ lua ];
+  propagatedBuildInputs = [lua];
 
   buildPhase = "LUA_PATH=${lua} bjam release";
 

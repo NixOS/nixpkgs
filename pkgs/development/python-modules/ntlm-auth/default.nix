@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  requests,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "ntlm-auth";
   version = "1.5.0";
@@ -30,13 +30,13 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [ "ntlm_auth" ];
+  pythonImportsCheck = ["ntlm_auth"];
 
   meta = with lib; {
     description = "Calculates NTLM Authentication codes";
     homepage = "https://github.com/jborean93/ntlm-auth";
     license = licenses.mit;
-    maintainers = with maintainers; [ elasticdog ];
+    maintainers = with maintainers; [elasticdog];
     platforms = platforms.all;
   };
 }

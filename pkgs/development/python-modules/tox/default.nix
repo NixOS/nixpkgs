@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, packaging
-, pluggy
-, py
-, six
-, virtualenv
-, setuptools-scm
-, toml
-, filelock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  packaging,
+  pluggy,
+  py,
+  six,
+  virtualenv,
+  setuptools-scm,
+  toml,
+  filelock,
 }:
-
 buildPythonPackage rec {
   pname = "tox";
   version = "3.24.5";
 
-  buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ packaging pluggy py six virtualenv toml filelock ];
+  buildInputs = [setuptools-scm];
+  propagatedBuildInputs = [packaging pluggy py six virtualenv toml filelock];
 
   doCheck = false;
 

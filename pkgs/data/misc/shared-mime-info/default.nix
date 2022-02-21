@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gettext
-, itstool
-, libxml2
-, glib
-, shared-mime-info
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
+  glib,
+  shared-mime-info,
 }:
-
 stdenv.mkDerivation rec {
   pname = "shared-mime-info-unstable";
   version = "2021-12-03";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -26,13 +26,15 @@ stdenv.mkDerivation rec {
     sha256 = "1v7dx7mr0m4lcff1aasg9gxn280zn0ffn6fjg9xc44pnllg01n6s";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    libxml2
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) shared-mime-info;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      libxml2
+    ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) shared-mime-info;
 
   buildInputs = [
     libxml2
@@ -50,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.freedesktop.members ++ [ maintainers.mimame ];
+    maintainers = teams.freedesktop.members ++ [maintainers.mimame];
   };
 }

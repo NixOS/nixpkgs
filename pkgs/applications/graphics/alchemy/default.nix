@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, jre, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "alchemy";
   version = "008";
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://al.chemy.org/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.marcweber ];
+    maintainers = [maintainers.marcweber];
     platforms = platforms.linux;
   };
 }

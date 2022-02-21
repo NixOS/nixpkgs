@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "jdatetime";
   version = "4.0.0";
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Jalali datetime binding";
     homepage = "https://github.com/slashmili/python-jalali";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

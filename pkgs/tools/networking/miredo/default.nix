@@ -1,10 +1,16 @@
-{ lib, stdenv, fetchurl, nettools, iproute2, judy }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nettools,
+  iproute2,
+  judy,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.6";
   pname = "miredo";
 
-  buildInputs = [ judy ];
+  buildInputs = [judy];
 
   src = fetchurl {
     url = "https://www.remlab.net/files/miredo/miredo-${version}.tar.xz";
@@ -18,7 +24,7 @@ stdenv.mkDerivation rec {
     substituteInPlace misc/client-hook.iproute --replace '/sbin/ip' '${iproute2}/bin/ip'
   '';
 
-  configureFlags = [ "--with-Judy" ];
+  configureFlags = ["--with-Judy"];
 
   postInstall = ''
     rm -rf $out/lib/systemd $out/var $out/etc/miredo/miredo.conf
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Teredo IPv6 Tunneling Daemon";
     homepage = "https://www.remlab.net/miredo/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    maintainers = [maintainers.volth];
     platforms = platforms.unix;
   };
 }

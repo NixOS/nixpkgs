@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   configDir = "/var/lib/foobar";
   mqttUsername = "homeassistant";
   mqttPassword = "secret";
@@ -8,30 +10,34 @@ in {
   name = "home-assistant";
   meta.maintainers = lib.teams.home-assistant.members;
 
-  nodes.hass = { pkgs, ... }: {
-    environment.systemPackages = with pkgs; [ mosquitto ];
+  nodes.hass = {pkgs, ...}: {
+    environment.systemPackages = with pkgs; [mosquitto];
 
     services.mosquitto = {
       enable = true;
-      listeners = [ {
-        users = {
-          "${mqttUsername}" = {
-            acl = [ "readwrite #" ];
-            password = mqttPassword;
+      listeners = [
+        {
+          users = {
+            "${mqttUsername}" = {
+              acl = ["readwrite #"];
+              password = mqttPassword;
+            };
           };
-        };
-      } ];
+        }
+      ];
     };
 
     services.postgresql = {
       enable = true;
-      ensureDatabases = [ "hass" ];
-      ensureUsers = [{
-        name = "hass";
-        ensurePermissions = {
-          "DATABASE hass" = "ALL PRIVILEGES";
-        };
-      }];
+      ensureDatabases = ["hass"];
+      ensureUsers = [
+        {
+          name = "hass";
+          ensurePermissions = {
+            "DATABASE hass" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
     services.home-assistant = {
@@ -40,11 +46,13 @@ in {
 
       # tests loading components by overriding the package
       package = (pkgs.home-assistant.override {
-        extraPackages = ps: with ps; [
-          colorama
-        ];
-        extraComponents = [ "zha" ];
-      }).overrideAttrs (oldAttrs: {
+        extraPackages = ps:
+          with ps; [
+            colorama
+          ];
+        extraComponents = ["zha"];
+      })
+      .overrideAttrs (oldAttrs: {
         doInstallCheck = false;
       });
 
@@ -54,9 +62,10 @@ in {
       ];
 
       # test extra package passing from the module
-      extraPackages = python3Packages: with python3Packages; [
-        psycopg2
-      ];
+      extraPackages = python3Packages:
+        with python3Packages; [
+          psycopg2
+        ];
 
       config = {
         homeassistant = {
@@ -86,21 +95,25 @@ in {
 
         # create a mqtt sensor that syncs state with its mqtt topic
         # https://www.home-assistant.io/integrations/sensor.mqtt/
-        binary_sensor = [ {
-          platform = "mqtt";
-          state_topic = "home-assistant/test";
-          payload_on = "let_there_be_light";
-          payload_off = "off";
-        } ];
+        binary_sensor = [
+          {
+            platform = "mqtt";
+            state_topic = "home-assistant/test";
+            payload_on = "let_there_be_light";
+            payload_off = "off";
+          }
+        ];
 
         # set up a wake-on-lan switch to test capset capability required
         # for the ping suid wrapper
         # https://www.home-assistant.io/integrations/wake_on_lan/
-        switch = [ {
-          platform = "wake_on_lan";
-          mac = "00:11:22:33:44:55";
-          host = "127.0.0.1";
-        } ];
+        switch = [
+          {
+            platform = "wake_on_lan";
+            mac = "00:11:22:33:44:55";
+            host = "127.0.0.1";
+          }
+        ];
 
         # test component-based capability assignment (CAP_NET_BIND_SERVICE)
         # https://www.home-assistant.io/integrations/emulated_hue/
@@ -120,14 +133,18 @@ in {
       # configure the sample lovelace dashboard
       lovelaceConfig = {
         title = "My Awesome Home";
-        views = [{
-          title = "Example";
-          cards = [{
-            type = "markdown";
-            title = "Lovelace";
-            content = "Welcome to your **Lovelace UI**.";
-          }];
-        }];
+        views = [
+          {
+            title = "Example";
+            cards = [
+              {
+                type = "markdown";
+                title = "Lovelace";
+                content = "Welcome to your **Lovelace UI**.";
+              }
+            ];
+          }
+        ];
       };
       lovelaceConfigWritable = true;
     };

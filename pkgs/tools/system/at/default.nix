@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, bison, flex, pam, perl
-, sendmailPath ? "/run/wrappers/bin/sendmail"
-, atWrapperPath ? "/run/wrappers/bin/at"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  bison,
+  flex,
+  pam,
+  perl,
+  sendmailPath ? "/run/wrappers/bin/sendmail",
+  atWrapperPath ? "/run/wrappers/bin/at",
 }:
-
 stdenv.mkDerivation rec {
   pname = "at";
   version = "3.1.23";
@@ -21,17 +28,23 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ bison flex perl /* for `prove` (tests) */ ];
+  nativeBuildInputs = [
+    bison
+    flex
+    perl
+    /*
+     for `prove` (tests)
+     */
+  ];
 
-  buildInputs = [ pam ];
+  buildInputs = [pam];
 
-  preConfigure =
-    ''
-      export SENDMAIL=${sendmailPath}
-      # Purity: force atd.pid to be placed in /var/run regardless of
-      # whether it exists now.
-      substituteInPlace ./configure --replace "test -d /var/run" "true"
-    '';
+  preConfigure = ''
+    export SENDMAIL=${sendmailPath}
+    # Purity: force atd.pid to be placed in /var/run regardless of
+    # whether it exists now.
+    substituteInPlace ./configure --replace "test -d /var/run" "true"
+  '';
 
   configureFlags = [
     "--with-etcdir=/etc/at"

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "cchardet";
   version = "2.1.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     "cchardet"
   ];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   preCheck = ''
     cp -R src/tests $TMPDIR
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "High-speed universal character encoding detector";
     homepage = "https://github.com/PyYoshi/cChardet";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = with lib.maintainers; [ivan];
   };
 }

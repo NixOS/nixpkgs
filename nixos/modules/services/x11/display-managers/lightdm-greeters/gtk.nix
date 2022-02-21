@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
   xcfg = config.services.xserver;
@@ -16,7 +17,7 @@ let
   cursors = cfg.cursorTheme.package;
 
   gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
-    ''
+  ''
     [greeter]
     theme-name = ${cfg.theme.name}
     icon-theme-name = ${cfg.iconTheme.name}
@@ -27,14 +28,10 @@ let
     ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
     ${optionalString (xcfg.dpi != null) "xft-dpi=${toString xcfg.dpi}"}
     ${cfg.extraConfig}
-    '';
-
-in
-{
+  '';
+in {
   options = {
-
     services.xserver.displayManager.lightdm.greeters.gtk = {
-
       enable = mkOption {
         type = types.bool;
         default = true;
@@ -44,7 +41,6 @@ in
       };
 
       theme = {
-
         package = mkOption {
           type = types.package;
           default = pkgs.gnome.gnome-themes-extra;
@@ -61,11 +57,9 @@ in
             Name of the theme to use for the lightdm-gtk-greeter.
           '';
         };
-
       };
 
       iconTheme = {
-
         package = mkOption {
           type = types.package;
           default = pkgs.gnome.adwaita-icon-theme;
@@ -82,11 +76,9 @@ in
             Name of the icon theme to use for the lightdm-gtk-greeter.
           '';
         };
-
       };
 
       cursorTheme = {
-
         package = mkOption {
           type = types.package;
           default = pkgs.gnome.adwaita-icon-theme;
@@ -128,7 +120,7 @@ in
       indicators = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
-        example = [ "~host" "~spacer" "~clock" "~spacer" "~session" "~language" "~a11y" "~power" ];
+        example = ["~host" "~spacer" "~clock" "~spacer" "~session" "~language" "~a11y" "~power"];
         description = ''
           List of allowed indicator modules to use for the lightdm gtk
           greeter panel.
@@ -150,13 +142,10 @@ in
           configuration file.
         '';
       };
-
     };
-
   };
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
-
     services.xserver.displayManager.lightdm.greeter = mkDefault {
       package = pkgs.lightdm_gtk_greeter.xgreeters;
       name = "lightdm-gtk-greeter";
@@ -169,6 +158,5 @@ in
     ];
 
     environment.etc."lightdm/lightdm-gtk-greeter.conf".source = gtkGreeterConf;
-
   };
 }

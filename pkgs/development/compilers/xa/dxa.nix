@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dxa";
   version = "0.1.4";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-C0rgwK51Ij9EZCm9GeiVnWIkEkse0d60ok8G9hm2a5U=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   dontConfigure = true;
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.floodgap.com/retrotech/xa/";
     description = "Andre Fachat's open-source 6502 disassembler";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

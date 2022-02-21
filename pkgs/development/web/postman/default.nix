@@ -1,10 +1,44 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, atk, at-spi2-atk, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
-, freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
-, libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  wrapGAppsHook,
+  atk,
+  at-spi2-atk,
+  at-spi2-core,
+  alsa-lib,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  freetype,
+  fontconfig,
+  nss,
+  nspr,
+  pango,
+  udev,
+  libuuid,
+  libX11,
+  libxcb,
+  libXi,
+  libXcursor,
+  libXdamage,
+  libXrandr,
+  libXcomposite,
+  libXext,
+  libXfixes,
+  libXrender,
+  libXtst,
+  libXScrnSaver,
+  libxkbcommon,
+  libdrm,
+  mesa,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "postman";
   version = "9.13.0";
@@ -66,8 +100,7 @@ stdenv.mkDerivation rec {
     xorg.libxshmfence
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-
+  nativeBuildInputs = [wrapGAppsHook];
 
   installPhase = ''
     mkdir -p $out/share/postman
@@ -101,7 +134,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.getpostman.com";
     description = "API Development Environment";
     license = licenses.postman;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ johnrichardrinehart evanjs ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [johnrichardrinehart evanjs];
   };
 }

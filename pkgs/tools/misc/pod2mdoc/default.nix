@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "pod2mdoc";
   version = "0.0.10";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "converter from POD into mdoc";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ramkromberg ];
+    maintainers = with maintainers; [ramkromberg];
   };
 }

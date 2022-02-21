@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, perl, coreutils }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   pname = "berkeley_upc";
   version = "2.22.0";
@@ -16,8 +21,8 @@ stdenv.mkDerivation rec {
   # Used during the configure phase
   ENVCMD = "${coreutils}/bin/env";
 
-  nativeBuildInputs = [ coreutils ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [coreutils];
+  buildInputs = [perl];
 
   meta = with lib; {
     description = "A compiler for the Berkely Unified Parallel C language";
@@ -35,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://upc.lbl.gov/";
     license = licenses.mit;
-    platforms = with platforms; [ linux ];
-    maintainers = with maintainers; [ zimbatm ];
+    platforms = with platforms; [linux];
+    maintainers = with maintainers; [zimbatm];
   };
 }

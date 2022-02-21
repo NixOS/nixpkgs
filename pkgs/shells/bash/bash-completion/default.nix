@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl
-, fetchpatch
-, autoreconfHook
-, perl
-, ps
-, python3Packages
-, bashInteractive
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  perl,
+  ps,
+  python3Packages,
+  bashInteractive,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bash-completion";
   version = "2.11";
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b0iz7da1sgifx1a5wdyx1kxbzys53v0kyk8nhxfipllmm5qka3k";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   # tests are super flaky unfortunately, and regularily break.
   # let's disable them for now.
@@ -68,6 +70,6 @@ stdenv.mkDerivation rec {
     description = "Programmable completion for the bash shell";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.xfix ];
+    maintainers = [maintainers.xfix];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libpcap, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpcap,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "dhcpdump";
   version = "1.8";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libpcap perl];
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = ["fortify"];
 
   installPhase = ''
     mkdir -pv $out/bin

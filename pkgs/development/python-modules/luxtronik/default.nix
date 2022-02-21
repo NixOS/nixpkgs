@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  poetry-core,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "luxtronik";
   version = "0.3.10";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python library to interact with Luxtronik heatpump controllers";
     homepage = "https://github.com/Bouni/python-luxtronik";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,18 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.locate;
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
   isPLocate = hasPrefix "plocate" cfg.locate.name;
   isMorPLocate = (isMLocate || isPLocate);
   isFindutils = hasPrefix "findutils" cfg.locate.name;
-in
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
-    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths")
+    (mkRenamedOptionModule ["services" "locate" "period"] ["services" "locate" "interval"])
+    (mkRemovedOptionModule ["services" "locate" "includeStore"] "Use services.locate.prunePaths")
   ];
 
   options.services.locate = with types; {
@@ -54,7 +55,7 @@ in
 
     extraFlags = mkOption {
       type = listOf str;
-      default = [ ];
+      default = [];
       description = ''
         Extra flags to pass to <command>updatedb</command>.
       '';
@@ -183,7 +184,7 @@ in
 
     pruneNames = mkOption {
       type = listOf str;
-      default = [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
+      default = [".bzr" ".cache" ".git" ".hg" ".svn"];
       description = ''
         Directory components which should exclude paths containing them from indexing
       '';
@@ -196,42 +197,40 @@ in
         Whether not to index bind mounts
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
     users.groups = mkMerge [
-      (mkIf isMLocate { mlocate = { }; })
-      (mkIf isPLocate { plocate = { }; })
+      (mkIf isMLocate {mlocate = {};})
+      (mkIf isPLocate {plocate = {};})
     ];
 
-    security.wrappers =
-      let
-        common = {
-          owner = "root";
-          permissions = "u+rx,g+x,o+x";
-          setgid = true;
-          setuid = false;
-        };
-        mlocate = (mkIf isMLocate {
-          group = "mlocate";
-          source = "${cfg.locate}/bin/locate";
-        });
-        plocate = (mkIf isPLocate {
-          group = "plocate";
-          source = "${cfg.locate}/bin/plocate";
-        });
-      in
+    security.wrappers = let
+      common = {
+        owner = "root";
+        permissions = "u+rx,g+x,o+x";
+        setgid = true;
+        setuid = false;
+      };
+      mlocate = (mkIf isMLocate {
+        group = "mlocate";
+        source = "${cfg.locate}/bin/locate";
+      });
+      plocate = (mkIf isPLocate {
+        group = "plocate";
+        source = "${cfg.locate}/bin/plocate";
+      });
+    in
       mkIf isMorPLocate {
-        locate = mkMerge [ common mlocate plocate ];
-        plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
+        locate = mkMerge [common mlocate plocate];
+        plocate = (mkIf isPLocate (mkMerge [common plocate]));
       };
 
-    nixpkgs.config = { locate.dbfile = cfg.output; };
+    nixpkgs.config = {locate.dbfile = cfg.output;};
 
-    environment.systemPackages = [ cfg.locate ];
+    environment.systemPackages = [cfg.locate];
 
-    environment.variables = mkIf (!isMorPLocate) { LOCATE_PATH = cfg.output; };
+    environment.variables = mkIf (!isMorPLocate) {LOCATE_PATH = cfg.output;};
 
     environment.etc = {
       # write /etc/updatedb.conf for manual calls to `updatedb`
@@ -240,48 +239,61 @@ in
           PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
           PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
           PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
-          PRUNE_BIND_MOUNTS="${if cfg.pruneBindMounts then "yes" else "no"}"
+          PRUNE_BIND_MOUNTS="${
+            if cfg.pruneBindMounts
+            then "yes"
+            else "no"
+          }"
         '';
       };
     };
 
-    warnings = optional (isMorPLocate && cfg.localuser != null)
+    warnings =
+      optional (isMorPLocate && cfg.localuser != null)
       "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
-    ++ optional (isFindutils && cfg.pruneNames != [ ])
+      ++ optional (isFindutils && cfg.pruneNames != [])
       "findutils locate does not support pruning by directory component"
-    ++ optional (isFindutils && cfg.pruneBindMounts)
+      ++ optional (isFindutils && cfg.pruneBindMounts)
       "findutils locate does not support skipping bind mounts";
 
     systemd.services.update-locatedb = {
       description = "Update Locate Database";
-      path = mkIf (!isMorPLocate) [ pkgs.su ];
+      path = mkIf (!isMorPLocate) [pkgs.su];
 
       # mlocate's updatedb takes flags via a configuration file or
       # on the command line, but not by environment variable.
       script =
-        if isMorPLocate then
+        if isMorPLocate
+        then
           let
             toFlags = x:
-              optional (cfg.${x} != [ ])
-                "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
-            args = concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
-          in
-          ''
+              optional (cfg.${x} != [])
+              "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
+            args = concatLists (map toFlags ["pruneFS" "pruneNames" "prunePaths"]);
+          in ''
             exec ${cfg.locate}/bin/updatedb \
               --output ${toString cfg.output} ${concatStringsSep " " args} \
-              --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
+              --prune-bind-mounts ${
+              if cfg.pruneBindMounts
+              then "yes"
+              else "no"
+            } \
               ${concatStringsSep " " cfg.extraFlags}
           ''
-        else ''
-          exec ${cfg.locate}/bin/updatedb \
-            ${optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
-            --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
-        '';
+        else
+          ''
+            exec ${cfg.locate}/bin/updatedb \
+              ${optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
+              --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+          '';
       environment = optionalAttrs (!isMorPLocate) {
         PRUNEFS = concatStringsSep " " cfg.pruneFS;
         PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
         PRUNENAMES = concatStringsSep " " cfg.pruneNames;
-        PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
+        PRUNE_BIND_MOUNTS =
+          if cfg.pruneBindMounts
+          then "yes"
+          else "no";
       };
       serviceConfig.Nice = 19;
       serviceConfig.IOSchedulingClass = "idle";
@@ -299,11 +311,11 @@ in
 
     systemd.timers.update-locatedb = mkIf (cfg.interval != "never") {
       description = "Update timer for locate database";
-      partOf = [ "update-locatedb.service" ];
-      wantedBy = [ "timers.target" ];
+      partOf = ["update-locatedb.service"];
+      wantedBy = ["timers.target"];
       timerConfig.OnCalendar = cfg.interval;
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ SuperSandro2000 ];
+  meta.maintainers = with lib.maintainers; [SuperSandro2000];
 }

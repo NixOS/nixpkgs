@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "kde-gruvbox";
   version = "unstable-2015-08-09";
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A suite of themes for KDE applications that match the retro gruvbox colorscheme";
     homepage = "https://github.com/printesoi/kde-gruvbox";
     license = licenses.mit;
-    maintainers = [ maintainers.ymarkus ];
+    maintainers = [maintainers.ymarkus];
     platforms = platforms.all;
   };
 }

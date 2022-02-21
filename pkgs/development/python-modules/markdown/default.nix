@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, importlib-metadata
-, pyyaml
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  importlib-metadata,
+  pyyaml,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "markdown";
   version = "3.3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [ pyyaml ];
+  checkInputs = [pyyaml];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "A Python implementation of John Gruber's Markdown with Extension support";
     homepage = "https://github.com/Python-Markdown/markdown";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

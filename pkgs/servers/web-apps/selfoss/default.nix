@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "selfoss";
   version = "2.18";
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = ".";
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   installPhase = ''
     mkdir $out
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Web-based news feed (RSS/Atom) aggregator";
     homepage = "https://selfoss.aditu.de";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jtojnar regnat ];
+    maintainers = with maintainers; [jtojnar regnat];
     platforms = platforms.all;
   };
 }

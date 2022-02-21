@@ -1,17 +1,17 @@
-{ lib
-, fetchPypi
-, pythonOlder
-, buildPythonPackage
-, docutils
-, mock
-, nose
-, coverage
-, wheel
-, unittest2
-, botocore
-, futures ? null
+{
+  lib,
+  fetchPypi,
+  pythonOlder,
+  buildPythonPackage,
+  docutils,
+  mock,
+  nose,
+  coverage,
+  wheel,
+  unittest2,
+  botocore,
+  futures ? null,
 }:
-
 buildPythonPackage rec {
   pname = "s3transfer";
   version = "0.4.2";
@@ -24,7 +24,8 @@ buildPythonPackage rec {
   propagatedBuildInputs =
     [
       botocore
-    ] ++ lib.optional (pythonOlder "3") futures;
+    ]
+    ++ lib.optional (pythonOlder "3") futures;
 
   buildInputs = [
     docutils

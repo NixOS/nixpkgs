@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ...}:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.hail;
 in {
-
-
   ###### interface
 
   options.services.hail = {
@@ -40,20 +40,20 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
     systemd.services.hail = {
       description = "Hail Auto Update Service";
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ nix ];
+      wants = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
+      path = with pkgs; [nix];
       environment = {
         HOME = "/var/lib/empty";
       };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/hail --profile ${cfg.profile} --job-uri ${cfg.hydraJobUri}"
+        ExecStart =
+          "${cfg.package}/bin/hail --profile ${cfg.profile} --job-uri ${cfg.hydraJobUri}"
           + lib.optionalString (cfg.netrc != null) " --netrc-file ${cfg.netrc}";
       };
     };

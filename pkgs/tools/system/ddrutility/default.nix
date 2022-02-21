@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "ddrutility";
   version = "2.8";
@@ -13,13 +16,13 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile --replace /usr/local ""
   '';
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = ["DESTDIR=$(out)"];
 
   meta = with lib; {
     description = "A set of utilities for hard drive data rescue";
     homepage = "https://sourceforge.net/projects/ddrutility/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsoup, webkitgtk, gtk3, glib-networking
-, gsettings-desktop-schemas, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libsoup,
+  webkitgtk,
+  gtk3,
+  glib-networking,
+  gsettings-desktop-schemas,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vimb";
   version = "3.3.0";
@@ -13,14 +21,14 @@ stdenv.mkDerivation rec {
     sha256 = "1qg18z2gnsli9qgrqfhqfrsi6g9mcgr90w8yab28nxrq4aha6brf";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config ];
-  buildInputs = [ gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas ];
+  nativeBuildInputs = [wrapGAppsHook pkg-config];
+  buildInputs = [gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas];
 
   passthru = {
     inherit gtk3;
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = {
     description = "A Vim-like browser";

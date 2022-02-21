@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "rustcat";
   version = "2.0.0";
@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "Port listener and reverse shell";
     homepage = "https://github.com/robiot/rustcat";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

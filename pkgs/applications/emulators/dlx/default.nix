@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "dlx";
   version = "2012-07-08";
@@ -9,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0508linnar9ivy3xr99gzrb2l027ngx12dlxaxs7w67cnwqnb0dg";
   };
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "LINK=${stdenv.cc.targetPrefix}cc" "CFLAGS=-O2" ];
-  hardeningDisable = [ "format" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "LINK=${stdenv.cc.targetPrefix}cc" "CFLAGS=-O2"];
+  hardeningDisable = ["format"];
 
   installPhase = ''
     mkdir -p $out/include/dlx $out/share/dlx/{examples,doc} $out/bin

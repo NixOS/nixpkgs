@@ -1,10 +1,10 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, six
-, requests
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  six,
+  requests,
 }:
-
 buildPythonPackage rec {
   version = "3.2.0";
   pname = "azure-cosmos";
@@ -14,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "4f77cc558fecffac04377ba758ac4e23f076dc1c54e2cf2515f85bc15cbde5c6";
   };
 
-  propagatedBuildInputs = [ six requests ];
+  propagatedBuildInputs = [six requests];
 
-  pythonNamespaces = [ "azure" ];
+  pythonNamespaces = ["azure"];
 
   # requires an active Azure Cosmos service
   doCheck = false;
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Azure Cosmos DB API";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, requests, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  requests,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "pysolr";
   version = "3.9.0";
@@ -9,11 +15,11 @@ buildPythonPackage rec {
     sha256 = "1rj5jmscvxjwcmlfi6hmkj44l4x6n3ln5p7d8d18j566hzmmzw3f";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
-  checkInputs = [ mock ];
+  checkInputs = [mock];
 
   doCheck = false; # requires network access
 
@@ -23,4 +29,3 @@ buildPythonPackage rec {
     license = licenses.bsd3;
   };
 }
-

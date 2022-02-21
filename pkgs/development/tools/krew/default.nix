@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "krew";
   version = "0.4.3";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-VXGjKzkOpaxyJClwXbxg15xmGdFi6arH8f4nN5/1SA4=";
 
-  subPackages = [ "cmd/krew" ];
+  subPackages = ["cmd/krew"];
 
   meta = with lib; {
     description = "Package manager for kubectl plugins";
     homepage = "https://github.com/kubernetes-sigs/krew";
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [vdemeester];
     license = lib.licenses.asl20;
     platforms = platforms.unix;
   };

@@ -1,13 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, fetchpatch
-, staticOnly ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fetchpatch,
+  staticOnly ? stdenv.hostPlatform.isStatic,
 }:
-
 # ?TODO: there's also python lib in there
-
 stdenv.mkDerivation rec {
   pname = "brotli";
   version = "1.0.9";
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "z6Dhrabav1MDQ4rAcXaDv0aN+qOoh9cvoXZqEWBB13c=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   patches = lib.optional staticOnly (fetchpatch {
     # context from https://github.com/google/brotli/pull/655
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = ["out" "dev" "lib"];
 
   doCheck = true;
 
@@ -58,20 +57,19 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/google/brotli";
     description = "A generic-purpose lossless compression algorithm and tool";
-    longDescription =
-      ''  Brotli is a generic-purpose lossless compression algorithm that
-          compresses data using a combination of a modern variant of the LZ77
-          algorithm, Huffman coding and 2nd order context modeling, with a
-          compression ratio comparable to the best currently available
-          general-purpose compression methods. It is similar in speed with
-          deflate but offers more dense compression.
+    longDescription = ''      Brotli is a generic-purpose lossless compression algorithm that
+              compresses data using a combination of a modern variant of the LZ77
+              algorithm, Huffman coding and 2nd order context modeling, with a
+              compression ratio comparable to the best currently available
+              general-purpose compression methods. It is similar in speed with
+              deflate but offers more dense compression.
 
-          The specification of the Brotli Compressed Data Format is defined
-          in the following internet draft:
-          http://www.ietf.org/id/draft-alakuijala-brotli
-      '';
+              The specification of the Brotli Compressed Data Format is defined
+              in the following internet draft:
+              http://www.ietf.org/id/draft-alakuijala-brotli
+    '';
     license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
     platforms = platforms.all;
   };
 }

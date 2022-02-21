@@ -1,13 +1,13 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, scikit-learn
-, pytestCheckHook
-, pytest-randomly
+{
+  lib,
+  isPy27,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  scikit-learn,
+  pytestCheckHook,
+  pytest-randomly,
 }:
-
 buildPythonPackage rec {
   pname = "mlrose";
   version = "1.3.0";
@@ -28,22 +28,22 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ scikit-learn ];
-  checkInputs = [ pytest-randomly pytestCheckHook ];
+  propagatedBuildInputs = [scikit-learn];
+  checkInputs = [pytest-randomly pytestCheckHook];
 
   postPatch = ''
     substituteInPlace setup.py --replace sklearn scikit-learn
   '';
 
-  pythonImportsCheck = [ "mlrose" ];
+  pythonImportsCheck = ["mlrose"];
 
   # Fix random seed during tests
-  pytestFlagsArray = [ "--randomly-seed 0" ];
+  pytestFlagsArray = ["--randomly-seed 0"];
 
   meta = with lib; {
     description = "Machine Learning, Randomized Optimization and SEarch";
-    homepage    = "https://github.com/gkhayes/mlrose";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ abbradar ];
+    homepage = "https://github.com/gkhayes/mlrose";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [abbradar];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, dask
-, fastparquet
-, pyarrow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pandas,
+  dask,
+  fastparquet,
+  pyarrow,
 }:
-
 buildPythonPackage rec {
   pname = "intake-parquet";
   version = "0.2.3";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Parquet plugin for Intake";
     homepage = "https://github.com/intake/intake-parquet";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

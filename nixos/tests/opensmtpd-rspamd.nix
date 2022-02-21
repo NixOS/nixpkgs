@@ -2,19 +2,22 @@ import ./make-test-python.nix {
   name = "opensmtpd-rspamd";
 
   nodes = {
-    smtp1 = { pkgs, ... }: {
-      imports = [ common/user-account.nix ];
+    smtp1 = {pkgs, ...}: {
+      imports = [common/user-account.nix];
       networking = {
-        firewall.allowedTCPPorts = [ 25 143 ];
+        firewall.allowedTCPPorts = [25 143];
         useDHCP = false;
         interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.1"; prefixLength = 24; }
+          {
+            address = "192.168.1.1";
+            prefixLength = 24;
+          }
         ];
       };
-      environment.systemPackages = [ pkgs.opensmtpd ];
+      environment.systemPackages = [pkgs.opensmtpd];
       services.opensmtpd = {
         enable = true;
-        extraServerArgs = [ "-v" ];
+        extraServerArgs = ["-v"];
         serverConfiguration = ''
           listen on 0.0.0.0
           action dovecot_deliver mda \
@@ -33,20 +36,23 @@ import ./make-test-python.nix {
         enable = true;
         enableImap = true;
         mailLocation = "maildir:~/mail";
-        protocols = [ "imap" ];
+        protocols = ["imap"];
       };
     };
 
-    smtp2 = { pkgs, ... }: {
-      imports = [ common/user-account.nix ];
+    smtp2 = {pkgs, ...}: {
+      imports = [common/user-account.nix];
       networking = {
-        firewall.allowedTCPPorts = [ 25 143 ];
+        firewall.allowedTCPPorts = [25 143];
         useDHCP = false;
         interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.2"; prefixLength = 24; }
+          {
+            address = "192.168.1.2";
+            prefixLength = 24;
+          }
         ];
       };
-      environment.systemPackages = [ pkgs.opensmtpd ];
+      environment.systemPackages = [pkgs.opensmtpd];
       services.rspamd = {
         enable = true;
         locals."worker-normal.inc".text = ''
@@ -55,7 +61,7 @@ import ./make-test-python.nix {
       };
       services.opensmtpd = {
         enable = true;
-        extraServerArgs = [ "-v" ];
+        extraServerArgs = ["-v"];
         serverConfiguration = ''
           filter rspamd proc-exec "${pkgs.opensmtpd-filter-rspamd}/bin/filter-rspamd"
           listen on 0.0.0.0 filter rspamd
@@ -68,15 +74,18 @@ import ./make-test-python.nix {
         enable = true;
         enableImap = true;
         mailLocation = "maildir:~/mail";
-        protocols = [ "imap" ];
+        protocols = ["imap"];
       };
     };
 
-    client = { pkgs, ... }: {
+    client = {pkgs, ...}: {
       networking = {
         useDHCP = false;
         interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = "192.168.1.3"; prefixLength = 24; }
+          {
+            address = "192.168.1.3";
+            prefixLength = 24;
+          }
         ];
       };
       environment.systemPackages = let
@@ -112,7 +121,7 @@ import ./make-test-python.nix {
             print("===> content:", content)
             assert b"An error has occurred while attempting to deliver a message" in content
         '';
-      in [ sendTestMail checkMailBounced ];
+      in [sendTestMail checkMailBounced];
     };
   };
 

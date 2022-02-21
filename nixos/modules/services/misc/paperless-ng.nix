@@ -1,42 +1,51 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.paperless-ng;
 
   defaultUser = "paperless";
 
   hasCustomRedis = hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
 
-  env = {
-    PAPERLESS_DATA_DIR = cfg.dataDir;
-    PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
-    PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
-    GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
-  } // (
-    lib.mapAttrs (_: toString) cfg.extraConfig
-  ) // (optionalAttrs (!hasCustomRedis) {
-    PAPERLESS_REDIS = "unix://${config.services.redis.servers.paperless-ng.unixSocket}";
-  });
+  env =
+    {
+      PAPERLESS_DATA_DIR = cfg.dataDir;
+      PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
+      PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
+      GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
+    }
+    // (
+      lib.mapAttrs (_: toString) cfg.extraConfig
+    )
+    // (optionalAttrs (!hasCustomRedis) {
+      PAPERLESS_REDIS = "unix://${config.services.redis.servers.paperless-ng.unixSocket}";
+    });
 
   manage = let
     setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
-  in pkgs.writeShellScript "manage" ''
-    ${setupEnv}
-    exec ${cfg.package}/bin/paperless-ng "$@"
-  '';
+  in
+    pkgs.writeShellScript "manage" ''
+      ${setupEnv}
+      exec ${cfg.package}/bin/paperless-ng "$@"
+    '';
 
   # Secure the services
   defaultServiceConfig = {
     TemporaryFileSystem = "/:ro";
-    BindReadOnlyPaths = [
-      "/nix/store"
-      "-/etc/resolv.conf"
-      "-/etc/nsswitch.conf"
-      "-/etc/hosts"
-      "-/etc/localtime"
-      "-/run/postgresql"
-    ] ++ (optional (!hasCustomRedis) config.services.redis.servers.paperless-ng.unixSocket);
+    BindReadOnlyPaths =
+      [
+        "/nix/store"
+        "-/etc/resolv.conf"
+        "-/etc/nsswitch.conf"
+        "-/etc/hosts"
+        "-/etc/localtime"
+        "-/run/postgresql"
+      ]
+      ++ (optional (!hasCustomRedis) config.services.redis.servers.paperless-ng.unixSocket);
     BindPaths = [
       cfg.consumptionDir
       cfg.dataDir
@@ -66,22 +75,21 @@ let
     ProtectKernelModules = true;
     ProtectKernelTunables = true;
     ProtectProc = "invisible";
-    RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+    RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6"];
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
     SupplementaryGroups = optional (!hasCustomRedis) config.services.redis.servers.paperless-ng.user;
     SystemCallArchitectures = "native";
-    SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
+    SystemCallFilter = ["@system-service" "~@privileged @resources @setuid @keyring"];
     # Does not work well with the temporary root
     #UMask = "0066";
   };
-in
-{
-  meta.maintainers = with maintainers; [ earvstedt Flakebi ];
+in {
+  meta.maintainers = with maintainers; [earvstedt Flakebi];
 
   imports = [
-    (mkRemovedOptionModule [ "services" "paperless"] ''
+    (mkRemovedOptionModule ["services" "paperless"] ''
       The paperless module has been removed as the upstream project died.
       Users should migrate to the paperless-ng module (services.paperless-ng).
       More information can be found in the NixOS 21.11 release notes.
@@ -201,55 +209,60 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
       "d '${cfg.mediaDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      (if cfg.consumptionDirIsPublic then
-        "d '${cfg.consumptionDir}' 777 - - - -"
-      else
-        "d '${cfg.consumptionDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      (
+        if cfg.consumptionDirIsPublic
+        then "d '${cfg.consumptionDir}' 777 - - - -"
+        else "d '${cfg.consumptionDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
       )
     ];
 
-    systemd.services.paperless-ng-server = {
-      description = "Paperless document server";
-      serviceConfig = defaultServiceConfig // {
-        User = cfg.user;
-        ExecStart = "${cfg.package}/bin/paperless-ng qcluster";
-        Restart = "on-failure";
+    systemd.services.paperless-ng-server =
+      {
+        description = "Paperless document server";
+        serviceConfig =
+          defaultServiceConfig
+          // {
+            User = cfg.user;
+            ExecStart = "${cfg.package}/bin/paperless-ng qcluster";
+            Restart = "on-failure";
+          };
+        environment = env;
+        wantedBy = ["multi-user.target"];
+        wants = ["paperless-ng-consumer.service" "paperless-ng-web.service"];
+
+        preStart =
+          ''
+            ln -sf ${manage} ${cfg.dataDir}/paperless-ng-manage
+
+            # Auto-migrate on first run or if the package has changed
+            versionFile="${cfg.dataDir}/src-version"
+            if [[ $(cat "$versionFile" 2>/dev/null) != ${cfg.package} ]]; then
+              ${cfg.package}/bin/paperless-ng migrate
+              echo ${cfg.package} > "$versionFile"
+            fi
+          ''
+          + optionalString (cfg.passwordFile != null) ''
+            export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
+            export PAPERLESS_ADMIN_PASSWORD=$(cat "${cfg.dataDir}/superuser-password")
+            superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
+            superuserStateFile="${cfg.dataDir}/superuser-state"
+
+            if [[ $(cat "$superuserStateFile" 2>/dev/null) != $superuserState ]]; then
+              ${cfg.package}/bin/paperless-ng manage_superuser
+              echo "$superuserState" > "$superuserStateFile"
+            fi
+          '';
+      }
+      // optionalAttrs (!hasCustomRedis) {
+        after = ["redis-paperless-ng.service"];
       };
-      environment = env;
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "paperless-ng-consumer.service" "paperless-ng-web.service" ];
-
-      preStart = ''
-        ln -sf ${manage} ${cfg.dataDir}/paperless-ng-manage
-
-        # Auto-migrate on first run or if the package has changed
-        versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${cfg.package} ]]; then
-          ${cfg.package}/bin/paperless-ng migrate
-          echo ${cfg.package} > "$versionFile"
-        fi
-      ''
-      + optionalString (cfg.passwordFile != null) ''
-        export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
-        export PAPERLESS_ADMIN_PASSWORD=$(cat "${cfg.dataDir}/superuser-password")
-        superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
-        superuserStateFile="${cfg.dataDir}/superuser-state"
-
-        if [[ $(cat "$superuserStateFile" 2>/dev/null) != $superuserState ]]; then
-          ${cfg.package}/bin/paperless-ng manage_superuser
-          echo "$superuserState" > "$superuserStateFile"
-        fi
-      '';
-    } // optionalAttrs (!hasCustomRedis) {
-      after = [ "redis-paperless-ng.service" ];
-    };
 
     # Password copying can't be implemented as a privileged preStart script
     # in 'paperless-ng-server' because 'defaultServiceConfig' limits the filesystem
     # paths accessible by the service.
     systemd.services.paperless-ng-copy-password = mkIf (cfg.passwordFile != null) {
-      requiredBy = [ "paperless-ng-server.service" ];
-      before = [ "paperless-ng-server.service" ];
+      requiredBy = ["paperless-ng-server.service"];
+      before = ["paperless-ng-server.service"];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.coreutils}/bin/install --mode 600 --owner '${cfg.user}' --compare \
@@ -263,46 +276,52 @@ in
 
     systemd.services.paperless-ng-consumer = {
       description = "Paperless document consumer";
-      serviceConfig = defaultServiceConfig // {
-        User = cfg.user;
-        ExecStart = "${cfg.package}/bin/paperless-ng document_consumer";
-        Restart = "on-failure";
-      };
+      serviceConfig =
+        defaultServiceConfig
+        // {
+          User = cfg.user;
+          ExecStart = "${cfg.package}/bin/paperless-ng document_consumer";
+          Restart = "on-failure";
+        };
       environment = env;
       # Bind to `paperless-ng-server` so that the consumer never runs
       # during migrations
-      bindsTo = [ "paperless-ng-server.service" ];
-      after = [ "paperless-ng-server.service" ];
+      bindsTo = ["paperless-ng-server.service"];
+      after = ["paperless-ng-server.service"];
     };
 
     systemd.services.paperless-ng-web = {
       description = "Paperless web server";
-      serviceConfig = defaultServiceConfig // {
-        User = cfg.user;
-        ExecStart = ''
-          ${pkgs.python3Packages.gunicorn}/bin/gunicorn \
-            -c ${cfg.package}/lib/paperless-ng/gunicorn.conf.py paperless.asgi:application
-        '';
-        Restart = "on-failure";
+      serviceConfig =
+        defaultServiceConfig
+        // {
+          User = cfg.user;
+          ExecStart = ''
+            ${pkgs.python3Packages.gunicorn}/bin/gunicorn \
+              -c ${cfg.package}/lib/paperless-ng/gunicorn.conf.py paperless.asgi:application
+          '';
+          Restart = "on-failure";
 
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        # gunicorn needs setuid
-        SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid" ];
-        # Needs to serve web page
-        PrivateNetwork = false;
-      };
-      environment = env // {
-        PATH = mkForce cfg.package.path;
-        PYTHONPATH = "${cfg.package.pythonPath}:${cfg.package}/lib/paperless-ng/src";
-      };
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+          # gunicorn needs setuid
+          SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ ["@setuid"];
+          # Needs to serve web page
+          PrivateNetwork = false;
+        };
+      environment =
+        env
+        // {
+          PATH = mkForce cfg.package.path;
+          PYTHONPATH = "${cfg.package.pythonPath}:${cfg.package}/lib/paperless-ng/src";
+        };
       # Allow the web interface to access the private /tmp directory of the server.
       # This is required to support uploading files via the web interface.
       unitConfig.JoinsNamespaceOf = "paperless-ng-server.service";
       # Bind to `paperless-ng-server` so that the web server never runs
       # during migrations
-      bindsTo = [ "paperless-ng-server.service" ];
-      after = [ "paperless-ng-server.service" ];
+      bindsTo = ["paperless-ng-server.service"];
+      after = ["paperless-ng-server.service"];
     };
 
     users = optionalAttrs (cfg.user == defaultUser) {

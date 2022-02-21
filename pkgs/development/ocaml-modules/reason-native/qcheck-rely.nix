@@ -1,6 +1,10 @@
-{ qcheck-core, reason, console, rely, ... }:
-
 {
+  qcheck-core,
+  reason,
+  console,
+  rely,
+  ...
+}: {
   pname = "qcheck-rely";
 
   buildInputs = [

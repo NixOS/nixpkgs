@@ -1,7 +1,12 @@
 {
-  stdenv, lib, cmake, extra-cmake-modules, fetchFromGitHub, qtbase, kdeFrameworks
+  stdenv,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  qtbase,
+  kdeFrameworks,
 }:
-
 stdenv.mkDerivation rec {
   pname = "plasma-theme-switcher";
   version = "0.1";
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/maldoinc/plasma-theme-switcher/";
     description = "A KDE Plasma theme switcher";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ kevink ];
+    license = with licenses; [gpl2Only];
+    maintainers = with maintainers; [kevink];
   };
 }

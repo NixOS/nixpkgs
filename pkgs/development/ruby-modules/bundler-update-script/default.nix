@@ -1,11 +1,17 @@
-{ runtimeShell, lib, writeScript, bundix, bundler, bundler-audit, coreutils, git, nix }:
-
-attrPath:
-
-let
+{
+  runtimeShell,
+  lib,
+  writeScript,
+  bundix,
+  bundler,
+  bundler-audit,
+  coreutils,
+  git,
+  nix,
+}: attrPath: let
   updateScript = writeScript "bundler-update-script" ''
     #!${runtimeShell}
-    PATH=${lib.makeBinPath [ bundler bundler-audit bundix coreutils git nix ]}
+    PATH=${lib.makeBinPath [bundler bundler-audit bundix coreutils git nix]}
     set -o errexit
     set -o nounset
     set -o pipefail
@@ -22,4 +28,4 @@ let
     bundler-audit check --update
     bundix
   '';
-in [ updateScript attrPath ]
+in [updateScript attrPath]

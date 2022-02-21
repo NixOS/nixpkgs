@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "driftctl";
   version = "0.20.0";
@@ -51,6 +54,6 @@ buildGoModule rec {
     description = "Tool to track infrastructure drift";
     homepage = "https://github.com/cloudskiff/driftctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kaction ];
+    maintainers = with maintainers; [kaction];
   };
 }

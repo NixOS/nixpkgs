@@ -1,13 +1,32 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
-  attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
-  prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
-  setuptools, installShellFiles, nixosTests,
-
-  pytest, faker, pytest-aiohttp, aioresponses,
-
-  enableDbusUi ? true
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pythonOlder,
+  attrs,
+  aiohttp,
+  appdirs,
+  click,
+  keyring,
+  Logbook,
+  peewee,
+  janus,
+  prompt-toolkit,
+  matrix-nio,
+  dbus-python,
+  pydbus,
+  notify2,
+  pygobject3,
+  setuptools,
+  installShellFiles,
+  nixosTests,
+  pytest,
+  faker,
+  pytest-aiohttp,
+  aioresponses,
+  enableDbusUi ? true,
 }:
-
 buildPythonApplication rec {
   pname = "pantalaimon";
   version = "0.10.4";
@@ -22,24 +41,26 @@ buildPythonApplication rec {
     sha256 = "sha256-X6DJHH+ZBPw7iWVMa43HvVFh+LDn6shzOU1A2uiAYL4=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    appdirs
-    attrs
-    click
-    janus
-    keyring
-    Logbook
-    matrix-nio
-    peewee
-    prompt-toolkit
-    setuptools
-  ] ++ lib.optional enableDbusUi [
+  propagatedBuildInputs =
+    [
+      aiohttp
+      appdirs
+      attrs
+      click
+      janus
+      keyring
+      Logbook
+      matrix-nio
+      peewee
+      prompt-toolkit
+      setuptools
+    ]
+    ++ lib.optional enableDbusUi [
       dbus-python
       notify2
       pygobject3
       pydbus
-  ];
+    ];
 
   checkInputs = [
     pytest
@@ -71,6 +92,6 @@ buildPythonApplication rec {
     description = "An end-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = licenses.asl20;
-    maintainers = with maintainers; [ valodim ];
+    maintainers = with maintainers; [valodim];
   };
 }

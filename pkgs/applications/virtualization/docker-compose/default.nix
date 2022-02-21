@@ -1,12 +1,31 @@
-{ lib, buildPythonApplication, fetchPypi, pythonOlder
-, installShellFiles
-, mock, pytest, nose
-, pyyaml, backports_ssl_match_hostname, colorama, docopt
-, dockerpty, docker, ipaddress, jsonschema, requests
-, six, texttable, websocket-client, cached-property
-, enum34, functools32, paramiko, distro, python-dotenv
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pythonOlder,
+  installShellFiles,
+  mock,
+  pytest,
+  nose,
+  pyyaml,
+  backports_ssl_match_hostname,
+  colorama,
+  docopt,
+  dockerpty,
+  docker,
+  ipaddress,
+  jsonschema,
+  requests,
+  six,
+  texttable,
+  websocket-client,
+  cached-property,
+  enum34,
+  functools32,
+  paramiko,
+  distro,
+  python-dotenv,
 }:
-
 buildPythonApplication rec {
   version = "1.29.2";
   pname = "docker-compose";
@@ -18,15 +37,29 @@ buildPythonApplication rec {
 
   # lots of networking and other fails
   doCheck = false;
-  nativeBuildInputs = [ installShellFiles ];
-  checkInputs = [ mock pytest nose ];
-  propagatedBuildInputs = [
-    pyyaml colorama dockerpty docker
-    ipaddress jsonschema requests six texttable websocket-client
-    docopt cached-property paramiko distro python-dotenv
-  ] ++ lib.optional (pythonOlder "3.7") backports_ssl_match_hostname
-  ++ lib.optional (pythonOlder "3.4") enum34
-  ++ lib.optional (pythonOlder "3.2") functools32;
+  nativeBuildInputs = [installShellFiles];
+  checkInputs = [mock pytest nose];
+  propagatedBuildInputs =
+    [
+      pyyaml
+      colorama
+      dockerpty
+      docker
+      ipaddress
+      jsonschema
+      requests
+      six
+      texttable
+      websocket-client
+      docopt
+      cached-property
+      paramiko
+      distro
+      python-dotenv
+    ]
+    ++ lib.optional (pythonOlder "3.7") backports_ssl_match_hostname
+    ++ lib.optional (pythonOlder "3.4") enum34
+    ++ lib.optional (pythonOlder "3.2") functools32;
 
   postPatch = ''
     # Remove upper bound on requires, see also
@@ -43,6 +76,6 @@ buildPythonApplication rec {
     homepage = "https://docs.docker.com/compose/";
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Frostman ];
+    maintainers = with maintainers; [Frostman];
   };
 }

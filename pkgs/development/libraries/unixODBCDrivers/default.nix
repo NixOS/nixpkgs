@@ -1,7 +1,23 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fetchFromGitHub }:
-
+{
+  fetchurl,
+  stdenv,
+  unixODBC,
+  cmake,
+  postgresql,
+  mariadb,
+  sqlite,
+  zlib,
+  libxml2,
+  dpkg,
+  lib,
+  openssl,
+  libkrb5,
+  libuuid,
+  patchelf,
+  libiconv,
+  fetchFromGitHub,
+}:
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
-
 {
   psql = stdenv.mkDerivation rec {
     pname = "psqlodbc";
@@ -12,7 +28,7 @@
       sha256 = "1cyams7157f3gry86x64xrplqi2vyqrq3rqka59gv4lb4rpl7jl7";
     };
 
-    buildInputs = [ unixODBC postgresql ];
+    buildInputs = [unixODBC postgresql];
 
     passthru = {
       fancyName = "PostgreSQL";
@@ -21,7 +37,7 @@
 
     meta = with lib; {
       description = "Official PostgreSQL ODBC Driver";
-      homepage =  "https://odbc.postgresql.org/";
+      homepage = "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
       platforms = platforms.linux;
     };
@@ -41,8 +57,8 @@
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC openssl libiconv ];
+    nativeBuildInputs = [cmake];
+    buildInputs = [unixODBC openssl libiconv];
 
     preConfigure = ''
       # we don't want to build a .pkg
@@ -62,7 +78,7 @@
 
     meta = with lib; {
       description = "MariaDB ODBC database driver";
-      homepage =  "https://downloads.mariadb.org/connector-odbc/";
+      homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
       platforms = platforms.linux ++ platforms.darwin;
     };
@@ -78,10 +94,10 @@
       sha256 = "1smi4z49i4zm7cmykjkwlxxzqvn7myngsw5bc35z6gqxmi8c55xr";
     };
 
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mariadb ];
+    nativeBuildInputs = [cmake];
+    buildInputs = [unixODBC mariadb];
 
-    cmakeFlags = [ "-DWITH_UNIXODBC=1" ];
+    cmakeFlags = ["-DWITH_UNIXODBC=1"];
 
     passthru = {
       fancyName = "MySQL";
@@ -106,11 +122,11 @@
       sha256 = "0dgsj28sc7f7aprmdd0n5a1rmcx6pv7170c8dfjl0x1qsjxim6hs";
     };
 
-    buildInputs = [ unixODBC sqlite zlib libxml2 ];
+    buildInputs = [unixODBC sqlite zlib libxml2];
 
-    configureFlags = [ "--with-odbc=${unixODBC}" "--with-sqlite3=${sqlite.dev}" ];
+    configureFlags = ["--with-odbc=${unixODBC}" "--with-sqlite3=${sqlite.dev}"];
 
-    installTargets = [ "install-3" ];
+    installTargets = ["install-3"];
 
     # move libraries to $out/lib where they're expected to be
     postInstall = ''
@@ -128,7 +144,7 @@
       homepage = "http://www.ch-werner.de/sqliteodbc";
       license = licenses.bsd2;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ vlstill ];
+      maintainers = with maintainers; [vlstill];
     };
   };
 
@@ -145,7 +161,7 @@
       sha256 = "0vwirnp56jibm3qf0kmi4jnz1w7xfhnsfr8imr0c9hg6av4sk3a6";
     };
 
-    nativeBuildInputs = [ dpkg patchelf ];
+    nativeBuildInputs = [dpkg patchelf];
 
     unpackPhase = "dpkg -x $src ./";
     buildPhase = "";
@@ -157,7 +173,7 @@
     '';
 
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out libkrb5 libuuid stdenv.cc.cc ]} \
+      patchelf --set-rpath ${lib.makeLibraryPath [unixODBC openssl.out libkrb5 libuuid stdenv.cc.cc]} \
         $out/lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
     '';
 
@@ -171,7 +187,7 @@
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
       license = licenses.unfree;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ spencerjanssen ];
+      maintainers = with maintainers; [spencerjanssen];
     };
   };
 }

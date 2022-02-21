@@ -1,6 +1,7 @@
-{ lib, python3Packages }:
-
-let
+{
+  lib,
+  python3Packages,
+}: let
   truffleHogRegexes = python3Packages.buildPythonPackage rec {
     pname = "truffleHogRegexes";
     version = "0.0.7";
@@ -24,7 +25,7 @@ in
       substituteInPlace setup.py --replace "GitPython ==" "GitPython >= "
     '';
 
-    propagatedBuildInputs = [ python3Packages.GitPython truffleHogRegexes ];
+    propagatedBuildInputs = [python3Packages.GitPython truffleHogRegexes];
 
     # Test cases run git clone and require network access
     doCheck = false;
@@ -32,7 +33,7 @@ in
     meta = {
       homepage = "https://github.com/dxa4481/truffleHog";
       description = "Searches through git repositories for high entropy strings and secrets, digging deep into commit history";
-      license = with lib.licenses; [ gpl2 ];
-      maintainers = with lib.maintainers; [ bhipple ];
+      license = with lib.licenses; [gpl2];
+      maintainers = with lib.maintainers; [bhipple];
     };
   }

@@ -1,29 +1,48 @@
-{ lib, callPackage, fetchpatch, fetchurl, stdenv, pkgsi686Linux }:
-
-let
+{
+  lib,
+  callPackage,
+  fetchpatch,
+  fetchurl,
+  stdenv,
+  pkgsi686Linux,
+}: let
   generic = args: let
     imported = import ./generic.nix args;
-  in if ((!lib.versionOlder args.version "391")
-    && stdenv.hostPlatform.system != "x86_64-linux") then null
-  else callPackage imported {
-    lib32 = (pkgsi686Linux.callPackage imported {
-      libsOnly = true;
-      kernel = null;
-    }).out;
-  };
+  in
+    if
+      ((!lib.versionOlder args.version "391")
+      && stdenv.hostPlatform.system != "x86_64-linux")
+    then null
+    else
+      callPackage imported {
+        lib32 =
+          (pkgsi686Linux.callPackage imported {
+            libsOnly = true;
+            kernel = null;
+          })
+          .out;
+      };
 
-  kernel = callPackage # a hacky way of extracting parameters from callPackage
-    ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
-in
-rec {
+  kernel = callPackage
+  # a hacky way of extracting parameters from callPackage
+  ({
+    kernel,
+    libsOnly ? false,
+  }:
+    if libsOnly
+    then {}
+    else kernel) {};
+in rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux"
-    then generic {
-      version = "510.54";
-      sha256_64bit = "TCDezK4/40et/Q5piaMG+QJP2t+DGtwejmCFVnUzUWE=";
-      settingsSha256 = "ZWz5UN6Pa69NlmerKu30G+X8WfGlAwnVerDrO7TRO6w=";
-      persistencedSha256 = "MgWrBjKXJeRqF+ouT72tTiLPtn+lsS/Cp3oS61AWV8Q=";
-    }
+  stable =
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
+      generic {
+        version = "510.54";
+        sha256_64bit = "TCDezK4/40et/Q5piaMG+QJP2t+DGtwejmCFVnUzUWE=";
+        settingsSha256 = "ZWz5UN6Pa69NlmerKu30G+X8WfGlAwnVerDrO7TRO6w=";
+        persistencedSha256 = "MgWrBjKXJeRqF+ouT72tTiLPtn+lsS/Cp3oS61AWV8Q=";
+      }
     else legacy_390;
 
   # see https://www.nvidia.com/en-us/drivers/unix/ "Production branch"
@@ -54,10 +73,10 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-      version = "470.94";
-      sha256_64bit = "lYWqKTMOutm98izjyiusICbIWpoy8D18WfcUp3mFAOs=";
-      settingsSha256 = "blJNKuFu/Th/ceexkKhTH/eYk8miUlTT+ESrcIyJNn0=";
-      persistencedSha256 = "xnccQ/EgafwnReBlk5Y7iClAj4hwXyFq9gUmwqyEuwE=";
+    version = "470.94";
+    sha256_64bit = "lYWqKTMOutm98izjyiusICbIWpoy8D18WfcUp3mFAOs=";
+    settingsSha256 = "blJNKuFu/Th/ceexkKhTH/eYk8miUlTT+ESrcIyJNn0=";
+    persistencedSha256 = "xnccQ/EgafwnReBlk5Y7iClAj4hwXyFq9gUmwqyEuwE=";
   };
 
   # Last one supporting x86
@@ -78,6 +97,6 @@ rec {
     useGLVND = false;
 
     broken = with kernel; kernelAtLeast "5.5";
-    patches = [ ./vm_operations_struct-fault.patch ];
+    patches = [./vm_operations_struct-fault.patch];
   };
 }

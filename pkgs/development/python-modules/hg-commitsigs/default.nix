@@ -1,9 +1,9 @@
-{ lib
-, fetchhg
-, stdenv
-, python3
+{
+  lib,
+  fetchhg,
+  stdenv,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hg-commitsigs";
   # Latest tag is 11 years old.
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       commits.  Either GnuPG or OpenSSL can be used to sign the hashes.
     '';
     homepage = "https://foss.heptapod.net/mercurial/commitsigs";
-    maintainers = with maintainers; [ yoctocell ];
+    maintainers = with maintainers; [yoctocell];
     license = licenses.gpl2Plus;
     platforms = platforms.unix; # same as Mercurial
   };

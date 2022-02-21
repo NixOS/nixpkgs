@@ -1,16 +1,16 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pillow
-, scipy
-, numpy
-, pytestCheckHook
-, imread
-, freeimage
-, lib
-, stdenv
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pillow,
+  scipy,
+  numpy,
+  pytestCheckHook,
+  imread,
+  freeimage,
+  lib,
+  stdenv,
 }:
-
 buildPythonPackage rec {
   pname = "mahotas";
   version = "1.4.12";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
       name = "fix-freeimage-tests.patch";
       url = "https://github.com/luispedro/mahotas/commit/08cc4aa0cbd5dbd4c37580d52b822810c03b2c69.patch";
       sha256 = "0389sz7fyl8h42phw8sn4pxl4wc3brcrj9d05yga21gzil9bfi23";
-      excludes = [ "ChangeLog" ];
+      excludes = ["ChangeLog"];
     })
   ];
 
-  propagatedBuildInputs = [ numpy imread pillow scipy freeimage ];
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [numpy imread pillow scipy freeimage];
+  checkInputs = [pytestCheckHook];
 
   postPatch = ''
     substituteInPlace mahotas/io/freeimage.py \
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Computer vision package based on numpy";
     homepage = "https://mahotas.readthedocs.io/";
-    maintainers = with maintainers; [ luispedro ];
+    maintainers = with maintainers; [luispedro];
     license = licenses.mit;
     platforms = platforms.unix;
   };

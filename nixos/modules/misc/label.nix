@@ -1,15 +1,12 @@
-{ config, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.system.nixos;
-in
-
 {
-
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.system.nixos;
+in {
   options.system = {
-
     nixos.label = mkOption {
       type = types.str;
       description = ''
@@ -42,7 +39,7 @@ in
     nixos.tags = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "with-xen" ];
+      example = ["with-xen"];
       description = ''
         Strings to prefix to the default
         <option>system.nixos.label</option>.
@@ -58,15 +55,13 @@ in
         </screen>
       '';
     };
-
   };
 
   config = {
     # This is set here rather than up there so that changing it would
     # not rebuild the manual
     system.nixos.label = mkDefault (maybeEnv "NIXOS_LABEL"
-                                             (concatStringsSep "-" ((sort (x: y: x < y) cfg.tags)
-                                              ++ [ (maybeEnv "NIXOS_LABEL_VERSION" cfg.version) ])));
+    (concatStringsSep "-" ((sort (x: y: x < y) cfg.tags)
+    ++ [(maybeEnv "NIXOS_LABEL_VERSION" cfg.version)])));
   };
-
 }

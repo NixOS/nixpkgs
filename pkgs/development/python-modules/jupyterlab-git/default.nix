@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, git
-, jupyter_server
-, jupyter-packaging
-, jupyterlab
-, nbdime
-, nbformat
-, pexpect
-, pytest-asyncio
-, pytest-tornasync
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  git,
+  jupyter_server,
+  jupyter-packaging,
+  jupyterlab,
+  nbdime,
+  nbformat,
+  pexpect,
+  pytest-asyncio,
+  pytest-tornasync,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "jupyterlab-git";
   version = "0.34.1";
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter lab extension for version control with Git";
     homepage = "https://github.com/jupyterlab/jupyterlab-git";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ chiroptical ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [chiroptical];
   };
 }

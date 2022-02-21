@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libpng }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  libpng,
+}:
 stdenv.mkDerivation rec {
   pname = "gqview";
   version = "2.1.5";
@@ -9,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ilm5s7ps9kg4f5hzgjhg0xhn6zg0v9i7jnd67zrx9h7wsaa9zhj";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ gtk2 libpng ];
+  buildInputs = [gtk2 libpng];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   NIX_LDFLAGS = "-lm";
 
@@ -22,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "http://gqview.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, gtk2, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  gtk2,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "gpicview";
   version = "0.2.4";
@@ -16,16 +23,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ intltool gtk2 ];
+  buildInputs = [intltool gtk2];
 
   meta = with lib; {
     description = "A simple and fast image viewer for X";
     homepage = "http://lxde.sourceforge.net/gpicview/";
     repositories.git = "git://lxde.git.sourceforge.net/gitroot/lxde/gpicview";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [lovek323];
     platforms = platforms.unix;
   };
 }

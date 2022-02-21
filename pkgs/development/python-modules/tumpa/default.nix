@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pyside2
-, johnnycanencrypt
-, pythonOlder
-, wrapQtAppsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyside2,
+  johnnycanencrypt,
+  pythonOlder,
+  wrapQtAppsHook,
 }:
-
 buildPythonPackage rec {
   pname = "tumpa";
   version = "0.1.2";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "OpenPGP key creation and smartcard access";
     homepage = "https://github.com/kushaldas/tumpa";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [_0x4A6F];
   };
 }

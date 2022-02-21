@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, fox, pkg-config, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fox,
+  pkg-config,
+  gettext,
+  xlibsWrapper,
+  gcc,
+  intltool,
+  file,
+  libpng,
+}:
 stdenv.mkDerivation rec {
   pname = "xfe";
   version = "1.42";
@@ -9,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v1v0vcbnm30kpyd3rj8f56yh7lfnwy7nbs9785wi229b29fiqx1";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fox gettext xlibsWrapper gcc intltool file libpng ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [fox gettext xlibsWrapper gcc intltool file libpng];
 
   preConfigure = ''
     sed -i s,/usr/share/xfe,$out/share/xfe, src/xfedefs.h
@@ -27,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/xfe/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

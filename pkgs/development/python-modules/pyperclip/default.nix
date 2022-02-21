@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, stdenv
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  stdenv,
+  python,
 }:
-
 buildPythonPackage rec {
   version = "1.8.2";
   pname = "pyperclip";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test_pyperclip.py
   '';
 
-  pythonImportsCheck = [ "pyperclip" ];
+  pythonImportsCheck = ["pyperclip"];
 
   meta = with lib; {
     homepage = "https://github.com/asweigart/pyperclip";
     license = licenses.bsd3;
     description = "Cross-platform clipboard module";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

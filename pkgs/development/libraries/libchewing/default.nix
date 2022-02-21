@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sqlite,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "libchewing";
   version = "unstable-2020-06-27";
@@ -11,15 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-w3/K2O/CU+XVzqzVCYJyq1vLgToN6iIUhJ9J7ia4p9E=";
   };
 
-  buildInputs = [ sqlite ];
+  buildInputs = [sqlite];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "Intelligent Chinese phonetic input method";
     homepage = "http://chewing.im/";
     license = licenses.lgpl21Only;
-    maintainers = [ maintainers.ericsagnes ];
+    maintainers = [maintainers.ericsagnes];
     platforms = platforms.linux;
   };
 }

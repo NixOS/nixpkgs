@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, llvmPackages
-, pkg-config
-, pcsclite
-, nettle
-, requests
-, vcrpy
-, numpy
-, pytestCheckHook
-, pythonOlder
-, PCSC
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  llvmPackages,
+  pkg-config,
+  pcsclite,
+  nettle,
+  requests,
+  vcrpy,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  PCSC,
+  libiconv,
 }:
-
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
   version = "0.6.0";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  patches = [ ./Cargo.lock.patch ];
+  patches = [./Cargo.lock.patch];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
@@ -45,21 +45,25 @@ buildPythonPackage rec {
     vcrpy
   ];
 
-  nativeBuildInputs = [
-    llvmPackages.clang
-    pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [
+      llvmPackages.clang
+      pkg-config
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
-  buildInputs = [
-    pcsclite
-    nettle
-  ] ++ lib.optionals stdenv.isDarwin [
-    PCSC
-    libiconv
-  ];
+  buildInputs =
+    [
+      pcsclite
+      nettle
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      PCSC
+      libiconv
+    ];
 
   # Needed b/c need to check AFTER python wheel is installed (using Rust Build, not buildPythonPackage)
   doCheck = false;
@@ -88,12 +92,12 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [ "johnnycanencrypt" ];
+  pythonImportsCheck = ["johnnycanencrypt"];
 
   meta = with lib; {
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
     description = "Python module for OpenPGP written in Rust";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [_0x4A6F];
   };
 }

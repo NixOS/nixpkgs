@@ -1,12 +1,12 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, opentracing
-, threadloop
-, thrift
-, tornado
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  opentracing,
+  threadloop,
+  thrift,
+  tornado,
 }:
-
 buildPythonPackage rec {
   pname = "jaeger-client";
   version = "4.8.0";
@@ -28,13 +28,13 @@ buildPythonPackage rec {
   # https://github.com/uber-common/opentracing-python-instrumentation/pull/115
   doCheck = false;
 
-  pythonImportsCheck = [ "jaeger_client" ];
+  pythonImportsCheck = ["jaeger_client"];
 
   meta = with lib; {
     description = "Jaeger bindings for Python OpenTracing API";
     downloadPage = "https://pypi.org/project/jaeger-client/";
     homepage = "https://github.com/jaegertracing/jaeger-client-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

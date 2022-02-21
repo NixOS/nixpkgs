@@ -1,5 +1,7 @@
-{ grafanaPlugin, lib }:
-
+{
+  grafanaPlugin,
+  lib,
+}:
 grafanaPlugin rec {
   pname = "doitintl-bigquery-datasource";
   version = "2.0.2";
@@ -7,7 +9,7 @@ grafanaPlugin rec {
   meta = with lib; {
     description = "BigQuery DataSource for Grafana";
     license = licenses.mit;
-    maintainers = with maintainers; [ jwygoda ];
+    maintainers = with maintainers; [jwygoda];
     platforms = platforms.unix;
   };
 }

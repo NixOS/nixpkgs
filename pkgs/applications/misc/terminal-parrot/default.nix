@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "terminal-parrot";
   version = "1.1.1";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "Shows colorful, animated party parrot in your terminial";
     homepage = "https://github.com/jmhobbs/terminal-parrot";
     license = licenses.mit;
-    maintainers = [ maintainers.heel ];
+    maintainers = [maintainers.heel];
   };
 }

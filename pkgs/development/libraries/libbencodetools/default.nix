@@ -1,6 +1,8 @@
-{ stdenv, lib, fetchFromGitLab
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libbencodetools";
   version = "unstable-2021-04-15";
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Collection of tools for manipulating bencoded data";
     homepage = "https://gitlab.com/heikkiorsila/bencodetools";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
     platforms = platforms.unix;
   };
 }

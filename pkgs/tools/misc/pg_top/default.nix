@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, ncurses, postgresql }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  postgresql,
+}:
 stdenv.mkDerivation rec {
   pname = "pg_top";
   version = "3.7.0";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "17xrv0l58rv3an06gkajzw0gg6v810xx6vl137an1iykmhvfh7h2";
   };
 
-  buildInputs = [ ncurses postgresql ];
+  buildInputs = [ncurses postgresql];
 
   meta = with lib; {
     description = "A 'top' like tool for PostgreSQL";

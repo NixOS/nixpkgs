@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, chardet
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  chardet,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "pysrt";
   version = "1.1.2";
@@ -16,12 +16,12 @@ buildPythonPackage rec {
     sha256 = "1f5hxyzlh5mdvvi52qapys9qcinffr6ghgivb6k4jxa92cbs3mfg";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     nosetests -v
   '';
 
-  propagatedBuildInputs = [ chardet ];
+  propagatedBuildInputs = [chardet];
 
   meta = with lib; {
     homepage = "https://github.com/byroot/pysrt";

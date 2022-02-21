@@ -1,21 +1,21 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-
-# build deps
-, poetry-core
-
-# propagates
-, cbor2
-, python-dateutil
-, pyyaml
-, tomlkit
-, u-msgpack-python
-
-# tested using
-, pytestCheckHook
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub
+  # build deps
+  ,
+  poetry-core
+  # propagates
+  ,
+  cbor2,
+  python-dateutil,
+  pyyaml,
+  tomlkit,
+  u-msgpack-python
+  # tested using
+  ,
+  pytestCheckHook,
 }:
-
 buildPythonApplication rec {
   pname = "remarshal";
   version = "0.14.0";
@@ -55,6 +55,6 @@ buildPythonApplication rec {
     description = "Convert between TOML, YAML and JSON";
     license = licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [offline];
   };
 }

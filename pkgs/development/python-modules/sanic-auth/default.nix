@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sanic
-, sanic-testing
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sanic,
+  sanic-testing,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "Sanic-Auth";
   version = "0.3.0";
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Simple Authentication for Sanic";
     homepage = "https://github.com/pyx/sanic-auth/";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    maintainers = with maintainers; [arnoldfarkas];
   };
 }

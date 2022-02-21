@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 buildGoModule rec {
   pname = "mynewt-newt";
   version = "1.7.0";
@@ -35,7 +39,7 @@ buildGoModule rec {
       was developed as a part of the Apache Mynewt Operating System.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ pjones ];
+    maintainers = with maintainers; [pjones];
     platforms = platforms.unix;
   };
 }

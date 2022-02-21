@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "flow-exporter";
   version = "1.1.1";
@@ -17,7 +20,7 @@ buildGoModule rec {
     description = "Export network flows from kafka to Prometheus";
     homepage = "https://github.com/neptune-networks/flow-exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ kloenk ];
+    maintainers = with maintainers; [kloenk];
     platforms = platforms.linux;
   };
 }

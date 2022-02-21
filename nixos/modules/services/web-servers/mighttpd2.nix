@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.mighttpd2;
   configFile = pkgs.writeText "mighty-config" cfg.config;
   routingFile = pkgs.writeText "mighty-routing" cfg.routing;
@@ -90,19 +92,19 @@ in {
         If null it will be determined automatically
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [ { assertion = cfg.routing != "";
-          message = "You need at least one rule in mighttpd2.routing";
-        }
-      ];
+    assertions = [
+      {
+        assertion = cfg.routing != "";
+        message = "You need at least one rule in mighttpd2.routing";
+      }
+    ];
     systemd.services.mighttpd2 = {
       description = "Mighttpd2 web server";
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.haskellPackages.mighttpd2}/bin/mighty \
@@ -128,5 +130,5 @@ in {
     users.groups.mighttpd2.gid = config.ids.gids.mighttpd2;
   };
 
-  meta.maintainers = with lib.maintainers; [ fgaz ];
+  meta.maintainers = with lib.maintainers; [fgaz];
 }

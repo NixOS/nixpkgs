@@ -1,5 +1,8 @@
-{stdenv, lib, fetchzip}:
-
+{
+  stdenv,
+  lib,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "darling";
   name = pname;
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [matthewbauer];
     license = licenses.gpl3;
     description = "Darwin/macOS emulation layer for Linux";
     platforms = platforms.darwin;

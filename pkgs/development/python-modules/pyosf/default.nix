@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytest-runner
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytest-runner,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pyosf";
   version = "1.0.5";
@@ -19,16 +19,16 @@ buildPythonPackage rec {
   };
 
   preBuild = "export HOME=$TMP";
-  buildInputs = [ pytest-runner ];  # required via `setup_requires`
-  propagatedBuildInputs = [ requests ];
+  buildInputs = [pytest-runner]; # required via `setup_requires`
+  propagatedBuildInputs = [requests];
 
-  doCheck = false;  # requires network access
-  pythonImportsCheck = [ "pyosf" ];
+  doCheck = false; # requires network access
+  pythonImportsCheck = ["pyosf"];
 
   meta = with lib; {
     homepage = "https://github.com/psychopy/pyosf";
     description = "Pure Python library for simple sync with Open Science Framework";
     license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

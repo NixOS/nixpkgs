@@ -1,17 +1,17 @@
-{ stdenv
-, cmake
-, fetchFromGitHub
-, gss
-, hwloc
-, lib
-, libsodium
-, libuv
-, nix-update-script
-, openssl
-, pkg-config
-, zeromq
+{
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  gss,
+  hwloc,
+  lib,
+  libsodium,
+  libuv,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  zeromq,
 }:
-
 stdenv.mkDerivation rec {
   pname = "p2pool";
   version = "1.7";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libuv zeromq libsodium gss hwloc openssl ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [libuv zeromq libsodium gss hwloc openssl];
 
   installPhase = ''
     runHook preInstall
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "Decentralized pool for Monero mining";
     homepage = "https://github.com/SChernykh/p2pool";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ratsclub ];
+    maintainers = with maintainers; [ratsclub];
   };
 }

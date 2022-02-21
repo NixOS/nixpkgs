@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, tokenize-rt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  tokenize-rt,
 }:
-
 buildPythonPackage rec {
   pname = "pyupgrade";
   version = "2.31.0";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Tool to automatically upgrade syntax for newer versions of the language";
     homepage = "https://github.com/asottile/pyupgrade";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

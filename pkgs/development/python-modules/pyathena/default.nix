@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boto3
-, botocore
-, pandas
-, tenacity
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  boto3,
+  botocore,
+  pandas,
+  tenacity,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pyathena";
   version = "2.4.1";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/laughingman7743/PyAthena/";
     license = licenses.mit;
     description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";
-    maintainers = with maintainers; [ turion ];
+    maintainers = with maintainers; [turion];
   };
 }

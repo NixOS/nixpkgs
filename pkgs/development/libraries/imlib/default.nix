@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, libX11, libXext, xorgproto, libjpeg, giflib, libtiff, libpng
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libX11,
+  libXext,
+  xorgproto,
+  libjpeg,
+  giflib,
+  libtiff,
+  libpng,
 }:
-
 stdenv.mkDerivation rec {
   pname = "imlib";
   version = "1.9.15";
@@ -34,11 +43,11 @@ stdenv.mkDerivation rec {
     "--x-libraries=${libX11.out}/lib"
   ];
 
-  buildInputs = [ libjpeg libXext libX11 xorgproto libtiff giflib libpng ];
+  buildInputs = [libjpeg libXext libX11 xorgproto libtiff giflib libpng];
 
   meta = with lib; {
     description = "An image loading and rendering library for X11";
     platforms = platforms.unix;
-    license = with licenses; [ gpl2Only lgpl2Only ];
+    license = with licenses; [gpl2Only lgpl2Only];
   };
 }

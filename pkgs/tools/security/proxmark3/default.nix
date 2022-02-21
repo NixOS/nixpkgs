@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, readline, pcsclite, qt5
-, gcc-arm-embedded }:
-
-let
-  generic = { pname, version, rev, sha256 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  ncurses,
+  readline,
+  pcsclite,
+  qt5,
+  gcc-arm-embedded,
+}: let
+  generic = {
+    pname,
+    version,
+    rev,
+    sha256,
+  }:
     stdenv.mkDerivation rec {
       inherit pname version;
 
@@ -12,8 +24,8 @@ let
         inherit rev sha256;
       };
 
-      nativeBuildInputs = [ pkg-config gcc-arm-embedded ];
-      buildInputs = [ ncurses readline pcsclite qt5.qtbase ];
+      nativeBuildInputs = [pkg-config gcc-arm-embedded];
+      buildInputs = [ncurses readline pcsclite qt5.qtbase];
 
       dontWrapQtApps = true;
 
@@ -39,12 +51,10 @@ let
         description = "Client for proxmark3, powerful general purpose RFID tool";
         homepage = "http://www.proxmark.org";
         license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ fpletz ];
+        maintainers = with maintainers; [fpletz];
       };
     };
-in
-
-{
+in {
   proxmark3 = generic rec {
     pname = "proxmark3";
     version = "3.1.0";

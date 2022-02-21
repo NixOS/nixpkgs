@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "terraformer";
   version = "0.8.18";
@@ -13,12 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-fCovSA3ZbKn9DrDlb/SXoe8iQTTEAiiDZFSpHUPmxzo=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "CLI tool to generate terraform files from existing infrastructure (reverse Terraform). Infrastructure to Code";
     homepage = "https://github.com/GoogleCloudPlatform/terraformer";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

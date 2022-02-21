@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook,
-  libtool, pkg-config, re2, texinfo }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  pkg-config,
+  re2,
+  texinfo,
+}:
 stdenv.mkDerivation rec {
   pname = "cre2";
   version = "0.3.6";
@@ -17,9 +24,9 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
   ];
-  buildInputs = [ re2 texinfo ];
+  buildInputs = [re2 texinfo];
 
-  NIX_LDFLAGS="-lre2 -lpthread";
+  NIX_LDFLAGS = "-lre2 -lpthread";
 
   configureFlags = [
     "--enable-maintainer-mode"

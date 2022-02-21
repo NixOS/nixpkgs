@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchFromGitLab
-, rustPlatform
-, pkg-config
-, openssl
-, sqlite
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  sqlite,
+  libiconv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "terminal-typeracer";
   version = "2.0.8";
@@ -21,14 +22,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-SAVDSUm2jpDwTfwo4L6MVUKzBxZvCfjn4UNIGUJziSY=";
 
-  buildInputs = [ openssl sqlite ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [openssl sqlite] ++ lib.optionals stdenv.isDarwin [libiconv Security];
+  nativeBuildInputs = [pkg-config];
 
   meta = with lib; {
     description = "An open source terminal based version of Typeracer written in rust";
     homepage = "https://gitlab.com/ttyperacer/terminal-typeracer";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ yoctocell ];
+    maintainers = with maintainers; [yoctocell];
     platforms = platforms.unix;
   };
 }

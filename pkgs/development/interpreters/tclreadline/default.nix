@@ -1,13 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, automake
-, autoconf
-, libtool
-, readline
-, tcl
-, tk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  libtool,
+  readline,
+  tcl,
+  tk,
 }:
-
 tcl.mkTclDerivation rec {
   pname = "tclreadline";
   version = "2.3.8";
@@ -60,7 +61,7 @@ tcl.mkTclDerivation rec {
     description = "GNU readline for interactive tcl shells";
     homepage = "https://github.com/flightaware/tclreadline";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }

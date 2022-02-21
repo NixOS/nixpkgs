@@ -1,27 +1,34 @@
-{ lib, stdenv, fetchurl, readline, libmysqlclient, postgresql, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  libmysqlclient,
+  postgresql,
+  sqlite,
+}: let
+  inherit (lib) getDev;
+in
+  stdenv.mkDerivation rec {
+    pname = "opendbx";
+    version = "1.4.6";
 
-let inherit (lib) getDev; in
+    src = fetchurl {
+      url = "https://linuxnetworks.de/opendbx/download/opendbx-${version}.tar.gz";
+      sha256 = "0z29h6zx5f3gghkh1a0060w6wr572ci1rl2a3480znf728wa0ii2";
+    };
 
-stdenv.mkDerivation rec {
-  pname = "opendbx";
-  version = "1.4.6";
+    preConfigure = ''
+      export CPPFLAGS="-I${getDev libmysqlclient}/include/mysql"
+      export LDFLAGS="-L${libmysqlclient}/lib/mysql -L${postgresql}/lib"
+      configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
+    '';
 
-  src = fetchurl {
-    url = "https://linuxnetworks.de/opendbx/download/opendbx-${version}.tar.gz";
-    sha256 = "0z29h6zx5f3gghkh1a0060w6wr572ci1rl2a3480znf728wa0ii2";
-  };
+    buildInputs = [readline libmysqlclient postgresql sqlite];
 
-  preConfigure = ''
-    export CPPFLAGS="-I${getDev libmysqlclient}/include/mysql"
-    export LDFLAGS="-L${libmysqlclient}/lib/mysql -L${postgresql}/lib"
-    configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
-  '';
-
-  buildInputs = [ readline libmysqlclient postgresql sqlite ];
-
-  meta = with lib; {
-    description = "Extremely lightweight but extensible database access library written in C";
-    license = licenses.lgpl21;
-    platforms = platforms.all;
-  };
-}
+    meta = with lib; {
+      description = "Extremely lightweight but extensible database access library written in C";
+      license = licenses.lgpl21;
+      platforms = platforms.all;
+    };
+  }

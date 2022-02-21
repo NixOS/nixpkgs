@@ -1,6 +1,10 @@
-{ callPackage, fetchFromGitHub, lib, pkgs }:
-let
-  nodePackages = import ./composition.nix { inherit pkgs; };
+{
+  callPackage,
+  fetchFromGitHub,
+  lib,
+  pkgs,
+}: let
+  nodePackages = import ./composition.nix {inherit pkgs;};
 in
   nodePackages.package.override {
     preRebuild = ''
@@ -9,6 +13,6 @@ in
     src = fetchFromGitHub (lib.importJSON ./netlify-cli.json);
     bypassCache = true;
     reconstructLock = true;
-    passthru.tests.test = callPackage ./test.nix { };
-    meta.maintainers = with lib.maintainers; [ roberth ];
+    passthru.tests.test = callPackage ./test.nix {};
+    meta.maintainers = with lib.maintainers; [roberth];
   }

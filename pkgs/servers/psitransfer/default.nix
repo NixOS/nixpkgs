@@ -3,15 +3,13 @@
 #   2. Run `./generate.sh` to rebuild node dependencies with node2nix
 #   3. Build this package `nix-build -A psitransfer`
 #   4. Profit
-
-{ stdenv
-, pkgs
-, lib
-, nodejs
-, fetchzip
-}:
-
-let
+{
+  stdenv,
+  pkgs,
+  lib,
+  nodejs,
+  fetchzip,
+}: let
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
@@ -35,7 +33,7 @@ let
       homepage = "https://github.com/psi-4ward/psitransfer";
       description = "Simple open source self-hosted file sharing solution";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ hyshka ];
+      maintainers = with maintainers; [hyshka];
     };
   };
 in

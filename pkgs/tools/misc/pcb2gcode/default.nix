@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, boost
-, glibmm
-, gtkmm2
-, gerbv
-, librsvg
-, bash
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  glibmm,
+  gtkmm2,
+  gerbv,
+  librsvg,
+  bash,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pcb2gcode";
   version = "2.4.0";
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3VQlYtSi6yWWNuxTlBzvBtkM5hAss47xat+sEW+P79E=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [ boost glibmm gtkmm2 gerbv librsvg ];
+  buildInputs = [boost glibmm gtkmm2 gerbv librsvg];
 
   postPatch = ''
     substituteInPlace ./Makefile.am \
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/pcb2gcode/pcb2gcode";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kritnich ];
+    maintainers = with maintainers; [kritnich];
     platforms = platforms.linux;
   };
 }

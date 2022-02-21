@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "httplab";
   version = "0.4.0";
@@ -18,6 +21,6 @@ buildGoPackage rec {
     homepage = "https://github.com/gchaincl/httplab";
     description = "Interactive WebServer";
     license = licenses.mit;
-    maintainers = with maintainers; [ pradeepchhetri ];
+    maintainers = with maintainers; [pradeepchhetri];
   };
 }

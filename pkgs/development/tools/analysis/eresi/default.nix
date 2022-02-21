@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, which, openssl, readline, fetchpatch }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  which,
+  openssl,
+  readline,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "eresi";
   version = "0.83-a3-phoenix";
@@ -40,7 +47,9 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (if stdenv.is64bit then "--enable-32-64" else "--enable-32")
+    (if stdenv.is64bit
+    then "--enable-32-64"
+    else "--enable-32")
     "--enable-readline"
   ];
 
@@ -50,12 +59,13 @@ stdenv.mkDerivation rec {
   prefixKey = "--prefix ";
   dontDisableStatic = true;
 
-  nativeBuildInputs = [ which ];
-  buildInputs = [ openssl readline ];
+  nativeBuildInputs = [which];
+  buildInputs = [openssl readline];
   enableParallelBuilding = true;
 
-  installTargets = lib.singleton "install"
-                ++ lib.optional stdenv.is64bit "install64";
+  installTargets =
+    lib.singleton "install"
+    ++ lib.optional stdenv.is64bit "install64";
 
   meta = {
     description = "The ERESI Reverse Engineering Software Interface";

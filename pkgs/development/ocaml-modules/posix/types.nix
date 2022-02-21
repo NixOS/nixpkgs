@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, posix-base }:
-
+{
+  lib,
+  buildDunePackage,
+  posix-base,
+}:
 buildDunePackage {
   pname = "posix-types";
 
@@ -7,9 +10,11 @@ buildDunePackage {
 
   minimumOCamlVersion = "4.03";
 
-  propagatedBuildInputs = [ posix-base ];
+  propagatedBuildInputs = [posix-base];
 
-  meta = posix-base.meta // {
-    description = "Bindings for the types defined in <sys/types.h>";
-  };
+  meta =
+    posix-base.meta
+    // {
+      description = "Bindings for the types defined in <sys/types.h>";
+    };
 }

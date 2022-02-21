@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, numix-icon-theme, numix-icon-theme-circle, hicolor-icon-theme }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  gnome-icon-theme,
+  numix-icon-theme,
+  numix-icon-theme-circle,
+  hicolor-icon-theme,
+}:
 stdenv.mkDerivation rec {
   pname = "zafiro-icons";
   version = "1.1";
@@ -35,8 +44,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Icon pack flat with light colors";
     homepage = "https://github.com/zayronxio/Zafiro-icons";
-    license = with licenses; [ gpl3 ];
+    license = with licenses; [gpl3];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

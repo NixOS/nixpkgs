@@ -1,8 +1,20 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake, pkg-config, udev
-, qtmultimedia, qtscript, alsa-lib, ola, libftdi1, libusb-compat-0_1
-, libsndfile, libmad
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  qmake,
+  pkg-config,
+  udev,
+  qtmultimedia,
+  qtscript,
+  alsa-lib,
+  ola,
+  libftdi1,
+  libusb-compat-0_1,
+  libsndfile,
+  libmad,
 }:
-
 mkDerivation rec {
   pname = "qlcplus";
   version = "4.12.3";
@@ -22,12 +34,20 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ qmake pkg-config ];
+  nativeBuildInputs = [qmake pkg-config];
   buildInputs = [
-    udev qtmultimedia qtscript alsa-lib ola libftdi1 libusb-compat-0_1 libsndfile libmad
+    udev
+    qtmultimedia
+    qtscript
+    alsa-lib
+    ola
+    libftdi1
+    libusb-compat-0_1
+    libsndfile
+    libmad
   ];
 
-  qmakeFlags = [ "INSTALLROOT=$(out)" ];
+  qmakeFlags = ["INSTALLROOT=$(out)"];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
@@ -45,7 +65,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
-    maintainers = [ maintainers.globin ];
+    maintainers = [maintainers.globin];
     license = licenses.asl20;
     platforms = platforms.all;
     homepage = "https://www.qlcplus.org/";

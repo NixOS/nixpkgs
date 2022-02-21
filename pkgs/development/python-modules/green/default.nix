@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, django
-, colorama
-, coverage
-, unidecode
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  django,
+  colorama,
+  coverage,
+  unidecode,
+  lxml,
 }:
-
 buildPythonPackage rec {
   pname = "green";
   version = "3.4.1";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Python test runner";
     homepage = "https://github.com/CleanCut/green";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

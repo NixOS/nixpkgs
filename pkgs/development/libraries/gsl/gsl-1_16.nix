@@ -1,5 +1,9 @@
-{ fetchurl, fetchpatch, lib, stdenv }:
-
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "gsl";
   version = "1.16";
@@ -46,6 +50,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = lib.platforms.unix;
     # Failing "eigen" tests on aarch64.
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = ["aarch64-linux"];
   };
 }

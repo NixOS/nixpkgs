@@ -1,15 +1,15 @@
-{ lib
-, bleach
-, buildPythonPackage
-, cmarkgfm
-, docutils
-, fetchPypi
-, mock
-, pygments
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bleach,
+  buildPythonPackage,
+  cmarkgfm,
+  docutils,
+  fetchPypi,
+  mock,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "readme-renderer";
   version = "32.0";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for rendering readme descriptions";
     homepage = "https://github.com/pypa/readme_renderer";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,7 +1,12 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, pkg-config, fftwFloat, libsamplerate
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  fftwFloat,
+  libsamplerate,
 }:
-
 stdenv.mkDerivation rec {
   pname = "csdr";
   version = "0.17.1";
@@ -33,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "A simple DSP library and command-line tool for Software Defined Radio";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [astro];
   };
 }

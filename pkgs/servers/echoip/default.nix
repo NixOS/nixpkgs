@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule {
   pname = "echoip";
   version = "unstable-2019-07-12";
@@ -15,7 +18,7 @@ buildGoModule {
 
   doCheck = false;
 
-  outputs = [ "out" "index" ];
+  outputs = ["out" "index"];
 
   postInstall = ''
     mkdir -p $index
@@ -25,6 +28,6 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/mpolden/echoip";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [rvolosatovs];
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fuse, curl, pkg-config, glib, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  fuse,
+  curl,
+  pkg-config,
+  glib,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "curlftpfs";
   version = "0.9.2";
@@ -16,8 +25,8 @@ stdenv.mkDerivation rec {
     ./fix-rpl_malloc.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fuse curl glib zlib ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [fuse curl glib zlib];
 
   CFLAGS = lib.optionalString stdenv.isDarwin "-D__off_t=off_t";
 

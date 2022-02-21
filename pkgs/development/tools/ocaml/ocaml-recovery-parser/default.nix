@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, fix
-, menhirLib
-, menhirSdk
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  fix,
+  menhirLib,
+  menhirSdk,
 }:
-
 buildDunePackage rec {
   pname = "ocaml-recovery-parser";
   version = "0.2.2";
@@ -29,7 +29,7 @@ buildDunePackage rec {
   meta = with lib; {
     homepage = "https://github.com/serokell/ocaml-recovery-parser";
     description = "A simple fork of OCaml parser with support for error recovery";
-    license = with licenses; [ lgpl2Only mit mpl20 ];
-    maintainers = with maintainers; [ romildo ];
+    license = with licenses; [lgpl2Only mit mpl20];
+    maintainers = with maintainers; [romildo];
   };
 }

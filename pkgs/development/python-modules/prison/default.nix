@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "prison";
   version = "0.1.3";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Rison encoder/decoder";
     homepage = "https://github.com/betodealmeida/python-rison";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

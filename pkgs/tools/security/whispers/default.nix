@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "whispers";
   version = "1.5.3";
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to identify hardcoded secrets in static structured text";
     homepage = "https://github.com/Skyscanner/whispers";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

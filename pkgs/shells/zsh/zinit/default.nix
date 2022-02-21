@@ -1,5 +1,9 @@
-{ stdenvNoCC, lib, fetchFromGitHub, installShellFiles }:
-
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "zinit";
   version = "3.7";
@@ -11,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   };
   # adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-zplugin-git
   dontBuild = true;
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
   installPhase = ''
     outdir="$out/share/$pname"
 
@@ -37,6 +41,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/zdharma-continuum/zinit";
     description = "Flexible zsh plugin manager";
     license = licenses.mit;
-    maintainers = with maintainers; [ pasqui23 sei40kr ];
+    maintainers = with maintainers; [pasqui23 sei40kr];
   };
 }

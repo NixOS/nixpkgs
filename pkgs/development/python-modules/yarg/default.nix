@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, nose, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  nose,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "yarg";
   version = "0.1.9";
@@ -11,9 +17,9 @@ buildPythonPackage rec {
     sha256 = "1isq02s404fp9whkm8w2kvb2ik1sz0r258iby0q532zw81lga0d0";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
-  checkInputs = [ nose mock ];
+  checkInputs = [nose mock];
   checkPhase = ''
     nosetests
   '';
@@ -22,6 +28,6 @@ buildPythonPackage rec {
     description = "An easy to use PyPI client";
     homepage = "https://yarg.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

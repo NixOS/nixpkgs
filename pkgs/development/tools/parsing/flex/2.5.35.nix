@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, flex, bison, texinfo, help2man, m4 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  flex,
+  bison,
+  texinfo,
+  help2man,
+  m4,
+}:
 stdenv.mkDerivation rec {
   pname = "flex";
   version = "2.5.35";
@@ -13,9 +22,9 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  nativeBuildInputs = [ flex bison texinfo help2man autoreconfHook ];
+  nativeBuildInputs = [flex bison texinfo help2man autoreconfHook];
 
-  propagatedBuildInputs = [ m4 ];
+  propagatedBuildInputs = [m4];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     ac_cv_func_malloc_0_nonnull=yes

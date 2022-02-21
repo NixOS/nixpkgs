@@ -1,5 +1,8 @@
-{ lib, trivialBuild, fetchurl }:
-
+{
+  lib,
+  trivialBuild,
+  fetchurl,
+}:
 trivialBuild rec {
   pname = "ebuild-mode";
   version = "1.53";
@@ -12,6 +15,6 @@ trivialBuild rec {
   meta = with lib; {
     description = "Major modes for Gentoo package files";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
   };
 }

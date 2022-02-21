@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+}:
 stdenv.mkDerivation rec {
   pname = "facedetect";
   version = "0.1";
@@ -19,8 +24,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ python3Packages.python python3Packages.wrapPython ];
-  pythonPath = [ python3Packages.numpy python3Packages.opencv4 ];
+  buildInputs = [python3Packages.python python3Packages.wrapPython];
+  pythonPath = [python3Packages.numpy python3Packages.opencv4];
 
   dontConfigure = true;
 
@@ -40,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "A simple face detector for batch processing";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.rycee ];
+    maintainers = [maintainers.rycee];
   };
 }

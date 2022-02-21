@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gawk }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  gawk,
+}:
 stdenv.mkDerivation rec {
   pname = "txt2man";
   version = "1.7.1";
@@ -40,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "http://mvertes.free.fr/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
   };
 }

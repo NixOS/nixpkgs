@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libctb";
   version = "0.16";
@@ -18,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://iftools.com";
     license = licenses.lgpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.misuzu ];
+    maintainers = [maintainers.misuzu];
   };
 }

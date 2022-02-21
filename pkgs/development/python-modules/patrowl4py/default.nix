@@ -1,24 +1,24 @@
-{ lib
-, attrs
-, buildPythonPackage
-, certifi
-, chardet
-, fetchFromGitHub
-, idna
-, iniconfig
-, more-itertools
-, packaging
-, pluggy
-, py
-, pyparsing
-, python-slugify
-, requests
-, six
-, text-unidecode
-, toml
-, urllib3
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  certifi,
+  chardet,
+  fetchFromGitHub,
+  idna,
+  iniconfig,
+  more-itertools,
+  packaging,
+  pluggy,
+  py,
+  pyparsing,
+  python-slugify,
+  requests,
+  six,
+  text-unidecode,
+  toml,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "patrowl4py";
   version = "1.1.9";
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "Python API Client for PatrOwl";
     homepage = "https://github.com/Patrowl/Patrowl4py";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

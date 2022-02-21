@@ -1,18 +1,18 @@
-{ lib
-, amqp
-, azure-servicebus
-, buildPythonPackage
-, cached-property
-, case
-, fetchPypi
-, importlib-metadata
-, Pyro4
-, pytestCheckHook
-, pythonOlder
-, pytz
-, vine
+{
+  lib,
+  amqp,
+  azure-servicebus,
+  buildPythonPackage,
+  cached-property,
+  case,
+  fetchPypi,
+  importlib-metadata,
+  Pyro4,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  vine,
 }:
-
 buildPythonPackage rec {
   pname = "kombu";
   version = "5.2.3";
@@ -25,13 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-gakMHel+CNPbN9vxY+qvZnRF4QaMmL/YnwUaQOn2270=";
   };
 
-  propagatedBuildInputs = [
-    amqp
-    vine
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      amqp
+      vine
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      cached-property
+      importlib-metadata
+    ];
 
   checkInputs = [
     azure-servicebus
@@ -49,6 +51,6 @@ buildPythonPackage rec {
     description = "Messaging library for Python";
     homepage = "https://github.com/celery/kombu";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

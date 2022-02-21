@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromSourcehut, installShellFiles, scdoc }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  installShellFiles,
+  scdoc,
+}:
 buildGoModule rec {
   pname = "soju";
   version = "0.3.0";
@@ -33,6 +38,6 @@ buildGoModule rec {
     description = "A user-friendly IRC bouncer";
     homepage = "https://soju.im";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [malvo];
   };
 }

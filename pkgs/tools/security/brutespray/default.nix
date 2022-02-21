@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, makeWrapper
-, medusa
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  makeWrapper,
+  medusa,
 }:
-
 stdenv.mkDerivation rec {
   pname = "brutespray";
   version = "1.7.0";
@@ -23,15 +23,15 @@ stdenv.mkDerivation rec {
   '';
 
   dontBuild = true;
-  nativeBuildInputs = [ python3.pkgs.wrapPython makeWrapper ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [python3.pkgs.wrapPython makeWrapper];
+  buildInputs = [python3];
 
   installPhase = ''
     install -Dm0755 brutespray.py $out/bin/brutespray
     patchShebangs $out/bin
     patchPythonScript $out/bin/brutespray
     wrapProgram $out/bin/brutespray \
-      --prefix PATH : ${lib.makeBinPath [ medusa ]}
+      --prefix PATH : ${lib.makeBinPath [medusa]}
 
     mkdir -p $out/share/brutespray
     cp -r wordlist/ $out/share/brutespray/wordlist
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
       directly from Nmap output.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

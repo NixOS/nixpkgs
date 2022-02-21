@@ -1,18 +1,17 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   name = "sickbeard";
 
   cfg = config.services.sickbeard;
   opt = options.services.sickbeard;
   sickbeard = cfg.package;
-
-in
-{
-
+in {
   ###### interface
 
   options = {
@@ -27,7 +26,7 @@ in
         default = pkgs.sickbeard;
         defaultText = literalExpression "pkgs.sickbeard";
         example = literalExpression "pkgs.sickrage";
-        description =''
+        description = ''
           Enable <literal>pkgs.sickrage</literal> or <literal>pkgs.sickgear</literal>
           as an alternative to SickBeard
         '';
@@ -61,11 +60,9 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users = optionalAttrs (cfg.user == name) {
       ${name} = {
         uid = config.ids.uids.sickbeard;
@@ -82,8 +79,8 @@ in
 
     systemd.services.sickbeard = {
       description = "Sickbeard Server";
-      wantedBy    = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         User = cfg.user;

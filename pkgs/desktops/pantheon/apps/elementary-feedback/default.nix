@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, python3
-, gtk3
-, glib
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, gettext
-, wrapGAppsHook
-, appstream
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  python3,
+  gtk3,
+  glib,
+  granite,
+  libgee,
+  libhandy,
+  elementary-icon-theme,
+  gettext,
+  wrapGAppsHook,
+  appstream,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-feedback";
   version = "6.1.0";

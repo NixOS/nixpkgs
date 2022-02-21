@@ -1,21 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "pgcenter";
   version = "0.9.2";
 
   src = fetchFromGitHub {
-    owner  = "lesovsky";
-    repo   = "pgcenter";
-    rev    = "v${version}";
+    owner = "lesovsky";
+    repo = "pgcenter";
+    rev = "v${version}";
     sha256 = "sha256-xaY01T12/5Peww9scRgfc5yHj7QA8BEwOK5l6OedziY=";
   };
 
   vendorSha256 = "sha256-9hYiyZ34atmSL7JvuXyiGU7HR4E6qN7bGZlyU+hP+FU=";
 
-  subPackages = [ "cmd" ];
+  subPackages = ["cmd"];
 
-  ldflags = [ "-w" "-s" "-X main.gitTag=${src.rev}" "-X main.gitCommit=${src.rev}" "-X main.gitBranch=master" ];
+  ldflags = ["-w" "-s" "-X main.gitTag=${src.rev}" "-X main.gitCommit=${src.rev}" "-X main.gitBranch=master"];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/pgcenter
@@ -28,6 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/lesovsky/pgcenter/raw/v${version}/doc/Changelog";
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

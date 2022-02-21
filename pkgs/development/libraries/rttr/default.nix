@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+}:
 stdenv.mkDerivation rec {
   pname = "rttr";
   version = "0.9.6";

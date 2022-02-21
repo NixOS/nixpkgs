@@ -1,5 +1,15 @@
-{ lib, stdenv, mkDerivation, fetchFromGitLab, fetchpatch, pkg-config, qmake, qtx11extras, qttools, mpv }:
-
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitLab,
+  fetchpatch,
+  pkg-config,
+  qmake,
+  qtx11extras,
+  qttools,
+  mpv,
+}:
 mkDerivation rec {
   pname = "mpc-qt";
   version = "2019-06-09";
@@ -18,11 +28,11 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config qmake qttools ];
+  nativeBuildInputs = [pkg-config qmake qttools];
 
-  buildInputs = [ mpv qtx11extras ];
+  buildInputs = [mpv qtx11extras];
 
-  qmakeFlags = [ "QMAKE_LUPDATE=${qttools.dev}/bin/lupdate" ];
+  qmakeFlags = ["QMAKE_LUPDATE=${qttools.dev}/bin/lupdate"];
 
   meta = with lib; {
     description = "Media Player Classic Qute Theater";
@@ -30,6 +40,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

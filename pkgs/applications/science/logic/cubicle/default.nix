@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ocamlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocamlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "cubicle";
   version = "1.1.2";
@@ -12,13 +16,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace "\\n" ""
   '';
 
-  buildInputs = with ocamlPackages; [ ocaml findlib functory ];
+  buildInputs = with ocamlPackages; [ocaml findlib functory];
 
   meta = with lib; {
     description = "An open source model checker for verifying safety properties of array-based systems";
     homepage = "http://cubicle.lri.fr/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dwarfmaster ];
+    maintainers = with maintainers; [dwarfmaster];
   };
 }

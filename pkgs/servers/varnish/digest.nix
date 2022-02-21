@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, libmhash, docutils, coreutils, version, sha256 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  varnish,
+  libmhash,
+  docutils,
+  coreutils,
+  version,
+  sha256,
+}:
 stdenv.mkDerivation rec {
   pname = "${varnish.name}-digest";
   inherit version;
@@ -11,17 +22,17 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config docutils ];
-  buildInputs = [ varnish libmhash ];
+  nativeBuildInputs = [autoreconfHook pkg-config docutils];
+  buildInputs = [varnish libmhash];
 
   postPatch = ''
     substituteInPlace autogen.sh  --replace "''${dataroot}/aclocal"                  "${varnish.dev}/share/aclocal"
     substituteInPlace Makefile.am --replace "''${LIBVARNISHAPI_DATAROOTDIR}/aclocal" "${varnish.dev}/share/aclocal"
   '';
 
-  configureFlags = [ "VMOD_DIR=$(out)/lib/varnish/vmods" ];
+  configureFlags = ["VMOD_DIR=$(out)/lib/varnish/vmods"];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  NIX_CFLAGS_COMPILE = ["-Wno-error=deprecated-declarations"];
 
   doCheck = true;
 

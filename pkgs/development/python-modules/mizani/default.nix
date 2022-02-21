@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, palettable
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  palettable,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
 }:
-
 buildPythonPackage rec {
   pname = "mizani";
   version = "0.7.3";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Scales for Python";
     homepage = "https://github.com/has2k1/mizani";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ samuela ];
+    maintainers = with maintainers; [samuela];
   };
 }

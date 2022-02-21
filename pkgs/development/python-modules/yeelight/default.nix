@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, future
-, ifaddr
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  future,
+  ifaddr,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "yeelight";
   version = "0.7.9";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python library for controlling YeeLight RGB bulbs";
     homepage = "https://gitlab.com/stavros/python-yeelight/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [nyanloutre];
   };
 }

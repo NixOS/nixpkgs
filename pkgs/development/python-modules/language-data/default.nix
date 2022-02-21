@@ -1,11 +1,11 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, marisa-trie
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  marisa-trie,
+  poetry-core,
+  pythonOlder,
 }:
-
 buildPythonApplication rec {
   pname = "language-data";
   version = "1.0.1";
@@ -39,6 +39,6 @@ buildPythonApplication rec {
     description = "Supplement module for langcodes";
     homepage = "https://github.com/rspeer/language_data";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,18 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, buildPythonPackage
-, rustPlatform
-, setuptools-rust
-, libiconv
-, numpy
-, datasets
-, pytestCheckHook
-, requests
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  buildPythonPackage,
+  rustPlatform,
+  setuptools-rust,
+  libiconv,
+  numpy,
+  datasets,
+  pytestCheckHook,
+  requests,
+}: let
   robertaVocab = fetchurl {
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-vocab.json";
     sha256 = "0m86wpkfb2gdh9x9i9ng2fvwk1rva4p0s98xw996nrjxs7166zwy";
@@ -49,78 +48,81 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
     sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
   };
-in buildPythonPackage rec {
-  pname = "tokenizers";
-  version = "unstable-2021-08-13";
+in
+  buildPythonPackage rec {
+    pname = "tokenizers";
+    version = "unstable-2021-08-13";
 
-  src = fetchFromGitHub {
-    owner = "huggingface";
-    repo = pname;
-    rev = "e7dd6436dd4a4ffd9e8a4f110ca68e6a38677cb6";
-    sha256 = "1p7w9a43a9h6ys5nsa4g89l65dj11037p7a1lqkj4x1yc9kv2y1r";
-  };
+    src = fetchFromGitHub {
+      owner = "huggingface";
+      repo = pname;
+      rev = "e7dd6436dd4a4ffd9e8a4f110ca68e6a38677cb6";
+      sha256 = "1p7w9a43a9h6ys5nsa4g89l65dj11037p7a1lqkj4x1yc9kv2y1r";
+    };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src sourceRoot;
-    name = "${pname}-${version}";
-    sha256 = "1yb4jsx6mp9jgd1g3mli6vr6mri2afnwqlmxq1rpvn34z6b3iw9q";
-  };
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      inherit src sourceRoot;
+      name = "${pname}-${version}";
+      sha256 = "1yb4jsx6mp9jgd1g3mli6vr6mri2afnwqlmxq1rpvn34z6b3iw9q";
+    };
 
-  sourceRoot = "source/bindings/python";
+    sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    nativeBuildInputs =
+      [setuptools-rust]
+      ++ (with rustPlatform; [
+        cargoSetupHook
+        rust.cargo
+        rust.rustc
+      ]);
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+    buildInputs = lib.optionals stdenv.isDarwin [
+      libiconv
+    ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+    propagatedBuildInputs = [
+      numpy
+    ];
 
-  checkInputs = [
-    datasets
-    pytestCheckHook
-    requests
-  ];
+    checkInputs = [
+      datasets
+      pytestCheckHook
+      requests
+    ];
 
-  postUnpack = ''
-    # Add data files for tests, otherwise tests attempt network access.
-    mkdir $sourceRoot/tests/data
-    ( cd $sourceRoot/tests/data
-      ln -s ${robertaVocab} roberta-base-vocab.json
-      ln -s ${robertaMerges} roberta-base-merges.txt
-      ln -s ${albertVocab} albert-base-v1-tokenizer.json
-      ln -s ${bertVocab} bert-base-uncased-vocab.txt
-      ln -s ${docPipelineTokenizer} bert-wiki.json
-      ln -s ${docQuicktourTokenizer} tokenizer-wiki.json
-      ln -s ${norvigBig} big.txt
-      ln -s ${openaiVocab} openai-gpt-vocab.json
-      ln -s ${openaiMerges} openai-gpt-merges.txt )
-  '';
+    postUnpack = ''
+      # Add data files for tests, otherwise tests attempt network access.
+      mkdir $sourceRoot/tests/data
+      ( cd $sourceRoot/tests/data
+        ln -s ${robertaVocab} roberta-base-vocab.json
+        ln -s ${robertaMerges} roberta-base-merges.txt
+        ln -s ${albertVocab} albert-base-v1-tokenizer.json
+        ln -s ${bertVocab} bert-base-uncased-vocab.txt
+        ln -s ${docPipelineTokenizer} bert-wiki.json
+        ln -s ${docQuicktourTokenizer} tokenizer-wiki.json
+        ln -s ${norvigBig} big.txt
+        ln -s ${openaiVocab} openai-gpt-vocab.json
+        ln -s ${openaiMerges} openai-gpt-merges.txt )
+    '';
 
-  postPatch = ''
-    echo 'import multiprocessing; multiprocessing.set_start_method("fork")' >> tests/__init__.py
-  '';
+    postPatch = ''
+      echo 'import multiprocessing; multiprocessing.set_start_method("fork")' >> tests/__init__.py
+    '';
 
-  preCheck = ''
-    HOME=$TMPDIR
-  '';
+    preCheck = ''
+      HOME=$TMPDIR
+    '';
 
-  disabledTests = [
-    # Downloads data using the datasets module.
-    "TestTrainFromIterators"
-  ];
+    disabledTests = [
+      # Downloads data using the datasets module.
+      "TestTrainFromIterators"
+    ];
 
-  meta = with lib; {
-    homepage = "https://github.com/huggingface/tokenizers";
-    description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://github.com/huggingface/tokenizers";
+      description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
+      license = licenses.asl20;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [];
+    };
+  }

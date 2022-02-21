@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libmpdclient
-, openssl
-, lua5_3
-, libid3tag
-, flac
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libmpdclient,
+  openssl,
+  lua5_3,
+  libid3tag,
+  flac,
+  pcre,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mympd";
   version = "8.0.4";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hpUoXqblhHreDZg8fDD5S4UG+ltptIbzP9LKyQ/WbX0=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [pkg-config cmake];
   buildInputs = [
     libmpdclient
     openssl
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LOCALSTATEDIR=/var/lib/mympd"
   ];
   # See https://github.com/jcorporation/myMPD/issues/315
-  hardeningDisable = [ "strictoverflow" ];
+  hardeningDisable = ["strictoverflow"];
 
   meta = {
     homepage = "https://jcorporation.github.io/mympd";
     description = "A standalone and mobile friendly web mpd client with a tiny footprint and advanced features";
-    maintainers = [ lib.maintainers.doronbehar ];
+    maintainers = [lib.maintainers.doronbehar];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "gotestsum";
   version = "1.7.0";
@@ -15,15 +18,15 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X gotest.tools/gotestsum/cmd.version=${version}" ];
+  ldflags = ["-s" "-w" "-X gotest.tools/gotestsum/cmd.version=${version}"];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     homepage = "https://github.com/gotestyourself/gotestsum";
     description = "A human friendly `go test` runner";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
-    maintainers = with maintainers; [ endocrimes ];
+    maintainers = with maintainers; [endocrimes];
   };
 }

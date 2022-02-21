@@ -1,9 +1,11 @@
-{ pkgs ? (import ../.. { inherit system; config = { }; })
-, system ? builtins.currentSystem
-, ...
-}:
-
-let
+{
+  pkgs ? (import ../.. {
+    inherit system;
+    config = {};
+  }),
+  system ? builtins.currentSystem,
+  ...
+}: let
   dbContents = ''
     dn: dc=example
     objectClass: domain
@@ -21,11 +23,11 @@ let
   '';
 in {
   # New-style configuration
-  current = import ./make-test-python.nix ({ pkgs, ... }: {
+  current = import ./make-test-python.nix ({pkgs, ...}: {
     inherit testScript;
     name = "openldap";
 
-    machine = { pkgs, ... }: {
+    machine = {pkgs, ...}: {
       environment.etc."openldap/root_password".text = "notapassword";
       services.openldap = {
         enable = true;
@@ -40,7 +42,7 @@ in {
             "olcDatabase={1}mdb" = {
               # This tests string, base64 and path values, as well as lists of string values
               attrs = {
-                objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+                objectClass = ["olcDatabaseConfig" "olcMdbConfig"];
                 olcDatabase = "{1}mdb";
                 olcDbDirectory = "/var/db/openldap";
                 olcSuffix = "dc=example";
@@ -58,14 +60,14 @@ in {
         declarativeContents."dc=example" = dbContents;
       };
     };
-  }) { inherit pkgs system; };
+  }) {inherit pkgs system;};
 
   # Old-style configuration
-  oldOptions = import ./make-test-python.nix ({ pkgs, ... }: {
+  oldOptions = import ./make-test-python.nix ({pkgs, ...}: {
     inherit testScript;
     name = "openldap";
 
-    machine = { pkgs, ... }: {
+    machine = {pkgs, ...}: {
       services.openldap = {
         enable = true;
         logLevel = "stats acl";
@@ -77,13 +79,13 @@ in {
         declarativeContents."dc=example" = dbContents;
       };
     };
-  }) { inherit system pkgs; };
+  }) {inherit system pkgs;};
 
   # Manually managed configDir, for example if dynamic config is essential
-  manualConfigDir = import ./make-test-python.nix ({ pkgs, ... }: {
+  manualConfigDir = import ./make-test-python.nix ({pkgs, ...}: {
     name = "openldap";
 
-    machine = { pkgs, ... }: {
+    machine = {pkgs, ...}: {
       services.openldap = {
         enable = true;
         configDir = "/var/db/slapd.d";
@@ -117,14 +119,16 @@ in {
         olcRootDN: cn=root,dc=example
         olcRootPW: notapassword
       '';
-    in ''
-      machine.succeed(
-          "mkdir -p /var/db/slapd.d /var/db/openldap",
-          "slapadd -F /var/db/slapd.d -n0 -l ${config}",
-          "slapadd -F /var/db/slapd.d -n1 -l ${contents}",
-          "chown -R openldap:openldap /var/db/slapd.d /var/db/openldap",
-          "systemctl restart openldap",
-      )
-    '' + testScript;
-  }) { inherit system pkgs; };
+    in
+      ''
+        machine.succeed(
+            "mkdir -p /var/db/slapd.d /var/db/openldap",
+            "slapadd -F /var/db/slapd.d -n0 -l ${config}",
+            "slapadd -F /var/db/slapd.d -n1 -l ${contents}",
+            "chown -R openldap:openldap /var/db/slapd.d /var/db/openldap",
+            "systemctl restart openldap",
+        )
+      ''
+      + testScript;
+  }) {inherit system pkgs;};
 }

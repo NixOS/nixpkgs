@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, coreutils
-, pythonOlder
-, astunparse
-, jq
-, bc
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  coreutils,
+  pythonOlder,
+  astunparse,
+  jq,
+  bc,
 }:
-
 buildPythonPackage rec {
   pname = "pyp";
   version = "1.0.0";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Easily run Python at the shell! Magical, but never mysterious";
     homepage = "https://github.com/hauntsaninja/pyp";
     license = licenses.mit;
-    maintainers = with maintainers; [ rmcgibbo ];
-   };
+    maintainers = with maintainers; [rmcgibbo];
+  };
 }

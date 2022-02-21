@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, future
-, numpy
-, qdldl
-, setuptools-scm
-, scipy
-# check inputs
-, pytestCheckHook
-, cvxopt
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  future,
+  numpy,
+  qdldl,
+  setuptools-scm,
+  scipy
+  # check inputs
+  ,
+  pytestCheckHook,
+  cvxopt,
 }:
-
 buildPythonPackage rec {
   pname = "osqp";
   version = "0.6.2.post5";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [ cmake setuptools-scm ];
+  nativeBuildInputs = [cmake setuptools-scm];
   dontUseCmakeConfigure = true;
 
   propagatedBuildInputs = [
@@ -33,8 +34,8 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [ "osqp" ];
-  checkInputs = [ pytestCheckHook cvxopt ];
+  pythonImportsCheck = ["osqp"];
+  checkInputs = [pytestCheckHook cvxopt];
   disabledTests = [
     "mkl_"
   ];
@@ -51,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://osqp.org/";
     downloadPage = "https://github.com/oxfordcontrol/osqp-python/releases";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

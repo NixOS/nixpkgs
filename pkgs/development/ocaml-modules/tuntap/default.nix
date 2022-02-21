@@ -1,7 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, ipaddr, macaddr, cmdliner
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ipaddr,
+  macaddr,
+  cmdliner,
 }:
-
 buildDunePackage rec {
   pname = "tuntap";
   version = "2.0.0";
@@ -15,7 +19,7 @@ buildDunePackage rec {
     sha256 = "12wmls28h3jzikwyfw08d5f7ycsc9njwzbhd3qk2l8jnf5rakfsa";
   };
 
-  propagatedBuildInputs = [ ipaddr macaddr cmdliner ];
+  propagatedBuildInputs = [ipaddr macaddr cmdliner];
 
   # tests manipulate network devices and use network
   # also depend on LWT 5

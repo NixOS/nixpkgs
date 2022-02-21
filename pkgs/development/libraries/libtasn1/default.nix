@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, perl, texinfo }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  texinfo,
+}:
 stdenv.mkDerivation rec {
   pname = "libtasn1";
   version = "4.18.0";
@@ -9,16 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Q2XBVJU1Y9ZMZ6AktgfR7nXG23bg0PZXCeqAozTNGJg=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
   outputBin = "dev";
 
-  nativeBuildInputs = [ texinfo perl ];
+  nativeBuildInputs = [texinfo perl];
 
   doCheck = true;
-  preCheck = if stdenv.isDarwin then
-    "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs"
-  else
-    null;
+  preCheck =
+    if stdenv.isDarwin
+    then "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs"
+    else null;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libtasn1/";

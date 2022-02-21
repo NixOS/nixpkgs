@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, coreutils
-, findutils
-, git
-, gnugrep
-, gnused
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  findutils,
+  git,
+  gnugrep,
+  gnused,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "helm-git";
   version = "0.10.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hvycqibmlw2zw3nm8rn73v5x1zcgm2jrfdlljbvc1n4n5vnzdrg";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   # NOTE: helm-git is comprised of shell scripts.
   dontBuild = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     patchShebangs $out/helm-git/helm-git{,-plugin.sh}
     wrapProgram $out/helm-git/helm-git \
-        --prefix PATH : ${lib.makeBinPath [ coreutils findutils git gnugrep gnused ]}
+        --prefix PATH : ${lib.makeBinPath [coreutils findutils git gnugrep gnused]}
 
     runHook postInstall
   '';
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "The Helm downloader plugin that provides GIT protocol support";
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
   };
 }

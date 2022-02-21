@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "trimal";
   version = "1.4.1";
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = "http://trimal.cgenomics.org";
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [maintainers.bzizou];
   };
 }

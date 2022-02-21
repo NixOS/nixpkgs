@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "dht";
   version = "0.25";
@@ -12,13 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "fksi8WBQPydgSlISaZMMnxzt4xN7/Hh7aN6QQ+g/L7s=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "BitTorrent DHT library";
     homepage = "https://github.com/transmission/dht";
     license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     platforms = platforms.unix;
   };
 }

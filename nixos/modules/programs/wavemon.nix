@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.wavemon;
 in {
   options = {
@@ -19,7 +21,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ wavemon ];
+    environment.systemPackages = with pkgs; [wavemon];
     security.wrappers.wavemon = {
       owner = "root";
       group = "root";

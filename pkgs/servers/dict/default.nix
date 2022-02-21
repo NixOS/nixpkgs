@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, which, bison, flex, libmaa, zlib, libtool }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  bison,
+  flex,
+  libmaa,
+  zlib,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "dictd";
   version = "1.13.1";
@@ -9,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5PGmfRaJTYSUVp19yUQsFcw4wBHyuWMcfxzGInZlKhs=";
   };
 
-  buildInputs = [ libmaa zlib ];
+  buildInputs = [libmaa zlib];
 
-  nativeBuildInputs = [ bison flex libtool which ];
+  nativeBuildInputs = [bison flex libtool which];
 
   # In earlier versions, parallel building was not supported but it's OK with 1.13
   enableParallelBuilding = true;
@@ -32,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Dict protocol server and client";
     homepage = "http://www.dict.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

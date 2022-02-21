@@ -1,7 +1,11 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, libX11 }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  dune-configurator,
+  libX11,
+}:
 buildDunePackage rec {
-
   pname = "graphics";
   version = "5.1.2";
 
@@ -12,8 +16,8 @@ buildDunePackage rec {
     sha256 = "sha256-QA/YHSPxy0FGuWl5NCwkeXHdVPWHn/0vgOx80CEuMtQ=";
   };
 
-  buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ libX11 ];
+  buildInputs = [dune-configurator];
+  propagatedBuildInputs = [libX11];
 
   meta = {
     homepage = "https://github.com/ocaml/graphics";

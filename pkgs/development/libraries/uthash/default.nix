@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "uthash";
   version = "2.3.0";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
-  checkInputs = [ perl ];
+  checkInputs = [perl];
   checkTarget = "all";
   preCheck = "cd tests";
 
@@ -22,8 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A hash table for C structures";
-    homepage    = "http://troydhanson.github.io/uthash";
-    license     = licenses.bsd2; # it's one-clause, actually, as it's source-only
-    platforms   = platforms.all;
+    homepage = "http://troydhanson.github.io/uthash";
+    license = licenses.bsd2; # it's one-clause, actually, as it's source-only
+    platforms = platforms.all;
   };
 }

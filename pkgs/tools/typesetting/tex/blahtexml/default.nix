@@ -1,5 +1,11 @@
-{ fetchFromGitHub, lib, stdenv, libiconv, texlive, xercesc }:
-
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  libiconv,
+  texlive,
+  xercesc,
+}:
 stdenv.mkDerivation {
   pname = "blahtexml";
   version = "0.9+date=2020-05-16";
@@ -11,16 +17,16 @@ stdenv.mkDerivation {
     hash = "sha256-ts+2gWsp7+rQu1US2/qEdbttB2Ps12efTSrcioZYsmE=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
-  nativeBuildInputs = [ texlive.combined.scheme-full ];
-  buildInputs = [ xercesc ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [texlive.combined.scheme-full];
+  buildInputs = [xercesc] ++ lib.optionals stdenv.isDarwin [libiconv];
 
   buildFlags =
-    [ "doc" ] ++
-    (if stdenv.isDarwin
-     then [ "blahtex-mac" "blahtexml-mac" ]
-     else [ "blahtex-linux" "blahtexml-linux" ]);
+    ["doc"]
+    ++ (if stdenv.isDarwin
+    then ["blahtex-mac" "blahtexml-mac"]
+    else ["blahtex-linux" "blahtexml-linux"]);
 
   installPhase = ''
     install -D -t "$out/bin" blahtex blahtexml
@@ -42,7 +48,7 @@ stdenv.mkDerivation {
       convert all the formulas of the given XML file into MathML.
     '';
     license = licenses.bsd3;
-    maintainers = [ maintainers.xworld21 ];
+    maintainers = [maintainers.xworld21];
     platforms = platforms.all;
   };
 }

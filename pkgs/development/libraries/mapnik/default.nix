@@ -1,11 +1,27 @@
-{ lib, stdenv, fetchzip
-, boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
-, libwebp, libxml2, proj, python3, python ? python3, sqlite, zlib
-
-# supply a postgresql package to enable the PostGIS input plugin
-, postgresql ? null
+{
+  lib,
+  stdenv,
+  fetchzip,
+  boost,
+  cairo,
+  freetype,
+  gdal,
+  harfbuzz,
+  icu,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  libxml2,
+  proj,
+  python3,
+  python ? python3,
+  sqlite,
+  zlib
+  # supply a postgresql package to enable the PostGIS input plugin
+  ,
+  postgresql ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mapnik";
   version = "3.1.0";
@@ -17,19 +33,31 @@ stdenv.mkDerivation rec {
   };
 
   # a distinct dev output makes python-mapnik fail
-  outputs = [ "out" ];
+  outputs = ["out"];
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [python3];
 
   buildInputs = [
-    boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
-    libwebp proj python sqlite zlib
+    boost
+    cairo
+    freetype
+    gdal
+    harfbuzz
+    icu
+    libjpeg
+    libpng
+    libtiff
+    libwebp
+    proj
+    python
+    sqlite
+    zlib
 
     # optional inputs
     postgresql
   ];
 
-  propagatedBuildInputs = [ libxml2 ];
+  propagatedBuildInputs = [libxml2];
 
   prefixKey = "PREFIX=";
 
@@ -93,7 +121,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers = with maintainers; [ hrdinka erictapen ];
+    maintainers = with maintainers; [hrdinka erictapen];
     license = licenses.lgpl21;
     platforms = platforms.all;
     # https://github.com/mapnik/mapnik/issues/4232

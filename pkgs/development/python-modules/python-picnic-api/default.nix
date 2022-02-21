@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "python-picnic-api";
   version = "1.1.0";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for the Picnic API";
     homepage = "https://github.com/MikeBrink/python-picnic-api";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

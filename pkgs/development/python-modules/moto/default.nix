@@ -1,33 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
-, aws-xray-sdk
-, backports_tempfile
-, boto3
-, botocore
-, cfn-lint
-, docker
-, flask
-, flask-cors
-, freezegun
-, jinja2
-, jsondiff
-, mock
-, pyaml
-, python-jose
-, pytz
-, requests
-, responses
-, six
-, sshpubkeys
-, sure
-, werkzeug
-, xmltodict
-, parameterized
-, idna
-, nose
-, pytestCheckHook
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  fetchpatch,
+  aws-xray-sdk,
+  backports_tempfile,
+  boto3,
+  botocore,
+  cfn-lint,
+  docker,
+  flask,
+  flask-cors,
+  freezegun,
+  jinja2,
+  jsondiff,
+  mock,
+  pyaml,
+  python-jose,
+  pytz,
+  requests,
+  responses,
+  six,
+  sshpubkeys,
+  sure,
+  werkzeug,
+  xmltodict,
+  parameterized,
+  idna,
+  nose,
+  pytestCheckHook,
+  pytest-xdist,
 }:
-
 buildPythonPackage rec {
   pname = "moto";
   version = "3.0.2";
@@ -44,27 +48,29 @@ buildPythonPackage rec {
       --replace "MarkupSafe<2.0" "MarkupSafe" \
   '';
 
-  propagatedBuildInputs = [
-    aws-xray-sdk
-    boto3
-    botocore
-    cfn-lint
-    docker
-    flask # required for server
-    jinja2
-    jsondiff
-    mock
-    pyaml
-    python-jose
-    pytz
-    six
-    requests
-    responses
-    sshpubkeys
-    werkzeug
-    xmltodict
-    idna
-  ] ++ lib.optionals isPy27 [ backports_tempfile ];
+  propagatedBuildInputs =
+    [
+      aws-xray-sdk
+      boto3
+      botocore
+      cfn-lint
+      docker
+      flask # required for server
+      jinja2
+      jsondiff
+      mock
+      pyaml
+      python-jose
+      pytz
+      six
+      requests
+      responses
+      sshpubkeys
+      werkzeug
+      xmltodict
+      idna
+    ]
+    ++ lib.optionals isPy27 [backports_tempfile];
 
   checkInputs = [
     boto3
@@ -270,6 +276,6 @@ buildPythonPackage rec {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/spulec/moto";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

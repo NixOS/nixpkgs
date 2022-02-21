@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "duplicacy";
   version = "2.7.2";
@@ -27,6 +30,6 @@ buildGoPackage rec {
     description = "A new generation cloud backup tool";
     platforms = platforms.linux ++ platforms.darwin;
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ ffinkdevs ];
+    maintainers = with maintainers; [ffinkdevs];
   };
 }

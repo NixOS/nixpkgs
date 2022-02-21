@@ -1,14 +1,20 @@
-{ lib, runCommand, makeWrapper, lndir
-, dconf, hicolor-icon-theme, ibus, librsvg, plugins ? []
-}:
-
-let
+{
+  lib,
+  runCommand,
+  makeWrapper,
+  lndir,
+  dconf,
+  hicolor-icon-theme,
+  ibus,
+  librsvg,
+  plugins ? [],
+}: let
   name = "ibus-with-plugins-" + lib.getVersion ibus;
   env = {
-    buildInputs = [ ibus ] ++ plugins;
-    nativeBuildInputs = [ lndir makeWrapper ];
-    propagatedUserEnvPackages = [ hicolor-icon-theme ];
-    paths = [ ibus ] ++ plugins;
+    buildInputs = [ibus] ++ plugins;
+    nativeBuildInputs = [lndir makeWrapper];
+    propagatedUserEnvPackages = [hicolor-icon-theme];
+    paths = [ibus] ++ plugins;
     inherit (ibus) meta;
   };
   command = ''

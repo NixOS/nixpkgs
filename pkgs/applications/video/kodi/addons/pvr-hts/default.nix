@@ -1,4 +1,9 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+}:
 buildKodiBinaryAddon rec {
   pname = "pvr-hts";
   namespace = "pvr.hts";

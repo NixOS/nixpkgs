@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "skeu";
   version = "0.5.1";
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.pling.com/p/1363834/";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

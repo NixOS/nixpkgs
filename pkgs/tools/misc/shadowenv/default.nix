@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
   version = "2.0.6";
@@ -13,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-gno44ZdLthcp5/+NP12d0C+x1jrmJHNkHSnyuHWl3Zk=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
 
   postInstall = ''
     installManPage man/man1/shadowenv.1
@@ -29,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://shopify.github.io/shadowenv/";
     description = "reversible directory-local environment variable manipulations";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

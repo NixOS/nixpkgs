@@ -1,9 +1,14 @@
-{ lib, runCommand, fetchurl, file, texlive, writeShellScript }:
-
 {
+  lib,
+  runCommand,
+  fetchurl,
+  file,
+  texlive,
+  writeShellScript,
+}: {
   chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
-      (with texlive; combine { inherit scheme-infraonly chktex; })
+      (with texlive; combine {inherit scheme-infraonly chktex;})
     ];
     input = builtins.toFile "chktex-sample.tex" ''
       \documentclass{article}
@@ -19,7 +24,7 @@
   dvipng = lib.recurseIntoAttrs {
     # https://github.com/NixOS/nixpkgs/issues/75605
     basic = runCommand "texlive-test-dvipng-basic" {
-      nativeBuildInputs = [ file texlive.combined.scheme-medium ];
+      nativeBuildInputs = [file texlive.combined.scheme-medium];
       input = fetchurl {
         name = "test_dvipng.tex";
         url = "http://git.savannah.nongnu.org/cgit/dvipng.git/plain/test_dvipng.tex?id=b872753590a18605260078f56cbd6f28d39dc035";
@@ -41,7 +46,7 @@
 
     # test dvipng's limited capability to render postscript specials via GS
     ghostscript = runCommand "texlive-test-ghostscript" {
-      nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
+      nativeBuildInputs = [file (with texlive; combine {inherit scheme-small dvipng;})];
       input = builtins.toFile "postscript-sample.tex" ''
         \documentclass{minimal}
         \begin{document}
@@ -82,7 +87,7 @@
 
   # https://github.com/NixOS/nixpkgs/issues/75070
   dvisvgm = runCommand "texlive-test-dvisvgm" {
-    nativeBuildInputs = [ file texlive.combined.scheme-medium ];
+    nativeBuildInputs = [file texlive.combined.scheme-medium];
     input = builtins.toFile "dvisvgm-sample.tex" ''
       \documentclass{article}
       \begin{document}
@@ -108,10 +113,11 @@
 
   texdoc = runCommand "texlive-test-texdoc" {
     nativeBuildInputs = [
-      (with texlive; combine {
-        inherit scheme-infraonly luatex texdoc;
-        pkgFilter = pkg: lib.elem pkg.tlType [ "run" "bin" "doc" ];
-      })
+      (with texlive;
+        combine {
+          inherit scheme-infraonly luatex texdoc;
+          pkgFilter = pkg: lib.elem pkg.tlType ["run" "bin" "doc"];
+        })
     ];
   } ''
     texdoc --version

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cffi
-, libspotify
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cffi,
+  libspotify,
 }:
-
 buildPythonPackage rec {
   pname = "pyspotify";
   version = "2.1.3";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
     sha256 = "sha256-CjIRwSlR5HPOJ9tp7lrdcDPiKH3p/PxvEJ8sqVD5s3Q=";
   };
 
-  propagatedBuildInputs = [ cffi ];
-  buildInputs = [ libspotify ];
+  propagatedBuildInputs = [cffi];
+  buildInputs = [libspotify];
 
   # python zip complains about old timestamps
   preConfigure = ''
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "http://pyspotify.mopidy.com";
     description = "A Python interface to Spotify’s online music streaming service";
     license = licenses.unfree;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [lovek323];
   };
 }

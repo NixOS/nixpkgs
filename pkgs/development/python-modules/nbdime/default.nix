@@ -1,28 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, hypothesis
-, setuptools-scm
-, six
-, attrs
-, py
-, setuptools
-, pytest-cov
-, pytest-timeout
-, pytest-tornado
-, mock
-, tabulate
-, nbformat
-, jsonschema
-, pytestCheckHook
-, colorama
-, pygments
-, tornado
-, requests
-, GitPython
-, jupyter-server-mathjax
-, notebook
-, jinja2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  hypothesis,
+  setuptools-scm,
+  six,
+  attrs,
+  py,
+  setuptools,
+  pytest-cov,
+  pytest-timeout,
+  pytest-tornado,
+  mock,
+  tabulate,
+  nbformat,
+  jsonschema,
+  pytestCheckHook,
+  colorama,
+  pygments,
+  tornado,
+  requests,
+  GitPython,
+  jupyter-server-mathjax,
+  notebook,
+  jinja2,
 }:
-
 buildPythonPackage rec {
   pname = "nbdime";
   version = "3.1.1";
@@ -53,7 +56,7 @@ buildPythonPackage rec {
     "test_merge"
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
   propagatedBuildInputs = [
     attrs
@@ -69,12 +72,12 @@ buildPythonPackage rec {
     GitPython
     notebook
     jinja2
-    ];
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";
     description = "Tools for diffing and merging of Jupyter notebooks.";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ tbenst ];
+    maintainers = with maintainers; [tbenst];
   };
 }

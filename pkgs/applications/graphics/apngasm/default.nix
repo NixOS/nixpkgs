@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, libpng, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  libpng,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "apngasm";
   version = "3.1.9";
@@ -11,16 +18,15 @@ stdenv.mkDerivation rec {
     sha256 = "0pk0r8x1950pm6j3d5wgryvy3ldm7a9gl59jmnwnjmg1sf9mzf97";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ boost libpng zlib ];
+  buildInputs = [boost libpng zlib];
 
   meta = with lib; {
     description = "Create an APNG from multiple PNG files";
     homepage = "https://github.com/apngasm/apngasm";
     license = licenses.zlib;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
-
 }

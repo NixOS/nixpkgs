@@ -1,19 +1,17 @@
-{ system ? builtins.currentSystem,
+{
+  system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. {inherit system config;},
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
-let
+with import ../lib/testing-python.nix {inherit system pkgs;}; let
   inherit (pkgs) lib;
 
   tests = {
     default = {
       name = "sddm";
 
-      machine = { ... }: {
-        imports = [ ./common/user-account.nix ];
+      machine = {...}: {
+        imports = [./common/user-account.nix];
         services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
         services.xserver.displayManager.defaultSession = "none+icewm";
@@ -22,7 +20,7 @@ let
 
       enableOCR = true;
 
-      testScript = { nodes, ... }: let
+      testScript = {nodes, ...}: let
         user = nodes.machine.config.users.users.alice;
       in ''
         start_all()
@@ -38,11 +36,11 @@ let
     autoLogin = {
       name = "sddm-autologin";
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ ttuegel ];
+        maintainers = [ttuegel];
       };
 
-      machine = { ... }: {
-        imports = [ ./common/user-account.nix ];
+      machine = {...}: {
+        imports = [./common/user-account.nix];
         services.xserver.enable = true;
         services.xserver.displayManager = {
           sddm.enable = true;
@@ -55,7 +53,7 @@ let
         services.xserver.windowManager.icewm.enable = true;
       };
 
-      testScript = { nodes, ... }: let
+      testScript = {nodes, ...}: let
         user = nodes.machine.config.users.users.alice;
       in ''
         start_all()

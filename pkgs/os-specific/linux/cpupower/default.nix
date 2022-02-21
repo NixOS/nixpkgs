@@ -1,11 +1,17 @@
-{ lib, stdenv, buildPackages, kernel, pciutils, gettext }:
-
+{
+  lib,
+  stdenv,
+  buildPackages,
+  kernel,
+  pciutils,
+  gettext,
+}:
 stdenv.mkDerivation {
   pname = "cpupower";
   inherit (kernel) version src;
 
-  nativeBuildInputs = [ gettext ];
-  buildInputs = [ pciutils ];
+  nativeBuildInputs = [gettext];
+  buildInputs = [pciutils];
 
   postPatch = ''
     cd tools/power/cpupower
@@ -21,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   installFlags = lib.mapAttrsToList
-    (n: v: "${n}dir=${placeholder "out"}/${v}") {
+  (n: v: "${n}dir=${placeholder "out"}/${v}") {
     bin = "bin";
     sbin = "sbin";
     man = "share/man";

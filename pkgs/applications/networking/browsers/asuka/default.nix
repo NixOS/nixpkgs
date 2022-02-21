@@ -1,5 +1,13 @@
-{ lib, stdenv, rustPlatform, fetchFromSourcehut, pkg-config, ncurses, openssl, Security }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromSourcehut,
+  pkg-config,
+  ncurses,
+  openssl,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "asuka";
   version = "0.8.3";
@@ -13,9 +21,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-twECZM1KcWeQptLhlKlIz16r3Q/xMb0e+lBG+EX79mU=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ ncurses openssl ]
+  buildInputs =
+    [ncurses openssl]
     ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
@@ -23,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~julienxx/asuka";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
   };
 }

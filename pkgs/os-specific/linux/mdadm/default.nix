@@ -1,5 +1,12 @@
-{ lib, stdenv, util-linux, coreutils, fetchurl, groff, system-sendmail }:
-
+{
+  lib,
+  stdenv,
+  util-linux,
+  coreutils,
+  fetchurl,
+  groff,
+  system-sendmail,
+}:
 stdenv.mkDerivation rec {
   pname = "mdadm";
   version = "4.1";
@@ -9,22 +16,27 @@ stdenv.mkDerivation rec {
     sha256 = "0jjgjgqijpdp7ijh8slzzjjw690kydb1jjadf0x5ilq85628hxmb";
   };
 
-  patches = [ ./no-self-references.patch ];
+  patches = [./no-self-references.patch];
 
-  makeFlags = [
-    "NIXOS=1" "INSTALL=install" "BINDIR=$(out)/sbin"
-    "SYSTEMD_DIR=$(out)/lib/systemd/system"
-    "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
-    "STRIP="
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags =
+    [
+      "NIXOS=1"
+      "INSTALL=install"
+      "BINDIR=$(out)/sbin"
+      "SYSTEMD_DIR=$(out)/lib/systemd/system"
+      "MANDIR=$(out)/share/man"
+      "RUN_DIR=/dev/.mdadm"
+      "STRIP="
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ];
 
-  installFlags = [ "install-systemd" ];
+  installFlags = ["install-systemd"];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [groff];
 
   postPatch = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
@@ -46,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "Programs for managing RAID arrays under Linux";
     homepage = "http://neil.brown.name/blog/mdadm";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ekleog ];
+    maintainers = with maintainers; [ekleog];
     platforms = platforms.linux;
   };
 }

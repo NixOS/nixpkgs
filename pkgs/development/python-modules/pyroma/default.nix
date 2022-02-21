@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, docutils
-, python
-, pygments
-, setuptools
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  docutils,
+  python,
+  pygments,
+  setuptools,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pyroma";
   version = "3.2";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest -k 'not PyPITest' pyroma.tests
   '';
 
-  pythonImportsCheck = [ "pyroma" ];
+  pythonImportsCheck = ["pyroma"];
 
   meta = with lib; {
     description = "Test your project's packaging friendliness";
     homepage = "https://github.com/regebro/pyroma";
     license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    maintainers = with maintainers; [kamadorueda];
   };
 }

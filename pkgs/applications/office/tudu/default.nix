@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "tudu";
   version = "0.10.4";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "14srqn968ii3sr4v6xc5zzs50dmm9am22lrm57j7n0rhjclwbssy";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   preConfigure = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace configure \

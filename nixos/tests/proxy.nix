@@ -1,26 +1,24 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-let
-  backend = { pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: let
+  backend = {pkgs, ...}: {
     services.httpd = {
       enable = true;
       adminAddr = "foo@example.org";
       virtualHosts.localhost.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
     };
-    networking.firewall.allowedTCPPorts = [ 80 ];
+    networking.firewall.allowedTCPPorts = [80];
   };
 in {
   name = "proxy";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [eelco];
   };
 
   nodes = {
-    proxy = { nodes, ... }: {
+    proxy = {nodes, ...}: {
       services.httpd = {
         enable = true;
         adminAddr = "bar@example.org";
-        extraModules = [ "proxy_balancer" "lbmethod_byrequests" ];
+        extraModules = ["proxy_balancer" "lbmethod_byrequests"];
         extraConfig = ''
           ExtendedStatus on
         '';
@@ -47,13 +45,13 @@ in {
           '';
         };
       };
-      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.firewall.allowedTCPPorts = [80];
     };
 
     backend1 = backend;
     backend2 = backend;
 
-    client = { ... }: { };
+    client = {...}: {};
   };
 
   testScript = ''

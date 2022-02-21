@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
-, testfixtures
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
+  testfixtures,
 }:
-
 buildPythonPackage rec {
   pname = "logfury";
   version = "1.0.1";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Python module that allows for responsible, low-boilerplate logging of method calls";
     homepage = "https://github.com/ppolewicz/logfury";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with maintainers; [jwiegley];
   };
 }

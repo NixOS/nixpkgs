@@ -1,5 +1,11 @@
-{lib, stdenv, fetchurl, automake, autoconf, libtool}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  automake,
+  autoconf,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "libdnet";
   version = "1.12";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "09mhbr8x66ykhf5581a5zjpplpjxibqzgkkpx689kybwg0wk1cw3";
   };
 
-  buildInputs = [ automake autoconf libtool ];
+  buildInputs = [automake autoconf libtool];
 
   # .so endings are missing (quick and dirty fix)
   postInstall = ''

@@ -1,16 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.zerotierone;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.zerotierone;
+in {
   options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
 
   options.services.zerotierone.joinNetworks = mkOption {
     default = [];
-    example = [ "a8a2c3c10c1a68de" ];
+    example = ["a8a2c3c10c1a68de"];
     type = types.listOf types.str;
     description = ''
       List of ZeroTier Network IDs to join on startup
@@ -38,19 +39,22 @@ in
     systemd.services.zerotierone = {
       description = "ZeroTierOne";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      wants = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      wants = ["network-online.target"];
 
-      path = [ cfg.package ];
+      path = [cfg.package];
 
-      preStart = ''
-        mkdir -p /var/lib/zerotier-one/networks.d
-        chmod 700 /var/lib/zerotier-one
-        chown -R root:root /var/lib/zerotier-one
-      '' + (concatMapStrings (netId: ''
-        touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
-      '') cfg.joinNetworks);
+      preStart =
+        ''
+          mkdir -p /var/lib/zerotier-one/networks.d
+          chmod 700 /var/lib/zerotier-one
+          chown -R root:root /var/lib/zerotier-one
+        ''
+        + (concatMapStrings (netId: ''
+          touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
+        '')
+        cfg.joinNetworks);
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zerotier-one -p${toString cfg.port}";
         Restart = "always";
@@ -60,12 +64,12 @@ in
     };
 
     # ZeroTier does not issue DHCP leases, but some strangers might...
-    networking.dhcpcd.denyInterfaces = [ "zt*" ];
+    networking.dhcpcd.denyInterfaces = ["zt*"];
 
     # ZeroTier receives UDP transmissions
-    networking.firewall.allowedUDPPorts = [ cfg.port ];
+    networking.firewall.allowedUDPPorts = [cfg.port];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     # Prevent systemd from potentially changing the MAC address
     systemd.network.links."50-zerotier" = {

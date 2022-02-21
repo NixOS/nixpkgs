@@ -1,50 +1,47 @@
 # Module for rdnssd, a daemon that configures DNS servers in
 # /etc/resolv/conf from IPv6 RDNSS advertisements.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   mergeHook = pkgs.writeScript "rdnssd-merge-hook" ''
     #! ${pkgs.runtimeShell} -e
     ${pkgs.openresolv}/bin/resolvconf -u
   '';
-in
-{
-
+in {
   ###### interface
 
   options = {
-
     services.rdnssd.enable = mkOption {
       type = types.bool;
       default = false;
       #default = config.networking.enableIPv6;
-      description =
-        ''
-          Whether to enable the RDNSS daemon
-          (<command>rdnssd</command>), which configures DNS servers in
-          <filename>/etc/resolv.conf</filename> from RDNSS
-          advertisements sent by IPv6 routers.
-        '';
+      description = ''
+        Whether to enable the RDNSS daemon
+        (<command>rdnssd</command>), which configures DNS servers in
+        <filename>/etc/resolv.conf</filename> from RDNSS
+        advertisements sent by IPv6 routers.
+      '';
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.rdnssd.enable {
-
-    assertions = [{
-      assertion = config.networking.resolvconf.enable;
-      message = "rdnssd needs resolvconf to work (probably something sets up a static resolv.conf)";
-    }];
+    assertions = [
+      {
+        assertion = config.networking.resolvconf.enable;
+        message = "rdnssd needs resolvconf to work (probably something sets up a static resolv.conf)";
+      }
+    ];
 
     systemd.services.rdnssd = {
       description = "RDNSS daemon";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       preStart = ''
         # Create the proper run directory
@@ -76,7 +73,5 @@ in
       group = "rdnssd";
     };
     users.groups.rdnssd = {};
-
   };
-
 }

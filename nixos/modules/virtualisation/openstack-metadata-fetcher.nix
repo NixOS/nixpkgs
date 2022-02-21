@@ -1,5 +1,7 @@
-{ targetRoot, wgetExtraOptions }:
-
+{
+  targetRoot,
+  wgetExtraOptions,
+}:
 # OpenStack's metadata service aims to be EC2-compatible. Where
 # possible, try to keep the set of fetched metadata in sync with
 # ./ec2-metadata-fetcher.nix .

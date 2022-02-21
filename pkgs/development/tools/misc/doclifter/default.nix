@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, python3, makeWrapper, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  makeWrapper,
+  libxml2,
+}:
 stdenv.mkDerivation rec {
   pname = "doclifter";
   version = "2.20";
@@ -7,12 +13,12 @@ stdenv.mkDerivation rec {
     url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
     sha256 = "sha256-BEuMbICJ8TD3+VjUr8rmhss7XlPNjxSy1P0SkmKLPsc=";
   };
-  buildInputs = [ python3 ];
-  nativeBuildInputs = [ python3 makeWrapper ];
+  buildInputs = [python3];
+  nativeBuildInputs = [python3 makeWrapper];
 
   strictDeps = true;
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   preInstall = ''
     mkdir -p $out/bin

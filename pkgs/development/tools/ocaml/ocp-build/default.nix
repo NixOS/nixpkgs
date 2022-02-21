@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ncurses, cmdliner, re }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ocaml,
+  findlib,
+  ncurses,
+  cmdliner,
+  re,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocp-build";
   version = "1.99.21";
@@ -19,8 +28,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ocaml findlib cmdliner re ];
-  propagatedBuildInputs = [ ncurses ];
+  buildInputs = [ocaml findlib cmdliner re];
+  propagatedBuildInputs = [ncurses];
   preInstall = "mkdir -p $out/bin";
 
   meta = with lib; {
@@ -35,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = ocaml.meta.platforms or [];
-    maintainers = [ maintainers.jirkamarsik ];
+    maintainers = [maintainers.jirkamarsik];
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, fuse, glib, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  fuse,
+  glib,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "fuseiso";
   version = "20070708";
@@ -32,9 +41,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [ fuse glib zlib ];
+  buildInputs = [fuse glib zlib];
 
   # after autoreconfHook, glib and zlib are not found, so force link against
   # them

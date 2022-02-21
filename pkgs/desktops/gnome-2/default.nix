@@ -1,89 +1,110 @@
-{ config, stdenv, pkgs, lib }:
+{
+  config,
+  stdenv,
+  pkgs,
+  lib,
+}:
+lib.makeScope pkgs.newScope (self:
+  with self;
+    {
+      #### PLATFORM
 
-lib.makeScope pkgs.newScope (self: with self; {
+      libIDL = callPackage ./platform/libIDL {
+        gettext =
+          if stdenv.isDarwin
+          then pkgs.gettext
+          else null;
+      };
 
-#### PLATFORM
+      ORBit2 = callPackage ./platform/ORBit2 {};
 
-  libIDL = callPackage ./platform/libIDL {
-    gettext = if stdenv.isDarwin then pkgs.gettext else null;
-  };
+      libart_lgpl = callPackage ./platform/libart_lgpl {};
 
-  ORBit2 = callPackage ./platform/ORBit2 { };
+      libglade = callPackage ./platform/libglade {};
 
-  libart_lgpl = callPackage ./platform/libart_lgpl { };
+      libgnomeprint = callPackage ./platform/libgnomeprint {};
 
-  libglade = callPackage ./platform/libglade { };
+      libgnomeprintui = callPackage ./platform/libgnomeprintui {};
 
-  libgnomeprint = callPackage ./platform/libgnomeprint { };
+      libgnomecups = callPackage ./platform/libgnomecups {};
 
-  libgnomeprintui = callPackage ./platform/libgnomeprintui { };
+      libgtkhtml = callPackage ./platform/libgtkhtml {};
 
-  libgnomecups = callPackage ./platform/libgnomecups { };
+      GConf = callPackage ./platform/GConf {};
 
-  libgtkhtml = callPackage ./platform/libgtkhtml { };
+      libgnomecanvas = callPackage ./platform/libgnomecanvas {};
 
-  GConf = callPackage ./platform/GConf { };
+      libgnomecanvasmm = callPackage ./platform/libgnomecanvasmm {};
 
-  libgnomecanvas = callPackage ./platform/libgnomecanvas { };
+      # for git-head builds
+      gnome-common = callPackage platform/gnome-common {};
 
-  libgnomecanvasmm = callPackage ./platform/libgnomecanvasmm { };
+      gnome_mime_data = callPackage ./platform/gnome-mime-data {};
 
-  # for git-head builds
-  gnome-common = callPackage platform/gnome-common { };
+      gnome_python = callPackage ./bindings/gnome-python {};
 
-  gnome_mime_data = callPackage ./platform/gnome-mime-data { };
+      gnome_python_desktop = callPackage ./bindings/gnome-python-desktop {};
 
-  gnome_python = callPackage ./bindings/gnome-python { };
+      gnome_vfs = callPackage ./platform/gnome-vfs {};
 
-  gnome_python_desktop = callPackage ./bindings/gnome-python-desktop { };
+      libgnome = callPackage ./platform/libgnome {};
 
-  gnome_vfs = callPackage ./platform/gnome-vfs { };
+      libgnomeui = callPackage ./platform/libgnomeui {};
 
-  libgnome = callPackage ./platform/libgnome { };
+      libbonobo = callPackage ./platform/libbonobo {};
 
-  libgnomeui = callPackage ./platform/libgnomeui { };
+      libbonoboui = callPackage ./platform/libbonoboui {};
 
-  libbonobo = callPackage ./platform/libbonobo { };
+      gtkhtml = callPackage ./platform/gtkhtml {enchant = pkgs.enchant1;};
 
-  libbonoboui = callPackage ./platform/libbonoboui { };
+      gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix {enchant = pkgs.enchant2;};
 
-  gtkhtml = callPackage ./platform/gtkhtml { enchant = pkgs.enchant1; };
+      gtkglext = callPackage ./platform/gtkglext {};
 
-  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant2; };
+      #### DESKTOP
 
-  gtkglext = callPackage ./platform/gtkglext { };
+      # Removed from recent GNOME releases, but still required
+      scrollkeeper = callPackage ./desktop/scrollkeeper {};
 
-#### DESKTOP
+      gtksourceview = callPackage ./desktop/gtksourceview {
+        autoreconfHook = pkgs.autoreconfHook269;
+      };
+    }
+    // lib.optionalAttrs (config.allowAliases or true) {
+      inherit
+        (pkgs)
+        # GTK Libs
+        glib
+        glibmm
+        atk
+        atkmm
+        cairo
+        pango
+        pangomm
+        gdk_pixbuf
+        gtkmm2
+        libcanberra-gtk2
+        # Included for backwards compatibility
+        libsoup
+        libwnck2
+        gtk-doc
+        gnome-doc-utils
+        rarian
+        gvfs
+        # added 2019-09-03
+        ;
 
-  # Removed from recent GNOME releases, but still required
-  scrollkeeper = callPackage ./desktop/scrollkeeper { };
+      gtk = pkgs.gtk2;
+      gtkmm = pkgs.gtkmm2;
+      python_rsvg = self.gnome_python_desktop;
 
-  gtksourceview = callPackage ./desktop/gtksourceview {
-    autoreconfHook = pkgs.autoreconfHook269;
-  };
-
-} // lib.optionalAttrs (config.allowAliases or true) {
-  inherit (pkgs)
-    # GTK Libs
-    glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
-
-    # Included for backwards compatibility
-    libsoup libwnck2 gtk-doc gnome-doc-utils rarian
-
-    gvfs # added 2019-09-03
-  ;
-
-  gtk = pkgs.gtk2;
-  gtkmm = pkgs.gtkmm2;
-  python_rsvg = self.gnome_python_desktop;
-
-  gtkdoc = pkgs.gtk-doc;
-  startup_notification = pkgs.libstartup_notification;
-  startupnotification = pkgs.libstartup_notification;
-  gnomedocutils = pkgs.gnome-doc-utils;
-  gnome-icon-theme = pkgs.gnome-icon-theme;
-  gnome_icon_theme = self.gnome-icon-theme;
-  gnomeicontheme = self.gnome-icon-theme;
-  gnome_common = gnome-common;
-  libglademm = throw "libglademm has been removed"; # 2022-01-15
-})
+      gtkdoc = pkgs.gtk-doc;
+      startup_notification = pkgs.libstartup_notification;
+      startupnotification = pkgs.libstartup_notification;
+      gnomedocutils = pkgs.gnome-doc-utils;
+      gnome-icon-theme = pkgs.gnome-icon-theme;
+      gnome_icon_theme = self.gnome-icon-theme;
+      gnomeicontheme = self.gnome-icon-theme;
+      gnome_common = gnome-common;
+      libglademm = throw "libglademm has been removed"; # 2022-01-15
+    })

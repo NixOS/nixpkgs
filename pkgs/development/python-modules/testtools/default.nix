@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, python-mimeparse
-, extras
-, unittest2
-, traceback2
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  python-mimeparse,
+  extras,
+  unittest2,
+  traceback2,
+  testscenarios,
 }:
-
 buildPythonPackage rec {
   pname = "testtools";
   version = "2.5.0";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
     sha256 = "57c13433d94f9ffde3be6534177d10fb0c1507cc499319128958ca91a65cb23f";
   };
 
-  propagatedBuildInputs = [ pbr python-mimeparse extras ];
-  buildInputs = [ traceback2 ];
+  propagatedBuildInputs = [pbr python-mimeparse extras];
+  buildInputs = [traceback2];
 
   # testscenarios has a circular dependency on testtools
   doCheck = false;
-  checkInputs = [ testscenarios ];
+  checkInputs = [testscenarios];
 
   # testtools 2.0.0 and up has a circular run-time dependency on futures
   postPatch = ''

@@ -1,8 +1,10 @@
 {
-  stdenv, lib, fetchurl,
-  cmake, perl,
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  perl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rinutils";
   version = "0.10.0";
@@ -17,5 +19,5 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cNifCoRk+PSU8zcEt8k5bn/KOS6Kr6pEZXEMGjiemAY=";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [cmake perl];
 }

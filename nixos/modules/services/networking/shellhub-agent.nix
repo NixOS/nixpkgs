@@ -1,16 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.shellhub-agent;
 in {
-
   ###### interface
 
   options = {
-
     services.shellhub-agent = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -60,13 +60,12 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-
     systemd.services.shellhub-agent = {
       description = "ShellHub Agent";
 
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "local-fs.target" ];
-      wants = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["local-fs.target"];
+      wants = ["network-online.target"];
       after = [
         "local-fs.target"
         "network.target"
@@ -86,6 +85,6 @@ in {
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
 }

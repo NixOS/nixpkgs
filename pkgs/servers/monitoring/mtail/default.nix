@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "mtail";
   version = "3.0.0-rc46";
@@ -15,7 +18,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/mtail" ];
+  subPackages = ["cmd/mtail"];
 
   preBuild = ''
     go generate -x ./internal/vm/

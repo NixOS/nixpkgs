@@ -1,21 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, cairo
-, giflib
-, glib
-, gtk2-x11
-, libjpeg
-, libpcap
-, libpng
-, libwebsockets
-, pkg-config
-, libuv
-, openssl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  cairo,
+  giflib,
+  glib,
+  gtk2-x11,
+  libjpeg,
+  libpcap,
+  libpng,
+  libwebsockets,
+  pkg-config,
+  libuv,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "driftnet";
   version = "1.3.0";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
 
   buildInputs = [
     cairo
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [offline];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2Plus;
   };

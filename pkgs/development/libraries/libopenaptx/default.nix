@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "libopenaptx";
   version = "0.2.1";
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = "https://github.com/pali/libopenaptx";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

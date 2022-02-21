@@ -1,5 +1,9 @@
-{ fetchurl, lib, stdenv, elf-header }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  elf-header,
+}:
 stdenv.mkDerivation rec {
   pname = "paxctl";
   version = "0.9";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0biw882fp1lmgs6kpxznp1v6758r7dg9x8iv5a06k0b82bcdsc53";
   };
 
-  buildInputs = [ elf-header ];
+  buildInputs = [elf-header];
 
   preBuild = ''
     sed -i Makefile \
@@ -26,9 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool for controlling PaX flags on a per binary basis";
-    homepage    = "https://pax.grsecurity.net";
-    license     = licenses.gpl2;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice ];
+    homepage = "https://pax.grsecurity.net";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "anybadge";
   version = "1.8.0";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python tool for generating badges for your projects";
     homepage = "https://github.com/jongracecox/anybadge";
     license = licenses.mit;
-    maintainers = with maintainers; [ fabiangd ];
+    maintainers = with maintainers; [fabiangd];
   };
 }

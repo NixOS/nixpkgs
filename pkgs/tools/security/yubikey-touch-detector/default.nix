@@ -1,5 +1,10 @@
-{ lib, libnotify, buildGoModule, fetchFromGitHub, pkg-config }:
-
+{
+  lib,
+  libnotify,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+}:
 buildGoModule rec {
   pname = "yubikey-touch-detector";
   version = "1.9.3";
@@ -12,14 +17,14 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-H05EJwYDdg4lq6+psXiwujQd5g294epdRPjqviHhLWs=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libnotify ];
+  buildInputs = [libnotify];
 
   meta = with lib; {
     description = "A tool to detect when your YubiKey is waiting for a touch (to send notification or display a visual indicator on the screen).";
     homepage = "https://github.com/maximbaz/yubikey-touch-detector";
-    maintainers = with maintainers; [ sumnerevans ];
+    maintainers = with maintainers; [sumnerevans];
     license = licenses.isc;
     platforms = platforms.unix;
   };

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "yapf";
   version = "0.32.0";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
       takes away some of the drudgery of maintaining your code.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres siddharthist ];
+    maintainers = with maintainers; [AndersonTorres siddharthist];
   };
 }

@@ -1,8 +1,8 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "slugid";
   version = "2.0.0";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "URL-safe base64 UUID encoder for generating 22 character slugs";
     homepage = "https://github.com/taskcluster/slugid.py";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ milahu ];
+    maintainers = with maintainers; [milahu];
   };
 }

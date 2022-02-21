@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, unixtools }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  unixtools,
+}:
 stdenv.mkDerivation rec {
   pname = "microscheme";
   version = "0.9.3";
@@ -15,9 +20,9 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile --replace gcc ${stdenv.cc.targetPrefix}cc
   '';
 
-  nativeBuildInputs = [ makeWrapper unixtools.xxd ];
+  nativeBuildInputs = [makeWrapper unixtools.xxd];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = ["PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     homepage = "https://ryansuchocki.github.io/microscheme/";
@@ -28,6 +33,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ardumont ];
+    maintainers = with maintainers; [ardumont];
   };
 }

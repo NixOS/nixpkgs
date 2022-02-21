@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, libX11, libXext, makeWrapper, ncurses, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXext,
+  makeWrapper,
+  ncurses,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self
   # so that it can be written to when using the Self transposer. Running 'Self'
@@ -21,8 +29,8 @@ stdenv.mkDerivation rec {
     sha256 = "C/1Q6yFmoXx2F97xuvkm8DxFmmvuBS7uYZOxq/CRNog=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ ncurses libX11 libXext ];
+  nativeBuildInputs = [cmake makeWrapper];
+  buildInputs = [ncurses libX11 libXext];
 
   selfWrapper = ./self;
 
@@ -39,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "A prototype-based dynamic object-oriented programming language, environment, and virtual machine";
     homepage = "https://selflanguage.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.doublec ];
+    maintainers = [maintainers.doublec];
     platforms = platforms.linux;
   };
 }

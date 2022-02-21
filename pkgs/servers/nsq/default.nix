@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "nsq";
   version = "1.2.1";
@@ -13,9 +16,9 @@ buildGoModule rec {
 
   vendorSha256 = "11sx96zshaciqrm8rqmhz1sf6nd4lczqwiha031xyyifvmpp2hsa";
 
-  excludedPackages = [ "bench" ];
+  excludedPackages = ["bench"];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   meta = with lib; {
     homepage = "https://nsq.io/";

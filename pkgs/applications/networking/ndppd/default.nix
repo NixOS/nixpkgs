@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gzip }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gzip,
+}:
 stdenv.mkDerivation rec {
   pname = "ndppd";
   version = "0.2.5";
@@ -29,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/DanielAdolfsson/ndppd";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fadenb globin ];
+    maintainers = with maintainers; [fadenb globin];
   };
 }

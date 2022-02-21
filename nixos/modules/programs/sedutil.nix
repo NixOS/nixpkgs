@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.sedutil;
-
 in {
   options.programs.sedutil.enable = mkEnableOption "sedutil";
 
@@ -13,6 +14,6 @@ in {
       "libata.allow_tpm=1"
     ];
 
-    environment.systemPackages = with pkgs; [ sedutil ];
+    environment.systemPackages = with pkgs; [sedutil];
   };
 }

@@ -1,6 +1,10 @@
-{ lib, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
-
-let
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  gsettings-desktop-schemas,
+  gtk3,
+}: let
   pname = "altair";
   version = "4.1.0";
   name = "${pname}-v${version}";
@@ -10,29 +14,29 @@ let
     sha256 = "sha256-YuG7H+7FXYGbNNhM5vxps72dqltcj3bA325e7ZbW8aI=";
   };
 
-  appimageContents = appimageTools.extract { inherit name src; };
+  appimageContents = appimageTools.extract {inherit name src;};
 in
-appimageTools.wrapType2 {
-  inherit src name;
+  appimageTools.wrapType2 {
+    inherit src name;
 
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
+    profile = ''
+      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+    '';
 
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+    extraInstallCommands = ''
+      mv $out/bin/${name} $out/bin/${pname}
 
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
-  '';
+      install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/${pname}.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}'
+      cp -r ${appimageContents}/usr/share/icons $out/share
+    '';
 
-  meta = with lib; {
-    description = "A feature-rich GraphQL Client IDE";
-    homepage = "https://github.com/imolorhe/altair";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evalexpr ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "A feature-rich GraphQL Client IDE";
+      homepage = "https://github.com/imolorhe/altair";
+      license = licenses.mit;
+      maintainers = with maintainers; [evalexpr];
+      platforms = ["x86_64-linux"];
+    };
+  }

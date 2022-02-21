@@ -1,7 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
-, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libxslt,
+  libaio,
+  systemd,
+  perl,
+  docbook_xsl,
+  coreutils,
+  lsof,
+  rdma-core,
+  makeWrapper,
+  sg3_utils,
+  util-linux,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tgt";
   version = "1.0.81";
@@ -13,9 +25,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SgMpoaVAuTbgpmnXRfQFWlK5gl01fsE9vJxu3C2ctPU=";
   };
 
-  nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
+  nativeBuildInputs = [libxslt docbook_xsl makeWrapper];
 
-  buildInputs = [ systemd libaio ];
+  buildInputs = [systemd libaio];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -35,9 +47,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/sbin/tgt-admin \
-      --replace "#!/usr/bin/perl" "#! ${perl.withPackages (p: [ p.ConfigGeneral ])}/bin/perl"
+      --replace "#!/usr/bin/perl" "#! ${perl.withPackages (p: [p.ConfigGeneral])}/bin/perl"
     wrapProgram $out/sbin/tgt-admin --prefix PATH : \
-      ${lib.makeBinPath [ lsof sg3_utils (placeholder "out") ]}
+      ${lib.makeBinPath [lsof sg3_utils (placeholder "out")]}
 
     install -D scripts/tgtd.service $out/etc/systemd/system/tgtd.service
     substituteInPlace $out/etc/systemd/system/tgtd.service \
@@ -54,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fujita/tgt";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ johnazoidberg ];
+    maintainers = with maintainers; [johnazoidberg];
   };
 }

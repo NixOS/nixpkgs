@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyannotate
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyannotate,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-annotate";
   version = "1.0.4";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Generate PyAnnotate annotations from your pytest tests";
     homepage = "https://github.com/kensho-technologies/pytest-annotate";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

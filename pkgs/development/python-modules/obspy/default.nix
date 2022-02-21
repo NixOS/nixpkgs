@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, decorator
-, future
-, lxml
-, matplotlib
-, numpy
-, requests
-, scipy
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  decorator,
+  future,
+  lxml,
+  matplotlib,
+  numpy,
+  requests,
+  scipy,
+  sqlalchemy,
 }:
-
 buildPythonPackage rec {
   pname = "obspy";
   version = "1.2.2";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
   # Tests require Internet access.
   doCheck = false;
 
-  pythonImportsCheck = [ "obspy" ];
+  pythonImportsCheck = ["obspy"];
 
   meta = with lib; {
     description = "Python framework for seismological observatories";
     homepage = "https://www.obspy.org";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.ametrine ];
+    maintainers = [maintainers.ametrine];
   };
 }

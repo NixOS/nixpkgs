@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "sharkiqpy";
   version = "0.1.9";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "sharkiqpy" ];
+  pythonImportsCheck = ["sharkiqpy"];
 
   meta = with lib; {
     description = "Python API for Shark IQ robot";
     homepage = "https://github.com/ajmarks/sharkiq";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

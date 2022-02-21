@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, libbladeRF
-, libusb1
-, ncurses
-, rtl-sdr
-, hackrf
-, limesuite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libbladeRF,
+  libusb1,
+  ncurses,
+  rtl-sdr,
+  hackrf,
+  limesuite,
 }:
-
 stdenv.mkDerivation rec {
   pname = "dump1090";
   version = "7.1";
@@ -20,20 +21,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1fD8ZMkTS/r+p1rrOfJhH2sz3sJCapQcvk8f8crGApw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [
-    libbladeRF
-    libusb1
-    ncurses
-    rtl-sdr
-    hackrf
-  ] ++ lib.optional stdenv.isLinux limesuite;
+  buildInputs =
+    [
+      libbladeRF
+      libusb1
+      ncurses
+      rtl-sdr
+      hackrf
+    ]
+    ++ lib.optional stdenv.isLinux limesuite;
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-implicit-function-declaration -Wno-int-conversion";
+  "-Wno-implicit-function-declaration -Wno-int-conversion";
 
-  buildFlags = [ "dump1090" "view1090" ];
+  buildFlags = ["dump1090" "view1090"];
 
   doCheck = true;
 
@@ -52,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flightaware/dump1090";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ earldouglas ];
+    maintainers = with maintainers; [earldouglas];
   };
 }

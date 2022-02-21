@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, xorg
-, cffi
-, nose
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  xorg,
+  cffi,
+  nose,
+  six,
 }:
-
 buildPythonPackage rec {
   version = "0.11.1";
   pname = "xcffib";
@@ -21,18 +21,18 @@ buildPythonPackage rec {
     sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
   '';
 
-  propagatedBuildInputs = [ cffi six ];
+  propagatedBuildInputs = [cffi six];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  propagatedNativeBuildInputs = [cffi];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
-  pythonImportsCheck = [ "xcffib" ];
+  pythonImportsCheck = ["xcffib"];
 
   meta = with lib; {
     description = "A drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kamilchm ];
+    maintainers = with maintainers; [kamilchm];
   };
 }

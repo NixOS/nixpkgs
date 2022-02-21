@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, makeWrapper
-, curl
-, jq
-, mpv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  jq,
+  mpv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "somafm-cli";
   version = "0.3.1";
@@ -17,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "1h5p9qsczgfr450sklh2vkllcpzb7nicbs8ciyvkavh3d7hds0yy";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     install -m0755 -D src/somafm $out/bin/somafm
-    wrapProgram $out/bin/somafm --prefix PATH ":" "${lib.makeBinPath [ curl jq mpv ]}";
+    wrapProgram $out/bin/somafm --prefix PATH ":" "${lib.makeBinPath [curl jq mpv]}";
   '';
 
   meta = with lib; {
@@ -29,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rockymadden/somafm-cli";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

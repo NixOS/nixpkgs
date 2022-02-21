@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pillow, imgp }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  pillow,
+  imgp,
+}:
 buildPythonApplication rec {
   pname = "imgp";
   version = "2.8";
@@ -11,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "1miabaxd5pwxn0va4drzj1d4ppxvyqsrrd4xw1j6qr52yci0lms8";
   };
 
-  propagatedBuildInputs = [ pillow ];
+  propagatedBuildInputs = [pillow];
 
   installFlags = [
     "DESTDIR=$(out)"
@@ -33,6 +38,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/jarun/imgp";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
   };
 }

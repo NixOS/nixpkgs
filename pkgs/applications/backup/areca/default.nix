@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, ant, jre, jdk, swt, acl, attr }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ant,
+  jre,
+  jdk,
+  swt,
+  acl,
+  attr,
+}:
 stdenv.mkDerivation rec {
   pname = "areca";
   version = "7.5";
@@ -11,9 +20,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  buildInputs = [ jdk ant acl attr ];
+  buildInputs = [jdk ant acl attr];
 
-  patches = [ ./fix-javah-bug.diff ];
+  patches = [./fix-javah-bug.diff];
 
   postPatch = ''
     substituteInPlace build.xml --replace "/usr/lib/java/swt.jar" "${swt}/jars/swt.jar"
@@ -27,7 +36,7 @@ stdenv.mkDerivation rec {
     substituteInPlace jni/com_myJava_file_metadata_posix_jni_wrapper_FileAccessWrapper.c --replace attr/xattr.h sys/xattr.h
 
     sed -i "s#^PROGRAM_DIR.*#PROGRAM_DIR=$out#g" bin/areca_run.sh
-    sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=$out/lib:${lib.makeLibraryPath [ swt acl ]}#g" bin/areca_run.sh
+    sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=$out/lib:${lib.makeLibraryPath [swt acl]}#g" bin/areca_run.sh
 
     # https://sourceforge.net/p/areca/bugs/563/
     substituteInPlace bin/areca_run.sh --replace '[ "$JAVA_IMPL" = "java" ]' \
@@ -51,7 +60,7 @@ stdenv.mkDerivation rec {
     # Builds fine but fails to launch.
     broken = true;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = with platforms; linux;
   };
 }

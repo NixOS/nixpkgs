@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
 
   options = {
-
     hardware.usbWwan = {
       enable = mkOption {
         type = types.bool;
@@ -22,11 +23,11 @@ with lib;
 
   config = mkIf config.hardware.usbWwan.enable {
     # Attaches device specific handlers.
-    services.udev.packages = with pkgs; [ usb-modeswitch-data ];
+    services.udev.packages = with pkgs; [usb-modeswitch-data];
 
     # Triggered by udev, usb-modeswitch creates systemd services via a
     # template unit in the usb-modeswitch package.
-    systemd.packages = with pkgs; [ usb-modeswitch ];
+    systemd.packages = with pkgs; [usb-modeswitch];
 
     # The systemd service requires the usb-modeswitch-data. The
     # usb-modeswitch package intends to discover this via the

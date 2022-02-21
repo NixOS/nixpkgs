@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, ncurses
-, lzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  lzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "moe";
   version = "1.12";
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
       "insert( 0U, 1U,"
   '';
 
-  nativeBuildInputs = [ lzip ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [lzip];
+  buildInputs = [ncurses];
 
   meta = with lib; {
     description = "A small, 8-bit clean editor";
@@ -35,8 +36,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/moe/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: a configurable, global moerc file
+

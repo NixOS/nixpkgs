@@ -1,22 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, gtk3
-, gnome
-, gdk-pixbuf
-, librsvg
-, wrapGAppsHook
-, itstool
-, gsound
-, libxml2
-, meson
-, ninja
-, python3
-, vala
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gtk3,
+  gnome,
+  gdk-pixbuf,
+  librsvg,
+  wrapGAppsHook,
+  itstool,
+  gsound,
+  libxml2,
+  meson,
+  ninja,
+  python3,
+  vala,
+  desktop-file-utils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "iagno";
   version = "3.38.1";

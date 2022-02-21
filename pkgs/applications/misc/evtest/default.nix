@@ -1,11 +1,17 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+}:
 stdenv.mkDerivation rec {
   pname = "evtest";
   version = "1.34";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libxml2 ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [libxml2];
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/${pname}";
@@ -17,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Simple tool for input event debugging";
     license = lib.licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

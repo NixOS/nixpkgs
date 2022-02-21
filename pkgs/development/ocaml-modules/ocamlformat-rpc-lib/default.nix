@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage, csexp, sexplib0 }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  csexp,
+  sexplib0,
+}:
 buildDunePackage rec {
   pname = "ocamlformat-rpc-lib";
   version = "0.19.0";
@@ -12,12 +17,12 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.08";
   useDune2 = true;
 
-  propagatedBuildInputs = [ csexp sexplib0 ];
+  propagatedBuildInputs = [csexp sexplib0];
 
   meta = with lib; {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code (RPC mode)";
     license = licenses.mit;
-    maintainers = with maintainers; [ Zimmi48 marsam ];
+    maintainers = with maintainers; [Zimmi48 marsam];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, async-timeout
-, pyserial-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  async-timeout,
+  pyserial-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "epson-projector";
   version = "0.4.2";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Epson projector support for Python";
     homepage = "https://github.com/pszafer/epson_projector";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

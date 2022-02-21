@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, acl
-, e2fsprogs
-, libb2
-, lz4
-, openssh
-, openssl
-, python3
-, zstd
-, nixosTests
+{
+  lib,
+  stdenv,
+  acl,
+  e2fsprogs,
+  libb2,
+  lz4,
+  openssh,
+  openssl,
+  python3,
+  zstd,
+  nixosTests,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
   version = "1.1.17";
@@ -33,22 +33,26 @@ python3.pkgs.buildPythonApplication rec {
     guzzle_sphinx_theme
   ];
 
-  buildInputs = [
-    libb2
-    lz4
-    zstd
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    acl
-  ];
+  buildInputs =
+    [
+      libb2
+      lz4
+      zstd
+      openssl
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      acl
+    ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    cython
-    llfuse
-    packaging
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    pyfuse3
-  ];
+  propagatedBuildInputs = with python3.pkgs;
+    [
+      cython
+      llfuse
+      packaging
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      pyfuse3
+    ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
@@ -88,9 +92,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "auto"
+    "--numprocesses"
+    "auto"
     "--benchmark-skip"
-    "--pyargs" "borg.testsuite"
+    "--pyargs"
+    "borg.testsuite"
   ];
 
   disabledTests = [
@@ -116,13 +122,13 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) borgbackup;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   meta = with lib; {
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ flokli dotlambda globin ];
+    maintainers = with maintainers; [flokli dotlambda globin];
   };
 }

@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, ncurses ? null, perl ? null, lib }:
-
+{
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses ? null,
+  perl ? null,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "liboping";
   version = "1.10.0";
@@ -24,9 +30,9 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString
-    stdenv.cc.isGNU "-Wno-error=format-truncation";
+  stdenv.cc.isGNU "-Wno-error=format-truncation";
 
-  buildInputs = [ ncurses perl ];
+  buildInputs = [ncurses perl];
 
   configureFlags = lib.optional (perl == null) "--with-perl-bindings=no";
 
@@ -42,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "http://noping.cc/";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

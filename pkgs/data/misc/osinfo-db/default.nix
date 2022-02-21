@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, osinfo-db-tools, gettext, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  osinfo-db-tools,
+  gettext,
+  libxml2,
+}:
 stdenv.mkDerivation rec {
   pname = "osinfo-db";
   version = "20211216";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CeznsOUhMw4x0SpZFx408JcYGny7zW+M1J+SiSO7EII=";
   };
 
-  nativeBuildInputs = [ osinfo-db-tools gettext libxml2 ];
+  nativeBuildInputs = [osinfo-db-tools gettext libxml2];
 
   installPhase = ''
     osinfo-db-import --dir "$out/share/osinfo" "${src}"
@@ -20,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/libosinfo/osinfo-db/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

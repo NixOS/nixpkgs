@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gnome-themes-extra
-, gtk-engine-murrine
-, librsvg
-, sassc
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  librsvg,
+  sassc,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
   version = "2021-12-25";
@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://vinceliuice.github.io/Qogir-theme";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

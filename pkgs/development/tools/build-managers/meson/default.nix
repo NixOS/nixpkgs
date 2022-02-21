@@ -1,12 +1,12 @@
-{ lib
-, fetchpatch
-, installShellFiles
-, ninja
-, pkg-config
-, python3
-, substituteAll
+{
+  lib,
+  fetchpatch,
+  installShellFiles,
+  ninja,
+  pkg-config,
+  python3,
+  substituteAll,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
   version = "0.60.3";
@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
   # require a typical building environment (including C compiler and stuff).
   # Just for the sake of documentation, the next lines are maintained here.
   doCheck = false;
-  checkInputs = [ ninja pkg-config ];
+  checkInputs = [ninja pkg-config];
   checkPhase = ''
     python ./run_project_tests.py
   '';
@@ -86,7 +86,7 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installShellCompletion --zsh data/shell-completions/zsh/_meson
@@ -106,8 +106,9 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    maintainers = with maintainers; [jtojnar mbe AndersonTorres];
     inherit (python3.meta) platforms;
   };
 }
 # TODO: a more Nixpkgs-tailoired test suite
+

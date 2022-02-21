@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "fastpbkdf2";
   version = "1.0.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "09ax0h4ik3vhvp3s98lic93l3g9f4v1jkr5k6z4g1lvm7s3lrha2";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   preBuild = ''
     makeFlagsArray=(CFLAGS="-std=c99 -O3 -g")
@@ -27,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "A fast PBKDF2-HMAC-{SHA1,SHA256,SHA512} implementation in C";
     homepage = "https://github.com/ctz/fastpbkdf2";
     license = licenses.cc0;
-    maintainers = with maintainers; [ ledif ];
+    maintainers = with maintainers; [ledif];
   };
 }

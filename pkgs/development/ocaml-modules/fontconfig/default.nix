@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, fontconfig, ocaml }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  fontconfig,
+  ocaml,
+}:
 stdenv.mkDerivation {
   pname = "ocaml-fontconfig";
   version = "unstable-2013-11-03";
@@ -11,8 +17,8 @@ stdenv.mkDerivation {
     sha256 = "1fw6bzydmnyh2g4x35mcbg0hypnxqhynivk4nakcsx7prr8zr3yh";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml fontconfig ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [ocaml fontconfig];
   makeFlags = [
     "OCAML_STDLIB_DIR=$(out)/lib/ocaml/${lib.getVersion ocaml}/site-lib/"
     "OCAML_HAVE_OCAMLOPT=yes"
@@ -21,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Fontconfig bindings for OCaml";
     license = lib.licenses.gpl2Plus;
-    platforms = ocaml.meta.platforms or [ ];
-    maintainers = with lib.maintainers; [ vbgl ];
+    platforms = ocaml.meta.platforms or [];
+    maintainers = with lib.maintainers; [vbgl];
   };
 }

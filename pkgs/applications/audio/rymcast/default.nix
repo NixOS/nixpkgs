@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchzip, autoPatchelfHook, makeWrapper
-, alsa-lib, curl, gtk3, webkitgtk, zenity }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoPatchelfHook,
+  makeWrapper,
+  alsa-lib,
+  curl,
+  gtk3,
+  webkitgtk,
+  zenity,
+}:
 stdenv.mkDerivation rec {
   pname = "rymcast";
   version = "1.0.6";
@@ -11,22 +20,22 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [autoPatchelfHook makeWrapper];
 
-  buildInputs = [ alsa-lib curl gtk3 stdenv.cc.cc.lib webkitgtk zenity ];
+  buildInputs = [alsa-lib curl gtk3 stdenv.cc.cc.lib webkitgtk zenity];
 
   installPhase = ''
     mkdir -p "$out/bin"
     cp RYMCast "$out/bin/"
     wrapProgram "$out/bin/RYMCast" \
-      --set PATH "${lib.makeBinPath [ zenity ]}"
+      --set PATH "${lib.makeBinPath [zenity]}"
   '';
 
   meta = with lib; {
     description = "Player for Mega Drive/Genesis VGM files";
     homepage = "https://www.inphonik.com/products/rymcast-genesis-vgm-player/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ astsmtl ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [astsmtl];
   };
 }

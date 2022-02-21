@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, psycopg2
-, click
-, configobj
-, sqlparse
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  psycopg2,
+  click,
+  configobj,
+  sqlparse,
 }:
-
 buildPythonPackage rec {
   pname = "pgspecial";
   version = "1.13.0";

@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, openssl, boost }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  openssl,
+  boost,
+}:
 stdenv.mkDerivation {
   pname = "stuntman";
   version = "1.2.16";
@@ -39,7 +44,7 @@ stdenv.mkDerivation {
     description = "STUNTMAN - an open source STUN server and client";
     homepage = "http://www.stunprotocol.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mattchrist ];
+    maintainers = with maintainers; [mattchrist];
     platforms = platforms.unix;
   };
 }

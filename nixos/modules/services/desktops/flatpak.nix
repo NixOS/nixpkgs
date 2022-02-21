@@ -1,9 +1,11 @@
 # flatpak service.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.flatpak;
 in {
   meta = {
@@ -18,21 +20,20 @@ in {
     };
   };
 
-
   ###### implementation
   config = mkIf cfg.enable {
-
     assertions = [
-      { assertion = (config.xdg.portal.enable == true);
+      {
+        assertion = (config.xdg.portal.enable == true);
         message = "To use Flatpak you must enable XDG Desktop Portals with xdg.portal.enable.";
       }
     ];
 
-    environment.systemPackages = [ pkgs.flatpak ];
+    environment.systemPackages = [pkgs.flatpak];
 
-    services.dbus.packages = [ pkgs.flatpak ];
+    services.dbus.packages = [pkgs.flatpak];
 
-    systemd.packages = [ pkgs.flatpak ];
+    systemd.packages = [pkgs.flatpak];
 
     environment.profiles = [
       "$HOME/.local/share/flatpak/exports"
@@ -49,6 +50,6 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.flatpak = { };
+    users.groups.flatpak = {};
   };
 }

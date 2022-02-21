@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, writeText
-, libinput
-, libX11
-, wayland
-, conf ? null
-, patches ? [ ]
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  writeText,
+  libinput,
+  libX11,
+  wayland,
+  conf ? null,
+  patches ? [],
 }:
-
 stdenv.mkDerivation rec {
   pname = "lisgd";
   version = "0.3.2";
@@ -23,13 +23,14 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   postPatch = let
-    configFile = if lib.isDerivation conf || lib.isPath conf then
-      conf
-    else
-      writeText "config.def.h" conf;
-  in lib.optionalString (conf != null) ''
-    cp ${configFile} config.def.h
-  '';
+    configFile =
+      if lib.isDerivation conf || lib.isPath conf
+      then conf
+      else writeText "config.def.h" conf;
+  in
+    lib.optionalString (conf != null) ''
+      cp ${configFile} config.def.h
+    '';
 
   buildInputs = [
     libinput
@@ -46,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~mil/lisgd";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

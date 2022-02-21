@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, libiconv
-, libmpdclient
-, meson
-, ninja
-, pkg-config
-, sphinx
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  libiconv,
+  libmpdclient,
+  meson,
+  ninja,
+  pkg-config,
+  sphinx,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mpc";
   version = "0.34";
@@ -30,10 +30,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [
-    libmpdclient
-  ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs =
+    [
+      libmpdclient
+    ]
+    ++ lib.optionals stdenv.isDarwin [libiconv];
 
   nativeBuildInputs = [
     installShellFiles
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "A minimalist command line interface to MPD";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/mpc/v${version}/NEWS";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = with platforms; unix;
   };
 }

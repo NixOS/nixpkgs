@@ -1,7 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, python, isPy27
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  isPy27,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "querystring_parser";
   version = "1.2.4";
@@ -24,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bernii/querystring-parser";
     description = "QueryString parser for Python/Django that correctly handles nested dictionaries";
     license = licenses.mit;
-    maintainers = with maintainers; [ tbenst ];
+    maintainers = with maintainers; [tbenst];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchgit }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 stdenv.mkDerivation {
   name = "rt5677-firmware";
 
@@ -9,7 +12,6 @@ stdenv.mkDerivation {
     sha256 = "0a6lz9wadm47cmva136q6wd0lw03bmymf9ispnzb091a7skwacry";
   };
 
-
   installPhase = ''
     mkdir -p $out/lib/firmware
     cp ./firmware/rt5677_elf_vad $out/lib/firmware
@@ -18,7 +20,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Firmware for Realtek rt5677 device";
     license = licenses.unfreeRedistributableFirmware;
-    maintainers = [ maintainers.zohl ];
+    maintainers = [maintainers.zohl];
     platforms = platforms.linux;
   };
 }

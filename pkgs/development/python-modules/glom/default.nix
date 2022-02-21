@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boltons
-, attrs
-, face
-, pytestCheckHook
-, pyyaml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  boltons,
+  attrs,
+  face,
+  pytestCheckHook,
+  pyyaml,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "glom";
   version = "22.1.0";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
       declarative, dynamic, and downright simple way.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    maintainers = with maintainers; [twey];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libuuid, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libuuid,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "reiserfsprogs";
   version = "3.6.24";
@@ -9,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "0q07df9wxxih8714a3mdp61h5n347l7j2a0l351acs3xapzgwi3y";
   };
 
-  patches = [ ./reiserfsprogs-ar-fix.patch ];
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libuuid ];
+  patches = [./reiserfsprogs-ar-fix.patch];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [libuuid];
 
-  NIX_CFLAGS_COMPILE = [ "-std=gnu90" "-D_GNU_SOURCE" ];
+  NIX_CFLAGS_COMPILE = ["-std=gnu90" "-D_GNU_SOURCE"];
 
   meta = {
     inherit version;

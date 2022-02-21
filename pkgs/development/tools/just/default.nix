@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, stdenv, rustPlatform, coreutils, bash, installShellFiles, libiconv }:
-
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  coreutils,
+  bash,
+  installShellFiles,
+  libiconv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "just";
   version = "0.11.2";
@@ -13,8 +21,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-cTAbAnSqvrc6e9NtbiV7caj1JnQReWMUhCQoFXZ7Nbs=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [installShellFiles];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
 
   postInstall = ''
     installManPage man/just.1
@@ -25,7 +33,7 @@ rustPlatform.buildRustPackage rec {
       --zsh  completions/just.zsh
   '';
 
-  checkInputs = [ coreutils bash ];
+  checkInputs = [coreutils bash];
 
   preCheck = ''
     # USER must not be empty
@@ -58,6 +66,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "A handy way to save and run project-specific commands";
     license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd jk ];
+    maintainers = with maintainers; [xrelkd jk];
   };
 }

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, pyasn1
-, pyasn1-modules
-, cxxfilt
-, msgpack
-, pycparser
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  pyasn1,
+  pyasn1-modules,
+  cxxfilt,
+  msgpack,
+  pycparser,
 }:
 buildPythonPackage rec {
   pname = "vivisect";

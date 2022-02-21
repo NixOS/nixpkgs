@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, libxslt
-, gettext
-, gnome
-, withDblatex ? false, dblatex
+{
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  libxslt,
+  gettext,
+  gnome,
+  withDblatex ? false,
+  dblatex,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "gtk-doc";
   version = "1.33.2";
@@ -47,13 +48,15 @@ python3.pkgs.buildPythonApplication rec {
     libxslt # for xsltproc
   ];
 
-  buildInputs = [
-    docbook_xml_dtd_43
-    docbook-xsl-nons
-    libxslt
-  ] ++ lib.optionals withDblatex [
-    dblatex
-  ];
+  buildInputs =
+    [
+      docbook_xml_dtd_43
+      docbook-xsl-nons
+      libxslt
+    ]
+    ++ lib.optionals withDblatex [
+      dblatex
+    ];
 
   pythonPath = with python3.pkgs; [
     pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
@@ -87,6 +90,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tools to extract documentation embedded in GTK and GNOME source code";
     homepage = "https://gitlab.gnome.org/GNOME/gtk-doc";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ pSub ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [pSub]);
   };
 }

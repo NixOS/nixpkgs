@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, gnome, libxslt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnome,
+  libxslt,
+}:
 stdenv.mkDerivation rec {
   pname = "mobile-broadband-provider-info";
   version = "20210805";
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Mobile broadband service provider database";
     homepage = "https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders";
     license = licenses.publicDomain;
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.all;
   };
 }

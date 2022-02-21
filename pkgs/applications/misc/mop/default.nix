@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchgit }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchgit,
+}:
 buildGoPackage rec {
   pname = "mop";
   version = "0.2.0";
@@ -24,7 +27,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Simple stock tracker implemented in go";
-    homepage =  "https://github.com/mop-tracker/mop";
+    homepage = "https://github.com/mop-tracker/mop";
     license = licenses.mit;
   };
 }

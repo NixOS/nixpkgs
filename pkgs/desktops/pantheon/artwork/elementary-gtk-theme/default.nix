@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, gettext
-, sassc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  gettext,
+  sassc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-gtk-theme";
   version = "6.1.1";

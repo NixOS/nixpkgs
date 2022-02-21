@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, glib, gnome, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glib,
+  gnome,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-night-theme-switcher";
   version = "53";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dgnh1aj0y89jzfkpj8zs4gdbmyc1v8lbki2q30gld17ljv4l6lh";
   };
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ glib gnome.gnome-shell ];
+  nativeBuildInputs = [unzip];
+  buildInputs = [glib gnome.gnome-shell];
 
   passthru = {
     extensionUuid = "nightthemeswitcher@romainvigier.fr";
@@ -29,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Automatically change the GTK theme to dark variant when Night Light activates";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jonafato ];
+    maintainers = with maintainers; [jonafato];
     homepage = "https://gitlab.com/rmnvgr/nightthemeswitcher-gnome-shell-extension/";
   };
 }

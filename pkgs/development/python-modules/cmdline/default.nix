@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+}:
 buildPythonPackage rec {
   pname = "cmdline";
   version = "0.2.0";
@@ -11,7 +15,7 @@ buildPythonPackage rec {
 
   # No tests, https://github.com/rca/cmdline/issues/1
   doCheck = false;
-  propagatedBuildInputs = [ pyyaml ];
+  propagatedBuildInputs = [pyyaml];
 
   meta = with lib; {
     description = "Utilities for consistent command line tools";

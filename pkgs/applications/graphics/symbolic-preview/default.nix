@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook
-, cargo, desktop-file-utils, meson, ninja, pkg-config, python3, rustc
-, gdk-pixbuf, glib, gtk3, libhandy, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustc,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libhandy,
+  libxml2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "symbolic-preview";
   version = "0.0.2";
@@ -13,9 +26,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cargo desktop-file-utils meson ninja pkg-config python3 rustc wrapGAppsHook
+    cargo
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    python3
+    rustc
+    wrapGAppsHook
   ];
-  buildInputs = [ gdk-pixbuf glib gtk3 libhandy libxml2 ];
+  buildInputs = [gdk-pixbuf glib gtk3 libhandy libxml2];
 
   postPatch = ''
     patchShebangs build-aux/meson_post_install.py
@@ -24,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/symbolic-preview";
     description = "Symbolics made easy";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

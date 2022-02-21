@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "tidy-viewer";
   version = "1.4.3";
@@ -24,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/alexhallam/tv";
     changelog = "https://github.com/alexhallam/tv/blob/${version}/CHANGELOG.md";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "subzerod";
   version = "1.0";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to help with the enumeration of subdomains";
     homepage = "https://github.com/sanderfoobar/subzerod";
-    license = with licenses; [ wtfpl ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [wtfpl];
+    maintainers = with maintainers; [fab];
   };
 }

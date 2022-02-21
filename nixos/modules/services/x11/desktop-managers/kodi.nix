@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.desktopManager.kodi;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.desktopManager.kodi;
+in {
   options = {
     services.xserver.desktopManager.kodi = {
       enable = mkOption {
@@ -28,14 +28,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.desktopManager.session = [{
-      name = "kodi";
-      start = ''
-        LIRC_SOCKET_PATH=/run/lirc/lircd ${cfg.package}/bin/kodi --standalone &
-        waitPID=$!
-      '';
-    }];
+    services.xserver.desktopManager.session = [
+      {
+        name = "kodi";
+        start = ''
+          LIRC_SOCKET_PATH=/run/lirc/lircd ${cfg.package}/bin/kodi --standalone &
+          waitPID=$!
+        '';
+      }
+    ];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
 }

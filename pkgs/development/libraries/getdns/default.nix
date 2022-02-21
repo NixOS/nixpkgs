@@ -1,36 +1,46 @@
 # Getdns and Stubby are released together, see https://getdnsapi.net/releases/
-
-{ lib, stdenv, fetchurl, cmake, darwin, doxygen, libidn2, libyaml, openssl
-, systemd, unbound, yq }:
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  darwin,
+  doxygen,
+  libidn2,
+  libyaml,
+  openssl,
+  systemd,
+  unbound,
+  yq,
+}: let
   metaCommon = with lib; {
-    maintainers = with maintainers; [ leenaars ehmry ];
+    maintainers = with maintainers; [leenaars ehmry];
     license = licenses.bsd3;
     platforms = platforms.all;
   };
 in rec {
-
   getdns = stdenv.mkDerivation rec {
     pname = "getdns";
     version = "1.7.0";
-    outputs = [ "out" "dev" "lib" "man" ];
+    outputs = ["out" "dev" "lib" "man"];
 
     src = fetchurl {
       url = "https://getdnsapi.net/releases/${pname}-${
-          with builtins;
+        with builtins;
           concatStringsSep "-" (splitVersion version)
-        }/${pname}-${version}.tar.gz";
+      }/${pname}-${version}.tar.gz";
       sha256 = "sha256-6ocTzl4HesdrFBjOtq/SXm1OOelgD29egdOjoTpg9lI=";
     };
 
-    nativeBuildInputs = [ cmake doxygen ];
+    nativeBuildInputs = [cmake doxygen];
 
-    buildInputs = [ libidn2 openssl unbound ];
+    buildInputs = [libidn2 openssl unbound];
 
     postInstall = "rm -r $out/share/doc";
 
     meta = with lib;
-      metaCommon // {
+      metaCommon
+      // {
         description = "A modern asynchronous DNS API";
         longDescription = ''
           getdns is an implementation of a modern asynchronous DNS API; the
@@ -50,15 +60,16 @@ in rec {
   stubby = stdenv.mkDerivation rec {
     pname = "stubby";
     version = "0.4.0";
-    outputs = [ "out" "man" "stubbyExampleJson" ];
+    outputs = ["out" "man" "stubbyExampleJson"];
 
     inherit (getdns) src;
     sourceRoot = "${getdns.name}/stubby";
 
-    nativeBuildInputs = [ cmake doxygen yq ];
+    nativeBuildInputs = [cmake doxygen yq];
 
-    buildInputs = [ getdns libyaml openssl systemd ]
-      ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
+    buildInputs =
+      [getdns libyaml openssl systemd]
+      ++ lib.optionals stdenv.isDarwin [darwin.Security];
 
     postInstall = ''
       rm -r $out/share/doc
@@ -71,7 +82,8 @@ in rec {
       fromJSON (readFile stubby.stubbyExampleJson);
 
     meta = with lib;
-      metaCommon // {
+      metaCommon
+      // {
         description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";
         longDescription = ''
           Stubby is an application that acts as a local DNS Privacy stub
@@ -83,5 +95,4 @@ in rec {
         homepage = "https://dnsprivacy.org/wiki/x/JYAT";
       };
   };
-
 }

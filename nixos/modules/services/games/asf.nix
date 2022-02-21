@@ -1,13 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.archisteamfarm;
 
-  format = pkgs.formats.json { };
+  format = pkgs.formats.json {};
 
-  asf-config = format.generate "ASF.json" (cfg.settings // {
+  asf-config = format.generate "ASF.json" (cfg.settings
+  // {
     # we disable it because ASF cannot update itself anyways
     # and nixos takes care of restarting the service
     # is in theory not needed as this is already the default for default builds
@@ -18,15 +21,18 @@ let
   ipc-config = format.generate "IPC.config" cfg.ipcSettings;
 
   mkBot = n: c:
-    format.generate "${n}.json" (c.settings // {
-      SteamLogin = if c.username == "" then n else c.username;
+    format.generate "${n}.json" (c.settings
+    // {
+      SteamLogin =
+        if c.username == ""
+        then n
+        else c.username;
       SteamPassword = c.passwordFile;
       # sets the password format to file (https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Security#file)
       PasswordFormat = 4;
       Enabled = c.enabled;
     });
-in
-{
+in {
   options.services.archisteamfarm = {
     enable = mkOption {
       type = types.bool;
@@ -42,13 +48,12 @@ in
       type = types.submodule {
         options = {
           enable = mkEnableOption
-            "Wheter to start the web-ui. This is the preferred way of configuring things such as the steam guard token";
+          "Wheter to start the web-ui. This is the preferred way of configuring things such as the steam guard token";
 
           package = mkOption {
             type = types.package;
             default = pkgs.ArchiSteamFarm.ui;
-            description =
-              "Web-UI package to use. Contents must be in lib/dist.";
+            description = "Web-UI package to use. Contents must be in lib/dist.";
           };
         };
       };
@@ -65,8 +70,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.ArchiSteamFarm;
-      description =
-        "Package to use. Should always be the latest version, for security reasons, since this module uses very new features and to not get out of sync with the Steam API.";
+      description = "Package to use. Should always be the latest version, for security reasons, since this module uses very new features and to not get out of sync with the Steam API.";
     };
 
     dataDir = mkOption {
@@ -80,16 +84,16 @@ in
     settings = mkOption {
       type = format.type;
       description = ''
-        The ASF.json file, all the options are documented <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config">here</link>.
-        Do note that `AutoRestart`  and `UpdateChannel` is always to `false`
-respectively `0` because NixOS takes care of updating everything.
-        `Headless` is also always set to `true` because there is no way to provide inputs via a systemd service.
-        You should try to keep ASF up to date since upstream does not provide support for anything but the latest version and you're exposing yourself to all kinds of issues - as is outlined <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#updateperiod">here</link>.
+                The ASF.json file, all the options are documented <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config">here</link>.
+                Do note that `AutoRestart`  and `UpdateChannel` is always to `false`
+        respectively `0` because NixOS takes care of updating everything.
+                `Headless` is also always set to `true` because there is no way to provide inputs via a systemd service.
+                You should try to keep ASF up to date since upstream does not provide support for anything but the latest version and you're exposing yourself to all kinds of issues - as is outlined <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#updateperiod">here</link>.
       '';
       example = {
         Statistics = false;
       };
-      default = { };
+      default = {};
     };
 
     ipcSettings = mkOption {
@@ -107,7 +111,7 @@ respectively `0` because NixOS takes care of updating everything.
           };
         };
       };
-      default = { };
+      default = {};
     };
 
     bots = mkOption {
@@ -115,14 +119,12 @@ respectively `0` because NixOS takes care of updating everything.
         options = {
           username = mkOption {
             type = types.str;
-            description =
-              "Name of the user to log in. Default is attribute name.";
+            description = "Name of the user to log in. Default is attribute name.";
             default = "";
           };
           passwordFile = mkOption {
             type = types.path;
-            description =
-              "Path to a file containig the password. The file must be readable by the <literal>asf</literal> user/group.";
+            description = "Path to a file containig the password. The file must be readable by the <literal>asf</literal> user/group.";
           };
           enabled = mkOption {
             type = types.bool;
@@ -131,9 +133,8 @@ respectively `0` because NixOS takes care of updating everything.
           };
           settings = mkOption {
             type = types.attrs;
-            description =
-              "Additional settings that are documented <link xlink:href=\"https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config\">here</link>.";
-            default = { };
+            description = "Additional settings that are documented <link xlink:href=\"https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config\">here</link>.";
+            default = {};
           };
         };
       });
@@ -144,15 +145,14 @@ respectively `0` because NixOS takes care of updating everything.
         exampleBot = {
           username = "alice";
           passwordFile = "/var/lib/asf/secrets/password";
-          settings = { SteamParentalCode = "1234"; };
+          settings = {SteamParentalCode = "1234";};
         };
       };
-      default = { };
+      default = {};
     };
   };
 
   config = mkIf cfg.enable {
-
     users = {
       users.asf = {
         home = cfg.dataDir;
@@ -160,24 +160,23 @@ respectively `0` because NixOS takes care of updating everything.
         group = "asf";
         description = "Archis-Steam-Farm service user";
       };
-      groups.asf = { };
+      groups.asf = {};
     };
 
     systemd.services = {
       asf = {
         description = "Archis-Steam-Farm Service";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = ["network.target"];
+        wantedBy = ["multi-user.target"];
 
         serviceConfig = mkMerge [
-          (mkIf (cfg.dataDir == "/var/lib/asf") { StateDirectory = "asf"; })
+          (mkIf (cfg.dataDir == "/var/lib/asf") {StateDirectory = "asf";})
           {
             User = "asf";
             Group = "asf";
             WorkingDirectory = cfg.dataDir;
             Type = "simple";
-            ExecStart =
-              "${cfg.package}/bin/ArchiSteamFarm --path ${cfg.dataDir} --process-required --no-restart --service --no-config-migrate";
+            ExecStart = "${cfg.package}/bin/ArchiSteamFarm --path ${cfg.dataDir} --process-required --no-restart --service --no-config-migrate";
 
             # mostly copied from the default systemd service
             PrivateTmp = true;
@@ -209,21 +208,27 @@ respectively `0` because NixOS takes care of updating everything.
 
           ln -s ${asf-config} config/ASF.json
 
-          ${strings.optionalString (cfg.ipcSettings != {}) ''
-            ln -s ${ipc-config} config/IPC.config
-          ''}
+          ${
+            strings.optionalString (cfg.ipcSettings != {}) ''
+              ln -s ${ipc-config} config/IPC.config
+            ''
+          }
 
-          ln -s ${pkgs.runCommandLocal "ASF-bots" {} ''
-            mkdir -p $out/lib/asf/bots
-            for i in ${strings.concatStringsSep " " (lists.map (x: "${getName x},${x}") (attrsets.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
-              set -- $i
-              ln -s $2 $out/lib/asf/bots/$1
-            done
-          ''}/lib/asf/bots/* config/
+          ln -s ${
+            pkgs.runCommandLocal "ASF-bots" {} ''
+              mkdir -p $out/lib/asf/bots
+              for i in ${strings.concatStringsSep " " (lists.map (x: "${getName x},${x}") (attrsets.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
+                set -- $i
+                ln -s $2 $out/lib/asf/bots/$1
+              done
+            ''
+          }/lib/asf/bots/* config/
 
-          ${strings.optionalString cfg.web-ui.enable ''
-            ln -s ${cfg.web-ui.package}/lib/dist www
-          ''}
+          ${
+            strings.optionalString cfg.web-ui.enable ''
+              ln -s ${cfg.web-ui.package}/lib/dist www
+            ''
+          }
         '';
       };
     };
@@ -231,6 +236,6 @@ respectively `0` because NixOS takes care of updating everything.
 
   meta = {
     buildDocsInSandbox = false;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [lom];
   };
 }

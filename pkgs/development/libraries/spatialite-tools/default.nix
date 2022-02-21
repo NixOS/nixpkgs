@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, geos
-, expat
-, librttopo
-, libspatialite
-, libxml2
-, minizip
-, proj
-, readosm
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  geos,
+  expat,
+  librttopo,
+  libspatialite,
+  libxml2,
+  minizip,
+  proj,
+  readosm,
+  sqlite,
 }:
-
 stdenv.mkDerivation rec {
   pname = "spatialite-tools";
   version = "5.0.1";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lgTCBeh/A3eJvFIwLGbM0TccPpjHTo7E4psHUt41Fxw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
     expat
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  configureFlags = [ "--disable-freexl" ];
+  configureFlags = ["--disable-freexl"];
 
   enableParallelBuilding = true;
 
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A complete sqlite3-compatible CLI front-end for libspatialite";
     homepage = "https://www.gaia-gis.it/fossil/spatialite-tools";
-    license = with licenses; [ mpl11 gpl2Plus lgpl21Plus ];
+    license = with licenses; [mpl11 gpl2Plus lgpl21Plus];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

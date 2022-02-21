@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, pytest
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  aiohttp,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-mockservers";
   version = "0.6.0";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "A set of fixtures to test your requests to HTTP/UDP servers";
     homepage = "https://github.com/Gr1N/pytest-mockservers";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,23 +1,21 @@
 /*
-  This is the Hydra jobset for the `haskell-updates` branch in Nixpkgs.
-  You can see the status of this jobset at
-  https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
-
-  To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra-unstable` which prints the jobset description
-  to `stdout`:
-
-  $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
-*/
-{ supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ] }:
-
-let
-
+ This is the Hydra jobset for the `haskell-updates` branch in Nixpkgs.
+ You can see the status of this jobset at
+ https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
+ 
+ To debug this expression you can use `hydra-eval-jobs` from
+ `pkgs.hydra-unstable` which prints the jobset description
+ to `stdout`:
+ 
+ $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
+ */
+{supportedSystems ? ["x86_64-linux" "x86_64-darwin" "aarch64-linux"]}: let
   releaseLib = import ./release-lib.nix {
     inherit supportedSystems;
   };
 
-  inherit (releaseLib)
+  inherit
+    (releaseLib)
     lib
     mapTestOn
     packagePlatforms
@@ -38,11 +36,12 @@ let
     lib.concatMap (
       attrs:
         if lib.isDerivation attrs
-        then [ attrs ]
+        then [attrs]
         else if lib.isAttrs attrs
         then accumulateDerivations (lib.attrValues attrs)
         else []
-    ) jobList;
+    )
+    jobList;
 
   # names of all subsets of `pkgs.haskell.packages`
   compilerNames = lib.mapAttrs (name: _: name) pkgs.haskell.packages;
@@ -57,32 +56,36 @@ let
 
   # packagePlatforms applied to `haskell.packages.*`
   compilerPlatforms = lib.mapAttrs
-    (_: v: packagePlatforms v)
-    pkgs.haskell.packages;
+  (_: v: packagePlatforms v)
+  pkgs.haskell.packages;
 
   # This function lets you specify specific packages
   # which are to be tested on a list of specific GHC
   # versions and returns a job set for all specified
   # combinations. See `jobs` below for an example.
-  versionedCompilerJobs = config: mapTestOn {
-    haskell.packages =
-      (lib.mapAttrs (
+  versionedCompilerJobs = config:
+    mapTestOn {
+      haskell.packages = (lib.mapAttrs (
         ghc: jobs:
-        lib.filterAttrs (
-          jobName: platforms:
-          lib.elem ghc (config."${jobName}" or [])
-        ) jobs
-      ) compilerPlatforms);
-  };
+          lib.filterAttrs (
+            jobName: platforms:
+              lib.elem ghc (config."${jobName}" or [])
+          )
+          jobs
+      )
+      compilerPlatforms);
+    };
 
   # hydra jobs for `pkgs` of which we import a subset of
   pkgsPlatforms = packagePlatforms pkgs;
 
   # names of packages in an attribute set that are maintained
-  maintainedPkgNames = set: builtins.attrNames
+  maintainedPkgNames = set:
+    builtins.attrNames
     (lib.filterAttrs (
       _: v: builtins.length (v.meta.maintainers or []) > 0
-    ) set);
+    )
+    set);
 
   recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate {};
 
@@ -119,12 +122,13 @@ let
   # }
   removePlatforms = platformsToRemove: packageSet:
     lib.mapAttrsRecursive
-      (_: val:
+    (
+      _: val:
         if lib.isList val
-          then removeMany platformsToRemove val
-          else val
-      )
-      packageSet;
+        then removeMany platformsToRemove val
+        else val
+    )
+    packageSet;
 
   jobs = recursiveUpdateMany [
     (mapTestOn {
@@ -137,7 +141,8 @@ let
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       # top-level packages that depend on haskellPackages
-      inherit (pkgsPlatforms)
+      inherit
+        (pkgsPlatforms)
         agda
         arion
         bench
@@ -247,57 +252,59 @@ let
 
       # GHCs linked to musl.
       pkgsMusl.haskell.compiler = lib.recursiveUpdate
-        (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
-        {
-          # remove musl ghc865Binary since it is known to be broken and
-          # causes an evaluation error on darwin.
-          # TODO: remove ghc865Binary altogether and use ghc8102Binary
-          ghc865Binary = {};
+      (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
+      {
+        # remove musl ghc865Binary since it is known to be broken and
+        # causes an evaluation error on darwin.
+        # TODO: remove ghc865Binary altogether and use ghc8102Binary
+        ghc865Binary = {};
 
-          ghcjs = {};
-          ghcjs810 = {};
+        ghcjs = {};
+        ghcjs810 = {};
 
-          # Can't be built with musl, see meta.broken comment in the drv
-          integer-simple.ghc884 = {};
-        };
+        # Can't be built with musl, see meta.broken comment in the drv
+        integer-simple.ghc884 = {};
+      };
 
       # Get some cache going for MUSL-enabled GHC.
       pkgsMusl.haskellPackages =
         removePlatforms
-          [
-            # pkgsMusl is compiled natively with musl.  It is not
-            # cross-compiled (unlike pkgsStatic).  We can only
-            # natively bootstrap GHC with musl on x86_64-linux because
-            # upstream doesn't provide a musl bindist for aarch64.
-            "aarch64-linux"
+        [
+          # pkgsMusl is compiled natively with musl.  It is not
+          # cross-compiled (unlike pkgsStatic).  We can only
+          # natively bootstrap GHC with musl on x86_64-linux because
+          # upstream doesn't provide a musl bindist for aarch64.
+          "aarch64-linux"
 
-            # musl only supports linux, not darwin.
-            "x86_64-darwin"
-          ]
-          {
-            inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
-              hello
-              lens
-              random
-              ;
-          };
+          # musl only supports linux, not darwin.
+          "x86_64-darwin"
+        ]
+        {
+          inherit
+            (packagePlatforms pkgs.pkgsMusl.haskellPackages)
+            hello
+            lens
+            random
+            ;
+        };
 
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
       # Use integer-simple to avoid GMP linking problems (LGPL)
       pkgsStatic.haskell.packages.integer-simple.ghc8107 =
         removePlatforms
-          [
-            "aarch64-linux" # times out on Hydra
-            "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
-          ]
-          {
-            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
-              hello
-              lens
-              random
-              ;
-          };
+        [
+          "aarch64-linux" # times out on Hydra
+          "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
+        ]
+        {
+          inherit
+            (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
+            hello
+            lens
+            random
+            ;
+        };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
@@ -372,9 +379,9 @@ let
           maintainers = lib.teams.haskell.members;
         };
         constituents = accumulateDerivations
-          (builtins.map
-            (name: jobs.haskellPackages."${name}")
-            (maintainedPkgNames pkgs.haskellPackages));
+        (builtins.map
+        (name: jobs.haskellPackages."${name}")
+        (maintainedPkgNames pkgs.haskellPackages));
       };
 
       muslGHCs = pkgs.releaseTools.aggregate {
@@ -417,5 +424,5 @@ let
       };
     }
   ];
-
-in jobs
+in
+  jobs

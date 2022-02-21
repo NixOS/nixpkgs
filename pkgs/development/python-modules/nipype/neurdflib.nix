@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isodate
-, html5lib
-, SPARQLWrapper
-, networkx
-, nose
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  html5lib,
+  SPARQLWrapper,
+  networkx,
+  nose,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "neurdflib";
   version = "5.0.1";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "d34493cee15029ff5db16157429585ff863ba5542675a4d8a94a0da1bc6e3a50";
   };
 
-  propagatedBuildInputs = [ isodate html5lib SPARQLWrapper ];
+  propagatedBuildInputs = [isodate html5lib SPARQLWrapper];
 
-  checkInputs = [ networkx nose ];
+  checkInputs = [networkx nose];
 
   # Python 2 syntax
   # Failing doctest

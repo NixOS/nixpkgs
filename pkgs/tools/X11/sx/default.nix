@@ -1,5 +1,13 @@
-{ coreutils, fetchFromGitHub, lib, makeWrapper, stdenv, util-linux, xauth, xorgserver }:
-
+{
+  coreutils,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  stdenv,
+  util-linux,
+  xauth,
+  xorgserver,
+}:
 stdenv.mkDerivation rec {
   pname = "sx";
   version = "2.1.7";
@@ -11,13 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "0xv15m30nhcknasqiybj5wwf7l91q4a4jf6xind8x5x00c6br6nl";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postInstall = ''
     wrapProgram $out/bin/sx \
-      --prefix PATH : ${lib.makeBinPath [ coreutils util-linux xorgserver xauth ]}
+      --prefix PATH : ${lib.makeBinPath [coreutils util-linux xorgserver xauth]}
   '';
 
   meta = with lib; {
@@ -25,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/earnestly/sx";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

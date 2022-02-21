@@ -1,10 +1,10 @@
-{ buildDunePackage
-, lib
-, fetchurl
-, angstrom
-, faraday
+{
+  buildDunePackage,
+  lib,
+  fetchurl,
+  angstrom,
+  faraday,
 }:
-
 buildDunePackage rec {
   pname = "hpack";
   version = "0.8.0";

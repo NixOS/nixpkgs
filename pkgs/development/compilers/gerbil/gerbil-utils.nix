@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
+{
+  lib,
+  fetchFromGitHub,
+  gerbil-unstable,
+  gerbil-support,
+  gambit-support,
+}:
 gerbil-support.gerbilPackage {
   pname = "gerbil-utils";
   version = "unstable-2020-10-18";
@@ -17,9 +22,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil Clan: Community curated Collection of Common Utilities";
-    homepage    = "https://github.com/fare/gerbil-utils";
-    license     = lib.licenses.lgpl21;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    homepage = "https://github.com/fare/gerbil-utils";
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [fare];
   };
 }

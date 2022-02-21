@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, kodi, libcec_platform, tinyxml }:
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kodi,
+  libcec_platform,
+  tinyxml,
+}:
 stdenv.mkDerivation rec {
   pname = "kodi-platform";
   version = "17.1";
@@ -10,6 +17,6 @@ stdenv.mkDerivation rec {
     sha256 = "1r3gs3c6zczmm66qcxh9mr306clwb3p7ykzb70r3jv5jqggiz199";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ kodi libcec_platform tinyxml ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [kodi libcec_platform tinyxml];
 }

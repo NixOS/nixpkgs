@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, glib
-, gtk3
-, curl
-, dbus
-, openssl
-, gst_all_1
-, pkg-config
-, rustPlatform
-, wrapGAppsHook
-, fetchurl
-, fetchFromGitHub
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  glib,
+  gtk3,
+  curl,
+  dbus,
+  openssl,
+  gst_all_1,
+  pkg-config,
+  rustPlatform,
+  wrapGAppsHook,
+  fetchurl,
+  fetchFromGitHub,
+  makeDesktopItem,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "netease-cloud-music-gtk";
@@ -23,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-42MaylfG5LY+TiYHWQMoh9CiVLShKXSBpMrxdWhujow=";
   };
   cargoSha256 = "sha256-A9wIcESdaJwLY4g/QlOxMU5PBB9wjvIzaXBSqeiRJBM=";
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoPatches = [./cargo-lock.patch];
 
   nativeBuildInputs = [
     glib
@@ -33,19 +34,21 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    curl
-    dbus
-    openssl
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ]);
+  buildInputs =
+    [
+      glib
+      gtk3
+      curl
+      dbus
+      openssl
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+    ]);
 
   postPatch = ''
     install -D netease-cloud-music-gtk.desktop $out/share/applications/netease-cloud-music-gtk.desktop
@@ -56,6 +59,6 @@ rustPlatform.buildRustPackage rec {
     description = "netease-cloud-music-gtk is a Rust + GTK based netease cloud music player";
     homepage = "https://github.com/gmg137/netease-cloud-music-gtk";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ diffumist ];
+    maintainers = with maintainers; [diffumist];
   };
 }

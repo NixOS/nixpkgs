@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, openssl
-, db48
-, boost
-, zlib
-, miniupnpc
-, qtbase ? null
-, qttools ? null
-, util-linux
-, protobuf
-, qrencode
-, libevent
-, withGui
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  openssl,
+  db48,
+  boost,
+  zlib,
+  miniupnpc,
+  qtbase ? null,
+  qttools ? null,
+  util-linux,
+  protobuf,
+  qrencode,
+  libevent,
+  withGui,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-classic";
   version = "1.3.8uahf";
@@ -28,23 +28,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fVmFD1B4kKoejd2cmPPF5TJJQTAA6AVsGlVY8IIUNK4=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [
-    openssl
-    db48
-    boost
-    zlib
-    miniupnpc
-    util-linux
-    protobuf
-    libevent
-  ] ++ lib.optionals withGui [ qtbase qttools qrencode ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
+  buildInputs =
+    [
+      openssl
+      db48
+      boost
+      zlib
+      miniupnpc
+      util-linux
+      protobuf
+      libevent
+    ]
+    ++ lib.optionals withGui [qtbase qttools qrencode];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
+  configureFlags =
+    ["--with-boost-libdir=${boost.out}/lib"]
     ++ lib.optionals withGui [
-    "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-  ];
+      "--with-gui=qt5"
+      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    ];
 
   enableParallelBuilding = true;
 
@@ -68,7 +71,7 @@ stdenv.mkDerivation rec {
       vision, and are agreed upon by the community.
     '';
     homepage = "https://bitcoinclassic.com/";
-    maintainers = with maintainers; [ jefdaj ];
+    maintainers = with maintainers; [jefdaj];
     license = licenses.mit;
     broken = stdenv.isDarwin;
     platforms = platforms.unix;

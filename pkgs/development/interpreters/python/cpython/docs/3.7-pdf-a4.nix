@@ -1,7 +1,9 @@
 # This file was generated and will be overwritten by ./generate.sh
-
-{ stdenv, fetchurl, lib }:
-
+{
+  stdenv,
+  fetchurl,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "python37-docs-pdf-a4";
   version = "3.7.2";
@@ -15,6 +17,6 @@ stdenv.mkDerivation rec {
     cp -R ./ $out/share/doc/python37/pdf-a4
   '';
   meta = {
-    maintainers = [ ];
+    maintainers = [];
   };
 }

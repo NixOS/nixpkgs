@@ -1,42 +1,43 @@
-{ lib, stdenv, rebar3 }:
-
-{ name
-, version
-, sha256
-, src
-, meta ? { }
+{
+  lib,
+  stdenv,
+  rebar3,
+}: {
+  name,
+  version,
+  sha256,
+  src,
+  meta ? {},
 }:
+  with lib;
+    stdenv.mkDerivation ({
+      pname = "rebar-deps-${name}";
+      inherit version;
 
-with lib;
+      dontUnpack = true;
+      dontConfigure = true;
+      dontBuild = true;
+      dontFixup = true;
 
-stdenv.mkDerivation ({
-  pname = "rebar-deps-${name}";
-  inherit version;
+      prePhases = ''
+        cp ${src} .
+        HOME='.' DEBUG=1 ${rebar3}/bin/rebar3 get-deps
+      '';
 
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
-  dontFixup = true;
+      installPhase = ''
+        runHook preInstall
+        mkdir -p "$out/_checkouts"
+        for i in ./_build/default/lib/* ; do
+           echo "$i"
+           cp -R "$i" "$out/_checkouts"
+        done
+        runHook postInstall
+      '';
 
-  prePhases = ''
-    cp ${src} .
-    HOME='.' DEBUG=1 ${rebar3}/bin/rebar3 get-deps
-  '';
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+      outputHash = sha256;
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p "$out/_checkouts"
-    for i in ./_build/default/lib/* ; do
-       echo "$i"
-       cp -R "$i" "$out/_checkouts"
-    done
-    runHook postInstall
-  '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = sha256;
-
-  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-  inherit meta;
-})
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+      inherit meta;
+    })

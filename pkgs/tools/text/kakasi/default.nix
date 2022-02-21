@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchurl, libiconv }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+}:
 stdenv.mkDerivation rec {
   pname = "kakasi";
   version = "2.3.6";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv];
 
   meta = with lib; {
     description = "Kanji Kana Simple Inverter";
@@ -13,9 +17,9 @@ stdenv.mkDerivation rec {
       characters to Hiragana, Katakana or Romaji and may be
       helpful to read Japanese documents.
     '';
-    homepage    = "http://kakasi.namazu.org/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.unix;
+    homepage = "http://kakasi.namazu.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 
   src = fetchurl {
@@ -31,5 +35,4 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # fails 1 of 6 tests
-
 }

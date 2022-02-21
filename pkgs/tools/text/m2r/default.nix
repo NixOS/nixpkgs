@@ -1,11 +1,11 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, docutils
-, mistune
-, pygments
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  docutils,
+  mistune,
+  pygments,
 }:
-
 buildPythonApplication rec {
   pname = "m2r";
   version = "0.2.1";
@@ -27,6 +27,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/miyakogi/m2r";
     description = "Markdown-to-RestructuredText converter";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

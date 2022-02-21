@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "ovh";
   version = "0.5.0";
@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "Thin wrapper around OVH's APIs";
     homepage = "https://github.com/ovh/python-ovh";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.makefu ];
+    maintainers = [lib.maintainers.makefu];
   };
 }

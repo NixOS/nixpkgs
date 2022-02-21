@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libvarlink";
   version = "22";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i15227vlc9k4276r833ndhxrcys9305pf6dga1j0alx2vj85yz2";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [meson ninja];
 
   postPatch = ''
     substituteInPlace varlink-wrapper.py \
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "C implementation of the Varlink protocol and command line tool";
     homepage = "https://github.com/varlink/libvarlink";
     license = licenses.asl20;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
     platforms = platforms.linux;
   };
 }

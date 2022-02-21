@@ -1,25 +1,27 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.qtile;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.qtile;
+in {
   options = {
     services.xserver.windowManager.qtile.enable = mkEnableOption "qtile";
   };
 
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = [{
-      name = "qtile";
-      start = ''
-        ${pkgs.qtile}/bin/qtile start &
-        waitPID=$!
-      '';
-    }];
+    services.xserver.windowManager.session = [
+      {
+        name = "qtile";
+        start = ''
+          ${pkgs.qtile}/bin/qtile start &
+          waitPID=$!
+        '';
+      }
+    ];
 
-    environment.systemPackages = [ pkgs.qtile ];
+    environment.systemPackages = [pkgs.qtile];
   };
 }

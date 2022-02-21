@@ -1,10 +1,13 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   version = "3.99-u4-b5";
   pname = "monkeys-audio";
 
-  patches = [ ./buildfix.diff ];
+  patches = [./buildfix.diff];
 
   src = fetchurl {
     url = "https://deb-multimedia.org/pool/main/m/${pname}/${pname}_${version}.orig.tar.gz";
@@ -15,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "Lossless audio codec";
     platforms = platforms.linux;
     license = licenses.lgpl2;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

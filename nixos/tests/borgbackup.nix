@@ -1,6 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-let
+import ./make-test-python.nix ({pkgs, ...}: let
   passphrase = "supersecret";
   dataDir = "/ran:dom/data";
   excludeFile = "not_this_file";
@@ -33,17 +31,15 @@ let
   publicKeyAppendOnly = ''
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFpxm7PUQsZB2Ejs8Xp0YVp8IOW+HylIRzhweORbRCMv root@client
   '';
-
 in {
   name = "borgbackup";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 
   nodes = {
-    client = { ... }: {
+    client = {...}: {
       services.borgbackup.jobs = {
-
         local = {
           paths = dataDir;
           repo = localRepo;
@@ -60,16 +56,16 @@ in {
             within = "1y";
             yearly = 5;
           };
-          exclude = [ "*/${excludeFile}" ];
+          exclude = ["*/${excludeFile}"];
           postHook = "echo post";
-          startAt = [ ]; # Do not run automatically
+          startAt = []; # Do not run automatically
         };
 
         remote = {
           paths = dataDir;
           repo = remoteRepo;
           encryption.mode = "none";
-          startAt = [ ];
+          startAt = [];
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
         };
 
@@ -77,7 +73,7 @@ in {
           paths = dataDir;
           repo = remoteRepo;
           encryption.mode = "none";
-          startAt = [ ];
+          startAt = [];
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly";
         };
 
@@ -87,7 +83,7 @@ in {
           '';
           repo = remoteRepo;
           encryption.mode = "none";
-          startAt = [ ];
+          startAt = [];
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
         };
 
@@ -95,14 +91,13 @@ in {
           dumpCommand = "${pkgs.coreutils}/bin/false";
           repo = remoteRepo;
           encryption.mode = "none";
-          startAt = [ ];
+          startAt = [];
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
         };
-
       };
     };
 
-    server = { ... }: {
+    server = {...}: {
       services.openssh = {
         enable = true;
         passwordAuthentication = false;
@@ -110,13 +105,13 @@ in {
       };
 
       services.borgbackup.repos.repo1 = {
-        authorizedKeys = [ publicKey ];
+        authorizedKeys = [publicKey];
         path = "/data/borgbackup";
       };
 
       # Second repo to make sure the authorizedKeys options are merged correctly
       services.borgbackup.repos.repo2 = {
-        authorizedKeysAppendOnly = [ publicKeyAppendOnly ];
+        authorizedKeysAppendOnly = [publicKeyAppendOnly];
         path = "/data/borgbackup";
         quota = ".5G";
       };

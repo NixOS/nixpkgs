@@ -1,15 +1,16 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "tparsec";
   version = "2020-02-11";
 
   ipkgName = "TParsec";
 
-  idrisDeps = [ contrib ];
+  idrisDeps = [contrib];
 
   src = fetchFromGitHub {
     owner = "gallais";
@@ -22,6 +23,6 @@ build-idris-package  {
     description = "TParsec - Total Parser Combinators in Idris";
     homepage = "https://github.com/gallais/idris-tparsec";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

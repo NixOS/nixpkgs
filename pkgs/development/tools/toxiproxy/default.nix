@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "toxiproxy";
   version = "2.1.4";
@@ -12,7 +15,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/Shopify/toxiproxy";
   subPackages = ["cmd" "cli"];
-  ldflags = [ "-X github.com/Shopify/toxiproxy.Version=v${version}" ];
+  ldflags = ["-X github.com/Shopify/toxiproxy.Version=v${version}"];
 
   postInstall = ''
     mv $out/bin/cli $out/bin/toxiproxy-cli
@@ -21,7 +24,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Proxy for for simulating network conditions";
-    maintainers = with lib.maintainers; [ avnik ];
+    maintainers = with lib.maintainers; [avnik];
     license = lib.licenses.mit;
   };
 }

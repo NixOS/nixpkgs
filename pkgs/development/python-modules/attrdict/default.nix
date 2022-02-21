@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, pythonOlder
-, nose
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  coverage,
+  pythonOlder,
+  nose,
+  pytestCheckHook,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "attrdict";
   version = "2.0.1";
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "A dict with attribute-style access";
     homepage = "https://github.com/bcj/AttrDict";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

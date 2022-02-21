@@ -1,8 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
-
 buildOctavePackage rec {
   pname = "dataframe";
   version = "1.2.0";
@@ -15,7 +15,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/dataframe/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Data manipulation toolbox similar to R data.frame";
   };
 }

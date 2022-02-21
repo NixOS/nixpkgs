@@ -1,10 +1,13 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
   version = "unstable-2021-06-12";
 
-  outputs = [ "out" "adobeBlank" ];
+  outputs = ["out" "adobeBlank"];
 
   src = fetchFromGitHub {
     owner = "google";
@@ -42,9 +45,9 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
-    license = with licenses; [ asl20 ofl ufl ];
+    license = with licenses; [asl20 ofl ufl];
     platforms = platforms.all;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ manveru ];
+    maintainers = with maintainers; [manveru];
   };
 }

@@ -1,15 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "plasma5";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ttuegel ];
+    maintainers = [ttuegel];
   };
 
-  machine = { ... }:
-
-  {
-    imports = [ ./common/user-account.nix ];
+  machine = {...}: {
+    imports = [./common/user-account.nix];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
     services.xserver.displayManager.defaultSession = "plasma";
@@ -21,7 +17,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     user = nodes.machine.config.users.users.alice;
     xdo = "${pkgs.xdotool}/bin/xdotool";
   in ''

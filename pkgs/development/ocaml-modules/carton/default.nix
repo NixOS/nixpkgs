@@ -1,10 +1,35 @@
-{ lib, buildDunePackage, fetchurl
-, ke, duff, decompress, cstruct, optint, bigstringaf, stdlib-shims
-, bigarray-compat, checkseum, logs, psq, fmt
-, result, rresult, fpath, base64, bos, digestif, mmap, alcotest
-, crowbar, alcotest-lwt, lwt, findlib, mirage-flow, cmdliner, hxd
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ke,
+  duff,
+  decompress,
+  cstruct,
+  optint,
+  bigstringaf,
+  stdlib-shims,
+  bigarray-compat,
+  checkseum,
+  logs,
+  psq,
+  fmt,
+  result,
+  rresult,
+  fpath,
+  base64,
+  bos,
+  digestif,
+  mmap,
+  alcotest,
+  crowbar,
+  alcotest-lwt,
+  lwt,
+  findlib,
+  mirage-flow,
+  cmdliner,
+  hxd,
 }:
-
 buildDunePackage rec {
   pname = "carton";
   version = "0.4.3";
@@ -62,6 +87,6 @@ buildDunePackage rec {
     description = "Implementation of PACKv2 file in OCaml";
     license = licenses.mit;
     homepage = "https://github.com/mirage/ocaml-git";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

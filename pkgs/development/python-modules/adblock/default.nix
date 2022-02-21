@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, pkg-config
-, openssl
-, publicsuffix-list
-, pythonOlder
-, libiconv
-, CoreFoundation
-, Security
-, pytestCheckHook
-, toml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  publicsuffix-list,
+  pythonOlder,
+  libiconv,
+  CoreFoundation,
+  Security,
+  pytestCheckHook,
+  toml,
 }:
-
 buildPythonPackage rec {
   pname = "adblock";
   version = "0.5.1";
@@ -35,20 +35,24 @@ buildPythonPackage rec {
     hash = "sha256-x0mcykHWhheD2ycELcfR1ZQ/6WfFQzY+L/LmMipP4Rc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    CoreFoundation
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      CoreFoundation
+      Security
+    ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
@@ -75,7 +79,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for Brave's adblocking library";
     homepage = "https://github.com/ArniDagur/python-adblock/";
-    maintainers = with maintainers; [ petabyteboy dotlambda ];
-    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [petabyteboy dotlambda];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
   };
 }

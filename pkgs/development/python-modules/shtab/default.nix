@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, bashInteractive
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  bashInteractive,
 }:
-
 buildPythonPackage rec {
   pname = "shtab";
   version = "1.5.3";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Module for shell tab completion of Python CLI applications";
     homepage = "https://docs.iterative.ai/shtab/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

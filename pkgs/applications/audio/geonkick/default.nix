@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitLab, cmake, pkg-config, libsndfile, rapidjson
-, libjack2, lv2, libX11, cairo }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  libsndfile,
+  rapidjson,
+  libjack2,
+  lv2,
+  libX11,
+  cairo,
+}:
 stdenv.mkDerivation rec {
   pname = "geonkick";
   version = "2.8.1";
@@ -12,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wSlZ9pVVqlrPSz20pRdcRLq6pTcibxD7326l9WY7ZDY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ libsndfile rapidjson libjack2 lv2 libX11 cairo ];
+  buildInputs = [libsndfile rapidjson libjack2 lv2 libX11 cairo];
 
   # https://github.com/iurie-sw/geonkick/issues/120
   cmakeFlags = [
@@ -26,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "A free software percussion synthesizer";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [maintainers.magnetophon];
   };
 }

@@ -1,5 +1,8 @@
-{ fetchFromGitHub, lib, rustPlatform }:
-
+{
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "genact";
   version = "0.11.0";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "A nonsense activity generator";
     homepage = "https://github.com/svenstaro/genact";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
   };
 }

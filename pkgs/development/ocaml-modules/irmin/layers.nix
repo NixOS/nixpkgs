@@ -1,5 +1,10 @@
-{ buildDunePackage, irmin, mtime, logs, lwt }:
-
+{
+  buildDunePackage,
+  irmin,
+  mtime,
+  logs,
+  lwt,
+}:
 buildDunePackage {
   pname = "irmin-layers";
 
@@ -12,7 +17,9 @@ buildDunePackage {
     lwt
   ];
 
-  meta = irmin.meta // {
-    description = "Combine different Irmin stores into a single, layered store";
-  };
+  meta =
+    irmin.meta
+    // {
+      description = "Combine different Irmin stores into a single, layered store";
+    };
 }

@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, xorgproto
-, libX11
-, libXext
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, ncurses
-, pixman
-, pkg-config
-, udev
-, utilmacros
-, xorgserver
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  xorgproto,
+  libX11,
+  libXext,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  ncurses,
+  pixman,
+  pkg-config,
+  udev,
+  utilmacros,
+  xorgserver,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xf86-input-wacom";
   version = "1.0.0";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WitvT1y9KpXJriMr6Z9CrmAQdKPBZ5g9fP2nIgzJzAc=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   buildInputs = [
     libX11
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    maintainers = with maintainers; [ goibhniu fortuneteller2k ];
+    maintainers = with maintainers; [goibhniu fortuneteller2k];
     description = "Wacom digitizer driver for X11";
     homepage = "http://linuxwacom.sourceforge.net";
     license = licenses.gpl2Only;

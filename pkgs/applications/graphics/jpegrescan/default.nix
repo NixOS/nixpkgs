@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, libjpeg_turbo, perl, perlPackages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  libjpeg_turbo,
+  perl,
+  perlPackages,
+}:
 stdenv.mkDerivation rec {
   pname = "jpegrescan";
   date = "2016-06-01";
@@ -26,17 +33,19 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jpegrescan --prefix PERL5LIB : $PERL5LIB
   '';
 
-  propagatedBuildInputs = [ perlPackages.FileSlurp ];
+  propagatedBuildInputs = [perlPackages.FileSlurp];
 
   buildInputs = [
-    perl libjpeg_turbo makeWrapper
+    perl
+    libjpeg_turbo
+    makeWrapper
   ];
 
   meta = with lib; {
     description = "losslessly shrink any JPEG file";
     homepage = "https://github.com/kud/jpegrescan";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.ramkromberg ];
+    maintainers = [maintainers.ramkromberg];
     platforms = platforms.all;
   };
 }

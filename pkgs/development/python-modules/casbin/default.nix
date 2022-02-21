@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, simpleeval
-, pythonOlder
-, coveralls
-, wcmatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  simpleeval,
+  pythonOlder,
+  coveralls,
+  wcmatch,
 }:
-
 buildPythonPackage rec {
   pname = "casbin";
   version = "1.15.4";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "An authorization library that supports access control models like ACL, RBAC, ABAC in Python";
     homepage = "https://github.com/casbin/pycasbin";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

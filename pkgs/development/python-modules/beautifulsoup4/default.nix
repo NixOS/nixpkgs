@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, html5lib
-, lxml
-, pytestCheckHook
-, pythonOlder
-, soupsieve
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  html5lib,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  soupsieve,
 }:
-
 buildPythonPackage rec {
   pname = "beautifulsoup4";
   version = "4.10.0";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "bs4" ];
+  pythonImportsCheck = ["bs4"];
 
   meta = with lib; {
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     description = "HTML and XML parser";
     license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

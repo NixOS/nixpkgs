@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipykernel
-, gcc
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ipykernel,
+  gcc,
 }:
-
 buildPythonPackage rec {
   pname = "jupyter-c-kernel";
   version = "1.2.2";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
       --replace "'gcc'" "'${gcc}/bin/gcc'"
   '';
 
-  propagatedBuildInputs = [ ipykernel ];
+  propagatedBuildInputs = [ipykernel];
 
   # no tests in repository
   doCheck = false;
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Minimalistic C kernel for Jupyter";
     homepage = "https://github.com/brendanrius/jupyter-c-kernel/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

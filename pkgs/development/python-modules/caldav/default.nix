@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, icalendar
-, lxml
-, nose
-, pytz
-, requests
-, six
-, tzlocal
-, vobject
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  icalendar,
+  lxml,
+  nose,
+  pytz,
+  requests,
+  six,
+  tzlocal,
+  vobject,
 }:
-
 buildPythonPackage rec {
   pname = "caldav";
   version = "0.8.2";
@@ -48,12 +48,12 @@ buildPythonPackage rec {
       --replace ", 'radicale'" ""
   '';
 
-  pythonImportsCheck = [ "caldav" ];
+  pythonImportsCheck = ["caldav"];
 
   meta = with lib; {
     description = "This project is a CalDAV (RFC4791) client library for Python.";
     homepage = "https://github.com/python-caldav/caldav";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marenz dotlambda ];
+    maintainers = with maintainers; [marenz dotlambda];
   };
 }

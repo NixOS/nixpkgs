@@ -1,16 +1,16 @@
-{ lib
-, asyncclick
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  asyncclick,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  poetry-core,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  voluptuous,
 }:
-
 buildPythonPackage rec {
   pname = "python-kasa";
   version = "0.4.1";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Python API for TP-Link Kasa Smarthome products";
     homepage = "https://python-kasa.readthedocs.io/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,38 +1,38 @@
 # This test runs podman and checks if simple container starts
-
 import ../make-test-python.nix (
-  { pkgs, lib, ... }: {
+  {
+    pkgs,
+    lib,
+    ...
+  }: {
     name = "podman";
     meta = {
       maintainers = lib.teams.podman.members;
     };
 
     nodes = {
-      podman =
-        { pkgs, ... }:
-        {
-          virtualisation.podman.enable = true;
+      podman = {pkgs, ...}: {
+        virtualisation.podman.enable = true;
 
-          # To test docker socket support
-          virtualisation.podman.dockerSocket.enable = true;
-          environment.systemPackages = [
-            pkgs.docker-client
-          ];
+        # To test docker socket support
+        virtualisation.podman.dockerSocket.enable = true;
+        environment.systemPackages = [
+          pkgs.docker-client
+        ];
 
-          users.users.alice = {
-            isNormalUser = true;
-            home = "/home/alice";
-            description = "Alice Foobar";
-            extraGroups = [ "podman" ];
-          };
-
-          users.users.mallory = {
-            isNormalUser = true;
-            home = "/home/mallory";
-            description = "Mallory Foobar";
-          };
-
+        users.users.alice = {
+          isNormalUser = true;
+          home = "/home/alice";
+          description = "Alice Foobar";
+          extraGroups = ["podman"];
         };
+
+        users.users.mallory = {
+          isNormalUser = true;
+          home = "/home/mallory";
+          description = "Mallory Foobar";
+        };
+      };
     };
 
     testScript = ''

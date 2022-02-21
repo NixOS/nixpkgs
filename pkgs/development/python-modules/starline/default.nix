@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  aiohttp,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "starline";
   version = "0.1.5";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "starline" ];
+  pythonImportsCheck = ["starline"];
 
   meta = with lib; {
     description = "Unofficial python library for StarLine API";
     homepage = "https://github.com/Anonym-tsk/starline";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

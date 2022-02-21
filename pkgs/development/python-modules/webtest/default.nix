@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, webob
-, six
-, beautifulsoup4
-, waitress
-, pyquery
-, wsgiproxy2
-, pastedeploy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  webob,
+  six,
+  beautifulsoup4,
+  waitress,
+  pyquery,
+  wsgiproxy2,
+  pastedeploy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   version = "3.0.0";
   pname = "webtest";
@@ -44,12 +44,12 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "webtest" ];
+  pythonImportsCheck = ["webtest"];
 
   meta = with lib; {
     description = "Helper to test WSGI applications";
     homepage = "https://webtest.readthedocs.org/en/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, bcrypt
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  bcrypt,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "flask-bcrypt";
   version = "0.7.1";
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Brcrypt hashing for Flask";
     homepage = "https://github.com/maxcountryman/flask-bcrypt";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

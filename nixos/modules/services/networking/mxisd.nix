@@ -1,39 +1,42 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  isMa1sd =
-    package:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  isMa1sd = package:
     lib.hasPrefix "ma1sd" package.name;
 
-  isMxisd =
-    package:
+  isMxisd = package:
     lib.hasPrefix "mxisd" package.name;
 
   cfg = config.services.mxisd;
 
-  server = optionalAttrs (cfg.server.name != null) { inherit (cfg.server) name; }
-        // optionalAttrs (cfg.server.port != null) { inherit (cfg.server) port; };
+  server =
+    optionalAttrs (cfg.server.name != null) {inherit (cfg.server) name;}
+    // optionalAttrs (cfg.server.port != null) {inherit (cfg.server) port;};
 
-  baseConfig = {
-    matrix.domain = cfg.matrix.domain;
-    key.path = "${cfg.dataDir}/signing.key";
-    storage = {
-      provider.sqlite.database = if isMa1sd cfg.package
-                                 then "${cfg.dataDir}/ma1sd.db"
-                                 else "${cfg.dataDir}/mxisd.db";
-    };
-  } // optionalAttrs (server != {}) { inherit server; };
+  baseConfig =
+    {
+      matrix.domain = cfg.matrix.domain;
+      key.path = "${cfg.dataDir}/signing.key";
+      storage = {
+        provider.sqlite.database =
+          if isMa1sd cfg.package
+          then "${cfg.dataDir}/ma1sd.db"
+          else "${cfg.dataDir}/mxisd.db";
+      };
+    }
+    // optionalAttrs (server != {}) {inherit server;};
 
   # merges baseConfig and extraConfig into a single file
   fullConfig = recursiveUpdate baseConfig cfg.extraConfig;
 
-  configFile = if isMa1sd cfg.package
-               then pkgs.writeText "ma1sd-config.yaml" (builtins.toJSON fullConfig)
-               else pkgs.writeText "mxisd-config.yaml" (builtins.toJSON fullConfig);
-
+  configFile =
+    if isMa1sd cfg.package
+    then pkgs.writeText "ma1sd-config.yaml" (builtins.toJSON fullConfig)
+    else pkgs.writeText "mxisd-config.yaml" (builtins.toJSON fullConfig);
 in {
   options = {
     services.mxisd = {
@@ -59,18 +62,15 @@ in {
       };
 
       matrix = {
-
         domain = mkOption {
           type = types.str;
           description = ''
             the domain of the matrix homeserver
           '';
         };
-
       };
 
       server = {
-
         name = mkOption {
           type = types.nullOr types.str;
           default = null;
@@ -86,34 +86,33 @@ in {
             HTTP port to listen on (unencrypted)
           '';
         };
-
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-    users.users.mxisd =
-      {
-        group = "mxisd";
-        home = cfg.dataDir;
-        createHome = true;
-        shell = "${pkgs.bash}/bin/bash";
-        uid = config.ids.uids.mxisd;
-      };
+    users.users.mxisd = {
+      group = "mxisd";
+      home = cfg.dataDir;
+      createHome = true;
+      shell = "${pkgs.bash}/bin/bash";
+      uid = config.ids.uids.mxisd;
+    };
 
-    users.groups.mxisd =
-      {
-        gid = config.ids.gids.mxisd;
-      };
+    users.groups.mxisd = {
+      gid = config.ids.gids.mxisd;
+    };
 
     systemd.services.mxisd = {
       description = "a federated identity server for the matrix ecosystem";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = let
-        executable = if isMa1sd cfg.package then "ma1sd" else "mxisd";
+        executable =
+          if isMa1sd cfg.package
+          then "ma1sd"
+          else "mxisd";
       in {
         Type = "simple";
         User = "mxisd";

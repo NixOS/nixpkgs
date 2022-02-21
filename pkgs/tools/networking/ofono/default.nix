@@ -1,20 +1,21 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, glib
-, dbus
-, ell
-, systemd
-, bluez
-, mobile-broadband-provider-info
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  dbus,
+  ell,
+  systemd,
+  bluez,
+  mobile-broadband-provider-info,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ofono";
   version = "1.34";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/network/ofono/ofono.git";
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
     changelog = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/plain/ChangeLog?h=${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

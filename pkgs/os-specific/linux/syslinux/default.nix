@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchurl,
+  fetchpatch,
+  nasm,
+  perl,
+  python3,
+  libuuid,
+  mtools,
+  makeWrapper,
+}:
 stdenv.mkDerivation {
   pname = "syslinux";
   version = "unstable-20190207";
@@ -63,23 +74,24 @@ stdenv.mkDerivation {
     touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
-  nativeBuildInputs = [ nasm perl python3 makeWrapper ];
-  buildInputs = [ libuuid ];
+  nativeBuildInputs = [nasm perl python3 makeWrapper];
+  buildInputs = [libuuid];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
-  hardeningDisable = [ "pic" "stackprotector" "fortify" ];
+  hardeningDisable = ["pic" "stackprotector" "fortify"];
 
-  stripDebugList = [ "bin" "sbin" "share/syslinux/com32" ];
+  stripDebugList = ["bin" "sbin" "share/syslinux/com32"];
 
-  makeFlags = [
-    "BINDIR=$(out)/bin"
-    "SBINDIR=$(out)/sbin"
-    "DATADIR=$(out)/share"
-    "MANDIR=$(out)/share/man"
-    "PERL=perl"
-    "HEXDATE=0x00000000"
-  ]
-    ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
+  makeFlags =
+    [
+      "BINDIR=$(out)/bin"
+      "SBINDIR=$(out)/sbin"
+      "DATADIR=$(out)/share"
+      "MANDIR=$(out)/share/man"
+      "PERL=perl"
+      "HEXDATE=0x00000000"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isi686 ["bios" "efi32"];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
 
@@ -95,7 +107,7 @@ stdenv.mkDerivation {
     homepage = "http://www.syslinux.org/";
     description = "A lightweight bootloader";
     license = licenses.gpl2;
-    maintainers = [ maintainers.samueldr ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [maintainers.samueldr];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

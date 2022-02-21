@@ -1,17 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.gerrit;
 
   # NixOS option type for git-like configs
-  gitIniType = with types;
-    let
-      primitiveType = either str (either bool int);
-      multipleType = either primitiveType (listOf primitiveType);
-      sectionType = lazyAttrsOf multipleType;
-      supersectionType = lazyAttrsOf (either multipleType sectionType);
-    in lazyAttrsOf supersectionType;
+  gitIniType = with types; let
+    primitiveType = either str (either bool int);
+    multipleType = either primitiveType (listOf primitiveType);
+    sectionType = lazyAttrsOf multipleType;
+    supersectionType = lazyAttrsOf (either multipleType sectionType);
+  in
+    lazyAttrsOf supersectionType;
 
   gerritConfig = pkgs.writeText "gerrit.conf" (
     lib.generators.toGitINI cfg.settings
@@ -36,27 +39,26 @@ let
   '';
 
   gerrit-plugins = pkgs.runCommand
-    "gerrit-plugins"
-    {
-      buildInputs = [ gerrit-cli ];
-    }
-    ''
-      shopt -s nullglob
-      mkdir $out
+  "gerrit-plugins"
+  {
+    buildInputs = [gerrit-cli];
+  }
+  ''
+    shopt -s nullglob
+    mkdir $out
 
-      for name in ${toString cfg.builtinPlugins}; do
-        echo "Installing builtin plugin $name.jar"
-        gerrit cat plugins/$name.jar > $out/$name.jar
-      done
+    for name in ${toString cfg.builtinPlugins}; do
+      echo "Installing builtin plugin $name.jar"
+      gerrit cat plugins/$name.jar > $out/$name.jar
+    done
 
-      for file in ${toString cfg.plugins}; do
-        name=$(echo "$file" | cut -d - -f 2-)
-        echo "Installing plugin $name"
-        ln -sf "$file" $out/$name
-      done
-    '';
-in
-{
+    for file in ${toString cfg.plugins}; do
+      name=$(echo "$file" | cut -d - -f 2-)
+      echo "Installing plugin $name"
+      ln -sf "$file" $out/$name
+    done
+  '';
+in {
   options = {
     services.gerrit = {
       enable = mkEnableOption "Gerrit service";
@@ -151,7 +153,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
     assertions = [
       {
         assertion = cfg.replicationSettings != {} -> elem "replication" cfg.builtinPlugins;
@@ -170,20 +171,20 @@ in
     };
 
     # Add the gerrit CLI to the system to run `gerrit init` and friends.
-    environment.systemPackages = [ gerrit-cli ];
+    environment.systemPackages = [gerrit-cli];
 
     systemd.sockets.gerrit = {
       unitConfig.Description = "Gerrit HTTP socket";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ cfg.listenAddress ];
+      wantedBy = ["sockets.target"];
+      listenStreams = [cfg.listenAddress];
     };
 
     systemd.services.gerrit = {
       description = "Gerrit";
 
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "gerrit.socket" ];
-      after = [ "gerrit.socket" "network.target" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["gerrit.socket"];
+      after = ["gerrit.socket" "network.target"];
 
       path = [
         gerrit-cli
@@ -220,8 +221,7 @@ in
         # install the plugins
         rm -rf plugins
         ln -sv ${gerrit-plugins} plugins
-      ''
-      ;
+      '';
 
       serviceConfig = {
         CacheDirectory = "gerrit";
@@ -236,7 +236,7 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ edef zimbatm ];
+  meta.maintainers = with lib.maintainers; [edef zimbatm];
   # uses attributes of the linked package
   meta.buildDocsInSandbox = false;
 }

@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+}:
 buildPythonPackage rec {
   pname = "casttube";
   version = "0.2.1";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "10pw2sjy648pvp42lbbdmkkx79bqlkq1xcbzp1frraj9g66azljl";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
   # no tests
   doCheck = false;
@@ -18,6 +22,6 @@ buildPythonPackage rec {
     description = "Interact with the Youtube Chromecast api";
     homepage = "https://github.com/ur1katz/casttube";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

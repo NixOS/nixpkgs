@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, dpkg, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-prosody";
   version = "1.0.5675";
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Prosody configuration for Jitsi Meet";
     longDescription = ''
-        This package contains configuration for Prosody to be used with Jitsi Meet.
+      This package contains configuration for Prosody to be used with Jitsi Meet.
     '';
     homepage = "https://github.com/jitsi/jitsi-meet/";
     license = licenses.asl20;

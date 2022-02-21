@@ -1,9 +1,12 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
-
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 bundlerApp {
   pname = "showoff";
   gemdir = ./.;
-  exes = [ "showoff" ];
+  exes = ["showoff"];
 
   passthru.updateScript = bundlerUpdateScript "showoff";
 
@@ -13,6 +16,6 @@ bundlerApp {
     homepage = "https://puppetlabs.github.io/showoff/";
     license = with licenses; mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ maxwilson nicknovitski ];
+    maintainers = with maintainers; [maxwilson nicknovitski];
   };
 }

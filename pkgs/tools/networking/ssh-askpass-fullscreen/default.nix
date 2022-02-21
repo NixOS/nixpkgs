@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk2, openssh }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gtk2,
+  openssh,
+}:
 stdenv.mkDerivation rec {
   pname = "ssh-askpass-fullscreen";
   version = "1.2";
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A small SSH askpass GUI using GTK+2";
     homepage = "https://github.com/atj/ssh-askpass-fullscreen";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ caadar ];
+    maintainers = with maintainers; [caadar];
     platforms = platforms.unix;
   };
 }

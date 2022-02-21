@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, intltool
-, gobject-introspection
-, gmime
-, libxml2
-, libsoup
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  intltool,
+  gobject-introspection,
+  gmime,
+  libxml2,
+  libsoup,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xplayer-plparser";
   version = "1.0.2";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Playlist parsing library for xplayer";
     homepage = "https://github.com/linuxmint/xplayer-plparser";
-    maintainers = with maintainers; [ tu-maurice ];
+    maintainers = with maintainers; [tu-maurice];
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

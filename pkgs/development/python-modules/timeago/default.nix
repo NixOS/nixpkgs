@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "timeago";
   version = "1.0.15";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test/testcase.py" ];
+  pytestFlagsArray = ["test/testcase.py"];
 
-  pythonImportsCheck = [ "timeago" ];
+  pythonImportsCheck = ["timeago"];
 
   meta = with lib; {
     description = "Python module to format past datetime output";
     homepage = "https://github.com/hustcc/timeago";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

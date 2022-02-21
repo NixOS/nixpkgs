@@ -1,7 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, pygments
-, gitMinimal, mercurial, subversion, patchutils, less
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  pygments,
+  gitMinimal,
+  mercurial,
+  subversion,
+  patchutils,
+  less,
 }:
-
 buildPythonPackage rec {
   pname = "ydiff";
   version = "1.2";
@@ -25,7 +33,7 @@ buildPythonPackage rec {
     patchShebangs tests/*.sh
   '';
 
-  checkInputs = [ docutils pygments ];
+  checkInputs = [docutils pygments];
 
   checkPhase = ''
     runHook preCheck
@@ -43,6 +51,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ymattw/ydiff";
     license = licenses.bsd3;
-    maintainers = (with maintainers; [ leenaars ]) ++ teams.deshaw.members;
+    maintainers = (with maintainers; [leenaars]) ++ teams.deshaw.members;
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  sphinx,
 }:
-
 buildPythonPackage rec {
   pname = "sphinx-argparse";
   version = "0.3.1";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "A sphinx extension that automatically documents argparse commands and options";
     homepage = "https://github.com/ribozz/sphinx-argparse";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ clacke ];
+    maintainers = with lib.maintainers; [clacke];
   };
 }

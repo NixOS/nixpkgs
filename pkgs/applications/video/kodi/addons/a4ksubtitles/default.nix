@@ -1,5 +1,10 @@
-{ lib, buildKodiAddon, fetchFromGitHub, requests, vfs-libarchive  }:
-
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  requests,
+  vfs-libarchive,
+}:
 buildKodiAddon rec {
   pname = "a4ksubtitles";
   namespace = "service.subtitles.a4ksubtitles";

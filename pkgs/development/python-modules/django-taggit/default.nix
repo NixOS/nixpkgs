@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, django
-, djangorestframework
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  django,
+  djangorestframework,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "django-taggit";
   version = "2.1.0";
@@ -43,7 +43,6 @@ buildPythonPackage rec {
     description = "Simple tagging for django";
     homepage = "https://github.com/jazzband/django-taggit";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ desiderius ];
+    maintainers = with maintainers; [desiderius];
   };
-
 }

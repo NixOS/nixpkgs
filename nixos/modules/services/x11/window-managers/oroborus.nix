@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.oroborus;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.oroborus;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.oroborus.enable = mkEnableOption "oroborus";
@@ -20,6 +21,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.oroborus ];
+    environment.systemPackages = [pkgs.oroborus];
   };
 }

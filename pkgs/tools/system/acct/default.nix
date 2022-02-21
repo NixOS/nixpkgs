@@ -1,5 +1,8 @@
-{ fetchurl, lib, stdenv }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+}:
 stdenv.mkDerivation rec {
   pname = "acct";
   version = "6.6.4";
@@ -25,7 +28,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/acct/";
 
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = platforms.linux;
   };
 }

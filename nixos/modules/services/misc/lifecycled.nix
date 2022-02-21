@@ -1,7 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.lifecycled;
 
   # TODO: Add the ability to extend this with an rfc 42-like interface.
@@ -19,9 +22,8 @@ let
     ${lib.optionalString (cfg.snsTopic != null) "LIFECYCLED_SNS_TOPIC=${cfg.snsTopic}"}
     ${lib.optionalString (cfg.awsRegion != null) "AWS_REGION=${cfg.awsRegion}"}
   '';
-in
-{
-  meta.maintainers = with maintainers; [ cole-h grahamc ];
+in {
+  meta.maintainers = with maintainers; [cole-h grahamc];
 
   options = {
     services.lifecycled = {
@@ -133,17 +135,17 @@ in
     (mkIf cfg.enable {
       environment.etc."lifecycled".source = configFile;
 
-      systemd.packages = [ pkgs.lifecycled ];
+      systemd.packages = [pkgs.lifecycled];
       systemd.services.lifecycled = {
-        wantedBy = [ "network-online.target" ];
-        restartTriggers = [ configFile ];
+        wantedBy = ["network-online.target"];
+        restartTriggers = [configFile];
       };
     })
 
     (mkIf cfg.queueCleaner.enable {
       systemd.services.lifecycled-queue-cleaner = {
         description = "Lifecycle Daemon Queue Cleaner";
-        environment = optionalAttrs (cfg.awsRegion != null) { AWS_REGION = cfg.awsRegion; };
+        environment = optionalAttrs (cfg.awsRegion != null) {AWS_REGION = cfg.awsRegion;};
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${pkgs.lifecycled}/bin/lifecycled-queue-cleaner -parallel ${toString cfg.queueCleaner.parallel}";
@@ -152,8 +154,8 @@ in
 
       systemd.timers.lifecycled-queue-cleaner = {
         description = "Lifecycle Daemon Queue Cleaner Timer";
-        wantedBy = [ "timers.target" ];
-        after = [ "network-online.target" ];
+        wantedBy = ["timers.target"];
+        after = ["network-online.target"];
         timerConfig = {
           Unit = "lifecycled-queue-cleaner.service";
           OnCalendar = "${cfg.queueCleaner.frequency}";

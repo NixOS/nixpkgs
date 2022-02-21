@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, libuv
-, CoreServices
-, ApplicationServices
-# Check Inputs
-, aiohttp
-, psutil
-, pyopenssl
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  libuv,
+  CoreServices,
+  ApplicationServices
+  # Check Inputs
+  ,
+  aiohttp,
+  psutil,
+  pyopenssl,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "uvloop";
   version = "0.16.0";
@@ -23,12 +24,14 @@ buildPythonPackage rec {
     sha256 = "f74bc20c7b67d1c27c72601c78cf95be99d5c2cdd4514502b4f3eb0933ff1228";
   };
 
-  buildInputs = [
-    libuv
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    ApplicationServices
-  ];
+  buildInputs =
+    [
+      libuv
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      ApplicationServices
+    ];
 
   dontUseSetuptoolsCheck = true;
   checkInputs = [
@@ -40,20 +43,25 @@ buildPythonPackage rec {
 
   LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
 
-  pytestFlagsArray = [
-    # from pytest.ini, these are NECESSARY to prevent failures
-    "--capture=no"
-    "--assert=plain"
-    "--strict"
-    "--tb=native"
-  ] ++ lib.optionals (stdenv.isAarch64) [
-    # test gets stuck in epoll_pwait on hydras aarch64 builders
-    # https://github.com/MagicStack/uvloop/issues/412
-    "--deselect" "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # Flaky test: https://github.com/MagicStack/uvloop/issues/412
-    "--deselect" "tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
-  ];
+  pytestFlagsArray =
+    [
+      # from pytest.ini, these are NECESSARY to prevent failures
+      "--capture=no"
+      "--assert=plain"
+      "--strict"
+      "--tb=native"
+    ]
+    ++ lib.optionals (stdenv.isAarch64) [
+      # test gets stuck in epoll_pwait on hydras aarch64 builders
+      # https://github.com/MagicStack/uvloop/issues/412
+      "--deselect"
+      "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # Flaky test: https://github.com/MagicStack/uvloop/issues/412
+      "--deselect"
+      "tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
+    ];
 
   disabledTestPaths = [
     # ignore code linting tests
@@ -83,6 +91,6 @@ buildPythonPackage rec {
     description = "Fast implementation of asyncio event loop on top of libuv";
     homepage = "https://github.com/MagicStack/uvloop";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

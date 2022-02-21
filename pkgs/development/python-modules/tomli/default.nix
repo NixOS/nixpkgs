@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, flit-core
-
-# important downstream dependencies
-, flit
-, black
-, mypy
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  flit-core
+  # important downstream dependencies
+  ,
+  flit,
+  black,
+  mypy,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "tomli";
   version = "1.2.2";
@@ -33,20 +33,20 @@ buildPythonPackage rec {
     ./fix-backwards-compatibility-load.patch
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [flit-core];
 
   postInstall = ''
     mkdir $testsout
     cp -R benchmark/ pyproject.toml tests/ $testsout/
   '';
 
-  pythonImportsCheck = [ "tomli" ];
+  pythonImportsCheck = ["tomli"];
 
   # check in passthru.tests.pytest to escape infinite recursion with setuptools-scm
   doCheck = false;
 
   passthru.tests = {
-    pytest = callPackage ./tests.nix { };
+    pytest = callPackage ./tests.nix {};
     inherit flit black mypy setuptools-scm;
   };
 
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "A Python library for parsing TOML, fully compatible with TOML v1.0.0";
     homepage = "https://github.com/hukkin/tomli";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch SuperSandro2000 ];
+    maintainers = with maintainers; [veehaitch SuperSandro2000];
   };
 }

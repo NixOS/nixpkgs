@@ -1,8 +1,14 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, logs, lwt, mirage-flow
-, alcotest, mirage-flow-combinators
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cstruct,
+  logs,
+  lwt,
+  mirage-flow,
+  alcotest,
+  mirage-flow-combinators,
 }:
-
 buildDunePackage rec {
   pname = "mirage-channel";
   version = "4.0.1";
@@ -19,15 +25,15 @@ buildDunePackage rec {
     substituteInPlace test/test_channel.ml --replace 'Fmt.kstrf Alcotest.fail' 'Fmt.kstrf (fun s -> Alcotest.fail s)'
   '';
 
-  propagatedBuildInputs = [ cstruct logs lwt mirage-flow ];
+  propagatedBuildInputs = [cstruct logs lwt mirage-flow];
 
   doCheck = true;
-  checkInputs = [ alcotest mirage-flow-combinators ];
+  checkInputs = [alcotest mirage-flow-combinators];
 
   meta = {
     description = "Buffered channels for MirageOS FLOW types";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     homepage = "https://github.com/mirage/mirage-channel";
   };
 }

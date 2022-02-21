@@ -1,34 +1,34 @@
-{ fetchFromGitHub
-, stdenv
-, lib
-, cmake
-, libGLU
-, libGL
-, freetype
-, freeimage
-, zziplib
-, xorgproto
-, libXrandr
-, libXaw
-, freeglut
-, libXt
-, libpng
-, boost
-, ois
-, libX11
-, libXmu
-, libSM
-, pkg-config
-, libXxf86vm
-, libICE
-, unzip
-, libXrender
-, SDL2
-, withNvidiaCg ? false
-, nvidia_cg_toolkit
-, withSamples ? false
+{
+  fetchFromGitHub,
+  stdenv,
+  lib,
+  cmake,
+  libGLU,
+  libGL,
+  freetype,
+  freeimage,
+  zziplib,
+  xorgproto,
+  libXrandr,
+  libXaw,
+  freeglut,
+  libXt,
+  libpng,
+  boost,
+  ois,
+  libX11,
+  libXmu,
+  libSM,
+  pkg-config,
+  libXxf86vm,
+  libICE,
+  unzip,
+  libXrender,
+  SDL2,
+  withNvidiaCg ? false,
+  nvidia_cg_toolkit,
+  withSamples ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ogre";
   version = "1.12.1";
@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
       --replace '#include <sys/sysctl.h>' ""
   '';
 
-  cmakeFlags = [ "-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
+  cmakeFlags =
+    ["-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}"]
     ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
-    ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
-    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
+    (["BSP" "OCTREE" "PCZ" "PFX"] ++ lib.optional withNvidiaCg "CG")
+    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") ["GL"];
 
-
-  nativeBuildInputs = [ cmake unzip pkg-config ];
+  nativeBuildInputs = [cmake unzip pkg-config];
   buildInputs =
     [
       cmake
@@ -78,12 +78,13 @@ stdenv.mkDerivation rec {
       libICE
       libXrender
       SDL2
-    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+    ]
+    ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
 
   meta = {
     description = "A 3D engine";
     homepage = "https://www.ogre3d.org/";
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
   };

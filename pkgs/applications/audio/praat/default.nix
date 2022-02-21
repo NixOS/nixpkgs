@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, wrapGAppsHook, alsa-lib, gtk3, libpulseaudio }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook,
+  alsa-lib,
+  gtk3,
+  libpulseaudio,
+}:
 stdenv.mkDerivation rec {
   pname = "praat";
   version = "6.2.04";
@@ -19,8 +27,8 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin praat
   '';
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
-  buildInputs = [ alsa-lib gtk3 libpulseaudio ];
+  nativeBuildInputs = [pkg-config wrapGAppsHook];
+  buildInputs = [alsa-lib gtk3 libpulseaudio];
 
   enableParallelBuilding = true;
 
@@ -28,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Doing phonetics by computer";
     homepage = "https://www.fon.hum.uva.nl/praat/";
     license = licenses.gpl2Plus; # Has some 3rd-party code in it though
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
 }

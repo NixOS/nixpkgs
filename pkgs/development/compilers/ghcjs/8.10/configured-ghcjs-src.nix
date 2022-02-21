@@ -1,21 +1,19 @@
-{ perl
-, autoconf
-, automake
-, python3
-, gcc
-, cabal-install
-, runCommand
-, lib
-, stdenv
-
-, ghc
-, happy
-, alex
-
-, ghcjsSrc
-, version
+{
+  perl,
+  autoconf,
+  automake,
+  python3,
+  gcc,
+  cabal-install,
+  runCommand,
+  lib,
+  stdenv,
+  ghc,
+  happy,
+  alex,
+  ghcjsSrc,
+  version,
 }:
-
 runCommand "configured-ghcjs-src" {
   nativeBuildInputs = [
     perl

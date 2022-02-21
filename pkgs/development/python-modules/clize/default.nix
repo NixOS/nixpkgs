@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, sigtools
-, six
-, attrs
-, od
-, docutils
-, pygments
-, unittest2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  sigtools,
+  six,
+  attrs,
+  od,
+  docutils,
+  pygments,
+  unittest2,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "clize";
   version = "4.2.1";
@@ -39,12 +39,12 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [ "clize" ];
+  pythonImportsCheck = ["clize"];
 
   meta = with lib; {
     description = "Command-line argument parsing for Python";
     homepage = "https://github.com/epsy/clize";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

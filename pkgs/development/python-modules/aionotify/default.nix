@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asynctest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  asynctest,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aionotify";
   version = "0.2.0";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/rbarrois/aionotify";
     description = "Simple, asyncio-based inotify library for Python";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; [bsd2];
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

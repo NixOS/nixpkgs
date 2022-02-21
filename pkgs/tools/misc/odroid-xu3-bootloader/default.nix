@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, coreutils, ubootOdroidXU3, runtimeShell }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  coreutils,
+  ubootOdroidXU3,
+  runtimeShell,
+}:
 stdenv.mkDerivation {
   pname = "odroid-xu3-bootloader";
   version = "unstable-2015-12-04";
@@ -19,7 +25,7 @@ stdenv.mkDerivation {
     install -Dm755 $src/sd_fuse/hardkernel_1mb_uboot/sd_fusing.1M.sh $out/bin/sd_fuse-xu3
     sed -i \
       -e '1i#!${runtimeShell}' \
-      -e '1iPATH=${lib.makeBinPath [ coreutils ]}:$PATH' \
+      -e '1iPATH=${lib.makeBinPath [coreutils]}:$PATH' \
       -e '/set -x/d' \
       -e 's,.\/sd_fusing\.sh,sd_fuse-xu3,g' \
       -e "s,\./,$out/lib/sd_fuse-xu3/,g" \
@@ -30,6 +36,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = licenses.unfreeRedistributableFirmware;
     description = "Secure boot enabled boot loader for ODROID-XU{3,4}";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

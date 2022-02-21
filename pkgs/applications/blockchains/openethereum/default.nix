@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, llvmPackages
-, openssl
-, pkg-config
-, stdenv
-, systemd
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  llvmPackages,
+  openssl,
+  pkg-config,
+  stdenv,
+  systemd,
+  darwin,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "openethereum";
   version = "3.2.6";
@@ -23,13 +23,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "08yrpls3szmw6vy2c4d6b1k907ga0809ylvyx0zb6f8mp8z7ahl2";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isLinux [ systemd ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
+  buildInputs =
+    [openssl]
+    ++ lib.optionals stdenv.isLinux [systemd]
+    ++ lib.optionals stdenv.isDarwin [darwin.Security];
 
-  buildFeatures = [ "final" ];
+  buildFeatures = ["final"];
 
   # Fix tests by preventing them from writing to /homeless-shelter.
   preCheck = ''
@@ -44,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     description = "Fast, light, robust Ethereum implementation";
     homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ akru ];
+    maintainers = with maintainers; [akru];
     platforms = lib.platforms.unix;
   };
 }

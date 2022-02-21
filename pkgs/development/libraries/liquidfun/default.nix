@@ -1,5 +1,13 @@
-{ lib, stdenv, requireFile, cmake, libGLU, libGL, libX11, libXi }:
-
+{
+  lib,
+  stdenv,
+  requireFile,
+  cmake,
+  libGLU,
+  libGL,
+  libX11,
+  libXi,
+}:
 stdenv.mkDerivation rec {
   pname = "liquidfun";
   version = "1.1.0";
@@ -10,8 +18,8 @@ stdenv.mkDerivation rec {
     name = "liquidfun-${version}.tar.gz";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGLU libGL libX11 libXi ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [libGLU libGL libX11 libXi];
 
   sourceRoot = "liquidfun/Box2D/";
 
@@ -30,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "2D physics engine based on Box2D";
-    maintainers = with maintainers; [ qknight ];
+    maintainers = with maintainers; [qknight];
     platforms = platforms.linux;
-    hydraPlatforms = [ ];
+    hydraPlatforms = [];
     license = licenses.bsd2;
     homepage = "https://google.github.io/liquidfun/";
   };

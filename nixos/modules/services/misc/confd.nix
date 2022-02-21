@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.confd;
 
   confdConfig = ''
@@ -14,7 +16,6 @@ let
     log-level = "${cfg.logLevel}"
     watch = ${boolToString cfg.watch}
   '';
-
 in {
   options.services.confd = {
     enable = mkEnableOption "confd service";
@@ -33,7 +34,7 @@ in {
 
     nodes = mkOption {
       description = "Confd list of nodes to connect to.";
-      default = [ "http://127.0.0.1:2379" ];
+      default = ["http://127.0.0.1:2379"];
       type = types.listOf types.str;
     };
 
@@ -72,8 +73,8 @@ in {
   config = mkIf cfg.enable {
     systemd.services.confd = {
       description = "Confd Service.";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/confd";
       };
@@ -83,7 +84,7 @@ in {
       "confd/confd.toml".text = confdConfig;
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     services.etcd.enable = mkIf (cfg.backend == "etcd") (mkDefault true);
   };

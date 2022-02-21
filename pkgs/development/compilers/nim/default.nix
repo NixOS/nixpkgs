@@ -1,68 +1,77 @@
 # https://nim-lang.github.io/Nim/packaging.html
 # https://nim-lang.org/docs/nimc.html
-
-{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
-, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, nim-unwrapped
-, nimble-unwrapped }:
-
-let
+{
+  lib,
+  callPackage,
+  buildPackages,
+  stdenv,
+  fetchurl,
+  fetchgit,
+  fetchFromGitHub,
+  makeWrapper,
+  openssl,
+  pcre,
+  readline,
+  boehmgc,
+  sqlite,
+  nim-unwrapped,
+  nimble-unwrapped,
+}: let
   parseCpu = platform:
     with platform;
     # Derive a Nim CPU identifier
-    if isAarch32 then
-      "arm"
-    else if isAarch64 then
-      "arm64"
-    else if isAlpha then
-      "alpha"
-    else if isAvr then
-      "avr"
-    else if isMips && is32bit then
-      "mips"
-    else if isMips && is64bit then
-      "mips64"
-    else if isMsp430 then
-      "msp430"
-    else if isPower && is32bit then
-      "powerpc"
-    else if isPower && is64bit then
-      "powerpc64"
-    else if isRiscV && is64bit then
-      "riscv64"
-    else if isSparc then
-      "sparc"
-    else if isx86_32 then
-      "i386"
-    else if isx86_64 then
-      "amd64"
-    else
-      abort "no Nim CPU support known for ${config}";
+      if isAarch32
+      then "arm"
+      else if isAarch64
+      then "arm64"
+      else if isAlpha
+      then "alpha"
+      else if isAvr
+      then "avr"
+      else if isMips && is32bit
+      then "mips"
+      else if isMips && is64bit
+      then "mips64"
+      else if isMsp430
+      then "msp430"
+      else if isPower && is32bit
+      then "powerpc"
+      else if isPower && is64bit
+      then "powerpc64"
+      else if isRiscV && is64bit
+      then "riscv64"
+      else if isSparc
+      then "sparc"
+      else if isx86_32
+      then "i386"
+      else if isx86_64
+      then "amd64"
+      else abort "no Nim CPU support known for ${config}";
 
   parseOs = platform:
     with platform;
     # Derive a Nim OS identifier
-    if isAndroid then
-      "Android"
-    else if isDarwin then
-      "MacOSX"
-    else if isFreeBSD then
-      "FreeBSD"
-    else if isGenode then
-      "Genode"
-    else if isLinux then
-      "Linux"
-    else if isNetBSD then
-      "NetBSD"
-    else if isNone then
-      "Standalone"
-    else if isOpenBSD then
-      "OpenBSD"
-    else if isWindows then
-      "Windows"
-    else if isiOS then
-      "iOS"
-    else
-      abort "no Nim OS support known for ${config}";
+      if isAndroid
+      then "Android"
+      else if isDarwin
+      then "MacOSX"
+      else if isFreeBSD
+      then "FreeBSD"
+      else if isGenode
+      then "Genode"
+      else if isLinux
+      then "Linux"
+      else if isNetBSD
+      then "NetBSD"
+      else if isNone
+      then "Standalone"
+      else if isOpenBSD
+      then "OpenBSD"
+      else if isWindows
+      then "Windows"
+      else if isiOS
+      then "iOS"
+      else abort "no Nim OS support known for ${config}";
 
   parsePlatform = p: {
     cpu = parseCpu p;
@@ -74,28 +83,27 @@ let
 
   bootstrapCompiler = let
     revision = "561b417c65791cd8356b5f73620914ceff845d10";
-  in stdenv.mkDerivation {
-    pname = "nim-bootstrap";
-    version = "g${lib.substring 0 7 revision}";
+  in
+    stdenv.mkDerivation {
+      pname = "nim-bootstrap";
+      version = "g${lib.substring 0 7 revision}";
 
-    src = fetchgit {
-      # A Git checkout is much smaller than a GitHub tarball.
-      url = "https://github.com/nim-lang/csources_v1.git";
-      rev = revision;
-      sha256 = "1c2k681knrha1zmf4abhb32i2wwd3nwflzylnqryxk753swla043";
+      src = fetchgit {
+        # A Git checkout is much smaller than a GitHub tarball.
+        url = "https://github.com/nim-lang/csources_v1.git";
+        rev = revision;
+        sha256 = "1c2k681knrha1zmf4abhb32i2wwd3nwflzylnqryxk753swla043";
+      };
+
+      enableParallelBuilding = true;
+
+      installPhase = ''
+        runHook preInstall
+        install -Dt $out/bin bin/nim
+        runHook postInstall
+      '';
     };
-
-    enableParallelBuilding = true;
-
-    installPhase = ''
-      runHook preInstall
-      install -Dt $out/bin bin/nim
-      runHook postInstall
-    '';
-  };
-
 in {
-
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
     version = "1.6.2";
@@ -106,15 +114,17 @@ in {
       hash = "sha256-msRxT6bDFdaR2n9diUHBsZDU1Dc5fZdC4yfC1RiT43M=";
     };
 
-    buildInputs = [ boehmgc openssl pcre readline sqlite ];
+    buildInputs = [boehmgc openssl pcre readline sqlite];
 
-    patches = [
-      ./NIM_CONFIG_DIR.patch
-      # Override compiler configuration via an environmental variable
+    patches =
+      [
+        ./NIM_CONFIG_DIR.patch
+        # Override compiler configuration via an environmental variable
 
-      ./nixbuild.patch
-      # Load libraries at runtime by absolute path
-    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
+        ./nixbuild.patch
+        # Load libraries at runtime by absolute path
+      ]
+      ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
 
     configurePhase = ''
       runHook preConfigure
@@ -123,12 +133,14 @@ in {
       runHook postConfigure
     '';
 
-    kochArgs = [
-      "--cpu:${nimHost.cpu}"
-      "--os:${nimHost.os}"
-      "-d:release"
-      "-d:useGnuReadline"
-    ] ++ lib.optional (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace";
+    kochArgs =
+      [
+        "--cpu:${nimHost.cpu}"
+        "--os:${nimHost.os}"
+        "-d:release"
+        "-d:useGnuReadline"
+      ]
+      ++ lib.optional (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace";
 
     buildPhase = ''
       runHook preBuild
@@ -151,7 +163,7 @@ in {
       description = "Statically typed, imperative programming language";
       homepage = "https://nim-lang.org/";
       license = licenses.mit;
-      maintainers = with maintainers; [ ehmry ];
+      maintainers = with maintainers; [ehmry];
     };
   };
 
@@ -167,10 +179,10 @@ in {
       sha256 = "1idb4r0kjbqv16r6bgmxlr13w2vgq5332hmnc8pjbxiyfwm075x8";
     };
 
-    depsBuildBuild = [ nim-unwrapped ];
-    buildInputs = [ openssl ];
+    depsBuildBuild = [nim-unwrapped];
+    buildInputs = [openssl];
 
-    nimFlags = [ "--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release" ];
+    nimFlags = ["--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release"];
 
     buildPhase = ''
       runHook preBuild
@@ -195,7 +207,7 @@ in {
       preferLocalBuild = true;
       strictDeps = true;
 
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [makeWrapper];
 
       patches = [
         ./nim.cfg.patch
@@ -259,12 +271,12 @@ in {
         '';
 
       wrapperArgs = [
-        "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${
+        "--prefix PATH : ${lib.makeBinPath [buildPackages.gdb]}:${
           placeholder "out"
         }/bin"
         # Used by nim-gdb
 
-        "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl pcre ]}"
+        "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [openssl pcre]}"
         # These libraries may be referred to by the standard library.
         # This is broken for cross-compilation because the package
         # set will be shifted back by nativeBuildInputs.
@@ -316,14 +328,18 @@ in {
         nimble = nimble';
       };
 
-      meta = nim'.meta // {
-        description = nim'.meta.description
-          + " (${targetPlatform.config} wrapper)";
-        platforms = with lib.platforms; unix ++ genode;
-      };
+      meta =
+        nim'.meta
+        // {
+          description =
+            nim'.meta.description
+            + " (${targetPlatform.config} wrapper)";
+          platforms = with lib.platforms; unix ++ genode;
+        };
     };
-  in self // {
-    pkgs = callPackage ../../../top-level/nim-packages.nix { nim = self; };
-  };
-
+  in
+    self
+    // {
+      pkgs = callPackage ../../../top-level/nim-packages.nix {nim = self;};
+    };
 }

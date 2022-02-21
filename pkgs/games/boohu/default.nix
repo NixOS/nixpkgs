@@ -1,7 +1,9 @@
-{lib, fetchurl, buildGoPackage}:
-
+{
+  lib,
+  fetchurl,
+  buildGoPackage,
+}:
 buildGoPackage rec {
-
   pname = "boohu";
   version = "0.13.0";
 

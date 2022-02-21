@@ -1,17 +1,19 @@
-{ lib, stdenv
-, python3Packages
-, fetchFromGitHub
-, systemd
-, xrandr
-, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  systemd,
+  xrandr,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "autorandr";
   version = "1.12.1";
 
-  buildInputs = [ python3Packages.python ];
+  buildInputs = [python3Packages.python];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   # no wrapper, as autorandr --batch does os.environ.clear()
   buildPhase = ''
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
   installPhase = ''
     runHook preInstall
@@ -37,18 +39,24 @@ stdenv.mkDerivation rec {
 
     make install TARGETS='manpage' PREFIX=$man
 
-    ${if systemd != null then ''
-      make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
-        SYSTEMD_UNIT_DIR=/lib/systemd/system \
-        UDEV_RULES_DIR=/etc/udev/rules.d
-      substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
-        --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
-    '' else ''
-      make install TARGETS='pmutils' DESTDIR=$out \
-        PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
-      make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
-        UDEV_RULES_DIR=/etc/udev/rules.d
-    ''}
+    ${
+      if systemd != null
+      then
+        ''
+          make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
+            SYSTEMD_UNIT_DIR=/lib/systemd/system \
+            UDEV_RULES_DIR=/etc/udev/rules.d
+          substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
+            --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
+        ''
+      else
+        ''
+          make install TARGETS='pmutils' DESTDIR=$out \
+            PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
+          make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
+            UDEV_RULES_DIR=/etc/udev/rules.d
+        ''
+    }
 
     runHook postInstall
   '';
@@ -64,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phillipberndt/autorandr/";
     description = "Automatically select a display configuration based on connected devices";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ coroa globin ];
+    maintainers = with maintainers; [coroa globin];
     platforms = platforms.unix;
   };
 }

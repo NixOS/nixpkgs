@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests_oauthlib
-, simplejson
-, pkce
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests_oauthlib,
+  simplejson,
+  pkce,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyvicare";
   version = "2.16.1";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Library to access Viessmann ViCare API";
     homepage = "https://github.com/somm15/PyViCare";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

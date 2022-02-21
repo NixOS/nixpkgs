@@ -1,7 +1,18 @@
-{ stdenv, lib, fetchurl, doxygen, graphviz, perl, pkg-config
-, bzip2, lz4, lzo, xz, zlib, zstd
+{
+  stdenv,
+  lib,
+  fetchurl,
+  doxygen,
+  graphviz,
+  perl,
+  pkg-config,
+  bzip2,
+  lz4,
+  lzo,
+  xz,
+  zlib,
+  zstd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "squashfs-tools-ng";
   version = "1.1.3";
@@ -11,15 +22,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-q84Pz5qK4cM1Lk5eh+Gwd/VEEdpRczLqg7XnzpSN1w0=";
   };
 
-  nativeBuildInputs = [ doxygen graphviz pkg-config perl ];
-  buildInputs = [ bzip2 zlib xz lz4 lzo zstd ];
+  nativeBuildInputs = [doxygen graphviz pkg-config perl];
+  buildInputs = [bzip2 zlib xz lz4 lzo zstd];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://github.com/AgentD/squashfs-tools-ng";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     platforms = platforms.unix;
 
     # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, html5lib
-, pytestCheckHook
-, pythonOlder
-, regex
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
 }:
-
 buildPythonPackage rec {
   pname = "textile";
   version = "4.0.2";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "MOdule for generating web text";
     homepage = "https://github.com/textile/python-textile";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,25 +1,26 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, gtk3
-, libxml2
-, intltool
-, itstool
-, gdb
-, boost
-, sqlite
-, libgtop
-, glibmm
-, gtkmm3
-, vte
-, gtksourceview
-, gsettings-desktop-schemas
-, gtksourceviewmm
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gnome,
+  gtk3,
+  libxml2,
+  intltool,
+  itstool,
+  gdb,
+  boost,
+  sqlite,
+  libgtop,
+  glibmm,
+  gtkmm3,
+  vte,
+  gtksourceview,
+  gsettings-desktop-schemas,
+  gtksourceviewmm,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nemiver";
   version = "0.9.6";
@@ -83,6 +84,6 @@ stdenv.mkDerivation rec {
     description = "Easy to use standalone C/C++ debugger";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.juliendehos ];
+    maintainers = [maintainers.juliendehos];
   };
 }

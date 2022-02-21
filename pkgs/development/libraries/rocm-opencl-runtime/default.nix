@@ -1,27 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, writeScript
-, addOpenGLRunpath
-, cmake
-, rocm-cmake
-, clang
-, clang-unwrapped
-, glew
-, libglvnd
-, libX11
-, lld
-, llvm
-, mesa
-, numactl
-, python3
-, rocclr
-, rocm-comgr
-, rocm-device-libs
-, rocm-runtime
-, rocm-thunk
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  writeScript,
+  addOpenGLRunpath,
+  cmake,
+  rocm-cmake,
+  clang,
+  clang-unwrapped,
+  glew,
+  libglvnd,
+  libX11,
+  lld,
+  llvm,
+  mesa,
+  numactl,
+  python3,
+  rocclr,
+  rocm-comgr,
+  rocm-device-libs,
+  rocm-runtime,
+  rocm-thunk,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";
   version = "4.5.2";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-0OGYF4urlscr8tMkQwo2yATXwN0DjB092KQ+CBEhfIA=";
   };
 
-  nativeBuildInputs = [ cmake rocm-cmake ];
+  nativeBuildInputs = [cmake rocm-cmake];
 
   buildInputs = [
     clang
@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OpenCL runtime for AMD GPUs, part of the ROCm stack";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-OpenCL-Runtime";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ acowley lovesegfault ];
+    license = with licenses; [asl20 mit];
+    maintainers = with maintainers; [acowley lovesegfault];
     platforms = platforms.linux;
   };
 }

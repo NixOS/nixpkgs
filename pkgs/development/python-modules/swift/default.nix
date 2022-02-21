@@ -1,26 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boto3
-, cryptography
-, eventlet
-, greenlet
-, iana-etc
-, libredirect
-, lxml
-, mock
-, netifaces
-, pastedeploy
-, pbr
-, pyeclib
-, requests
-, setuptools
-, six
-, stestr
-, swiftclient
-, xattr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  boto3,
+  cryptography,
+  eventlet,
+  greenlet,
+  iana-etc,
+  libredirect,
+  lxml,
+  mock,
+  netifaces,
+  pastedeploy,
+  pbr,
+  pyeclib,
+  requests,
+  setuptools,
+  six,
+  stestr,
+  swiftclient,
+  xattr,
 }:
-
 buildPythonPackage rec {
   pname = "swift";
   version = "2.29.0";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     rm test/functional/s3api/{__init__.py,s3_test_client.py}
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
   propagatedBuildInputs = [
     cryptography
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "swift" ];
+  pythonImportsCheck = ["swift"];
 
   meta = with lib; {
     description = "OpenStack Object Storage";

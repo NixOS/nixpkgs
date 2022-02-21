@@ -1,7 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, nunavut
-, pyserial , pytest, ruamel-yaml}:
-
- buildPythonPackage rec {
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  numpy,
+  nunavut,
+  pyserial,
+  pytest,
+  ruamel-yaml,
+}:
+buildPythonPackage rec {
   pname = "pyuavcan";
   version = "1.1.0.dev1";
   disabled = pythonOlder "3.7"; # only python>=3.7 is supported
@@ -44,7 +52,7 @@
       CLI tool for basic diagnostics and shell script automation.
     '';
     homepage = "https://pyuavcan.readthedocs.io";
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with maintainers; [wucke13];
     license = licenses.mit;
   };
 }

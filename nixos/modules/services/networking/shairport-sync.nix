@@ -1,21 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.shairport-sync;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.shairport-sync;
+in {
   ###### interface
 
   options = {
-
     services.shairport-sync = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -61,16 +56,12 @@ in
           will be created.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.shairport-sync.enable {
-
     services.avahi.enable = true;
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
@@ -82,31 +73,33 @@ in
         createHome = true;
         home = "/var/lib/shairport-sync";
         group = cfg.group;
-        extraGroups = [ "audio" ] ++ optional config.hardware.pulseaudio.enable "pulse";
+        extraGroups = ["audio"] ++ optional config.hardware.pulseaudio.enable "pulse";
       };
       groups.${cfg.group} = {};
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 5000 ];
-      allowedUDPPortRanges = [ { from = 6001; to = 6011; } ];
+      allowedTCPPorts = [5000];
+      allowedUDPPortRanges = [
+        {
+          from = 6001;
+          to = 6011;
+        }
+      ];
     };
 
-    systemd.services.shairport-sync =
-      {
-        description = "shairport-sync";
-        after = [ "network.target" "avahi-daemon.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
-          RuntimeDirectory = "shairport-sync";
-        };
+    systemd.services.shairport-sync = {
+      description = "shairport-sync";
+      after = ["network.target" "avahi-daemon.service"];
+      wantedBy = ["multi-user.target"];
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
+        RuntimeDirectory = "shairport-sync";
       };
+    };
 
-    environment.systemPackages = [ pkgs.shairport-sync ];
-
+    environment.systemPackages = [pkgs.shairport-sync];
   };
-
 }

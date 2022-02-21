@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, json-data-encoding, ocplib-endian, crowbar, alcotest }:
-
+{
+  lib,
+  buildDunePackage,
+  json-data-encoding,
+  ocplib-endian,
+  crowbar,
+  alcotest,
+}:
 buildDunePackage {
   pname = "json-data-encoding-bson";
 
@@ -15,7 +21,9 @@ buildDunePackage {
     alcotest
   ];
 
-  meta = json-data-encoding.meta // {
-    description = "Type-safe encoding to and decoding from JSON (bson support)";
-  };
+  meta =
+    json-data-encoding.meta
+    // {
+      description = "Type-safe encoding to and decoding from JSON (bson support)";
+    };
 }

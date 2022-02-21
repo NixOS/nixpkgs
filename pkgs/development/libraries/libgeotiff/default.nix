@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, libtiff, libjpeg, proj, zlib, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtiff,
+  libjpeg,
+  proj,
+  zlib,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   version = "1.5.1";
   pname = "libgeotiff";
@@ -11,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "081ag23pn2n5y4fkb2rnh4hmcnq92siqiqv0s20jmx0j3s2nvfxy";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   sourceRoot = "source/libgeotiff";
 
@@ -20,11 +28,11 @@ stdenv.mkDerivation rec {
     "--with-zlib=${zlib.dev}"
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
-  buildInputs = [ libtiff proj ];
+  buildInputs = [libtiff proj];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";

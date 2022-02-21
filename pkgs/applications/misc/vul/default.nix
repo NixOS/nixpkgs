@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "vul";
   version = "unstable-2020-02-15";
@@ -19,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Latin Vulgate Bible on the Command Line";
     homepage = "https://github.com/LukeSmithxyz/vul";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.j0hax ];
+    maintainers = [maintainers.j0hax];
   };
 }

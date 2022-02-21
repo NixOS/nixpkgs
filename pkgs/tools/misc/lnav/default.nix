@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
-, readline, zlib, bzip2, autoconf, automake, curl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pcre-cpp,
+  sqlite,
+  ncurses,
+  readline,
+  zlib,
+  bzip2,
+  autoconf,
+  automake,
+  curl,
+}:
 stdenv.mkDerivation rec {
   pname = "lnav";
   version = "0.10.1";
@@ -12,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1b4mVKIUotMSK/ADHnpiM42G98JF0abL8sXXGFyS3sw=";
   };
 
-  patches = [ ./0001-Forcefully-disable-docs-build.patch ];
+  patches = [./0001-Forcefully-disable-docs-build.patch];
   postPatch = ''
     substituteInPlace Makefile.am \
       --replace "SUBDIRS = src test" "SUBDIRS = src"
@@ -20,7 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [autoconf automake];
   buildInputs = [
     zlib
     bzip2
@@ -49,8 +60,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dochang ma27 ];
+    maintainers = with maintainers; [dochang ma27];
     platforms = platforms.unix;
   };
-
 }

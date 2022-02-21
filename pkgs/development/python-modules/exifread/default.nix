@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "ExifRead";
   version = "2.3.2";
@@ -14,9 +14,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easy to use Python module to extract Exif metadata from tiff and jpeg files";
-    homepage    = "https://github.com/ianare/exif-py";
-    license     = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/ianare/exif-py";
+    license = licenses.bsd0;
+    maintainers = with maintainers; [];
   };
-
 }

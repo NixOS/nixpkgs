@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pymongo
-, isPy27
-, six
-, blinker
-, nose
-, pillow
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pymongo,
+  isPy27,
+  six,
+  blinker,
+  nose,
+  pillow,
+  coverage,
 }:
-
 buildPythonPackage rec {
   pname = "mongoengine";
   version = "0.23.1";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";
     homepage = "http://mongoengine.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

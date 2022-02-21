@@ -1,14 +1,13 @@
-{ lib
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, python
-, dbus-python
-, enlightenment
+{
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  pkg-config,
+  python,
+  dbus-python,
+  enlightenment,
 }:
-
 # Should be bumped along with EFL!
-
 buildPythonPackage rec {
   pname = "python-efl";
   version = "1.25.0";
@@ -18,11 +17,11 @@ buildPythonPackage rec {
     sha256 = "0bk161xwlz4dlv56r68xwkm8snzfifaxd1j7w2wcyyk4fgvnvq4r";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ enlightenment.efl ];
+  buildInputs = [enlightenment.efl];
 
-  propagatedBuildInputs = [ dbus-python ];
+  propagatedBuildInputs = [dbus-python];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl evas) $NIX_CFLAGS_COMPILE"
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     description = "Python bindings for EFL and Elementary";
     homepage = "https://phab.enlightenment.org/w/projects/python_bindings_for_efl/";
     platforms = platforms.linux;
-    license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = with licenses; [gpl3 lgpl3];
+    maintainers = with maintainers; [matejc tstrobel ftrvxmtrx romildo];
   };
 }

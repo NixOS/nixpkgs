@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, python-jose
-, httmock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  python-jose,
+  httmock,
 }:
-
 buildPythonPackage rec {
   pname = "python-keycloak";
   version = "0.27.0";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     python -m unittest discover
   '';
 
-  pythonImportsCheck = [ "keycloak" ];
+  pythonImportsCheck = ["keycloak"];
 
   meta = with lib; {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

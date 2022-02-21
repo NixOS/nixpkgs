@@ -1,5 +1,8 @@
-{ lib, stdenvNoCC, fetchurl }:
-let
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}: let
   srcs = {
     train-images = fetchurl {
       url = "http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz";
@@ -40,6 +43,6 @@ in
       homepage = "http://yann.lecun.com/exdb/mnist/index.html";
       license = licenses.cc-by-sa-30;
       platforms = platforms.all;
-      maintainers = with maintainers; [ cmcdragonkai ];
+      maintainers = with maintainers; [cmcdragonkai];
     };
   }

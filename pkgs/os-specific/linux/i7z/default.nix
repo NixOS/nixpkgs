@@ -1,6 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, ncurses
-, withGui ? false, qtbase }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  withGui ? false,
+  qtbase,
+}:
 stdenv.mkDerivation rec {
   pname = "i7z";
   version = "0.27.4";
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "00c4ng30ry88hcya4g1i9dngiqmz3cs31x7qh1a10nalxn1829xy";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optional withGui qtbase;
+  buildInputs = [ncurses] ++ lib.optional withGui qtbase;
 
   patches = [
     (fetchpatch {
@@ -33,14 +39,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postBuild = lib.optionalString withGui ''
-      cd GUI
-      qmake
-      make clean
-      make
-      cd ..
+    cd GUI
+    qmake
+    make clean
+    make
+    cd ..
   '';
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = ["prefix=${placeholder "out"}"];
 
   postInstall = lib.optionalString withGui ''
     install -Dm755 GUI/i7z_GUI $out/bin/i7z-gui
@@ -51,8 +57,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/DimitryAndric/i7z";
     repositories.git = "https://github.com/DimitryAndric/i7z.git";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bluescreen303 ];
+    maintainers = with maintainers; [bluescreen303];
     # broken on ARM
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

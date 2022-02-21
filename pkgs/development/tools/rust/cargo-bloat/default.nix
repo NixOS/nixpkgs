@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bloat";
   version = "0.11.0";
@@ -18,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/RazrFalcon/cargo-bloat";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [xrelkd];
   };
 }
-

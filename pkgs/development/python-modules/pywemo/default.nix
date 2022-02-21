@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, lxml
-, poetry-core
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  lxml,
+  poetry-core,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "pywemo";
   version = "0.8.0";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to discover and control WeMo devices";
     homepage = "https://github.com/pywemo/pywemo";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

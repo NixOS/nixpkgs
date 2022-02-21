@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, protobuf
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  protobuf,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "tokio-console";
   version = "0.1.0";
@@ -17,13 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-RScu5V55OowwWHi3MLjW8DPlTMA/IEBYFt4VUDUHPKo=";
 
-  nativeBuildInputs = [ protobuf ];
+  nativeBuildInputs = [protobuf];
 
   meta = with lib; {
     description = "A debugger for asynchronous Rust code";
     homepage = "https://github.com/tokio-rs/console";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ max-niederman ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [max-niederman];
   };
 }
-

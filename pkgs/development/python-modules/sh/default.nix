@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, python, coverage, lsof, glibcLocales, coreutils }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  coverage,
+  lsof,
+  glibcLocales,
+  coreutils,
+}:
 buildPythonPackage rec {
   pname = "sh";
   version = "1.14.2";
@@ -19,7 +27,7 @@ buildPythonPackage rec {
     sed -i 's#/bin/sleep#${coreutils.outPath}/bin/sleep#' test.py
   '';
 
-  checkInputs = [ coverage lsof glibcLocales ];
+  checkInputs = [coverage lsof glibcLocales];
 
   # A test needs the HOME directory to be different from $TMPDIR.
   preCheck = ''
@@ -31,6 +39,6 @@ buildPythonPackage rec {
     description = "Python subprocess interface";
     homepage = "https://pypi.python.org/pypi/sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [siriobalmelli];
   };
 }

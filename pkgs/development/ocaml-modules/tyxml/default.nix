@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchurl, re, uutf }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  re,
+  uutf,
+}:
 buildDunePackage rec {
   pname = "tyxml";
   version = "4.5.0";
@@ -11,15 +16,15 @@ buildDunePackage rec {
     sha256 = "0s30f72m457c3gbdmdwbx7ls9zg806nvm83aiz9qkpglbppwr6n6";
   };
 
-  propagatedBuildInputs = [ uutf re ];
+  propagatedBuildInputs = [uutf re];
 
   meta = with lib; {
     homepage = "http://ocsigen.org/tyxml/";
     description = "A library that makes it almost impossible for your OCaml programs to generate wrong XML output, using static typing";
     license = licenses.lgpl21;
     maintainers = with maintainers; [
-      gal_bolle vbgl
+      gal_bolle
+      vbgl
     ];
   };
-
 }

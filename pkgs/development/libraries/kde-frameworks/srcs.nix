@@ -1,8 +1,9 @@
 # DO NOT EDIT! This file is generated automatically.
 # Command: ./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/kde-frameworks
-{ fetchurl, mirror }:
-
 {
+  fetchurl,
+  mirror,
+}: {
   attica = {
     version = "5.90.0";
     src = fetchurl {

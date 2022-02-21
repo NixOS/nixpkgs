@@ -1,10 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, glibcLocales
-, libnotify
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  glibcLocales,
+  libnotify,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "zulip-term";
   version = "0.6.0";
@@ -33,22 +33,27 @@ python3.pkgs.buildPythonApplication rec {
     tzlocal
   ];
 
-  checkInputs = [
-    glibcLocales
-  ] ++ (with python3.pkgs; [
-    pytestCheckHook
-    pytest-cov
-    pytest-mock
-  ]);
+  checkInputs =
+    [
+      glibcLocales
+    ]
+    ++ (with python3.pkgs; [
+      pytestCheckHook
+      pytest-cov
+      pytest-mock
+    ]);
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ libnotify ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [libnotify])
   ];
 
   meta = with lib; {
     description = "Zulip's official terminal client";
     homepage = "https://github.com/zulip/zulip-terminal";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

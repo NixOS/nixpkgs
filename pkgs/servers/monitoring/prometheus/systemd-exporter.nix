@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "systemd_exporter";
   version = "0.4.0";
@@ -13,13 +17,13 @@ buildGoModule rec {
     sha256 = "sha256-JDfRHczFnTP9sxA7polUE9qzJhSPIiAU58GBNDYkX4c=";
   };
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) systemd; };
+  passthru.tests = {inherit (nixosTests.prometheus-exporters) systemd;};
 
   meta = with lib; {
     description = "Exporter for systemd unit metrics";
     homepage = "https://github.com/povilasv/systemd_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ chkno ];
+    maintainers = with maintainers; [chkno];
     platforms = platforms.unix;
   };
 }

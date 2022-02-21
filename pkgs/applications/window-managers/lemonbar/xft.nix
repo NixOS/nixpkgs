@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, perl, libxcb, libXft }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  libxcb,
+  libXft,
+}:
 stdenv.mkDerivation {
   pname = "lemonbar-xft";
   version = "unstable-2020-09-10";
@@ -11,15 +17,15 @@ stdenv.mkDerivation {
     sha256 = "sha256-BNYBbUouqqsRQaPkpg+UKg62IV9uI34gKJuiAM94CBU=";
   };
 
-  buildInputs = [ libxcb libXft perl ];
+  buildInputs = [libxcb libXft perl];
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  installFlags = ["DESTDIR=$(out)" "PREFIX="];
 
   meta = with lib; {
     description = "A lightweight xcb based bar with XFT-support";
     homepage = "https://github.com/drscream/lemonbar-xft";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
   };
 }

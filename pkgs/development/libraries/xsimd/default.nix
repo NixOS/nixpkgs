@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest }:
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+}: let
   version = "7.5.0";
 
   darwin_src = fetchFromGitHub {
@@ -26,19 +31,23 @@ let
     rev = version;
     sha256 = "0c9pq5vz43j99z83w3b9qylfi66mn749k1afpv5cwfxggbxvy63f";
   };
-in stdenv.mkDerivation {
-  pname = "xsimd";
-  inherit version;
-  src = if stdenv.hostPlatform.isDarwin then darwin_src else src;
+in
+  stdenv.mkDerivation {
+    pname = "xsimd";
+    inherit version;
+    src =
+      if stdenv.hostPlatform.isDarwin
+      then darwin_src
+      else src;
 
-  nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [cmake];
 
-  cmakeFlags = [ "-DBUILD_TESTS=ON" ];
+    cmakeFlags = ["-DBUILD_TESTS=ON"];
 
-  doCheck = true;
-  checkInputs = [ gtest ];
-  checkTarget = "xtest";
-  GTEST_FILTER = let
+    doCheck = true;
+    checkInputs = [gtest];
+    checkTarget = "xtest";
+    GTEST_FILTER = let
       # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
       filteredTests = lib.optionals stdenv.hostPlatform.isDarwin [
         "error_gamma_test/sse_double.gamma"
@@ -46,11 +55,11 @@ in stdenv.mkDerivation {
       ];
     in "-${builtins.concatStringsSep ":" filteredTests}";
 
-  meta = with lib; {
-    description = "C++ wrappers for SIMD intrinsics";
-    homepage = "https://github.com/xtensor-stack/xsimd";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tobim ];
-    platforms = platforms.all;
-  };
-}
+    meta = with lib; {
+      description = "C++ wrappers for SIMD intrinsics";
+      homepage = "https://github.com/xtensor-stack/xsimd";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [tobim];
+      platforms = platforms.all;
+    };
+  }

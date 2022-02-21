@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "rowhammer-test";
   version = "unstable-2015-08-11";
@@ -24,7 +27,7 @@ stdenv.mkDerivation {
     description = "Test DRAM for bit flips caused by the rowhammer problem";
     homepage = "https://github.com/google/rowhammer-test";
     license = licenses.asl20;
-    maintainers = [ maintainers.viric ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = [maintainers.viric];
+    platforms = ["x86_64-linux" "i686-linux"];
   };
 }

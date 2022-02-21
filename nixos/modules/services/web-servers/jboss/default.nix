@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.jboss;
 
   jbossService = pkgs.stdenv.mkDerivation {
@@ -12,17 +13,11 @@ let
     inherit (pkgs) jboss su;
     inherit (cfg) tempDir logDir libUrl deployDir serverDir user useJK;
   };
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.jboss = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -70,11 +65,8 @@ in
         default = false;
         description = "Whether to use to connector to the Apache HTTP server";
       };
-
     };
-
   };
-
 
   ###### implementation
 
@@ -82,7 +74,7 @@ in
     systemd.services.jboss = {
       description = "JBoss server";
       script = "${jbossService}/bin/control start";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
   };
 }

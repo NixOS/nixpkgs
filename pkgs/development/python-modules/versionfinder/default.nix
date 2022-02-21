@@ -1,13 +1,13 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, GitPython
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  GitPython,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "versionfinder";
   version = "1.1.1";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Find the version of another package, whether installed via pip, setuptools or git";
     homepage = "https://github.com/jantman/versionfinder";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ zakame ];
+    maintainers = with maintainers; [zakame];
   };
 }

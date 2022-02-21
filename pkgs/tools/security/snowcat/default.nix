@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "snowcat";
   version = "0.1.3";
@@ -12,7 +15,7 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-D6ipwGMxT0B3uYUzg6Oo2TYnsOVBY0mYO5lC7vtVPc0=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   meta = with lib; {
     homepage = "https://github.com/praetorian-inc/snowcat";
@@ -28,6 +31,6 @@ buildGoModule rec {
       point snowcat at a directory containing Kubernets YAML files.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [jk];
   };
 }

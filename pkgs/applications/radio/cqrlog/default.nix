@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fpc
-, lazarus
-, atk
-, cairo
-, gdk-pixbuf
-, glib
-, gtk2-x11
-, libX11
-, pango
-, hamlib
-, mysql57
-, tqsl
-, xdg-utils
-, xplanet
-, autoPatchelfHook
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fpc,
+  lazarus,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk2-x11,
+  libX11,
+  pango,
+  hamlib,
+  mysql57,
+  tqsl,
+  xdg-utils,
+  xplanet,
+  autoPatchelfHook,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cqrlog";
   version = "2.5.2";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   # Adds the possiblity to change the lazarus directory,
   # otherwise, we would get error : "directory lcl not found"
-  patches = [ ./fix-makefile-lazarusdir.patch ];
+  patches = [./fix-makefile-lazarusdir.patch];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ! grep -C src -RC0 "/usr"
   '';
 
-  nativeBuildInputs = [ lazarus fpc autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [lazarus fpc autoPatchelfHook wrapGAppsHook];
   buildInputs = [
     atk
     cairo
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "Linux logging program for amateur radio operators";
     homepage = "https://www.cqrlog.com/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [shamilton];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, dbus-glib, libXScrnSaver, libnotify, libxml2, pam, systemd, mate, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  dbus-glib,
+  libXScrnSaver,
+  libnotify,
+  libxml2,
+  pam,
+  systemd,
+  mate,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-screensaver";
   version = "1.26.1";
@@ -28,18 +43,18 @@ stdenv.mkDerivation rec {
     mate.mate-panel
   ];
 
-  configureFlags = [ "--without-console-kit" ];
+  configureFlags = ["--without-console-kit"];
 
-  makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
+  makeFlags = ["DBUS_SESSION_SERVICE_DIR=$(out)/etc"];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "Screen saver and locker for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [gpl2Plus lgpl2Plus];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

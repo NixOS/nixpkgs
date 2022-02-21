@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, git }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  git,
+}:
 stdenv.mkDerivation rec {
   pname = "directx-shader-compiler";
   version = "1.6.2106";
 
   # Put headers in dev, there are lot of them which aren't necessary for
   # using the compiler binary.
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "microsoft";
@@ -18,7 +24,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake git python3 ];
+  nativeBuildInputs = [cmake git python3];
 
   configurePhase = ''
     # Requires some additional flags to cmake from a file in the repo
@@ -45,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/microsoft/DirectXShaderCompiler";
     platforms = with platforms; linux ++ darwin;
     license = licenses.ncsa;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [expipiplus1];
   };
 }

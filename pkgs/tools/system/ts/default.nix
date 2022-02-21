@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl
-, sendmailPath ? "/run/wrappers/bin/sendmail"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
-
 stdenv.mkDerivation rec {
   pname = "ts";
   version = "1.0";
 
-  installPhase=''make install "PREFIX=$out"'';
+  installPhase = ''make install "PREFIX=$out"'';
 
   patchPhase = ''
     sed -i s,/usr/sbin/sendmail,${sendmailPath}, mail.c ts.1
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/ts";
     description = "Task spooler - batch queue";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [viric];
     platforms = platforms.all;
   };
 }

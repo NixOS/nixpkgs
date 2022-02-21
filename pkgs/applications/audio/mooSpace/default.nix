@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "mooSpace";
   version = "unstable-2020-06-10";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "10vsbddf6d7i06040850v8xkmqh3bqawczs29kfgakair809wqxl";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [faust2jaqt faust2lv2];
 
   patchPhase = "mv ${pname}_faust.dsp ${pname}.dsp";
 
@@ -30,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "Variable reverb audio effect, jack and lv2";
     homepage = "https://github.com/modularev/mooSpace";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
   };
 }

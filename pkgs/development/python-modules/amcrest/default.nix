@@ -1,17 +1,17 @@
-{ lib
-, argcomplete
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, httpx
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, urllib3
-, typing-extensions
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  httpx,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  urllib3,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "amcrest";
   version = "1.9.4";
@@ -38,12 +38,12 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [ "amcrest" ];
+  pythonImportsCheck = ["amcrest"];
 
   meta = with lib; {
     description = "Python module for Amcrest and Dahua Cameras";
     homepage = "https://github.com/tchellomello/python-amcrest";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl2Only];
+    maintainers = with maintainers; [fab];
   };
 }

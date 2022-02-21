@@ -1,5 +1,12 @@
-{ lib, clangStdenv, stdenvNoCC, cmake, fetchFromGitHub, dotnetCorePackages, buildDotnetModule }:
-let
+{
+  lib,
+  clangStdenv,
+  stdenvNoCC,
+  cmake,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  buildDotnetModule,
+}: let
   pname = "netcoredbg";
   version = "1.2.0-825";
 
@@ -24,7 +31,7 @@ let
   unmanaged = clangStdenv.mkDerivation rec {
     inherit src pname version;
 
-    nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [cmake];
 
     # Building the "unmanaged part" still involves compiling C# code.
     preBuild = ''
@@ -33,7 +40,7 @@ let
       export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
     '';
 
-    hardeningDisable = [ "strictoverflow" ];
+    hardeningDisable = ["strictoverflow"];
 
     preConfigure = ''
       dotnetVersion="$(${dotnet-sdk}/bin/dotnet --list-runtimes | grep -Po '^Microsoft.NETCore.App \K.*?(?= )')"
@@ -55,24 +62,24 @@ let
     projectFile = "src/managed/ManagedPart.csproj";
     nugetDeps = ./deps.nix;
 
-    executables = [ ];
+    executables = [];
   };
 in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
+  stdenvNoCC.mkDerivation {
+    inherit pname version;
 
-  buildCommand = ''
-    mkdir -p $out/share/netcoredbg $out/bin
-    cp ${unmanaged}/* $out/share/netcoredbg
-    cp ${managed}/lib/netcoredbg/* $out/share/netcoredbg
-    ln -s $out/share/netcoredbg/netcoredbg $out/bin/netcoredbg
-  '';
+    buildCommand = ''
+      mkdir -p $out/share/netcoredbg $out/bin
+      cp ${unmanaged}/* $out/share/netcoredbg
+      cp ${managed}/lib/netcoredbg/* $out/share/netcoredbg
+      ln -s $out/share/netcoredbg/netcoredbg $out/bin/netcoredbg
+    '';
 
-  meta = with lib; {
-    description = "Managed code debugger with MI interface for CoreCLR";
-    homepage = "https://github.com/Samsung/netcoredbg";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.leo60228 ];
-  };
-}
+    meta = with lib; {
+      description = "Managed code debugger with MI interface for CoreCLR";
+      homepage = "https://github.com/Samsung/netcoredbg";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = [maintainers.leo60228];
+    };
+  }

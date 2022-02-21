@@ -1,14 +1,13 @@
-{ faust
-, gtk2
-, jack2
-, alsa-lib
-, opencv
-, libsndfile
-, which
+{
+  faust,
+  gtk2,
+  jack2,
+  alsa-lib,
+  opencv,
+  libsndfile,
+  which,
 }:
-
 faust.wrapWithBuildEnv {
-
   baseName = "faust2jack";
 
   scripts = [
@@ -24,5 +23,4 @@ faust.wrapWithBuildEnv {
     libsndfile
     which
   ];
-
 }

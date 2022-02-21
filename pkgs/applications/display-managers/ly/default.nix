@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, linux-pam }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  linux-pam,
+}:
 stdenv.mkDerivation rec {
   pname = "ly";
   version = "0.2.1";
@@ -12,8 +16,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ linux-pam ];
-  makeFlags = [ "FLAGS=-Wno-error" ];
+  buildInputs = [linux-pam];
+  makeFlags = ["FLAGS=-Wno-error"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -24,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "TUI display manager";
     license = licenses.wtfpl;
     homepage = "https://github.com/cylgom/ly";
-    maintainers = [ maintainers.vidister ];
+    maintainers = [maintainers.vidister];
   };
 }

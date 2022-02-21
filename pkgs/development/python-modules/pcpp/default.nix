@@ -1,8 +1,8 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildPythonPackage rec {
   pname = "pcpp";
   version = "1.21";
@@ -19,6 +19,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ned14/pcpp";
     description = "A C99 preprocessor written in pure Python";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ rakesh4g ];
- };
+    maintainers = with maintainers; [rakesh4g];
+  };
 }

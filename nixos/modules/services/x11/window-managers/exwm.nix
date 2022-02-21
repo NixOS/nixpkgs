@@ -1,21 +1,23 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.xserver.windowManager.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
     ${cfg.loadScript}
-    ${optionalString cfg.enableDefaultConfig ''
-      (require 'exwm-config)
-      (exwm-config-default)
-    ''}
+    ${
+      optionalString cfg.enableDefaultConfig ''
+        (require 'exwm-config)
+        (exwm-config-default)
+      ''
+    }
   '';
-  packages = epkgs: cfg.extraPackages epkgs ++ [ epkgs.exwm ];
+  packages = epkgs: cfg.extraPackages epkgs ++ [epkgs.exwm];
   exwm-emacs = pkgs.emacsWithPackages packages;
-in
-
-{
+in {
   options = {
     services.xserver.windowManager.exwm = {
       enable = mkEnableOption "exwm";
@@ -64,6 +66,6 @@ in
         ${exwm-emacs}/bin/emacs -l ${loadScript}
       '';
     };
-    environment.systemPackages = [ exwm-emacs ];
+    environment.systemPackages = [exwm-emacs];
   };
 }

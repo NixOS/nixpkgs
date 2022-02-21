@@ -1,7 +1,9 @@
-{ buildPythonPackage, fetchPypi
-, pytest, pytest-cov
+{
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytest-cov,
 }:
-
 buildPythonPackage rec {
   pname = "plaster";
   version = "1.0";
@@ -15,5 +17,5 @@ buildPythonPackage rec {
     py.test
   '';
 
-  checkInputs = [ pytest pytest-cov ];
+  checkInputs = [pytest pytest-cov];
 }

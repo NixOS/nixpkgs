@@ -2,7 +2,6 @@ let
   pkgs = import ../../../../.. {};
 
   emacsEnv = pkgs.emacs.pkgs.withPackages (epkgs: let
-
     promise = epkgs.trivialBuild {
       pname = "promise";
       version = "1";
@@ -17,7 +16,7 @@ let
     semaphore = epkgs.trivialBuild {
       pname = "semaphore";
       version = "1";
-      packageRequires = [ promise ];
+      packageRequires = [promise];
       src = pkgs.fetchFromGitHub {
         owner = "webnf";
         repo = "semaphore.el";
@@ -25,16 +24,15 @@ let
         sha256 = "09pfyp27m35sv340xarhld7xx2vv5fs5xj4418709iw6l6hpk853";
       };
     };
-
-  in [ promise semaphore ]);
-
-in pkgs.mkShell {
-  packages = [
-    pkgs.git
-    pkgs.nix
-    pkgs.bash
-    pkgs.nix-prefetch-git
-    pkgs.nix-prefetch-hg
-    emacsEnv
-  ];
-}
+  in [promise semaphore]);
+in
+  pkgs.mkShell {
+    packages = [
+      pkgs.git
+      pkgs.nix
+      pkgs.bash
+      pkgs.nix-prefetch-git
+      pkgs.nix-prefetch-hg
+      emacsEnv
+    ];
+  }

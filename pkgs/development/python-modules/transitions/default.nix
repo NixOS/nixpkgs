@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, six
-, pygraphviz
-, pytestCheckHook
-, mock
-, graphviz
-, pycodestyle
-, fontconfig
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  six,
+  pygraphviz,
+  pytestCheckHook,
+  mock,
+  graphviz,
+  pycodestyle,
+  fontconfig,
 }:
-
 buildPythonPackage rec {
   pname = "transitions";
   version = "0.8.10";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytransitions/transitions";
     description = "A lightweight, object-oriented finite state machine implementation in Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

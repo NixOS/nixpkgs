@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "chmlib";
   version = "0.40a";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hah0nw0l05npva2r35ywwd0kzyiiz4vamghm6d71h8170iva6m9";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   meta = with lib; {
     homepage = "http://www.jedrea.com/chmlib";

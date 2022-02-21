@@ -1,10 +1,15 @@
-{ lib, stdenv, fetchurl, perl
-, bdftopcf, bdf2psf, mkfontdir
-, fonttosfnt
-, targetsDat  ? null
-, variantsDat ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  bdftopcf,
+  bdf2psf,
+  mkfontdir,
+  fonttosfnt,
+  targetsDat ? null,
+  variantsDat ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "uw-ttyp0";
   version = "1.3";
@@ -15,30 +20,32 @@ stdenv.mkDerivation rec {
   };
 
   # remove for version >1.3
-  patches = [ ./determinism.patch ];
+  patches = [./determinism.patch];
 
-  nativeBuildInputs = [ perl bdftopcf bdf2psf fonttosfnt mkfontdir ];
+  nativeBuildInputs = [perl bdftopcf bdf2psf fonttosfnt mkfontdir];
 
   # configure sizes, encodings and variants
   preConfigure =
     (if targetsDat == null
-      then ''
+    then
+      ''
         cat << EOF > TARGETS.dat
         SIZES = 11 12 13 14 15 16 17 18 22 \
         11b 12b 13b 14b 15b 16b 17b 18b 22b 15i 16i 17i 18i
         ENCODINGS = uni
         EOF
       ''
-      else ''cp "${targetsDat}" TARGETS.dat'') +
-    (if variantsDat == null
-      then ''
+    else ''cp "${targetsDat}" TARGETS.dat'')
+    + (if variantsDat == null
+    then
+      ''
         cat << EOF > VARIANTS.dat
         COPYTO AccStress PApostropheAscii
         COPYTO PAmComma AccGraveAscii
         COPYTO Digit0Slashed Digit0
         EOF
       ''
-      else ''cp "${variantsDat}" VARIANTS.dat'');
+    else ''cp "${variantsDat}" VARIANTS.dat'');
 
   postBuild = ''
     # convert bdf fonts to psf
@@ -83,8 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Monospace bitmap screen fonts for X11";
     homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
-    license = with licenses; [ free mit ];
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = with licenses; [free mit];
+    maintainers = with maintainers; [rnhmjoj];
   };
-
 }

@@ -1,38 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, glib
-, gettext
-, cinnamon-desktop
-, gtk3
-, libnotify
-, libxml2
-, gnome-online-accounts
-, cinnamon-settings-daemon
-, colord
-, polkit
-, libxkbfile
-, cinnamon-menus
-, dbus-glib
-, libgnomekbd
-, libxklavier
-, networkmanager
-, libwacom
-, gnome
-, wrapGAppsHook
-, tzdata
-, glibc
-, libnma
-, modemmanager
-, xorg
-, gdk-pixbuf
-, meson
-, ninja
-, cinnamon-translations
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  gettext,
+  cinnamon-desktop,
+  gtk3,
+  libnotify,
+  libxml2,
+  gnome-online-accounts,
+  cinnamon-settings-daemon,
+  colord,
+  polkit,
+  libxkbfile,
+  cinnamon-menus,
+  dbus-glib,
+  libgnomekbd,
+  libxklavier,
+  networkmanager,
+  libwacom,
+  gnome,
+  wrapGAppsHook,
+  tzdata,
+  glibc,
+  libnma,
+  modemmanager,
+  xorg,
+  gdk-pixbuf,
+  meson,
+  ninja,
+  cinnamon-translations,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
   version = "5.2.0";
@@ -68,9 +68,11 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
   ];
 
-  /* ./panels/datetime/test-timezone.c:4:#define TZ_DIR "/usr/share/zoneinfo/"
-    ./panels/datetime/tz.h:32:#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
-    ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab" */
+  /*
+    ./panels/datetime/test-timezone.c:4:#define TZ_DIR "/usr/share/zoneinfo/"
+   ./panels/datetime/tz.h:32:#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
+   ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab"
+   */
 
   postPatch = ''
     sed 's|TZ_DIR "/usr/share/zoneinfo/"|TZ_DIR "${tzdata}/share/zoneinfo/"|g' -i ./panels/datetime/test-timezone.c

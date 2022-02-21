@@ -1,10 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, arrow
-, six
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  arrow,
+  six,
+  hypothesis,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "inform";
   version = "1.26";
@@ -21,9 +23,9 @@ buildPythonPackage rec {
       --replace "pytest-runner>=2.0" ""
   '';
 
-  propagatedBuildInputs = [ arrow six ];
+  propagatedBuildInputs = [arrow six];
 
-  checkInputs = [ pytestCheckHook hypothesis ];
+  checkInputs = [pytestCheckHook hypothesis];
   preCheck = ''
     patchShebangs test.doctests.py test.inform.py
     ./test.doctests.py
@@ -39,6 +41,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://inform.readthedocs.io";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jeremyschlatter ];
+    maintainers = with maintainers; [jeremyschlatter];
   };
 }

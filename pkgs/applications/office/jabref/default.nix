@@ -1,6 +1,26 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
-, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsa-lib, cairo, freetype, pango, gdk-pixbuf, glib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  wrapGAppsHook,
+  gtk3,
+  gsettings-desktop-schemas,
+  zlib,
+  libX11,
+  libXext,
+  libXi,
+  libXrender,
+  libXtst,
+  libGL,
+  alsa-lib,
+  cairo,
+  freetype,
+  pango,
+  gdk-pixbuf,
+  glib,
+}:
 stdenv.mkDerivation rec {
   version = "5.5";
   pname = "jabref";
@@ -13,7 +33,7 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   desktopItem = makeDesktopItem {
-    comment =  meta.description;
+    comment = meta.description;
     name = "jabref";
     desktopName = "JabRef";
     genericName = "Bibliography manager";
@@ -22,10 +42,10 @@ stdenv.mkDerivation rec {
     exec = "jabref";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ gsettings-desktop-schemas ] ++ systemLibs;
+  nativeBuildInputs = [makeWrapper wrapGAppsHook];
+  buildInputs = [gsettings-desktop-schemas] ++ systemLibs;
 
-  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsa-lib cairo freetype pango gdk-pixbuf glib ];
+  systemLibs = [gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsa-lib cairo freetype pango gdk-pixbuf glib];
   systemLibPaths = lib.makeLibraryPath systemLibs;
 
   installPhase = ''
@@ -36,7 +56,7 @@ stdenv.mkDerivation rec {
     for f in $out/lib/runtime/bin/j*; do
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${ lib.makeLibraryPath [ zlib ]}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
+        --set-rpath "${lib.makeLibraryPath [zlib]}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
     done
 
     for f in $out/lib/runtime/lib/*.so; do
@@ -67,6 +87,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.jabref.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    maintainers = [maintainers.gebner];
   };
 }

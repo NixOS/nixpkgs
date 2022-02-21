@@ -1,9 +1,11 @@
 # dleyna-server service.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
   ###### interface
   options = {
     services.dleyna-server = {
@@ -18,11 +20,10 @@ with lib;
     };
   };
 
-
   ###### implementation
   config = mkIf config.services.dleyna-server.enable {
-    environment.systemPackages = [ pkgs.dleyna-server ];
+    environment.systemPackages = [pkgs.dleyna-server];
 
-    services.dbus.packages = [ pkgs.dleyna-server ];
+    services.dbus.packages = [pkgs.dleyna-server];
   };
 }

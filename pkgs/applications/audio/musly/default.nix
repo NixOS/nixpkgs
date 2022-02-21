@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, ffmpeg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+  ffmpeg,
+}:
 stdenv.mkDerivation {
   pname = "musly";
   version = "unstable-2017-04-26";
@@ -8,13 +15,17 @@ stdenv.mkDerivation {
     rev = "f911eacbbe0b39ebe87cb37d0caef09632fa40d6";
     sha256 = "1q42wvdwy2pac7bhfraqqj2czw7w2m33ms3ifjl8phm7d87i8825";
   };
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen ffmpeg ];
-  fixupPhase = if stdenv.isDarwin then ''
-    install_name_tool -change libmusly.dylib $out/lib/libmusly.dylib $out/bin/musly
-    install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/bin/musly
-    install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/lib/libmusly.dylib
-  '' else "";
+  nativeBuildInputs = [cmake];
+  buildInputs = [eigen ffmpeg];
+  fixupPhase =
+    if stdenv.isDarwin
+    then
+      ''
+        install_name_tool -change libmusly.dylib $out/lib/libmusly.dylib $out/bin/musly
+        install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/bin/musly
+        install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/lib/libmusly.dylib
+      ''
+    else "";
 
   meta = with lib; {
     homepage = "https://www.musly.org";
@@ -27,7 +38,7 @@ stdenv.mkDerivation {
       some automatic music playlists right away.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ggpeti ];
+    maintainers = with maintainers; [ggpeti];
     platforms = with platforms; darwin ++ linux;
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "notify";
   version = "1.0.0";
@@ -32,6 +32,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/notify";
     license = licenses.mit;
-    maintainers = with maintainers; [ hanemile ];
+    maintainers = with maintainers; [hanemile];
   };
 }

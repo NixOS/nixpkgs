@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+}:
 buildPythonPackage {
   version = "0.5.3-2016-09-28";
   pname = "tempita";
@@ -11,7 +15,7 @@ buildPythonPackage {
     sha256 = "0f33jjjs5rvp7ar2j6ggyfykcrsrn04jaqcq71qfvycf6b7nw3rn";
   };
 
-  buildInputs = [ nose ];
+  buildInputs = [nose];
 
   meta = {
     homepage = "https://github.com/gjhiggins/tempita";

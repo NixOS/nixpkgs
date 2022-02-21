@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "zinnia";
   version = "2016-08-28";
@@ -20,6 +23,6 @@ stdenv.mkDerivation {
     homepage = "http://taku910.github.io/zinnia/";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    maintainers = [maintainers.gebner];
   };
 }

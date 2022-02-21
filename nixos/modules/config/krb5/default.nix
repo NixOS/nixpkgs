@@ -1,19 +1,22 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.krb5;
 
   # This is to provide support for old configuration options (as much as is
   # reasonable). This can be removed after 18.03 was released.
   defaultConfig = {
     libdefaults = optionalAttrs (cfg.defaultRealm != null)
-      { default_realm = cfg.defaultRealm; };
+    {default_realm = cfg.defaultRealm;};
 
     realms = optionalAttrs (lib.all (value: value != null) [
-      cfg.defaultRealm cfg.kdc cfg.kerberosAdminServer
+      cfg.defaultRealm
+      cfg.kdc
+      cfg.kerberosAdminServer
     ]) {
       ${cfg.defaultRealm} = {
         kdc = cfg.kdc;
@@ -22,7 +25,8 @@ let
     };
 
     domain_realm = optionalAttrs (lib.all (value: value != null) [
-      cfg.domainRealm cfg.defaultRealm
+      cfg.domainRealm
+      cfg.defaultRealm
     ]) {
       ".${cfg.domainRealm}" = cfg.defaultRealm;
       ${cfg.domainRealm} = cfg.defaultRealm;
@@ -30,50 +34,67 @@ let
   };
 
   mergedConfig = (recursiveUpdate defaultConfig {
-    inherit (config.krb5)
-      kerberos libdefaults realms domain_realm capaths appdefaults plugins
-      extraConfig config;
+    inherit
+      (config.krb5)
+      kerberos
+      libdefaults
+      realms
+      domain_realm
+      capaths
+      appdefaults
+      plugins
+      extraConfig
+      config
+      ;
   });
 
-  filterEmbeddedMetadata = value: if isAttrs value then
-    (filterAttrs
+  filterEmbeddedMetadata = value:
+    if isAttrs value
+    then
+      (filterAttrs
       (attrName: attrValue: attrName != "_module" && attrValue != null)
-        value)
+      value)
     else value;
 
   indent = "  ";
 
   mkRelation = name: value:
-    if (isList value) then
-      concatMapStringsSep "\n" (mkRelation name) value
+    if (isList value)
+    then concatMapStringsSep "\n" (mkRelation name) value
     else "${name} = ${mkVal value}";
 
   mkVal = value:
-    if (value == true) then "true"
-    else if (value == false) then "false"
-    else if (isInt value) then (toString value)
-    else if (isAttrs value) then
-      let configLines = concatLists
+    if (value == true)
+    then "true"
+    else if (value == false)
+    then "false"
+    else if (isInt value)
+    then (toString value)
+    else if (isAttrs value)
+    then
+      let
+        configLines = concatLists
         (map (splitString "\n")
-          (mapAttrsToList mkRelation value));
+        (mapAttrsToList mkRelation value));
       in
-      (concatStringsSep "\n${indent}"
-        ([ "{" ] ++ configLines))
-      + "\n}"
+        (concatStringsSep "\n${indent}"
+        (["{"] ++ configLines))
+        + "\n}"
     else value;
 
-  mkMappedAttrsOrString = value: concatMapStringsSep "\n"
-    (line: if builtins.stringLength line > 0
+  mkMappedAttrsOrString = value:
+    concatMapStringsSep "\n"
+    (line:
+      if builtins.stringLength line > 0
       then "${indent}${line}"
       else line)
     (splitString "\n"
-      (if isAttrs value then
-        concatStringsSep "\n"
-            (mapAttrsToList mkRelation value)
-        else value));
-
+    (if isAttrs value
+    then
+      concatStringsSep "\n"
+      (mapAttrsToList mkRelation value)
+    else value));
 in {
-
   ###### interface
 
   options = {
@@ -291,31 +312,33 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [cfg.kerberos];
 
-    environment.systemPackages = [ cfg.kerberos ];
-
-    environment.etc."krb5.conf".text = if isString cfg.config
+    environment.etc."krb5.conf".text =
+      if isString cfg.config
       then cfg.config
-      else (''
-        [libdefaults]
-        ${mkMappedAttrsOrString mergedConfig.libdefaults}
+      else
+        (''
+          [libdefaults]
+          ${mkMappedAttrsOrString mergedConfig.libdefaults}
 
-        [realms]
-        ${mkMappedAttrsOrString mergedConfig.realms}
+          [realms]
+          ${mkMappedAttrsOrString mergedConfig.realms}
 
-        [domain_realm]
-        ${mkMappedAttrsOrString mergedConfig.domain_realm}
+          [domain_realm]
+          ${mkMappedAttrsOrString mergedConfig.domain_realm}
 
-        [capaths]
-        ${mkMappedAttrsOrString mergedConfig.capaths}
+          [capaths]
+          ${mkMappedAttrsOrString mergedConfig.capaths}
 
-        [appdefaults]
-        ${mkMappedAttrsOrString mergedConfig.appdefaults}
+          [appdefaults]
+          ${mkMappedAttrsOrString mergedConfig.appdefaults}
 
-        [plugins]
-        ${mkMappedAttrsOrString mergedConfig.plugins}
-      '' + optionalString (mergedConfig.extraConfig != null)
-          ("\n" + mergedConfig.extraConfig));
+          [plugins]
+          ${mkMappedAttrsOrString mergedConfig.plugins}
+        ''
+        + optionalString (mergedConfig.extraConfig != null)
+        ("\n" + mergedConfig.extraConfig));
 
     warnings = flatten [
       (optional (cfg.defaultRealm != null) ''
@@ -336,28 +359,51 @@ in {
     ];
 
     assertions = [
-      { assertion = !((builtins.any (value: value != null) [
-            cfg.defaultRealm cfg.domainRealm cfg.kdc cfg.kerberosAdminServer
-          ]) && ((builtins.any (value: value != {}) [
-              cfg.libdefaults cfg.realms cfg.domain_realm cfg.capaths
-              cfg.appdefaults cfg.plugins
-            ]) || (builtins.any (value: value != null) [
-              cfg.config cfg.extraConfig
-            ])));
+      {
+        assertion =
+          !((builtins.any (value: value != null) [
+            cfg.defaultRealm
+            cfg.domainRealm
+            cfg.kdc
+            cfg.kerberosAdminServer
+          ])
+          && ((builtins.any (value: value != {}) [
+            cfg.libdefaults
+            cfg.realms
+            cfg.domain_realm
+            cfg.capaths
+            cfg.appdefaults
+            cfg.plugins
+          ])
+          || (builtins.any (value: value != null) [
+            cfg.config
+            cfg.extraConfig
+          ])));
         message = ''
           Configuration of krb5.conf by deprecated options is mutually exclusive
           with configuration by section.  Please migrate your config using the
           attributes suggested in the warnings.
         '';
       }
-      { assertion = !(cfg.config != null
+      {
+        assertion =
+          !(cfg.config
+          != null
           && ((builtins.any (value: value != {}) [
-              cfg.libdefaults cfg.realms cfg.domain_realm cfg.capaths
-              cfg.appdefaults cfg.plugins
-            ]) || (builtins.any (value: value != null) [
-              cfg.extraConfig cfg.defaultRealm cfg.domainRealm cfg.kdc
-              cfg.kerberosAdminServer
-            ])));
+            cfg.libdefaults
+            cfg.realms
+            cfg.domain_realm
+            cfg.capaths
+            cfg.appdefaults
+            cfg.plugins
+          ])
+          || (builtins.any (value: value != null) [
+            cfg.extraConfig
+            cfg.defaultRealm
+            cfg.domainRealm
+            cfg.kdc
+            cfg.kerberosAdminServer
+          ])));
         message = ''
           Configuration of krb5.conf using krb.config is mutually exclusive with
           configuration by section.  If you want to mix the two, you can pass

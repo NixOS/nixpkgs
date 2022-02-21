@@ -1,7 +1,14 @@
-{ lib, mkDerivation, fetchurl, fetchpatch, extra-cmake-modules, qtx11extras,
-  plasma-workspace, libwacom, xf86_input_wacom
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  extra-cmake-modules,
+  qtx11extras,
+  plasma-workspace,
+  libwacom,
+  xf86_input_wacom,
 }:
-
 mkDerivation rec {
   pname = "wacomtablet";
   version = "3.2.0";
@@ -16,10 +23,12 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [extra-cmake-modules];
   buildInputs = [
-    qtx11extras plasma-workspace
-    libwacom xf86_input_wacom
+    qtx11extras
+    plasma-workspace
+    libwacom
+    xf86_input_wacom
   ];
 
   meta = {
@@ -30,7 +39,7 @@ mkDerivation rec {
     '';
     homepage = "https://invent.kde.org/system/wacomtablet";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.Thra11 ];
+    maintainers = [lib.maintainers.Thra11];
     platforms = lib.platforms.linux;
   };
 }

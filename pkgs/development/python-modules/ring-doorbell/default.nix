@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, oauthlib
-, pytestCheckHook
-, pytz
-, requests
-, requests-mock
-, requests_oauthlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  oauthlib,
+  pytestCheckHook,
+  pytz,
+  requests,
+  requests-mock,
+  requests_oauthlib,
 }:
-
 buildPythonPackage rec {
   pname = "ring-doorbell";
   version = "0.7.2";
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [ "ring_doorbell" ];
+  pythonImportsCheck = ["ring_doorbell"];
 
   meta = with lib; {
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
     description = "A Python library to communicate with Ring Door Bell (https://ring.com/)";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ graham33 ];
+    maintainers = with maintainers; [graham33];
   };
 }

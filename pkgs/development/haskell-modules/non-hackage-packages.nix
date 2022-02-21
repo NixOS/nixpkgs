@@ -6,25 +6,24 @@
 # configuration-common.nix or to one of the compiler specific configuration
 # files.
 self: super: {
+  dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix {};
 
-  dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
-
-  ldgallery-compiler = self.callPackage ../../tools/graphics/ldgallery/compiler { };
+  ldgallery-compiler = self.callPackage ../../tools/graphics/ldgallery/compiler {};
 
   # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
   # from the latest master instead of the current version on Hackage.
-  cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };
+  cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix {};
 
   # https://github.com/channable/vaultenv/issues/1
-  vaultenv = self.callPackage ../tools/haskell/vaultenv { };
+  vaultenv = self.callPackage ../tools/haskell/vaultenv {};
 
   # spago is not released to Hackage.
   # https://github.com/spacchetti/spago/issues/512
-  spago = self.callPackage ../tools/purescript/spago/spago.nix { };
+  spago = self.callPackage ../tools/purescript/spago/spago.nix {};
 
-  nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
+  nix-linter = self.callPackage ../../development/tools/analysis/nix-linter {};
 
-  nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
+  nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor {};
 
   # hasura graphql-engine is not released to hackage.
   # https://github.com/hasura/graphql-engine/issues/7391

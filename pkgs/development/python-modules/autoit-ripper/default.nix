@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pefile
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pefile,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "autoit-ripper";
   version = "1.1.0";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to extract AutoIt scripts embedded in PE binaries";
     homepage = "https://github.com/nazywam/AutoIt-Ripper";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

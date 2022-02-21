@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, ilmbase, libtiff, openexr }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  ilmbase,
+  libtiff,
+  openexr,
+}:
 stdenv.mkDerivation rec {
   pname = "ctl";
   version = "1.5.2";
@@ -29,8 +38,8 @@ stdenv.mkDerivation rec {
         --replace "( IlmCtlMath IlmCtl )" "( IlmCtlMath IlmCtl Imath)"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libtiff ilmbase openexr ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [libtiff ilmbase openexr];
 
   meta = with lib; {
     description = "Color Transformation Language";

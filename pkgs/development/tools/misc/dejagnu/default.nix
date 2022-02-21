@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, expect, makeWrapper }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  expect,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "dejagnu";
   version = "1.6.3";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ expect ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [expect];
 
   # dejagnu-1.6.3 can't successfully run tests in source tree:
   #   https://wiki.linuxfromscratch.org/lfs/ticket/4871
@@ -58,6 +63,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
   };
 }

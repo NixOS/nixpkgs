@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
-, gtk2, libcanberra, libnotify, pcre, sqlite, xorg
-, harfbuzz
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  gettext,
+  gtk2,
+  libcanberra,
+  libnotify,
+  pcre,
+  sqlite,
+  xorg,
+  harfbuzz,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libgaminggear";
   version = "0.15.1";
@@ -12,12 +22,18 @@ stdenv.mkDerivation rec {
     sha256 = "0jf5i1iv8j842imgiixbhwcr6qcwa93m27lzr6gb01ri5v35kggz";
   };
 
-  outputs = [ "dev" "out" "bin" ];
+  outputs = ["dev" "out" "bin"];
 
-  nativeBuildInputs = [ cmake pkg-config gettext ];
+  nativeBuildInputs = [cmake pkg-config gettext];
 
   propagatedBuildInputs = [
-    gtk2 libcanberra libnotify pcre sqlite xorg.libXdmcp xorg.libpthreadstubs
+    gtk2
+    libcanberra
+    libnotify
+    pcre
+    sqlite
+    xorg.libXdmcp
+    xorg.libpthreadstubs
   ];
 
   cmakeFlags = [
@@ -27,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   # https://sourceforge.net/p/libgaminggear/discussion/general/thread/b43a776b3a/
-  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+  NIX_CFLAGS_COMPILE = ["-I${harfbuzz.dev}/include/harfbuzz"];
 
   postFixup = ''
     moveToOutput bin "$bin"

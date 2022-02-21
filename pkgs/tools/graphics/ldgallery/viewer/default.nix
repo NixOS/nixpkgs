@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkgs, nodejs-12_x, pandoc, CoreServices }:
-
-with lib;
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkgs,
+  nodejs-12_x,
+  pandoc,
+  CoreServices,
+}:
+with lib; let
   # Note for maintainers:
   # * keep version in sync with the ldgallery compiler
   # * regenerate node-*.nix with `./generate.sh <git release tag>`
@@ -24,31 +29,28 @@ let
   nodePkg = nodePackages.package.override {
     src = "${sourcePkg}/viewer";
     postInstall = "npm run build";
-    buildInputs = optionals stdenv.isDarwin [ CoreServices ];
+    buildInputs = optionals stdenv.isDarwin [CoreServices];
   };
-
 in
+  # making sure that the source and the node package are in sync
+  assert versions.majorMinor nodePkg.version == removePrefix "v" sourcePkg.rev;
+    stdenv.mkDerivation {
+      pname = nodePkg.packageName;
+      version = nodePkg.version;
+      src = nodePkg;
 
-# making sure that the source and the node package are in sync
-assert versions.majorMinor nodePkg.version == removePrefix "v" sourcePkg.rev;
+      buildInputs = [pandoc];
 
-stdenv.mkDerivation {
-  pname = nodePkg.packageName;
-  version = nodePkg.version;
-  src = nodePkg;
+      installPhase = ''
+        mkdir -p "$out/share/ldgallery"
+        cp -rp "lib/node_modules/ldgallery-viewer/dist" \
+          "$out/share/ldgallery/viewer/"
+        cp -rp "lib/node_modules/ldgallery-viewer/examples" \
+          "$out/share/ldgallery/viewer/"
 
-  buildInputs = [ pandoc ];
-
-  installPhase = ''
-    mkdir -p "$out/share/ldgallery"
-    cp -rp "lib/node_modules/ldgallery-viewer/dist" \
-      "$out/share/ldgallery/viewer/"
-    cp -rp "lib/node_modules/ldgallery-viewer/examples" \
-      "$out/share/ldgallery/viewer/"
-
-    mkdir -p "$out/share/man/man7"
-    pandoc --standalone --to man \
-      "lib/node_modules/ldgallery-viewer/ldgallery-viewer.7.md" \
-      --output "$out/share/man/man7/ldgallery-viewer.7"
-  '';
-}
+        mkdir -p "$out/share/man/man7"
+        pandoc --standalone --to man \
+          "lib/node_modules/ldgallery-viewer/ldgallery-viewer.7.md" \
+          --output "$out/share/man/man7/ldgallery-viewer.7"
+      '';
+    }

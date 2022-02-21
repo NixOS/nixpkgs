@@ -1,6 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, alsa-lib, openssl
-, withTTS ? false, llvmPackages, speechd }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  alsa-lib,
+  openssl,
+  withTTS ? false,
+  llvmPackages,
+  speechd,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
   version = "3.5.0";
@@ -16,9 +25,9 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withTTS "tts";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ alsa-lib openssl ] ++ lib.optional withTTS [ speechd ];
+  buildInputs = [alsa-lib openssl] ++ lib.optional withTTS [speechd];
 
   # Building the speech-dispatcher-sys crate for TTS support requires setting
   # LIBCLANG_PATH.
@@ -35,11 +44,11 @@ rustPlatform.buildRustPackage rec {
     export BINDGEN_EXTRA_CLANG_ARGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
       -isystem ${llvmPackages.libclang.lib}/lib/clang/${
-        lib.getVersion llvmPackages.clang
-      }/include \
+      lib.getVersion llvmPackages.clang
+    }/include \
       -idirafter ${stdenv.cc.cc}/lib/gcc/${stdenv.hostPlatform.config}/${
-        lib.getVersion stdenv.cc.cc
-      }/include \
+      lib.getVersion stdenv.cc.cc
+    }/include \
       -idirafter ${speechd}/include"
   '';
 
@@ -58,7 +67,8 @@ rustPlatform.buildRustPackage rec {
       "validate_assertion_fail"
     ];
     skipFlag = test: "--skip " + test;
-  in builtins.concatStringsSep " " (builtins.map skipFlag skipList);
+  in
+    builtins.concatStringsSep " " (builtins.map skipFlag skipList);
 
   meta = with lib; {
     description = "A terminal MUD client written in Rust";
@@ -73,7 +83,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/Blightmud/Blightmud";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cpu ];
+    maintainers = with maintainers; [cpu];
     platforms = platforms.linux;
   };
 }

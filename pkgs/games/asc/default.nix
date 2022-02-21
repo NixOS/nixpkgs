@@ -1,7 +1,32 @@
-{ fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
-, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkg-config, zlib, zip, bzip2
-, libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  SDL_sound,
+  libsigcxx,
+  physfs,
+  boost,
+  expat,
+  freetype,
+  libjpeg,
+  wxGTK,
+  lua,
+  perl,
+  pkg-config,
+  zlib,
+  zip,
+  bzip2,
+  libpng,
+  libtiff,
+  fluidsynth,
+  libmikmod,
+  libvorbis,
+  flac,
+  libogg,
+}:
 stdenv.mkDerivation rec {
   pname = "asc";
   version = "2.6.0.0";
@@ -11,15 +36,36 @@ stdenv.mkDerivation rec {
     sha256 = "1fybasb6srqfg6pqbvh0s0vvzjq9r0n6aq0z44hs7n68kmaam775";
   };
 
-  configureFlags = [ "--disable-paragui" "--disable-paraguitest" ];
+  configureFlags = ["--disable-paragui" "--disable-paraguitest"];
 
   NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=narrowing"; # I'm too lazy to catch all gcc47-related problems
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   buildInputs = [
-    SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
-    freetype libjpeg wxGTK lua perl pkg-config zlib zip bzip2 libpng
-    libtiff fluidsynth libmikmod flac libvorbis libogg
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_sound
+    libsigcxx
+    physfs
+    boost
+    expat
+    freetype
+    libjpeg
+    wxGTK
+    lua
+    perl
+    pkg-config
+    zlib
+    zip
+    bzip2
+    libpng
+    libtiff
+    fluidsynth
+    libmikmod
+    flac
+    libvorbis
+    libogg
   ];
 
   meta = with lib; {
@@ -35,7 +81,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, gcc }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gcc,
+}:
 stdenv.mkDerivation rec {
   pname = "pxattr";
   version = "2.1.0";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dwcqc5z7gzma1zhis2md49bj2nq7m6jimh4zlx9szw6svisz56z";
   };
 
-  buildInputs = [ gcc ];
+  buildInputs = [gcc];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.lesbonscomptes.com/pxattr/index.html";
     description = "Provides a single interface to extended file attributes";
-    maintainers = [ lib.maintainers.vrthra ];
-    license = [ lib.licenses.mit ];
+    maintainers = [lib.maintainers.vrthra];
+    license = [lib.licenses.mit];
     platforms = lib.platforms.unix;
   };
 }

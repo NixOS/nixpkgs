@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, switchboard
-, elementary-notifications
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  granite,
+  gtk3,
+  switchboard,
+  elementary-notifications,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
   version = "2.2.0";

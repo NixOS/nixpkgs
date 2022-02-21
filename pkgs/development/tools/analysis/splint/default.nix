@@ -1,5 +1,9 @@
-{ fetchurl, lib, stdenv, flex }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  flex,
+}:
 stdenv.mkDerivation rec {
   pname = "splint";
   version = "3.1.2";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "02pv8kscsrkrzip9r08pfs9xs98q74c52mlxzbii6cv6vx1vd3f7";
   };
 
-  patches = [ ./tmpdir.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [./tmpdir.patch] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
-  buildInputs = [ flex ];
+  buildInputs = [flex];
 
   doCheck = true;
 

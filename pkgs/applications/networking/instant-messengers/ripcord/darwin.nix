@@ -1,5 +1,8 @@
-{ stdenvNoCC, lib, fetchzip }:
-
+{
+  stdenvNoCC,
+  lib,
+  fetchzip,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "ripcord";
   version = "0.4.29";
@@ -27,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://cancel.fm/ripcord/";
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ mikroskeem ];
-    platforms = [ "x86_64-darwin" ];
+    maintainers = with maintainers; [mikroskeem];
+    platforms = ["x86_64-darwin"];
   };
 }

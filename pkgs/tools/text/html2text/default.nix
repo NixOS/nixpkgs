@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "html2text";
   version = "1.3.2a";
@@ -28,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.mbayer.de/html2text/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.eikek ];
+    maintainers = [lib.maintainers.eikek];
   };
 }

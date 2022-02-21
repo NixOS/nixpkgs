@@ -1,11 +1,11 @@
-{ mkDerivation
-, extra-cmake-modules
-, kparts
-, kxmlgui
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kparts,
+  kxmlgui,
 }:
-
 mkDerivation {
   name = "kmediaplayer";
-  nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kparts kxmlgui ];
+  nativeBuildInputs = [extra-cmake-modules];
+  buildInputs = [kparts kxmlgui];
 }

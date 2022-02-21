@@ -1,8 +1,19 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
-, pkg-config, openssl
-, libiconv, Security, CoreServices
-, dbBackend ? "sqlite", libmysqlclient, postgresql }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchurl,
+  nixosTests,
+  pkg-config,
+  openssl,
+  libiconv,
+  Security,
+  CoreServices,
+  dbBackend ? "sqlite",
+  libmysqlclient,
+  postgresql,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
   version = "1.24.0";
@@ -22,9 +33,10 @@ rustPlatform.buildRustPackage rec {
     sed -ri 's/^rust-version = .*//g' Cargo.toml
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = with lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
+  nativeBuildInputs = [pkg-config];
+  buildInputs = with lib;
+    [openssl]
+    ++ optionals stdenv.isDarwin [libiconv Security CoreServices]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 
@@ -40,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ msteen ivan ];
+    maintainers = with maintainers; [msteen ivan];
   };
 }

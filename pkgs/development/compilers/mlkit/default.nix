@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, mlton }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  mlton,
+}:
 stdenv.mkDerivation rec {
   pname = "mlkit";
   version = "4.5.9";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-b+iPuGB82a0r0zl49+RbalxR6OpFNXOxZgubzKE+2M4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook mlton ];
+  nativeBuildInputs = [autoreconfHook mlton];
 
   buildFlags = ["mlkit" "mlkit_libs"];
 
@@ -21,6 +26,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/melsman/mlkit/blob/v${version}/NEWS.md";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ athas ];
+    maintainers = with maintainers; [athas];
   };
 }

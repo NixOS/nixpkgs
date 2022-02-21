@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, AppKit, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  AppKit,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
   version = "0.13.0";
@@ -11,12 +18,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-OqJceRO1RFOLgNi3SbTKLw62tSfJSO7T2/u0RTX89AM=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  buildInputs = lib.optionals stdenv.isDarwin  [ AppKit Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [AppKit Security];
 
   cargoSha256 = "sha256-sULjd+weixTQYFIQlluPwY4MFlZ1+vMMoMn4GP79oQs=";
-  checkFlagsArray = lib.optionals stdenv.isDarwin [ "--skip=copy" ];
+  checkFlagsArray = lib.optionals stdenv.isDarwin ["--skip=copy"];
   dontUseCargoParallelTests = true;
 
   postInstall = ''
@@ -30,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Terminal code snippets manager";
     homepage = "https://github.com/out-of-cheese-error/the-way";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ numkem ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [numkem];
   };
 }

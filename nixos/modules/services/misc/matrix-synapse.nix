@@ -1,8 +1,11 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.matrix-synapse;
   opt = options.services.matrix-synapse;
   pg = config.services.postgresql;
@@ -14,134 +17,167 @@ let
     extraLibs = cfg.plugins;
   };
   configFile = pkgs.writeText "homeserver.yaml" ''
-${optionalString (cfg.tls_certificate_path != null) ''
-tls_certificate_path: "${cfg.tls_certificate_path}"
-''}
-${optionalString (cfg.tls_private_key_path != null) ''
-tls_private_key_path: "${cfg.tls_private_key_path}"
-''}
-${optionalString (cfg.tls_dh_params_path != null) ''
-tls_dh_params_path: "${cfg.tls_dh_params_path}"
-''}
-no_tls: ${boolToString cfg.no_tls}
-${optionalString (cfg.bind_port != null) ''
-bind_port: ${toString cfg.bind_port}
-''}
-${optionalString (cfg.unsecure_port != null) ''
-unsecure_port: ${toString cfg.unsecure_port}
-''}
-${optionalString (cfg.bind_host != null) ''
-bind_host: "${cfg.bind_host}"
-''}
-server_name: "${cfg.server_name}"
-pid_file: "/run/matrix-synapse.pid"
-${optionalString (cfg.public_baseurl != null) ''
-public_baseurl: "${cfg.public_baseurl}"
-''}
-listeners: [${concatStringsSep "," (map mkListener cfg.listeners)}]
-database: {
-  name: "${cfg.database_type}",
-  args: {
-    ${concatStringsSep ",\n    " (
-      mapAttrsToList (n: v: "\"${n}\": ${builtins.toJSON v}") cfg.database_args
-    )}
-  }
-}
-event_cache_size: "${cfg.event_cache_size}"
-verbose: ${cfg.verbose}
-log_config: "${logConfigFile}"
-rc_messages_per_second: ${cfg.rc_messages_per_second}
-rc_message_burst_count: ${cfg.rc_message_burst_count}
-federation_rc_window_size: ${cfg.federation_rc_window_size}
-federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
-federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
-federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
-federation_rc_concurrent: ${cfg.federation_rc_concurrent}
-media_store_path: "${cfg.dataDir}/media"
-uploads_path: "${cfg.dataDir}/uploads"
-max_upload_size: "${cfg.max_upload_size}"
-max_image_pixels: "${cfg.max_image_pixels}"
-dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
-url_preview_enabled: ${boolToString cfg.url_preview_enabled}
-${optionalString (cfg.url_preview_enabled == true) ''
-url_preview_ip_range_blacklist: ${builtins.toJSON cfg.url_preview_ip_range_blacklist}
-url_preview_ip_range_whitelist: ${builtins.toJSON cfg.url_preview_ip_range_whitelist}
-url_preview_url_blacklist: ${builtins.toJSON cfg.url_preview_url_blacklist}
-''}
-recaptcha_private_key: "${cfg.recaptcha_private_key}"
-recaptcha_public_key: "${cfg.recaptcha_public_key}"
-enable_registration_captcha: ${boolToString cfg.enable_registration_captcha}
-turn_uris: ${builtins.toJSON cfg.turn_uris}
-turn_shared_secret: "${cfg.turn_shared_secret}"
-enable_registration: ${boolToString cfg.enable_registration}
-${optionalString (cfg.registration_shared_secret != null) ''
-registration_shared_secret: "${cfg.registration_shared_secret}"
-''}
-recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
-turn_user_lifetime: "${cfg.turn_user_lifetime}"
-user_creation_max_duration: ${cfg.user_creation_max_duration}
-bcrypt_rounds: ${cfg.bcrypt_rounds}
-allow_guest_access: ${boolToString cfg.allow_guest_access}
-
-account_threepid_delegates:
-  ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
-  ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
-
-room_prejoin_state:
-  disable_default_event_types: ${boolToString cfg.room_prejoin_state.disable_default_event_types}
-  additional_event_types: ${builtins.toJSON cfg.room_prejoin_state.additional_event_types}
-${optionalString (cfg.macaroon_secret_key != null) ''
-  macaroon_secret_key: "${cfg.macaroon_secret_key}"
-''}
-expire_access_token: ${boolToString cfg.expire_access_token}
-enable_metrics: ${boolToString cfg.enable_metrics}
-report_stats: ${boolToString cfg.report_stats}
-signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
-key_refresh_interval: "${cfg.key_refresh_interval}"
-perspectives:
-  servers: {
-    ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
-    "${n}": {
-      "verify_keys": {
-        ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
-        "${n}": {
-          "key": "${v}"
-        }'') v)}
-      }
-    '') cfg.servers)}
+    ${
+      optionalString (cfg.tls_certificate_path != null) ''
+        tls_certificate_path: "${cfg.tls_certificate_path}"
+      ''
     }
-  }
-redaction_retention_period: ${toString cfg.redaction_retention_period}
-app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
+    ${
+      optionalString (cfg.tls_private_key_path != null) ''
+        tls_private_key_path: "${cfg.tls_private_key_path}"
+      ''
+    }
+    ${
+      optionalString (cfg.tls_dh_params_path != null) ''
+        tls_dh_params_path: "${cfg.tls_dh_params_path}"
+      ''
+    }
+    no_tls: ${boolToString cfg.no_tls}
+    ${
+      optionalString (cfg.bind_port != null) ''
+        bind_port: ${toString cfg.bind_port}
+      ''
+    }
+    ${
+      optionalString (cfg.unsecure_port != null) ''
+        unsecure_port: ${toString cfg.unsecure_port}
+      ''
+    }
+    ${
+      optionalString (cfg.bind_host != null) ''
+        bind_host: "${cfg.bind_host}"
+      ''
+    }
+    server_name: "${cfg.server_name}"
+    pid_file: "/run/matrix-synapse.pid"
+    ${
+      optionalString (cfg.public_baseurl != null) ''
+        public_baseurl: "${cfg.public_baseurl}"
+      ''
+    }
+    listeners: [${concatStringsSep "," (map mkListener cfg.listeners)}]
+    database: {
+      name: "${cfg.database_type}",
+      args: {
+        ${
+      concatStringsSep ",\n    " (
+        mapAttrsToList (n: v: "\"${n}\": ${builtins.toJSON v}") cfg.database_args
+      )
+    }
+      }
+    }
+    event_cache_size: "${cfg.event_cache_size}"
+    verbose: ${cfg.verbose}
+    log_config: "${logConfigFile}"
+    rc_messages_per_second: ${cfg.rc_messages_per_second}
+    rc_message_burst_count: ${cfg.rc_message_burst_count}
+    federation_rc_window_size: ${cfg.federation_rc_window_size}
+    federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
+    federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
+    federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
+    federation_rc_concurrent: ${cfg.federation_rc_concurrent}
+    media_store_path: "${cfg.dataDir}/media"
+    uploads_path: "${cfg.dataDir}/uploads"
+    max_upload_size: "${cfg.max_upload_size}"
+    max_image_pixels: "${cfg.max_image_pixels}"
+    dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
+    url_preview_enabled: ${boolToString cfg.url_preview_enabled}
+    ${
+      optionalString (cfg.url_preview_enabled == true) ''
+        url_preview_ip_range_blacklist: ${builtins.toJSON cfg.url_preview_ip_range_blacklist}
+        url_preview_ip_range_whitelist: ${builtins.toJSON cfg.url_preview_ip_range_whitelist}
+        url_preview_url_blacklist: ${builtins.toJSON cfg.url_preview_url_blacklist}
+      ''
+    }
+    recaptcha_private_key: "${cfg.recaptcha_private_key}"
+    recaptcha_public_key: "${cfg.recaptcha_public_key}"
+    enable_registration_captcha: ${boolToString cfg.enable_registration_captcha}
+    turn_uris: ${builtins.toJSON cfg.turn_uris}
+    turn_shared_secret: "${cfg.turn_shared_secret}"
+    enable_registration: ${boolToString cfg.enable_registration}
+    ${
+      optionalString (cfg.registration_shared_secret != null) ''
+        registration_shared_secret: "${cfg.registration_shared_secret}"
+      ''
+    }
+    recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
+    turn_user_lifetime: "${cfg.turn_user_lifetime}"
+    user_creation_max_duration: ${cfg.user_creation_max_duration}
+    bcrypt_rounds: ${cfg.bcrypt_rounds}
+    allow_guest_access: ${boolToString cfg.allow_guest_access}
 
-${cfg.extraConfig}
-'';
+    account_threepid_delegates:
+      ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
+      ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
 
-  hasLocalPostgresDB = let args = cfg.database_args; in
-    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+    room_prejoin_state:
+      disable_default_event_types: ${boolToString cfg.room_prejoin_state.disable_default_event_types}
+      additional_event_types: ${builtins.toJSON cfg.room_prejoin_state.additional_event_types}
+    ${
+      optionalString (cfg.macaroon_secret_key != null) ''
+        macaroon_secret_key: "${cfg.macaroon_secret_key}"
+      ''
+    }
+    expire_access_token: ${boolToString cfg.expire_access_token}
+    enable_metrics: ${boolToString cfg.enable_metrics}
+    report_stats: ${boolToString cfg.report_stats}
+    signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
+    key_refresh_interval: "${cfg.key_refresh_interval}"
+    perspectives:
+      servers: {
+        ${
+      concatStringsSep "},\n" (mapAttrsToList (n: v: ''
+        "${n}": {
+          "verify_keys": {
+            ${
+          concatStringsSep "},\n" (mapAttrsToList (n: v: ''
+            "${n}": {
+              "key": "${v}"
+            }'')
+          v)
+        }
+          }
+      '')
+      cfg.servers)
+    }
+        }
+      }
+    redaction_retention_period: ${toString cfg.redaction_retention_period}
+    app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
 
-  registerNewMatrixUser =
-    let
-      isIpv6 = x: lib.length (lib.splitString ":" x) > 1;
-      listener =
-        lib.findFirst (
-          listener: lib.any (
-            resource: lib.any (
-              name: name == "client"
-            ) resource.names
-          ) listener.resources
-        ) (lib.last cfg.listeners) cfg.listeners;
-    in
+    ${cfg.extraConfig}
+  '';
+
+  hasLocalPostgresDB = let
+    args = cfg.database_args;
+  in
+    usePostgresql && (!(args ? host) || (elem args.host ["localhost" "127.0.0.1" "::1"]));
+
+  registerNewMatrixUser = let
+    isIpv6 = x: lib.length (lib.splitString ":" x) > 1;
+    listener =
+      lib.findFirst (
+        listener:
+          lib.any (
+            resource:
+              lib.any (
+                name: name == "client"
+              )
+              resource.names
+          )
+          listener.resources
+      ) (lib.last cfg.listeners)
+      cfg.listeners;
+  in
     pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
       exec ${cfg.package}/bin/register_new_matrix_user \
         $@ \
-        ${lib.concatMapStringsSep " " (x: "-c ${x}") ([ configFile ] ++ cfg.extraConfigFiles)} \
+        ${lib.concatMapStringsSep " " (x: "-c ${x}") ([configFile] ++ cfg.extraConfigFiles)} \
         "${listener.type}://${
-          if (isIpv6 listener.bind_address) then
-            "[${listener.bind_address}]"
-          else
-            "${listener.bind_address}"
-        }:${builtins.toString listener.port}/"
+        if (isIpv6 listener.bind_address)
+        then "[${listener.bind_address}]"
+        else "${listener.bind_address}"
+      }:${builtins.toString listener.port}/"
     '';
 in {
   options = {
@@ -165,7 +201,7 @@ in {
       };
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [ ];
+        default = [];
         example = literalExpression ''
           with config.services.matrix-synapse.package.plugins; [
             matrix-synapse-ldap3
@@ -336,17 +372,25 @@ in {
             };
           };
         });
-        default = [{
-          port = 8448;
-          bind_address = "";
-          type = "http";
-          tls = true;
-          x_forwarded = false;
-          resources = [
-            { names = ["client"]; compress = true; }
-            { names = ["federation"]; compress = false; }
-          ];
-        }];
+        default = [
+          {
+            port = 8448;
+            bind_address = "";
+            type = "http";
+            tls = true;
+            x_forwarded = false;
+            resources = [
+              {
+                names = ["client"];
+                compress = true;
+              }
+              {
+                names = ["federation"];
+                compress = false;
+              }
+            ];
+          }
+        ];
         description = ''
           List of ports that Synapse should listen on, their purpose and their configuration.
         '';
@@ -401,8 +445,9 @@ in {
         description = "The number of federation requests to concurrently process from a single server";
       };
       database_type = mkOption {
-        type = types.enum [ "sqlite3" "psycopg2" ];
-        default = if versionAtLeast config.system.stateVersion "18.03"
+        type = types.enum ["sqlite3" "psycopg2"];
+        default =
+          if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
         defaultText = literalExpression ''
@@ -426,13 +471,15 @@ in {
       };
       database_args = mkOption {
         type = types.attrs;
-        default = {
-          sqlite3 = { database = "${cfg.dataDir}/homeserver.db"; };
-          psycopg2 = {
-            user = cfg.database_user;
-            database = cfg.database_name;
-          };
-        }.${cfg.database_type};
+        default =
+          {
+            sqlite3 = {database = "${cfg.dataDir}/homeserver.db";};
+            psycopg2 = {
+              user = cfg.database_user;
+              database = cfg.database_name;
+            };
+          }
+          .${cfg.database_type};
         defaultText = literalDocBook ''
           <variablelist>
             <varlistentry>
@@ -699,7 +746,7 @@ in {
       };
       app_service_config_files = mkOption {
         type = types.listOf types.path;
-        default = [ ];
+        default = [];
         description = ''
           A list of application service config file to use
         '';
@@ -750,7 +797,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
+      {
+        assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
         message = ''
           Cannot deploy matrix-synapse with a configuration for a local postgresql database
             and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
@@ -784,31 +832,36 @@ in {
 
     systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
-      after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"] ++ optional hasLocalPostgresDB "postgresql.service";
+      wantedBy = ["multi-user.target"];
       preStart = ''
         ${cfg.package}/bin/synapse_homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
-      environment = {
-        PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
-      } // optionalAttrs (cfg.withJemalloc) {
-        LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
-      };
+      environment =
+        {
+          PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [pluginsEnv];
+        }
+        // optionalAttrs (cfg.withJemalloc) {
+          LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+        };
       serviceConfig = {
         Type = "notify";
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
-        ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
-          chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
-          chmod 0600 ${cfg.dataDir}/homeserver.signing.key
-        '')) ];
+        ExecStartPre = [
+          ("+"
+          + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
+            chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
+            chmod 0600 ${cfg.dataDir}/homeserver.signing.key
+          ''))
+        ];
         ExecStart = ''
           ${cfg.package}/bin/synapse_homeserver \
-            ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
+            ${concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([configFile] ++ cfg.extraConfigFiles)}
             --keys-directory ${cfg.dataDir}
         '';
         ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
@@ -817,20 +870,20 @@ in {
       };
     };
 
-    environment.systemPackages = [ registerNewMatrixUser ];
+    environment.systemPackages = [registerNewMatrixUser];
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "trusted_third_party_id_servers" ] ''
+    (mkRemovedOptionModule ["services" "matrix-synapse" "trusted_third_party_id_servers"] ''
       The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
       as the behavior is now obsolete.
     '')
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
+    (mkRemovedOptionModule ["services" "matrix-synapse" "create_local_database"] ''
       Database configuration must be done manually. An exemplary setup is demonstrated in
       <nixpkgs/nixos/tests/matrix-synapse.nix>
     '')
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
+    (mkRemovedOptionModule ["services" "matrix-synapse" "web_client"] "")
+    (mkRemovedOptionModule ["services" "matrix-synapse" "room_invite_state_types"] ''
       You may add additional event types via
       `services.matrix-synapse.room_prejoin_state.additional_event_types` and
       disable the default events via
@@ -840,5 +893,4 @@ in {
 
   meta.doc = ./matrix-synapse.xml;
   meta.maintainers = teams.matrix.members;
-
 }

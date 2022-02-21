@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, confluent-kafka
-, distributed
-, fetchPypi
-, flaky
-, graphviz
-, networkx
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, six
-, toolz
-, tornado
-, zict
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  confluent-kafka,
+  distributed,
+  fetchPypi,
+  flaky,
+  graphviz,
+  networkx,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  six,
+  toolz,
+  tornado,
+  zict,
+  fetchpatch,
 }:
-
 buildPythonPackage rec {
   pname = "streamz";
   version = "0.6.3";
@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "Pipelines to manage continuous streams of data";
     homepage = "https://github.com/python-streamz/streamz";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

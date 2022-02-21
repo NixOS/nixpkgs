@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, makefun
-, decopatch
-, pythonOlder
-, pytest
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  makefun,
+  decopatch,
+  pythonOlder,
+  pytest,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-cases";
   version = "3.6.9";
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Separate test code from test cases in pytest";
     homepage = "https://github.com/smarie/python-pytest-cases";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

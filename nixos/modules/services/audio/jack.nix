@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.jack;
 
   pcmPlugin = cfg.jackd.enable && cfg.alsa.enable;
@@ -51,7 +53,6 @@ in {
             Commands to run after JACK is started.
           '';
         };
-
       };
 
       alsa = {
@@ -119,19 +120,18 @@ in {
           '';
         };
       };
-
     };
-
   };
 
   config = mkMerge [
-
     (mkIf pcmPlugin {
       sound.extraConfig = ''
         pcm_type.jack {
           libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
-          ${lib.optionalString enable32BitAlsaPlugins
-          "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"}
+          ${
+          lib.optionalString enable32BitAlsaPlugins
+          "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"
+        }
         }
         pcm.!default {
           @func getenv
@@ -142,8 +142,8 @@ in {
     })
 
     (mkIf loopback {
-      boot.kernelModules = [ "snd-aloop" ];
-      boot.kernelParams = [ "snd-aloop.index=${toString cfg.loopback.index}" ];
+      boot.kernelModules = ["snd-aloop"];
+      boot.kernelParams = ["snd-aloop.index=${toString cfg.loopback.index}"];
       sound.extraConfig = cfg.loopback.config;
     })
 
@@ -221,19 +221,29 @@ in {
 
       users.users.jackaudio = {
         group = "jackaudio";
-        extraGroups = [ "audio" ];
+        extraGroups = ["audio"];
         description = "JACK Audio system service user";
         isSystemUser = true;
       };
       # http://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [
-        { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
-        { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }
+        {
+          domain = "@jackaudio";
+          type = "-";
+          item = "rtprio";
+          value = "99";
+        }
+        {
+          domain = "@jackaudio";
+          type = "-";
+          item = "memlock";
+          value = "unlimited";
+        }
       ];
       users.groups.jackaudio = {};
 
       environment = {
-        systemPackages = [ cfg.jackd.package ];
+        systemPackages = [cfg.jackd.package];
         etc."alsa/conf.d/50-jack.conf".source = "${pkgs.alsa-plugins}/etc/alsa/conf.d/50-jack.conf";
         variables.JACK_PROMISCUOUS_SERVER = "jackaudio";
       };
@@ -244,18 +254,20 @@ in {
 
       systemd.services.jack = {
         description = "JACK Audio Connection Kit";
-        serviceConfig = {
-          User = "jackaudio";
-          SupplementaryGroups = lib.optional
+        serviceConfig =
+          {
+            User = "jackaudio";
+            SupplementaryGroups = lib.optional
             (config.hardware.pulseaudio.enable
             && !config.hardware.pulseaudio.systemWide) "users";
-          ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
-          LimitRTPRIO = 99;
-          LimitMEMLOCK = "infinity";
-        } // optionalAttrs umaskNeeded {
-          UMask = "007";
-        };
-        path = [ cfg.jackd.package ];
+            ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
+            LimitRTPRIO = 99;
+            LimitMEMLOCK = "infinity";
+          }
+          // optionalAttrs umaskNeeded {
+            UMask = "007";
+          };
+        path = [cfg.jackd.package];
         environment = {
           JACK_PROMISCUOUS_SERVER = "jackaudio";
           JACK_NO_AUDIO_RESERVATION = "1";
@@ -276,19 +288,18 @@ in {
           LimitRTPRIO = 99;
           LimitMEMLOCK = "infinity";
         };
-        path = [ cfg.jackd.package ];
+        path = [cfg.jackd.package];
         environment = {
           JACK_PROMISCUOUS_SERVER = "jackaudio";
           HOME = "/var/lib/jack";
         };
-        wantedBy = [ "jack.service" ];
-        partOf = [ "jack.service" ];
-        after = [ "jack.service" ];
+        wantedBy = ["jack.service"];
+        partOf = ["jack.service"];
+        after = ["jack.service"];
         restartIfChanged = false;
       };
     })
-
   ];
 
-  meta.maintainers = [ ];
+  meta.maintainers = [];
 }

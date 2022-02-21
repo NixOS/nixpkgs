@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libpulseaudio,
+  glibc,
+  substituteAll,
+  stdenv,
+  pulseaudio,
+  python,
+}:
 buildPythonPackage rec {
   pname = "pulsectl";
   version = "22.1.3";
@@ -22,7 +31,7 @@ buildPythonPackage rec {
     "pulsectl"
   ];
 
-  checkInputs = [ pulseaudio ];
+  checkInputs = [pulseaudio];
 
   checkPhase = ''
     export HOME=$TMPDIR
@@ -33,6 +42,6 @@ buildPythonPackage rec {
     description = "Python high-level interface and ctypes-based bindings for PulseAudio (libpulse)";
     homepage = "https://pypi.python.org/pypi/pulsectl/";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

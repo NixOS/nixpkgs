@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3
-, writeText
-, writeShellScript
-, sqlite
-}:
-let
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  writeText,
+  writeShellScript,
+  sqlite,
+}: let
   pypkgs = python3.pkgs;
 
   dbSql = writeText "create_pykms_db.sql" ''
@@ -30,60 +30,59 @@ let
       ${lib.getBin sqlite}/bin/sqlite3 $db < ${dbSql}
     fi
   '';
-
 in
-pypkgs.buildPythonApplication rec {
-  pname = "pykms";
-  version = "unstable-2021-01-25";
+  pypkgs.buildPythonApplication rec {
+    pname = "pykms";
+    version = "unstable-2021-01-25";
 
-  src = fetchFromGitHub {
-    owner = "SystemRage";
-    repo = "py-kms";
-    rev = "a3b0c85b5b90f63b33dfa5ae6085fcd52c6da2ff";
-    sha256 = "sha256-u0R0uJMQxHnJUDenxglhQkZza3/1DcyXCILcZVceygA=";
-  };
+    src = fetchFromGitHub {
+      owner = "SystemRage";
+      repo = "py-kms";
+      rev = "a3b0c85b5b90f63b33dfa5ae6085fcd52c6da2ff";
+      sha256 = "sha256-u0R0uJMQxHnJUDenxglhQkZza3/1DcyXCILcZVceygA=";
+    };
 
-  sourceRoot = "source/py-kms";
+    sourceRoot = "source/py-kms";
 
-  propagatedBuildInputs = with pypkgs; [ systemd pytz tzlocal ];
+    propagatedBuildInputs = with pypkgs; [systemd pytz tzlocal];
 
-  postPatch = ''
-    siteDir=$out/${python3.sitePackages}
+    postPatch = ''
+      siteDir=$out/${python3.sitePackages}
 
-    substituteInPlace pykms_DB2Dict.py \
-      --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
-  '';
+      substituteInPlace pykms_DB2Dict.py \
+        --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
+    '';
 
-  format = "other";
+    format = "other";
 
-  # there are no tests
-  doCheck = false;
+    # there are no tests
+    doCheck = false;
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p $siteDir
+      mkdir -p $siteDir
 
-    mv * $siteDir
-    for b in Client Server ; do
-      makeWrapper ${python3.interpreter} $out/bin/''${b,,} \
-        --argv0 pykms-''${b,,} \
-        --add-flags $siteDir/pykms_$b.py
-    done
+      mv * $siteDir
+      for b in Client Server ; do
+        makeWrapper ${python3.interpreter} $out/bin/''${b,,} \
+          --argv0 pykms-''${b,,} \
+          --add-flags $siteDir/pykms_$b.py
+      done
 
-    install -Dm755 ${dbScript} $out/libexec/create_pykms_db.sh
+      install -Dm755 ${dbScript} $out/libexec/create_pykms_db.sh
 
-    install -Dm644 ../README.md -t $out/share/doc/pykms
+      install -Dm644 ../README.md -t $out/share/doc/pykms
 
-    ${python3.interpreter} -m compileall $siteDir
+      ${python3.interpreter} -m compileall $siteDir
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  meta = with lib; {
-    description = "Windows KMS (Key Management Service) server written in Python";
-    homepage = "https://github.com/SystemRage/py-kms";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ peterhoeg ];
-  };
-}
+    meta = with lib; {
+      description = "Windows KMS (Key Management Service) server written in Python";
+      homepage = "https://github.com/SystemRage/py-kms";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [peterhoeg];
+    };
+  }

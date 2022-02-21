@@ -1,15 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  openssl,
+  zlib,
+  readline,
+}:
 stdenv.mkDerivation rec {
   pname = "pg_repack";
   version = "1.4.7";
 
-  buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = [postgresql openssl zlib readline];
 
   src = fetchFromGitHub {
-    owner  = "reorg";
-    repo   = "pg_repack";
-    rev    = "refs/tags/ver_${version}";
+    owner = "reorg";
+    repo = "pg_repack";
+    rev = "refs/tags/ver_${version}";
     sha256 = "12j8crgljvkm9dz790xcsr8l7sv8ydvb2imrb0jh1jvj0r9yg1v5";
   };
 
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
       with performance comparable to using CLUSTER directly.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ danbst ];
+    maintainers = with maintainers; [danbst];
     inherit (postgresql.meta) platforms;
     inherit (src.meta) homepage;
   };

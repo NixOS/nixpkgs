@@ -1,18 +1,18 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt
-, qtbase
-, qttools
-, qtx11extras
-, libfm-qt
-, menu-cache
-, lxmenu-data
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  lxqt,
+  qtbase,
+  qttools,
+  qtx11extras,
+  libfm-qt,
+  menu-cache,
+  lxmenu-data,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "pcmanfm-qt";
   version = "1.0.0";
@@ -40,7 +40,7 @@ mkDerivation rec {
     lxmenu-data
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   postPatch = ''
     substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt
@@ -51,6 +51,6 @@ mkDerivation rec {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

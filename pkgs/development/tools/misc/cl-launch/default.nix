@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "cl-launch";
   version = "4.1.4.1";
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Common Lisp launcher script";
     license = licenses.llgpl21;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
   };
 }

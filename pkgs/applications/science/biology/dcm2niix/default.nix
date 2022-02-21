@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, libyamlcpp
-, git
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libyamlcpp,
+  git,
 }:
-
 stdenv.mkDerivation rec {
   version = "1.0.20211006";
   pname = "dcm2niix";
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fQAVOzynMdSLDfhcYWcaXkFW/mnv4zySGLVJNE7ql/c=";
   };
 
-  nativeBuildInputs = [ cmake git ];
-  buildInputs = [ libyamlcpp ];
+  nativeBuildInputs = [cmake git];
+  buildInputs = [libyamlcpp];
 
   meta = with lib; {
     description = "DICOM to NIfTI converter";
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.nitrc.org/projects/dcm2nii";
     license = licenses.bsd3;
-    maintainers = [ maintainers.ashgillman ];
+    maintainers = [maintainers.ashgillman];
     platforms = platforms.all;
   };
 }

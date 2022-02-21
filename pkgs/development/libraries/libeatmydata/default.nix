@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, strace, which }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  strace,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "libeatmydata";
   version = "105";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sx803h46i81h67xbpd3c7ky0nhaw4gij214nsx4lqig70223v9r";
   };
 
-  patches = [ ./find-shell-lib.patch ];
+  patches = [./find-shell-lib.patch];
 
   patchFlags = "-p0";
 
@@ -22,9 +28,11 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ] ++ lib.optionals doCheck [ strace which ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+    ]
+    ++ lib.optionals doCheck [strace which];
 
   # while we can *build* in parallel, the tests also run in parallel which does
   # not work with v105. Later versions (unreleased) have a fix for that. The

@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "pgmanage";
   version = "11.0.1";
 
   src = fetchFromGitHub {
-    owner  = "pgManage";
-    repo   = "pgManage";
-    rev    = "v${version}";
+    owner = "pgManage";
+    repo = "pgManage";
+    rev = "v${version}";
     sha256 = "1a1dbc32b3y0ph8ydf800h6pz7dg6g1gxgid4gffk7k58xj0c5yf";
   };
 
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
     ./configure --prefix $out
   '';
 
-  buildInputs = [ postgresql openssl ];
+  buildInputs = [postgresql openssl];
 
   meta = with lib; {
     description = "A fast replacement for PGAdmin";
@@ -31,6 +36,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/pgManage/pgManage";
     license = licenses.postgresql;
-    maintainers = [ maintainers.basvandijk ];
+    maintainers = [maintainers.basvandijk];
   };
 }

@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.rmfakecloud;
   serviceDataDir = "/var/lib/rmfakecloud";
-
 in {
   options = {
     services.rmfakecloud = {
@@ -39,7 +40,7 @@ in {
       };
 
       logLevel = mkOption {
-        type = types.enum [ "info" "debug" "warn" "error" ];
+        type = types.enum ["info" "debug" "warn" "error"];
         default = "info";
         description = ''
           Logging level.
@@ -48,8 +49,8 @@ in {
 
       extraSettings = mkOption {
         type = with types; attrsOf str;
-        default = { };
-        example = { DATADIR = "/custom/path/for/rmfakecloud/data"; };
+        default = {};
+        example = {DATADIR = "/custom/path/for/rmfakecloud/data";};
         description = ''
           Extra settings in the form of a set of key-value pairs.
           For tokens and secrets, use `environmentFile` instead.
@@ -78,11 +79,13 @@ in {
     systemd.services.rmfakecloud = {
       description = "rmfakecloud remarkable self-hosted cloud";
 
-      environment = {
-        STORAGE_URL = cfg.storageUrl;
-        PORT = toString cfg.port;
-        LOGLEVEL = cfg.logLevel;
-      } // cfg.extraSettings;
+      environment =
+        {
+          STORAGE_URL = cfg.storageUrl;
+          PORT = toString cfg.port;
+          LOGLEVEL = cfg.logLevel;
+        }
+        // cfg.extraSettings;
 
       preStart = ''
         # Generate the secret key used to sign client session tokens.
@@ -101,9 +104,9 @@ in {
         ${cfg.package}/bin/rmfakecloud
       '';
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target"];
+      after = ["network-online.target"];
 
       serviceConfig = {
         Type = "simple";
@@ -113,7 +116,7 @@ in {
           mkIf (cfg.environmentFile != null) cfg.environmentFile;
 
         AmbientCapabilities =
-          mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+          mkIf (cfg.port < 1024) ["CAP_NET_BIND_SERVICE"];
 
         DynamicUser = true;
         PrivateDevices = true;
@@ -121,7 +124,7 @@ in {
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        CapabilityBoundingSet = [ "" ];
+        CapabilityBoundingSet = [""];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -131,7 +134,7 @@ in {
         ProtectProc = "invisible";
         ProcSubset = "pid";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -143,5 +146,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with maintainers; [pacien];
 }

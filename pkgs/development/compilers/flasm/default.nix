@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchzip, unzip, bison, flex, gperf, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  unzip,
+  bison,
+  flex,
+  gperf,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "flasm";
   version = "1.64";
@@ -10,11 +18,11 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
-  nativeBuildInputs = [ unzip bison flex gperf ];
+  nativeBuildInputs = [unzip bison flex gperf];
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   installPhase = ''
     install -Dm755 flasm -t $out/bin
@@ -24,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Assembler and disassembler for Flash (SWF) bytecode";
     homepage = "http://flasm.sourceforge.net/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
     platforms = platforms.all;
   };
 }

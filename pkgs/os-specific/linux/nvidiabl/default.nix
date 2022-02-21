@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   name = "nvidiabl-${version}-${kernel.version}";
   version = "2020-10-01";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z57gbnayjid2jv782rpfpp13qdchmbr1vr35g995jfnj624nlgy";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Linux driver for setting the backlight brightness on laptops using NVIDIA GPU";
     homepage = "https://github.com/guillaumezin/nvidiabl";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ yorickvp ];
+    platforms = ["x86_64-linux" "i686-linux"];
+    maintainers = with maintainers; [yorickvp];
   };
 }

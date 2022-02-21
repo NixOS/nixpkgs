@@ -1,5 +1,10 @@
-{ lib, fetchFromGitLab, rustPlatform, pkg-config, dbus }:
-
+{
+  lib,
+  fetchFromGitLab,
+  rustPlatform,
+  pkg-config,
+  dbus,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "sd-switch";
   version = "0.2.3";
@@ -13,14 +18,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "12ny3cir2nxzrmf4vwq6sgc35dbpq88hav53xqdp44rigdf4vzbs";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [dbus];
 
   meta = with lib; {
     description = "A systemd unit switcher for Home Manager";
     homepage = "https://gitlab.com/rycee/sd-switch";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rycee ];
+    maintainers = with maintainers; [rycee];
     platforms = platforms.linux;
   };
 }

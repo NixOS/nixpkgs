@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "enchive";
   version = "3.5";
@@ -22,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/skeeto/enchive";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.nico202 ];
+    maintainers = [lib.maintainers.nico202];
   };
 }

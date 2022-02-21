@@ -1,12 +1,12 @@
 import ../make-test-python.nix (
-  { pkgs, ... }:
-  let
+  {pkgs, ...}: let
     pantalaimonInstanceName = "testing";
 
     # Set up SSL certs for Synapse to be happy.
-    runWithOpenSSL = file: cmd: pkgs.runCommand file
+    runWithOpenSSL = file: cmd:
+      pkgs.runCommand file
       {
-        buildInputs = [ pkgs.openssl ];
+        buildInputs = [pkgs.openssl];
       }
       cmd;
 
@@ -29,14 +29,13 @@ import ../make-test-python.nix (
         -CAcreateserial -out $out \
         -days 365
     '';
-  in
-  {
+  in {
     name = "pantalaimon";
     meta = with pkgs.lib; {
       maintainers = teams.matrix.members;
     };
 
-    machine = { pkgs, ... }: {
+    machine = {pkgs, ...}: {
       services.pantalaimon-headless.instances.${pantalaimonInstanceName} = {
         homeserver = "https://localhost:8448";
         listenAddress = "0.0.0.0";

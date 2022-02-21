@@ -1,8 +1,8 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "merriweather";
   version = "2.005";
@@ -30,6 +30,6 @@ stdenvNoCC.mkDerivation rec {
     description = "A text face designed to be pleasant to read on screens";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [emily];
   };
 }

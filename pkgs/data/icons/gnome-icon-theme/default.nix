@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, iconnamingutils, gtk2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  iconnamingutils,
+  gtk2,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-icon-theme";
   version = "3.12.0";
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://download.gnome.org/sources/gnome-icon-theme/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-icon-theme.x86_64-darwin
   };
 }

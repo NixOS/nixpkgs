@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "wrapt";
   version = "1.13.3";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Module for decorators, wrappers and monkey patching";
     homepage = "https://github.com/GrahamDumpleton/wrapt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

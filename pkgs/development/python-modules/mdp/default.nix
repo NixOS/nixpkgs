@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, numpy
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  numpy,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "MDP";
   version = "3.6";
@@ -15,13 +15,13 @@ buildPythonPackage rec {
     sha256 = "ac52a652ccbaed1857ff1209862f03bf9b06d093b12606fb410787da3aa65a0e";
   };
 
-  propagatedBuildInputs = [ future numpy ];
+  propagatedBuildInputs = [future numpy];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   doCheck = true;
 
-  pythonImportsCheck = [ "mdp" "bimdp" ];
+  pythonImportsCheck = ["mdp" "bimdp"];
 
   postPatch = ''
     # https://github.com/mdp-toolkit/mdp-toolkit/issues/92
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Library for building complex data processing software by combining widely used machine learning algorithms";
     homepage = "http://mdp-toolkit.sourceforge.net";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nico202 ];
+    maintainers = with maintainers; [nico202];
   };
 }

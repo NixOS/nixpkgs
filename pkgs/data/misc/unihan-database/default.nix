@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchurl
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "unihan-database";
   version = "12.1.0";

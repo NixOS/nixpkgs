@@ -1,5 +1,8 @@
-{ lib, stdenv, teck-programmer }:
-
+{
+  lib,
+  stdenv,
+  teck-programmer,
+}:
 stdenv.mkDerivation {
   pname = "teck-udev-rules";
   version = lib.getVersion teck-programmer;
@@ -17,6 +20,6 @@ stdenv.mkDerivation {
   meta = {
     description = "udev rules for TECK keyboards";
     inherit (teck-programmer.meta) license;
-    maintainers = [ lib.maintainers.lourkeur ];
+    maintainers = [lib.maintainers.lourkeur];
   };
 }

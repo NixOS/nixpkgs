@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "wrapio";
   version = "2.0.0";
@@ -16,12 +16,12 @@ buildPythonPackage rec {
   };
 
   doCheck = false;
-  pythonImportsCheck = [ "wrapio" ];
+  pythonImportsCheck = ["wrapio"];
 
   meta = with lib; {
     homepage = "https://github.com/Exahilosys/wrapio";
     description = "Handling event-based streams";
     license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    maintainers = with maintainers; [sfrijters];
   };
 }

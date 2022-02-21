@@ -1,15 +1,15 @@
-{ lib
-, pkgs
-, stdenv
-, ninja
-, libusb1
-, meson
-, boost
-, fetchFromGitHub
-, pkg-config
-, microsoft_gsl
+{
+  lib,
+  pkgs,
+  stdenv,
+  ninja,
+  libusb1,
+  meson,
+  boost,
+  fetchFromGitHub,
+  pkg-config,
+  microsoft_gsl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ite-backlight";
   version = "1.1";
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
       This project aims to provide a set of simple utilities for controlling ITE 8291
       keyboard backlight controllers.
     '';
-    license = with licenses; [ mit ];
+    license = with licenses; [mit];
     homepage = "https://github.com/hexagonal-sun/ite-backlight";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hexagonal-sun ];
+    maintainers = with maintainers; [hexagonal-sun];
   };
 }

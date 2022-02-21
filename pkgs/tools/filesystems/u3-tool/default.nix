@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "u3-tool";
   version = "0.3";
@@ -16,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/u3-tool/";
     license = licenses.gpl2;
     platforms = with platforms; linux;
-    maintainers = with maintainers; [ makefu ];
+    maintainers = with maintainers; [makefu];
   };
 }

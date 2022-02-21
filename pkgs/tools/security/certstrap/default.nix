@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "certstrap";
   version = "1.2.0";
@@ -17,6 +20,6 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
     description = "Tools to bootstrap CAs, certificate requests, and signed certificates";
     license = licenses.asl20;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [volth];
   };
 }

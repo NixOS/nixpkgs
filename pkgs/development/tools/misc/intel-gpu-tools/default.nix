@@ -1,42 +1,42 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, libdrm
-, libpciaccess
-, cairo
-, xorgproto
-, udev
-, libX11
-, libXext
-, libXv
-, libXrandr
-, glib
-, bison
-, libunwind
-, python3
-, kmod
-, procps
-, utilmacros
-, gtk-doc
-, docbook_xsl
-, openssl
-, peg
-, elfutils
-, meson
-, ninja
-, valgrind
-, xmlrpc_c
-, gsl
-, alsa-lib
-, curl
-, json_c
-, liboping
-, flex
-, docutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libdrm,
+  libpciaccess,
+  cairo,
+  xorgproto,
+  udev,
+  libX11,
+  libXext,
+  libXv,
+  libXrandr,
+  glib,
+  bison,
+  libunwind,
+  python3,
+  kmod,
+  procps,
+  utilmacros,
+  gtk-doc,
+  docbook_xsl,
+  openssl,
+  peg,
+  elfutils,
+  meson,
+  ninja,
+  valgrind,
+  xmlrpc_c,
+  gsl,
+  alsa-lib,
+  curl,
+  json_c,
+  liboping,
+  flex,
+  docutils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "intel-gpu-tools";
   version = "1.26";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config utilmacros meson ninja flex bison gtk-doc docutils docbook_xsl ];
+  nativeBuildInputs = [pkg-config utilmacros meson ninja flex bison gtk-doc docutils docbook_xsl];
   buildInputs = [
     libdrm
     libpciaccess
@@ -82,19 +82,19 @@ stdenv.mkDerivation rec {
     liboping
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ];
+  NIX_CFLAGS_COMPILE = ["-Wno-error=array-bounds"];
 
   preConfigure = ''
     patchShebangs tests man
   '';
 
-  hardeningDisable = [ "bindnow" ];
+  hardeningDisable = ["bindnow"];
 
   meta = with lib; {
     homepage = "https://01.org/linuxgraphics/";
     description = "Tools for development and testing of the Intel DRM driver";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ pSub ];
+    platforms = ["x86_64-linux" "i686-linux"];
+    maintainers = with maintainers; [pSub];
   };
 }

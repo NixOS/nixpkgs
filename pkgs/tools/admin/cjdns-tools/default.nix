@@ -1,10 +1,10 @@
-{ stdenv
-, cjdns
-, nodejs
-, makeWrapper
-, lib
+{
+  stdenv,
+  cjdns,
+  nodejs,
+  makeWrapper,
+  lib,
 }:
-
 stdenv.mkDerivation {
   pname = "cjdns-tools";
   version = cjdns.version;
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Tools for cjdns managment";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
     platforms = platforms.linux;
   };
 }

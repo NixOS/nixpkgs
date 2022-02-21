@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitLab
-, coq
-, cacert
+{
+  lib,
+  fetchFromGitLab,
+  coq,
+  cacert,
 }:
-
 coq.ocamlPackages.buildDunePackage rec {
   pname = "ligo";
   version = "0.34.0";
@@ -59,7 +59,7 @@ coq.ocamlPackages.buildDunePackage rec {
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "A friendly Smart Contract Language for Tezos";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ulrikstrid ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [ulrikstrid];
   };
 }

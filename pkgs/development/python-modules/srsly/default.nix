@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cython
-, catalogue
-, mock
-, numpy
-, pytest
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  cython,
+  catalogue,
+  mock,
+  numpy,
+  pytest,
+  ruamel-yaml,
 }:
-
 buildPythonPackage rec {
   pname = "srsly";
   version = "2.4.2";
@@ -21,9 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-KrolIpJ2eHUIat9OQ4DiewJNc2VUVveW+OB+s6TfrMA=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [cython];
 
-  propagatedBuildInputs = [ catalogue ];
+  propagatedBuildInputs = [catalogue];
 
   checkInputs = [
     mock
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  pythonImportsCheck = [ "srsly" ];
+  pythonImportsCheck = ["srsly"];
 
   meta = with lib; {
     description = "Modern high-performance serialization utilities for Python";

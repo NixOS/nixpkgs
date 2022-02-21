@@ -1,5 +1,9 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "jx";
   version = "2.1.155";
@@ -15,9 +19,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/jx" ];
+  subPackages = ["cmd/jx"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   ldflags = [
     "-s -w"
@@ -41,8 +45,8 @@ buildGoModule rec {
       Environments on Pull Requests using Jenkins, Knative Build, Prow,
       Skaffold and Helm.
     '';
-    license = licenses.asl20 ;
-    maintainers = with maintainers; [ kalbasit ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [kalbasit];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,10 +1,26 @@
-{ lib, stdenv, fetchgit, nix-update-script, pkg-config, meson, ninja, vala, python3, gtk-doc, docbook_xsl, docbook_xml_dtd_43, docbook_xml_dtd_412, glib, check, gobject-introspection }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  python3,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  docbook_xml_dtd_412,
+  glib,
+  check,
+  gobject-introspection,
+}:
 stdenv.mkDerivation rec {
   pname = "libsignon-glib";
   version = "2.1";
 
-  outputs = [ "out" "dev" "devdoc" "py" ];
+  outputs = ["out" "dev" "devdoc" "py"];
 
   src = fetchgit {
     url = "https://gitlab.com/accounts-sso/${pname}";
@@ -52,8 +68,7 @@ stdenv.mkDerivation rec {
     description = "A library for managing single signon credentials which can be used from GLib applications";
     homepage = "https://gitlab.com/accounts-sso/libsignon-glib";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }
-

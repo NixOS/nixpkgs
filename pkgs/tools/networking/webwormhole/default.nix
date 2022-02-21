@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "webwormhole";
   version = "unstable-2021-01-16";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "Send files using peer authenticated WebRTC";
     homepage = "https://github.com/saljam/webwormhole";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [bbigras];
   };
 }

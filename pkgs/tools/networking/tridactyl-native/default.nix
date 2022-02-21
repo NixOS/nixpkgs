@@ -1,8 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tridactyl-native";
   # this is actually the version of tridactyl itself; the native messenger will
@@ -39,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tridactyl/tridactyl";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [timokau];
   };
 }

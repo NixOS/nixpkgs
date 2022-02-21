@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, snap7, fetchFromGitHub, six, setuptools }:
-
+{
+  lib,
+  buildPythonPackage,
+  snap7,
+  fetchFromGitHub,
+  six,
+  setuptools,
+}:
 buildPythonPackage rec {
   pname = "python-snap7";
   version = "1.1";
@@ -11,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "18z13wb2q5q3msp9w3wddg1byp7picczw4ng8w1ccj4npidxsqv8";
   };
 
-  propagatedBuildInputs = [ setuptools six ];
+  propagatedBuildInputs = [setuptools six];
 
   prePatch = ''
     substituteInPlace snap7/common.py \
@@ -31,6 +37,6 @@ buildPythonPackage rec {
     description = "Python wrapper for the snap7 PLC communication library ";
     homepage = "https://github.com/gijzelaerr/python-snap7";
     license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
   };
 }

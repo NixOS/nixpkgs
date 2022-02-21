@@ -1,14 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json {};
 in {
   options = {
     services.navidrome = {
-
       enable = mkEnableOption "Navidrome music server";
 
       settings = mkOption rec {
@@ -25,15 +26,14 @@ in {
           Configuration for Navidrome, see <link xlink:href="https://www.navidrome.org/docs/usage/configuration-options/"/> for supported values.
         '';
       };
-
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.navidrome = {
       description = "Navidrome Media Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.navidrome}/bin/navidrome --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
@@ -44,11 +44,13 @@ in {
         RuntimeDirectory = "navidrome";
         RootDirectory = "/run/navidrome";
         ReadWritePaths = "";
-        BindReadOnlyPaths = [
-          builtins.storeDir
-        ] ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
+        BindReadOnlyPaths =
+          [
+            builtins.storeDir
+          ]
+          ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
         CapabilityBoundingSet = "";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6"];
         RestrictNamespaces = true;
         PrivateDevices = true;
         PrivateUsers = true;
@@ -59,7 +61,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
         RestrictRealtime = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

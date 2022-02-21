@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libosip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libosip,
+}:
 stdenv.mkDerivation rec {
   pname = "siproxd";
   version = "0.8.2";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1l6cyxxhra825jiiw9npa7jrbfgbyfpk4966cqkrw66cn28y8v2j";
   };
 
-  patches = [ ./cheaders.patch ];
+  patches = [./cheaders.patch];
 
-  buildInputs = [ libosip ];
+  buildInputs = [libosip];
 
   meta = {
     homepage = "http://siproxd.sourceforge.net/";

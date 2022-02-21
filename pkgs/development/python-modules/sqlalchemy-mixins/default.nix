@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pytestCheckHook
-, pythonOlder
-, six
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  sqlalchemy,
 }:
-
 buildPythonPackage rec {
   pname = "sqlalchemy-mixins";
   version = "1.5.1";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Python mixins for SQLAlchemy ORM";
     homepage = "https://github.com/absent1706/sqlalchemy-mixins";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

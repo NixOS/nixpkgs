@@ -1,5 +1,10 @@
-{ lib, stdenv, python3, emacs, bash }:
-
+{
+  lib,
+  stdenv,
+  python3,
+  emacs,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "cask";
 
@@ -7,14 +12,27 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ emacs ];
-  buildInputs = with emacs.pkgs; [
-    s f dash ansi ecukes servant ert-runner el-mock
-    noflet ert-async shell-split-string git package-build
-  ] ++ [
-    python3
-    bash
-  ];
+  nativeBuildInputs = [emacs];
+  buildInputs = with emacs.pkgs;
+    [
+      s
+      f
+      dash
+      ansi
+      ecukes
+      servant
+      ert-runner
+      el-mock
+      noflet
+      ert-async
+      shell-split-string
+      git
+      package-build
+    ]
+    ++ [
+      python3
+      bash
+    ];
 
   strictDeps = true;
 
@@ -49,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://cask.readthedocs.io/en/latest/index.html";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.flexw ];
+    maintainers = [maintainers.flexw];
   };
 }

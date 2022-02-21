@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, libusb-compat-0_1, glib, dbus-glib, bluez, openobex, dbus }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libusb-compat-0_1,
+  glib,
+  dbus-glib,
+  bluez,
+  openobex,
+  dbus,
+}:
 stdenv.mkDerivation rec {
   pname = "obex-data-server";
   version = "0.4.6";
@@ -9,14 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "0kq940wqs9j8qjnl58d6l3zhx0jaszci356xprx23l6nvdfld6dk";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb-compat-0_1 glib dbus-glib bluez openobex dbus ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libusb-compat-0_1 glib dbus-glib bluez openobex dbus];
 
-  patches = [ ./obex-data-server-0.4.6-build-fixes-1.patch ];
+  patches = [./obex-data-server-0.4.6-build-fixes-1.patch];
 
   preConfigure = ''
-  addToSearchPath PKG_CONFIG_PATH ${openobex}/lib64/pkgconfig
-  export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
+    addToSearchPath PKG_CONFIG_PATH ${openobex}/lib64/pkgconfig
+    export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
   '';
 
   meta = with lib; {

@@ -1,13 +1,15 @@
 # This module creates a bootable ISO image containing the given NixOS
 # configuration.  The derivation for the ISO image will be placed in
 # config.system.build.isoImage.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  /**
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  /*
+    *
    * Given a list of `options`, concats the result of mapping each options
    * to a menuentry for use in grub.
    *
@@ -15,38 +17,44 @@ let
    *  * options: [ option... ]
    *  * option: {name, params, class}
    */
-  menuBuilderGrub2 =
-  defaults: options: lib.concatStrings
+  menuBuilderGrub2 = defaults: options:
+    lib.concatStrings
     (
       map
       (option: ''
         menuentry '${defaults.name} ${
-        # Name appended to menuentry defaults to params if no specific name given.
-        option.name or (if option ? params then "(${option.params})" else "")
-        }' ${if option ? class then " --class ${option.class}" else ""} {
+          # Name appended to menuentry defaults to params if no specific name given.
+          option.name
+          or (if option ? params
+          then "(${option.params})"
+          else "")
+        }' ${
+          if option ? class
+          then " --class ${option.class}"
+          else ""
+        } {
           linux ${defaults.image} \''${isoboot} ${defaults.params} ${
-            option.params or ""
-          }
+          option.params or ""
+        }
           initrd ${defaults.initrd}
         }
       '')
       options
-    )
-  ;
+    );
 
-  /**
+  /*
+    *
    * Given a `config`, builds the default options.
    */
   buildMenuGrub2 = config:
-    buildMenuAdditionalParamsGrub2 config ""
-  ;
+    buildMenuAdditionalParamsGrub2 config "";
 
-  /**
+  /*
+    *
    * Given a `config` and params to add to `params`, build a set of default options.
    * Use this one when creating a variant (e.g. hidpi)
    */
-  buildMenuAdditionalParamsGrub2 = config: additional:
-  let
+  buildMenuAdditionalParamsGrub2 = config: additional: let
     finalCfg = {
       name = "NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
       params = "init=${config.system.build.toplevel}/init ${additional} ${toString config.boot.kernelParams}";
@@ -57,22 +65,32 @@ let
     menuBuilderGrub2
     finalCfg
     [
-      { class = "installer"; }
-      { class = "nomodeset"; params = "nomodeset"; }
-      { class = "copytoram"; params = "copytoram"; }
-      { class = "debug";     params = "debug"; }
-    ]
-  ;
+      {class = "installer";}
+      {
+        class = "nomodeset";
+        params = "nomodeset";
+      }
+      {
+        class = "copytoram";
+        params = "copytoram";
+      }
+      {
+        class = "debug";
+        params = "debug";
+      }
+    ];
 
   # Timeout in syslinux is in units of 1/10 of a second.
   # 0 is used to disable timeouts.
-  syslinuxTimeout = if config.boot.loader.timeout == null then
-      0
-    else
-      max (config.boot.loader.timeout * 10) 1;
+  syslinuxTimeout =
+    if config.boot.loader.timeout == null
+    then 0
+    else max (config.boot.loader.timeout * 10) 1;
 
-
-  max = x: y: if x > y then x else y;
+  max = x: y:
+    if x > y
+    then x
+    else y;
 
   # The configuration file for syslinux.
 
@@ -160,22 +178,27 @@ let
   '';
 
   isolinuxCfg = concatStringsSep "\n"
-    ([ baseIsolinuxCfg ] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
+  ([baseIsolinuxCfg] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
-  refindBinary = if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
+  refindBinary =
+    if targetArch == "x64" || targetArch == "aa64"
+    then "refind_${targetArch}.efi"
+    else null;
 
   # Setup instructions for rEFInd.
   refind =
-    if refindBinary != null then
+    if refindBinary != null
+    then
       ''
-      # Adds rEFInd to the ISO.
-      cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/boot/
+        # Adds rEFInd to the ISO.
+        cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/boot/
       ''
-    else
-      "# No refind for ${targetArch}"
-  ;
+    else "# No refind for ${targetArch}";
 
-  grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
+  grubPkgs =
+    if config.boot.loader.grub.forcei686
+    then pkgs.pkgsi686Linux
+    else pkgs;
 
   grubMenuCfg = ''
     #
@@ -188,19 +211,21 @@ let
     insmod gfxterm
     insmod png
     set gfxpayload=keep
-    set gfxmode=${concatStringsSep "," [
-      # GRUB will use the first valid mode listed here.
-      # `auto` will sometimes choose the smallest valid mode it detects.
-      # So instead we'll list a lot of possibly valid modes :/
-      #"3840x2160"
-      #"2560x1440"
-      "1920x1080"
-      "1366x768"
-      "1280x720"
-      "1024x768"
-      "800x600"
-      "auto"
-    ]}
+    set gfxmode=${
+      concatStringsSep "," [
+        # GRUB will use the first valid mode listed here.
+        # `auto` will sometimes choose the smallest valid mode it detects.
+        # So instead we'll list a lot of possibly valid modes :/
+        #"3840x2160"
+        #"2560x1440"
+        "1920x1080"
+        "1366x768"
+        "1280x720"
+        "1024x768"
+        "800x600"
+        "auto"
+      ]
+    }
 
     # Fonts can be loaded?
     # (This font is assumed to always be provided as a fallback by NixOS)
@@ -225,24 +250,30 @@ let
       set menu_color_highlight=white/blue
     fi
 
-    ${ # When there is a theme configured, use it, otherwise use the background image.
-    if config.isoImage.grubTheme != null then ''
-      # Sets theme.
-      set theme=(\$root)/EFI/boot/grub-theme/theme.txt
-      # Load theme fonts
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
-    '' else ''
-      if background_image (\$root)/EFI/boot/efi-background.png; then
-        # Black background means transparent background when there
-        # is a background image set... This seems undocumented :(
-        set color_normal=black/black
-        set color_highlight=white/blue
+    ${
+      # When there is a theme configured, use it, otherwise use the background image.
+      if config.isoImage.grubTheme != null
+      then
+        ''
+          # Sets theme.
+          set theme=(\$root)/EFI/boot/grub-theme/theme.txt
+          # Load theme fonts
+          $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
+        ''
       else
-        # Falls back again to proper colors.
-        set menu_color_normal=cyan/blue
-        set menu_color_highlight=white/blue
-      fi
-    ''}
+        ''
+          if background_image (\$root)/EFI/boot/efi-background.png; then
+            # Black background means transparent background when there
+            # is a background image set... This seems undocumented :(
+            set color_normal=black/black
+            set color_highlight=white/blue
+          else
+            # Falls back again to proper colors.
+            set menu_color_normal=cyan/blue
+            set menu_color_highlight=white/blue
+          fi
+        ''
+    }
   '';
 
   # The EFI boot image.
@@ -250,7 +281,7 @@ let
   #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
   #    will get white-on-black console-like text on sub-menus. *sigh*
   efiDir = pkgs.runCommand "efi-directory" {
-    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
+    nativeBuildInputs = [pkgs.buildPackages.grub2_efi];
     strictDeps = true;
   } ''
     mkdir -p $out/EFI/boot/
@@ -386,17 +417,19 @@ let
       }
     }
 
-    ${lib.optionalString (refindBinary != null) ''
-    # GRUB apparently cannot do "chainloader" operations on "CD".
-    if [ "\$root" != "cd0" ]; then
-      # Force root to be the FAT partition
-      # Otherwise it breaks rEFInd's boot
-      search --set=root --no-floppy --fs-uuid 1234-5678
-      menuentry 'rEFInd' --class refind {
-        chainloader (\$root)/EFI/boot/${refindBinary}
-      }
-    fi
-    ''}
+    ${
+      lib.optionalString (refindBinary != null) ''
+        # GRUB apparently cannot do "chainloader" operations on "CD".
+        if [ "\$root" != "cd0" ]; then
+          # Force root to be the FAT partition
+          # Otherwise it breaks rEFInd's boot
+          search --set=root --no-floppy --fs-uuid 1234-5678
+          menuentry 'rEFInd' --class refind {
+            chainloader (\$root)/EFI/boot/${refindBinary}
+          }
+        fi
+      ''
+    }
     menuentry 'Firmware Setup' --class settings {
       fwsetup
       clear
@@ -413,67 +446,62 @@ let
   '';
 
   efiImg = pkgs.runCommand "efi-image_eltorito" {
-    nativeBuildInputs = [ pkgs.buildPackages.mtools pkgs.buildPackages.libfaketime pkgs.buildPackages.dosfstools ];
+    nativeBuildInputs = [pkgs.buildPackages.mtools pkgs.buildPackages.libfaketime pkgs.buildPackages.dosfstools];
     strictDeps = true;
   }
-    # Be careful about determinism: du --apparent-size,
-    #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
-    ''
-      mkdir ./contents && cd ./contents
-      cp -rp "${efiDir}"/EFI .
-      mkdir ./boot
-      cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
-        "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
+  # Be careful about determinism: du --apparent-size,
+  #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
+  ''
+    mkdir ./contents && cd ./contents
+    cp -rp "${efiDir}"/EFI .
+    mkdir ./boot
+    cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
+      "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
 
-      # Rewrite dates for everything in the FS
-      find . -exec touch --date=2000-01-01 {} +
+    # Rewrite dates for everything in the FS
+    find . -exec touch --date=2000-01-01 {} +
 
-      # Round up to the nearest multiple of 1MB, for more deterministic du output
-      usage_size=$(( $(du -s --block-size=1M --apparent-size . | tr -cd '[:digit:]') * 1024 * 1024 ))
-      # Make the image 110% as big as the files need to make up for FAT overhead
-      image_size=$(( ($usage_size * 110) / 100 ))
-      # Make the image fit blocks of 1M
-      block_size=$((1024*1024))
-      image_size=$(( ($image_size / $block_size + 1) * $block_size ))
-      echo "Usage size: $usage_size"
-      echo "Image size: $image_size"
-      truncate --size=$image_size "$out"
-      faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
+    # Round up to the nearest multiple of 1MB, for more deterministic du output
+    usage_size=$(( $(du -s --block-size=1M --apparent-size . | tr -cd '[:digit:]') * 1024 * 1024 ))
+    # Make the image 110% as big as the files need to make up for FAT overhead
+    image_size=$(( ($usage_size * 110) / 100 ))
+    # Make the image fit blocks of 1M
+    block_size=$((1024*1024))
+    image_size=$(( ($image_size / $block_size + 1) * $block_size ))
+    echo "Usage size: $usage_size"
+    echo "Image size: $image_size"
+    truncate --size=$image_size "$out"
+    faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
 
-      # Force a fixed order in mcopy for better determinism, and avoid file globbing
-      for d in $(find EFI boot -type d | sort); do
-        faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
-      done
+    # Force a fixed order in mcopy for better determinism, and avoid file globbing
+    for d in $(find EFI boot -type d | sort); do
+      faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
+    done
 
-      for f in $(find EFI boot -type f | sort); do
-        mcopy -pvm -i "$out" "$f" "::/$f"
-      done
+    for f in $(find EFI boot -type f | sort); do
+      mcopy -pvm -i "$out" "$f" "::/$f"
+    done
 
-      # Verify the FAT partition.
-      fsck.vfat -vn "$out"
-    ''; # */
+    # Verify the FAT partition.
+    fsck.vfat -vn "$out"
+  ''; # */
 
   # Name used by UEFI for architectures.
   targetArch =
-    if pkgs.stdenv.isi686 || config.boot.loader.grub.forcei686 then
-      "ia32"
-    else if pkgs.stdenv.isx86_64 then
-      "x64"
-    else if pkgs.stdenv.isAarch32 then
-      "arm"
-    else if pkgs.stdenv.isAarch64 then
-      "aa64"
-    else
-      throw "Unsupported architecture";
+    if pkgs.stdenv.isi686 || config.boot.loader.grub.forcei686
+    then "ia32"
+    else if pkgs.stdenv.isx86_64
+    then "x64"
+    else if pkgs.stdenv.isAarch32
+    then "arm"
+    else if pkgs.stdenv.isAarch64
+    then "aa64"
+    else throw "Unsupported architecture";
 
   # Syslinux (and isolinux) only supports x86-based architectures.
   canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;
-
-in
-
-{
+in {
   options = {
-
     isoImage.isoName = mkOption {
       default = "${config.isoImage.isoBaseName}.iso";
       description = ''
@@ -497,12 +525,13 @@ in
     };
 
     isoImage.squashfsCompression = mkOption {
-      default = with pkgs.stdenv.targetPlatform; "xz -Xdict-size 100% "
-                + lib.optionalString (isx86_32 || isx86_64) "-Xbcj x86"
-                # Untested but should also reduce size for these platforms
-                + lib.optionalString (isAarch32 || isAarch64) "-Xbcj arm"
-                + lib.optionalString (isPowerPC) "-Xbcj powerpc"
-                + lib.optionalString (isSparc) "-Xbcj sparc";
+      default = with pkgs.stdenv.targetPlatform;
+        "xz -Xdict-size 100% "
+        + lib.optionalString (isx86_32 || isx86_64) "-Xbcj x86"
+        # Untested but should also reduce size for these platforms
+        + lib.optionalString (isAarch32 || isAarch64) "-Xbcj arm"
+        + lib.optionalString (isPowerPC) "-Xbcj powerpc"
+        + lib.optionalString (isSparc) "-Xbcj sparc";
       description = ''
         Compression settings to use for the squashfs nix store.
       '';
@@ -575,9 +604,9 @@ in
 
     isoImage.efiSplashImage = mkOption {
       default = pkgs.fetchurl {
-          url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/efi-background.png";
-          sha256 = "18lfwmp8yq923322nlb9gxrh5qikj1wsk6g5qvdh31c4h5b1538x";
-        };
+        url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/efi-background.png";
+        sha256 = "18lfwmp8yq923322nlb9gxrh5qikj1wsk6g5qvdh31c4h5b1538x";
+      };
       description = ''
         The splash image to use in the EFI bootloader.
       '';
@@ -585,9 +614,9 @@ in
 
     isoImage.splashImage = mkOption {
       default = pkgs.fetchurl {
-          url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/isolinux/bios-boot.png";
-          sha256 = "1wp822zrhbg4fgfbwkr7cbkr4labx477209agzc0hr6k62fr6rxd";
-        };
+        url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/isolinux/bios-boot.png";
+        sha256 = "1wp822zrhbg4fgfbwkr7cbkr4labx477209agzc0hr6k62fr6rxd";
+      };
       description = ''
         The splash image to use in the legacy-boot bootloader.
       '';
@@ -612,56 +641,59 @@ in
         <para><literal>NixOS 99.99-pre666XXX</literal></para>
       '';
     };
-
   };
 
   # store them in lib so we can mkImageMediaOverride the
   # entire file system layout in installation media (only)
   config.lib.isoFileSystems = {
     "/" = mkImageMediaOverride
-      {
-        fsType = "tmpfs";
-        options = [ "mode=0755" ];
-      };
+    {
+      fsType = "tmpfs";
+      options = ["mode=0755"];
+    };
 
     # Note that /dev/root is a symlink to the actual root device
     # specified on the kernel command line, created in the stage 1
     # init script.
     "/iso" = mkImageMediaOverride
-      { device = "/dev/root";
-        neededForBoot = true;
-        noCheck = true;
-      };
+    {
+      device = "/dev/root";
+      neededForBoot = true;
+      noCheck = true;
+    };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
     "/nix/.ro-store" = mkImageMediaOverride
-      { fsType = "squashfs";
-        device = "/iso/nix-store.squashfs";
-        options = [ "loop" ];
-        neededForBoot = true;
-      };
+    {
+      fsType = "squashfs";
+      device = "/iso/nix-store.squashfs";
+      options = ["loop"];
+      neededForBoot = true;
+    };
 
     "/nix/.rw-store" = mkImageMediaOverride
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-        neededForBoot = true;
-      };
+    {
+      fsType = "tmpfs";
+      options = ["mode=0755"];
+      neededForBoot = true;
+    };
 
     "/nix/store" = mkImageMediaOverride
-      { fsType = "overlay";
-        device = "overlay";
-        options = [
-          "lowerdir=/nix/.ro-store"
-          "upperdir=/nix/.rw-store/store"
-          "workdir=/nix/.rw-store/work"
-        ];
-        depends = [
-          "/nix/.ro-store"
-          "/nix/.rw-store/store"
-          "/nix/.rw-store/work"
-        ];
-      };
+    {
+      fsType = "overlay";
+      device = "overlay";
+      options = [
+        "lowerdir=/nix/.ro-store"
+        "upperdir=/nix/.rw-store/store"
+        "workdir=/nix/.rw-store/work"
+      ];
+      depends = [
+        "/nix/.ro-store"
+        "/nix/.rw-store/store"
+        "/nix/.rw-store/work"
+      ];
+    };
   };
 
   config = {
@@ -674,8 +706,7 @@ in
           length = stringLength config.isoImage.volumeID;
           howmany = toString length;
           toomany = toString (length - 32);
-        in
-        "isoImage.volumeID ${config.isoImage.volumeID} is ${howmany} characters. That is ${toomany} characters longer than the limit of 32.";
+        in "isoImage.volumeID ${config.isoImage.volumeID} is ${howmany} characters. That is ${toomany} characters longer than the limit of 32.";
       }
     ];
 
@@ -685,9 +716,9 @@ in
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
-      ++ optional canx86BiosBoot pkgs.syslinux
-    ;
+    environment.systemPackages =
+      [grubPkgs.grub2 grubPkgs.grub2_efi]
+      ++ optional canx86BiosBoot pkgs.syslinux;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the
@@ -697,23 +728,23 @@ in
     # UUID of the USB stick.  It would be nicer to write
     # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
     # recognise that.
-    boot.kernelParams =
-      [ "root=LABEL=${config.isoImage.volumeID}"
-        "boot.shell_on_fail"
-      ];
+    boot.kernelParams = [
+      "root=LABEL=${config.isoImage.volumeID}"
+      "boot.shell_on_fail"
+    ];
 
     fileSystems = config.lib.isoFileSystems;
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
+    boot.initrd.availableKernelModules = ["squashfs" "iso9660" "uas" "overlay"];
 
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernelModules = ["loop" "overlay"];
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
     isoImage.storeContents =
-      [ config.system.build.toplevel ] ++
-      optional config.isoImage.includeSystemBuildDependencies
-        config.system.build.toplevel.drvPath;
+      [config.system.build.toplevel]
+      ++ optional config.isoImage.includeSystemBuildDependencies
+      config.system.build.toplevel.drvPath;
 
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
@@ -725,51 +756,68 @@ in
     # store on the CD.
     isoImage.contents =
       [
-        { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+        {
+          source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
           target = "/boot/" + config.system.boot.loader.kernelFile;
         }
-        { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
+        {
+          source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
           target = "/boot/" + config.system.boot.loader.initrdFile;
         }
-        { source = config.system.build.squashfsStore;
+        {
+          source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
         }
-        { source = pkgs.writeText "version" config.system.nixos.label;
+        {
+          source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
-      ] ++ optionals canx86BiosBoot [
-        { source = config.isoImage.splashImage;
+      ]
+      ++ optionals canx86BiosBoot [
+        {
+          source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
-        { source = pkgs.substituteAll  {
+        {
+          source = pkgs.substituteAll {
             name = "isolinux.cfg";
             src = pkgs.writeText "isolinux.cfg-in" isolinuxCfg;
             bootRoot = "/boot";
           };
           target = "/isolinux/isolinux.cfg";
         }
-        { source = "${pkgs.syslinux}/share/syslinux";
+        {
+          source = "${pkgs.syslinux}/share/syslinux";
           target = "/isolinux";
         }
-      ] ++ optionals config.isoImage.makeEfiBootable [
-        { source = efiImg;
+      ]
+      ++ optionals config.isoImage.makeEfiBootable [
+        {
+          source = efiImg;
           target = "/boot/efi.img";
         }
-        { source = "${efiDir}/EFI";
+        {
+          source = "${efiDir}/EFI";
           target = "/EFI";
         }
-        { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
+        {
+          source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
           target = "/boot/grub";
         }
-        { source = config.isoImage.efiSplashImage;
+        {
+          source = config.isoImage.efiSplashImage;
           target = "/EFI/boot/efi-background.png";
         }
-      ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
-        { source = "${pkgs.memtest86plus}/memtest.bin";
+      ]
+      ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
+        {
+          source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
-      ] ++ optionals (config.isoImage.grubTheme != null) [
-        { source = config.isoImage.grubTheme;
+      ]
+      ++ optionals (config.isoImage.grubTheme != null) [
+        {
+          source = config.isoImage.grubTheme;
           target = "/EFI/boot/grub-theme";
         }
       ];
@@ -781,31 +829,33 @@ in
       inherit (config.isoImage) isoName compressImage volumeID contents;
       bootable = canx86BiosBoot;
       bootImage = "/isolinux/isolinux.bin";
-      syslinux = if canx86BiosBoot then pkgs.syslinux else null;
-    } // optionalAttrs (config.isoImage.makeUsbBootable && canx86BiosBoot) {
+      syslinux =
+        if canx86BiosBoot
+        then pkgs.syslinux
+        else null;
+    }
+    // optionalAttrs (config.isoImage.makeUsbBootable && canx86BiosBoot) {
       usbBootable = true;
       isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
-    } // optionalAttrs config.isoImage.makeEfiBootable {
+    }
+    // optionalAttrs config.isoImage.makeEfiBootable {
       efiBootable = true;
       efiBootImage = "boot/efi.img";
     });
 
-    boot.postBootCommands =
-      ''
-        # After booting, register the contents of the Nix store on the
-        # CD in the Nix database in the tmpfs.
-        ${config.nix.package.out}/bin/nix-store --load-db < /nix/store/nix-path-registration
+    boot.postBootCommands = ''
+      # After booting, register the contents of the Nix store on the
+      # CD in the Nix database in the tmpfs.
+      ${config.nix.package.out}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
-        # nixos-rebuild also requires a "system" profile and an
-        # /etc/NIXOS tag.
-        touch /etc/NIXOS
-        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-      '';
+      # nixos-rebuild also requires a "system" profile and an
+      # /etc/NIXOS tag.
+      touch /etc/NIXOS
+      ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+    '';
 
     # Add vfat support to the initrd to enable people to copy the
     # contents of the CD to a bootable USB stick.
-    boot.initrd.supportedFilesystems = [ "vfat" ];
-
+    boot.initrd.supportedFilesystems = ["vfat"];
   };
-
 }

@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, curl
-, freetype
-, libGLU
-, libnotify
-, libogg
-, libX11
-, opusfile
-, pcre
-, python3
-, SDL2
-, sqlite
-, wavpack
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  curl,
+  freetype,
+  libGLU,
+  libnotify,
+  libogg,
+  libX11,
+  opusfile,
+  pcre,
+  python3,
+  SDL2,
+  sqlite,
+  wavpack,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ddnet";
   version = "15.9.1";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QGtXI4Dbua5LBXSvB17tnSTGEvCCoopvg1XKBuDIEoQ=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  nativeBuildInputs = [cmake ninja pkg-config];
 
   buildInputs = [
     curl
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ddnet.tw";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sirseruju lom ];
+    maintainers = with maintainers; [sirseruju lom];
     mainProgram = "DDNet";
   };
 }

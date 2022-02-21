@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
+  msrestazure,
 }:
-
 buildPythonPackage rec {
   pname = "azure-mgmt-cognitiveservices";
   version = "13.0.0";
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Cognitive Services Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    maintainers = with maintainers; [maxwilson];
   };
 }

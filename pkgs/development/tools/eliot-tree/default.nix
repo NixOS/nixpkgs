@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "eliot-tree";
   version = "19.0.1";
@@ -12,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [
     testtools
     pytest
-   ];
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     colored
@@ -33,6 +35,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/jonathanj/eliottree";
     description = "Render Eliot logs as an ASCII tree";
     license = licenses.mit;
-    maintainers = [ maintainers.dpausp ];
+    maintainers = [maintainers.dpausp];
   };
 }

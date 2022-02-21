@@ -1,16 +1,16 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cbor2
-, fetchFromGitHub
-, pycryptodomex
-, pytestCheckHook
-, pytest-vcr
-, pytest-asyncio
-, requests
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  cbor2,
+  fetchFromGitHub,
+  pycryptodomex,
+  pytestCheckHook,
+  pytest-vcr,
+  pytest-asyncio,
+  requests,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pubnub";
   version = "6.0.1";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

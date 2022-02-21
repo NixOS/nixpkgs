@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, intltool }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+}:
 stdenv.mkDerivation rec {
   pname = "pxlib";
   version = "0.6.8";
@@ -8,13 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "1yafwz4z5h30hqvk51wpgbjlmq9f2z2znvfim87ydrfrqfjmi6sz";
   };
 
-  nativeBuildInputs = [ intltool ];
+  nativeBuildInputs = [intltool];
 
   meta = with lib; {
     description = "Library to read and write Paradox files";
     homepage = "http://pxlib.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = [ maintainers.winpat ];
+    maintainers = [maintainers.winpat];
   };
 }

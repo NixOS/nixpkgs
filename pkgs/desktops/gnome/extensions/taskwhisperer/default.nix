@@ -1,5 +1,12 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  taskwarrior,
+  gettext,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-taskwhisperer";
   version = "20";
@@ -39,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNOME Shell TaskWarrior GUI";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jonafato ];
+    maintainers = with maintainers; [jonafato];
     homepage = "https://github.com/cinatic/taskwhisperer";
   };
 }

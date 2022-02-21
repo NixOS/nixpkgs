@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, mock }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  mock,
+}:
 buildPythonPackage rec {
   pname = "backports.unittest_mock";
   version = "1.5";
@@ -9,18 +14,18 @@ buildPythonPackage rec {
     sha256 = "eff58e53de8fdeb27a1c87a9d57e7b91d15d1bc3854e85344b1a2e69f31ecda7";
   };
 
-  propagatedBuildInputs = [ mock ];
+  propagatedBuildInputs = [mock];
 
-  buildInputs = [ setuptools-scm ];
+  buildInputs = [setuptools-scm];
 
   # does not contain tests
   doCheck = false;
-  pythonImportsCheck = [ "backports.unittest_mock" ];
+  pythonImportsCheck = ["backports.unittest_mock"];
 
   meta = with lib; {
     description = "Provides a function install() which makes the mock module";
     homepage = "https://github.com/jaraco/backports.unittest_mock";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

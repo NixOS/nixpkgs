@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "void";
   version = "1.1.5";
@@ -20,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "Terminal-based personal organizer";
     homepage = "https://github.com/spacejam/void";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ spacekookie ];
+    maintainers = with maintainers; [spacekookie];
   };
 }

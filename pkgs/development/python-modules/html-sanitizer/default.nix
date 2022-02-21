@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, beautifulsoup4
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  beautifulsoup4,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "html-sanitizer";
   version = "1.9.3";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Allowlist-based and very opinionated HTML sanitizer";
     homepage = "https://github.com/matthiask/html-sanitizer";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

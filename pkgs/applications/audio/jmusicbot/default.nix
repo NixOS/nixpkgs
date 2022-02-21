@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "JMusicBot";
   version = "0.3.6";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     mkdir -p $out/lib
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Discord music bot that's easy to set up and run yourself";
     homepage = "https://github.com/jagrosh/MusicBot";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
     platforms = platforms.all;
   };
 }

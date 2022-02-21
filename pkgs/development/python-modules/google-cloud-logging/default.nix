@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, flask
-, google-api-core
-, google-cloud-appengine-logging
-, google-cloud-audit-log
-, google-cloud-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  flask,
+  google-api-core,
+  google-cloud-appengine-logging,
+  google-cloud-audit-log,
+  google-cloud-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-logging";
   version = "3.0.0";
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

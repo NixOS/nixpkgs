@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchurl
-, boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libGLU, libGL, vigra
-, help2man, pkg-config, perl, texlive }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  freeglut,
+  glew,
+  gsl,
+  lcms2,
+  libpng,
+  libtiff,
+  libGLU,
+  libGL,
+  vigra,
+  help2man,
+  pkg-config,
+  perl,
+  texlive,
+}:
 stdenv.mkDerivation rec {
   pname = "enblend-enfuse";
   version = "4.2";
@@ -11,9 +26,9 @@ stdenv.mkDerivation rec {
     sha256 = "0j5x011ilalb47ssah50ag0a4phgh1b0wdgxdbbp1gcyjcjf60w7";
   };
 
-  buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libGLU libGL vigra ];
+  buildInputs = [boost freeglut glew gsl lcms2 libpng libtiff libGLU libGL vigra];
 
-  nativeBuildInputs = [ help2man perl pkg-config texlive.combined.scheme-small ];
+  nativeBuildInputs = [help2man perl pkg-config texlive.combined.scheme-small];
 
   preConfigure = ''
     patchShebangs src/embrace

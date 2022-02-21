@@ -1,5 +1,4 @@
-{ lib }:
-
+{lib}:
 lib.mapAttrs (lname: lset: let
   defaultLicense = rec {
     shortName = lname;
@@ -11,16 +10,19 @@ lib.mapAttrs (lname: lset: let
     applyDefaults = license: defaultLicense // license;
     applySpdx = license:
       if license ? spdxId
-      then license // { url = "https://spdx.org/licenses/${license.spdxId}.html"; }
+      then license // {url = "https://spdx.org/licenses/${license.spdxId}.html";}
       else license;
-    applyRedistributable = license: { redistributable = license.free; } // license;
-  in lib.pipe licenseDeclaration [
-    applyDefaults
-    applySpdx
-    applyRedistributable
-  ];
-in mkLicense lset) ({
-  /* License identifiers from spdx.org where possible.
+    applyRedistributable = license: {redistributable = license.free;} // license;
+  in
+    lib.pipe licenseDeclaration [
+      applyDefaults
+      applySpdx
+      applyRedistributable
+    ];
+in
+  mkLicense lset) ({
+  /*
+     License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
@@ -257,12 +259,12 @@ in mkLicense lset) ({
 
   cecill-b = {
     spdxId = "CECILL-B";
-    fullName  = "CeCILL-B Free Software License Agreement";
+    fullName = "CeCILL-B Free Software License Agreement";
   };
 
   cecill-c = {
     spdxId = "CECILL-C";
-    fullName  = "CeCILL-C Free Software License Agreement";
+    fullName = "CeCILL-C Free Software License Agreement";
   };
 
   cpal10 = {
@@ -471,15 +473,15 @@ in mkLicense lset) ({
   };
 
   inria-compcert = {
-    fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
-    url       = "https://compcert.org/doc/LICENSE.txt";
-    free      = false;
+    fullName = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
+    url = "https://compcert.org/doc/LICENSE.txt";
+    free = false;
   };
 
   inria-icesl = {
     fullName = "INRIA Non-Commercial License Agreement for IceSL";
-    url      = "https://icesl.loria.fr/assets/pdf/EULA_IceSL_binary.pdf";
-    free     = false;
+    url = "https://icesl.loria.fr/assets/pdf/EULA_IceSL_binary.pdf";
+    free = false;
   };
 
   ipa = {
@@ -635,7 +637,7 @@ in mkLicense lset) ({
 
   ncsa = {
     spdxId = "NCSA";
-    fullName  = "University of Illinois/NCSA Open Source License";
+    fullName = "University of Illinois/NCSA Open Source License";
   };
 
   nposl3 = {
@@ -899,7 +901,8 @@ in mkLicense lset) ({
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };
-} // {
+}
+// {
   # TODO: remove legacy aliases
   agpl3 = {
     spdxId = "AGPL-3.0";

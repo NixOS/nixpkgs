@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, fetchzip
-, util-linux
-, jq
-, mtools
+{
+  stdenv,
+  lib,
+  fetchzip,
+  util-linux,
+  jq,
+  mtools,
 }:
-
 stdenv.mkDerivation rec {
   pname = "memtest86-efi";
   version = "9.3.1000";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     # MemTest86 Free Edition is free to download with no restrictions on usage. However, the source code is not available.
     # https://www.memtest86.com/tech_license-information.html
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ cdepillabout ];
+    maintainers = with maintainers; [cdepillabout];
     platforms = platforms.linux;
   };
 }

@@ -1,13 +1,23 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
-
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   addrShared = "192.168.0.1";
   addrHostA = "192.168.0.10";
   addrHostB = "192.168.0.11";
 
-  mkUcarpHost = addr: { config, pkgs, lib, ... }: {
+  mkUcarpHost = addr: {
+    config,
+    pkgs,
+    lib,
+    ...
+  }: {
     networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-      { address = addr; prefixLength = 24; }
+      {
+        address = addr;
+        prefixLength = 24;
+      }
     ];
 
     networking.ucarp = {
@@ -29,7 +39,7 @@ let
   };
 in {
   name = "ucarp";
-  meta.maintainers = with lib.maintainers; [ oxzi ];
+  meta.maintainers = with lib.maintainers; [oxzi];
 
   nodes = {
     hostA = mkUcarpHost addrHostA;

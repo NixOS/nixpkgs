@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "jsonpath";
   version = "0.82";
@@ -16,6 +16,6 @@ buildPythonPackage rec {
     description = "An XPath for JSON";
     homepage = "https://github.com/json-path/JsonPath";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

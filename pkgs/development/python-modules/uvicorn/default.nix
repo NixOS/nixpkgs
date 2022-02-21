@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, asgiref
-, click
-, colorama
-, h11
-, httptools
-, python-dotenv
-, pyyaml
-, typing-extensions
-, uvloop
-, watchgod
-, websockets
-, wsproto
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  asgiref,
+  click,
+  colorama,
+  h11,
+  httptools,
+  python-dotenv,
+  pyyaml,
+  typing-extensions,
+  uvloop,
+  watchgod,
+  websockets,
+  wsproto,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "uvicorn";
   version = "0.16.0";
@@ -34,21 +34,23 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  propagatedBuildInputs = [
-    asgiref
-    click
-    colorama
-    h11
-    httptools
-    python-dotenv
-    pyyaml
-    uvloop
-    watchgod
-    websockets
-    wsproto
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      asgiref
+      click
+      colorama
+      h11
+      httptools
+      python-dotenv
+      pyyaml
+      uvloop
+      watchgod
+      websockets
+      wsproto
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+    ];
 
   postInstall = ''
     mkdir $testsout
@@ -63,13 +65,13 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    pytest = callPackage ./tests.nix { };
+    pytest = callPackage ./tests.nix {};
   };
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    maintainers = with maintainers; [wd15];
   };
 }

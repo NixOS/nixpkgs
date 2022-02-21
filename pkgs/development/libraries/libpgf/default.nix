@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchzip, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "libpgf";
   version = "7.21.2";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l1j5b1d02jn27miggihlppx656i0pc70cn6x89j1rpj33zn0g9r";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [autoreconfHook];
 
   autoreconfPhase = ''
     mv README.txt README

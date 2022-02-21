@@ -1,5 +1,9 @@
-{ trivialBuild, lib, fetchFromGitHub, curl }:
-
+{
+  trivialBuild,
+  lib,
+  fetchFromGitHub,
+  curl,
+}:
 trivialBuild {
   pname = "plz";
   version = "unstable-2021-08-22";

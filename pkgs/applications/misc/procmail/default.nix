@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "procmail";
   version = "3.22";
@@ -36,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.procmail.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, cmake, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   version = "1.1.5";
   pname = "nanomsg";
@@ -11,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "01ddfzjlkf2dgijrmm3j3j8irccsnbgfvjcnwslsfaxnrmrq5s64";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
-    description= "Socket library that provides several common communication patterns";
+    description = "Socket library that provides several common communication patterns";
     homepage = "https://nanomsg.org/";
     license = licenses.mit;
     platforms = platforms.unix;

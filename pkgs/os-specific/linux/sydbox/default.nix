@@ -1,23 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, autoreconfHook
-, python3
-, perl
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_42
-, libseccomp
-, installTests ? true, gnumake, which
-, debugBuild ? false, libunwind
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  python3,
+  perl,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  libseccomp,
+  installTests ? true,
+  gnumake,
+  which,
+  debugBuild ? false,
+  libunwind,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sydbox-1";
   version = "2.2.0";
 
-  outputs = [ "out" "dev" "man" "doc" ]
+  outputs =
+    ["out" "dev" "man" "doc"]
     ++ lib.optional installTests "installedTests";
 
   src = fetchurl {
@@ -35,9 +39,11 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
   ];
 
-  buildInputs = [
-    libseccomp
-  ] ++ lib.optional debugBuild libunwind
+  buildInputs =
+    [
+      libseccomp
+    ]
+    ++ lib.optional debugBuild libunwind
     ++ lib.optionals installTests [
       gnumake
       python3
@@ -47,12 +53,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ ]
-    ++ lib.optionals installTests [ "--enable-installed-tests"
-      "--libexecdir=${placeholder "installedTests"}/libexec" ]
+  configureFlags =
+    []
+    ++ lib.optionals installTests [
+      "--enable-installed-tests"
+      "--libexecdir=${placeholder "installedTests"}/libexec"
+    ]
     ++ lib.optional debugBuild "--enable-debug";
 
-  makeFlags = [ "SYD_INCLUDEDIR=${stdenv.cc.libc.dev}/include" ];
+  makeFlags = ["SYD_INCLUDEDIR=${stdenv.cc.libc.dev}/include"];
 
   doCheck = true;
   checkPhase = ''
@@ -60,18 +69,23 @@ stdenv.mkDerivation rec {
     make -C syd check
   '';
 
-  postInstall = if installTests then ''
-    moveToOutput bin/syd-test $installedTests
-  '' else ''
-    # Tests are installed despite --disable-installed-tests
-    rm -r $out/bin/syd-test $out/libexec
-  '';
+  postInstall =
+    if installTests
+    then
+      ''
+        moveToOutput bin/syd-test $installedTests
+      ''
+    else
+      ''
+        # Tests are installed despite --disable-installed-tests
+        rm -r $out/bin/syd-test $out/libexec
+      '';
 
   meta = with lib; {
     homepage = "https://sydbox.exherbo.org/";
     description = "seccomp-based application sandbox";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mvs ];
+    maintainers = with maintainers; [mvs];
   };
 }

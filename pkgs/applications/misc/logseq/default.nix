@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+}:
 stdenv.mkDerivation rec {
   pname = "logseq";
   version = "0.5.9";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -46,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ weihua ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [weihua];
+    platforms = ["x86_64-linux"];
   };
 }

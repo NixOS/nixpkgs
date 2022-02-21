@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-runner, wcwidth }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pytest-runner,
+  wcwidth,
+}:
 buildPythonPackage rec {
   pname = "pyte";
   version = "0.8.0";
@@ -9,11 +15,11 @@ buildPythonPackage rec {
     sha256 = "7e71d03e972d6f262cbe8704ff70039855f05ee6f7ad9d7129df9c977b5a88c5";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
+  nativeBuildInputs = [pytest-runner];
 
-  propagatedBuildInputs = [ wcwidth ];
+  propagatedBuildInputs = [wcwidth];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   disabledTests = [
     "test_input_output"
@@ -23,6 +29,6 @@ buildPythonPackage rec {
     description = "Simple VTXXX-compatible linux terminal emulator";
     homepage = "https://github.com/selectel/pyte";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [flokli];
   };
 }

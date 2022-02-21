@@ -1,16 +1,17 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.scheduler;
-in
-{
+in {
   ###### interface
   options.services.kubernetes.scheduler = with lib.types; {
-
     address = mkOption {
       description = "Kubernetes scheduler listening address.";
       default = "127.0.0.1";
@@ -54,26 +55,27 @@ in
       default = null;
       type = nullOr int;
     };
-
   };
 
   ###### implementation
   config = mkIf cfg.enable {
     systemd.services.kube-scheduler = {
       description = "Kubernetes Scheduler Service";
-      wantedBy = [ "kubernetes.target" ];
-      after = [ "kube-apiserver.service" ];
+      wantedBy = ["kubernetes.target"];
+      after = ["kube-apiserver.service"];
       serviceConfig = {
         Slice = "kubernetes.slice";
-        ExecStart = ''${top.package}/bin/kube-scheduler \
-          --bind-address=${cfg.address} \
-          ${optionalString (cfg.featureGates != [])
-            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
-          --leader-elect=${boolToString cfg.leaderElect} \
-          --secure-port=${toString cfg.port} \
-          ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-          ${cfg.extraOpts}
+        ExecStart = ''          ${top.package}/bin/kube-scheduler \
+                    --bind-address=${cfg.address} \
+                    ${
+            optionalString (cfg.featureGates != [])
+            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"
+          } \
+                    --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
+                    --leader-elect=${boolToString cfg.leaderElect} \
+                    --secure-port=${toString cfg.port} \
+                    ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
+                    ${cfg.extraOpts}
         '';
         WorkingDirectory = top.dataDir;
         User = "kubernetes";

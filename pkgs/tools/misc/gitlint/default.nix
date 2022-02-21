@@ -1,10 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, gitMinimal
-, python3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gitMinimal,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
   version = "0.17.0";
@@ -45,6 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Linting for your git commit messages";
     homepage = "https://jorisroovers.com/gitlint/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 fab ];
+    maintainers = with maintainers; [ethancedwards8 fab];
   };
 }

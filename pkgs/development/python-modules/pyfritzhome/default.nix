@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, nose
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  nose,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "pyfritzhome";
   version = "0.6.4";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python Library to access AVM FRITZ!Box homeautomation";
     homepage = "https://github.com/hthiery/python-fritzhome";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

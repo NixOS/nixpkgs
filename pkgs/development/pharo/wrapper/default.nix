@@ -1,5 +1,12 @@
-{ lib, stdenv, file, makeDesktopItem, cog32, spur32, spur64 ? "none" }:
-
+{
+  lib,
+  stdenv,
+  file,
+  makeDesktopItem,
+  cog32,
+  spur32,
+  spur64 ? "none",
+}:
 stdenv.mkDerivation rec {
   name = "pharo";
   src = ./pharo-vm.sh;
@@ -12,7 +19,7 @@ stdenv.mkDerivation rec {
     exec = "pharo %F";
     icon = "pharo";
     terminal = "false";
-    type="Application";
+    type = "Application";
     startupNotify = "false";
     categories = "Development;";
     mimeType = "application/x-pharo-image";
@@ -51,12 +58,12 @@ stdenv.mkDerivation rec {
 
     homepage = "http://pharo.org";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lukego ];
+    maintainers = [lib.maintainers.lukego];
     # Pharo VM sources are packaged separately for darwin (OS X)
     platforms = lib.filter
-      (system: with lib.systems.elaborate { inherit system; };
-         isUnix && !isDarwin)
-      lib.platforms.mesaPlatforms;
+    (system:
+      with lib.systems.elaborate {inherit system;};
+        isUnix && !isDarwin)
+    lib.platforms.mesaPlatforms;
   };
 }
-

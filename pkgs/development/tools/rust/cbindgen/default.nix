@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, python3Packages, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  python3Packages,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
   version = "0.20.0";
@@ -33,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     description = "A project for generating C bindings from Rust code";
     homepage = "https://github.com/eqrion/cbindgen";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

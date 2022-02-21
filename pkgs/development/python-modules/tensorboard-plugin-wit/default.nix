@@ -1,6 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
-
 buildPythonPackage rec {
   pname = "tensorboard_plugin_wit";
   version = "1.7.0";
@@ -17,6 +19,6 @@ buildPythonPackage rec {
     description = "What-If Tool TensorBoard plugin.";
     homepage = "http://tensorflow.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    maintainers = with maintainers; [ndl];
   };
 }

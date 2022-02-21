@@ -1,18 +1,18 @@
-{ lib, stdenv
-, python3
-, libffi
-, git
-, cmake
-, zlib
-, fetchgit
-, makeWrapper
-, runCommand
-, llvmPackages_5
-, glibc
-, ncurses
-}:
-
-let
+{
+  lib,
+  stdenv,
+  python3,
+  libffi,
+  git,
+  cmake,
+  zlib,
+  fetchgit,
+  makeWrapper,
+  runCommand,
+  llvmPackages_5,
+  glibc,
+  ncurses,
+}: let
   unwrapped = stdenv.mkDerivation rec {
     pname = "cling-unwrapped";
     version = "0.7";
@@ -38,8 +38,8 @@ let
       chmod -R a+w ./tools/cling
     '';
 
-    nativeBuildInputs = [ python3 git cmake llvmPackages_5.llvm.dev ];
-    buildInputs = [ libffi llvmPackages_5.llvm zlib ncurses ];
+    nativeBuildInputs = [python3 git cmake llvmPackages_5.llvm.dev];
+    buildInputs = [libffi llvmPackages_5.llvm zlib ncurses];
 
     strictDeps = true;
 
@@ -55,8 +55,8 @@ let
     meta = with lib; {
       description = "The Interactive C++ Interpreter";
       homepage = "https://root.cern/cling/";
-      license = with licenses; [ lgpl21 ncsa ];
-      maintainers = with maintainers; [ thomasjm ];
+      license = with licenses; [lgpl21 ncsa];
+      maintainers = with maintainers; [thomasjm];
       platforms = platforms.unix;
     };
   };
@@ -75,9 +75,12 @@ let
   flags = [
     "-nostdinc"
     "-nostdinc++"
-    "-isystem" "${lib.getDev stdenv.cc.libc}/include"
-    "-I" "${lib.getDev unwrapped}/include"
-    "-I" "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
+    "-isystem"
+    "${lib.getDev stdenv.cc.libc}/include"
+    "-I"
+    "${lib.getDev unwrapped}/include"
+    "-I"
+    "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
   ];
 
   # Autodetect the include paths for the compiler used to build Cling, in the same way Cling does at
@@ -90,15 +93,13 @@ let
     sed -e 's/^/-isystem /' -i tmp
     tr '\n' ' ' < tmp > $out
   '';
-
 in
-
-runCommand "cling-${unwrapped.version}" {
-  buildInputs = [ makeWrapper ];
-  inherit unwrapped flags compilerIncludeFlags;
-  inherit (unwrapped) meta;
-} ''
-  makeWrapper $unwrapped/bin/cling $out/bin/cling \
-    --add-flags "$(cat "$compilerIncludeFlags")" \
-    --add-flags "$flags"
-''
+  runCommand "cling-${unwrapped.version}" {
+    buildInputs = [makeWrapper];
+    inherit unwrapped flags compilerIncludeFlags;
+    inherit (unwrapped) meta;
+  } ''
+    makeWrapper $unwrapped/bin/cling $out/bin/cling \
+      --add-flags "$(cat "$compilerIncludeFlags")" \
+      --add-flags "$flags"
+  ''

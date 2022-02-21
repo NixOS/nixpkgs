@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "mp3cat";
   version = "0.5";
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/tomclegg/mp3cat";
     license = licenses.gpl2;
-    maintainers = [ maintainers.omnipotententity ];
+    maintainers = [maintainers.omnipotententity];
     platforms = platforms.all;
   };
 }

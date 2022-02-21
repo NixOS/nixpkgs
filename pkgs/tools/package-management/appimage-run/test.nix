@@ -1,14 +1,19 @@
-{ runCommand, fetchurl, appimage-run, glibcLocales, file }:
-let
+{
+  runCommand,
+  fetchurl,
+  appimage-run,
+  glibcLocales,
+  file,
+}: let
   # any AppImage usable on cli, really
   sample-appImage = fetchurl {
     url = "https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage";
-    sha256 =  "04ws94q71bwskmhizhwmaf41ma4wabvfgjgkagr8wf3vakgv866r";
+    sha256 = "04ws94q71bwskmhizhwmaf41ma4wabvfgjgkagr8wf3vakgv866r";
   };
 in
   runCommand "appimage-run-tests" {
-    buildInputs = [ appimage-run glibcLocales file ];
-    meta.platforms = [ "x86_64-linux" ];
+    buildInputs = [appimage-run glibcLocales file];
+    meta.platforms = ["x86_64-linux"];
   }
   ''
     export HOME=$(mktemp -d)
@@ -21,4 +26,3 @@ in
     set +x
     touch $out
   ''
-

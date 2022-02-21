@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchzip, fetchurl, xorg
-, withBigAtlas ? true
-, withEphemeris ? true
-, withMoonsEphemeris ? true
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchurl,
+  xorg,
+  withBigAtlas ? true,
+  withEphemeris ? true,
+  withMoonsEphemeris ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "astrolog";
@@ -18,11 +23,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace cc "$CC" --replace strip "$STRIP"
   '';
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [xorg.libX11];
   NIX_CFLAGS_COMPILE = "-Wno-format-security";
 
-  installPhase =
-  let
+  installPhase = let
     ephemeris = fetchzip {
       url = "http://astrolog.org/ftp/ephem/astephem.zip";
       sha256 = "1mwvpvfk3lxjcc79zvwl4ypqzgqzipnc01cjldxrmx56xkc35zn7";
@@ -42,20 +46,24 @@ stdenv.mkDerivation rec {
     cp *.as $out/astrolog
     install astrolog $out/bin
     ${lib.optionalString withBigAtlas "cp ${atlas} $out/astrolog/atlas.as"}
-    ${lib.optionalString withEphemeris ''
-      sed -i "/-Yi1/s#\".*\"#\"$out/ephemeris\"#" $out/astrolog/astrolog.as
-      mkdir -p $out/ephemeris
-      cp -r ${ephemeris}/*.se1 $out/ephemeris
-    ''}
-    ${lib.optionalString withMoonsEphemeris ''
-      sed -i "/-Yi1/s#\".*\"#\"$out/ephemeris\"#" $out/astrolog/astrolog.as
-      mkdir -p $out/ephemeris
-      cp -r ${moonsEphemeris}/*.se1 $out/ephemeris
-    ''}
+    ${
+      lib.optionalString withEphemeris ''
+        sed -i "/-Yi1/s#\".*\"#\"$out/ephemeris\"#" $out/astrolog/astrolog.as
+        mkdir -p $out/ephemeris
+        cp -r ${ephemeris}/*.se1 $out/ephemeris
+      ''
+    }
+    ${
+      lib.optionalString withMoonsEphemeris ''
+        sed -i "/-Yi1/s#\".*\"#\"$out/ephemeris\"#" $out/astrolog/astrolog.as
+        mkdir -p $out/ephemeris
+        cp -r ${moonsEphemeris}/*.se1 $out/ephemeris
+      ''
+    }
   '';
 
   meta = with lib; {
-    maintainers = [ maintainers.kmein ];
+    maintainers = [maintainers.kmein];
     homepage = "https://astrolog.org/astrolog.htm";
     description = "Freeware astrology program";
     platforms = platforms.linux;

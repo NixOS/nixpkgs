@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, readline
-, talloc
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, which
-, wafHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  pkg-config,
+  readline,
+  talloc,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  which,
+  wafHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tevent";
   version = "0.10.2";

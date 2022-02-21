@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, graphviz }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  graphviz,
+}:
 stdenv.mkDerivation rec {
   version = "1.2022.1";
   pname = "plantuml";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oEOhf7nLVGJqoK/pyTWzF+s3OYsGcEy5pIj8obSrkRY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   buildCommand = ''
     install -Dm644 $src $out/lib/plantuml.jar
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://plantuml.sourceforge.net/";
     # "plantuml -license" says GPLv3 or later
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor Mogria ];
+    maintainers = with maintainers; [bjornfor Mogria];
     platforms = platforms.unix;
   };
 }

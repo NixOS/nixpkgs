@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, findutils
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  findutils,
+  pytestCheckHook,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "extension-helpers";
   version = "0.1";
@@ -20,9 +20,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  patches = [ ./permissions.patch ];
+  patches = [./permissions.patch];
 
-  checkInputs = [ findutils pytestCheckHook ];
+  checkInputs = [findutils pytestCheckHook];
 
   # avoid import mismatch errors, as conftest.py is copied to build dir
   pytestFlagsArray = [
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Utilities for building and installing packages in the Astropy ecosystem";
     homepage = "https://github.com/astropy/extension-helpers";
     license = licenses.bsd3;
-    maintainers = [ maintainers.rmcgibbo ];
+    maintainers = [maintainers.rmcgibbo];
   };
 }

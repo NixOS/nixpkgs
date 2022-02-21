@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage {
   pname = "remkrom";
   version = "unstable-2020-10-17";
@@ -17,7 +21,7 @@ rustPlatform.buildRustPackage {
     description = "Reimplementation of mkrom in Rust";
     homepage = "https://github.com/siraben/remkrom";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
     mainProgram = "remkrom";
   };
 }

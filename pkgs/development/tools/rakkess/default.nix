@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "rakkess";
   version = "0.5.0";
@@ -12,7 +15,7 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-1/8it/djhDjbWqe36VefnRu9XuwAa/qKpZT6d2LGpJ0=";
 
-  ldflags = [ "-s" "-w" "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}"];
 
   meta = with lib; {
     homepage = "https://github.com/corneliusweig/rakkess";
@@ -27,6 +30,6 @@ buildGoModule rec {
       `kubectl auth can-i --list`.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [jk];
   };
 }

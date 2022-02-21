@@ -1,21 +1,22 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, wayland
-, gtk3
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  wayland,
+  gtk3,
+  gobject-introspection,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtk-layer-shell";
   version = "0.6.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchFromGitHub {
     owner = "wmww";
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A library to create panels and other desktop components for Wayland using the Layer Shell protocol";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ eonpatapon ];
+    maintainers = with maintainers; [eonpatapon];
     platforms = platforms.unix;
   };
 }

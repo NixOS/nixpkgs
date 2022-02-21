@@ -1,11 +1,11 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gnome-themes-extra
-, gtk-engine-murrine
-, gtk_engines
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  gtk_engines,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rose-pine-gtk-theme";
   version = "unstable-2021-02-22";
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rose-pine/gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, substituteAll, PodParser }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  substituteAll,
+  PodParser,
+}:
 stdenv.mkDerivation {
   pname = "multiline";
   version = "0.6.3";
@@ -22,7 +27,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  passthru.scripts = [ "multiline.pl" ];
+  passthru.scripts = ["multiline.pl"];
 
   installPhase = ''
     runHook preInstall
@@ -35,6 +40,6 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Multi-line edit box";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }

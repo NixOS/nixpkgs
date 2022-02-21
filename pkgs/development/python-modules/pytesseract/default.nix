@@ -1,5 +1,11 @@
-{ buildPythonPackage, fetchPypi, lib, pillow, tesseract, substituteAll }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pillow,
+  tesseract,
+  substituteAll,
+}:
 buildPythonPackage rec {
   pname = "pytesseract";
   version = "0.3.8";
@@ -16,8 +22,8 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ tesseract ];
-  propagatedBuildInputs = [ pillow ];
+  buildInputs = [tesseract];
+  propagatedBuildInputs = [pillow];
 
   # the package doesn't have any tests.
   doCheck = false;
@@ -26,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/pytesseract/";
     license = licenses.asl20;
     description = "A Python wrapper for Google Tesseract";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

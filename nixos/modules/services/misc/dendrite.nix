@@ -1,11 +1,14 @@
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.services.dendrite;
-  settingsFormat = pkgs.formats.yaml { };
+  settingsFormat = pkgs.formats.yaml {};
   configurationYaml = settingsFormat.generate "dendrite.yaml" cfg.settings;
   workingDir = "/var/lib/dendrite";
-in
-{
+in {
   options.services.dendrite = {
     enable = lib.mkEnableOption "matrix.org dendrite";
     httpPort = lib.mkOption {
@@ -101,8 +104,8 @@ in
           };
           trusted_third_party_id_servers = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            example = [ "matrix.org" ];
-            default = [ "matrix.org" "vector.im" ];
+            example = ["matrix.org"];
+            default = ["matrix.org" "vector.im"];
             description = ''
               Lists of domains that the server will trust as identity
               servers to verify third party identifiers such as phone
@@ -121,7 +124,7 @@ in
           };
         };
       };
-      default = { };
+      default = {};
       description = ''
         Configuration for dendrite, see:
         <link xlink:href="https://github.com/matrix-org/dendrite/blob/master/dendrite-config.yaml"/>
@@ -131,21 +134,23 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [{
-      assertion = cfg.httpsPort != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
-      message = ''
-        If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
+    assertions = [
+      {
+        assertion = cfg.httpsPort != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
+        message = ''
+          If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
 
-        nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
-      '';
-    }];
+          nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+        '';
+      }
+    ];
 
     systemd.services.dendrite = {
       description = "Dendrite Matrix homeserver";
       after = [
         "network.target"
       ];
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
@@ -155,19 +160,25 @@ in
         RuntimeDirectoryMode = "0700";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStartPre =
-          if (cfg.environmentFile != null) then ''
-            ${pkgs.envsubst}/bin/envsubst \
-              -i ${configurationYaml} \
-              -o /run/dendrite/dendrite.yaml
-          '' else ''
-            ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/dendrite/dendrite.yaml
-          '';
+          if (cfg.environmentFile != null)
+          then
+            ''
+              ${pkgs.envsubst}/bin/envsubst \
+                -i ${configurationYaml} \
+                -o /run/dendrite/dendrite.yaml
+            ''
+          else
+            ''
+              ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/dendrite/dendrite.yaml
+            '';
         ExecStart = lib.strings.concatStringsSep " " ([
           "${pkgs.dendrite}/bin/dendrite-monolith-server"
           "--config /run/dendrite/dendrite.yaml"
-        ] ++ lib.optionals (cfg.httpPort != null) [
+        ]
+        ++ lib.optionals (cfg.httpPort != null) [
           "--http-bind-address :${builtins.toString cfg.httpPort}"
-        ] ++ lib.optionals (cfg.httpsPort != null) [
+        ]
+        ++ lib.optionals (cfg.httpsPort != null) [
           "--https-bind-address :${builtins.toString cfg.httpsPort}"
           "--tls-cert ${cfg.tlsCert}"
           "--tls-key ${cfg.tlsKey}"

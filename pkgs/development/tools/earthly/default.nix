@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "earthly";
   version = "0.6.8";
@@ -14,7 +17,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-6lzusbfedDJESJIxsTVGoRnjdtPnMSDdL2OjXIFFL04=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.Version=v${version}"
     "-X main.DefaultBuildkitdImage=earthly/buildkitd:v${version}"
   ];
@@ -37,6 +41,6 @@ buildGoModule rec {
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ zoedsoupe ];
+    maintainers = with maintainers; [zoedsoupe];
   };
 }

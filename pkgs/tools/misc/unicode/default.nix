@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, fetchurl, python3Packages, installShellFiles }:
-
+{
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  python3Packages,
+  installShellFiles,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
   version = "2.7";
@@ -16,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1fz8fcd23lxyl97ay8h42zvkcgcg8l81b2dm05nklkddr2zzpgxx";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postFixup = ''
     substituteInPlace "$out/bin/.unicode-wrapped" \
@@ -31,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     description = "Display unicode character properties";
     homepage = "https://github.com/garabik/unicode";
     license = licenses.gpl3;
-    maintainers = [ maintainers.woffs ];
+    maintainers = [maintainers.woffs];
     platforms = platforms.all;
   };
 }

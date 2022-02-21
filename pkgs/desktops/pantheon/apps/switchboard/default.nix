@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, gtk3
-, libgee
-, libhandy
-, granite
-, gettext
-, elementary-icon-theme
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  python3,
+  ninja,
+  vala,
+  gtk3,
+  libgee,
+  libhandy,
+  granite,
+  gettext,
+  elementary-icon-theme,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard";
   version = "6.0.0";

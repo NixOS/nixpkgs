@@ -1,19 +1,19 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, colorama
-, fetchFromGitHub
-, html2text
-, lxml
-, pytestCheckHook
-, python-dateutil
-, pytz
-, requests
-, simplejson
-, tabulate
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  colorama,
+  fetchFromGitHub,
+  html2text,
+  lxml,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  requests,
+  simplejson,
+  tabulate,
 }:
-
 buildPythonPackage rec {
   pname = "faraday-plugins";
   version = "1.6.0";
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [gpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

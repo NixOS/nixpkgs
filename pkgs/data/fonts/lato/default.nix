@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "lato-2.0";
 
@@ -34,6 +36,6 @@ fetchzip {
 
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [chris-martin];
   };
 }

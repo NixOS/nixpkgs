@@ -1,14 +1,14 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "memcached";
 
   machine = {
-    imports = [ ../modules/profiles/minimal.nix ];
+    imports = [../modules/profiles/minimal.nix];
     services.memcached.enable = true;
   };
 
   testScript = let
     testScript = pkgs.writers.writePython3 "test_memcache" {
-      libraries = with pkgs.python3Packages; [ memcached ];
+      libraries = with pkgs.python3Packages; [memcached];
     } ''
       import memcache
       c = memcache.Client(['localhost:11211'])

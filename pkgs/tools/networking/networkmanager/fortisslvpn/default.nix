@@ -1,25 +1,30 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, openfortivpn
-, gettext
-, pkg-config
-, file
-, glib
-, gtk3
-, networkmanager
-, ppp
-, libsecret
-, withGnome ? true
-, gnome
-, fetchpatch
-, libnma
+{
+  lib,
+  stdenv,
+  fetchurl,
+  substituteAll,
+  openfortivpn,
+  gettext,
+  pkg-config,
+  file,
+  glib,
+  gtk3,
+  networkmanager,
+  ppp,
+  libsecret,
+  withGnome ? true,
+  gnome,
+  fetchpatch,
+  libnma,
 }:
-
 stdenv.mkDerivation rec {
   pname = "NetworkManager-fortisslvpn";
   version = "1.2.10";
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${
+    if withGnome
+    then "-gnome"
+    else ""
+  }-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -45,19 +50,25 @@ stdenv.mkDerivation rec {
     file
   ];
 
-  buildInputs = [
-    openfortivpn
-    networkmanager
-    ppp
-    glib
-  ] ++ lib.optionals withGnome [
-    gtk3
-    libsecret
-    libnma
-  ];
+  buildInputs =
+    [
+      openfortivpn
+      networkmanager
+      ppp
+      glib
+    ]
+    ++ lib.optionals withGnome [
+      gtk3
+      libsecret
+      libnma
+    ];
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${
+      if withGnome
+      then "yes"
+      else "no"
+    }"
     "--localstatedir=/var"
     "--enable-absolute-paths"
   ];

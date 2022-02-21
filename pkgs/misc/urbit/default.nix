@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, curl, git, gmp, libsigsegv, meson, ncurses, ninja
-, openssl, pkg-config, re2c, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  git,
+  gmp,
+  libsigsegv,
+  meson,
+  ncurses,
+  ninja,
+  openssl,
+  pkg-config,
+  re2c,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "urbit";
   version = "0.7.3";
@@ -14,8 +26,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config ninja meson ];
-  buildInputs = [ curl git gmp libsigsegv ncurses openssl re2c zlib ];
+  nativeBuildInputs = [pkg-config ninja meson];
+  buildInputs = [curl git gmp libsigsegv ncurses openssl re2c zlib];
 
   postPatch = ''
     patchShebangs .
@@ -25,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "An operating function";
     homepage = "https://urbit.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ mudri ];
+    maintainers = with maintainers; [mudri];
     platforms = with platforms; linux;
   };
 }

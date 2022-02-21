@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, bison, flex, autoreconfHook
-, openssl, db, attr, perl, tcsh
-} :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+  autoreconfHook,
+  openssl,
+  db,
+  attr,
+  perl,
+  tcsh,
+}:
 stdenv.mkDerivation rec {
   pname = "orangefs";
   version = "2.9.8";
@@ -11,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "0c2yla615j04ygclfavh8g5miqhbml2r0zs2c5mvkacf9in7p7sq";
   };
 
-  nativeBuildInputs = [ bison flex perl autoreconfHook ];
-  buildInputs = [ openssl db attr tcsh ];
+  nativeBuildInputs = [bison flex perl autoreconfHook];
+  buildInputs = [openssl db attr tcsh];
 
   postPatch = ''
     # Issue introduced by attr-2.4.48
@@ -35,7 +44,6 @@ stdenv.mkDerivation rec {
     "--with-ssl=${lib.getDev openssl}"
   ];
 
-
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -54,8 +62,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Scale-out network file system for use on high-end computing systems";
     homepage = "http://www.orangefs.org/";
-    license = with licenses;  [ asl20 bsd3 gpl2 lgpl21 lgpl21Plus openldap ];
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ markuskowa ];
+    license = with licenses; [asl20 bsd3 gpl2 lgpl21 lgpl21Plus openldap];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [markuskowa];
   };
 }

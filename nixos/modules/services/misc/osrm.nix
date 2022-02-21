@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.osrm;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.osrm;
+in {
   options.services.osrm = {
     enable = mkOption {
       type = types.bool;
@@ -33,7 +33,7 @@ in
     };
 
     algorithm = mkOption {
-      type = types.enum [ "CH" "CoreCH" "MLD" ];
+      type = types.enum ["CH" "CoreCH" "MLD"];
       default = "MLD";
       description = "Algorithm to use for the data. Must be one of CH, CoreCH, MLD";
     };
@@ -41,7 +41,7 @@ in
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "--max-table-size 1000" "--max-matching-size 1000" ];
+      example = ["--max-table-size 1000" "--max-matching-size 1000"];
       description = "Extra command line arguments passed to osrm-routed";
     };
 
@@ -50,11 +50,9 @@ in
       example = "/var/lib/osrm/berlin-latest.osrm";
       description = "Data file location";
     };
-
   };
 
   config = mkIf cfg.enable {
-
     users.users.osrm = {
       group = config.users.users.osrm.name;
       description = "OSRM user";
@@ -62,12 +60,12 @@ in
       isSystemUser = true;
     };
 
-    users.groups.osrm = { };
+    users.groups.osrm = {};
 
     systemd.services.osrm = {
       description = "OSRM service";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         User = config.users.users.osrm.name;

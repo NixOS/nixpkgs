@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "mtr-exporter";
   version = "0.1.0";
@@ -20,6 +24,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/mgumz/mtr-exporter";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jakubgs ];
+    maintainers = with maintainers; [jakubgs];
   };
 }

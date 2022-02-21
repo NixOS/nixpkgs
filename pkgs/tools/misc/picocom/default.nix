@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, installShellFiles
-, lrzsz
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  lrzsz,
+  IOKit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "picocom";
   # last tagged release is 3.1 but 3.2 is still considered a release
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   buildInputs = lib.optional stdenv.isDarwin IOKit;
 

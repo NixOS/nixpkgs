@@ -1,30 +1,32 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "redis";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ flokli ];
+    maintainers = [flokli];
   };
 
   nodes = {
-    machine =
-      { pkgs, lib, ... }: with lib;
-
-      {
+    machine = {
+      pkgs,
+      lib,
+      ...
+    }:
+      with lib; {
         services.redis.servers."".enable = true;
         services.redis.servers."test".enable = true;
 
-        users.users = listToAttrs (map (suffix: nameValuePair "member${suffix}" {
-          createHome = false;
-          description = "A member of the redis${suffix} group";
-          isNormalUser = true;
-          extraGroups = [ "redis${suffix}" ];
-        }) ["" "-test"]);
+        users.users = listToAttrs (map (suffix:
+          nameValuePair "member${suffix}" {
+            createHome = false;
+            description = "A member of the redis${suffix} group";
+            isNormalUser = true;
+            extraGroups = ["redis${suffix}"];
+          }) ["" "-test"]);
       };
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     inherit (nodes.machine.config.services) redis;
-    in ''
+  in ''
     start_all()
     machine.wait_for_unit("redis")
     machine.wait_for_unit("redis-test")

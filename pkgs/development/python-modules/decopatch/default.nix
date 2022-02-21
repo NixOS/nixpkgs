@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, makefun
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  makefun,
+  setuptools-scm,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "decopatch";
   version = "1.4.9";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Python helper for decorators";
     homepage = "https://github.com/smarie/python-decopatch";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

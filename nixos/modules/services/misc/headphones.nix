@@ -1,18 +1,16 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   name = "headphones";
 
   cfg = config.services.headphones;
   opt = options.services.headphones;
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
@@ -56,11 +54,9 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users = optionalAttrs (cfg.user == name) {
       ${name} = {
         uid = config.ids.uids.headphones;
@@ -76,14 +72,14 @@ in
     };
 
     systemd.services.headphones = {
-        description = "Headphones Server";
-        wantedBy    = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = "${pkgs.headphones}/bin/headphones --datadir ${cfg.dataDir} --config ${cfg.configFile} --host ${cfg.host} --port ${toString cfg.port}";
-        };
+      description = "Headphones Server";
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${pkgs.headphones}/bin/headphones --datadir ${cfg.dataDir} --config ${cfg.configFile} --host ${cfg.host} --port ${toString cfg.port}";
+      };
     };
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, astroid
-, jinja2
-, sphinx
-, pyyaml
-, unidecode
-, mock
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  astroid,
+  jinja2,
+  sphinx,
+  pyyaml,
+  unidecode,
+  mock,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
   version = "1.8.4";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "8c4ec5fbedc1e6e8f4692bcc4fcd1abcfb9e8dfca8a4ded60ad811a743c22ccc";
   };
 
-  propagatedBuildInputs = [ astroid jinja2 pyyaml sphinx unidecode ];
+  propagatedBuildInputs = [astroid jinja2 pyyaml sphinx unidecode];
 
   checkInputs = [
     mock
@@ -37,7 +37,6 @@ buildPythonPackage rec {
     description = "Provides 'autodoc' style documentation";
     longDescription = "Sphinx AutoAPI provides 'autodoc' style documentation for multiple programming languages without needing to load, run, or import the project being documented.";
     license = licenses.mit;
-    maintainers = with maintainers; [ karolchmist ];
+    maintainers = with maintainers; [karolchmist];
   };
-
 }

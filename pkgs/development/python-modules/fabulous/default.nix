@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "fabulous";
   version = "0.4.0";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Make the output of terminal applications look fabulous";
     homepage = "https://jart.github.io/fabulous";
     license = licenses.asl20;
-    maintainers = [ maintainers.symphorien ];
+    maintainers = [maintainers.symphorien];
   };
 }

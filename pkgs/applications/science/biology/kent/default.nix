@@ -1,15 +1,17 @@
-{ lib, stdenv
-, libpng
-, libuuid
-, zlib
-, bzip2
-, xz
-, openssl
-, curl
-, libmysqlclient
-, bash
-, fetchFromGitHub
-, which
+{
+  lib,
+  stdenv,
+  libpng,
+  libuuid,
+  zlib,
+  bzip2,
+  xz,
+  openssl,
+  curl,
+  libmysqlclient,
+  bash,
+  fetchFromGitHub,
+  which,
 }:
 stdenv.mkDerivation rec {
   pname = "kent";
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l5lmqqc6sqkf4hyk3z4825ly0vdlj5xdfad6zd0708cb1v81nbx";
   };
 
-  buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];
+  buildInputs = [libpng libuuid zlib bzip2 xz openssl curl libmysqlclient];
 
   patchPhase = ''
     substituteInPlace ./src/checkUmask.sh \
@@ -69,7 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
     license = licenses.unfree;
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [scalavision];
     platforms = platforms.linux;
   };
 }

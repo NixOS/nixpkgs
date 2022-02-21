@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, mono
-, glib
-, pango
-, gtk2
-, libxml2
-, monoDLLFixer
-, autoconf
-, automake
-, libtool
-, which
-, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  mono,
+  glib,
+  pango,
+  gtk2,
+  libxml2,
+  monoDLLFixer,
+  autoconf,
+  automake,
+  libtool,
+  which,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtk-sharp";
   version = "2.12.45";
@@ -43,10 +43,13 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
+  nativeBuildInputs = [pkg-config autoconf automake libtool which];
 
   buildInputs = [
-    mono glib pango gtk2
+    mono
+    glib
+    pango
+    gtk2
     libxml2
   ];
 

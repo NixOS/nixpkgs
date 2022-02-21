@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, editdistance-s
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, ukkonen
+{
+  lib,
+  buildPythonPackage,
+  editdistance-s,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  ukkonen,
 }:
-
 buildPythonPackage rec {
   pname = "identify";
   version = "2.4.10";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "File identification library for Python";
     homepage = "https://github.com/chriskuehl/identify";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

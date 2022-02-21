@@ -1,13 +1,13 @@
-{ lib
-, substituteAll
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, exdown
-, numpy
-, gnuplot
+{
+  lib,
+  substituteAll,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  exdown,
+  numpy,
+  gnuplot,
 }:
-
 buildPythonPackage rec {
   pname = "termplotlib";
   version = "0.3.9";
@@ -24,9 +24,9 @@ buildPythonPackage rec {
     pytestCheckHook
     exdown
   ];
-  pythonImportsCheck = [ "termplotlib" ];
+  pythonImportsCheck = ["termplotlib"];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [numpy];
 
   patches = [
     (substituteAll {
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "matplotlib for your terminal";
     homepage = "https://github.com/nschloe/termplotlib";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, betamax
-, hacking
-, iso8601
-, lxml
-, oauthlib
-, os-service-types
-, oslo-config
-, oslo-utils
-, pbr
-, pycodestyle
-, pyyaml
-, requests
-, requests-kerberos
-, requests-mock
-, six
-, stestr
-, stevedore
-, testresources
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  betamax,
+  hacking,
+  iso8601,
+  lxml,
+  oauthlib,
+  os-service-types,
+  oslo-config,
+  oslo-utils,
+  pbr,
+  pycodestyle,
+  pyyaml,
+  requests,
+  requests-kerberos,
+  requests-mock,
+  six,
+  stestr,
+  stevedore,
+  testresources,
+  testtools,
 }:
-
 buildPythonPackage rec {
   pname = "keystoneauth1";
   version = "4.4.0";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "keystoneauth1" ];
+  pythonImportsCheck = ["keystoneauth1"];
 
   meta = with lib; {
     description = "Authentication Library for OpenStack Identity";

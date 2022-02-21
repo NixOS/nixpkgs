@@ -1,11 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, opencl-clhpp, ocl-icd, fftw, fftwFloat
-, blas, lapack, boost, mesa, libGLU, libGL
-, freeimage, python3, clfft, clblas
-, doxygen, buildDocs ? false
-, cudaSupport ? false, cudatoolkit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  opencl-clhpp,
+  ocl-icd,
+  fftw,
+  fftwFloat,
+  blas,
+  lapack,
+  boost,
+  mesa,
+  libGLU,
+  libGL,
+  freeimage,
+  python3,
+  clfft,
+  clblas,
+  doxygen,
+  buildDocs ? false,
+  cudaSupport ? false,
+  cudatoolkit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "arrayfire";
   version = "3.7.3";
@@ -18,13 +35,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  cmakeFlags = [
-    "-DAF_BUILD_OPENCL=OFF"
-    "-DAF_BUILD_EXAMPLES=OFF"
-    "-DBUILD_TESTING=OFF"
-  ] ++ lib.optional cudaSupport "-DCMAKE_LIBRARY_PATH=${cudatoolkit}/lib/stubs";
+  cmakeFlags =
+    [
+      "-DAF_BUILD_OPENCL=OFF"
+      "-DAF_BUILD_EXAMPLES=OFF"
+      "-DBUILD_TESTING=OFF"
+    ]
+    ++ lib.optional cudaSupport "-DCMAKE_LIBRARY_PATH=${cudatoolkit}/lib/stubs";
 
-  patches = [ ./no-download.patch ];
+  patches = [./no-download.patch];
 
   postPatch = ''
     mkdir -p ./build/third_party/clFFT/src
@@ -47,13 +66,21 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [
-    opencl-clhpp fftw fftwFloat
-    blas lapack
-    libGLU libGL
-    mesa freeimage
-    boost.out boost.dev
-  ] ++ (lib.optional stdenv.isLinux ocl-icd)
+  buildInputs =
+    [
+      opencl-clhpp
+      fftw
+      fftwFloat
+      blas
+      lapack
+      libGLU
+      libGL
+      mesa
+      freeimage
+      boost.out
+      boost.dev
+    ]
+    ++ (lib.optional stdenv.isLinux ocl-icd)
     ++ (lib.optional cudaSupport cudatoolkit)
     ++ (lib.optional buildDocs doxygen);
 
@@ -65,6 +92,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "https://arrayfire.com/";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chessai ];
+    maintainers = with maintainers; [chessai];
   };
 }

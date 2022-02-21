@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nulltype
-, python-dateutil
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nulltype,
+  python-dateutil,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "plaid-python";
   version = "8.10.0";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/plaid/plaid-python";
     changelog = "https://github.com/plaid/plaid-python/blob/master/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

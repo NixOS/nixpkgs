@@ -1,15 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.system.autoUpgrade;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.system.autoUpgrade;
 in {
-
   options = {
-
     system.autoUpgrade = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -45,7 +44,7 @@ in {
 
       flags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
+        default = [];
         example = [
           "-I"
           "stuff=/home/alice/nixos-stuff"
@@ -95,29 +94,30 @@ in {
           <manvolnum>7</manvolnum></citerefentry>
         '';
       };
-
     };
-
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !((cfg.channel != null) && (cfg.flake != null));
+        message = ''
+          The options 'system.autoUpgrade.channels' and 'system.autoUpgrade.flake' cannot both be set.
+        '';
+      }
+    ];
 
-    assertions = [{
-      assertion = !((cfg.channel != null) && (cfg.flake != null));
-      message = ''
-        The options 'system.autoUpgrade.channels' and 'system.autoUpgrade.flake' cannot both be set.
-      '';
-    }];
-
-    system.autoUpgrade.flags = (if cfg.flake == null then
-        [ "--no-build-output" ] ++ (if cfg.channel == null then
-          [ "--upgrade" ]
-        else [
+    system.autoUpgrade.flags = (if cfg.flake == null
+    then
+      ["--no-build-output"]
+      ++ (if cfg.channel == null
+      then ["--upgrade"]
+      else
+        [
           "-I"
           "nixpkgs=${cfg.channel}/nixexprs.tar.xz"
         ])
-      else
-        [ "--flake ${cfg.flake}" ]);
+    else ["--flake ${cfg.flake}"]);
 
     systemd.services.nixos-upgrade = {
       description = "NixOS Upgrade";
@@ -127,10 +127,13 @@ in {
 
       serviceConfig.Type = "oneshot";
 
-      environment = config.nix.envVars // {
-        inherit (config.environment.sessionVariables) NIX_PATH;
-        HOME = "/root";
-      } // config.networking.proxy.envVars;
+      environment =
+        config.nix.envVars
+        // {
+          inherit (config.environment.sessionVariables) NIX_PATH;
+          HOME = "/root";
+        }
+        // config.networking.proxy.envVars;
 
       path = with pkgs; [
         coreutils
@@ -143,27 +146,29 @@ in {
       ];
 
       script = let
-        nixos-rebuild =
-          "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-      in if cfg.allowReboot then ''
-        ${nixos-rebuild} boot ${toString cfg.flags}
-        booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
-        built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-        if [ "$booted" = "$built" ]; then
-          ${nixos-rebuild} switch ${toString cfg.flags}
+        nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+      in
+        if cfg.allowReboot
+        then
+          ''
+            ${nixos-rebuild} boot ${toString cfg.flags}
+            booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+            built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+            if [ "$booted" = "$built" ]; then
+              ${nixos-rebuild} switch ${toString cfg.flags}
+            else
+              /run/current-system/sw/bin/shutdown -r +1
+            fi
+          ''
         else
-          /run/current-system/sw/bin/shutdown -r +1
-        fi
-      '' else ''
-        ${nixos-rebuild} switch ${toString cfg.flags}
-      '';
+          ''
+            ${nixos-rebuild} switch ${toString cfg.flags}
+          '';
 
       startAt = cfg.dates;
     };
 
     systemd.timers.nixos-upgrade.timerConfig.RandomizedDelaySec =
       cfg.randomizedDelaySec;
-
   };
-
 }

@@ -1,5 +1,8 @@
-{ buildGoModule, lib, fetchFromGitLab }:
-
+{
+  buildGoModule,
+  lib,
+  fetchFromGitLab,
+}:
 buildGoModule rec {
   pname = "gitlab-pages";
   version = "1.51.0";
@@ -12,13 +15,13 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-0Vp+dVDMLl52dKLj1v+mgg+odu5DNfrANBzTztVymh8=";
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "Daemon used to serve static websites for GitLab users";
     homepage = "https://gitlab.com/gitlab-org/gitlab-pages";
     changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ajs124 das_j ];
+    maintainers = with maintainers; [ajs124 das_j];
   };
 }

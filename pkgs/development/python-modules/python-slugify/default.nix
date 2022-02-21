@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, text-unidecode
-, unidecode
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  text-unidecode,
+  unidecode,
 }:
-
 buildPythonPackage rec {
   pname = "python-slugify";
   version = "5.0.2";
@@ -26,14 +26,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  pytestFlagsArray = ["test.py"];
 
-  pythonImportsCheck = [ "slugify" ];
+  pythonImportsCheck = ["slugify"];
 
   meta = with lib; {
     description = "Python Slugify application that handles Unicode";
     homepage = "https://github.com/un33k/python-slugify";
     license = licenses.mit;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
   };
 }

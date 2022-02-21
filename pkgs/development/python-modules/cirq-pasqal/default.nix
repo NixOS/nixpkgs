@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, cirq-core
-, requests
-, pytestCheckHook
+{
+  buildPythonPackage,
+  cirq-core,
+  requests,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "cirq-pasqal";
   inherit (cirq-core) version src meta;

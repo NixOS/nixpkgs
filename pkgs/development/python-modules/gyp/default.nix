@@ -1,8 +1,9 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitiles
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitiles,
 }:
-
 buildPythonPackage {
   pname = "gyp";
   version = "2020-05-12";
@@ -22,7 +23,6 @@ buildPythonPackage {
     description = "A tool to generate native build files";
     homepage = "https://chromium.googlesource.com/external/gyp/+/master/README.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ codyopel ];
+    maintainers = with maintainers; [codyopel];
   };
-
 }

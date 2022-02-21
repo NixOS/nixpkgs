@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, requests
-, pytestCheckHook
-, waitress
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  requests,
+  pytestCheckHook,
+  waitress,
 }:
-
 buildPythonPackage rec {
   pname = "requests-unixsocket";
   version = "0.3.0";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Use requests to talk HTTP via a UNIX domain socket";
     homepage = "https://github.com/msabramo/requests-unixsocket";
     license = licenses.asl20;
-    maintainers = with maintainers; [ catern ];
+    maintainers = with maintainers; [catern];
   };
 }

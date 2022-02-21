@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, mypy
-, pytestCheckHook
-, python-lsp-server
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  mypy,
+  pytestCheckHook,
+  python-lsp-server,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pylsp-mypy";
   version = "0.5.7";
@@ -24,16 +24,16 @@ buildPythonPackage rec {
     "test_multiple_workspaces"
   ];
 
-  checkInputs = [ pytestCheckHook mock ];
+  checkInputs = [pytestCheckHook mock];
 
-  propagatedBuildInputs = [ mypy python-lsp-server ];
+  propagatedBuildInputs = [mypy python-lsp-server];
 
-  pythonImportsCheck = [ "pylsp_mypy" ];
+  pythonImportsCheck = ["pylsp_mypy"];
 
   meta = with lib; {
     homepage = "https://github.com/Richardk2n/pylsp-mypy";
     description = "Mypy plugin for the Python LSP Server";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

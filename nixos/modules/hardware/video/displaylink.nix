@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   enabled = elem "displaylink" config.services.xserver.videoDrivers;
 
   evdi = config.boot.kernelPackages.evdi;
@@ -11,15 +12,10 @@ let
   displaylink = pkgs.displaylink.override {
     inherit evdi;
   };
-
-in
-
-{
-
+in {
   config = mkIf enabled {
-
-    boot.extraModulePackages = [ evdi ];
-    boot.kernelModules = [ "evdi" ];
+    boot.extraModulePackages = [evdi];
+    boot.kernelModules = ["evdi"];
 
     environment.etc."X11/xorg.conf.d/40-displaylink.conf".text = ''
       Section "OutputClass"
@@ -37,7 +33,7 @@ in
 
     # Those are taken from displaylink-installer.sh and from Arch Linux AUR package.
 
-    services.udev.packages = [ displaylink ];
+    services.udev.packages = [displaylink];
 
     powerManagement.powerDownCommands = ''
       #flush any bytes in pipe
@@ -60,8 +56,8 @@ in
 
     systemd.services.dlm = {
       description = "DisplayLink Manager Service";
-      after = [ "display-manager.service" ];
-      conflicts = [ "getty@tty7.service" ];
+      after = ["display-manager.service"];
+      conflicts = ["getty@tty7.service"];
 
       serviceConfig = {
         ExecStart = "${displaylink}/bin/DisplayLinkManager";
@@ -70,7 +66,5 @@ in
         LogsDirectory = "displaylink";
       };
     };
-
   };
-
 }

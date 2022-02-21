@@ -1,6 +1,8 @@
-{ invalidateFetcherByDrvHash, fetchYarnDeps, ... }:
-
 {
+  invalidateFetcherByDrvHash,
+  fetchYarnDeps,
+  ...
+}: {
   simple = invalidateFetcherByDrvHash fetchYarnDeps {
     yarnLock = ./simple.lock;
     sha256 = "sha256-Erdkw2E8wWT09jFNLXGkrdwKl0HuSZWnUDJUrV95vSE=";

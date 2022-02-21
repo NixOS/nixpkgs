@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-, backports-zoneinfo
-, python-dateutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  backports-zoneinfo,
+  python-dateutil,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "time-machine";
   version = "2.6.0";
@@ -22,11 +22,13 @@ buildPythonPackage rec {
     sha256 = "sha256-D3cbArF09b5+LkkdosNbYMfndnzCPWwNqzIww23pOtk=";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  propagatedBuildInputs =
+    [
+      python-dateutil
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      backports-zoneinfo
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -48,6 +50,6 @@ buildPythonPackage rec {
     description = "Travel through time in your tests";
     homepage = "https://github.com/adamchainz/time-machine";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

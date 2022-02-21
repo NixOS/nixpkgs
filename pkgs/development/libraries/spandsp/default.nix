@@ -1,13 +1,20 @@
-{ lib, stdenv, fetchurl, audiofile, libtiff, buildPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  audiofile,
+  libtiff,
+  buildPackages,
+}:
 stdenv.mkDerivation rec {
   version = "0.0.6";
   pname = "spandsp";
-  src=fetchurl {
+  src = fetchurl {
     url = "https://www.soft-switch.org/downloads/spandsp/spandsp-${version}.tar.gz";
     sha256 = "0rclrkyspzk575v8fslzjpgp4y2s4x7xk3r55ycvpi4agv33l1fc";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
@@ -20,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
   propagatedBuildInputs = [audiofile libtiff];
   meta = {
     description = "A portable and modular SIP User-Agent with audio and video support";

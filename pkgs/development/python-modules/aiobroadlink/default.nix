@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiobroadlink";
   version = "0.1.3";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to control various Broadlink devices";
     homepage = "https://github.com/frawau/aiobroadlink";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

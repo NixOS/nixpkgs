@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, configargparse
-, aiohttp
-, async-timeout
-, appdirs
-, readlike
-, requests
-, reparser
-, protobuf
-, urwid
-, mechanicalsoup
-, httpretty
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  configargparse,
+  aiohttp,
+  async-timeout,
+  appdirs,
+  readlike,
+  requests,
+  reparser,
+  protobuf,
+  urwid,
+  mechanicalsoup,
+  httpretty,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "hangups";
   version = "0.4.17";
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     description = "The first third-party instant messaging client for Google Hangouts";
     homepage = "https://github.com/tdryer/hangups";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

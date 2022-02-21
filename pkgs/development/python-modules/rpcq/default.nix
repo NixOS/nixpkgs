@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, numpy
-, pytest-asyncio
-, pytestCheckHook
-, python-rapidjson
-, pythonOlder
-, pyzmq
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  msgpack,
+  numpy,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-rapidjson,
+  pythonOlder,
+  pyzmq,
+  ruamel-yaml,
 }:
-
 buildPythonPackage rec {
   pname = "rpcq";
   version = "3.9.2";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "The RPC framework and message specification for rigetti Quantum Cloud services";
     homepage = "https://github.com/rigetti/rpcq";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

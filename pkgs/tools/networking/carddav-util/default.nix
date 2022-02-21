@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchgit, python3Packages, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  python3Packages,
+  makeWrapper,
+}:
 stdenv.mkDerivation {
   pname = "carddav";
   version = "0.1-2014-02-26";
@@ -10,9 +15,9 @@ stdenv.mkDerivation {
     sha256 = "0f0raffdy032wlnxfck6ky60r163nhqfbr311y4ry55l60s4497n";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  propagatedBuildInputs = with python3Packages; [ requests vobject lxml ];
+  propagatedBuildInputs = with python3Packages; [requests vobject lxml];
 
   strictDeps = true;
 

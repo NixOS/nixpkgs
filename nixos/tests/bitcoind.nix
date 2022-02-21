@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "bitcoind";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with maintainers; [_1000101];
   };
 
-  machine = { ... }: {
+  machine = {...}: {
     services.bitcoind."mainnet" = {
       enable = true;
       rpc = {
@@ -20,7 +20,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       rpc = {
         port = 18332;
       };
-      extraCmdlineOptions = [ "-rpcuser=rpc" "-rpcpassword=rpc" "-rpcauth=rpc2:1495e4a3ad108187576c68f7f9b5ddc5$accce0881c74aa01bb8960ff3bdbd39f607fd33178147679e055a4ac35f53225" ];
+      extraCmdlineOptions = ["-rpcuser=rpc" "-rpcpassword=rpc" "-rpcauth=rpc2:1495e4a3ad108187576c68f7f9b5ddc5$accce0881c74aa01bb8960ff3bdbd39f607fd33178147679e055a4ac35f53225"];
     };
   };
 

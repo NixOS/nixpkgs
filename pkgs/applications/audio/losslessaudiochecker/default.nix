@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+}:
 stdenv.mkDerivation {
   pname = "losslessaudiochecker";
   version = "2.0.5";
@@ -9,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "1i1zbl7sqwxwmhw89lgz922l5k85in3y76zb06h8j3zd0lb20wkq";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [autoPatchelfHook];
 
   setSourceRoot = "sourceRoot=$PWD";
 
@@ -24,6 +28,6 @@ stdenv.mkDerivation {
     homepage = "https://losslessaudiochecker.com";
     license = lib.licenses.unfree;
     platforms = lib.platforms.x86_64;
-    maintainers = with lib.maintainers; [ p-h ];
+    maintainers = with lib.maintainers; [p-h];
   };
 }

@@ -1,8 +1,18 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch
-, python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
-, which, perl, makeWrapper
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  ruby,
+  qtbase,
+  qtmultimedia,
+  qttools,
+  qtxmlpatterns,
+  which,
+  perl,
+  makeWrapper,
 }:
-
 mkDerivation rec {
   pname = "klayout";
   version = "0.27.3";
@@ -44,20 +54,19 @@ mkDerivation rec {
     mv $out/lib/klayout $out/bin/
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-parentheses" ];
+  NIX_CFLAGS_COMPILE = ["-Wno-parentheses"];
 
   dontInstall = true; # Installation already happens as part of "build.sh"
 
   # Fix: "gsiDeclQMessageLogger.cc:126:42: error: format not a string literal
   # and no format arguments [-Werror=format-security]"
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
-    license = with licenses; [ gpl3 ];
+    license = with licenses; [gpl3];
     homepage = "https://www.klayout.de/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [knedlsepp];
   };
 }
-

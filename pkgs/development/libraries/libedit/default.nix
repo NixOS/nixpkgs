@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "libedit";
   version = "20210910-3.1";
@@ -9,14 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z5KmqZIFB2LtzKKP8zGM233jfcz3vDDbWfzXAX7tE8U=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
   # NROFF = "${groff}/bin/nroff";
 
-  patches = [ ./01-cygwin.patch ];
+  patches = [./01-cygwin.patch];
 
-  propagatedBuildInputs = [ ncurses ];
+  propagatedBuildInputs = [ncurses];
 
   postInstall = ''
     find $out/lib -type f | grep '\.\(la\|pc\)''$' | xargs sed -i \

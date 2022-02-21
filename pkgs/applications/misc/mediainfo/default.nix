@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, libmediainfo, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libzen,
+  libmediainfo,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   version = "21.09";
   pname = "mediainfo";
@@ -8,12 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "0mqcqm8y2whnbdi2ry7jd755gfl5ccdqhwjh67hsyr7c0ajxk3vv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libzen libmediainfo zlib ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [libzen libmediainfo zlib];
 
   sourceRoot = "./MediaInfo/Project/GNU/CLI/";
 
-  configureFlags = [ "--with-libmediainfo=${libmediainfo}" ];
+  configureFlags = ["--with-libmediainfo=${libmediainfo}"];
 
   enableParallelBuilding = true;
 
@@ -26,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mediaarea.net/";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.devhell ];
+    maintainers = [maintainers.devhell];
   };
 }

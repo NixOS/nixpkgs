@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub, ezjsonm, menhir, menhirLib, ounit }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ezjsonm,
+  menhir,
+  menhirLib,
+  ounit,
+}:
 buildDunePackage rec {
   pname = "mustache";
   version = "3.1.0";
@@ -11,16 +18,16 @@ buildDunePackage rec {
     sha256 = "19v8rk8d8lkfm2rmhdawfgadji6wa267ir5dprh4w9l1sfj8a1py";
   };
 
-  buildInputs = [ ezjsonm menhir ];
-  propagatedBuildInputs = [ menhirLib ];
+  buildInputs = [ezjsonm menhir];
+  propagatedBuildInputs = [menhirLib];
 
   doCheck = true;
-  checkInputs = [ ounit ];
+  checkInputs = [ounit];
 
   meta = {
     description = "Mustache logic-less templates in OCaml";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
     inherit (src.meta) homepage;
   };
 }

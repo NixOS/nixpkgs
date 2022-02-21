@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkg-config, ncurses, libx86 }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gpm,
+  freetype,
+  fontconfig,
+  pkg-config,
+  ncurses,
+  libx86,
+}:
 stdenv.mkDerivation rec {
   version = "1.7.0";
   pname = "fbterm";
@@ -9,8 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
   };
 
-  nativeBuildInputs = [ pkg-config ncurses ];
-  buildInputs = [ gpm freetype fontconfig ncurses ]
+  nativeBuildInputs = [pkg-config ncurses];
+  buildInputs =
+    [gpm freetype fontconfig ncurses]
     ++ lib.optional stdenv.hostPlatform.isx86 libx86;
 
   preConfigure = ''
@@ -46,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Framebuffer terminal emulator";
     homepage = "https://code.google.com/archive/p/fbterm/";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

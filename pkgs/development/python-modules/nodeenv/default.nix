@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+}:
 buildPythonPackage rec {
   pname = "nodeenv";
   version = "1.6.0";

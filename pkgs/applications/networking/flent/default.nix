@@ -1,6 +1,16 @@
-{ lib, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, python
-, pythonPackages, qt5, sphinx, xvfb-run }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  matplotlib,
+  procps,
+  pyqt5,
+  python,
+  pythonPackages,
+  qt5,
+  sphinx,
+  xvfb-run,
+}:
 buildPythonApplication rec {
   pname = "flent";
   version = "2.0.1";
@@ -9,10 +19,10 @@ buildPythonApplication rec {
     sha256 = "300a09938dc2b4a0463c9144626f25e0bd736fd47806a9444719fa024d671796";
   };
 
-  buildInputs = [ sphinx ];
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
-  propagatedBuildInputs = [ matplotlib procps pyqt5 ];
-  checkInputs = [ procps pythonPackages.mock pyqt5 xvfb-run ];
+  buildInputs = [sphinx];
+  nativeBuildInputs = [qt5.wrapQtAppsHook];
+  propagatedBuildInputs = [matplotlib procps pyqt5];
+  checkInputs = [procps pythonPackages.mock pyqt5 xvfb-run];
 
   checkPhase = ''
     cat >test-runner <<EOF
@@ -34,6 +44,6 @@ buildPythonApplication rec {
     homepage = "https://flent.org";
     license = licenses.gpl3;
 
-    maintainers = [ maintainers.mmlb ];
+    maintainers = [maintainers.mmlb];
   };
 }

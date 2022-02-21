@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zeromq, cppzmq }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zeromq,
+  cppzmq,
+}:
 stdenv.mkDerivation rec {
   pname = "ursadb";
   version = "1.2.0";
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/CERT-Polska/ursadb";
     description = "Trigram database written in C++, suited for malware indexing";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ msm ];
+    maintainers = with maintainers; [msm];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };

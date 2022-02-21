@@ -1,17 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.minio;
 
-  legacyCredentials = cfg: pkgs.writeText "minio-legacy-credentials" ''
-    MINIO_ROOT_USER=${cfg.accessKey}
-    MINIO_ROOT_PASSWORD=${cfg.secretKey}
-  '';
-in
-{
-  meta.maintainers = [ maintainers.bachp ];
+  legacyCredentials = cfg:
+    pkgs.writeText "minio-legacy-credentials" ''
+      MINIO_ROOT_USER=${cfg.accessKey}
+      MINIO_ROOT_PASSWORD=${cfg.secretKey}
+    '';
+in {
+  meta.maintainers = [maintainers.bachp];
 
   options.services.minio = {
     enable = mkEnableOption "Minio Object Storage";
@@ -29,7 +31,7 @@ in
     };
 
     dataDir = mkOption {
-      default = [ "/var/lib/minio/data" ];
+      default = ["/var/lib/minio/data"];
       type = types.listOf types.path;
       description = "The list of data directories for storing the objects. Use one path for regular operation and the minimum of 4 endpoints for Erasure Code mode.";
     };
@@ -60,7 +62,7 @@ in
       '';
     };
 
-    rootCredentialsFile = mkOption  {
+    rootCredentialsFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       description = ''
@@ -96,27 +98,36 @@ in
   config = mkIf cfg.enable {
     warnings = optional ((cfg.accessKey != "") || (cfg.secretKey != "")) "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.configDir}' - minio minio - -"
-    ] ++ (map (x:  "d '" + x + "' - minio minio - - ") cfg.dataDir);
+    systemd.tmpfiles.rules =
+      [
+        "d '${cfg.configDir}' - minio minio - -"
+      ]
+      ++ (map (x: "d '" + x + "' - minio minio - - ") cfg.dataDir);
 
     systemd.services.minio = {
       description = "Minio Object Storage";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
         Type = "simple";
         User = "minio";
         Group = "minio";
         LimitNOFILE = 65536;
-        EnvironmentFile = if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
-                          else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
-                          else null;
+        EnvironmentFile =
+          if (cfg.rootCredentialsFile != null)
+          then cfg.rootCredentialsFile
+          else if ((cfg.accessKey != "") || (cfg.secretKey != ""))
+          then (legacyCredentials cfg)
+          else null;
       };
       environment = {
         MINIO_REGION = "${cfg.region}";
-        MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
+        MINIO_BROWSER = "${
+          if cfg.browser
+          then "on"
+          else "off"
+        }";
       };
     };
 

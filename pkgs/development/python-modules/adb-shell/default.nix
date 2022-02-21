@@ -1,18 +1,18 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, isPy3k
-, libusb1
-, mock
-, pyasn1
-, pythonAtLeast
-, pycryptodome
-, pytestCheckHook
-, rsa
+{
+  lib,
+  aiofiles,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  isPy3k,
+  libusb1,
+  mock,
+  pyasn1,
+  pythonAtLeast,
+  pycryptodome,
+  pytestCheckHook,
+  rsa,
 }:
-
 buildPythonPackage rec {
   pname = "adb-shell";
   version = "0.4.2";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Python implementation of ADB with shell and FileSync functionality";
     homepage = "https://github.com/JeffLIrion/adb_shell";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    maintainers = with maintainers; [jamiemagee];
   };
 }

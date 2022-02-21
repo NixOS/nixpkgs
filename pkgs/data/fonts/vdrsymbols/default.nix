@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "vdrsymbols-20100612";
 
@@ -16,7 +18,7 @@ fetchzip {
     description = "DejaVu fonts with additional symbols used by VDR";
     homepage = "http://andreas.vdr-developer.org/fonts/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ ck3d ];
+    maintainers = with maintainers; [ck3d];
 
     # Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved.
     # Copyright (c) 2006 by Tavmjong Bah. All Rights Reserved.

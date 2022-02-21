@@ -1,21 +1,25 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.node-red;
   defaultUser = "node-red";
-  finalPackage = if cfg.withNpmAndGcc then node-red_withNpmAndGcc else cfg.package;
+  finalPackage =
+    if cfg.withNpmAndGcc
+    then node-red_withNpmAndGcc
+    else cfg.package;
   node-red_withNpmAndGcc = pkgs.runCommand "node-red" {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [pkgs.makeWrapper];
   }
   ''
     mkdir -p $out/bin
     makeWrapper ${pkgs.nodePackages.node-red}/bin/node-red $out/bin/node-red \
-      --set PATH '${lib.makeBinPath [ pkgs.nodePackages.npm pkgs.gcc ]}:$PATH' \
+      --set PATH '${lib.makeBinPath [pkgs.nodePackages.npm pkgs.gcc]}:$PATH' \
   '';
-in
-{
+in {
   options.services.node-red = {
     enable = mkEnableOption "the Node-RED service";
 
@@ -119,17 +123,17 @@ in
     };
 
     users.groups = optionalAttrs (cfg.group == defaultUser) {
-      ${defaultUser} = { };
+      ${defaultUser} = {};
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [cfg.port];
     };
 
     systemd.services.node-red = {
       description = "Node-RED Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
       environment = {
         HOME = cfg.userDir;
       };
@@ -142,7 +146,7 @@ in
           Restart = "always";
           WorkingDirectory = cfg.userDir;
         }
-        (mkIf (cfg.userDir == "/var/lib/node-red") { StateDirectory = "node-red"; })
+        (mkIf (cfg.userDir == "/var/lib/node-red") {StateDirectory = "node-red";})
       ];
     };
   };

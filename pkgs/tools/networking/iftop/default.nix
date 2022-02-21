@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, ncurses, libpcap, automake, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libpcap,
+  automake,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "iftop";
   version = "1.0pre4";
@@ -19,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ncurses libpcap];
 
-  passthru.tests = { inherit (nixosTests) iftop; };
+  passthru.tests = {inherit (nixosTests) iftop;};
 
   meta = with lib; {
     description = "Display bandwidth usage on a network interface";
@@ -31,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "http://ex-parrot.com/pdw/iftop/";
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

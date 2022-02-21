@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildGoPackage, libtool }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
+  libtool,
+}:
 buildGoPackage rec {
   pname = "notary";
   version = "0.6.1";
@@ -12,9 +16,9 @@ buildGoPackage rec {
     sha256 = "1ak9dk6vjny5069hp3w36dbjawcnaq82l3i2qvf7mn7zfglbsnf9";
   };
 
-  patches = [ ./no-git-usage.patch ];
+  patches = [./no-git-usage.patch];
 
-  buildInputs = [ libtool ];
+  buildInputs = [libtool];
   buildPhase = ''
     runHook preBuild
     cd go/src/github.com/theupdateframework/notary
@@ -59,7 +63,7 @@ buildGoPackage rec {
     '';
     license = licenses.asl20;
     homepage = "https://github.com/theupdateframework/notary";
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [vdemeester];
     platforms = platforms.unix;
   };
 }

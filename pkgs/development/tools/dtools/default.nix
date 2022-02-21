@@ -1,5 +1,11 @@
-{stdenv, lib, fetchFromGitHub, fetchpatch, ldc, curl}:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  ldc,
+  curl,
+}:
 stdenv.mkDerivation rec {
   pname = "dtools";
   version = "2.095.1";
@@ -20,8 +26,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ ldc ];
-  buildInputs = [ curl ];
+  nativeBuildInputs = [ldc];
+  buildInputs = [curl];
 
   makeCmd = ''
     make -f posix.mak all DMD_DIR=dmd DMD=${ldc.out}/bin/ldmd2 CC=${stdenv.cc}/bin/cc
@@ -34,18 +40,18 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-      $makeCmd test_rdmd
-    '';
+    $makeCmd test_rdmd
+  '';
 
   installPhase = ''
-      $makeCmd INSTALL_DIR=$out install
+    $makeCmd INSTALL_DIR=$out install
   '';
 
   meta = with lib; {
     description = "Ancillary tools for the D programming language compiler";
     homepage = "https://github.com/dlang/tools";
     license = lib.licenses.boost;
-    maintainers = with maintainers; [ ThomasMader ];
+    maintainers = with maintainers; [ThomasMader];
     platforms = lib.platforms.unix;
   };
 }

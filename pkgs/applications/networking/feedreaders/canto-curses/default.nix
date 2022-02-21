@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, python3Packages, readline, ncurses, canto-daemon }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  readline,
+  ncurses,
+  canto-daemon,
+}:
 python3Packages.buildPythonApplication rec {
   version = "0.9.9";
   pname = "canto-curses";
@@ -11,8 +17,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1vzb9n1j4gxigzll6654ln79lzbrrm6yy0lyazd9kldyl349b8sr";
   };
 
-  buildInputs = [ readline ncurses canto-daemon ];
-  propagatedBuildInputs = [ canto-daemon ];
+  buildInputs = [readline ncurses canto-daemon];
+  propagatedBuildInputs = [canto-daemon];
 
   meta = {
     description = "An ncurses-based console Atom/RSS feed reader";
@@ -27,6 +33,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://codezen.org/canto-ng/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.devhell ];
+    maintainers = [lib.maintainers.devhell];
   };
 }

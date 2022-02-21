@@ -1,23 +1,22 @@
-{ stdenvNoCC
-, lib
-, fetchzip
-}:
-
-let
-  makePackage =
-    { family
-    , description
-    , rev
-    , sha256
-    , postFetch ? ''
-        install -m444 -Dt $out/share/fonts/opentype/source-han-${family} $downloadedFile
-      ''
-    , zip ? ""
-    }:
-    let Family =
-      lib.toUpper (lib.substring 0 1 family) +
-      lib.substring 1 (lib.stringLength family) family;
-    in
+{
+  stdenvNoCC,
+  lib,
+  fetchzip,
+}: let
+  makePackage = {
+    family,
+    description,
+    rev,
+    sha256,
+    postFetch ? ''
+      install -m444 -Dt $out/share/fonts/opentype/source-han-${family} $downloadedFile
+    '',
+    zip ? "",
+  }: let
+    Family =
+      lib.toUpper (lib.substring 0 1 family)
+      + lib.substring 1 (lib.stringLength family) family;
+  in
     fetchzip {
       name = "source-han-${family}-${lib.removeSuffix "R" rev}";
 
@@ -28,11 +27,10 @@ let
         description = "An open source Pan-CJK ${description} typeface";
         homepage = "https://github.com/adobe-fonts/source-han-${family}";
         license = lib.licenses.ofl;
-        maintainers = with lib.maintainers; [ taku0 emily ];
+        maintainers = with lib.maintainers; [taku0 emily];
       };
     };
-in
-{
+in {
   sans = makePackage {
     family = "sans";
     description = "sans-serif";

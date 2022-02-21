@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "meslo-lgs-nf";
   version = "2021-09-03";
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Meslo Nerd Font patched for Powerlevel10k";
     homepage = "https://github.com/romkatv/powerlevel10k-media";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [bbigras];
     platforms = platforms.all;
   };
 }

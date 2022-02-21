@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "git-filter-repo";
   version = "2.34.0";
@@ -31,7 +31,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Quickly rewrite git repository history";
     homepage = "https://github.com/newren/git-filter-repo";
-    license = with licenses; [ mit /* or */ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      gpl2Plus
+    ];
+    maintainers = with maintainers; [fab];
   };
 }

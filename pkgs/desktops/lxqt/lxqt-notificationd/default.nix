@@ -1,18 +1,18 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, qtx11extras
-, lxqtUpdateScript
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  lxqt-build-tools,
+  qtbase,
+  qttools,
+  qtsvg,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  qtx11extras,
+  lxqtUpdateScript,
 }:
-
 mkDerivation rec {
   pname = "lxqt-notificationd";
   version = "1.0.0";
@@ -39,13 +39,13 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = lxqtUpdateScript {inherit pname version src;};
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-notificationd";
     description = "The LXQt notification daemon";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [romildo];
   };
 }

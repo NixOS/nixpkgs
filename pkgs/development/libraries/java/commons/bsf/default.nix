@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "commons-bsf";
   version = "2.4.0";
@@ -21,4 +24,3 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 }
-

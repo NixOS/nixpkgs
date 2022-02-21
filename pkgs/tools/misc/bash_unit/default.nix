@@ -1,7 +1,8 @@
-{ fetchFromGitHub
-, lib, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bash_unit";
   version = "1.9.1";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bash unit testing enterprise edition framework for professionals";
-    maintainers = with maintainers; [ pamplemousse ];
+    maintainers = with maintainers; [pamplemousse];
     platforms = platforms.all;
     license = licenses.gpl3Plus;
   };

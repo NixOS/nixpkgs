@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
-, pytest-datadir
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
+  pytest-datadir,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "jproperties";
   version = "2.1.1";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Java Property file parser and writer for Python";
     homepage = "https://github.com/Tblue/python-jproperties";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

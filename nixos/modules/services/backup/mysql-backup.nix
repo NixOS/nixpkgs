@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   inherit (pkgs) mariadb gzip;
 
   cfg = config.services.mysqlBackup;
@@ -20,7 +21,11 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mariadb}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    if ${mariadb}/bin/mysqldump ${
+      if cfg.singleTransaction
+      then "--single-transaction"
+      else ""
+    } ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -29,14 +34,9 @@ let
       failed="$failed ${db}"
     fi
   '';
-
-in
-
-{
+in {
   options = {
-
     services.mysqlBackup = {
-
       enable = mkEnableOption "MySQL backups";
 
       calendar = mkOption {
@@ -79,7 +79,6 @@ in
         '';
       };
     };
-
   };
 
   config = mkIf cfg.enable {
@@ -92,20 +91,21 @@ in
       };
     };
 
-    services.mysql.ensureUsers = [{
-      name = cfg.user;
-      ensurePermissions = with lib;
-        let
+    services.mysql.ensureUsers = [
+      {
+        name = cfg.user;
+        ensurePermissions = with lib; let
           privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
           grant = db: nameValuePair "${db}.*" privs;
         in
           listToAttrs (map grant cfg.databases);
-    }];
+      }
+    ];
 
     systemd = {
       timers.mysql-backup = {
         description = "Mysql backup timer";
-        wantedBy = [ "timers.target" ];
+        wantedBy = ["timers.target"];
         timerConfig = {
           OnCalendar = cfg.calendar;
           AccuracySec = "5m";
@@ -126,5 +126,4 @@ in
       ];
     };
   };
-
 }

@@ -1,5 +1,8 @@
-{ lib, fetchurl, appimageTools }:
-let
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}: let
   name = "vial-${version}";
   version = "0.4.2";
   pname = "Vial";
@@ -9,25 +12,25 @@ let
     sha256 = "sha256-T3aSwv/qTJHR/Fa6qU1fWbp3duvny4lC+9jBwQzpw2w=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 {inherit name src;};
 in
-appimageTools.wrapType2 {
-  inherit name src;
+  appimageTools.wrapType2 {
+    inherit name src;
 
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    extraInstallCommands = ''
+      mv $out/bin/${name} $out/bin/${pname}
+      install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
+      cp -r ${appimageContents}/usr/share/icons $out/share
 
-    mkdir -p $out/etc/udev/rules.d/ # https://get.vial.today/getting-started/linux-udev.html
-    echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
-  '';
+      mkdir -p $out/etc/udev/rules.d/ # https://get.vial.today/getting-started/linux-udev.html
+      echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
+    '';
 
-  meta = with lib; {
-    description = "An Open-source QMK GUI fork for configuring your keyboard in real time";
-    homepage = "https://get.vial.today";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kranzes ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "An Open-source QMK GUI fork for configuring your keyboard in real time";
+      homepage = "https://get.vial.today";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [kranzes];
+      platforms = ["x86_64-linux"];
+    };
+  }

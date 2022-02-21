@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "ip2location";
   version = "7.0.0";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
       any IP address or host name in the IP2Location databases.
     '';
     homepage = "https://www.ip2location.com/free/applications";
-    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    license = with licenses; [gpl3Plus lgpl3Plus];
     platforms = platforms.linux;
   };
 }

@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config
-, acl, librsync, ncurses, openssl, zlib, uthash }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  acl,
+  librsync,
+  ncurses,
+  openssl,
+  zlib,
+  uthash,
+}:
 stdenv.mkDerivation rec {
   pname = "burp";
   version = "2.2.18";
@@ -21,19 +32,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ librsync ncurses openssl zlib uthash ]
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs =
+    [librsync ncurses openssl zlib uthash]
     ++ lib.optional (!stdenv.isDarwin) acl;
 
-  configureFlags = [ "--localstatedir=/var" ];
+  configureFlags = ["--localstatedir=/var"];
 
-  installFlags = [ "localstatedir=/tmp" ];
+  installFlags = ["localstatedir=/tmp"];
 
   meta = with lib; {
     description = "BURP - BackUp and Restore Program";
-    homepage    = "https://burp.grke.org";
-    license     = licenses.agpl3;
-    maintainers = with maintainers; [ tokudan ];
-    platforms   = platforms.all;
+    homepage = "https://burp.grke.org";
+    license = licenses.agpl3;
+    maintainers = with maintainers; [tokudan];
+    platforms = platforms.all;
   };
 }

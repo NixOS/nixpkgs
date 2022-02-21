@@ -1,5 +1,8 @@
-{ rustPlatform, fetchFromGitHub, lib }:
-
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rpg-cli";
   version = "1.0.1";
@@ -20,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "Your filesystem as a dungeon";
     homepage = "https://github.com/facundoolano/rpg-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [lom];
   };
 }

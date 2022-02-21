@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gettext
-, libxml2
-, pkg-config
-, gtk3
-, cmake
-, ninja
-, vala
-, wrapGAppsHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  libxml2,
+  pkg-config,
+  gtk3,
+  cmake,
+  ninja,
+  vala,
+  wrapGAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "plotinus";
   version = "0.2.0";
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A searchable command palette in every modern GTK application";
     homepage = "https://github.com/p-e-w/plotinus";
-    maintainers = with maintainers; [ samdroid-apps ];
+    maintainers = with maintainers; [samdroid-apps];
     platforms = platforms.linux;
     # No COPYING file, but headers in the source code
     license = licenses.gpl3;

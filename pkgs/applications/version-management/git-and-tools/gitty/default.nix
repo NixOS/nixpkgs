@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "gitty";
   version = "0.7.0";
@@ -13,13 +16,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-qrLECQkjXH0aTHmysq64jnXj9jgbunpVtBAIXJOEYIY=";
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X=main.Version=${version}"];
 
   meta = with lib; {
     homepage = "https://github.com/muesli/gitty/";
     description = "Contextual information about your git projects, right on the command-line";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with maintainers; [izorkin];
   };
 }

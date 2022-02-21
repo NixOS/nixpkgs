@@ -1,15 +1,18 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  makeProg = args: pkgs.substituteAll (args // {
-    dir = "bin";
-    isExecutable = true;
-  });
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  makeProg = args:
+    pkgs.substituteAll (args
+    // {
+      dir = "bin";
+      isExecutable = true;
+    });
 
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
@@ -28,12 +31,12 @@ let
     ];
   };
 
-  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
+  nixos-rebuild = pkgs.nixos-rebuild.override {nix = config.nix.package.out;};
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+    perl = "${pkgs.perl.withPackages (p: [p.FileSlurp])}/bin/perl";
     detectvirt = "${pkgs.systemd}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
@@ -53,9 +56,11 @@ let
     inherit (config.system) configurationRevision;
     json = builtins.toJSON ({
       nixosVersion = config.system.nixos.version;
-    } // optionalAttrs (config.system.nixos.revision != null) {
+    }
+    // optionalAttrs (config.system.nixos.revision != null) {
       nixpkgsRevision = config.system.nixos.revision;
-    } // optionalAttrs (config.system.configurationRevision != null) {
+    }
+    // optionalAttrs (config.system.configurationRevision != null) {
       configurationRevision = config.system.configurationRevision;
     });
   };
@@ -65,11 +70,7 @@ let
     src = ./nixos-enter.sh;
     inherit (pkgs) runtimeShell;
   };
-
-in
-
-{
-
+in {
   options.system.nixos-generate-config = {
     configuration = mkOption {
       internal = true;
@@ -118,7 +119,6 @@ in
   };
 
   config = lib.mkIf (!config.system.disableInstallerTools) {
-
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
       # your system.  Help is available in the configuration.nix(5) man page
@@ -218,18 +218,18 @@ in
     '';
 
     environment.systemPackages =
-      [ nixos-build-vms
+      [
+        nixos-build-vms
         nixos-install
         nixos-rebuild
         nixos-generate-config
         nixos-version
         nixos-enter
-      ] ++ lib.optional (nixos-option != null) nixos-option;
+      ]
+      ++ lib.optional (nixos-option != null) nixos-option;
 
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
-
   };
-
 }

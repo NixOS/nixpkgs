@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hypothesis,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "priority";
   version = "2.0.0";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [
-     "priority"
+    "priority"
   ];
 
   checkInputs = [
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "A pure-Python implementation of the HTTP/2 priority tree";
     homepage = "https://github.com/python-hyper/priority/";
     license = licenses.mit;
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-autocomplete";
   version = "22.01.21";
@@ -22,6 +25,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/marlonrichert/zsh-autocomplete/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.em0lar ];
+    maintainers = [maintainers.em0lar];
   };
 }

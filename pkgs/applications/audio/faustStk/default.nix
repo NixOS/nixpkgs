@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, faust2jaqt, faust2lv2 }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "faustPhhysicalModeling";
   version = "2.20.2";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mm93ba26b7q69hvabzalg30dh8pl858nj4m2bb57pznnp09lq9a";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [faust2jaqt faust2lv2];
 
   buildPhase = ''
     cd examples/physicalModeling/faust-stk
@@ -34,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ccrma.stanford.edu/~rmichon/faustSTK/";
     license = licenses.stk;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [magnetophon];
   };
 }

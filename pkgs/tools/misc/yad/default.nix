@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, autoreconfHook, wrapGAppsHook
-, gtk3, hicolor-icon-theme, netpbm }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  intltool,
+  autoreconfHook,
+  wrapGAppsHook,
+  gtk3,
+  hicolor-icon-theme,
+  netpbm,
+}:
 stdenv.mkDerivation rec {
   pname = "yad";
   version = "10.1";
@@ -18,9 +27,9 @@ stdenv.mkDerivation rec {
     "--with-rgb=${placeholder "out"}/share/yad/rgb.txt"
   ];
 
-  buildInputs = [ gtk3 hicolor-icon-theme ];
+  buildInputs = [gtk3 hicolor-icon-theme];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config intltool wrapGAppsHook ];
+  nativeBuildInputs = [autoreconfHook pkg-config intltool wrapGAppsHook];
 
   postPatch = ''
     sed -i src/file.c -e '21i#include <glib/gprintf.h>'
@@ -44,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl3;
-    maintainers = with maintainers; [ smironov ];
+    maintainers = with maintainers; [smironov];
     platforms = with platforms; linux;
   };
 }

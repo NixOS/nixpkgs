@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "peach";
   version = "0.9.8";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "Web server for multi-language, real-time synchronization and searchable documentation";
     homepage = "https://peachdocs.org/";
     license = licenses.asl20;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
   };
 }

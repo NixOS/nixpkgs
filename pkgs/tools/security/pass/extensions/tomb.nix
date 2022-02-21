@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, tomb }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  tomb,
+}:
 stdenv.mkDerivation rec {
   pname = "pass-tomb";
   version = "1.3";
@@ -11,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kbbMHmYmeyt7HM8YiNhknePm1vUaXWWXPWePKGpbU+o=";
   };
 
-  buildInputs = [ tomb ];
+  buildInputs = [tomb];
 
   dontBuild = true;
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = ["PREFIX=$(out)"];
 
   postFixup = ''
     substituteInPlace $out/lib/password-store/extensions/tomb.bash \
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Pass extension that keeps the password store encrypted inside a tomb";
     homepage = "https://github.com/roddhjav/pass-tomb";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
+    maintainers = with maintainers; [lovek323 fpletz tadfisher];
     platforms = platforms.unix;
   };
 }

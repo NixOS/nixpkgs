@@ -1,9 +1,23 @@
-{ lib, stdenv, substituteAll, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash }:
-
-let
-
-  common = { pname, sha256, suffix ? "" }: let
-    legacySuffix = if suffix == "-nons" then "" else "-ns";
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchurl,
+  fetchpatch,
+  findXMLCatalogs,
+  writeScriptBin,
+  ruby,
+  bash,
+}: let
+  common = {
+    pname,
+    sha256,
+    suffix ? "",
+  }: let
+    legacySuffix =
+      if suffix == "-nons"
+      then ""
+      else "-ns";
     self = stdenv.mkDerivation rec {
       inherit pname;
       version = "1.79.2";
@@ -38,7 +52,7 @@ let
         })
       ];
 
-      propagatedBuildInputs = [ findXMLCatalogs ];
+      propagatedBuildInputs = [findXMLCatalogs];
 
       dontBuild = true;
 
@@ -57,23 +71,22 @@ let
       '';
 
       passthru.dbtoepub = writeScriptBin "dbtoepub"
-        ''
-          #!${bash}/bin/bash
-          exec -a dbtoepub ${ruby}/bin/ruby ${self}/share/xml/${pname}/epub/bin/dbtoepub "$@"
-        '';
+      ''
+        #!${bash}/bin/bash
+        exec -a dbtoepub ${ruby}/bin/ruby ${self}/share/xml/${pname}/epub/bin/dbtoepub "$@"
+      '';
 
       meta = {
         homepage = "https://github.com/docbook/wiki/wiki/DocBookXslStylesheets";
         description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
         license = lib.licenses.mit;
-        maintainers = [ lib.maintainers.eelco ];
+        maintainers = [lib.maintainers.eelco];
         platforms = lib.platforms.all;
       };
     };
-  in self;
-
+  in
+    self;
 in {
-
   docbook-xsl-nons = common {
     pname = "docbook-xsl-nons";
     suffix = "-nons";

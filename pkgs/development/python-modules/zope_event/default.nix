@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "zope.event";
   version = "4.5.0";
@@ -16,7 +16,6 @@ buildPythonPackage rec {
     description = "An event publishing system";
     homepage = "https://pypi.python.org/pypi/zope.event";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [goibhniu];
   };
-
 }

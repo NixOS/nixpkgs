@@ -1,18 +1,18 @@
-{ lib
-, aiohttp
-, apispec
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, fetchPypi
-, jinja2
-, packaging
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, webargs
+{
+  lib,
+  aiohttp,
+  apispec,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  jinja2,
+  packaging,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  webargs,
 }:
-
 buildPythonPackage rec {
   pname = "aiohttp-apispec";
   version = "3.0.0b1";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Build and document REST APIs with aiohttp and apispec";
     homepage = "https://github.com/maximdanilchenko/aiohttp-apispec/";
     license = licenses.mit;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [viric];
   };
 }

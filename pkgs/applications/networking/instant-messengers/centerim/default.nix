@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, gnused, openssl, curl, ncurses, libjpeg
-, withGpg ? true, gpgme ? null}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnused,
+  openssl,
+  curl,
+  ncurses,
+  libjpeg,
+  withGpg ? true,
+  gpgme ? null,
+}:
 stdenv.mkDerivation rec {
   version = "5.0.1";
   pname = "centerim5";
@@ -12,7 +21,8 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = "-std=gnu++98";
 
-  buildInputs = [ openssl curl ncurses libjpeg ]
+  buildInputs =
+    [openssl curl ncurses libjpeg]
     ++ lib.optional withGpg gpgme;
 
   preConfigure = ''

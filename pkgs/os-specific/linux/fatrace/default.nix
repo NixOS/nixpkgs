@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fatrace";
   version = "0.16.3";
@@ -15,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-w7leZPdmiTc+avihP203e6GLvbRzbCtNOJdF8MM2v68=";
   };
 
-  buildInputs = [ python3 which ];
+  buildInputs = [python3 which];
 
   postPatch = ''
     substituteInPlace power-usage-report \
       --replace "'which'" "'${which}/bin/which'"
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Report system-wide file access events";

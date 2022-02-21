@@ -1,19 +1,19 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, jdk8
-, jdk
-, zlib
-, file
-, makeWrapper
-, xorg
-, libpulseaudio
-, qtbase
-, libGL
-, msaClientID ? ""
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  jdk8,
+  jdk,
+  zlib,
+  file,
+  makeWrapper,
+  xorg,
+  libpulseaudio,
+  qtbase,
+  libGL,
+  msaClientID ? "",
 }:
-
 mkDerivation rec {
   pname = "polymc";
   version = "1.0.6";
@@ -26,8 +26,8 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake file makeWrapper ];
-  buildInputs = [ qtbase jdk8 zlib ];
+  nativeBuildInputs = [cmake file makeWrapper];
+  buildInputs = [qtbase jdk8 zlib];
 
   postPatch = ''
     # hardcode jdk paths
@@ -36,27 +36,29 @@ mkDerivation rec {
       --replace 'scanJavaDir("/usr/lib32/jvm")' 'javas.append("${jdk8}/lib/openjdk/bin/java")'
   '';
 
-  cmakeFlags = [ "-DLauncher_LAYOUT=lin-system" ] ++
-               lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];
+  cmakeFlags =
+    ["-DLauncher_LAYOUT=lin-system"]
+    ++ lib.optionals (msaClientID != "") ["-DLauncher_MSA_CLIENT_ID=${msaClientID}"];
 
   dontWrapQtApps = true;
 
   postInstall = let
-    libpath = with xorg; lib.makeLibraryPath [
-      libX11
-      libXext
-      libXcursor
-      libXrandr
-      libXxf86vm
-      libpulseaudio
-      libGL
-    ];
+    libpath = with xorg;
+      lib.makeLibraryPath [
+        libX11
+        libXext
+        libXcursor
+        libXrandr
+        libXxf86vm
+        libpulseaudio
+        libGL
+      ];
   in ''
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
     wrapProgram $out/bin/polymc \
       "''${qtWrapperArgs[@]}" \
       --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} \
-      --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
+      --prefix PATH : ${lib.makeBinPath [xorg.xrandr]}
   '';
 
   meta = with lib; {
@@ -69,6 +71,6 @@ mkDerivation rec {
     '';
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cleverca22 starcraft66 ];
+    maintainers = with maintainers; [cleverca22 starcraft66];
   };
 }

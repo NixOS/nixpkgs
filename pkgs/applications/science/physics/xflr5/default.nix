@@ -1,5 +1,9 @@
-{ mkDerivation, lib, fetchurl, qmake }:
-
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  qmake,
+}:
 mkDerivation rec {
   pname = "xflr5";
   version = "6.47";
@@ -9,13 +13,13 @@ mkDerivation rec {
     sha256 = "02x3r9iv3ndwxa65mxn9m5dlhcrnjiq7cffi6rmb456gs3v3dnav";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [qmake];
 
   meta = with lib; {
     description = "An analysis tool for airfoils, wings and planes";
     homepage = "https://sourceforge.net/projects/xflr5/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.esclear ];
+    maintainers = [maintainers.esclear];
     platforms = platforms.linux;
   };
 }

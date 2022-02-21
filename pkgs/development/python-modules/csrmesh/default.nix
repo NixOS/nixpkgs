@@ -1,10 +1,10 @@
-{ lib
-, bluepy
-, buildPythonPackage
-, fetchPypi
-, pycryptodomex
+{
+  lib,
+  bluepy,
+  buildPythonPackage,
+  fetchPypi,
+  pycryptodomex,
 }:
-
 buildPythonPackage rec {
   pname = "csrmesh";
   version = "0.10.0";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   # Project has no test
   doCheck = false;
-  pythonImportsCheck = [ "csrmesh" ];
+  pythonImportsCheck = ["csrmesh"];
 
   meta = with lib; {
     description = "Python implementation of the CSRMesh bridge protocol";
     homepage = "https://github.com/nkaminski/csrmesh";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [lgpl3Only];
+    maintainers = with maintainers; [fab];
   };
 }

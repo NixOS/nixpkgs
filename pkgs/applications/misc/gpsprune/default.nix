@@ -1,5 +1,13 @@
-{ fetchurl, lib, stdenv, makeDesktopItem, makeWrapper, unzip, jre, copyDesktopItems }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  jre,
+  copyDesktopItems,
+}:
 stdenv.mkDerivation rec {
   pname = "gpsprune";
   version = "21.1";
@@ -11,8 +19,8 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper copyDesktopItems];
+  buildInputs = [jre];
 
   desktopItems = [
     (makeDesktopItem {
@@ -42,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Application for viewing, editing and converting GPS coordinate data";
     homepage = "https://activityworkshop.net/software/gpsprune/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rycee ];
+    maintainers = with maintainers; [rycee];
     platforms = platforms.all;
   };
 }

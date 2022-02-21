@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchurl, callPackage, libpng12, imagemagick
-, autoreconfHook, glib, pstoedit, pkg-config, gettext, gd, darwin
-, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  callPackage,
+  libpng12,
+  imagemagick,
+  autoreconfHook,
+  glib,
+  pstoedit,
+  pkg-config,
+  gettext,
+  gd,
+  darwin,
+  runtimeShell,
+}:
 # TODO: Figure out why the resultant binary is somehow linked against
 # libpng16.so.16 rather than libpng12.
-
 stdenv.mkDerivation rec {
   pname = "autotrace";
   version = "0.31.1";
@@ -34,10 +45,11 @@ stdenv.mkDerivation rec {
   #'';
 
   autofig = callPackage ./autofig.nix {};
-  nativeBuildInputs = [ autoreconfHook glib autofig pkg-config gettext ];
-  buildInputs = [ libpng12 imagemagick pstoedit ]
+  nativeBuildInputs = [autoreconfHook glib autofig pkg-config gettext];
+  buildInputs =
+    [libpng12 imagemagick pstoedit]
     ++ lib.optionals stdenv.isDarwin
-       (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
+    (with darwin.apple_sdk.frameworks; [gd ApplicationServices]);
 
   postUnpack = ''
     pushd $sourceRoot
@@ -65,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "http://autotrace.sourceforge.net/";
     description = "Utility for converting bitmap into vector graphics";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ hodapp ];
+    maintainers = with maintainers; [hodapp];
     license = licenses.gpl2;
     knownVulnerabilities = [
       "CVE-2013-1953"

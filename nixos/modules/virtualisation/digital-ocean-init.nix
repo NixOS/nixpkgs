@@ -1,6 +1,10 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.virtualisation.digitalOcean;
   defaultConfigFile = pkgs.writeText "digitalocean-configuration.nix" ''
     { modulesPath, lib, ... }:
@@ -34,11 +38,11 @@ in {
   config = {
     systemd.services.digitalocean-init = mkIf cfg.rebuildFromUserData {
       description = "Reconfigure the system from Digital Ocean userdata on startup";
-      wantedBy = [ "network-online.target" ];
+      wantedBy = ["network-online.target"];
       unitConfig = {
         ConditionPathExists = "!/etc/nixos/do-userdata.nix";
-        After = [ "digitalocean-metadata.service" "network-online.target" ];
-        Requires = [ "digitalocean-metadata.service" ];
+        After = ["digitalocean-metadata.service" "network-online.target"];
+        Requires = ["digitalocean-metadata.service"];
         X-StopOnRemoval = false;
       };
       serviceConfig = {
@@ -46,7 +50,7 @@ in {
         RemainAfterExit = true;
       };
       restartIfChanged = false;
-      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep pkgs.systemd config.nix.package config.system.build.nixos-rebuild ];
+      path = [pkgs.jq pkgs.gnused pkgs.gnugrep pkgs.systemd config.nix.package config.system.build.nixos-rebuild];
       environment = {
         HOME = "/root";
         NIX_PATH = concatStringsSep ":" [
@@ -88,8 +92,8 @@ in {
         else
           echo "no user data is available"
         fi
-        '';
+      '';
     };
   };
-  meta.maintainers = with maintainers; [ arianvp eamsden ];
+  meta.maintainers = with maintainers; [arianvp eamsden];
 }

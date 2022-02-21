@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, isPyPy
-, ipython
-, python
-, scikit-build
-, cmake
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  isPyPy,
+  ipython,
+  python,
+  scikit-build,
+  cmake,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "line-profiler";
   version = "3.4.0";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Line-by-line profiler";
     homepage = "https://github.com/pyutils/line_profiler";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    maintainers = with maintainers; [fridh];
   };
 }

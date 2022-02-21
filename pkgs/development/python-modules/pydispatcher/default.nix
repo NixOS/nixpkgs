@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
-
 buildPythonPackage rec {
   version = "2.0.5";
   pname = "pydispatcher";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1bswbmhlbqdxlgbxlb6xrlm4k253sg8nvpl1whgsys8p3fg0cw2m";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     py.test
@@ -24,5 +24,4 @@ buildPythonPackage rec {
     description = "Signal-registration and routing infrastructure for use in multiple contexts";
     license = licenses.bsd3;
   };
-
 }

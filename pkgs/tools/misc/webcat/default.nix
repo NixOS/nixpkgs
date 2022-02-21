@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitea, asciidoctor, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  asciidoctor,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "webcat";
   version = "unstable-2021-09-06";
@@ -14,7 +19,7 @@ buildGoModule rec {
 
   vendorSha256 = "1apnra58mqrazbq53f0qlqnyyhjdvvdz995yridxva0fxmwpwcjy";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [asciidoctor installShellFiles];
 
   postInstall = ''
     make -C man man
@@ -25,6 +30,6 @@ buildGoModule rec {
     homepage = "https://rumpelsepp.org/blog/ssh-through-websocket/";
     description = "The lightweight swiss army knife for websockets";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ montag451 ];
+    maintainers = with maintainers; [montag451];
   };
 }

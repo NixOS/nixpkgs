@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pv";
   version = "1.6.20";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.ivarch.com/programs/pv";
     description = "Tool for monitoring the progress of data through a pipeline";
     license = lib.licenses.artistic2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
     platforms = with lib.platforms; all;
   };
 }

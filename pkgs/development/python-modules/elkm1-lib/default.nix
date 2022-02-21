@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "elkm1-lib";
   version = "1.0.0";
@@ -45,12 +45,12 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [ "elkm1_lib" ];
+  pythonImportsCheck = ["elkm1_lib"];
 
   meta = with lib; {
     description = "Python module for interacting with ElkM1 alarm/automation panel";
     homepage = "https://github.com/gwww/elkm1";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

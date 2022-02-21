@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, oauthlib
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  oauthlib,
+  python-dateutil,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "discogs-client";
   version = "2.3.13";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Unofficial Python API client for Discogs";
     homepage = "https://github.com/joalla/discogs_client";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

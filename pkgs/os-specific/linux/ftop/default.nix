@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "ftop";
   version = "1.0";
@@ -9,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "3a705f4f291384344cd32c3dd5f5f6a7cd7cea7624c83cb7e923966dbcd47f82";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
   patches = [
     ./ftop-fix_buffer_overflow.patch
     ./ftop-fix_printf_format.patch
   ];
-  patchFlags = [ "-p0" ];
+  patchFlags = ["-p0"];
 
   postPatch = ''
     substituteInPlace configure --replace "curses" "ncurses"

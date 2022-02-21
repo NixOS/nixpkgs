@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip rec {
   name = "encode-sans-1.002";
 
@@ -25,7 +27,7 @@ fetchzip rec {
     '';
     homepage = "https://github.com/impallari/Encode-Sans";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = with maintainers; [cmfwyp];
     platforms = platforms.all;
   };
 }

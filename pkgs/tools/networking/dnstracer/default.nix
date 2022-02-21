@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libresolv, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libresolv,
+  perl,
+}:
 stdenv.mkDerivation rec {
   version = "1.10";
   pname = "dnstracer";
@@ -9,9 +14,14 @@ stdenv.mkDerivation rec {
     sha256 = "089bmrjnmsga2n0r4xgw4bwbf41xdqsnmabjxhw8lngg2pns1kb4";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [
+    perl
+    /*
+     for pod2man
+     */
+  ];
 
   setOutputFlags = false;
 
@@ -20,7 +30,7 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $man/share/man/man8 dnstracer.8
   '';
 
-  buildInputs = [] ++ lib.optionals stdenv.isDarwin [ libresolv ];
+  buildInputs = [] ++ lib.optionals stdenv.isDarwin [libresolv];
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lresolv";
 
@@ -28,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";
     homepage = "http://www.mavetju.org/unix/general.php";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.all;
   };
 }

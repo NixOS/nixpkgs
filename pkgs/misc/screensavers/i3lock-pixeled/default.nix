@@ -1,5 +1,12 @@
-{ lib, stdenv, i3lock, imagemagick, scrot, playerctl, fetchFromGitLab }:
-
+{
+  lib,
+  stdenv,
+  i3lock,
+  imagemagick,
+  scrot,
+  playerctl,
+  fetchFromGitLab,
+}:
 stdenv.mkDerivation rec {
   pname = "i3lock-pixeled";
   version = "1.2.1";
@@ -35,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/Ma27/i3lock-pixeled";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

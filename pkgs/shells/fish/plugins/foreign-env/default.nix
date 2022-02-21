@@ -1,5 +1,11 @@
-{ lib, buildFishPlugin, fetchFromGitHub, gnused, bash, coreutils }:
-
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  gnused,
+  bash,
+  coreutils,
+}:
 buildFishPlugin {
   pname = "foreign-env";
   version = "unstable-2020-02-09";
@@ -11,7 +17,7 @@ buildFishPlugin {
     sha256 = "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs";
   };
 
-  patches = [ ./suppress-harmless-warnings.patch ];
+  patches = [./suppress-harmless-warnings.patch];
 
   preInstall = ''
     sed -e "s|sed|${gnused}/bin/sed|" \
@@ -23,7 +29,7 @@ buildFishPlugin {
   meta = with lib; {
     description = "A foreign environment interface for Fish shell";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich ];
+    maintainers = with maintainers; [jgillich];
     platforms = with platforms; unix;
   };
 }

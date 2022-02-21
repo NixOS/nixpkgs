@@ -1,10 +1,10 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, sqlalchemy
-, snowflake-connector-python
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  sqlalchemy,
+  snowflake-connector-python,
 }:
-
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
   version = "1.3.3";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   # Pypi does not include tests
   doCheck = false;
-  pythonImportsCheck = [ "snowflake.sqlalchemy" ];
+  pythonImportsCheck = ["snowflake.sqlalchemy"];
 
   meta = with lib; {
     description = "Snowflake SQLAlchemy Dialect";
     homepage = "https://www.snowflake.net/";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

@@ -1,10 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, addOpenGLRunpath
-, cudatoolkit
-, cutensor_cudatoolkit
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  addOpenGLRunpath,
+  cudatoolkit,
+  cutensor_cudatoolkit,
+}: let
   rev = "5aab680905d853bce0dbad4c488e4f7e9f7b2302";
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -14,8 +16,8 @@ let
   };
   commonAttrs = {
     version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
-    nativeBuildInputs = [ cmake addOpenGLRunpath ];
-    buildInputs = [ cudatoolkit ];
+    nativeBuildInputs = [cmake addOpenGLRunpath];
+    buildInputs = [cudatoolkit];
     postFixup = ''
       for exe in $out/bin/*; do
         addOpenGLRunpath $exe
@@ -29,19 +31,19 @@ let
         cuSPARSE, cuSOLVER, cuFFT, cuRAND, NPP and nvJPEG.
       '';
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+      maintainers = with lib.maintainers; [obsidian-systems-maintenance];
     };
   };
-in
-
-{
-  cublas = stdenv.mkDerivation (commonAttrs // {
+in {
+  cublas = stdenv.mkDerivation (commonAttrs
+  // {
     pname = "cuda-library-samples-cublas";
 
     src = "${src}/cuBLASLt";
   });
 
-  cusolver = stdenv.mkDerivation (commonAttrs // {
+  cusolver = stdenv.mkDerivation (commonAttrs
+  // {
     pname = "cuda-library-samples-cusolver";
 
     src = "${src}/cuSOLVER";
@@ -49,7 +51,8 @@ in
     sourceRoot = "cuSOLVER/gesv";
   });
 
-  cutensor = stdenv.mkDerivation (commonAttrs // {
+  cutensor = stdenv.mkDerivation (commonAttrs
+  // {
     pname = "cuda-library-samples-cutensor";
 
     src = "${src}/cuTENSOR";

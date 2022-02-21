@@ -1,12 +1,56 @@
-{ pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
-, makeDesktopItem, lib, stdenv, wrapGAppsHook, alsa-lib, at-spi2-atk
-, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
-, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11
-, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
-, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
-, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript
-, common-updater-scripts }:
-
+{
+  pname,
+  version,
+  src,
+  meta,
+  binaryName,
+  desktopName,
+  autoPatchelfHook,
+  makeDesktopItem,
+  lib,
+  stdenv,
+  wrapGAppsHook,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libcxx,
+  libdrm,
+  libnotify,
+  libpulseaudio,
+  libuuid,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libxcb,
+  libxshmfence,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  libappindicator-gtk3,
+  libdbusmenu,
+  writeScript,
+  common-updater-scripts,
+}:
 stdenv.mkDerivation rec {
   inherit pname version src meta;
 
@@ -109,7 +153,7 @@ stdenv.mkDerivation rec {
     #!nix-shell -i bash -p curl gnugrep common-updater-scripts
     set -eou pipefail;
     url=$(curl -sI "https://discordapp.com/api/download/${
-      builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
+      builtins.replaceStrings ["discord-" "discord"] ["" "stable"] pname
     }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
     version=''${url##https://dl*.discordapp.net/apps/linux/}
     version=''${version%%/*.tar.gz}

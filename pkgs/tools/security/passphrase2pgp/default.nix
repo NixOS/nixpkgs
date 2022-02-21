@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "passphrase2pgp";
   version = "1.2.0";
@@ -22,6 +25,6 @@ buildGoModule rec {
     description = "Predictable, passphrase-based PGP key generator";
     homepage = "https://github.com/skeeto/passphrase2pgp";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ kaction ];
+    maintainers = with maintainers; [kaction];
   };
 }

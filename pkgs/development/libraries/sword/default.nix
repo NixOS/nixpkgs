@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, icu, clucene_core, curl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  icu,
+  clucene_core,
+  curl,
+}:
 stdenv.mkDerivation rec {
-
   pname = "sword";
   version = "1.8.1";
 
@@ -10,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "14syphc47g6svkbg018nrsgq4z6hid1zydax243g8dx747vsi6nf";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ icu clucene_core curl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [icu clucene_core curl];
 
   prePatch = ''
     patchShebangs .;
   '';
 
-  configureFlags = [ "--without-conf" "--enable-tests=no" ];
+  configureFlags = ["--without-conf" "--enable-tests=no"];
   CXXFLAGS = [
     "-Wno-unused-but-set-variable"
     # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
@@ -37,8 +43,7 @@ stdenv.mkDerivation rec {
       texts in around 100 languages.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ piotr AndersonTorres ];
+    maintainers = with maintainers; [piotr AndersonTorres];
     platforms = platforms.unix;
   };
-
 }

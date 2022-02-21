@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "3proxy";
   version = "0.9.4";
@@ -26,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/z3APA3A/3proxy";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ misuzu ];
+    maintainers = with maintainers; [misuzu];
   };
 }

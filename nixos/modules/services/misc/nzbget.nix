@@ -1,24 +1,28 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.nzbget;
   pkg = pkgs.nzbget;
   stateDir = "/var/lib/nzbget";
   configFile = "${stateDir}/nzbget.conf";
   configOpts = concatStringsSep " " (mapAttrsToList (name: value: "-o ${name}=${escapeShellArg (toStr value)}") cfg.settings);
   toStr = v:
-    if v == true then "yes"
-    else if v == false then "no"
-    else if isInt v then toString v
+    if v == true
+    then "yes"
+    else if v == false
+    then "no"
+    else if isInt v
+    then toString v
     else v;
-in
-{
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "configFile" ] "The configuration of nzbget is now managed by users through the web interface.")
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "dataDir" ] "The data directory for nzbget is now /var/lib/nzbget.")
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
+    (mkRemovedOptionModule ["services" "misc" "nzbget" "configFile"] "The configuration of nzbget is now managed by users through the web interface.")
+    (mkRemovedOptionModule ["services" "misc" "nzbget" "dataDir"] "The data directory for nzbget is now /var/lib/nzbget.")
+    (mkRemovedOptionModule ["services" "misc" "nzbget" "openFirewall"] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
   ];
 
   # interface
@@ -40,7 +44,7 @@ in
       };
 
       settings = mkOption {
-        type = with types; attrsOf (oneOf [ bool int str ]);
+        type = with types; attrsOf (oneOf [bool int str]);
         default = {};
         description = ''
           NZBGet configuration, passed via command line using switch -o. Refer to
@@ -75,8 +79,8 @@ in
 
     systemd.services.nzbget = {
       description = "NZBGet Daemon";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       path = with pkgs; [
         unrar
         p7zip

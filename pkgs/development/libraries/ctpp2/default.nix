@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "ctpp2";
   version = "2.8.3";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z22zfw9lb86z4hcan9hlvji49c9b7vznh7gjm95gnvsh43zsgx8";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   patchPhase = ''
     # include <unistd.h> to fix undefined getcwd
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A high performance templating engine";
     homepage = "http://ctpp.havoc.ru";
-    maintainers = [ maintainers.robbinch ];
+    maintainers = [maintainers.robbinch];
     platforms = platforms.linux;
     license = licenses.bsd2;
   };

@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, boost, cmake, git }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  git,
+}:
 stdenv.mkDerivation rec {
   pname = "openttd-grfcodec";
   version = "unstable-2021-03-10";
@@ -21,8 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Low-level (dis)assembler and linter for OpenTTD GRF files";
-    homepage    = "http://openttd.org/";
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ ToxicFrog ];
+    homepage = "http://openttd.org/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ToxicFrog];
   };
 }

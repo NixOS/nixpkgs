@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "chezmoi";
   version = "2.12.0";
@@ -16,10 +20,13 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.builtBy=nixpkgs"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.builtBy=nixpkgs"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installShellCompletion --bash --name chezmoi.bash completions/chezmoi-completion.bash
@@ -27,12 +34,12 @@ buildGoModule rec {
     installShellCompletion --zsh completions/chezmoi.zsh
   '';
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     homepage = "https://www.chezmoi.io/";
     description = "Manage your dotfiles across multiple machines, securely";
     license = licenses.mit;
-    maintainers = with maintainers; [ jhillyerd ];
+    maintainers = with maintainers; [jhillyerd];
   };
 }

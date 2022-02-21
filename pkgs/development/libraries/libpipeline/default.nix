@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libpipeline";
   version = "1.5.4";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-23hb3boKN+8UtO+Cri0YuIJOaYPfuZEDGTheKN8/Gpw=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
+  patches = lib.optionals stdenv.isDarwin [./fix-on-osx.patch];
 
   meta = with lib; {
     homepage = "http://libpipeline.nongnu.org";

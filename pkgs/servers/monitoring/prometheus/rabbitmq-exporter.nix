@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "rabbitmq_exporter";
   version = "1.0.0-RC8";
@@ -17,7 +20,7 @@ buildGoModule rec {
     description = "Prometheus exporter for RabbitMQ";
     homepage = "https://github.com/kbudde/rabbitmq_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.unix;
   };
 }

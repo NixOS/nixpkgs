@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
   version = "4.1.0";
@@ -50,11 +50,11 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "A daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [maintainers.bzizou];
     platforms = platforms.linux;
   };
 }

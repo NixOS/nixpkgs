@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, zlib, libtiff, libxml2, SDL, xorgproto, libX11
-, libXi, libXmu, libXext, libGLU, libGL }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  libtiff,
+  libxml2,
+  SDL,
+  xorgproto,
+  libX11,
+  libXi,
+  libXmu,
+  libXext,
+  libGLU,
+  libGL,
+}:
 stdenv.mkDerivation rec {
   pname = "stardust";
   version = "0.1.13";
@@ -11,13 +24,22 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    zlib libtiff libxml2 SDL xorgproto libX11 libXi
-    libXmu libXext libGLU libGL
+    zlib
+    libtiff
+    libxml2
+    SDL
+    xorgproto
+    libX11
+    libXi
+    libXmu
+    libXext
+    libGLU
+    libGL
   ];
 
-  installFlags = [ "bindir=\${out}/bin" ];
+  installFlags = ["bindir=\${out}/bin"];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   postConfigure = ''
     substituteInPlace config.h \
@@ -26,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Space flight simulator";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

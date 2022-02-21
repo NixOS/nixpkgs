@@ -1,24 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, meson
-, ninja
-
-, pkg-config
-, python3
-, pygobject3
-, gobject-introspection
-, gst-plugins-base
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  pygobject3,
+  gobject-introspection,
+  gst-plugins-base,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "gst-python";
   version = "1.20.0";
 
   format = "other";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";

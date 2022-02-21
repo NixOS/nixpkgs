@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, SDL2, SDL2_ttf, SDL2_image, SDL2_mixer, pkg-config, lua, zlib, unzip }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL2,
+  SDL2_ttf,
+  SDL2_image,
+  SDL2_mixer,
+  pkg-config,
+  lua,
+  zlib,
+  unzip,
+}: let
   # I took several games at random from https://instead.syscall.ru/games/
   games = [
     (fetchurl {
@@ -25,47 +35,46 @@ let
     })
   ];
 in
+  stdenv.mkDerivation rec {
+    pname = "instead";
+    version = "3.3.2";
 
-stdenv.mkDerivation rec {
-  pname = "instead";
-  version = "3.3.2";
+    src = fetchurl {
+      url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
+      sha256 = "u5j2kDKRvMQPsG8iA6uOBScuyE/e1BJIK2+qVL6jqQs=";
+    };
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
-    sha256 = "u5j2kDKRvMQPsG8iA6uOBScuyE/e1BJIK2+qVL6jqQs=";
-  };
+    NIX_LDFLAGS = "-llua -lgcc_s";
 
-  NIX_LDFLAGS = "-llua -lgcc_s";
+    nativeBuildInputs = [pkg-config unzip];
+    buildInputs = [SDL2 SDL2_ttf SDL2_image SDL2_mixer lua zlib];
 
-  nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [ SDL2 SDL2_ttf SDL2_image SDL2_mixer lua zlib ];
+    postPatch = ''
+      substituteInPlace configure.sh \
+        --replace "/tmp/sdl-test" $(mktemp)
+    '';
 
-  postPatch = ''
-    substituteInPlace configure.sh \
-      --replace "/tmp/sdl-test" $(mktemp)
-  '';
+    configurePhase = ''
+      { echo 2; echo $out; } | ./configure.sh
+    '';
 
-  configurePhase = ''
-    { echo 2; echo $out; } | ./configure.sh
-  '';
+    inherit games;
 
-  inherit games;
+    postInstall = ''
+      pushd $out/share/instead/games
+      for a in $games; do
+        unzip $a
+      done
+      popd
+    '';
 
-  postInstall = ''
-    pushd $out/share/instead/games
-    for a in $games; do
-      unzip $a
-    done
-    popd
-  '';
+    enableParallelBuilding = true;
 
-  enableParallelBuilding = true;
-
-  meta = with lib; {
-    description = "Simple text adventure interpreter for Unix and Windows";
-    homepage = "https://instead.syscall.ru/";
-    license = lib.licenses.gpl2;
-    platforms = with lib.platforms; linux;
-    maintainers = with maintainers; [ pSub ];
-  };
-}
+    meta = with lib; {
+      description = "Simple text adventure interpreter for Unix and Windows";
+      homepage = "https://instead.syscall.ru/";
+      license = lib.licenses.gpl2;
+      platforms = with lib.platforms; linux;
+      maintainers = with maintainers; [pSub];
+    };
+  }

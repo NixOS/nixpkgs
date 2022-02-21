@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
-
 buildGoModule rec {
   pname = "kubeone";
   version = "1.4.0";
@@ -31,6 +31,6 @@ buildGoModule rec {
     description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments.";
     homepage = "https://kubeone.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lblasc ];
+    maintainers = with lib.maintainers; [lblasc];
   };
 }

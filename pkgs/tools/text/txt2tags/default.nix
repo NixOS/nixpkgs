@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python2,
+}:
 stdenv.mkDerivation rec {
   version = "2.6";
   pname = "txt2tags";
@@ -7,7 +11,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   # Python script, needs the interpreter
-  propagatedBuildInputs = [ python2 ];
+  propagatedBuildInputs = [python2];
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -28,8 +32,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://txt2tags.org/";
     description = "A KISS markup language";
-    license  = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ kovirobi ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [kovirobi];
     platforms = with lib.platforms; unix;
   };
 }

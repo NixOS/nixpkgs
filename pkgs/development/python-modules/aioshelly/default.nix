@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, netifaces
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  netifaces,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aioshelly";
   version = "1.0.9";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     description = "Python library to control Shelly";
     homepage = "https://github.com/home-assistant-libs/aioshelly";
     changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

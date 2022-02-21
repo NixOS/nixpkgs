@@ -1,5 +1,7 @@
-{ pkgs, mkDerivation }:
-
+{
+  pkgs,
+  mkDerivation,
+}:
 mkDerivation {
   baseName = "erlang";
   version = "16B02.basho10";
@@ -56,10 +58,10 @@ mkDerivation {
       repository.
     '';
 
-    knownVulnerabilities = [ "CVE-2017-1000385" ];
+    knownVulnerabilities = ["CVE-2017-1000385"];
 
     platforms = ["x86_64-linux" "x86_64-darwin"];
     license = pkgs.lib.licenses.asl20;
-    maintainers = with pkgs.lib.maintainers; [ mdaiter ];
+    maintainers = with pkgs.lib.maintainers; [mdaiter];
   };
 }

@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, syslogng
-, eventlog, perl, python2, bison, protobufc, libivykis, libcap, czmq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  syslogng,
+  eventlog,
+  perl,
+  python2,
+  bison,
+  protobufc,
+  libivykis,
+  libcap,
+  czmq,
 }:
-
 stdenv.mkDerivation rec {
   pname = "syslog-ng-incubator";
   version = "0.6.2";
@@ -13,10 +26,18 @@ stdenv.mkDerivation rec {
     sha256 = "17y85cqcyfbp882gaii731cvz5bg1s8rgda271jh6kgnrz5rbd4s";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook bison ];
+  nativeBuildInputs = [pkg-config autoreconfHook bison];
 
   buildInputs = [
-    glib syslogng eventlog perl python2 protobufc libivykis libcap czmq
+    glib
+    syslogng
+    eventlog
+    perl
+    python2
+    protobufc
+    libivykis
+    libcap
+    czmq
   ];
 
   configureFlags = [

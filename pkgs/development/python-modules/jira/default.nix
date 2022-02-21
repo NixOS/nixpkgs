@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, defusedxml
-, flaky
-, keyring
-, requests-mock
-, requests_oauthlib
-, requests-toolbelt
-, setuptools-scm
-, setuptools-scm-git-archive
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  defusedxml,
+  flaky,
+  keyring,
+  requests-mock,
+  requests_oauthlib,
+  requests-toolbelt,
+  setuptools-scm,
+  setuptools-scm-git-archive,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "jira";
   version = "3.1.1";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace "--cov-report=xml --cov jira" ""
   '';
 
-  nativeBuildInputs = [ setuptools-scm setuptools-scm-git-archive ];
+  nativeBuildInputs = [setuptools-scm setuptools-scm-git-archive];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "This library eases the use of the JIRA REST API from Python.";
     homepage = "https://github.com/pycontribs/jira";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [globin];
   };
 }

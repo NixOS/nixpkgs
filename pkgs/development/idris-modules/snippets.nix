@@ -1,14 +1,15 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "snippets";
   version = "2018-03-17";
 
   ipkgName = "idris-snippets";
-  idrisDeps = [ contrib ];
+  idrisDeps = [contrib];
 
   src = fetchFromGitHub {
     owner = "palladin";
@@ -21,6 +22,6 @@ build-idris-package  {
     description = "Collection of Idris snippets";
     homepage = "https://github.com/palladin/idris-snippets";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

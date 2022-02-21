@@ -1,27 +1,28 @@
 {
   # eval time deps
-  lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder
   # runtime deps
-, click
-, ghp-import
-, importlib-metadata
-, jinja2
-, markdown
-, mergedeep
-, packaging
-, pyyaml
-, pyyaml-env-tag
-, watchdog
+  ,
+  click,
+  ghp-import,
+  importlib-metadata,
+  jinja2,
+  markdown,
+  mergedeep,
+  packaging,
+  pyyaml,
+  pyyaml-env-tag,
+  watchdog
   # testing deps
-, Babel
-, mock
-, pytestCheckHook
+  ,
+  Babel,
+  mock,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "mkdocs";
   version = "1.2.3";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/mkdocs/mkdocs/commit/c93fc91e4dc0ef33e2ea418aaa32b0584a8d354a.patch";
       sha256 = "sha256-7uLIuQOt6KU/+iS9cwhXkWPAHzZkQdMyNBxSMut5WK4=";
-      excludes = [ "tox.ini" ];
+      excludes = ["tox.ini"];
     })
   ];
 
@@ -60,7 +61,6 @@ buildPythonPackage rec {
     mock
   ];
 
-
   checkPhase = ''
     set -euo pipefail
 
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "mkdocs" ];
+  pythonImportsCheck = ["mkdocs"];
 
   meta = with lib; {
     description = "Project documentation with Markdown / static website generator";
@@ -85,6 +85,6 @@ buildPythonPackage rec {
     homepage = "http://mkdocs.org/";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rkoe ];
+    maintainers = with maintainers; [rkoe];
   };
 }

@@ -1,5 +1,4 @@
-{ lib, ... }: {
-
+{lib, ...}: {
   options.value = lib.mkOption {
     type = lib.types.anything;
   };
@@ -8,5 +7,4 @@
     outPath = "foo";
     err = throw "err";
   };
-
 }

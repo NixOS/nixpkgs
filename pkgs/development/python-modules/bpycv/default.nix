@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, fetchurl
-, writeText
-, blender
-, minexr
-, beautifulsoup4
-, zcs
-, requests
-, opencv3
-, boxx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchFromGitHub,
+  fetchurl,
+  writeText,
+  blender,
+  minexr,
+  beautifulsoup4,
+  zcs,
+  requests,
+  opencv3,
+  boxx,
 }:
-
 buildPythonPackage rec {
   pname = "bpycv";
   version = "0.2.43";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   # pythonImportsCheck = [ "bpycv" ]; # this import depends on bpy that is only available inside blender
-  checkInputs = [ blender ];
+  checkInputs = [blender];
   checkPhase = let
     bpycv_example_data = fetchFromGitHub {
       owner = "DIYer22";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Computer vision utils for Blender";
     homepage = "https://github.com/DIYer22/bpycv";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucasew ];
+    maintainers = with maintainers; [lucasew];
   };
 }

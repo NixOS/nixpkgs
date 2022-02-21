@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "fsm";
   version = "2017-04-16";
 
@@ -17,6 +18,6 @@ build-idris-package  {
     description = "Comonads for Idris";
     homepage = "https://github.com/ctford/flying-spaghetti-monster";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

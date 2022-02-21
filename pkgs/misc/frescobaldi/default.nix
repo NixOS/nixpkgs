@@ -1,5 +1,12 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
-
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  python3Packages,
+  pyqtwebengine,
+  lilypond,
+}:
 buildPythonApplication rec {
   pname = "frescobaldi";
   version = "3.1.3";
@@ -12,12 +19,16 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    lilypond pygame python-ly sip_4
-    pyqt5 poppler-qt5
+    lilypond
+    pygame
+    python-ly
+    sip_4
+    pyqt5
+    poppler-qt5
     pyqtwebengine
   ];
 
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [pyqtwebengine.wrapQtAppsHook];
 
   # Needed because source is fetched from git
   preBuild = ''
@@ -30,7 +41,7 @@ buildPythonApplication rec {
 
   dontWrapQtApps = true;
   makeWrapperArgs = [
-      "\${qtWrapperArgs[@]}"
+    "\${qtWrapperArgs[@]}"
   ];
 
   meta = with lib; {
@@ -49,7 +60,7 @@ buildPythonApplication rec {
       fonts and keyboard shortcuts
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sepi ];
+    maintainers = with maintainers; [sepi];
     platforms = platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/frescobaldi.x86_64-darwin
   };

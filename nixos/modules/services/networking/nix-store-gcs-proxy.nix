@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  opts = { name, config, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  opts = {
+    name,
+    config,
+    ...
+  }: {
     options = {
       enable = mkOption {
         default = true;
@@ -26,8 +32,7 @@ let
   };
   enabledProxies = lib.filterAttrs (n: v: v.enable) config.services.nix-store-gcs-proxy;
   mapProxies = function: lib.mkMerge (lib.mapAttrsToList function enabledProxies);
-in
-{
+in {
   options.services.nix-store-gcs-proxy = mkOption {
     type = types.attrsOf (types.submodule opts);
     default = {};
@@ -71,5 +76,5 @@ in
     };
   });
 
-  meta.maintainers = [ maintainers.mrkkrp ];
+  meta.maintainers = [maintainers.mrkkrp];
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ffmpeg, libui }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg,
+  libui,
+}:
 stdenv.mkDerivation {
   pname = "untrunc-anthwlock";
   version = "2020.07.18";
@@ -11,8 +16,7 @@ stdenv.mkDerivation {
     sha256 = "14i2lq68q990hnm2kkfamlsi67bcml85zl8yjsyxc5h8ncc2f3dp";
   };
 
-
-  buildInputs = [ ffmpeg libui ];
+  buildInputs = [ffmpeg libui];
 
   postBuild = ''
     make untrunc-gui
@@ -31,6 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/anthwlock/untrunc";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

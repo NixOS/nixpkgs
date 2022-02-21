@@ -1,18 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, common-updater-scripts
-, genericUpdater
-, writers
-, makeWrapper
-, bash
-, nodejs
-, nodePackages
-, gzip
-, jq
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  common-updater-scripts,
+  genericUpdater,
+  writers,
+  makeWrapper,
+  bash,
+  nodejs,
+  nodePackages,
+  gzip,
+  jq,
+}: let
   # NOTE: use updateScript to bump the package version
   pname = "EPGStation";
   version = "1.7.5";
@@ -38,7 +37,7 @@ let
   pkg = nodePackages.epgstation.override (drv: {
     inherit src;
 
-    buildInputs = [ bash ];
+    buildInputs = [bash];
     nativeBuildInputs = [
       workaround-opencollective-buildfailures
       makeWrapper
@@ -51,9 +50,8 @@ let
     '';
 
     postInstall = let
-      runtimeDeps = [ nodejs bash ];
-    in
-    ''
+      runtimeDeps = [nodejs bash];
+    in ''
       mkdir -p $out/{bin,libexec,share/doc/epgstation,share/man/man1}
 
       pushd $out/lib/node_modules/EPGStation
@@ -99,7 +97,8 @@ let
         common-updater-scripts
         genericUpdater
         writers
-        jq;
+        jq
+        ;
     };
 
     # nodePackages.epgstation is a stub package to fetch npm dependencies and
@@ -108,16 +107,19 @@ let
     # nixpkgs while still allowing us to heavily customize the build. It also
     # allows us to provide devDependencies for the epgstation build process
     # without doing the same for all the other node packages.
-    meta = drv.meta // { broken = false; };
+    meta = drv.meta // {broken = false;};
   });
 in
-pkg // {
-  name = "${pname}-${version}";
+  pkg
+  // {
+    name = "${pname}-${version}";
 
-  meta = with lib; pkg.meta // {
-    maintainers = with maintainers; [ midchildan ];
+    meta = with lib;
+      pkg.meta
+      // {
+        maintainers = with maintainers; [midchildan];
 
-    # NOTE: updateScript relies on this being correct
-    position = toString ./default.nix + ":1";
-  };
-}
+        # NOTE: updateScript relies on this being correct
+        position = toString ./default.nix + ":1";
+      };
+  }

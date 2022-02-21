@@ -1,7 +1,14 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, sexplib0, mirage-crypto, mirage-crypto-pk, astring, base64
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cstruct,
+  sexplib0,
+  mirage-crypto,
+  mirage-crypto-pk,
+  astring,
+  base64,
 }:
-
 buildDunePackage rec {
   pname = "otr";
   version = "0.3.10";
@@ -15,8 +22,14 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [ cstruct sexplib0 mirage-crypto mirage-crypto-pk
-                            astring base64 ];
+  propagatedBuildInputs = [
+    cstruct
+    sexplib0
+    mirage-crypto
+    mirage-crypto-pk
+    astring
+    base64
+  ];
 
   doCheck = true;
 
@@ -24,6 +37,6 @@ buildDunePackage rec {
     homepage = "https://github.com/hannesm/ocaml-otr";
     description = "Off-the-record messaging protocol, purely in OCaml";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ sternenseemann ];
+    maintainers = with maintainers; [sternenseemann];
   };
 }

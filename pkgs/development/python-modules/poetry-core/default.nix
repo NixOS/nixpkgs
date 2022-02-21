@@ -1,16 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
-, git
-, importlib-metadata
-, intreehooks
-, pathlib2
-, pep517
-, pytest-mock
-, pytestCheckHook
-, tomlkit
-, typing ? null
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  isPy27,
+  git,
+  importlib-metadata,
+  intreehooks,
+  pathlib2,
+  pep517,
+  pytest-mock,
+  pytestCheckHook,
+  tomlkit,
+  typing ? null,
+  virtualenv,
 }:
-
 buildPythonPackage rec {
   pname = "poetry-core";
   version = "1.0.7";
@@ -34,12 +38,14 @@ buildPythonPackage rec {
     intreehooks
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optionals isPy27 [
-    pathlib2
-    typing
-  ];
+  propagatedBuildInputs =
+    lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ]
+    ++ lib.optionals isPy27 [
+      pathlib2
+      typing
+    ];
 
   checkInputs = [
     git
@@ -51,17 +57,17 @@ buildPythonPackage rec {
   ];
 
   # requires git history to work correctly
-  disabledTests = [ "default_with_excluded_data" "default_src_with_excluded_data" ];
+  disabledTests = ["default_with_excluded_data" "default_src_with_excluded_data"];
 
-  pythonImportsCheck = [ "poetry.core" ];
+  pythonImportsCheck = ["poetry.core"];
 
   # allow for package to use pep420's native namespaces
-  pythonNamespaces = [ "poetry" ];
+  pythonNamespaces = ["poetry"];
 
   meta = with lib; {
     description = "Core utilities for Poetry";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

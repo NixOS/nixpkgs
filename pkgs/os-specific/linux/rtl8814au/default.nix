@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation {
   pname = "rtl8814au";
   version = "${kernel.version}-unstable-2021-10-25";
@@ -13,9 +17,9 @@ stdenv.mkDerivation {
 
   buildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -35,6 +39,6 @@ stdenv.mkDerivation {
     description = "Realtek 8814AU USB WiFi driver";
     homepage = "https://github.com/morrownr/8814au";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.lassulus ];
+    maintainers = [maintainers.lassulus];
   };
 }

@@ -1,26 +1,27 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, itstool
-, gettext
-, python3
-, wrapGAppsHook
-, libxml2
-, libgda
-, libhandy
-, libsoup
-, json-glib
-, gspell
-, glib
-, libdazzle
-, gtk3
-, gtksourceview4
-, gnome
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  itstool,
+  gettext,
+  python3,
+  wrapGAppsHook,
+  libxml2,
+  libgda,
+  libhandy,
+  libsoup,
+  json-glib,
+  gspell,
+  glib,
+  libdazzle,
+  gtk3,
+  gtksourceview4,
+  gnome,
+  gsettings-desktop-schemas,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtranslator";
   version = "40.0";
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "GNOME translation making program";
     homepage = "https://wiki.gnome.org/Apps/Gtranslator";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

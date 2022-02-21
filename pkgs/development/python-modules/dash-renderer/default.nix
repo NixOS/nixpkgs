@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "dash_renderer";
   version = "1.9.1";
@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "Renderer for the Dash framework";
     homepage = "https://dash.plot.ly/";
     license = licenses.mit;
-    maintainers = [ maintainers.antoinerg ];
+    maintainers = [maintainers.antoinerg];
   };
 }

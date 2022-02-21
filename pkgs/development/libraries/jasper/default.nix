@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "jasper";
   version = "2.0.32";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       for most computing platforms when JasPer was first developed, circa 1999.
     '';
     license = licenses.free; # MIT-like
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
   };
 }

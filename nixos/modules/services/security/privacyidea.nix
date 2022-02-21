@@ -1,14 +1,17 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.privacyidea;
   opt = options.services.privacyidea;
 
-  uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; };
+  uwsgi = pkgs.uwsgi.override {plugins = ["python3"];};
   python = uwsgi.python3;
-  penv = python.withPackages (const [ pkgs.privacyidea ]);
+  penv = python.withPackages (const [pkgs.privacyidea]);
   logCfg = pkgs.writeText "privacyidea-log.cfg" ''
     [formatters]
     keys=detail
@@ -50,10 +53,7 @@ let
     PI_LOGCONFIG = '${logCfg}'
     ${cfg.extraConfig}
   '';
-
-in
-
-{
+in {
   options = {
     services.privacyidea = {
       enable = mkEnableOption "PrivacyIDEA";
@@ -88,7 +88,7 @@ in
 
       superuserRealm = mkOption {
         type = types.listOf types.str;
-        default = [ "super" "administrators" ];
+        default = ["super" "administrators"];
         description = ''
           The realm where users are allowed to login as administrators.
         '';
@@ -194,10 +194,8 @@ in
   };
 
   config = mkMerge [
-
     (mkIf cfg.enable {
-
-      environment.systemPackages = [ pkgs.privacyidea ];
+      environment.systemPackages = [pkgs.privacyidea];
 
       services.postgresql.enable = mkDefault true;
 
@@ -205,7 +203,7 @@ in
         piuwsgi = pkgs.writeText "uwsgi.json" (builtins.toJSON {
           uwsgi = {
             buffer-size = 8192;
-            plugins = [ "python3" ];
+            plugins = ["python3"];
             pythonpath = "${penv}/${uwsgi.python3.sitePackages}";
             socket = "/run/privacyidea/socket";
             uid = cfg.user;
@@ -227,9 +225,9 @@ in
           };
         });
       in {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "postgresql.service" ];
-        path = with pkgs; [ openssl ];
+        wantedBy = ["multi-user.target"];
+        after = ["postgresql.service"];
+        path = with pkgs; [openssl];
         environment.PRIVACYIDEA_CONFIGFILE = "${cfg.stateDir}/privacyidea.cfg";
         preStart = let
           pi-manage = "${config.security.sudo.package}/bin/sudo -u privacyidea -HE ${penv}/bin/pi-manage";
@@ -275,12 +273,11 @@ in
     })
 
     (mkIf cfg.ldap-proxy.enable {
-
       systemd.services.privacyidea-ldap-proxy = let
-        ldap-proxy-env = pkgs.python3.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
+        ldap-proxy-env = pkgs.python3.withPackages (ps: [ps.privacyidea-ldap-proxy]);
       in {
         description = "privacyIDEA LDAP proxy";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = ["multi-user.target"];
         serviceConfig = {
           User = cfg.ldap-proxy.user;
           Group = cfg.ldap-proxy.group;
@@ -305,5 +302,4 @@ in
       users.groups.pi-ldap-proxy = mkIf (cfg.ldap-proxy.group == "pi-ldap-proxy") {};
     })
   ];
-
 }

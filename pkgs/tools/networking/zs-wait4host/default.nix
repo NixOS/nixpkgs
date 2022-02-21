@@ -1,5 +1,10 @@
-{ coreutils, fetchurl, fping, lib, stdenvNoCC }:
-
+{
+  coreutils,
+  fetchurl,
+  fping,
+  lib,
+  stdenvNoCC,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "zs-wait4host";
   version = "0.3.2";
@@ -28,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Wait for a host to come up/go down";
     homepage = "https://ytrizja.de/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zseri ];
+    maintainers = with maintainers; [zseri];
     platforms = platforms.all;
   };
 }

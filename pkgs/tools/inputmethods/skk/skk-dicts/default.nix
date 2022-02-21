@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl, buildPackages, libiconv, skktools }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  libiconv,
+  skktools,
+}: let
   # kana to kanji
   small = fetchurl {
     url = "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.S";
@@ -26,55 +31,57 @@ let
     sha256 = "1smcbyv6srrhnpl7ic9nqds9nz3g2dgqngmhzkrdlwmvcpvakp1v";
   };
 
-  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
+  iconvBin =
+    if stdenv.isDarwin
+    then libiconv
+    else buildPackages.stdenv.cc.libc;
 in
+  stdenv.mkDerivation {
+    pname = "skk-dicts-unstable";
+    version = "2020-03-24";
+    srcs = [small medium large edict assoc];
+    nativeBuildInputs = [skktools] ++ lib.optional stdenv.isDarwin libiconv;
 
-stdenv.mkDerivation {
-  pname = "skk-dicts-unstable";
-  version = "2020-03-24";
-  srcs = [ small medium large edict assoc ];
-  nativeBuildInputs = [ skktools ] ++ lib.optional stdenv.isDarwin libiconv;
+    strictDeps = true;
 
-  strictDeps = true;
+    dontUnpack = true;
 
-  dontUnpack = true;
+    installPhase = ''
+      function dictname() {
+        src=$1
+        name=$(basename $src)          # remove dir name
+        dict=$(echo $name | cut -b34-) # remove sha256 prefix
+        echo $dict
+      }
+      mkdir -p $out/share
 
-  installPhase = ''
-    function dictname() {
-      src=$1
-      name=$(basename $src)          # remove dir name
-      dict=$(echo $name | cut -b34-) # remove sha256 prefix
-      echo $dict
-    }
-    mkdir -p $out/share
+      for src in $srcs; do
+        dst=$out/share/$(dictname $src)
+        echo ";;; -*- coding: utf-8 -*-" > $dst  # libskk requires this on the first line
+        ${lib.getBin iconvBin}/bin/iconv \
+          -f EUC-JP -t UTF-8 $src | skkdic-expr2 >> $dst
+      done
 
-    for src in $srcs; do
-      dst=$out/share/$(dictname $src)
-      echo ";;; -*- coding: utf-8 -*-" > $dst  # libskk requires this on the first line
-      ${lib.getBin iconvBin}/bin/iconv \
-        -f EUC-JP -t UTF-8 $src | skkdic-expr2 >> $dst
-    done
-
-    # combine .L .edict and .assoc for convenience
-    dst=$out/share/SKK-JISYO.combined
-    echo ";;; -*- coding: utf-8 -*-" > $dst
-    skkdic-expr2 \
-      $out/share/$(dictname ${large}) + \
-      $out/share/$(dictname ${edict}) + \
-      $out/share/$(dictname ${assoc}) >> $dst
-  '';
-
-  enableParallelBuilding = true;
-
-  meta = with lib; {
-    description = "A collection of standard SKK dictionaries";
-    longDescription = ''
-      This package provides a collection of standard kana-to-kanji
-      dictionaries for the SKK Japanese input method.
+      # combine .L .edict and .assoc for convenience
+      dst=$out/share/SKK-JISYO.combined
+      echo ";;; -*- coding: utf-8 -*-" > $dst
+      skkdic-expr2 \
+        $out/share/$(dictname ${large}) + \
+        $out/share/$(dictname ${edict}) + \
+        $out/share/$(dictname ${assoc}) >> $dst
     '';
-    homepage = "https://github.com/skk-dev/dict";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ yuriaisaka ];
-    platforms = platforms.all;
-  };
-}
+
+    enableParallelBuilding = true;
+
+    meta = with lib; {
+      description = "A collection of standard SKK dictionaries";
+      longDescription = ''
+        This package provides a collection of standard kana-to-kanji
+        dictionaries for the SKK Japanese input method.
+      '';
+      homepage = "https://github.com/skk-dev/dict";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [yuriaisaka];
+      platforms = platforms.all;
+    };
+  }

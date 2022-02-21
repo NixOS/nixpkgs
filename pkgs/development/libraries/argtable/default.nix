@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "argtable";
   version = "3.2.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-HFsk91uJXQ0wpvAQxP4/yZwRQx9kLH7KgB3Y/+zcZC0=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       are essential but tedious to implement for a robust CLI program.
     '';
     license = with licenses; bsd3;
-    maintainers = with maintainers; [ AndersonTorres artuuge ];
+    maintainers = with maintainers; [AndersonTorres artuuge];
     platforms = with platforms; all;
   };
 }
@@ -46,3 +46,4 @@ stdenv.mkDerivation rec {
 # TODO: multiple outputs
 # TODO: documentation
 # TODO: build both shared and static libs
+

@@ -1,28 +1,29 @@
-{ lib, stdenv
-, fetchurl
-, atk
-, cairo
-, desktop-file-utils
-, evolution-data-server
-, evolution
-, gcr
-, gettext
-, glib
-, gnome
-, gpgme
-, gtk3
-, gtksourceview3
-, gtkspell3
-, libcryptui
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, sqlite
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  atk,
+  cairo,
+  desktop-file-utils,
+  evolution-data-server,
+  evolution,
+  gcr,
+  gettext,
+  glib,
+  gnome,
+  gpgme,
+  gtk3,
+  gtksourceview3,
+  gtkspell3,
+  libcryptui,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  sqlite,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "almanah";
   version = "0.12.3";

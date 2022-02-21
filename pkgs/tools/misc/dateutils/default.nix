@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, autoreconfHook, tzdata, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  tzdata,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   version = "0.4.9";
   pname = "dateutils";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hy96h9imxdbg9y7305mgv4grr6x4qic9xy3vhgh15lvjkcmc0kr";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ tzdata ]; # needed for datezone
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [tzdata]; # needed for datezone
   enableParallelBuilding = true;
 
   doCheck = true;
@@ -20,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.fresse.org/dateutils/";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.paperdigits ];
+    maintainers = [maintainers.paperdigits];
   };
 }

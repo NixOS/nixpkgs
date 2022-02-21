@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   name = "poly";
 
@@ -45,6 +49,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.fontsquirrel.com/fonts/poly";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ relrod ];
+    maintainers = with lib.maintainers; [relrod];
   };
 }

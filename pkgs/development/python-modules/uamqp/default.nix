@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, certifi
-, CFNetwork
-, cmake
-, CoreFoundation
-, enum34
-, fetchpatch
-, fetchPypi
-, isPy3k
-, openssl
-, Security
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  certifi,
+  CFNetwork,
+  cmake,
+  CoreFoundation,
+  enum34,
+  fetchpatch,
+  fetchPypi,
+  isPy3k,
+  openssl,
+  Security,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "uamqp";
   version = "1.5.1";
@@ -33,13 +33,15 @@ buildPythonPackage rec {
     Security
   ];
 
-  propagatedBuildInputs = [
-    certifi
-    openssl
-    six
-  ] ++ lib.optionals (!isPy3k) [
-    enum34
-  ];
+  propagatedBuildInputs =
+    [
+      certifi
+      openssl
+      six
+    ]
+    ++ lib.optionals (!isPy3k) [
+      enum34
+    ];
 
   dontUseCmakeConfigure = true;
 
@@ -54,6 +56,6 @@ buildPythonPackage rec {
     description = "An AMQP 1.0 client library for Python";
     homepage = "https://github.com/Azure/azure-uamqp-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    maintainers = with maintainers; [maxwilson];
   };
 }

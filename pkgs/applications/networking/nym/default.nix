@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
-, libiconv
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  Security,
+  libiconv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "nym";
   version = "0.11.0";
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0xwa114fs4h6y2a3nrl2dp0rv0k336xy9y330g9yix4g34qmrynq";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = [openssl] ++ lib.optionals stdenv.isDarwin [Security libiconv];
 
   checkType = "debug";
 
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://nymtech.net";
     license = licenses.asl20;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = [maintainers.ehmry];
     platforms = platforms.all;
   };
 }

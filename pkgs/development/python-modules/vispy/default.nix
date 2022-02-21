@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, substituteAll
-, fetchPypi
-, cython
-, fontconfig
-, freetype-py
-, hsluv
-, kiwisolver
-, libGL
-, numpy
-, setuptools-scm
-, setuptools-scm-git-archive
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  substituteAll,
+  fetchPypi,
+  cython,
+  fontconfig,
+  freetype-py,
+  hsluv,
+  kiwisolver,
+  libGL,
+  numpy,
+  setuptools-scm,
+  setuptools-scm-git-archive,
 }:
-
 buildPythonPackage rec {
   pname = "vispy";
   version = "0.9.6";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  doCheck = false;  # otherwise runs OSX code on linux.
+  doCheck = false; # otherwise runs OSX code on linux.
 
   pythonImportsCheck = [
     "vispy"
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://vispy.org/index.html";
     description = "Interactive scientific visualization in Python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goertzenator ];
+    maintainers = with maintainers; [goertzenator];
   };
 }

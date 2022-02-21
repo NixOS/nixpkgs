@@ -1,10 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, lxml
-, six
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  lxml,
+  six,
 }:
-
 buildPythonApplication rec {
   pname = "xmldiff";
   version = "2.4";
@@ -36,6 +36,6 @@ buildPythonApplication rec {
       readable diffs in those situations.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, systemd, fcgi, autoreconfHook, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  systemd,
+  fcgi,
+  autoreconfHook,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "fcgiwrap";
   version = "1.1.0";
@@ -12,10 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
-  configureFlags = [ "--with-systemd" "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
+  configureFlags = ["--with-systemd" "--with-systemdsystemunitdir=$(out)/etc/systemd/system"];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ systemd fcgi ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [systemd fcgi];
 
   # systemd 230 no longer has libsystemd-daemon as a separate entity from libsystemd
   postPatch = ''
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/gnosek/fcgiwrap";
     description = "Simple server for running CGI applications over FastCGI";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = with platforms; linux;
     license = licenses.mit;
   };

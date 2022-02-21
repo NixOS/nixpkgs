@@ -1,11 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
-, python-dateutil
-, importlib-metadata
-, poetry-core
-, pytzdata
-, typing
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  python-dateutil,
+  importlib-metadata,
+  poetry-core,
+  pytzdata,
+  typing,
 }:
-
 buildPythonPackage rec {
   pname = "pendulum";
   version = "2.1.2";
@@ -20,10 +23,11 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  nativeBuildInputs = [ poetry-core ];
-  propagatedBuildInputs = [ python-dateutil pytzdata ]
-  ++ lib.optional (pythonOlder "3.5") typing
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  nativeBuildInputs = [poetry-core];
+  propagatedBuildInputs =
+    [python-dateutil pytzdata]
+    ++ lib.optional (pythonOlder "3.5") typing
+    ++ lib.optionals (pythonOlder "3.8") [importlib-metadata];
 
   # No tests
   doCheck = false;

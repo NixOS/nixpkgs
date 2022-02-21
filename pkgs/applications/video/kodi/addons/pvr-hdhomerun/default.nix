@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, jsoncpp, libhdhomerun }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  jsoncpp,
+  libhdhomerun,
+}:
 buildKodiBinaryAddon rec {
   pname = "pvr-hdhomerun";
   namespace = "pvr.hdhomerun";
@@ -11,7 +18,7 @@ buildKodiBinaryAddon rec {
     sha256 = "sha256-iFAOoQvZAdvJvN8FBg2w+oZWtr8mYdBQ3QX58HLmBho=";
   };
 
-  extraBuildInputs = [ jsoncpp libhdhomerun ];
+  extraBuildInputs = [jsoncpp libhdhomerun];
 
   meta = with lib; {
     homepage = "https://github.com/kodi-pvr/pvr.hdhomerun";

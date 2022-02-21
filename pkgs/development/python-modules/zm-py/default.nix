@@ -1,6 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
-, pytest, requests }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  pytest,
+  requests,
+}:
 buildPythonPackage rec {
   pname = "zm-py";
   version = "0.5.2";
@@ -12,9 +17,9 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [requests];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     PYTHONPATH="./zoneminder:$PYTHONPATH" pytest
@@ -24,6 +29,6 @@ buildPythonPackage rec {
     description = "A loose python wrapper around the ZoneMinder REST API";
     homepage = "https://github.com/rohankapoorcom/zm-py";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

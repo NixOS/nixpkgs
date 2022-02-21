@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage {
   pname = "regenkfs";
   version = "unstable-2020-10-17";
@@ -13,13 +16,13 @@ rustPlatform.buildRustPackage {
 
   cargoSha256 = "sha256-05VmQdop4vdzw2XEvVdp9+RNmyZvay1Q7gKN2n8rDEQ=";
 
-  buildFeatures = [ "c-undef" ];
+  buildFeatures = ["c-undef"];
 
   meta = with lib; {
     description = "Reimplementation of genkfs in Rust";
     homepage = "https://github.com/siraben/regenkfs";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
     mainProgram = "regenkfs";
   };
 }

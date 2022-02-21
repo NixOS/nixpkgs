@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, python3
-, ninja
-, hicolor-icon-theme
-, gtk3
-, xorg
-, librsvg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  python3,
+  ninja,
+  hicolor-icon-theme,
+  gtk3,
+  xorg,
+  librsvg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
   version = "6.1.0";

@@ -1,5 +1,9 @@
-{ lib, fetchFromGitLab, buildDunePackage, uri }:
-
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  uri,
+}:
 buildDunePackage rec {
   pname = "resto";
   version = "0.6.1";
@@ -23,6 +27,6 @@ buildDunePackage rec {
     description = "A minimal OCaml library for type-safe HTTP/JSON RPCs";
     homepage = "https://gitlab.com/nomadic-labs/resto";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = [lib.maintainers.ulrikstrid];
   };
 }

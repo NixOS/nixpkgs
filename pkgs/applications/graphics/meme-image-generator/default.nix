@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "meme-image-generator";
   version = "1.0.1";
@@ -20,7 +20,7 @@ buildGoModule rec {
     description = "A command line utility for creating image macro style memes";
     homepage = "https://github.com/nomad-software/meme";
     license = licenses.mit;
-    maintainers = [ maintainers.fgaz ];
+    maintainers = [maintainers.fgaz];
     platforms = with platforms; linux ++ darwin;
   };
 }

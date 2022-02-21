@@ -1,16 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  future,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "textfsm";
   version = "1.1.3";
   format = "setuptools";
-
 
   src = fetchFromGitHub {
     owner = "google";
@@ -32,6 +31,6 @@ buildPythonPackage rec {
     description = "Python module for parsing semi-structured text into python tables";
     homepage = "https://github.com/google/textfsm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

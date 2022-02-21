@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+}:
 stdenv.mkDerivation rec {
   pname = "ocamlify";
   version = "0.0.2";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f0fghvlbfryf5h3j4as7vcqrgfjb4c8abl5y0y5h069vs4kp5ii";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ocaml findlib ocamlbuild];
 
   configurePhase = ''
     substituteInPlace src/ocamlify.ml --replace 'OCamlifyConfig.version' '"0.0.2"'

@@ -1,13 +1,16 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   fprotUser = "fprot";
   stateDir = "/var/lib/fprot";
   fprotGroup = fprotUser;
   cfg = config.services.fprot;
 in {
   options = {
-
     services.fprot = {
       updater = {
         enable = mkEnableOption "automatic F-Prot virus definitions database updates";
@@ -33,7 +36,6 @@ in {
             License keyfile. Defaults to the one supplied with installation package.
           '';
         };
-
       };
     };
   };
@@ -41,32 +43,30 @@ in {
   ###### implementation
 
   config = mkIf cfg.updater.enable {
-
     services.fprot.updater.productData = mkDefault "${pkgs.fprot}/opt/f-prot/product.data";
     services.fprot.updater.licenseKeyfile = mkDefault "${pkgs.fprot}/opt/f-prot/license.key";
 
-    environment.systemPackages = [ pkgs.fprot ];
+    environment.systemPackages = [pkgs.fprot];
     environment.etc."f-prot.conf" = {
       source = "${pkgs.fprot}/opt/f-prot/f-prot.conf";
     };
 
-    users.users.${fprotUser} =
-      { uid = config.ids.uids.fprot;
-        description = "F-Prot daemon user";
-        home = stateDir;
-      };
+    users.users.${fprotUser} = {
+      uid = config.ids.uids.fprot;
+      description = "F-Prot daemon user";
+      home = stateDir;
+    };
 
-    users.groups.${fprotGroup} =
-      { gid = config.ids.gids.fprot; };
+    users.groups.${fprotGroup} = {gid = config.ids.gids.fprot;};
 
-    services.cron.systemCronJobs = [ "*/${toString cfg.updater.frequency} * * * * root start fprot-updater" ];
+    services.cron.systemCronJobs = ["*/${toString cfg.updater.frequency} * * * * root start fprot-updater"];
 
     systemd.services.fprot-updater = {
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = false;
       };
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       # have to copy fpupdate executable because it insists on storing the virus database in the same dir
       preStart = ''
@@ -78,5 +78,5 @@ in {
 
       script = "/var/lib/fprot/fpupdate --keyfile ${cfg.updater.licenseKeyfile}";
     };
- };
+  };
 }

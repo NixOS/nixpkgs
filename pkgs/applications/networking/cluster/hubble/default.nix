@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "hubble";
   version = "0.9.0";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
     license = licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";
-    maintainers = with maintainers; [ humancalico ];
+    maintainers = with maintainers; [humancalico];
   };
 }

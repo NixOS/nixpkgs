@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-# The two audio backends:
-, SDL2
-, jack2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config
+  # The two audio backends:
+  ,
+  SDL2,
+  jack2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "audiality2";
   version = "1.9.4";
@@ -33,7 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://audiality.org";
     license = licenses.zlib;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
   };
 }
-

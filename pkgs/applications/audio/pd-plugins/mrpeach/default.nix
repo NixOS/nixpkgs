@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, puredata }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  puredata,
+}:
 stdenv.mkDerivation {
   pname = "mrpeach";
   version = "1.1";
@@ -14,9 +18,9 @@ stdenv.mkDerivation {
     sha256 = "12jqba3jsdrk20ib9wc2wiivki88ypcd4mkzgsri9siywbbz9w8x";
   };
 
-  buildInputs = [ puredata ];
+  buildInputs = [puredata];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   patchPhase = ''
     for D in net osc
@@ -56,7 +60,7 @@ stdenv.mkDerivation {
     description = "A collection of Pd objectclasses for OSC-messages";
     homepage = "http://puredata.info/downloads/osc";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
     platforms = lib.platforms.linux;
   };
 }

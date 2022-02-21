@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  texinfo,
 }:
-
 stdenv.mkDerivation rec {
   pname = "quickjs";
   version = "2021-03-27";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-VMaxVVQuJ3DAwYrC14uJqlRBg0//ugYvtyhOXsTUbCA=";
   };
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = ["prefix=${placeholder "out"}"];
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small and embeddable Javascript engine";
     homepage = "https://bellard.org/quickjs/";
-    maintainers = with maintainers; [ stesie AndersonTorres ];
+    maintainers = with maintainers; [stesie AndersonTorres];
     platforms = platforms.linux;
     license = licenses.mit;
     mainProgram = "qjs";

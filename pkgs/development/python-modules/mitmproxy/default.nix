@@ -1,48 +1,50 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder
   # Mitmproxy requirements
-, asgiref
-, blinker
-, brotli
-, certifi
-, click
-, cryptography
-, flask
-, h11
-, h2
-, hyperframe
-, kaitaistruct
-, ldap3
-, msgpack
-, passlib
-, protobuf
-, publicsuffix2
-, pyasn1
-, pyopenssl
-, pyparsing
-, pyperclip
-, ruamel-yaml
-, setuptools
-, sortedcontainers
-, tornado
-, urwid
-, wsproto
-, zstandard
+  ,
+  asgiref,
+  blinker,
+  brotli,
+  certifi,
+  click,
+  cryptography,
+  flask,
+  h11,
+  h2,
+  hyperframe,
+  kaitaistruct,
+  ldap3,
+  msgpack,
+  passlib,
+  protobuf,
+  publicsuffix2,
+  pyasn1,
+  pyopenssl,
+  pyparsing,
+  pyperclip,
+  ruamel-yaml,
+  setuptools,
+  sortedcontainers,
+  tornado,
+  urwid,
+  wsproto,
+  zstandard
   # Additional check requirements
-, beautifulsoup4
-, glibcLocales
-, hypothesis
-, parver
-, pytest-asyncio
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, requests
+  ,
+  beautifulsoup4,
+  glibcLocales,
+  hypothesis,
+  parver,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "mitmproxy";
   version = "7.0.4";
@@ -117,12 +119,12 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
-  pythonImportsCheck = [ "mitmproxy" ];
+  pythonImportsCheck = ["mitmproxy"];
 
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz kamilchm ];
+    maintainers = with maintainers; [fpletz kamilchm];
   };
 }

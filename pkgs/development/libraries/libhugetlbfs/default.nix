@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchurl }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libhugetlbfs";
   version = "2.23";
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ya4q001g111d3pqlzrf3yaifadl0ccirx5dndz1pih7x3qp41mp";
   };
 
-  outputs = [ "bin" "dev" "man" "doc" "lib" "out" ];
+  outputs = ["bin" "dev" "man" "doc" "lib" "out"];
 
   postConfigure = ''
     patchShebangs ld.hugetlbfs
@@ -29,12 +32,12 @@ stdenv.mkDerivation rec {
 
   # Default target builds tests as well, and the tests want a static
   # libc.
-  buildFlags = [ "libs" "tools" ];
-  installTargets = [ "install" "install-docs" ];
+  buildFlags = ["libs" "tools"];
+  installTargets = ["install" "install-docs"];
 
   meta = with lib; {
     description = "library and utilities for Linux hugepages";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [qyliss];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

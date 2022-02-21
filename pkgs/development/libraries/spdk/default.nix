@@ -1,17 +1,18 @@
-{ lib, stdenv
-, fetchpatch
-, fetchFromGitHub
-, ncurses
-, python3
-, cunit
-, dpdk
-, libaio
-, libbsd
-, libuuid
-, numactl
-, openssl
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  ncurses,
+  python3,
+  cunit,
+  dpdk,
+  libaio,
+  libbsd,
+  libuuid,
+  numactl,
+  openssl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "spdk";
   version = "21.10";
@@ -40,7 +41,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cunit dpdk libaio libbsd libuuid numactl openssl ncurses
+    cunit
+    dpdk
+    libaio
+    libbsd
+    libuuid
+    numactl
+    openssl
+    ncurses
   ];
 
   postPatch = ''
@@ -49,7 +57,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--with-dpdk=${dpdk}" ];
+  configureFlags = ["--with-dpdk=${dpdk}"];
 
   NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
   # otherwise does not find strncpy when compiling
@@ -59,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
     license = licenses.bsd3;
-    platforms =  [ "x86_64-linux" ];
-    maintainers = with maintainers; [ orivej ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [orivej];
   };
 }

@@ -1,5 +1,10 @@
-{ fetchzip, lib, stdenv, jdk, runtimeShell }:
-
+{
+  fetchzip,
+  lib,
+  stdenv,
+  jdk,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   version = "5.4.4";
   pname = "keystore-explorer";
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source GUI replacement for the Java command-line utilities keytool and jarsigner";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.numinit ];
+    maintainers = [lib.maintainers.numinit];
     platforms = lib.platforms.unix;
   };
 }

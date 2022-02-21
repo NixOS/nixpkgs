@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 buildPythonPackage rec {
   pname = "pinboard";
   version = "2.1.8";
@@ -16,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python wrapper for Pinboard.in";
-    maintainers = with maintainers; [ djanatyn ];
+    maintainers = with maintainers; [djanatyn];
     license = licenses.asl20;
     homepage = "https://github.com/lionheart/pinboard.py";
   };

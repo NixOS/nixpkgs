@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, cmake
-, gtk3-x11
-, python3
-, protobuf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  cmake,
+  gtk3-x11,
+  python3,
+  protobuf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cdogs";
   version = "0.13.0";
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     patchShebangs src/proto/nanopb/generator/*
   '';
 
-  cmakeFlags = [ "-DCDOGS_DATA_DIR=${placeholder "out"}/" ];
+  cmakeFlags = ["-DCDOGS_DATA_DIR=${placeholder "out"}/"];
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    (python3.withPackages (pp: with pp; [ pp.protobuf setuptools ]))
+    (python3.withPackages (pp: with pp; [pp.protobuf setuptools]))
   ];
 
   buildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://cxong.github.io/cdogs-sdl";
     description = "Open source classic overhead run-and-gun game";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nixinator ];
+    maintainers = with maintainers; [nixinator];
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
   };

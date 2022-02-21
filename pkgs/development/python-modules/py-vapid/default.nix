@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, flake8, mock, nose, pytest
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flake8,
+  mock,
+  nose,
+  pytest,
+  cryptography,
 }:
-
 buildPythonPackage rec {
   pname = "py-vapid";
   version = "1.8.2";
@@ -12,9 +17,9 @@ buildPythonPackage rec {
     sha256 = "874f21910f2103c56228cded941d6e733dd8f1eb12876137919533bfacb65a48";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  propagatedBuildInputs = [cryptography];
 
-  checkInputs = [ flake8 mock nose pytest ];
+  checkInputs = [flake8 mock nose pytest];
 
   meta = with lib; {
     description = "VAPID is a voluntary standard for WebPush subscription providers";

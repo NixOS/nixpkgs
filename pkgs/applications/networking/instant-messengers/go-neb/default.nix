@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, olm }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  olm,
+}:
 buildGoModule {
   pname = "go-neb";
   version = "unstable-2021-07-21";
@@ -10,9 +15,9 @@ buildGoModule {
     sha256 = "sha256-kuH4vbvS4G1bczxUdY4bd4oL4pIZzuueUxdEp4xuzJM=";
   };
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  buildInputs = [ olm ];
+  buildInputs = [olm];
 
   vendorSha256 = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
 
@@ -24,6 +29,6 @@ buildGoModule {
     description = "Extensible matrix bot written in Go";
     homepage = "https://github.com/matrix-org/go-neb";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa maralorn ];
+    maintainers = with maintainers; [hexa maralorn];
   };
 }

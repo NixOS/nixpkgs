@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.journalwatch;
   user = "journalwatch";
   # for journal access
@@ -27,24 +30,27 @@ let
   '';
 
   # empty line at the end needed to to separate the blocks
-  mkPatterns = filterBlocks: concatStringsSep "\n" (map (block: ''
-    ${block.match}
-    ${block.filters}
+  mkPatterns = filterBlocks:
+    concatStringsSep "\n" (map (block: ''
+      ${block.match}
+      ${block.filters}
 
-  '') filterBlocks);
+    '')
+    filterBlocks);
 
   # can't use joinSymlinks directly, because when we point $XDG_CONFIG_HOME
   # to the /nix/store path, we still need the subdirectory "journalwatch" inside that
   # to match journalwatch's expectations
   journalwatchConfigDir = pkgs.runCommand "journalwatch-config"
-    { preferLocalBuild = true; allowSubstitutes = false; }
-    ''
-      mkdir -p $out/journalwatch
-      ln -sf ${journalwatchConfig} $out/journalwatch/config
-      ln -sf ${journalwatchPatterns} $out/journalwatch/patterns
-    '';
-
-
+  {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  }
+  ''
+    mkdir -p $out/journalwatch
+    ln -sf ${journalwatchConfig} $out/journalwatch/config
+    ln -sf ${journalwatchPatterns} $out/journalwatch/patterns
+  '';
 in {
   options = {
     services.journalwatch = {
@@ -103,13 +109,13 @@ in {
           Extra lines to be added verbatim to the journalwatch/config configuration file.
           You can add any commandline argument to the config, without the '--'.
           See <literal>journalwatch --help</literal> for all arguments and their description.
-          '';
+        '';
       };
 
       filterBlocks = mkOption {
         type = types.listOf (types.submodule {
           options = {
-           match = mkOption {
+            match = mkOption {
               type = types.str;
               example = "SYSLOG_IDENTIFIER = systemd";
               description = ''
@@ -174,7 +180,6 @@ in {
           }
         ];
 
-
         description = ''
           filterBlocks can be defined to blacklist journal messages which are not errors.
           Each block matches on a log entry field, and the filters in that block then are matched
@@ -210,7 +215,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     users.users.${user} = {
       isSystemUser = true;
       home = dataDir;
@@ -224,7 +228,6 @@ in {
     ];
 
     systemd.services.journalwatch = {
-
       environment = {
         # journalwatch stores the last processed timpestamp here
         # the share subdirectory is historic now that config home lives in /nix/store,
@@ -242,24 +245,23 @@ in {
         StateDirectoryMode = 0750;
         ExecStart = "${pkgs.python3Packages.journalwatch}/bin/journalwatch mail";
         # lowest CPU and IO priority, but both still in best-effort class to prevent starvation
-        Nice=19;
-        IOSchedulingPriority=7;
+        Nice = 19;
+        IOSchedulingPriority = 7;
       };
     };
 
     systemd.timers.journalwatch = {
       description = "Periodic journalwatch run";
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
       timerConfig = {
         OnCalendar = cfg.interval;
         AccuracySec = cfg.accuracy;
         Persistent = true;
       };
     };
-
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ florianjacob ];
+    maintainers = with lib.maintainers; [florianjacob];
   };
 }

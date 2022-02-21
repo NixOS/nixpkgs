@@ -1,27 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_net
-, SDL2_ttf
-, boost
-, cmake
-, curl
-, doxygen
-, gettext
-, glew
-, graphviz
-, icu
-, installShellFiles
-, libpng
-, lua
-, python3
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_ttf,
+  boost,
+  cmake,
+  curl,
+  doxygen,
+  gettext,
+  glew,
+  graphviz,
+  icu,
+  installShellFiles,
+  libpng,
+  lua,
+  python3,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "widelands";
   version = "1.0";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "-DWL_INSTALL_BINARY=${placeholder "out"}/bin"
   ];
 
-  nativeBuildInputs = [ cmake doxygen gettext graphviz installShellFiles ];
+  nativeBuildInputs = [cmake doxygen gettext graphviz installShellFiles];
 
   buildInputs = [
     SDL2
@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
       multiplayer mode.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin jcumming ];
+    maintainers = with maintainers; [raskin jcumming];
     platforms = platforms.linux;
-    hydraPlatforms = [ ];
+    hydraPlatforms = [];
   };
 }

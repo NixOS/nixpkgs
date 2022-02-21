@@ -1,15 +1,15 @@
-{ atomEnv
-, autoPatchelfHook
-, squashfsTools
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, lib
-, udev
-, wrapGAppsHook
+{
+  atomEnv,
+  autoPatchelfHook,
+  squashfsTools,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  lib,
+  udev,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "termius";
   version = "7.17.1";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
-  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook];
 
   buildInputs = atomEnv.packages;
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  runtimeDependencies = [ (lib.getLib udev) ];
+  runtimeDependencies = [(lib.getLib udev)];
 
   postFixup = ''
     makeWrapper $out/opt/termius/termius-app $out/bin/termius-app \
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ Br1ght0ne th0rgal ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [Br1ght0ne th0rgal];
+    platforms = ["x86_64-linux"];
   };
 }

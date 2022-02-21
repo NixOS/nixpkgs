@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, tie }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  tie,
+}:
 stdenv.mkDerivation rec {
   pname = "cwebbin";
   version = "22p";
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
     substituteInPlace cweav-patch.ch --replace ' ("__DATE__", "__TIME__")' ""
   '';
 
-  nativeBuildInputs = [ tie ];
+  nativeBuildInputs = [tie];
 
   makeFlags = [
     "MACROSDIR=$(out)/share/texmf/tex/generic/cweb"
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Literate Programming in C/C++";
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
     license = licenses.abstyles;
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, Babel
-, markupsafe
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  Babel,
+  markupsafe,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "Jinja2";
   version = "3.0.3";
@@ -48,6 +48,6 @@ buildPythonPackage rec {
       syntax. Then the template is passed data to render the final document.
       an optional sandboxed environment.
     '';
-    maintainers = with maintainers; [ pierron sjourdois ];
+    maintainers = with maintainers; [pierron sjourdois];
   };
 }

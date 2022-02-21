@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, gtk3
-, AppKit
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  gtk3,
+  AppKit,
+  pkg-config,
+  python3,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "xprite-editor-unstable";
   version = "2019-09-22";
@@ -24,20 +25,21 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [ gtk3 ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [gtk3]
+    ++ lib.optionals stdenv.isDarwin [AppKit];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config python3 ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [pkg-config python3];
 
   cargoSha256 = "0z1ip667d1qwvm9md3zg8ib9jixpg7qj5ypwib7r2928h14yg7ck";
 
-  cargoBuildFlags = [ "--bin" "xprite-native" ];
+  cargoBuildFlags = ["--bin" "xprite-native"];
 
   meta = with lib; {
     homepage = "https://github.com/rickyhan/xprite-editor";
     description = "Pixel art editor";
     license = licenses.gpl3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

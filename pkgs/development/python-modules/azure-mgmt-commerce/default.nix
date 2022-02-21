@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
 }:
-
 buildPythonPackage rec {
   pname = "azure-mgmt-commerce";
   version = "6.0.0";
@@ -31,16 +31,16 @@ buildPythonPackage rec {
     sed -i "/azure-namespace-package/c\ " setup.cfg
   '';
 
-  pythonNamespaces = [ "azure.mgmt" ];
+  pythonNamespaces = ["azure.mgmt"];
 
   # has no tests
   doCheck = false;
-  pythonImportsCheck = [ "azure.mgmt.commerce" ];
+  pythonImportsCheck = ["azure.mgmt.commerce"];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Commerce Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson jonringer ];
+    maintainers = with maintainers; [maxwilson jonringer];
   };
 }

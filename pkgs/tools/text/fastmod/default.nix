@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "fastmod";
   version = "0.4.2";
@@ -18,12 +19,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-L1MKoVacVKcpEG2IfS+eENxFZNiSaTDTxfFbFlvzYl8=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [libiconv Security];
 
   meta = with lib; {
     description = "A utility that makes sweeping changes to large, shared code bases";
     homepage = "https://github.com/facebookincubator/fastmod";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jduan ];
+    maintainers = with maintainers; [jduan];
   };
 }

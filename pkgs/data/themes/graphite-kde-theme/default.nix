@@ -1,8 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "graphite-kde-theme";
   version = "2022-02-08";
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vinceliuice/Graphite-kde-theme";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, runtimeShell, jre_headless }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  runtimeShell,
+  jre_headless,
+}:
 stdenv.mkDerivation rec {
   pname = "procyon";
   version = "0.6-prerelease";
@@ -26,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Procyon is a suite of Java metaprogramming tools including a Java decompiler";
     homepage = "https://github.com/mstrobel/procyon/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

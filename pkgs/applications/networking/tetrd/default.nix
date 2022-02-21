@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, c-ares
-, ffmpeg
-, libevent
-, libvpx
-, libxslt
-, xorg
-, minizip
-, nss
-, re2
-, snappy
-, libnotify
-, libappindicator-gtk3
-, libappindicator
-, udev
-, mesa # required for libgbm
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  c-ares,
+  ffmpeg,
+  libevent,
+  libvpx,
+  libxslt,
+  xorg,
+  minizip,
+  nss,
+  re2,
+  snappy,
+  libnotify,
+  libappindicator-gtk3,
+  libappindicator,
+  udev,
+  mesa
+  # required for libgbm
 }:
-
 stdenv.mkDerivation rec {
   pname = "tetrd";
   version = "1.0.4";
@@ -80,6 +81,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tetrd.app";
     license = licenses.unfree;
     platforms = platforms.all;
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with maintainers; [Madouura];
   };
 }

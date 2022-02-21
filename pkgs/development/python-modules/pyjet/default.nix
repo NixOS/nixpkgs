@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, cython, pytest, importlib-resources, numpy }:
-
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  pytest,
+  importlib-resources,
+  numpy,
+}:
 buildPythonPackage rec {
   pname = "pyjet";
   version = "1.8.2";
@@ -12,14 +20,16 @@ buildPythonPackage rec {
     sha256 = "sha256-0EI/dbanVDvILawnnK/Ce/5n/cD4Fv7VQEZfF9yPQio=";
   };
 
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [
-    numpy
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  nativeBuildInputs = [cython];
+  propagatedBuildInputs =
+    [
+      numpy
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   checkPhase = ''
     mv pyjet _pyjet
     pytest tests/
@@ -29,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scikit-hep/pyjet";
     description = "The interface between FastJet and NumPy";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [veprbl];
   };
 }

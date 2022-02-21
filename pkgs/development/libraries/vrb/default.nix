@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "vrb";
   version = "0.5.1";
@@ -25,10 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A virtual ring buffer library written in C";
-    license     = licenses.lgpl21;
-    homepage    = "http://vrb.sourceforge.net/";
-    maintainers = [ maintainers.bobvanderlinden ];
-    platforms   = platforms.linux;
+    license = licenses.lgpl21;
+    homepage = "http://vrb.sourceforge.net/";
+    maintainers = [maintainers.bobvanderlinden];
+    platforms = platforms.linux;
   };
 }
-

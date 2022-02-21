@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, glib
-, dbus
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  dbus,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mmsd";
   version = "unstable-2019-07-15";
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Multimedia Messaging Service Daemon";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

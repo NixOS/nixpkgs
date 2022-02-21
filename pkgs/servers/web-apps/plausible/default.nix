@@ -1,16 +1,15 @@
-{ lib
-, stdenv
-, beamPackages
-, fetchFromGitHub
-, glibcLocales
-, cacert
-, mkYarnModules
-, fetchYarnDeps
-, nodejs
-, nixosTests
-}:
-
-let
+{
+  lib,
+  stdenv,
+  beamPackages,
+  fetchFromGitHub,
+  glibcLocales,
+  cacert,
+  mkYarnModules,
+  fetchYarnDeps,
+  nodejs,
+  nixosTests,
+}: let
   pname = "plausible";
   version = "1.4.4";
 
@@ -44,30 +43,30 @@ let
     '';
   };
 in
-beamPackages.mixRelease {
-  inherit pname version src mixFodDeps;
+  beamPackages.mixRelease {
+    inherit pname version src mixFodDeps;
 
-  nativeBuildInputs = [ nodejs ];
+    nativeBuildInputs = [nodejs];
 
-  passthru = {
-    tests = { inherit (nixosTests) plausible; };
-    updateScript = ./update.sh;
-  };
+    passthru = {
+      tests = {inherit (nixosTests) plausible;};
+      updateScript = ./update.sh;
+    };
 
-  postBuild = ''
-    ln -sf ${yarnDeps}/node_modules assets/node_modules
-    npm run deploy --prefix ./assets
+    postBuild = ''
+      ln -sf ${yarnDeps}/node_modules assets/node_modules
+      npm run deploy --prefix ./assets
 
-    # for external task you need a workaround for the no deps check flag
-    # https://github.com/phoenixframework/phoenix/issues/2690
-    mix do deps.loadpaths --no-deps-check, phx.digest
-  '';
+      # for external task you need a workaround for the no deps check flag
+      # https://github.com/phoenixframework/phoenix/issues/2690
+      mix do deps.loadpaths --no-deps-check, phx.digest
+    '';
 
-  meta = with lib; {
-    license = licenses.agpl3Plus;
-    homepage = "https://plausible.io/";
-    description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.";
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.unix;
-  };
-}
+    meta = with lib; {
+      license = licenses.agpl3Plus;
+      homepage = "https://plausible.io/";
+      description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.";
+      maintainers = with maintainers; [ma27];
+      platforms = platforms.unix;
+    };
+  }

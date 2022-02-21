@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 }:
-
 buildPythonPackage rec {
   pname = "python-wifi";
   version = "0.6.1";
@@ -20,7 +20,6 @@ buildPythonPackage rec {
     homepage = "http://pythonwifi.tuxfamily.org/";
     # From the README: "pythonwifi is licensed under LGPLv2+, however, the
     # examples (e.g. iwconfig.py and iwlist.py) are licensed under GPLv2+."
-    license = with licenses; [ lgpl2Plus gpl2Plus ];
+    license = with licenses; [lgpl2Plus gpl2Plus];
   };
-
 }

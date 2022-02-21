@@ -1,27 +1,27 @@
-{ stdenv
-, lib
-, meson
-, fetchurl
-, python3
-, pkg-config
-, gtk3
-, glib
-, adwaita-icon-theme
-, libpeas
-, libxml2
-, gtksourceview4
-, gsettings-desktop-schemas
-, wrapGAppsHook
-, ninja
-, libsoup
-, gnome
-, gspell
-, perl
-, itstool
-, desktop-file-utils
-, vala
+{
+  stdenv,
+  lib,
+  meson,
+  fetchurl,
+  python3,
+  pkg-config,
+  gtk3,
+  glib,
+  adwaita-icon-theme,
+  libpeas,
+  libxml2,
+  gtksourceview4,
+  gsettings-desktop-schemas,
+  wrapGAppsHook,
+  ninja,
+  libsoup,
+  gnome,
+  gspell,
+  perl,
+  itstool,
+  desktop-file-utils,
+  vala,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gedit";
   version = "41.0";

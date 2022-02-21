@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, autoreconfHook
-, libtirpc, rpcsvc-proto, avahi, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  libtirpc,
+  rpcsvc-proto,
+  avahi,
+  libxml2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "liblxi";
   version = "1.13";
@@ -14,9 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "129m0k2wrlgs25qkskynljddqspasla1x8iq51vmg38nhnilpqf6";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config rpcsvc-proto ];
+  nativeBuildInputs = [autoreconfHook pkg-config rpcsvc-proto];
 
-  buildInputs = [ libtirpc avahi libxml2 ];
+  buildInputs = [libtirpc avahi libxml2];
 
   meta = with lib; {
     description = "Library for communicating with LXI compatible instruments";
@@ -29,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lxi-tools.github.io/";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.vq ];
+    maintainers = [maintainers.vq];
   };
 }

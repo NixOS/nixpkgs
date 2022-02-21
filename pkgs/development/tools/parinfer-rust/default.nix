@@ -1,5 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, llvmPackages }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "parinfer-rust";
   version = "0.4.3";
@@ -13,8 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1lam4gwzcj6w0pyxf61l2cpbvvf5gmj2gwi8dangnhd60qhlnvrx";
 
-  nativeBuildInputs = [ llvmPackages.clang ];
-  buildInputs = [ llvmPackages.libclang ];
+  nativeBuildInputs = [llvmPackages.clang];
+  buildInputs = [llvmPackages.libclang];
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = ''
@@ -31,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     description = "Infer parentheses for Clojure, Lisp, and Scheme";
     homepage = "https://github.com/eraserhd/parinfer-rust";
     license = licenses.isc;
-    maintainers = with maintainers; [ eraserhd ];
+    maintainers = with maintainers; [eraserhd];
   };
 }

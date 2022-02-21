@@ -1,7 +1,14 @@
 # Taken from a past commit of nixpkgs
-
-{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytest-cov, parso }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  glibcLocales,
+  tox,
+  pytest-cov,
+  parso,
+}:
 buildPythonPackage rec {
   pname = "jedi";
 
@@ -17,9 +24,9 @@ buildPythonPackage rec {
     sha256 = "86ed7d9b750603e4ba582ea8edc678657fb4007894a12bcf6f4bb97892f31d20";
   };
 
-  checkInputs = [ pytest glibcLocales tox pytest-cov ];
+  checkInputs = [pytest glibcLocales tox pytest-cov];
 
-  propagatedBuildInputs = [ parso ];
+  propagatedBuildInputs = [parso];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test test

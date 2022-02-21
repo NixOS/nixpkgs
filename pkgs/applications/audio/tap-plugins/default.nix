@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, ladspa-sdk, pkgs, ... }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ladspa-sdk,
+  pkgs,
+  ...
+}:
 stdenv.mkDerivation rec {
   pname = "tap-plugins";
   version = "1.0.1";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c6qhyf8smlypc36vmpr42dm3mrzk6pg9cc9r0vx22qbrd5zfpjw";
   };
 
-  buildInputs = [ ladspa-sdk ];
+  buildInputs = [ladspa-sdk];
 
   preInstall = ''
     substituteInPlace Makefile --replace /usr/local "$out"
@@ -27,6 +33,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://tap-plugins.sourceforge.net/ladspa.html";
     license = licenses.gpl3;
-    maintainers = [ maintainers.fps ];
+    maintainers = [maintainers.fps];
   };
 }

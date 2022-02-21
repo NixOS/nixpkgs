@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, flake8
-, pytestCheckHook
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  flake8,
+  pytestCheckHook,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "flake8-length";
   version = "0.3.0";
@@ -24,14 +24,14 @@ buildPythonPackage rec {
     "flake8_length"
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pytestFlagsArray = [ "tests/" ];
+  pytestFlagsArray = ["tests/"];
 
   meta = {
     description = "Flake8 plugin for a smart line length validation";
     homepage = "https://github.com/orsinium-labs/flake8-length";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sauyon ];
+    maintainers = with lib.maintainers; [sauyon];
   };
 }

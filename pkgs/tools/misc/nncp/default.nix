@@ -1,17 +1,27 @@
-{ lib, stdenv, go, fetchurl, redo-apenwarr, curl, perl, genericUpdater
-, writeShellScript, nixosTests, cfgPath ? "/etc/nncp.hjson" }:
-
+{
+  lib,
+  stdenv,
+  go,
+  fetchurl,
+  redo-apenwarr,
+  curl,
+  perl,
+  genericUpdater,
+  writeShellScript,
+  nixosTests,
+  cfgPath ? "/etc/nncp.hjson",
+}:
 stdenv.mkDerivation rec {
   pname = "nncp";
   version = "8.5.0";
-  outputs = [ "out" "doc" "info" ];
+  outputs = ["out" "doc" "info"];
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
     sha256 = "sha256-6IUNJ3DE+nRc+bmpDO7l1gXlD6UDGggTSYRMFT57v/Q=";
   };
 
-  nativeBuildInputs = [ go redo-apenwarr ];
+  nativeBuildInputs = [go redo-apenwarr];
 
   # Build parameters
   CFGPATH = cfgPath;
@@ -58,6 +68,6 @@ stdenv.mkDerivation rec {
     downloadPage = "http://www.nncpgo.org/Tarballs.html";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry woffs ];
+    maintainers = with maintainers; [ehmry woffs];
   };
 }

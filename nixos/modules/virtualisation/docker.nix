@@ -1,18 +1,16 @@
 # Systemd services for docker.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.virtualisation.docker;
   proxy_env = config.networking.proxy.envVars;
   settingsFormat = pkgs.formats.json {};
   daemonSettingsFile = settingsFormat.generate "daemon.json" cfg.daemon.settings;
-in
-
-{
+in {
   ###### interface
 
   options.virtualisation.docker = {
@@ -20,43 +18,40 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description =
-          ''
-            This option enables docker, a daemon that manages
-            linux containers. Users in the "docker" group can interact with
-            the daemon (e.g. to start or stop containers) using the
-            <command>docker</command> command line tool.
-          '';
+        description = ''
+          This option enables docker, a daemon that manages
+          linux containers. Users in the "docker" group can interact with
+          the daemon (e.g. to start or stop containers) using the
+          <command>docker</command> command line tool.
+        '';
       };
 
     listenOptions =
       mkOption {
         type = types.listOf types.str;
         default = ["/run/docker.sock"];
-        description =
-          ''
-            A list of unix and tcp docker should listen to. The format follows
-            ListenStream as described in systemd.socket(5).
-          '';
+        description = ''
+          A list of unix and tcp docker should listen to. The format follows
+          ListenStream as described in systemd.socket(5).
+        '';
       };
 
     enableOnBoot =
       mkOption {
         type = types.bool;
         default = true;
-        description =
-          ''
-            When enabled dockerd is started on boot. This is required for
-            containers which are created with the
-            <literal>--restart=always</literal> flag to work. If this option is
-            disabled, docker might be started on demand by socket activation.
-          '';
+        description = ''
+          When enabled dockerd is started on boot. This is required for
+          containers which are created with the
+          <literal>--restart=always</literal> flag to work. If this option is
+          disabled, docker might be started on demand by socket activation.
+        '';
       };
 
     daemon.settings =
       mkOption {
         type = settingsFormat.type;
-        default = { };
+        default = {};
         example = {
           ipv6 = true;
           "fixed-cidr-v6" = "fd00::/80";
@@ -80,43 +75,39 @@ in
       mkOption {
         type = types.bool;
         default = true;
-        description =
-          ''
-            Allow dockerd to be restarted without affecting running container.
-            This option is incompatible with docker swarm.
-          '';
+        description = ''
+          Allow dockerd to be restarted without affecting running container.
+          This option is incompatible with docker swarm.
+        '';
       };
 
     storageDriver =
       mkOption {
         type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs"]);
         default = null;
-        description =
-          ''
-            This option determines which Docker storage driver to use. By default
-            it let's docker automatically choose preferred storage driver.
-          '';
+        description = ''
+          This option determines which Docker storage driver to use. By default
+          it let's docker automatically choose preferred storage driver.
+        '';
       };
 
     logDriver =
       mkOption {
         type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs"];
         default = "journald";
-        description =
-          ''
-            This option determines which Docker log driver to use.
-          '';
+        description = ''
+          This option determines which Docker log driver to use.
+        '';
       };
 
     extraOptions =
       mkOption {
         type = types.separatedString " ";
         default = "";
-        description =
-          ''
-            The extra command-line options to pass to
-            <command>docker</command> daemon.
-          '';
+        description = ''
+          The extra command-line options to pass to
+          <command>docker</command> daemon.
+        '';
       };
 
     autoPrune = {
@@ -133,7 +124,7 @@ in
       flags = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "--all" ];
+        example = ["--all"];
         description = ''
           Any additional flags passed to <command>docker system prune</command>.
         '';
@@ -164,21 +155,23 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [{
-      boot.kernelModules = [ "bridge" "veth" ];
+  config = mkIf cfg.enable (mkMerge [
+    {
+      boot.kernelModules = ["bridge" "veth"];
       boot.kernel.sysctl = {
         "net.ipv4.conf.all.forwarding" = mkOverride 98 true;
         "net.ipv4.conf.default.forwarding" = mkOverride 98 true;
       };
-      environment.systemPackages = [ cfg.package ]
+      environment.systemPackages =
+        [cfg.package]
         ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       users.groups.docker.gid = config.ids.gids.docker;
-      systemd.packages = [ cfg.package ];
+      systemd.packages = [cfg.package];
 
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
-        after = [ "network.target" "docker.socket" ];
-        requires = [ "docker.socket" ];
+        after = ["network.target" "docker.socket"];
+        requires = ["docker.socket"];
         environment = proxy_env;
         serviceConfig = {
           Type = "notify";
@@ -188,20 +181,23 @@ in
               ${cfg.package}/bin/dockerd \
                 --config-file=${daemonSettingsFile} \
                 ${cfg.extraOptions}
-            ''];
-          ExecReload=[
+            ''
+          ];
+          ExecReload = [
             ""
             "${pkgs.procps}/bin/kill -s HUP $MAINPID"
           ];
         };
 
-        path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
+        path =
+          [pkgs.kmod]
+          ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
           ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       };
 
       systemd.sockets.docker = {
         description = "Docker Socket for the API";
-        wantedBy = [ "sockets.target" ];
+        wantedBy = ["sockets.target"];
         socketConfig = {
           ListenStream = cfg.listenOptions;
           SocketMode = "0660";
@@ -226,13 +222,15 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
+        {
+          assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
           message = "Option enableNvidia requires 32bit support libraries";
-        }];
+        }
+      ];
 
       virtualisation.docker.daemon.settings = {
         group = "docker";
-        hosts = [ "fd://" ];
+        hosts = ["fd://"];
         log-driver = mkDefault cfg.logDriver;
         storage-driver = mkIf (cfg.storageDriver != null) (mkDefault cfg.storageDriver);
         live-restore = mkDefault cfg.liveRestore;
@@ -248,5 +246,4 @@ in
   imports = [
     (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
   ];
-
 }

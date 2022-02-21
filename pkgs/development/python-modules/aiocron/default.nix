@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, croniter
-, tzlocal
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  croniter,
+  tzlocal,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "aiocron";
   version = "1.8";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
     rm -rf $out/${python.sitePackages}/tests
   '';
 
-  pythonImportsCheck = [ "aiocron" ];
+  pythonImportsCheck = ["aiocron"];
 
   meta = with lib; {
     description = "Crontabs for asyncio";
     homepage = "https://github.com/gawel/aiocron/";
     license = licenses.mit;
-    maintainers = [ maintainers.starcraft66 ];
+    maintainers = [maintainers.starcraft66];
   };
 }

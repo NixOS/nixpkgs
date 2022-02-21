@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "terraform-lsp";
   version = "0.0.12";
@@ -13,12 +16,12 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/juliosueiras/terraform-lsp";
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" "-X main.GitCommit=${src.rev}" ];
+  ldflags = ["-s" "-w" "-X main.Version=${version}" "-X main.GitCommit=${src.rev}"];
 
   meta = with lib; {
     description = "Language Server Protocol for Terraform";
     homepage = "https://github.com/juliosueiras/terraform-lsp";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

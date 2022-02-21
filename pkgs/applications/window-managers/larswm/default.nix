@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, imake, gccmakedep, libX11, libXext, libXmu }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  gccmakedep,
+  libX11,
+  libXext,
+  libXmu,
+}:
 stdenv.mkDerivation rec {
   pname = "larswm";
   version = "7.5.3";
@@ -9,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "1xmlx9g1nhklxjrg0wvsya01s4k5b9fphnpl9zdwp29mm484ni3v";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ libX11 libXext libXmu ];
+  nativeBuildInputs = [imake gccmakedep];
+  buildInputs = [libX11 libXext libXmu];
 
-  makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
-  installTargets = [ "install" "install.man" ];
+  makeFlags = ["BINDIR=$(out)/bin" "MANPATH=$(out)/share/man"];
+  installTargets = ["install" "install.man"];
 
   meta = {
     homepage = "http://www.fnurt.net/larswm";

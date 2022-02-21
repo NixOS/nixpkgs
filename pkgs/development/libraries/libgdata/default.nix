@@ -1,29 +1,30 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, nixosTests
-, vala
-, gettext
-, libxml2
-, glib
-, json-glib
-, gcr
-, gnome-online-accounts
-, gobject-introspection
-, gnome
-, p11-kit
-, openssl
-, uhttpmock
-, libsoup
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  nixosTests,
+  vala,
+  gettext,
+  libxml2,
+  glib,
+  json-glib,
+  gcr,
+  gnome-online-accounts,
+  gobject-introspection,
+  gnome,
+  p11-kit,
+  openssl,
+  uhttpmock,
+  libsoup,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libgdata";
   version = "0.18.1";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = ["out" "dev" "installedTests"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GData API library";
     homepage = "https://wiki.gnome.org/Projects/libgdata";
-    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
+    maintainers = with maintainers; [raskin] ++ teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
   };

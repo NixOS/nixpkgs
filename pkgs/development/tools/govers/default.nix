@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchgit }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchgit,
+}:
 buildGoPackage rec {
   pname = "govers";
   version = "20160623-${lib.strings.substring 0 7 rev}";
@@ -16,5 +19,4 @@ buildGoPackage rec {
   dontRenameImports = true;
 
   doCheck = false; # fails, silently
-
 }

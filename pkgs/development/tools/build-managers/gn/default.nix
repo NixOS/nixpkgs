@@ -1,5 +1,4 @@
-{ callPackage, ... } @ args:
-
+{callPackage, ...} @ args:
 callPackage ./generic.nix args {
   # Note: Please use the recommended version for Chromium, e.g.:
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/chromium-gn-version.sh?h=packages/gn

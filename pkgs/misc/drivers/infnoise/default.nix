@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libftdi }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libftdi,
+}:
 stdenv.mkDerivation rec {
   pname = "infnoise";
   version = "unstable-2019-08-12";
@@ -12,16 +16,16 @@ stdenv.mkDerivation rec {
   };
 
   # Patch makefile so we can set defines from the command line instead of it depending on .git
-  patches = [ ./makefile.patch ];
+  patches = [./makefile.patch];
   GIT_COMMIT = src.rev;
   GIT_VERSION = version;
   GIT_DATE = "2019-08-12";
 
-  buildInputs = [ libftdi ];
+  buildInputs = [libftdi];
 
   sourceRoot = "source/software";
   makefile = "Makefile.linux";
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
   postPatch = ''
     substituteInPlace init_scripts/infnoise.service --replace "/usr/local" "$out"
   '';
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
       services.udev.packages = [ pkgs.infnoise ];
     '';
     license = licenses.cc0;
-    maintainers = with maintainers; [ StijnDW ];
+    maintainers = with maintainers; [StijnDW];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchCrate, rustPlatform }:
-
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "skim";
   version = "0.9.4";
@@ -9,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0yvjzmz2vqc63l8911jflqf5aww7wxsav2yal5wg9ci9hzq6dl7j";
   };
 
-  outputs = [ "out" "vim" ];
+  outputs = ["out" "vim"];
 
   cargoSha256 = "1jk2vcm2z6r1xd6md98jzpcy7kdwp5p2fzxvvaz9qscyfnx28x17";
 
@@ -39,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/lotabout/skim";
     license = licenses.mit;
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [dywedir];
   };
 }

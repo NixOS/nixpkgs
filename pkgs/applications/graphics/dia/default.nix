@@ -1,8 +1,26 @@
-{ lib, stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkg-config, perlPackages,
-libxml2, gettext, python2, libxml2Python, docbook5, docbook_xsl,
-libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui,
-gtk-mac-integration-gtk2 }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoconf,
+  automake,
+  libtool,
+  gtk2,
+  pkg-config,
+  perlPackages,
+  libxml2,
+  gettext,
+  python2,
+  libxml2Python,
+  docbook5,
+  docbook_xsl,
+  libxslt,
+  intltool,
+  libart_lgpl,
+  withGNOME ? false,
+  libgnomeui,
+  gtk-mac-integration-gtk2,
+}:
 stdenv.mkDerivation {
   pname = "dia";
   version = "0.97.3.20170622";
@@ -18,25 +36,35 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    [ gtk2 libxml2 gettext python2 libxml2Python docbook5
-      libxslt docbook_xsl libart_lgpl ]
-      ++ lib.optional withGNOME libgnomeui
-      ++ lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
+    [
+      gtk2
+      libxml2
+      gettext
+      python2
+      libxml2Python
+      docbook5
+      libxslt
+      docbook_xsl
+      libart_lgpl
+    ]
+    ++ lib.optional withGNOME libgnomeui
+    ++ lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config intltool ]
-    ++ (with perlPackages; [ perl XMLParser ]);
+  nativeBuildInputs =
+    [autoconf automake libtool pkg-config intltool]
+    ++ (with perlPackages; [perl XMLParser]);
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh # autoreconfHook is not enough
   '';
   configureFlags = lib.optional withGNOME "--enable-gnome";
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "Gnome Diagram drawing software";
     homepage = "http://live.gnome.org/Dia";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

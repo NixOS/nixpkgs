@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub, zlib, dune-configurator, zarith, ncurses }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  zlib,
+  dune-configurator,
+  zarith,
+  ncurses,
+}:
 buildDunePackage rec {
   pname = "cryptokit";
   version = "1.16.1";
@@ -19,8 +26,8 @@ buildDunePackage rec {
     runHook postConfigure
   '';
 
-  buildInputs = [ dune-configurator ncurses ];
-  propagatedBuildInputs = [ zarith zlib ];
+  buildInputs = [dune-configurator ncurses];
+  propagatedBuildInputs = [zarith zlib];
 
   doCheck = true;
 

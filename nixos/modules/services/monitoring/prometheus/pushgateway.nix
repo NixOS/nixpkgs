@@ -1,12 +1,14 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.prometheus.pushgateway;
 
   cmdlineArgs =
-       opt "web.listen-address" cfg.web.listen-address
+    opt "web.listen-address" cfg.web.listen-address
     ++ opt "web.telemetry-path" cfg.web.telemetry-path
     ++ opt "web.external-url" cfg.web.external-url
     ++ opt "web.route-prefix" cfg.web.route-prefix
@@ -16,8 +18,7 @@ let
     ++ opt "log.format" cfg.log.format
     ++ cfg.extraFlags;
 
-  opt = k : v : optional (v != null) ''--${k}="${v}"'';
-
+  opt = k: v: optional (v != null) ''--${k}="${v}"'';
 in {
   options = {
     services.prometheus.pushgateway = {
@@ -145,21 +146,25 @@ in {
       {
         assertion = !hasPrefix "/" cfg.stateDir;
         message =
-          "The option services.prometheus.pushgateway.stateDir" +
-          " shouldn't be an absolute directory." +
-          " It should be a directory relative to /var/lib.";
+          "The option services.prometheus.pushgateway.stateDir"
+          + " shouldn't be an absolute directory."
+          + " It should be a directory relative to /var/lib.";
       }
     ];
     systemd.services.pushgateway = {
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
-        Restart  = "always";
+        Restart = "always";
         DynamicUser = true;
-        ExecStart = "${cfg.package}/bin/pushgateway" +
-          optionalString (length cmdlineArgs != 0) (" \\\n  " +
-            concatStringsSep " \\\n  " cmdlineArgs);
-        StateDirectory = if cfg.persistMetrics then cfg.stateDir else null;
+        ExecStart =
+          "${cfg.package}/bin/pushgateway"
+          + optionalString (length cmdlineArgs != 0) (" \\\n  "
+          + concatStringsSep " \\\n  " cmdlineArgs);
+        StateDirectory =
+          if cfg.persistMetrics
+          then cfg.stateDir
+          else null;
       };
     };
   };

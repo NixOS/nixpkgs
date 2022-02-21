@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "cement";
   version = "3.0.6";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "CLI Application Framework for Python";
     homepage = "https://builtoncement.com/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eqyiel ];
+    maintainers = with maintainers; [eqyiel];
   };
 }

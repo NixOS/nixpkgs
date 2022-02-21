@@ -1,12 +1,14 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "rpl";
   version = "1.10";
 
   # Tests not included in pip package.
   doCheck = false;
-
 
   src = fetchFromGitHub {
     owner = "rrthomas";
@@ -31,8 +33,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Replace strings in files";
-    homepage    = "https://github.com/rrthomas/rpl";
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ teto ];
+    homepage = "https://github.com/rrthomas/rpl";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [teto];
   };
 }

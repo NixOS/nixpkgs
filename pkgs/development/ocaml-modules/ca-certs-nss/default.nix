@@ -1,17 +1,17 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, mirage-crypto
-, mirage-clock
-, x509
-, logs
-, fmt
-, bos
-, astring
-, cmdliner
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mirage-crypto,
+  mirage-clock,
+  x509,
+  logs,
+  fmt,
+  bos,
+  astring,
+  cmdliner,
+  alcotest,
 }:
-
 buildDunePackage rec {
   pname = "ca-certs-nss";
   version = "3.74";
@@ -40,12 +40,12 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
 
   meta = with lib; {
     license = licenses.isc;
     description = "X.509 trust anchors extracted from Mozilla's NSS";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
     homepage = "https://github.com/mirage/ca-certs-nss";
   };
 }

@@ -1,26 +1,29 @@
-{ lib
-, pythonOlder
-, pythonAtLeast
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  pythonOlder,
+  pythonAtLeast,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch
   # Python Inputs
-, fastdtw
-, numpy
-, psutil
-, qiskit-terra
-, scikit-learn
-, sparse
+  ,
+  fastdtw,
+  numpy,
+  psutil,
+  qiskit-terra,
+  scikit-learn,
+  sparse
   # Optional inputs
-, withTorch ? true
-, pytorch
+  ,
+  withTorch ? true,
+  pytorch
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pytest-timeout
-, qiskit-aer
+  ,
+  pytestCheckHook,
+  ddt,
+  pytest-timeout,
+  qiskit-aer,
 }:
-
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
   version = "0.3.0";
@@ -34,16 +37,18 @@ buildPythonPackage rec {
     sha256 = "0jycs18apnwrksarpwpmp7scndyx91vnv6fchil4jyx4kym8mnf9";
   };
 
-  propagatedBuildInputs = [
-    fastdtw
-    numpy
-    psutil
-    qiskit-terra
-    scikit-learn
-    sparse
-  ] ++ lib.optional withTorch pytorch;
+  propagatedBuildInputs =
+    [
+      fastdtw
+      numpy
+      psutil
+      qiskit-terra
+      scikit-learn
+      sparse
+    ]
+    ++ lib.optional withTorch pytorch;
 
-  doCheck = false;  # TODO: enable. Tests fail on unstable due to some multithreading issue?
+  doCheck = false; # TODO: enable. Tests fail on unstable due to some multithreading issue?
   checkInputs = [
     pytestCheckHook
     pytest-timeout
@@ -51,13 +56,13 @@ buildPythonPackage rec {
     qiskit-aer
   ];
 
-  pythonImportsCheck = [ "qiskit_machine_learning" ];
+  pythonImportsCheck = ["qiskit_machine_learning"];
 
   pytestFlagsArray = [
     "--durations=10"
     "--showlocals"
     "-vv"
-    "--ignore=test/connectors/test_torch_connector.py"  # TODO: fix, get multithreading errors with python3.9, segfaults
+    "--ignore=test/connectors/test_torch_connector.py" # TODO: fix, get multithreading errors with python3.9, segfaults
   ];
   disabledTests = [
     # Slow tests >10 s
@@ -82,6 +87,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

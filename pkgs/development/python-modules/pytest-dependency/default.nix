@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-dependency";
   version = "0.5.1";
@@ -22,9 +22,9 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     pytest
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/RKrahl/pytest-dependency";
     description = "Manage dependencies of tests";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

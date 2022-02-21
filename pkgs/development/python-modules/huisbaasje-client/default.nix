@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "huisbaasje-client";
   version = "0.1.0";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "huisbaasje.huisbaasje" ];
+  pythonImportsCheck = ["huisbaasje.huisbaasje"];
 
   meta = with lib; {
     description = "Client for Huisbaasje";
     homepage = "https://github.com/dennisschroer/huisbaasje-client";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

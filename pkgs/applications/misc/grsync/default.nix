@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, dee, gtk3, intltool, libdbusmenu-gtk3, libunity, pkg-config, rsync }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dee,
+  gtk3,
+  intltool,
+  libdbusmenu-gtk3,
+  libunity,
+  pkg-config,
+  rsync,
+}:
 stdenv.mkDerivation rec {
   version = "1.3.0";
   pname = "grsync";
@@ -27,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.opbyte.it/grsync/";
     license = licenses.gpl1;
     platforms = platforms.linux;
-    maintainers = [ maintainers.kuznero ];
+    maintainers = [maintainers.kuznero];
   };
 }

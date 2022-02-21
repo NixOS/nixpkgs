@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "terminaltables";
   version = "3.1.10";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/Robpol86/terminaltables";
     license = licenses.mit;
   };
-
 }

@@ -1,16 +1,16 @@
-{ lib
-, fetchurl
-, fetchpatch
-, intltool
-, libtorrent-rasterbar
-, pythonPackages
-, gtk3
-, glib
-, gobject-introspection
-, librsvg
-, wrapGAppsHook
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  intltool,
+  libtorrent-rasterbar,
+  pythonPackages,
+  gtk3,
+  glib,
+  gobject-introspection,
+  librsvg,
+  wrapGAppsHook,
 }:
-
 pythonPackages.buildPythonPackage rec {
   pname = "deluge";
   version = "2.0.5";
@@ -43,7 +43,7 @@ pythonPackages.buildPythonPackage rec {
     librsvg
   ];
 
-  nativeBuildInputs = [ intltool wrapGAppsHook glib ];
+  nativeBuildInputs = [intltool wrapGAppsHook glib];
 
   checkInputs = with pythonPackages; [
     pytestCheckHook
@@ -66,7 +66,7 @@ pythonPackages.buildPythonPackage rec {
     homepage = "https://deluge-torrent.org";
     description = "Torrent client";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ domenkozar ebzzry ];
+    maintainers = with maintainers; [domenkozar ebzzry];
     platforms = platforms.all;
   };
 }

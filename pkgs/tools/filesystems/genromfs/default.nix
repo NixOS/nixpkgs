@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   version = "0.5.2";
   pname = "genromfs";
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "http://romfs.sourceforge.net/";
     description = "Tool for creating romfs file system images";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     platforms = platforms.all;
   };
 }

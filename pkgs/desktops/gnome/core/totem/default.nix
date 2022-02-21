@@ -1,33 +1,34 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, gst_all_1
-, clutter-gtk
-, clutter-gst
-, python3Packages
-, shared-mime-info
-, pkg-config
-, gtk3
-, glib
-, gobject-introspection
-, totem-pl-parser
-, wrapGAppsHook
-, itstool
-, libxml2
-, vala
-, gnome
-, grilo
-, grilo-plugins
-, libpeas
-, adwaita-icon-theme
-, gnome-desktop
-, gsettings-desktop-schemas
-, gdk-pixbuf
-, xvfb-run
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  gst_all_1,
+  clutter-gtk,
+  clutter-gst,
+  python3Packages,
+  shared-mime-info,
+  pkg-config,
+  gtk3,
+  glib,
+  gobject-introspection,
+  totem-pl-parser,
+  wrapGAppsHook,
+  itstool,
+  libxml2,
+  vala,
+  gnome,
+  grilo,
+  grilo-plugins,
+  libpeas,
+  adwaita-icon-theme,
+  gnome-desktop,
+  gsettings-desktop-schemas,
+  gdk-pixbuf,
+  xvfb-run,
 }:
-
 stdenv.mkDerivation rec {
   pname = "totem";
   version = "3.38.2";
@@ -104,7 +105,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  wrapPrefixVariables = [ "PYTHONPATH" ];
+  wrapPrefixVariables = ["PYTHONPATH"];
 
   passthru = {
     updateScript = gnome.updateScript {

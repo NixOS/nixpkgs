@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config,
-  libtool, check, bison, git, gperf,
-  perl, texinfo, help2man, gettext, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  pkg-config,
+  libtool,
+  check,
+  bison,
+  git,
+  gperf,
+  perl,
+  texinfo,
+  help2man,
+  gettext,
+  ncurses,
 }:
-
 stdenv.mkDerivation {
   pname = "dgsh-unstable";
   version = "2017-02-05";
@@ -15,10 +28,22 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [ ./glibc-2.26.patch ];
+  patches = [./glibc-2.26.patch];
 
-  nativeBuildInputs = [ autoconf automake pkg-config libtool check
-    bison git gettext gperf perl texinfo help2man ncurses
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+    libtool
+    check
+    bison
+    git
+    gettext
+    gperf
+    perl
+    texinfo
+    help2man
+    ncurses
   ];
 
   configurePhase = ''
@@ -39,7 +64,7 @@ stdenv.mkDerivation {
     description = "The Directed Graph Shell";
     homepage = "http://www.dmst.aueb.gr/dds/sw/dgsh";
     license = with licenses; asl20;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [vrthra];
     platforms = with platforms; all;
   };
 }

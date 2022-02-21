@@ -1,14 +1,13 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.snapper;
-in
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.snapper;
+in {
   options.services.snapper = {
-
     snapshotRootOnBoot = mkOption {
       type = types.bool;
       default = false;
@@ -50,7 +49,7 @@ in
     };
 
     configs = mkOption {
-      default = { };
+      default = {};
       example = literalExpression ''
         {
           home = {
@@ -81,7 +80,7 @@ in
           };
 
           fstype = mkOption {
-            type = types.enum [ "btrfs" ];
+            type = types.enum ["btrfs"];
             default = "btrfs";
             description = ''
               Filesystem type. Only btrfs is stable and tested.
@@ -102,36 +101,34 @@ in
   };
 
   config = mkIf (cfg.configs != {}) (let
-    documentation = [ "man:snapper(8)" "man:snapper-configs(5)" ];
+    documentation = ["man:snapper(8)" "man:snapper-configs(5)"];
   in {
-
     environment = {
-
-      systemPackages = [ pkgs.snapper ];
+      systemPackages = [pkgs.snapper];
 
       # Note: snapper/config-templates/default is only needed for create-config
       #       which is not the NixOS way to configure.
-      etc = {
-
-        "sysconfig/snapper".text = ''
-          SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
-        '';
-
-      }
-      // (mapAttrs' (name: subvolume: nameValuePair "snapper/configs/${name}" ({
-        text = ''
-          ${subvolume.extraConfig}
-          FSTYPE="${subvolume.fstype}"
-          SUBVOLUME="${subvolume.subvolume}"
-        '';
-      })) cfg.configs)
-      // (lib.optionalAttrs (cfg.filters != null) {
-        "snapper/filters/default.txt".text = cfg.filters;
-      });
-
+      etc =
+        {
+          "sysconfig/snapper".text = ''
+            SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
+          '';
+        }
+        // (mapAttrs' (name: subvolume:
+          nameValuePair "snapper/configs/${name}" ({
+            text = ''
+              ${subvolume.extraConfig}
+              FSTYPE="${subvolume.fstype}"
+              SUBVOLUME="${subvolume.subvolume}"
+            '';
+          }))
+        cfg.configs)
+        // (lib.optionalAttrs (cfg.filters != null) {
+          "snapper/filters/default.txt".text = cfg.filters;
+        });
     };
 
-    services.dbus.packages = [ pkgs.snapper ];
+    services.dbus.packages = [pkgs.snapper];
 
     systemd.services.snapperd = {
       description = "DBus interface for snapper";
@@ -153,7 +150,7 @@ in
     systemd.services.snapper-timeline = {
       description = "Timeline of Snapper Snapshots";
       inherit documentation;
-      requires = [ "local-fs.target" ];
+      requires = ["local-fs.target"];
       serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --timeline";
       startAt = cfg.snapshotInterval;
     };
@@ -167,8 +164,8 @@ in
     systemd.timers.snapper-cleanup = {
       description = "Cleanup of Snapper Snapshots";
       inherit documentation;
-      wantedBy = [ "timers.target" ];
-      requires = [ "local-fs.target" ];
+      wantedBy = ["timers.target"];
+      requires = ["local-fs.target"];
       timerConfig.OnBootSec = "10m";
       timerConfig.OnUnitActiveSec = cfg.cleanupInterval;
     };
@@ -178,10 +175,9 @@ in
       inherit documentation;
       serviceConfig.ExecStart = "${pkgs.snapper}/bin/snapper --config root create --cleanup-algorithm number --description boot";
       serviceConfig.type = "oneshot";
-      requires = [ "local-fs.target" ];
-      wantedBy = [ "multi-user.target" ];
+      requires = ["local-fs.target"];
+      wantedBy = ["multi-user.target"];
       unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
     };
-
   });
 }

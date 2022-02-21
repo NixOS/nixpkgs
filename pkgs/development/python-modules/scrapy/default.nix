@@ -1,32 +1,32 @@
-{ lib
-, stdenv
-, botocore
-, buildPythonPackage
-, cryptography
-, cssselect
-, fetchPypi
-, fetchpatch
-, glibcLocales
-, installShellFiles
-, itemadapter
-, itemloaders
-, jmespath
-, lxml
-, parsel
-, protego
-, pydispatcher
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, queuelib
-, service-identity
-, sybil
-, testfixtures
-, twisted
-, w3lib
-, zope_interface
+{
+  lib,
+  stdenv,
+  botocore,
+  buildPythonPackage,
+  cryptography,
+  cssselect,
+  fetchPypi,
+  fetchpatch,
+  glibcLocales,
+  installShellFiles,
+  itemadapter,
+  itemloaders,
+  jmespath,
+  lxml,
+  parsel,
+  protego,
+  pydispatcher,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  queuelib,
+  service-identity,
+  sybil,
+  testfixtures,
+  twisted,
+  w3lib,
+  zope_interface,
 }:
-
 buildPythonPackage rec {
   pname = "scrapy";
   version = "2.5.1";
@@ -80,7 +80,7 @@ buildPythonPackage rec {
       name = "remove-h2.patch";
       url = "https://github.com/scrapy/scrapy/commit/c5b1ee810167266fcd259f263dbfc0fe0204761a.patch";
       sha256 = "0sa39yx9my4nqww8a12bk9zagx7b56vwy7xpxm4xgjapjl6mcc0k";
-      excludes = [ "tox.ini" ];
+      excludes = ["tox.ini"];
     })
   ];
 
@@ -100,28 +100,30 @@ buildPythonPackage rec {
     "docs"
   ];
 
-  disabledTests = [
-    # It's unclear if the failures are related to libxml2, https://github.com/NixOS/nixpkgs/pull/123890
-    "test_nested_css"
-    "test_nested_xpath"
-    "test_flavor_detection"
-    # Requires network access
-    "FTPFeedStorageTest"
-    "FeedExportTest"
-    "test_custom_asyncio_loop_enabled_true"
-    "test_custom_loop_asyncio"
-    "test_custom_loop_asyncio_deferred_signal"
-    "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
-    "test_timeout_download_from_spider_nodata_rcvd"
-    # Fails with AssertionError
-    "test_peek_fifo"
-    "test_peek_one_element"
-    "test_peek_lifo"
-    "test_callback_kwargs"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_xmliter_encoding"
-    "test_download"
-  ];
+  disabledTests =
+    [
+      # It's unclear if the failures are related to libxml2, https://github.com/NixOS/nixpkgs/pull/123890
+      "test_nested_css"
+      "test_nested_xpath"
+      "test_flavor_detection"
+      # Requires network access
+      "FTPFeedStorageTest"
+      "FeedExportTest"
+      "test_custom_asyncio_loop_enabled_true"
+      "test_custom_loop_asyncio"
+      "test_custom_loop_asyncio_deferred_signal"
+      "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
+      "test_timeout_download_from_spider_nodata_rcvd"
+      # Fails with AssertionError
+      "test_peek_fifo"
+      "test_peek_one_element"
+      "test_peek_lifo"
+      "test_callback_kwargs"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_xmliter_encoding"
+      "test_download"
+    ];
 
   postInstall = ''
     installManPage extras/scrapy.1
@@ -145,7 +147,7 @@ buildPythonPackage rec {
     homepage = "https://scrapy.org/";
     changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewkett marsam ];
+    maintainers = with maintainers; [drewkett marsam];
     platforms = platforms.unix;
   };
 }

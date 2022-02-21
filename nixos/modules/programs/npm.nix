@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.programs.npm;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.programs.npm;
+in {
   ###### interface
 
   options = {
@@ -48,7 +48,6 @@ in
 
     environment.variables.NPM_CONFIG_GLOBALCONFIG = "/etc/npmrc";
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
-
 }

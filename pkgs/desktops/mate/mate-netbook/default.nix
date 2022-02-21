@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libwnck, libfakekey, libXtst, mate, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  libwnck,
+  libfakekey,
+  libXtst,
+  mate,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-netbook";
   version = "1.26.0";
@@ -25,7 +37,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "MATE utilities for netbooks";
@@ -37,7 +49,7 @@ stdenv.mkDerivation rec {
       devices with low resolution displays.
     '';
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl3Only lgpl2Plus ];
+    license = with licenses; [gpl3Only lgpl2Plus];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

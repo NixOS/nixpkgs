@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, openssh, debugLevel ? 0 }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  openssh,
+  debugLevel ? 0,
+}:
 stdenv.mkDerivation {
   pname = "scponly";
   version = "4.8";
@@ -11,16 +16,16 @@ stdenv.mkDerivation {
     sha256 = "U0K7lOp18ytNjh3KVFmc6vL+/tG4ETnwLEPQEhM4lXE=";
   };
 
-  patches = [ ./scponly-fix-make.patch ];
+  patches = [./scponly-fix-make.patch];
 
-  buildInputs = [ openssh ];
+  buildInputs = [openssh];
 
   # Add path to sftp-server so configure finds it
   preConfigure = "export PATH=$PATH:${openssh}/libexec";
 
   # chroot doesn't seem to work, so not enabling
   # rsync could also be optionally enabled
-  configureFlags = [ "--enable-winscp-compat" ];
+  configureFlags = ["--enable-winscp-compat"];
 
   postInstall = lib.optionalString (debugLevel > 0) ''
     mkdir -p $out/etc/scponly && echo ${
@@ -33,7 +38,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A shell that only permits scp and sftp-server";
     homepage = "https://github.com/scponly/scponly";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ wmertens ];
+    license = with licenses; [bsd2];
+    maintainers = with maintainers; [wmertens];
   };
 }

@@ -1,22 +1,22 @@
-{ lib
-, brotli
-, brotlicffi
-, buildPythonPackage
-, certifi
-, chardet
-, charset-normalizer
-, fetchPypi
-, idna
-, isPy27
-, isPy3k
-, pysocks
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, trustme
-, urllib3
+{
+  lib,
+  brotli,
+  brotlicffi,
+  buildPythonPackage,
+  certifi,
+  chardet,
+  charset-normalizer,
+  fetchPypi,
+  idna,
+  isPy27,
+  isPy3k,
+  pysocks,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  trustme,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "requests";
   version = "2.27.1";
@@ -37,17 +37,20 @@ buildPythonPackage rec {
       --replace ",<3" ""
   '';
 
-  propagatedBuildInputs = [
-    certifi
-    idna
-    urllib3
-    chardet
-  ] ++ lib.optionals (isPy3k) [
-    brotlicffi
-    charset-normalizer
-  ] ++ lib.optionals (isPy27) [
-    brotli
-  ];
+  propagatedBuildInputs =
+    [
+      certifi
+      idna
+      urllib3
+      chardet
+    ]
+    ++ lib.optionals (isPy3k) [
+      brotlicffi
+      charset-normalizer
+    ]
+    ++ lib.optionals (isPy27) [
+      brotli
+    ];
 
   checkInputs = [
     pysocks
@@ -84,6 +87,6 @@ buildPythonPackage rec {
     description = "HTTP library for Python";
     homepage = "http://docs.python-requests.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

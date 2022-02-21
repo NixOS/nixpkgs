@@ -1,15 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, click
-, click-default-group
-, incremental
-, jinja2
-, mock
-, pytestCheckHook
-, toml
-, twisted
-, git # shells out to git
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  click,
+  click-default-group,
+  incremental,
+  jinja2,
+  mock,
+  pytestCheckHook,
+  toml,
+  twisted,
+  git
+  # shells out to git
 }:
-
 buildPythonPackage rec {
   pname = "towncrier";
   version = "21.3.0";
@@ -35,12 +39,12 @@ buildPythonPackage rec {
     twisted
     pytestCheckHook
   ];
-  pythonImportsCheck = [ "towncrier" ];
+  pythonImportsCheck = ["towncrier"];
 
   meta = with lib; {
     description = "Utility to produce useful, summarised news files";
     homepage = "https://github.com/twisted/towncrier/";
     license = licenses.mit;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [];
   };
 }

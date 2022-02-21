@@ -1,9 +1,9 @@
-{ lib
-, build-idris-package
-, fetchFromGitHub
+{
+  lib,
+  build-idris-package,
+  fetchFromGitHub,
 }:
-
-build-idris-package  {
+build-idris-package {
   name = "tf-random";
   version = "2020-01-15";
 
@@ -18,6 +18,6 @@ build-idris-package  {
     description = "Port of Haskell tf-random";
     homepage = "https://github.com/david-christiansen/idris-tf-random";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.mikesperber ];
+    maintainers = [lib.maintainers.mikesperber];
   };
 }

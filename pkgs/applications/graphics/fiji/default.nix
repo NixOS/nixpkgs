@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, jdk11
-, makeDesktopItem
-, copyDesktopItems
-, runtimeShell
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  jdk11,
+  makeDesktopItem,
+  copyDesktopItems,
+  runtimeShell,
 }:
 stdenv.mkDerivation rec {
   pname = "fiji";
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper copyDesktopItems ];
-  buildInputs = [ stdenv.cc.cc.lib ];
+  nativeBuildInputs = [autoPatchelfHook makeWrapper copyDesktopItems];
+  buildInputs = [stdenv.cc.cc.lib];
 
   desktopItems = [
     (makeDesktopItem {
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/.fiji-launcher-hack
 
     makeWrapper $out/bin/.fiji-launcher-hack $out/bin/fiji \
-      --prefix PATH : ${lib.makeBinPath [ jdk11 ]} \
+      --prefix PATH : ${lib.makeBinPath [jdk11]} \
       --set JAVA_HOME ${jdk11.home}
 
     ln $out/fiji/images/icon.png $out/share/pixmaps/fiji.png
@@ -70,8 +71,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://imagej.net/software/fiji/";
     description = "batteries-included distribution of ImageJ2, bundling a lot of plugins which facilitate scientific image analysis";
-    platforms = [ "x86_64-linux" ];
-    license = with lib.licenses; [ gpl2Plus gpl3Plus bsd2 publicDomain ];
-    maintainers = with maintainers; [ zane ];
+    platforms = ["x86_64-linux"];
+    license = with lib.licenses; [gpl2Plus gpl3Plus bsd2 publicDomain];
+    maintainers = with maintainers; [zane];
   };
 }

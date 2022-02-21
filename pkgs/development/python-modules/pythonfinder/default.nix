@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, attrs
-, cached-property
-, click
-, six
-, packaging
-, pytest-cov
-, pytest-timeout
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  attrs,
+  cached-property,
+  click,
+  six,
+  packaging,
+  pytest-cov,
+  pytest-timeout,
 }:
-
 buildPythonPackage rec {
   pname = "pythonfinder";
   version = "1.2.9";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [ "--no-cov" ];
+  pytestFlagsArray = ["--no-cov"];
 
   # these tests invoke git in a subprocess and
   # for some reason git can't be found even if included in checkInputs
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sarugaku/pythonfinder";
     description = "Cross Platform Search Tool for Finding Pythons";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [cpcloud];
   };
 }

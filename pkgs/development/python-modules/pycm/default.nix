@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, pytestCheckHook
-, pythonOlder
-, seaborn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  seaborn,
 }:
-
 buildPythonPackage rec {
   pname = "pycm";
   version = "3.4";
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Multiclass confusion matrix library";
     homepage = "https://pycm.ir";
     license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

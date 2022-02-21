@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, vala
-, meson
-, ninja
-, pkg-config
-, python3
-, libgee
-, gsettings-desktop-schemas
-, gnome
-, pantheon
-, wrapGAppsHook
-, gtk3
-, json-glib
-, glib
-, glib-networking
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  fetchpatch,
+  vala,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  libgee,
+  gsettings-desktop-schemas,
+  gnome,
+  pantheon,
+  wrapGAppsHook,
+  gtk3,
+  json-glib,
+  glib,
+  glib-networking,
+  libhandy,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tootle";
   version = "1.0";
@@ -82,6 +82,6 @@ stdenv.mkDerivation rec {
     description = "Simple Mastodon client designed for elementary OS";
     homepage = "https://github.com/bleakgrey/tootle";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

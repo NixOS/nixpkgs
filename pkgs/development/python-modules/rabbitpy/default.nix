@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, pamqp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  nose,
+  pamqp,
 }:
-
 buildPythonPackage rec {
   version = "2.0.1";
   pname = "rabbitpy";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
     sha256 = "0m5z3i3d5adrz1wh6y35xjlls3cq6p4y9p1mzghw3k7hdvg26cck";
   };
 
-  propagatedBuildInputs = [ pamqp ];
-  checkInputs = [ mock nose ];
+  propagatedBuildInputs = [pamqp];
+  checkInputs = [mock nose];
 
   checkPhase = ''
     runHook preCheck
@@ -43,5 +43,4 @@ buildPythonPackage rec {
     # https://github.com/gmr/rabbitpy/issues/125
     broken = true;
   };
-
 }

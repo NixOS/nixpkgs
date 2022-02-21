@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, dbus-glib
-, udev, libnl, libuuid, gnutls, dhcp
-, libgcrypt, perl, libgudev, avahi, ppp, kmod }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  dbus-glib,
+  udev,
+  libnl,
+  libuuid,
+  gnutls,
+  dhcp,
+  libgcrypt,
+  perl,
+  libgudev,
+  avahi,
+  ppp,
+  kmod,
+}:
 stdenv.mkDerivation rec {
   pname = "networkmanager";
   version = "0.9.8.10";
@@ -31,29 +46,30 @@ stdenv.mkDerivation rec {
     "--with-iptables=no"
     "--with-udev-dir=\${out}/lib/udev"
     "--with-resolvconf=no"
-    "--sysconfdir=/etc" "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
-    "--with-crypto=gnutls" "--disable-more-warnings"
+    "--with-crypto=gnutls"
+    "--disable-more-warnings"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-kernel-firmware-dir=/run/current-system/firmware"
     "--disable-ppp"
   ];
 
-  buildInputs = [ udev libnl libuuid gnutls libgcrypt libgudev ];
+  buildInputs = [udev libnl libuuid gnutls libgcrypt libgudev];
 
-  propagatedBuildInputs = [ dbus-glib ];
+  propagatedBuildInputs = [dbus-glib];
 
-  nativeBuildInputs = [ intltool pkg-config ];
+  nativeBuildInputs = [intltool pkg-config];
 
-  patches =
-    [ ./libnl-3.2.25.patch
-      ./nixos-purity.patch
-    ];
+  patches = [
+    ./libnl-3.2.25.patch
+    ./nixos-purity.patch
+  ];
 
-  preInstall =
-    ''
-      installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" )
-    '';
+  preInstall = ''
+    installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" )
+  '';
 
   meta = with lib; {
     homepage = "http://projects.gnome.org/NetworkManager/";

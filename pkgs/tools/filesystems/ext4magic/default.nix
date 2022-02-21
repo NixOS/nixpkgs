@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, file, libuuid, e2fsprogs, zlib, bzip2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  file,
+  libuuid,
+  e2fsprogs,
+  zlib,
+  bzip2,
+}:
 stdenv.mkDerivation rec {
   version = "0.3.2";
   pname = "ext4magic";
@@ -11,14 +20,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-        url = "https://sourceforge.net/p/ext4magic/tickets/10/attachment/ext4magic-0.3.2-i_dir_acl.patch";
-        sha256 = "1accydd8kigid68yir2fbihm3r3x8ws3iyznp25snkx41w6y6x8c";
+      url = "https://sourceforge.net/p/ext4magic/tickets/10/attachment/ext4magic-0.3.2-i_dir_acl.patch";
+      sha256 = "1accydd8kigid68yir2fbihm3r3x8ws3iyznp25snkx41w6y6x8c";
     })
     ./glibc-fix.patch
   ];
 
-  buildInputs = [ file libuuid e2fsprogs zlib bzip2 ];
-  installFlags = [ "PREFIX=$(out)" ];
+  buildInputs = [file libuuid e2fsprogs zlib bzip2];
+  installFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Recover / undelete files from ext3 or ext4 partitions";
@@ -35,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ext4magic.sourceforge.net/ext4magic_en.html";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.rkoe ];
+    maintainers = [maintainers.rkoe];
   };
 }

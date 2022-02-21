@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, xorgserver
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  xorgserver,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "xvfbwrapper";
   version = "0.2.9";
@@ -13,17 +13,17 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "097wxhvp01ikqpg1z3v8rqhss6f1vwr399zpz9a05d2135bsxx5w";
   };
-  propagatedBuildInputs = [ xorgserver ];
+  propagatedBuildInputs = [xorgserver];
 
   # See: https://github.com/cgoldberg/xvfbwrapper/issues/30
   doCheck = false;
 
-  checkInputs = [ mock ];
+  checkInputs = [mock];
 
   meta = with lib; {
     description = "Run headless display inside X virtual framebuffer (Xvfb)";
     homepage = "https://github.com/cgoldberg/xvfbwrapper";
     license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    maintainers = with maintainers; [ashgillman];
   };
 }

@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cython
-, h5py
-, matplotlib
-, numpy
-, phonopy
-, pymatgen
-, scipy
-, seekpath
-, spglib
-, castepxbin
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  cython,
+  h5py,
+  matplotlib,
+  numpy,
+  phonopy,
+  pymatgen,
+  scipy,
+  seekpath,
+  spglib,
+  castepxbin,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "sumo";
   version = "2.2.5";
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Toolkit for plotting and analysis of ab initio solid-state calculation data";
     homepage = "https://github.com/SMTG-UCL/sumo";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

@@ -1,17 +1,24 @@
-{ lib, stdenv, buildPackages
-, autoreconfHook, bison, binutils-unwrapped
-, libiberty, libbfd
+{
+  lib,
+  stdenv,
+  buildPackages,
+  autoreconfHook,
+  bison,
+  binutils-unwrapped,
+  libiberty,
+  libbfd,
 }:
-
 stdenv.mkDerivation {
   pname = "libopcodes";
   inherit (binutils-unwrapped) version src;
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  patches = binutils-unwrapped.patches ++ [
-    ../../tools/misc/binutils/build-components-separately.patch
-  ];
+  patches =
+    binutils-unwrapped.patches
+    ++ [
+      ../../tools/misc/binutils/build-components-separately.patch
+    ];
 
   # We just want to build libopcodes
   postPatch = ''
@@ -19,15 +26,16 @@ stdenv.mkDerivation {
     find . ../include/opcode -type f -exec sed {} -i -e 's/"bfd.h"/<bfd.h>/' \;
   '';
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty ];
+  depsBuildBuild = [buildPackages.stdenv.cc];
+  nativeBuildInputs = [autoreconfHook bison];
+  buildInputs = [libiberty];
   # dis-asm.h includes bfd.h
-  propagatedBuildInputs = [ libbfd ];
+  propagatedBuildInputs = [libbfd];
 
-  configurePlatforms = [ "build" "host" ];
+  configurePlatforms = ["build" "host"];
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--enable-shared"
   ];
@@ -38,7 +46,7 @@ stdenv.mkDerivation {
     description = "A library from binutils for manipulating machine code";
     homepage = "https://www.gnu.org/software/binutils/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericson2314 ];
+    maintainers = with maintainers; [ericson2314];
     platforms = platforms.unix;
   };
 }

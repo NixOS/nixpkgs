@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl, perl
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  buildsystem,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netsurf-${libname}";
   libname = "libparserutils";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MiuuYbMMzt4+MFv26uJBSSBkl3W8X/HRtogBKjxJR9g=";
   };
 
-  buildInputs = [ perl buildsystem ];
+  buildInputs = [perl buildsystem];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "Parser building library for netsurf browser";
     license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    maintainers = [maintainers.vrthra maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

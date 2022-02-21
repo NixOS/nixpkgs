@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libconfuse }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libconfuse,
+}:
 stdenv.mkDerivation rec {
   pname = "libite";
   version = "2.5.1";
@@ -11,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-G9X0ZMyasS9praogWnLDU1LeTvK4fYPgJ89o2y3AIJI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libconfuse ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [libconfuse];
 
   meta = with lib; {
     description = "Lightweight library of frog DNA";
@@ -30,8 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/troglobit/libite";
     platforms = with platforms; linux ++ netbsd;
-    maintainers = with maintainers; [ fpletz ];
-    license = with licenses; [ mit isc bsd2 bsd3 ];
+    maintainers = with maintainers; [fpletz];
+    license = with licenses; [mit isc bsd2 bsd3];
   };
 }
-

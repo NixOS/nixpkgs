@@ -1,8 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
   version = "6.18.6";
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   # needs a Docker setup
   doCheck = false;
 
-  pythonImportsCheck = [ "getmailcore" ];
+  pythonImportsCheck = ["getmailcore"];
 
   postPatch = ''
     # getmail spends a lot of effort to build an absolute path for
@@ -29,6 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "A program for retrieving mail";
     homepage = "https://getmail6.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbe dotlambda ];
+    maintainers = with maintainers; [abbe dotlambda];
   };
 }

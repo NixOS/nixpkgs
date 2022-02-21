@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "iniparser";
   version = "4.1";
@@ -46,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "Free standalone ini file parsing library";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.primeos ];
+    maintainers = [maintainers.primeos];
   };
 }

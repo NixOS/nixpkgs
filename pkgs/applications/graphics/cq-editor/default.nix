@@ -1,10 +1,10 @@
-{ lib
-, mkDerivationWith
-, python3Packages
-, fetchFromGitHub
-, wrapQtAppsHook
+{
+  lib,
+  mkDerivationWith,
+  python3Packages,
+  fetchFromGitHub,
+  wrapQtAppsHook,
 }:
-
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "cq-editor";
   version = "0.1.1";
@@ -32,7 +32,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [wrapQtAppsHook];
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
@@ -57,7 +57,6 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     description = "CadQuery GUI editor based on PyQT";
     homepage = "https://github.com/CadQuery/CQ-editor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc marcus7070 ];
+    maintainers = with maintainers; [costrouc marcus7070];
   };
-
 }

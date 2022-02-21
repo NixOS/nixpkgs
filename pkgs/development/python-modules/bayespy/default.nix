@@ -1,7 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, nose, glibcLocales
-, numpy, scipy, matplotlib, h5py }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytest,
+  nose,
+  glibcLocales,
+  numpy,
+  scipy,
+  matplotlib,
+  h5py,
+}:
 buildPythonPackage rec {
   pname = "bayespy";
   version = "0.5.22";
@@ -15,8 +24,8 @@ buildPythonPackage rec {
     sha256 = "ed0057dc22bd392df4b3bba23536117e1b2866e3201b12c5a37428d23421a5ba";
   };
 
-  checkInputs = [ pytest nose glibcLocales ];
-  propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
+  checkInputs = [pytest nose glibcLocales];
+  propagatedBuildInputs = [numpy scipy matplotlib h5py];
 
   checkPhase = ''
     LC_ALL=en_US.utf-8 pytest -k 'not test_message_to_parents'
@@ -26,6 +35,6 @@ buildPythonPackage rec {
     homepage = "http://www.bayespy.org";
     description = "Variational Bayesian inference tools for Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

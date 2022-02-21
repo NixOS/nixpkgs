@@ -1,9 +1,9 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
-, makeWrapper
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  makeWrapper,
 }:
-
 buildGoPackage rec {
   pname = "docker-slim";
   version = "1.37.3";
@@ -17,14 +17,15 @@ buildGoPackage rec {
     sha256 = "sha256-jzwQ3nrhLDiQXcVkPiXrRAmpLQOD8ILBnoCEUiEbxzw=";
   };
 
-  subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
+  subPackages = ["cmd/docker-slim" "cmd/docker-slim-sensor"];
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X ${goPackagePath}/pkg/version.appVersionTag=${version}"
     "-X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}"
   ];
@@ -40,6 +41,6 @@ buildGoPackage rec {
     homepage = "https://dockersl.im/";
     changelog = "https://github.com/docker-slim/docker-slim/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
+    maintainers = with maintainers; [Br1ght0ne marsam mbrgm];
   };
 }

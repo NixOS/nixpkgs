@@ -1,13 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, expat
-, fontconfig
-, freetype
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "fontfor";
   version = "0.3.1";
@@ -34,8 +34,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Find fonts which can show a specified character and preview them in browser";
     homepage = "https://github.com/7sDream/fontfor";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ shamilton ];
+    license = with licenses; [gpl3Plus];
+    maintainers = with maintainers; [shamilton];
     platforms = platforms.linux;
   };
 }

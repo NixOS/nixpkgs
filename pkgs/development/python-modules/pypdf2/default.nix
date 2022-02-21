@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, python
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  python,
+  isPy3k,
 }:
-
 buildPythonPackage rec {
   pname = "PyPDF2";
   version = "1.26.0";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = [glibcLocales];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s Tests
@@ -29,7 +29,6 @@ buildPythonPackage rec {
     description = "A Pure-Python library built as a PDF toolkit";
     homepage = "http://mstamy2.github.com/PyPDF2/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ desiderius vrthra ];
+    maintainers = with maintainers; [desiderius vrthra];
   };
-
 }

@@ -1,11 +1,12 @@
-{ cfg }:
-{ config, lib, name, ... }:
-let
+{cfg}: {
+  config,
+  lib,
+  name,
+  ...
+}: let
   inherit (lib) literalExpression mkOption types;
-in
-{
+in {
   options = {
-
     hostName = mkOption {
       type = types.str;
       default = name;
@@ -14,8 +15,8 @@ in
 
     serverAliases = mkOption {
       type = with types; listOf str;
-      default = [ ];
-      example = [ "www.example.org" "example.org" ];
+      default = [];
+      example = ["www.example.org" "example.org"];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
@@ -26,8 +27,8 @@ in
       description = ''
         A list of host interfaces to bind to for this virtual host.
       '';
-      default = [ ];
-      example = [ "127.0.0.1" "::1" ];
+      default = [];
+      example = ["127.0.0.1" "::1"];
     };
 
     useACMEHost = mkOption {
@@ -74,6 +75,5 @@ in
         automatically generated <literal>Caddyfile</literal>.
       '';
     };
-
   };
 }

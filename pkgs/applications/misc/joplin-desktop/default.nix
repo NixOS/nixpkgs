@@ -1,6 +1,12 @@
-{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg }:
-
-let
+{
+  lib,
+  stdenv,
+  appimageTools,
+  fetchurl,
+  gsettings-desktop-schemas,
+  gtk3,
+  undmg,
+}: let
   pname = "joplin-desktop";
   version = "2.6.10";
   name = "${pname}-${version}";
@@ -8,17 +14,23 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  suffix = {
-    x86_64-linux = "AppImage";
-    x86_64-darwin = "dmg";
-  }.${system} or throwSystem;
+  suffix =
+    {
+      x86_64-linux = "AppImage";
+      x86_64-darwin = "dmg";
+    }
+    .${system}
+    or throwSystem;
 
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
-    sha256 = {
-      x86_64-linux = "sha256-2/QYEzQjB9n/4k5I/fry3ol8Fpsb5+tc1ttVdf2ID+4=";
-      x86_64-darwin = "sha256-BwBpq78hYJVUItUgs9lonBTV4YWJ+qvML6VTj5M4BQ4=";
-    }.${system} or throwSystem;
+    sha256 =
+      {
+        x86_64-linux = "sha256-2/QYEzQjB9n/4k5I/fry3ol8Fpsb5+tc1ttVdf2ID+4=";
+        x86_64-darwin = "sha256-BwBpq78hYJVUItUgs9lonBTV4YWJ+qvML6VTj5M4BQ4=";
+      }
+      .${system}
+      or throwSystem;
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -36,8 +48,8 @@ let
     '';
     homepage = "https://joplinapp.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ hugoreeves ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [hugoreeves];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
   };
 
   linux = appimageTools.wrapType2 rec {
@@ -63,7 +75,7 @@ let
   darwin = stdenv.mkDerivation {
     inherit name src meta;
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [undmg];
 
     sourceRoot = "Joplin.app";
 
@@ -73,6 +85,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+  if stdenv.isDarwin
+  then darwin
+  else linux

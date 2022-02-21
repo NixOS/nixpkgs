@@ -1,6 +1,9 @@
-{ lib, fetchzip, mkfontscale, mkfontdir }:
-
-let
+{
+  lib,
+  fetchzip,
+  mkfontscale,
+  mkfontdir,
+}: let
   version = "0.2.20080216.2";
 in {
   arphic-ukai = fetchzip {
@@ -23,7 +26,7 @@ in {
       homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
 
       license = licenses.arphicpl;
-      maintainers = [ maintainers.changlinli ];
+      maintainers = [maintainers.changlinli];
       platforms = platforms.all;
     };
   };
@@ -48,7 +51,7 @@ in {
       homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
 
       license = licenses.arphicpl;
-      maintainers = [ maintainers.changlinli ];
+      maintainers = [maintainers.changlinli];
       platforms = platforms.all;
     };
   };

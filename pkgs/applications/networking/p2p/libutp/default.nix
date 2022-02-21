@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "libutp";
   version = "unstable-2017-01-02";
@@ -12,13 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "CvuZLOBksIl/lS6LaqOIuzNvX3ihlIPjI3Eqwo7YJH0=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "uTorrent Transport Protocol library";
     homepage = "https://github.com/transmission/libutp";
     license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [emilytrau];
     platforms = platforms.unix;
   };
 }

@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchgit
-, automake
-, alsa-lib
-, ladspaH
-, libjack2
-, fftw
-, zita-alsa-pcmi
-, qt5
-, pkg-config
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchgit,
+  automake,
+  alsa-lib,
+  ladspaH,
+  libjack2,
+  fftw,
+  zita-alsa-pcmi,
+  qt5,
+  pkg-config,
+  autoreconfHook,
 }:
-
 stdenv.mkDerivation rec {
   name = "ams";
   version = "unstable-2019-04-27";
@@ -27,22 +28,24 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    alsa-lib
-    ladspaH
-    libjack2
-    fftw
-    zita-alsa-pcmi
-  ] ++ (with qt5; [
-    qtbase
-    qttools
-  ]);
+  buildInputs =
+    [
+      alsa-lib
+      ladspaH
+      libjack2
+      fftw
+      zita-alsa-pcmi
+    ]
+    ++ (with qt5; [
+      qtbase
+      qttools
+    ]);
 
   meta = with lib; {
     description = "Realtime modular synthesizer for ALSA";
     homepage = "http://alsamodular.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    maintainers = with maintainers; [sjfloat];
   };
 }

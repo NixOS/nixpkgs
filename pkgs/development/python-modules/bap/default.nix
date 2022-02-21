@@ -1,5 +1,10 @@
-{lib, buildPythonPackage, fetchFromGitHub, bap, requests}:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bap,
+  requests,
+}:
 buildPythonPackage rec {
   pname = "bap";
   version = "1.3.1";
@@ -17,7 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";
     homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
-    maintainers = [ maintainers.maurer ];
+    maintainers = [maintainers.maurer];
     license = licenses.mit;
   };
 }

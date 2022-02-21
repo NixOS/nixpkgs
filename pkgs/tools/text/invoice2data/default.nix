@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, imagemagick
-, python3
-, tesseract
-, xpdf
+{
+  lib,
+  fetchFromGitHub,
+  imagemagick,
+  python3,
+  tesseract,
+  xpdf,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "invoice2data";
   version = "0.3.6";
@@ -36,11 +36,16 @@ python3.pkgs.buildPythonApplication rec {
       --replace "pytest-runner" ""
   '';
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [
-    imagemagick
-    tesseract
-    xpdf
-  ])];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      imagemagick
+      tesseract
+      xpdf
+    ])
+  ];
 
   # Tests fails even when ran manually on my ubuntu machine !!
   doCheck = false;
@@ -53,6 +58,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Data extractor for PDF invoices";
     homepage = "https://github.com/invoice-x/invoice2data";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

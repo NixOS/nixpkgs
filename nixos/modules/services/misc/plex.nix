@@ -1,13 +1,14 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-  cfg = config.services.plex;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.plex;
+in {
   imports = [
-    (mkRemovedOptionModule [ "services" "plex" "managePlugins" ] "Please omit or define the option: `services.plex.extraPlugins' instead.")
+    (mkRemovedOptionModule ["services" "plex" "managePlugins"] "Please omit or define the option: `services.plex.extraPlugins' instead.")
   ];
 
   options = {
@@ -96,8 +97,8 @@ in
     # Most of this is just copied from the RPM package's systemd service file.
     systemd.services.plex = {
       description = "Plex Media Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "simple";
@@ -115,9 +116,8 @@ in
               echo "Creating initial Plex data directory in: $PLEX_DATADIR"
               install -d -m 0755 -o "${cfg.user}" -g "${cfg.group}" "$PLEX_DATADIR"
             fi
-         '';
-        in
-          "!${preStartScript}";
+          '';
+        in "!${preStartScript}";
 
         ExecStart = "${cfg.package}/bin/plexmediaserver";
         KillSignal = "SIGQUIT";
@@ -126,9 +126,9 @@ in
 
       environment = {
         # Configuration for our FHS userenv script
-        PLEX_DATADIR=cfg.dataDir;
-        PLEX_PLUGINS=concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
-        PLEX_SCANNERS=concatMapStringsSep ":" builtins.toString cfg.extraScanners;
+        PLEX_DATADIR = cfg.dataDir;
+        PLEX_PLUGINS = concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
+        PLEX_SCANNERS = concatMapStringsSep ":" builtins.toString cfg.extraScanners;
 
         # The following variables should be set by the FHS userenv script:
         #   PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
@@ -136,19 +136,19 @@ in
 
         # Allow access to GPU acceleration; the Plex LD_LIBRARY_PATH is added
         # by the FHS userenv script.
-        LD_LIBRARY_PATH="/run/opengl-driver/lib";
+        LD_LIBRARY_PATH = "/run/opengl-driver/lib";
 
-        PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6";
-        PLEX_MEDIA_SERVER_TMPDIR="/tmp";
-        PLEX_MEDIA_SERVER_USE_SYSLOG="true";
-        LC_ALL="en_US.UTF-8";
-        LANG="en_US.UTF-8";
+        PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS = "6";
+        PLEX_MEDIA_SERVER_TMPDIR = "/tmp";
+        PLEX_MEDIA_SERVER_USE_SYSLOG = "true";
+        LC_ALL = "en_US.UTF-8";
+        LANG = "en_US.UTF-8";
       };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 32400 3005 8324 32469 ];
-      allowedUDPPorts = [ 1900 5353 32410 32412 32413 32414 ];
+      allowedTCPPorts = [32400 3005 8324 32469];
+      allowedUDPPorts = [1900 5353 32410 32412 32413 32414];
     };
 
     users.users = mkIf (cfg.user == "plex") {

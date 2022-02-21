@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coverage
-, ipykernel
-, jupyter-client
-, nbformat
-, pytestCheckHook
-, pytest
-, six
-, glibcLocales
-, matplotlib
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  coverage,
+  ipykernel,
+  jupyter-client,
+  nbformat,
+  pytestCheckHook,
+  pytest,
+  six,
+  glibcLocales,
+  matplotlib,
+  sympy,
 }:
-
 buildPythonPackage rec {
   pname = "nbval";
   version = "0.9.6";
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "A py.test plugin to validate Jupyter notebooks";
     homepage = "https://github.com/computationalmodelling/nbval";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, libcst
-, google-api-core
-, google-cloud-storage
-, google-cloud-testutils
-, pandas
-, proto-plus
-, pytest-asyncio
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  libcst,
+  google-api-core,
+  google-cloud-storage,
+  google-cloud-testutils,
+  pandas,
+  proto-plus,
+  pytest-asyncio,
+  mock,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-automl";
   version = "2.6.0";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Cloud AutoML API client library";
     homepage = "https://github.com/googleapis/python-automl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

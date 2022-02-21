@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtkmm3, libxml2, libgtop, libwnck, librsvg, polkit, systemd, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  gtkmm3,
+  libxml2,
+  libgtop,
+  libwnck,
+  librsvg,
+  polkit,
+  systemd,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-system-monitor";
   version = "1.26.0";
@@ -26,16 +41,16 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  configureFlags = [ "--enable-systemd" ];
+  configureFlags = ["--enable-systemd"];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "System monitor for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = [ licenses.gpl2Plus ];
+    license = [licenses.gpl2Plus];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

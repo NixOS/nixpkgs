@@ -1,5 +1,11 @@
-{lib, stdenv, fetchurl, erlang, pam, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  erlang,
+  pam,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "yaws";
   version = "2.0.6";
@@ -16,9 +22,9 @@ stdenv.mkDerivation rec {
     cd $name
   '';
 
-  configureFlags = [ "--with-extrainclude=${pam}/include/security" ];
+  configureFlags = ["--with-extrainclude=${pam}/include/security"];
 
-  buildInputs = [ erlang pam perl ];
+  buildInputs = [erlang pam perl];
 
   postInstall = ''
     sed -i "s#which #type -P #" $out/bin/yaws
@@ -29,7 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://yaws.hyber.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [goibhniu];
   };
-
 }

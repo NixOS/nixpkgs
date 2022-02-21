@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, zip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  zip,
+}:
 stdenv.mkDerivation rec {
   version = "13.8.0";
   pname = "mediathekview";
@@ -8,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zfkwz5psv7m0881ykgqrxwjhadg39c55aj2wpy7m1jdara86c5q";
   };
 
-  nativeBuildInputs = [ makeWrapper zip ];
+  nativeBuildInputs = [makeWrapper zip];
 
   installPhase = ''
     runHook preInstall
@@ -36,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
     homepage = "https://mediathekview.de/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ moredread ];
+    maintainers = with maintainers; [moredread];
     platforms = platforms.all;
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, brotli
-, buildPythonPackage
-, certifi
-, dpkt
-, fetchPypi
-, gevent
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  certifi,
+  dpkt,
+  fetchPypi,
+  gevent,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "geventhttpclient";
   version = "1.5.3";
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gwik/geventhttpclient";
     description = "HTTP client library for gevent";
     license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [koral];
   };
 }

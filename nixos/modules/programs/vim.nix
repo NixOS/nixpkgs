@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.vim;
 in {
   options.programs.vim = {
@@ -27,7 +29,7 @@ in {
   };
 
   config = mkIf cfg.defaultEditor {
-    environment.systemPackages = [ cfg.package ];
-    environment.variables = { EDITOR = mkOverride 900 "vim"; };
+    environment.systemPackages = [cfg.package];
+    environment.variables = {EDITOR = mkOverride 900 "vim";};
   };
 }

@@ -1,5 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "gay";
   version = "1.2.8";
@@ -19,7 +22,7 @@ python3Packages.buildPythonApplication rec {
       Applies pride flag colors to text, ala lolcat or displays a pride flag.
     '';
     homepage = "https://github.com/ms-jpq/gay";
-    maintainers = with maintainers; [ CodeLongAndProsper90 ];
+    maintainers = with maintainers; [CodeLongAndProsper90];
     license = licenses.mit;
   };
 }

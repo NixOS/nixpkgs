@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, taglib
-, cython
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  taglib,
+  cython,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pytaglib";
   version = "1.5.0-1";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "taglib" ];
+  pythonImportsCheck = ["taglib"];
 
   meta = with lib; {
     description = "Python bindings for the Taglib audio metadata library";
     homepage = "https://github.com/supermihi/pytaglib";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mrkkrp ];
+    maintainers = with maintainers; [mrkkrp];
   };
 }

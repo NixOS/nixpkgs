@@ -1,6 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
-
-stdenvNoCC.mkDerivation rec{
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
+stdenvNoCC.mkDerivation rec {
   pname = "pitch-black";
   version = "unstable-2019-07-23";
 
@@ -25,6 +28,6 @@ stdenvNoCC.mkDerivation rec{
     homepage = "https://github.com/freefreeno/Pitch-Black";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.pasqui23 ];
+    maintainers = [maintainers.pasqui23];
   };
 }

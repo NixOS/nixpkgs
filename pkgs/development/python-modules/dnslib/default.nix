@@ -1,5 +1,9 @@
-{ lib, python, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "dnslib";
   version = "0.9.19";
@@ -15,6 +19,6 @@ buildPythonPackage rec {
     description = "Simple library to encode/decode DNS wire-format packets";
     license = licenses.bsd2;
     homepage = "https://bitbucket.org/paulc/dnslib/";
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [delroth];
   };
 }

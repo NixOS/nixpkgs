@@ -1,14 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   inherit (pkgs) nntp-proxy;
 
   cfg = config.services.nntp-proxy;
 
-  configBool = b: if b then "TRUE" else "FALSE";
+  configBool = b:
+    if b
+    then "TRUE"
+    else "FALSE";
 
   confFile = pkgs.writeText "nntp-proxy.conf" ''
     nntp_server:
@@ -39,25 +43,19 @@ let
       # Verbose levels: ERROR, WARNING, NOTICE, INFO, DEBUG
       verbose = "${toUpper cfg.verbosity}";
       # Password is made with: 'mkpasswd -m sha-512 <password>'
-      users = (${concatStringsSep ",\n" (mapAttrsToList (username: userConfig:
-        ''
-          {
-              username = "${username}";
-              password = "${userConfig.passwordHash}";
-              max_connections = ${toString userConfig.maxConnections};
-          }
-        '') cfg.users)});
+      users = (${concatStringsSep ",\n" (mapAttrsToList (username: userConfig: ''
+      {
+          username = "${username}";
+          password = "${userConfig.passwordHash}";
+          max_connections = ${toString userConfig.maxConnections};
+      }
+    '') cfg.users)});
     };
   '';
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.nntp-proxy = {
       enable = mkEnableOption "NNTP-Proxy";
 
@@ -146,7 +144,7 @@ in
       };
 
       verbosity = mkOption {
-        type = types.enum [ "error" "warning" "notice" "info" "debug" ];
+        type = types.enum ["error" "warning" "notice" "info" "debug"];
         default = "info";
         example = "error";
         description = ''
@@ -201,13 +199,11 @@ in
         '';
       };
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     users.users.nntp-proxy = {
       isSystemUser = true;
       group = "nntp-proxy";
@@ -217,9 +213,9 @@ in
 
     systemd.services.nntp-proxy = {
       description = "NNTP proxy";
-      after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = { User="nntp-proxy"; };
+      after = ["network.target" "nss-lookup.target"];
+      wantedBy = ["multi-user.target"];
+      serviceConfig = {User = "nntp-proxy";};
       serviceConfig.ExecStart = "${nntp-proxy}/bin/nntp-proxy ${confFile}";
       preStart = ''
         if [ ! \( -f ${cfg.sslCert} -a -f ${cfg.sslKey} \) ]; then
@@ -228,7 +224,5 @@ in
         fi
       '';
     };
-
   };
-
 }

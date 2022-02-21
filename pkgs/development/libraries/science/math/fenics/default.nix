@@ -1,44 +1,45 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, boost
-, cmake
-, doxygen
-, eigen
-, mpi4py
-, numpy
-, pkg-config
-, pybind11
-, pytest
-, pythonPackages
-, six
-, sympy
-, gtest
-, hdf5
-, mpi
-, ply
-, python
-, scotch
-, setuptools
-, sphinx
-, suitesparse
-, swig
-, zlib
-, blas
-, lapack
-, nixosTests
-}:
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  boost,
+  cmake,
+  doxygen,
+  eigen,
+  mpi4py,
+  numpy,
+  pkg-config,
+  pybind11,
+  pytest,
+  pythonPackages,
+  six,
+  sympy,
+  gtest,
+  hdf5,
+  mpi,
+  ply,
+  python,
+  scotch,
+  setuptools,
+  sphinx,
+  suitesparse,
+  swig,
+  zlib,
+  blas,
+  lapack,
+  nixosTests,
+}: let
   version = "2019.1.0";
 
   # TODO: test with newer pytest
   pytest = pythonPackages.callPackage
-    ../../../../python2-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = pythonPackages.hypothesis.override {
-        doCheck = false;
-      };
+  ../../../../python2-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = pythonPackages.hypothesis.override {
+      doCheck = false;
     };
+  };
 
   dijitso = pythonPackages.buildPythonPackage {
     pname = "dijitso";
@@ -47,8 +48,8 @@ let
       url = "https://bitbucket.org/fenics-project/dijitso/downloads/dijitso-${version}.tar.gz";
       sha256 = "1ncgbr0bn5cvv16f13g722a0ipw6p9y6p4iasxjziwsp8kn5x97a";
     };
-    propagatedBuildInputs = [ numpy six ];
-    checkInputs = [ pytest ];
+    propagatedBuildInputs = [numpy six];
+    checkInputs = [pytest];
     preCheck = ''
       export HOME=$PWD
     '';
@@ -72,8 +73,8 @@ let
       url = "https://bitbucket.org/fenics-project/fiat/downloads/fiat-${version}.tar.gz";
       sha256 = "1sbi0fbr7w9g9ajr565g3njxrc3qydqjy3334vmz5xg0rd3106il";
     };
-    propagatedBuildInputs = [ numpy six sympy ];
-    checkInputs = [ pytest ];
+    propagatedBuildInputs = [numpy six sympy];
+    checkInputs = [pytest];
 
     preCheck = ''
       # Workaround pytest 4.6.3 issue.
@@ -102,8 +103,8 @@ let
       url = "https://bitbucket.org/fenics-project/ufl/downloads/ufl-${version}.tar.gz";
       sha256 = "04daxwg4y9c51sdgvwgmlc82nn0fjw7i2vzs15ckdc7dlazmcfi1";
     };
-    propagatedBuildInputs = [ numpy six ];
-    checkInputs = [ pytest ];
+    propagatedBuildInputs = [numpy six];
+    checkInputs = [pytest];
     checkPhase = ''
       runHook preCheck
       py.test test/
@@ -136,7 +137,7 @@ let
       ufl
       setuptools
     ];
-    checkInputs = [ pytest ];
+    checkInputs = [pytest];
     preCheck = ''
       export HOME=$PWD
       rm test/unit/ufc/finite_element/test_evaluate.py
@@ -261,7 +262,7 @@ let
       pythonPackages.pybind11
     ];
     doCheck = false; # Tries to orte_ess_init and call ssh to localhost
-    passthru.tests = { inherit (nixosTests) fenics; };
+    passthru.tests = {inherit (nixosTests) fenics;};
     meta = {
       description = "Python bindings for the DOLFIN FEM compiler";
       homepage = "https://fenicsproject.org/";
@@ -269,4 +270,5 @@ let
       license = lib.licenses.lgpl3;
     };
   };
-in python-dolfin
+in
+  python-dolfin

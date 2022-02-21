@@ -1,15 +1,15 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, redis
-, alembic
-, pystache
-, pytest
-, factory_boy
-, python
+{
+  lib,
+  fetchFromSourcehut,
+  buildPythonPackage,
+  srht,
+  redis,
+  alembic,
+  pystache,
+  pytest,
+  factory_boy,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "todosrht";
   version = "0.67.2";
@@ -47,12 +47,12 @@ buildPythonPackage rec {
   ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportsCheck = [ "todosrht" ];
+  pythonImportsCheck = ["todosrht"];
 
   meta = with lib; {
     homepage = "https://todo.sr.ht/~sircmpwn/todo.sr.ht";
     description = "Ticket tracking service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

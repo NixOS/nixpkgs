@@ -1,11 +1,12 @@
-{ stdenvNoCC
-, fetchFromGitHub
-, lib
-, gtk3
-, jdupes
-, nordzy-themes ? [ "all" ] # Override this to only install selected themes
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  lib,
+  gtk3,
+  jdupes,
+  nordzy-themes ? ["all"]
+  # Override this to only install selected themes
 }:
-
 stdenvNoCC.mkDerivation {
   pname = "nordzy-icon-theme";
   version = "unstable-2022-01-23";
@@ -49,6 +50,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/alvatip/Nordzy-icon";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ alexnortung ];
+    maintainers = with maintainers; [alexnortung];
   };
 }

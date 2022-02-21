@@ -1,6 +1,4 @@
-{ pkgs }:
-self: super: {
-
+{pkgs}: self: super: {
   rmfuse = super.rmfuse.overridePythonAttrs (
     _: {
       src = pkgs.fetchgit {
@@ -10,5 +8,4 @@ self: super: {
       };
     }
   );
-
 }

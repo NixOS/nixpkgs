@@ -1,5 +1,7 @@
-{ lib, fetchzip }:
-
+{
+  lib,
+  fetchzip,
+}:
 fetchzip {
   name = "paratype-pt-sans";
 
@@ -26,7 +28,6 @@ fetchzip {
     # http://www.paratype.ru/public/pt_openlicense.asp
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
   };
 }
-

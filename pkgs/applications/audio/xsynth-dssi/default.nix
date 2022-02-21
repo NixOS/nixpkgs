@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, alsa-lib, autoconf, automake, dssi, gtk2, libjack2,
-ladspaH, ladspaPlugins, liblo, pkg-config }:
-
-stdenv.mkDerivation  rec {
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  autoconf,
+  automake,
+  dssi,
+  gtk2,
+  libjack2,
+  ladspaH,
+  ladspaPlugins,
+  liblo,
+  pkg-config,
+}:
+stdenv.mkDerivation rec {
   pname = "xsynth-dssi";
   version = "0.9.4";
 
@@ -10,8 +22,18 @@ stdenv.mkDerivation  rec {
     sha256 = "00nwv2pqjbmxqdc6xdm0cljq6z05lv4y6bibmhz1kih9lm0lklnk";
   };
 
-  buildInputs = [ alsa-lib autoconf automake dssi gtk2 libjack2 ladspaH
-    ladspaPlugins liblo pkg-config ];
+  buildInputs = [
+    alsa-lib
+    autoconf
+    automake
+    dssi
+    gtk2
+    libjack2
+    ladspaH
+    ladspaPlugins
+    liblo
+    pkg-config
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -32,6 +54,6 @@ stdenv.mkDerivation  rec {
     homepage = "http://dssi.sourceforge.net/download.html#Xsynth-DSSI";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
   };
 }

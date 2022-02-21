@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, dj-email-url
-, django-cache-url
-, fetchFromGitHub
-, marshmallow
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  dj-email-url,
+  django-cache-url,
+  fetchFromGitHub,
+  marshmallow,
+  pytestCheckHook,
+  python-dotenv,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "environs";
   version = "9.5.0";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python modle for environment variable parsing";
     homepage = "https://github.com/sloria/environs";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, zstd, stdenv }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  zstd,
+  stdenv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
   version = "0.4.7";
@@ -12,20 +18,26 @@ rustPlatform.buildRustPackage rec {
   };
 
   # enable pkg-config feature of zstd
-  cargoPatches = [ ./zstd-pkg-config.patch ];
+  cargoPatches = [./zstd-pkg-config.patch];
 
   cargoSha256 = "sha256-JewI+23eNrMHfSUwsA3CaeTvG61/ZOFFLpm7rKZKsoU=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ zstd ];
+  buildInputs = [zstd];
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";
     homepage = "https://github.com/EmbarkStudios/cargo-about";
     changelog = "https://github.com/EmbarkStudios/cargo-about/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ evanjs figsoda ];
+    license = with licenses; [
+      mit
+      /*
+       or
+       */
+      asl20
+    ];
+    maintainers = with maintainers; [evanjs figsoda];
     broken = stdenv.isDarwin;
   };
 }

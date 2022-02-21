@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, python3, check }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  python3,
+  check,
+}:
 stdenv.mkDerivation rec {
   pname = "libsigrokdecode";
   version = "0.5.3";
@@ -9,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1h1zi1kpsgf6j2z8j8hjpv1q7n49i3fhqjn8i178rka3cym18265";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib python3 ];
-  checkInputs = [ check ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [glib python3];
+  checkInputs = [check];
   doCheck = true;
 
   meta = with lib; {
@@ -19,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

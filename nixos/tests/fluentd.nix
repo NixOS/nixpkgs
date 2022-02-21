@@ -1,7 +1,11 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "fluentd";
 
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     services.fluentd = {
       enable = true;
       config = ''

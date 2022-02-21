@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitLab
-, perlPackages
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  perlPackages,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gcstar";
   version = "1.7.3";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hah8ijh9mvcgbh36y3d3s6y79mzz27w24f2i29qllv7cayf6129";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [wrapGAppsHook];
 
   buildInputs = with perlPackages; [
     perl
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
       You may also search and filter your collections by many criteria.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dasj19 ];
+    maintainers = with maintainers; [dasj19];
     platforms = platforms.all;
   };
 }

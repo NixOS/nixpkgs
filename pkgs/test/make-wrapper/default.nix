@@ -1,14 +1,13 @@
-{ lib
-, writeText
-, writeCBin
-, writeShellScript
-, makeWrapper
-, runCommand
-, which
-, ...
-}:
-
-let
+{
+  lib,
+  writeText,
+  writeCBin,
+  writeShellScript,
+  makeWrapper,
+  runCommand,
+  which,
+  ...
+}: let
   # Testfiles
   foofile = writeText "foofile" "foo";
   barfile = writeText "barfile" "bar";
@@ -30,13 +29,18 @@ let
     echo "$@"
   '';
 
-  mkWrapperBinary = { name, args, wrapped ? wrappedBinaryVar }: runCommand name
+  mkWrapperBinary = {
+    name,
+    args,
+    wrapped ? wrappedBinaryVar,
+  }:
+    runCommand name
     {
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [makeWrapper];
     } ''
-    mkdir -p $out/bin
-    makeWrapper "${wrapped}" "$out/bin/${name}" ${lib.escapeShellArgs args}
-  '';
+      mkdir -p $out/bin
+      makeWrapper "${wrapped}" "$out/bin/${name}" ${lib.escapeShellArgs args}
+    '';
 
   mkTest = cmd: toExpect: ''
     output="$(${cmd})"
@@ -52,31 +56,77 @@ let
     fi
   '';
 in
-runCommand "make-wrapper-test"
-{
-  nativeBuildInputs = [
-    which
-    (mkWrapperBinary { name = "test-argv0"; args = [ "--argv0" "foo" ]; wrapped = "${wrappedArgv0}/bin/wrapped-argv0"; })
-    (mkWrapperBinary { name = "test-set"; args = [ "--set" "VAR" "abc" ]; })
-    (mkWrapperBinary { name = "test-set-default"; args = [ "--set-default" "VAR" "abc" ]; })
-    (mkWrapperBinary { name = "test-unset"; args = [ "--unset" "VAR" ]; })
-    (mkWrapperBinary { name = "test-run"; args = [ "--run" "echo bar" ]; })
-    (mkWrapperBinary { name = "test-run-and-set"; args = [ "--run" "export VAR=foo" "--set" "VAR" "bar" ]; })
-    (mkWrapperBinary { name = "test-args"; args = [ "--add-flags" "abc" ]; wrapped = wrappedBinaryArgs; })
-    (mkWrapperBinary { name = "test-prefix"; args = [ "--prefix" "VAR" ":" "abc" ]; })
-    (mkWrapperBinary { name = "test-suffix"; args = [ "--suffix" "VAR" ":" "abc" ]; })
-    (mkWrapperBinary { name = "test-prefix-and-suffix"; args = [ "--prefix" "VAR" ":" "foo" "--suffix" "VAR" ":" "bar" ]; })
-    (mkWrapperBinary { name = "test-prefix-multi"; args = [ "--prefix" "VAR" ":" "abc:foo:foo" ]; })
-    (mkWrapperBinary { name = "test-suffix-each"; args = [ "--suffix-each" "VAR" ":" "foo bar:def" ]; })
-    (mkWrapperBinary { name = "test-prefix-each"; args = [ "--prefix-each" "VAR" ":" "foo bar:def" ]; })
-    (mkWrapperBinary { name = "test-suffix-contents"; args = [ "--suffix-contents" "VAR" ":" "${foofile} ${barfile}" ]; })
-    (mkWrapperBinary { name = "test-prefix-contents"; args = [ "--prefix-contents" "VAR" ":" "${foofile} ${barfile}" ]; })
-  ];
-}
+  runCommand "make-wrapper-test"
+  {
+    nativeBuildInputs = [
+      which
+      (mkWrapperBinary {
+        name = "test-argv0";
+        args = ["--argv0" "foo"];
+        wrapped = "${wrappedArgv0}/bin/wrapped-argv0";
+      })
+      (mkWrapperBinary {
+        name = "test-set";
+        args = ["--set" "VAR" "abc"];
+      })
+      (mkWrapperBinary {
+        name = "test-set-default";
+        args = ["--set-default" "VAR" "abc"];
+      })
+      (mkWrapperBinary {
+        name = "test-unset";
+        args = ["--unset" "VAR"];
+      })
+      (mkWrapperBinary {
+        name = "test-run";
+        args = ["--run" "echo bar"];
+      })
+      (mkWrapperBinary {
+        name = "test-run-and-set";
+        args = ["--run" "export VAR=foo" "--set" "VAR" "bar"];
+      })
+      (mkWrapperBinary {
+        name = "test-args";
+        args = ["--add-flags" "abc"];
+        wrapped = wrappedBinaryArgs;
+      })
+      (mkWrapperBinary {
+        name = "test-prefix";
+        args = ["--prefix" "VAR" ":" "abc"];
+      })
+      (mkWrapperBinary {
+        name = "test-suffix";
+        args = ["--suffix" "VAR" ":" "abc"];
+      })
+      (mkWrapperBinary {
+        name = "test-prefix-and-suffix";
+        args = ["--prefix" "VAR" ":" "foo" "--suffix" "VAR" ":" "bar"];
+      })
+      (mkWrapperBinary {
+        name = "test-prefix-multi";
+        args = ["--prefix" "VAR" ":" "abc:foo:foo"];
+      })
+      (mkWrapperBinary {
+        name = "test-suffix-each";
+        args = ["--suffix-each" "VAR" ":" "foo bar:def"];
+      })
+      (mkWrapperBinary {
+        name = "test-prefix-each";
+        args = ["--prefix-each" "VAR" ":" "foo bar:def"];
+      })
+      (mkWrapperBinary {
+        name = "test-suffix-contents";
+        args = ["--suffix-contents" "VAR" ":" "${foofile} ${barfile}"];
+      })
+      (mkWrapperBinary {
+        name = "test-prefix-contents";
+        args = ["--prefix-contents" "VAR" ":" "${foofile} ${barfile}"];
+      })
+    ];
+  }
   (
     # --argv0 works
     mkTest "test-argv0" "argv0=foo"
-
     # --set works
     + mkTest "test-set" "VAR=abc"
     # --set overwrites the variable
@@ -87,17 +137,14 @@ runCommand "make-wrapper-test"
     + mkTest "VAR=foo test-set-default" "VAR=foo"
     # --unset works
     + mkTest "VAR=foo test-unset" "VAR="
-
     # --add-flags works
     + mkTest "test-args" "abc"
     # given flags are appended
     + mkTest "test-args foo" "abc foo"
-
     # --run works
     + mkTest "test-run" "bar\nVAR="
     # --run & --set works
     + mkTest "test-run-and-set" "VAR=bar"
-
     # --prefix works
     + mkTest "VAR=foo test-prefix" "VAR=abc:foo"
     # sets variable if not set yet
@@ -112,8 +159,6 @@ runCommand "make-wrapper-test"
     # Only append the value once when given multiple times in a parameter
     # to makeWrapper
     + mkTest "test-prefix" "VAR=abc"
-
-
     # --suffix works
     + mkTest "VAR=foo test-suffix" "VAR=foo:abc"
     # sets variable if not set yet
@@ -123,7 +168,6 @@ runCommand "make-wrapper-test"
     + mkTest "VAR=abc:foo test-suffix" "VAR=abc:foo"
     # --prefix in combination with --suffix
     + mkTest "VAR=abc test-prefix-and-suffix" "VAR=foo:abc:bar"
-
     # --suffix-each works
     + mkTest "VAR=abc test-suffix-each" "VAR=abc:foo:bar:def"
     # --prefix-each works

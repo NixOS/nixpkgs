@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchgit }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 stdenv.mkDerivation {
   pname = "memtest86+";
   version = "5.01-coreboot-002";
@@ -12,9 +15,9 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
 
-  hardeningDisable = [ "all" ];
+  hardeningDisable = ["all"];
 
-  buildFlags = [ "memtest.bin" ];
+  buildFlags = ["memtest.bin"];
 
   doCheck = false; # fails
 
@@ -26,6 +29,6 @@ stdenv.mkDerivation {
     homepage = "http://www.memtest.org/";
     description = "A tool to detect memory errors";
     license = lib.licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = ["x86_64-linux" "i686-linux"];
   };
 }

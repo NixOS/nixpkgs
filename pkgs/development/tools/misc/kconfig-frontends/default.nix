@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex, gperf, ncurses, python3, bash }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  bison,
+  flex,
+  gperf,
+  ncurses,
+  python3,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "kconfig-frontends";
   version = "4.11.0.1";
@@ -9,8 +19,8 @@ stdenv.mkDerivation rec {
     url = "http://ymorin.is-a-geek.org/download/kconfig-frontends/kconfig-frontends-${version}.tar.xz";
   };
 
-  nativeBuildInputs = [ bison flex gperf pkg-config ];
-  buildInputs = [ bash ncurses python3 ];
+  nativeBuildInputs = [bison flex gperf pkg-config];
+  buildInputs = [bash ncurses python3];
 
   strictDeps = true;
 
@@ -31,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ymorin.is-a-geek.org/projects/kconfig-frontends";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mbe ];
+    maintainers = with maintainers; [mbe];
   };
 }

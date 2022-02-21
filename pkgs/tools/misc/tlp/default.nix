@@ -1,28 +1,31 @@
-{ stdenv
-, lib
-, checkbashisms
-, coreutils
-, ethtool
-, fetchFromGitHub
-, gawk
-, gnugrep
-, gnused
-, hdparm
-, iw
-, kmod
-, makeWrapper
-, pciutils
-, perl
-, perlcritic
-, shellcheck
-, smartmontools
-, systemd
-, util-linux
-, x86_energy_perf_policy
+{
+  stdenv,
+  lib,
+  checkbashisms,
+  coreutils,
+  ethtool,
+  fetchFromGitHub,
+  gawk,
+  gnugrep,
+  gnused,
+  hdparm,
+  iw,
+  kmod,
+  makeWrapper,
+  pciutils,
+  perl,
+  perlcritic,
+  shellcheck,
+  smartmontools,
+  systemd,
+  util-linux,
+  x86_energy_perf_policy
   # RDW only works with NetworkManager, and thus is optional with default off
-, enableRDW ? false
-, networkmanager
-}: stdenv.mkDerivation rec {
+  ,
+  enableRDW ? false,
+  networkmanager,
+}:
+stdenv.mkDerivation rec {
   pname = "tlp";
   version = "1.5.0";
 
@@ -39,8 +42,8 @@
     ./patches/0002-reintroduce-tlp-sleep-service.patch
   ];
 
-  buildInputs = [ perl ];
-  nativeBuildInputs = [ makeWrapper gnused ];
+  buildInputs = [perl];
+  nativeBuildInputs = [makeWrapper gnused];
 
   # XXX: While [1] states that DESTDIR should not be used, and that the correct
   # variable to set is, in fact, PREFIX, tlp thinks otherwise. The Makefile for
@@ -67,12 +70,13 @@
     "TLP_TLIB=/share/tlp"
   ];
 
-  installTargets = [ "install-tlp" "install-man" ]
-  ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
+  installTargets =
+    ["install-tlp" "install-man"]
+    ++ lib.optionals enableRDW ["install-rdw" "install-man-rdw"];
 
   doCheck = true;
-  checkInputs = [ checkbashisms perlcritic shellcheck ];
-  checkTarget = [ "checkall" ];
+  checkInputs = [checkbashisms perlcritic shellcheck];
+  checkTarget = ["checkall"];
 
   # TODO: Consider using resholve here
   postInstall = let
@@ -91,44 +95,43 @@
         smartmontools
         systemd
         util-linux
-      ] ++ lib.optional enableRDW networkmanager
-        ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
+      ]
+      ++ lib.optional enableRDW networkmanager
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
     );
-  in
-    ''
-      fixup_perl=(
-        $out/share/tlp/tlp-pcilist
-        $out/share/tlp/tlp-readconfs
-        $out/share/tlp/tlp-usblist
-        $out/share/tlp/tpacpi-bat
-      )
-      for f in "''${fixup_perl[@]}"; do
-        wrapProgram "$f" --prefix PATH : "${paths}"
-      done
+  in ''
+    fixup_perl=(
+      $out/share/tlp/tlp-pcilist
+      $out/share/tlp/tlp-readconfs
+      $out/share/tlp/tlp-usblist
+      $out/share/tlp/tpacpi-bat
+    )
+    for f in "''${fixup_perl[@]}"; do
+      wrapProgram "$f" --prefix PATH : "${paths}"
+    done
 
-      fixup_bash=(
-        $out/bin/*
-        $out/etc/NetworkManager/dispatcher.d/*
-        $out/lib/udev/tlp-*
-        $out/sbin/*
-        $out/share/tlp/bat.d/*
-        $out/share/tlp/func.d/*
-        $out/share/tlp/tlp-func-base
-      )
-      for f in "''${fixup_bash[@]}"; do
-        sed -i '2iexport PATH=${paths}:$PATH' "$f"
-      done
+    fixup_bash=(
+      $out/bin/*
+      $out/etc/NetworkManager/dispatcher.d/*
+      $out/lib/udev/tlp-*
+      $out/sbin/*
+      $out/share/tlp/bat.d/*
+      $out/share/tlp/func.d/*
+      $out/share/tlp/tlp-func-base
+    )
+    for f in "''${fixup_bash[@]}"; do
+      sed -i '2iexport PATH=${paths}:$PATH' "$f"
+    done
 
-      rm -rf $out/var
-      rm -rf $out/share/metainfo
-    '';
+    rm -rf $out/var
+    rm -rf $out/share/metainfo
+  '';
 
   meta = with lib; {
     description = "Advanced Power Management for Linux";
-    homepage =
-      "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
+    homepage = "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar lovesegfault ];
+    maintainers = with maintainers; [abbradar lovesegfault];
     license = licenses.gpl2Plus;
   };
 }

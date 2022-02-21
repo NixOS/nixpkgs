@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, gobject-introspection, imagemagick,
-wrapGAppsHook, python3Packages, gtk3, networkmanager, webkitgtk }:
-
+{
+  lib,
+  fetchFromGitHub,
+  gobject-introspection,
+  imagemagick,
+  wrapGAppsHook,
+  python3Packages,
+  gtk3,
+  networkmanager,
+  webkitgtk,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "protonvpn-linux-gui";
   version = "1.7.0";
@@ -15,7 +23,9 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
 
   nativeBuildInputs = [
-    gobject-introspection imagemagick wrapGAppsHook
+    gobject-introspection
+    imagemagick
+    wrapGAppsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -24,7 +34,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtk3 networkmanager webkitgtk
+    gtk3
+    networkmanager
+    webkitgtk
   ];
 
   postFixup = ''
@@ -47,7 +59,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Linux GUI for ProtonVPN, written in Python";
     homepage = "https://github.com/ProtonVPN/linux-app";
-    maintainers = with maintainers; [ offline wolfangaukang ];
+    maintainers = with maintainers; [offline wolfangaukang];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

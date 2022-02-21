@@ -1,5 +1,8 @@
-{ lib, fetchgit, buildGoModule }:
-
+{
+  lib,
+  fetchgit,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "obfs4";
   version = "0.0.11";
@@ -18,6 +21,6 @@ buildGoModule rec {
     description = "A pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";
     repositories.git = "https://git.torproject.org/pluggable-transports/obfs4.git";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

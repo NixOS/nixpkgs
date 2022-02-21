@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "licensor";
   version = "unstable-2021-02-03";
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "Write licenses to stdout";
     homepage = "https://github.com/raftario/licensor";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [Br1ght0ne];
     mainProgram = "licensor";
   };
 }

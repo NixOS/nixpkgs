@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, python3, python3Packages, mypy, glib, pango, pkg-config, xcbutilcursor }:
-
-let
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  python3Packages,
+  mypy,
+  glib,
+  pango,
+  pkg-config,
+  xcbutilcursor,
+}: let
   unwrapped = python3Packages.buildPythonPackage rec {
     pname = "qtile";
     version = "0.20.0";
@@ -27,15 +35,17 @@ let
 
     SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-    nativeBuildInputs = [
-      pkg-config
-    ] ++ (with python3Packages; [
-      setuptools-scm
-    ]);
+    nativeBuildInputs =
+      [
+        pkg-config
+      ]
+      ++ (with python3Packages; [
+        setuptools-scm
+      ]);
 
     propagatedBuildInputs = with python3Packages; [
       xcffib
-      (cairocffi.override { withXcffib = true; })
+      (cairocffi.override {withXcffib = true;})
       setuptools
       python-dateutil
       dbus-python
@@ -50,7 +60,7 @@ let
 
     # for `qtile check`, needs `stubtest` and `mypy` commands
     makeWrapperArgs = [
-      "--suffix PATH : ${lib.makeBinPath [ mypy ]}"
+      "--suffix PATH : ${lib.makeBinPath [mypy]}"
     ];
 
     doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
@@ -60,13 +70,13 @@ let
       license = licenses.mit;
       description = "A small, flexible, scriptable tiling window manager written in Python";
       platforms = platforms.linux;
-      maintainers = with maintainers; [ kamilchm ];
+      maintainers = with maintainers; [kamilchm];
     };
   };
 in
-(python3.withPackages (_: [ unwrapped ])).overrideAttrs (_: {
-  # otherwise will be exported as "env", this restores `nix search` behavior
-  name = "${unwrapped.pname}-${unwrapped.version}";
-  # export underlying qtile package
-  passthru = { inherit unwrapped; };
-})
+  (python3.withPackages (_: [unwrapped])).overrideAttrs (_: {
+    # otherwise will be exported as "env", this restores `nix search` behavior
+    name = "${unwrapped.pname}-${unwrapped.version}";
+    # export underlying qtile package
+    passthru = {inherit unwrapped;};
+  })

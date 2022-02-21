@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-criterion";
   version = "1.1.0";
@@ -16,7 +19,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Cargo extension for running Criterion.rs benchmarks";
     homepage = "https://github.com/bheisler/cargo-criterion";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ humancalico ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [humancalico];
   };
 }

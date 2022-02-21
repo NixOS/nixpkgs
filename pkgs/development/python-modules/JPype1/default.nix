@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pythonOlder
-, typing-extensions
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pythonOlder,
+  typing-extensions,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "JPype1";
   version = "1.3.0";

@@ -1,18 +1,19 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, lcms2
-, vala
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  lcms2,
+  vala,
 }:
-
 stdenv.mkDerivation rec {
   pname = "babl";
   version = "0.1.88";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Image pixel format conversion library";
     homepage = "https://gegl.org/babl/";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.unix;
   };
 }

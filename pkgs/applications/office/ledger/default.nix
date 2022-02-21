@@ -1,25 +1,43 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3
-, texinfo, gnused, usePython ? true }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  gmp,
+  mpfr,
+  libedit,
+  python3,
+  texinfo,
+  gnused,
+  usePython ? true,
+}:
 stdenv.mkDerivation rec {
   pname = "ledger";
   version = "3.2.1";
 
   src = fetchFromGitHub {
-    owner  = "ledger";
-    repo   = "ledger";
-    rev    = "v${version}";
+    owner = "ledger";
+    repo = "ledger";
+    rev = "v${version}";
     sha256 = "0x6jxwss3wwzbzlwmnwb8yzjk8f9wfawif4f1b74z2qg6hc4r7f6";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   buildInputs = [
-    (boost.override { enablePython = usePython; python = python3; })
-    gmp mpfr libedit python3 gnused
+    (boost.override {
+      enablePython = usePython;
+      python = python3;
+    })
+    gmp
+    mpfr
+    libedit
+    python3
+    gnused
   ];
 
-  nativeBuildInputs = [ cmake texinfo ];
+  nativeBuildInputs = [cmake texinfo];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -34,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${python3.sitePackages}"'
   '';
 
-  installTargets = [ "doc" "install" ];
+  installTargets = ["doc" "install"];
 
   meta = with lib; {
     homepage = "https://ledger-cli.org/";
@@ -49,6 +67,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with maintainers; [jwiegley];
   };
 }

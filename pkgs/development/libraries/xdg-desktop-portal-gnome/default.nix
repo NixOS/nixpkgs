@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, fontconfig
-, glib
-, gsettings-desktop-schemas
-, gtk4
-, libadwaita
-, xdg-desktop-portal
-, wayland
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  fontconfig,
+  glib,
+  gsettings-desktop-schemas,
+  gtk4,
+  libadwaita,
+  xdg-desktop-portal,
+  wayland,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gnome";
   version = "41.1";

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 stdenv.mkDerivation {
   pname = "subdl";
   version = "unstable-2017-11.06";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "0kmk5ck1j49q4ww0lvas2767kwnzhkq0vdwkmjypdx5zkxz73fn8";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
   installPhase = ''
     install -vD subdl $out/bin/subdl
@@ -22,6 +26,6 @@ stdenv.mkDerivation {
     description = "A command-line tool to download subtitles from opensubtitles.org";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.exfalso ];
+    maintainers = [lib.maintainers.exfalso];
   };
 }

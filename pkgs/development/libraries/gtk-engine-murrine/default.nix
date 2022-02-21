@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk2 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  gtk2,
+}:
 stdenv.mkDerivation rec {
   pname = "gtk-engine-murrine";
   version = "0.98.2";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "129cs5bqw23i76h3nmc29c9mqkm9460iwc8vkl7hs4xr07h8mip9";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ intltool gtk2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [intltool gtk2];
 
   meta = {
     description = "A very flexible theme engine";

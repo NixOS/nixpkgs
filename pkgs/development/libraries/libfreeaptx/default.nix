@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "libfreeaptx";
   version = "0.1.1";
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     homepage = "https://github.com/iamthehorker/libfreeaptx";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [kranzes];
   };
 }

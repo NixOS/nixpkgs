@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mockupdb
-, pymongo
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mockupdb,
+  pymongo,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "motor";
   version = "2.5.1";
@@ -18,19 +18,19 @@ buildPythonPackage rec {
     sha256 = "sha256-r+HyIEC+Jafn7eMqkAldsZ5hbem+n+P76RJGAymmBks=";
   };
 
-  propagatedBuildInputs = [ pymongo ];
+  propagatedBuildInputs = [pymongo];
 
-  checkInputs = [ mockupdb ];
+  checkInputs = [mockupdb];
 
   # network connections
   doCheck = false;
 
-  pythonImportsCheck = [ "motor" ];
+  pythonImportsCheck = ["motor"];
 
   meta = with lib; {
     description = "Non-blocking MongoDB driver for Tornado or asyncio";
     license = licenses.asl20;
     homepage = "https://github.com/mongodb/motor";
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [globin];
   };
 }

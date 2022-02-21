@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, elasticsearch
-, ipaddress
-, python-dateutil
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  elasticsearch,
+  ipaddress,
+  python-dateutil,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
   version = "7.4.0";
@@ -17,8 +17,9 @@ buildPythonPackage rec {
     sha256 = "c4a7b93882918a413b63bed54018a1685d7410ffd8facbc860ee7fd57f214a6d";
   };
 
-  propagatedBuildInputs = [ elasticsearch python-dateutil six ]
-                          ++ lib.optional (!isPy3k) ipaddress;
+  propagatedBuildInputs =
+    [elasticsearch python-dateutil six]
+    ++ lib.optional (!isPy3k) ipaddress;
 
   # ImportError: No module named test_elasticsearch_dsl
   # Tests require a local instance of elasticsearch
@@ -33,6 +34,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
     license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
+    maintainers = with maintainers; [desiderius];
   };
 }

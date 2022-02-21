@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, gfortran
-, cmake
-, shared ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gfortran,
+  cmake,
+  shared ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "liblapack";
   version = "3.10.0";
@@ -26,17 +26,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ gfortran cmake ];
+  nativeBuildInputs = [gfortran cmake];
 
   # Configure stage fails on aarch64-darwin otherwise, due to either clang 11 or gfortran 10.
-  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) ["stackprotector"];
 
-  cmakeFlags = [
-    "-DCMAKE_Fortran_FLAGS=-fPIC"
-    "-DLAPACKE=ON"
-    "-DCBLAS=ON"
-    "-DBUILD_TESTING=ON"
-  ] ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON";
+  cmakeFlags =
+    [
+      "-DCMAKE_Fortran_FLAGS=-fPIC"
+      "-DLAPACKE=ON"
+      "-DCBLAS=ON"
+      "-DBUILD_TESTING=ON"
+    ]
+    ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON";
 
   doCheck = true;
 
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

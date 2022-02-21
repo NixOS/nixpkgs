@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  coverage,
 }:
-
 buildPythonPackage rec {
   pname = "isbnlib";
   version = "3.10.9";
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Extract, clean, transform, hyphenate and metadata for ISBNs";
     homepage = "https://github.com/xlcnd/isbnlib";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

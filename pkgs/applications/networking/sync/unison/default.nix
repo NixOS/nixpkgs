@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ocamlPackages
-, fontschumachermisc
-, xset
-, makeWrapper
-, ncurses
-, gnugrep
-, copyDesktopItems
-, makeDesktopItem
-, enableX11 ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
+  fontschumachermisc,
+  xset,
+  makeWrapper,
+  ncurses,
+  gnugrep,
+  copyDesktopItems,
+  makeDesktopItem,
+  enableX11 ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "unison";
   version = "2.51.5";
@@ -23,20 +23,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pi5uYwPpIy0lERmgATWQCO3EA3Pg5pnn7gxv49FaPug=";
   };
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs =
+    [makeWrapper]
     ++ lib.optional enableX11 copyDesktopItems;
-  buildInputs = [ ocamlPackages.ocaml ncurses ];
+  buildInputs = [ocamlPackages.ocaml ncurses];
 
-  preBuild = lib.optionalString enableX11 ''
-    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml
-  '' + ''
-    echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
-  '';
+  preBuild =
+    lib.optionalString enableX11 ''
+      sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml
+    ''
+    + ''
+      echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
+    '';
 
-  makeFlags = [
-    "INSTALLDIR=$(out)/bin/"
-    "UISTYLE=${if enableX11 then "gtk2" else "text"}"
-  ] ++ lib.optional (!ocamlPackages.ocaml.nativeCompilers) "NATIVE=false";
+  makeFlags =
+    [
+      "INSTALLDIR=$(out)/bin/"
+      "UISTYLE=${
+        if enableX11
+        then "gtk2"
+        else "text"
+      }"
+    ]
+    ++ lib.optional (!ocamlPackages.ocaml.nativeCompilers) "NATIVE=false";
 
   preInstall = ''
     mkdir -p $out/bin
@@ -72,7 +81,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
     description = "Bidirectional file synchronizer";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [viric];
     platforms = platforms.unix;
   };
 }

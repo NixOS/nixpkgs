@@ -1,8 +1,27 @@
-{ stdenv, lib, fetchurl, dpkg, autoPatchelfHook, makeWrapper
-, alsa-lib, dbus, fontconfig, freetype, glib, gst_all_1, libGL
-, libinput, libpulseaudio, libsecret, libtiff, libxkbcommon
-, mesa, openssl, systemd, xorg }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  alsa-lib,
+  dbus,
+  fontconfig,
+  freetype,
+  glib,
+  gst_all_1,
+  libGL,
+  libinput,
+  libpulseaudio,
+  libsecret,
+  libtiff,
+  libxkbcommon,
+  mesa,
+  openssl,
+  systemd,
+  xorg,
+}:
 stdenv.mkDerivation rec {
   pname = "alfaview";
   version = "8.37.0";
@@ -72,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "Video-conferencing application, specialized in virtual online meetings, seminars, training sessions and conferences";
     homepage = "https://alfaview.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [wolfangaukang];
+    platforms = ["x86_64-linux"];
   };
 }

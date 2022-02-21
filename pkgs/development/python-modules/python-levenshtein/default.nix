@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "python-levenshtein";
   version = "0.12.2";
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/ztane/python-Levenshtein";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ aske ];
+    maintainers = with maintainers; [aske];
   };
 }

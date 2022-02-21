@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "goalzero";
   version = "0.2.1";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Goal Zero Yeti REST Api Library";
     homepage = "https://github.com/tkdrob/goalzero";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

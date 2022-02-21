@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, beautifulsoup4
-, pyuseragents
-, inquirer
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  beautifulsoup4,
+  pyuseragents,
+  inquirer,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "translatepy";
   version = "2.2";
@@ -26,18 +26,18 @@ buildPythonPackage rec {
     inquirer
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   disabledTestPaths = [
     # Requires network connection
     "tests/test_translate.py"
     "tests/test_translators.py"
   ];
-  pythonImportsCheck = [ "translatepy" ];
+  pythonImportsCheck = ["translatepy"];
 
   meta = with lib; {
     description = "A module grouping multiple translation APIs";
     homepage = "https://github.com/Animenosekai/translate";
-    license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = with licenses; [agpl3Only];
+    maintainers = with maintainers; [emilytrau];
   };
 }

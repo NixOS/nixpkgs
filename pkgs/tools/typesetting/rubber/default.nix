@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, python3Packages, texinfo }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  python3Packages,
+  texinfo,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "rubber";
   version = "1.5.1";
@@ -18,7 +23,7 @@ python3Packages.buildPythonApplication rec {
       --replace '$base/share' 'share'
   '';
 
-  nativeBuildInputs = [ texinfo ];
+  nativeBuildInputs = [texinfo];
 
   checkPhase = ''
     cd tests && ${stdenv.shell} run.sh
@@ -37,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://launchpad.net/rubber";
-    maintainers = with maintainers; [ ttuegel peterhoeg ];
+    maintainers = with maintainers; [ttuegel peterhoeg];
     platforms = platforms.unix;
   };
 }

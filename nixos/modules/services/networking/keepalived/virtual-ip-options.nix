@@ -1,9 +1,6 @@
-{ lib } :
-
-with lib;
-{
+{lib}:
+with lib; {
   options = {
-
     addr = mkOption {
       type = types.str;
       description = ''
@@ -45,6 +42,5 @@ with lib;
         by colon.
       '';
     };
-
   };
 }

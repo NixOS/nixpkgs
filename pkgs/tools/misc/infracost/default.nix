@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, terraform }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  terraform,
+}:
 buildGoModule rec {
   pname = "infracost";
   version = "0.9.18";
@@ -12,14 +17,14 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-D4tXBXtD3FlWvp4GPIuo/2p3MKg81DVPT5pKVOGe/5c=";
 
-  ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}"];
 
-  subPackages = [ "cmd/infracost" ];
+  subPackages = ["cmd/infracost"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   # -short only runs the unit-tests tagged short
-  checkFlags = [ "-short" ];
+  checkFlags = ["-short"];
   checkPhase = ''
     runHook preCheck
 
@@ -60,6 +65,6 @@ buildGoModule rec {
       compare different deployment options upfront.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ davegallant jk ];
+    maintainers = with maintainers; [davegallant jk];
   };
 }

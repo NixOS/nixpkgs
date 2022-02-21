@@ -1,21 +1,33 @@
-{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? ""}:
-
+{
+  deployAndroidPackage,
+  lib,
+  package,
+  autoPatchelfHook,
+  makeWrapper,
+  os,
+  pkgs,
+  pkgs_i686,
+  postInstall ? "",
+}:
 deployAndroidPackage {
   name = "androidsdk";
-  buildInputs = [ autoPatchelfHook makeWrapper ]
-    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.xorg.libX11 pkgs.xorg.libXext pkgs.xorg.libXdamage pkgs.xorg.libxcb pkgs.xorg.libXfixes pkgs.xorg.libXrender pkgs.fontconfig.lib pkgs.freetype pkgs.libGL pkgs.zlib pkgs.ncurses5 pkgs.libpulseaudio pkgs_i686.glibc pkgs_i686.xorg.libX11 pkgs_i686.xorg.libXrender pkgs_i686.fontconfig pkgs_i686.freetype pkgs_i686.zlib ];
+  buildInputs =
+    [autoPatchelfHook makeWrapper]
+    ++ lib.optional (os == "linux") [pkgs.glibc pkgs.xorg.libX11 pkgs.xorg.libXext pkgs.xorg.libXdamage pkgs.xorg.libxcb pkgs.xorg.libXfixes pkgs.xorg.libXrender pkgs.fontconfig.lib pkgs.freetype pkgs.libGL pkgs.zlib pkgs.ncurses5 pkgs.libpulseaudio pkgs_i686.glibc pkgs_i686.xorg.libX11 pkgs_i686.xorg.libXrender pkgs_i686.fontconfig pkgs_i686.freetype pkgs_i686.zlib];
   inherit package os;
 
   patchInstructions = ''
-    ${lib.optionalString (os == "linux") ''
-      # Auto patch all binaries
-      addAutoPatchelfSearchPath $PWD/lib64
-      addAutoPatchelfSearchPath $PWD/lib64/libstdc++
-      addAutoPatchelfSearchPath $PWD/lib64/qt/lib
-      addAutoPatchelfSearchPath $PWD/lib
-      addAutoPatchelfSearchPath $PWD/lib/libstdc++
-      autoPatchelf .
-    ''}
+    ${
+      lib.optionalString (os == "linux") ''
+        # Auto patch all binaries
+        addAutoPatchelfSearchPath $PWD/lib64
+        addAutoPatchelfSearchPath $PWD/lib64/libstdc++
+        addAutoPatchelfSearchPath $PWD/lib64/qt/lib
+        addAutoPatchelfSearchPath $PWD/lib
+        addAutoPatchelfSearchPath $PWD/lib/libstdc++
+        autoPatchelf .
+      ''
+    }
 
     # Wrap all scripts that require JAVA_HOME
     for i in bin
@@ -41,15 +53,17 @@ deployAndroidPackage {
     do
         wrapProgram $PWD/$i \
           --prefix PATH : ${pkgs.jdk8}/bin \
-          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pkgs.xorg.libX11 pkgs.xorg.libXtst ]}
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [pkgs.xorg.libX11 pkgs.xorg.libXtst]}
     done
 
-    ${lib.optionalString (os == "linux") ''
-      wrapProgram $PWD/emulator \
-        --prefix PATH : ${pkgs.file}/bin:${pkgs.glxinfo}/bin:${pkgs.pciutils}/bin \
-        --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
-        --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
-    ''}
+    ${
+      lib.optionalString (os == "linux") ''
+        wrapProgram $PWD/emulator \
+          --prefix PATH : ${pkgs.file}/bin:${pkgs.glxinfo}/bin:${pkgs.pciutils}/bin \
+          --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
+          --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
+      ''
+    }
 
     # Patch all script shebangs
     patchShebangs .

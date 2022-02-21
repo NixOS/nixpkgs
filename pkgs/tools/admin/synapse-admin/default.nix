@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchzip
+{
+  lib,
+  stdenv,
+  fetchzip,
 }:
-
 stdenv.mkDerivation rec {
   pname = "synapse-admin";
   version = "0.8.4";
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Awesome-Technologies/synapse-admin";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
   };
 }

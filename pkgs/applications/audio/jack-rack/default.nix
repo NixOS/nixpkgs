@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, libjack2, ladspaH, gtk2, alsa-lib, libxml2, lrdf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libjack2,
+  ladspaH,
+  gtk2,
+  alsa-lib,
+  libxml2,
+  lrdf,
+}:
 stdenv.mkDerivation rec {
   pname = "jack-rack";
   version = "1.4.7";
@@ -6,8 +17,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "1lmibx9gicagcpcisacj6qhq6i08lkl5x8szysjqvbgpxl9qg045";
   };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjack2 ladspaH gtk2 alsa-lib libxml2 lrdf ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libjack2 ladspaH gtk2 alsa-lib libxml2 lrdf];
   NIX_LDFLAGS = "-ldl -lm -lpthread";
 
   meta = {
@@ -20,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://jack-rack.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.astsmtl ];
+    maintainers = [lib.maintainers.astsmtl];
     platforms = lib.platforms.linux;
   };
 }

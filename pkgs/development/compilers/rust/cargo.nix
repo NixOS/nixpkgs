@@ -1,9 +1,22 @@
-{ lib, stdenv, pkgsHostHost
-, file, curl, pkg-config, python3, openssl, cmake, zlib
-, installShellFiles, makeWrapper, cacert, rustPlatform, rustc
-, CoreFoundation, Security
+{
+  lib,
+  stdenv,
+  pkgsHostHost,
+  file,
+  curl,
+  pkg-config,
+  python3,
+  openssl,
+  cmake,
+  zlib,
+  installShellFiles,
+  makeWrapper,
+  cacert,
+  rustPlatform,
+  rustc,
+  CoreFoundation,
+  Security,
 }:
-
 rustPlatform.buildRustPackage {
   name = "cargo-${rustc.version}";
   inherit (rustc) version src;
@@ -18,11 +31,15 @@ rustPlatform.buildRustPackage {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   nativeBuildInputs = [
-    pkg-config cmake installShellFiles makeWrapper
+    pkg-config
+    cmake
+    installShellFiles
+    makeWrapper
     (lib.getDev pkgsHostHost.curl)
   ];
-  buildInputs = [ cacert file curl python3 openssl zlib ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+  buildInputs =
+    [cacert file curl python3 openssl zlib]
+    ++ lib.optionals stdenv.isDarwin [CoreFoundation Security];
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that
   # is not compatible with the current version in nixpkgs.
@@ -58,8 +75,9 @@ rustPlatform.buildRustPackage {
   # Disable check phase as there are failures (4 tests fail)
   doCheck = false;
 
-  doInstallCheck = !stdenv.hostPlatform.isStatic &&
-    stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
+  doInstallCheck =
+    !stdenv.hostPlatform.isStatic
+    && stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
   installCheckPhase = ''
     runHook preInstallCheck
     readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
@@ -69,8 +87,8 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     homepage = "https://crates.io";
     description = "Downloads your Rust project's dependencies and builds your project";
-    maintainers = with maintainers; [ retrry ];
-    license = [ licenses.mit licenses.asl20 ];
+    maintainers = with maintainers; [retrry];
+    license = [licenses.mit licenses.asl20];
     platforms = platforms.unix;
   };
 }

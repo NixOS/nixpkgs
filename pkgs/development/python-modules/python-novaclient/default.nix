@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, iso8601
-, keystoneauth1
-, openssl
-, oslo-i18n
-, oslo-serialization
-, pbr
-, prettytable
-, requests-mock
-, stestr
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  iso8601,
+  keystoneauth1,
+  openssl,
+  oslo-i18n,
+  oslo-serialization,
+  pbr,
+  prettytable,
+  requests-mock,
+  stestr,
+  testscenarios,
 }:
-
 buildPythonPackage rec {
   pname = "python-novaclient";
   version = "17.6.0";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     ")
   '';
 
-  pythonImportsCheck = [ "novaclient" ];
+  pythonImportsCheck = ["novaclient"];
 
   meta = with lib; {
     description = "Client library for OpenStack Compute API";

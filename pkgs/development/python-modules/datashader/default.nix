@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dask
-, bokeh
-, toolz
-, datashape
-, numba
-, numpy
-, pandas
-, pillow
-, xarray
-, colorcet
-, param
-, pyct
-, scipy
-, pytestCheckHook
-, nbsmoke
-, fastparquet
-, nbconvert
-, pytest-xdist
-, netcdf4
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dask,
+  bokeh,
+  toolz,
+  datashape,
+  numba,
+  numpy,
+  pandas,
+  pillow,
+  xarray,
+  colorcet,
+  param,
+  pyct,
+  scipy,
+  pytestCheckHook,
+  nbsmoke,
+  fastparquet,
+  nbconvert,
+  pytest-xdist,
+  netcdf4,
 }:
-
 buildPythonPackage rec {
   pname = "datashader";
   version = "0.13.0";
@@ -92,10 +92,10 @@ buildPythonPackage rec {
     "datashader"
   ];
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Data visualization toolchain based on aggregating into a grid";
     homepage = "https://datashader.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

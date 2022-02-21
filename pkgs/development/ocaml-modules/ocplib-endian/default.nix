@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub, cppo }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  cppo,
+}:
 buildDunePackage rec {
   version = "1.1";
   pname = "ocplib-endian";
@@ -13,12 +17,12 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  nativeBuildInputs = [ cppo ];
+  nativeBuildInputs = [cppo];
 
   meta = with lib; {
     description = "Optimised functions to read and write int16/32/64";
     homepage = "https://github.com/OCamlPro/ocplib-endian";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ vbgl ];
+    maintainers = with maintainers; [vbgl];
   };
 }

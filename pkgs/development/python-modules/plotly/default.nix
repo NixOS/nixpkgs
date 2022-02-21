@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytz
-, requests
-, six
-, tenacity
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytz,
+  requests,
+  six,
+  tenacity,
 }:
-
 buildPythonPackage rec {
   pname = "plotly";
   version = "5.5.0";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";
     homepage = "https://plot.ly/python/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [];
   };
 }

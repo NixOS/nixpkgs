@@ -1,12 +1,25 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, vala, gobject-introspection, gtk-doc
-, docbook_xsl, docbook_xml_dtd_412, glib, libxml2, libsoup, gnome, buildPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  glib,
+  libxml2,
+  libsoup,
+  gnome,
+  buildPackages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libgrss";
   version = "0.7.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -37,11 +50,13 @@ stdenv.mkDerivation rec {
     libsoup
   ];
 
-  configureFlags = [
-    "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    "--enable-gtk-doc"
-  ];
+  configureFlags =
+    [
+      "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+      "--enable-gtk-doc"
+    ];
 
   doCheck = true;
 

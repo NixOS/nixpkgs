@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, setuptools-scm
-, freetype
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  setuptools-scm,
+  freetype,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "freetype-py";
   version = "2.1.0.post1";
@@ -24,9 +24,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
 
-  propagatedBuildInputs = [ freetype ];
+  propagatedBuildInputs = [freetype];
 
   preCheck = ''
     cd tests
@@ -36,12 +36,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck =  [ "freetype" ];
+  pythonImportsCheck = ["freetype"];
 
   meta = with lib; {
     homepage = "https://github.com/rougier/freetype-py";
     description = "FreeType (high-level Python API)";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goertzenator ];
+    maintainers = with maintainers; [goertzenator];
   };
 }

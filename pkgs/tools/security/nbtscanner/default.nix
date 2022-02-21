@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "nbtscanner";
   version = "0.0.1";
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "NetBIOS scanner written in Rust";
     homepage = "https://github.com/jonkgrimes/nbtscanner";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

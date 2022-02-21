@@ -1,5 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, protobuf }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  protobuf,
+}:
 buildGoModule rec {
   pname = "prototool";
   version = "1.10.0";
@@ -11,7 +16,7 @@ buildGoModule rec {
     sha256 = "02ih9pqnziwl2k4z6c59w1p4bxmb3xki5y33pdfkxqn2467s792g";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   vendorSha256 = "0gyj0yrri2j4yxmyn4d4vdhaxf2p08srpjcxg9zpaxwv5rrvipav";
 
@@ -23,12 +28,12 @@ buildGoModule rec {
       --prefix PROTOTOOL_PROTOC_WKT_PATH : "${protobuf}/include"
   '';
 
-  subPackages = [ "cmd/prototool" ];
+  subPackages = ["cmd/prototool"];
 
   meta = with lib; {
     homepage = "https://github.com/uber/prototool";
     description = "Your Swiss Army Knife for Protocol Buffers";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     license = licenses.mit;
     platforms = platforms.unix;
   };

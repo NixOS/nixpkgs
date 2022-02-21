@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "shhopt";
   version = "1.1.7";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
-  installFlags = [ "INSTBASEDIR=$(out)" ];
+  installFlags = ["INSTBASEDIR=$(out)"];
 
   meta = with lib; {
     description = "A library for parsing command line options";

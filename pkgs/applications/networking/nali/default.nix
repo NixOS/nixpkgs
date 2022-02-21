@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "nali";
   version = "0.3.2";
@@ -12,12 +15,12 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-0u6n53hL2+GvqbYpAKN54n7uiTHSsgyjedt20nT1yRc=";
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     description = "An offline tool for querying IP geographic information and CDN provider";
     homepage = "https://github.com/zu1k/nali";
     license = licenses.mit;
-    maintainers = with maintainers; [ diffumist ];
+    maintainers = with maintainers; [diffumist];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "bingrep";
   version = "0.9.0";
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Greps through binaries from various OSs and architectures, and colors them";
     homepage = "https://github.com/m4b/bingrep";
     license = licenses.mit;
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = with maintainers; [minijackson];
   };
 }

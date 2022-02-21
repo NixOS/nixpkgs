@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libogg, libpng }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libogg,
+  libpng,
+}:
 stdenv.mkDerivation rec {
   pname = "libkate";
   version = "0.4.1";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s3vr2nxfxlf1k75iqpp4l78yf4gil3f0v778kvlngbchvaq23n4";
   };
 
-  buildInputs = [ libogg libpng ];
+  buildInputs = [libogg libpng];
 
   meta = with lib; {
     description = "A library for encoding and decoding Kate streams";

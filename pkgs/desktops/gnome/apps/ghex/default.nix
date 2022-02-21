@@ -1,27 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, python3
-, gnome
-, desktop-file-utils
-, appstream-glib
-, gettext
-, itstool
-, libxml2
-, gtk3
-, glib
-, atk
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  gnome,
+  desktop-file-utils,
+  appstream-glib,
+  gettext,
+  itstool,
+  libxml2,
+  gtk3,
+  glib,
+  atk,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ghex";
   version = "3.41.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-     chmod +x meson_post_install.py
-     patchShebangs meson_post_install.py
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
 
   passthru = {

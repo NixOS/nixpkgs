@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "proxytunnel";
   version = "1.9.0";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fd644kldsg14czkqjybqh3wrzwsp3dcargqf4fjkpqxv3wbpx9f";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
   installPhase = ''make DESTDIR="$out" PREFIX="" install'';
 

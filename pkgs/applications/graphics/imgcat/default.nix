@@ -1,18 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "imgcat";
   version = "2.3.1";
 
-  nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [autoconf automake libtool];
+  buildInputs = [ncurses];
 
   preConfigure = ''
     ${autoconf}/bin/autoconf
     sed -i -e "s|-ltermcap|-L ${ncurses}/lib -lncurses|" Makefile
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   src = fetchFromGitHub {
     owner = "eddieantonio";
@@ -27,8 +34,7 @@ stdenv.mkDerivation rec {
     description = "It's like cat, but for images";
     homepage = "https://github.com/eddieantonio/imgcat";
     license = licenses.isc;
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with maintainers; [jwiegley];
     platforms = platforms.unix;
   };
 }
-

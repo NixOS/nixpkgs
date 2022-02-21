@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "godns";
   version = "2.6";
@@ -16,12 +19,12 @@ buildGoModule rec {
   # Some tests require internet access, broken in sandbox
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.Version=${version}"];
 
   meta = with lib; {
     description = "A dynamic DNS client tool supports AliDNS, Cloudflare, Google Domains, DNSPod, HE.net & DuckDNS & DreamHost, etc";
     homepage = "https://github.com/TimothyYe/godns";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yinfeng ];
+    maintainers = with maintainers; [yinfeng];
   };
 }

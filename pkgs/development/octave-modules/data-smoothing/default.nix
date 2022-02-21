@@ -1,9 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, optim
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  optim,
 }:
-
 buildOctavePackage rec {
   pname = "data-smoothing";
   version = "1.3.0";
@@ -20,7 +20,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/data-smoothing/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Algorithms for smoothing noisy data";
   };
 }

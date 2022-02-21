@@ -1,14 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.unifi-poller;
 
   configFile = pkgs.writeText "unifi-poller.json" (generators.toJSON {} {
     inherit (cfg) poller influxdb loki prometheus unifi;
   });
-
 in {
   options.services.unifi-poller = {
     enable = mkEnableOption "unifi-poller";
@@ -200,7 +201,7 @@ in {
           '';
         };
         sites = mkOption {
-          type = with types; either (enum [ "default" "all" ]) (listOf str);
+          type = with types; either (enum ["default" "all"]) (listOf str);
           default = "all";
           description = ''
             List of site names for which statistics should be exported.
@@ -267,7 +268,6 @@ in {
           '';
         };
       };
-
     in {
       dynamic = mkOption {
         type = types.bool;
@@ -281,18 +281,18 @@ in {
       defaults = controllerOptions;
 
       controllers = mkOption {
-        type = with types; listOf (submodule { options = controllerOptions; });
+        type = with types; listOf (submodule {options = controllerOptions;});
         default = [];
         description = ''
           List of Unifi controllers to poll. Use defaults if empty.
         '';
-        apply = map (flip removeAttrs [ "_module" ]);
+        apply = map (flip removeAttrs ["_module"]);
       };
     };
   };
 
   config = mkIf cfg.enable {
-    users.groups.unifi-poller = { };
+    users.groups.unifi-poller = {};
     users.users.unifi-poller = {
       description = "unifi-poller Service User";
       group = "unifi-poller";
@@ -300,8 +300,8 @@ in {
     };
 
     systemd.services.unifi-poller = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
         ExecStart = "${pkgs.unifi-poller}/bin/unifi-poller --config ${configFile}";
         Restart = "always";

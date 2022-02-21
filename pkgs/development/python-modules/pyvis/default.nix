@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, networkx
-, jinja2
-, ipython
-, jsonpickle
-, numpy }:
-
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildPythonPackage,
+  networkx,
+  jinja2,
+  ipython,
+  jsonpickle,
+  numpy,
+}:
 buildPythonPackage rec {
   pname = "pyvis";
   version = "unstable-2021-04-29";
@@ -28,16 +29,16 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ networkx jinja2 ipython jsonpickle ];
+  propagatedBuildInputs = [networkx jinja2 ipython jsonpickle];
 
-  checkInputs = [ numpy ];
+  checkInputs = [numpy];
 
-  pythonImportsCheck = [ "pyvis" ];
+  pythonImportsCheck = ["pyvis"];
 
   meta = with lib; {
     homepage = "https://github.com/WestHealth/pyvis";
     description = "Python package for creating and visualizing interactive network graphs";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [erictapen];
   };
 }

@@ -1,4 +1,9 @@
-{lib, stdenv, fetchFromGitHub, mono}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mono,
+}:
 stdenv.mkDerivation rec {
   pname = "wavefunctioncollapse";
   version = "0.0pre20170130";

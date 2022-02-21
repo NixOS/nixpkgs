@@ -1,19 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.networking.tcpcrypt;
-
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.networking.tcpcrypt;
+in {
   ###### interface
 
   options = {
-
     networking.tcpcrypt.enable = mkOption {
       type = types.bool;
       default = false;
@@ -29,7 +25,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
     users.users.tcpcryptd = {
       uid = config.ids.uids.tcpcryptd;
       description = "tcpcrypt daemon user";
@@ -38,10 +33,10 @@ in
     systemd.services.tcpcrypt = {
       description = "tcpcrypt";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
-      path = [ pkgs.iptables pkgs.tcpcrypt pkgs.procps ];
+      path = [pkgs.iptables pkgs.tcpcrypt pkgs.procps];
 
       preStart = ''
         mkdir -p /run/tcpcryptd
@@ -76,5 +71,4 @@ in
       '';
     };
   };
-
 }

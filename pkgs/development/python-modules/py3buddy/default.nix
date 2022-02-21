@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python
-, pyusb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+  pyusb,
 }:
-
 stdenv.mkDerivation rec {
   pname = "py3buddy";
   version = "unstable-2019-09-29";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "12ar4kbplavndarkrbibxi5i607f5sfia5myscvalqy78lc33798";
   };
 
-  propagatedBuildInputs = [ pyusb ];
+  propagatedBuildInputs = [pyusb];
 
   dontConfigure = true;
   dontBuild = true;
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Code to work with the iBuddy MSN figurine";
     homepage = "https://github.com/armijnhemel/py3buddy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [prusnak];
   };
 }

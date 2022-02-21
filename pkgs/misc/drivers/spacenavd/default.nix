@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, libX11, IOKit }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  libX11,
+  IOKit,
+}:
 stdenv.mkDerivation rec {
   version = "0.8";
   pname = "spacenavd";
@@ -28,12 +34,13 @@ stdenv.mkDerivation rec {
     ./configure-cfgfile-path.patch
   ];
 
-  buildInputs = [ libX11 ]
+  buildInputs =
+    [libX11]
     ++ lib.optional stdenv.isDarwin IOKit;
 
-  configureFlags = [ "--disable-debug" ];
+  configureFlags = ["--disable-debug"];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   meta = with lib; {
     homepage = "http://spacenav.sourceforge.net/";
@@ -41,6 +48,6 @@ stdenv.mkDerivation rec {
     longDescription = "A free, compatible alternative, to the proprietary 3Dconnexion device driver and SDK, for their 3D input devices (called 'space navigator', 'space pilot', 'space traveller', etc)";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sohalt ];
+    maintainers = with maintainers; [sohalt];
   };
 }

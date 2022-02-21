@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchFromGitLab
-, meson, pkg-config, ninja
-, libdrm
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  pkg-config,
+  ninja,
+  libdrm,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libliftoff";
   version = "0.2.0";
@@ -15,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ysxm7kg1gwrsn29lw8kngvkxp46g4m2pvbwcvscgvr54ikirn4q";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
+  nativeBuildInputs = [meson pkg-config ninja];
 
-  buildInputs = [ libdrm ];
+  buildInputs = [libdrm];
 
   meta = with lib; {
     description = "A lightweight KMS plane library";
@@ -28,8 +32,8 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://github.com/emersion/libliftoff/releases/tag/v${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [primeos];
   };
 }

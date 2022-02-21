@@ -1,8 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, glew, glm, libGLU, libGL, libX11, libXext, libXrender, icu
-, cppcheck
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  glew,
+  glm,
+  libGLU,
+  libGL,
+  libX11,
+  libXext,
+  libXrender,
+  icu,
+  cppcheck,
 }:
-
 stdenv.mkDerivation rec {
   pname = "slop";
   version = "7.6";
@@ -14,9 +25,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LdBQxw8K8WWSfm4E2QpK4GYTuYvI+FX5gLOouVFSU/U=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ glew glm libGLU libGL libX11 libXext libXrender icu ]
-                ++ lib.optional doCheck cppcheck;
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs =
+    [glew glm libGLU libGL libX11 libXext libXrender icu]
+    ++ lib.optional doCheck cppcheck;
 
   doCheck = false;
 
@@ -25,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "Queries a selection from the user and prints to stdout";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

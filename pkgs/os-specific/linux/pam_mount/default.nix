@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, util-linux }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libtool,
+  pam,
+  libHX,
+  libxml2,
+  pcre,
+  perl,
+  openssl,
+  cryptsetup,
+  util-linux,
+}:
 stdenv.mkDerivation rec {
   pname = "pam_mount";
   version = "2.17";
@@ -18,9 +32,9 @@ stdenv.mkDerivation rec {
       --replace @@NIX_UTILLINUX@@ ${util-linux}/bin
   '';
 
-  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
+  nativeBuildInputs = [autoreconfHook libtool pkg-config];
 
-  buildInputs = [ pam libHX util-linux libxml2 pcre perl openssl cryptsetup ];
+  buildInputs = [pam libHX util-linux libxml2 pcre perl openssl cryptsetup];
 
   enableParallelBuilding = true;
 
@@ -39,8 +53,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PAM module to mount volumes for a user session";
     homepage = "https://pam-mount.sourceforge.net/";
-    license = with licenses; [ gpl2 gpl3 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ tstrobel ];
+    license = with licenses; [gpl2 gpl3 lgpl21 lgpl3];
+    maintainers = with maintainers; [tstrobel];
     platforms = platforms.linux;
   };
 }

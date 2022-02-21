@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   cfg = config.services.ddclient;
-  boolToStr = bool: if bool then "yes" else "no";
+  boolToStr = bool:
+    if bool
+    then "yes"
+    else "no";
   dataDir = "/var/lib/ddclient";
   StateDirectory = builtins.baseNameOf dataDir;
   RuntimeDirectory = StateDirectory;
@@ -17,7 +23,7 @@ let
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
-    ${lib.optionalString (cfg.zone != "")   "zone=${cfg.zone}"}
+    ${lib.optionalString (cfg.zone != "") "zone=${cfg.zone}"}
     ssl=${boolToStr cfg.ssl}
     wildcard=YES
     ipv6=${boolToStr cfg.ipv6}
@@ -26,214 +32,220 @@ let
     ${cfg.extraConfig}
     ${lib.concatStringsSep "," cfg.domains}
   '';
-  configFile = if (cfg.configFile != null) then cfg.configFile else configFile';
+  configFile =
+    if (cfg.configFile != null)
+    then cfg.configFile
+    else configFile';
 
   preStart = ''
     install ${configFile} /run/${RuntimeDirectory}/ddclient.conf
-    ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
-      install ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
-    '' else if (cfg.passwordFile != null) then ''
-      password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
-      sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf
-    '' else ''
-      sed -i '/^password=$/d' /run/${RuntimeDirectory}/ddclient.conf
-    '')}
+    ${
+      lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate")
+      then
+        ''
+          install ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+        ''
+      else if (cfg.passwordFile != null)
+      then
+        ''
+          password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
+          sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf
+        ''
+      else
+        ''
+          sed -i '/^password=$/d' /run/${RuntimeDirectory}/ddclient.conf
+        '')
+    }
   '';
-
 in
+  with lib; {
+    imports = [
+      (mkChangedOptionModule ["services" "ddclient" "domain"] ["services" "ddclient" "domains"]
+      (config: let
+        value = getAttrFromPath ["services" "ddclient" "domain"] config;
+      in
+        if value != ""
+        then [value]
+        else []))
+      (mkRemovedOptionModule ["services" "ddclient" "homeDir"] "")
+      (mkRemovedOptionModule ["services" "ddclient" "password"] "Use services.ddclient.passwordFile instead.")
+    ];
 
-with lib;
+    ###### interface
 
-{
+    options = {
+      services.ddclient = with lib.types; {
+        enable = mkOption {
+          default = false;
+          type = bool;
+          description = ''
+            Whether to synchronise your machine's IP address with a dynamic DNS provider (e.g. dyndns.org).
+          '';
+        };
 
-  imports = [
-    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
-      (config:
-        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in if value != "" then [ value ] else []))
-    (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
-    (mkRemovedOptionModule [ "services" "ddclient" "password" ] "Use services.ddclient.passwordFile instead.")
-  ];
+        package = mkOption {
+          type = package;
+          default = pkgs.ddclient;
+          defaultText = "pkgs.ddclient";
+          description = ''
+            The ddclient executable package run by the service.
+          '';
+        };
 
-  ###### interface
+        domains = mkOption {
+          default = [""];
+          type = listOf str;
+          description = ''
+            Domain name(s) to synchronize.
+          '';
+        };
 
-  options = {
+        username = mkOption {
+          # For `nsupdate` username contains the path to the nsupdate executable
+          default = lib.optionalString (config.services.ddclient.protocol == "nsupdate") "${pkgs.bind.dnsutils}/bin/nsupdate";
+          defaultText = "";
+          type = str;
+          description = ''
+            User name.
+          '';
+        };
 
-    services.ddclient = with lib.types; {
+        passwordFile = mkOption {
+          default = null;
+          type = nullOr str;
+          description = ''
+            A file containing the password or a TSIG key in named format when using the nsupdate protocol.
+          '';
+        };
 
-      enable = mkOption {
-        default = false;
-        type = bool;
-        description = ''
-          Whether to synchronise your machine's IP address with a dynamic DNS provider (e.g. dyndns.org).
-        '';
-      };
+        interval = mkOption {
+          default = "10min";
+          type = str;
+          description = ''
+            The interval at which to run the check and update.
+            See <command>man 7 systemd.time</command> for the format.
+          '';
+        };
 
-      package = mkOption {
-        type = package;
-        default = pkgs.ddclient;
-        defaultText = "pkgs.ddclient";
-        description = ''
-          The ddclient executable package run by the service.
-        '';
-      };
+        configFile = mkOption {
+          default = null;
+          type = nullOr path;
+          description = ''
+            Path to configuration file.
+            When set this overrides the generated configuration from module options.
+          '';
+          example = "/root/nixos/secrets/ddclient.conf";
+        };
 
-      domains = mkOption {
-        default = [ "" ];
-        type = listOf str;
-        description = ''
-          Domain name(s) to synchronize.
-        '';
-      };
+        protocol = mkOption {
+          default = "dyndns2";
+          type = str;
+          description = ''
+            Protocol to use with dynamic DNS provider (see https://sourceforge.net/p/ddclient/wiki/protocols).
+          '';
+        };
 
-      username = mkOption {
-        # For `nsupdate` username contains the path to the nsupdate executable
-        default = lib.optionalString (config.services.ddclient.protocol == "nsupdate") "${pkgs.bind.dnsutils}/bin/nsupdate";
-        defaultText = "";
-        type = str;
-        description = ''
-          User name.
-        '';
-      };
+        server = mkOption {
+          default = "";
+          type = str;
+          description = ''
+            Server address.
+          '';
+        };
 
-      passwordFile = mkOption {
-        default = null;
-        type = nullOr str;
-        description = ''
-          A file containing the password or a TSIG key in named format when using the nsupdate protocol.
-        '';
-      };
+        ssl = mkOption {
+          default = true;
+          type = bool;
+          description = ''
+            Whether to use SSL/TLS to connect to dynamic DNS provider.
+          '';
+        };
 
-      interval = mkOption {
-        default = "10min";
-        type = str;
-        description = ''
-          The interval at which to run the check and update.
-          See <command>man 7 systemd.time</command> for the format.
-        '';
-      };
+        ipv6 = mkOption {
+          default = false;
+          type = bool;
+          description = ''
+            Whether to use IPv6.
+          '';
+        };
 
-      configFile = mkOption {
-        default = null;
-        type = nullOr path;
-        description = ''
-          Path to configuration file.
-          When set this overrides the generated configuration from module options.
-        '';
-        example = "/root/nixos/secrets/ddclient.conf";
-      };
+        quiet = mkOption {
+          default = false;
+          type = bool;
+          description = ''
+            Print no messages for unnecessary updates.
+          '';
+        };
 
-      protocol = mkOption {
-        default = "dyndns2";
-        type = str;
-        description = ''
-          Protocol to use with dynamic DNS provider (see https://sourceforge.net/p/ddclient/wiki/protocols).
-        '';
-      };
+        script = mkOption {
+          default = "";
+          type = str;
+          description = ''
+            script as required by some providers.
+          '';
+        };
 
-      server = mkOption {
-        default = "";
-        type = str;
-        description = ''
-          Server address.
-        '';
-      };
+        use = mkOption {
+          default = "web, web=checkip.dyndns.com/, web-skip='Current IP Address: '";
+          type = str;
+          description = ''
+            Method to determine the IP address to send to the dynamic DNS provider.
+          '';
+        };
 
-      ssl = mkOption {
-        default = true;
-        type = bool;
-        description = ''
-          Whether to use SSL/TLS to connect to dynamic DNS provider.
-        '';
-      };
+        verbose = mkOption {
+          default = true;
+          type = bool;
+          description = ''
+            Print verbose information.
+          '';
+        };
 
-      ipv6 = mkOption {
-        default = false;
-        type = bool;
-        description = ''
-          Whether to use IPv6.
-        '';
-      };
+        zone = mkOption {
+          default = "";
+          type = str;
+          description = ''
+            zone as required by some providers.
+          '';
+        };
 
-
-      quiet = mkOption {
-        default = false;
-        type = bool;
-        description = ''
-          Print no messages for unnecessary updates.
-        '';
-      };
-
-      script = mkOption {
-        default = "";
-        type = str;
-        description = ''
-          script as required by some providers.
-        '';
-      };
-
-      use = mkOption {
-        default = "web, web=checkip.dyndns.com/, web-skip='Current IP Address: '";
-        type = str;
-        description = ''
-          Method to determine the IP address to send to the dynamic DNS provider.
-        '';
-      };
-
-      verbose = mkOption {
-        default = true;
-        type = bool;
-        description = ''
-          Print verbose information.
-        '';
-      };
-
-      zone = mkOption {
-        default = "";
-        type = str;
-        description = ''
-          zone as required by some providers.
-        '';
-      };
-
-      extraConfig = mkOption {
-        default = "";
-        type = lines;
-        description = ''
-          Extra configuration. Contents will be added verbatim to the configuration file.
-        '';
-      };
-    };
-  };
-
-
-  ###### implementation
-
-  config = mkIf config.services.ddclient.enable {
-    systemd.services.ddclient = {
-      description = "Dynamic DNS Client";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      restartTriggers = optional (cfg.configFile != null) cfg.configFile;
-
-      serviceConfig = {
-        DynamicUser = true;
-        RuntimeDirectoryMode = "0700";
-        inherit RuntimeDirectory;
-        inherit StateDirectory;
-        Type = "oneshot";
-        ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
-        ExecStart = "${lib.getBin cfg.package}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
+        extraConfig = mkOption {
+          default = "";
+          type = lines;
+          description = ''
+            Extra configuration. Contents will be added verbatim to the configuration file.
+          '';
+        };
       };
     };
 
-    systemd.timers.ddclient = {
-      description = "Run ddclient";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnBootSec = cfg.interval;
-        OnUnitInactiveSec = cfg.interval;
+    ###### implementation
+
+    config = mkIf config.services.ddclient.enable {
+      systemd.services.ddclient = {
+        description = "Dynamic DNS Client";
+        wantedBy = ["multi-user.target"];
+        after = ["network.target"];
+        restartTriggers = optional (cfg.configFile != null) cfg.configFile;
+
+        serviceConfig = {
+          DynamicUser = true;
+          RuntimeDirectoryMode = "0700";
+          inherit RuntimeDirectory;
+          inherit StateDirectory;
+          Type = "oneshot";
+          ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
+          ExecStart = "${lib.getBin cfg.package}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
+        };
+      };
+
+      systemd.timers.ddclient = {
+        description = "Run ddclient";
+        wantedBy = ["timers.target"];
+        timerConfig = {
+          OnBootSec = cfg.interval;
+          OnUnitInactiveSec = cfg.interval;
+        };
       };
     };
-  };
-}
+  }

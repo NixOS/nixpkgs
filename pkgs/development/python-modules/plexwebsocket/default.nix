@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, aiohttp, isPy27 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  isPy27,
+}:
 buildPythonPackage rec {
   pname = "plexwebsocket";
   version = "0.0.13";
@@ -12,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-u9zO3d0d4Qg+u4ezVRGkNDpJqHkYIMrEMJzBK5WKk8Y=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [aiohttp];
 
   # package does not include tests
   doCheck = false;
@@ -26,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jjlawren/python-plexwebsocket/";
     description = "Async library to react to events issued over Plex websockets";
     license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [colemickens];
   };
 }

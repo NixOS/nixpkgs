@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "circup";
   version = "1.0.4";
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "CircuitPython library updater";
     homepage = "https://github.com/adafruit/circup";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

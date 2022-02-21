@@ -1,7 +1,7 @@
-{ lib
-, python3Packages
+{
+  lib,
+  python3Packages,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "litecli";
   version = "1.6.0";
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     mock
   ];
 
-  pythonImportsCheck = [ "litecli" ];
+  pythonImportsCheck = ["litecli"];
 
   meta = with lib; {
     description = "Command-line interface for SQLite";
@@ -36,6 +36,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://litecli.com";
     changelog = "https://github.com/dbcli/litecli/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    maintainers = with maintainers; [Scriptkiddi];
   };
 }

@@ -1,5 +1,11 @@
-{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+}:
 stdenv.mkDerivation rec {
   pname = "super-productivity";
   version = "7.10.1";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -39,14 +45,14 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [stdenv.cc.cc]}"
   '';
 
   meta = with lib; {
     description = "To Do List / Time Tracker with Jira Integration";
     homepage = "https://super-productivity.com";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ offline ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [offline];
   };
 }

@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, desktop-file-utils
-, gettext
-, libxml2
-, gtk3
-, granite
-, libgee
-, bamf
-, libcanberra-gtk3
-, gnome-desktop
-, mutter
-, clutter
-, elementary-icon-theme
-, gnome-settings-daemon
-, wrapGAppsHook
-, gexiv2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  python3,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gettext,
+  libxml2,
+  gtk3,
+  granite,
+  libgee,
+  bamf,
+  libcanberra-gtk3,
+  gnome-desktop,
+  mutter,
+  clutter,
+  elementary-icon-theme,
+  gnome-settings-daemon,
+  wrapGAppsHook,
+  gexiv2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gala";
   version = "6.3.0";

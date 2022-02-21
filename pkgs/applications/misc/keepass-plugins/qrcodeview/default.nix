@@ -1,6 +1,10 @@
-{ lib, stdenv, buildEnv, fetchurl, mono }:
-
-let
+{
+  lib,
+  stdenv,
+  buildEnv,
+  fetchurl,
+  mono,
+}: let
   version = "1.0.4";
 
   drv = stdenv.mkDerivation {
@@ -24,16 +28,19 @@ let
         KeePassQRCodeView is a plugin for KeePass 2.x which shows QR codes for entry fields.
         These codes can be scanned to copy the encoded data to the scanner (smartphone, ...)
       '';
-      homepage    = "https://github.com/JanisEst/KeePassQRCodeView";
-      platforms   = [
+      homepage = "https://github.com/JanisEst/KeePassQRCodeView";
+      platforms = [
         "aarch64-linux"
         "i686-linux"
         "x86_64-linux"
       ];
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nazarewk ];
+      license = licenses.mit;
+      maintainers = with maintainers; [nazarewk];
     };
   };
 in
   # Mono is required to compile plugin at runtime, after loading.
-  buildEnv { name = drv.name; paths = [ mono drv ]; }
+  buildEnv {
+    name = drv.name;
+    paths = [mono drv];
+  }

@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, xorgproto
-, libXt
-, libXaw
-, libSM
-, libICE
-, libXmu
-, libXext
-, gnuchess
-, texinfo
-, libXpm
-, pkg-config
-, librsvg
-, cairo
-, pango
-, gtk2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  xorgproto,
+  libXt,
+  libXaw,
+  libSM,
+  libICE,
+  libXmu,
+  libXext,
+  gnuchess,
+  texinfo,
+  libXpm,
+  pkg-config,
+  librsvg,
+  cairo,
+  pango,
+  gtk2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xboard";
   version = "4.9.1";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GUI for chess engines";
     homepage = "https://www.gnu.org/software/xboard/";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
   };

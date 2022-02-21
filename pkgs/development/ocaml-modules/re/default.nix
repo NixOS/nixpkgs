@@ -1,5 +1,11 @@
-{ lib, fetchurl, buildDunePackage, ocaml, ounit, seq }:
-
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  ounit,
+  seq,
+}:
 buildDunePackage rec {
   pname = "re";
   version = "1.9.0";
@@ -14,13 +20,13 @@ buildDunePackage rec {
   };
 
   buildInputs = lib.optional doCheck ounit;
-  propagatedBuildInputs = [ seq ];
+  propagatedBuildInputs = [seq];
   doCheck = lib.versionAtLeast ocaml.version "4.04";
 
   meta = {
     homepage = "https://github.com/ocaml/ocaml-re";
     description = "Pure OCaml regular expressions, with support for Perl and POSIX-style strings";
     license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [vbgl];
   };
 }

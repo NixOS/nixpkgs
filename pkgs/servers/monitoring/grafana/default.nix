@@ -1,5 +1,12 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
-
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  fetchFromGitHub,
+  nixosTests,
+  tzdata,
+  wire,
+}:
 buildGoModule rec {
   pname = "grafana";
   version = "8.4.1";
@@ -20,7 +27,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-RugV5cHlpR739CA1C/7FkXasvkv18m7pPsK6mxfSkC0=";
 
-  nativeBuildInputs = [ wire ];
+  nativeBuildInputs = [wire];
 
   preBuild = ''
     # Generate DI code that's required to compile the package.
@@ -45,7 +52,9 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -66,13 +75,13 @@ buildGoModule rec {
     cp ./conf/defaults.ini $out/share/grafana/conf/
   '';
 
-  passthru.tests = { inherit (nixosTests) grafana; };
+  passthru.tests = {inherit (nixosTests) grafana;};
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.agpl3;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
+    maintainers = with maintainers; [offline fpletz willibutz globin ma27 Frostman];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "grafana-server";
   };

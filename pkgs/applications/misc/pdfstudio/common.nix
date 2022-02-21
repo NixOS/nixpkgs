@@ -1,30 +1,32 @@
-{ pname
-, src
-, year
-, version
-, desktopName
-, longDescription
-, buildFHSUserEnv
-, extraBuildInputs ? []
-, stdenv
-, lib
-, dpkg
-, makeDesktopItem
-, copyDesktopItems
-, autoPatchelfHook
-, sane-backends
-, cups
-, jdk11
-}:
-let
+{
+  pname,
+  src,
+  year,
+  version,
+  desktopName,
+  longDescription,
+  buildFHSUserEnv,
+  extraBuildInputs ? [],
+  stdenv,
+  lib,
+  dpkg,
+  makeDesktopItem,
+  copyDesktopItems,
+  autoPatchelfHook,
+  sane-backends,
+  cups,
+  jdk11,
+}: let
   thisPackage = stdenv.mkDerivation rec {
     inherit pname src version;
     strictDeps = true;
 
-    buildInputs = [
-      sane-backends #for libsane.so.1
-      jdk11
-    ] ++ extraBuildInputs;
+    buildInputs =
+      [
+        sane-backends #for libsane.so.1
+        jdk11
+      ]
+      ++ extraBuildInputs;
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -67,32 +69,31 @@ let
       runHook postInstall
     '';
   };
-
 in
-# Package with cups in FHS sandbox, because JAVA bin expects "/usr/bin/lpr" for printing.
-buildFHSUserEnv {
-  name = pname;
-  targetPkgs = pkgs: [
-    cups
-    thisPackage
-  ];
-  runScript = pname;
+  # Package with cups in FHS sandbox, because JAVA bin expects "/usr/bin/lpr" for printing.
+  buildFHSUserEnv {
+    name = pname;
+    targetPkgs = pkgs: [
+      cups
+      thisPackage
+    ];
+    runScript = pname;
 
-  # link desktop item and icon into FHS user environment
-  extraInstallCommands = ''
-    mkdir -p "$out/share/applications"
-    mkdir -p "$out/share/pixmaps"
-    ln -s ${thisPackage}/share/applications/*.desktop "$out/share/applications/"
-    ln -s ${thisPackage}/share/pixmaps/*.png "$out/share/pixmaps/"
-  '';
+    # link desktop item and icon into FHS user environment
+    extraInstallCommands = ''
+      mkdir -p "$out/share/applications"
+      mkdir -p "$out/share/pixmaps"
+      ln -s ${thisPackage}/share/applications/*.desktop "$out/share/applications/"
+      ln -s ${thisPackage}/share/pixmaps/*.png "$out/share/pixmaps/"
+    '';
 
-  meta = with lib; {
-    homepage = "https://www.qoppa.com/${pname}/";
-    description = "An easy to use, full-featured PDF editing software";
-    longDescription = longDescription;
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    mainProgram = pname;
-    maintainers = [ maintainers.pwoelfel ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://www.qoppa.com/${pname}/";
+      description = "An easy to use, full-featured PDF editing software";
+      longDescription = longDescription;
+      license = licenses.unfree;
+      platforms = platforms.linux;
+      mainProgram = pname;
+      maintainers = [maintainers.pwoelfel];
+    };
+  }

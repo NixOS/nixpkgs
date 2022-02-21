@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk, lua, libwnck }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  glib,
+  gtk,
+  lua,
+  libwnck,
+}:
 stdenv.mkDerivation rec {
   pname = "devilspie2";
   version = "0.43";
@@ -9,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0a7qjl2qd4099kkkbwa1y2fk48s21jlr409lf9mij7mlc9yc3zzc";
   };
 
-  nativeBuildInputs = [ intltool pkg-config ];
-  buildInputs = [ glib gtk lua libwnck ];
+  nativeBuildInputs = [intltool pkg-config];
+  buildInputs = [glib gtk lua libwnck];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -29,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gusnan.se/devilspie2/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.ebzzry ];
+    maintainers = [maintainers.ebzzry];
     platforms = platforms.linux;
   };
 }

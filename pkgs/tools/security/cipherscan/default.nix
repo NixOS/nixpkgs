@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, openssl, makeWrapper, python3, coreutils }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  openssl,
+  makeWrapper,
+  python3,
+  coreutils,
+}:
 stdenv.mkDerivation rec {
   pname = "cipherscan";
   version = "2016-08-16";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "16azhlmairnvdz7xmwgvfpn2pzw1p8z7c9b27m07fngqjkpx0mhh";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [python3];
 
   strictDeps = true;
 
@@ -38,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "Very simple way to find out which SSL ciphersuites are supported by a target";
     license = licenses.mpl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cstrahan fpletz ];
+    maintainers = with maintainers; [cstrahan fpletz];
   };
 }

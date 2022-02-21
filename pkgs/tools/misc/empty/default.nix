@@ -1,5 +1,9 @@
-{ fetchzip, lib, stdenv, which }:
-
+{
+  fetchzip,
+  lib,
+  stdenv,
+  which,
+}:
 stdenv.mkDerivation rec {
   pname = "empty";
   version = "0.6.21b";
@@ -14,9 +18,9 @@ stdenv.mkDerivation rec {
     ./0.6-Makefile.patch
   ];
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [which];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   postPatch = ''
     rm empty
@@ -41,6 +45,6 @@ stdenv.mkDerivation rec {
       - has small and simple source code
       - can easily be ported to almost all UNIX-like systems
     '';
-    maintainers = [ maintainers.djwf ];
+    maintainers = [maintainers.djwf];
   };
 }

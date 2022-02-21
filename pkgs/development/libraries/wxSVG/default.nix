@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, cairo
-, ffmpeg
-, libexif
-, pango
-, pkg-config
-, wxGTK
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cairo,
+  ffmpeg,
+  libexif,
+  pango,
+  pkg-config,
+  wxGTK,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wxSVG";
   version = "1.5.23";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       Graphics (SVG) files with the wxWidgets toolkit.
     '';
     license = with licenses; gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = wxGTK.meta.platforms;
     broken = stdenv.isDarwin;
   };

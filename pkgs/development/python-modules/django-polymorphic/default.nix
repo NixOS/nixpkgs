@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, django, dj-database-url }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  django,
+  dj-database-url,
+}:
 buildPythonPackage rec {
   pname = "django-polymorphic";
   version = "2.1.2";
@@ -12,8 +18,8 @@ buildPythonPackage rec {
     sha256 = "0zghrq7y7g2ls38cz6y98qj5xwnn992slhb95qyp6l66d420j179";
   };
 
-  checkInputs = [ dj-database-url ];
-  propagatedBuildInputs = [ django ];
+  checkInputs = [dj-database-url];
+  propagatedBuildInputs = [django];
 
   checkPhase = ''
     ${python.interpreter} runtests.py

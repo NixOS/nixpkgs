@@ -1,5 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash, scdoc }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  bash,
+  scdoc,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "fetchutils";
   version = "unstable-2021-03-16";
@@ -11,9 +16,9 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-ONrVZC6GBV5v3TeBekW9ybZjDHF3FNyXw1rYknqKRbk=";
   };
 
-  buildInputs = [ bash scdoc ];
+  buildInputs = [bash scdoc];
 
-  installFlags = [ "PREFIX=$(out)/" ];
+  installFlags = ["PREFIX=$(out)/"];
 
   postPatch = ''
     patchShebangs --host src/*
@@ -24,6 +29,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/lptstr/fetchutils";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
   };
 }

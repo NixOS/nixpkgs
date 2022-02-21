@@ -1,19 +1,19 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, psutil
-, py-cpuinfo
-, pydantic
-, pyyaml
-, qcelemental
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  psutil,
+  py-cpuinfo,
+  pydantic,
+  pyyaml,
+  qcelemental,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "qcengine";
   version = "0.22.0";
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   propagatedBuildInputs = [
     psutil
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Quantum chemistry program executor and IO standardizer (QCSchema) for quantum chemistry";
     homepage = "http://docs.qcarchive.molssi.org/projects/qcelemental/en/latest/";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.sheepforce ];
+    platforms = ["x86_64-linux"];
+    maintainers = [maintainers.sheepforce];
   };
 }

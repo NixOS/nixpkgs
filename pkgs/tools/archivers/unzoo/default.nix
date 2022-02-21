@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "unzoo";
   version = "4.4";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-oPq1I7EsvHaJ7anHbm/KWrYrxJkM79rLhgRfSAdoLtk=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
   buildPhase = ''
     runHook preBuild
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/museoa/unzoo/";
     description = "Manipulate archives of files in Zoo compressed form";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }

@@ -1,11 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, boost
-, openssl
-, mysql80
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  boost,
+  openssl,
+  mysql80,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libmysqlconnectorcpp";
   version = "8.0.28";

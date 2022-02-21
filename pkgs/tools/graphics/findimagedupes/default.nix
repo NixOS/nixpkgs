@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, perl, perlPackages, installShellFiles }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  perl,
+  perlPackages,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "findimagedupes";
   version = "2.19.1";
@@ -13,18 +20,20 @@ stdenv.mkDerivation rec {
   # Work around the "unpacker appears to have produced no directories"
   setSourceRoot = "sourceRoot=$(pwd)";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
-  buildInputs = [ perl ] ++ (with perlPackages; [
-    DBFile
-    FileMimeInfo
-    FileBaseDir
-    #GraphicsMagick
-    ImageMagick
-    Inline
-    InlineC
-    ParseRecDescent
-  ]);
+  buildInputs =
+    [perl]
+    ++ (with perlPackages; [
+      DBFile
+      FileMimeInfo
+      FileBaseDir
+      #GraphicsMagick
+      ImageMagick
+      Inline
+      InlineC
+      ParseRecDescent
+    ]);
 
   # use /tmp as a storage
   # replace GraphicsMagick with ImageMagick, because perl bindings are not yet available
@@ -49,22 +58,25 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram "$out/bin/findimagedupes" \
-      --prefix PERL5LIB : "${with perlPackages; makePerlPath [
-        DBFile
-        FileMimeInfo
-        FileBaseDir
-        #GraphicsMagick
-        ImageMagick
-        Inline
-        InlineC
-        ParseRecDescent
-      ]}"
+      --prefix PERL5LIB : "${
+      with perlPackages;
+        makePerlPath [
+          DBFile
+          FileMimeInfo
+          FileBaseDir
+          #GraphicsMagick
+          ImageMagick
+          Inline
+          InlineC
+          ParseRecDescent
+        ]
+    }"
   '';
 
   meta = with lib; {
     homepage = "http://www.jhnc.org/findimagedupes/";
     description = "Finds visually similar or duplicate images";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ stunkymonkey ];
+    maintainers = with maintainers; [stunkymonkey];
   };
 }

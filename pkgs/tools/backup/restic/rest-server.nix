@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "restic-rest-server";
   version = "0.10.0";
@@ -22,6 +25,6 @@ buildGoModule rec {
     description = "A high performance HTTP server that implements restic's REST backend API";
     platforms = platforms.unix;
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

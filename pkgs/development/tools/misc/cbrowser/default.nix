@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, tk, makeWrapper }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  tk,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "cbrowser";
   version = "0.8";
@@ -9,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1050mirjab23qsnq3lp3a9vwcbavmh9kznzjm7dr5vkx8b7ffcji";
   };
 
-  patches = [ ./backslashes-quotes.diff ];
+  patches = [./backslashes-quotes.diff];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ tk ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [tk];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/${pname}-${version}

@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, python, numpy, matplotlib, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  numpy,
+  matplotlib,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "deap";
   version = "1.3.1";
@@ -13,13 +20,13 @@ buildPythonPackage rec {
     sed -i '/use_2to3=True/d' setup.py
   '';
 
-  propagatedBuildInputs = [ numpy matplotlib ];
+  propagatedBuildInputs = [numpy matplotlib];
 
   preBuild = ''
     2to3 -wn deap
   '';
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     nosetests --verbosity=3
   '';
@@ -28,8 +35,6 @@ buildPythonPackage rec {
     description = "DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas.";
     homepage = "https://github.com/DEAP/deap";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
-
 }
-

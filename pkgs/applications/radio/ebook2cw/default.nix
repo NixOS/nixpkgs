@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchgit, fetchpatch, lame, libvorbis, gettext }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchpatch,
+  lame,
+  libvorbis,
+  gettext,
+}:
 stdenv.mkDerivation rec {
   pname = "ebook2cw";
   version = "0.8.4";
@@ -18,15 +25,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ lame libvorbis gettext ];
+  buildInputs = [lame libvorbis gettext];
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = ["DESTDIR=$(out)"];
 
   meta = with lib; {
     description = "Convert ebooks to Morse MP3s/OGGs";
     homepage = "http://fkurz.net/ham/ebook2cw.html";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ earldouglas ];
+    maintainers = with maintainers; [earldouglas];
   };
 }

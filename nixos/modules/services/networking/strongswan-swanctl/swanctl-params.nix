@@ -7,10 +7,7 @@
 #   git clone https://github.com/strongswan/strongswan.git
 #   cd strongswan
 #   git diff 5.7.2..5.8.0 src/swanctl/swanctl.opt
-
-lib: with (import ./param-constructors.nix lib);
-
-let
+lib: with (import ./param-constructors.nix lib); let
   certParams = {
     file = mkOptionalStrParam ''
       Absolute path to the certificate to load. Passed as-is to the daemon, so
@@ -36,7 +33,6 @@ let
   };
 in {
   authorities = mkAttrsOfParams ({
-
     cacert = mkOptionalStrParam ''
       The certificates may use a relative path from the swanctl
       <literal>x509ca</literal> directory or an absolute path.
@@ -61,14 +57,13 @@ in {
     ocsp_uris = mkCommaSepListParam [] ''
       List of OCSP URIs.
     '';
-
-  } // certParams) ''
+  }
+  // certParams) ''
     Section defining complementary attributes of certification authorities, each
     in its own subsection with an arbitrary yet unique name
   '';
 
   connections = mkAttrsOfParams {
-
     version = mkIntParam 0 ''
       IKE major version to use for connection.
       <itemizedlist>
@@ -79,7 +74,7 @@ in {
       </itemizedlist>
     '';
 
-    local_addrs	= mkCommaSepListParam [] ''
+    local_addrs = mkCommaSepListParam [] ''
       Local address(es) to use for IKE communication. Takes
       single IPv4/IPv6 addresses, DNS names, CIDR subnets or IP address ranges.
       </para><para>
@@ -227,7 +222,7 @@ in {
       irrespective of the value of this option (even when set to no).
     '';
 
-    childless = mkEnumParam [ "allow" "force" "never" ] "allow" ''
+    childless = mkEnumParam ["allow" "force" "never"] "allow" ''
       Use childless IKE_SA initiation (RFC 6023) for IKEv2.  Acceptable values
       are <literal>allow</literal> (the default), <literal>force</literal> and
       <literal>never</literal>. If set to <literal>allow</literal>, responders
@@ -250,9 +245,9 @@ in {
       Disabling certificate requests can be useful if too many trusted root CA
       certificates are installed, as each certificate request increases the size
       of the initial IKE packets.
-   '';
+    '';
 
-    send_cert = mkEnumParam ["always" "never" "ifasked" ] "ifasked" ''
+    send_cert = mkEnumParam ["always" "never" "ifasked"] "ifasked" ''
       Send certificate payloads when using certificate authentication.
       <itemizedlist>
       <listitem><para>With the default of <literal>ifasked</literal> the daemon sends
@@ -265,11 +260,11 @@ in {
     '';
 
     ppk_id = mkOptionalStrParam ''
-       String identifying the Postquantum Preshared Key (PPK) to be used.
+      String identifying the Postquantum Preshared Key (PPK) to be used.
     '';
 
     ppk_required = mkYesNoParam no ''
-       Whether a Postquantum Preshared Key (PPK) is required for this connection.
+      Whether a Postquantum Preshared Key (PPK) is required for this connection.
     '';
 
     keyingtries = mkIntParam 1 ''
@@ -313,7 +308,7 @@ in {
       round). Unless set to <literal>never</literal> the client will send a notify.
     '';
 
-    reauth_time	= mkDurationParam "0s" ''
+    reauth_time = mkDurationParam "0s" ''
       Time to schedule IKE reauthentication. IKE reauthentication recreates the
       IKE/ISAKMP SA from scratch and re-evaluates the credentials. In asymmetric
       configurations (with EAP or configuration payloads) it might not be
@@ -399,7 +394,6 @@ in {
     '';
 
     local = mkPrefixedAttrsOfParams {
-
       round = mkIntParam 0 ''
         Optional numeric identifier by which authentication rounds are
         sorted. If not specified rounds are ordered by their position in the
@@ -512,7 +506,6 @@ in {
       xauth_id = mkOptionalStrParam ''
         Client XAuth username used in the XAuth exchange.
       '';
-
     } ''
       Section for a local authentication round. A local authentication round
       defines the rules how authentication is performed for the local
@@ -525,7 +518,6 @@ in {
     '';
 
     remote = mkPrefixedAttrsOfParams {
-
       round = mkIntParam 0 ''
         Optional numeric identifier by which authentication rounds are
         sorted. If not specified rounds are ordered by their position in the
@@ -646,7 +638,6 @@ in {
         EAP method, followed by the key type/size and hash algorithm as
         discussed above (e.g. <literal>eap-tls:ecdsa-384-sha384</literal>).
       '';
-
     } ''
       Section for a remote authentication round. A remote authentication round
       defines the constraints how the peers must authenticate to use this
@@ -677,7 +668,7 @@ in {
         a default proposal of supported algorithms considered safe, and is
         usually a good choice for interoperability. By default no AH proposals
         are included, instead ESP is proposed.
-     '';
+      '';
 
       esp_proposals = mkCommaSepListParam ["default"] ''
         ESP proposals to offer for the CHILD_SA. A proposal is a set of
@@ -839,13 +830,14 @@ in {
         Hostaccess variable to pass to <literal>updown</literal> script.
       '';
 
-      mode = mkEnumParam [ "tunnel"
-                           "transport"
-                           "transport_proxy"
-                           "beet"
-                           "pass"
-                           "drop"
-                         ] "tunnel" ''
+      mode = mkEnumParam [
+        "tunnel"
+        "transport"
+        "transport_proxy"
+        "beet"
+        "pass"
+        "drop"
+      ] "tunnel" ''
         IPsec Mode to establish CHILD_SA with.
         <itemizedlist>
         <listitem><para>
@@ -1014,7 +1006,7 @@ in {
         for each CHILD_SA direction (in/out).
 
         The daemon will not install routes for CHILD_SAs that have this option set.
-     '';
+      '';
 
       tfc_padding = mkParamOfType (with lib.types; either int (enum ["mtu"])) 0 ''
         Pads ESP packets with additional data to have a consistent ESP packet
@@ -1052,7 +1044,7 @@ in {
         not supported by all kernel interfaces.
       '';
 
-      copy_dscp = mkEnumParam [ "out" "in" "yes" "no" ] "out" ''
+      copy_dscp = mkEnumParam ["out" "in" "yes" "no"] "out" ''
         Whether to copy the DSCP (Differentiated Services Field Codepoint)
         header field to/from the outer IP header in tunnel mode. The value
         <literal>out</literal> only copies the field from the inner to the outer
@@ -1108,7 +1100,6 @@ in {
         on negotiation failures. Use trap policies to reliably re-create failed
         CHILD_SAs.
       '';
-
     } ''
       CHILD_SA configuration sub-section. Each connection definition may have
       one or more sections in its <option>children</option> subsection. The
@@ -1133,16 +1124,13 @@ in {
         be specified, each having an <literal>id</literal> prefix, if a secret
         is shared between multiple users.
       '';
-
     } ''
       EAP secret section for a specific secret. Each EAP secret is defined in a
       unique section having the <literal>eap</literal> prefix. EAP secrets are
       used for XAuth authentication as well.
     '';
-
   in {
-
-    eap   = mkEapXauthParams;
+    eap = mkEapXauthParams;
     xauth = mkEapXauthParams;
 
     ntlm = mkPrefixedAttrsOfParams {
@@ -1284,7 +1272,6 @@ in {
         <literal>--load-creds</literal> call.
       '';
     } "Definition for a private key that's stored on a token/smartcard/TPM.";
-
   };
 
   pools = mkAttrsOfParams {
@@ -1294,12 +1281,12 @@ in {
       range (&#60;from&#62;-&#60;to&#62;). Pools must be unique and non-overlapping.
     '';
 
-    dns           = mkCommaSepListParam [] "Address or CIDR subnets";
-    nbns          = mkCommaSepListParam [] "Address or CIDR subnets";
-    dhcp          = mkCommaSepListParam [] "Address or CIDR subnets";
-    netmask       = mkCommaSepListParam [] "Address or CIDR subnets";
-    server        = mkCommaSepListParam [] "Address or CIDR subnets";
-    subnet        = mkCommaSepListParam [] "Address or CIDR subnets";
+    dns = mkCommaSepListParam [] "Address or CIDR subnets";
+    nbns = mkCommaSepListParam [] "Address or CIDR subnets";
+    dhcp = mkCommaSepListParam [] "Address or CIDR subnets";
+    netmask = mkCommaSepListParam [] "Address or CIDR subnets";
+    server = mkCommaSepListParam [] "Address or CIDR subnets";
+    subnet = mkCommaSepListParam [] "Address or CIDR subnets";
     split_include = mkCommaSepListParam [] "Address or CIDR subnets";
     split_exclude = mkCommaSepListParam [] "Address or CIDR subnets";
   } ''

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "pdunehd";
   version = "1.3.2";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "pdunehd" ];
+  pythonImportsCheck = ["pdunehd"];
 
   meta = with lib; {
     description = "Python wrapper for Dune HD media player API";
     homepage = "https://github.com/valentinalexeev/pdunehd";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

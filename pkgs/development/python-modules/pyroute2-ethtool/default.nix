@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyroute2-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyroute2-core,
 }:
-
 buildPythonPackage rec {
   pname = "pyroute2-ethtool";
   version = "0.6.5";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     description = "Ethtool module for pyroute2";
     homepage = "https://github.com/svinota/pyroute2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
     platforms = platforms.unix;
   };
 }

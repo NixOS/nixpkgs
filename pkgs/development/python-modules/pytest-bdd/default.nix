@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, execnet
-, glob2
-, Mako
-, mock
-, parse
-, parse-type
-, py
-, pytest
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  execnet,
+  glob2,
+  Mako,
+  mock,
+  parse,
+  parse-type,
+  py,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-bdd";
   version = "5.0.0";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "BDD library for the pytest";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
     license = licenses.mit;
-    maintainers = with maintainers; [ jm2dev ];
+    maintainers = with maintainers; [jm2dev];
   };
 }

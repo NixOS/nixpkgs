@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, clvm
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  clvm,
+  setuptools-scm,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "clvm_tools";
   version = "0.4.3";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   # give a hint to setuptools-scm on package version
-  SETUPTOOLS_SCM_PRETEND_VERSION="v${version}";
+  SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   meta = with lib; {
     description = "Tools for clvm development";

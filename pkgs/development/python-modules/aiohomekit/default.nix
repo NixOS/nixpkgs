@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, commentjson
-, cryptography
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  commentjson,
+  cryptography,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  zeroconf,
 }:
-
 buildPythonPackage rec {
   pname = "aiohomekit";
   version = "0.6.11";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

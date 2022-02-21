@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "forktty";
   version = "1.3";
@@ -18,12 +21,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/man/man8"
   '';
 
-  makeFlags = [ "prefix=$(out)" "manprefix=$(out)/share/" ];
+  makeFlags = ["prefix=$(out)" "manprefix=$(out)/share/"];
 
   meta = with lib; {
     description = "Tool to detach from controlling TTY and attach to another";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
   };
 }

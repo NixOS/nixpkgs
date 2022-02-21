@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gnome
-, glib
-, gtk3
-, wayland
-, wayland-protocols
-, libxml2
-, libxkbcommon
-, rustPlatform
-, feedbackd
-, wrapGAppsHook
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  glib,
+  gtk3,
+  wayland,
+  wayland-protocols,
+  libxml2,
+  libxkbcommon,
+  rustPlatform,
+  feedbackd,
+  wrapGAppsHook,
+  fetchpatch,
 }:
-
 stdenv.mkDerivation rec {
   pname = "squeekboard";
   version = "1.16.0";
@@ -39,18 +39,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vQaiEENxaQxBGYP1br03wSkU7OGOYkJvMBUAOeb3jGk=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-    wayland
-    wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      glib
+      wayland
+      wrapGAppsHook
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
 
   buildInputs = [
     gtk3
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "A virtual keyboard supporting Wayland";
     homepage = "https://source.puri.sm/Librem5/squeekboard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [artturin];
     platforms = platforms.linux;
   };
 }

@@ -1,6 +1,11 @@
-{ config, lib, pkgs, options, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
+with lib; let
   cfg = config.services.biboumi;
   inherit (config.environment) etc;
   rootDir = "/run/biboumi/mnt-root";
@@ -8,12 +13,14 @@ let
   settingsFile = pkgs.writeText "biboumi.cfg" (
     generators.toKeyValue {
       mkKeyValue = k: v:
-        if v == null then ""
+        if v == null
+        then ""
         else generators.mkKeyValueDefault {} "=" k v;
-    } cfg.settings);
+    }
+    cfg.settings
+  );
   need_CAP_NET_BIND_SERVICE = cfg.settings.identd_port != 0 && cfg.settings.identd_port < 1024;
-in
-{
+in {
   options = {
     services.biboumi = {
       enable = mkEnableOption "the Biboumi XMPP gateway to IRC";
@@ -26,7 +33,8 @@ in
         default = {};
         type = types.submodule {
           freeformType = with types;
-            (attrsOf (nullOr (oneOf [str int bool]))) // {
+            (attrsOf (nullOr (oneOf [str int bool])))
+            // {
               description = "settings option";
             };
           options.admin = mkOption {
@@ -172,12 +180,12 @@ in
 
   config = mkIf cfg.enable {
     networking.firewall = mkIf (cfg.openFirewall && cfg.settings.identd_port != 0)
-      { allowedTCPPorts = [ cfg.settings.identd_port ]; };
+    {allowedTCPPorts = [cfg.settings.identd_port];};
 
     systemd.services.biboumi = {
       description = "Biboumi, XMPP to IRC gateway";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "notify";
@@ -185,11 +193,14 @@ in
         WatchdogSec = 20;
         Restart = "always";
         # Use "+" because credentialsFile may not be accessible to User= or Group=.
-        ExecStartPre = [("+" + pkgs.writeShellScript "biboumi-prestart" ''
-          set -eux
-          cat ${settingsFile} '${cfg.credentialsFile}' |
-          install -m 644 /dev/stdin /run/biboumi/biboumi.cfg
-        '')];
+        ExecStartPre = [
+          ("+"
+          + pkgs.writeShellScript "biboumi-prestart" ''
+            set -eux
+            cat ${settingsFile} '${cfg.credentialsFile}' |
+            install -m 644 /dev/stdin /run/biboumi/biboumi.cfg
+          '')
+        ];
         ExecStart = "${pkgs.biboumi}/bin/biboumi /run/biboumi/biboumi.cfg";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         # Firewalls needing opening for output connections can still do that
@@ -202,8 +213,8 @@ in
         DynamicUser = true;
         RootDirectory = rootDir;
         RootDirectoryStartOnly = true;
-        InaccessiblePaths = [ "-+${rootDir}" ];
-        RuntimeDirectory = [ "biboumi" (removePrefix "/run/" rootDir) ];
+        InaccessiblePaths = ["-+${rootDir}"];
+        RuntimeDirectory = ["biboumi" (removePrefix "/run/" rootDir)];
         RuntimeDirectoryMode = "700";
         StateDirectory = "biboumi";
         StateDirectoryMode = "700";
@@ -222,8 +233,8 @@ in
         ];
         # The following options are only for optimizing:
         # systemd-analyze security biboumi
-        AmbientCapabilities = [ (optionalString need_CAP_NET_BIND_SERVICE "CAP_NET_BIND_SERVICE") ];
-        CapabilityBoundingSet = [ (optionalString need_CAP_NET_BIND_SERVICE "CAP_NET_BIND_SERVICE") ];
+        AmbientCapabilities = [(optionalString need_CAP_NET_BIND_SERVICE "CAP_NET_BIND_SERVICE")];
+        CapabilityBoundingSet = [(optionalString need_CAP_NET_BIND_SERVICE "CAP_NET_BIND_SERVICE")];
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
         LockPersonality = true;
@@ -246,7 +257,7 @@ in
         ProtectSystem = "strict";
         RemoveIPC = true;
         # AF_UNIX is for /run/systemd/notify
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -258,7 +269,13 @@ in
           # To run such a perf in ExecStart=, you have to:
           # - AmbientCapabilities="CAP_SYS_ADMIN"
           # - mount -o remount,mode=755 /sys/kernel/debug/{,tracing}
-          "~@aio" "~@chown" "~@ipc" "~@keyring" "~@resources" "~@setuid" "~@timer"
+          "~@aio"
+          "~@chown"
+          "~@ipc"
+          "~@keyring"
+          "~@resources"
+          "~@setuid"
+          "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
@@ -266,5 +283,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ julm ];
+  meta.maintainers = with maintainers; [julm];
 }

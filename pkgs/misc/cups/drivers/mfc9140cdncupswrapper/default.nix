@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, makeWrapper
-, coreutils
-, gnugrep
-, gnused
-, mfc9140cdnlpr
-, pkgsi686Linux
-, psutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  gnugrep,
+  gnused,
+  mfc9140cdnlpr,
+  pkgsi686Linux,
+  psutils,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mfc9140cdncupswrapper";
   version = "1.1.4-0";
@@ -54,15 +54,15 @@ stdenv.mkDerivation rec {
     ln $dir/cupswrapper/brother_mfc9140cdn_printer_en.ppd $out/share/cups/model
 
     sed -n '/!ENDOFWFILTER!/,/!ENDOFWFILTER!/p' "$dir/cupswrapper/cupswrappermfc9140cdn" | sed '1 br; b; :r s/.*/printer_model=mfc9140cdn; cat <<!ENDOFWFILTER!/'  | bash > $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
-    sed -i "/#! \/bin\/sh/a PATH=${lib.makeBinPath [ coreutils gnused gnugrep ]}:\$PATH" $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
+    sed -i "/#! \/bin\/sh/a PATH=${lib.makeBinPath [coreutils gnused gnugrep]}:\$PATH" $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
     chmod +x $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
-    '';
+  '';
 
   meta = with lib; {
     description = "Brother MFC-9140CDN CUPS wrapper driver";
     homepage = "http://www.brother.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

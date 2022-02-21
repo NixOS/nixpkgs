@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "pack";
   version = "0.24.0";
@@ -13,11 +17,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-4uMd0KaV5xrxuJ9yqpxbD3YTNaBHsH2d/IRtYRyN5+0=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  subPackages = [ "cmd/pack" ];
+  subPackages = ["cmd/pack"];
 
-  ldflags = [ "-s" "-w" "-X github.com/buildpacks/pack.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/buildpacks/pack.Version=${version}"];
 
   postInstall = ''
     installShellCompletion --bash --name pack.bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash)
@@ -29,6 +33,6 @@ buildGoModule rec {
     changelog = "https://github.com/buildpacks/pack/releases/tag/v${version}";
     description = "CLI for building apps using Cloud Native Buildpacks";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

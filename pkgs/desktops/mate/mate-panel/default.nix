@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  glib,
+  libwnck,
+  librsvg,
+  libxml2,
+  dconf,
+  gtk3,
+  mate,
+  hicolor-icon-theme,
+  gobject-introspection,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-panel";
   version = "1.26.2";
@@ -39,12 +56,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "The MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
-    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    license = with licenses; [gpl2Plus lgpl2Plus fdl11Plus];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

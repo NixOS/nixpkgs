@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonApplication
-, appstream-glib
-, dbus-python
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, gtk3
-, hicolor-icon-theme
-, libappindicator
-, libhandy
-, meson
-, ninja
-, pkg-config
-, pygobject3
-, pyxdg
-, systemd
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonApplication,
+  appstream-glib,
+  dbus-python,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gobject-introspection,
+  gtk3,
+  hicolor-icon-theme,
+  libappindicator,
+  libhandy,
+  meson,
+  ninja,
+  pkg-config,
+  pygobject3,
+  pyxdg,
+  systemd,
+  wrapGAppsHook,
 }:
-
 buildPythonApplication rec {
   pname = "cpupower-gui";
   version = "1.0.0";
@@ -78,7 +78,7 @@ buildPythonApplication rec {
   strictDeps = false;
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  makeWrapperArgs = ["\${gappsWrapperArgs[@]}"];
 
   postFixup = ''
     wrapPythonProgramsIn $out/lib "$out $propagatedBuildInputs"
@@ -88,6 +88,6 @@ buildPythonApplication rec {
     description = "Change the frequency limits of your cpu and its governor";
     homepage = "https://github.com/vagnum08/cpupower-gui/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ unode ];
+    maintainers = with maintainers; [unode];
   };
 }

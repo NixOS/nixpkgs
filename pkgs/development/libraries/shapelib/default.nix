@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "shapelib";
   version = "1.5.0";
@@ -13,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "C Library for reading, writing and updating ESRI Shapefiles";
     homepage = "http://shapelib.maptools.org/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = [maintainers.ehmry];
   };
 }

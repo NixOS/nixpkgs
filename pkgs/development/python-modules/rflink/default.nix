@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, async-timeout
-, docopt
-, pyserial
-, pyserial-asyncio
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  async-timeout,
+  docopt,
+  pyserial,
+  pyserial-asyncio,
+  setuptools,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "rflink";
   version = "0.0.62";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Library and CLI tools for interacting with RFlink 433MHz transceiver";
     homepage = "https://github.com/aequitas/python-rflink";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

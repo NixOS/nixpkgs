@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, textfsm
-, pytestCheckHook
-, ruamel-yaml
-, yamllint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  textfsm,
+  pytestCheckHook,
+  ruamel-yaml,
+  yamllint,
 }:
-
 buildPythonPackage rec {
   pname = "ntc-templates";
   version = "3.0.0";
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "TextFSM templates for parsing show commands of network devices";
     homepage = "https://github.com/networktocode/ntc-templates";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

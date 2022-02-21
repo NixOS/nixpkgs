@@ -1,16 +1,18 @@
-import ./make-test-python.nix ({ pkgs, ... } :
-let
-  role     = "test";
+import ./make-test-python.nix ({pkgs, ...}: let
+  role = "test";
   password = "secret";
-  conn     = "local";
-in
-{
+  conn = "local";
+in {
   name = "pgmanage";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ basvandijk ];
+    maintainers = [basvandijk];
   };
   nodes = {
-    one = { config, pkgs, ... }: {
+    one = {
+      config,
+      pkgs,
+      ...
+    }: {
       services = {
         postgresql = {
           enable = true;

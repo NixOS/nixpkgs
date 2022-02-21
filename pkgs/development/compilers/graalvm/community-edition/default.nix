@@ -1,17 +1,19 @@
-{ lib, callPackage, Foundation }:
-
-let
-  mkGraal = opts: callPackage (import ./mkGraal.nix opts) {
-    inherit Foundation;
-  };
-in
 {
+  lib,
+  callPackage,
+  Foundation,
+}: let
+  mkGraal = opts:
+    callPackage (import ./mkGraal.nix opts) {
+      inherit Foundation;
+    };
+in {
   inherit mkGraal;
 
   graalvm11-ce = mkGraal rec {
     version = "22.0.0.2";
     javaVersion = "11";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = ["x86_64-linux" "aarch64-linux" "x86_64-darwin"];
   };
 
   # TODO: fix aarch64-linux, failing during Native Image compilation
@@ -22,6 +24,6 @@ in
   graalvm17-ce = mkGraal rec {
     version = "22.0.0.2";
     javaVersion = "17";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
   };
 }

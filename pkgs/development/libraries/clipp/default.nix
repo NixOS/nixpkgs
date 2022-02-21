@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "clipp";
   version = "1.2.3";
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Easy to use, powerful and expressive command line argument handling for C++11/14/17";
     homepage = "https://github.com/muellan/clipp";
     license = licenses.mit;
-    maintainers = with maintainers; [ xbreak ];
+    maintainers = with maintainers; [xbreak];
     platforms = with platforms; all;
   };
 }

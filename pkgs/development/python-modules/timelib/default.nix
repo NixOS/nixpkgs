@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "timelib";
   version = "0.2.5";
@@ -18,5 +18,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/pediapress/timelib/";
     license = licenses.zlib;
   };
-
 }

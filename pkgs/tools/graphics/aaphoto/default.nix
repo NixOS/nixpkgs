@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, jasper
-, libpng
-, libjpeg
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jasper,
+  libpng,
+  libjpeg,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aaphoto";
   version = "0.45";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       one-by-one.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # aaphoto.c:237:10: fatal error: 'omp.h' file not found
   };

@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "doge";
   version = "3.5.0";
@@ -13,6 +15,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/thiderman/doge";
     description = "wow very terminal doge";
     license = licenses.mit;
-    maintainers = with maintainers; [ Gonzih ];
+    maintainers = with maintainers; [Gonzih];
   };
 }

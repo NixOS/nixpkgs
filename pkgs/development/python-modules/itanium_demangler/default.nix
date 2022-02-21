@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "itanium-demangler";
   version = "1.0"; # pulled from pypi version
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python parser for the Itanium C++ ABI symbol mangling language";
     homepage = "https://github.com/whitequark/python-itanium_demangler";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ pamplemousse ];
+    maintainers = with maintainers; [pamplemousse];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "semantic_version";
   version = "2.8.5";
@@ -15,6 +18,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library implementing the 'SemVer' scheme";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ layus makefu ];
+    maintainers = with maintainers; [layus makefu];
   };
 }

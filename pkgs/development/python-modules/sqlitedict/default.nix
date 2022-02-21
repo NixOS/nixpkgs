@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "sqlitedict";
   version = "1.7.0";
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Persistent, thread-safe dict";
     homepage = "https://github.com/RaRe-Technologies/sqlitedict";
     license = licenses.asl20;
-    maintainers = [ maintainers.arnoldfarkas ];
+    maintainers = [maintainers.arnoldfarkas];
   };
 }

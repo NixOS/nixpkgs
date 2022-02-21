@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchurl }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 buildDunePackage rec {
   minimumOCamlVersion = "4.07";
   version = "0.1.0";
@@ -15,6 +18,6 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/optint";
     description = "Abstract type of integer between x64 and x86 architecture";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

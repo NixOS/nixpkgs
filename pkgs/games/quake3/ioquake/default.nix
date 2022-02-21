@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, pkg-config
-, SDL2
-, libGL
-, openalSoft
-, curl
-, speex
-, opusfile
-, libogg
-, libvorbis
-, libopus
-, libjpeg
-, mumble
-, freetype
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  pkg-config,
+  SDL2,
+  libGL,
+  openalSoft,
+  curl,
+  speex,
+  opusfile,
+  libogg,
+  libvorbis,
+  libopus,
+  libjpeg,
+  mumble,
+  freetype,
 }:
-
 stdenv.mkDerivation {
   pname = "ioquake3";
   version = "unstable-2021-07-20";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     sha256 = "1icrkaw6c5c5ndy886bn65lycwnxzxwvz0ndz4p9i6r716k11add";
   };
 
-  nativeBuildInputs = [ which pkg-config ];
+  nativeBuildInputs = [which pkg-config];
   buildInputs = [
     SDL2
     libGL
@@ -46,11 +46,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "USE_INTERNAL_LIBS=0" "USE_FREETYPE=1" "USE_OPENAL_DLOPEN=0" "USE_CURL_DLOPEN=0" ];
+  makeFlags = ["USE_INTERNAL_LIBS=0" "USE_FREETYPE=1" "USE_OPENAL_DLOPEN=0" "USE_CURL_DLOPEN=0"];
 
-  installTargets = [ "copyfiles" ];
+  installTargets = ["copyfiles"];
 
-  installFlags = [ "COPYDIR=$(out)" ];
+  installFlags = ["COPYDIR=$(out)"];
 
   preInstall = ''
     mkdir -p $out/baseq3
@@ -61,6 +61,6 @@ stdenv.mkDerivation {
     description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rvolosatovs eelco abbradar ];
+    maintainers = with maintainers; [rvolosatovs eelco abbradar];
   };
 }

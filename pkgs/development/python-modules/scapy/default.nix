@@ -1,16 +1,36 @@
-{ buildPythonPackage, fetchFromGitHub, lib, isPyPy
-, pycrypto, ecdsa # TODO
-, tox, mock, coverage, can, brotli
-, withOptionalDeps ? true, tcpdump, ipython
-, withCryptography ? true, cryptography
-, withVoipSupport ? true, sox
-, withPlottingSupport ? true, matplotlib
-, withGraphicsSupport ? false, pyx, texlive, graphviz, imagemagick
-, withManufDb ? false, wireshark
-# 2D/3D graphics and graphs TODO: VPython
-# TODO: nmap, numpy
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  isPyPy,
+  pycrypto,
+  ecdsa
+  # TODO
+  ,
+  tox,
+  mock,
+  coverage,
+  can,
+  brotli,
+  withOptionalDeps ? true,
+  tcpdump,
+  ipython,
+  withCryptography ? true,
+  cryptography,
+  withVoipSupport ? true,
+  sox,
+  withPlottingSupport ? true,
+  matplotlib,
+  withGraphicsSupport ? false,
+  pyx,
+  texlive,
+  graphviz,
+  imagemagick,
+  withManufDb ? false,
+  wireshark
+  # 2D/3D graphics and graphs TODO: VPython
+  # TODO: nmap, numpy
 }:
-
 buildPythonPackage rec {
   pname = "scapy";
   version = "2.4.5";
@@ -24,27 +44,30 @@ buildPythonPackage rec {
     sha256 = "0nxci1v32h5517gl9ic6zjq8gc8drwr0n5pz04c91yl97xznnw94";
   };
 
-  postPatch = ''
-    printf "${version}" > scapy/VERSION
-  '' + lib.optionalString withManufDb ''
-    substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
-  '';
+  postPatch =
+    ''
+      printf "${version}" > scapy/VERSION
+    ''
+    + lib.optionalString withManufDb ''
+      substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
+    '';
 
-  propagatedBuildInputs = [ pycrypto ecdsa ]
-    ++ lib.optionals withOptionalDeps [ tcpdump ipython ]
+  propagatedBuildInputs =
+    [pycrypto ecdsa]
+    ++ lib.optionals withOptionalDeps [tcpdump ipython]
     ++ lib.optional withCryptography cryptography
     ++ lib.optional withVoipSupport sox
     ++ lib.optional withPlottingSupport matplotlib
-    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ];
+    ++ lib.optionals withGraphicsSupport [pyx texlive.combined.scheme-minimal graphviz imagemagick];
 
   # Running the tests seems too complicated:
   doCheck = false;
-  checkInputs = [ tox mock coverage can brotli ];
+  checkInputs = [tox mock coverage can brotli];
   checkPhase = ''
     patchShebangs .
     .config/ci/test.sh
   '';
-  pythonImportsCheck = [ "scapy" ];
+  pythonImportsCheck = ["scapy"];
 
   meta = with lib; {
     description = "A Python-based network packet manipulation program and library";
@@ -73,6 +96,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/secdev/scapy/releases/tag/v${version}";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos bjornfor ];
+    maintainers = with maintainers; [primeos bjornfor];
   };
 }

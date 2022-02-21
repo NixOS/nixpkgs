@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, writeText, unzip, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  unzip,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "invoiceplane";
   version = "1.5.11";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "137g0xps4kb3j7f5gz84ql18iggbya6d9dnrfp05g2qcbbp8kqad";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [unzip];
 
   sourceRoot = ".";
 
@@ -27,6 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://www.invoiceplane.com";
     platforms = platforms.all;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [onny];
   };
 }

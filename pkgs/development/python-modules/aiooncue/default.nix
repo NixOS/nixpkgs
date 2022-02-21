@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiooncue";
   version = "0.3.3";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with the Kohler Oncue API";
     homepage = "https://github.com/bdraco/aiooncue";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

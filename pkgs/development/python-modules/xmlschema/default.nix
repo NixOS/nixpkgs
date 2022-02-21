@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, elementpath
-, lxml
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  elementpath,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   version = "1.9.2";
   pname = "xmlschema";
@@ -42,12 +42,12 @@ buildPythonPackage rec {
     "tests/test_validation.py"
   ];
 
-  pythonImportsCheck = [ "xmlschema" ];
+  pythonImportsCheck = ["xmlschema"];
 
   meta = with lib; {
     description = "XML Schema validator and data conversion library for Python";
     homepage = "https://github.com/sissaschool/xmlschema";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

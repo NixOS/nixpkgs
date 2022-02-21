@@ -1,24 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, cython
-, git
-, pkgconfig
-, pytest-runner
-, setuptools-scm
-, future
-, numpy
-, pyusb
-, mock
-, pytestCheckHook
-, zipp
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  cython,
+  git,
+  pkgconfig,
+  pytest-runner,
+  setuptools-scm,
+  future,
+  numpy,
+  pyusb,
+  mock,
+  pytestCheckHook,
+  zipp,
 }:
-
 ## Usage
 # In NixOS, add the package to services.udev.packages for non-root plugdev
 # users to get device access permission:
 #    services.udev.packages = [ pkgs.python3Packages.seabreeze ];
-
 buildPythonPackage rec {
   pname = "seabreeze";
   version = "1.3.0";
@@ -57,7 +56,7 @@ buildPythonPackage rec {
     zipp
   ];
 
-  setupPyBuildFlags = [ "--without-cseabreeze" ];
+  setupPyBuildFlags = ["--without-cseabreeze"];
 
   meta = with lib; {
     homepage = "https://github.com/ap--/python-seabreeze";

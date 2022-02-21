@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, boost
-, gfortran
-, lhapdf
-, ncurses
-, perl
-, python ? null
-, swig
-, yoda
-, zlib
-, withPython ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  gfortran,
+  lhapdf,
+  ncurses,
+  perl,
+  python ? null,
+  swig,
+  yoda,
+  zlib,
+  withPython ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fastnlo_toolkit";
   version = "2.5.0-2826";
@@ -22,18 +22,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
 
-  buildInputs = [
-    boost
-    gfortran
-    gfortran.cc.lib
-    lhapdf
-    yoda
-  ] ++ lib.optional withPython python
+  buildInputs =
+    [
+      boost
+      gfortran
+      gfortran.cc.lib
+      lhapdf
+      yoda
+    ]
+    ++ lib.optional withPython python
     ++ lib.optional (withPython && python.isPy3k) ncurses;
 
-  propagatedBuildInputs = [
-    zlib
-  ] ++ lib.optional withPython swig;
+  propagatedBuildInputs =
+    [
+      zlib
+    ]
+    ++ lib.optional withPython swig;
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
@@ -44,9 +48,11 @@ stdenv.mkDerivation rec {
     chmod +x check/fnlo-tk-stattest.pl.in
   '';
 
-  configureFlags = [
-    "--with-yoda=${yoda}"
-  ] ++ lib.optional withPython "--enable-pyext";
+  configureFlags =
+    [
+      "--with-yoda=${yoda}"
+    ]
+    ++ lib.optional withPython "--enable-pyext";
 
   enableParallelBuilding = true;
 
@@ -75,7 +81,7 @@ stdenv.mkDerivation rec {
       recalculations are thus avoided.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [veprbl];
     platforms = platforms.unix;
   };
 }

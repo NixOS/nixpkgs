@@ -1,22 +1,22 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.system.nixos;
   opt = options.system.nixos;
-in
-
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])
-    (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
-    (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
-    (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
+    (mkRenamedOptionModule ["system" "nixosVersion"] ["system" "nixos" "version"])
+    (mkRenamedOptionModule ["system" "nixosVersionSuffix"] ["system" "nixos" "versionSuffix"])
+    (mkRenamedOptionModule ["system" "nixosRevision"] ["system" "nixos" "revision"])
+    (mkRenamedOptionModule ["system" "nixosLabel"] ["system" "nixos" "label"])
   ];
 
   options.system = {
-
     nixos.version = mkOption {
       internal = true;
       type = types.str;
@@ -87,11 +87,9 @@ in
       default = null;
       description = "The Git revision of the top-level flake from which this configuration was built.";
     };
-
   };
 
   config = {
-
     system.nixos = {
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
@@ -101,22 +99,20 @@ in
     # Generate /etc/os-release.  See
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
-    environment.etc.os-release.text =
-      ''
-        NAME=NixOS
-        ID=nixos
-        VERSION="${cfg.release} (${cfg.codeName})"
-        VERSION_CODENAME=${toLower cfg.codeName}
-        VERSION_ID="${cfg.release}"
-        BUILD_ID="${cfg.version}"
-        PRETTY_NAME="NixOS ${cfg.release} (${cfg.codeName})"
-        LOGO="nix-snowflake"
-        HOME_URL="https://nixos.org/"
-        DOCUMENTATION_URL="https://nixos.org/learn.html"
-        SUPPORT_URL="https://nixos.org/community.html"
-        BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
-      '';
-
+    environment.etc.os-release.text = ''
+      NAME=NixOS
+      ID=nixos
+      VERSION="${cfg.release} (${cfg.codeName})"
+      VERSION_CODENAME=${toLower cfg.codeName}
+      VERSION_ID="${cfg.release}"
+      BUILD_ID="${cfg.version}"
+      PRETTY_NAME="NixOS ${cfg.release} (${cfg.codeName})"
+      LOGO="nix-snowflake"
+      HOME_URL="https://nixos.org/"
+      DOCUMENTATION_URL="https://nixos.org/learn.html"
+      SUPPORT_URL="https://nixos.org/community.html"
+      BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
+    '';
   };
 
   # uses version info nixpkgs, which requires a full nixpkgs path

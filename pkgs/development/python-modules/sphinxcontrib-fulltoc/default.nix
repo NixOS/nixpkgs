@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx, pbr }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sphinx,
+  pbr,
+}:
 buildPythonPackage rec {
   pname = "sphinxcontrib-fulltoc";
   version = "1.2.0";
@@ -13,18 +19,18 @@ buildPythonPackage rec {
     sha256 = "1nbwflv9szyh37yr075xhck8b4gg2c7g3sa38mfi7wv7qhpxcif8";
   };
 
-  nativeBuildInputs = [ pbr ];
-  propagatedBuildInputs = [ sphinx ];
+  nativeBuildInputs = [pbr];
+  propagatedBuildInputs = [sphinx];
 
   # There are no unit tests
   doCheck = false;
   # Ensure package importing works
-  pythonImportsCheck = [ "sphinxcontrib.fulltoc" ];
+  pythonImportsCheck = ["sphinxcontrib.fulltoc"];
 
   meta = with lib; {
     description = "Include a full table of contents in your Sphinx HTML sidebar";
     homepage = "https://sphinxcontrib-fulltoc.readthedocs.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

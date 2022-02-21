@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, jdk }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+}:
 stdenv.mkDerivation rec {
   pname = "jboss-as";
   version = "7.1.1.Final";
@@ -17,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.jboss.org/";
     description = "Open Source J2EE application server";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.sander ];
+    maintainers = [maintainers.sander];
     platforms = platforms.unix;
     knownVulnerabilities = [
       "CVE-2015-7501: remote code execution in apache-commons-collections: InvokerTransformer during deserialisation"

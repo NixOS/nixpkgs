@@ -1,5 +1,12 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python, pyyaml, fonttools, fontforge }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  python,
+  pyyaml,
+  fonttools,
+  fontforge,
+}:
 buildPythonApplication {
   pname = "scfbuild";
   version = "2.0.0";
@@ -13,7 +20,7 @@ buildPythonApplication {
     sha256 = "0wkyzkhshlax9rvdmn441gv87n9abfr0qqmgs8bkg9kbcjb4bhad";
   };
 
-  propagatedBuildInputs = [ pyyaml fonttools fontforge ];
+  propagatedBuildInputs = [pyyaml fonttools fontforge];
 
   installPhase = ''
     runHook preInstall
@@ -29,6 +36,6 @@ buildPythonApplication {
     description = "SVGinOT color font builder";
     homepage = "https://github.com/13rac1/scfbuild";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

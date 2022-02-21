@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gflags
-, libsodium
-, openssl
-, protobuf
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gflags,
+  libsodium,
+  openssl,
+  protobuf,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
   version = "6.1.11";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dezgeg ];
+    maintainers = with maintainers; [dezgeg];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

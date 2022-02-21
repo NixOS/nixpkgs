@@ -1,8 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libGL, glib, gdk-pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome
-, mesa, automake, autoconf
-, gstreamerSupport ? true, gst_all_1 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libGL,
+  glib,
+  gdk-pixbuf,
+  xorg,
+  libintl,
+  pangoSupport ? true,
+  pango,
+  cairo,
+  gobject-introspection,
+  wayland,
+  gnome,
+  mesa,
+  automake,
+  autoconf,
+  gstreamerSupport ? true,
+  gst_all_1,
+}:
 stdenv.mkDerivation rec {
   pname = "cogl";
   version = "1.22.8";
@@ -29,30 +47,42 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ pkg-config libintl automake autoconf ];
+  nativeBuildInputs = [pkg-config libintl automake autoconf];
 
-  configureFlags = [
-    "--enable-introspection"
-    "--enable-kms-egl-platform"
-    "--enable-wayland-egl-platform"
-    "--enable-wayland-egl-server"
-  ] ++ lib.optional gstreamerSupport "--enable-cogl-gst"
-  ++ lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
-
-  propagatedBuildInputs = with xorg; [
-      glib gdk-pixbuf gobject-introspection wayland mesa
-      libGL libXrandr libXfixes libXcomposite libXdamage
+  configureFlags =
+    [
+      "--enable-introspection"
+      "--enable-kms-egl-platform"
+      "--enable-wayland-egl-platform"
+      "--enable-wayland-egl-server"
     ]
-    ++ lib.optionals gstreamerSupport [ gst_all_1.gstreamer
-                                               gst_all_1.gst-plugins-base ];
+    ++ lib.optional gstreamerSupport "--enable-cogl-gst"
+    ++ lib.optionals (!stdenv.isDarwin) ["--enable-gles1" "--enable-gles2"];
 
-  buildInputs = lib.optionals pangoSupport [ pango cairo ];
+  propagatedBuildInputs = with xorg;
+    [
+      glib
+      gdk-pixbuf
+      gobject-introspection
+      wayland
+      mesa
+      libGL
+      libXrandr
+      libXfixes
+      libXcomposite
+      libXdamage
+    ]
+    ++ lib.optionals gstreamerSupport [
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+    ];
 
-  COGL_PANGO_DEP_CFLAGS
-    = lib.optionalString (stdenv.isDarwin && pangoSupport)
-      "-I${pango.dev}/include/pango-1.0 -I${cairo.dev}/include/cairo";
+  buildInputs = lib.optionals pangoSupport [pango cairo];
+
+  COGL_PANGO_DEP_CFLAGS = lib.optionalString (stdenv.isDarwin && pangoSupport)
+  "-I${pango.dev}/include/pango-1.0 -I${cairo.dev}/include/cairo";
 
   #doCheck = true; # all tests fail (no idea why)
 
@@ -65,7 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A small open source library for using 3D graphics hardware for rendering";
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [lovek323];
 
     longDescription = ''
       Cogl is a small open source library for using 3D graphics hardware for
@@ -75,6 +105,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.mesaPlatforms;
-    license = with licenses; [ mit bsd3 publicDomain sgi-b-20 ];
+    license = with licenses; [mit bsd3 publicDomain sgi-b-20];
   };
 }

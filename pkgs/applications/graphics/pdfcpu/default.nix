@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "pdfcpu";
   version = "0.3.13";
@@ -22,12 +25,12 @@ buildGoModule rec {
     $out/bin/pdfcpu version | grep ${version}
   '';
 
-  subPackages = [ "cmd/pdfcpu" ];
+  subPackages = ["cmd/pdfcpu"];
 
   meta = with lib; {
     description = "A PDF processor written in Go";
     homepage = "https://pdfcpu.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [doronbehar];
   };
 }

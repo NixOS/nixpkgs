@@ -1,7 +1,14 @@
-{ buildPythonPackage, lib, fetchFromGitHub, gfortran
-, makeWrapper, numpy, pytest, mock, pytest-mock
-} :
-
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  gfortran,
+  makeWrapper,
+  numpy,
+  pytest,
+  mock,
+  pytest-mock,
+}:
 buildPythonPackage rec {
   pname = "i-pi";
   version = "2.4.0";
@@ -18,7 +25,7 @@ buildPythonPackage rec {
     makeWrapper
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [numpy];
 
   checkInputs = [
     pytest
@@ -33,9 +40,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A universal force engine for ab initio and force field driven (path integral) molecular dynamics";
-    license = with licenses; [ gpl3Only mit ];
+    license = with licenses; [gpl3Only mit];
     homepage = "http://ipi-code.org/";
     platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [maintainers.sheepforce];
   };
 }

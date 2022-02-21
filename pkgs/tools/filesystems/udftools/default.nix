@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  readline,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "udftools";
   version = "2.0";
@@ -10,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0mz04h3rki6ljwfs15z83gf4vv816w7xgz923waiqgmfj9xpvx87";
   };
 
-  buildInputs = [ ncurses readline ];
-  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ncurses readline];
+  nativeBuildInputs = [autoreconfHook];
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = ["fortify"];
 
   NIX_CFLAGS_COMPILE = "-std=gnu90";
 
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "UDF tools";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [raskin];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

@@ -1,19 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, libxml2
-, xdg-desktop-portal
-, gtk3
-, gnome
-, glib
-, wrapGAppsHook
-, gsettings-desktop-schemas
-, buildPortalsInGnome ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+  xdg-desktop-portal,
+  gtk3,
+  gnome,
+  glib,
+  wrapGAppsHook,
+  gsettings-desktop-schemas,
+  buildPortalsInGnome ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gtk";
   version = "1.10.0";
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

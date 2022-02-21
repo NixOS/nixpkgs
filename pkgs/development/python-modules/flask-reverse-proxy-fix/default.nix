@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, flask
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  flask,
+  werkzeug,
 }:
-
 buildPythonPackage rec {
   pname = "flask-reverse-proxy-fix";
   version = "0.2.1";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Flask middleware for applications running under a reverse proxy";
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
     homepage = "https://github.com/antarctica/flask-reverse-proxy-fix";
 
     license = {

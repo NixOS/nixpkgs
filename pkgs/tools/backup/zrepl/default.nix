@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, openssh
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  openssh,
 }:
 buildGoModule rec {
   pname = "zrepl";
@@ -17,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "xToq9pKAxxknh4kE8S3uUg5ySPMbJkLftkMhofNxotc=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   nativeBuildInputs = [
     makeWrapper
@@ -29,7 +30,7 @@ buildGoModule rec {
       --replace /usr/local/bin/zrepl $out/bin/zrepl
 
     wrapProgram $out/bin/zrepl \
-      --prefix PATH : ${lib.makeBinPath [ openssh ]}
+      --prefix PATH : ${lib.makeBinPath [openssh]}
   '';
 
   meta = with lib; {
@@ -37,6 +38,6 @@ buildGoModule rec {
     description = "A one-stop, integrated solution for ZFS replication";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ cole-h danderson ];
+    maintainers = with maintainers; [cole-h danderson];
   };
 }

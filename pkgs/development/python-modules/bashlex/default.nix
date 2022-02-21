@@ -1,11 +1,11 @@
-{ enum-compat
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, python
+{
+  enum-compat,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "bashlex";
   version = "0.15";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
     sha256 = "sha256-kKVorAIKlyC9vUzLOlaZ/JrG1kBBRIvLwBmHNj9nx84=";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ enum-compat ];
+  checkInputs = [nose];
+  propagatedBuildInputs = [enum-compat];
 
   # workaround https://github.com/idank/bashlex/issues/51
   preBuild = ''
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m nose --with-doctest
   '';
 
-  pythonImportsCheck = [ "bashlex" ];
+  pythonImportsCheck = ["bashlex"];
 
   meta = with lib; {
     description = "Python parser for bash";
     license = licenses.gpl3Plus;
     homepage = "https://github.com/idank/bashlex";
-    maintainers = with maintainers; [ multun ];
+    maintainers = with maintainers; [multun];
   };
 }

@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, ghostscript, netpbm, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  ghostscript,
+  netpbm,
+  perl,
+}:
 # TODO: withTex
-
 stdenv.mkDerivation rec {
   pname = "latex2html";
   version = "2022";
@@ -13,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-a+OFBNMtP6mDqg1k9rjDLEJhZDM+zdRpPbn3aeC+Qks=";
   };
 
-  buildInputs = [ ghostscript netpbm perl ];
+  buildInputs = [ghostscript netpbm perl];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   configurePhase = ''
     ./configure \
@@ -46,6 +52,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [yurrriq];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, iso8601
-, requests
-, pycryptodome
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  iso8601,
+  requests,
+  pycryptodome,
 }:
-
 buildPythonPackage rec {
   pname = "pycarwings2";
   version = "2.13";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Python library for interacting with the NissanConnect EV";
     homepage = "https://github.com/filcole/pycarwings2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,11 +1,28 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
-, libxml2, libxslt, pkg-config, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  glib,
+  check,
+  python3,
+  vala,
+  gtk-doc,
+  glibcLocales,
+  libxml2,
+  libxslt,
+  pkg-config,
+  sqlite,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gobject-introspection,
+}:
 stdenv.mkDerivation rec {
   pname = "libaccounts-glib";
   version = "1.24";
 
-  outputs = [ "out" "dev" "devdoc" "py" ];
+  outputs = ["out" "dev" "devdoc" "py"];
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
@@ -15,7 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   # See: https://gitlab.com/accounts-sso/libaccounts-glib/merge_requests/22
-  patches = [ ./py-override.patch ];
+  patches = [./py-override.patch];
 
   nativeBuildInputs = [
     check

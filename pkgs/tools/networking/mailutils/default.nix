@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, dejagnu
-, gettext
-, gnum4
-, pkg-config
-, texinfo
-, fribidi
-, gdbm
-, gnutls
-, gss
-, guile
-, libmysqlclient
-, mailcap
-, nettools
-, pam
-, readline
-, ncurses
-, python3
-, sasl
-, system-sendmail
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  dejagnu,
+  gettext,
+  gnum4,
+  pkg-config,
+  texinfo,
+  fribidi,
+  gdbm,
+  gnutls,
+  gss,
+  guile,
+  libmysqlclient,
+  mailcap,
+  nettools,
+  pam,
+  readline,
+  ncurses,
+  python3,
+  sasl,
+  system-sendmail,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mailutils";
   version = "3.14";
@@ -48,20 +48,22 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [
-    fribidi
-    gdbm
-    gnutls
-    gss
-    guile
-    libmysqlclient
-    mailcap
-    ncurses
-    pam
-    python3
-    readline
-    sasl
-  ] ++ lib.optionals stdenv.isLinux [ nettools ];
+  buildInputs =
+    [
+      fribidi
+      gdbm
+      gnutls
+      gss
+      guile
+      libmysqlclient
+      mailcap
+      ncurses
+      pam
+      python3
+      readline
+      sasl
+    ]
+    ++ lib.optionals stdenv.isLinux [nettools];
 
   patches = [
     ./fix-build-mb-len-max.patch
@@ -75,7 +77,7 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = false;
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   configureFlags = [
     "--with-gssapi"
@@ -89,13 +91,25 @@ stdenv.mkDerivation rec {
   readmsg-tests = let
     p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
   in [
-    (fetchurl { url = "${p}/hdr.at"; sha256 = "0phpkqyhs26chn63wjns6ydx9468ng3ssbjbfhcvza8h78jlsd98"; })
-    (fetchurl { url = "${p}/nohdr.at"; sha256 = "1vkbkfkbqj6ml62s1am8i286hxwnpsmbhbnq0i2i0j1i7iwkk4b7"; })
-    (fetchurl { url = "${p}/twomsg.at"; sha256 = "15m29rg2xxa17xhx6jp4s2vwa9d4khw8092vpygqbwlhw68alk9g"; })
-    (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
+    (fetchurl {
+      url = "${p}/hdr.at";
+      sha256 = "0phpkqyhs26chn63wjns6ydx9468ng3ssbjbfhcvza8h78jlsd98";
+    })
+    (fetchurl {
+      url = "${p}/nohdr.at";
+      sha256 = "1vkbkfkbqj6ml62s1am8i286hxwnpsmbhbnq0i2i0j1i7iwkk4b7";
+    })
+    (fetchurl {
+      url = "${p}/twomsg.at";
+      sha256 = "15m29rg2xxa17xhx6jp4s2vwa9d4khw8092vpygqbwlhw68alk9g";
+    })
+    (fetchurl {
+      url = "${p}/weed.at";
+      sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh";
+    })
   ];
 
-  checkInputs = [ dejagnu ];
+  checkInputs = [dejagnu];
   doCheck = false; # fails 1 out of a bunch of tests, looks like a bug
   doInstallCheck = false; # fails
 
@@ -143,11 +157,17 @@ stdenv.mkDerivation rec {
     '';
 
     license = with licenses; [
-      lgpl3Plus /* libraries */
-      gpl3Plus /* tools */
+      lgpl3Plus
+      /*
+       libraries
+       */
+      gpl3Plus
+      /*
+       tools
+       */
     ];
 
-    maintainers = with maintainers; [ orivej vrthra ];
+    maintainers = with maintainers; [orivej vrthra];
 
     homepage = "https://www.gnu.org/software/mailutils/";
 

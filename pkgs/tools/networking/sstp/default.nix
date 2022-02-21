@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, ppp, libevent, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  ppp,
+  libevent,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "sstp-client";
   version = "1.0.16";
@@ -20,15 +27,15 @@ stdenv.mkDerivation rec {
     "--with-pppd-plugin-dir=$(out)/lib/pppd"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libevent openssl ppp ];
+  buildInputs = [libevent openssl ppp];
 
   meta = with lib; {
     description = "SSTP client for Linux";
     homepage = "http://sstp-client.sourceforge.net/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ktosiek ];
+    maintainers = with maintainers; [ktosiek];
     license = licenses.gpl2Plus;
   };
 }

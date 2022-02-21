@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "graphqlclient";
   version = "0.2.4";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "graphqlclient" ];
+  pythonImportsCheck = ["graphqlclient"];
 
   meta = with lib; {
     description = "Simple GraphQL client for Python";
     homepage = "https://github.com/prisma-labs/python-graphql-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ lde ];
+    maintainers = with maintainers; [lde];
   };
 }

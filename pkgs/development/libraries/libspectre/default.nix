@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, pkg-config, ghostscript, cairo }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  ghostscript,
+  cairo,
+}:
 stdenv.mkDerivation rec {
   pname = "libspectre";
   version = "0.2.7";
@@ -9,11 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "1v63lqc6bhhxwkpa43qmz8phqs8ci4dhzizyy16d3vkb20m846z8";
   };
 
-  patches = [ ./libspectre-0.2.7-gs918.patch ];
+  patches = [./libspectre-0.2.7-gs918.patch];
 
   buildInputs = [
     # Need `libgs.so'.
-    pkg-config ghostscript cairo /*for tests*/
+    pkg-config
+    ghostscript
+    cairo
+    /*
+     for tests
+     */
   ];
 
   doCheck = true;

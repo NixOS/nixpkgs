@@ -1,17 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, buildEnv, cmake, makeWrapper
-, SDL2, libGL, curl
-, oggSupport ? true, libogg, libvorbis
-, openalSupport ? true, openal
-, zipSupport ? true, zlib
-, Cocoa, OpenAL
-}:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildEnv,
+  cmake,
+  makeWrapper,
+  SDL2,
+  libGL,
+  curl,
+  oggSupport ? true,
+  libogg,
+  libvorbis,
+  openalSupport ? true,
+  openal,
+  zipSupport ? true,
+  zlib,
+  Cocoa,
+  OpenAL,
+}: let
+  mkFlag = b:
+    if b
+    then "ON"
+    else "OFF";
 
-let
-  mkFlag = b: if b then "ON" else "OFF";
+  games = import ./games.nix {inherit stdenv lib fetchFromGitHub cmake;};
 
-  games = import ./games.nix { inherit stdenv lib fetchFromGitHub cmake; };
-
-  wrapper = import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2; };
+  wrapper = import ./wrapper.nix {inherit stdenv lib buildEnv makeWrapper yquake2;};
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
@@ -29,11 +43,12 @@ let
         --replace /usr/share/games/quake2 $out/share/games/quake2
     '';
 
-    nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [cmake];
 
-    buildInputs = [ SDL2 libGL curl ]
-      ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ]
-      ++ lib.optionals oggSupport [ libogg libvorbis ]
+    buildInputs =
+      [SDL2 libGL curl]
+      ++ lib.optionals stdenv.isDarwin [Cocoa OpenAL]
+      ++ lib.optionals oggSupport [libogg libvorbis]
       ++ lib.optional openalSupport openal
       ++ lib.optional zipSupport zlib;
 
@@ -65,27 +80,26 @@ let
       homepage = "https://www.yamagi.org/quake2/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ tadfisher ];
+      maintainers = with maintainers; [tadfisher];
     };
   };
-
 in {
   inherit yquake2;
 
   yquake2-ctf = wrapper {
-    games = [ games.ctf ];
+    games = [games.ctf];
     name = "yquake2-ctf";
     inherit (games.ctf) description;
   };
 
   yquake2-ground-zero = wrapper {
-    games = [ games.ground-zero ];
+    games = [games.ground-zero];
     name = "yquake2-ground-zero";
     inherit (games.ground-zero) description;
   };
 
   yquake2-the-reckoning = wrapper {
-    games = [ games.the-reckoning ];
+    games = [games.the-reckoning];
     name = "yquake2-the-reckoning";
     inherit (games.the-reckoning) description;
   };

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
 }:
-
 buildPythonPackage rec {
   pname = "ppscore";
   version = "unstable-2021-11-25";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python implementation of the Predictive Power Score (PPS)";
     homepage = "https://github.com/8080labs/ppscore/";
     license = licenses.mit;
-    maintainers = with maintainers; [ evax ];
+    maintainers = with maintainers; [evax];
   };
 }

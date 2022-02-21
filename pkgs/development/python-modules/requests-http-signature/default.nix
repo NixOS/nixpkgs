@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  requests,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "requests-http-signature";
   version = "0.2.0";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mmai ];
+    maintainers = with maintainers; [mmai];
   };
 }

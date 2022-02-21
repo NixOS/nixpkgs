@@ -1,5 +1,7 @@
-{ lib, fetchFromGitHub }:
-
+{
+  lib,
+  fetchFromGitHub,
+}:
 fetchFromGitHub rec {
   name = "libre-franklin-1.014";
 
@@ -19,7 +21,7 @@ fetchFromGitHub rec {
     description = "A reinterpretation and expansion based on the 1912 Morris Fuller Benton’s classic.";
     homepage = "https://github.com/impallari/Libre-Franklin";
     license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
+    maintainers = with maintainers; [cmfwyp];
     platforms = platforms.all;
   };
 }

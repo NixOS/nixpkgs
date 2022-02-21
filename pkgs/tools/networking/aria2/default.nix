@@ -1,9 +1,20 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook
-, openssl, c-ares, libxml2, sqlite, zlib, libssh2
-, cppunit, sphinx
-, Security
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  openssl,
+  c-ares,
+  libxml2,
+  sqlite,
+  zlib,
+  libssh2,
+  cppunit,
+  sphinx,
+  Security,
 }:
-
 stdenv.mkDerivation rec {
   pname = "aria2";
   version = "1.36.0";
@@ -16,12 +27,13 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
+  nativeBuildInputs = [pkg-config autoreconfHook sphinx];
 
-  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
-    lib.optional stdenv.isDarwin Security;
+  buildInputs =
+    [openssl c-ares libxml2 sqlite zlib libssh2]
+    ++ lib.optional stdenv.isDarwin Security;
 
-  outputs = [ "bin" "dev" "out" "doc" "man" ];
+  outputs = ["bin" "dev" "out" "doc" "man"];
 
   configureFlags = [
     "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
@@ -32,7 +44,7 @@ stdenv.mkDerivation rec {
     patchShebangs --build doc/manual-src/en/mkapiref.py
   '';
 
-  checkInputs = [ cppunit ];
+  checkInputs = [cppunit];
   doCheck = false; # needs the net
 
   enableParallelBuilding = true;
@@ -42,6 +54,6 @@ stdenv.mkDerivation rec {
     description = "A lightweight, multi-protocol, multi-source, command-line download utility";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Br1ght0ne koral ];
+    maintainers = with maintainers; [Br1ght0ne koral];
   };
 }

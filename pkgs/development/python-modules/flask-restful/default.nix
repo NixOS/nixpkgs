@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aniso8601
-, flask
-, pytz
-, six
-, blinker
-, mock
-, nose
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aniso8601,
+  flask,
+  pytz,
+  six,
+  blinker,
+  mock,
+  nose,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "Flask-RESTful";
   version = "0.3.9";

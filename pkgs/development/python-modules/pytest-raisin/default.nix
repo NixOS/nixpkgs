@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-raisin";
   version = "0.4";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Plugin enabling the use of exception instances with pytest.raises context";
     homepage = "https://github.com/wimglenn/pytest-raisin";
     license = licenses.mit;
-    maintainers = with maintainers; [ aadibajpai ];
+    maintainers = with maintainers; [aadibajpai];
   };
 }

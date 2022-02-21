@@ -1,8 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
-
 buildGoModule rec {
   pname = "gobuster";
   version = "3.1.0";
@@ -22,6 +22,6 @@ buildGoModule rec {
     description = "Tool used to brute-force URIs, DNS subdomains, Virtual Host names on target web servers";
     homepage = "https://github.com/OJ/gobuster";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pamplemousse ];
+    maintainers = with maintainers; [pamplemousse];
   };
 }

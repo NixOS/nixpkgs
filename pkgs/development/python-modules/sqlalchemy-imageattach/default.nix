@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pytest
-, Wand
-, webob
-, sqlalchemy
-, isPyPy
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  pytest,
+  Wand,
+  webob,
+  sqlalchemy,
+  isPyPy,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "SQLAlchemy-ImageAttach";
   version = "1.0.0";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
     sha256 = "0ba97pn5dh00qvxyjbr0mr3pilxqw5kb3a6jd4wwbsfcv6nngqig";
   };
 
-  checkInputs = [ pytest Wand.imagemagick webob ];
-  propagatedBuildInputs = [ sqlalchemy Wand ];
+  checkInputs = [pytest Wand.imagemagick webob];
+  propagatedBuildInputs = [sqlalchemy Wand];
 
   checkPhase = ''
     cd tests
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  doCheck = !isPyPy;  # failures due to sqla version mismatch
+  doCheck = !isPyPy; # failures due to sqla version mismatch
 
   meta = with lib; {
     homepage = "https://github.com/dahlia/sqlalchemy-imageattach";
@@ -38,5 +38,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     broken = true; # Incompatible with sqlalchemy>=1.4 (https://github.com/dahlia/sqlalchemy-imageattach/issues/47)
   };
-
 }

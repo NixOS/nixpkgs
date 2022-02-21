@@ -1,17 +1,23 @@
 import ./make-test-python.nix (
-  { lib, ... }: {
+  {lib, ...}: {
     name = "nomad";
     nodes = {
-      default_server = { pkgs, lib, ... }: {
+      default_server = {
+        pkgs,
+        lib,
+        ...
+      }: {
         networking = {
-          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [{
-            address = "192.168.1.1";
-            prefixLength = 16;
-          }];
+          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [
+            {
+              address = "192.168.1.1";
+              prefixLength = 16;
+            }
+          ];
         };
 
         environment.etc."nomad.custom.json".source =
-          (pkgs.formats.json { }).generate "nomad.custom.json" {
+          (pkgs.formats.json {}).generate "nomad.custom.json" {
             region = "universe";
             datacenter = "earth";
           };
@@ -26,21 +32,27 @@ import ./make-test-python.nix (
             };
           };
 
-          extraSettingsPaths = [ "/etc/nomad.custom.json" ];
+          extraSettingsPaths = ["/etc/nomad.custom.json"];
           enableDocker = false;
         };
       };
 
-      custom_state_dir_server = { pkgs, lib, ... }: {
+      custom_state_dir_server = {
+        pkgs,
+        lib,
+        ...
+      }: {
         networking = {
-          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [{
-            address = "192.168.1.1";
-            prefixLength = 16;
-          }];
+          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [
+            {
+              address = "192.168.1.1";
+              prefixLength = 16;
+            }
+          ];
         };
 
         environment.etc."nomad.custom.json".source =
-          (pkgs.formats.json { }).generate "nomad.custom.json" {
+          (pkgs.formats.json {}).generate "nomad.custom.json" {
             region = "universe";
             datacenter = "earth";
           };
@@ -57,15 +69,17 @@ import ./make-test-python.nix (
             };
           };
 
-          extraSettingsPaths = [ "/etc/nomad.custom.json" ];
+          extraSettingsPaths = ["/etc/nomad.custom.json"];
           enableDocker = false;
         };
 
-        systemd.services.nomad.serviceConfig.ExecStartPre = "${pkgs.writeShellScript "mk_data_dir" ''
-          set -euxo pipefail
+        systemd.services.nomad.serviceConfig.ExecStartPre = "${
+          pkgs.writeShellScript "mk_data_dir" ''
+            set -euxo pipefail
 
-          ${pkgs.coreutils}/bin/mkdir -p /nomad/data/dir
-        ''}";
+            ${pkgs.coreutils}/bin/mkdir -p /nomad/data/dir
+          ''
+        }";
       };
     };
 

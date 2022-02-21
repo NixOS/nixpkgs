@@ -1,12 +1,12 @@
 # This module contains the basic configuration for building a graphical NixOS
 # installation CD.
-
-{ lib, pkgs, ... }:
-
-with lib;
-
 {
-  imports = [ ./installation-cd-base.nix ];
+  lib,
+  pkgs,
+  ...
+}:
+with lib; {
+  imports = [./installation-cd-base.nix];
 
   # Whitelist wheel users to do anything
   # This is useful for things like pkexec
@@ -52,5 +52,4 @@ with lib;
 
     pkgs.glxinfo
   ];
-
 }

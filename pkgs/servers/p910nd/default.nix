@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "p910nd";
   version = "0.97";
@@ -14,7 +17,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
-  makeFlags = [ "DESTDIR=$(out)" "BINDIR=/bin" ];
+  makeFlags = ["DESTDIR=$(out)" "BINDIR=/bin"];
 
   postInstall = ''
     # Match the man page:

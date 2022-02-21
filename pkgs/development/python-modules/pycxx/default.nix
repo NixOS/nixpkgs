@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchurl, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  python,
+}:
 buildPythonPackage rec {
   pname = "pycxx";
   version = "7.1.4";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "MUMU+/qsm92WENYFxfjQsSuR8/nE/asYG8HgIbaAaz0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   postInstall = ''
     mkdir -p $dev/include
@@ -21,7 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "set of classes to help create extensions of Python in the C++ language";
     homepage = "https://sourceforge.net/projects/cxx/";
-    maintainers = with maintainers; [ freezeboy ];
+    maintainers = with maintainers; [freezeboy];
     platforms = platforms.all;
   };
 }

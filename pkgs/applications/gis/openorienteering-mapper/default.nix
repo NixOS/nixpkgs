@@ -1,23 +1,24 @@
-{ lib, stdenv
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, substituteAll
-, gdal
-, cmake
-, ninja
-, proj
-, clipper
-, zlib
-, qttools
-, qtlocation
-, qtsensors
-, qttranslations
-, doxygen
-, cups
-, qtimageformats
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  substituteAll,
+  gdal,
+  cmake,
+  ninja,
+  proj,
+  clipper,
+  zlib,
+  qttools,
+  qtlocation,
+  qtsensors,
+  qttranslations,
+  doxygen,
+  cups,
+  qtimageformats,
 }:
-
 mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
   version = "0.9.5";
@@ -33,7 +34,7 @@ mkDerivation rec {
     cups
   ];
 
-  nativeBuildInputs = [ cmake doxygen ninja qttools ];
+  nativeBuildInputs = [cmake doxygen ninja qttools];
 
   src = fetchFromGitHub {
     owner = "OpenOrienteering";
@@ -55,30 +56,33 @@ mkDerivation rec {
     })
   ];
 
-  cmakeFlags = [
-    # Building the manual and bundling licenses fails
-    # See https://github.com/NixOS/nixpkgs/issues/85306
-    "-DLICENSING_PROVIDER:BOOL=OFF"
-    "-DMapper_MANUAL_QTHELP:BOOL=OFF"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # FindGDAL is broken and always finds /Library/Framework unless this is
-    # specified
-    "-DGDAL_INCLUDE_DIR=${gdal}/include"
-    "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
-    "-DGDAL_LIBRARY=${gdal}/lib/libgdal.dylib"
-    # Don't bundle libraries
-    "-DMapper_PACKAGE_PROJ=0"
-    "-DMapper_PACKAGE_QT=0"
-    "-DMapper_PACKAGE_ASSISTANT=0"
-    "-DMapper_PACKAGE_GDAL=0"
-  ];
+  cmakeFlags =
+    [
+      # Building the manual and bundling licenses fails
+      # See https://github.com/NixOS/nixpkgs/issues/85306
+      "-DLICENSING_PROVIDER:BOOL=OFF"
+      "-DMapper_MANUAL_QTHELP:BOOL=OFF"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # FindGDAL is broken and always finds /Library/Framework unless this is
+      # specified
+      "-DGDAL_INCLUDE_DIR=${gdal}/include"
+      "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
+      "-DGDAL_LIBRARY=${gdal}/lib/libgdal.dylib"
+      # Don't bundle libraries
+      "-DMapper_PACKAGE_PROJ=0"
+      "-DMapper_PACKAGE_QT=0"
+      "-DMapper_PACKAGE_ASSISTANT=0"
+      "-DMapper_PACKAGE_GDAL=0"
+    ];
 
-  postInstall = with stdenv; lib.optionalString isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/Mapper.app $out/Applications
-    mkdir -p $out/bin
-    ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
-  '';
+  postInstall = with stdenv;
+    lib.optionalString isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/Mapper.app $out/Applications
+      mkdir -p $out/bin
+      ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
+    '';
 
   meta = with lib; {
     description = ''
@@ -89,6 +93,6 @@ mkDerivation rec {
     changelog = "https://github.com/OpenOrienteering/mapper/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ mpickering sikmir ];
+    maintainers = with maintainers; [mpickering sikmir];
   };
 }

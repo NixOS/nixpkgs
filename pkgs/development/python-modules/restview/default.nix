@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, readme_renderer
-, packaging
-, pygments
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  readme_renderer,
+  packaging,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "restview";
   version = "3.0.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "ReStructuredText viewer";
     homepage = "https://mg.pov.lt/restview/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ koral ];
+    maintainers = with lib.maintainers; [koral];
   };
 }

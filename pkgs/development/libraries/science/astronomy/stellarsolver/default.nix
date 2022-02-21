@@ -1,6 +1,14 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake,
-  qtbase, cfitsio, gsl, wcslib, withTester ? false }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  cfitsio,
+  gsl,
+  wcslib,
+  withTester ? false,
+}:
 mkDerivation rec {
   pname = "stellarsolver";
   version = "1.9";
@@ -12,19 +20,23 @@ mkDerivation rec {
     sha256 = "sha256-PiRXNiemJ+UjVhmd2KPcTKJoDW9K9QBf62nkP1LlOfw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ qtbase cfitsio gsl wcslib ];
+  buildInputs = [qtbase cfitsio gsl wcslib];
 
   cmakeFlags = [
-    "-DBUILD_TESTER=${if withTester then "on" else "off"}"
+    "-DBUILD_TESTER=${
+      if withTester
+      then "on"
+      else "off"
+    }"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/rlancaste/stellarsolver";
     description = "Astrometric plate solving library";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [hjones2199];
     platforms = platforms.unix;
   };
 }

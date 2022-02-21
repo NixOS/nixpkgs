@@ -1,9 +1,12 @@
-{ buildPythonPackage, fetchPypi, lib
-, dicttoxml
-, importlib-metadata
-, pexpect
-, prettytable
-, requests-toolbelt
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  dicttoxml,
+  importlib-metadata,
+  pexpect,
+  prettytable,
+  requests-toolbelt,
 }:
 buildPythonPackage rec {
   pname = "argcomplete";
@@ -27,12 +30,12 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  pythonImportsCheck = [ "argcomplete" ];
+  pythonImportsCheck = ["argcomplete"];
 
   meta = with lib; {
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
-    maintainers = [ maintainers.womfoo ];
-    license = [ licenses.asl20 ];
+    maintainers = [maintainers.womfoo];
+    license = [licenses.asl20];
   };
 }

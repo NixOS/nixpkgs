@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, imlib2
-, xlibsWrapper
-, autoreconfHook
-, autoconf-archive
-, libXfixes
-, libXcomposite
-, pkg-config
-, libbsd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  imlib2,
+  xlibsWrapper,
+  autoreconfHook,
+  autoconf-archive,
+  libXfixes,
+  libXcomposite,
+  pkg-config,
+  libbsd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "scrot";
   version = "1.7";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
     description = "A command-line screen capture utility";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [globin];
     license = licenses.mitAdvertising;
   };
 }

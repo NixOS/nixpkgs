@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyftdi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyftdi,
 }:
-
 buildPythonPackage rec {
   pname = "pyi2cflash";
   version = "0.2.2";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
   # tests are not shipped with the PyPI source
   doCheck = false;
 
-  pythonImportsCheck = [ "i2cflash" ];
+  pythonImportsCheck = ["i2cflash"];
 
   meta = with lib; {
     description = "I2C eeprom device drivers in Python";
     homepage = "https://github.com/eblot/pyi2cflash";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

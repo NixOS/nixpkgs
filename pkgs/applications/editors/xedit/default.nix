@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, utilmacros
-, libX11
-, libXaw
-, libXmu
-, libXt
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  utilmacros,
+  libX11,
+  libXaw,
+  libXmu,
+  libXt,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xedit";
   version = "1.2.2";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b5ic13aasv6zh20v2k7zyxsqbnsxfq5rs3w8nwzl1gklmgrjxa3";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config utilmacros ];
+  nativeBuildInputs = [autoreconfHook pkg-config utilmacros];
   buildInputs = [
     libX11
     libXaw
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple graphical text editor using Athena Widgets (Xaw)";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xedit";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ shamilton ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [shamilton];
     platforms = platforms.linux;
   };
 }

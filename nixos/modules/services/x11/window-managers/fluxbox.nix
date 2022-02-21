@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.fluxbox;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.fluxbox;
+in {
   ###### interface
   options = {
     services.xserver.windowManager.fluxbox.enable = mkEnableOption "fluxbox";
@@ -20,6 +21,6 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.fluxbox ];
+    environment.systemPackages = [pkgs.fluxbox];
   };
 }

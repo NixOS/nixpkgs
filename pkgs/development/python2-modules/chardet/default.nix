@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, pytest, pytest-runner, hypothesis }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pytest,
+  pytest-runner,
+  hypothesis,
+}:
 buildPythonPackage rec {
   pname = "chardet";
   version = "3.0.4";
@@ -18,12 +24,12 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytest pytest-runner hypothesis ];
+  checkInputs = [pytest pytest-runner hypothesis];
 
   meta = with lib; {
     homepage = "https://github.com/chardet/chardet";
     description = "Universal encoding detector";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
   };
 }

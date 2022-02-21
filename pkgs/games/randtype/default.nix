@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchzip, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "randtype";
   version = "1.13";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "055xs02qwpgbkn2l57bwghbsrsysg1zhm2asp0byvjpz4sc4w1rd";
   };
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   installPhase = ''
     runHook preInstall
@@ -24,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "semi-random text typer";
     homepage = "https://benkibbey.wordpress.com/randtype/";
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with maintainers; [dandellion];
     license = licenses.gpl2Only;
     platforms = platforms.unix;
   };

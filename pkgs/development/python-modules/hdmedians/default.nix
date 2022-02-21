@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, cython
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  cython,
+  numpy,
 }:
-
 buildPythonPackage rec {
   version = "0.14.2";
   pname = "hdmedians";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   };
 
   # nose was specified in setup.py as a build dependency...
-  buildInputs = [ cython nose ];
-  propagatedBuildInputs = [ numpy ];
+  buildInputs = [cython nose];
+  propagatedBuildInputs = [numpy];
 
   # cannot resolve path for packages in tests
   doCheck = false;
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/daleroberts/hdmedians";
     description = "High-dimensional medians";
     license = licenses.gpl3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

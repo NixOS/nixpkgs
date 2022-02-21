@@ -1,5 +1,15 @@
-{ lib, python3Packages, fetchFromGitHub, wrapGAppsHook, gobject-introspection, libpulseaudio, glib, gtk3, pango, xorg }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  wrapGAppsHook,
+  gobject-introspection,
+  libpulseaudio,
+  glib,
+  gtk3,
+  pango,
+  xorg,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "volctl";
   version = "0.8.2";
@@ -26,12 +36,14 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = [ pango gtk3 ] ++ (with python3Packages; [
-    click
-    pycairo
-    pygobject3
-    pyyaml
-  ]);
+  propagatedBuildInputs =
+    [pango gtk3]
+    ++ (with python3Packages; [
+      click
+      pycairo
+      pygobject3
+      pyyaml
+    ]);
 
   # with strictDeps importing "gi.repository.Gtk" fails with "gi.RepositoryError: Typelib file for namespace 'Pango', version '1.0' not found"
   strictDeps = false;
@@ -39,7 +51,7 @@ python3Packages.buildPythonApplication rec {
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "volctl" ];
+  pythonImportsCheck = ["volctl"];
 
   preFixup = ''
     glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
@@ -51,6 +63,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://buzz.github.io/volctl/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

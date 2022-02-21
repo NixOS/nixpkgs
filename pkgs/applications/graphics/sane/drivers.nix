@@ -1,6 +1,7 @@
-{ lib, fetchFromGitHub }:
-
 {
+  lib,
+  fetchFromGitHub,
+}: {
   # Fujitsu ScanSnap
   epjitsu = fetchFromGitHub {
     name = "scansnap-firmware";

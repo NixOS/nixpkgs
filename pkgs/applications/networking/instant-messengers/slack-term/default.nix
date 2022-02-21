@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   # https://github.com/erroneousboat/slack-term
   pname = "slack-term";
@@ -18,6 +21,6 @@ buildGoPackage rec {
     description = "Slack client for your terminal";
     homepage = "https://github.com/erroneousboat/slack-term";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
   };
 }

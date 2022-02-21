@@ -1,23 +1,23 @@
-{ lib
-, async_generator
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, brotlicffi
-, certifi
-, charset-normalizer
-, httpcore
-, rfc3986
-, sniffio
-, python
-, pytestCheckHook
-, pytest-asyncio
-, pytest-trio
-, typing-extensions
-, trustme
-, uvicorn
+{
+  lib,
+  async_generator,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  brotlicffi,
+  certifi,
+  charset-normalizer,
+  httpcore,
+  rfc3986,
+  sniffio,
+  python,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-trio,
+  typing-extensions,
+  trustme,
+  uvicorn,
 }:
-
 buildPythonPackage rec {
   pname = "httpx";
   version = "0.21.3";
@@ -32,16 +32,18 @@ buildPythonPackage rec {
     sha256 = "01069b0kj6vnb26xazlz06rj4yncy5nkq76pajvzx0pmpjkniiz9";
   };
 
-  propagatedBuildInputs = [
-    brotlicffi
-    certifi
-    charset-normalizer
-    httpcore
-    rfc3986
-    sniffio
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    async_generator
-  ];
+  propagatedBuildInputs =
+    [
+      brotlicffi
+      certifi
+      charset-normalizer
+      httpcore
+      rfc3986
+      sniffio
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      async_generator
+    ];
 
   checkInputs = [
     pytestCheckHook
@@ -92,6 +94,6 @@ buildPythonPackage rec {
     description = "The next generation HTTP client";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc fab ];
+    maintainers = with maintainers; [costrouc fab];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, robotframework-seleniumlibrary }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  robotframework-seleniumlibrary,
+}:
 buildPythonPackage rec {
   version = "3.0.0";
   pname = "robotframework-selenium2library";
@@ -12,13 +16,12 @@ buildPythonPackage rec {
   # Neither the PyPI tarball nor the repository has tests
   doCheck = false;
 
-  propagatedBuildInputs = [ robotframework-seleniumlibrary ];
+  propagatedBuildInputs = [robotframework-seleniumlibrary];
 
   meta = with lib; {
     description = "Web testing library for Robot Framework";
     homepage = "https://github.com/robotframework/Selenium2Library";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
-
 }

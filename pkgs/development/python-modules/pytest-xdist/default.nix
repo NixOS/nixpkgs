@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
-, filelock
-, execnet
-, pytest
-, pytest-forked
-, psutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  pytestCheckHook,
+  filelock,
+  execnet,
+  pytest,
+  pytest-forked,
+  psutil,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-xdist";
   version = "2.5.0";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     sha256 = "sha256-RYDeyj/wTdsqxT66Oddstd1e3qwFDLb7x2iw3XErTt8=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [setuptools-scm];
   buildInputs = [
     pytest
   ];
-  checkInputs = [ pytestCheckHook filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil ];
+  checkInputs = [pytestCheckHook filelock];
+  propagatedBuildInputs = [execnet pytest-forked psutil];
 
   # access file system
   disabledTests = [
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

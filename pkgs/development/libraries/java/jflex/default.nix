@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, jre} :
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+}:
 stdenv.mkDerivation rec {
   pname = "jflex";
   version = "1.8.2";

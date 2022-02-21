@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "itemdb";
   version = "1.1.1";
@@ -19,8 +19,6 @@ buildPythonPackage rec {
     description = "Easy transactional database for Python dicts, backed by SQLite";
     license = licenses.bsd2;
     homepage = "https://itemdb.readthedocs.io";
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [maintainers.matthiasbeyer];
   };
 }
-
-

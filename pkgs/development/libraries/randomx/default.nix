@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "randomX";
   version = "1.1.9";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   src = fetchFromGitHub {
     owner = "tevador";
@@ -17,8 +21,7 @@ stdenv.mkDerivation rec {
     description = "Proof of work algorithm based on random code execution";
     homepage = "https://github.com/tevador/RandomX";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [rnhmjoj];
     platforms = platforms.unix;
   };
-
 }

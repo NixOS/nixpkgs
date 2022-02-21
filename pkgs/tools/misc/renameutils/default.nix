@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, readline}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+}:
 stdenv.mkDerivation rec {
   pname = "renameutils";
   version = "0.12.0";
@@ -9,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "18xlkr56jdyajjihcmfqlyyanzyiqqlzbhrm6695mkvw081g1lnb";
   };
 
-  patches = [ ./install-exec.patch ];
+  patches = [./install-exec.patch];
 
-  nativeBuildInputs = [ readline ];
+  nativeBuildInputs = [readline];
 
   meta = {
     homepage = "https://www.nongnu.org/renameutils/";

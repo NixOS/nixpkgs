@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, jq
-, expat
-, libX11
-, libXdmcp
-, libXrandr
-, libffi
-, libxcb
-, wayland
-, xcbutilkeysyms
-, xcbutilwm
-, vulkan-headers
-, vulkan-loader
-, symlinkJoin
-, vulkan-validation-layers
-, writeText
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  jq,
+  expat,
+  libX11,
+  libXdmcp,
+  libXrandr,
+  libffi,
+  libxcb,
+  wayland,
+  xcbutilkeysyms,
+  xcbutilwm,
+  vulkan-headers,
+  vulkan-loader,
+  symlinkJoin,
+  vulkan-validation-layers,
+  writeText,
 }:
-
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
   # The version must match that in vulkan-headers
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       fetchSubmodules = true;
     });
 
-  nativeBuildInputs = [ cmake python3 jq ];
+  nativeBuildInputs = [cmake python3 jq];
 
   buildInputs = [
     expat
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "-DVULKAN_VALIDATIONLAYERS_INSTALL_DIR=${
       symlinkJoin {
         name = "vulkan-validation-layers-merged";
-        paths = [ vulkan-validation-layers.headers vulkan-validation-layers ];
+        paths = [vulkan-validation-layers.headers vulkan-validation-layers];
       }
     }"
     # Hide dev warnings that are useless for packaging
@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LunarG/VulkanTools";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = [ maintainers.expipiplus1 ];
+    maintainers = [maintainers.expipiplus1];
   };
 }

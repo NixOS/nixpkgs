@@ -1,15 +1,15 @@
-{ lib
-, dbus
-, fetchFromGitHub
-, libssh
-, openssl
-, pkg-config
-, rustPlatform
-, Foundation
-, Security
-, stdenv
+{
+  lib,
+  dbus,
+  fetchFromGitHub,
+  libssh,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  Foundation,
+  Security,
+  stdenv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
   version = "0.8.0";
@@ -27,14 +27,16 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    dbus
-    libssh
-    openssl
-  ] ++ lib.optional stdenv.isDarwin [
-    Foundation
-    Security
-  ];
+  buildInputs =
+    [
+      dbus
+      libssh
+      openssl
+    ]
+    ++ lib.optional stdenv.isDarwin [
+      Foundation
+      Security
+    ];
 
   # Requires network access
   doCheck = false;
@@ -42,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Terminal tool for file transfer and explorer";
     homepage = "https://github.com/veeso/termscp";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

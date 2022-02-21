@@ -1,8 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "rotate-backups";
   version = "8.1";
@@ -33,6 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Simple command line interface for backup rotation";
     homepage = "https://github.com/xolox/python-rotate-backups";
     license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    maintainers = with maintainers; [eyjhb];
   };
 }

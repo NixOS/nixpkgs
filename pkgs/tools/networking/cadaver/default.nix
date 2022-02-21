@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, neon, pkg-config, readline, zlib}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  neon,
+  pkg-config,
+  readline,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "cadaver";
   version = "0.23.3";
@@ -20,16 +28,16 @@ stdenv.mkDerivation rec {
     ./configure.patch
   ];
 
-  configureFlags = [ "--with-ssl" "--with-readline" ];
+  configureFlags = ["--with-ssl" "--with-readline"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ neon readline zlib ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [neon readline zlib];
 
   meta = with lib; {
     description = "A command-line WebDAV client";
-    homepage    = "http://www.webdav.org/cadaver";
-    maintainers = with maintainers; [ ianwookim ];
-    license     = licenses.gpl2;
-    platforms   = with platforms; linux ++ freebsd ++ openbsd;
+    homepage = "http://www.webdav.org/cadaver";
+    maintainers = with maintainers; [ianwookim];
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ freebsd ++ openbsd;
   };
 }

@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchFromGitLab
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, itstool
-, glib
-, gtk4
-, coreutils
-, libsoup_3
-, libsecret
-, libadwaita
-, wrapGAppsHook4
-, libgpg-error
-, json-glib
-, duplicity
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  itstool,
+  glib,
+  gtk4,
+  coreutils,
+  libsoup_3,
+  libsecret,
+  libadwaita,
+  wrapGAppsHook4,
+  libgpg-error,
+  json-glib,
+  duplicity,
 }:
-
 stdenv.mkDerivation rec {
   pname = "deja-dup";
   version = "43.2";
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wiki.gnome.org/Apps/DejaDup";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.linux;
   };
 }

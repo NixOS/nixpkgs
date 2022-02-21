@@ -1,6 +1,9 @@
-{ lib, fetchFromGitHub
-, buildGoModule, installShellFiles }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 buildGoModule rec {
   pname = "cheat";
   version = "4.2.3";
@@ -12,9 +15,9 @@ buildGoModule rec {
     sha256 = "sha256-F0p309rY0PeeOU1K9Had6qI6DCHgzauuuTjMfWoZYBQ=";
   };
 
-  subPackages = [ "cmd/cheat" ];
+  subPackages = ["cmd/cheat"];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installManPage doc/cheat.1
@@ -27,8 +30,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Create and view interactive cheatsheets on the command-line";
-    maintainers = with maintainers; [ mic92 ];
-    license = with licenses; [ gpl3 mit ];
+    maintainers = with maintainers; [mic92];
+    license = with licenses; [gpl3 mit];
     inherit (src.meta) homepage;
   };
 }

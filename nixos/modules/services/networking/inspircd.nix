@@ -1,13 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.services.inspircd;
 
   configFile = pkgs.writeText "inspircd.conf" cfg.config;
-
 in {
   meta = {
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = [lib.maintainers.sternenseemann];
   };
 
   options = {
@@ -47,8 +49,8 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.inspircd = {
       description = "InspIRCd - the stable, high-performance and modular Internet Relay Chat Daemon";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      requires = ["network.target"];
 
       serviceConfig = {
         Type = "simple";

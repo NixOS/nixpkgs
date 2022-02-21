@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, gtk3
-, libgee
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  gtk3,
+  libgee,
+  pantheon,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
   version = "1.0.3";
@@ -35,15 +35,17 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    gtk3
-    libgee
-  ] ++ (with pantheon; [
-    elementary-files # settings schemas
-    elementary-terminal # settings schemas
-    granite
-    switchboard
-  ]);
+  buildInputs =
+    [
+      gtk3
+      libgee
+    ]
+    ++ (with pantheon; [
+      elementary-files # settings schemas
+      elementary-terminal # settings schemas
+      granite
+      switchboard
+    ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

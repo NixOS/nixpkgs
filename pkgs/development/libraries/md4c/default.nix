@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "md4c";
   version = "0.4.8";
@@ -59,8 +59,9 @@ stdenv.mkDerivation rec {
       - Permissive license: MD4C is available under the MIT license.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.all;
   };
 }
 # TODO: enable tests (needs Python)
+

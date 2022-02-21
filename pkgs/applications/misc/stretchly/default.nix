@@ -1,15 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, electron
-, common-updater-scripts
-, writeShellScript
-, makeDesktopItem
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  electron,
+  common-updater-scripts,
+  writeShellScript,
+  makeDesktopItem,
 }:
-
 stdenv.mkDerivation rec {
-
   pname = "stretchly";
   version = "1.8.1";
 
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0whfg1fy2hjyk1lzpryikc1aj8agsjhfrb0bf7ggl6r9m8s1rvdl";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   installPhase = ''
     runHook preInstall
@@ -74,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://hovancik.net/stretchly";
     downloadPage = "https://hovancik.net/stretchly/downloads/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ _1000101 oxalica ];
+    maintainers = with maintainers; [_1000101 oxalica];
     platforms = platforms.linux;
   };
 }

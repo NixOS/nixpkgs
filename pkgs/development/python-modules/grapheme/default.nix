@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "grapheme";
   version = "0.6.0";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python package for grapheme aware string handling";
     homepage = "https://github.com/alvinlindstam/grapheme";
     license = licenses.mit;
-    maintainers = with maintainers; [ creator54 ];
+    maintainers = with maintainers; [creator54];
   };
 }

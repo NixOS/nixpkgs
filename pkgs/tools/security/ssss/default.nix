@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gmp
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  installShellFiles,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ssss";
   version = "0.5.7";
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://point-at-infinity.org/ssss/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

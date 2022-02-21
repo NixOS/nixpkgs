@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  libzip,
+  gnupg,
   # Darwin
-  libiconv, CoreFoundation, Security }:
-
+  libiconv,
+  CoreFoundation,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "sit";
   version = "0.4.1";
@@ -13,9 +22,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "06xkhlfix0h6di6cnvc4blbj3mjy90scbh89dvywbx16wjlc79pf";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libzip gnupg ]
-    ++ (lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ]);
+  nativeBuildInputs = [cmake];
+  buildInputs =
+    [libzip gnupg]
+    ++ (lib.optionals stdenv.isDarwin [libiconv CoreFoundation Security]);
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -26,8 +36,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Serverless Information Tracker";
     homepage = "https://sit.fyi/";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir yrashk ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [dywedir yrashk];
     # Upstream has not had a release in several years, and dependencies no
     # longer compile with the latest Rust compiler.
     broken = true;

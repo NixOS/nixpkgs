@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-, pytestCheckHook
-, ApplicationServices
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  cffi,
+  pytestCheckHook,
+  ApplicationServices,
 }:
-
 buildPythonPackage rec {
   pname = "pymunk";
   version = "6.2.1";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "18ae0f83ec2dc20892b98c84127ce9149ab40fa3c3120097377e1506884b27b8";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [cffi];
   buildInputs = lib.optionals stdenv.isDarwin [
     ApplicationServices
   ];
@@ -27,17 +27,17 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py build_ext --inplace
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   pytestFlagsArray = [
     "pymunk/tests"
   ];
-  pythonImportsCheck = [ "pymunk" ];
+  pythonImportsCheck = ["pymunk"];
 
   meta = with lib; {
     description = "2d physics library";
     homepage = "https://www.pymunk.org";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [emilytrau];
     platforms = platforms.unix;
   };
 }

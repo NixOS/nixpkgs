@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "llama";
   version = "1.0.2";
@@ -17,6 +20,6 @@ buildGoModule rec {
     description = "Terminal file manager";
     homepage = "https://github.com/antonmedv/llama";
     license = licenses.mit;
-    maintainers = with maintainers; [ portothree ];
+    maintainers = with maintainers; [portothree];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "ifenslave";
   version = "1.1.0";
@@ -18,7 +21,7 @@ stdenv.mkDerivation rec {
     cp -a ifenslave $out/bin
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = {
     description = "Utility for enslaving networking interfaces under a bond";

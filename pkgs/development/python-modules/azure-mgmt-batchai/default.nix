@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
+  msrestazure,
 }:
-
 buildPythonPackage rec {
   pname = "azure-mgmt-batchai";
   version = "2.0.0";
@@ -22,9 +22,9 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     azure-mgmt-nspkg
- ];
+  ];
 
-  pythonNamespaces = [ "azure.mgmt" ];
+  pythonNamespaces = ["azure.mgmt"];
 
   # has no tests
   doCheck = false;
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Batch AI Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    maintainers = with maintainers; [maxwilson];
   };
 }

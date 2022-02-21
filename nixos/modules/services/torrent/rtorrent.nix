@@ -1,12 +1,13 @@
-{ config, options, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.rtorrent;
   opt = options.services.rtorrent;
-
 in {
   options.services.rtorrent = {
     enable = mkEnableOption "rtorrent";
@@ -88,7 +89,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     users.groups = mkIf (cfg.group == "rtorrent") {
       rtorrent = {};
     };
@@ -103,7 +103,7 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall) [ cfg.port ];
+    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall) [cfg.port];
 
     services.rtorrent.configText = mkBefore ''
       # Instance layout (base paths)
@@ -188,24 +188,24 @@ in {
           rtorrentConfigFile = pkgs.writeText "rtorrent.rc" cfg.configText;
         in {
           description = "rTorrent system service";
-          after = [ "network.target" ];
-          path = [ cfg.package pkgs.bash ];
-          wantedBy = [ "multi-user.target" ];
+          after = ["network.target"];
+          path = [cfg.package pkgs.bash];
+          wantedBy = ["multi-user.target"];
           serviceConfig = {
             User = cfg.user;
             Group = cfg.group;
             Type = "simple";
             Restart = "on-failure";
             WorkingDirectory = cfg.dataDir;
-            ExecStartPre=''${pkgs.bash}/bin/bash -c "if test -e ${cfg.dataDir}/session/rtorrent.lock && test -z $(${pkgs.procps}/bin/pidof rtorrent); then rm -f ${cfg.dataDir}/session/rtorrent.lock; fi"'';
-            ExecStart="${cfg.package}/bin/rtorrent -n -o system.daemon.set=true -o import=${rtorrentConfigFile}";
+            ExecStartPre = ''${pkgs.bash}/bin/bash -c "if test -e ${cfg.dataDir}/session/rtorrent.lock && test -z $(${pkgs.procps}/bin/pidof rtorrent); then rm -f ${cfg.dataDir}/session/rtorrent.lock; fi"'';
+            ExecStart = "${cfg.package}/bin/rtorrent -n -o system.daemon.set=true -o import=${rtorrentConfigFile}";
             RuntimeDirectory = "rtorrent";
             RuntimeDirectoryMode = 755;
           };
         };
       };
 
-      tmpfiles.rules = [ "d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} -" ];
+      tmpfiles.rules = ["d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} -"];
     };
   };
 }

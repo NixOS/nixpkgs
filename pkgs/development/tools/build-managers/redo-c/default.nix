@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "redo-c";
   version = "0.3";
@@ -19,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/leahneukirchen/redo-c";
     license = licenses.cc0;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ck3d ];
+    maintainers = with maintainers; [ck3d];
   };
 }

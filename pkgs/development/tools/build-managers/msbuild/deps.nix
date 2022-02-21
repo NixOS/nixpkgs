@@ -1,4 +1,4 @@
-{ fetchurl }: [
+{fetchurl}: [
   {
     name = "benchmarkdotnet";
     version = "0.12.1";

@@ -1,16 +1,16 @@
-{ fetchurl
-, lib
-, stdenv
-, meson
-, ninja
-, gettext
-, pkg-config
-, pulseaudioFull
-, glibmm
-, gtkmm3
-, wrapGAppsHook
+{
+  fetchurl,
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  pulseaudioFull,
+  glibmm,
+  gtkmm3,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "paprefs";
   version = "1.2";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
 
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [maintainers.abbradar];
     platforms = platforms.linux;
   };
 }

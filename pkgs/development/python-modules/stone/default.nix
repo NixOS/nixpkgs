@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, coverage
-, mock
-, ply
-, pytest-runner
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  coverage,
+  mock,
+  ply,
+  pytest-runner,
+  pytestCheckHook,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "stone";
   version = "3.2.1";
@@ -24,11 +26,11 @@ buildPythonPackage rec {
       --replace "coverage==5.3" "coverage"
   '';
 
-  nativeBuildInputs = [ pytest-runner ];
+  nativeBuildInputs = [pytest-runner];
 
-  propagatedBuildInputs = [ ply six ];
+  propagatedBuildInputs = [ply six];
 
-  checkInputs = [ pytestCheckHook coverage mock ];
+  checkInputs = [pytestCheckHook coverage mock];
 
   # try to import from `test` directory, which is exported by the python interpreter
   # and cannot be overriden without removing some py3 to py2 support
@@ -40,12 +42,12 @@ buildPythonPackage rec {
     "test_type_name_with_module"
   ];
 
-  pythonImportsCheck = [ "stone" ];
+  pythonImportsCheck = ["stone"];
 
   meta = with lib; {
     description = "Official Api Spec Language for Dropbox";
     homepage = "https://github.com/dropbox/stone";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

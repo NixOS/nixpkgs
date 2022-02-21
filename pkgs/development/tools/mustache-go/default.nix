@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "mustache-go";
   version = "1.3.0";
@@ -16,8 +19,8 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://github.com/cbroglie/mustache";
     description = "The mustache template language in Go";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ Zimmi48 ];
+    license = [licenses.mit];
+    maintainers = with maintainers; [Zimmi48];
     mainProgram = "mustache";
   };
 }

@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, withJson ? true, stdenv }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  withJson ? true,
+  stdenv,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "statix";
   # also update version of the vim plugin in pkgs/misc/vim-plugins/overrides.nix
@@ -24,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Lints and suggestions for the nix programming language";
     homepage = "https://github.com/nerdypepper/statix";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda nerdypepper ];
+    maintainers = with maintainers; [figsoda nerdypepper];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools, poppler }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qttools,
+  poppler,
+}:
 mkDerivation rec {
   pname = "lumina-pdf";
   version = "1.6.0";
@@ -13,9 +20,9 @@ mkDerivation rec {
 
   sourceRoot = "source/src-qt5";
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [qmake qttools];
 
-  buildInputs = [ qtbase poppler ];
+  buildInputs = [qtbase poppler];
 
   postPatch = ''
     sed -i '1i\#include <memory>\' Renderer-poppler.cpp
@@ -33,6 +40,6 @@ mkDerivation rec {
     homepage = "https://github.com/lumina-desktop/lumina-pdf";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, makeWrapper
-, ffmpeg
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  makeWrapper,
+  ffmpeg,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "alass";
   version = "2.0.0";
@@ -18,16 +18,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-6swIoVp1B4CMvaGvq868LTKkzpI6zFKJNgUVqjdyH20=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
-    wrapProgram "$out/bin/alass-cli" --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"
+    wrapProgram "$out/bin/alass-cli" --prefix PATH : "${lib.makeBinPath [ffmpeg]}"
   '';
 
   meta = with lib; {
     description = "Automatic Language-Agnostic Subtitle Synchronization";
     homepage = "https://github.com/kaegi/alass";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [erictapen];
   };
 }

@@ -1,11 +1,12 @@
-{ lib, stdenv
-, cmake
-, extra-cmake-modules
-, plasma-framework
-, kwindowsystem
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  cmake,
+  extra-cmake-modules,
+  plasma-framework,
+  kwindowsystem,
+  fetchFromGitHub,
 }:
-
 stdenv.mkDerivation rec {
   pname = "playbar2";
   version = "2.5";
@@ -34,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/audoban/PlayBar2";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pjones ];
+    maintainers = with maintainers; [pjones];
   };
 }

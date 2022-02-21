@@ -1,5 +1,9 @@
-{ lib, buildPythonApplication, fetchFromGitHub, nose }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  nose,
+}:
 buildPythonApplication rec {
   pname = "mbutil";
   version = "0.3.0";
@@ -11,7 +15,7 @@ buildPythonApplication rec {
     sha256 = "06d62r89h026asaa4ryzb23m86j0cmbvy54kf4zl5f35sgiha45z";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = "nosetests";
 
   meta = with lib; {
@@ -19,6 +23,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/mapbox/mbutil";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
   };
 }

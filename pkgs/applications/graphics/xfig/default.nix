@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, xlibsWrapper
-, makeWrapper
-, libXpm
-, libXmu
-, libXi
-, libXp
-, Xaw3d
-, libXaw
-, fig2dev
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xlibsWrapper,
+  makeWrapper,
+  libXpm,
+  libXmu,
+  libXi,
+  libXp,
+  Xaw3d,
+  libXaw,
+  fig2dev,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xfig";
   version = "3.2.8b";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fndgbm1mkqb1sn2v2kj3nx9mxj70jbp31y2bjvzcmmkry0q3k5j";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   buildInputs = [
     xlibsWrapper

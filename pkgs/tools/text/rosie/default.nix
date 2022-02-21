@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, fetchgit
-, libbsd
-, readline
+{
+  stdenv,
+  lib,
+  fetchgit,
+  libbsd,
+  readline,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rosie";
   version = "unstable-2020-01-11";
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
     ln -s $out/share/vim-plugins/rosie $out/share/nvim/site
   '';
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" ];
+  makeFlags = ["DESTDIR=${placeholder "out"}"];
 
-  buildInputs = [ libbsd readline ];
+  buildInputs = [libbsd readline];
 
   meta = with lib; {
     homepage = "https://rosie-lang.org";
     description = "Tools for searching using parsing expression grammars";
     license = licenses.mit;
-    maintainers = with maintainers; [ kovirobi ];
+    maintainers = with maintainers; [kovirobi];
     platforms = with platforms; linux ++ darwin;
   };
 }

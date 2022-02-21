@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses, bash }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  perl,
+  file,
+  ncurses,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "lesspipe";
   version = "1.85";
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = [ perl bash ];
+  nativeBuildInputs = [perl];
+  buildInputs = [perl bash];
   strictDeps = true;
   preConfigure = ''
     patchShebangs --build configure
   '';
-  configureFlags = [ "--shell=${bash}/bin/bash" "--yes" ];
+  configureFlags = ["--shell=${bash}/bin/bash" "--yes"];
   configurePlatforms = [];
   dontBuild = true;
 
@@ -46,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wofr06/lesspipe";
     platforms = platforms.all;
     license = licenses.gpl2;
-    maintainers = [ maintainers.martijnvermaat ];
+    maintainers = [maintainers.martijnvermaat];
   };
 }

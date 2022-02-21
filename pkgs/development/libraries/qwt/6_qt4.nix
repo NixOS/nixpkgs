@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, qt4, qmake4Hook, AGL }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qt4,
+  qmake4Hook,
+  AGL,
+}:
 stdenv.mkDerivation rec {
   pname = "qwt";
   version = "6.1.5";
@@ -9,11 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "0hf0mpca248xlqn7xnzkfj8drf19gdyg5syzklvq8pibxiixwxj0";
   };
 
-  buildInputs = [
-    qt4
-  ] ++ lib.optionals stdenv.isDarwin [ AGL ];
+  buildInputs =
+    [
+      qt4
+    ]
+    ++ lib.optionals stdenv.isDarwin [AGL];
 
-  nativeBuildInputs = [ qmake4Hook ];
+  nativeBuildInputs = [qmake4Hook];
 
   enableParallelBuilding = true;
 
@@ -28,7 +36,7 @@ stdenv.mkDerivation rec {
       install_name_tool -id "$out/lib/qwt.framework/Versions/6/qwt" "$out/lib/qwt.framework/Versions/6/qwt"
     '';
 
-  qmakeFlags = [ "-after doc.path=$out/share/doc/qwt-${version}" ];
+  qmakeFlags = ["-after doc.path=$out/share/doc/qwt-${version}"];
 
   meta = with lib; {
     description = "Qt widgets for technical applications";
@@ -36,7 +44,7 @@ stdenv.mkDerivation rec {
     # LGPL 2.1 plus a few exceptions (more liberal)
     license = lib.licenses.qwt;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
     branch = "6";
   };
 }

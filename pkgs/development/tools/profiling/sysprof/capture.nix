@@ -1,9 +1,10 @@
-{ lib, stdenv
-, meson
-, ninja
-, sysprof
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  sysprof,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libsysprof-capture";
 
@@ -23,9 +24,11 @@ stdenv.mkDerivation rec {
     "-Denable_examples=false"
   ];
 
-  meta = sysprof.meta // {
-    description = "Static library for Sysprof capture data generation";
-    license = lib.licenses.bsd2Patent;
-    platforms = lib.platforms.all;
-  };
+  meta =
+    sysprof.meta
+    // {
+      description = "Static library for Sysprof capture data generation";
+      license = lib.licenses.bsd2Patent;
+      platforms = lib.platforms.all;
+    };
 }

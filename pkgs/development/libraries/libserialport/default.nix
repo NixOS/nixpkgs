@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, udev, darwin }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  udev,
+  darwin,
+}:
 stdenv.mkDerivation rec {
   pname = "libserialport";
   version = "0.1.1";
@@ -9,8 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "17ajlwgvyyrap8z7f16zcs59pksvncwbmd3mzf98wj7zqgczjaja";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional stdenv.isLinux udev
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    lib.optional stdenv.isLinux udev
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   meta = with lib; {
@@ -18,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

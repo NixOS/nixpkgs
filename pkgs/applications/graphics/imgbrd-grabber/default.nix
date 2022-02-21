@@ -1,24 +1,25 @@
-{ lib, stdenv
-, cmake
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtmultimedia
-, qttools
-, qtscript
-, qtdeclarative
-, qtnetworkauth
-, qtbase
-, autogen
-, automake
-, makeWrapper
-, catch2
-, nodejs
-, libpulseaudio
-, openssl
-, rsync
-, typescript
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtmultimedia,
+  qttools,
+  qtscript,
+  qtdeclarative,
+  qtnetworkauth,
+  qtbase,
+  autogen,
+  automake,
+  makeWrapper,
+  catch2,
+  nodejs,
+  libpulseaudio,
+  openssl,
+  rsync,
+  typescript,
 }:
-
 stdenv.mkDerivation rec {
   pname = "imgbrd-grabber";
   version = "7.7.1";
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  extraOutputsToLink = [ "doc" ];
+  extraOutputsToLink = ["doc"];
 
   postPatch = ''
     # the package.sh script provides some install helpers
@@ -94,6 +95,6 @@ stdenv.mkDerivation rec {
     description = "Very customizable imageboard/booru downloader with powerful filenaming features";
     license = licenses.asl20;
     homepage = "https://bionus.github.io/imgbrd-grabber/";
-    maintainers = [ maintainers.evanjs ];
+    maintainers = [maintainers.evanjs];
   };
 }

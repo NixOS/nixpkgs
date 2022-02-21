@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, readline }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  readline,
+}:
 stdenv.mkDerivation rec {
   pname = "mrsh-unstable";
   version = "2021-01-10";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vvdwzw3fq74lwgmy6xxkk01sd68fzhsw84c750lm1dma22xhjci";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ readline ];
+  nativeBuildInputs = [meson ninja pkg-config];
+  buildInputs = [readline];
 
   doCheck = true;
 
@@ -20,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A minimal POSIX shell";
     homepage = "https://mrsh.sh";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
     platforms = platforms.unix;
   };
 

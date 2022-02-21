@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "log4jcheck";
   version = "unstable-2021-12-14";
@@ -29,6 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool to check for vulnerable Log4j (CVE-2021-44228) systems";
     homepage = "https://github.com/NorthwaveSecurity/log4jcheck";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

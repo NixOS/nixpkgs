@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, bison
-, cmake
-, jq
-, python3
-, spirv-headers
-, spirv-tools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  jq,
+  python3,
+  spirv-headers,
+  spirv-tools,
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     spirv-headers = spirv-headers;
   };
 
-  nativeBuildInputs = [ cmake python3 bison jq ];
+  nativeBuildInputs = [cmake python3 bison jq];
 
   postPatch = ''
     cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools
@@ -41,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "Khronos reference front-end for GLSL and ESSL";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ralith ];
+    maintainers = [maintainers.ralith];
   };
 }

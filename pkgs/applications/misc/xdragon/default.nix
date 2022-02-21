@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+}:
 stdenv.mkDerivation rec {
   pname = "xdragon";
   version = "1.1.1";
@@ -11,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0fgzz39007fdjwq72scp0qygp2v3zc5f1xkm0sxaa8zxm25g1bra";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk3 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gtk3];
 
-  installFlags = [ "PREFIX=${placeholder "out"}/bin" ];
+  installFlags = ["PREFIX=${placeholder "out"}/bin"];
   postInstall = ''
     ln -s $out/bin/dragon $out/bin/xdragon
   '';
@@ -23,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Simple drag-and-drop source/sink for X (called dragon in upstream)";
     homepage = "https://github.com/mwh/dragon";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [das_j];
   };
 }

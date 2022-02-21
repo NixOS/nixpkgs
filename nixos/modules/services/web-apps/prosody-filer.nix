@@ -1,14 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.prosody-filer;
 
-  settingsFormat = pkgs.formats.toml { };
+  settingsFormat = pkgs.formats.toml {};
   configFile = settingsFormat.generate "prosody-filer.toml" cfg.settings;
 in {
-
   options = {
     services.prosody-filer = {
       enable = mkEnableOption "Prosody Filer XMPP upload file server";
@@ -47,12 +48,12 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.prosody-filer = { };
+    users.groups.prosody-filer = {};
 
     systemd.services.prosody-filer = {
       description = "Prosody file upload server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         User = "prosody-filer";
@@ -78,8 +79,8 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
+        SystemCallFilter = ["@system-service" "~@privileged" "~@resources"];
       };
     };
   };

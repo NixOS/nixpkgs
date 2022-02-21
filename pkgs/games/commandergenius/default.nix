@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitLab, SDL2, SDL2_image, pkg-config
-, libvorbis, libGL, boost, cmake, zlib, curl, SDL2_mixer, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  SDL2,
+  SDL2_image,
+  pkg-config,
+  libvorbis,
+  libGL,
+  boost,
+  cmake,
+  zlib,
+  curl,
+  SDL2_mixer,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "commandergenius";
   version = "2.3.3";
@@ -13,14 +25,14 @@ stdenv.mkDerivation rec {
     sha256 = "04nb23wwvc3yywz3cr6gvn02fa7psfs22ssg4wk12s08z1azvz3h";
   };
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer libGL boost libvorbis zlib curl python3 ];
+  buildInputs = [SDL2 SDL2_image SDL2_mixer libGL boost libvorbis zlib curl python3];
 
   preConfigure = ''
     export cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_PREFIX=$out -DSHAREDIR=$out/share"
     export makeFlags="$makeFlags DESTDIR=$(out)"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   postPatch = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(sdl2-config --cflags)"
@@ -37,7 +49,7 @@ stdenv.mkDerivation rec {
       are required to do so
     '';
     homepage = "https://github.com/gerstrong/Commander-Genius";
-    maintainers = with maintainers; [ hce ];
+    maintainers = with maintainers; [hce];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

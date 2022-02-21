@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, weechat }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  weechat,
+}:
 stdenv.mkDerivation {
   pname = "weechat-go";
   version = "2.7";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  passthru.scripts = [ "go.py" ];
+  passthru.scripts = ["go.py"];
 
   installPhase = ''
     install -D $src $out/share/go.py
@@ -21,6 +25,6 @@ stdenv.mkDerivation {
     inherit (weechat.meta) platforms;
     description = "go.py is a weechat script to quickly jump to different buffers";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ govanify ];
+    maintainers = with maintainers; [govanify];
   };
 }

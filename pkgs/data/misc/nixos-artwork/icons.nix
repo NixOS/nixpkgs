@@ -1,8 +1,8 @@
-{ stdenv
-, fetchFromGitHub
-, imagemagick
+{
+  stdenv,
+  fetchFromGitHub,
+  imagemagick,
 }:
-
 stdenv.mkDerivation {
   pname = "nixos-icons";
   version = "2021-02-24";

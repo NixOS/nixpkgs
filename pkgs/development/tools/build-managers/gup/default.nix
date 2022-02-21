@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, nix-update-source, lib, python3
-, which, runtimeShell, pychecker ? null }:
+{
+  stdenv,
+  fetchFromGitHub,
+  nix-update-source,
+  lib,
+  python3,
+  which,
+  runtimeShell,
+  pychecker ? null,
+}:
 stdenv.mkDerivation rec {
   version = "0.8.0";
   src = fetchFromGitHub {
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zjd76jyb5zc9w3l368723bjmxjl05s096g8ipwncfks1p9hdgf3";
   };
   pname = "gup";
-  nativeBuildInputs = [ python3 which pychecker ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [python3 which pychecker];
+  buildInputs = [python3];
   strictDeps = true;
   SKIP_PYCHECKER = pychecker == null;
   buildPhase = "make python";
@@ -39,7 +47,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "A better make, inspired by djb's redo";
     license = lib.licenses.lgpl2Plus;
-    maintainers = [ lib.maintainers.timbertson ];
+    maintainers = [lib.maintainers.timbertson];
     platforms = lib.platforms.all;
   };
 }

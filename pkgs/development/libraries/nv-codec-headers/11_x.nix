@@ -1,8 +1,8 @@
-{ stdenv
-, lib
-, fetchgit
+{
+  stdenv,
+  lib,
+  fetchgit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "nv-codec-headers";
   version = "11.1.5.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "FFmpeg version of headers for NVENC";
     homepage = "https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git";
     license = licenses.mit;
-    maintainers = with maintainers; [ MP2E ];
+    maintainers = with maintainers; [MP2E];
     platforms = platforms.all;
   };
 }

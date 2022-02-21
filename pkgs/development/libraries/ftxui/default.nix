@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doxygen
-, graphviz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+  graphviz,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ftxui";
   version = "unstable-2021-08-13";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ArthurSonzogni/FTXUI";
     description = "Functional Terminal User Interface for C++";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
     platforms = platforms.unix;
   };
 }

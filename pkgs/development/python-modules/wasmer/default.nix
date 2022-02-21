@@ -1,29 +1,29 @@
-{ stdenv
-, lib
-, rustPlatform
-, callPackage
-, fetchFromGitHub
-, buildPythonPackage
-, libiconv
-, libffi
-, libxml2
-, ncurses
-, zlib
-}:
-
-let
-  common =
-    { pname
-    , buildAndTestSubdir
-    , cargoHash
-    , extraNativeBuildInputs ? [ ]
-    , extraBuildInputs ? [ ]
-    }: buildPythonPackage rec {
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  callPackage,
+  fetchFromGitHub,
+  buildPythonPackage,
+  libiconv,
+  libffi,
+  libxml2,
+  ncurses,
+  zlib,
+}: let
+  common = {
+    pname,
+    buildAndTestSubdir,
+    cargoHash,
+    extraNativeBuildInputs ? [],
+    extraBuildInputs ? [],
+  }:
+    buildPythonPackage rec {
       inherit pname;
       version = "1.1.0";
       format = "pyproject";
 
-      outputs = [ "out" ] ++ lib.optional (pname == "wasmer") "testsout";
+      outputs = ["out"] ++ lib.optional (pname == "wasmer") "testsout";
 
       src = fetchFromGitHub {
         owner = "wasmerio";
@@ -38,10 +38,12 @@ let
         sha256 = cargoHash;
       };
 
-      nativeBuildInputs = (with rustPlatform; [ cargoSetupHook maturinBuildHook ])
+      nativeBuildInputs =
+        (with rustPlatform; [cargoSetupHook maturinBuildHook])
         ++ extraNativeBuildInputs;
 
-      buildInputs = lib.optionals stdenv.isDarwin [ libiconv ]
+      buildInputs =
+        lib.optionals stdenv.isDarwin [libiconv]
         ++ extraBuildInputs;
 
       inherit buildAndTestSubdir;
@@ -55,21 +57,20 @@ let
       doCheck = false;
 
       passthru.tests = lib.optionalAttrs (pname == "wasmer") {
-        pytest = callPackage ./tests.nix { };
+        pytest = callPackage ./tests.nix {};
       };
 
-      pythonImportsCheck = [ "${lib.replaceStrings ["-"] ["_"] pname}" ];
+      pythonImportsCheck = ["${lib.replaceStrings ["-"] ["_"] pname}"];
 
       meta = with lib; {
         description = "Python extension to run WebAssembly binaries";
         homepage = "https://github.com/wasmerio/wasmer-python";
         license = licenses.mit;
         platforms = platforms.unix;
-        maintainers = with maintainers; [ SuperSandro2000 ];
+        maintainers = with maintainers; [SuperSandro2000];
       };
     };
-in
-rec {
+in rec {
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";
@@ -86,8 +87,8 @@ rec {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
     cargoHash = "sha256-xawbf5gXXV+7I2F2fDSaMvjtFvGDBtqX7wL3c28TSbA=";
-    extraNativeBuildInputs = [ rustPlatform.rust.rustc.llvm ];
-    extraBuildInputs = [ libffi libxml2.out ncurses zlib ];
+    extraNativeBuildInputs = [rustPlatform.rust.rustc.llvm];
+    extraBuildInputs = [libffi libxml2.out ncurses zlib];
   };
 
   wasmer-compiler-singlepass = common {

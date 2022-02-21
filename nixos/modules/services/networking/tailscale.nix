@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let cfg = config.services.tailscale;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.tailscale;
 in {
-  meta.maintainers = with maintainers; [ danderson mbaillie ];
+  meta.maintainers = with maintainers; [danderson mbaillie];
 
   options.services.tailscale = {
     enable = mkEnableOption "Tailscale client daemon";
@@ -30,11 +33,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ]; # for the CLI
-    systemd.packages = [ cfg.package ];
+    environment.systemPackages = [cfg.package]; # for the CLI
+    systemd.packages = [cfg.package];
     systemd.services.tailscaled = {
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.openresolv pkgs.procps ];
+      wantedBy = ["multi-user.target"];
+      path = [pkgs.openresolv pkgs.procps];
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''

@@ -1,13 +1,13 @@
-{ lib
-, fetchhg
-, buildPythonPackage
-, srht
-, hglib
-, scmsrht
-, unidiff
-, python
+{
+  lib,
+  fetchhg,
+  buildPythonPackage,
+  srht,
+  hglib,
+  scmsrht,
+  unidiff,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "hgsrht";
   version = "0.29.4";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  pythonImportsCheck = [ "hgsrht" ];
+  pythonImportsCheck = ["hgsrht"];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/hg.sr.ht";
     description = "Mercurial repository hosting service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

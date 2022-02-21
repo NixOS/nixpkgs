@@ -1,9 +1,30 @@
-{ lib, stdenv, alsa-lib, atk, at-spi2-atk, cairo, cups, dbus, dpkg, expat, fontconfig, freetype
-, fetchurl, GConf, gdk-pixbuf, glib, gtk2, gtk3, libpulseaudio, makeWrapper, nspr
-, nss, pango, udev, xorg
-}:
-
-let
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  atk,
+  at-spi2-atk,
+  cairo,
+  cups,
+  dbus,
+  dpkg,
+  expat,
+  fontconfig,
+  freetype,
+  fetchurl,
+  GConf,
+  gdk-pixbuf,
+  glib,
+  gtk2,
+  gtk3,
+  libpulseaudio,
+  makeWrapper,
+  nspr,
+  nss,
+  pango,
+  udev,
+  xorg,
+}: let
   version = "4.7.1";
 
   deps = [
@@ -40,43 +61,41 @@ let
     xorg.libXScrnSaver
     xorg.libXtst
   ];
-
 in
+  stdenv.mkDerivation {
+    pname = "google-play-music-desktop-player";
+    inherit version;
 
-stdenv.mkDerivation {
-  pname = "google-play-music-desktop-player";
-  inherit version;
+    src = fetchurl {
+      url = "https://github.com/MarshallOfSound/Google-Play-Music-Desktop-Player-UNOFFICIAL-/releases/download/v${version}/google-play-music-desktop-player_${version}_amd64.deb";
+      sha256 = "1ljm9c5sv6wa7pa483yq03wq9j1h1jdh8363z5m2imz407yzgm5r";
+    };
 
-  src = fetchurl {
-    url = "https://github.com/MarshallOfSound/Google-Play-Music-Desktop-Player-UNOFFICIAL-/releases/download/v${version}/google-play-music-desktop-player_${version}_amd64.deb";
-    sha256 = "1ljm9c5sv6wa7pa483yq03wq9j1h1jdh8363z5m2imz407yzgm5r";
-  };
+    dontBuild = true;
+    nativeBuildInputs = [dpkg makeWrapper];
 
-  dontBuild = true;
-  nativeBuildInputs = [ dpkg makeWrapper ];
+    unpackPhase = ''
+      dpkg -x $src .
+    '';
 
-  unpackPhase = ''
-    dpkg -x $src .
-  '';
+    installPhase = ''
+      mkdir -p $out
+      cp -r ./usr/share $out
+      cp -r ./usr/bin $out
 
-  installPhase = ''
-    mkdir -p $out
-    cp -r ./usr/share $out
-    cp -r ./usr/bin $out
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+               "$out/share/google-play-music-desktop-player/Google Play Music Desktop Player"
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             "$out/share/google-play-music-desktop-player/Google Play Music Desktop Player"
+      wrapProgram $out/bin/google-play-music-desktop-player \
+        --prefix LD_LIBRARY_PATH : "$out/share/google-play-music-desktop-player" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath deps}"
+    '';
 
-    wrapProgram $out/bin/google-play-music-desktop-player \
-      --prefix LD_LIBRARY_PATH : "$out/share/google-play-music-desktop-player" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath deps}"
-  '';
-
-  meta = {
-    homepage = "https://www.googleplaymusicdesktopplayer.com/";
-    description = "A beautiful cross platform Desktop Player for Google Play Music and YouTube Music";
-    license = lib.licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ anna328p SuprDewd ];
-  };
-}
+    meta = {
+      homepage = "https://www.googleplaymusicdesktopplayer.com/";
+      description = "A beautiful cross platform Desktop Player for Google Play Music and YouTube Music";
+      license = lib.licenses.mit;
+      platforms = ["x86_64-linux"];
+      maintainers = with lib.maintainers; [anna328p SuprDewd];
+    };
+  }

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, futures ? null
-, gevent
-, mock
-, pytest
-, tornado }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  futures ? null,
+  gevent,
+  mock,
+  pytest,
+  tornado,
+}:
 buildPythonPackage rec {
   pname = "opentracing";
   version = "2.4.0";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional isPy27 futures;
 
-  checkInputs = [ gevent mock pytest tornado ];
+  checkInputs = [gevent mock pytest tornado];
 
   checkPhase = ''
     pytest
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/opentracing/opentracing-python";
     description = "Platform API for OpenTracing";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rakesh4g ];
+    maintainers = with maintainers; [rakesh4g];
   };
 }

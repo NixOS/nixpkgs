@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage {
   pname = "manul";
   version = "unstable-2016-09-30";
@@ -22,6 +25,6 @@ buildGoPackage {
     homepage = "https://github.com/kovetskiy/manul";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [maintainers.mic92];
   };
 }

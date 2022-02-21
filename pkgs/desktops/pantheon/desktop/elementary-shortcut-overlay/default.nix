@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, libxml2
-, desktop-file-utils
-, gtk3
-, glib
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  libxml2,
+  desktop-file-utils,
+  gtk3,
+  glib,
+  granite,
+  libgee,
+  libhandy,
+  elementary-icon-theme,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
   version = "1.2.1";

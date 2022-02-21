@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, yacs
-, boxx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  yacs,
+  boxx,
 }:
-
 buildPythonPackage rec {
   pname = "zcs";
   version = "0.1.17";
@@ -15,11 +15,11 @@ buildPythonPackage rec {
     sha256 = "sha256-ZoQgAaJy3kKHLljyKA0Oo/D1kefE8X9FlsGDSNt1nPw=";
   };
 
-  propagatedBuildInputs = [ yacs ];
+  propagatedBuildInputs = [yacs];
 
-  pythonImportsCheck = [ "zcs" ];
+  pythonImportsCheck = ["zcs"];
 
-  checkInputs = [ boxx ];
+  checkInputs = [boxx];
   checkPhase = ''
     ${python.interpreter} test/test_zcs.py
   '';
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "A flexible powerful configuration system which takes advantage of both argparse and yacs";
     homepage = "https://github.com/DIYer22/zcs";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucasew ];
+    maintainers = with maintainers; [lucasew];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchzip, cmake, tbb, python3, ispc }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  cmake,
+  tbb,
+  python3,
+  ispc,
+}:
 stdenv.mkDerivation rec {
   pname = "openimagedenoise";
   version = "1.4.2";
@@ -10,14 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+7o7b64ORCLn8z0KbnUKhlgPs9mlyDCUiNKJEbusGxw=";
   };
 
-  nativeBuildInputs = [ cmake python3 ispc ];
-  buildInputs = [ tbb ];
+  nativeBuildInputs = [cmake python3 ispc];
+  buildInputs = [tbb];
 
   meta = with lib; {
     homepage = "https://openimagedenoise.github.io";
     description = "High-Performance Denoising Library for Ray Tracing";
     license = licenses.asl20;
-    maintainers = [ maintainers.leshainc ];
+    maintainers = [maintainers.leshainc];
     platforms = platforms.unix;
     changelog = "https://github.com/OpenImageDenoise/oidn/blob/v${version}/CHANGELOG.md";
   };

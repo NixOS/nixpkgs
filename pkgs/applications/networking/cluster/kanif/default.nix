@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, perl , taktuk}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  taktuk,
+}:
 stdenv.mkDerivation rec {
   version = "1.2.2";
   pname = "kanif";
@@ -10,8 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-      substituteInPlace ./kanif --replace "/usr/bin/perl" "${perl}/bin/perl"
-      substituteInPlace ./kanif --replace '$taktuk_command = "taktuk";' '$taktuk_command = "${taktuk}/bin/taktuk";'
+    substituteInPlace ./kanif --replace "/usr/bin/perl" "${perl}/bin/perl"
+    substituteInPlace ./kanif --replace '$taktuk_command = "taktuk";' '$taktuk_command = "${taktuk}/bin/taktuk";'
   '';
 
   meta = {
@@ -27,9 +32,7 @@ stdenv.mkDerivation rec {
       for efficiency and scalability.'';
     homepage = "http://taktuk.gforge.inria.fr/kanif";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.bzizou ];
+    maintainers = [lib.maintainers.bzizou];
     platforms = lib.platforms.linux;
   };
-
 }
-

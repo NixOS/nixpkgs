@@ -1,26 +1,26 @@
-{ lib
-, buildPythonPackage
-, capstone
-, crytic-compile
-, fetchFromGitHub
-, intervaltree
-, ply
-, prettytable
-, protobuf
-, pyelftools
-, pyevmasm
-, pysha3
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, rlp
-, stdenv
-, unicorn
-, wasm
-, yices
-, z3
+{
+  lib,
+  buildPythonPackage,
+  capstone,
+  crytic-compile,
+  fetchFromGitHub,
+  intervaltree,
+  ply,
+  prettytable,
+  protobuf,
+  pyelftools,
+  pyevmasm,
+  pysha3,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rlp,
+  stdenv,
+  unicorn,
+  wasm,
+  yices,
+  z3,
 }:
-
 buildPythonPackage rec {
   pname = "manticore";
   version = "0.3.6";
@@ -35,22 +35,24 @@ buildPythonPackage rec {
     sha256 = "sha256-L112YwrBcdcLBeBsPLWt3C57u2WDvGLq50EzW9ojdyg=";
   };
 
-  propagatedBuildInputs = [
-    crytic-compile
-    intervaltree
-    ply
-    prettytable
-    protobuf
-    pyevmasm
-    pysha3
-    pyyaml
-    rlp
-    wasm
-  ] ++ lib.optionals (stdenv.isLinux) [
-    capstone
-    pyelftools
-    unicorn
-  ];
+  propagatedBuildInputs =
+    [
+      crytic-compile
+      intervaltree
+      ply
+      prettytable
+      protobuf
+      pyevmasm
+      pysha3
+      pyyaml
+      rlp
+      wasm
+    ]
+    ++ lib.optionals (stdenv.isLinux) [
+      capstone
+      pyelftools
+      unicorn
+    ];
 
   # Python API is not used in the code, only z3 from PATH
   postPatch = ''
@@ -65,14 +67,16 @@ buildPythonPackage rec {
     export PATH=${yices}/bin:${z3}/bin:$PATH
   '';
 
-  disabledTestPaths = [
-    "tests/ethereum" # Enable when solc works again
-    "tests/ethereum_bench"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "tests/native"
-    "tests/other/test_locking.py"
-    "tests/other/test_state_introspection.py"
-  ];
+  disabledTestPaths =
+    [
+      "tests/ethereum" # Enable when solc works again
+      "tests/ethereum_bench"
+    ]
+    ++ lib.optionals (!stdenv.isLinux) [
+      "tests/native"
+      "tests/other/test_locking.py"
+      "tests/other/test_state_introspection.py"
+    ];
 
   disabledTests = [
     # Failing tests
@@ -127,6 +131,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/trailofbits/manticore/releases/tag/${version}";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ arturcygan ];
+    maintainers = with maintainers; [arturcygan];
   };
 }

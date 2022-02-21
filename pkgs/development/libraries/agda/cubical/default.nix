@@ -1,5 +1,10 @@
-{ lib, mkDerivation, fetchFromGitHub, ghc, glibcLocales }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  ghc,
+  glibcLocales,
+}:
 mkDerivation rec {
   pname = "cubical";
   version = "0.4prec3e097a";
@@ -17,17 +22,16 @@ mkDerivation rec {
 
   # The cubical library has several `Everything.agda` files, which are
   # compiled through the make file they provide.
-  nativeBuildInputs = [ ghc glibcLocales ];
+  nativeBuildInputs = [ghc glibcLocales];
   buildPhase = ''
     make
   '';
 
   meta = with lib; {
-    description =
-      "A cubical type theory library for use with the Agda compiler";
+    description = "A cubical type theory library for use with the Agda compiler";
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice ryanorendorff ];
+    maintainers = with maintainers; [alexarice ryanorendorff];
   };
 }

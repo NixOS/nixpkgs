@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, libtool, automake, pkg-config, git
-, bison, flex, postgresql, ripgrep }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  libtool,
+  automake,
+  pkg-config,
+  git,
+  bison,
+  flex,
+  postgresql,
+  ripgrep,
+}:
 stdenv.mkDerivation rec {
   pname = "stellar-core";
   version = "17.0.0";
@@ -13,9 +24,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ automake autoconf git libtool pkg-config ripgrep ];
+  nativeBuildInputs = [automake autoconf git libtool pkg-config ripgrep];
 
-  propagatedBuildInputs = [ bison flex postgresql ];
+  propagatedBuildInputs = [bison flex postgresql];
 
   preConfigure = ''
     # Due to https://github.com/NixOS/nixpkgs/issues/8567 we cannot rely on
@@ -39,8 +50,8 @@ stdenv.mkDerivation rec {
       store historical records of the ledger and participate in consensus.
     '';
     homepage = "https://www.stellar.org/";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [];
     license = licenses.asl20;
   };
 }

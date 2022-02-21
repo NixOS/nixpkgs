@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchzip }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "migu";
   version = "20150712";
@@ -37,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "A high-quality Japanese font based on modified M+ fonts and IPA fonts";
     homepage = "http://mix-mplus-ipa.osdn.jp/migu/";
     license = licenses.ipa;
-    maintainers = [ maintainers.mikoim ];
+    maintainers = [maintainers.mikoim];
   };
 }

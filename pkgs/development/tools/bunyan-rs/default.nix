@@ -1,8 +1,8 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "bunyan-rs";
   version = "0.1.7";
@@ -19,8 +19,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A CLI to pretty print logs in bunyan format (Rust port of the original JavaScript bunyan CLI)";
     homepage = "https://github.com/LukeMathWalker/bunyan";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ netcrns ];
+    license = with licenses; [asl20 mit];
+    maintainers = with maintainers; [netcrns];
     mainProgram = "bunyan";
   };
 }

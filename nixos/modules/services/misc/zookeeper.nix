@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.zookeeper;
 
   zookeeperConfig = ''
@@ -20,9 +22,7 @@ let
       (pkgs.writeTextDir "log4j.properties" cfg.logging)
     ];
   };
-
 in {
-
   options.services.zookeeper = {
     enable = mkOption {
       description = "Whether to enable Zookeeper.";
@@ -94,9 +94,9 @@ in {
 
     extraCmdLineOptions = mkOption {
       description = "Extra command line options for the Zookeeper launcher.";
-      default = [ "-Dcom.sun.management.jmxremote" "-Dcom.sun.management.jmxremote.local.only=true" ];
+      default = ["-Dcom.sun.management.jmxremote" "-Dcom.sun.management.jmxremote.local.only=true"];
       type = types.listOf types.str;
-      example = [ "-Djava.net.preferIPv4Stack=true" "-Dcom.sun.management.jmxremote" "-Dcom.sun.management.jmxremote.local.only=true" ];
+      example = ["-Djava.net.preferIPv4Stack=true" "-Dcom.sun.management.jmxremote" "-Dcom.sun.management.jmxremote.local.only=true"];
     };
 
     preferIPv4 = mkOption {
@@ -113,9 +113,7 @@ in {
       defaultText = literalExpression "pkgs.zookeeper";
       type = types.package;
     };
-
   };
-
 
   config = mkIf cfg.enable {
     environment.systemPackages = [cfg.package];
@@ -127,8 +125,8 @@ in {
 
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.jre}/bin/java \

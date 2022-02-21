@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.ecs-agent;
 in {
   options.services.ecs-agent = {
@@ -29,8 +31,8 @@ in {
 
     systemd.services.ecs-agent = {
       inherit (cfg.package.meta) description;
-      after    = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       environment = cfg.extra-environment;
 

@@ -1,30 +1,30 @@
-{ stdenv
-, fetchFromGitHub
-, coreutils
-}:
-
-let
+{
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+}: let
   yara = fetchFromGitHub {
     owner = "avast-tl";
     repo = "yara";
     rev = "ea101c5856941f39cad2db3012f2660d1d5c8b65";
     sha256 = "033ssx2hql5k4pv9si043s3mjq2b748ymjzif8pg6rdwh260faky";
   };
-in stdenv.mkDerivation rec {
-  # only fetches the yaracpp source patched to work with a local yara clone,
-  # does not build anything
-  pname = "yaracpp-src";
-  version = "2018-10-09";
-  rev = "b92bde0e59e3b75bc445227e04b71105771dee8b"; # as specified in retdec/deps/yaracpp/CMakeLists.txt
+in
+  stdenv.mkDerivation rec {
+    # only fetches the yaracpp source patched to work with a local yara clone,
+    # does not build anything
+    pname = "yaracpp-src";
+    version = "2018-10-09";
+    rev = "b92bde0e59e3b75bc445227e04b71105771dee8b"; # as specified in retdec/deps/yaracpp/CMakeLists.txt
 
-  src = fetchFromGitHub {
-    inherit rev;
-    owner = "avast-tl";
-    repo = "yaracpp";
-    sha256 = "0fan7q79j7s3bjmhsd2nw6sqyi14xgikn7mr2p4nj87lick5l4a2";
-  };
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "avast-tl";
+      repo = "yaracpp";
+      sha256 = "0fan7q79j7s3bjmhsd2nw6sqyi14xgikn7mr2p4nj87lick5l4a2";
+    };
 
-  postPatch = ''
+    postPatch = ''
       # check if our version of yara is the same version that upstream expects
       echo "Checking version of yara"
       expected_rev="$( sed -n -e 's|.*URL https://github.com/.*/archive/\(.*\)\.zip.*|\1|p' "deps/CMakeLists.txt" )"
@@ -40,10 +40,10 @@ in stdenv.mkDerivation rec {
       sed -i -e 's|CONFIGURE_COMMAND ""|CONFIGURE_COMMAND COMMAND ${coreutils}/bin/chmod -R u+w .|' "deps/CMakeLists.txt"
     '';
 
-  buildPhase = "# do nothing";
-  configurePhase = "# do nothing";
-  installPhase = ''
-    mkdir -p "$out"
-    cp -r * "$out"
-  '';
-}
+    buildPhase = "# do nothing";
+    configurePhase = "# do nothing";
+    installPhase = ''
+      mkdir -p "$out"
+      cp -r * "$out"
+    '';
+  }

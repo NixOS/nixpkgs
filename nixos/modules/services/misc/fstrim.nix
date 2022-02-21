@@ -1,15 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.fstrim;
-
 in {
-
   options = {
-
     services.fstrim = {
       enable = mkEnableOption "periodic SSD TRIM of mounted partitions in background";
 
@@ -26,21 +24,18 @@ in {
         '';
       };
     };
-
   };
 
   config = mkIf cfg.enable {
-
-    systemd.packages = [ pkgs.util-linux ];
+    systemd.packages = [pkgs.util-linux];
 
     systemd.timers.fstrim = {
       timerConfig = {
         OnCalendar = cfg.interval;
       };
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
     };
-
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = with maintainers; [];
 }

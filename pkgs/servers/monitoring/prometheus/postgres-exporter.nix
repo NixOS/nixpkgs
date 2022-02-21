@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "postgres_exporter";
   version = "0.10.1";
@@ -15,12 +19,12 @@ buildGoModule rec {
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) postgres; };
+  passthru.tests = {inherit (nixosTests.prometheus-exporters) postgres;};
 
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "A Prometheus exporter for PostgreSQL";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz globin willibutz ma27 ];
+    maintainers = with maintainers; [fpletz globin willibutz ma27];
   };
 }

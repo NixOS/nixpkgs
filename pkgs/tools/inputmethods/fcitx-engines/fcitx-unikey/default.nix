@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, cmake, fcitx, gettext, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  fcitx,
+  gettext,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "fcitx-unikey";
   version = "0.2.5";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "063vc29v7ycaai98v3z4q319sv9sm91my17pmhblw1vifxnw02wf";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ fcitx gettext ];
+  nativeBuildInputs = [cmake pkg-config];
+  buildInputs = [fcitx gettext];
 
   NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
@@ -23,12 +30,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-unikey";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
-    description   = "Fcitx wrapper for unikey";
-    license       = licenses.gpl3Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/fcitx/fcitx-unikey";
+    downloadPage = "http://download.fcitx-im.org/fcitx-table-other/";
+    description = "Fcitx wrapper for unikey";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ericsagnes];
   };
-
 }

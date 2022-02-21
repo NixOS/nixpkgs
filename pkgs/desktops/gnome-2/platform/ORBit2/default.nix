@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libIDL, libintl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  libIDL,
+  libintl,
+}:
 stdenv.mkDerivation rec {
   name = "ORBit2-${minVer}.19";
   minVer = "2.14";
@@ -9,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0l3mhpyym9m5iz09fz0rgiqxl2ym6kpkwpsp1xrr4aa80nlh1jam";
   };
 
-  nativeBuildInputs = [ pkg-config libintl ];
-  propagatedBuildInputs = [ glib libIDL ];
+  nativeBuildInputs = [pkg-config libintl];
+  propagatedBuildInputs = [glib libIDL];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   preBuild = ''
     sed 's/-DG_DISABLE_DEPRECATED//' -i linc2/src/Makefile
@@ -31,10 +38,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    homepage    = "https://developer-old.gnome.org/ORBit2/";
+    homepage = "https://developer-old.gnome.org/ORBit2/";
     description = "A CORBA 2.4-compliant Object Request Broker";
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [lovek323];
 
     longDescription = ''
       ORBit2 is a CORBA 2.4-compliant Object Request Broker (ORB) featuring

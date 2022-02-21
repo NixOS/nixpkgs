@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libpng }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpng,
+}:
 stdenv.mkDerivation rec {
   pname = "pngtoico";
   version = "1.0";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i s,/usr/local,$out, Makefile
   '';
 
-  buildInputs = [ libpng ];
+  buildInputs = [libpng];
 
   meta = {
     homepage = "https://www.kernel.org/pub/software/graphics/pngtoico/";

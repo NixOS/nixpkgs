@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, pcsclite , libusb-compat-0_1, IOKit }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pcsclite,
+  libusb-compat-0_1,
+  IOKit,
+}:
 stdenv.mkDerivation {
   version = "1.7.11";
   pname = "libacr38u";
@@ -11,8 +18,9 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcsclite libusb-compat-0_1 ]
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [pcsclite libusb-compat-0_1]
     ++ lib.optional stdenv.isDarwin IOKit;
 
   preBuild = ''
@@ -36,7 +44,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://www.acs.com.hk";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ berce ];
+    maintainers = with maintainers; [berce];
     platforms = with platforms; unix;
   };
 }

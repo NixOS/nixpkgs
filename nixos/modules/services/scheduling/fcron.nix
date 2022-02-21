@@ -1,42 +1,41 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.fcron;
 
-  queuelen = if cfg.queuelen == null then "" else "-q ${toString cfg.queuelen}";
+  queuelen =
+    if cfg.queuelen == null
+    then ""
+    else "-q ${toString cfg.queuelen}";
 
   # Duplicate code, also found in cron.nix. Needs deduplication.
-  systemCronJobs =
-    ''
-      SHELL=${pkgs.bash}/bin/bash
-      PATH=${config.system.path}/bin:${config.system.path}/sbin
-      ${optionalString (config.services.cron.mailto != null) ''
+  systemCronJobs = ''
+    SHELL=${pkgs.bash}/bin/bash
+    PATH=${config.system.path}/bin:${config.system.path}/sbin
+    ${
+      optionalString (config.services.cron.mailto != null) ''
         MAILTO="${config.services.cron.mailto}"
-      ''}
-      NIX_CONF_DIR=/etc/nix
-      ${lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
-    '';
+      ''
+    }
+    NIX_CONF_DIR=/etc/nix
+    ${lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
+  '';
 
-  allowdeny = target: users:
-    { source = pkgs.writeText "fcron.${target}" (concatStringsSep "\n" users);
-      target = "fcron.${target}";
-      mode = "644";
-      gid = config.ids.gids.fcron;
-    };
-
-in
-
-{
-
+  allowdeny = target: users: {
+    source = pkgs.writeText "fcron.${target}" (concatStringsSep "\n" users);
+    target = "fcron.${target}";
+    mode = "644";
+    gid = config.ids.gids.fcron;
+  };
+in {
   ###### interface
 
   options = {
-
     services.fcron = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -45,7 +44,7 @@ in
 
       allow = mkOption {
         type = types.listOf types.str;
-        default = [ "all" ];
+        default = ["all"];
         description = ''
           Users allowed to use fcrontab and fcrondyn (one name per
           line, <literal>all</literal> for everyone).
@@ -76,46 +75,48 @@ in
         description = ''The "system" crontab contents.'';
       };
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     services.fcron.systab = systemCronJobs;
 
     environment.etc = listToAttrs
-      (map (x: { name = x.target; value = x; })
-      [ (allowdeny "allow" (cfg.allow))
-        (allowdeny "deny" cfg.deny)
-        # see man 5 fcron.conf
-        { source =
-            let
-              isSendmailWrapped =
-                lib.hasAttr "sendmail" config.security.wrappers;
-              sendmailPath =
-                if isSendmailWrapped then "/run/wrappers/bin/sendmail"
-                else "${config.system.path}/bin/sendmail";
-            in
-            pkgs.writeText "fcron.conf" ''
-              fcrontabs   =       /var/spool/fcron
-              pidfile     =       /run/fcron.pid
-              fifofile    =       /run/fcron.fifo
-              fcronallow  =       /etc/fcron.allow
-              fcrondeny   =       /etc/fcron.deny
-              shell       =       /bin/sh
-              sendmail    =       ${sendmailPath}
-              editor      =       ${pkgs.vim}/bin/vim
-            '';
-          target = "fcron.conf";
-          gid = config.ids.gids.fcron;
-          mode = "0644";
-        }
-      ]);
+    (map (x: {
+      name = x.target;
+      value = x;
+    })
+    [
+      (allowdeny "allow" (cfg.allow))
+      (allowdeny "deny" cfg.deny)
+      # see man 5 fcron.conf
+      {
+        source = let
+          isSendmailWrapped =
+            lib.hasAttr "sendmail" config.security.wrappers;
+          sendmailPath =
+            if isSendmailWrapped
+            then "/run/wrappers/bin/sendmail"
+            else "${config.system.path}/bin/sendmail";
+        in
+          pkgs.writeText "fcron.conf" ''
+            fcrontabs   =       /var/spool/fcron
+            pidfile     =       /run/fcron.pid
+            fifofile    =       /run/fcron.fifo
+            fcronallow  =       /etc/fcron.allow
+            fcrondeny   =       /etc/fcron.deny
+            shell       =       /bin/sh
+            sendmail    =       ${sendmailPath}
+            editor      =       ${pkgs.vim}/bin/vim
+          '';
+        target = "fcron.conf";
+        gid = config.ids.gids.fcron;
+        mode = "0644";
+      }
+    ]);
 
-    environment.systemPackages = [ pkgs.fcron ];
+    environment.systemPackages = [pkgs.fcron];
     users.users.fcron = {
       uid = config.ids.uids.fcron;
       home = "/var/spool/fcron";
@@ -147,9 +148,9 @@ in
     };
     systemd.services.fcron = {
       description = "fcron daemon";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
-      path = [ pkgs.fcron ];
+      path = [pkgs.fcron];
 
       preStart = ''
         install \

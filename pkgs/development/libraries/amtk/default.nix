@@ -1,15 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, gtk3
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, gnome
-, dbus
-, xvfb-run
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk3,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  gnome,
+  dbus,
+  xvfb-run,
 }:
-
 stdenv.mkDerivation rec {
   pname = "amtk";
   version = "5.3.1";
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Amtk";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
-    maintainers = [ maintainers.manveru ];
+    maintainers = [maintainers.manveru];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

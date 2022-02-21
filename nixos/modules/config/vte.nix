@@ -1,27 +1,22 @@
 # VTE
-
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   vteInitSnippet = ''
     # Show current working directory in VTE terminals window title.
     # Supports both bash and zsh, requires interactive shell.
     . ${pkgs.vte}/etc/profile.d/vte.sh
   '';
-
-in
-
-{
-
+in {
   meta = {
     maintainers = teams.gnome.members;
   };
 
   options = {
-
     programs.bash.vteIntegration = mkOption {
       default = false;
       type = types.bool;
@@ -41,7 +36,6 @@ in
         across terminals.
       '';
     };
-
   };
 
   config = mkMerge [

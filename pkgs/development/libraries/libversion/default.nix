@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, lib }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "libversion";
   version = "3.0.1";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "13x5djdpv6aryxsbw6a3b6vwzi9f4aa3gn9dqb7axzppggayawyk";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   cmakeFlags = lib.optional stdenv.isDarwin [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
@@ -26,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Advanced version string comparison library";
     homepage = "https://github.com/repology/libversion";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ryantm ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [ryantm];
     platforms = platforms.unix;
   };
 }

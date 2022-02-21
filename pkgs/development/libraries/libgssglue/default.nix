@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libkrb5 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libkrb5,
+}:
 stdenv.mkDerivation rec {
   pname = "libgssglue";
   version = "0.4";
@@ -25,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Exports a gssapi interface which calls other random gssapi libraries";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ corngood ];
+    maintainers = with maintainers; [corngood];
   };
 }

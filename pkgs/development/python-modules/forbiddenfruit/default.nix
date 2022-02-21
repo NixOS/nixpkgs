@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
 }:
-
 buildPythonPackage rec {
   version = "0.1.4";
   pname = "forbiddenfruit";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "16chhrxbbmg6lfbzm532fq0v00z8qihcsj0kg2b5jlgnb6qijwn8";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
   preBuild = ''
     export FFRUIT_EXTENSION="true";
@@ -32,5 +32,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/clarete/forbiddenfruit";
     license = licenses.mit;
   };
-
 }

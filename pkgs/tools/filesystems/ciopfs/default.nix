@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, glib, attr }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  glib,
+  attr,
+}:
 stdenv.mkDerivation rec {
   pname = "ciopfs";
   version = "0.4";
@@ -9,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0sr9i9b3qfwbfvzvk00yrrg3x2xqk1njadbldkvn7hwwa4z5bm9l";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse glib attr ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [fuse glib attr];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = ["DESTDIR=$(out)" "PREFIX="];
 
   meta = {
     homepage = "https://www.brain-dump.org/projects/ciopfs/";

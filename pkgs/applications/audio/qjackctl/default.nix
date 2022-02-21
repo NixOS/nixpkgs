@@ -1,9 +1,19 @@
-{ lib, mkDerivation, fetchFromGitHub
-, pkg-config, cmake, alsa-lib, libjack2, dbus, qtbase, qttools, qtx11extras
-# Enable jack session support
-, jackSession ? false
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  alsa-lib,
+  libjack2,
+  dbus,
+  qtbase,
+  qttools,
+  qtx11extras
+  # Enable jack session support
+  ,
+  jackSession ? false,
 }:
-
 mkDerivation rec {
   version = "0.9.6";
   pname = "qjackctl";
@@ -40,7 +50,7 @@ mkDerivation rec {
     description = "A Qt application to control the JACK sound server daemon";
     homepage = "https://github.com/rncbc/qjackctl";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
   };
 }

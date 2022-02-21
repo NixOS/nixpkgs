@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, vala }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  vala,
+}:
 stdenv.mkDerivation rec {
   pname = "tiramisu";
   version = "2.0.20211107";
@@ -11,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "1n1x1ybbwbanibw7b90k7v4cadagl41li17hz2l8s2sapacvq3mw";
   };
 
-  buildInputs = [ glib ];
+  buildInputs = [glib];
 
-  nativeBuildInputs = [ pkg-config vala ];
+  nativeBuildInputs = [pkg-config vala];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Desktop notifications, the UNIX way";
@@ -27,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Sweets/tiramisu";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wishfort36 fortuneteller2k ];
+    maintainers = with maintainers; [wishfort36 fortuneteller2k];
   };
 }

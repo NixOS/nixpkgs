@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "endlessh";
   version = "1.1";
@@ -11,14 +14,14 @@ stdenv.mkDerivation rec {
     sha256 = "0ziwr8j1frsp3dajr8h5glkm1dn5cci404kazz5w1jfrp0736x68";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "SSH tarpit that slowly sends an endless banner";
     homepage = "https://github.com/skeeto/endlessh";
     changelog = "https://github.com/skeeto/endlessh/releases/tag/${version}";
     license = licenses.unlicense;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
     platforms = platforms.unix;
   };
 }

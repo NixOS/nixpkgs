@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchPypi
-, filelock
-, idna
-, platformdirs
-, pytestCheckHook
-, pythonOlder
-, uritools
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  filelock,
+  idna,
+  platformdirs,
+  pytestCheckHook,
+  pythonOlder,
+  uritools,
 }:
-
 buildPythonPackage rec {
   pname = "urlextract";
   version = "1.5.0";
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Collects and extracts URLs from given text";
     homepage = "https://github.com/lipoja/URLExtract";
     license = licenses.mit;
-    maintainers = with maintainers; [ ilkecan ];
+    maintainers = with maintainers; [ilkecan];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "wafw00f";
   version = "2.1.0";
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to identify and fingerprint Web Application Firewalls (WAF)";
     homepage = "https://github.com/EnableSecurity/wafw00f";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

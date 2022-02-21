@@ -1,13 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "power-profiles-daemon";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ mvnetbiz ];
+    maintainers = [mvnetbiz];
   };
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     services.power-profiles-daemon.enable = true;
-    environment.systemPackages = [ pkgs.glib ];
+    environment.systemPackages = [pkgs.glib];
   };
 
   testScript = ''

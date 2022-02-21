@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, ncurses, pkg-config, glib, loudmouth, libotr
-, gpgme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  openssl,
+  ncurses,
+  pkg-config,
+  glib,
+  loudmouth,
+  libotr,
+  gpgme,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mcabber";
   version = "1.1.2";
@@ -21,8 +30,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ncurses glib loudmouth libotr gpgme ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [openssl ncurses glib loudmouth libotr gpgme];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -36,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "http://mcabber.com/";
     description = "Small Jabber console client";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
     platforms = with platforms; linux;
     downloadPage = "http://mcabber.com/files/";
   };

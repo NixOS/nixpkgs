@@ -1,6 +1,13 @@
-{ lib, stdenv, file, fetchurl, makeWrapper,
-  autoPatchelfHook, jsoncpp, libpulseaudio }:
-let
+{
+  lib,
+  stdenv,
+  file,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  jsoncpp,
+  libpulseaudio,
+}: let
   versionMajor = "7.8";
   versionMinor = "2";
   versionBuild_x86_64 = "1";
@@ -11,18 +18,19 @@ in
     version = "${versionMajor}.${versionMinor}";
 
     src =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux"
+      then
         fetchurl {
           url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_x86_64}_x86_64.tar.gz";
           sha256 = "sha256-DZtEt3zBhkvANlCvDwhFY3X+46zzhmKrm6zKPA99w7o=";
         }
-      else if stdenv.hostPlatform.system == "i686-linux" then
+      else if stdenv.hostPlatform.system == "i686-linux"
+      then
         fetchurl {
           url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_i686}_i686.tar.gz";
           sha256 = "sha256-T38lOp4R1CoU6TZYeYcZkeZUi9l613LxLUZaEScOcHg=";
         }
-      else
-        throw "NoMachine client is not supported on ${stdenv.hostPlatform.system}";
+      else throw "NoMachine client is not supported on ${stdenv.hostPlatform.system}";
 
     # nxusb-legacy is only needed for kernel versions < 3
     postUnpack = ''
@@ -36,8 +44,8 @@ in
       rm NX/bin/nxusbd-legacy NX/lib/libnxusb-legacy.so
     '';
 
-    nativeBuildInputs = [ file makeWrapper autoPatchelfHook ];
-    buildInputs = [ jsoncpp libpulseaudio ];
+    nativeBuildInputs = [file makeWrapper autoPatchelfHook];
+    buildInputs = [jsoncpp libpulseaudio];
 
     installPhase = ''
       rm bin/nxplayer bin/nxclient
@@ -86,7 +94,7 @@ in
         url = "https://www.nomachine.com/licensing-7";
         free = false;
       };
-      maintainers = with maintainers; [ talyz ];
-      platforms = [ "x86_64-linux" "i686-linux" ];
+      maintainers = with maintainers; [talyz];
+      platforms = ["x86_64-linux" "i686-linux"];
     };
   }

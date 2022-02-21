@@ -1,5 +1,12 @@
-{lib, stdenv, fetchFromGitHub, unzip, which, python3, perl}:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  which,
+  python3,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "hisat2";
   version = "2.2.1";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lmzdhzjkvxw7n5w40pbv5fgzd4cz0f9pxczswn3d4cr0k10k754";
   };
 
-  nativeBuildInputs = [ unzip which ];
-  buildInputs = [ python3 perl ];
+  nativeBuildInputs = [unzip which];
+  buildInputs = [python3 perl];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -39,8 +46,7 @@ stdenv.mkDerivation rec {
     description = "Graph based aligner";
     license = licenses.gpl3Plus;
     homepage = "https://daehwankimlab.github.io/hisat2/";
-    maintainers = with maintainers; [ jbedo ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [jbedo];
+    platforms = ["x86_64-linux" "i686-linux"];
   };
-
 }

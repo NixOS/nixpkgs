@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, enableShared ? !stdenv.hostPlatform.isStatic
-}:
-
-let
-  generic = { version, sha256, patches ? [ ] }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+}: let
+  generic = {
+    version,
+    sha256,
+    patches ? [],
+  }:
     stdenv.mkDerivation {
       pname = "fmt";
       inherit version;
 
-      outputs = [ "out" "dev" ];
+      outputs = ["out" "dev"];
 
       src = fetchFromGitHub {
         owner = "fmtlib";
@@ -19,10 +26,14 @@ let
 
       inherit patches;
 
-      nativeBuildInputs = [ cmake ];
+      nativeBuildInputs = [cmake];
 
       cmakeFlags = [
-        "-DBUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
+        "-DBUILD_SHARED_LIBS=${
+          if enableShared
+          then "ON"
+          else "OFF"
+        }"
         "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
       ];
 
@@ -36,13 +47,12 @@ let
         '';
         homepage = "http://fmtlib.net/";
         downloadPage = "https://github.com/fmtlib/fmt/";
-        maintainers = [ maintainers.jdehaas ];
+        maintainers = [maintainers.jdehaas];
         license = licenses.mit;
         platforms = platforms.all;
       };
     };
-in
-{
+in {
   fmt_7 = generic {
     version = "7.1.3";
     sha256 = "08hyv73qp2ndbs0isk8pspsphdzz5qh8czl3wgyxy3mmif9xdg29";

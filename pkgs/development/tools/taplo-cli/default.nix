@@ -1,5 +1,12 @@
-{ lib, rustPlatform, fetchCrate, stdenv, pkg-config, openssl, Security }:
-
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  pkg-config,
+  openssl,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "taplo-cli";
   version = "0.5.0";
@@ -13,14 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
 
-  buildInputs = lib.optional stdenv.isLinux openssl
+  buildInputs =
+    lib.optional stdenv.isLinux openssl
     ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "A TOML toolkit written in Rust";
     homepage = "https://taplo.tamasfe.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
     mainProgram = "taplo";
   };
 }

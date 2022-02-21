@@ -1,12 +1,12 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_cstruct
-, mirage-profile
-, cstruct
-, ounit
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_cstruct,
+  mirage-profile,
+  cstruct,
+  ounit,
 }:
-
 buildDunePackage rec {
   pname = "shared-memory-ring";
   version = "3.1.0";
@@ -36,6 +36,6 @@ buildDunePackage rec {
     description = "Shared memory rings for RPC and bytestream communications";
     license = licenses.isc;
     homepage = "https://github.com/mirage/shared-memory-ring";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

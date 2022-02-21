@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, jre, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "smc";
   version = "6.6.3";
@@ -45,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "http://smc.sourceforge.net/";
     license = licenses.mpl11;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

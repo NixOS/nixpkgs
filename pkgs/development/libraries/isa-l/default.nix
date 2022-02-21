@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, nasm }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  nasm,
+}:
 stdenv.mkDerivation rec {
   pname = "isa-l";
   version = "2.30.0";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-AAuSdDQfDW4QFRu0jHwCZ+ZCSjoVqlQiSW1OOFye1Rs=";
   };
 
-  nativeBuildInputs = [ nasm autoreconfHook ];
+  nativeBuildInputs = [nasm autoreconfHook];
 
   preConfigure = ''
     export AS=nasm
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "A collection of optimised low-level functions targeting storage applications";
     license = licenses.bsd3;
     homepage = "https://github.com/intel/isa-l";
-    maintainers = with maintainers; [ jbedo ];
+    maintainers = with maintainers; [jbedo];
     platforms = platforms.all;
   };
 }

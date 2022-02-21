@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, gtk3
-, gtksourceview
-, gtkspell3
-, webkitgtk
-, pandoc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  gtk3,
+  gtksourceview,
+  gtkspell3,
+  webkitgtk,
+  pandoc,
 }:
-
 stdenv.mkDerivation rec {
   pname = "marker";
   version = "2020.04.04.2";
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://fabiocolacio.github.io/Marker/";
     description = "Markdown editor for the Linux desktop";
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [trepetti];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${version}";

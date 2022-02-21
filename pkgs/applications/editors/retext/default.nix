@@ -1,14 +1,15 @@
-{ lib
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
-, buildEnv
-, aspellDicts
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  buildEnv,
+  aspellDicts
   # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
   # available.
-, enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]
+  ,
+  enchantAspellDicts ? with aspellDicts; [en en-computers en-science],
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "retext";
   version = "7.2.3";
@@ -43,10 +44,12 @@ python3.pkgs.buildPythonApplication rec {
   postInstall = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     makeWrapperArgs+=(
-      "--set" "ASPELL_CONF" "dict-dir ${buildEnv {
+      "--set" "ASPELL_CONF" "dict-dir ${
+      buildEnv {
         name = "aspell-all-dicts";
         paths = map (path: "${path}/lib/aspell") enchantAspellDicts;
-      }}"
+      }
+    }"
     )
 
     substituteInPlace $out/share/applications/me.mitya57.ReText.desktop \
@@ -64,7 +67,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Editor for Markdown and reStructuredText";
     homepage = "https://github.com/retext-project/retext/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ klntsky ];
+    maintainers = with maintainers; [klntsky];
     platforms = platforms.unix;
   };
 }

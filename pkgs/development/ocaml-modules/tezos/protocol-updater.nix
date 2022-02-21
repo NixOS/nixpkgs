@@ -1,12 +1,12 @@
-{ lib
-, ocaml
-, buildDunePackage
-, tezos-stdlib
-, tezos-protocol-compiler
-, tezos-shell-context
-, lwt-exit
+{
+  lib,
+  ocaml,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-protocol-compiler,
+  tezos-shell-context,
+  lwt-exit,
 }:
-
 buildDunePackage {
   pname = "tezos-protocol-updater";
   inherit (tezos-stdlib) version useDune2;
@@ -20,7 +20,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: economic-protocol dynamic loading for `tezos-node`";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos: economic-protocol dynamic loading for `tezos-node`";
+    };
 }

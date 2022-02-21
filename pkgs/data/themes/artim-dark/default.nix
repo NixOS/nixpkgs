@@ -1,12 +1,15 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
-
-stdenvNoCC.mkDerivation rec{
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
+stdenvNoCC.mkDerivation rec {
   pname = "artim-dark";
   version = "unstable-2021-12-29";
 
   src = fetchFromGitHub {
-    owner="Mrcuve0";
-    repo="Aritim-Dark";
+    owner = "Mrcuve0";
+    repo = "Aritim-Dark";
     rev = "99cd330a1ab4814260e28f15431e3338a1103668";
     hash = "sha256-xGnw5KpXbVyDdTuAkav1Hec6bitpZdPzZk0xv7WHTdY=";
   };
@@ -28,8 +31,8 @@ stdenvNoCC.mkDerivation rec{
   meta = {
     description = "Dark theme deeply inspired by the Ayu Dark color palette";
     homepage = "https://github.com/Mrcuve0/Aritim-Dark";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; [gpl3Only];
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.pasqui23 ];
+    maintainers = [lib.maintainers.pasqui23];
   };
 }

@@ -1,5 +1,13 @@
-{ fetchurl, lib, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  erlang,
+  cl,
+  libGL,
+  libGLU,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "wings";
   version = "2.2.4";
@@ -22,7 +30,7 @@ stdenv.mkDerivation rec {
     find . -type f -name "*.[eh]rl" -exec sed -i 's,wings/intl_tools/,../intl_tools/,' {} \;
   '';
 
-  buildInputs = [ erlang cl libGL libGLU ];
+  buildInputs = [erlang cl libGL libGLU];
 
   # I did not test the *cl* part. I added the -pa just by imitation.
   installPhase = ''
@@ -41,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.wings3d.com/";
     description = "Subdivision modeler inspired by Nendo and Mirai from Izware";
     license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
   };
 }

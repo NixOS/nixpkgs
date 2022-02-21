@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, sage-src
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  sage-src,
+  sphinx,
 }:
-
 buildPythonPackage rec {
   version = src.version;
   pname = "sage-docbuild";

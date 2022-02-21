@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, binutils-unwrapped, patchelf, asterisk }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  binutils-unwrapped,
+  patchelf,
+  asterisk,
+}:
 stdenv.mkDerivation rec {
   pname = "asterisk-module-sccp";
   version = "4.3.4";
@@ -10,11 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YGHK4A03Ba/tnVTnu9VuhIy/xQ5C/7ZX8h9mxqKsnZI=";
   };
 
-  nativeBuildInputs = [ patchelf ];
+  nativeBuildInputs = [patchelf];
 
-  configureFlags = [ "--with-asterisk=${asterisk}" ];
+  configureFlags = ["--with-asterisk=${asterisk}"];
 
-  installFlags = [ "DESTDIR=/build/dest" "DATAROOTDIR=/build/dest" ];
+  installFlags = ["DESTDIR=/build/dest" "DATAROOTDIR=/build/dest"];
 
   postInstall = ''
     mkdir -p "$out"
@@ -23,12 +30,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     p="$out/lib/asterisk/modules/chan_sccp.so"
-    patchelf --set-rpath "$p:${lib.makeLibraryPath [ binutils-unwrapped ]}" "$p"
+    patchelf --set-rpath "$p:${lib.makeLibraryPath [binutils-unwrapped]}" "$p"
   '';
 
   meta = with lib; {
     description = "Replacement for the SCCP channel driver in Asterisk";
     license = licenses.gpl1Only;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [das_j];
   };
 }

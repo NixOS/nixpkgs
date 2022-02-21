@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mox3
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mox3,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "aprslib";
   version = "0.7.0";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aprslib" ];
+  pythonImportsCheck = ["aprslib"];
 
   meta = with lib; {
     description = "Module for accessing APRS-IS and parsing APRS packets";
     homepage = "https://github.com/rossengeorgiev/aprs-python";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

@@ -1,6 +1,9 @@
-{ config, lib, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.jenkinsSlave;
   masterCfg = config.services.jenkins;
 in {

@@ -1,11 +1,11 @@
-{ lib
-, qt5
-, autoPatchelfHook
-, unzip
-, fetchzip
-, portaudio
+{
+  lib,
+  qt5,
+  autoPatchelfHook,
+  unzip,
+  fetchzip,
+  portaudio,
 }:
-
 qt5.mkDerivation {
   pname = "soundwire";
   version = "3.0";
@@ -33,7 +33,7 @@ qt5.mkDerivation {
   meta = with lib; {
     description = "Turn your Android device into wireless headphones / wireless speaker";
     homepage = "https://georgielabs.net/";
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [mkg20001];
     license = licenses.unfree;
   };
 }

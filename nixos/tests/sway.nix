@@ -1,17 +1,21 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "sway";
   meta = {
-    maintainers = with lib.maintainers; [ primeos synthetica ];
+    maintainers = with lib.maintainers; [primeos synthetica];
   };
 
-  machine = { config, ... }: {
+  machine = {config, ...}: {
     # Automatically login on tty1 as a normal user:
-    imports = [ ./common/user-account.nix ];
+    imports = [./common/user-account.nix];
     services.getty.autologinUser = "alice";
 
     environment = {
       # For glinfo and wayland-info:
-      systemPackages = with pkgs; [ mesa-demos wayland-utils alacritty ];
+      systemPackages = with pkgs; [mesa-demos wayland-utils alacritty];
       # Use a fixed SWAYSOCK path (for swaymsg):
       variables = {
         "SWAYSOCK" = "/tmp/sway-ipc.sock";
@@ -29,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
 
       # To help with OCR:
-      etc."xdg/foot/foot.ini".text = lib.generators.toINI { } {
+      etc."xdg/foot/foot.ini".text = lib.generators.toINI {} {
         main = {
           font = "inconsolata:size=14";
         };
@@ -41,7 +45,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
-    fonts.fonts = [ pkgs.inconsolata ];
+    fonts.fonts = [pkgs.inconsolata];
 
     # Automatically configure and start Sway when logging in on tty1:
     programs.bash.loginShellInit = ''
@@ -62,12 +66,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     programs.gnupg.agent.enable = true;
 
     # Need to switch to a different GPU driver than the default one (-vga std) so that Sway can launch:
-    virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
+    virtualisation.qemu.options = ["-vga none -device virtio-gpu-pci"];
   };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: ''
+  testScript = {nodes, ...}: ''
     import shlex
 
     def swaymsg(command: str, succeed=True):

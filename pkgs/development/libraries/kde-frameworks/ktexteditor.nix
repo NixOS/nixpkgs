@@ -1,18 +1,39 @@
 {
   mkDerivation,
-  extra-cmake-modules, perl,
-  karchive, kconfig, kguiaddons, ki18n, kiconthemes, kio, kparts, libgit2,
-  qtscript, qtxmlpatterns, sonnet, syntax-highlighting, qtquickcontrols,
-  editorconfig-core-c
+  extra-cmake-modules,
+  perl,
+  karchive,
+  kconfig,
+  kguiaddons,
+  ki18n,
+  kiconthemes,
+  kio,
+  kparts,
+  libgit2,
+  qtscript,
+  qtxmlpatterns,
+  sonnet,
+  syntax-highlighting,
+  qtquickcontrols,
+  editorconfig-core-c,
 }:
-
 mkDerivation {
   name = "ktexteditor";
-  nativeBuildInputs = [ extra-cmake-modules perl ];
+  nativeBuildInputs = [extra-cmake-modules perl];
   buildInputs = [
-    karchive kconfig kguiaddons ki18n kiconthemes kio libgit2 qtscript
-    qtxmlpatterns sonnet syntax-highlighting qtquickcontrols
+    karchive
+    kconfig
+    kguiaddons
+    ki18n
+    kiconthemes
+    kio
+    libgit2
+    qtscript
+    qtxmlpatterns
+    sonnet
+    syntax-highlighting
+    qtquickcontrols
     editorconfig-core-c
   ];
-  propagatedBuildInputs = [ kparts ];
+  propagatedBuildInputs = [kparts];
 }

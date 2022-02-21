@@ -15,9 +15,8 @@
   ocl-icd,
   openssl,
   pkg-config,
-  cli11
+  cli11,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ethminer";
   version = "0.19.0";
@@ -32,17 +31,23 @@ stdenv.mkDerivation rec {
     };
 
   # NOTE: dbus is broken
-  cmakeFlags = [
-    "-DHUNTER_ENABLED=OFF"
-    "-DETHASHCUDA=ON"
-    "-DAPICORE=ON"
-    "-DETHDBUS=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
-  ] ++ (if cudaSupport then [
-    "-DCUDA_PROPAGATE_HOST_FLAGS=off"
-  ] else [
-    "-DETHASHCUDA=OFF" # on by default
-  ]);
+  cmakeFlags =
+    [
+      "-DHUNTER_ENABLED=OFF"
+      "-DETHASHCUDA=ON"
+      "-DAPICORE=ON"
+      "-DETHDBUS=OFF"
+      "-DCMAKE_BUILD_TYPE=Release"
+    ]
+    ++ (if cudaSupport
+    then
+      [
+        "-DCUDA_PROPAGATE_HOST_FLAGS=off"
+      ]
+    else
+      [
+        "-DETHASHCUDA=OFF" # on by default
+      ]);
 
   nativeBuildInputs = [
     cmake
@@ -50,19 +55,21 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    cli11
-    boost16x # 1.7x support is broken, see https://github.com/ethereum-mining/ethminer/issues/2393
-    opencl-headers
-    mesa
-    ethash
-    opencl-info
-    ocl-icd
-    openssl
-    jsoncpp
-  ] ++ lib.optionals cudaSupport [
-    cudatoolkit
-  ];
+  buildInputs =
+    [
+      cli11
+      boost16x # 1.7x support is broken, see https://github.com/ethereum-mining/ethminer/issues/2393
+      opencl-headers
+      mesa
+      ethash
+      opencl-info
+      ocl-icd
+      openssl
+      jsoncpp
+    ]
+    ++ lib.optionals cudaSupport [
+      cudatoolkit
+    ];
 
   patches = [
     # global context library is separated from libethash
@@ -80,8 +87,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Ethereum miner with OpenCL${lib.optionalString cudaSupport ", CUDA"} and stratum support";
     homepage = "https://github.com/ethereum-mining/ethminer";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ atemu ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [atemu];
     license = licenses.gpl3Only;
   };
 }

@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchzip
-, jre, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "epubcheck";
   version = "4.2.6";
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-f4r0ODKvZrl+YBcP2T9Z+zEuCyvQm9W7GNiLTr4p278=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   dontBuild = true;
 
@@ -34,8 +38,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/w3c/epubcheck";
     description = "Validation tool for EPUB";
-    license = with licenses; [ asl20 bsd3 mpl10 w3c ];
+    license = with licenses; [asl20 bsd3 mpl10 w3c];
     platforms = platforms.all;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, munge, lua,
-  libcap, perl, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  munge,
+  lua,
+  libcap,
+  perl,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "diod";
   version = "1.0.24";
@@ -16,12 +22,12 @@ stdenv.mkDerivation rec {
     sed -i -e '/sys\/types\.h>/a #include <sys/sysmacros.h>' diod/ops.c
   '';
 
-  buildInputs = [ munge lua libcap perl ncurses ];
+  buildInputs = [munge lua libcap perl ncurses];
 
   meta = with lib; {
     description = "An I/O forwarding server that implements a variant of the 9P protocol";
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms   = platforms.linux;
-    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [rnhmjoj];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

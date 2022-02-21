@@ -1,5 +1,8 @@
-{ lib, git, python3Packages }:
-
+{
+  lib,
+  git,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";
   version = "2.1.0";
@@ -37,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     description = "Manage the aggregation of git branches from different remotes to build a consolidated one";
     homepage = "https://github.com/acsone/git-aggregator";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [lourkeur];
     mainProgram = "gitaggregate";
   };
 }

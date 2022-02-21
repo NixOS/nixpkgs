@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, writeShellScript
-, curl
-, jq
-, common-updater-scripts
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
-
 stdenv.mkDerivation rec {
   pname = "blackfire";
   version = "2.5.2";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = writeShellScript "update-${pname}" ''
-      export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
+      export PATH="${lib.makeBinPath [curl jq common-updater-scripts]}"
       update-source-version "$UPDATE_NIX_ATTR_PATH" "$(curl https://blackfire.io/api/v1/releases | jq .cli --raw-output)"
     '';
   };
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Blackfire Profiler agent and client";
     homepage = "https://blackfire.io/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [jtojnar];
+    platforms = ["x86_64-linux"];
   };
 }

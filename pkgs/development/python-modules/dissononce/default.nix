@@ -1,5 +1,11 @@
-{ buildPythonPackage, fetchFromGitHub, lib, pytest, cryptography, transitions }:
-
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytest,
+  cryptography,
+  transitions,
+}:
 buildPythonPackage rec {
   pname = "dissononce";
   version = "0.34.3";
@@ -11,12 +17,12 @@ buildPythonPackage rec {
     sha256 = "0hn64qfr0d5npmza6rjyxwwp12k2z2y1ma40zpl104ghac6g3mbs";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
   checkPhase = ''
     HOME=$(mktemp -d) py.test tests/
   '';
 
-  propagatedBuildInputs = [ cryptography transitions ];
+  propagatedBuildInputs = [cryptography transitions];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/dissononce/";

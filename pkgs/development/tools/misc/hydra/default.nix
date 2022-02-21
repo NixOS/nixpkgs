@@ -1,6 +1,9 @@
-{ fetchFromGitHub, callPackage, nixVersions, nixosTests }:
-
 {
+  fetchFromGitHub,
+  callPackage,
+  nixVersions,
+  nixosTests,
+}: {
   hydra-unstable = callPackage ./common.nix {
     version = "2021-08-11";
     src = fetchFromGitHub {

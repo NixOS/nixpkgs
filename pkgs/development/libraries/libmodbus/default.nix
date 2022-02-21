@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libmodbus";
   version = "3.1.7";
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://libmodbus.org/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
   };
 }

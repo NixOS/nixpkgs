@@ -1,6 +1,10 @@
-{ stdenv, lib, fetchurl, unzip, makeWrapper }:
-
-let
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  makeWrapper,
+}: let
   # Gradle is a build system that bootstraps itself. This is what it actually
   # downloads in the bootstrap phase.
   gradleAllZip = fetchurl {
@@ -52,51 +56,55 @@ let
     '';
   };
 in
-stdenv.mkDerivation {
-  pname = "mobilesdk";
-  version = "8.3.2.GA";
+  stdenv.mkDerivation {
+    pname = "mobilesdk";
+    version = "8.3.2.GA";
 
-  src =
-    if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then
-      fetchurl {
-        url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-linux.zip";
-        sha256 = "04pfw21jrx9w259lphynwykqjk4c9hm0zix4d40s7mf8mmh3xdx9";
+    src =
+      if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+      then
+        fetchurl {
+          url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-linux.zip";
+          sha256 = "04pfw21jrx9w259lphynwykqjk4c9hm0zix4d40s7mf8mmh3xdx9";
+        }
+      else if stdenv.system == "x86_64-darwin"
+      then
+        fetchurl {
+          url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-osx.zip";
+          sha256 = "1zflq5hc96lrriw71ya623kkskkisi9yayg8qs03zimi0gksizxw";
+        }
+      else throw "Platform: ${stdenv.system} not supported!";
+
+    nativeBuildInputs = [makeWrapper unzip];
+
+    buildCommand = ''
+      mkdir -p $out
+      cd $out
+      unzip $src
+
+      # Rename ugly version number
+      cd mobilesdk/*
+      mv * 8.3.2.GA
+      cd *
+
+      # Patch bundled gradle build infrastructure to make shebangs work
+      patchShebangs android/templates/gradle
+
+      # Substitute the gradle-all zip URL by a local file to prevent downloads from happening while building an Android app
+      sed -i -e "s|distributionUrl=|#distributionUrl=|" android/templates/gradle/gradle/wrapper/gradle-wrapper.properties
+      cp ${gradleAllZip} android/templates/gradle/gradle/wrapper/gradle-4.1-all.zip
+      echo "distributionUrl=gradle-4.1-all.zip" >> android/templates/gradle/gradle/wrapper/gradle-wrapper.properties
+
+      # Patch maven central repository with our own local directory. This prevents the builder from downloading Maven artifacts
+      sed -i -e 's|mavenCentral()|maven { url "${fakeMavenRepo}" }|' android/templates/build/proguard.gradle
+
+      ${
+        lib.optionalString (stdenv.system == "x86_64-darwin") ''
+          # Patch the strip frameworks script in the iPhone build template to not let
+          # it skip the strip phase. This is caused by an assumption on the file
+          # permissions in which Nix deviates from the standard.
+          sed -i -e "s|-perm +111|-perm /111|" iphone/templates/build/strip-frameworks.sh
+        ''
       }
-    else if stdenv.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-osx.zip";
-        sha256 = "1zflq5hc96lrriw71ya623kkskkisi9yayg8qs03zimi0gksizxw";
-      }
-    else throw "Platform: ${stdenv.system} not supported!";
-
-  nativeBuildInputs = [ makeWrapper unzip ];
-
-  buildCommand = ''
-    mkdir -p $out
-    cd $out
-    unzip $src
-
-    # Rename ugly version number
-    cd mobilesdk/*
-    mv * 8.3.2.GA
-    cd *
-
-    # Patch bundled gradle build infrastructure to make shebangs work
-    patchShebangs android/templates/gradle
-
-    # Substitute the gradle-all zip URL by a local file to prevent downloads from happening while building an Android app
-    sed -i -e "s|distributionUrl=|#distributionUrl=|" android/templates/gradle/gradle/wrapper/gradle-wrapper.properties
-    cp ${gradleAllZip} android/templates/gradle/gradle/wrapper/gradle-4.1-all.zip
-    echo "distributionUrl=gradle-4.1-all.zip" >> android/templates/gradle/gradle/wrapper/gradle-wrapper.properties
-
-    # Patch maven central repository with our own local directory. This prevents the builder from downloading Maven artifacts
-    sed -i -e 's|mavenCentral()|maven { url "${fakeMavenRepo}" }|' android/templates/build/proguard.gradle
-
-    ${lib.optionalString (stdenv.system == "x86_64-darwin") ''
-      # Patch the strip frameworks script in the iPhone build template to not let
-      # it skip the strip phase. This is caused by an assumption on the file
-      # permissions in which Nix deviates from the standard.
-      sed -i -e "s|-perm +111|-perm /111|" iphone/templates/build/strip-frameworks.sh
-    ''}
-  '';
-}
+    '';
+  }

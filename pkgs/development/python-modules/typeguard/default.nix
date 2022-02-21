@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, lib
-, setuptools-scm
-, pytest
-, typing-extensions
-, glibcLocales
+{
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  lib,
+  setuptools-scm,
+  pytest,
+  typing-extensions,
+  glibcLocales,
 }:
-
 buildPythonPackage rec {
   pname = "typeguard";
   version = "2.13.3";
@@ -17,16 +17,16 @@ buildPythonPackage rec {
     sha256 = "00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4";
   };
 
-  buildInputs = [ setuptools-scm ];
-  nativeBuildInputs = [ glibcLocales ];
+  buildInputs = [setuptools-scm];
+  nativeBuildInputs = [glibcLocales];
 
-  LC_ALL="en_US.utf-8";
+  LC_ALL = "en_US.utf-8";
 
   postPatch = ''
     substituteInPlace setup.cfg --replace " --cov" ""
   '';
 
-  checkInputs = [ pytest typing-extensions ];
+  checkInputs = [pytest typing-extensions];
 
   # mypy tests aren't passing with latest mypy
   checkPhase = ''

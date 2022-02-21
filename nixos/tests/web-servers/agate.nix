@@ -1,14 +1,17 @@
 import ../make-test-python.nix (
-  { pkgs, lib, ... }:
   {
+    pkgs,
+    lib,
+    ...
+  }: {
     name = "agate";
-    meta = with lib.maintainers; { maintainers = [ jk ]; };
+    meta = with lib.maintainers; {maintainers = [jk];};
 
     nodes = {
-      geminiserver = { pkgs, ... }: {
+      geminiserver = {pkgs, ...}: {
         services.agate = {
           enable = true;
-          hostnames = [ "localhost" ];
+          hostnames = ["localhost"];
           contentDir = pkgs.writeTextDir "index.gmi" ''
             # Hello NixOS!
           '';
@@ -16,7 +19,7 @@ import ../make-test-python.nix (
       };
     };
 
-    testScript = { nodes, ... }: ''
+    testScript = {nodes, ...}: ''
       geminiserver.wait_for_unit("agate")
       geminiserver.wait_for_open_port(1965)
 

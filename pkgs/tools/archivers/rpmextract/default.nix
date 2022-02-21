@@ -1,5 +1,10 @@
-{ lib, stdenv, rpm, cpio, substituteAll }:
-
+{
+  lib,
+  stdenv,
+  rpm,
+  cpio,
+  substituteAll,
+}:
 stdenv.mkDerivation {
   name = "rpmextract";
 
@@ -18,6 +23,6 @@ stdenv.mkDerivation {
     description = "Script to extract RPM archives";
     platforms = platforms.all;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

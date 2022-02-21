@@ -1,11 +1,11 @@
-{ mkXfceDerivation
-, lib
-, intltool
-, libxfce4ui
-, xfce4-panel
-, gettext
+{
+  mkXfceDerivation,
+  lib,
+  intltool,
+  libxfce4ui,
+  xfce4-panel,
+  gettext,
 }:
-
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-datetime-plugin";
@@ -26,6 +26,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Shows the date and time in the panel, and a calendar appears when you left-click on it";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    maintainers = with maintainers; [] ++ teams.xfce.members;
   };
 }

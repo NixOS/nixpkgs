@@ -1,7 +1,10 @@
-{ lib, appleDerivation, makeWrapper }:
-
+{
+  lib,
+  appleDerivation,
+  makeWrapper,
+}:
 appleDerivation {
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   patchPhase = ''
     substituteInPlace mk/bsd.prog.mk \

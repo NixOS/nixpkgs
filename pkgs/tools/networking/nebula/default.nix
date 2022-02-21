@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "nebula";
   version = "1.5.2";
@@ -15,9 +18,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
+  subPackages = ["cmd/nebula" "cmd/nebula-cert"];
 
-  ldflags = [ "-X main.Build=${version}" ];
+  ldflags = ["-X main.Build=${version}"];
 
   meta = with lib; {
     description = "A scalable overlay networking tool with a focus on performance, simplicity and security";
@@ -38,7 +41,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/slackhq/nebula";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne numinit ];
+    maintainers = with maintainers; [Br1ght0ne numinit];
   };
-
 }

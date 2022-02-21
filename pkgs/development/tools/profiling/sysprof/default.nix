@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, desktop-file-utils
-, fetchurl
-, gettext
-, glib
-, gtk3
-, json-glib
-, itstool
-, libdazzle
-, libxml2
-, meson, ninja
-, pango
-, pkg-config
-, polkit
-, shared-mime-info
-, systemd
-, wrapGAppsHook
-, gnome
+{
+  stdenv,
+  lib,
+  desktop-file-utils,
+  fetchurl,
+  gettext,
+  glib,
+  gtk3,
+  json-glib,
+  itstool,
+  libdazzle,
+  libxml2,
+  meson,
+  ninja,
+  pango,
+  pkg-config,
+  polkit,
+  shared-mime-info,
+  systemd,
+  wrapGAppsHook,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sysprof";
   version = "3.42.1";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = ["out" "lib" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

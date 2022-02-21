@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "mcpp";
   version = "2.7.2";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0r48rfghjm90pkdyr4khxg783g9v98rdx2n69xn8f6c5i0hl96rv";
   };
 
-  configureFlags = [ "--enable-mcpplib" ];
+  configureFlags = ["--enable-mcpplib"];
 
   patches = [
     (fetchpatch {

@@ -1,5 +1,8 @@
-{ lib, stdenv, mysql_jdbc }:
-
+{
+  lib,
+  stdenv,
+  mysql_jdbc,
+}:
 stdenv.mkDerivation {
   pname = "tomcat-mysql-jdbc";
   version = mysql_jdbc.version;

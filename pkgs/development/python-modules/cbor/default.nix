@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 buildPythonPackage rec {
   pname = "cbor";
   version = "1.0.0";
@@ -17,6 +20,6 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/bodhisnarkva/cbor";
     description = "Concise Binary Object Representation (CBOR) library";
     license = licenses.asl20;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [oxzi];
   };
 }

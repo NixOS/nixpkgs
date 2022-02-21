@@ -1,23 +1,24 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, openscenegraph
-, curl
-, gdal
-, hdf5-cpp
-, LASzip
-, libe57format
-, libgeotiff
-, libxml2
-, postgresql
-, tiledb
-, xercesc
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  openscenegraph,
+  curl,
+  gdal,
+  hdf5-cpp,
+  LASzip,
+  libe57format,
+  libgeotiff,
+  libxml2,
+  postgresql,
+  tiledb,
+  xercesc,
+  zlib,
+  zstd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pdal";
   version = "2.3.0";
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [nh2];
     platforms = platforms.all;
   };
 }

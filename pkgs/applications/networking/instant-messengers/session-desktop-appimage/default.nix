@@ -1,8 +1,8 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  lib,
+  fetchurl,
+  appimageTools,
 }:
-
 appimageTools.wrapType2 rec {
   pname = "session-desktop-appimage";
   version = "1.7.7";
@@ -15,7 +15,7 @@ appimageTools.wrapType2 rec {
     description = "Onion routing based messenger";
     homepage = "https://getsession.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ alexnortung ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [alexnortung];
+    platforms = ["x86_64-linux"];
   };
 }

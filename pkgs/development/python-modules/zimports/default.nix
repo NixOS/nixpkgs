@@ -1,13 +1,13 @@
-{ lib
-, isPy3k
-, fetchFromGitHub
-, buildPythonPackage
-, flake8-import-order
-, pyflakes
-, mock
-, setuptools
+{
+  lib,
+  isPy3k,
+  fetchFromGitHub,
+  buildPythonPackage,
+  flake8-import-order,
+  pyflakes,
+  mock,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "zimports";
   version = "0.4.1";
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Python import rewriter";
     homepage = "https://github.com/sqlalchemyorg/zimports";
     license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [timokau];
   };
 }

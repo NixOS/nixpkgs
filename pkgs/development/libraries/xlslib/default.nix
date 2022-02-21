@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook, unzip }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "xlslib";
   version = "2.5.0";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wx3jbpkz2rvgs45x6mwawamd1b2llb0vn29b5sr0rfxzx9d1985";
   };
 
-  nativeBuildInputs = [ unzip autoreconfHook ];
+  nativeBuildInputs = [unzip autoreconfHook];
 
   setSourceRoot = "export sourceRoot=xlslib/xlslib";
 
@@ -20,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/xlslib/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

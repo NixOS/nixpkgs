@@ -1,10 +1,14 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "wiki-js";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
+    maintainers = [ma27];
   };
 
-  machine = { pkgs, ... }: {
+  machine = {pkgs, ...}: {
     virtualisation.memorySize = 2048;
     services.wiki-js = {
       enable = true;
@@ -14,18 +18,19 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     };
     services.postgresql = {
       enable = true;
-      ensureDatabases = [ "wiki" ];
+      ensureDatabases = ["wiki"];
       ensureUsers = [
-        { name = "wiki-js";
+        {
+          name = "wiki-js";
           ensurePermissions."DATABASE wiki" = "ALL PRIVILEGES";
         }
       ];
     };
     systemd.services.wiki-js = {
-      requires = [ "postgresql.service" ];
-      after = [ "postgresql.service" ];
+      requires = ["postgresql.service"];
+      after = ["postgresql.service"];
     };
-    environment.systemPackages = with pkgs; [ jq ];
+    environment.systemPackages = with pkgs; [jq];
   };
 
   testScript = let
@@ -36,80 +41,84 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       siteUrl = "http://localhost:3000";
       telemetry = false;
     });
-    payloads.login = pkgs.writeText "login.json" (builtins.toJSON [{
-      operationName = null;
-      extensions = {};
-      query = ''
-        mutation ($username: String!, $password: String!, $strategy: String!) {
-          authentication {
-            login(username: $username, password: $password, strategy: $strategy) {
-              responseResult {
-                succeeded
-                errorCode
-                slug
-                message
-                __typename
-              }
-              jwt
-              mustChangePwd
-              mustProvideTFA
-              mustSetupTFA
-              continuationToken
-              redirect
-              tfaQRImage
-              __typename
-            }
-            __typename
-          }
-        }
-      '';
-      variables = {
-        password = "notapassword";
-        strategy = "local";
-        username = "webmaster@example.com";
-      };
-    }]);
-    payloads.content = pkgs.writeText "content.json" (builtins.toJSON [{
-      extensions = {};
-      operationName = null;
-      query = ''
-        mutation ($content: String!, $description: String!, $editor: String!, $isPrivate: Boolean!, $isPublished: Boolean!, $locale: String!, $path: String!, $publishEndDate: Date, $publishStartDate: Date, $scriptCss: String, $scriptJs: String, $tags: [String]!, $title: String!) {
-          pages {
-            create(content: $content, description: $description, editor: $editor, isPrivate: $isPrivate, isPublished: $isPublished, locale: $locale, path: $path, publishEndDate: $publishEndDate, publishStartDate: $publishStartDate, scriptCss: $scriptCss, scriptJs: $scriptJs, tags: $tags, title: $title) {
-              responseResult {
-                succeeded
-                errorCode
-                slug
-                message
-                __typename
-              }
-              page {
-                id
-                updatedAt
+    payloads.login = pkgs.writeText "login.json" (builtins.toJSON [
+      {
+        operationName = null;
+        extensions = {};
+        query = ''
+          mutation ($username: String!, $password: String!, $strategy: String!) {
+            authentication {
+              login(username: $username, password: $password, strategy: $strategy) {
+                responseResult {
+                  succeeded
+                  errorCode
+                  slug
+                  message
+                  __typename
+                }
+                jwt
+                mustChangePwd
+                mustProvideTFA
+                mustSetupTFA
+                continuationToken
+                redirect
+                tfaQRImage
                 __typename
               }
               __typename
             }
-            __typename
           }
-        }
-      '';
-      variables = {
-        content = "# Header\n\nHello world!";
-        description = "";
-        editor = "markdown";
-        isPrivate = false;
-        isPublished = true;
-        locale = "en";
-        path = "home";
-        publishEndDate = "";
-        publishStartDate = "";
-        scriptCss = "";
-        scriptJs = "";
-        tags = [];
-        title = "Hello world";
-      };
-    }]);
+        '';
+        variables = {
+          password = "notapassword";
+          strategy = "local";
+          username = "webmaster@example.com";
+        };
+      }
+    ]);
+    payloads.content = pkgs.writeText "content.json" (builtins.toJSON [
+      {
+        extensions = {};
+        operationName = null;
+        query = ''
+          mutation ($content: String!, $description: String!, $editor: String!, $isPrivate: Boolean!, $isPublished: Boolean!, $locale: String!, $path: String!, $publishEndDate: Date, $publishStartDate: Date, $scriptCss: String, $scriptJs: String, $tags: [String]!, $title: String!) {
+            pages {
+              create(content: $content, description: $description, editor: $editor, isPrivate: $isPrivate, isPublished: $isPublished, locale: $locale, path: $path, publishEndDate: $publishEndDate, publishStartDate: $publishStartDate, scriptCss: $scriptCss, scriptJs: $scriptJs, tags: $tags, title: $title) {
+                responseResult {
+                  succeeded
+                  errorCode
+                  slug
+                  message
+                  __typename
+                }
+                page {
+                  id
+                  updatedAt
+                  __typename
+                }
+                __typename
+              }
+              __typename
+            }
+          }
+        '';
+        variables = {
+          content = "# Header\n\nHello world!";
+          description = "";
+          editor = "markdown";
+          isPrivate = false;
+          isPublished = true;
+          locale = "en";
+          path = "home";
+          publishEndDate = "";
+          publishStartDate = "";
+          scriptCss = "";
+          scriptJs = "";
+          tags = [];
+          title = "Hello world";
+        };
+      }
+    ]);
   in ''
     machine.start()
     machine.wait_for_unit("multi-user.target")

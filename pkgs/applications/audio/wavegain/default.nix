@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 stdenv.mkDerivation {
   pname = "wavegain";
   version = "1.3.1";
@@ -20,7 +24,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   installPhase = ''
     strip -s wavegain
@@ -32,6 +36,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/MestreLion/wavegain";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.robbinch ];
+    maintainers = [lib.maintainers.robbinch];
   };
 }

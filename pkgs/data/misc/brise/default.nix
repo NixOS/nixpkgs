@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, librime }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  librime,
+}:
 stdenv.mkDerivation {
   name = "brise-unstable-2017-09-16";
 
@@ -10,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1l13j3cfwida0ycl874fizz2jwjvlxid589a1iciqa9y25k21ql7";
   };
 
-  buildInputs = [ librime ];
+  buildInputs = [librime];
 
   postPatch = ''
     patchShebangs scripts/*
@@ -20,7 +24,7 @@ stdenv.mkDerivation {
   # since nix won't allow networking during 'make'
   preBuild = import ./fetchPackages.nix fetchFromGitHub;
 
-  makeFlags = [ "BRISE_BUILD_BINARIES=yes" "PREFIX=$(out)" ];
+  makeFlags = ["BRISE_BUILD_BINARIES=yes" "PREFIX=$(out)"];
 
   enableParallelBuilding = true;
 
@@ -36,6 +40,6 @@ stdenv.mkDerivation {
     # may be released under different licenses
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.sifmelcara ];
+    maintainers = [maintainers.sifmelcara];
   };
 }

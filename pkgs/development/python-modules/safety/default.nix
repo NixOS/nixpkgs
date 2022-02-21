@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, requests, dparse, click, setuptools, pytestCheckHook }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  dparse,
+  click,
+  setuptools,
+  pytestCheckHook,
+}:
 buildPythonPackage rec {
   pname = "safety";
   version = "1.10.3";
@@ -9,10 +17,10 @@ buildPythonPackage rec {
     sha256 = "sha256-MOOU0CogrEm39lKS0Z04+pJ6j5WCzf060a27xmxkGtU=";
   };
 
-  propagatedBuildInputs = [ requests dparse click setuptools ];
+  propagatedBuildInputs = [requests dparse click setuptools];
 
   # Disable tests depending on online services
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   dontUseSetuptoolsCheck = true;
   disabledTests = [
     "test_check_live"
@@ -24,10 +32,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description =
-      "Safety checks your installed dependencies for known security vulnerabilities";
+    description = "Safety checks your installed dependencies for known security vulnerabilities";
     homepage = "https://github.com/pyupio/safety";
     license = licenses.mit;
-    maintainers = with maintainers; [ thomasdesr ];
+    maintainers = with maintainers; [thomasdesr];
   };
 }

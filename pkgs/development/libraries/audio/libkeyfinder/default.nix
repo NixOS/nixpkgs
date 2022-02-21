@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fftw, catch2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fftw,
+  catch2,
+}:
 stdenv.mkDerivation rec {
   pname = "libkeyfinder";
   version = "2.2.6";
@@ -12,13 +18,13 @@ stdenv.mkDerivation rec {
   };
 
   # needed for finding libkeyfinder.so to link it into keyfinder-tests executable
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
+  cmakeFlags = ["-DCMAKE_SKIP_BUILD_RPATH=OFF"];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ fftw ];
+  buildInputs = [fftw];
 
-  checkInputs = [ catch2 ];
+  checkInputs = [catch2];
 
   doCheck = true;
 

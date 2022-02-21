@@ -1,9 +1,23 @@
-{ lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook
-, buildPythonApplication, pycairo, pygobject3
-, gobject-introspection, gtk3, librsvg
-, alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
+{
+  lib,
+  fetchurl,
+  gettext,
+  pkg-config,
+  texinfo,
+  wrapGAppsHook,
+  buildPythonApplication,
+  pycairo,
+  pygobject3,
+  gobject-introspection,
+  gtk3,
+  librsvg,
+  alsa-utils,
+  timidity,
+  mpg123,
+  vorbis-tools,
+  csound,
+  lilypond,
 }:
-
 buildPythonApplication rec {
   pname = "solfege";
   version = "3.23.4";
@@ -20,9 +34,9 @@ buildPythonApplication rec {
     ./webbrowser.patch
   ];
 
-  nativeBuildInputs = [ gettext pkg-config texinfo wrapGAppsHook ];
-  buildInputs = [ gobject-introspection gtk3 librsvg ];
-  propagatedBuildInputs = [ pycairo pygobject3 ];
+  nativeBuildInputs = [gettext pkg-config texinfo wrapGAppsHook];
+  buildInputs = [gobject-introspection gtk3 librsvg];
+  propagatedBuildInputs = [pycairo pygobject3];
 
   preBuild = ''
     sed -i -e 's|wav_player=.*|wav_player=${alsa-utils}/bin/aplay|' \
@@ -43,6 +57,6 @@ buildPythonApplication rec {
     homepage = "https://www.solfege.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor orivej ];
+    maintainers = with maintainers; [bjornfor orivej];
   };
 }

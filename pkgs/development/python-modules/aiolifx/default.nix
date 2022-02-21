@@ -1,11 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, ifaddr
-, bitstring
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  ifaddr,
+  bitstring,
 }:
-
 buildPythonPackage rec {
   pname = "aiolifx";
   version = "0.7.0";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # tests are not implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "aiolifx" ];
+  pythonImportsCheck = ["aiolifx"];
 
   meta = with lib; {
     description = "API for local communication with LIFX devices over a LAN";
     homepage = "https://github.com/frawau/aiolifx";
     license = licenses.mit;
-    maintainers = with maintainers; [ netixx ];
+    maintainers = with maintainers; [netixx];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, pcre }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pcre,
+}:
 stdenv.mkDerivation rec {
   pname = "classads";
   version = "1.0.10";
@@ -9,10 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "1czgj53gnfkq3ncwlsrwnr4y91wgz35sbicgkp4npfrajqizxqnd";
   };
 
-  buildInputs = [ pcre ];
+  buildInputs = [pcre];
 
   configureFlags = [
-    "--enable-namespace" "--enable-flexible-member"
+    "--enable-namespace"
+    "--enable-flexible-member"
   ];
 
   meta = {

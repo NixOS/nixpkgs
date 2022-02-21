@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper, clang, llvm, libbfd
-, libopcodes, libunwind, libblocksruntime }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  makeWrapper,
+  clang,
+  llvm,
+  libbfd,
+  libopcodes,
+  libunwind,
+  libblocksruntime,
+}: let
   honggfuzz = stdenv.mkDerivation rec {
     pname = "honggfuzz";
     version = "2.5";
@@ -20,15 +29,14 @@ let
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ llvm ];
-    propagatedBuildInputs = [ libbfd libopcodes libunwind libblocksruntime ];
+    nativeBuildInputs = [makeWrapper];
+    buildInputs = [llvm];
+    propagatedBuildInputs = [libbfd libopcodes libunwind libblocksruntime];
 
-    makeFlags = [ "PREFIX=$(out)" ];
+    makeFlags = ["PREFIX=$(out)"];
 
     meta = {
-      description =
-        "A security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";
+      description = "A security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";
       longDescription = ''
         Honggfuzz is a security oriented, feedback-driven, evolutionary,
         easy-to-use fuzzer with interesting analysis options. It is
@@ -44,8 +52,9 @@ let
       '';
       homepage = "https://honggfuzz.dev/";
       license = lib.licenses.asl20;
-      platforms = [ "x86_64-linux" ];
-      maintainers = with lib.maintainers; [ cpu ];
+      platforms = ["x86_64-linux"];
+      maintainers = with lib.maintainers; [cpu];
     };
   };
-in honggfuzz
+in
+  honggfuzz

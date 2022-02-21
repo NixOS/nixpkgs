@@ -1,10 +1,10 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
-, color-theme
+{
+  lib,
+  trivialBuild,
+  fetchFromGitHub,
+  emacs,
+  color-theme,
 }:
-
 trivialBuild {
   pname = "color-theme-solarized";
   version = "0.pre+unstable=2017-10-24";
@@ -16,8 +16,8 @@ trivialBuild {
     hash = "sha256-oxX0lo6sxotEiR3nPrKPE9H01HKB3ohB/p8eEHFTp5k=";
   };
 
-  buildInputs = [ emacs ];
-  propagatedUserEnvPkgs = [ color-theme ];
+  buildInputs = [emacs];
+  propagatedUserEnvPkgs = [color-theme];
 
   buildPhase = ''
     runHook preBuild
@@ -32,7 +32,7 @@ trivialBuild {
     homepage = "http://ethanschoonover.com/solarized";
     description = "Precision colors for machines and people; Emacs implementation";
     license = licenses.mit;
-    maintainers = with maintainers; [ samuelrivas AndersonTorres ];
+    maintainers = with maintainers; [samuelrivas AndersonTorres];
     inherit (emacs.meta) platforms;
   };
 }

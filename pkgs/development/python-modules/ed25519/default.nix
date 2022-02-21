@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "ed25519";
   version = "1.5";
@@ -13,6 +16,6 @@ buildPythonPackage rec {
     description = "Ed25519 public-key signatures";
     homepage = "https://github.com/warner/python-ed25519";
     license = licenses.mit;
-    maintainers = with maintainers; [ np ];
+    maintainers = with maintainers; [np];
   };
 }

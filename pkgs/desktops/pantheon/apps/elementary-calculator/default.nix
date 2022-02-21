@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, libxml2
-, gtk3
-, python3
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  libxml2,
+  gtk3,
+  python3,
+  granite,
+  libgee,
+  libhandy,
+  elementary-icon-theme,
+  appstream,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
   version = "1.7.2";

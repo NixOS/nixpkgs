@@ -1,6 +1,4 @@
-{ pkgs }:
-self: super: {
-
+{pkgs}: self: super: {
   nixops = super.nixops.overridePythonAttrs (
     _: {
       src = pkgs.fetchgit {
@@ -100,5 +98,4 @@ self: super: {
       };
     }
   );
-
 }

@@ -1,18 +1,18 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, pkg-config
-, adwaita-qt
-, glib
-, gtk3
-, qtbase
-, pantheon
-, substituteAll
-, gsettings-desktop-schemas
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  pkg-config,
+  adwaita-qt,
+  glib,
+  gtk3,
+  qtbase,
+  pantheon,
+  substituteAll,
+  gsettings-desktop-schemas,
 }:
-
 mkDerivation rec {
   pname = "qgnomeplatform";
   version = "0.8.4";
@@ -59,7 +59,7 @@ mkDerivation rec {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";
     homepage = "https://github.com/FedoraQt/QGnomePlatform";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
+    maintainers = teams.gnome.members ++ (with maintainers; []);
     platforms = platforms.linux;
   };
 }

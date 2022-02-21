@@ -1,12 +1,12 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "scramp";
   version = "1.4.1";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "scramp" ];
+  pythonImportsCheck = ["scramp"];
 
   meta = with lib; {
     description = "Implementation of the SCRAM authentication protocol";
     homepage = "https://github.com/tlocke/scramp";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

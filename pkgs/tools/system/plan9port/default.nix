@@ -1,66 +1,73 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin ? null
-, fontconfig ? null
-, freetype ? null
-, libX11
-, libXext ? null
-, libXt ? null
-, perl ? null  # For building web manuals
-, which
-, xorgproto ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  darwin ? null,
+  fontconfig ? null,
+  freetype ? null,
+  libX11,
+  libXext ? null,
+  libXt ? null,
+  perl ? null
+  # For building web manuals
+  ,
+  which,
+  xorgproto ? null,
 }:
-
 stdenv.mkDerivation {
   pname = "plan9port";
   version = "2021-10-19";
 
-  src =  fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "9fans";
     repo = "plan9port";
     rev = "d0d440860f2000a1560abb3f593cdc325fcead4c";
     hash = "sha256-2aYXqPGwrReyFPrLDtEjgQd/RJjpOfI3ge/tDocYpRQ=";
   };
 
-  postPatch = ''
-    #hardcoded path
-    substituteInPlace src/cmd/acme/acme.c \
-      --replace /lib/font/bit $out/plan9/font
+  postPatch =
+    ''
+      #hardcoded path
+      substituteInPlace src/cmd/acme/acme.c \
+        --replace /lib/font/bit $out/plan9/font
 
-    #deprecated flags
-    find . -type f \
-      -exec sed -i -e 's/_SVID_SOURCE/_DEFAULT_SOURCE/g' {} \; \
-      -exec sed -i -e 's/_BSD_SOURCE/_DEFAULT_SOURCE/g' {} \;
+      #deprecated flags
+      find . -type f \
+        -exec sed -i -e 's/_SVID_SOURCE/_DEFAULT_SOURCE/g' {} \; \
+        -exec sed -i -e 's/_BSD_SOURCE/_DEFAULT_SOURCE/g' {} \;
 
-    substituteInPlace bin/9c \
-      --replace 'which uniq' '${which}/bin/which uniq'
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    #add missing ctrl+c\z\x\v keybind for non-Darwin
-    substituteInPlace src/cmd/acme/text.c \
-      --replace "case Kcmd+'c':" "case 0x03: case Kcmd+'c':" \
-      --replace "case Kcmd+'z':" "case 0x1a: case Kcmd+'z':" \
-      --replace "case Kcmd+'x':" "case 0x18: case Kcmd+'x':" \
-      --replace "case Kcmd+'v':" "case 0x16: case Kcmd+'v':"
-  '';
+      substituteInPlace bin/9c \
+        --replace 'which uniq' '${which}/bin/which uniq'
+    ''
+    + lib.optionalString (!stdenv.isDarwin) ''
+      #add missing ctrl+c\z\x\v keybind for non-Darwin
+      substituteInPlace src/cmd/acme/text.c \
+        --replace "case Kcmd+'c':" "case 0x03: case Kcmd+'c':" \
+        --replace "case Kcmd+'z':" "case 0x1a: case Kcmd+'z':" \
+        --replace "case Kcmd+'x':" "case 0x18: case Kcmd+'x':" \
+        --replace "case Kcmd+'v':" "case 0x16: case Kcmd+'v':"
+    '';
 
-  buildInputs = [
-    perl
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    fontconfig
-    freetype # fontsrv wants ft2build.h provides system fonts for acme and sam
-    libX11
-    libXext
-    libXt
-    xorgproto
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Carbon
-    Cocoa
-    IOKit
-    Metal
-    QuartzCore
-    darwin.DarwinTools
-  ]);
+  buildInputs =
+    [
+      perl
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      fontconfig
+      freetype # fontsrv wants ft2build.h provides system fonts for acme and sam
+      libX11
+      libXext
+      libXt
+      xorgproto
+    ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      Carbon
+      Cocoa
+      IOKit
+      Metal
+      QuartzCore
+      darwin.DarwinTools
+    ]);
 
   builder = ./builder.sh;
   libXt_dev = libXt.dev;
@@ -107,3 +114,4 @@ stdenv.mkDerivation {
   };
 }
 # TODO: investigate the mouse chording support patch
+

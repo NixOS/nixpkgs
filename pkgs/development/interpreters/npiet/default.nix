@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, gd
-, giflib
-, groff
-, libpng
-, tk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gd,
+  giflib,
+  groff,
+  libpng,
+  tk,
 }:
-
 stdenv.mkDerivation rec {
   pname = "npiet";
   version = "1.3f";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Le2FYGKr1zWZ6F4edozmvGC6LbItx9aptidj3KBLhVo=";
   };
 
-  buildInputs = [ gd giflib libpng ];
+  buildInputs = [gd giflib libpng];
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [groff];
 
   postPatch = ''
     # malloc.h is not needed because stdlib.h is already included.
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bertnase.de/npiet/";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

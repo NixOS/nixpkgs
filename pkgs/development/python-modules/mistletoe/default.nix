@@ -1,8 +1,9 @@
-{ lib
-, isPy3k
-, fetchPypi
-, buildPythonPackage }:
-
+{
+  lib,
+  isPy3k,
+  fetchPypi,
+  buildPythonPackage,
+}:
 buildPythonPackage rec {
   pname = "mistletoe";
   version = "0.8.2";
@@ -17,6 +18,6 @@ buildPythonPackage rec {
     description = "A fast, extensible Markdown parser in pure Python.";
     homepage = "https://github.com/miyuchina/mistletoe";
     license = licenses.mit;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

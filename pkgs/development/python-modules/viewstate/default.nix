@@ -1,10 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
-, pytest
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  lib,
+  pytest,
 }:
-
 buildPythonPackage rec {
   pname = "viewstate";
   version = "0.4.3";

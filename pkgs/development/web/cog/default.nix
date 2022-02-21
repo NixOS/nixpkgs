@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland
-, wayland-protocols
-, libwpe
-, libwpe-fdo
-, glib-networking
-, webkitgtk
-, makeWrapper
-, wrapGAppsHook
-, gnome
-, gdk-pixbuf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland,
+  wayland-protocols,
+  libwpe,
+  libwpe-fdo,
+  glib-networking,
+  webkitgtk,
+  makeWrapper,
+  wrapGAppsHook,
+  gnome,
+  gdk-pixbuf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cog";
   version = "0.8.1";
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small single “window” launcher for the WebKit WPE port";
     license = licenses.mit;
-    maintainers = [ maintainers.matthewbauer ];
+    maintainers = [maintainers.matthewbauer];
     platforms = platforms.linux;
   };
 }

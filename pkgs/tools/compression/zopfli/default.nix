@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "zopfli";
   version = "1.0.3";
-  outputs = [ "out" "lib" "dev" ];
+  outputs = ["out" "lib" "dev"];
 
   src = fetchFromGitHub {
     owner = "google";
@@ -13,9 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0dr8n4j5nj2h9n208jns56wglw59gg4qm3s7c6y3hs75d0nnkhm4";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ];
+  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"];
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/zopfli ../README*
@@ -34,6 +39,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ bobvanderlinden edef ];
+    maintainers = with maintainers; [bobvanderlinden edef];
   };
 }

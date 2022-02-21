@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, readline, python2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
+  readline,
+  python2,
+}:
 stdenv.mkDerivation rec {
   pname = "oclgrind";
   version = "21.10";
@@ -11,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DGCF7X2rPV1w9guxg2bMylRirXQgez24sG7Unlct3ow=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmPackages.llvm llvmPackages.clang-unwrapped readline python2 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [llvmPackages.llvm llvmPackages.clang-unwrapped readline python2];
 
   cmakeFlags = [
     "-DCLANG_ROOT=${llvmPackages.clang-unwrapped}"
@@ -23,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jrprice/oclgrind";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ athas ];
+    maintainers = with maintainers; [athas];
   };
 }

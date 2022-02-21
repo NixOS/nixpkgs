@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, python3Packages, ffmpeg }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  ffmpeg,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "gphotos-sync";
   version = "2.14.2";
@@ -20,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     requests_oauthlib
   ];
 
-  buildInputs = [ ffmpeg ];
+  buildInputs = [ffmpeg];
 
   checkInputs = with python3Packages; [
     pytestCheckHook
@@ -41,8 +45,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Google Photos and Albums backup with Google Photos Library API";
-    homepage    = "https://github.com/gilesknap/gphotos-sync";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ dnr ];
+    homepage = "https://github.com/gilesknap/gphotos-sync";
+    license = licenses.mit;
+    maintainers = with maintainers; [dnr];
   };
 }

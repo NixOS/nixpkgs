@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, boto3
-, six
-, pyyaml
-, mock
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  boto3,
+  six,
+  pyyaml,
+  mock,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "serverlessrepo";
   version = "0.1.10";
@@ -54,6 +54,6 @@ buildPythonPackage rec {
       AWS Serverless Application Repository.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ dhkl ];
+    maintainers = with maintainers; [dhkl];
   };
 }

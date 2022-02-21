@@ -1,8 +1,11 @@
-{ lib
-, fetchFromGitHub
-, gcc
-, gmp, mpfr, libmpc
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  gcc,
+  gmp,
+  mpfr,
+  libmpc,
+  rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kalker";
@@ -17,9 +20,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-nSLbe3EhcLYylvyzOWuLIehBnD6mMofsNpFQVEybV8k=";
 
-  buildInputs = [ gmp mpfr libmpc ];
+  buildInputs = [gmp mpfr libmpc];
 
-  outputs = [ "out" "lib" ];
+  outputs = ["out" "lib"];
 
   postInstall = ''
     moveToOutput "lib" "$lib"
@@ -36,6 +39,6 @@ rustPlatform.buildRustPackage rec {
       variables, functions, derivation, integration, and complex numbers
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
   };
 }

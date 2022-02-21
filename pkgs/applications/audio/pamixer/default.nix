@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, boost, libpulseaudio }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  libpulseaudio,
+}:
 stdenv.mkDerivation rec {
   pname = "pamixer";
   version = "1.5";
@@ -11,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7VNhHAQ1CecQPlqb8SMKK0U1SsFZxDuS+QkPqJfMqrQ=";
   };
 
-  buildInputs = [ boost libpulseaudio ];
+  buildInputs = [boost libpulseaudio];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Pulseaudio command line mixer";
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
         - Mute or unmute a device
     '';
     homepage = "https://github.com/cdemoulins/pamixer";
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [thiagokokada];
     license = licenses.gpl3;
     platforms = platforms.linux;
     mainProgram = "pamixer";

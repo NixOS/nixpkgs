@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, zlib, python2, cmake, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  python2,
+  cmake,
+  pkg-config,
+}:
 stdenv.mkDerivation rec
 {
   pname = "ptex";
@@ -12,10 +19,10 @@ stdenv.mkDerivation rec
     sha256 = "sha256-TuwgZJHvQUqBEFeZYvzpi+tmXB97SkOairYnuUahtSA=";
   };
 
-  outputs = [ "bin" "dev" "out" "lib" ];
+  outputs = ["bin" "dev" "out" "lib"];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python2 pkg-config ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [zlib python2 pkg-config];
 
   # Can be removed in the next release
   # https://github.com/wdas/ptex/pull/42
@@ -28,6 +35,6 @@ stdenv.mkDerivation rec
     homepage = "http://ptex.us/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ maintainers.guibou ];
+    maintainers = [maintainers.guibou];
   };
 }

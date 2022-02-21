@@ -1,5 +1,9 @@
-{ stdenv, lib, jekyll, fetchFromGitHub }:
-
+{
+  stdenv,
+  lib,
+  jekyll,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "jsonnet";
   version = "0.18.0";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RmuvpKv9Dg3JcxsdZDBMehJjG5SvrV0spHgxApFeuJo=";
   };
 
-  nativeBuildInputs = [ jekyll ];
+  nativeBuildInputs = [jekyll];
 
   enableParallelBuilding = true;
 
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Purely-functional configuration language that helps you define JSON data";
-    maintainers = with lib.maintainers; [ benley copumpkin ];
+    maintainers = with lib.maintainers; [benley copumpkin];
     license = lib.licenses.asl20;
     homepage = "https://github.com/google/jsonnet";
     platforms = lib.platforms.unix;

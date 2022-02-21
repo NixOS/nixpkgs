@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiohwenergy";
   version = "0.8.0";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Python library to interact with the HomeWizard Energy devices API";
     homepage = "https://github.com/DCSBL/aiohwenergy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

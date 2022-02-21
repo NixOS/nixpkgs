@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
-, lz4
-, bzip2
-, zstd
-, spdlog_0
-, tbb
-, openssl
-, boost
-, libpqxx
-, clang-tools
-, catch2
-, python3
-, gtest
-, doxygen
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  lz4,
+  bzip2,
+  zstd,
+  spdlog_0,
+  tbb,
+  openssl,
+  boost,
+  libpqxx,
+  clang-tools,
+  catch2,
+  python3,
+  gtest,
+  doxygen,
+  fixDarwinDylibNames,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tiledb";
   version = "2.3.3";
@@ -36,12 +36,14 @@ stdenv.mkDerivation rec {
     "-DTILEDB_WERROR=0"
   ];
 
-  nativeBuildInputs = [
-    clang-tools
-    cmake
-    python3
-    doxygen
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs =
+    [
+      clang-tools
+      cmake
+      python3
+      doxygen
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   checkInputs = [
     gtest
@@ -68,7 +70,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # 9 failing tests due to what seems an overflow
 
-  installTargets = [ "install-tiledb" "doc" ];
+  installTargets = ["install-tiledb" "doc"];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib
@@ -79,7 +81,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/TileDB-Inc/TileDB";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rakesh4g ];
+    maintainers = with maintainers; [rakesh4g];
   };
-
 }

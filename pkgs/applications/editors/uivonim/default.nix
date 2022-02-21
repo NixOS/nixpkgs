@@ -1,5 +1,10 @@
-{ lib, mkYarnPackage, fetchFromGitHub, electron, makeWrapper }:
-
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  electron,
+  makeWrapper,
+}:
 mkYarnPackage rec {
   pname = "uivonim";
   version = "unstable-2021-05-24";
@@ -35,7 +40,7 @@ mkYarnPackage rec {
     name = "uivonim-build-${version}";
     inherit version src packageJSON yarnLock yarnNix yarnPreBuild distPhase;
 
-    yarnFlags = [ "--offline" ];
+    yarnFlags = ["--offline"];
 
     buildPhase = ''
       yarn build:prod
@@ -47,9 +52,9 @@ mkYarnPackage rec {
   };
 
   # The --production flag disables the devDependencies.
-  yarnFlags = [ "--offline" "--production" ];
+  yarnFlags = ["--offline" "--production"];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     dir=$out/libexec/uivonim/node_modules/uivonim/
@@ -66,7 +71,7 @@ mkYarnPackage rec {
   meta = with lib; {
     homepage = "https://github.com/smolck/uivonim";
     description = "Cross-platform GUI for neovim based on electron";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
     platforms = platforms.unix;
     license = licenses.agpl3Only;
   };

@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, glib
-, meson
-, ninja
-, libmaxminddb
-, pkg-config
-, ronn
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glib,
+  meson,
+  ninja,
+  libmaxminddb,
+  pkg-config,
+  ronn,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ipcalc";
   version = "1.0.1";
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Simple IP network calculator";
     homepage = "https://gitlab.com/ipcalc/ipcalc";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

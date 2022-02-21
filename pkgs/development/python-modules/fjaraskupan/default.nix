@@ -1,12 +1,12 @@
-{ lib
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "fjaraskupan";
   version = "1.0.2";
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "fjaraskupan" ];
+  pythonImportsCheck = ["fjaraskupan"];
 
   meta = with lib; {
     description = "Python module for controlling Fjäråskupan kitchen fans";
     homepage = "https://github.com/elupus/fjaraskupan";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

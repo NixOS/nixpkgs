@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "kubeaudit";
   version = "0.16.0";
@@ -26,7 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Audit tool for Kubernetes";
     homepage = "https://github.com/Shopify/kubeaudit";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

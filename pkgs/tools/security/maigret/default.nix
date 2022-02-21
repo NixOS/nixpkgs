@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
   version = "0.4.1";
@@ -86,7 +86,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

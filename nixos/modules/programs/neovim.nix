@@ -1,14 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.neovim;
 
   runtime' = filter (f: f.enable) (attrValues cfg.runtime);
 
-  runtime = pkgs.linkFarm "neovim-runtime" (map (x: { name = x.target; path = x.source; }) runtime');
-
+  runtime = pkgs.linkFarm "neovim-runtime" (map (x: {
+    name = x.target;
+    path = x.source;
+  })
+  runtime');
 in {
   options.programs.neovim = {
     enable = mkEnableOption "Neovim";
@@ -101,49 +106,54 @@ in {
         Set of files that have to be linked in <filename>runtime</filename>.
       '';
 
-      type = with types; attrsOf (submodule (
-        { name, config, ... }:
-        { options = {
+      type = with types;
+        attrsOf (submodule (
+          {
+            name,
+            config,
+            ...
+          }: {
+            options = {
+              enable = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  Whether this /etc file should be generated.  This
+                  option allows specific /etc files to be disabled.
+                '';
+              };
 
-            enable = mkOption {
-              type = types.bool;
-              default = true;
-              description = ''
-                Whether this /etc file should be generated.  This
-                option allows specific /etc files to be disabled.
-              '';
+              target = mkOption {
+                type = types.str;
+                description = ''
+                  Name of symlink.  Defaults to the attribute
+                  name.
+                '';
+              };
+
+              text = mkOption {
+                default = null;
+                type = types.nullOr types.lines;
+                description = "Text of the file.";
+              };
+
+              source = mkOption {
+                type = types.path;
+                description = "Path of the source file.";
+              };
             };
 
-            target = mkOption {
-              type = types.str;
-              description = ''
-                Name of symlink.  Defaults to the attribute
-                name.
-              '';
+            config = {
+              target = mkDefault name;
+              source = mkIf (config.text != null) (
+                let
+                  name' = "neovim-runtime" + baseNameOf name;
+                in
+                  mkDefault (pkgs.writeText name' config.text)
+              );
             };
-
-            text = mkOption {
-              default = null;
-              type = types.nullOr types.lines;
-              description = "Text of the file.";
-            };
-
-            source = mkOption {
-              type = types.path;
-              description = "Path of the source file.";
-            };
-
-          };
-
-          config = {
-            target = mkDefault name;
-            source = mkIf (config.text != null) (
-              let name' = "neovim-runtime" + baseNameOf name;
-              in mkDefault (pkgs.writeText name' config.text));
-          };
-
-        }));
-
+          }
+        ));
     };
   };
 
@@ -155,12 +165,15 @@ in {
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
       inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby;
-      configure = cfg.configure // {
-
-        customRC = (cfg.configure.customRC or "") + ''
-          set runtimepath^=${runtime}/etc
-        '';
-      };
+      configure =
+        cfg.configure
+        // {
+          customRC =
+            (cfg.configure.customRC or "")
+            + ''
+              set runtimepath^=${runtime}/etc
+            '';
+        };
     };
   };
 }

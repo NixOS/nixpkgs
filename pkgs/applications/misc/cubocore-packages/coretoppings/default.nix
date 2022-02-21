@@ -1,33 +1,33 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, ffmpeg
-, cmake
-, ninja
-, qtbase
-, qtx11extras
-, qtconnectivity
-, v4l-utils
-, grim
-, wf-recorder
-, libdbusmenu
-, playerctl
-, xorg
-, iio-sensor-proxy
-, inotify-tools
-, bluez
-, networkmanager
-, connman
-, redshift
-, gawk
-, polkit
-, libnotify
-, systemd
-, xdg-utils
-, libcprime
-, libcsys
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  ffmpeg,
+  cmake,
+  ninja,
+  qtbase,
+  qtx11extras,
+  qtconnectivity,
+  v4l-utils,
+  grim,
+  wf-recorder,
+  libdbusmenu,
+  playerctl,
+  xorg,
+  iio-sensor-proxy,
+  inotify-tools,
+  bluez,
+  networkmanager,
+  connman,
+  redshift,
+  gawk,
+  polkit,
+  libnotify,
+  systemd,
+  xdg-utils,
+  libcprime,
+  libcsys,
 }:
-
 mkDerivation rec {
   pname = "coretoppings";
   version = "4.3.0";
@@ -81,7 +81,7 @@ mkDerivation rec {
     description = "Additional features,plugins etc for CuboCore Application Suite";
     homepage = "https://gitlab.com/cubocore/coreapps/coretoppings";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

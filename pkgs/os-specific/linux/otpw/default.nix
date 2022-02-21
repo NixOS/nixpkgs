@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, pam }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pam,
+}:
 stdenv.mkDerivation rec {
   pname = "otpw";
   version = "1.3";
@@ -23,9 +27,9 @@ stdenv.mkDerivation rec {
     cp *.8 $out/share/man/man8
   '';
 
-  buildInputs = [ pam ];
+  buildInputs = [pam];
 
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = ["stackprotector"];
 
   meta = {
     homepage = "http://www.cl.cam.ac.uk/~mgk25/otpw.html";

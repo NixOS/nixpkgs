@@ -1,13 +1,13 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, stdenv
-, CoreServices
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  stdenv,
+  CoreServices,
+  Security,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "inherd-quake";
   version = "0.5.0";
@@ -21,20 +21,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-EMRaChFwjMYZKSX5OvXYLSiwWo1m1H/tHVqc8RXX52A=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+    ];
 
   meta = with lib; {
     description = "A knowledge management meta-framework for geeks";
     homepage = "https://github.com/phodal/quake";
     license = licenses.mit;
-    maintainers = [ maintainers.elliot ];
+    maintainers = [maintainers.elliot];
     mainProgram = "quake";
   };
 }

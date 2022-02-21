@@ -1,7 +1,15 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
-, cmake, pkg-config, fftw, libpcap, libusb1, python3
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fftw,
+  libpcap,
+  libusb1,
+  python3,
 }:
-
 mkDerivation rec {
   pname = "hobbits";
   version = "0.52.0";
@@ -20,15 +28,15 @@ mkDerivation rec {
       --replace "[Mystery Build]" "${version}"
   '';
 
-  buildInputs = [ fftw libpcap libusb1 python3 ];
+  buildInputs = [fftw libpcap libusb1 python3];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   meta = with lib; {
     description = "A multi-platform GUI for bit-based analysis, processing, and visualization";
     homepage = "https://github.com/Mahlet-Inc/hobbits";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = platforms.linux;
   };
 }

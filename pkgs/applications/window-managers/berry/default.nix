@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, copyDesktopItems
-, fontconfig
-, freetype
-, libX11
-, libXext
-, libXft
-, libXinerama
-, makeDesktopItem
-, pkg-config
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyDesktopItems,
+  fontconfig,
+  freetype,
+  libX11,
+  libXext,
+  libXft,
+  libXinerama,
+  makeDesktopItem,
+  pkg-config,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "berry";
   version = "0.1.9";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =[
+  buildInputs = [
     libX11
     libXext
     libXft
@@ -71,9 +71,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://berrywm.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }
 # TODO: report upstream that `which` is not POSIX; the `command` shell builtin
 # should be used instead
+

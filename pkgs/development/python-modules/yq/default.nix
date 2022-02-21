@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, argcomplete
-, pyyaml
-, xmltodict
-, jq
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  argcomplete,
+  pyyaml,
+  xmltodict,
+  jq,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "yq";
   version = "2.13.0";
@@ -37,12 +37,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-   pytestCheckHook
+    pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  pytestFlagsArray = ["test/test.py"];
 
-  pythonImportsCheck = [ "yq" ];
+  pythonImportsCheck = ["yq"];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Command-line YAML processor - jq wrapper for YAML documents";
     homepage = "https://github.com/kislyuk/yq";
     license = licenses.asl20;
-    maintainers = with maintainers; [ womfoo SuperSandro2000 ];
+    maintainers = with maintainers; [womfoo SuperSandro2000];
   };
 }

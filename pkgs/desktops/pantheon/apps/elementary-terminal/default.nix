@@ -1,27 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, python3
-, vala
-, desktop-file-utils
-, gtk3
-, libxml2
-, granite
-, libhandy
-, libnotify
-, vte
-, libgee
-, elementary-icon-theme
-, appstream
-, pcre2
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  vala,
+  desktop-file-utils,
+  gtk3,
+  libxml2,
+  granite,
+  libhandy,
+  libnotify,
+  vte,
+  libgee,
+  elementary-icon-theme,
+  appstream,
+  pcre2,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
   version = "6.0.1";
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   # See https://github.com/elementary/terminal/commit/914d4b0e2d0a137f12276d748ae07072b95eff80
-  mesonFlags = [ "-Dubuntu-bionic-patched-vte=false" ];
+  mesonFlags = ["-Dubuntu-bionic-patched-vte=false"];
 
   postPatch = ''
     chmod +x meson/post_install.py

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "spicetify-cli";
   version = "2.9.1";
@@ -27,6 +30,6 @@ buildGoModule rec {
     description = "Command-line tool to customize Spotify client";
     homepage = "https://github.com/khanhas/spicetify-cli/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

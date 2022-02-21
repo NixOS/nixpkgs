@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyftdi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyftdi,
 }:
-
 buildPythonPackage rec {
   pname = "pyspiflash";
   version = "0.6.3";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
   # tests are not shipped with the PyPI source
   doCheck = false;
 
-  pythonImportsCheck = [ "spiflash" ];
+  pythonImportsCheck = ["spiflash"];
 
   meta = with lib; {
     description = "SPI data flash device drivers in Python";
     homepage = "https://github.com/eblot/pyspiflash";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

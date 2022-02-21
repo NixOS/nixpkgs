@@ -1,14 +1,14 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, isPy27
-
-# pythonPackages
-, msal
-, pathlib2
-, portalocker
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  isPy27
+  # pythonPackages
+  ,
+  msal,
+  pathlib2,
+  portalocker,
 }:
-
 buildPythonPackage rec {
   pname = "msal-extensions";
   version = "0.3.1";
@@ -18,12 +18,14 @@ buildPythonPackage rec {
     sha256 = "d9029af70f2cbdc5ad7ecfed61cb432ebe900484843ccf72825445dbfe62d311";
   };
 
-  propagatedBuildInputs = [
-    msal
-    portalocker
-  ] ++ lib.optionals isPy27 [
-    pathlib2
-  ];
+  propagatedBuildInputs =
+    [
+      msal
+      portalocker
+    ]
+    ++ lib.optionals isPy27 [
+      pathlib2
+    ];
 
   # upstream doesn't update this requirement probably because they use pip
   postPatch = ''

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, ocamlPackages
-, fetchFromGitHub
-, makeWrapper
-, python3
+{
+  lib,
+  stdenv,
+  ocamlPackages,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
-
 ocamlPackages.buildDunePackage rec {
   pname = "flitter";
   # request to tag releases: https://github.com/alexozer/flitter/issues/34
@@ -42,13 +42,13 @@ ocamlPackages.buildDunePackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/flitter \
-      --prefix PATH : "${python3.withPackages (pp: [ pp.pynput ])}/bin"
+      --prefix PATH : "${python3.withPackages (pp: [pp.pynput])}/bin"
   '';
 
   meta = with lib; {
     description = "A Livesplit-inspired speedrunning split timer for Linux/macOS terminal";
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     homepage = "https://github.com/alexozer/flitter";
     platforms = platforms.unix;
   };

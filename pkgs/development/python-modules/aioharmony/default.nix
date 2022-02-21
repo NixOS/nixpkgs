@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, slixmpp
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  slixmpp,
 }:
-
 buildPythonPackage rec {
   pname = "aioharmony";
   version = "0.2.9";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ehendrix23/aioharmony";
     description = "Python library for interacting the Logitech Harmony devices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ oro ];
+    maintainers = with maintainers; [oro];
   };
 }

@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, httplib2
-, keyring
-, lazr-restfulclient
-, lazr-uri
-, setuptools
-, six
-, testresources
-, wadllib
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  httplib2,
+  keyring,
+  lazr-restfulclient,
+  lazr-uri,
+  setuptools,
+  six,
+  testresources,
+  wadllib,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "launchpadlib";
   version = "1.10.16";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     wadllib
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Script Launchpad through its web services interfaces. Officially supported";
     homepage = "https://help.launchpad.net/API/launchpadlib";
     license = licenses.lgpl3Only;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

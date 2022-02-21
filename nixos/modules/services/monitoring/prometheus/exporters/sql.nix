@@ -1,12 +1,16 @@
-{ config, lib, pkgs, options }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
   cfg = config.services.prometheus.exporters.sql;
   cfgOptions = {
     options = with types; {
       jobs = mkOption {
         type = attrsOf (submodule jobOptions);
-        default = { };
+        default = {};
         description = "An attrset of metrics scraping jobs to run.";
       };
     };
@@ -44,7 +48,7 @@ let
       };
       labels = mkOption {
         type = listOf str;
-        default = [ ];
+        default = [];
         description = "A set of columns that will be used as Prometheus labels.";
       };
       query = mkOption {
@@ -63,16 +67,15 @@ let
     then cfg.configFile
     else
       let
-        nameInline = mapAttrsToList (k: v: v // { name = k; });
-        renameStartupSql = j: removeAttrs (j // { startup_sql = j.startupSql; }) [ "startupSql" ];
+        nameInline = mapAttrsToList (k: v: v // {name = k;});
+        renameStartupSql = j: removeAttrs (j // {startup_sql = j.startupSql;}) ["startupSql"];
         configuration = {
           jobs = map renameStartupSql
-            (nameInline (mapAttrs (k: v: (v // { queries = nameInline v.queries; })) cfg.configuration.jobs));
+          (nameInline (mapAttrs (k: v: (v // {queries = nameInline v.queries;})) cfg.configuration.jobs));
         };
       in
-      builtins.toFile "config.yaml" (builtins.toJSON configuration);
-in
-{
+        builtins.toFile "config.yaml" (builtins.toJSON configuration);
+in {
   extraOpts = {
     configFile = mkOption {
       type = with types; nullOr path;

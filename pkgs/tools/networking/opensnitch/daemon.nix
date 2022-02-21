@@ -1,18 +1,18 @@
-{ buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, protobuf
-, go-protobuf
-, pkg-config
-, libnetfilter_queue
-, libnfnetlink
-, lib
-, coreutils
-, iptables
-, makeWrapper
-, protoc-gen-go-grpc
+{
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  protobuf,
+  go-protobuf,
+  pkg-config,
+  libnetfilter_queue,
+  libnfnetlink,
+  lib,
+  coreutils,
+  iptables,
+  makeWrapper,
+  protoc-gen-go-grpc,
 }:
-
 buildGoModule rec {
   pname = "opensnitch";
   version = "1.5.0";
@@ -36,9 +36,9 @@ buildGoModule rec {
 
   modRoot = "daemon";
 
-  buildInputs = [ libnetfilter_queue libnfnetlink ];
+  buildInputs = [libnetfilter_queue libnfnetlink];
 
-  nativeBuildInputs = [ pkg-config protobuf go-protobuf makeWrapper protoc-gen-go-grpc ];
+  nativeBuildInputs = [pkg-config protobuf go-protobuf makeWrapper protoc-gen-go-grpc];
 
   vendorSha256 = "sha256-81BKMLuEXA/NeIjO7icBm48ROq6KxAxHtvP0nV5yM5A=";
 
@@ -57,14 +57,14 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/opensnitchd \
-      --prefix PATH : ${lib.makeBinPath [ iptables ]}
+      --prefix PATH : ${lib.makeBinPath [iptables]}
   '';
 
   meta = with lib; {
     description = "An application firewall";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.raboof ];
+    maintainers = [maintainers.raboof];
     platforms = platforms.linux;
   };
 }

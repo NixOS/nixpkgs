@@ -1,17 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
-, openssl, sqlite }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  which,
+  openssl,
+  sqlite,
+}:
 # Instead of writing directly into $HOME, we change the default db location
 # from $HOME/.dupd_sqlite to $HOME/.cache/dupd.sqlite3
-
 stdenv.mkDerivation rec {
   pname = "dupd";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "jvirkki";
-    repo  = "dupd";
-    rev   = version;
+    repo = "dupd";
+    rev = version;
     sha256 = "sha256-jDFPvJqIUEu0/8bvq2PaaA1NnWakApegW8bxn+NKffs=";
   };
 
@@ -28,9 +33,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [ openssl sqlite ];
+  buildInputs = [openssl sqlite];
 
-  nativeBuildInputs = [ perl which ];
+  nativeBuildInputs = [perl which];
 
   makeFlags = [
     "INSTALL_PREFIX=$(out)"
@@ -44,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "CLI utility to find duplicate files";
     homepage = "http://www.virkki.com/dupd";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

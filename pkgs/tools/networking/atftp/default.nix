@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper, gcc, ps }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  tcp_wrappers,
+  pcre,
+  makeWrapper,
+  gcc,
+  ps,
+}:
 stdenv.mkDerivation rec {
   pname = "atftp";
   version = "0.7.5";
@@ -14,18 +23,18 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ readline tcp_wrappers pcre gcc ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [readline tcp_wrappers pcre gcc];
 
   # Expects pre-GCC5 inline semantics
   NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   doCheck = true;
-  checkInputs = [ ps ];
+  checkInputs = [ps];
 
   meta = {
     description = "Advanced tftp tools";
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

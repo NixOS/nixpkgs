@@ -1,5 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 buildGoPackage rec {
   pname = "minio-exporter";
   version = "0.2.0";
@@ -7,7 +11,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/joe-pll/minio-exporter";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     inherit rev;
     owner = "joe-pll";
     repo = "minio-exporter";
@@ -29,7 +33,7 @@ buildGoPackage rec {
     description = "A Prometheus exporter for Minio cloud storage server";
     homepage = "https://github.com/joe-pll/minio-exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bachp ];
+    maintainers = with maintainers; [bachp];
     platforms = platforms.unix;
   };
 }

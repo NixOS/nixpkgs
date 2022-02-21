@@ -1,14 +1,14 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, siosocks
-, trustme
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  siosocks,
+  trustme,
 }:
-
 buildPythonPackage rec {
   pname = "aioftp";
   version = "0.20.0";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Python FTP client/server for asyncio";
     homepage = "https://github.com/aio-libs/aioftp";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

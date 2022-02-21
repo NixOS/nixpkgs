@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pcre
-, tinyxml
-, libusb1
-, libzip
-, glib
-, gobject-introspection
-, gst_all_1
-, libwebcam
-, libunwind
-, elfutils
-, orc
-, python3Packages
-, libuuid
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  pcre,
+  tinyxml,
+  libusb1,
+  libzip,
+  glib,
+  gobject-introspection,
+  gst_all_1,
+  libwebcam,
+  libunwind,
+  elfutils,
+  orc,
+  python3Packages,
+  libuuid,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tiscamera";
   version = "0.13.1";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     python3Packages.pyqt5
   ];
 
-  pythonPath = with python3Packages; [ pyqt5 pygobject3 ];
+  pythonPath = with python3Packages; [pyqt5 pygobject3];
 
   propagatedBuildInputs = pythonPath;
 
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Linux sources and UVC firmwares for The Imaging Source cameras";
     homepage = "https://github.com/TheImagingSource/tiscamera";
-    license = with licenses; [ asl20 ];
+    license = with licenses; [asl20];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [jraygauthier];
   };
 }

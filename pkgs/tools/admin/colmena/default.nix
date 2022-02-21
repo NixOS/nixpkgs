@@ -1,5 +1,12 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, colmena, testVersion }:
-
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  colmena,
+  testVersion,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "colmena";
   version = "0.2.1";
@@ -13,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-wMC2GAVVxkwrgJtOIJL0P+Uxh+ouW4VwLDrXJlD10AA=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     installShellCompletion --cmd colmena \
@@ -29,14 +36,14 @@ rustPlatform.buildRustPackage rec {
     # We guarantee CLI and Nix API stability for the same minor version
     apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
 
-    tests.version = testVersion { package = colmena; };
+    tests.version = testVersion {package = colmena;};
   };
 
   meta = with lib; {
     description = "A simple, stateless NixOS deployment tool";
     homepage = "https://zhaofengli.github.io/colmena/${passthru.apiVersion}";
     license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [zhaofengli];
     platforms = platforms.linux;
   };
 }

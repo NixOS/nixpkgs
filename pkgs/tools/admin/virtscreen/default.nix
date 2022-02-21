@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3Packages
-, x11vnc
-, xrandr
-, libGL
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  x11vnc,
+  xrandr,
+  libGL,
+  qt5,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "virtscreen";
   version = "0.3.1";
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "005qach6phz8w17k8kqmyd647c6jkfybczybxq0yxi5ik0s91a08";
   };
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [qt5.wrapQtAppsHook];
 
   propagatedBuildInputs = with python3Packages; [
     netifaces
@@ -51,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     description = "Make your iPad/tablet/computer as a secondary monitor on Linux";
     homepage = "https://github.com/kbumsik/VirtScreen";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ borisbabic ];
+    maintainers = with maintainers; [borisbabic];
   };
 }

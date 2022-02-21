@@ -1,10 +1,18 @@
-{ lib, stdenv, file, fetchFromGitLab, buildPerlPackage, ArchiveZip, ArchiveCpio, shortenPerlShebang }:
-
+{
+  lib,
+  stdenv,
+  file,
+  fetchFromGitLab,
+  buildPerlPackage,
+  ArchiveZip,
+  ArchiveCpio,
+  shortenPerlShebang,
+}:
 buildPerlPackage rec {
   pname = "strip-nondeterminism";
   version = "1.0.0";
 
-  outputs = [ "out" "dev" ]; # no "devdoc"
+  outputs = ["out" "dev"]; # no "devdoc"
 
   src = fetchFromGitLab {
     owner = "reproducible-builds";
@@ -17,9 +25,9 @@ buildPerlPackage rec {
   # stray test failure
   doCheck = false;
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
-  buildInputs = [ ArchiveZip ArchiveCpio ];
-  propagatedNativeBuildInputs = [ file ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [shortenPerlShebang];
+  buildInputs = [ArchiveZip ArchiveCpio];
+  propagatedNativeBuildInputs = [file];
 
   perlPostHook = ''
     # we don’t need the debhelper script
@@ -35,6 +43,6 @@ buildPerlPackage rec {
     description = "A Perl module for stripping bits of non-deterministic information";
     homepage = "https://reproducible-builds.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

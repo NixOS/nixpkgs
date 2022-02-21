@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook
-, evolution-data-server
-, feedbackd
-, glibmm
-, gnome
-, gspell
-, gtk3
-, json-glib
-, libgcrypt
-, libhandy
-, libphonenumber
-, modemmanager
-, olm
-, pidgin
-, protobuf
-, sqlite
-, plugins ? [ ]
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  appstream-glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook,
+  evolution-data-server,
+  feedbackd,
+  glibmm,
+  gnome,
+  gspell,
+  gtk3,
+  json-glib,
+  libgcrypt,
+  libhandy,
+  libphonenumber,
+  modemmanager,
+  olm,
+  pidgin,
+  protobuf,
+  sqlite,
+  plugins ? [],
 }:
-
 stdenv.mkDerivation rec {
   pname = "chatty";
   version = "0.6.1";
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
     homepage = "https://source.puri.sm/Librem5/chatty";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda tomfitzhenry ];
+    maintainers = with maintainers; [dotlambda tomfitzhenry];
     platforms = platforms.linux;
   };
 }

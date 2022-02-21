@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, htslib, zlib, bzip2, xz, curl, perl, python3, bash }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  htslib,
+  zlib,
+  bzip2,
+  xz,
+  curl,
+  perl,
+  python3,
+  bash,
+}:
 stdenv.mkDerivation rec {
   pname = "bcftools";
   version = "1.14";
@@ -14,7 +25,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [ htslib zlib bzip2 xz curl ];
+  buildInputs = [htslib zlib bzip2 xz curl];
 
   strictDeps = true;
 
@@ -39,6 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "http://www.htslib.org/";
     platforms = platforms.unix;
-    maintainers = [ maintainers.mimame ];
+    maintainers = [maintainers.mimame];
   };
 }

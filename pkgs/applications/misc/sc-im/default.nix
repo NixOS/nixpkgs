@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, which
-, bison
-, gnuplot
-, libxls
-, libxlsxwriter
-, libxml2
-, libzip
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  which,
+  bison,
+  gnuplot,
+  libxls,
+  libxlsxwriter,
+  libxml2,
+  libzip,
+  ncurses,
 }:
-
 stdenv.mkDerivation rec {
   pname = "sc-im";
   version = "0.8.2";
@@ -42,17 +42,17 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = ["prefix=${placeholder "out"}"];
 
   postInstall = ''
-    wrapProgram "$out/bin/sc-im" --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
+    wrapProgram "$out/bin/sc-im" --prefix PATH : "${lib.makeBinPath [gnuplot]}"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/andmarti1424/sc-im";
     description = "An ncurses spreadsheet program for terminal";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
     platforms = platforms.unix;
   };
 }

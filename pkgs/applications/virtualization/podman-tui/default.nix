@@ -1,10 +1,11 @@
-{ lib
-, pkg-config
-, fetchFromGitHub
-, buildGoModule
-, btrfs-progs
-, gpgme
-, lvm2
+{
+  lib,
+  pkg-config,
+  fetchFromGitHub,
+  buildGoModule,
+  btrfs-progs,
+  gpgme,
+  lvm2,
 }:
 buildGoModule rec {
   pname = "podman-tui";
@@ -19,7 +20,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
     btrfs-progs
@@ -27,15 +28,15 @@ buildGoModule rec {
     lvm2
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   meta = with lib; {
     homepage = "https://github.com/containers/podman-tui";
     description = "Podman Terminal UI";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    maintainers = with maintainers; [aaronjheng];
     platforms = platforms.linux;
   };
 }

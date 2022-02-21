@@ -1,14 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.xserver.windowManager.fvwm;
-  fvwm = pkgs.fvwm.override { enableGestures = cfg.gestures; };
-in
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.xserver.windowManager.fvwm;
+  fvwm = pkgs.fvwm.override {enableGestures = cfg.gestures;};
+in {
   ###### interface
 
   options = {
@@ -23,19 +22,18 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton
-      { name = "fvwm";
-        start =
-          ''
-            ${fvwm}/bin/fvwm &
-            waitPID=$!
-          '';
-      };
+    {
+      name = "fvwm";
+      start = ''
+        ${fvwm}/bin/fvwm &
+        waitPID=$!
+      '';
+    };
 
-    environment.systemPackages = [ fvwm ];
+    environment.systemPackages = [fvwm];
   };
 }

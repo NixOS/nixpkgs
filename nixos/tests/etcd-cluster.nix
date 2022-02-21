@@ -1,10 +1,10 @@
 # This test runs simple etcd cluster
-
-import ./make-test-python.nix ({ pkgs, ... } : let
-
-  runWithOpenSSL = file: cmd: pkgs.runCommand file {
-    buildInputs = [ pkgs.openssl ];
-  } cmd;
+import ./make-test-python.nix ({pkgs, ...}: let
+  runWithOpenSSL = file: cmd:
+    pkgs.runCommand file {
+      buildInputs = [pkgs.openssl];
+    }
+    cmd;
 
   ca_key = runWithOpenSSL "ca-key.pem" "openssl genrsa -out $out 2048";
   ca_pem = runWithOpenSSL "ca.pem" ''
@@ -29,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, ... } : let
   '';
 
   etcd_client_key = runWithOpenSSL "etcd-client-key.pem"
-    "openssl genrsa -out $out 2048";
+  "openssl genrsa -out $out 2048";
 
   etcd_client_csr = runWithOpenSSL "etcd-client-key.pem" ''
     openssl req \
@@ -92,17 +92,17 @@ import ./make-test-python.nix ({ pkgs, ... } : let
       ETCDCTL_PEERS = "https://127.0.0.1:2379";
     };
 
-    networking.firewall.allowedTCPPorts = [ 2380 ];
+    networking.firewall.allowedTCPPorts = [2380];
   };
 in {
   name = "etcd";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ offline ];
+    maintainers = [offline];
   };
 
   nodes = {
-    node1 = { ... }: {
+    node1 = {...}: {
       require = [nodeConfig];
       services.etcd = {
         initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380"];
@@ -110,7 +110,7 @@ in {
       };
     };
 
-    node2 = { ... }: {
+    node2 = {...}: {
       require = [nodeConfig];
       services.etcd = {
         initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380"];
@@ -118,7 +118,7 @@ in {
       };
     };
 
-    node3 = { ... }: {
+    node3 = {...}: {
       require = [nodeConfig];
       services.etcd = {
         initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380" "node3=https://node3:2380"];

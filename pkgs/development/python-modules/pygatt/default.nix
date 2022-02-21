@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, pexpect
-, pyserial
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  nose,
+  pexpect,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pygatt";
   version = "4.0.5";
@@ -37,12 +37,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'enum-compat'" ""
   '';
 
-  pythonImportsCheck = [ "pygatt" ];
+  pythonImportsCheck = ["pygatt"];
 
   meta = with lib; {
     description = "Python wrapper the BGAPI for accessing Bluetooth LE Devices";
     homepage = "https://github.com/peplin/pygatt";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20 mit];
+    maintainers = with maintainers; [fab];
   };
 }

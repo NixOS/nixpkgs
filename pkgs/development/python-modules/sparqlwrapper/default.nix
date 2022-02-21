@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, isodate
-, pyparsing
-, html5lib
-, keepalive
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  isodate,
+  pyparsing,
+  html5lib,
+  keepalive,
 }:
-
 buildPythonPackage rec {
   pname = "SPARQLWrapper";
   version = "1.8.5";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # Doesn't actually run tests
   doCheck = false;
 
-  propagatedBuildInputs = [ six isodate pyparsing html5lib keepalive ];
+  propagatedBuildInputs = [six isodate pyparsing html5lib keepalive];
 
   meta = with lib; {
     description = "This is a wrapper around a SPARQL service. It helps in creating the query URI and, possibly, convert the result into a more manageable format";

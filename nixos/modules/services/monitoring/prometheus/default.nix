@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.prometheus;
 
   workingDir = "/var/lib/" + cfg.stateDir;
@@ -10,14 +12,14 @@ let
   prometheusYmlOut = "${workingDir}/prometheus-substituted.yaml";
 
   triggerReload = pkgs.writeShellScriptBin "trigger-reload-prometheus" ''
-    PATH="${makeBinPath (with pkgs; [ systemd ])}"
+    PATH="${makeBinPath (with pkgs; [systemd])}"
     if systemctl -q is-active prometheus.service; then
       systemctl reload prometheus.service
     fi
   '';
 
   reload = pkgs.writeShellScriptBin "reload-prometheus" ''
-    PATH="${makeBinPath (with pkgs; [ systemd coreutils gnugrep ])}"
+    PATH="${makeBinPath (with pkgs; [systemd coreutils gnugrep])}"
     cursor=$(journalctl --show-cursor -n0 | grep -oP "cursor: \K.*")
     kill -HUP $MAINPID
     journalctl -u prometheus.service --after-cursor="$cursor" -f \
@@ -26,17 +28,19 @@ let
 
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
-    if cfg.checkConfig then
+    if cfg.checkConfig
+    then
       pkgs.runCommandLocal
-        "${name}-${replaceStrings [" "] [""] what}-checked"
-        { buildInputs = [ cfg.package ]; } ''
+      "${name}-${replaceStrings [" "] [""] what}-checked"
+      {buildInputs = [cfg.package];} ''
         ln -s ${file} $out
         promtool ${what} $out
-      '' else file;
+      ''
+    else file;
 
   # Pretty-print JSON to a file
   writePrettyJSON = name: x:
-    pkgs.runCommandLocal name { } ''
+    pkgs.runCommandLocal name {} ''
       echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
     '';
 
@@ -45,7 +49,8 @@ let
   # This becomes the main config file for Prometheus
   promConfig = {
     global = filterValidPrometheus cfg.globalConfig;
-    rule_files = map (promtoolCheck "check rules" "rules") (cfg.ruleFiles ++ [
+    rule_files = map (promtoolCheck "check rules" "rules") (cfg.ruleFiles
+    ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
     ]);
     scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
@@ -56,106 +61,120 @@ let
     };
   };
 
-  prometheusYml =
-    let
-      yml =
-        if cfg.configText != null then
-          pkgs.writeText "prometheus.yml" cfg.configText
-        else generatedPrometheusYml;
-    in
+  prometheusYml = let
+    yml =
+      if cfg.configText != null
+      then pkgs.writeText "prometheus.yml" cfg.configText
+      else generatedPrometheusYml;
+  in
     promtoolCheck "check config" "prometheus.yml" yml;
 
-  cmdlineArgs = cfg.extraFlags ++ [
-    "--storage.tsdb.path=${workingDir}/data/"
-    "--config.file=${
-      if cfg.enableReload
-      then "/etc/prometheus/prometheus.yaml"
-      else prometheusYml
-    }"
-    "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
-    "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-    "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
-  ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
+  cmdlineArgs =
+    cfg.extraFlags
+    ++ [
+      "--storage.tsdb.path=${workingDir}/data/"
+      "--config.file=${
+        if cfg.enableReload
+        then "/etc/prometheus/prometheus.yaml"
+        else prometheusYml
+      }"
+      "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
+      "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
+      "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
+    ]
+    ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
     ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}";
 
   filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
   filterAttrsListRecursive = pred: x:
-    if isAttrs x then
+    if isAttrs x
+    then
       listToAttrs
+      (
+        concatMap
         (
-          concatMap
-            (name:
-              let v = x.${name}; in
-              if pred name v then [
+          name: let
+            v = x.${name};
+          in
+            if pred name v
+            then
+              [
                 (nameValuePair name (filterAttrsListRecursive pred v))
-              ] else [ ]
-            )
-            (attrNames x)
+              ]
+            else []
         )
-    else if isList x then
-      map (filterAttrsListRecursive pred) x
+        (attrNames x)
+      )
+    else if isList x
+    then map (filterAttrsListRecursive pred) x
     else x;
 
   #
   # Config types: helper functions
   #
 
-  mkDefOpt = type: defaultStr: description: mkOpt type (description + ''
+  mkDefOpt = type: defaultStr: description:
+    mkOpt type (description
+    + ''
 
-    Defaults to <literal>${defaultStr}</literal> in prometheus
-    when set to <literal>null</literal>.
-  '');
+      Defaults to <literal>${defaultStr}</literal> in prometheus
+      when set to <literal>null</literal>.
+    '');
 
-  mkOpt = type: description: mkOption {
-    type = types.nullOr type;
-    default = null;
-    inherit description;
-  };
+  mkOpt = type: description:
+    mkOption {
+      type = types.nullOr type;
+      default = null;
+      inherit description;
+    };
 
-  mkSdConfigModule = extraOptions: types.submodule {
-    options = {
-      basic_auth = mkOpt promTypes.basic_auth ''
-        Optional HTTP basic authentication information.
-      '';
+  mkSdConfigModule = extraOptions:
+    types.submodule {
+      options =
+        {
+          basic_auth = mkOpt promTypes.basic_auth ''
+            Optional HTTP basic authentication information.
+          '';
 
-      authorization = mkOpt
-        (types.submodule {
-          options = {
-            type = mkDefOpt types.str "Bearer" ''
-              Sets the authentication type.
-            '';
+          authorization = mkOpt
+          (types.submodule {
+            options = {
+              type = mkDefOpt types.str "Bearer" ''
+                Sets the authentication type.
+              '';
 
-            credentials = mkOpt types.str ''
-              Sets the credentials. It is mutually exclusive with `credentials_file`.
-            '';
+              credentials = mkOpt types.str ''
+                Sets the credentials. It is mutually exclusive with `credentials_file`.
+              '';
 
-            credentials_file = mkOpt types.str ''
-              Sets the credentials to the credentials read from the configured file.
-              It is mutually exclusive with `credentials`.
-            '';
-          };
-        }) ''
-        Optional `Authorization` header configuration.
-      '';
+              credentials_file = mkOpt types.str ''
+                Sets the credentials to the credentials read from the configured file.
+                It is mutually exclusive with `credentials`.
+              '';
+            };
+          }) ''
+            Optional `Authorization` header configuration.
+          '';
 
-      oauth2 = mkOpt promtypes.oauth2 ''
-        Optional OAuth 2.0 configuration.
-        Cannot be used at the same time as basic_auth or authorization.
-      '';
+          oauth2 = mkOpt promtypes.oauth2 ''
+            Optional OAuth 2.0 configuration.
+            Cannot be used at the same time as basic_auth or authorization.
+          '';
 
-      proxy_url = mkOpt types.str ''
-        Optional proxy URL.
-      '';
+          proxy_url = mkOpt types.str ''
+            Optional proxy URL.
+          '';
 
-      follow_redirects = mkDefOpt types.bool "true" ''
-        Configure whether HTTP requests follow HTTP 3xx redirects.
-      '';
+          follow_redirects = mkDefOpt types.bool "true" ''
+            Configure whether HTTP requests follow HTTP 3xx redirects.
+          '';
 
-      tls_config = mkOpt promTypes.tls_config ''
-        TLS configuration.
-      '';
-    } // extraOptions;
-  };
+          tls_config = mkOpt promTypes.tls_config ''
+            TLS configuration.
+          '';
+        }
+        // extraOptions;
+    };
 
   #
   # Config types: general
@@ -309,7 +328,7 @@ let
         by the target will be ignored.
       '';
 
-      scheme = mkDefOpt (types.enum [ "http" "https" ]) "http" ''
+      scheme = mkDefOpt (types.enum ["http" "https"]) "http" ''
         The URL scheme with which to fetch metrics from targets.
       '';
 
@@ -509,7 +528,7 @@ let
         The Azure environment.
       '';
 
-      authentication_method = mkDefOpt (types.enum [ "OAuth" "ManagedIdentity" ]) "OAuth" ''
+      authentication_method = mkDefOpt (types.enum ["OAuth" "ManagedIdentity"]) "OAuth" ''
         The authentication method, either OAuth or ManagedIdentity.
         See https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview
       '';
@@ -618,20 +637,21 @@ let
     '';
   };
 
-  mkDockerSdConfigModule = extraOptions: mkSdConfigModule ({
-    host = mkOption {
-      type = types.str;
-      description = ''
-        Address of the Docker daemon.
+  mkDockerSdConfigModule = extraOptions:
+    mkSdConfigModule ({
+      host = mkOption {
+        type = types.str;
+        description = ''
+          Address of the Docker daemon.
+        '';
+      };
+
+      port = mkDefOpt types.int "80" ''
+        The port to scrape metrics from, when `role` is nodes, and for discovered
+        tasks and services that don't have published ports.
       '';
-    };
 
-    port = mkDefOpt types.int "80" ''
-      The port to scrape metrics from, when `role` is nodes, and for discovered
-      tasks and services that don't have published ports.
-    '';
-
-    filters = mkOpt
+      filters = mkOpt
       (types.listOf (types.submodule {
         options = {
           name = mkOption {
@@ -651,13 +671,14 @@ let
           };
         };
       })) ''
-      Optional filters to limit the discovery process to a subset of available resources.
-    '';
+        Optional filters to limit the discovery process to a subset of available resources.
+      '';
 
-    refresh_interval = mkDefOpt types.str "60s" ''
-      The time after which the containers are refreshed.
-    '';
-  } // extraOptions);
+      refresh_interval = mkDefOpt types.str "60s" ''
+        The time after which the containers are refreshed.
+      '';
+    }
+    // extraOptions);
 
   promTypes.docker_sd_config = mkDockerSdConfigModule {
     host_networking_host = mkDefOpt types.str "localhost" ''
@@ -667,7 +688,7 @@ let
 
   promTypes.dockerswarm_sd_config = mkDockerSdConfigModule {
     role = mkOption {
-      type = types.enum [ "services" "tasks" "nodes" ];
+      type = types.enum ["services" "tasks" "nodes"];
       description = ''
         Role of the targets to retrieve. Must be `services`, `tasks`, or `nodes`.
       '';
@@ -683,7 +704,7 @@ let
         '';
       };
 
-      type = mkDefOpt (types.enum [ "SRV" "A" "AAAA" ]) "SRV" ''
+      type = mkDefOpt (types.enum ["SRV" "A" "AAAA"]) "SRV" ''
         The type of DNS query to perform. One of SRV, A, or AAAA.
       '';
 
@@ -738,25 +759,25 @@ let
       '';
 
       filters = mkOpt
-        (types.listOf (types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = ''
-                See <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">this list</link>
-                for the available filters.
-              '';
-            };
-
-            values = mkOption {
-              type = types.listOf types.str;
-              default = [ ];
-              description = ''
-                Value of the filter.
-              '';
-            };
+      (types.listOf (types.submodule {
+        options = {
+          name = mkOption {
+            type = types.str;
+            description = ''
+              See <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">this list</link>
+              for the available filters.
+            '';
           };
-        })) ''
+
+          values = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = ''
+              Value of the filter.
+            '';
+          };
+        };
+      })) ''
         Filters can be used optionally to filter the instance list by other criteria.
       '';
     };
@@ -835,7 +856,7 @@ let
 
   promTypes.hetzner_sd_config = mkSdConfigModule {
     role = mkOption {
-      type = types.enum [ "robot" "hcloud" ];
+      type = types.enum ["robot" "hcloud"];
       description = ''
         The Hetzner role of entities that should be discovered.
         One of <literal>robot</literal> or <literal>hcloud</literal>.
@@ -891,7 +912,7 @@ let
     '';
 
     role = mkOption {
-      type = types.enum [ "endpoints" "service" "pod" "node" "ingress" ];
+      type = types.enum ["endpoints" "service" "pod" "node" "ingress"];
       description = ''
         The Kubernetes role of entities that should be discovered.
         One of endpoints, service, pod, node, or ingress.
@@ -904,41 +925,41 @@ let
     '';
 
     namespaces = mkOpt
-      (
-        types.submodule {
-          options = {
-            names = mkOpt (types.listOf types.str) ''
-              Namespace name.
-            '';
-          };
-        }
-      ) ''
+    (
+      types.submodule {
+        options = {
+          names = mkOpt (types.listOf types.str) ''
+            Namespace name.
+          '';
+        };
+      }
+    ) ''
       Optional namespace discovery. If omitted, all namespaces are used.
     '';
 
     selectors = mkOpt
-      (
-        types.listOf (
-          types.submodule {
-            options = {
-              role = mkOption {
-                type = types.str;
-                description = ''
-                  Selector role
-                '';
-              };
-
-              label = mkOpt types.str ''
-                Selector label
-              '';
-
-              field = mkOpt types.str ''
-                Selector field
+    (
+      types.listOf (
+        types.submodule {
+          options = {
+            role = mkOption {
+              type = types.str;
+              description = ''
+                Selector role
               '';
             };
-          }
-        )
-      ) ''
+
+            label = mkOpt types.str ''
+              Selector label
+            '';
+
+            field = mkOpt types.str ''
+              Selector field
+            '';
+          };
+        }
+      )
+    ) ''
       Optional label and field selectors to limit the discovery process to a subset of available resources.
       See https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
       and https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ to learn more about the possible
@@ -1070,99 +1091,97 @@ let
   };
 
   promTypes.openstack_sd_config = types.submodule {
-    options =
-      let
-        userDescription = ''
-          username is required if using Identity V2 API. Consult with your provider's
-          control panel to discover your account's username. In Identity V3, either
-          userid or a combination of username and domain_id or domain_name are needed.
-        '';
+    options = let
+      userDescription = ''
+        username is required if using Identity V2 API. Consult with your provider's
+        control panel to discover your account's username. In Identity V3, either
+        userid or a combination of username and domain_id or domain_name are needed.
+      '';
 
-        domainDescription = ''
-          At most one of domain_id and domain_name must be provided if using username
-          with Identity V3. Otherwise, either are optional.
-        '';
+      domainDescription = ''
+        At most one of domain_id and domain_name must be provided if using username
+        with Identity V3. Otherwise, either are optional.
+      '';
 
-        projectDescription = ''
-          The project_id and project_name fields are optional for the Identity V2 API.
-          Some providers allow you to specify a project_name instead of the project_id.
-          Some require both. Your provider's authentication policies will determine
-          how these fields influence authentication.
-        '';
+      projectDescription = ''
+        The project_id and project_name fields are optional for the Identity V2 API.
+        Some providers allow you to specify a project_name instead of the project_id.
+        Some require both. Your provider's authentication policies will determine
+        how these fields influence authentication.
+      '';
 
-        applicationDescription = ''
-          The application_credential_id or application_credential_name fields are
-          required if using an application credential to authenticate. Some providers
-          allow you to create an application credential to authenticate rather than a
-          password.
-        '';
-      in
-      {
-        role = mkOption {
-          type = types.str;
-          description = ''
-            The OpenStack role of entities that should be discovered.
-          '';
-        };
-
-        region = mkOption {
-          type = types.str;
-          description = ''
-            The OpenStack Region.
-          '';
-        };
-
-        identity_endpoint = mkOpt types.str ''
-          identity_endpoint specifies the HTTP endpoint that is required to work with
-          the Identity API of the appropriate version. While it's ultimately needed by
-          all of the identity services, it will often be populated by a provider-level
-          function.
-        '';
-
-        username = mkOpt types.str userDescription;
-        userid = mkOpt types.str userDescription;
-
-        password = mkOpt types.str ''
-          password for the Identity V2 and V3 APIs. Consult with your provider's
-          control panel to discover your account's preferred method of authentication.
-        '';
-
-        domain_name = mkOpt types.str domainDescription;
-        domain_id = mkOpt types.str domainDescription;
-
-        project_name = mkOpt types.str projectDescription;
-        project_id = mkOpt types.str projectDescription;
-
-        application_credential_name = mkOpt types.str applicationDescription;
-        application_credential_id = mkOpt types.str applicationDescription;
-
-        application_credential_secret = mkOpt types.str ''
-          The application_credential_secret field is required if using an application
-          credential to authenticate.
-        '';
-
-        all_tenants = mkDefOpt types.bool "false" ''
-          Whether the service discovery should list all instances for all projects.
-          It is only relevant for the 'instance' role and usually requires admin permissions.
-        '';
-
-        refresh_interval = mkDefOpt types.str "60s" ''
-          Refresh interval to re-read the instance list.
-        '';
-
-        port = mkDefOpt types.int "80" ''
-          The port to scrape metrics from. If using the public IP address, this must
-          instead be specified in the relabeling rule.
-        '';
-
-        availability = mkDefOpt (types.enum [ "public" "admin" "internal" ]) "public" ''
-          The availability of the endpoint to connect to. Must be one of public, admin or internal.
-        '';
-
-        tls_config = mkOpt promTypes.tls_config ''
-          TLS configuration.
+      applicationDescription = ''
+        The application_credential_id or application_credential_name fields are
+        required if using an application credential to authenticate. Some providers
+        allow you to create an application credential to authenticate rather than a
+        password.
+      '';
+    in {
+      role = mkOption {
+        type = types.str;
+        description = ''
+          The OpenStack role of entities that should be discovered.
         '';
       };
+
+      region = mkOption {
+        type = types.str;
+        description = ''
+          The OpenStack Region.
+        '';
+      };
+
+      identity_endpoint = mkOpt types.str ''
+        identity_endpoint specifies the HTTP endpoint that is required to work with
+        the Identity API of the appropriate version. While it's ultimately needed by
+        all of the identity services, it will often be populated by a provider-level
+        function.
+      '';
+
+      username = mkOpt types.str userDescription;
+      userid = mkOpt types.str userDescription;
+
+      password = mkOpt types.str ''
+        password for the Identity V2 and V3 APIs. Consult with your provider's
+        control panel to discover your account's preferred method of authentication.
+      '';
+
+      domain_name = mkOpt types.str domainDescription;
+      domain_id = mkOpt types.str domainDescription;
+
+      project_name = mkOpt types.str projectDescription;
+      project_id = mkOpt types.str projectDescription;
+
+      application_credential_name = mkOpt types.str applicationDescription;
+      application_credential_id = mkOpt types.str applicationDescription;
+
+      application_credential_secret = mkOpt types.str ''
+        The application_credential_secret field is required if using an application
+        credential to authenticate.
+      '';
+
+      all_tenants = mkDefOpt types.bool "false" ''
+        Whether the service discovery should list all instances for all projects.
+        It is only relevant for the 'instance' role and usually requires admin permissions.
+      '';
+
+      refresh_interval = mkDefOpt types.str "60s" ''
+        Refresh interval to re-read the instance list.
+      '';
+
+      port = mkDefOpt types.int "80" ''
+        The port to scrape metrics from. If using the public IP address, this must
+        instead be specified in the relabeling rule.
+      '';
+
+      availability = mkDefOpt (types.enum ["public" "admin" "internal"]) "public" ''
+        The availability of the endpoint to connect to. Must be one of public, admin or internal.
+      '';
+
+      tls_config = mkOpt promTypes.tls_config ''
+        TLS configuration.
+      '';
+    };
   };
 
   promTypes.puppetdb_sd_config = mkSdConfigModule {
@@ -1227,7 +1246,7 @@ let
       };
 
       role = mkOption {
-        type = types.enum [ "instance" "baremetal" ];
+        type = types.enum ["instance" "baremetal"];
         description = ''
           Role of the targets to retrieve. Must be `instance` or `baremetal`.
         '';
@@ -1283,7 +1302,7 @@ let
         '';
       };
 
-      role = mkDefOpt (types.enum [ "container" "cn" ]) "container" ''
+      role = mkDefOpt (types.enum ["container" "cn"]) "container" ''
         The type of targets to discover, can be set to:
         - "container" to discover virtual machines (SmartOS zones, lx/KVM/bhyve branded zones) running on Triton
         - "cn" to discover compute nodes (servers/global zones) making up the Triton infrastructure
@@ -1372,7 +1391,7 @@ let
       };
       labels = mkOption {
         type = types.attrsOf types.str;
-        default = { };
+        default = {};
         description = ''
           Labels assigned to all metrics scraped from the targets.
         '';
@@ -1415,7 +1434,7 @@ let
       '';
 
       action =
-        mkDefOpt (types.enum [ "replace" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep" ]) "replace" ''
+        mkDefOpt (types.enum ["replace" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep"]) "replace" ''
           Action to perform based on regex matching.
         '';
     };
@@ -1463,47 +1482,47 @@ let
       '';
       proxy_url = mkOpt types.str "Optional Proxy URL.";
       queue_config = mkOpt
-        (types.submodule {
-          options = {
-            capacity = mkOpt types.int ''
-              Number of samples to buffer per shard before we block reading of more
-              samples from the WAL. It is recommended to have enough capacity in each
-              shard to buffer several requests to keep throughput up while processing
-              occasional slow remote requests.
-            '';
-            max_shards = mkOpt types.int ''
-              Maximum number of shards, i.e. amount of concurrency.
-            '';
-            min_shards = mkOpt types.int ''
-              Minimum number of shards, i.e. amount of concurrency.
-            '';
-            max_samples_per_send = mkOpt types.int ''
-              Maximum number of samples per send.
-            '';
-            batch_send_deadline = mkOpt types.str ''
-              Maximum time a sample will wait in buffer.
-            '';
-            min_backoff = mkOpt types.str ''
-              Initial retry delay. Gets doubled for every retry.
-            '';
-            max_backoff = mkOpt types.str ''
-              Maximum retry delay.
-            '';
-          };
-        }) ''
+      (types.submodule {
+        options = {
+          capacity = mkOpt types.int ''
+            Number of samples to buffer per shard before we block reading of more
+            samples from the WAL. It is recommended to have enough capacity in each
+            shard to buffer several requests to keep throughput up while processing
+            occasional slow remote requests.
+          '';
+          max_shards = mkOpt types.int ''
+            Maximum number of shards, i.e. amount of concurrency.
+          '';
+          min_shards = mkOpt types.int ''
+            Minimum number of shards, i.e. amount of concurrency.
+          '';
+          max_samples_per_send = mkOpt types.int ''
+            Maximum number of samples per send.
+          '';
+          batch_send_deadline = mkOpt types.str ''
+            Maximum time a sample will wait in buffer.
+          '';
+          min_backoff = mkOpt types.str ''
+            Initial retry delay. Gets doubled for every retry.
+          '';
+          max_backoff = mkOpt types.str ''
+            Maximum retry delay.
+          '';
+        };
+      }) ''
         Configures the queue used to write to remote storage.
       '';
       metadata_config = mkOpt
-        (types.submodule {
-          options = {
-            send = mkOpt types.bool ''
-              Whether metric metadata is sent to remote storage or not.
-            '';
-            send_interval = mkOpt types.str ''
-              How frequently metric metadata is sent to remote storage.
-            '';
-          };
-        }) ''
+      (types.submodule {
+        options = {
+          send = mkOpt types.bool ''
+            Whether metric metadata is sent to remote storage or not.
+          '';
+          send_interval = mkOpt types.str ''
+            How frequently metric metadata is sent to remote storage.
+          '';
+        };
+      }) ''
         Configures the sending of series metadata to remote storage.
         Metadata configuration is subject to change at any point
         or be removed in future releases.
@@ -1555,18 +1574,14 @@ let
       proxy_url = mkOpt types.str "Optional Proxy URL.";
     };
   };
-
-in
-{
-
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
-    (mkRemovedOptionModule [ "services" "prometheus" "environmentFile" ]
-      "It has been removed since it was causing issues (https://github.com/NixOS/nixpkgs/issues/126083) and Prometheus now has native support for secret files, i.e. `basic_auth.password_file` and `authorization.credentials_file`.")
+    (mkRenamedOptionModule ["services" "prometheus2"] ["services" "prometheus"])
+    (mkRemovedOptionModule ["services" "prometheus" "environmentFile"]
+    "It has been removed since it was causing issues (https://github.com/NixOS/nixpkgs/issues/126083) and Prometheus now has native support for secret files, i.e. `basic_auth.password_file` and `authorization.credentials_file`.")
   ];
 
   options.services.prometheus = {
-
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -1611,7 +1626,7 @@ in
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = ''
         Extra commandline options when launching Prometheus.
       '';
@@ -1642,7 +1657,7 @@ in
 
     globalConfig = mkOption {
       type = promTypes.globalConfig;
-      default = { };
+      default = {};
       description = ''
         Parameters that are valid in all  configuration contexts. They
         also serve as defaults for other configuration sections
@@ -1651,7 +1666,7 @@ in
 
     remoteRead = mkOption {
       type = types.listOf promTypes.remote_read;
-      default = [ ];
+      default = [];
       description = ''
         Parameters of the endpoints to query from.
         See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read">the official documentation</link> for more information.
@@ -1660,7 +1675,7 @@ in
 
     remoteWrite = mkOption {
       type = types.listOf promTypes.remote_write;
-      default = [ ];
+      default = [];
       description = ''
         Parameters of the endpoints to send samples to.
         See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write">the official documentation</link> for more information.
@@ -1669,7 +1684,7 @@ in
 
     rules = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = ''
         Alerting and/or Recording rules to evaluate at runtime.
       '';
@@ -1677,7 +1692,7 @@ in
 
     ruleFiles = mkOption {
       type = types.listOf types.path;
-      default = [ ];
+      default = [];
       description = ''
         Any additional rules files to include in this configuration.
       '';
@@ -1685,7 +1700,7 @@ in
 
     scrapeConfigs = mkOption {
       type = types.listOf promTypes.scrape_config;
-      default = [ ];
+      default = [];
       description = ''
         A list of scrape configurations.
       '';
@@ -1704,7 +1719,7 @@ in
           } ];
         } ]
       '';
-      default = [ ];
+      default = [];
       description = ''
         A list of alertmanagers to send alerts to.
         See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config">the official documentation</link> for more information.
@@ -1768,8 +1783,7 @@ in
           # Match something with dots (an IPv4 address) or something ending in
           # a square bracket (an IPv6 addresses) followed by a port number.
           legacy = builtins.match "(.*\\..*|.*]):([[:digit:]]+)" cfg.listenAddress;
-        in
-        {
+        in {
           assertion = legacy == null;
           message = ''
             Do not specify the port for Prometheus to listen on in the
@@ -1791,12 +1805,13 @@ in
       source = prometheusYml;
     };
     systemd.services.prometheus = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/prometheus" +
-          optionalString (length cmdlineArgs != 0) (" \\\n  " +
-            concatStringsSep " \\\n  " cmdlineArgs);
+        ExecStart =
+          "${cfg.package}/bin/prometheus"
+          + optionalString (length cmdlineArgs != 0) (" \\\n  "
+          + concatStringsSep " \\\n  " cmdlineArgs);
         ExecReload = mkIf cfg.enableReload "+${reload}/bin/reload-prometheus";
         User = "prometheus";
         Restart = "always";
@@ -1819,16 +1834,16 @@ in
     # that this service has changed (restartTriggers) and needs to be reloaded
     # (reloadIfChanged). The reload command then reloads prometheus.
     systemd.services.prometheus-config-reload = mkIf cfg.enableReload {
-      wantedBy = [ "prometheus.service" ];
-      after = [ "prometheus.service" ];
+      wantedBy = ["prometheus.service"];
+      after = ["prometheus.service"];
       reloadIfChanged = true;
-      restartTriggers = [ prometheusYml ];
+      restartTriggers = [prometheusYml];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
         TimeoutSec = 60;
         ExecStart = "${pkgs.logger}/bin/logger 'prometheus-config-reload will only reload prometheus when reloaded itself.'";
-        ExecReload = [ "${triggerReload}/bin/trigger-reload-prometheus" ];
+        ExecReload = ["${triggerReload}/bin/trigger-reload-prometheus"];
       };
     };
   };

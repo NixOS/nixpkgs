@@ -1,17 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.globalprotect;
 
-  execStart = if cfg.csdWrapper == null then
-      "${pkgs.globalprotect-openconnect}/bin/gpservice"
-    else
-      "${pkgs.globalprotect-openconnect}/bin/gpservice --csd-wrapper=${cfg.csdWrapper}";
-in
-
-{
+  execStart =
+    if cfg.csdWrapper == null
+    then "${pkgs.globalprotect-openconnect}/bin/gpservice"
+    else "${pkgs.globalprotect-openconnect}/bin/gpservice --csd-wrapper=${cfg.csdWrapper}";
+in {
   options.services.globalprotect = {
     enable = mkEnableOption "globalprotect";
 
@@ -27,17 +27,17 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.dbus.packages = [ pkgs.globalprotect-openconnect ];
+    services.dbus.packages = [pkgs.globalprotect-openconnect];
 
     systemd.services.gpservice = {
       description = "GlobalProtect openconnect DBus service";
       serviceConfig = {
-        Type="dbus";
-        BusName="com.yuezk.qt.GPService";
-        ExecStart=execStart;
+        Type = "dbus";
+        BusName = "com.yuezk.qt.GPService";
+        ExecStart = execStart;
       };
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
     };
   };
 }

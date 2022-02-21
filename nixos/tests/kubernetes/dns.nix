@@ -1,6 +1,8 @@
-{ system ? builtins.currentSystem, pkgs ? import ../../.. { inherit system; } }:
-with import ./base.nix { inherit system; };
-let
+{
+  system ? builtins.currentSystem,
+  pkgs ? import ../../.. {inherit system;},
+}:
+with import ./base.nix {inherit system;}; let
   domain = "my.zyx";
 
   redisPod = pkgs.writeText "redis-pod.json" (builtins.toJSON {
@@ -8,16 +10,20 @@ let
     apiVersion = "v1";
     metadata.name = "redis";
     metadata.labels.name = "redis";
-    spec.containers = [{
-      name = "redis";
-      image = "redis";
-      args = ["--bind" "0.0.0.0"];
-      imagePullPolicy = "Never";
-      ports = [{
-        name = "redis-server";
-        containerPort = 6379;
-      }];
-    }];
+    spec.containers = [
+      {
+        name = "redis";
+        image = "redis";
+        args = ["--bind" "0.0.0.0"];
+        imagePullPolicy = "Never";
+        ports = [
+          {
+            name = "redis-server";
+            containerPort = 6379;
+          }
+        ];
+      }
+    ];
   });
 
   redisService = pkgs.writeText "redis-service.json" (builtins.toJSON {
@@ -25,7 +31,12 @@ let
     apiVersion = "v1";
     metadata.name = "redis";
     spec = {
-      ports = [{port = 6379; targetPort = 6379;}];
+      ports = [
+        {
+          port = 6379;
+          targetPort = 6379;
+        }
+      ];
       selector = {name = "redis";};
     };
   });
@@ -33,7 +44,7 @@ let
   redisImage = pkgs.dockerTools.buildImage {
     name = "redis";
     tag = "latest";
-    contents = [ pkgs.redis pkgs.bind.host ];
+    contents = [pkgs.redis pkgs.bind.host];
     config.Entrypoint = ["/bin/redis-server"];
   };
 
@@ -42,24 +53,31 @@ let
     apiVersion = "v1";
     metadata.name = "probe";
     metadata.labels.name = "probe";
-    spec.containers = [{
-      name = "probe";
-      image = "probe";
-      args = [ "-f" ];
-      tty = true;
-      imagePullPolicy = "Never";
-    }];
+    spec.containers = [
+      {
+        name = "probe";
+        image = "probe";
+        args = ["-f"];
+        tty = true;
+        imagePullPolicy = "Never";
+      }
+    ];
   });
 
   probeImage = pkgs.dockerTools.buildImage {
     name = "probe";
     tag = "latest";
-    contents = [ pkgs.bind.host pkgs.busybox ];
+    contents = [pkgs.bind.host pkgs.busybox];
     config.Entrypoint = ["/bin/tail"];
   };
 
-  extraConfiguration = { config, pkgs, lib, ... }: {
-    environment.systemPackages = [ pkgs.bind.host ];
+  extraConfiguration = {
+    config,
+    pkgs,
+    lib,
+    ...
+  }: {
+    environment.systemPackages = [pkgs.bind.host];
     services.dnsmasq.enable = true;
     services.dnsmasq.servers = [
       "/cluster.local/${config.services.kubernetes.addons.dns.clusterIp}#53"

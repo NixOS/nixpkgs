@@ -1,31 +1,41 @@
-{ lib, stdenv, fetchFromGitLab, cmake, openal, pkg-config, libogg,
-  libvorbis, SDL2, makeWrapper, libpng, libjpeg_turbo, libGLU }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  openal,
+  pkg-config,
+  libogg,
+  libvorbis,
+  SDL2,
+  makeWrapper,
+  libpng,
+  libjpeg_turbo,
+  libGLU,
+}:
 with lib;
+  stdenv.mkDerivation rec {
+    pname = "lugaru";
+    version = "1.2";
 
-stdenv.mkDerivation rec {
+    src = fetchFromGitLab {
+      owner = "osslugaru";
+      repo = "lugaru";
+      rev = version;
+      sha256 = "089rblf8xw3c6dq96vnfla6zl8gxcpcbc1bj5jysfpq63hhdpypz";
+    };
 
-  pname = "lugaru";
-  version = "1.2";
+    nativeBuildInputs = [makeWrapper cmake pkg-config];
 
-  src = fetchFromGitLab {
-    owner = "osslugaru";
-    repo = "lugaru";
-    rev = version;
-    sha256 = "089rblf8xw3c6dq96vnfla6zl8gxcpcbc1bj5jysfpq63hhdpypz";
-  };
+    buildInputs = [libGLU openal SDL2 libogg libvorbis libpng libjpeg_turbo];
 
-  nativeBuildInputs = [ makeWrapper cmake pkg-config ];
+    cmakeFlags = ["-DSYSTEM_INSTALL=ON"];
 
-  buildInputs = [ libGLU openal SDL2 libogg libvorbis libpng libjpeg_turbo ];
-
-  cmakeFlags = [ "-DSYSTEM_INSTALL=ON" ];
-
-  meta = {
-    description = "Third person ninja rabbit fighting game";
-    homepage = "https://osslugaru.gitlab.io";
-    maintainers = [ ];
-    platforms = platforms.linux;
-    license = lib.licenses.gpl2Plus;
-  };
-}
+    meta = {
+      description = "Third person ninja rabbit fighting game";
+      homepage = "https://osslugaru.gitlab.io";
+      maintainers = [];
+      platforms = platforms.linux;
+      license = lib.licenses.gpl2Plus;
+    };
+  }

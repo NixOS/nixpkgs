@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.asterisk;
 
   asteriskUser = "asterisk";
@@ -15,18 +17,23 @@ let
   # Add filecontents from files of useTheseDefaultConfFiles to confFiles, do not override
   defaultConfFiles = subtractLists (attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
   allConfFiles =
-    cfg.confFiles //
-    builtins.listToAttrs (map (x: { name = x;
-                                    value = builtins.readFile (cfg.package + "/etc/asterisk/" + x); })
-                              defaultConfFiles);
+    cfg.confFiles
+    // builtins.listToAttrs (map (x: {
+      name = x;
+      value = builtins.readFile (cfg.package + "/etc/asterisk/" + x);
+    })
+    defaultConfFiles);
 
   asteriskEtc = pkgs.stdenv.mkDerivation
-  ((mapAttrs' (name: value: nameValuePair
-        # Fudge the names to make bash happy
-        ((replaceChars ["."] ["_"] name) + "_")
-        (value)
-      ) allConfFiles) //
-  {
+  ((mapAttrs' (
+    name: value:
+      nameValuePair
+      # Fudge the names to make bash happy
+      ((replaceChars ["."] ["_"] name) + "_")
+      (value)
+  )
+  allConfFiles)
+  // {
     confFilesString = concatStringsSep " " (
       attrNames allConfFiles
     );
@@ -85,9 +92,7 @@ let
       done
     '';
   });
-in
-
-{
+in {
   options = {
     services.asterisk = {
       enable = mkOption {
@@ -116,50 +121,50 @@ in
         default = {};
         type = types.attrsOf types.str;
         example = literalExpression
-          ''
-            {
-              "extensions.conf" = '''
-                [tests]
-                ; Dial 100 for "hello, world"
-                exten => 100,1,Answer()
-                same  =>     n,Wait(1)
-                same  =>     n,Playback(hello-world)
-                same  =>     n,Hangup()
+        ''
+          {
+            "extensions.conf" = '''
+              [tests]
+              ; Dial 100 for "hello, world"
+              exten => 100,1,Answer()
+              same  =>     n,Wait(1)
+              same  =>     n,Playback(hello-world)
+              same  =>     n,Hangup()
 
-                [softphones]
-                include => tests
+              [softphones]
+              include => tests
 
-                [unauthorized]
-              ''';
-              "sip.conf" = '''
-                [general]
-                allowguest=no              ; Require authentication
-                context=unauthorized       ; Send unauthorized users to /dev/null
-                srvlookup=no               ; Don't do DNS lookup
-                udpbindaddr=0.0.0.0        ; Listen on all interfaces
-                nat=force_rport,comedia    ; Assume device is behind NAT
+              [unauthorized]
+            ''';
+            "sip.conf" = '''
+              [general]
+              allowguest=no              ; Require authentication
+              context=unauthorized       ; Send unauthorized users to /dev/null
+              srvlookup=no               ; Don't do DNS lookup
+              udpbindaddr=0.0.0.0        ; Listen on all interfaces
+              nat=force_rport,comedia    ; Assume device is behind NAT
 
-                [softphone](!)
-                type=friend                ; Match on username first, IP second
-                context=softphones         ; Send to softphones context in
-                                           ; extensions.conf file
-                host=dynamic               ; Device will register with asterisk
-                disallow=all               ; Manually specify codecs to allow
-                allow=g722
-                allow=ulaw
-                allow=alaw
+              [softphone](!)
+              type=friend                ; Match on username first, IP second
+              context=softphones         ; Send to softphones context in
+                                         ; extensions.conf file
+              host=dynamic               ; Device will register with asterisk
+              disallow=all               ; Manually specify codecs to allow
+              allow=g722
+              allow=ulaw
+              allow=alaw
 
-                [myphone](softphone)
-                secret=GhoshevFew          ; Change this password!
-              ''';
-              "logger.conf" = '''
-                [general]
+              [myphone](softphone)
+              secret=GhoshevFew          ; Change this password!
+            ''';
+            "logger.conf" = '''
+              [general]
 
-                [logfiles]
-                ; Add debug output to log
-                syslog.local0 => notice,warning,error,debug
-              ''';
-            }
+              [logfiles]
+              ; Add debug output to log
+              syslog.local0 => notice,warning,error,debug
+            ''';
+          }
         '';
         description = ''
           Sets the content of config files (typically ending with
@@ -179,20 +184,19 @@ in
       };
 
       useTheseDefaultConfFiles = mkOption {
-        default = [ "ari.conf" "acl.conf" "agents.conf" "amd.conf" "calendar.conf" "cdr.conf" "cdr_syslog.conf" "cdr_custom.conf" "cel.conf" "cel_custom.conf" "cli_aliases.conf" "confbridge.conf" "dundi.conf" "features.conf" "hep.conf" "iax.conf" "pjsip.conf" "pjsip_wizard.conf" "phone.conf" "phoneprov.conf" "queues.conf" "res_config_sqlite3.conf" "res_parking.conf" "statsd.conf" "udptl.conf" "unistim.conf" ];
+        default = ["ari.conf" "acl.conf" "agents.conf" "amd.conf" "calendar.conf" "cdr.conf" "cdr_syslog.conf" "cdr_custom.conf" "cel.conf" "cel_custom.conf" "cli_aliases.conf" "confbridge.conf" "dundi.conf" "features.conf" "hep.conf" "iax.conf" "pjsip.conf" "pjsip_wizard.conf" "phone.conf" "phoneprov.conf" "queues.conf" "res_config_sqlite3.conf" "res_parking.conf" "statsd.conf" "udptl.conf" "unistim.conf"];
         type = types.listOf types.str;
-        example = [ "sip.conf" "dundi.conf" ];
-        description = ''Sets these config files to the default content. The default value for
-          this option contains all necesscary files to avoid errors at startup.
-          This does not override settings via <option>services.asterisk.confFiles</option>.
+        example = ["sip.conf" "dundi.conf"];
+        description = ''          Sets these config files to the default content. The default value for
+                    this option contains all necesscary files to avoid errors at startup.
+                    This does not override settings via <option>services.asterisk.confFiles</option>.
         '';
       };
 
       extraArguments = mkOption {
         default = [];
         type = types.listOf types.str;
-        example =
-          [ "-vvvddd" "-e" "1024" ];
+        example = ["-vvvddd" "-e" "1024"];
         description = ''
           Additional command line arguments to pass to Asterisk.
         '';
@@ -207,29 +211,29 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     environment.etc.asterisk.source = asteriskEtc;
 
-    users.users.asterisk =
-      { name = asteriskUser;
-        group = asteriskGroup;
-        uid = config.ids.uids.asterisk;
-        description = "Asterisk daemon user";
-        home = varlibdir;
-      };
+    users.users.asterisk = {
+      name = asteriskUser;
+      group = asteriskGroup;
+      uid = config.ids.uids.asterisk;
+      description = "Asterisk daemon user";
+      home = varlibdir;
+    };
 
-    users.groups.asterisk =
-      { name = asteriskGroup;
-        gid = config.ids.gids.asterisk;
-      };
+    users.groups.asterisk = {
+      name = asteriskGroup;
+      gid = config.ids.gids.asterisk;
+    };
 
     systemd.services.asterisk = {
       description = ''
         Asterisk PBX server
       '';
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
 
       # Do not restart, to avoid disruption of running calls. Restart unit by yourself!
       restartIfChanged = false;
@@ -248,14 +252,12 @@ in
       '';
 
       serviceConfig = {
-        ExecStart =
-          let
-            # FIXME: This doesn't account for arguments with spaces
-            argString = concatStringsSep " " cfg.extraArguments;
-          in
-          "${cfg.package}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
-        ExecReload = ''${cfg.package}/bin/asterisk -x "core reload"
-          '';
+        ExecStart = let
+          # FIXME: This doesn't account for arguments with spaces
+          argString = concatStringsSep " " cfg.extraArguments;
+        in "${cfg.package}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
+        ExecReload = ''          ${cfg.package}/bin/asterisk -x "core reload"
+        '';
         Type = "forking";
         PIDFile = "/run/asterisk/asterisk.pid";
       };

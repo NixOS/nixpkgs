@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, asgiref
-, click
-, itsdangerous
-, jinja2
-, python-dotenv
-, werkzeug
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  asgiref,
+  click,
+  itsdangerous,
+  jinja2,
+  python-dotenv,
+  werkzeug,
+  setuptools,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   version = "2.0.2";
   pname = "Flask";

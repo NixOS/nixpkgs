@@ -1,6 +1,23 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
-, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
-, oathToolkit }:
+{
+  gnustep,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  python3,
+  lndir,
+  openssl,
+  openldap,
+  sope,
+  libmemcached,
+  curl,
+  libsodium,
+  libytnef,
+  libzip,
+  pkg-config,
+  nixosTests,
+  oathToolkit,
+}:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.5.0";
@@ -12,8 +29,8 @@ gnustep.stdenv.mkDerivation rec {
     sha256 = "1kyfn3qw299qsyivbrm487h68va99rrb3gmhpgjpwqd2xdg9aypk";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oathToolkit ];
+  nativeBuildInputs = [gnustep.make makeWrapper python3];
+  buildInputs = [gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oathToolkit];
 
   patches = [
     # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches
@@ -74,10 +91,9 @@ gnustep.stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A very fast and scalable modern collaboration suite (groupware)";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with licenses; [gpl2Only lgpl21Only];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ajs124 das_j ];
+    maintainers = with maintainers; [ajs124 das_j];
   };
 }
-

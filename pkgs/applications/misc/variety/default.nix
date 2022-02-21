@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gexiv2
-, gobject-introspection
-, gtk3
-, hicolor-icon-theme
-, intltool
-, libnotify
-, librsvg
-, python3
-, runtimeShell
-, wrapGAppsHook
-, fehSupport ? false, feh
-, imagemagickSupport ? true, imagemagick
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gexiv2,
+  gobject-introspection,
+  gtk3,
+  hicolor-icon-theme,
+  intltool,
+  libnotify,
+  librsvg,
+  python3,
+  runtimeShell,
+  wrapGAppsHook,
+  fehSupport ? false,
+  feh,
+  imagemagickSupport ? true,
+  imagemagick,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "variety";
   version = "0.8.5";
@@ -31,29 +33,30 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = [
-   gexiv2
-   gobject-introspection
-   gtk3
-   hicolor-icon-theme
-   libnotify
-   librsvg
-  ]
-  ++ (with python3.pkgs; [
-    beautifulsoup4
-    configobj
-    dbus-python
-    distutils_extra
-    httplib2
-    lxml
-    pillow
-    pycairo
-    pygobject3
-    requests
-    setuptools
-  ])
-  ++ lib.optional fehSupport feh
-  ++ lib.optional imagemagickSupport imagemagick;
+  propagatedBuildInputs =
+    [
+      gexiv2
+      gobject-introspection
+      gtk3
+      hicolor-icon-theme
+      libnotify
+      librsvg
+    ]
+    ++ (with python3.pkgs; [
+      beautifulsoup4
+      configobj
+      dbus-python
+      distutils_extra
+      httplib2
+      lxml
+      pillow
+      pycairo
+      pygobject3
+      requests
+      setuptools
+    ])
+    ++ lib.optional fehSupport feh
+    ++ lib.optional imagemagickSupport imagemagick;
 
   doCheck = false;
 
@@ -87,6 +90,6 @@ python3.pkgs.buildPythonApplication rec {
       blur, as well as options to layer quotes and a clock onto the background.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ p3psi AndersonTorres zfnmxt ];
+    maintainers = with maintainers; [p3psi AndersonTorres zfnmxt];
   };
 }

@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
-, libX11, libXext, qttools, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qtsvg,
+  qtx11extras,
+  kwindowsystem,
+  libX11,
+  libXext,
+  qttools,
+  wrapQtAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
   version = "1.0.1";
@@ -14,11 +24,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake qttools wrapQtAppsHook
+    qmake
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase qtsvg qtx11extras kwindowsystem libX11 libXext
+    qtbase
+    qtsvg
+    qtx11extras
+    kwindowsystem
+    libX11
+    libXext
   ];
 
   sourceRoot = "source/Kvantum";
@@ -35,6 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     broken = lib.versionOlder qtbase.version "5.14";
-    maintainers = [ maintainers.bugworm ];
+    maintainers = [maintainers.bugworm];
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, bitlist
-, buildPythonPackage
-, fetchPypi
-, fountains
-, parts
-, nose
-, pytestCheckHook
+{
+  lib,
+  bitlist,
+  buildPythonPackage,
+  fetchPypi,
+  fountains,
+  parts,
+  nose,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "fe25519";
   version = "1.1.0";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python field operations for Curve25519's prime";
     homepage = "https://github.com/BjoernMHaase/fe25519";
-    license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [cc0];
+    maintainers = with maintainers; [fab];
   };
 }

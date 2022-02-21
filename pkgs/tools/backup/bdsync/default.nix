@@ -1,9 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, openssl
-, pandoc
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  pandoc,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "bdsync";
   version = "0.11.2";
@@ -15,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kx422cp1bxr62i1mi7dzrpwmys1kdp865rcymdp4knb5rr5864k";
   };
 
-  nativeBuildInputs = [ pandoc which ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [pandoc which];
+  buildInputs = [openssl];
 
   postPatch = ''
     patchShebangs ./tests.sh
@@ -35,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/TargetHolding/bdsync";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

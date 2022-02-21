@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, aresponses
-, coverage
-, mypy
-, pytest-asyncio
-, pytest-cov
-, pytest-mock
-, pythonOlder
-, aiohttp
-, attrs
-, cattrs
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  aresponses,
+  coverage,
+  mypy,
+  pytest-asyncio,
+  pytest-cov,
+  pytest-mock,
+  pythonOlder,
+  aiohttp,
+  attrs,
+  cattrs,
+  yarl,
 }:
-
 buildPythonPackage rec {
   pname = "bsblan";
   version = "0.5.0";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for BSB-Lan";
     homepage = "https://github.com/liudger/python-bsblan";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

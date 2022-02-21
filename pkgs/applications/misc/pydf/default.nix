@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "pydf";
   version = "12";
@@ -19,6 +21,6 @@ python3Packages.buildPythonPackage rec {
     description = "colourised df(1)-clone";
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/pydf/";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ monsieurp ];
+    maintainers = with maintainers; [monsieurp];
   };
 }

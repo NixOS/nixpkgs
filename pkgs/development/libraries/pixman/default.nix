@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, libpng, glib /*just passthru*/ }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libpng,
+  glib
+  /*
+   just passthru
+   */
+}:
 stdenv.mkDerivation rec {
   pname = "pixman";
   version = "0.38.4";
@@ -11,9 +20,9 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libpng ];
+  buildInputs = [libpng];
 
   configureFlags = lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
 

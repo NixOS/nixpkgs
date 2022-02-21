@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "google-java-format";
   version = "1.14.0";
@@ -11,8 +16,8 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jre];
 
   installPhase = ''
     runHook preInstall
@@ -39,7 +44,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/google/google-java-format";
     license = licenses.asl20;
-    maintainers = [ maintainers.emptyflask ];
+    maintainers = [maintainers.emptyflask];
     platforms = platforms.all;
   };
 }

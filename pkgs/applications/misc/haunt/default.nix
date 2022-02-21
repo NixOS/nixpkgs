@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, guile-commonmark
-, guile-reader
-, makeWrapper
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  guile-commonmark,
+  guile-reader,
+  makeWrapper,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "haunt";
   version = "0.2.4";
@@ -29,15 +29,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall =
-    let
-      guileVersion = lib.versions.majorMinor guile.version;
-    in
-    ''
-      wrapProgram $out/bin/haunt \
-        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
-        --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
-    '';
+  postInstall = let
+    guileVersion = lib.versions.majorMinor guile.version;
+  in ''
+    wrapProgram $out/bin/haunt \
+      --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
+      --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -66,7 +64,7 @@ stdenv.mkDerivation rec {
       to do things that aren't provided out-of-the-box.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres AluisioASG ];
+    maintainers = with maintainers; [AndersonTorres AluisioASG];
     platforms = guile.meta.platforms;
   };
 }

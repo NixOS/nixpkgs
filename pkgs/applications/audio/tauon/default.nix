@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, python3Packages
-, ffmpeg
-, flac
-, librsvg
-, gobject-introspection
-, gtk3
-, libnotify
-, libsamplerate
-, libvorbis
-, mpg123
-, libopenmpt
-, opusfile
-, pango
-, pulseaudio
-, withDiscordRPC ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  python3Packages,
+  ffmpeg,
+  flac,
+  librsvg,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  libsamplerate,
+  libvorbis,
+  mpg123,
+  libopenmpt,
+  opusfile,
+  pango,
+  pulseaudio,
+  withDiscordRPC ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tauon";
   version = "7.1.1";
@@ -72,25 +72,27 @@ stdenv.mkDerivation rec {
     pulseaudio
   ];
 
-  pythonPath = with python3Packages; [
-    beautifulsoup4
-    gst-python
-    dbus-python
-    isounidecode
-    musicbrainzngs
-    mutagen
-    pillow
-    plexapi
-    pulsectl
-    pycairo
-    pylast
-    pygobject3
-    pylyrics
-    pysdl2
-    requests
-    send2trash
-    setproctitle
-  ] ++ lib.optional withDiscordRPC pypresence;
+  pythonPath = with python3Packages;
+    [
+      beautifulsoup4
+      gst-python
+      dbus-python
+      isounidecode
+      musicbrainzngs
+      mutagen
+      pillow
+      plexapi
+      pulsectl
+      pycairo
+      pylast
+      pygobject3
+      pylyrics
+      pysdl2
+      requests
+      send2trash
+      setproctitle
+    ]
+    ++ lib.optional withDiscordRPC pypresence;
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ffmpeg]}"
@@ -110,13 +112,13 @@ stdenv.mkDerivation rec {
     install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
     mkdir -p $out/share/icons/hicolor/scalable/apps
     install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
-'';
+  '';
 
   meta = with lib; {
     description = "The Linux desktop music player from the future";
     homepage = "https://tauonmusicbox.rocks/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
     platforms = platforms.linux;
   };
 }

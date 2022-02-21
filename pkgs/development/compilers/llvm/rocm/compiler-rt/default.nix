@@ -1,9 +1,19 @@
-{ stdenv, lib, version, src, cmake, python3, llvm, libcxxabi, fetchpatch }:
+{
+  stdenv,
+  lib,
+  version,
+  src,
+  cmake,
+  python3,
+  llvm,
+  libcxxabi,
+  fetchpatch,
+}:
 stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version src;
 
-  nativeBuildInputs = [ cmake python3 llvm ];
+  nativeBuildInputs = [cmake python3 llvm];
 
   NIX_CFLAGS_COMPILE = [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
@@ -27,14 +37,13 @@ stdenv.mkDerivation rec {
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     # https://github.com/llvm/llvm-project/commit/68d5235cb58f988c71b403334cd9482d663841ab.diff but the compiler-rt part of the path is stripped
     ./68d5235cb58f988c71b403334cd9482d663841ab.patch
-    ];
-
+  ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -61,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "ROCm fork of the LLVM Compiler runtime libraries";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ acowley lovesegfault ];
+    maintainers = with maintainers; [acowley lovesegfault];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fftw, ncurses5, libpulseaudio, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fftw,
+  ncurses5,
+  libpulseaudio,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   version = "1.8";
   pname = "cli-visualizer";
@@ -15,11 +23,11 @@ stdenv.mkDerivation rec {
     sed '1i#include <cmath>' -i src/Transformer/SpectrumCircleTransformer.cpp
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [cmake makeWrapper];
 
-  buildInputs = [ fftw ncurses5 libpulseaudio ];
+  buildInputs = [fftw ncurses5 libpulseaudio];
 
-  buildFlags = [ "ENABLE_PULSE=1" ];
+  buildFlags = ["ENABLE_PULSE=1"];
 
   postInstall = ''
     # See https://github.com/dpayne/cli-visualizer/issues/62#issuecomment-330738075
@@ -30,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dpayne/cli-visualizer";
     description = "CLI based audio visualizer";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.matthiasbeyer ];
+    maintainers = [lib.maintainers.matthiasbeyer];
     platforms = with lib.platforms; linux;
   };
 }

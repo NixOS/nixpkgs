@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, azure-common
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  azure-common,
+  msrestazure,
 }:
-
 buildPythonPackage rec {
   pname = "azure-batch";
   version = "12.0.0";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.batch" ];
+  pythonImportsCheck = ["azure.batch"];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Batch Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    maintainers = with maintainers; [maxwilson];
   };
 }

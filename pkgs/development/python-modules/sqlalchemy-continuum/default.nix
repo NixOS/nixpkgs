@@ -1,16 +1,16 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, flask
-, flask_login
-, flask_sqlalchemy
-, flexmock
-, pytestCheckHook
-, sqlalchemy
-, sqlalchemy-utils
-, sqlalchemy-i18n
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  flask,
+  flask_login,
+  flask_sqlalchemy,
+  flexmock,
+  pytestCheckHook,
+  sqlalchemy,
+  sqlalchemy-utils,
+  sqlalchemy-i18n,
 }:
-
 buildPythonPackage rec {
   pname = "SQLAlchemy-Continuum";
   version = "1.3.12";

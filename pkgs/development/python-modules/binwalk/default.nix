@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, stdenv
-, zlib
-, xz
-, gzip
-, bzip2
-, gnutar
-, p7zip
-, cabextract
-, cramfsprogs
-, cramfsswap
-, sasquatch
-, squashfsTools
-, matplotlib
-, nose
-, pycrypto
-, pyqtgraph
-, visualizationSupport ? false }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  stdenv,
+  zlib,
+  xz,
+  gzip,
+  bzip2,
+  gnutar,
+  p7zip,
+  cabextract,
+  cramfsprogs,
+  cramfsswap,
+  sasquatch,
+  squashfsTools,
+  matplotlib,
+  nose,
+  pycrypto,
+  pyqtgraph,
+  visualizationSupport ? false,
+}:
 buildPythonPackage rec {
   pname = "binwalk";
   version = "2.3.3";
@@ -44,9 +45,10 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ zlib xz gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
-  ++ lib.optionals visualizationSupport [ matplotlib pyqtgraph ]
-  ++ lib.optionals (!stdenv.isDarwin) [ cramfsprogs cramfsswap sasquatch ];
+  propagatedBuildInputs =
+    [zlib xz gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto]
+    ++ lib.optionals visualizationSupport [matplotlib pyqtgraph]
+    ++ lib.optionals (!stdenv.isDarwin) [cramfsprogs cramfsswap sasquatch];
 
   # setup.py only installs version.py during install, not test
   postPatch = ''
@@ -58,14 +60,14 @@ buildPythonPackage rec {
     HOME=$(mktemp -d)
   '';
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
 
-  pythonImportsCheck = [ "binwalk" ];
+  pythonImportsCheck = ["binwalk"];
 
   meta = with lib; {
     homepage = "https://github.com/ReFirmLabs/binwalk";
     description = "A tool for searching a given binary image for embedded files";
-    maintainers = [ maintainers.koral ];
+    maintainers = [maintainers.koral];
     license = licenses.mit;
   };
 }

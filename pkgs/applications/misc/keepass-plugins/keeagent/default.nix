@@ -1,6 +1,10 @@
-{ lib, stdenv, buildEnv, fetchzip, mono }:
-
-let
+{
+  lib,
+  stdenv,
+  buildEnv,
+  fetchzip,
+  mono,
+}: let
   version = "0.12.0";
   drv = stdenv.mkDerivation {
     pname = "keeagent";
@@ -14,10 +18,10 @@ let
 
     meta = {
       description = "KeePass plugin to allow other programs to access SSH keys stored in a KeePass database for authentication";
-      homepage    = "http://lechnology.com/software/keeagent";
-      platforms   = with lib.platforms; linux;
-      license     = lib.licenses.gpl2;
-      maintainers = [ ];
+      homepage = "http://lechnology.com/software/keeagent";
+      platforms = with lib.platforms; linux;
+      license = lib.licenses.gpl2;
+      maintainers = [];
     };
 
     pluginFilename = "KeeAgent.plgx";
@@ -29,4 +33,7 @@ let
   };
 in
   # Mono is required to compile plugin at runtime, after loading.
-  buildEnv { name = drv.name; paths = [ mono drv ]; }
+  buildEnv {
+    name = drv.name;
+    paths = [mono drv];
+  }

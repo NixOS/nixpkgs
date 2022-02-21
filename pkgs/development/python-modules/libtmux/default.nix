@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, poetry-core
-, pytestCheckHook
-, pkgs
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  poetry-core,
+  pytestCheckHook,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "libtmux";
   version = "0.10.3";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Scripting library for tmux";
     homepage = "https://libtmux.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

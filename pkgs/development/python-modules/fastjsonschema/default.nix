@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "fastjsonschema";
   version = "2.15.2";
@@ -36,7 +36,6 @@ buildPythonPackage rec {
     })
   ];
 
-
   disabledTests = [
     "benchmark"
     # these tests require network access
@@ -52,6 +51,6 @@ buildPythonPackage rec {
     description = "JSON schema validator for Python";
     homepage = "https://horejsek.github.io/python-fastjsonschema/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [drewrisinger];
   };
 }

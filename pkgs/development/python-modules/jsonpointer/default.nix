@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "jsonpointer";
   version = "2.2";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/stefankoegl/python-json-pointer";
     license = licenses.bsd2; # "Modified BSD license, says pypi"
   };
-
 }

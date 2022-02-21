@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "pycontrol4";
   version = "0.3.1";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python 3 asyncio package for interacting with Control4 systems";
     homepage = "https://github.com/lawtancool/pyControl4";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

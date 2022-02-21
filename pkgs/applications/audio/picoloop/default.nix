@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, libpulseaudio, SDL2, SDL2_image, SDL2_ttf, alsa-lib, libjack2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpulseaudio,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
+  alsa-lib,
+  libjack2,
+}:
 stdenv.mkDerivation rec {
   pname = "picoloop";
   version = "0.77e";
@@ -23,11 +32,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/picoloop";
 
-  makeFlags = [ "-f Makefile.PatternPlayer_debian_RtAudio_sdl20" ];
+  makeFlags = ["-f Makefile.PatternPlayer_debian_RtAudio_sdl20"];
 
-  NIX_CFLAGS_COMPILE = [ "-I${SDL2.dev}/include/SDL2" ];
+  NIX_CFLAGS_COMPILE = ["-I${SDL2.dev}/include/SDL2"];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   patchPhase = ''
     substituteInPlace SDL_GUI.cpp \

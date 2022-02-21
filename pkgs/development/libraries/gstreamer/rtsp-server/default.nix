@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gettext
-, gobject-introspection
-, gst-plugins-base
-, gst-plugins-bad
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gettext,
+  gobject-introspection,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
   version = "1.20.0";
@@ -43,12 +43,14 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ];
 
-  mesonFlags = [
-    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+      "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-Dintrospection=disabled"
+    ];
 
   postPatch = ''
     patchShebangs \
@@ -63,6 +65,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bkchr ];
+    maintainers = with maintainers; [bkchr];
   };
 }

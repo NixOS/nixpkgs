@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libnatpmp";
   version = "20150609";
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://miniupnp.free.fr/libnatpmp.html";
     description = "NAT-PMP client";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.all;
   };
 }

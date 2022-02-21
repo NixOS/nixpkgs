@@ -1,10 +1,15 @@
-{ lib, stdenv, fetchgit, electron, runtimeShell } :
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  electron,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "nix-tour";
   version = "0.0.1";
 
-  buildInputs = [ electron ];
+  buildInputs = [electron];
 
   src = fetchgit {
     url = "https://github.com/nixcloud/tour_of_nix";
@@ -28,7 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nixcloud.io/tour";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ qknight ];
+    maintainers = with maintainers; [qknight];
   };
-
 }

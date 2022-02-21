@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "Vc";
   version = "0.7.5";
@@ -14,7 +18,7 @@ stdenv.mkDerivation rec {
   # Avoid requesting an unreasonable intrinsic
   patches = lib.optional stdenv.cc.isClang ./vc_0_7_clang_fix.patch;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   postPatch = ''
     sed -i '/OptimizeForArchitecture()/d' cmake/VcMacros.cmake
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/VcDevel/Vc";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

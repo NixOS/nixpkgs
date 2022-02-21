@@ -1,6 +1,18 @@
-{ fetchgit, lib, stdenv, gmp, which, flex, bison, makeWrapper
-, autoconf, automake, libtool, jdk, perl }:
-
+{
+  fetchgit,
+  lib,
+  stdenv,
+  gmp,
+  which,
+  flex,
+  bison,
+  makeWrapper,
+  autoconf,
+  automake,
+  libtool,
+  jdk,
+  perl,
+}:
 stdenv.mkDerivation {
   pname = "aldor";
   version = "1.2.0";
@@ -11,8 +23,8 @@ stdenv.mkDerivation {
     rev = "15471e75f3d65b93150f414ebcaf59a03054b68d";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gmp which flex bison autoconf automake libtool jdk perl ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [gmp which flex bison autoconf automake libtool jdk perl];
 
   preConfigure = ''
     cd aldor ;

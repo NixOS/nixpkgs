@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, wxGTK31
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wxGTK31,
+  meson,
+  ninja,
 }:
-
 stdenv.mkDerivation {
   pname = "wxFormBuilder";
   version = "unstable-2020-08-18";
@@ -30,6 +31,6 @@ stdenv.mkDerivation {
     description = "RAD tool for wxWidgets GUI design";
     homepage = "https://github.com/wxFormBuilder/wxFormBuilder";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ matthuszagh ];
+    maintainers = with maintainers; [matthuszagh];
   };
 }

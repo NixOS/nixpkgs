@@ -1,21 +1,21 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python
-, boost
-, cppunit
-, log4cpp
-, osmosdr
-, gmp
-, mpir
-, fftwFloat
-, icu
-, gnuradio
-, thrift
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python,
+  boost,
+  cppunit,
+  log4cpp,
+  osmosdr,
+  gmp,
+  mpir,
+  fftwFloat,
+  icu,
+  gnuradio,
+  thrift,
 }:
-
 mkDerivation rec {
   pname = "gr-ais";
   version = "2020-08-13";
@@ -55,6 +55,6 @@ mkDerivation rec {
     homepage = "https://github.com/bistromath/gr-ais";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mog ];
+    maintainers = with maintainers; [mog];
   };
 }

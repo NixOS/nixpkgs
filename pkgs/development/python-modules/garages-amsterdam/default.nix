@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  aiohttp,
 }:
-
 buildPythonPackage rec {
   pname = "garages-amsterdam";
   version = "3.2.1";
@@ -35,12 +35,12 @@ buildPythonPackage rec {
   # The only test requires network access
   doCheck = false;
 
-  pythonImportsCheck = [ "garages_amsterdam" ];
+  pythonImportsCheck = ["garages_amsterdam"];
 
   meta = with lib; {
     description = "Python client for getting garage occupancy in Amsterdam";
     homepage = "https://github.com/klaasnicolaas/python-garages-amsterdam";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

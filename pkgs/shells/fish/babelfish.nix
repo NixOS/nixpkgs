@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "babelfish";
   version = "1.1.0";
@@ -16,6 +20,6 @@ buildGoModule rec {
     description = "Translate bash scripts to fish";
     homepage = "https://github.com/bouk/babelfish";
     license = licenses.mit;
-    maintainers = with maintainers; [ bouk kevingriffin ];
+    maintainers = with maintainers; [bouk kevingriffin];
   };
 }

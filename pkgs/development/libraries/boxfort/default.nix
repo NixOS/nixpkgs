@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, python3Packages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  python3Packages,
+}:
 stdenv.mkDerivation rec {
   version = "unstable-2019-10-09";
   pname = "boxfort";
@@ -11,23 +17,23 @@ stdenv.mkDerivation rec {
     sha256 = "1p0llz7n0p5gzpvqszmra9p88vnr0j88sp5ixhgbfz89bswg62ss";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [meson ninja];
 
   preConfigure = ''
     patchShebangs ci/isdir.py
   '';
 
-  checkInputs = with python3Packages; [ cram ];
+  checkInputs = with python3Packages; [cram];
 
   doCheck = true;
 
-  outputs = [ "dev" "out" ];
+  outputs = ["dev" "out"];
 
   meta = with lib; {
     description = "Convenient & cross-platform sandboxing C library";
     homepage = "https://github.com/Snaipe/BoxFort";
     license = licenses.mit;
-    maintainers = with maintainers; [ thesola10 Yumasi ];
+    maintainers = with maintainers; [thesola10 Yumasi];
     platforms = platforms.unix;
     # Upstream currently broken for macOS https://cirrus-ci.com/build/5624937369042944
     broken = stdenv.targetPlatform.isDarwin;

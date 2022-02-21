@@ -1,5 +1,8 @@
-{ lib, mkFranzDerivation, fetchurl }:
-
+{
+  lib,
+  mkFranzDerivation,
+  fetchurl,
+}:
 mkFranzDerivation rec {
   pname = "franz";
   name = "Franz";
@@ -12,8 +15,8 @@ mkFranzDerivation rec {
     description = "A free messaging app that combines chat & messaging services into one application";
     homepage = "https://meetfranz.com";
     license = licenses.free;
-    maintainers = [ maintainers.davidtwco ];
-    platforms = [ "x86_64-linux" ];
-    hydraPlatforms = [ ];
+    maintainers = [maintainers.davidtwco];
+    platforms = ["x86_64-linux"];
+    hydraPlatforms = [];
   };
 }

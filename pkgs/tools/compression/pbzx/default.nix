@@ -1,5 +1,10 @@
-{stdenv, lib, fetchFromGitHub, xz, xar}:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  xz,
+  xar,
+}:
 stdenv.mkDerivation rec {
   pname = "pbzx";
   version = "1.0.2";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0bwd7wmnhpz1n5p39mh6asfyccj4cm06hwigslcwbb3pdwmvxc90";
   };
-  buildInputs = [ xz xar ];
+  buildInputs = [xz xar];
   buildPhase = ''
     ${stdenv.cc.targetPrefix}cc pbzx.c -llzma -lxar -o pbzx
   '';
@@ -21,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Stream parser of Apple's pbzx compression format";
     platforms = platforms.unix;
     license = licenses.gpl3;
-    maintainers = [ maintainers.matthewbauer ];
+    maintainers = [maintainers.matthewbauer];
   };
 }

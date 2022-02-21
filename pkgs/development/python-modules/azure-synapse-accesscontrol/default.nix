@@ -1,9 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, azure-common
-, azure-core
-, msrest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-core,
+  msrest,
 }:
-
 buildPythonPackage rec {
   pname = "azure-synapse-accesscontrol";
   version = "0.7.0";
@@ -23,12 +25,12 @@ buildPythonPackage rec {
   # zero tests run
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.synapse.accesscontrol" ];
+  pythonImportsCheck = ["azure.synapse.accesscontrol"];
 
   meta = with lib; {
     description = "Azure python SDK";
     homepage = "https://github.com/Azure/azure-sdk-for-python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

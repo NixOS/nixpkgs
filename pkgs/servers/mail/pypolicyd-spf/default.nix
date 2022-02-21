@@ -1,5 +1,9 @@
-{ lib, buildPythonApplication, fetchurl, pyspf }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchurl,
+  pyspf,
+}:
 buildPythonApplication rec {
   pname = "pypolicyd-spf";
   majorVersion = "2.0";
@@ -10,7 +14,7 @@ buildPythonApplication rec {
     sha256 = "1nm8y1jjgx6mxrbcxrbdnmkf8vglwp0wiw6jipzh641wb24gi76z";
   };
 
-  propagatedBuildInputs = [ pyspf ];
+  propagatedBuildInputs = [pyspf];
 
   preBuild = ''
     substituteInPlace setup.py --replace "'/etc'" "'$out/etc'"
@@ -19,7 +23,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://launchpad.net/pypolicyd-spf/";
     description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
     license = licenses.asl20;
     platforms = platforms.all;
   };

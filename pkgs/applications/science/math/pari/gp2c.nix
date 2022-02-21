@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, pari
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pari,
+  perl,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gp2c";
   version = "0.0.12";
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description =  "A compiler to translate GP scripts to PARI programs";
+    description = "A compiler to translate GP scripts to PARI programs";
     homepage = "http://pari.math.u-bordeaux.fr/";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
   };
 }

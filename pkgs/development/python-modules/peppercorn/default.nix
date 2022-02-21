@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "peppercorn";
   version = "0.6";
@@ -15,8 +15,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library for converting a token stream into a data structure for use in web form posts";
     homepage = "https://docs.pylonsproject.org/projects/peppercorn/en/latest/";
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [domenkozar];
     platforms = platforms.all;
   };
-
 }

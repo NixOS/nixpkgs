@@ -1,5 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
-
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 buildGoModule rec {
   pname = "mage";
   version = "1.12.1";
@@ -25,6 +28,6 @@ buildGoModule rec {
     description = "A Make/Rake-like Build Tool Using Go";
     homepage = "https://magefile.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ swdunlop ];
+    maintainers = with maintainers; [swdunlop];
   };
 }

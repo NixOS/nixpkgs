@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, pytestCheckHook
-, python-http-client
-, pythonOlder
-, pyyaml
-, starkbank-ecdsa
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  pytestCheckHook,
+  python-http-client,
+  pythonOlder,
+  pyyaml,
+  starkbank-ecdsa,
+  werkzeug,
 }:
-
 buildPythonPackage rec {
   pname = "sendgrid";
   version = "6.9.6";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for SendGrid";
     homepage = "https://github.com/sendgrid/sendgrid-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

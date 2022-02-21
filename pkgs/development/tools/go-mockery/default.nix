@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "go-mockery";
   version = "2.9.2";
@@ -16,7 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/vektra/mockery";
     description = "A mock code autogenerator for Golang";
-    maintainers = with maintainers; [ fbrs ];
+    maintainers = with maintainers; [fbrs];
     license = licenses.bsd3;
   };
 }

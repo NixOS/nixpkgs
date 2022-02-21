@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, ninja
-, meson
-, pkg-config
-, gthree
-, gsound
-, libepoxy
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ninja,
+  meson,
+  pkg-config,
+  gthree,
+  gsound,
+  libepoxy,
+  gtk3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-hexgl";
   version = "unstable-2020-07-24";
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Gthree port of HexGL";
     homepage = "https://github.com/alexlarsson/gnome-hexgl";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     platforms = platforms.unix;
   };
 }

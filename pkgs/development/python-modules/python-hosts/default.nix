@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, pytest, pytest-cov }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  pytest,
+  pytest-cov,
+}:
 buildPythonPackage rec {
   pname = "python-hosts";
   version = "1.0.2";
@@ -15,7 +21,7 @@ buildPythonPackage rec {
     substituteInPlace python_hosts/utils.py --replace "import win_inet_pton" ""
   '';
 
-  checkInputs = [ pyyaml pytest pytest-cov ];
+  checkInputs = [pyyaml pytest pytest-cov];
 
   # Removing 1 test file (it requires internet connection) and keeping the other two
   checkPhase = ''
@@ -27,7 +33,6 @@ buildPythonPackage rec {
     description = "A library for managing a hosts file. It enables adding and removing entries, or importing them from a file or URL";
     homepage = "https://github.com/jonhadfield/python-hosts";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }
-

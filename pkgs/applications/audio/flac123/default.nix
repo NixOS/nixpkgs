@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook, flac, libao, libogg, popt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  flac,
+  libao,
+  libogg,
+  popt,
+}:
 stdenv.mkDerivation rec {
   pname = "flac123";
   version = "0.0.12";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0zg4ahkg7v81za518x32wldf42g0rrvlrcqhrg9sv3li9bayyxhr";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ flac libao libogg popt ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [flac libao libogg popt];
 
   meta = with lib; {
     homepage = "http://flac-tools.sourceforge.net/";

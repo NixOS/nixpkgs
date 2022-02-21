@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "simpleeval";
   version = "0.9.12";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Simple, safe single expression evaluator library";
     homepage = "https://github.com/danthedeckie/simpleeval";
     license = licenses.mit;
-    maintainers = with maintainers; [ johbo ];
+    maintainers = with maintainers; [johbo];
   };
 }

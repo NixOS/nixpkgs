@@ -1,13 +1,13 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, dill
-, coverage
-, coveralls
-, mock
-, nose
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  dill,
+  coverage,
+  coveralls,
+  mock,
+  nose,
 }:
-
 buildPythonApplication rec {
   pname = "expiringdict";
   version = "1.2.1";
@@ -33,12 +33,12 @@ buildPythonApplication rec {
     nosetests -v --with-coverage --cover-package=expiringdict
   '';
 
-  pythonImportsCheck = [ "expiringdict" ];
+  pythonImportsCheck = ["expiringdict"];
 
   meta = with lib; {
     description = "Dictionary with auto-expiring values for caching purposes";
     homepage = "https://pypi.org/project/expiringdict/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ gravndal ];
+    maintainers = with maintainers; [gravndal];
   };
 }

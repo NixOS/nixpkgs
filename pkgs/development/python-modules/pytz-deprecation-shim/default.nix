@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pythonOlder
-, backports-zoneinfo
-, python-dateutil
-, tzdata
-, hypothesis
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  pythonOlder,
+  backports-zoneinfo,
+  python-dateutil,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
+  pytz,
 }:
-
 buildPythonPackage rec {
   pname = "pytz-deprecation-shim";
   version = "0.1.0.post0";
@@ -23,13 +23,16 @@ buildPythonPackage rec {
     sha256 = "af097bae1b616dde5c5744441e2ddc69e74dfdcb0c263129610d85b87445a59d";
   };
 
-  propagatedBuildInputs = (lib.optionals (pythonAtLeast "3.6" && pythonOlder "3.9") [
-    backports-zoneinfo
-  ]) ++ (lib.optionals (pythonOlder "3.6") [
-    python-dateutil
-  ]) ++ (lib.optionals (pythonAtLeast "3.6") [
-    tzdata
-  ]);
+  propagatedBuildInputs =
+    (lib.optionals (pythonAtLeast "3.6" && pythonOlder "3.9") [
+      backports-zoneinfo
+    ])
+    ++ (lib.optionals (pythonOlder "3.6") [
+      python-dateutil
+    ])
+    ++ (lib.optionals (pythonAtLeast "3.6") [
+      tzdata
+    ]);
 
   checkInputs = [
     hypothesis
@@ -44,6 +47,6 @@ buildPythonPackage rec {
     description = "Shims to make deprecation of pytz easier";
     homepage = "https://github.com/pganssle/pytz-deprecation-shim";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

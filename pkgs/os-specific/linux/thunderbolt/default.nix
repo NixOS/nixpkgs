@@ -1,11 +1,12 @@
-{ lib, stdenv
-, boost
-, cmake
-, fetchFromGitHub
-, pkg-config
-, txt2tags
+{
+  lib,
+  stdenv,
+  boost,
+  cmake,
+  fetchFromGitHub,
+  pkg-config,
+  txt2tags,
 }:
-
 stdenv.mkDerivation rec {
   pname = "thunderbolt";
   version = "0.9.3";
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "02w1bfm7xvq0dzkhwqiq0camkzz9kvciyhnsis61c8vzp39cwx0x";
   };
 
-  nativeBuildInputs = [ cmake pkg-config txt2tags ];
-  buildInputs = [ boost ];
+  nativeBuildInputs = [cmake pkg-config txt2tags];
+  buildInputs = [boost];
 
   cmakeFlags = [
     "-DUDEV_BIN_DIR=${placeholder "out"}/bin"
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Thunderbolt(TM) user-space components";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ryantrinkle ];
+    maintainers = [lib.maintainers.ryantrinkle];
     homepage = "https://01.org/thunderbolt-sw";
     platforms = lib.platforms.linux;
   };

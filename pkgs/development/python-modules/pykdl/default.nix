@@ -1,5 +1,12 @@
-{ lib, stdenv, toPythonModule, cmake, orocos-kdl, eigen, python }:
-
+{
+  lib,
+  stdenv,
+  toPythonModule,
+  cmake,
+  orocos-kdl,
+  eigen,
+  python,
+}:
 toPythonModule (stdenv.mkDerivation {
   pname = "pykdl";
   inherit (orocos-kdl) version src;
@@ -12,15 +19,15 @@ toPythonModule (stdenv.mkDerivation {
       --replace dist-packages site-packages
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ orocos-kdl eigen ];
-  propagatedBuildInputs = [ python ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [orocos-kdl eigen];
+  propagatedBuildInputs = [python];
 
   meta = with lib; {
     description = "Kinematics and Dynamics Library (Python bindings)";
     homepage = "https://www.orocos.org/kdl.html";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [lopsided98];
     platforms = platforms.all;
   };
 })

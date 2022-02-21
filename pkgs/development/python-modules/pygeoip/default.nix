@@ -1,6 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, nose }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+}:
 buildPythonPackage rec {
   pname = "pygeoip";
   version = "0.3.2";
@@ -13,7 +16,7 @@ buildPythonPackage rec {
   # requires geoip samples
   doCheck = false;
 
-  buildInputs = [ nose ];
+  buildInputs = [nose];
 
   meta = with lib; {
     description = "Pure Python GeoIP API";

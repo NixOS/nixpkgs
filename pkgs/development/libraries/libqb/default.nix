@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libxml2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+}:
 stdenv.mkDerivation rec {
   pname = "libqb";
   version = "2.0.4";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-s6b2/bCVNzr3IBqiSAjiJ/DHCqkRwR1aA+J4uBP5mO4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
-  buildInputs = [ libxml2 ];
+  buildInputs = [libxml2];
 
   postPatch = ''
     sed -i '/# --enable-new-dtags:/,/--enable-new-dtags is required/ d' configure.ac

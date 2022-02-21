@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "teler";
   version = "1.2.2";
@@ -17,7 +17,9 @@ buildGoModule rec {
   vendorSha256 = "sha256-TQjwPem+RMuoF5T02CL/CTvBS6W7Q786gTvYUFIvxjE=";
 
   ldflags = [
-    "-s" "-w" "-X ktbs.dev/teler/common.Version=${version}"
+    "-s"
+    "-w"
+    "-X ktbs.dev/teler/common.Version=${version}"
   ];
 
   # test require internet access
@@ -32,6 +34,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kitabisa/teler";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

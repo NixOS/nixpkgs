@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pep257 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pep257,
+}:
 buildPythonPackage rec {
   pname = "pytest-pep257";
   version = "0.0.5";
@@ -9,8 +14,8 @@ buildPythonPackage rec {
     sha256 = "082v3d5k4331x53za51kl8zxsndsw1pcyf1xdfpb2gjdjrhixb8w";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ pep257 ];
+  buildInputs = [pytest];
+  propagatedBuildInputs = [pep257];
 
   meta = with lib; {
     homepage = "https://github.com/anderslime/pytest-pep257";

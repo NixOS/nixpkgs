@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, tetex }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  tetex,
+}:
 stdenv.mkDerivation {
   pname = "mmixware";
   version = "unstable-2021-06-18";
@@ -12,16 +16,16 @@ stdenv.mkDerivation {
     sha256 = "sha256-eSwHiJ5SP/Nennalv4QFTgVnM6oan/DWDZRqtk0o6Z0=";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   postPatch = ''
     substituteInPlace Makefile --replace 'rm abstime.h' ""
   '';
 
-  nativeBuildInputs = [ tetex ];
+  nativeBuildInputs = [tetex];
   enableParallelBuilding = true;
 
-  makeFlags = [ "all" "doc" "CFLAGS=-O2" ];
+  makeFlags = ["all" "doc" "CFLAGS=-O2"];
 
   installPhase = ''
     runHook preInstall
@@ -35,10 +39,10 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description  = "MMIX simulator and assembler";
-    homepage     = "https://www-cs-faculty.stanford.edu/~knuth/mmix-news.html";
-    maintainers  = with maintainers; [ siraben ];
-    platforms    = platforms.unix;
-    license      = licenses.publicDomain;
+    description = "MMIX simulator and assembler";
+    homepage = "https://www-cs-faculty.stanford.edu/~knuth/mmix-news.html";
+    maintainers = with maintainers; [siraben];
+    platforms = platforms.unix;
+    license = licenses.publicDomain;
   };
 }

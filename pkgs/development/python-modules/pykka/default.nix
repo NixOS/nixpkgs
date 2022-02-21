@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pytest-mock,
 }:
-
 buildPythonPackage rec {
   pname = "pykka";
   version = "3.0.2";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     homepage = "https://www.pykka.org/";
     description = "A Python implementation of the actor model";
     changelog = "https://github.com/jodal/pykka/blob/v${version}/docs/changes.rst";
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [marsam];
     license = licenses.asl20;
   };
 }

@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl, stdlib-shims }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  stdlib-shims,
+}:
 buildDunePackage rec {
   pname = "bheap";
   version = "2.0.0";
@@ -19,7 +23,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "OCaml binary heap implementation by Jean-Christophe Filliatre";
     license = licenses.lgpl21Only;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
     homepage = "https://github.com/backtracking/bheap";
   };
 }

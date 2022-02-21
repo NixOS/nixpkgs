@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytools
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytools,
+  numpy,
 }:
-
 buildPythonPackage rec {
   pname = "genpy";
   version = "2021.1";
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "C/C++ source generation from an AST";
     homepage = "https://github.com/inducer/genpy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

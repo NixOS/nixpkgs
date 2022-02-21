@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, autoconf
-, automake
-, c-ares
-, cryptopp
-, curl
-, doxygen
-, fetchFromGitHub
-, ffmpeg
-, freeimage
-, libmediainfo
-, libraw
-, libsodium
-, libtool
-, libuv
-, libzen
-, lsb-release
-, mkDerivation
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, sqlite
-, swig
-, unzip
-, wget
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  c-ares,
+  cryptopp,
+  curl,
+  doxygen,
+  fetchFromGitHub,
+  ffmpeg,
+  freeimage,
+  libmediainfo,
+  libraw,
+  libsodium,
+  libtool,
+  libuv,
+  libzen,
+  lsb-release,
+  mkDerivation,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtx11extras,
+  sqlite,
+  swig,
+  unzip,
+  wget,
 }:
 mkDerivation rec {
   pname = "megasync";
@@ -119,11 +120,10 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Easy automated syncing between your computers and your MEGA Cloud Drive";
+    description = "Easy automated syncing between your computers and your MEGA Cloud Drive";
     homepage = "https://mega.nz/";
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ maintainers.michojel ];
+    platforms = ["i686-linux" "x86_64-linux"];
+    maintainers = [maintainers.michojel];
   };
 }

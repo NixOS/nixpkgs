@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, ctags, perl, elfutils, vtable-dumper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ctags,
+  perl,
+  elfutils,
+  vtable-dumper,
+}:
 stdenv.mkDerivation rec {
   pname = "abi-dumper";
   version = "1.2";
@@ -18,16 +25,16 @@ stdenv.mkDerivation rec {
       --replace '"ctags"' '"${ctags}/bin/ctags"'
   '';
 
-  buildInputs = [ elfutils ctags perl vtable-dumper ];
+  buildInputs = [elfutils ctags perl vtable-dumper];
 
   preBuild = "mkdir -p $out";
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = ["prefix=$(out)"];
 
   meta = with lib; {
     homepage = "https://github.com/lvc/abi-dumper";
     description = "Dump ABI of an ELF object containing DWARF debug info";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.bhipple ];
+    maintainers = [maintainers.bhipple];
     platforms = platforms.all;
   };
 }

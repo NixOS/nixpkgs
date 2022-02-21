@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "fsatrace";
   version = "0.0.1-324";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installDir = "libexec/${pname}-${version}";
 
-  makeFlags = [ "INSTALLDIR=$(out)/$(installDir)" ];
+  makeFlags = ["INSTALLDIR=$(out)/$(installDir)"];
 
   preInstall = ''
     mkdir -p $out/$installDir

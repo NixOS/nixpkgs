@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "primesieve";
   version = "7.8";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
@@ -18,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://primesieve.org/";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

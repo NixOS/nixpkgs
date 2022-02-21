@@ -1,31 +1,34 @@
-{ lib, stdenv, buildPackages
-, staticBuild ? stdenv.hostPlatform.isStatic
-}:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  staticBuild ? stdenv.hostPlatform.isStatic,
+}: let
+  inherit (buildPackages.buildPackages) gcc;
+in
+  stdenv.mkDerivation {
+    pname = "libiberty";
+    version = "${gcc.cc.version}";
 
-let inherit (buildPackages.buildPackages) gcc; in
+    inherit (gcc.cc) src;
 
-stdenv.mkDerivation {
-  pname = "libiberty";
-  version = "${gcc.cc.version}";
+    outputs = ["out" "dev"];
 
-  inherit (gcc.cc) src;
+    postUnpack = "sourceRoot=\${sourceRoot}/libiberty";
 
-  outputs = [ "out" "dev" ];
+    configureFlags =
+      ["--enable-install-libiberty"]
+      ++ lib.optional (!staticBuild) "--enable-shared";
 
-  postUnpack = "sourceRoot=\${sourceRoot}/libiberty";
+    postInstall = lib.optionalString (!staticBuild) ''
+      cp pic/libiberty.a $out/lib*/libiberty.a
+    '';
 
-  configureFlags = [ "--enable-install-libiberty" ]
-    ++ lib.optional (!staticBuild) "--enable-shared";
-
-  postInstall = lib.optionalString (!staticBuild) ''
-    cp pic/libiberty.a $out/lib*/libiberty.a
-  '';
-
-  meta = with lib; {
-    homepage = "https://gcc.gnu.org/";
-    license = licenses.lgpl2;
-    description = "Collection of subroutines used by various GNU programs";
-    maintainers = with maintainers; [ abbradar ericson2314 ];
-    platforms = platforms.unix;
-  };
-}
+    meta = with lib; {
+      homepage = "https://gcc.gnu.org/";
+      license = licenses.lgpl2;
+      description = "Collection of subroutines used by various GNU programs";
+      maintainers = with maintainers; [abbradar ericson2314];
+      platforms = platforms.unix;
+    };
+  }

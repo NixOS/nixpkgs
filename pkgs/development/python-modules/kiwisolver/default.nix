@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, stdenv
-, libcxx
-, cppy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  stdenv,
+  libcxx,
+  cppy,
 }:
-
 buildPythonPackage rec {
   pname = "kiwisolver";
   version = "1.3.2";
@@ -29,5 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/nucleic/kiwi";
     license = lib.licenses.bsd3;
   };
-
 }

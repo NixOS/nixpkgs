@@ -1,10 +1,14 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: {
   name = "aesmd";
   meta = {
-    maintainers = with lib.maintainers; [ veehaitch ];
+    maintainers = with lib.maintainers; [veehaitch];
   };
 
-  machine = { lib, ... }: {
+  machine = {lib, ...}: {
     services.aesmd = {
       enable = true;
       settings = {
@@ -17,14 +21,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Should have access to the AESM socket
     users.users."sgxtest" = {
       isNormalUser = true;
-      extraGroups = [ "sgx" ];
+      extraGroups = ["sgx"];
     };
 
     # Should NOT have access to the AESM socket
     users.users."nosgxtest".isNormalUser = true;
 
     # We don't have a real SGX machine in NixOS tests
-    systemd.services.aesmd.unitConfig.AssertPathExists = lib.mkForce [ ];
+    systemd.services.aesmd.unitConfig.AssertPathExists = lib.mkForce [];
   };
 
   testScript = ''

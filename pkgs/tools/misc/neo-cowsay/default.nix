@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "neo-cowsay";
   version = "2.0.1";
@@ -15,12 +18,18 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/cowsay" "cmd/cowthink" ];
+  subPackages = ["cmd/cowsay" "cmd/cowthink"];
 
   meta = with lib; {
     description = "Cowsay reborn, written in Go";
     homepage = "https://github.com/Code-Hex/Neo-cowsay";
-    license = with licenses; [artistic1 /* or */ gpl3];
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = with licenses; [
+      artistic1
+      /*
+       or
+       */
+      gpl3
+    ];
+    maintainers = with maintainers; [Br1ght0ne];
   };
 }

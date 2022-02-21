@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cmake, qt4, pyside, pysideShiboken }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  qt4,
+  pyside,
+  pysideShiboken,
+}:
 buildPythonPackage rec {
   pname = "pyside-tools";
   version = "0.2.15";
@@ -12,23 +19,23 @@ buildPythonPackage rec {
     sha256 = "017i2yxgjrisaifxqnl3ym8ijl63l2yl6a3474dsqhlyqz2nx2ll";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   preConfigure = ''
     cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ qt4 ];
+  buildInputs = [qt4];
 
-  propagatedBuildInputs = [ pyside pysideShiboken ];
+  propagatedBuildInputs = [pyside pysideShiboken];
 
   meta = with lib; {
     description = "Development tools (pyside-uic/rcc/lupdate) for PySide, the LGPL-licensed Python bindings for the Qt framework";
     license = licenses.gpl2;
     homepage = "https://wiki.qt.io/PySide";
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.all;
   };
 }

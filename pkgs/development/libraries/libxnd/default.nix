@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libndtypes
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libndtypes,
 }:
-
 stdenv.mkDerivation {
   pname = "libxnd";
   version = "unstable-2019-08-01";
@@ -15,17 +15,17 @@ stdenv.mkDerivation {
     sha256 = "1n31d64qwlc7m3qkzbafhp0dgrvgvkdx89ykj63kll7r1n3yk59y";
   };
 
-  buildInputs = [ libndtypes ];
+  buildInputs = [libndtypes];
 
   # Override linker with cc (symlink to either gcc or clang)
   # Library expects to use cc for linking
   configureFlags = [
-      # Override linker with cc (symlink to either gcc or clang)
-      # Library expects to use cc for linking
-      "LD=${stdenv.cc.targetPrefix}cc"
-      # needed for tests
-      "--with-includes=${libndtypes}/include"
-      "--with-libs=${libndtypes}/lib"
+    # Override linker with cc (symlink to either gcc or clang)
+    # Library expects to use cc for linking
+    "LD=${stdenv.cc.targetPrefix}cc"
+    # needed for tests
+    "--with-includes=${libndtypes}/include"
+    "--with-libs=${libndtypes}/lib"
   ];
 
   # other packages which depend on libxnd seem to expect overflow.h, but
@@ -42,6 +42,6 @@ stdenv.mkDerivation {
     description = "C library for managing typed memory blocks and Python container module";
     homepage = "https://xnd.io/";
     license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ costrouc ];
+    maintainers = with lib.maintainers; [costrouc];
   };
 }

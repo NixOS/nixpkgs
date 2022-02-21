@@ -1,25 +1,34 @@
-{ lib, stdenv, fetchurl, unzip, patchelf, xorg, openal }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  patchelf,
+  xorg,
+  openal,
+}: let
+  urls = file: [
+    # Untrusted mirrors - do not update hashes
+    "https://ludios.org/mirror/ue4demos/${file}"
+    "https://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
+  ];
 
-let
-  urls = file:
-    [
-      # Untrusted mirrors - do not update hashes
-      "https://ludios.org/mirror/ue4demos/${file}"
-      "https://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
-    ];
-
-  buildDemo = { name, src }:
+  buildDemo = {
+    name,
+    src,
+  }:
     stdenv.mkDerivation rec {
       inherit name src;
 
-      nativeBuildInputs = [ unzip patchelf ];
+      nativeBuildInputs = [unzip patchelf];
 
-      rtdeps = lib.makeLibraryPath
-        [ xorg.libXxf86vm xorg.libXext openal ]
-        + ":" + lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
+      rtdeps =
+        lib.makeLibraryPath
+        [xorg.libXxf86vm xorg.libXext openal]
+        + ":"
+        + lib.makeSearchPathOutput "lib" "lib64" [stdenv.cc.cc];
 
-      buildCommand =
-      ''
+      buildCommand = ''
         mkdir -p "$out"
         cd $out
         unzip $src
@@ -51,11 +60,10 @@ let
       meta = {
         description = "Unreal Engine 4 Linux demos";
         homepage = "https://wiki.unrealengine.com/Linux_Demos";
-        platforms = [ "x86_64-linux" ];
+        platforms = ["x86_64-linux"];
         license = lib.licenses.unfree;
       };
     };
-
 in {
   tappy_chicken = buildDemo {
     name = "ue4demos-tappy_chicken";

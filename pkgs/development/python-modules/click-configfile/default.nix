@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, click
-, six
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  six,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "click-configfile";
   version = "0.2.3";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Add support for commands that use configuration files to Click";
     homepage = "https://github.com/click-contrib/click-configfile";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
   };
 }

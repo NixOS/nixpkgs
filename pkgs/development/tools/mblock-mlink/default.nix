@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchurl, dpkg, makeWrapper, autoPatchelfHook }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  autoPatchelfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "mblock-mlink";
   version = "1.2.0";
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Driver for mBlock web version";
     homepage = "https://mblock.makeblock.com/en-us/download/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.mausch ];
+    platforms = ["x86_64-linux"];
+    maintainers = [maintainers.mausch];
   };
 }

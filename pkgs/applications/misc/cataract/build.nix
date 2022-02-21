@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, glib
-, pkg-config
-, libxml2
-, exiv2
-, imagemagick6
-, version
-, sha256
-, rev }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  glib,
+  pkg-config,
+  libxml2,
+  exiv2,
+  imagemagick6,
+  version,
+  sha256,
+  rev,
+}:
 stdenv.mkDerivation {
   inherit version;
   pname = "cataract";
@@ -19,8 +21,8 @@ stdenv.mkDerivation {
     inherit sha256 rev;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ glib libxml2 exiv2 imagemagick6 ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [glib libxml2 exiv2 imagemagick6];
 
   prePatch = ''
     sed -i 's|#include <exiv2/exif.hpp>|#include <exiv2/exiv2.hpp>|' src/jpeg-utils.cpp
@@ -35,9 +37,7 @@ stdenv.mkDerivation {
     homepage = "http://cgg.bzatek.net/";
     description = "A simple static web photo gallery, designed to be clean and easily usable";
     license = licenses.gpl2;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [maintainers.matthiasbeyer];
     platforms = with platforms; linux ++ darwin;
   };
 }
-
-

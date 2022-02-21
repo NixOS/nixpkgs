@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   version = "3.12.0";
   pname = "commons-lang";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/lang/binaries/commons-lang3-${version}-bin.tar.gz";
+    url = "mirror://apache/commons/lang/binaries/commons-lang3-${version}-bin.tar.gz";
     sha256 = "sha256-MwEkZd/Lf3kKyjM+CevxBeKl+5XCxjiz33kNPvqQjig=";
   };
 
@@ -16,10 +19,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = "https://commons.apache.org/proper/commons-lang";
+    homepage = "https://commons.apache.org/proper/commons-lang";
     description = "Provides additional methods to manipulate standard Java library classes";
-    maintainers = with lib.maintainers; [ copumpkin ];
-    license     = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [copumpkin];
+    license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
   };
 }

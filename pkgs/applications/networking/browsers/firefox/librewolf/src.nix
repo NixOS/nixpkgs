@@ -1,7 +1,9 @@
-{ fetchurl, fetchFromGitLab }:
-let src = builtins.fromJSON (builtins.readFile ./src.json);
-in
 {
+  fetchurl,
+  fetchFromGitLab,
+}: let
+  src = builtins.fromJSON (builtins.readFile ./src.json);
+in {
   inherit (src) packageVersion;
   source = fetchFromGitLab {
     owner = "librewolf-community";
@@ -10,9 +12,7 @@ in
     inherit (src.source) rev sha256;
   };
   firefox = fetchurl {
-    url =
-      "mirror://mozilla/firefox/releases/${src.firefox.version}/source/firefox-${src.firefox.version}.source.tar.xz";
+    url = "mirror://mozilla/firefox/releases/${src.firefox.version}/source/firefox-${src.firefox.version}.source.tar.xz";
     inherit (src.firefox) sha512;
   };
 }
-

@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, python, packaging, numpy
-, cython, scipy, matplotlib, pytestCheckHook, pytest-rerunfailures }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  packaging,
+  numpy,
+  cython,
+  scipy,
+  matplotlib,
+  pytestCheckHook,
+  pytest-rerunfailures,
+}:
 buildPythonPackage rec {
   pname = "qutip";
   version = "4.6.3";
@@ -52,6 +63,6 @@ buildPythonPackage rec {
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.fabiangd ];
+    maintainers = [maintainers.fabiangd];
   };
 }

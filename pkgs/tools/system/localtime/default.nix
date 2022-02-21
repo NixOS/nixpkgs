@@ -1,10 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, geoclue2-with-demo-agent
-, lib
-, m4
+{
+  buildGoModule,
+  fetchFromGitHub,
+  geoclue2-with-demo-agent,
+  lib,
+  m4,
 }:
-
 buildGoModule {
   pname = "localtime";
   version = "unstable-2021-11-23";
@@ -23,7 +23,7 @@ buildGoModule {
     sed -i localtimed.go -e "s#/usr/lib/geoclue-2.0/demos/agent#$demoPath#"
   '';
 
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [m4];
 
   installPhase = ''
     runHook preInstall
@@ -34,7 +34,7 @@ buildGoModule {
   meta = with lib; {
     description = "A daemon for keeping the system timezone up-to-date based on the current location";
     homepage = "https://github.com/Stebalien/localtime";
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [lovesegfault];
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

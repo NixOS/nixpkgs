@@ -1,5 +1,9 @@
-{lib, stdenv, fetchurl, libdvdcss}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libdvdcss,
+}:
 stdenv.mkDerivation rec {
   pname = "libdvdread";
   version = "4.9.9";
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "http://dvdnav.mplayerhq.hu/";
     description = "A library for reading DVDs";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.wmertens ];
+    maintainers = [lib.maintainers.wmertens];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, SDL2, SDL2_image
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL2,
+  SDL2_image,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "klystrack";
   version = "1.7.6";
@@ -16,9 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    SDL2 SDL2_image
+    SDL2
+    SDL2_image
   ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   patches = [
     (fetchpatch {
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildFlags = [ "PREFIX=${placeholder "out"}" "CFG=release" ];
+  buildFlags = ["PREFIX=${placeholder "out"}" "CFG=release"];
 
   installPhase = ''
     install -Dm755 bin.release/klystrack $out/bin/klystrack
@@ -46,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "A chiptune tracker";
     homepage = "https://kometbomb.github.io/klystrack";
     license = licenses.mit;
-    maintainers = with maintainers; [ suhr ];
+    maintainers = with maintainers; [suhr];
     platforms = platforms.linux;
   };
 }

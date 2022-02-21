@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 buildGoModule rec {
   version = "1.7.6";
   pname = "ossutil";
@@ -28,6 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/aliyun/ossutil";
     description = "A user friendly command line tool to access Alibaba Cloud OSS";
     license = licenses.mit;
-    maintainers = with maintainers; [ jpetrucciani ];
+    maintainers = with maintainers; [jpetrucciani];
   };
 }

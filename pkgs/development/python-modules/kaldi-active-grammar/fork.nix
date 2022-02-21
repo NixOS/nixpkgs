@@ -1,18 +1,17 @@
-{ lib
-, stdenv
-, blas
-, lapack
-, openfst
-, icu
-, pkg-config
-, fetchFromGitHub
-, python3
-, openblas
-, zlib
-, gfortran
-}:
-
-let
+{
+  lib,
+  stdenv,
+  blas,
+  lapack,
+  openfst,
+  icu,
+  pkg-config,
+  fetchFromGitHub,
+  python3,
+  openblas,
+  zlib,
+  gfortran,
+}: let
   old-openfst = openfst.overrideAttrs (self: {
     src = fetchFromGitHub {
       owner = "kkm000";
@@ -20,74 +19,73 @@ let
       rev = "0bca6e76d24647427356dc242b0adbf3b5f1a8d9";
       sha256 = "1802rr14a03zl1wa5a0x1fa412kcvbgprgkadfj5s6s3agnn11rx";
     };
-    buildInputs = [ zlib ];
-  }); in
+    buildInputs = [zlib];
+  });
+in
+  assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+    stdenv.mkDerivation rec {
+      pname = "kaldi";
+      version = "kag-v2.1.0";
 
-assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+      src = fetchFromGitHub {
+        owner = "daanzu";
+        repo = "kaldi-fork-active-grammar";
+        rev = version;
+        sha256 = "+kT2xJRwDj/ECv/v/J1FpsINWOK8XkP9ZvZ9moFRl70=";
+      };
 
-stdenv.mkDerivation rec {
-  pname = "kaldi";
-  version = "kag-v2.1.0";
+      patches = [
+        ./0004-fork-cmake.patch
+        ./0006-fork-configure.patch
+      ];
 
-  src = fetchFromGitHub {
-    owner = "daanzu";
-    repo = "kaldi-fork-active-grammar";
-    rev = version;
-    sha256 = "+kT2xJRwDj/ECv/v/J1FpsINWOK8XkP9ZvZ9moFRl70=";
-  };
+      enableParallelBuilding = true;
 
-  patches = [
-    ./0004-fork-cmake.patch
-    ./0006-fork-configure.patch
-  ];
+      buildInputs = [
+        openblas
+        old-openfst
+        icu
+      ];
 
-  enableParallelBuilding = true;
+      nativeBuildInputs = [
+        pkg-config
+        python3
+        gfortran
+      ];
 
-  buildInputs = [
-    openblas
-    old-openfst
-    icu
-  ];
+      buildFlags = [
+        "dragonfly"
+        "dragonflybin"
+        "bin"
+        "fstbin"
+        "lmbin"
+      ];
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-    gfortran
-  ];
+      postPatch = ''
+        # Replace the shebangs for the various build scripts
+        patchShebangs src
+      '';
 
-  buildFlags = [
-    "dragonfly"
-    "dragonflybin"
-    "bin"
-    "fstbin"
-    "lmbin"
-  ];
+      configurePhase = ''
+        cd src
+        ./configure --shared --fst-root="${old-openfst}" --use-cuda=no --openblas-root="${openblas}" --mathlib=OPENBLAS
+      '';
 
-  postPatch = ''
-    # Replace the shebangs for the various build scripts
-    patchShebangs src
-  '';
+      installPhase = ''
+        # Fixes "patchelf: wrong ELF type"
+        find . -type f -name "*.o" -print0 | xargs -0 rm -f
+        mkdir -p $out/{bin,lib}
+        cp lib/* $out/lib/
+        patchelf \
+          --set-rpath "${lib.makeLibraryPath buildInputs}:$out/lib" \
+          $out/lib/*
+      '';
 
-  configurePhase = ''
-    cd src
-    ./configure --shared --fst-root="${old-openfst}" --use-cuda=no --openblas-root="${openblas}" --mathlib=OPENBLAS
-  '';
-
-  installPhase = ''
-    # Fixes "patchelf: wrong ELF type"
-    find . -type f -name "*.o" -print0 | xargs -0 rm -f
-    mkdir -p $out/{bin,lib}
-    cp lib/* $out/lib/
-    patchelf \
-      --set-rpath "${lib.makeLibraryPath buildInputs}:$out/lib" \
-      $out/lib/*
-  '';
-
-  meta = with lib; {
-    description = "Speech Recognition Toolkit";
-    homepage = "https://kaldi-asr.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ckie ];
-    platforms = platforms.linux;
-  };
-}
+      meta = with lib; {
+        description = "Speech Recognition Toolkit";
+        homepage = "https://kaldi-asr.org";
+        license = licenses.mit;
+        maintainers = with maintainers; [ckie];
+        platforms = platforms.linux;
+      };
+    }

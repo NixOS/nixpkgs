@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libpcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libpcap,
 }:
-
 buildGoModule rec {
   pname = "sx-go";
   version = "0.4.0";
@@ -30,6 +30,6 @@ buildGoModule rec {
     description = "Command-line network scanner";
     homepage = "https://github.com/v-byte-cpu/sx";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

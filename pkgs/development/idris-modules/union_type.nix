@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "union_type";
   version = "2018-01-30";
 
@@ -17,6 +18,6 @@ build-idris-package  {
     description = "UnionType in Idris";
     homepage = "https://github.com/berewt/UnionType";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

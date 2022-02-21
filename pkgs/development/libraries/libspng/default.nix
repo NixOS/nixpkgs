@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, zlib
-, ninja
-, meson
-, pkg-config
-, cmake
-, libpng
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  zlib,
+  ninja,
+  meson,
+  pkg-config,
+  cmake,
+  libpng,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libspng";
   version = "0.7.2";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "-Ddev_build=true"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   checkInputs = [
     cmake
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple, modern libpng alternative";
     homepage = "https://github.com/randy408/libspng";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ humancalico ];
+    license = with licenses; [bsd2];
+    maintainers = with maintainers; [humancalico];
   };
 }

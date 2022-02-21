@@ -1,38 +1,45 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.less;
 
-  configText = if (cfg.configFile != null) then (builtins.readFile cfg.configFile) else ''
-    #command
-    ${concatStringsSep "\n"
-      (mapAttrsToList (command: action: "${command} ${action}") cfg.commands)
-    }
-    ${if cfg.clearDefaultCommands then "#stop" else ""}
+  configText =
+    if (cfg.configFile != null)
+    then (builtins.readFile cfg.configFile)
+    else
+      ''
+        #command
+        ${
+          concatStringsSep "\n"
+          (mapAttrsToList (command: action: "${command} ${action}") cfg.commands)
+        }
+        ${
+          if cfg.clearDefaultCommands
+          then "#stop"
+          else ""
+        }
 
-    #line-edit
-    ${concatStringsSep "\n"
-      (mapAttrsToList (command: action: "${command} ${action}") cfg.lineEditingKeys)
-    }
+        #line-edit
+        ${
+          concatStringsSep "\n"
+          (mapAttrsToList (command: action: "${command} ${action}") cfg.lineEditingKeys)
+        }
 
-    #env
-    ${concatStringsSep "\n"
-      (mapAttrsToList (variable: values: "${variable}=${values}") cfg.envVariables)
-    }
-  '';
+        #env
+        ${
+          concatStringsSep "\n"
+          (mapAttrsToList (variable: values: "${variable}=${values}") cfg.envVariables)
+        }
+      '';
 
   lessKey = pkgs.writeText "lessconfig" configText;
-
-in
-
-{
+in {
   options = {
-
     programs.less = {
-
       # note that environment.nix sets PAGER=less, and
       # therefore also enables this module
       enable = mkEnableOption "less";
@@ -110,16 +117,18 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [pkgs.less];
 
-    environment.systemPackages = [ pkgs.less ];
-
-    environment.variables = {
-      LESSKEYIN_SYSTEM = toString lessKey;
-    } // optionalAttrs (cfg.lessopen != null) {
-      LESSOPEN = cfg.lessopen;
-    } // optionalAttrs (cfg.lessclose != null) {
-      LESSCLOSE = cfg.lessclose;
-    };
+    environment.variables =
+      {
+        LESSKEYIN_SYSTEM = toString lessKey;
+      }
+      // optionalAttrs (cfg.lessopen != null) {
+        LESSOPEN = cfg.lessopen;
+      }
+      // optionalAttrs (cfg.lessclose != null) {
+        LESSCLOSE = cfg.lessclose;
+      };
 
     warnings = optional (
       cfg.clearDefaultCommands && (all (x: x != "quit") (attrValues cfg.commands))
@@ -129,6 +138,5 @@ in
     '';
   };
 
-  meta.maintainers = with maintainers; [ johnazoidberg ];
-
+  meta.maintainers = with maintainers; [johnazoidberg];
 }

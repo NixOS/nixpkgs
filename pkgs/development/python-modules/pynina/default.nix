@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pynina";
   version = "0.1.4";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Python API wrapper to retrieve warnings from the german NINA app";
     homepage = "https://gitlab.com/DeerMaximum/pynina";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

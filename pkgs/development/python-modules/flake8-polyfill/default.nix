@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, flake8
-, mock
-, pep8
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  flake8,
+  mock,
+  pep8,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "flake8-polyfill";
   version = "1.0.2";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/pycqa/flake8-polyfill";
     description = "Polyfill package for Flake8 plugins";
     license = licenses.mit;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [eadwu];
   };
 }

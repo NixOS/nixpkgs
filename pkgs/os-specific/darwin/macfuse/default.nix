@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, cpio, xar, undmg, libtapi, DiskArbitration }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cpio,
+  xar,
+  undmg,
+  libtapi,
+  DiskArbitration,
+}:
 stdenv.mkDerivation rec {
   pname = "macfuse-stubs";
   version = "4.1.0";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "118hg64w5wb95lbxw6w1hbqxrx3plcbxfjhvxx86q0zx0saa9diw";
   };
 
-  nativeBuildInputs = [ cpio xar undmg libtapi ];
-  propagatedBuildInputs = [ DiskArbitration ];
+  nativeBuildInputs = [cpio xar undmg libtapi];
+  propagatedBuildInputs = [DiskArbitration];
 
   postUnpack = ''
     xar -xf 'Install macFUSE.pkg'
@@ -47,7 +55,7 @@ stdenv.mkDerivation rec {
       project website</link>.
     '';
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [midchildan];
 
     # macFUSE as a whole includes code with restrictions on commercial
     # redistribution. However, the build artifacts that we actually touch for

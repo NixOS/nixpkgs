@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, atk
-, cairo
-, glib
-, gtk3
-, pango
-, fribidi
-, vala
-, libxml2
-, perl
-, gettext
-, gnome
-, gobject-introspection
-, dbus
-, xvfb-run
-, shared-mime-info
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  atk,
+  cairo,
+  glib,
+  gtk3,
+  pango,
+  fribidi,
+  vala,
+  libxml2,
+  perl,
+  gettext,
+  gnome,
+  gobject-introspection,
+  dbus,
+  xvfb-run,
+  shared-mime-info,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
   version = "4.8.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

@@ -1,7 +1,28 @@
-{ fetchpatch, fetchurl, lib, stdenv, libGLU, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
-libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
-libpng, zlib, makeWrapper }:
-
+{
+  fetchpatch,
+  fetchurl,
+  lib,
+  stdenv,
+  libGLU,
+  freeglut,
+  libX11,
+  plib,
+  openal,
+  freealut,
+  libXrandr,
+  xorgproto,
+  libXext,
+  libSM,
+  libICE,
+  libXi,
+  libXt,
+  libXrender,
+  libXxf86vm,
+  libvorbis,
+  libpng,
+  zlib,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "torcs";
   version = "1.3.7";
@@ -34,9 +55,27 @@ stdenv.mkDerivation rec {
     sed -i -e s,/bin/bash,`type -P bash`, src/linux/torcs.in
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libGLU freeglut libX11 plib openal freealut libXrandr xorgproto
-    libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [
+    libGLU
+    freeglut
+    libX11
+    plib
+    openal
+    freealut
+    libXrandr
+    xorgproto
+    libXext
+    libSM
+    libICE
+    libXi
+    libXt
+    libXrender
+    libXxf86vm
+    libpng
+    zlib
+    libvorbis
+  ];
 
   installTargets = "install datainstall";
 

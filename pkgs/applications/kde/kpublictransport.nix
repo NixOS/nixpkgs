@@ -1,13 +1,13 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
 }:
-
 mkDerivation {
   pname = "kpublictransport";
   meta = with lib; {
-    license = [ licenses.cc0 ];
-    maintainers = [ maintainers.samueldr ];
+    license = [licenses.cc0];
+    maintainers = [maintainers.samueldr];
   };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [extra-cmake-modules];
 }

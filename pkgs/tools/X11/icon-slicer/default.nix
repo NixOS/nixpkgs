@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, gdk-pixbuf, popt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gdk-pixbuf,
+  popt,
+}:
 stdenv.mkDerivation rec {
   pname = "icon-slicer";
   version = "0.3";
@@ -16,14 +23,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ popt pkg-config ];
-  buildInputs = [ gdk-pixbuf ];
+  nativeBuildInputs = [popt pkg-config];
+  buildInputs = [gdk-pixbuf];
 
   meta = with lib; {
     description = "Utility for generating icon themes and libXcursor cursor themes";
     homepage = "https://www.freedesktop.org/wiki/Software/icon-slicer/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zaninime ];
+    maintainers = with maintainers; [zaninime];
     platforms = platforms.linux;
   };
 }

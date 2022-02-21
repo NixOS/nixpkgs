@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, motif, libXpm }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xlibsWrapper,
+  motif,
+  libXpm,
+}:
 stdenv.mkDerivation rec {
   pname = "nedit";
   version = "5.7";
@@ -9,15 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "0ym1zhjx9976rf2z5nr7dj4mjkxcicimhs686snjhdcpzxwsrndd";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
-  nativeBuildInputs = [ xlibsWrapper ];
-  buildInputs = [ motif libXpm ];
+  nativeBuildInputs = [xlibsWrapper];
+  buildInputs = [motif libXpm];
 
   # the linux config works fine on darwin too!
   buildFlags = lib.optional (stdenv.isLinux || stdenv.isDarwin) "linux";
 
-  NIX_CFLAGS_COMPILE="-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
+  NIX_CFLAGS_COMPILE = "-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
 
   installPhase = ''
     mkdir -p $out/bin

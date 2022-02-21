@@ -1,30 +1,30 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, gtk3
-, libgnomekbd
-, gdk-pixbuf
-, cairo
-, xorg
-, meson
-, ninja
-, pkg-config
-, python3
-, lib
-, stdenv
-, vala
-, wrapGAppsHook
-, inxi
-, mate
-, dbus
-, libdbusmenu-gtk3
+{
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  gtk3,
+  libgnomekbd,
+  gdk-pixbuf,
+  cairo,
+  xorg,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  lib,
+  stdenv,
+  vala,
+  wrapGAppsHook,
+  inxi,
+  mate,
+  dbus,
+  libdbusmenu-gtk3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xapps";
   version = "2.2.8";
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
@@ -49,10 +49,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gobject-introspection
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-      setproctitle # mate applet
-    ]))
+    (python3.withPackages (ps:
+      with ps; [
+        pygobject3
+        setproctitle # mate applet
+      ]))
     libgnomekbd
     gdk-pixbuf
     xorg.libxkbfile

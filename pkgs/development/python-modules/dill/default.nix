@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "dill";
   version = "0.3.4";
@@ -36,12 +36,12 @@ buildPythonPackage rec {
     "test_the_rest"
   ];
 
-  pythonImportsCheck = [ "dill" ];
+  pythonImportsCheck = ["dill"];
 
   meta = with lib; {
     description = "Serialize all of python (almost)";
     homepage = "https://github.com/uqfoundation/dill/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

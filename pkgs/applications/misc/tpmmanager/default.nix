@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchgit, qt4, qmake4Hook, trousers }:
-
+{
+  lib,
+  stdenv,
+  fetchgit,
+  qt4,
+  qmake4Hook,
+  trousers,
+}:
 stdenv.mkDerivation rec {
   version = "0.8.1";
   pname = "tpmmanager";
@@ -10,9 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "24a606f88fed67ed0d0e61dc220295e9e1ab8db3ef3d028fa34b04ff30652d8e";
   };
 
-  nativeBuildInputs = [ qmake4Hook ];
+  nativeBuildInputs = [qmake4Hook];
 
-  buildInputs = [ qt4 trousers ];
+  buildInputs = [qt4 trousers];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -28,13 +34,13 @@ stdenv.mkDerivation rec {
     Exec=$out/bin/tpmmanager
     Terminal=false
     EOF
-    '';
+  '';
 
   meta = {
     homepage = "https://projects.sirrix.com/trac/tpmmanager";
     description = "Tool for managing the TPM";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ tstrobel ];
+    maintainers = with lib.maintainers; [tstrobel];
     platforms = with lib.platforms; linux;
   };
 }

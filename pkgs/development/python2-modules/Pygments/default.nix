@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, docutils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  docutils,
 }:
-
 buildPythonPackage rec {
   pname = "Pygments";
   version = "2.5.2";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ docutils ];
+  propagatedBuildInputs = [docutils];
 
   # Circular dependency with sphinx
   doCheck = false;
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://pygments.org/";
     description = "A generic syntax highlighter";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

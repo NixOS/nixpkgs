@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "kepubify";
   version = "4.0.3";
@@ -13,14 +16,14 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-eiFG6lgsY5hf+XT3Kf5uA4Ai8vBbPsh1T4ObV+rj30Y=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}"];
 
-  excludedPackages = [ "kobotest" ];
+  excludedPackages = ["kobotest"];
 
   meta = with lib; {
     description = "EPUB to KEPUB converter";
     homepage = "https://pgaskin.net/kepubify";
     license = licenses.mit;
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [zowoq];
   };
 }

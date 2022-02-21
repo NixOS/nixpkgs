@@ -1,14 +1,47 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, bash, pkg-config, autoconf, cpio
-, file, which, unzip, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib
-, libpng, zlib, lcms2, libX11, libICE, libXrender, libXext, libXt, libXtst
-, libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk16-bootstrap
-, setJavaClassPath
-, headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
-}:
-
-let
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  bash,
+  pkg-config,
+  autoconf,
+  cpio,
+  file,
+  which,
+  unzip,
+  zip,
+  perl,
+  cups,
+  freetype,
+  alsa-lib,
+  libjpeg,
+  giflib,
+  libpng,
+  zlib,
+  lcms2,
+  libX11,
+  libICE,
+  libXrender,
+  libXext,
+  libXt,
+  libXtst,
+  libXi,
+  libXinerama,
+  libXcursor,
+  libXrandr,
+  fontconfig,
+  openjdk16-bootstrap,
+  setJavaClassPath,
+  headless ? false,
+  enableJavaFX ? openjfx.meta.available,
+  openjfx,
+  enableGnome2 ? true,
+  gtk3,
+  gnome_vfs,
+  glib,
+  GConf,
+}: let
   version = {
     feature = "16";
     interim = "0";
@@ -26,51 +59,84 @@ let
       sha256 = "165nr15dqfcxzsl5z95g4iklln4rlfkgdigdma576mx8813ldi44";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf unzip ];
-    buildInputs = [
-      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
-      libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk16-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
-    ];
+    nativeBuildInputs = [pkg-config autoconf unzip];
+    buildInputs =
+      [
+        cpio
+        file
+        which
+        zip
+        perl
+        zlib
+        cups
+        freetype
+        alsa-lib
+        libjpeg
+        giflib
+        libpng
+        zlib
+        lcms2
+        libX11
+        libICE
+        libXrender
+        libXext
+        libXtst
+        libXt
+        libXtst
+        libXi
+        libXinerama
+        libXcursor
+        libXrandr
+        fontconfig
+        openjdk16-bootstrap
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        gtk3
+        gnome_vfs
+        GConf
+        glib
+      ];
 
-    patches = [
-      ./fix-java-home-jdk10.patch
-      ./read-truststore-from-env-jdk10.patch
-      ./currency-date-range-jdk10.patch
-      ./increase-javadoc-heap-jdk13.patch
-      # -Wformat etc. are stricter in newer gccs, per
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
-      # so grab the work-around from
-      # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
-      (fetchurl {
-        url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
-        sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
-      })
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      ./swing-use-gtk-jdk13.patch
-    ];
+    patches =
+      [
+        ./fix-java-home-jdk10.patch
+        ./read-truststore-from-env-jdk10.patch
+        ./currency-date-range-jdk10.patch
+        ./increase-javadoc-heap-jdk13.patch
+        # -Wformat etc. are stricter in newer gccs, per
+        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
+        # so grab the work-around from
+        # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
+        (fetchurl {
+          url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
+          sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
+        })
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        ./swing-use-gtk-jdk13.patch
+      ];
 
     prePatch = ''
       chmod +x configure
       patchShebangs --build configure
     '';
 
-    configureFlags = [
-      "--with-boot-jdk=${openjdk16-bootstrap.home}"
-      "--with-version-build=${version.build}"
-      "--with-version-opt=nixos"
-      "--with-version-pre="
-      "--enable-unlimited-crypto"
-      "--with-native-debug-symbols=internal"
-      "--with-libjpeg=system"
-      "--with-giflib=system"
-      "--with-libpng=system"
-      "--with-zlib=system"
-      "--with-lcms=system"
-      "--with-stdc++lib=dynamic"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
+    configureFlags =
+      [
+        "--with-boot-jdk=${openjdk16-bootstrap.home}"
+        "--with-version-build=${version.build}"
+        "--with-version-opt=nixos"
+        "--with-version-pre="
+        "--enable-unlimited-crypto"
+        "--with-native-debug-symbols=internal"
+        "--with-libjpeg=system"
+        "--with-giflib=system"
+        "--with-libpng=system"
+        "--with-zlib=system"
+        "--with-lcms=system"
+        "--with-stdc++lib=dynamic"
+      ]
+      ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
       ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
@@ -79,9 +145,17 @@ let
     NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lfontconfig"
+      "-lcups"
+      "-lXinerama"
+      "-lXrandr"
+      "-lmagic"
+    ]
+    ++ lib.optionals (!headless && enableGnome2) [
+      "-lgtk-3"
+      "-lgio-2.0"
+      "-lgnomevfs-2"
+      "-lgconf-2"
     ]);
 
     # -j flag is explicitly rejected by the build system:
@@ -90,7 +164,7 @@ let
     # still runs in parallel.
     enableParallelBuilding = false;
 
-    buildFlags = [ "all" ];
+    buildFlags = ["all"];
 
     installPhase = ''
       mkdir -p $out/lib
@@ -111,9 +185,11 @@ let
 
       # Remove crap from the installation.
       rm -rf $out/lib/openjdk/demo
-      ${lib.optionalString headless ''
-        rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
-      ''}
+      ${
+        lib.optionalString headless ''
+          rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
+        ''
+      }
 
       ln -s $out/lib/openjdk/bin $out/bin
     '';
@@ -151,7 +227,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk16-bootstrap ];
+    disallowedReferences = [openjdk16-bootstrap];
 
     meta = import ./meta.nix lib;
 
@@ -161,4 +237,5 @@ let
       inherit gtk3;
     };
   };
-in openjdk
+in
+  openjdk

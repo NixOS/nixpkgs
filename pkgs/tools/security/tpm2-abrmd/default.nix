@@ -1,9 +1,17 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, pkg-config, autoconf-archive, makeWrapper, which
-, tpm2-tss, glib, dbus
-, cmocka
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  autoconf-archive,
+  makeWrapper,
+  which,
+  tpm2-tss,
+  glib,
+  dbus,
+  cmocka,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tpm2-abrmd";
   version = "2.3.3";
@@ -15,9 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "17nv50w1yh6fg7393vfvys9y13lp0gvxx9vcw2pb87ky551d7xkf";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook autoconf-archive which ];
-  buildInputs = [ tpm2-tss glib dbus ];
-  checkInputs = [ cmocka ];
+  nativeBuildInputs = [pkg-config makeWrapper autoreconfHook autoconf-archive which];
+  buildInputs = [tpm2-tss glib dbus];
+  checkInputs = [cmocka];
 
   enableParallelBuilding = true;
 
@@ -36,7 +44,7 @@ stdenv.mkDerivation rec {
   # /dev/tpm0) in it's LD_LIBRARY_PATH
   postFixup = ''
     wrapProgram $out/bin/tpm2-abrmd \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ tpm2-tss ]}"
+      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [tpm2-tss]}"
   '';
 
   meta = with lib; {
@@ -44,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpm2-software/tpm2-tools";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
   };
 }

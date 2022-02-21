@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  zlib,
+}:
 stdenv.mkDerivation {
   pname = "meritous";
   version = "1.4";
@@ -19,7 +26,7 @@ stdenv.mkDerivation {
       --replace "filename[64]" "filename[256]"
   '';
 
-  buildInputs = [ SDL SDL_image SDL_mixer zlib ];
+  buildInputs = [SDL SDL_image SDL_mixer zlib];
 
   installPhase = ''
     install -m 555 -D meritous $out/bin/meritous
@@ -27,14 +34,13 @@ stdenv.mkDerivation {
     cp -r dat/* $out/share/meritous/
   '';
 
-  hardeningDisable = [ "stackprotector" "fortify" ];
+  hardeningDisable = ["stackprotector" "fortify"];
 
   meta = with lib; {
     description = "Action-adventure dungeon crawl game";
     homepage = "http://www.asceai.net/meritous/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.alexvorobiev ];
+    maintainers = [maintainers.alexvorobiev];
     platforms = platforms.linux;
   };
 }
-

@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "kubernix";
   version = "0.2.0";
@@ -17,8 +20,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";
     homepage = "https://github.com/saschagrunert/kubernix";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ saschagrunert ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [saschagrunert];
     platforms = platforms.linux;
   };
 }

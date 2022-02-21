@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+}:
 buildPythonPackage rec {
   pname = "palettable";
   version = "3.3.0";
@@ -9,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "72feca71cf7d79830cd6d9181b02edf227b867d503bec953cf9fa91bf44896bd";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     pytest
@@ -19,6 +23,6 @@ buildPythonPackage rec {
     description = "A library of color palettes";
     homepage = "https://jiffyclub.github.io/palettable/";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

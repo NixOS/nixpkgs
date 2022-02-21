@@ -1,7 +1,11 @@
-{ lib, substituteAll, buildPythonPackage, fetchPypi
-, pandoc, texlive
+{
+  lib,
+  substituteAll,
+  buildPythonPackage,
+  fetchPypi,
+  pandoc,
+  texlive,
 }:
-
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.7.2";
@@ -28,6 +32,6 @@ buildPythonPackage rec {
     description = "Thin wrapper for pandoc";
     homepage = "https://github.com/NicklasTegner/pypandoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann bennofs ];
+    maintainers = with maintainers; [sternenseemann bennofs];
   };
 }

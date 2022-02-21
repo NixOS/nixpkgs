@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config
-, libX11, libXext, libXft, libXmu, libXinerama, libXrandr, libXpm
-, imagemagick, libpng, libjpeg, libexif, libtiff, giflib, libwebp }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libX11,
+  libXext,
+  libXft,
+  libXmu,
+  libXinerama,
+  libXrandr,
+  libXpm,
+  imagemagick,
+  libpng,
+  libjpeg,
+  libexif,
+  libtiff,
+  giflib,
+  libwebp,
+}:
 stdenv.mkDerivation rec {
   pname = "windowmaker";
   version = "0.95.9";
@@ -12,10 +28,24 @@ stdenv.mkDerivation rec {
     sha256 = "055pqvlkhipyjn7m6bb3fs4zz9rd1ynzl0mmwbhp05ihc3zmh8zj";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ libX11 libXext libXft libXmu libXinerama libXrandr libXpm
-                  imagemagick libpng libjpeg libexif libtiff giflib libwebp ];
+  buildInputs = [
+    libX11
+    libXext
+    libXft
+    libXmu
+    libXinerama
+    libXrandr
+    libXpm
+    imagemagick
+    libpng
+    libjpeg
+    libexif
+    libtiff
+    giflib
+    libwebp
+  ];
 
   configureFlags = [
     "--with-x"
@@ -38,6 +68,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
   };
 }

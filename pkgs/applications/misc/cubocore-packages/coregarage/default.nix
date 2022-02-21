@@ -1,5 +1,15 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, libarchive, libarchive-qt, cmake, ninja, libcprime, libcsys }:
-
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  libarchive,
+  libarchive-qt,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 mkDerivation rec {
   pname = "coregarage";
   version = "4.3.0";
@@ -28,7 +38,7 @@ mkDerivation rec {
     description = "A settings manager for the C Suite";
     homepage = "https://gitlab.com/cubocore/coreapps/coregarage";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [dan4ik605743];
     platforms = platforms.linux;
   };
 }

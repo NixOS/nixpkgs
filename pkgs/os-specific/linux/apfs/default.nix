@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
 }:
-
 stdenv.mkDerivation {
   pname = "apfs";
   version = "unstable-2021-09-21-${kernel.version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-Y8/PGPLirNrICF+Bum60v/DBPa1xpox5VBvt64myZzs=";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [
@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     broken = kernel.kernelOlder "4.9";
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage {
   pname = "pigeon";
   version = "20190810-f3db42a662";
@@ -16,7 +20,7 @@ buildGoPackage {
   meta = {
     homepage = "https://github.com/mna/pigeon";
     description = "A PEG parser generator for Go";
-    maintainers = with lib.maintainers; [ zimbatm ];
-    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [zimbatm];
+    license = with lib.licenses; [bsd3];
   };
 }

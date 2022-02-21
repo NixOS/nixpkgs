@@ -1,5 +1,7 @@
-{ callPackage, fetchurl }:
-
+{
+  callPackage,
+  fetchurl,
+}:
 callPackage ./build.nix rec {
   version = "4.9.3";
   git-version = version;

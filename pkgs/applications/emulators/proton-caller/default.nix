@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "proton-caller";
   version = "2.3.2";
@@ -18,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/caverym/proton-caller/releases/tag/${version}";
     homepage = "https://github.com/caverym/proton-caller";
     license = licenses.mit;
-    maintainers = with maintainers; [ kho-dialga ];
+    maintainers = with maintainers; [kho-dialga];
   };
 }

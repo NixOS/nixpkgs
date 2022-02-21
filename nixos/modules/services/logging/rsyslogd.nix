@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.rsyslogd;
 
   syslogConf = pkgs.writeText "syslog.conf" ''
@@ -26,16 +27,11 @@ let
 
     *.*;mail.none;local1.none    -/var/log/messages
   '';
-
-in
-
-{
+in {
   ###### interface
 
   options = {
-
     services.rsyslogd = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -67,39 +63,33 @@ in
 
       extraParams = mkOption {
         type = types.listOf types.str;
-        default = [ ];
-        example = [ "-m 0" ];
+        default = [];
+        example = ["-m 0"];
         description = ''
           Additional parameters passed to <command>rsyslogd</command>.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [pkgs.rsyslog];
 
-    environment.systemPackages = [ pkgs.rsyslog ];
+    systemd.services.syslog = {
+      description = "Syslog Daemon";
 
-    systemd.services.syslog =
-      { description = "Syslog Daemon";
+      requires = ["syslog.socket"];
 
-        requires = [ "syslog.socket" ];
+      wantedBy = ["multi-user.target"];
 
-        wantedBy = [ "multi-user.target" ];
-
-        serviceConfig =
-          { ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
-            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";
-            # Prevent syslogd output looping back through journald.
-            StandardOutput = "null";
-          };
+      serviceConfig = {
+        ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";
+        # Prevent syslogd output looping back through journald.
+        StandardOutput = "null";
       };
-
+    };
   };
-
 }

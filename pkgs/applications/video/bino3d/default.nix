@@ -1,5 +1,14 @@
-{ mkDerivation, lib, fetchurl, pkg-config, ffmpeg, glew, libass, openal, qtbase }:
-
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  pkg-config,
+  ffmpeg,
+  glew,
+  libass,
+  openal,
+  qtbase,
+}:
 mkDerivation rec {
   pname = "bino";
   version = "1.6.8";
@@ -9,9 +18,9 @@ mkDerivation rec {
     sha256 = "sha256-8sIdX+qm7CGPHIziFBHHIe+KEbhbwDY6w/iRm1V+so4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ ffmpeg glew libass openal qtbase ];
+  buildInputs = [ffmpeg glew libass openal qtbase];
 
   enableParallelBuilding = true;
 
@@ -19,7 +28,7 @@ mkDerivation rec {
     description = "Stereoscopic 3D and multi-display video player";
     homepage = "https://bino3d.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
 }

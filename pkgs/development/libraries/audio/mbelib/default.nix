@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "mbelib";
   version = "1.3.0";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v6b7nf8fgxy7vzgcwffqyql5zhldrz30c88k1ylbjp78hwh4rif";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   doCheck = true;
   preCheck = ''
@@ -24,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/szechyjs/mbelib";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = with maintainers; [andrew-d];
   };
 }

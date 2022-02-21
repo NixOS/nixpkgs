@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, hdf5 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  hdf5,
+}:
 stdenv.mkDerivation rec {
   pname = "medfile";
   version = "4.1.0";
@@ -13,8 +18,8 @@ stdenv.mkDerivation rec {
     ./hdf5-1.12.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ hdf5 ];
+  nativeBuildInputs = [cmake];
+  buildInputs = [hdf5];
 
   checkPhase = "make test";
 

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy36
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy36,
 }:
-
 buildPythonPackage rec {
   pname = "mailcap-fix";
   version = "1.0.1";
@@ -19,5 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/michael-lazar/mailcap_fix";
     license = licenses.unlicense;
   };
-
 }

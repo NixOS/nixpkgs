@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, unzip, pkg-config, libixp_hg, txt2tags, dash, python2, which
-, libX11 , libXrender, libXext, libXinerama, libXrandr, libXft }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  pkg-config,
+  libixp_hg,
+  txt2tags,
+  dash,
+  python2,
+  which,
+  libX11,
+  libXrender,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXft,
+}:
 stdenv.mkDerivation rec {
   rev = "2823";
   version = "hg-2012-12-09";
@@ -29,17 +44,28 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [ libixp_hg txt2tags dash python2 which
-                  libX11 libXrender libXext libXinerama libXrandr libXft ];
+  nativeBuildInputs = [pkg-config unzip];
+  buildInputs = [
+    libixp_hg
+    txt2tags
+    dash
+    python2
+    which
+    libX11
+    libXrender
+    libXext
+    libXinerama
+    libXrandr
+    libXft
+  ];
 
   # For some reason including mercurial in buildInputs did not help
-  makeFlags = [ "WMII_HGVERSION=hg${rev}" ];
+  makeFlags = ["WMII_HGVERSION=hg${rev}"];
 
   meta = {
     homepage = "https://suckless.org/"; # https://wmii.suckless.org/ does not exist anymore
     description = "A small window manager controlled by a 9P filesystem";
-    maintainers = with lib.maintainers; [ kovirobi ];
+    maintainers = with lib.maintainers; [kovirobi];
     license = lib.licenses.mit;
     platforms = with lib.platforms; linux;
   };

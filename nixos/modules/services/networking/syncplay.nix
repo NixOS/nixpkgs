@@ -1,17 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.syncplay;
 
   cmdArgs =
-    [ "--port" cfg.port ]
-    ++ optionals (cfg.salt != null) [ "--salt" cfg.salt ]
-    ++ optionals (cfg.certDir != null) [ "--tls" cfg.certDir ];
-
-in
-{
+    ["--port" cfg.port]
+    ++ optionals (cfg.salt != null) ["--salt" cfg.salt]
+    ++ optionals (cfg.certDir != null) ["--tls" cfg.certDir];
+in {
   options = {
     services.syncplay = {
       enable = mkOption {
@@ -67,8 +67,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.syncplay = {
       description = "Syncplay Service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
 
       serviceConfig = {
         ExecStart = "${pkgs.syncplay}/bin/syncplay-server ${escapeShellArgs cmdArgs}";

@@ -1,20 +1,20 @@
-{ mkDerivation
-, fetchFromGitHub
-, lib
-, extra-cmake-modules
-, kdoctools
-, wrapGAppsHook
-, baloo
-, karchive
-, kconfig
-, kcrash
-, kfilemetadata
-, kinit
-, kirigami2
-, knewstuff
-, plasma-framework
+{
+  mkDerivation,
+  fetchFromGitHub,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wrapGAppsHook,
+  baloo,
+  karchive,
+  kconfig,
+  kcrash,
+  kfilemetadata,
+  kinit,
+  kirigami2,
+  knewstuff,
+  plasma-framework,
 }:
-
 mkDerivation rec {
   pname = "peruse";
   version = "1.2.20200208";
@@ -45,13 +45,12 @@ mkDerivation rec {
     plasma-framework
   ];
 
-  pathsToLink = [ "/etc/xdg/peruse.knsrc" ];
+  pathsToLink = ["/etc/xdg/peruse.knsrc"];
 
   meta = with lib; {
     description = "A comic book reader";
     homepage = "https://peruse.kde.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
-
 }

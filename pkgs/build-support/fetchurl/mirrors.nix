@@ -1,5 +1,4 @@
 {
-
   # Content-addressable Nix mirrors.
   hashedMirrors = [
     "https://tarballs.nixos.org"
@@ -152,7 +151,7 @@
     "https://cpan.metacpan.org/"
     "https://cpan.perl.org/"
     "https://mirrors.kernel.org/CPAN/"
-    "https://backpan.perl.org/"  # for old releases
+    "https://backpan.perl.org/" # for old releases
   ];
 
   # CentOS.

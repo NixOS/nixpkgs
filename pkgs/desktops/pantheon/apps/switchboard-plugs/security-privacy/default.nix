@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, python3
-, ninja
-, pkg-config
-, vala
-, elementary-settings-daemon
-, libgee
-, granite
-, gsettings-desktop-schemas
-, gala
-, gtk3
-, glib
-, polkit
-, zeitgeist
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  python3,
+  ninja,
+  pkg-config,
+  vala,
+  elementary-settings-daemon,
+  libgee,
+  granite,
+  gsettings-desktop-schemas,
+  gala,
+  gtk3,
+  glib,
+  polkit,
+  zeitgeist,
+  switchboard,
 }:
-
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
   version = "2.3.0";
@@ -69,5 +69,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
   };
-
 }

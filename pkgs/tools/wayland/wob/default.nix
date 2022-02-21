@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland-scanner
-, wayland
-, wayland-protocols
-, libseccomp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  libseccomp,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wob";
   version = "0.12";
@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gVQqZbz6ylBBlmhSgyaSEvAyMi48QiuviwZodPVGJxI=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols ]
+  nativeBuildInputs = [meson ninja pkg-config scdoc wayland-scanner];
+  buildInputs =
+    [wayland wayland-protocols]
     ++ lib.optional stdenv.isLinux libseccomp;
 
   mesonFlags = lib.optional stdenv.isLinux "-Dseccomp=enabled";
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://github.com/francma/wob/releases/tag/${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
     platforms = platforms.unix;
   };
 }

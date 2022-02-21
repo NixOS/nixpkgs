@@ -1,23 +1,23 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, marshmallow
-, pytest-datafiles
-, pytest-vcr
-, pytestCheckHook
-, python-box
-, python-dateutil
-, pythonOlder
-, requests
-, requests-pkcs12
-, responses
-, restfly
-, semver
-, typing-extensions
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  marshmallow,
+  pytest-datafiles,
+  pytest-vcr,
+  pytestCheckHook,
+  python-box,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-pkcs12,
+  responses,
+  restfly,
+  semver,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "pytenable";
   version = "1.4.3";
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

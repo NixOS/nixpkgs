@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, zeep
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  zeep,
 }:
-
 buildPythonPackage rec {
   pname = "total-connect-client";
   version = "2022.2.1";
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Interact with Total Connect 2 alarm systems";
     homepage = "https://github.com/craigjmidwinter/total-connect-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

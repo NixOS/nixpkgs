@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, boxfort, cmake, libcsptr, pkg-config, gettext
-, dyncall , nanomsg, python3Packages }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boxfort,
+  cmake,
+  libcsptr,
+  pkg-config,
+  gettext,
+  dyncall,
+  nanomsg,
+  python3Packages,
+}:
 stdenv.mkDerivation rec {
   version = "2.3.3";
   pname = "criterion";
@@ -13,7 +23,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   buildInputs = [
     boxfort.dev
@@ -23,16 +33,16 @@ stdenv.mkDerivation rec {
     nanomsg
   ];
 
-  checkInputs = with python3Packages; [ cram ];
+  checkInputs = with python3Packages; [cram];
 
-  cmakeFlags = [ "-DCTESTS=ON" ];
+  cmakeFlags = ["-DCTESTS=ON"];
   doCheck = true;
   preCheck = ''
     export LD_LIBRARY_PATH=`pwd`''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
   checkTarget = "criterion_tests test";
 
-  outputs = [ "dev" "out" ];
+  outputs = ["dev" "out"];
 
   meta = with lib; {
     description = "A cross-platform C and C++ unit testing framework for the 21th century";

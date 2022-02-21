@@ -1,5 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 buildGoPackage rec {
   pname = "kubeless";
   version = "1.0.7";
@@ -13,12 +17,14 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/kubeless/kubeless";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  subPackages = [ "cmd/kubeless" ];
+  subPackages = ["cmd/kubeless"];
 
   ldflags = [
-    "-s" "-w" "-X github.com/kubeless/kubeless/pkg/version.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/kubeless/kubeless/pkg/version.Version=${version}"
   ];
 
   postInstall = ''

@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, jre, git, gradle_6, perl, makeWrapper }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jre,
+  git,
+  gradle_6,
+  perl,
+  makeWrapper,
+}: let
   pname = "ma1sd";
   version = "2.4.0";
   rev = version;
@@ -12,11 +19,10 @@ let
     hash = "sha256-8UnhrGa8KKmMAAkzUXztMkxgYOX8MU1ioXuEStGi4Vc=";
   };
 
-
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradle_6 perl git ];
+    nativeBuildInputs = [gradle_6 perl git];
 
     buildPhase = ''
       export MA1SD_BUILD_VERSION=${rev}
@@ -37,36 +43,34 @@ let
     outputHashMode = "recursive";
     outputHash = "0x2wmmhjgnb6p72d3kvnv2vg52l0c4151rs4jrazs9rvxjfc88dr";
   };
-
 in
-stdenv.mkDerivation {
-  inherit pname src version;
-  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
-  buildInputs = [ jre ];
+  stdenv.mkDerivation {
+    inherit pname src version;
+    nativeBuildInputs = [gradle_6 perl makeWrapper];
+    buildInputs = [jre];
 
-  buildPhase = ''
-    runHook preBuild
-    export MA1SD_BUILD_VERSION=${rev}
-    export GRADLE_USER_HOME=$(mktemp -d)
+    buildPhase = ''
+      runHook preBuild
+      export MA1SD_BUILD_VERSION=${rev}
+      export GRADLE_USER_HOME=$(mktemp -d)
 
-    sed -ie "s#jcenter()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
-    gradle --offline --no-daemon build -x test
-    runHook postBuild
-  '';
+      sed -ie "s#jcenter()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
+      gradle --offline --no-daemon build -x test
+      runHook postBuild
+    '';
 
-  installPhase = ''
-    runHook preInstall
-    install -D build/libs/source.jar $out/lib/ma1sd.jar
-    makeWrapper ${jre}/bin/java $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
-    runHook postInstall
-  '';
+    installPhase = ''
+      runHook preInstall
+      install -D build/libs/source.jar $out/lib/ma1sd.jar
+      makeWrapper ${jre}/bin/java $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
+      runHook postInstall
+    '';
 
-  meta = with lib; {
-    description = "a federated matrix identity server; fork of mxisd";
-    homepage = "https://github.com/ma1uta/ma1sd";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ mguentner ];
-    platforms = platforms.all;
-  };
-
-}
+    meta = with lib; {
+      description = "a federated matrix identity server; fork of mxisd";
+      homepage = "https://github.com/ma1uta/ma1sd";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [mguentner];
+      platforms = platforms.all;
+    };
+  }

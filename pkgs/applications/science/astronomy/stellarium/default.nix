@@ -1,9 +1,24 @@
-{ stdenv, lib, mkDerivation, fetchFromGitHub
-, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
-, qtscript, qtserialport, qttools
-, qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  freetype,
+  libpng,
+  libGLU,
+  libGL,
+  openssl,
+  perl,
+  libiconv,
+  qtscript,
+  qtserialport,
+  qttools,
+  qtmultimedia,
+  qtlocation,
+  qtbase,
+  wrapQtAppsHook,
 }:
-
 mkDerivation rec {
   pname = "stellarium";
   version = "0.21.3";
@@ -15,11 +30,21 @@ mkDerivation rec {
     sha256 = "sha256-TQMLy5ziBF7YqPDzPwgjY5FHxxMUe7MXo/TGxQ1nGcg=";
   };
 
-  nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
+  nativeBuildInputs = [cmake perl wrapQtAppsHook];
 
   buildInputs = [
-    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
-    qtmultimedia qtlocation qtbase
+    freetype
+    libpng
+    libGLU
+    libGL
+    openssl
+    libiconv
+    qtscript
+    qtserialport
+    qttools
+    qtmultimedia
+    qtlocation
+    qtbase
   ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -33,6 +58,6 @@ mkDerivation rec {
     homepage = "http://stellarium.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

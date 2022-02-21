@@ -1,9 +1,11 @@
-{ callPackage, util-linux }:
-
-let
-  mkFuse = args: callPackage (import ./common.nix args) {
-    inherit util-linux;
-  };
+{
+  callPackage,
+  util-linux,
+}: let
+  mkFuse = args:
+    callPackage (import ./common.nix args) {
+      inherit util-linux;
+    };
 in {
   fuse_2 = mkFuse {
     version = "2.9.9";

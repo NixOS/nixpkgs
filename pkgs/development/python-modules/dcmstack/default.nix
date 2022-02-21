@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, nose
-, nibabel
-, pydicom
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  nose,
+  nibabel,
+  pydicom,
 }:
-
 buildPythonPackage rec {
   pname = "dcmstack";
   version = "0.8";
@@ -21,9 +21,9 @@ buildPythonPackage rec {
     sha256 = "1n24pp3rqz7ss1z6276fxynnppraxadbl3b9p8ijrcqnpzbzih7p";
   };
 
-  propagatedBuildInputs = [ nibabel pydicom ];
+  propagatedBuildInputs = [nibabel pydicom];
 
-  checkInputs = [ nose ];
+  checkInputs = [nose];
   checkPhase = ''
     runHook preCheck
     nosetests
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/moloney/dcmstack";
     description = "DICOM to Nifti conversion preserving metadata";
     license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [bcdarwin];
   };
 }

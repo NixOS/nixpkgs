@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fq
-, testVersion
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fq,
+  testVersion,
 }:
-
 buildGoModule rec {
   pname = "fq";
   version = "0.0.4";
@@ -24,12 +24,12 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  passthru.tests = testVersion { package = fq; };
+  passthru.tests = testVersion {package = fq;};
 
   meta = with lib; {
     description = "jq for binary formats";
     homepage = "https://github.com/wader/fq";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [siraben];
   };
 }

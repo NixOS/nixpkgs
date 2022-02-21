@@ -1,5 +1,11 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, udev }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  udev,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "elf2uf2-rs";
   version = "unstable-2021-12-12";
@@ -24,8 +30,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Convert ELF files to UF2 for USB Flashing Bootloaders";
     homepage = "https://github.com/JoNil/elf2uf2-rs";
-    license = with licenses; [ bsd0 ];
+    license = with licenses; [bsd0];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ polygon ];
+    maintainers = with maintainers; [polygon];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
 }:
-
 buildPythonPackage rec {
   pname = "azure-mgmt-dns";
   version = "8.0.0";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   ];
 
   # this is still needed for when the version is overrided
-  pythonNamespaces = [ "azure.mgmt" ];
+  pythonNamespaces = ["azure.mgmt"];
 
   # has no tests
   doCheck = false;
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure DNS Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer maxwilson ];
+    maintainers = with maintainers; [jonringer maxwilson];
   };
 }

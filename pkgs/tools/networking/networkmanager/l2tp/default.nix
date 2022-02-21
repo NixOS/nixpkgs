@@ -1,10 +1,30 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkg-config
-, file, findutils
-, gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret
-, withGnome ? true, libnma, glib }:
-
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  intltool,
+  pkg-config,
+  file,
+  findutils,
+  gtk3,
+  networkmanager,
+  ppp,
+  xl2tpd,
+  strongswan,
+  libsecret,
+  withGnome ? true,
+  libnma,
+  glib,
+}:
 stdenv.mkDerivation rec {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${
+    if withGnome
+    then "-gnome"
+    else ""
+  }-${version}";
   pname = "NetworkManager-l2tp";
   version = "1.2.12";
 
@@ -22,10 +42,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ networkmanager ppp glib ]
-    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
+  buildInputs =
+    [networkmanager ppp glib]
+    ++ lib.optionals withGnome [gtk3 libsecret libnma];
 
-  nativeBuildInputs = [ autoreconfHook libtool intltool pkg-config file findutils ];
+  nativeBuildInputs = [autoreconfHook libtool intltool pkg-config file findutils];
 
   preConfigure = ''
     intltoolize -f
@@ -33,7 +54,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--without-libnm-glib"
-    "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${
+      if withGnome
+      then "yes"
+      else "no"
+    }"
     "--localstatedir=/var"
     "--sysconfdir=$(out)/etc"
     "--enable-absolute-paths"
@@ -46,6 +71,6 @@ stdenv.mkDerivation rec {
     inherit (networkmanager.meta) platforms;
     homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ abbradar obadz ];
+    maintainers = with maintainers; [abbradar obadz];
   };
 }

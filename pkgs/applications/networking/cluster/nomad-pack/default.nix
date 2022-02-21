@@ -1,12 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
-
 buildGoModule rec {
   pname = "nomad-pack";
   version = "2022-02-11";
-  rev   = "568ac5e42bc41172a1fa3c8b18af2f42b9e341ff";
+  rev = "568ac5e42bc41172a1fa3c8b18af2f42b9e341ff";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
@@ -32,7 +32,6 @@ buildGoModule rec {
     changelog = "https://github.com/hashicorp/nomad-pack/blob/main/CHANGELOG.md";
     description = "Nomad Pack is a templating and packaging tool used with HashiCorp Nomad.";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ techknowlogick ];
+    maintainers = with maintainers; [techknowlogick];
   };
-
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "kibi";
   version = "0.2.2";
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "A text editor in ≤1024 lines of code, written in Rust";
     homepage = "https://github.com/ilai-deutel/kibi";
     license = licenses.mit;
-    maintainers = with maintainers; [ robertodr ];
+    maintainers = with maintainers; [robertodr];
   };
 }

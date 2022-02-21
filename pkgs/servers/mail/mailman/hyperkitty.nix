@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-
-# dependencies
-, defusedxml
-, django
-, django-gravatar2
-, django-haystack
-, django-mailman3
-, django-paintstore
-, django-q
-, django_compressor
-, django-extensions
-, djangorestframework
-, flufl_lock
-, mistune_2_0
-, networkx
-, psycopg2
-, python-dateutil
-, robot-detection
-
-# tests
-, beautifulsoup4
-, elasticsearch
-, mock
-, whoosh
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder
+  # dependencies
+  ,
+  defusedxml,
+  django,
+  django-gravatar2,
+  django-haystack,
+  django-mailman3,
+  django-paintstore,
+  django-q,
+  django_compressor,
+  django-extensions,
+  djangorestframework,
+  flufl_lock,
+  mistune_2_0,
+  networkx,
+  psycopg2,
+  python-dateutil,
+  robot-detection
+  # tests
+  ,
+  beautifulsoup4,
+  elasticsearch,
+  mock,
+  whoosh,
 }:
-
 buildPythonPackage rec {
   pname = "HyperKitty";
   # Note: Mailman core must be on the latest version before upgrading HyperKitty.
@@ -87,6 +87,6 @@ buildPythonPackage rec {
     description = "Archiver for GNU Mailman v3";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ globin qyliss ];
+    maintainers = with lib.maintainers; [globin qyliss];
   };
 }

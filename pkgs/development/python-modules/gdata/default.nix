@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchurl
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
 }:
-
 buildPythonPackage rec {
   pname = "gdata";
   version = "2.0.18";
@@ -20,5 +20,4 @@ buildPythonPackage rec {
     description = "Python client library for Google data APIs";
     license = licenses.asl20;
   };
-
 }

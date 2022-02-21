@@ -1,10 +1,10 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchPypi
-, monotonic
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchPypi,
+  monotonic,
 }:
-
 buildPythonPackage rec {
   pname = "humanfriendly";
   version = "10.0";
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Human friendly output for text interfaces using Python";
     homepage = "https://humanfriendly.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ montag451 ];
+    maintainers = with maintainers; [montag451];
   };
 }

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  psutil,
 }:
-
 buildPythonPackage rec {
   pname = "python-pidfile";
   version = "3.0.0";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     psutil
   ];
 
-  pythonImportsCheck = [ "pidfile" ];
+  pythonImportsCheck = ["pidfile"];
 
   # no tests on the github mirror of the source code
   # see this: https://github.com/mosquito/python-pidfile/issues/7
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python context manager for managing pid files";
     homepage = "https://github.com/mosquito/python-pidfile";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lom ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [lom];
   };
 }

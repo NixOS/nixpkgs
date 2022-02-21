@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, aalib
-, alsa-lib
-, autoconf
-, ffmpeg
-, flac
-, libGL
-, libGLU
-, libcaca
-, libcdio
-, libmng
-, libmpcdec
-, libpulseaudio
-, libtheora
-, libv4l
-, libvorbis
-, ncurses
-, perl
-, pkg-config
-, speex
-, vcdimager
-, xorg
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  aalib,
+  alsa-lib,
+  autoconf,
+  ffmpeg,
+  flac,
+  libGL,
+  libGLU,
+  libcaca,
+  libcdio,
+  libmng,
+  libmpcdec,
+  libpulseaudio,
+  libtheora,
+  libv4l,
+  libvorbis,
+  ncurses,
+  perl,
+  pkg-config,
+  speex,
+  vcdimager,
+  xorg,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xine-lib";
   version = "1.2.11";
@@ -55,44 +55,45 @@ stdenv.mkDerivation rec {
     pkg-config
     perl
   ];
-  buildInputs = [
-    aalib
-    alsa-lib
-    ffmpeg
-    flac
-    libGL
-    libGLU
-    libcaca
-    libcdio
-    libmng
-    libmpcdec
-    libpulseaudio
-    libtheora
-    libv4l
-    libvorbis
-    ncurses
-    perl
-    speex
-    vcdimager
-    zlib
-  ] ++ (with xorg; [
-    libX11
-    libXext
-    libXinerama
-    libXv
-    libxcb
-  ]);
+  buildInputs =
+    [
+      aalib
+      alsa-lib
+      ffmpeg
+      flac
+      libGL
+      libGLU
+      libcaca
+      libcdio
+      libmng
+      libmpcdec
+      libpulseaudio
+      libtheora
+      libv4l
+      libvorbis
+      ncurses
+      perl
+      speex
+      vcdimager
+      zlib
+    ]
+    ++ (with xorg; [
+      libX11
+      libXext
+      libXinerama
+      libXv
+      libxcb
+    ]);
 
   enableParallelBuilding = true;
 
   NIX_LDFLAGS = "-lxcb-shm";
 
-
   meta = with lib; {
     homepage = "http://xine.sourceforge.net/";
     description = "A high-performance, portable and reusable multimedia playback engine";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with licenses; [gpl2Plus lgpl2Plus];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }

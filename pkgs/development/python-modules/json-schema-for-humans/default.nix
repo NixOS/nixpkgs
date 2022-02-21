@@ -1,22 +1,22 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, dataclasses
-, dataclasses-json
-, fetchFromGitHub
-, htmlmin
-, jinja2
-, markdown2
-, poetry-core
-, pygments
-, pytestCheckHook
-, pythonOlder
-, pytz
-, pyyaml
-, requests
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  dataclasses,
+  dataclasses-json,
+  fetchFromGitHub,
+  htmlmin,
+  jinja2,
+  markdown2,
+  poetry-core,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
   version = "0.40";
@@ -35,19 +35,21 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    click
-    dataclasses-json
-    htmlmin
-    jinja2
-    markdown2
-    pygments
-    pytz
-    pyyaml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  propagatedBuildInputs =
+    [
+      click
+      dataclasses-json
+      htmlmin
+      jinja2
+      markdown2
+      pygments
+      pytz
+      pyyaml
+      requests
+    ]
+    ++ lib.optionals (pythonOlder "3.7") [
+      dataclasses
+    ];
 
   checkInputs = [
     beautifulsoup4
@@ -75,6 +77,6 @@ buildPythonPackage rec {
     description = "Quickly generate HTML documentation from a JSON schema";
     homepage = "https://github.com/coveooss/json-schema-for-humans";
     license = licenses.asl20;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [astro];
   };
 }

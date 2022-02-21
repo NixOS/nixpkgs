@@ -1,29 +1,29 @@
-{ lib
-, buildPythonPackage
-, python
-, pythonAtLeast
-, fetchFromGitHub
-, fetchpatch
-, django
-, pygments
-, simplejson
-, python-dateutil
-, requests
-, setuptools-scm
-, sqlparse
-, jinja2
-, autopep8
-, pytz
-, pillow
-, mock
-, gprof2dot
-, freezegun
-, contextlib2
-, networkx
-, pydot
-, factory_boy
+{
+  lib,
+  buildPythonPackage,
+  python,
+  pythonAtLeast,
+  fetchFromGitHub,
+  fetchpatch,
+  django,
+  pygments,
+  simplejson,
+  python-dateutil,
+  requests,
+  setuptools-scm,
+  sqlparse,
+  jinja2,
+  autopep8,
+  pytz,
+  pillow,
+  mock,
+  gprof2dot,
+  freezegun,
+  contextlib2,
+  networkx,
+  pydot,
+  factory_boy,
 }:
-
 buildPythonPackage rec {
   pname = "django-silk";
   version = "4.1.0";
@@ -53,14 +53,23 @@ buildPythonPackage rec {
       --replace 'use_scm_version=True' 'version="${version}"'
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [ mock ];
+  nativeBuildInputs = [setuptools-scm];
+  buildInputs = [mock];
   propagatedBuildInputs = [
-    django pygments simplejson python-dateutil requests
-    sqlparse jinja2 autopep8 pytz pillow gprof2dot
+    django
+    pygments
+    simplejson
+    python-dateutil
+    requests
+    sqlparse
+    jinja2
+    autopep8
+    pytz
+    pillow
+    gprof2dot
   ];
 
-  checkInputs = [ freezegun contextlib2 networkx pydot factory_boy ];
+  checkInputs = [freezegun contextlib2 networkx pydot factory_boy];
   checkPhase = ''
     cd project
     DB=sqlite3 DB_NAME=db.sqlite3 ${python.interpreter} manage.py test
@@ -70,7 +79,6 @@ buildPythonPackage rec {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ris];
   };
-
 }

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, casttube
-, fetchPypi
-, isPy3k
-, protobuf
-, requests
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  casttube,
+  fetchPypi,
+  isPy3k,
+  protobuf,
+  requests,
+  zeroconf,
 }:
-
 buildPythonPackage rec {
   pname = "pychromecast";
   version = "10.2.3";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     description = "Library for Python to communicate with the Google Chromecast";
     homepage = "https://github.com/home-assistant-libs/pychromecast";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
     platforms = platforms.unix;
   };
 }

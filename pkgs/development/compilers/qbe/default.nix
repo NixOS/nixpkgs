@@ -1,9 +1,10 @@
-{ lib, stdenv
-, fetchgit
-, unstableGitUpdater
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchgit,
+  unstableGitUpdater,
+  callPackage,
 }:
-
 stdenv.mkDerivation rec {
   pname = "qbe";
   version = "unstable-2021-12-05";
@@ -14,19 +15,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xhTEiFR1RXMHtxmXlRof3O8monXEjstyWP3GClZmMuU=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   doCheck = true;
 
   passthru = {
     tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {};
   };
 
   meta = with lib; {
     homepage = "https://c9x.me/compile/";
     description = "A small compiler backend written in C";
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     license = licenses.mit;
     platforms = platforms.all;
   };

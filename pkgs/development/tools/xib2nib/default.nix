@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pugixml, boost, PlistCpp }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pugixml,
+  boost,
+  PlistCpp,
+}:
 stdenv.mkDerivation {
   pname = "xib2nib";
   version = "unstable-2017-04-12";
@@ -11,11 +17,11 @@ stdenv.mkDerivation {
     sha256 = "08442f4xg7racknj35nr56a4c62gvdgdw55pssbkn2qq0rfzziqq";
   };
 
-  buildInputs = [ PlistCpp pugixml boost ];
-  makeFlags = [ "PREFIX=$(out)" ];
+  buildInputs = [PlistCpp pugixml boost];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [matthewbauer];
     description = "Compiles CocoaTouch .xib files into .nib";
     license = licenses.mit;
     platforms = platforms.unix;

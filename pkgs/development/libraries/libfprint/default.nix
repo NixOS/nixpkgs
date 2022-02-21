@@ -1,26 +1,27 @@
-{ lib, stdenv
-, fetchFromGitLab
-, pkg-config
-, meson
-, python3
-, ninja
-, gusb
-, pixman
-, glib
-, nss
-, gobject-introspection
-, coreutils
-, cairo
-, libgudev
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  meson,
+  python3,
+  ninja,
+  gusb,
+  pixman,
+  glib,
+  nss,
+  gobject-introspection,
+  coreutils,
+  cairo,
+  libgudev,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libfprint";
   version = "1.94.2";
-  outputs = [ "out" "devdoc" ];
+  outputs = ["out" "devdoc"];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -76,6 +77,6 @@ stdenv.mkDerivation rec {
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
     license = licenses.lgpl21Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [abbradar];
   };
 }

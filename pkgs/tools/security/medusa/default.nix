@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, freerdp, openssl, libssh2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  freerdp,
+  openssl,
+  libssh2,
+}:
 stdenv.mkDerivation rec {
   pname = "medusa-unstable";
   version = "2018-12-16";
@@ -11,17 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "0njlz4fqa0165wdmd5y8lfnafayf3c4la0r8pf3hixkdwsss1509";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  configureFlags = [ "--enable-module-ssh=yes" ];
+  configureFlags = ["--enable-module-ssh=yes"];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ freerdp openssl libssh2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [freerdp openssl libssh2];
 
   meta = with lib; {
     homepage = "https://github.com/jmk-foofus/medusa";
     description = "A speedy, parallel, and modular, login brute-forcer";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ma27];
   };
 }

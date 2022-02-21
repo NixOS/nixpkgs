@@ -1,29 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
-, alembic
-, click
-, cloudpickle
-, requests
-, six
-, flask
-, numpy
-, pandas
-, python-dateutil
-, protobuf
-, GitPython
-, pyyaml
-, querystring_parser
-, simplejson
-, docker
-, databricks-cli
-, entrypoints
-, sqlparse
-, sqlalchemy
-, gorilla
-, gunicorn
-, prometheus-flask-exporter
-, importlib-metadata
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  fetchpatch,
+  alembic,
+  click,
+  cloudpickle,
+  requests,
+  six,
+  flask,
+  numpy,
+  pandas,
+  python-dateutil,
+  protobuf,
+  GitPython,
+  pyyaml,
+  querystring_parser,
+  simplejson,
+  docker,
+  databricks-cli,
+  entrypoints,
+  sqlparse,
+  sqlalchemy,
+  gorilla,
+  gunicorn,
+  prometheus-flask-exporter,
+  importlib-metadata,
 }:
-
 buildPythonPackage rec {
   pname = "mlflow";
   version = "1.22.0";
@@ -77,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mlflow/mlflow";
     description = "Open source platform for the machine learning lifecycle";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tbenst ];
+    maintainers = with maintainers; [tbenst];
   };
 }

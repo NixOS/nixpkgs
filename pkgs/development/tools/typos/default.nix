@@ -1,5 +1,8 @@
-{ fetchFromGitHub, rustPlatform, lib }:
-
+{
+  fetchFromGitHub,
+  rustPlatform,
+  lib,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "typos";
   version = "1.4.1";
@@ -16,7 +19,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Source code spell checker";
     homepage = "https://github.com/crate-ci/typos/";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ maintainers.mgttlinger ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = [maintainers.mgttlinger];
   };
 }

@@ -1,9 +1,12 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
-  _name   = "liblockfile";
+  _name = "liblockfile";
   version = "1.17";
-  name    = "${_name}-${version}";
+  name = "${_name}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/libl/${_name}/${_name}_${version}.orig.tar.gz";
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://packages.debian.org/unstable/libs/liblockfile1";
     license = lib.licenses.gpl2Plus;
 
-    maintainers = [ lib.maintainers.bluescreen303 ];
+    maintainers = [lib.maintainers.bluescreen303];
     platforms = lib.platforms.all;
   };
 }

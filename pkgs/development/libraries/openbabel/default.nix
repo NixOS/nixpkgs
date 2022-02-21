@@ -1,5 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkg-config, swig, rapidjson }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  libxml2,
+  eigen,
+  python,
+  cairo,
+  pcre,
+  pkg-config,
+  swig,
+  rapidjson,
+}:
 stdenv.mkDerivation rec {
   pname = "openbabel";
   version = "3.1.1";
@@ -11,9 +24,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wQpgdfCyBAoh4pmj9j7wPTlMtraJ62w/EShxi/olVMY=";
   };
 
-  buildInputs = [ zlib libxml2 eigen python cairo pcre swig rapidjson ];
+  buildInputs = [zlib libxml2 eigen python cairo pcre swig rapidjson];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   pythonMajorMinor = "${python.sourceVersion.major}.${python.sourceVersion.minor}";
 
@@ -40,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "http://openbabel.org";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ danielbarter ];
+    maintainers = with maintainers; [danielbarter];
   };
 }

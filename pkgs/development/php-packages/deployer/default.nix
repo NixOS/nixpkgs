@@ -1,5 +1,11 @@
-{ mkDerivation, fetchurl, makeWrapper, installShellFiles, lib, php }:
-
+{
+  mkDerivation,
+  fetchurl,
+  makeWrapper,
+  installShellFiles,
+  lib,
+  php,
+}:
 mkDerivation rec {
   pname = "deployer";
   version = "6.8.0";
@@ -11,7 +17,7 @@ mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
   installPhase = ''
     mkdir -p $out/bin

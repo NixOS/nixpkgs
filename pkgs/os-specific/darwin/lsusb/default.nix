@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   version = "1.0";
   pname = "lsusb";
@@ -23,6 +26,6 @@ stdenv.mkDerivation {
     description = "lsusb command for Mac OS X";
     platforms = lib.platforms.darwin;
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.varunpatro ];
+    maintainers = [lib.maintainers.varunpatro];
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytest-runner
-, future
-, requests
-, responses
-, requests_oauthlib
-, pytest
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytest-runner,
+  future,
+  requests,
+  responses,
+  requests_oauthlib,
+  pytest,
+  hypothesis,
 }:
-
 buildPythonPackage rec {
   pname = "python-twitter";
   version = "3.5";
@@ -31,14 +31,14 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ future requests requests_oauthlib ];
-  checkInputs = [ pytest responses hypothesis ];
+  nativeBuildInputs = [pytest-runner];
+  propagatedBuildInputs = [future requests requests_oauthlib];
+  checkInputs = [pytest responses hypothesis];
 
   meta = with lib; {
     description = "A Python wrapper around the Twitter API";
     homepage = "https://github.com/bear/python-twitter";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [maintainers.marsam];
   };
 }

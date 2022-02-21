@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "pysdcp";
   version = "1";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pysdcp" ];
+  pythonImportsCheck = ["pysdcp"];
 
   meta = with lib; {
     description = "Python library to control SONY projectors";
     homepage = "https://github.com/Galala7/pySDCP";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

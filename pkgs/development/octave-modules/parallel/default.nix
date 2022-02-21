@@ -1,11 +1,11 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, struct
-, gnutls
-, pkg-config
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  struct,
+  gnutls,
+  pkg-config,
 }:
-
 buildOctavePackage rec {
   pname = "parallel";
   version = "4.0.1";
@@ -30,7 +30,7 @@ buildOctavePackage rec {
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/parallel/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Parallel execution package";
   };
 }

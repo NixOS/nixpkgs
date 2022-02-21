@@ -1,8 +1,24 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, dbus-glib, libxklavier,
-  libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
-  pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
-  wrapGAppsHook, mateUpdateScript }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  glib,
+  dbus-glib,
+  libxklavier,
+  libcanberra-gtk3,
+  libnotify,
+  nss,
+  polkit,
+  dconf,
+  gtk3,
+  mate,
+  pulseaudioSupport ? stdenv.config.pulseaudio or true,
+  libpulseaudio,
+  wrapGAppsHook,
+  mateUpdateScript,
+}:
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
   version = "1.26.0";
@@ -18,19 +34,21 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    dbus-glib
-    libxklavier
-    libcanberra-gtk3
-    libnotify
-    nss
-    polkit
-    gtk3
-    dconf
-    mate.mate-desktop
-    mate.libmatekbd
-    mate.libmatemixer
-  ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs =
+    [
+      dbus-glib
+      libxklavier
+      libcanberra-gtk3
+      libnotify
+      nss
+      polkit
+      gtk3
+      dconf
+      mate.mate-desktop
+      mate.libmatekbd
+      mate.libmatemixer
+    ]
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = lib.optional pulseaudioSupport "--enable-pulse";
 
@@ -38,12 +56,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {inherit pname version;};
 
   meta = with lib; {
     description = "MATE settings daemon";
     homepage = "https://github.com/mate-desktop/mate-settings-daemon";
-    license = with licenses; [ gpl2Plus gpl3Plus lgpl2Plus mit ];
+    license = with licenses; [gpl2Plus gpl3Plus lgpl2Plus mit];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

@@ -1,4 +1,4 @@
-{ stdenv }@orig:
+{stdenv} @ orig:
 # srcOnly is a utility builder that only fetches and unpacks the given `src`,
 # maybe pathings it in the process with the optional `patches` and
 # `buildInputs` attributes.
@@ -7,15 +7,16 @@
 #
 # > srcOnly pkgs.hello
 #
-{ name
-, src
-, stdenv ? orig.stdenv
-, patches ? []
-, # deprecated, use the nativeBuildInputs
-  buildInputs ? []
-, # used to pass extra unpackers
-  nativeBuildInputs ? []
-, # needed when passing an existing derivation
+{
+  name,
+  src,
+  stdenv ? orig.stdenv,
+  patches ? [],
+  # deprecated, use the nativeBuildInputs
+  buildInputs ? [],
+  # used to pass extra unpackers
+  nativeBuildInputs ? [],
+  # needed when passing an existing derivation
   ...
 }:
 stdenv.mkDerivation {

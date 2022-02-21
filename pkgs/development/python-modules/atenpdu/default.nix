@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pysnmp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pysnmp,
 }:
-
 buildPythonPackage rec {
   pname = "atenpdu";
   version = "0.3.2";
@@ -13,16 +13,16 @@ buildPythonPackage rec {
     sha256 = "sha256-hlbrjx6WKVJYaxrMT4fiRXlxKRcQU4AIQUVgA8mbWa8=";
   };
 
-  propagatedBuildInputs = [ pysnmp ];
+  propagatedBuildInputs = [pysnmp];
 
   # Project has no test
   doCheck = false;
-  pythonImportsCheck = [ "atenpdu" ];
+  pythonImportsCheck = ["atenpdu"];
 
   meta = with lib; {
     description = "Python interface to control ATEN PE PDUs";
     homepage = "https://github.com/mtdcr/pductl";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

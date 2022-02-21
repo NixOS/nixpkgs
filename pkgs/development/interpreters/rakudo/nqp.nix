@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, perl, lib, moarvm }:
-
+{
+  stdenv,
+  fetchurl,
+  perl,
+  lib,
+  moarvm,
+}:
 stdenv.mkDerivation rec {
   pname = "nqp";
   version = "2022.02";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JdPJl0XNhPQEmpvZzya7XcgXklq6r+ccm9tohBzbGLE=";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
 
   configureScript = "${perl}/bin/perl ./Configure.pl";
   configureFlags = [
@@ -24,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Raku/nqp";
     license = licenses.artistic2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    maintainers = with maintainers; [thoughtpolice vrthra sgo];
   };
 }

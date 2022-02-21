@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, docker
-, entrypoints
-, escapism
-, fetchFromGitHub
-, iso8601
-, jinja2
-, pkgs-docker
-, python-json-logger
-, pythonOlder
-, ruamel-yaml
-, semver
-, toml
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  docker,
+  entrypoints,
+  escapism,
+  fetchFromGitHub,
+  iso8601,
+  jinja2,
+  pkgs-docker,
+  python-json-logger,
+  pythonOlder,
+  ruamel-yaml,
+  semver,
+  toml,
+  traitlets,
 }:
-
 buildPythonPackage rec {
   version = "2022.02.0";
   pname = "jupyter-repo2docker";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Turn code repositories into Jupyter enabled Docker Images";
     homepage = "https://repo2docker.readthedocs.io/";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

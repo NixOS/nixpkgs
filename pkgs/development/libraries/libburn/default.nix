@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "libburn";
   version = "1.5.4";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = "http://libburnia-project.org/";
     description = "A library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbradar vrthra ];
+    maintainers = with maintainers; [abbradar vrthra];
     platforms = with platforms; unix;
   };
 }

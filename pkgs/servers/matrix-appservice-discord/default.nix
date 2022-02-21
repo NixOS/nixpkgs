@@ -1,81 +1,86 @@
-{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs }:
-
-assert lib.versionAtLeast nodejs.version "12.0.0";
-
-let
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  runCommand,
+  makeWrapper,
+  python3,
+  nodejs,
+}:
+assert lib.versionAtLeast nodejs.version "12.0.0"; let
   nodeSources = runCommand "node-sources" {} ''
     tar --no-same-owner --no-same-permissions -xf "${nodejs.src}"
     mv node-* $out
   '';
+in
+  mkYarnPackage rec {
+    pname = "matrix-appservice-discord";
 
-in mkYarnPackage rec {
-  pname = "matrix-appservice-discord";
+    # when updating, run `./generate.sh <git release tag>`
+    version = "1.0.0";
 
-  # when updating, run `./generate.sh <git release tag>`
-  version = "1.0.0";
-
-  src = fetchFromGitHub {
-    owner = "Half-Shot";
-    repo = "matrix-appservice-discord";
-    rev = "v${version}";
-    sha256 = "0pca4jxxl4b8irvb1bacsrzjg8m7frq9dnx1knnd2n6ia3f3x545";
-  };
-
-  packageJSON = ./package.json;
-  yarnNix = ./yarn-dependencies.nix;
-
-  pkgConfig = {
-    better-sqlite3 = {
-      buildInputs = [ python3 ];
-      postInstall = ''
-        # build native sqlite bindings
-        npm run build-release --offline --nodedir="${nodeSources}"
-     '';
+    src = fetchFromGitHub {
+      owner = "Half-Shot";
+      repo = "matrix-appservice-discord";
+      rev = "v${version}";
+      sha256 = "0pca4jxxl4b8irvb1bacsrzjg8m7frq9dnx1knnd2n6ia3f3x545";
     };
-  };
 
-  nativeBuildInputs = [ makeWrapper ];
+    packageJSON = ./package.json;
+    yarnNix = ./yarn-dependencies.nix;
 
-  buildPhase = ''
-    # compile TypeScript sources
-    yarn --offline build
-  '';
+    pkgConfig = {
+      better-sqlite3 = {
+        buildInputs = [python3];
+        postInstall = ''
+          # build native sqlite bindings
+          npm run build-release --offline --nodedir="${nodeSources}"
+        '';
+      };
+    };
 
-  doCheck = true;
-  checkPhase = ''
-    # the default 2000ms timeout is sometimes too short on our busy builders
-    yarn --offline test --timeout 10000
-  '';
+    nativeBuildInputs = [makeWrapper];
 
-  postInstall = ''
-    OUT_JS_DIR="$out/${passthru.nodeAppDir}/build"
+    buildPhase = ''
+      # compile TypeScript sources
+      yarn --offline build
+    '';
 
-    # server wrapper
-    makeWrapper '${nodejs}/bin/node' "$out/bin/${pname}" \
-      --add-flags "$OUT_JS_DIR/src/discordas.js"
+    doCheck = true;
+    checkPhase = ''
+      # the default 2000ms timeout is sometimes too short on our busy builders
+      yarn --offline test --timeout 10000
+    '';
 
-    # admin tools wrappers
-    for toolPath in $OUT_JS_DIR/tools/*; do
-      makeWrapper '${nodejs}/bin/node' "$out/bin/${pname}-$(basename $toolPath .js)" \
-        --add-flags "$toolPath"
-    done
-  '';
+    postInstall = ''
+      OUT_JS_DIR="$out/${passthru.nodeAppDir}/build"
 
-  # don't generate the dist tarball
-  # (`doDist = false` does not work in mkYarnPackage)
-  distPhase = ''
-    true
-  '';
+      # server wrapper
+      makeWrapper '${nodejs}/bin/node' "$out/bin/${pname}" \
+        --add-flags "$OUT_JS_DIR/src/discordas.js"
 
-  passthru = {
-    nodeAppDir = "libexec/${pname}/deps/${pname}";
-  };
+      # admin tools wrappers
+      for toolPath in $OUT_JS_DIR/tools/*; do
+        makeWrapper '${nodejs}/bin/node' "$out/bin/${pname}-$(basename $toolPath .js)" \
+          --add-flags "$toolPath"
+      done
+    '';
 
-  meta = {
-    description = "A bridge between Matrix and Discord";
-    homepage = "https://github.com/Half-Shot/matrix-appservice-discord";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pacien ];
-    platforms = lib.platforms.linux;
-  };
-}
+    # don't generate the dist tarball
+    # (`doDist = false` does not work in mkYarnPackage)
+    distPhase = ''
+      true
+    '';
+
+    passthru = {
+      nodeAppDir = "libexec/${pname}/deps/${pname}";
+    };
+
+    meta = {
+      description = "A bridge between Matrix and Discord";
+      homepage = "https://github.com/Half-Shot/matrix-appservice-discord";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [pacien];
+      platforms = lib.platforms.linux;
+    };
+  }

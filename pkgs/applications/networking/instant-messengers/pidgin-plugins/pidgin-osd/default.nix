@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pidgin, xosd
-, autoreconfHook } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pidgin,
+  xosd,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "pidgin-osd";
   version = "0.2.0";
@@ -20,8 +25,8 @@ stdenv.mkDerivation rec {
     mv $out/lib/pidgin-osd.{la,so} $out/lib/pidgin
   '';
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ xosd pidgin ];
+  nativeBuildInputs = [autoreconfHook];
+  buildInputs = [xosd pidgin];
 
   meta = with lib; {
     homepage = "https://github.com/mbroemme/pidgin-osd";

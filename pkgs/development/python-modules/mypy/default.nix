@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, mypy-extensions
-, python
-, pythonOlder
-, typed-ast
-, typing-extensions
-, tomli
-, types-typed-ast
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  buildPythonPackage,
+  mypy-extensions,
+  python,
+  pythonOlder,
+  typed-ast,
+  typing-extensions,
+  tomli,
+  types-typed-ast,
 }:
-
 buildPythonPackage rec {
   pname = "mypy";
   version = "0.931";
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     description = "Optional static typing for Python";
     homepage = "http://www.mypy-lang.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
+    maintainers = with maintainers; [martingms lnl7 SuperSandro2000];
   };
 }

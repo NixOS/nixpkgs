@@ -1,25 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
-
-# Dependencies
-, cmake
-, libjpeg_turbo
-, makeWrapper
-, mesa # for built-in 3D software rendering using swrast
-, openjdk # for the client with Java GUI
-, openjdk_headless # for the server
-, openssh
-, openssl
-, pam
-, perl
-, which
-, xkbcomp
-, xkeyboard_config
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests
+  # Dependencies
+  ,
+  cmake,
+  libjpeg_turbo,
+  makeWrapper,
+  mesa
+  # for built-in 3D software rendering using swrast
+  ,
+  openjdk
+  # for the client with Java GUI
+  ,
+  openjdk_headless
+  # for the server
+  ,
+  openssh,
+  openssl,
+  pam,
+  perl,
+  which,
+  xkbcomp,
+  xkeyboard_config,
+  xorg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "turbovnc";
   version = "2.2.7";
@@ -49,18 +55,20 @@ stdenv.mkDerivation rec {
     openjdk_headless
   ];
 
-  buildInputs = [
-    libjpeg_turbo
-    openssl
-    pam
-    perl
-  ] ++ (with xorg; [
-    libSM
-    libX11
-    libXext
-    libXi
-    xorgproto
-  ]);
+  buildInputs =
+    [
+      libjpeg_turbo
+      openssl
+      pam
+      perl
+    ]
+    ++ (with xorg; [
+      libSM
+      libX11
+      libXext
+      libXi
+      xorgproto
+    ]);
 
   cmakeFlags = [
     # For the 3D software rendering built into TurboVNC, pass the path
@@ -78,7 +86,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # turbovnc dlopen()s libssl.so depending on the requested encryption.
     wrapProgram $out/bin/Xvnc \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [openssl]}
 
     # `twm` is the default window manager that `vncserver` tries to start,
     # and it has minimal dependencies (no non-Xorg).
@@ -86,21 +94,21 @@ stdenv.mkDerivation rec {
     # see https://github.com/TurboVNC/turbovnc/blob/ffdb57d9/unix/vncserver.in#L201.)
     # It checks for it using `which twm`.
     wrapProgram $out/bin/vncserver \
-      --prefix PATH : ${lib.makeBinPath [ which xorg.twm ]}
+      --prefix PATH : ${lib.makeBinPath [which xorg.twm]}
 
     # Patch /usr/bin/perl
     patchShebangs $out/bin/vncserver
 
     # vncserver needs `xauth`
     wrapProgram $out/bin/vncserver \
-      --prefix PATH : ${lib.makeBinPath (with xorg; [ xauth ])}
+      --prefix PATH : ${lib.makeBinPath (with xorg; [xauth])}
 
     # The viewer is in Java and requires `JAVA_HOME` (which is a single
     # path, cannot be multiple separated paths).
     # For SSH support, `ssh` is required on `PATH`.
     wrapProgram $out/bin/vncviewer \
-      --set JAVA_HOME "${lib.makeLibraryPath [ openjdk ]}/openjdk" \
-      --prefix PATH : ${lib.makeBinPath [ openssh ]}
+      --set JAVA_HOME "${lib.makeLibraryPath [openjdk]}/openjdk" \
+      --prefix PATH : ${lib.makeBinPath [openssh]}
   '';
 
   passthru.tests.turbovnc-headless-server = nixosTests.turbovnc-headless-server;
@@ -109,7 +117,7 @@ stdenv.mkDerivation rec {
     homepage = "https://turbovnc.org/";
     license = lib.licenses.gpl2Plus;
     description = "High-speed version of VNC derived from TightVNC";
-    maintainers = with lib.maintainers; [ nh2 ];
+    maintainers = with lib.maintainers; [nh2];
     platforms = with lib.platforms; linux;
   };
 }

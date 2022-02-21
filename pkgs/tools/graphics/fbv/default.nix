@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, getopt, libjpeg, libpng12, giflib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  getopt,
+  libjpeg,
+  libpng12,
+  giflib,
+}:
 stdenv.mkDerivation rec {
   pname = "fbv";
   version = "1.0b";
@@ -16,10 +24,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  patchFlags = [ "-p0" ];
+  patchFlags = ["-p0"];
 
-  buildInputs = [ getopt libjpeg libpng12 giflib ];
-  makeFlags = [ "LDFLAGS=-lgif" ];
+  buildInputs = [getopt libjpeg libpng12 giflib];
+  makeFlags = ["LDFLAGS=-lgif"];
 
   enableParallelBuilding = true;
 
@@ -31,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "View pictures on a linux framebuffer device";
     homepage = "http://s-tech.elsat.net.pl/fbv/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [peterhoeg];
   };
 }

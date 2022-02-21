@@ -1,5 +1,11 @@
-{ rustPlatform, pkg-config, openssl, lib, darwin, stdenv }:
-
+{
+  rustPlatform,
+  pkg-config,
+  openssl,
+  lib,
+  darwin,
+  stdenv,
+}:
 rustPlatform.buildRustPackage {
   pname = "git-dependency-rev-non-workspace-nested-crate";
   version = "0.1.0";
@@ -10,11 +16,13 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

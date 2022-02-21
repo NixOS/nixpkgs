@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fftw, speexdsp }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  fftw,
+  speexdsp,
+}:
 stdenv.mkDerivation rec {
   pname = "speex";
   version = "1.2.0";
@@ -13,13 +20,13 @@ stdenv.mkDerivation rec {
     sed -i '/AC_CONFIG_MACRO_DIR/i PKG_PROG_PKG_CONFIG' configure.ac
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = ["out" "dev" "doc"];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fftw speexdsp ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [fftw speexdsp];
 
   # TODO: Remove this will help with immediate backward compatability
-  propagatedBuildInputs = [ speexdsp ];
+  propagatedBuildInputs = [speexdsp];
 
   configureFlags = [
     "--with-fft=gpl-fftw3"

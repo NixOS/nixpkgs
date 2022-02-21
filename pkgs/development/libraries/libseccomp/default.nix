@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, getopt, util-linux, gperf, nix-update-script }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  getopt,
+  util-linux,
+  gperf,
+  nix-update-script,
+}:
 stdenv.mkDerivation rec {
   pname = "libseccomp";
   version = "2.5.3";
@@ -9,16 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WQZchzM2RyXpchukjDqZu8Uq+SHa9I30seAS+8exCnY=";
   };
 
-  outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
+  outputs = ["out" "lib" "dev" "man" "pythonsrc"];
 
-  nativeBuildInputs = [ gperf ];
-  buildInputs = [ getopt ];
+  nativeBuildInputs = [gperf];
+  buildInputs = [getopt];
 
   patchPhase = ''
     patchShebangs .
   '';
 
-  checkInputs = [ util-linux ];
+  checkInputs = [util-linux];
   doCheck = false; # dependency cycle
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
@@ -48,6 +55,6 @@ stdenv.mkDerivation rec {
       "sparc-linux"
       "sparc64-linux"
     ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [thoughtpolice];
   };
 }

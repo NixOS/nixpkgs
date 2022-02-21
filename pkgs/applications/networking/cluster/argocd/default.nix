@@ -1,5 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub, packr, makeWrapper, installShellFiles, helm, kustomize }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  packr,
+  makeWrapper,
+  installShellFiles,
+  helm,
+  kustomize,
+}:
 buildGoModule rec {
   pname = "argocd";
   version = "2.2.5";
@@ -15,23 +23,24 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-BVhts+gOM6nhcR1lkFzy7OJnainLXw5YdeseBBRF2xE=";
 
-  nativeBuildInputs = [ packr makeWrapper installShellFiles ];
+  nativeBuildInputs = [packr makeWrapper installShellFiles];
 
   # run packr to embed assets
   preBuild = ''
     packr
   '';
 
-  ldflags =
-    let package_url = "github.com/argoproj/argo-cd/v2/common"; in
-    [
-      "-s" "-w"
-      "-X ${package_url}.version=${version}"
-      "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${commit}"
-      "-X ${package_url}.gitTag=${tag}"
-      "-X ${package_url}.gitTreeState=clean"
-    ];
+  ldflags = let
+    package_url = "github.com/argoproj/argo-cd/v2/common";
+  in [
+    "-s"
+    "-w"
+    "-X ${package_url}.version=${version}"
+    "-X ${package_url}.buildDate=unknown"
+    "-X ${package_url}.gitCommit=${commit}"
+    "-X ${package_url}.gitTag=${tag}"
+    "-X ${package_url}.gitTreeState=clean"
+  ];
 
   # Test is disabled because ksonnet is missing from nixpkgs.
   # Log: https://gist.github.com/superherointj/79cbdc869dfd44d28a10dc6746ecb3f9
@@ -69,6 +78,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ shahrukh330 bryanasdev000 ];
+    maintainers = with maintainers; [shahrukh330 bryanasdev000];
   };
 }

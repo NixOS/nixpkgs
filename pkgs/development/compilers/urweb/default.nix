@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, file, openssl, mlton
-, libmysqlclient, postgresql, sqlite, gcc, icu
+{
+  lib,
+  stdenv,
+  fetchurl,
+  file,
+  openssl,
+  mlton,
+  libmysqlclient,
+  postgresql,
+  sqlite,
+  gcc,
+  icu,
 }:
-
 stdenv.mkDerivation rec {
   pname = "urweb";
   version = "20200209";
@@ -11,13 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "0qh6wcxfk5kf735i5gqwnkdirnnmqhnnpkfz96gz144dgz2i0c5c";
   };
 
-  buildInputs = [ openssl mlton libmysqlclient postgresql sqlite icu ];
+  buildInputs = [openssl mlton libmysqlclient postgresql sqlite icu];
 
   prePatch = ''
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
   '';
 
-  configureFlags = [ "--with-openssl=${openssl.dev}" ];
+  configureFlags = ["--with-openssl=${openssl.dev}"];
 
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";
@@ -38,9 +47,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Advanced purely-functional web programming language";
-    homepage    = "http://www.impredicative.com/ur/";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ lib.maintainers.thoughtpolice lib.maintainers.sheganinans ];
+    homepage = "http://www.impredicative.com/ur/";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [lib.maintainers.thoughtpolice lib.maintainers.sheganinans];
   };
 }

@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.programs.msmtp;
-
 in {
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with maintainers; [pacien];
 
   options = {
     programs.msmtp = {
@@ -71,7 +72,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.msmtp ];
+    environment.systemPackages = [pkgs.msmtp];
 
     services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail {
       program = "sendmail";
@@ -84,12 +85,13 @@ in {
 
     environment.etc."msmtprc".text = let
       mkValueString = v:
-        if v == true then "on"
-        else if v == false then "off"
+        if v == true
+        then "on"
+        else if v == false
+        then "off"
         else generators.mkValueStringDefault {} v;
       mkKeyValueString = k: v: "${k} ${mkValueString v}";
-      mkInnerSectionString =
-        attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValueString attrs);
+      mkInnerSectionString = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValueString attrs);
       mkAccountString = name: attrs: ''
         account ${name}
         ${mkInnerSectionString attrs}

@@ -1,10 +1,19 @@
-{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
-, buildLlvmTools
-, fixDarwinDylibNames
-, enableManpages ? false
-}:
-
-let
+{
+  lib,
+  stdenv,
+  llvm_meta,
+  fetch,
+  substituteAll,
+  cmake,
+  libxml2,
+  libllvm,
+  version,
+  clang-tools-extra_src,
+  python3,
+  buildLlvmTools,
+  fixDarwinDylibNames,
+  enableManpages ? false,
+}: let
   self = stdenv.mkDerivation ({
     pname = "clang";
     inherit version;
@@ -22,26 +31,30 @@ let
         --replace ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
     '';
 
-    nativeBuildInputs = [ cmake python3 ]
+    nativeBuildInputs =
+      [cmake python3]
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 libllvm ];
+    buildInputs = [libxml2 libllvm];
 
-    cmakeFlags = [
-      "-DCMAKE_CXX_FLAGS=-std=c++14"
-      "-DCLANGD_BUILD_XPC=OFF"
-      "-DLLVM_ENABLE_RTTI=ON"
-    ] ++ lib.optionals enableManpages [
-      "-DCLANG_INCLUDE_DOCS=ON"
-      "-DLLVM_ENABLE_SPHINX=ON"
-      "-DSPHINX_OUTPUT_MAN=ON"
-      "-DSPHINX_OUTPUT_HTML=OFF"
-      "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-      "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
-    ];
+    cmakeFlags =
+      [
+        "-DCMAKE_CXX_FLAGS=-std=c++14"
+        "-DCLANGD_BUILD_XPC=OFF"
+        "-DLLVM_ENABLE_RTTI=ON"
+      ]
+      ++ lib.optionals enableManpages [
+        "-DCLANG_INCLUDE_DOCS=ON"
+        "-DLLVM_ENABLE_SPHINX=ON"
+        "-DSPHINX_OUTPUT_MAN=ON"
+        "-DSPHINX_OUTPUT_HTML=OFF"
+        "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+        "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+        "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
+      ];
 
     patches = [
       ./purity.patch
@@ -53,18 +66,20 @@ let
       })
     ];
 
-    postPatch = ''
-      sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
-             -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
-             lib/Driver/ToolChains/*.cpp
+    postPatch =
+      ''
+        sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
+               -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
+               lib/Driver/ToolChains/*.cpp
 
-      # Patch for standalone doc building
-      sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
-    '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-      sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
-    '';
+        # Patch for standalone doc building
+        sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
+      ''
+      + lib.optionalString stdenv.hostPlatform.isMusl ''
+        sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
+      '';
 
-    outputs = [ "out" "lib" "dev" "python" ];
+    outputs = ["out" "lib" "dev" "python"];
 
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
@@ -93,22 +108,25 @@ let
       inherit libllvm;
     };
 
-    meta = llvm_meta // {
-      homepage = "https://clang.llvm.org/";
-      description = "A C language family frontend for LLVM";
-      longDescription = ''
-        The Clang project provides a language front-end and tooling
-        infrastructure for languages in the C language family (C, C++, Objective
-        C/C++, OpenCL, CUDA, and RenderScript) for the LLVM project.
-        It aims to deliver amazingly fast compiles, extremely useful error and
-        warning messages and to provide a platform for building great source
-        level tools. The Clang Static Analyzer and clang-tidy are tools that
-        automatically find bugs in your code, and are great examples of the sort
-        of tools that can be built using the Clang frontend as a library to
-        parse C/C++ code.
-      '';
-    };
-  } // lib.optionalAttrs enableManpages {
+    meta =
+      llvm_meta
+      // {
+        homepage = "https://clang.llvm.org/";
+        description = "A C language family frontend for LLVM";
+        longDescription = ''
+          The Clang project provides a language front-end and tooling
+          infrastructure for languages in the C language family (C, C++, Objective
+          C/C++, OpenCL, CUDA, and RenderScript) for the LLVM project.
+          It aims to deliver amazingly fast compiles, extremely useful error and
+          warning messages and to provide a platform for building great source
+          level tools. The Clang Static Analyzer and clang-tidy are tools that
+          automatically find bugs in your code, and are great examples of the sort
+          of tools that can be built using the Clang frontend as a library to
+          parse C/C++ code.
+        '';
+      };
+  }
+  // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
 
     buildPhase = ''
@@ -121,12 +139,15 @@ let
       cp docs/man/*.1 $out/share/man/man1/
     '';
 
-    outputs = [ "out" ];
+    outputs = ["out"];
 
     doCheck = false;
 
-    meta = llvm_meta // {
-      description = "man page for Clang ${version}";
-    };
+    meta =
+      llvm_meta
+      // {
+        description = "man page for Clang ${version}";
+      };
   });
-in self
+in
+  self

@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, autoreconfHook
-, gtk2
-, alsa-lib
-, SDL
-, jack2
-, audiofile
-, goocanvas # graphical envelope editing
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  gtk2,
+  alsa-lib,
+  SDL,
+  jack2,
+  audiofile,
+  goocanvas
+  # graphical envelope editing
 }:
-
 stdenv.mkDerivation rec {
   pname = "soundtracker";
   version = "1.0.2.1";
@@ -36,11 +38,13 @@ stdenv.mkDerivation rec {
     sed -i -e '/seteuid/d' -e '/setegid/d' app/main.c
   '';
 
-  configureFlags = [
-    "--with-graphics-backend=gdk"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--disable-alsa"
-  ];
+  configureFlags =
+    [
+      "--with-graphics-backend=gdk"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--disable-alsa"
+    ];
 
   enableParallelBuilding = true;
 
@@ -49,13 +53,15 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = [
-    gtk2
-    SDL
-    jack2
-    audiofile
-    goocanvas
-  ] ++ lib.optional stdenv.isLinux alsa-lib;
+  buildInputs =
+    [
+      gtk2
+      SDL
+      jack2
+      audiofile
+      goocanvas
+    ]
+    ++ lib.optional stdenv.isLinux alsa-lib;
 
   meta = with lib; {
     description = "A music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
@@ -69,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.soundtracker.org/";
     downloadPage = "https://sourceforge.net/projects/soundtracker/files/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [fgaz];
     platforms = platforms.all;
   };
 }

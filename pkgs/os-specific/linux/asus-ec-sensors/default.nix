@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation rec {
   name = "asus-ec-sensors-${version}-${kernel.version}";
   version = "unstable-2021-12-16";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0akdga2854q3w0pyi0jywa6cxr32541ifz0ka1hgn6j4czk39kyn";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = ["pic"];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Linux HWMON sensors driver for ASUS motherboards to read sensor data from the embedded controller";
     homepage = "https://github.com/zeule/asus-ec-sensors";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nickhu ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [nickhu];
   };
 }

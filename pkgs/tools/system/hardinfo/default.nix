@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchurl, which, pkg-config, gtk2, pcre, glib, libxml2
-, libsoup ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  pkg-config,
+  gtk2,
+  pcre,
+  glib,
+  libxml2,
+  libsoup ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "hardinfo";
   version = "0.5.1";
@@ -13,11 +21,11 @@ stdenv.mkDerivation rec {
 
   # Not adding 'hostname' command, the build shouldn't depend on what the build
   # host is called.
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ which gtk2 pcre glib libxml2 libsoup ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [which gtk2 pcre glib libxml2 libsoup];
 
   # Fixes '#error You must compile this program without "-O"'
-  hardeningDisable = [ "all" ];
+  hardeningDisable = ["all"];
 
   # Ignore undefined references to a bunch of libsoup symbols
   NIX_LDFLAGS = "--unresolved-symbol=ignore-all";
@@ -34,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Makefile supports DESTDIR but not PREFIX (it hardcodes $DESTDIR/usr/).
-  installFlags = [ "DESTDIR=$(out)" ];
+  installFlags = ["DESTDIR=$(out)"];
   postInstall = ''
     mv "$out/usr/"* "$out"
     rmdir "$out/usr"
@@ -44,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "http://hardinfo.org/";
     description = "Display information about your hardware and operating system";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
+    maintainers = with maintainers; [bjornfor];
+    platforms = ["x86_64-linux" "i686-linux"]; # ARMv7 and AArch64 are unsupported
   };
 }

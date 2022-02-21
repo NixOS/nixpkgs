@@ -1,18 +1,18 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, click
-, semantic-version
-, requests
-, colorama
-, pyserial
-, wheel
-, scons
-, setuptools
-, tinyprog
-, pytestCheckHook
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  click,
+  semantic-version,
+  requests,
+  colorama,
+  pyserial,
+  wheel,
+  scons,
+  setuptools,
+  tinyprog,
+  pytestCheckHook,
 }:
-
 buildPythonApplication rec {
   pname = "apio";
   version = "0.8.0";
@@ -63,12 +63,12 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--offline" ];
+  pytestFlagsArray = ["--offline"];
 
   meta = with lib; {
     description = "Open source ecosystem for open FPGA boards";
     homepage = "https://github.com/FPGAwars/apio";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [Luflosi];
   };
 }

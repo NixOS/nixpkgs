@@ -19,14 +19,19 @@
 #   - bin/traffic_logcat
 #   - bin/traffic_logstats
 #   - bin/tspush
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "trafficserver";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ midchildan ];
+    maintainers = [midchildan];
   };
 
   nodes = {
-    ats = { pkgs, lib, config, ... }: let
+    ats = {
+      pkgs,
+      lib,
+      config,
+      ...
+    }: let
       user = config.users.users.trafficserver.name;
       group = config.users.groups.trafficserver.name;
       healthchecks = pkgs.writeText "healthchecks.conf" ''
@@ -46,8 +51,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       services.trafficserver.plugins = [
-        { path = "healthchecks.so"; arg = toString healthchecks; }
-        { path = "xdebug.so"; }
+        {
+          path = "healthchecks.so";
+          arg = toString healthchecks;
+        }
+        {path = "xdebug.so";}
       ];
 
       services.trafficserver.remap = ''
@@ -64,35 +72,43 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         /dev/vdb volume=1
       '';
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      virtualisation.emptyDiskImages = [ 256 ];
+      networking.firewall.allowedTCPPorts = [80];
+      virtualisation.emptyDiskImages = [256];
       services.udev.extraRules = ''
         KERNEL=="vdb", OWNER="${user}", GROUP="${group}"
       '';
     };
 
-    httpbin = { pkgs, lib, ... }: let
+    httpbin = {
+      pkgs,
+      lib,
+      ...
+    }: let
       python = pkgs.python3.withPackages
-        (ps: with ps; [ httpbin gunicorn gevent ]);
+      (ps: with ps; [httpbin gunicorn gevent]);
     in {
       systemd.services.httpbin = {
         enable = true;
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = ["network.target"];
+        wantedBy = ["multi-user.target"];
         serviceConfig = {
           ExecStart = "${python}/bin/gunicorn -b 0.0.0.0:80 httpbin:app -k gevent";
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.firewall.allowedTCPPorts = [80];
     };
 
-    client = { pkgs, lib, ... }: {
-      environment.systemPackages = with pkgs; [ curl ];
+    client = {
+      pkgs,
+      lib,
+      ...
+    }: {
+      environment.systemPackages = with pkgs; [curl];
     };
   };
 
-  testScript = { nodes, ... }: let
+  testScript = {nodes, ...}: let
     sampleFile = pkgs.writeText "sample.txt" ''
       It's the season of White Album.
     '';

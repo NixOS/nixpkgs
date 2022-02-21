@@ -1,14 +1,11 @@
-{ config
-, lib
-, pkgs
-, ...
-}:
-
-let
-  cfg = config.services.ddccontrol;
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.services.ddccontrol;
+in {
   ###### interface
 
   options = {
@@ -21,7 +18,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # Load the i2c-dev module
-    boot.kernelModules = [ "i2c_dev" ];
+    boot.kernelModules = ["i2c_dev"];
 
     # Give users access to the "gddccontrol" tool
     environment.systemPackages = [

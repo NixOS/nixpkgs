@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, enum-compat
-, fetchFromGitHub
-, pytestCheckHook
-, unicodecsv
+{
+  lib,
+  buildPythonPackage,
+  enum-compat,
+  fetchFromGitHub,
+  pytestCheckHook,
+  unicodecsv,
 }:
-
 buildPythonPackage rec {
   pname = "python-registry";
   version = "1.4";

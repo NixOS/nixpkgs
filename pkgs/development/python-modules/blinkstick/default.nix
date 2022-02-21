@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyusb,
 }:
-
 buildPythonPackage rec {
   pname = "BlinkStick";
   version = "1.2.0";
@@ -20,16 +20,16 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pyusb==1.0.0" "pyusb>=1.0.0"
   '';
 
-  propagatedBuildInputs = [ pyusb ];
+  propagatedBuildInputs = [pyusb];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "blinkstick" ];
+  pythonImportsCheck = ["blinkstick"];
 
   meta = with lib; {
     description = "Python package to control BlinkStick USB devices";
     homepage = "https://github.com/arvydas/blinkstick-python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ np ];
+    maintainers = with maintainers; [np];
   };
 }

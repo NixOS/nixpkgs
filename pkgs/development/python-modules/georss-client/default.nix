@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, haversine
-, pytestCheckHook
-, pythonOlder
-, requests
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  haversine,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  xmltodict,
 }:
-
 buildPythonPackage rec {
   pname = "georss-client";
   version = "0.15";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-client";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

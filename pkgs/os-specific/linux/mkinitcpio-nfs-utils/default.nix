@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "mkinitcpio-nfs-utils";
   version = "0.3";
@@ -11,7 +14,7 @@ stdenv.mkDerivation rec {
     name = "mkinitcpio-nfs-utils-${version}.tar.gz";
   };
 
-  makeFlags = [ "DESTDIR=$(out)" "bindir=/bin" ];
+  makeFlags = ["DESTDIR=$(out)" "bindir=/bin"];
 
   postInstall = ''
     rm -rf $out/usr
@@ -21,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://archlinux.org/";
     description = "ipconfig and nfsmount tools for root on NFS, ported from klibc";
     license = licenses.gpl2;
-    platforms  = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [abbradar];
   };
 }

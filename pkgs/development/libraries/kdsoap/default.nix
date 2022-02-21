@@ -1,10 +1,10 @@
-{ mkDerivation
-, lib
-, fetchurl
-, cmake
-, qtbase
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  cmake,
+  qtbase,
 }:
-
 mkDerivation rec {
   pname = "kdsoap";
   version = "2.0.0";
@@ -14,11 +14,11 @@ mkDerivation rec {
     sha256 = "sha256-0YljEE+m99ArBEYxzdvnjxj3DgbGB69oDHrOBNbPBO4=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [qtbase];
 
   postInstall = ''
     moveToOutput bin/kdwsdl2cpp "$dev"
@@ -37,7 +37,7 @@ mkDerivation rec {
       provides the means to create web services without the need for any further
       component such as a dedicated web server.
     '';
-    license = with licenses; [ gpl2 gpl3 lgpl21 ];
-    maintainers = [ maintainers.ttuegel ];
+    license = with licenses; [gpl2 gpl3 lgpl21];
+    maintainers = [maintainers.ttuegel];
   };
 }

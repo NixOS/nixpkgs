@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, backports_ssl_match_hostname
-, mock
-, paramiko
-, pytestCheckHook
-, requests
-, six
-, websocket-client
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  backports_ssl_match_hostname,
+  mock,
+  paramiko,
+  pytestCheckHook,
+  requests,
+  six,
+  websocket-client,
 }:
-
 buildPythonPackage rec {
   pname = "docker";
   version = "5.0.3";
@@ -23,21 +23,23 @@ buildPythonPackage rec {
 
   nativeBuildInputs = lib.optional isPy27 mock;
 
-  propagatedBuildInputs = [
-    paramiko
-    requests
-    six
-    websocket-client
-  ] ++ lib.optional isPy27 backports_ssl_match_hostname;
+  propagatedBuildInputs =
+    [
+      paramiko
+      requests
+      six
+      websocket-client
+    ]
+    ++ lib.optional isPy27 backports_ssl_match_hostname;
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  pytestFlagsArray = ["tests/unit"];
 
   # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
-  disabledTests = lib.optionals stdenv.isDarwin [ "api_test" "stream_response" "socket_file" ];
+  disabledTests = lib.optionals stdenv.isDarwin ["api_test" "stream_response" "socket_file"];
 
   dontUseSetuptoolsCheck = true;
 
@@ -45,6 +47,6 @@ buildPythonPackage rec {
     description = "An API client for docker written in Python";
     homepage = "https://github.com/docker/docker-py";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

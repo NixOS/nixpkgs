@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, django
-, django-debug-toolbar
-, graphene-django
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  django,
+  django-debug-toolbar,
+  graphene-django,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "django-graphiql-debug-toolbar";
   version = "0.2.0";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Django Debug Toolbar for GraphiQL IDE";
     homepage = "https://github.com/flavors/django-graphiql-debug-toolbar";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

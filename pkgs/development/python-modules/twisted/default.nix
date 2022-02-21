@@ -1,19 +1,21 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, python
-, zope_interface
-, incremental
-, automat
-, constantly
-, hyperlink
-, pyhamcrest
-, attrs
-, pyopenssl
-, service-identity
-, setuptools
-, idna
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  zope_interface,
+  incremental,
+  automat,
+  constantly,
+  hyperlink,
+  pyhamcrest,
+  attrs,
+  pyopenssl,
+  service-identity,
+  setuptools,
+  idna,
+  typing-extensions,
 }:
 buildPythonPackage rec {
   pname = "Twisted";
@@ -25,9 +27,9 @@ buildPythonPackage rec {
     sha256 = "01lh225d7lfnmfx4f4kxwl3963gjc9yg8jfkn1w769v34ia55mic";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools typing-extensions ];
+  propagatedBuildInputs = [zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools typing-extensions];
 
-  passthru.extras.tls = [ pyopenssl service-identity idna ];
+  passthru.extras.tls = [pyopenssl service-identity idna];
 
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False
@@ -58,6 +60,6 @@ buildPythonPackage rec {
       and licensed under the MIT license.
     '';
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [];
   };
 }

@@ -1,21 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   pcmciaUtils = pkgs.pcmciaUtils.passthru.function {
     inherit (config.hardware.pcmcia) firmware config;
   };
-
-in
-
-
-{
+in {
   ###### interface
 
   options = {
-
     hardware.pcmcia = {
       enable = mkOption {
         type = types.bool;
@@ -42,19 +38,15 @@ in
         '';
       };
     };
-
   };
 
   ###### implementation
 
   config = mkIf config.hardware.pcmcia.enable {
+    boot.kernelModules = ["pcmcia"];
 
-    boot.kernelModules = [ "pcmcia" ];
+    services.udev.packages = [pcmciaUtils];
 
-    services.udev.packages = [ pcmciaUtils ];
-
-    environment.systemPackages = [ pcmciaUtils ];
-
+    environment.systemPackages = [pcmciaUtils];
   };
-
 }

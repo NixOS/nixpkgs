@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   inherit (pkgs) prayer;
 
   cfg = config.services.prayer;
@@ -25,22 +26,16 @@ let
     ${cfg.extraConfig}
   '';
 
-  prayerCfg = pkgs.runCommand "prayer.cf" { preferLocalBuild = true; } ''
+  prayerCfg = pkgs.runCommand "prayer.cf" {preferLocalBuild = true;} ''
     # We have to remove the http_port 80, or it will start a server there
     cat ${prayer}/etc/prayer.cf | grep -v http_port > $out
     cat ${prayerExtraCfg} >> $out
   '';
-
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.prayer = {
-
       enable = mkEnableOption "the prayer webmail http server";
 
       port = mkOption {
@@ -53,32 +48,29 @@ in
 
       extraConfig = mkOption {
         type = types.lines;
-        default = "" ;
+        default = "";
         description = ''
           Extra configuration. Contents will be added verbatim to the configuration file.
         '';
       };
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf config.services.prayer.enable {
-    environment.systemPackages = [ prayer ];
+    environment.systemPackages = [prayer];
 
-    users.users.${prayerUser} =
-      { uid = config.ids.uids.prayer;
-        description = "Prayer daemon user";
-        home = stateDir;
-      };
+    users.users.${prayerUser} = {
+      uid = config.ids.uids.prayer;
+      description = "Prayer daemon user";
+      home = stateDir;
+    };
 
-    users.groups.${prayerGroup} =
-      { gid = config.ids.gids.prayer; };
+    users.groups.${prayerGroup} = {gid = config.ids.gids.prayer;};
 
     systemd.services.prayer = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig.Type = "forking";
       preStart = ''
         mkdir -m 0755 -p ${stateDir}

@@ -1,5 +1,8 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: let
-
+import ./make-test-python.nix ({
+  lib,
+  pkgs,
+  ...
+}: let
   v2rayUser = {
     # A random UUID.
     id = "a6a46834-2150-45f8-8364-0f6f6ab32384";
@@ -27,11 +30,13 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
       {
         tag = "vmess_out";
         protocol = "vmess";
-        settings.vnext = [{
-          address = "127.0.0.1";
-          port = 1081;
-          users = [v2rayUser];
-        }];
+        settings.vnext = [
+          {
+            address = "127.0.0.1";
+            port = 1081;
+            users = [v2rayUser];
+          }
+        ];
       }
       {
         tag = "direct";
@@ -51,14 +56,13 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
       }
     ];
   };
-
 in {
   name = "v2ray";
   meta = with lib.maintainers; {
-    maintainers = [ servalcatty ];
+    maintainers = [servalcatty];
   };
-  machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.curl ];
+  machine = {pkgs, ...}: {
+    environment.systemPackages = [pkgs.curl];
     services.v2ray = {
       enable = true;
       config = v2rayConfig;

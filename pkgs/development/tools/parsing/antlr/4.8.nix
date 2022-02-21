@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchurl, jre
-, fetchFromGitHub, cmake, ninja, pkg-config, libuuid, darwin }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  libuuid,
+  darwin,
+}: let
   version = "4.8";
   source = fetchFromGitHub {
     owner = "antlr";
@@ -16,15 +24,16 @@ let
       inherit version;
       src = source;
 
-      outputs = [ "out" "dev" "doc" ];
+      outputs = ["out" "dev" "doc"];
 
-      nativeBuildInputs = [ cmake ninja pkg-config ];
-      buildInputs = lib.optional stdenv.isLinux libuuid
+      nativeBuildInputs = [cmake ninja pkg-config];
+      buildInputs =
+        lib.optional stdenv.isLinux libuuid
         ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreFoundation;
 
       # Install CMake config files, used to locate the runtime from another
       # CMake project, using the find_package function.
-      cmakeFlags = [ "-DANTLR4_INSTALL=ON" ];
+      cmakeFlags = ["-DANTLR4_INSTALL=ON"];
 
       postUnpack = ''
         export sourceRoot=$sourceRoot/runtime/Cpp
@@ -44,7 +53,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url ="https://www.antlr.org/download/antlr-${version}-complete.jar";
+      url = "https://www.antlr.org/download/antlr-${version}-complete.jar";
       sha256 = "0nms976cnqyr1ndng3haxkmknpdq6xli4cpf4x4al0yr21l9v93k";
     };
 
@@ -85,4 +94,5 @@ let
       platforms = platforms.unix;
     };
   };
-in antlr
+in
+  antlr

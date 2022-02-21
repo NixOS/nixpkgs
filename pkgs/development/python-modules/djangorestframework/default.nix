@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, django, isPy27 }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  isPy27,
+}:
 buildPythonPackage rec {
   version = "3.12.4";
   pname = "djangorestframework";
@@ -15,12 +20,12 @@ buildPythonPackage rec {
   # Test settings are missing
   doCheck = false;
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [django];
 
   meta = with lib; {
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
-    maintainers = with maintainers; [ desiderius ];
+    maintainers = with maintainers; [desiderius];
     license = licenses.bsd2;
   };
 }

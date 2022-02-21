@@ -1,11 +1,11 @@
-{ fetchFromGitHub
-, glib
-, gtk3
-, lib
-, rustPlatform
-, wrapGAppsHook
+{
+  fetchFromGitHub,
+  glib,
+  gtk3,
+  lib,
+  rustPlatform,
+  wrapGAppsHook,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "fitnesstrax";
   version = "0.1.0";
@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     description = "Privacy-first fitness tracking";
     homepage = "https://github.com/luminescent-dreams/fitnesstrax";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ savannidgerinel ];
+    maintainers = with maintainers; [savannidgerinel];
   };
 }

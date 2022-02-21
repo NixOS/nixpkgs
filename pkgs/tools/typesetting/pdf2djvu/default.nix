@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, gettext
-, libtool
-, pkg-config
-, djvulibre
-, exiv2
-, fontconfig
-, graphicsmagick
-, libjpeg
-, libuuid
-, poppler
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  gettext,
+  libtool,
+  pkg-config,
+  djvulibre,
+  exiv2,
+  fontconfig,
+  graphicsmagick,
+  libjpeg,
+  libuuid,
+  poppler,
 }:
-
 stdenv.mkDerivation rec {
   version = "0.9.17.1";
   pname = "pdf2djvu";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
 
   buildInputs = [
     djvulibre
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     description = "Creates djvu files from PDF files";
     homepage = "https://jwilk.net/software/pdf2djvu";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [pSub];
   };
 }

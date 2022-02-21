@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, nixosTests
-, python3
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  python3,
+  python3Packages,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
   version = "0.6.16";
@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
     homepage = "https://github.com/janeczku/calibre-web";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pborzenkov ];
+    maintainers = with maintainers; [pborzenkov];
     platforms = platforms.all;
   };
 }

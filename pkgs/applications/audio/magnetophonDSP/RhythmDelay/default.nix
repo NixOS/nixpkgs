@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "RhythmDelay";
   version = "2.1";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j0bjl9agz43dcrcrbiqd7fv7xsxgd65s4ahhv5pvcr729y0fxg4";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [faust2jaqt faust2lv2];
 
   buildPhase = ''
     faust2jaqt -time -vec -t 99999 RhythmDelay.dsp
@@ -28,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Tap a rhythm into your delay! For jack and lv2";
     homepage = "https://github.com/magnetophon/RhythmDelay";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
   };
 }

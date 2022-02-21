@@ -1,20 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.ethminer;
   poolUrl = escapeShellArg "stratum1+tcp://${cfg.wallet}@${cfg.pool}:${toString cfg.stratumPort}/${cfg.rig}/${cfg.registerMail}";
-in
-
-{
-
+in {
   ###### interface
 
   options = {
-
     services.ethminer = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -28,7 +25,7 @@ in
       };
 
       toolkit = mkOption {
-        type = types.enum [ "cuda" "opencl" ];
+        type = types.enum ["cuda" "opencl"];
         default = "cuda";
         description = "Cuda or opencl toolkit.";
       };
@@ -74,21 +71,17 @@ in
         default = 113;
         description = "Miner max watt usage.";
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     systemd.services.ethminer = {
-      path = [ pkgs.cudatoolkit ];
+      path = [pkgs.cudatoolkit];
       description = "ethminer ethereum mining service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       serviceConfig = {
         DynamicUser = true;
@@ -109,9 +102,6 @@ in
           --api-port ${toString cfg.apiPort} \
           --pool ${poolUrl}
       '';
-
     };
-
   };
-
 }

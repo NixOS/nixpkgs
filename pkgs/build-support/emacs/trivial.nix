@@ -1,29 +1,28 @@
 # trivial builder for Emacs packages
-
-{ callPackage, lib, ... }@envargs:
-
+{
+  callPackage,
+  lib,
+  ...
+} @ envargs:
 with lib;
+  args:
+    callPackage ./generic.nix envargs ({
+      buildPhase = ''
+        runHook preBuild
 
-args:
+        emacs -L . --batch -f batch-byte-compile *.el
 
-callPackage ./generic.nix envargs ({
-  buildPhase = ''
-    runHook preBuild
+        runHook postBuild
+      '';
 
-    emacs -L . --batch -f batch-byte-compile *.el
+      installPhase = ''
+        runHook preInstall
 
-    runHook postBuild
-  '';
+        LISPDIR=$out/share/emacs/site-lisp
+        install -d $LISPDIR
+        install *.el *.elc $LISPDIR
 
-  installPhase = ''
-    runHook preInstall
-
-    LISPDIR=$out/share/emacs/site-lisp
-    install -d $LISPDIR
-    install *.el *.elc $LISPDIR
-
-    runHook postInstall
-  '';
-}
-
-// args)
+        runHook postInstall
+      '';
+    }
+    // args)

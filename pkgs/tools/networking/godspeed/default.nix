@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libpcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libpcap,
 }:
-
 buildGoModule rec {
   pname = "godspeed";
   version = "unstable-2021-08-27";
@@ -28,7 +28,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Manager for reverse shells";
     homepage = "https://github.com/redcode-labs/GodSpeed";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab] ++ teams.redcodelabs.members;
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, gettext
-, meson
-, ninja
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  gettext,
+  meson,
+  ninja,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-wallpapers";
   version = "6.1.0";
@@ -45,4 +45,3 @@ stdenv.mkDerivation rec {
     maintainers = teams.pantheon.members;
   };
 }
-

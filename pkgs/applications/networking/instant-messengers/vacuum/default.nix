@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-  , qt4, qmake4Hook, openssl
-  , xorgproto, libX11, libXScrnSaver
-  , xz, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt4,
+  qmake4Hook,
+  openssl,
+  xorgproto,
+  libX11,
+  libXScrnSaver,
+  xz,
+  zlib,
 }:
 stdenv.mkDerivation {
   pname = "vacuum-im";
@@ -15,7 +23,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    qt4 openssl xorgproto libX11 libXScrnSaver xz zlib
+    qt4
+    openssl
+    xorgproto
+    libX11
+    libXScrnSaver
+    xz
+    zlib
   ];
 
   # hack: needed to fix build issues in
@@ -23,17 +37,17 @@ stdenv.mkDerivation {
   # should be an upstream issue but it's easy to fix
   NIX_LDFLAGS = "-lz";
 
-  nativeBuildInputs = [ qmake4Hook ];
+  nativeBuildInputs = [qmake4Hook];
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
   '';
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     description = "An XMPP client fully composed of plugins";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
     license = licenses.gpl3;
     homepage = "http://www.vacuum-im.org";

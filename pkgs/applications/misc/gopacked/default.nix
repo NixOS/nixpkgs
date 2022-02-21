@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "gopacked";
   version = "0.4.1";
@@ -19,6 +22,6 @@ buildGoModule rec {
     description = "A simple text-based Minecraft modpack manager";
     license = licenses.agpl3;
     homepage = src.meta.homepage;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

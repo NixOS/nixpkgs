@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-
-# Build dependencies
-, glibcLocales
-
-# Runtime dependencies
-, appnope
-, backcall
-, black
-, decorator
-, jedi
-, matplotlib-inline
-, pexpect
-, pickleshare
-, prompt-toolkit
-, pygments
-, stack-data
-, traitlets
-
-# Test dependencies
-, pytestCheckHook
-, testpath
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder
+  # Build dependencies
+  ,
+  glibcLocales
+  # Runtime dependencies
+  ,
+  appnope,
+  backcall,
+  black,
+  decorator,
+  jedi,
+  matplotlib-inline,
+  pexpect,
+  pickleshare,
+  prompt-toolkit,
+  pygments,
+  stack-data,
+  traitlets
+  # Test dependencies
+  ,
+  pytestCheckHook,
+  testpath,
 }:
-
 buildPythonPackage rec {
   pname = "ipython";
   version = "8.0.1";
@@ -41,23 +41,25 @@ buildPythonPackage rec {
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
-    backcall
-    black
-    decorator
-    jedi
-    matplotlib-inline
-    pexpect
-    pickleshare
-    prompt-toolkit
-    pygments
-    stack-data
-    traitlets
-  ] ++ lib.optionals stdenv.isDarwin [
-    appnope
-  ];
+  propagatedBuildInputs =
+    [
+      backcall
+      black
+      decorator
+      jedi
+      matplotlib-inline
+      pexpect
+      pickleshare
+      prompt-toolkit
+      pygments
+      stack-data
+      traitlets
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      appnope
+    ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   pythonImportsCheck = [
     "IPython"
@@ -80,6 +82,6 @@ buildPythonPackage rec {
     description = "IPython: Productive Interactive Computing";
     homepage = "http://ipython.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor fridh ];
+    maintainers = with maintainers; [bjornfor fridh];
   };
 }

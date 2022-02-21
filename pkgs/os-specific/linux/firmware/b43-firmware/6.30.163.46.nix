@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, b43FirmwareCutter }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  b43FirmwareCutter,
+}:
 stdenv.mkDerivation rec {
   pname = "b43-firmware";
   version = "6.30.163.46";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0baw6gcnrhxbb447msv34xg6rmlcj0gm3ahxwvdwfcvq4xmknz50";
   };
 
-  buildInputs = [ b43FirmwareCutter ];
+  buildInputs = [b43FirmwareCutter];
 
   sourceRoot = ".";
 

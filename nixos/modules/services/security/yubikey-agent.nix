@@ -1,22 +1,21 @@
 # Global configuration for yubikey-agent.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.yubikey-agent;
 
   # reuse the pinentryFlavor option from the gnupg module
   pinentryFlavor = config.programs.gnupg.agent.pinentryFlavor;
-in
-{
+in {
   ###### interface
 
-  meta.maintainers = with maintainers; [ philandstuff rawkode jwoudenberg ];
+  meta.maintainers = with maintainers; [philandstuff rawkode jwoudenberg];
 
   options = {
-
     services.yubikey-agent = {
       enable = mkOption {
         type = types.bool;
@@ -42,18 +41,17 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    systemd.packages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
+    systemd.packages = [cfg.package];
 
     # This overrides the systemd user unit shipped with the
     # yubikey-agent package
     systemd.user.services.yubikey-agent = mkIf (pinentryFlavor != null) {
-      path = [ pkgs.pinentry.${pinentryFlavor} ];
+      path = [pkgs.pinentry.${pinentryFlavor}];
       wantedBy = [
-        (if pinentryFlavor == "tty" || pinentryFlavor == "curses" then
-          "default.target"
-        else
-          "graphical-session.target")
+        (if pinentryFlavor == "tty" || pinentryFlavor == "curses"
+        then "default.target"
+        else "graphical-session.target")
       ];
     };
 

@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
-
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "fd";
   version = "8.3.2";
@@ -13,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-A8MAgV7/6Vf+PaND+gaZz8IEq4Cw9ETEY+lF8R77lA4=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   preFixup = ''
     installManPage doc/fd.1
@@ -31,7 +35,13 @@ rustPlatform.buildRustPackage rec {
       it provides sensible (opinionated) defaults for 80% of the use cases.
     '';
     homepage = "https://github.com/sharkdp/fd";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir globin ma27 zowoq ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      mit
+    ];
+    maintainers = with maintainers; [dywedir globin ma27 zowoq];
   };
 }

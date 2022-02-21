@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, makeWrapper
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  makeWrapper,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "fs-uae-launcher";
   version = "3.0.5";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     setuptools
   ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = ["prefix=$(out)"];
 
   postInstall = ''
     wrapProgram $out/bin/fs-uae-launcher --set PYTHONPATH "$PYTHONPATH"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fs-uae.net";
     description = "Graphical front-end for the FS-UAE emulator";
     license = lib.licenses.gpl2Plus;
-    maintainers = with  maintainers; [ sander AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [sander AndersonTorres];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

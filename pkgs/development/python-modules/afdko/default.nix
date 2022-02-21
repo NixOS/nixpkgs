@@ -1,16 +1,36 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder
-, fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
-, brotli, fontmath, mutatormath, booleanoperations
-, ufoprocessor, ufonormalizer, psautohint, tqdm
-, setuptools-scm, scikit-build
-, cmake
-, antlr4_9
-, pytestCheckHook
-# Enables some expensive tests, useful for verifying an update
-, runAllTests ? false
-, afdko
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pythonOlder,
+  fonttools,
+  defcon,
+  lxml,
+  fs,
+  unicodedata2,
+  zopfli,
+  brotlipy,
+  fontpens,
+  brotli,
+  fontmath,
+  mutatormath,
+  booleanoperations,
+  ufoprocessor,
+  ufonormalizer,
+  psautohint,
+  tqdm,
+  setuptools-scm,
+  scikit-build,
+  cmake,
+  antlr4_9,
+  pytestCheckHook
+  # Enables some expensive tests, useful for verifying an update
+  ,
+  runAllTests ? false,
+  afdko,
 }:
-
 buildPythonPackage rec {
   pname = "afdko";
   version = "3.7.1";
@@ -54,11 +74,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     booleanoperations
     fonttools
-    lxml           # fonttools[lxml], defcon[lxml] extra
-    fs             # fonttools[ufo] extra
-    unicodedata2   # fonttools[unicode] extra
-    brotlipy       # fonttools[woff] extra
-    zopfli         # fonttools[woff] extra
+    lxml # fonttools[lxml], defcon[lxml] extra
+    fs # fonttools[ufo] extra
+    unicodedata2 # fonttools[unicode] extra
+    brotlipy # fonttools[woff] extra
+    zopfli # fonttools[woff] extra
     fontpens
     brotli
     defcon
@@ -70,7 +90,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
   preCheck = ''
     export PATH=$PATH:$out/bin
 
@@ -78,29 +98,31 @@ buildPythonPackage rec {
     #   https://github.com/adobe-type-tools/afdko/issues/1418
     find tests -name layerinfo.plist -delete
   '';
-  disabledTests = lib.optionals (!runAllTests) [
-    # Disable slow tests, reduces test time ~25 %
-    "test_report"
-    "test_post_overflow"
-    "test_cjk"
-    "test_extrapolate"
-    "test_filename_without_dir"
-    "test_overwrite"
-    "test_options"
-  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
-    # aarch64-only (?) failure, unknown reason so far
-    # https://github.com/adobe-type-tools/afdko/issues/1425
-    "test_spec"
-  ];
+  disabledTests =
+    lib.optionals (!runAllTests) [
+      # Disable slow tests, reduces test time ~25 %
+      "test_report"
+      "test_post_overflow"
+      "test_cjk"
+      "test_extrapolate"
+      "test_filename_without_dir"
+      "test_overwrite"
+      "test_options"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
+      # aarch64-only (?) failure, unknown reason so far
+      # https://github.com/adobe-type-tools/afdko/issues/1425
+      "test_spec"
+    ];
 
   passthru.tests = {
-    fullTestsuite = afdko.override { runAllTests = true; };
+    fullTestsuite = afdko.override {runAllTests = true;};
   };
 
   meta = with lib; {
     description = "Adobe Font Development Kit for OpenType";
     homepage = "https://adobe-type-tools.github.io/afdko/";
     license = licenses.asl20;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

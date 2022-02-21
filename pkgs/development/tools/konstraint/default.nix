@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "konstraint";
   version = "0.18.0";
@@ -15,7 +18,7 @@ buildGoModule rec {
   # Exclude go within .github folder
   excludedPackages = ".github";
 
-  ldflags = [ "-s" "-w" "-X github.com/plexsystems/konstraint/internal/commands.version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/plexsystems/konstraint/internal/commands.version=${version}"];
 
   meta = with lib; {
     homepage = "https://github.com/plexsystems/konstraint";
@@ -27,6 +30,6 @@ buildGoModule rec {
       library changes. Enable writing the same policies for Conftest and Gatekeeper.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [jk];
   };
 }

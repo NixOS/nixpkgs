@@ -1,19 +1,19 @@
-{ lib
-, buildDunePackage
-, tezos-stdlib
-, tezos-mockup-registration
-, tezos-proxy
-, tezos-signer-backends
-, tezos-protocol-011-PtHangz2-parameters
-, tezos-protocol-plugin-011-PtHangz2
-, alcotest-lwt
-, cacert
-, ppx_inline_test
-, qcheck-alcotest
-, tezos-base-test-helpers
-, tezos-test-helpers
+{
+  lib,
+  buildDunePackage,
+  tezos-stdlib,
+  tezos-mockup-registration,
+  tezos-proxy,
+  tezos-signer-backends,
+  tezos-protocol-011-PtHangz2-parameters,
+  tezos-protocol-plugin-011-PtHangz2,
+  alcotest-lwt,
+  cacert,
+  ppx_inline_test,
+  qcheck-alcotest,
+  tezos-base-test-helpers,
+  tezos-test-helpers,
 }:
-
 buildDunePackage {
   pname = "tezos-client-011-PtHangz2";
   inherit (tezos-stdlib) version useDune2;
@@ -38,7 +38,9 @@ buildDunePackage {
 
   doCheck = true;
 
-  meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: protocol specific library for `tezos-client`";
-  };
+  meta =
+    tezos-stdlib.meta
+    // {
+      description = "Tezos/Protocol: protocol specific library for `tezos-client`";
+    };
 }

@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, glib, libglibutil }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  libglibutil,
+}:
 stdenv.mkDerivation rec {
   pname = "libgbinder";
   version = "1.1.16";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-g+3yRRiTv2l7ZpJc5a6tOPsErKjdALomAWmYHErdfIQ=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     "INSTALL_PKGCONFIG_DIR=$(dev)/lib/pkgconfig"
   ];
 
-  installTargets = [ "install" "install-dev" ];
+  installTargets = ["install" "install-dev"];
 
   postInstall = ''
     sed -i -e "s@includedir=/usr@includedir=$dev@g" $dev/lib/pkgconfig/$pname.pc
@@ -40,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mer-hybris/libgbinder";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    maintainers = with maintainers; [mcaju];
   };
 }

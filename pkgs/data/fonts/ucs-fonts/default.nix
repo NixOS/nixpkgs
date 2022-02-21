@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl, bdftopcf
-, libfaketime, fonttosfnt, mkfontscale
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bdftopcf,
+  libfaketime,
+  fonttosfnt,
+  mkfontscale,
 }:
-
 stdenv.mkDerivation {
   pname = "ucs-fonts";
   version = "20090406";
@@ -23,10 +28,12 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs =
-    [ bdftopcf libfaketime fonttosfnt
-      mkfontscale
-    ];
+  nativeBuildInputs = [
+    bdftopcf
+    libfaketime
+    fonttosfnt
+    mkfontscale
+  ];
 
   buildPhase = ''
     for i in *.bdf; do
@@ -49,13 +56,13 @@ stdenv.mkDerivation {
     mkfontdir "$bdf/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" ];
+  outputs = ["out" "bdf"];
 
   meta = with lib; {
     homepage = "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html";
     description = "Unicode bitmap fonts";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.all;
   };
 }

@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, meson
-, ninja
-, vala
-, pkg-config
-, libgee
-, gtk3
-, glib
-, gettext
-, gsettings-desktop-schemas
-, gobject-introspection
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  libgee,
+  gtk3,
+  glib,
+  gettext,
+  gsettings-desktop-schemas,
+  gobject-introspection,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "granite";
   version = "6.2.0"; # nixpkgs-update: no auto update
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   src = fetchFromGitHub {
     owner = "elementary";

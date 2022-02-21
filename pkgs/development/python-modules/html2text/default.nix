@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "html2text";
   version = "2020.1.16";
@@ -17,9 +17,9 @@ buildPythonPackage rec {
     sha256 = "1y924clp2hiqg3a9437z808p29mqcx537j5fmz71plx8qrcm5jf9";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [pytestCheckHook];
 
-  pythonImportsCheck = [ "html2text" ];
+  pythonImportsCheck = ["html2text"];
 
   meta = with lib; {
     description = "Turn HTML into equivalent Markdown-structured text";

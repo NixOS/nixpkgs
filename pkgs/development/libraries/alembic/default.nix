@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  openexr,
+  hdf5-threadsafe,
+}:
 stdenv.mkDerivation rec
 {
   pname = "alembic";
@@ -12,10 +19,10 @@ stdenv.mkDerivation rec
     sha256 = "sha256-QnqUD8KmMDmEZ1REoKN70SwVICOdyGPZsB/lU9nojj4=";
   };
 
-  outputs = [ "bin" "dev" "out" "lib" ];
+  outputs = ["bin" "dev" "out" "lib"];
 
-  nativeBuildInputs = [ unzip cmake ];
-  buildInputs = [ openexr hdf5-threadsafe ];
+  nativeBuildInputs = [unzip cmake];
+  buildInputs = [openexr hdf5-threadsafe];
 
   buildPhase = ''
     cmake -DUSE_HDF5=ON -DCMAKE_INSTALL_PREFIX=$out/ -DUSE_TESTS=OFF .
@@ -39,6 +46,6 @@ stdenv.mkDerivation rec
     homepage = "http://alembic.io/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ maintainers.guibou ];
+    maintainers = [maintainers.guibou];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
-
 buildGoModule rec {
   pname = "unifiedpush-common-proxies";
   version = "1.1.1";
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "A set of rewrite proxies and gateways for UnifiedPush";
     homepage = "https://github.com/UnifiedPush/common-proxies";
     license = licenses.mit;
-    maintainers = with maintainers; [ yuka ];
+    maintainers = with maintainers; [yuka];
   };
 }

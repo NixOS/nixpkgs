@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchgit, autoreconfHook, xorgproto, libX11, libXext
-, pixman, pkg-config, utilmacros, xorgserver
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  xorgproto,
+  libX11,
+  libXext,
+  pixman,
+  pkg-config,
+  utilmacros,
+  xorgserver,
 }:
-
 stdenv.mkDerivation {
   pname = "xf86-video-nested";
   version = "unstable-2017-06-12";
@@ -12,19 +21,25 @@ stdenv.mkDerivation {
     sha256 = "133rd2kvr2q2wmwpx82bb93qbi8wm8qp1vlmbhgc7aslz0j4cqqv";
   };
 
-  buildInputs =
-    [ autoreconfHook xorgproto libX11 libXext pixman
-      pkg-config utilmacros xorgserver
-    ];
+  buildInputs = [
+    autoreconfHook
+    xorgproto
+    libX11
+    libXext
+    pixman
+    pkg-config
+    utilmacros
+    xorgserver
+  ];
 
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = ["fortify"];
 
   CFLAGS = "-I${pixman}/include/pixman-1";
 
   meta = with lib; {
     homepage = "https://cgit.freedesktop.org/xorg/driver/xf86-video-nested";
     description = "A driver to run Xorg on top of Xorg or something else";
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
     license = licenses.mit;
   };

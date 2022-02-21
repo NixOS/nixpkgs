@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pykerberos
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pykerberos,
+  pyspnego,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "requests-kerberos";
   version = "0.14.0";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "An authentication handler for using Kerberos with Python Requests";
     homepage = "https://github.com/requests/requests-kerberos";
     license = licenses.isc;
-    maintainers = with maintainers; [ catern ];
+    maintainers = with maintainers; [catern];
   };
 }

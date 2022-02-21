@@ -1,11 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-
-, enableWasmEval ? false
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  enableWasmEval ? false,
 }:
-
 buildGoModule rec {
   pname = "open-policy-agent";
   version = "0.37.2";
@@ -18,18 +17,19 @@ buildGoModule rec {
   };
   vendorSha256 = null;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  ldflags = [ "-s" "-w" "-X github.com/open-policy-agent/opa/version.Version=${version}" ];
+  ldflags = ["-s" "-w" "-X github.com/open-policy-agent/opa/version.Version=${version}"];
 
   tags = lib.optional enableWasmEval (
     builtins.trace
-      ("Warning: enableWasmEval breaks reproducability, "
-        + "ensure you need wasm evaluation. "
-        + "`opa build` does not need this feature.")
-      "opa_wasm");
+    ("Warning: enableWasmEval breaks reproducability, "
+    + "ensure you need wasm evaluation. "
+    + "`opa build` does not need this feature.")
+    "opa_wasm"
+  );
 
   preCheck = ''
     # Feed in all but the e2e tests for testing
@@ -57,10 +57,12 @@ buildGoModule rec {
     $out/bin/opa --help
     $out/bin/opa version | grep "Version: ${version}"
 
-    ${lib.optionalString enableWasmEval ''
-      # If wasm is enabled verify it works
-      $out/bin/opa eval -t wasm 'trace("hello from wasm")'
-    ''}
+    ${
+      lib.optionalString enableWasmEval ''
+        # If wasm is enabled verify it works
+        $out/bin/opa eval -t wasm 'trace("hello from wasm")'
+      ''
+    }
 
     runHook postInstallCheck
   '';
@@ -76,6 +78,6 @@ buildGoModule rec {
       in microservices, Kubernetes, CI/CD pipelines, API gateways, and more.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ lewo jk ];
+    maintainers = with maintainers; [lewo jk];
   };
 }

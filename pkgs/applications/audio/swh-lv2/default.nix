@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fftwSinglePrec, libxslt, lv2, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fftwSinglePrec,
+  libxslt,
+  lv2,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   pname = "swh-lv2";
   version = "1.0.16";
@@ -16,8 +23,8 @@ stdenv.mkDerivation rec {
     sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fftwSinglePrec lv2 ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [fftwSinglePrec lv2];
 
   installPhase = "make install-system";
 
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
       generators, surround encoders and more.
     '';
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [maintainers.goibhniu];
     platforms = platforms.linux;
   };
 }

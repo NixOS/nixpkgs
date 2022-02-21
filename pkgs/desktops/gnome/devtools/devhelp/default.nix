@@ -1,28 +1,29 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook
-, glib
-, appstream-glib
-, gobject-introspection
-, python3
-, gi-docgen
-, webkitgtk
-, gettext
-, itstool
-, gsettings-desktop-schemas
-, shared-mime-info
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook,
+  glib,
+  appstream-glib,
+  gobject-introspection,
+  python3,
+  gi-docgen,
+  webkitgtk,
+  gettext,
+  itstool,
+  gsettings-desktop-schemas,
+  shared-mime-info,
 }:
-
 stdenv.mkDerivation rec {
   pname = "devhelp";
   version = "41.2";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = ["out" "devdoc"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/${pname}-${version}.tar.xz";

@@ -1,9 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, kmod, which
-, hwdata
-, static ? stdenv.hostPlatform.isStatic
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  zlib,
+  kmod,
+  which,
+  hwdata,
+  static ? stdenv.hostPlatform.isStatic,
+  IOKit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "pciutils";
   version = "3.7.0"; # with release-date database
@@ -13,16 +19,25 @@ stdenv.mkDerivation rec {
     sha256 = "1ss0rnfsx8gvqjxaji4mvbhf9xyih4cadmgadbwwv8mnx1xvjh4x";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib kmod which ] ++
-    lib.optional stdenv.hostPlatform.isDarwin IOKit;
+  nativeBuildInputs = [pkg-config];
+  buildInputs =
+    [zlib kmod which]
+    ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
-  preConfigure = if stdenv.cc.isGNU then null else ''
-    substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
-  '';
+  preConfigure =
+    if stdenv.cc.isGNU
+    then null
+    else
+      ''
+        substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
+      '';
 
   makeFlags = [
-    "SHARED=${if static then "no" else "yes"}"
+    "SHARED=${
+      if static
+      then "no"
+      else "yes"
+    }"
     "PREFIX=\${out}"
     "STRIP="
     "HOST=${stdenv.hostPlatform.system}"
@@ -30,7 +45,7 @@ stdenv.mkDerivation rec {
     "DNS=yes"
   ];
 
-  installTargets = [ "install" "install-lib" ];
+  installTargets = ["install" "install-lib"];
 
   postInstall = ''
     # Remove update-pciids as it won't work on nixos
@@ -47,6 +62,6 @@ stdenv.mkDerivation rec {
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ]; # not really, but someone should watch it
+    maintainers = [maintainers.vcunat]; # not really, but someone should watch it
   };
 }

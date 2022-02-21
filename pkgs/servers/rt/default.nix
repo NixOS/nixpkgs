@@ -1,5 +1,15 @@
-{ lib, stdenv, autoreconfHook, buildEnv, fetchFromGitHub, perl, perlPackages, makeWrapper, gnupg, openssl }:
-
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  buildEnv,
+  fetchFromGitHub,
+  perl,
+  perlPackages,
+  makeWrapper,
+  gnupg,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "rt";
   version = "5.0.1";
@@ -12,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./dont-check-users_groups.patch  # needed for "make testdeps" to work in the build
+    ./dont-check-users_groups.patch # needed for "make testdeps" to work in the build
     ./override-generated.patch
   ];
 
@@ -145,7 +155,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for i in $(find $out/bin -type f); do
       wrapProgram $i --prefix PERL5LIB ':' $PERL5LIB \
-        --prefix PATH ":" "${lib.makeBinPath [ openssl gnupg ]}"
+        --prefix PATH ":" "${lib.makeBinPath [openssl gnupg]}"
     done
 
     rm -r $out/var

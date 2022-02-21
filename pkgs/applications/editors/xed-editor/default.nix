@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, libxml2
-, libpeas
-, glib
-, gtk3
-, gtksourceview4
-, gspell
-, xapps
-, pkg-config
-, meson
-, ninja
-, wrapGAppsHook
-, intltool
-, itstool }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libxml2,
+  libpeas,
+  glib,
+  gtk3,
+  gtksourceview4,
+  gspell,
+  xapps,
+  pkg-config,
+  meson,
+  ninja,
+  wrapGAppsHook,
+  intltool,
+  itstool,
+}:
 stdenv.mkDerivation rec {
   pname = "xed-editor";
   version = "3.2.2";
@@ -66,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/xed";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ];
+    maintainers = with maintainers; [tu-maurice];
   };
 }

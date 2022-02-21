@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "wireless-regdb";
   version = "2021.08.28";
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "http://wireless.kernel.org/en/developers/Regulatory/";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

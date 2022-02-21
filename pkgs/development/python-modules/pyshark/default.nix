@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, py, lxml, pytestCheckHook, wireshark-cli }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  py,
+  lxml,
+  pytestCheckHook,
+  wireshark-cli,
+}:
 buildPythonPackage rec {
   pname = "pyshark";
   version = "0.4.3";
@@ -29,12 +36,12 @@ buildPythonPackage rec {
     wireshark-cli
   ];
 
-  pythonImportsCheck = [ "pyshark" ];
+  pythonImportsCheck = ["pyshark"];
 
   meta = with lib; {
     description = "Python wrapper for tshark, allowing python packet parsing using wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
     license = licenses.mit;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [petabyteboy];
   };
 }

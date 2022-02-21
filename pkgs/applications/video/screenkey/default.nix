@@ -1,14 +1,16 @@
-{ lib
-, fetchFromGitLab
-# native
-, wrapGAppsHook
-# not native
-, xorg
-, gobject-introspection
-, gtk3
-, python3
+{
+  lib,
+  fetchFromGitLab
+  # native
+  ,
+  wrapGAppsHook
+  # not native
+  ,
+  xorg,
+  gobject-introspection,
+  gtk3,
+  python3,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "screenkey";
   version = "1.4";
@@ -59,6 +61,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "A screencast tool to display your keys inspired by Screenflick";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.rasendubi ];
+    maintainers = [maintainers.rasendubi];
   };
 }

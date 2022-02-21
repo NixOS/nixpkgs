@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, pkg-config
-, fribidi
-, harfbuzz
-, libunistring
-, libwebp
-, mpg123
-, openssl
-, pcre
-, SDL2
-, AppKit
-, zip
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  pkg-config,
+  fribidi,
+  harfbuzz,
+  libunistring,
+  libwebp,
+  mpg123,
+  openssl,
+  pcre,
+  SDL2,
+  AppKit,
+  zip,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lagrange";
   version = "1.10.6";
@@ -33,9 +33,10 @@ stdenv.mkDerivation rec {
     rm -r lib/fribidi lib/harfbuzz
   '';
 
-  nativeBuildInputs = [ cmake pkg-config zip ];
+  nativeBuildInputs = [cmake pkg-config zip];
 
-  buildInputs = [ fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib ]
+  buildInputs =
+    [fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib]
     ++ lib.optional stdenv.isDarwin AppKit;
 
   installPhase = lib.optionalString stdenv.isDarwin ''
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "A Beautiful Gemini Client";
     homepage = "https://gmi.skyjake.fi/lagrange/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [sikmir];
     platforms = platforms.unix;
   };
 }

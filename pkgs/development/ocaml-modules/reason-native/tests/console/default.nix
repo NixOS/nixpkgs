@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, reason, console }:
-
+{
+  lib,
+  buildDunePackage,
+  reason,
+  console,
+}:
 buildDunePackage rec {
   pname = "console-test";
   version = "1";

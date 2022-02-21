@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, ipython
-, lark
-, networkx
-, numpy
-, poetry-core
-, pytest-asyncio
-, pytest-freezegun
-, pytest-httpx
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, qcs-api-client
-, retry
-, respx
-, rpcq
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  ipython,
+  lark,
+  networkx,
+  numpy,
+  poetry-core,
+  pytest-asyncio,
+  pytest-freezegun,
+  pytest-httpx,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  qcs-api-client,
+  retry,
+  respx,
+  rpcq,
+  scipy,
 }:
-
 buildPythonPackage rec {
   pname = "pyquil";
   version = "3.1.0";
@@ -38,17 +38,19 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    lark
-    networkx
-    numpy
-    qcs-api-client
-    retry
-    rpcq
-    scipy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      lark
+      networkx
+      numpy
+      qcs-api-client
+      retry
+      rpcq
+      scipy
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   checkInputs = [
     pytest-asyncio
@@ -96,6 +98,6 @@ buildPythonPackage rec {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";
     homepage = "https://github.com/rigetti/pyquil";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

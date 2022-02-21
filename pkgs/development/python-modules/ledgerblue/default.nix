@@ -1,8 +1,17 @@
-{ lib, fetchPypi, buildPythonPackage, hidapi
-, pycrypto, pillow, protobuf, future, ecpy, python-u2flib-host, pycryptodomex
-, websocket-client
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  hidapi,
+  pycrypto,
+  pillow,
+  protobuf,
+  future,
+  ecpy,
+  python-u2flib-host,
+  pycryptodomex,
+  websocket-client,
 }:
-
 buildPythonPackage rec {
   pname = "ledgerblue";
   version = "0.1.41";
@@ -13,18 +22,26 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    hidapi pycrypto pillow protobuf future ecpy python-u2flib-host pycryptodomex websocket-client
+    hidapi
+    pycrypto
+    pillow
+    protobuf
+    future
+    ecpy
+    python-u2flib-host
+    pycryptodomex
+    websocket-client
   ];
 
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [ "ledgerblue" ];
+  pythonImportsCheck = ["ledgerblue"];
 
   meta = with lib; {
     description = "Python library to communicate with Ledger Blue/Nano S";
     homepage = "https://github.com/LedgerHQ/blue-loader-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ np ];
+    maintainers = with maintainers; [np];
   };
 }

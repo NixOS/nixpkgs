@@ -1,56 +1,60 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gettext
-, libxml2
-, appstream
-, glib
-, gtk3
-, pango
-, atk
-, gdk-pixbuf
-, shared-mime-info
-, itstool
-, gnome
-, poppler
-, ghostscriptX
-, djvulibre
-, libspectre
-, libarchive
-, libhandy
-, libsecret
-, wrapGAppsHook
-, librsvg
-, gobject-introspection
-, yelp-tools
-, gspell
-, adwaita-icon-theme
-, gsettings-desktop-schemas
-, gnome-desktop
-, dbus
-, pantheon
-, python3
-, texlive
-, t1lib
-, gst_all_1
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, supportMultimedia ? true # PDF multimedia
-, libgxps
-, supportXPS ? true # Open XML Paper Specification via libgxps
-, withPantheon ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  libxml2,
+  appstream,
+  glib,
+  gtk3,
+  pango,
+  atk,
+  gdk-pixbuf,
+  shared-mime-info,
+  itstool,
+  gnome,
+  poppler,
+  ghostscriptX,
+  djvulibre,
+  libspectre,
+  libarchive,
+  libhandy,
+  libsecret,
+  wrapGAppsHook,
+  librsvg,
+  gobject-introspection,
+  yelp-tools,
+  gspell,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  dbus,
+  pantheon,
+  python3,
+  texlive,
+  t1lib,
+  gst_all_1,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  supportMultimedia ? true
+  # PDF multimedia
+  ,
+  libgxps,
+  supportXPS ? true
+  # Open XML Paper Specification via libgxps
+  ,
+  withPantheon ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "evince";
   version = "41.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -88,40 +92,44 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs = [
-    adwaita-icon-theme
-    atk
-    dbus # only needed to find the service directory
-    djvulibre
-    gdk-pixbuf
-    ghostscriptX
-    glib
-    gnome-desktop
-    gsettings-desktop-schemas
-    gspell
-    gtk3
-    libarchive
-    libhandy
-    librsvg
-    libsecret
-    libspectre
-    libxml2
-    pango
-    poppler
-    t1lib
-    texlive.bin.core # kpathsea for DVI support
-  ] ++ lib.optionals supportXPS [
-    libgxps
-  ] ++ lib.optionals supportMultimedia (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-  ]) ++ lib.optionals withPantheon [
-    pantheon.granite
-  ];
+  buildInputs =
+    [
+      adwaita-icon-theme
+      atk
+      dbus # only needed to find the service directory
+      djvulibre
+      gdk-pixbuf
+      ghostscriptX
+      glib
+      gnome-desktop
+      gsettings-desktop-schemas
+      gspell
+      gtk3
+      libarchive
+      libhandy
+      librsvg
+      libsecret
+      libspectre
+      libxml2
+      pango
+      poppler
+      t1lib
+      texlive.bin.core # kpathsea for DVI support
+    ]
+    ++ lib.optionals supportXPS [
+      libgxps
+    ]
+    ++ lib.optionals supportMultimedia (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ])
+    ++ lib.optionals withPantheon [
+      pantheon.granite
+    ];
 
   mesonFlags = [
     "-Dnautilus=false"

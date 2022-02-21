@@ -1,6 +1,22 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkg-config, libxml2, json_c, ncurses
-, asciidoctor, libiconv, Security, Foundation, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  stfl,
+  sqlite,
+  curl,
+  gettext,
+  pkg-config,
+  libxml2,
+  json_c,
+  ncurses,
+  asciidoctor,
+  libiconv,
+  Security,
+  Foundation,
+  makeWrapper,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
   version = "2.26";
@@ -21,14 +37,17 @@ rustPlatform.buildRustPackage rec {
       --replace "ncurses5.4" "ncurses"
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    asciidoctor
-    gettext
-  ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      asciidoctor
+      gettext
+    ]
+    ++ lib.optionals stdenv.isDarwin [makeWrapper ncurses];
 
-  buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ Security Foundation libiconv gettext ];
+  buildInputs =
+    [stfl sqlite curl libxml2 json_c ncurses]
+    ++ lib.optionals stdenv.isDarwin [Security Foundation libiconv gettext];
 
   postBuild = ''
     make prefix="$out"
@@ -47,20 +66,22 @@ rustPlatform.buildRustPackage rec {
     make test
   '';
 
-  postInstall = ''
-    make prefix="$out" install
-    cp -r contrib $out
-  '' + lib.optionalString stdenv.isDarwin ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
-    done
-  '';
+  postInstall =
+    ''
+      make prefix="$out" install
+      cp -r contrib $out
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      for prog in $out/bin/*; do
+        wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
+      done
+    '';
 
   meta = with lib; {
-    homepage    = "https://newsboat.org/";
+    homepage = "https://newsboat.org/";
     description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
-    maintainers = with maintainers; [ dotlambda nicknovitski ];
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    maintainers = with maintainers; [dotlambda nicknovitski];
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

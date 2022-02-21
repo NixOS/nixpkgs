@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, colorlog
-, fetchFromGitHub
-, pytest-sugar
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  pytest-sugar,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
-
 buildPythonPackage rec {
   pname = "skybellpy";
   version = "0.6.3";
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [ "skybellpy" ];
+  pythonImportsCheck = ["skybellpy"];
 
   meta = with lib; {
     description = "Python wrapper for the Skybell alarm API";
     homepage = "https://github.com/MisterWil/skybellpy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,7 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, requests, zeroconf, wakeonlan
-, python }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  zeroconf,
+  wakeonlan,
+  python,
+}:
 buildPythonPackage rec {
   pname = "openwebifpy";
   version = "3.2.7";
@@ -26,7 +32,6 @@ buildPythonPackage rec {
     description = "Provides a python interface to interact with a device running OpenWebIf";
     homepage = "https://openwebifpy.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }
-

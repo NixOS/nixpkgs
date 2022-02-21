@@ -1,8 +1,11 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-let
-  pkg = [ pkgs.switcheroo-control ];
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  pkg = [pkgs.switcheroo-control];
   cfg = config.services.switcherooControl;
 in {
   options.services.switcherooControl = {
@@ -13,6 +16,6 @@ in {
     services.dbus.packages = pkg;
     environment.systemPackages = pkg;
     systemd.packages = pkg;
-    systemd.targets.multi-user.wants = [ "switcheroo-control.service" ];
+    systemd.targets.multi-user.wants = ["switcheroo-control.service"];
   };
 }

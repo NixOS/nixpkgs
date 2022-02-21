@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  buildsystem,
 }:
-
 stdenv.mkDerivation rec {
   pname = "netsurf-${libname}";
   libname = "libnspsl";
@@ -12,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-08WCBct40xC/gcpVNHotCYcZzsrHBGvDZ5g7E4tFAgs=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ buildsystem ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [buildsystem];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.netsurf-browser.org/";
     description = "NetSurf Public Suffix List - Handling library";
     license = licenses.mit;
-    maintainers =  [ maintainers.samueldr maintainers.AndersonTorres ];
+    maintainers = [maintainers.samueldr maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

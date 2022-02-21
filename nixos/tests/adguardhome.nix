@@ -2,11 +2,11 @@ import ./make-test-python.nix {
   name = "adguardhome";
 
   nodes = {
-    minimalConf = { ... }: {
-      services.adguardhome = { enable = true; };
+    minimalConf = {...}: {
+      services.adguardhome = {enable = true;};
     };
 
-    declarativeConf = { ... }: {
+    declarativeConf = {...}: {
       services.adguardhome = {
         enable = true;
 
@@ -20,7 +20,7 @@ import ./make-test-python.nix {
       };
     };
 
-    mixedConf = { ... }: {
+    mixedConf = {...}: {
       services.adguardhome = {
         enable = true;
 

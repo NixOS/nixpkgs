@@ -1,13 +1,25 @@
 # This file contains the base package, some of which is compiled.
 # Runtime glue to optinal runtime dependencies is in 'default.nix'.
-{ fetchurl, lib, qt5
-
-# python deps
-, python, buildPythonPackage
-, alembic, beautifulsoup4, chardet, lxml, Mako, pyenchant
-, pyqt5_with_qtwebkit, pyxdg, sip_4, sqlalchemy, sqlalchemy-migrate
+{
+  fetchurl,
+  lib,
+  qt5
+  # python deps
+  ,
+  python,
+  buildPythonPackage,
+  alembic,
+  beautifulsoup4,
+  chardet,
+  lxml,
+  Mako,
+  pyenchant,
+  pyqt5_with_qtwebkit,
+  pyxdg,
+  sip_4,
+  sqlalchemy,
+  sqlalchemy-migrate,
 }:
-
 buildPythonPackage rec {
   pname = "openlp";
   version = "2.4.6";
@@ -31,7 +43,7 @@ buildPythonPackage rec {
   # See also https://discourse.nixos.org/t/qt-plugin-path-unset-in-test-phase/
 
   #checkInputs = [ mock nose ];
-  nativeBuildInputs = [ qt5.qttools ];
+  nativeBuildInputs = [qt5.qttools];
   propagatedBuildInputs = [
     alembic
     beautifulsoup4
@@ -74,7 +86,7 @@ buildPythonPackage rec {
     downloadPage = "https://openlp.org/#downloads";
     platforms = platforms.unix;
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.jorsn ];
+    maintainers = [maintainers.jorsn];
 
     longDescription = ''
       OpenLP is a free church presentation software.

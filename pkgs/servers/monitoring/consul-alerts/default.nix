@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "consul-alerts";
   version = "0.6.0";
@@ -22,6 +25,6 @@ buildGoPackage rec {
     # As per README
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.darwin;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [nh2];
   };
 }

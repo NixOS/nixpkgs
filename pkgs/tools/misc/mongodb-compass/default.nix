@@ -1,38 +1,36 @@
 {
-alsa-lib,
-at-spi2-atk,
-at-spi2-core,
-atk,
-cairo,
-cups,
-curl,
-dbus,
-dpkg,
-expat,
-fetchurl,
-fontconfig,
-freetype,
-gdk-pixbuf,
-glib,
-gtk3,
-lib,
-libdrm,
-libnotify,
-libsecret,
-libuuid,
-libxcb,
-libxkbcommon,
-mesa,
-nspr,
-nss,
-pango,
-stdenv,
-systemd,
-wrapGAppsHook,
-xorg,
-}:
-
-let
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dpkg,
+  expat,
+  fetchurl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libdrm,
+  libnotify,
+  libsecret,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  stdenv,
+  systemd,
+  wrapGAppsHook,
+  xorg,
+}: let
   version = "1.30.1";
 
   rpath = lib.makeLibraryPath [
@@ -79,57 +77,57 @@ let
   ];
 
   src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
         sha256 = "sha256-MwkYgkDZmzZsthJxSK6c+0us0D4cPuDfuV1XBbeTNXE=";
       }
-    else
-      throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
+    else throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
+in
+  stdenv.mkDerivation {
+    pname = "mongodb-compass";
+    inherit version;
 
-in stdenv.mkDerivation {
-  pname = "mongodb-compass";
-  inherit version;
+    inherit src;
 
-  inherit src;
+    buildInputs = [dpkg wrapGAppsHook gtk3];
+    dontUnpack = true;
 
-  buildInputs = [ dpkg wrapGAppsHook gtk3 ];
-  dontUnpack = true;
+    buildCommand = ''
+      IFS=$'\n'
 
-  buildCommand = ''
-    IFS=$'\n'
+      # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
+      dpkg --fsys-tarfile $src | tar --extract
 
-    # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
-    dpkg --fsys-tarfile $src | tar --extract
+      mkdir -p $out
+      mv usr/* $out
 
-    mkdir -p $out
-    mv usr/* $out
+      # cp -av $out/usr/* $out
+      rm -rf $out/share/lintian
 
-    # cp -av $out/usr/* $out
-    rm -rf $out/share/lintian
+      # The node_modules are bringing in non-linux files/dependencies
+      find $out -name "*.app" -exec rm -rf {} \; || true
+      find $out -name "*.dll" -delete
+      find $out -name "*.exe" -delete
 
-    # The node_modules are bringing in non-linux files/dependencies
-    find $out -name "*.app" -exec rm -rf {} \; || true
-    find $out -name "*.dll" -delete
-    find $out -name "*.exe" -delete
+      # Otherwise it looks "suspicious"
+      chmod -R g-w $out
 
-    # Otherwise it looks "suspicious"
-    chmod -R g-w $out
+      for file in `find $out -type f -perm /0111 -o -name \*.so\*`; do
+        echo "Manipulating file: $file"
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+        patchelf --set-rpath ${rpath}:$out/lib/mongodb-compass "$file" || true
+      done
 
-    for file in `find $out -type f -perm /0111 -o -name \*.so\*`; do
-      echo "Manipulating file: $file"
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath ${rpath}:$out/lib/mongodb-compass "$file" || true
-    done
+      wrapGAppsHook $out/bin/mongodb-compass
+    '';
 
-    wrapGAppsHook $out/bin/mongodb-compass
-  '';
-
-  meta = with lib; {
-    description = "The GUI for MongoDB";
-    maintainers = with maintainers; [ bryanasdev000 ];
-    homepage = "https://www.mongodb.com/products/compass";
-    license = licenses.sspl;
-    platforms = [ "x86_64-linux" ];
-  };
-}
+    meta = with lib; {
+      description = "The GUI for MongoDB";
+      maintainers = with maintainers; [bryanasdev000];
+      homepage = "https://www.mongodb.com/products/compass";
+      license = licenses.sspl;
+      platforms = ["x86_64-linux"];
+    };
+  }

@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, gtk2
-, librep
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gtk2,
+  librep,
+  pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rep-gtk";
   version = "0.90.8.3";
@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
     homepage = "http://sawfish.tuxfamily.org";
     description = "GTK bindings for librep";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.unix;
   };
 }
 # TODO: investigate fetchFromGithub
+

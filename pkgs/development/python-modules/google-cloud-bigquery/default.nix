@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, freezegun
-, google-cloud-core
-, google-cloud-datacatalog
-, google-cloud-storage
-, google-cloud-testutils
-, google-resumable-media
-, ipython
-, mock
-, pandas
-, proto-plus
-, psutil
-, pyarrow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  freezegun,
+  google-cloud-core,
+  google-cloud-datacatalog,
+  google-cloud-storage,
+  google-cloud-testutils,
+  google-resumable-media,
+  ipython,
+  mock,
+  pandas,
+  proto-plus,
+  psutil,
+  pyarrow,
 }:
-
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
   version = "2.34.0";
@@ -81,6 +81,6 @@ buildPythonPackage rec {
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [SuperSandro2000];
   };
 }

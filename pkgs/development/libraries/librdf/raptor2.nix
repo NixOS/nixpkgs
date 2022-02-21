@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libxml2, libxslt }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  libxslt,
+}:
 stdenv.mkDerivation rec {
   pname = "raptor2";
   version = "2.0.15";
@@ -17,15 +22,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libxml2 libxslt ];
+  buildInputs = [libxml2 libxslt];
 
   postInstall = "rm -rvf $out/share/gtk-doc";
 
   meta = {
     description = "The RDF Parser Toolkit";
     homepage = "https://librdf.org/raptor";
-    license = with lib.licenses; [ lgpl21 asl20 ];
-    maintainers = with lib.maintainers; [ marcweber ];
+    license = with lib.licenses; [lgpl21 asl20];
+    maintainers = with lib.maintainers; [marcweber];
     platforms = lib.platforms.unix;
   };
 }

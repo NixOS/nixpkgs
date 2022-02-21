@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, instead, qmake4Hook, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  instead,
+  qmake4Hook,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "instead-launcher";
 
@@ -12,21 +18,21 @@ stdenv.mkDerivation rec {
     sha256 = "1svy8i8anspway01pnz2cy69aad03anvkq04wrdfv1h9c34gbvb9";
   };
 
-  patches = [ ./path.patch ];
+  patches = [./path.patch];
 
   postPatch = ''
     substituteInPlace platform.cpp --subst-var-by instead ${instead}
   '';
 
-  nativeBuildInputs = [ qmake4Hook ];
+  nativeBuildInputs = [qmake4Hook];
 
-  buildInputs = [ zlib ];
+  buildInputs = [zlib];
 
   meta = with lib; {
     homepage = "https://instead.syscall.ru/wiki/en/instead-launcher";
     description = "Install and play games from INSTEAD repository";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

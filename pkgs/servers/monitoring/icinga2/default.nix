@@ -1,12 +1,34 @@
-{ stdenv, runCommand, lib, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd
-, boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib, tzdata
-# Databases
-, withMysql ? true, withPostgresql ? false
-# Features
-, withChecker ? true, withCompat ? false, withLivestatus ? false
-, withNotification ? true, withPerfdata ? true, withIcingadb ? true
-, nameSuffix ? "" }:
-
+{
+  stdenv,
+  runCommand,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  flex,
+  bison,
+  systemd,
+  boost,
+  openssl,
+  patchelf,
+  mariadb-connector-c,
+  postgresql,
+  zlib,
+  tzdata
+  # Databases
+  ,
+  withMysql ? true,
+  withPostgresql ? false
+  # Features
+  ,
+  withChecker ? true,
+  withCompat ? false,
+  withLivestatus ? false,
+  withNotification ? true,
+  withPerfdata ? true,
+  withIcingadb ? true,
+  nameSuffix ? "",
+}:
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
   version = "2.13.2";
@@ -25,7 +47,11 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = let
-    mkFeatureFlag = label: value: "-DICINGA2_WITH_${label}=${if value then "ON" else "OFF"}";
+    mkFeatureFlag = label: value: "-DICINGA2_WITH_${label}=${
+      if value
+      then "ON"
+      else "OFF"
+    }";
   in [
     # Paths
     "-DCMAKE_INSTALL_SYSCONFDIR=etc"
@@ -52,15 +78,16 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEMD=ON"
   ];
 
-  outputs = [ "out" "doc" ];
+  outputs = ["out" "doc"];
 
-  buildInputs = [ boost openssl systemd ]
+  buildInputs =
+    [boost openssl systemd]
     ++ lib.optional withPostgresql postgresql;
 
-  nativeBuildInputs = [ cmake flex bison patchelf ];
+  nativeBuildInputs = [cmake flex bison patchelf];
 
   doCheck = true;
-  checkInputs = [ tzdata ]; # legacytimeperiod/dst needs this
+  checkInputs = [tzdata]; # legacytimeperiod/dst needs this
 
   postFixup = ''
     rm -r $out/etc/logrotate.d $out/etc/sysconfig $out/lib/icinga2/prepare-dirs
@@ -72,14 +99,16 @@ stdenv.mkDerivation rec {
     sed -i 's/sbin/bin/g' $out/lib/icinga2/safe-reload
     rm $out/sbin
 
-    ${lib.optionalString withMysql ''
-      # Add dependencies of the MySQL shim to the shared library
-      patchelf --add-needed ${zlib.out}/lib/libz.so $(readlink -f $out/lib/icinga2/libmysql_shim.so)
+    ${
+      lib.optionalString withMysql ''
+        # Add dependencies of the MySQL shim to the shared library
+        patchelf --add-needed ${zlib.out}/lib/libz.so $(readlink -f $out/lib/icinga2/libmysql_shim.so)
 
-      # Make Icinga find the MySQL shim
-      icinga2Bin=$out/lib/icinga2/sbin/icinga2
-      patchelf --set-rpath $out/lib/icinga2:$(patchelf --print-rpath $icinga2Bin) $icinga2Bin
-    ''}
+        # Make Icinga find the MySQL shim
+        icinga2Bin=$out/lib/icinga2/sbin/icinga2
+        patchelf --set-rpath $out/lib/icinga2:$(patchelf --print-rpath $icinga2Bin) $icinga2Bin
+      ''
+    }
   '';
 
   vim = runCommand "vim-icinga2-${version}" {} ''
@@ -92,6 +121,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.icinga.com";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = with lib.maintainers; [das_j];
   };
 }

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "kubecolor";
   version = "0.0.20";
@@ -18,6 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/hidetatz/kubecolor";
     changelog = "https://github.com/hidetatz/kubecolor/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = [maintainers.ivankovnatsky];
   };
 }

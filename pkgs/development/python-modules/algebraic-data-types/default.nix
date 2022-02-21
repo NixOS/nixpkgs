@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hypothesis
-, mypy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hypothesis,
+  mypy,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "algebraic-data-types";
   version = "0.2.1";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Algebraic data types for Python";
     homepage = "https://github.com/jspahrsummers/adt";
     license = licenses.mit;
-    maintainers = with maintainers; [ uri-canva ];
+    maintainers = with maintainers; [uri-canva];
   };
 }

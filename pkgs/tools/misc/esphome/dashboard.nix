@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "esphome-dashboard";
   version = "20220209.0";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "ESPHome dashboard";
     homepage = "https://esphome.io/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ hexa ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [hexa];
   };
 }

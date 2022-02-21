@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "vo-aacenc";
   version = "0.1.3";
@@ -11,9 +14,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "VisualOn AAC encoder library";
-    homepage    = "https://sourceforge.net/projects/opencore-amr/";
-    license     = licenses.asl20;
-    maintainers = [ maintainers.baloo ];
-    platforms   = platforms.all;
+    homepage = "https://sourceforge.net/projects/opencore-amr/";
+    license = licenses.asl20;
+    maintainers = [maintainers.baloo];
+    platforms = platforms.all;
   };
 }

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, openssl, perl, zlib, jam }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  perl,
+  zlib,
+  jam,
+}:
 stdenv.mkDerivation rec {
   version = "3.2.0";
   pname = "archiveopteryx";
@@ -8,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0i0zg8di8nbh96qnyyr156ikwcsq1w9b2291bazm5whb351flmqx";
   };
 
-  nativeBuildInputs = [ jam ];
-  buildInputs = [ openssl perl zlib ];
+  nativeBuildInputs = [jam];
+  buildInputs = [openssl perl zlib];
 
   preConfigure = ''
     export INSTALLROOT=installroot
@@ -37,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "http://archiveopteryx.org/";
     description = "An advanced PostgreSQL-based IMAP/POP server";
     license = licenses.postgresql;
-    maintainers = [ maintainers.phunehehe ];
+    maintainers = [maintainers.phunehehe];
     platforms = platforms.linux;
   };
 }

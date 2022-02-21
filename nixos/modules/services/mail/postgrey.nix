@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib; let
-
   cfg = config.services.postgrey;
 
   natural = with types; addCheck int (x: x >= 0);
@@ -40,17 +43,21 @@ with lib; let
       };
     };
   };
-
 in {
   imports = [
-    (mkMergedOptionModule [ [ "services" "postgrey" "inetAddr" ] [ "services" "postgrey" "inetPort" ] ] [ "services" "postgrey" "socket" ] (config: let
+    (mkMergedOptionModule [["services" "postgrey" "inetAddr"] ["services" "postgrey" "inetPort"]] ["services" "postgrey" "socket"] (
+      config: let
         value = p: getAttrFromPath p config;
-        inetAddr = [ "services" "postgrey" "inetAddr" ];
-        inetPort = [ "services" "postgrey" "inetPort" ];
+        inetAddr = ["services" "postgrey" "inetAddr"];
+        inetPort = ["services" "postgrey" "inetPort"];
       in
         if value inetAddr == null
-        then { path = "/run/postgrey.sock"; }
-        else { addr = value inetAddr; port = value inetPort; }
+        then {path = "/run/postgrey.sock";}
+        else
+          {
+            addr = value inetAddr;
+            port = value inetPort;
+          }
     ))
   ];
 
@@ -143,8 +150,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-
-    environment.systemPackages = [ pkgs.postgrey ];
+    environment.systemPackages = [pkgs.postgrey];
 
     users = {
       users = {
@@ -162,14 +168,14 @@ in {
     };
 
     systemd.services.postgrey = let
-      bind-flag = if cfg.socket ? path then
-        "--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}"
-      else
-        ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';
+      bind-flag =
+        if cfg.socket ? path
+        then "--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}"
+        else ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';
     in {
       description = "Postfix Greylisting Service";
-      wantedBy = [ "multi-user.target" ];
-      before = [ "postfix.service" ];
+      wantedBy = ["multi-user.target"];
+      before = ["postfix.service"];
       preStart = ''
         mkdir -p /var/postgrey
         chown postgrey:postgrey /var/postgrey
@@ -177,29 +183,35 @@ in {
       '';
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.postgrey}/bin/postgrey \
-          ${bind-flag} \
-          --group=postgrey --user=postgrey \
-          --dbdir=/var/postgrey \
-          --delay=${toString cfg.delay} \
-          --max-age=${toString cfg.maxAge} \
-          --retry-window=${toString cfg.retryWindow} \
-          ${if cfg.lookupBySubnet then "--lookup-by-subnet" else "--lookup-by-host"} \
-          --ipv4cidr=${toString cfg.IPv4CIDR} --ipv6cidr=${toString cfg.IPv6CIDR} \
-          ${optionalString cfg.privacy "--privacy"} \
-          --auto-whitelist-clients=${toString (if cfg.autoWhitelist == null then 0 else cfg.autoWhitelist)} \
-          --greylist-action=${cfg.greylistAction} \
-          --greylist-text="${cfg.greylistText}" \
-          --x-greylist-header="${cfg.greylistHeader}" \
-          ${concatMapStringsSep " " (x: "--whitelist-clients=" + x) cfg.whitelistClients} \
-          ${concatMapStringsSep " " (x: "--whitelist-recipients=" + x) cfg.whitelistRecipients}
+        ExecStart = ''          ${pkgs.postgrey}/bin/postgrey \
+                    ${bind-flag} \
+                    --group=postgrey --user=postgrey \
+                    --dbdir=/var/postgrey \
+                    --delay=${toString cfg.delay} \
+                    --max-age=${toString cfg.maxAge} \
+                    --retry-window=${toString cfg.retryWindow} \
+                    ${
+            if cfg.lookupBySubnet
+            then "--lookup-by-subnet"
+            else "--lookup-by-host"
+          } \
+                    --ipv4cidr=${toString cfg.IPv4CIDR} --ipv6cidr=${toString cfg.IPv6CIDR} \
+                    ${optionalString cfg.privacy "--privacy"} \
+                    --auto-whitelist-clients=${
+            toString (if cfg.autoWhitelist == null
+            then 0
+            else cfg.autoWhitelist)
+          } \
+                    --greylist-action=${cfg.greylistAction} \
+                    --greylist-text="${cfg.greylistText}" \
+                    --x-greylist-header="${cfg.greylistHeader}" \
+                    ${concatMapStringsSep " " (x: "--whitelist-clients=" + x) cfg.whitelistClients} \
+                    ${concatMapStringsSep " " (x: "--whitelist-recipients=" + x) cfg.whitelistRecipients}
         '';
         Restart = "always";
         RestartSec = 5;
         TimeoutSec = 10;
       };
     };
-
   };
-
 }

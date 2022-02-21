@@ -1,31 +1,57 @@
-{ pname, version, src, branchName
-, stdenv, lib, wrapQtAppsHook
-, cmake, pkg-config
-, libpulseaudio, libjack2, alsa-lib, sndio
-, vulkan-loader, vulkan-headers
-, qtbase, qtwebengine, qttools
-, nlohmann_json, rapidjson
-, zlib, zstd, libzip, lz4
-, glslang
-, boost173
-, catch2
-, fmt_8
-, SDL2
-, udev
-, libusb1
-, ffmpeg
+{
+  pname,
+  version,
+  src,
+  branchName,
+  stdenv,
+  lib,
+  wrapQtAppsHook,
+  cmake,
+  pkg-config,
+  libpulseaudio,
+  libjack2,
+  alsa-lib,
+  sndio,
+  vulkan-loader,
+  vulkan-headers,
+  qtbase,
+  qtwebengine,
+  qttools,
+  nlohmann_json,
+  rapidjson,
+  zlib,
+  zstd,
+  libzip,
+  lz4,
+  glslang,
+  boost173,
+  catch2,
+  fmt_8,
+  SDL2,
+  udev,
+  libusb1,
+  ffmpeg,
 }:
-
 stdenv.mkDerivation rec {
   inherit pname version src;
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [cmake pkg-config wrapQtAppsHook];
   buildInputs = [
-    libpulseaudio libjack2 alsa-lib sndio
-    vulkan-loader vulkan-headers
-    qtbase qtwebengine qttools
-    nlohmann_json rapidjson
-    zlib zstd libzip lz4
+    libpulseaudio
+    libjack2
+    alsa-lib
+    sndio
+    vulkan-loader
+    vulkan-headers
+    qtbase
+    qtwebengine
+    qttools
+    nlohmann_json
+    rapidjson
+    zlib
+    zstd
+    libzip
+    lz4
     glslang
     boost173
     catch2
@@ -77,9 +103,10 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       gpl2Plus
       # Icons
-      cc-by-nd-30 cc0
+      cc-by-nd-30
+      cc0
     ];
-    maintainers = with maintainers; [ ivar joshuafern sbruder ];
+    maintainers = with maintainers; [ivar joshuafern sbruder];
     platforms = platforms.linux;
     broken = stdenv.isAarch64; # Currently aarch64 is not supported.
   };

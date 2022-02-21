@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, telepathy-glib, farstream, dbus-glib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  telepathy-glib,
+  farstream,
+  dbus-glib,
+}:
 stdenv.mkDerivation rec {
   name = "${pname}-0.6.2";
   pname = "telepathy-farstream";
@@ -9,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "02ky12bb92prr5f6xmvmfq4yz2lj33li6nj4829a98hk5pr9k83g";
   };
 
-  propagatedBuildInputs = [ dbus-glib telepathy-glib farstream ];
-  nativeBuildInputs = [ pkg-config ];
+  propagatedBuildInputs = [dbus-glib telepathy-glib farstream];
+  nativeBuildInputs = [pkg-config];
 
   meta = with lib; {
     description = "GObject-based C library that uses Telepathy GLib, Farstream and GStreamer to handle the media streaming part of channels of type Call";

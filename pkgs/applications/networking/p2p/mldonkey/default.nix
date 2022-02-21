@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, ocamlPackages, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocamlPackages,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "mldonkey";
   version = "3.1.7-2";
@@ -14,13 +19,15 @@ stdenv.mkDerivation rec {
       '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
   '';
 
-  buildInputs = (with ocamlPackages; [
-    ocaml
-    camlp4
-    num
-  ]) ++ [
-    zlib
-  ];
+  buildInputs =
+    (with ocamlPackages; [
+      ocaml
+      camlp4
+      num
+    ])
+    ++ [
+      zlib
+    ];
 
   meta = {
     description = "Client for many p2p networks, with multiple frontends";

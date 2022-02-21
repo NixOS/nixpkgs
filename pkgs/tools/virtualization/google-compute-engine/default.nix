@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, bash
-, bashInteractive
-, systemd
-, util-linux
-, boto
-, setuptools
-, distro
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  bash,
+  bashInteractive,
+  systemd,
+  util-linux,
+  boto,
+  setuptools,
+  distro,
 }:
-
 buildPythonPackage rec {
   pname = "google-compute-engine";
   version = "20190124";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
     sha256 = "08cy0jd463kng6hwbd3nfldsp4dpd2lknlvdm88cq795wy0kh4wp";
   };
 
-  buildInputs = [ bash ];
-  propagatedBuildInputs = [ boto setuptools distro ];
+  buildInputs = [bash];
+  propagatedBuildInputs = [boto setuptools distro];
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
@@ -52,13 +52,13 @@ buildPythonPackage rec {
   '';
 
   doCheck = false;
-  pythonImportsCheck = [ "google_compute_engine" ];
+  pythonImportsCheck = ["google_compute_engine"];
 
   meta = with lib; {
     description = "Google Compute Engine tools and services";
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [zimbatm];
     platforms = platforms.linux;
   };
 }

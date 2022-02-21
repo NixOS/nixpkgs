@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, cppo, lwt, react }:
-
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  cppo,
+  lwt,
+  react,
+}:
 buildDunePackage {
   pname = "lwt_react";
   version = "1.1.5";
@@ -13,9 +19,9 @@ buildDunePackage {
     sha256 = "sha256:1jbjz2rsz3j56k8vh5qlmm87hhkr250bs2m3dvpy9vsri8rkzj9z";
   };
 
-  nativeBuildInputs = [ cppo ];
+  nativeBuildInputs = [cppo];
 
-  propagatedBuildInputs = [ lwt react ];
+  propagatedBuildInputs = [lwt react];
 
   meta = {
     description = "Helpers for using React with Lwt";

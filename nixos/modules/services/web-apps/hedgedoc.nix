@@ -1,29 +1,31 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.hedgedoc;
 
   # 21.03 will not be an official release - it was instead 21.05.  This
   # versionAtLeast statement remains set to 21.03 for backwards compatibility.
   # See https://github.com/NixOS/nixpkgs/pull/108899 and
   # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-  name = if versionAtLeast config.system.stateVersion "21.03"
+  name =
+    if versionAtLeast config.system.stateVersion "21.03"
     then "hedgedoc"
     else "codimd";
 
   prettyJSON = conf:
     pkgs.runCommandLocal "hedgedoc-config.json" {
-      nativeBuildInputs = [ pkgs.jq ];
+      nativeBuildInputs = [pkgs.jq];
     } ''
       echo '${builtins.toJSON conf}' | jq \
         '{production:del(.[]|nulls)|del(.[][]?|nulls)}' > $out
     '';
-in
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
+    (mkRenamedOptionModule ["services" "codimd"] ["services" "hedgedoc"])
   ];
 
   options.services.hedgedoc = {
@@ -89,7 +91,7 @@ in
       allowOrigin = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "localhost" "hedgedoc.org" ];
+        example = ["localhost" "hedgedoc.org"];
         description = ''
           List of domains to whitelist.
         '';
@@ -198,7 +200,7 @@ in
         '';
       };
       defaultPermission = mkOption {
-        type = types.enum [ "freely" "editable" "limited" "locked" "private" ];
+        type = types.enum ["freely" "editable" "limited" "locked" "private"];
         default = "editable";
         description = ''
           Default permissions for notes.
@@ -236,7 +238,7 @@ in
           Note: This option overrides <option>db</option>.
         '';
       };
-      sslKeyPath= mkOption {
+      sslKeyPath = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/hedgedoc/hedgedoc.key";
@@ -255,7 +257,7 @@ in
       sslCAPath = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "/var/lib/hedgedoc/ca.crt" ];
+        example = ["/var/lib/hedgedoc/ca.crt"];
         description = ''
           SSL ca chain. Needed when <option>useSSL</option> is enabled.
         '';
@@ -410,7 +412,7 @@ in
         '';
       };
       imageUploadType = mkOption {
-        type = types.enum [ "imgur" "s3" "minio" "filesystem" ];
+        type = types.enum ["imgur" "s3" "minio" "filesystem"];
         default = "filesystem";
         description = ''
           Specify where to upload images.
@@ -703,7 +705,7 @@ in
               '';
             };
             scope = mkOption {
-              type = types.enum [ "api" "read_user" ];
+              type = types.enum ["api" "read_user"];
               default = "api";
               description = ''
                 GitLab API requested scope.
@@ -832,7 +834,7 @@ in
             };
             searchAttributes = mkOption {
               type = types.listOf types.str;
-              example = [ "displayName" "mail" ];
+              example = ["displayName" "mail"];
               description = ''
                 LDAP attributes to search with.
               '';
@@ -907,7 +909,7 @@ in
             externalGroups = mkOption {
               type = types.listOf types.str;
               default = [];
-              example = [ "Temporary-staff" "External-users" ];
+              example = ["Temporary-staff" "External-users"];
               description = ''
                 Excluded group names.
               '';
@@ -915,7 +917,7 @@ in
             requiredGroups = mkOption {
               type = types.listOf types.str;
               default = [];
-              example = [ "Hedgedoc-Users" ];
+              example = ["Hedgedoc-Users"];
               description = ''
                 Required group names.
               '';
@@ -997,10 +999,15 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.configuration.db == {} -> (
-          cfg.configuration.dbURL != "" && cfg.configuration.dbURL != null
-        );
-        message = "Database configuration for HedgeDoc missing."; }
+      {
+        assertion =
+          cfg.configuration.db
+          == {}
+          -> (
+            cfg.configuration.dbURL != "" && cfg.configuration.dbURL != null
+          );
+        message = "Database configuration for HedgeDoc missing.";
+      }
     ];
     users.groups.${name} = {};
     users.users.${name} = {
@@ -1014,8 +1021,8 @@ in
 
     systemd.services.hedgedoc = {
       description = "HedgeDoc Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"];
       preStart = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o ${cfg.workDir}/config.json \
@@ -1024,7 +1031,7 @@ in
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
         ExecStart = "${cfg.package}/bin/hedgedoc";
-        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        EnvironmentFile = mkIf (cfg.environmentFile != null) [cfg.environmentFile];
         Environment = [
           "CMD_CONFIG_FILE=${cfg.workDir}/config.json"
           "NODE_ENV=production"

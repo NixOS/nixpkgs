@@ -1,5 +1,8 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-let
+import ./make-test-python.nix ({
+  pkgs,
+  lib,
+  ...
+}: let
   client_base = {
     containers.test1 = {
       autoStart = true;
@@ -10,22 +13,22 @@ let
 
     # prevent make-test-python.nix to change IP
     networking.interfaces = {
-      eth1.ipv4.addresses = lib.mkOverride 0 [ ];
+      eth1.ipv4.addresses = lib.mkOverride 0 [];
     };
   };
 in {
   name = "containers-reloadable";
   meta = {
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = with lib.maintainers; [danbst];
   };
 
   nodes = {
-    client = { ... }: {
-      imports = [ client_base ];
+    client = {...}: {
+      imports = [client_base];
     };
 
-    client_c1 = { lib, ... }: {
-      imports = [ client_base ];
+    client_c1 = {lib, ...}: {
+      imports = [client_base];
 
       containers.test1.config = {
         environment.etc.check.text = lib.mkForce "client_c1";
@@ -33,8 +36,8 @@ in {
         services.httpd.adminAddr = "nixos@example.com";
       };
     };
-    client_c2 = { lib, ... }: {
-      imports = [ client_base ];
+    client_c2 = {lib, ...}: {
+      imports = [client_base];
 
       containers.test1.config = {
         environment.etc.check.text = lib.mkForce "client_c2";
@@ -67,5 +70,4 @@ in {
         )
         client.fail("systemctl status httpd -M test1 >&2")
   '';
-
 })

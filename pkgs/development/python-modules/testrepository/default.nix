@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, testtools
-, testresources
-, pbr
-, subunit
-, fixtures
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  testtools,
+  testresources,
+  pbr,
+  subunit,
+  fixtures,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "testrepository";
   version = "0.0.20";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "1ssqb07c277010i6gzzkbdd46gd9mrj0bi0i8vn560n2k2y4j93m";
   };
 
-  checkInputs = [ testresources ];
-  buildInputs = [ pbr ];
-  propagatedBuildInputs = [ fixtures subunit testtools ];
+  checkInputs = [testresources];
+  buildInputs = [pbr];
+  propagatedBuildInputs = [fixtures subunit testtools];
 
   checkPhase = ''
     ${python.interpreter} ./testr
@@ -31,5 +31,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/testrepository";
     license = licenses.bsd2;
   };
-
 }

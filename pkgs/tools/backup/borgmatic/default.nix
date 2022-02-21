@@ -1,5 +1,10 @@
-{ borgbackup, coreutils, lib, python3Packages, systemd }:
-
+{
+  borgbackup,
+  coreutils,
+  lib,
+  python3Packages,
+  systemd,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
   version = "1.5.18";
@@ -9,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-dX1U1zza8zMhDiTLE+DgtN6RLRciLks4NDOukpKH/po=";
   };
 
-  checkInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
+  checkInputs = with python3Packages; [flexmock pytestCheckHook pytest-cov];
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
@@ -41,6 +46,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://torsion.org/borgmatic/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ imlonghao ];
+    maintainers = with maintainers; [imlonghao];
   };
 }

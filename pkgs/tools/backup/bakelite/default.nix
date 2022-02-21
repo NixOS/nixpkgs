@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "bakelite";
   version = "unstable-2021-10-19";
@@ -11,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "xoGor8KMG1vU6hP6v6gHcADKjVpaClvkivxkcPUJtss=";
   };
 
-  hardeningEnable = [ "pie" ];
-  buildFlags = [ "CFLAGS=-D_GNU_SOURCE" ];
+  hardeningEnable = ["pie"];
+  buildFlags = ["CFLAGS=-D_GNU_SOURCE"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Incremental backup with strong cryptographic confidentality";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mvs ];
+    maintainers = with maintainers; [mvs];
   };
 }

@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libjpeg
-, libvpx
-, openh264
-, withPulse ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-, libvorbis
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libjpeg,
+  libvpx,
+  openh264,
+  withPulse ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  libvorbis,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libopenglrecorder";
   version = "unstable-2020-08-13";
@@ -27,20 +27,22 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libjpeg
-    libvpx
-    openh264
-  ] ++ lib.optionals withPulse [
-    libpulseaudio
-    libvorbis
-  ];
+  buildInputs =
+    [
+      libjpeg
+      libvpx
+      openh264
+    ]
+    ++ lib.optionals withPulse [
+      libpulseaudio
+      libvorbis
+    ];
 
   meta = with lib; {
     description = "Library allowing Optional async readback OpenGL frame buffer with optional audio recording";
     homepage = "https://github.com/Benau/libopenglrecorder";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [OPNA2608];
     platforms = with platforms; windows ++ linux;
   };
 }

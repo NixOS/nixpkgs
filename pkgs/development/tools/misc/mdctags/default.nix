@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage {
   pname = "mdctags";
   version = "unstable-2020-06-11"; # v0.1.0 does not build with our rust version
@@ -17,6 +20,6 @@ rustPlatform.buildRustPackage {
     description = "tags for markdown file";
     homepage = "https://github.com/wsdjeg/mdctags.rs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pacien ];
+    maintainers = with lib.maintainers; [pacien];
   };
 }

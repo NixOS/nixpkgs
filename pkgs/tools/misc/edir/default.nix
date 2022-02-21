@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-
+{
+  lib,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "edir";
   version = "2.7.3";
@@ -13,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     description = "Program to rename and remove files and directories using your editor";
     homepage = "https://github.com/bulletmark/edir";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ guyonvarch ];
+    maintainers = with maintainers; [guyonvarch];
     platforms = platforms.all;
   };
 }

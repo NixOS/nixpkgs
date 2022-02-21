@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, cmake, makeWrapper }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "OttoMatic";
   version = "4.0.0";
@@ -38,7 +44,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       cc-by-sa-40
     ];
-    maintainers = with maintainers; [ lux ];
+    maintainers = with maintainers; [lux];
     platforms = platforms.linux;
   };
 }

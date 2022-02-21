@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "libeb";
   version = "4.4.3";
@@ -8,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0psbdzirazfnn02hp3gsx7xxss9f1brv4ywp6a15ihvggjki1rxb";
   };
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [perl];
+  buildInputs = [zlib];
 
   meta = with lib; {
     description = "C library for accessing Japanese CD-ROM books";
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
       the EB, EBG, EBXA, EBXA-C, S-EBXA and EPWING formats.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
     platforms = with platforms; unix;
   };
 }

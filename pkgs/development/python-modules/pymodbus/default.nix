@@ -1,21 +1,21 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, prompt-toolkit
-, pygments
-, pyserial
-, pyserial-asyncio
-, pytestCheckHook
-, redis
-, sqlalchemy
-, tornado
-, twisted
+{
+  lib,
+  aiohttp,
+  asynctest,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mock,
+  prompt-toolkit,
+  pygments,
+  pyserial,
+  pyserial-asyncio,
+  pytestCheckHook,
+  redis,
+  sqlalchemy,
+  tornado,
+  twisted,
 }:
-
 buildPythonPackage rec {
   pname = "pymodbus";
   version = "2.5.3";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     twisted
   ];
 
-  pythonImportsCheck = [ "pymodbus" ];
+  pythonImportsCheck = ["pymodbus"];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
       lightweight project is needed.
     '';
     homepage = "https://github.com/riptideio/pymodbus";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [bsd3];
+    maintainers = with maintainers; [fab];
   };
 }

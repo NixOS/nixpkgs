@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "openttd-nml";
   version = "0.6.1";
@@ -15,8 +19,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Compiler for OpenTTD NML files";
-    homepage    = "http://openttdcoop.org/";
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ ToxicFrog ];
+    homepage = "http://openttdcoop.org/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ToxicFrog];
   };
 }

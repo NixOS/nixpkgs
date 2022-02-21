@@ -1,14 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, freeglut
-, libGL
-, libGLU
-, libX11
-, libXext
-, libXi
-, libXmu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  freeglut,
+  libGL,
+  libGLU,
+  libX11,
+  libXext,
+  libXi,
+  libXmu,
 }:
-
 stdenv.mkDerivation rec {
   pname = "glui";
   version = "2.37";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qg2y8w95s03zay1qsqs8pqxxlg6l9kwm7rrs1qmx0h22sxb360i";
   };
 
-  buildInputs = [ freeglut libGLU libGL libXmu libXext libX11 libXi ];
+  buildInputs = [freeglut libGLU libGL libXmu libXext libX11 libXi];
 
   installPhase = ''
     mkdir -p "$out"/{bin,lib,share/glui/doc,include}
@@ -33,8 +34,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A user interface library using OpenGL";
-    license = licenses.zlib ;
-    maintainers = [ maintainers.raskin ];
+    license = licenses.zlib;
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
   };
 }

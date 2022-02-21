@@ -1,13 +1,13 @@
 import ./make-test-python.nix {
   name = "dovecot";
 
-  machine = { pkgs, ... }: {
-    imports = [ common/user-account.nix ];
+  machine = {pkgs, ...}: {
+    imports = [common/user-account.nix];
     services.postfix.enable = true;
     services.dovecot2 = {
       enable = true;
-      protocols = [ "imap" "pop3" ];
-      modules = [ pkgs.dovecot_pigeonhole ];
+      protocols = ["imap" "pop3"];
+      modules = [pkgs.dovecot_pigeonhole];
       mailUser = "vmail";
       mailGroup = "vmail";
     };
@@ -66,8 +66,7 @@ import ./make-test-python.nix {
         finally:
           pop.quit()
       '';
-
-    in [ sendTestMail sendTestMailViaDeliveryAgent testImap testPop ];
+    in [sendTestMail sendTestMailViaDeliveryAgent testImap testPop];
   };
 
   testScript = ''

@@ -1,27 +1,25 @@
-/* This file composes a single bootstrapping stage of the Nix Packages
-   collection. That is, it imports the functions that build the various
-   packages, and calls them with appropriate arguments. The result is a set of
-   all the packages in the Nix Packages collection for some particular platform
-   for some particular stage.
-
-   Default arguments are only provided for bootstrapping
-   arguments. Normal users should not import this directly but instead
-   import `pkgs/default.nix` or `default.nix`. */
-
-
-{ ## Misc parameters kept the same for all stages
+/*
+ This file composes a single bootstrapping stage of the Nix Packages
+ collection. That is, it imports the functions that build the various
+ packages, and calls them with appropriate arguments. The result is a set of
+ all the packages in the Nix Packages collection for some particular platform
+ for some particular stage.
+ 
+ Default arguments are only provided for bootstrapping
+ arguments. Normal users should not import this directly but instead
+ import `pkgs/default.nix` or `default.nix`.
+ */
+{
+  ## Misc parameters kept the same for all stages
   ##
-
   # Utility functions, could just import but passing in for efficiency
-  lib
-
-, # Use to reevaluate Nixpkgs
+  lib,
+  # Use to reevaluate Nixpkgs
   nixpkgsFun
-
   ## Other parameters
   ##
-
-, # Either null or an object in the form:
+  ,
+  # Either null or an object in the form:
   #
   #   {
   #     pkgsBuildBuild = ...;
@@ -37,40 +35,36 @@
   # they are instead defined internally as the current stage. This allows us to
   # avoid expensive splicing. `pkgsHostTarget` is skipped because it is always
   # defined as the current stage.
-  adjacentPackages
-
-, # The standard environment to use for building packages.
-  stdenv
-
-, # This is used because stdenv replacement and the stdenvCross do benefit from
+  adjacentPackages,
+  # The standard environment to use for building packages.
+  stdenv,
+  # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
   # bootstrapping stdenvs.
-  allowCustomOverrides
-
-, # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
+  allowCustomOverrides,
+  # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for files
   # in standard system directories (/usr/include, etc.)
-  noSysDirs ? stdenv.buildPlatform.system != "x86_64-freebsd"
-           && stdenv.buildPlatform.system != "i686-freebsd"
-           && stdenv.buildPlatform.system != "x86_64-solaris"
-           && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu"
-
-, # The configuration attribute set
-  config
-
-, # A list of overlays (Additional `self: super: { .. }` customization
+  noSysDirs ?
+    stdenv.buildPlatform.system
+    != "x86_64-freebsd"
+    && stdenv.buildPlatform.system != "i686-freebsd"
+    && stdenv.buildPlatform.system != "x86_64-solaris"
+    && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu",
+  # The configuration attribute set
+  config,
+  # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
-  overlays
-} @args:
-
-let
-  stdenvAdapters = self: super:
-    let
-      res = import ../stdenv/adapters.nix {
-        inherit lib config;
-        pkgs = self;
-      };
-    in res // {
+  overlays,
+} @ args: let
+  stdenvAdapters = self: super: let
+    res = import ../stdenv/adapters.nix {
+      inherit lib config;
+      pkgs = self;
+    };
+  in
+    res
+    // {
       stdenvAdapters = res;
     };
 
@@ -84,8 +78,10 @@ let
 
   stdenvBootstappingAndPlatforms = self: super: let
     withFallback = thisPkgs:
-      (if adjacentPackages == null then self else thisPkgs)
-      // { recurseForDerivations = false; };
+      (if adjacentPackages == null
+      then self
+      else thisPkgs)
+      // {recurseForDerivations = false;};
   in {
     # Here are package sets of from related stages. They are all in the form
     # `pkgs{theirHost}{theirTarget}`. For example, `pkgsBuildHost` means their
@@ -98,7 +94,7 @@ let
     pkgsBuildHost = withFallback adjacentPackages.pkgsBuildHost;
     pkgsBuildTarget = withFallback adjacentPackages.pkgsBuildTarget;
     pkgsHostHost = withFallback adjacentPackages.pkgsHostHost;
-    pkgsHostTarget = self // { recurseForDerivations = false; }; # always `self`
+    pkgsHostTarget = self // {recurseForDerivations = false;}; # always `self`
     pkgsTargetTarget = withFallback adjacentPackages.pkgsTargetTarget;
 
     # Older names for package sets. Use these when only the host platform of the
@@ -122,11 +118,14 @@ let
 
   splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
 
-  allPackages = self: super:
-    let res = import ./all-packages.nix
-      { inherit lib noSysDirs config overlays; }
-      res self super;
-    in res;
+  allPackages = self: super: let
+    res = import ./all-packages.nix
+    {inherit lib noSysDirs config overlays;}
+    res
+    self
+    super;
+  in
+    res;
 
   aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib self super);
 
@@ -145,7 +144,7 @@ let
   # ... pkgs.foo ...").
   configOverrides = self: super:
     lib.optionalAttrs allowCustomOverrides
-      ((config.packageOverrides or (super: {})) super);
+    ((config.packageOverrides or (super: {})) super);
 
   # Convenience attributes for instantitating package sets. Each of
   # these will instantiate a new version of allPackages. Currently the
@@ -161,57 +160,89 @@ let
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
     pkgsCross = lib.mapAttrs (n: crossSystem:
-                              nixpkgsFun { inherit crossSystem; })
-                              lib.systems.examples;
+      nixpkgsFun {inherit crossSystem;})
+    lib.systems.examples;
 
     pkgsLLVM = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsLLVM = super';
-        })
-      ] ++ overlays;
+      overlays =
+        [
+          (self': super': {
+            pkgsLLVM = super';
+          })
+        ]
+        ++ overlays;
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useLLVM = true;
-        linker = "lld";
-      };
+      crossSystem =
+        stdenv.hostPlatform
+        // {
+          useLLVM = true;
+          linker = "lld";
+        };
     };
 
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.
-    pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsMusl = super';
-      })] ++ overlays;
-      ${if stdenv.hostPlatform == stdenv.buildPlatform
-        then "localSystem" else "crossSystem"} = {
-        parsed = stdenv.hostPlatform.parsed // {
-          abi = {
-            gnu = lib.systems.parse.abis.musl;
-            gnueabi = lib.systems.parse.abis.musleabi;
-            gnueabihf = lib.systems.parse.abis.musleabihf;
-          }.${stdenv.hostPlatform.parsed.abi.name}
-            or lib.systems.parse.abis.musl;
-        };
-      };
-    } else throw "Musl libc only supports Linux systems.";
+    pkgsMusl =
+      if stdenv.hostPlatform.isLinux
+      then
+        nixpkgsFun {
+          overlays =
+            [
+              (self': super': {
+                pkgsMusl = super';
+              })
+            ]
+            ++ overlays;
+          ${
+            if stdenv.hostPlatform == stdenv.buildPlatform
+            then "localSystem"
+            else "crossSystem"
+          } = {
+            parsed =
+              stdenv.hostPlatform.parsed
+              // {
+                abi =
+                  {
+                    gnu = lib.systems.parse.abis.musl;
+                    gnueabi = lib.systems.parse.abis.musleabi;
+                    gnueabihf = lib.systems.parse.abis.musleabihf;
+                  }
+                  .${stdenv.hostPlatform.parsed.abi.name}
+                  or lib.systems.parse.abis.musl;
+              };
+          };
+        }
+      else throw "Musl libc only supports Linux systems.";
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsi686Linux = super';
-      })] ++ overlays;
-      ${if stdenv.hostPlatform == stdenv.buildPlatform
-        then "localSystem" else "crossSystem"} = {
-        parsed = stdenv.hostPlatform.parsed // {
-          cpu = lib.systems.parse.cpuTypes.i686;
-        };
-      };
-    } else throw "i686 Linux package set can only be used with the x86 family.";
+    pkgsi686Linux =
+      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86
+      then
+        nixpkgsFun {
+          overlays =
+            [
+              (self': super': {
+                pkgsi686Linux = super';
+              })
+            ]
+            ++ overlays;
+          ${
+            if stdenv.hostPlatform == stdenv.buildPlatform
+            then "localSystem"
+            else "crossSystem"
+          } = {
+            parsed =
+              stdenv.hostPlatform.parsed
+              // {
+                cpu = lib.systems.parse.cpuTypes.i686;
+              };
+          };
+        }
+      else throw "i686 Linux package set can only be used with the x86 family.";
 
     # Extend the package set with zero or more overlays. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays
@@ -219,7 +250,7 @@ let
     appendOverlays = extraOverlays:
       if extraOverlays == []
       then self
-      else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+      else nixpkgsFun {overlays = args.overlays ++ extraOverlays;};
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
@@ -233,25 +264,36 @@ let
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
     pkgsStatic = nixpkgsFun ({
-      overlays = [ (self': super': {
-        pkgsStatic = super';
-      })] ++ overlays;
-    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      crossSystem = {
-        isStatic = true;
-        parsed = stdenv.hostPlatform.parsed // {
-          abi = {
-            gnu = lib.systems.parse.abis.musl;
-            gnueabi = lib.systems.parse.abis.musleabi;
-            gnueabihf = lib.systems.parse.abis.musleabihf;
-            musleabi = lib.systems.parse.abis.musleabi;
-            musleabihf = lib.systems.parse.abis.musleabihf;
-          }.${stdenv.hostPlatform.parsed.abi.name}
-            or lib.systems.parse.abis.musl;
+      overlays =
+        [
+          (self': super': {
+            pkgsStatic = super';
+          })
+        ]
+        ++ overlays;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      crossSystem =
+        {
+          isStatic = true;
+          parsed =
+            stdenv.hostPlatform.parsed
+            // {
+              abi =
+                {
+                  gnu = lib.systems.parse.abis.musl;
+                  gnueabi = lib.systems.parse.abis.musleabi;
+                  gnueabihf = lib.systems.parse.abis.musleabihf;
+                  musleabi = lib.systems.parse.abis.musleabi;
+                  musleabihf = lib.systems.parse.abis.musleabihf;
+                }
+                .${stdenv.hostPlatform.parsed.abi.name}
+                or lib.systems.parse.abis.musl;
+            };
+        }
+        // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+          gcc.abi = "elfv2";
         };
-      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
-        gcc.abi = "elfv2";
-      };
     });
   };
 
@@ -268,9 +310,11 @@ let
     otherPackageSets
     aliases
     configOverrides
-  ] ++ overlays ++ [
-    stdenvOverrides ]);
-
+  ]
+  ++ overlays
+  ++ [
+    stdenvOverrides
+  ]);
 in
   # Return the complete set of packages.
   lib.fix toFix

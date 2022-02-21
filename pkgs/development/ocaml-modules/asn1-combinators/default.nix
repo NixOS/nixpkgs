@@ -1,7 +1,14 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, zarith, bigarray-compat, stdlib-shims, ptime, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  zarith,
+  bigarray-compat,
+  stdlib-shims,
+  ptime,
+  alcotest,
 }:
-
 buildDunePackage rec {
   minimumOCamlVersion = "4.05";
 
@@ -15,15 +22,15 @@ buildDunePackage rec {
     sha256 = "1pbcdwm12hnfpd1jv2b7cjfkj5r7h61xp2gr8dysb8waa455kwln";
   };
 
-  propagatedBuildInputs = [ cstruct zarith bigarray-compat stdlib-shims ptime ];
+  propagatedBuildInputs = [cstruct zarith bigarray-compat stdlib-shims ptime];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  checkInputs = [alcotest];
 
   meta = with lib; {
     homepage = "https://github.com/mirleft/ocaml-asn1-combinators";
     description = "Combinators for expressing ASN.1 grammars in OCaml";
     license = licenses.isc;
-    maintainers = with maintainers; [ vbgl ];
+    maintainers = with maintainers; [vbgl];
   };
 }

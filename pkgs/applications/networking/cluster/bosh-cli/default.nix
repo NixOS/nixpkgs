@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, openssh
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  openssh,
 }:
-
 buildGoModule rec {
   pname = "bosh-cli";
 
@@ -22,15 +22,15 @@ buildGoModule rec {
     substituteInPlace cmd/version.go --replace '[DEV BUILD]' '${version}'
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   doCheck = false;
 
   postInstall = ''
     mv $out/bin/bosh-cli $out/bin/bosh
-    wrapProgram $out/bin/bosh --prefix PATH : '${lib.makeBinPath [ openssh ]}'
+    wrapProgram $out/bin/bosh --prefix PATH : '${lib.makeBinPath [openssh]}'
   '';
 
   meta = with lib; {
@@ -38,6 +38,6 @@ buildGoModule rec {
     homepage = "https://bosh.io";
     changelog = "https://github.com/cloudfoundry/bosh-cli/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ris];
   };
 }

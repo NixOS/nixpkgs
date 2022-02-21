@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, faust2jack, faust2lv2, helmholtz, mrpeach, puredata-with-plugins }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jack,
+  faust2lv2,
+  helmholtz,
+  mrpeach,
+  puredata-with-plugins,
+}:
 stdenv.mkDerivation rec {
   pname = "VoiceOfFaust";
   version = "1.1.4";
@@ -10,13 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "0la9b806qwrlsxgbir7n1db8v3w24wmd6k43p6qpr1fjjpkhrrgw";
   };
 
-  plugins = [ helmholtz mrpeach ];
+  plugins = [helmholtz mrpeach];
 
   pitchTracker = puredata-with-plugins plugins;
 
-  buildInputs = [ faust2jack faust2lv2 ];
+  buildInputs = [faust2jack faust2lv2];
 
-  runtimeInputs = [ pitchTracker ];
+  runtimeInputs = [pitchTracker];
 
   patchPhase = ''
     sed -i "s@pd -nodac@${pitchTracker}/bin/pd -nodac@g" launchers/synthWrapper
@@ -51,6 +60,6 @@ stdenv.mkDerivation rec {
     description = "Turn your voice into a synthesizer";
     homepage = "https://github.com/magnetophon/VoiceOfFaust";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
   };
 }

@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, librsvg
-, gtk-engine-murrine
-, gtk3
-, gnome
-, gnome-icon-theme
-, numix-icon-theme-circle
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  librsvg,
+  gtk-engine-murrine,
+  gtk3,
+  gnome,
+  gnome-icon-theme,
+  numix-icon-theme-circle,
+  hicolor-icon-theme,
 }:
-
 stdenv.mkDerivation rec {
   pname = "canta-theme";
   version = "2021-09-08";
@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vinceliuice/Canta-theme";
     license = licenses.gpl2Only;
     platforms = platforms.linux; # numix-icon-theme-circle unavailable in darwin
-    maintainers = [ maintainers.romildo ];
+    maintainers = [maintainers.romildo];
   };
 }

@@ -1,14 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
-  cfg = config.services.solr;
-
-in
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.solr;
+in {
   options = {
     services.solr = {
       enable = mkEnableOption "Solr";
@@ -53,12 +51,11 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     systemd.services.solr = {
-      after = [ "network.target" "remote-fs.target" "nss-lookup.target" "systemd-journald-dev-log.socket" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target" "remote-fs.target" "nss-lookup.target" "systemd-journald-dev-log.socket"];
+      wantedBy = ["multi-user.target"];
 
       environment = {
         SOLR_HOME = "${cfg.stateDir}/data";
@@ -87,8 +84,8 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart="${cfg.package}/bin/solr start -f -a \"${concatStringsSep " " cfg.extraJavaOptions}\"";
-        ExecStop="${cfg.package}/bin/solr stop";
+        ExecStart = "${cfg.package}/bin/solr start -f -a \"${concatStringsSep " " cfg.extraJavaOptions}\"";
+        ExecStop = "${cfg.package}/bin/solr stop";
       };
     };
 
@@ -104,7 +101,5 @@ in
     users.groups = optionalAttrs (cfg.group == "solr") {
       solr.gid = config.ids.gids.solr;
     };
-
   };
-
 }

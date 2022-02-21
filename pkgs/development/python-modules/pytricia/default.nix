@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
-
 buildPythonPackage rec {
   pname = "pytricia";
   version = "unstable-2019-01-16";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library for fast IP address lookup in Python";
     homepage = "https://github.com/jsommers/pytricia";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ mkg ];
+    license = with licenses; [lgpl3Plus];
+    maintainers = with maintainers; [mkg];
   };
 }

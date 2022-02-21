@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, vala
-, gobject-introspection
-, perl
-, bison
-, gettext
-, glib
-, pkg-config
-, libgsf
-, gcab
-, bzip2
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  vala,
+  gobject-introspection,
+  perl,
+  bison,
+  gettext,
+  glib,
+  pkg-config,
+  libgsf,
+  gcab,
+  bzip2,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "msitools";
   version = "0.101";
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       # Tools
       gpl2Plus
     ];
-    maintainers = with maintainers; [ PlushBeaver ];
+    maintainers = with maintainers; [PlushBeaver];
     platforms = platforms.unix;
   };
 }

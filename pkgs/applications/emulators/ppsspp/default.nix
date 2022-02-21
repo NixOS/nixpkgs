@@ -1,19 +1,19 @@
-{ mkDerivation
-, fetchFromGitHub
-, SDL2
-, cmake
-, ffmpeg
-, glew
-, lib
-, libzip
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, snappy
-, zlib
+{
+  mkDerivation,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  ffmpeg,
+  glew,
+  lib,
+  libzip,
+  pkg-config,
+  python3,
+  qtbase,
+  qtmultimedia,
+  snappy,
+  zlib,
 }:
-
 mkDerivation rec {
   pname = "ppsspp";
   version = "1.12.3";
@@ -31,7 +31,7 @@ mkDerivation rec {
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
-  nativeBuildInputs = [ cmake pkg-config python3 ];
+  nativeBuildInputs = [cmake pkg-config python3];
 
   buildInputs = [
     SDL2
@@ -65,8 +65,9 @@ mkDerivation rec {
     homepage = "https://www.ppsspp.org/";
     description = "A HLE Playstation Portable emulator, written in C++";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     platforms = platforms.linux;
   };
 }
 # TODO: add SDL headless port
+

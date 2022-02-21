@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, perl, makeWrapper }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  perl,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "sloccount";
   version = "2.26";
@@ -9,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ayiwfjdh1946asah861ah9269s5xkc8p5fv1wnxs9znyaxs4zzs";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [perl];
 
   # Make sure the Flex-generated files are newer than the `.l' files, so that
   # Flex isn't needed to recompile them.
@@ -31,7 +36,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc"];
 
   doCheck = true;
   checkPhase = ''HOME="$TMPDIR" PATH="$PWD:$PATH" make test'';
@@ -47,7 +52,7 @@ stdenv.mkDerivation rec {
       isScript "$w" || continue
       wrapProgram "$w" --prefix PATH : "$out/bin"
     done
-    '';
+  '';
 
   meta = {
     description = "Set of tools for counting physical Source Lines of Code (SLOC)";
@@ -67,7 +72,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.dwheeler.com/sloccount/";
 
-    maintainers = [ ];
+    maintainers = [];
     platforms = lib.platforms.all;
   };
 }

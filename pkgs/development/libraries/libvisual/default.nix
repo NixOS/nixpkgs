@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, glib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+}:
 stdenv.mkDerivation rec {
   pname = "libvisual";
   version = "0.4.0";
@@ -9,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1my1ipd5k1ixag96kwgf07bgxkjlicy9w22jfxb2kq95f6wgsk8b";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [glib];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"

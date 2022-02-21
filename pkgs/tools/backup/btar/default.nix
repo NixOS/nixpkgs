@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, librsync }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  librsync,
+}:
 stdenv.mkDerivation rec {
   pname = "btar";
   version = "1.1.1";
@@ -16,15 +21,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ librsync ];
+  buildInputs = [librsync];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Tar-compatible block-based archiver";
     license = lib.licenses.gpl3Plus;
     homepage = "https://viric.name/cgi-bin/btar";
     platforms = platforms.all;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [viric];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "truvari";
   version = "2.1.1";
@@ -35,13 +35,13 @@ python3Packages.buildPythonApplication rec {
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "truvari" ];
+  pythonImportsCheck = ["truvari"];
 
   meta = with lib; {
     description = "Structural variant comparison tool for VCFs";
     homepage = "https://github.com/spiralgenetics/truvari";
     license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [scalavision];
     longDescription = ''
       Truvari is a benchmarking tool for comparison sets of SVs.
       It can calculate the recall, precision, and f-measure of a

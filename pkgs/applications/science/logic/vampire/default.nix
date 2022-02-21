@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, z3, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  z3,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "vampire";
   version = "4.6.1";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "0z71nxjak3ibp842r8iv37w1x3cbkrmjs88lpvxqb4sgrbyk38zd";
   };
 
-  buildInputs = [ z3 zlib ];
+  buildInputs = [z3 zlib];
 
-  makeFlags = [ "vampire_z3_rel" "CC:=$(CC)" "CXX:=$(CXX)" ];
+  makeFlags = ["vampire_z3_rel" "CC:=$(CC)" "CXX:=$(CXX)"];
 
   patches = [
     # https://github.com/vprover/vampire/pull/54
@@ -51,6 +57,6 @@ stdenv.mkDerivation rec {
     description = "The Vampire Theorem Prover";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [gebner];
   };
 }

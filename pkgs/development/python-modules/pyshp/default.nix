@@ -1,6 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+}:
 buildPythonPackage rec {
   version = "2.2.0";
   pname = "pyshp";
@@ -10,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Dtogm9YvM0VwHE9nmbY4wRTOtn/uKClc3bThyvBT6UQ=";
   };
 
-  buildInputs = [ setuptools ];
+  buildInputs = [setuptools];
 
   meta = with lib; {
     description = "Pure Python read/write support for ESRI Shapefile format";

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nbconvert
-, pathpy
-, pytestCheckHook
-, setuptools-scm
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nbconvert,
+  pathpy,
+  pytestCheckHook,
+  setuptools-scm,
+  pythonAtLeast,
 }:
-
 buildPythonPackage rec {
   pname = "zetup";
   version = "0.2.64";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     py.test test -k "not TestObject" --deselect=test/test_zetup_config.py::test_classifiers
   '';
 
-  propagatedBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [setuptools-scm];
 
   checkInputs = [
     pathpy
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "zetup" ];
+  pythonImportsCheck = ["zetup"];
 
   meta = with lib; {
     description = "Zimmermann's Extensible Tools for Unified Project setups";

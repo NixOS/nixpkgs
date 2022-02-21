@@ -1,8 +1,10 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
-
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.services.vikunja;
   format = pkgs.formats.yaml {};
   configFile = format.generate "config.yaml" cfg.settings;
@@ -25,7 +27,7 @@ in {
     };
     environmentFiles = mkOption {
       type = types.listOf types.path;
-      default = [ ];
+      default = [];
       description = ''
         List of environment files set in the vikunja systemd service.
         For example passwords should be set in one of these files.
@@ -46,7 +48,7 @@ in {
       '';
     };
     frontendScheme = mkOption {
-      type = types.enum [ "http" "https" ];
+      type = types.enum ["http" "https"];
       description = ''
         Whether the site is available via http or https.
         This does not configure https or ACME in nginx!
@@ -64,11 +66,11 @@ in {
         Vikunja configuration. Refer to
         <link xlink:href="https://vikunja.io/docs/config-options/"/>
         for details on supported values.
-        '';
+      '';
     };
     database = {
       type = mkOption {
-        type = types.enum [ "sqlite" "mysql" "postgres" ];
+        type = types.enum ["sqlite" "mysql" "postgres"];
         example = "postgres";
         default = "sqlite";
         description = "Database engine to use.";
@@ -110,10 +112,10 @@ in {
 
     systemd.services.vikunja-api = {
       description = "vikunja-api";
-      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
-      wantedBy = [ "multi-user.target" ];
-      path = [ cfg.package-api ];
-      restartTriggers = [ configFile ];
+      after = ["network.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+      wantedBy = ["multi-user.target"];
+      path = [cfg.package-api];
+      restartTriggers = [configFile];
 
       serviceConfig = {
         Type = "simple";

@@ -1,8 +1,17 @@
-{ lib, fetchFromGitHub, stdenv
-, ffmpeg, frei0r, sox, gtk3, python3, ladspaPlugins
-, gobject-introspection, makeWrapper, wrapGAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  ffmpeg,
+  frei0r,
+  sox,
+  gtk3,
+  python3,
+  ladspaPlugins,
+  gobject-introspection,
+  makeWrapper,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "flowblade";
   version = "2.8.0.3";
@@ -15,11 +24,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ffmpeg frei0r sox gtk3 gobject-introspection ladspaPlugins
-    (python3.withPackages (ps: with ps; [ mlt pygobject3 dbus-python numpy pillow ]))
+    ffmpeg
+    frei0r
+    sox
+    gtk3
+    gobject-introspection
+    ladspaPlugins
+    (python3.withPackages (ps: with ps; [mlt pygobject3 dbus-python numpy pillow]))
   ];
 
-  nativeBuildInputs = [ gobject-introspection makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [gobject-introspection makeWrapper wrapGAppsHook];
 
   installPhase = ''
     runHook preInstall
@@ -38,8 +52,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multitrack Non-Linear Video Editor";
     homepage = "https://jliljebl.github.io/flowblade/";
-    license = with licenses; [ gpl3Plus ];
+    license = with licenses; [gpl3Plus];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ polygon ];
+    maintainers = with maintainers; [polygon];
   };
 }

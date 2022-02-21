@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libtool
-, pkg-config
-, gnutls
-, libgcrypt
-, libtasn1
-, glib
-, libplist
-, libusbmuxd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  pkg-config,
+  gnutls,
+  libgcrypt,
+  libtasn1,
+  glib,
+  libplist,
+  libusbmuxd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libimobiledevice";
   version = "unstable-2021-06-02";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Q7THwld1+elMJQ14kRnlIJDohFt7MW7JeyIUGC0k52I=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libusbmuxd
   ];
 
-  configureFlags = [ "--disable-openssl" "--without-cython" ];
+  configureFlags = ["--disable-openssl" "--without-cython"];
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice";
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [infinisil];
   };
 }

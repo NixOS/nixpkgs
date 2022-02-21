@@ -1,14 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, click-plugins
-, colorama
-, requests
-, setuptools
-, pythonOlder
-, XlsxWriter
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  click-plugins,
+  colorama,
+  requests,
+  setuptools,
+  pythonOlder,
+  XlsxWriter,
 }:
-
 buildPythonPackage rec {
   pname = "shodan";
   version = "1.26.1";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Python library and command-line utility for Shodan";
     homepage = "https://github.com/achillean/shodan-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ lihop ];
+    maintainers = with maintainers; [lihop];
   };
 }

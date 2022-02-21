@@ -2,8 +2,8 @@ import ./make-test-python.nix {
   name = "rss2email";
 
   nodes = {
-    server = { pkgs, ... }: {
-      imports = [ common/user-account.nix ];
+    server = {pkgs, ...}: {
+      imports = [common/user-account.nix];
       services.nginx = {
         enable = true;
         virtualHosts."127.0.0.1".root = ./common/webroot;
@@ -14,12 +14,12 @@ import ./make-test-python.nix {
         interval = "1";
         config.from = "test@example.org";
         feeds = {
-          nixos = { url = "http://127.0.0.1/news-rss.xml"; };
+          nixos = {url = "http://127.0.0.1/news-rss.xml";};
         };
       };
       services.opensmtpd = {
         enable = true;
-        extraServerArgs = [ "-v" ];
+        extraServerArgs = ["-v"];
         serverConfiguration = ''
           listen on 127.0.0.1
           action dovecot_deliver mda \
@@ -31,7 +31,7 @@ import ./make-test-python.nix {
         enable = true;
         enableImap = true;
         mailLocation = "maildir:~/mail";
-        protocols = [ "imap" ];
+        protocols = ["imap"];
       };
       environment.systemPackages = let
         checkMailLanded = pkgs.writeScriptBin "check-mail-landed" ''
@@ -48,7 +48,7 @@ import ./make-test-python.nix {
             status, msg = imap.fetch(refs[0], 'BODY[TEXT]')
             assert status == 'OK'
         '';
-      in [ pkgs.opensmtpd checkMailLanded ];
+      in [pkgs.opensmtpd checkMailLanded];
     };
   };
 

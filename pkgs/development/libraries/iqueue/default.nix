@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libbsd, microsoft_gsl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libbsd,
+  microsoft_gsl,
+}:
 stdenv.mkDerivation rec {
   pname = "iqueue";
   version = "0.1.0";
@@ -9,14 +15,14 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libbsd microsoft_gsl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [libbsd microsoft_gsl];
 
   meta = with lib; {
     homepage = "https://github.com/twosigma/iqueue";
     description = "Indexed queue";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.catern ];
+    platforms = ["x86_64-linux"];
+    maintainers = [maintainers.catern];
   };
 }

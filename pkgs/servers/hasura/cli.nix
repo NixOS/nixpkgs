@@ -1,5 +1,7 @@
-{ buildGoModule, hasura-graphql-engine }:
-
+{
+  buildGoModule,
+  hasura-graphql-engine,
+}:
 buildGoModule rec {
   pname = "hasura";
   version = hasura-graphql-engine.version;
@@ -7,7 +9,7 @@ buildGoModule rec {
   src = hasura-graphql-engine.src;
   modRoot = "./cli";
 
-  subPackages = [ "cmd/hasura" ];
+  subPackages = ["cmd/hasura"];
 
   vendorSha256 = "0c0zn3a3bq3g13zj1b7hz1gfd9mcc5wlch80vjgp31vgm23vvd8d";
 

@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cacert, python3 }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cacert,
+  python3,
+}:
 stdenv.mkDerivation {
   pname = "matrix-commander";
   version = "unstable-2021-08-05";
@@ -13,15 +18,17 @@ stdenv.mkDerivation {
 
   buildInputs = [
     cacert
-    (python3.withPackages(ps: with ps; [
-      matrix-nio
-      magic
-      markdown
-      pillow
-      urllib3
-      aiofiles
-      notify2
-    ]))];
+    (python3.withPackages (ps:
+      with ps; [
+        matrix-nio
+        magic
+        markdown
+        pillow
+        urllib3
+        aiofiles
+        notify2
+      ]))
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -38,6 +45,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/8go/matrix-commander";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.seb314 ];
+    maintainers = [maintainers.seb314];
   };
 }

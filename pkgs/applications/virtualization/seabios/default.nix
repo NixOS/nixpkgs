@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchurl, acpica-tools, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  acpica-tools,
+  python3,
+}:
 stdenv.mkDerivation rec {
-
   pname = "seabios";
   version = "1.15.0";
 
@@ -10,13 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YownF8mUMmtFMlFXPRBZ4qOhEtSqSIds4nyz8d4ZiPg=";
   };
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [python3];
 
-  buildInputs = [ acpica-tools ];
+  buildInputs = [acpica-tools];
 
   strictDeps = true;
 
-  hardeningDisable = [ "pic" "stackprotector" "fortify" ];
+  hardeningDisable = ["pic" "stackprotector" "fortify"];
 
   configurePhase = ''
     # build SeaBIOS for CSM
@@ -43,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.seabios.org";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.tstrobel ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [maintainers.tstrobel];
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

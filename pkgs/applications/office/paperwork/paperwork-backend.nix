@@ -1,32 +1,29 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-
-, isPy3k
-, isPyPy
-
-, pyenchant
-, scikit-learn
-, pypillowfight
-, pycountry
-, whoosh
-, termcolor
-, python-Levenshtein
-, pygobject3
-, pyocr
-, natsort
-, libinsane
-, distro
-, openpaperwork-core
-, openpaperwork-gtk
-, psutil
-
-, pkgs
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  isPy3k,
+  isPyPy,
+  pyenchant,
+  scikit-learn,
+  pypillowfight,
+  pycountry,
+  whoosh,
+  termcolor,
+  python-Levenshtein,
+  pygobject3,
+  pyocr,
+  natsort,
+  libinsane,
+  distro,
+  openpaperwork-core,
+  openpaperwork-gtk,
+  psutil,
+  pkgs,
 }:
-
 buildPythonPackage rec {
   pname = "paperwork-backend";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (import ./src.nix {inherit fetchFromGitLab;}) version src;
 
   sourceRoot = "source/paperwork-backend";
 
@@ -61,17 +58,17 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeBuildInputs = [ pkgs.gettext pkgs.which pkgs.shared-mime-info ];
+  nativeBuildInputs = [pkgs.gettext pkgs.which pkgs.shared-mime-info];
   preBuild = ''
     make l10n_compile
   '';
 
-  checkInputs = [ openpaperwork-gtk psutil pkgs.libreoffice ];
+  checkInputs = [openpaperwork-gtk psutil pkgs.libreoffice];
 
   meta = {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [aszlig symphorien];
   };
 }

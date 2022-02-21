@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, convertdate
-, python-dateutil
-, fetchPypi
-, hijri-converter
-, korean-lunar-calendar
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  convertdate,
+  python-dateutil,
+  fetchPypi,
+  hijri-converter,
+  korean-lunar-calendar,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "holidays";
   version = "0.12";
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/dr-prodigy/python-holidays";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

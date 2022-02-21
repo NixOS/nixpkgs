@@ -1,5 +1,13 @@
-{ bzip2, fetchFromGitHub, gzip, gnutar, lib, stdenv, unzip, xz }:
-
+{
+  bzip2,
+  fetchFromGitHub,
+  gzip,
+  gnutar,
+  lib,
+  stdenv,
+  unzip,
+  xz,
+}:
 stdenv.mkDerivation rec {
   pname = "xtrt";
   version = "unstable-2021-02-17";
@@ -31,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Tiny script to extract archives by their extensions";
     homepage = "https://github.com/figsoda/xtrt";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [figsoda];
     mainProgram = "xtrt";
   };
 }

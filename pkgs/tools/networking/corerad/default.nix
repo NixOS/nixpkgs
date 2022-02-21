@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 buildGoModule rec {
   pname = "corerad";
   version = "1.0.0";
@@ -35,6 +39,6 @@ buildGoModule rec {
     homepage = "https://github.com/mdlayher/corerad";
     description = "Extensible and observable IPv6 NDP RA daemon";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mdlayher ];
+    maintainers = with maintainers; [mdlayher];
   };
 }

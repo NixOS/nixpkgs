@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "constant-detune-chorus";
   version = "0.1.3";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sipmc25fr7w7xqx1r0y6i2zwfkgszzwvhk1v15mnsb3cqvk8ybn";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [faust2jaqt faust2lv2];
 
   buildPhase = ''
     faust2jaqt -time -vec -t 99999 ConstantDetuneChorus.dsp
@@ -28,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "A chorus algorithm that maintains constant and symmetric detuning depth (in cents), regardless of modulation rate. For jack and lv2";
     homepage = "https://github.com/magnetophon/constant-detune-chorus";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
   };
 }

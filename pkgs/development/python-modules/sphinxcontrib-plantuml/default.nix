@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, plantuml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
+  plantuml,
 }:
-
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
   version = "0.22";
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   # No tests included.
   doCheck = false;
 
-  propagatedBuildInputs = [ sphinx plantuml ];
+  propagatedBuildInputs = [sphinx plantuml];
 
   meta = with lib; {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
     homepage = "https://github.com/sphinx-contrib/plantuml/";
-    maintainers = with maintainers; [ ];
-    license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [];
+    license = with licenses; [bsd2];
   };
 }

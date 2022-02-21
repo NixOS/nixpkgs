@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, pbr, ldap, prettytable, fixtures, testresources, testtools }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  ldap,
+  prettytable,
+  fixtures,
+  testresources,
+  testtools,
+}:
 buildPythonPackage rec {
   pname = "ldappool";
   version = "3.0.0";
@@ -18,15 +26,15 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "PrettyTable<0.8,>=0.7.2" "PrettyTable"
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [pbr];
 
-  propagatedBuildInputs = [ ldap prettytable ];
+  propagatedBuildInputs = [ldap prettytable];
 
-  checkInputs = [ fixtures testresources testtools ];
+  checkInputs = [fixtures testresources testtools];
 
   meta = with lib; {
     description = "A simple connector pool for python-ldap";
     homepage = "https://opendev.org/openstack/ldappool/";
-    license = with licenses; [ mpl11 lgpl21Plus gpl2Plus ];
+    license = with licenses; [mpl11 lgpl21Plus gpl2Plus];
   };
 }

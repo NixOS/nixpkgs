@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "dstp";
   version = "0.4.0";
@@ -20,6 +23,6 @@ buildGoModule rec {
     description = "Run common networking tests against your site";
     homepage = "https://github.com/ycd/dstp";
     license = licenses.mit;
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with maintainers; [jlesquembre];
   };
 }

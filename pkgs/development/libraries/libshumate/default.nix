@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gi-docgen
-, meson
-, ninja
-, pkg-config
-, vala
-, gobject-introspection
-, glib
-, cairo
-, sqlite
-, libsoup
-, gtk4
-, xvfb-run
-, gnome
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gi-docgen,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  glib,
+  cairo,
+  sqlite,
+  libsoup,
+  gtk4,
+  xvfb-run,
+  gnome,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libshumate";
   version = "1.0.0.alpha.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = ["out" "dev" "devdoc"];
   outputBin = "devdoc"; # demo app
 
   src = fetchFromGitLab {

@@ -1,12 +1,24 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
-, defusedxml, future, packaging, psutil, setuptools
-# Optional dependencies:
-, bottle, pysnmp
-, hddtemp
-, netifaces # IP module
-, py-cpuinfo
+{
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  isPyPy,
+  lib,
+  defusedxml,
+  future,
+  packaging,
+  psutil,
+  setuptools
+  # Optional dependencies:
+  ,
+  bottle,
+  pysnmp,
+  hddtemp,
+  netifaces
+  # IP module
+  ,
+  py-cpuinfo,
 }:
-
 buildPythonApplication rec {
   pname = "glances";
   version = "3.2.4.2";
@@ -27,7 +39,9 @@ buildPythonApplication rec {
   # scripts a workaround below is still required.
   # Relevant: https://github.com/NixOS/nixpkgs/issues/24693
   makeWrapperArgs = lib.optionals stdenv.isDarwin [
-    "--set" "DYLD_FRAMEWORK_PATH" "/System/Library/Frameworks"
+    "--set"
+    "DYLD_FRAMEWORK_PATH"
+    "/System/Library/Frameworks"
   ];
 
   doCheck = true;
@@ -35,23 +49,25 @@ buildPythonApplication rec {
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
-  propagatedBuildInputs = [
-    bottle
-    defusedxml
-    future
-    netifaces
-    packaging
-    psutil
-    pysnmp
-    setuptools
-    py-cpuinfo
-  ] ++ lib.optional stdenv.isLinux hddtemp;
+  propagatedBuildInputs =
+    [
+      bottle
+      defusedxml
+      future
+      netifaces
+      packaging
+      psutil
+      pysnmp
+      setuptools
+      py-cpuinfo
+    ]
+    ++ lib.optional stdenv.isLinux hddtemp;
 
   meta = with lib; {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
     changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ jonringer primeos koral ];
+    maintainers = with maintainers; [jonringer primeos koral];
   };
 }

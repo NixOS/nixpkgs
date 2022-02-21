@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytest-cov
-, pytest-doctestplus
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytest-cov,
+  pytest-doctestplus,
+  pytestCheckHook,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "pytest-filter-subpackage";
   version = "0.1.1";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [pytest];
 
   propagatedBuildInputs = [
     pytest-doctestplus
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   # missing some files
-  disabledTests = [ "with_rst" ];
+  disabledTests = ["with_rst"];
 
   meta = with lib; {
     description = "Meta-package containing dependencies for testing";

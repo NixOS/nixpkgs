@@ -1,16 +1,16 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, isPy3k
-
-# pythonPackages
-, GitPython
-, pbr
-, pyyaml
-, six
-, stevedore
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  isPy3k
+  # pythonPackages
+  ,
+  GitPython,
+  pbr,
+  pyyaml,
+  six,
+  stevedore,
 }:
-
 buildPythonPackage rec {
   pname = "bandit";
   version = "1.7.2";

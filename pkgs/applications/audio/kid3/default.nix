@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, automoc4
-, chromaprint
-, cmake
-, docbook_xml_dtd_45
-, docbook_xsl
-, ffmpeg
-, flac
-, id3lib
-, libogg
-, libvorbis
-, libxslt
-, mp4v2
-, phonon
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, qtquickcontrols
-, qttools
-, readline
-, taglib
-, wrapQtAppsHook
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  automoc4,
+  chromaprint,
+  cmake,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  ffmpeg,
+  flac,
+  id3lib,
+  libogg,
+  libvorbis,
+  libxslt,
+  mp4v2,
+  phonon,
+  pkg-config,
+  python3,
+  qtbase,
+  qtmultimedia,
+  qtquickcontrols,
+  qttools,
+  readline,
+  taglib,
+  wrapQtAppsHook,
+  zlib,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kid3";
   version = "3.9.1";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
+  cmakeFlags = ["-DWITH_APPS=Qt;CLI"];
   NIX_LDFLAGS = "-lm -lpthread";
 
   preConfigure = ''
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
         LRC files.
     '';
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [maintainers.AndersonTorres];
     platforms = platforms.linux;
   };
 }

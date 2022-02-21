@@ -1,8 +1,17 @@
-{lib, stdenv, fetchgit
-, wxGTK, perl, python2, zlib, libGLU, libGL, libX11
-, automake, autoconf
+{
+  lib,
+  stdenv,
+  fetchgit,
+  wxGTK,
+  perl,
+  python2,
+  zlib,
+  libGLU,
+  libGL,
+  libX11,
+  automake,
+  autoconf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "golly";
   version = "2.8.99.2.20161122";
@@ -23,15 +32,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [autoconf automake];
 
   buildInputs = [
-    wxGTK perl python2 zlib libGLU libGL libX11
+    wxGTK
+    perl
+    python2
+    zlib
+    libGLU
+    libGL
+    libX11
   ];
 
   # Link against Python explicitly as it is needed for scripts
-  makeFlags=[
+  makeFlags = [
     "AM_LDFLAGS="
   ];
-  NIX_LDFLAGS="-l${python2.libPrefix} -lperl -ldl -lGL";
-  preConfigure=''
+  NIX_LDFLAGS = "-l${python2.libPrefix} -lperl -ldl -lGL";
+  preConfigure = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
       -DPYTHON_SHLIB=$(basename "$(

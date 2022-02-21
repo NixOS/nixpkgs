@@ -1,11 +1,10 @@
 {
-  lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, glibcLocales
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  glibcLocales,
 }:
-
 buildPythonPackage rec {
   pname = "ratelimiter";
   version = "1.2.0.post0";
@@ -17,9 +16,9 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.utf-8";
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [glibcLocales];
 
-  checkInputs = [ pytest ];
+  checkInputs = [pytest];
 
   checkPhase = ''
     py.test tests
@@ -29,7 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/RazerM/ratelimiter";
     license = licenses.asl20;
     description = "Simple python rate limiting object";
-    maintainers = with maintainers; [ helkafen ];
+    maintainers = with maintainers; [helkafen];
   };
 }
-

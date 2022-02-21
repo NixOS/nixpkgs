@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, boto3
-, google-pasta
-, importlib-metadata
-, numpy
-, protobuf
-, protobuf3-to-dict
-, smdebug-rulesconfig
-, pandas
-, pathos
-, packaging
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  boto3,
+  google-pasta,
+  importlib-metadata,
+  numpy,
+  protobuf,
+  protobuf3-to-dict,
+  smdebug-rulesconfig,
+  pandas,
+  pathos,
+  packaging,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "sagemaker";
   version = "2.75.1";
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nequissimus ];
+    maintainers = with maintainers; [nequissimus];
   };
 }

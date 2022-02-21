@@ -1,5 +1,9 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages }:
-
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+}:
 buildDotnetModule rec {
   pname = "nbxplorer";
   version = "2.2.20";
@@ -23,7 +27,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
-    maintainers = with maintainers; [ kcalvinalvin earvstedt ];
+    maintainers = with maintainers; [kcalvinalvin earvstedt];
     license = licenses.mit;
     platforms = platforms.linux;
   };

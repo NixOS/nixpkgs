@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, coreutils, fltk, libjpeg }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  fltk,
+  libjpeg,
+}:
 stdenv.mkDerivation rec {
   version = "5.0.5";
   pname = "seaview";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zo9emLpHiDv6kekbx55NOibxWN2Zg7XngzGkUqSx+PI=";
   };
 
-  buildInputs = [ fltk libjpeg ];
+  buildInputs = [fltk libjpeg];
 
   patchPhase = "sed -i 's#PATH=/bin:/usr/bin rm#'${coreutils}/bin/rm'#' seaview.cxx";
   installPhase = "mkdir -p $out/bin; cp seaview $out/bin";
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://doua.prabi.fr/software/seaview";
     license = licenses.gpl3;
-    maintainers = [ maintainers.iimog ];
+    maintainers = [maintainers.iimog];
     platforms = platforms.linux;
   };
 }

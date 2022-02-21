@@ -1,19 +1,18 @@
-{ lib, stdenv
-, fetchurl
-
-, meson
-, ninja
-, pkg-config
-
-, at-spi2-core
-, atk
-, dbus
-, glib
-, libxml2
-
-, gnome # To pass updateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  at-spi2-core,
+  atk,
+  dbus,
+  glib,
+  libxml2,
+  gnome
+  # To pass updateScript
 }:
-
 stdenv.mkDerivation rec {
   pname = "at-spi2-atk";
   version = "2.38.0";
@@ -23,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "z6AIpa+CKzauYofxgYLEDJHdaZxV+qOGBYge0XXKRk8=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ at-spi2-core atk dbus glib libxml2 ];
+  nativeBuildInputs = [meson ninja pkg-config];
+  buildInputs = [at-spi2-core atk dbus glib libxml2];
 
   doCheck = false; # fails with "No test data file provided"
 

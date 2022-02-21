@@ -1,58 +1,60 @@
-{ lib, stdenv
-, fetchgit
-, alsa-lib
-, aubio
-, boost
-, cairomm
-, cppunit
-, curl
-, dbus
-, doxygen
-, ffmpeg
-, fftw
-, fftwSinglePrec
-, flac
-, glibc
-, glibmm
-, graphviz
-, gtkmm2
-, harvid
-, itstool
-, libarchive
-, libjack2
-, liblo
-, libogg
-, libpulseaudio
-, librdf_raptor
-, librdf_rasqal
-, libsamplerate
-, libsigcxx
-, libsndfile
-, libusb1
-, libuv
-, libwebsockets
-, libxml2
-, libxslt
-, lilv
-, lrdf
-, lv2
-, makeWrapper
-, pango
-, perl
-, pkg-config
-, python3
-, readline
-, rubberband
-, serd
-, sord
-, soundtouch
-, sratom
-, suil
-, taglib
-, vamp-plugin-sdk
-, wafHook
-, xjadeo
-, videoSupport ? true
+{
+  lib,
+  stdenv,
+  fetchgit,
+  alsa-lib,
+  aubio,
+  boost,
+  cairomm,
+  cppunit,
+  curl,
+  dbus,
+  doxygen,
+  ffmpeg,
+  fftw,
+  fftwSinglePrec,
+  flac,
+  glibc,
+  glibmm,
+  graphviz,
+  gtkmm2,
+  harvid,
+  itstool,
+  libarchive,
+  libjack2,
+  liblo,
+  libogg,
+  libpulseaudio,
+  librdf_raptor,
+  librdf_rasqal,
+  libsamplerate,
+  libsigcxx,
+  libsndfile,
+  libusb1,
+  libuv,
+  libwebsockets,
+  libxml2,
+  libxslt,
+  lilv,
+  lrdf,
+  lv2,
+  makeWrapper,
+  pango,
+  perl,
+  pkg-config,
+  python3,
+  readline,
+  rubberband,
+  serd,
+  sord,
+  soundtouch,
+  sratom,
+  suil,
+  taglib,
+  vamp-plugin-sdk,
+  wafHook,
+  xjadeo,
+  videoSupport ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
@@ -81,52 +83,54 @@ stdenv.mkDerivation rec {
     wafHook
   ];
 
-  buildInputs = [
-    alsa-lib
-    aubio
-    boost
-    cairomm
-    cppunit
-    curl
-    dbus
-    ffmpeg
-    fftw
-    fftwSinglePrec
-    flac
-    glibmm
-    gtkmm2
-    itstool
-    libarchive
-    libjack2
-    liblo
-    libogg
-    libpulseaudio
-    librdf_raptor
-    librdf_rasqal
-    libsamplerate
-    libsigcxx
-    libsndfile
-    libusb1
-    libuv
-    libwebsockets
-    libxml2
-    libxslt
-    lilv
-    lrdf
-    lv2
-    pango
-    perl
-    python3
-    readline
-    rubberband
-    serd
-    sord
-    soundtouch
-    sratom
-    suil
-    taglib
-    vamp-plugin-sdk
-  ] ++ lib.optionals videoSupport [ harvid xjadeo ];
+  buildInputs =
+    [
+      alsa-lib
+      aubio
+      boost
+      cairomm
+      cppunit
+      curl
+      dbus
+      ffmpeg
+      fftw
+      fftwSinglePrec
+      flac
+      glibmm
+      gtkmm2
+      itstool
+      libarchive
+      libjack2
+      liblo
+      libogg
+      libpulseaudio
+      librdf_raptor
+      librdf_rasqal
+      libsamplerate
+      libsigcxx
+      libsndfile
+      libusb1
+      libuv
+      libwebsockets
+      libxml2
+      libxslt
+      lilv
+      lrdf
+      lv2
+      pango
+      perl
+      python3
+      readline
+      rubberband
+      serd
+      sord
+      soundtouch
+      sratom
+      suil
+      taglib
+      vamp-plugin-sdk
+    ]
+    ++ lib.optionals videoSupport [harvid xjadeo];
 
   wafConfigureFlags = [
     "--cxx11"
@@ -152,22 +156,24 @@ stdenv.mkDerivation rec {
       --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
   '';
 
-  postInstall = ''
-    # wscript does not install these for some reason
-    install -vDm 644 "build/gtk2_ardour/ardour.xml" \
-      -t "$out/share/mime/packages"
-    install -vDm 644 "build/gtk2_ardour/ardour6.desktop" \
-      -t "$out/share/applications"
-    for size in 16 22 32 48 256 512; do
-      install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour6.png"
-    done
-    install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
-  '' + lib.optionalString videoSupport ''
-    # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
-    wrapProgram "$out/bin/ardour6" \
-      --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
-  '';
+  postInstall =
+    ''
+      # wscript does not install these for some reason
+      install -vDm 644 "build/gtk2_ardour/ardour.xml" \
+        -t "$out/share/mime/packages"
+      install -vDm 644 "build/gtk2_ardour/ardour6.desktop" \
+        -t "$out/share/applications"
+      for size in 16 22 32 48 256 512; do
+        install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
+          "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour6.png"
+      done
+      install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+    ''
+    + lib.optionalString videoSupport ''
+      # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
+      wrapProgram "$out/bin/ardour6" \
+        --prefix PATH : "${lib.makeBinPath [harvid xjadeo]}"
+    '';
 
   LINKFLAGS = "-lpthread";
 
@@ -185,6 +191,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ardour.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
+    maintainers = with maintainers; [goibhniu magnetophon mitchmindtree];
   };
 }

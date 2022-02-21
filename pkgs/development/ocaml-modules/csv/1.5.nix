@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
-
+{
+  lib,
+  stdenv,
+  fetchzip,
+  ocaml,
+  findlib,
+  ocamlbuild,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-csv";
   version = "1.5";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ca7jgg58j24pccs5fshis726s06fdcjshnwza5kwxpjgdbvc63g";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ocaml findlib ocamlbuild];
 
   createFindlibDestdir = true;
 
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A pure OCaml library to read and write CSV files";
     homepage = "https://github.com/Chris00/ocaml-csv";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [ ];
+    maintainers = [maintainers.vbgl];
+    platforms = ocaml.meta.platforms or [];
   };
 }

@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, lwt_log }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  lwt_log,
+}:
 buildDunePackage rec {
   version = "1.1";
   pname = "resource-pooling";
@@ -15,7 +19,7 @@ buildDunePackage rec {
     sha256 = "0wsbnwszafdv3gsiiaslgf6m6pfx74h7h19i0gp2c4ivdiv3wck9";
   };
 
-  propagatedBuildInputs = [ lwt_log ];
+  propagatedBuildInputs = [lwt_log];
 
   doCheck = true;
 
@@ -23,6 +27,6 @@ buildDunePackage rec {
     inherit (src.meta) homepage;
     description = "A library for pooling resources like connections, threads, or similar";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [lib.maintainers.vbgl];
   };
 }

@@ -1,12 +1,12 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, unittest2
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  unittest2,
 }:
-
 buildPythonPackage rec {
   pname = "python-datemath";
   version = "1.5.5";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to emulate the date math used in SOLR and Elasticsearch";
     homepage = "https://github.com/nickmaccarthy/python-datemath";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

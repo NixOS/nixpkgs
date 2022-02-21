@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "fbmark";
   version = "0.3";
@@ -11,13 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "0n2czl2sy1k6r5ri0hp7jgq84xcwrx4x43bqvw1b4na99mqhyahn";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Linux Framebuffer Benchmark";
     homepage = "https://github.com/caramelli/fbmark";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [davidak];
     platforms = platforms.linux;
   };
 }

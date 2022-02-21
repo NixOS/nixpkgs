@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python3, pkg-config, bison
-, flex
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  zlib,
+  libevent,
+  openssl,
+  python3,
+  pkg-config,
+  bison,
+  flex,
 }:
-
 stdenv.mkDerivation rec {
   pname = "thrift";
   version = "0.10.0";
@@ -17,16 +26,22 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    boost zlib libevent openssl bison flex (python3.withPackages (ps: [ps.twisted]))
+    boost
+    zlib
+    libevent
+    openssl
+    bison
+    flex
+    (python3.withPackages (ps: [ps.twisted]))
   ];
 
   preConfigure = "export PY_PREFIX=$out";
 
   # TODO: package boost-test, so we can run the test suite. (Currently it fails
   # to find libboost_unit_test_framework.a.)
-  configureFlags = [ "--enable-tests=no" ];
+  configureFlags = ["--enable-tests=no"];
   doCheck = false;
 
   meta = with lib; {
@@ -34,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "https://thrift.apache.org/";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [maintainers.bjornfor];
     knownVulnerabilities = [
       "CVE-2018-1320"
       "CVE-2018-11798"

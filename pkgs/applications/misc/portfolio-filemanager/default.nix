@@ -1,20 +1,20 @@
-{ lib
-, python3
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, gtk3
-, libhandy
-, librsvg
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gobject-introspection,
+  gtk3,
+  libhandy,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
   version = "0.9.12";
@@ -66,6 +66,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/tchx84/Portfolio/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

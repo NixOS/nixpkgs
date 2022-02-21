@@ -1,9 +1,25 @@
-{ stdenv, fetchurl, alsa-lib, cairo, dpkg, freetype
-, gdk-pixbuf, glib, gtk3, lib, xorg
-, libglvnd, libjack2, ffmpeg
-, libxkbcommon, xdg-utils, zlib, pulseaudio
-, wrapGAppsHook, makeWrapper }:
-
+{
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  cairo,
+  dpkg,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  xorg,
+  libglvnd,
+  libjack2,
+  ffmpeg,
+  libxkbcommon,
+  xdg-utils,
+  zlib,
+  pulseaudio,
+  wrapGAppsHook,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
   version = "4.1.6";
@@ -13,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Q4YYdMUd/T8tGGcakhoLdHvWsHwOq7LgIb77sr2OWuQ=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [dpkg makeWrapper wrapGAppsHook];
 
   unpackCmd = ''
     mkdir -p root
@@ -24,7 +40,24 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
+    alsa-lib
+    cairo
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libxcb
+    xcbutil
+    xcbutilwm
+    zlib
+    libXtst
+    libxkbcommon
+    pulseaudio
+    libjack2
+    libX11
+    libglvnd
+    libXcursor
+    stdenv.cc.cc.lib
   ];
 
   installPhase = ''
@@ -55,7 +88,7 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
       wrapProgram $f \
         "''${gappsWrapperArgs[@]}" \
-        --prefix PATH : "${lib.makeBinPath [ xdg-utils ffmpeg ]}" \
+        --prefix PATH : "${lib.makeBinPath [xdg-utils ffmpeg]}" \
         --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
     done
 
@@ -74,7 +107,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.bitwig.com/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [bfortz michalrus mrVanDalo];
   };
 }

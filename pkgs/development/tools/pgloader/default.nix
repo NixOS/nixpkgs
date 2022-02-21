@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, makeWrapper, sbcl_2_0_8, sqlite, freetds, libzip, curl, git, cacert, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  sbcl_2_0_8,
+  sqlite,
+  freetds,
+  libzip,
+  curl,
+  git,
+  cacert,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "pgloader";
   version = "3.6.2";
@@ -8,10 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "1jqnw6pw11kwyy8zm2g7g85r8197fy0q4l70yybw9wr87wnqqnz3";
   };
 
-  nativeBuildInputs = [ git makeWrapper ];
-  buildInputs = [ sbcl_2_0_8 cacert sqlite freetds libzip curl openssl ];
+  nativeBuildInputs = [git makeWrapper];
+  buildInputs = [sbcl_2_0_8 cacert sqlite freetds libzip curl openssl];
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ sqlite libzip curl git openssl freetds ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [sqlite libzip curl git openssl freetds];
 
   buildPhase = ''
     export PATH=$PATH:$out/bin
@@ -31,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://pgloader.io/";
     description = "Loads data into PostgreSQL and allows you to implement Continuous Migration from your current database to PostgreSQL";
-    maintainers = with maintainers; [ mguentner ];
+    maintainers = with maintainers; [mguentner];
     license = licenses.postgresql;
     platforms = platforms.all;
   };

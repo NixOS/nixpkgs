@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytestCheckHook
-, coverage
-, ghostscript
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pytestCheckHook,
+  coverage,
+  ghostscript,
+  pillow,
 }:
-
 buildPythonPackage rec {
   pname = "pydyf";
   version = "0.1.2";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://doc.courtbouillon.org/pydyf/stable/";
     description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rprecenth ];
+    maintainers = with maintainers; [rprecenth];
   };
 }

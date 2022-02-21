@@ -1,23 +1,22 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, blessed
-, keyring
-, keyrings-alt
-, lxml
-, measurement
-, python-dateutil
-, requests
-, six
-, rich
-, pytestCheckHook
-, mock
-, nose
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  blessed,
+  keyring,
+  keyrings-alt,
+  lxml,
+  measurement,
+  python-dateutil,
+  requests,
+  six,
+  rich,
+  pytestCheckHook,
+  mock,
+  nose,
 }:
-
 # TODO: Define this package in "all-packages.nix" using "toPythonApplication".
 # This currently errors out, complaining about not being able to find "etree" from "lxml" even though "lxml" is defined in "propagatedBuildInputs".
-
 buildPythonPackage rec {
   pname = "myfitnesspal";
   version = "1.16.6";
@@ -64,6 +63,6 @@ buildPythonPackage rec {
     description = "Python module to access meal tracking data stored in MyFitnessPal";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

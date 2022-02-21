@@ -1,5 +1,7 @@
-{ appleDerivation', stdenvNoCC }:
-
+{
+  appleDerivation',
+  stdenvNoCC,
+}:
 appleDerivation' stdenvNoCC {
   installPhase = ''
     substituteInPlace xcodescripts/install_files.sh \

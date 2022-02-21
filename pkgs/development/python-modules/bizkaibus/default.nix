@@ -1,10 +1,10 @@
-{ lib
-, requests
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  requests,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "bizkaibus";
   version = "0.1.4";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "bizkaibus" ];
+  pythonImportsCheck = ["bizkaibus"];
 
   meta = with lib; {
     description = "Python module to get information about Bizkaibus buses";
     homepage = "https://github.com/UgaitzEtxebarria/BizkaibusRTPI";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf mkOption types;
 
   cfg = config.hardware.sata.timeout;
@@ -13,11 +17,9 @@ let
       ''ENV{SYSTEMD_WANTS}="${unitName d}"''
     ];
 
-  devicePath = device:
-    "/dev/disk/by-${device.idBy}/${device.name}";
+  devicePath = device: "/dev/disk/by-${device.idBy}/${device.name}";
 
-  unitName = device:
-    "sata-timeout-${lib.strings.sanitizeDerivationName device.name}";
+  unitName = device: "sata-timeout-${lib.strings.sanitizeDerivationName device.name}";
 
   startScript =
     pkgs.writeShellScript "sata-timeout.sh" ''
@@ -30,10 +32,8 @@ let
         --quietmode errorsonly \
         "$device"
     '';
-
-in
-{
-  meta.maintainers = with lib.maintainers; [ peterhoeg ];
+in {
+  meta.maintainers = with lib.maintainers; [peterhoeg];
 
   options.hardware.sata.timeout = {
     enable = mkEnableOption "SATA drive timeouts";
@@ -55,20 +55,20 @@ in
     drives = mkOption {
       description = "List of drives for which to configure the timeout.";
       type = types.listOf
-        (types.submodule {
-          options = {
-            name = mkOption {
-              description = "Drive name without the full path.";
-              type = types.str;
-            };
-
-            idBy = mkOption {
-              description = "The method to identify the drive.";
-              type = types.enum [ "path" "wwn" ];
-              default = "path";
-            };
+      (types.submodule {
+        options = {
+          name = mkOption {
+            description = "Drive name without the full path.";
+            type = types.str;
           };
-        });
+
+          idBy = mkOption {
+            description = "The method to identify the drive.";
+            type = types.enum ["path" "wwn"];
+            default = "path";
+          };
+        };
+      });
     };
   };
 
@@ -76,10 +76,11 @@ in
     services.udev.extraRules = lib.concatMapStringsSep "\n" buildRule cfg.drives;
 
     systemd.services = lib.listToAttrs (map
-      (e:
+    (
+      e:
         lib.nameValuePair (unitName e) {
           description = "SATA timeout for ${e.name}";
-          wantedBy = [ "sata-timeout.target" ];
+          wantedBy = ["sata-timeout.target"];
           serviceConfig = {
             Type = "oneshot";
             ExecStart = "${startScript} '${devicePath e}'";
@@ -89,12 +90,12 @@ in
             ProtectSystem = "strict";
           };
         }
-      )
-      cfg.drives);
+    )
+    cfg.drives);
 
     systemd.targets.sata-timeout = {
       description = "SATA timeout";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
   };
 }

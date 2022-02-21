@@ -1,12 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub }:
-
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+}:
 mkDerivation (rec {
   version = "1.5.0";
   pname = "iowa-stdlib";
 
   src = fetchFromGitHub {
     owner = "cedille";
-    repo  = "ial";
+    repo = "ial";
     rev = "v${version}";
     sha256 = "0dlis6v6nzbscf713cmwlx8h9n2gxghci8y21qak3hp18gkxdp0g";
   };
@@ -26,6 +29,6 @@ mkDerivation (rec {
     platforms = lib.platforms.unix;
     # broken since Agda 2.6.1
     broken = true;
-    maintainers = with lib.maintainers; [ alexarice turion ];
+    maintainers = with lib.maintainers; [alexarice turion];
   };
 })

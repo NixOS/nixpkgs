@@ -1,5 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 buildGoPackage rec {
   pname = "docopts";
   version = "0.6.4-with-no-mangle-double-dash";
@@ -15,7 +18,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  subPackages = [ "./" ];
+  subPackages = ["./"];
 
   postInstall = ''
     install -D -m 755 ./go/src/$goPackagePath/docopts.sh $out/bin/docopts.sh
@@ -25,7 +28,7 @@ buildGoPackage rec {
     homepage = "https://github.com/docopt/${pname}";
     description = "docopt CLI tool for shell scripting";
     license = licenses.mit;
-    maintainers = [ maintainers.confus ];
+    maintainers = [maintainers.confus];
     platforms = platforms.linux;
   };
 }

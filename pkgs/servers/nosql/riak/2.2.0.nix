@@ -1,6 +1,13 @@
-{ stdenv, lib, fetchurl, unzip, erlang, which, pam, nixosTests }:
-
-let
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  erlang,
+  which,
+  pam,
+  nixosTests,
+}: let
   solrName = "solr-4.10.4-yz-2.tgz";
   yokozunaJarName = "yokozuna-3.jar";
   yzMonitorJarName = "yz_monitor-1.jar";
@@ -24,79 +31,80 @@ let
     };
   };
 in
+  stdenv.mkDerivation {
+    pname = "riak";
+    version = "2.2.0";
 
-stdenv.mkDerivation {
-  pname = "riak";
-  version = "2.2.0";
+    nativeBuildInputs = [unzip];
+    buildInputs = [
+      which
+      erlang
+      pam
+    ];
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [
-    which erlang pam
-  ];
+    src = srcs.riak;
 
-  src = srcs.riak;
+    hardeningDisable = ["format"];
 
-  hardeningDisable = [ "format" ];
+    postPatch = ''
+      sed -i deps/node_package/priv/base/env.sh \
+        -e 's@{{platform_data_dir}}@''${RIAK_DATA_DIR:-/var/db/riak}@' \
+        -e 's@^RUNNER_SCRIPT_DIR=.*@RUNNER_SCRIPT_DIR='$out'/bin@' \
+        -e 's@^RUNNER_BASE_DIR=.*@RUNNER_BASE_DIR='$out'@' \
+        -e 's@^RUNNER_ETC_DIR=.*@RUNNER_ETC_DIR=''${RIAK_ETC_DIR:-/etc/riak}@' \
+        -e 's@^RUNNER_LOG_DIR=.*@RUNNER_LOG_DIR=''${RIAK_LOG_DIR:-/var/log}@'
+    '';
 
-  postPatch = ''
-    sed -i deps/node_package/priv/base/env.sh \
-      -e 's@{{platform_data_dir}}@''${RIAK_DATA_DIR:-/var/db/riak}@' \
-      -e 's@^RUNNER_SCRIPT_DIR=.*@RUNNER_SCRIPT_DIR='$out'/bin@' \
-      -e 's@^RUNNER_BASE_DIR=.*@RUNNER_BASE_DIR='$out'@' \
-      -e 's@^RUNNER_ETC_DIR=.*@RUNNER_ETC_DIR=''${RIAK_ETC_DIR:-/etc/riak}@' \
-      -e 's@^RUNNER_LOG_DIR=.*@RUNNER_LOG_DIR=''${RIAK_LOG_DIR:-/var/log}@'
-  '';
+    preBuild = ''
+      mkdir solr-pkg
+      cp ${srcs.solr} solr-pkg/${solrName}
+      export SOLR_PKG_DIR=$(readlink -f solr-pkg)
 
-  preBuild = ''
-    mkdir solr-pkg
-    cp ${srcs.solr} solr-pkg/${solrName}
-    export SOLR_PKG_DIR=$(readlink -f solr-pkg)
+      mkdir -p deps/yokozuna/priv/java_lib
+      cp ${srcs.yokozunaJar} deps/yokozuna/priv/java_lib/${yokozunaJarName}
 
-    mkdir -p deps/yokozuna/priv/java_lib
-    cp ${srcs.yokozunaJar} deps/yokozuna/priv/java_lib/${yokozunaJarName}
+      mkdir -p deps/yokozuna/priv/solr/lib/ext
+      cp ${srcs.yzMonitorJar} deps/yokozuna/priv/solr/lib/ext/${yzMonitorJarName}
 
-    mkdir -p deps/yokozuna/priv/solr/lib/ext
-    cp ${srcs.yzMonitorJar} deps/yokozuna/priv/solr/lib/ext/${yzMonitorJarName}
+      patchShebangs .
+    '';
 
-    patchShebangs .
-  '';
+    buildPhase = ''
+      runHook preBuild
 
-  buildPhase = ''
-    runHook preBuild
+      make locked-deps
+      make rel
 
-    make locked-deps
-    make rel
+      runHook postBuild
+    '';
 
-    runHook postBuild
-  '';
+    doCheck = false;
 
-  doCheck = false;
+    installPhase = ''
+      runHook preInstall
 
-  installPhase = ''
-    runHook preInstall
+      mkdir $out
+      mv rel/riak/etc rel/riak/riak-etc
+      mkdir -p rel/riak/etc
+      mv rel/riak/riak-etc rel/riak/etc/riak
+      mv rel/riak/* $out
 
-    mkdir $out
-    mv rel/riak/etc rel/riak/riak-etc
-    mkdir -p rel/riak/etc
-    mv rel/riak/riak-etc rel/riak/etc/riak
-    mv rel/riak/* $out
+      for prog in $out/bin/*; do
+        substituteInPlace $prog \
+          --replace '. "`cd \`dirname $0\` && /bin/pwd`/../lib/env.sh"' \
+                    ". $out/lib/env.sh"
+      done
 
-    for prog in $out/bin/*; do
-      substituteInPlace $prog \
-        --replace '. "`cd \`dirname $0\` && /bin/pwd`/../lib/env.sh"' \
-                  ". $out/lib/env.sh"
-    done
+      runHook postInstall
+    '';
 
-    runHook postInstall
-  '';
+    passthru.tests = {inherit (nixosTests) riak;};
 
-  passthru.tests = { inherit (nixosTests) riak; };
-
-  meta = with lib; {
-    maintainers = with maintainers; [ cstrahan mdaiter ];
-    description = "Dynamo inspired NoSQL DB by Basho";
-    platforms   = [ "x86_64-linux" ];
-    license     = licenses.asl20;
-    knownVulnerabilities = [ "CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876" ];
-  };
-}
+    meta = with lib; {
+      maintainers = with maintainers; [cstrahan mdaiter];
+      description = "Dynamo inspired NoSQL DB by Basho";
+      platforms = ["x86_64-linux"];
+      license = licenses.asl20;
+      knownVulnerabilities = ["CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876"];
+    };
+  }

@@ -1,23 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   tzdir = "${pkgs.tzdata}/share/zoneinfo";
-  nospace  = str: filter (c: c == " ") (stringToCharacters str) == [];
-  timezone = types.nullOr (types.addCheck types.str nospace)
-    // { description = "null or string without spaces"; };
+  nospace = str: filter (c: c == " ") (stringToCharacters str) == [];
+  timezone =
+    types.nullOr (types.addCheck types.str nospace)
+    // {description = "null or string without spaces";};
 
   lcfg = config.location;
-
-in
-
-{
+in {
   options = {
-
     time = {
-
       timeZone = mkOption {
         default = null;
         type = timezone;
@@ -37,11 +34,9 @@ in
         type = types.bool;
         description = "If set, keep the hardware clock in local time instead of UTC.";
       };
-
     };
 
     location = {
-
       latitude = mkOption {
         type = types.float;
         description = ''
@@ -61,19 +56,17 @@ in
       };
 
       provider = mkOption {
-        type = types.enum [ "manual" "geoclue2" ];
+        type = types.enum ["manual" "geoclue2"];
         default = "manual";
         description = ''
           The location provider to use for determining your location. If set to
           <literal>manual</literal> you must also provide latitude/longitude.
         '';
       };
-
     };
   };
 
   config = {
-
     environment.sessionVariables.TZDIR = "/etc/zoneinfo";
 
     services.geoclue2.enable = mkIf (lcfg.provider == "geoclue2") true;
@@ -81,14 +74,15 @@ in
     # This way services are restarted when tzdata changes.
     systemd.globalEnvironment.TZDIR = tzdir;
 
-    systemd.services.systemd-timedated.environment = lib.optionalAttrs (config.time.timeZone != null) { NIXOS_STATIC_TIMEZONE = "1"; };
+    systemd.services.systemd-timedated.environment = lib.optionalAttrs (config.time.timeZone != null) {NIXOS_STATIC_TIMEZONE = "1";};
 
-    environment.etc = {
-      zoneinfo.source = tzdir;
-    } // lib.optionalAttrs (config.time.timeZone != null) {
+    environment.etc =
+      {
+        zoneinfo.source = tzdir;
+      }
+      // lib.optionalAttrs (config.time.timeZone != null) {
         localtime.source = "/etc/zoneinfo/${config.time.timeZone}";
         localtime.mode = "direct-symlink";
       };
   };
-
 }

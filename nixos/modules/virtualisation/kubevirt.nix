@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ../profiles/qemu-guest.nix
   ];
@@ -13,7 +16,7 @@
     };
 
     boot.growPartition = true;
-    boot.kernelParams = [ "console=ttyS0" ];
+    boot.kernelParams = ["console=ttyS0"];
     boot.loader.grub.device = "/dev/vda";
     boot.loader.timeout = 0;
 

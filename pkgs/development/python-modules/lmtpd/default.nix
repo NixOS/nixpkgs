@@ -1,5 +1,9 @@
-{ buildPythonPackage, fetchPypi, isPy3k, lib }:
-
+{
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  lib,
+}:
 buildPythonPackage rec {
   pname = "lmtpd";
   version = "6.2.0";
@@ -15,6 +19,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/moggers87/lmtpd";
     description = "LMTP counterpart to smtpd in the Python standard library";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [jluttine];
   };
 }

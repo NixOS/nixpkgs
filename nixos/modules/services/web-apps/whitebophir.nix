@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.whitebophir;
 in {
   options = {
@@ -33,18 +35,18 @@ in {
   config = mkIf cfg.enable {
     systemd.services.whitebophir = {
       description = "Whitebophir Service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
       environment = {
-        PORT            = toString cfg.port;
-        HOST            = toString cfg.listenAddress;
+        PORT = toString cfg.port;
+        HOST = toString cfg.listenAddress;
         WBO_HISTORY_DIR = "/var/lib/whitebophir";
       };
 
       serviceConfig = {
-        DynamicUser    = true;
-        ExecStart      = "${cfg.package}/bin/whitebophir";
-        Restart        = "always";
+        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/whitebophir";
+        Restart = "always";
         StateDirectory = "whitebophir";
       };
     };

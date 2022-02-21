@@ -1,44 +1,44 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, gtk3
-, libexif
-, libgphoto2
-, libwebp
-, libsoup
-, libxml2
-, vala
-, sqlite
-, webkitgtk
-, pkg-config
-, gnome
-, gst_all_1
-, libgudev
-, libraw
-, glib
-, glib-networking
-, json-glib
-, gcr
-, libgee
-, gexiv2
-, librest
-, gettext
-, desktop-file-utils
-, gdk-pixbuf
-, librsvg
-, wrapGAppsHook
-, gobject-introspection
-, itstool
-, libgdata
-, libchamplain
-, libsecret
-, gsettings-desktop-schemas
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gtk3,
+  libexif,
+  libgphoto2,
+  libwebp,
+  libsoup,
+  libxml2,
+  vala,
+  sqlite,
+  webkitgtk,
+  pkg-config,
+  gnome,
+  gst_all_1,
+  libgudev,
+  libraw,
+  glib,
+  glib-networking,
+  json-glib,
+  gcr,
+  libgee,
+  gexiv2,
+  librest,
+  gettext,
+  desktop-file-utils,
+  gdk-pixbuf,
+  librsvg,
+  wrapGAppsHook,
+  gobject-introspection,
+  itstool,
+  libgdata,
+  libchamplain,
+  libsecret,
+  gsettings-desktop-schemas,
+  python3,
 }:
-
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
-
 stdenv.mkDerivation rec {
   pname = "shotwell";
   version = "0.30.14";

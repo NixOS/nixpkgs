@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alacritty
-, cage
-, cairo
-, libxkbcommon
-, makeWrapper
-, mesa
-, meson
-, ninja
-, pkg-config
-, udev
-, wayland
-, wayland-protocols
-, wlroots
-, xwayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alacritty,
+  cage,
+  cairo,
+  libxkbcommon,
+  makeWrapper,
+  mesa,
+  meson,
+  ninja,
+  pkg-config,
+  udev,
+  wayland,
+  wayland-protocols,
+  wlroots,
+  xwayland,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wio";
   version = "0.pre+unstable=2021-06-27";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/wio \
-      --prefix PATH ":" "${lib.makeBinPath [ alacritty cage ]}"
+      --prefix PATH ":" "${lib.makeBinPath [alacritty cage]}"
   '';
 
   meta = with lib; {
@@ -59,10 +59,11 @@ stdenv.mkDerivation rec {
       and feel to plan9's rio.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [AndersonTorres];
     inherit (wayland.meta) platforms;
   };
 
-  passthru.providedSessions = [ "wio" ];
+  passthru.providedSessions = ["wio"];
 }
 # TODO: factor Linux-specific options
+

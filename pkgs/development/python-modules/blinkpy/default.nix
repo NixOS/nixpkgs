@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-dateutil
-, python-slugify
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dateutil,
+  python-slugify,
+  requests,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "blinkpy";
   version = "0.18.0";
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python library for the Blink Camera system";
     homepage = "https://github.com/fronzbot/blinkpy";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

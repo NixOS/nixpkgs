@@ -1,5 +1,13 @@
-{ fetchurl, lib, stdenv, ant, jdk, jre, python2, makeWrapper }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ant,
+  jdk,
+  jre,
+  python2,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "rabbitmq-java-client";
   version = "3.3.4";
@@ -9,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "03kspkgzzjsbq6f8yl2zj5m30qwgxv3l58hrbf6gcgxb5rpfk6sh";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ant jdk python2 ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [ant jdk python2];
 
   buildPhase = "ant dist";
 
@@ -26,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "RabbitMQ Java client library which allows Java code to interface to AMQP servers";
     homepage = "https://www.rabbitmq.com/java-client.html";
-    license = with licenses; [ mpl11 gpl2 ];
+    license = with licenses; [mpl11 gpl2];
     platforms = platforms.linux;
   };
 }

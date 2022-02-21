@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, capstone
-, stdenv
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  capstone,
+  stdenv,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "capstone";
   version = lib.getVersion capstone;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace manylinux1 manylinux2014
   '';
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [setuptools];
 
   checkPhase = ''
     mv capstone capstone.hidden
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "http://www.capstone-engine.org/";
     license = licenses.bsdOriginal;
     description = "Python bindings for Capstone disassembly engine";
-    maintainers = with maintainers; [ bennofs ris ];
+    maintainers = with maintainers; [bennofs ris];
   };
 }

@@ -1,11 +1,19 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+import ./make-test-python.nix ({
+  lib,
+  pkgs,
+  ...
+}: {
   name = "doh-proxy-rust";
   meta = with lib.maintainers; {
-    maintainers = [ stephank ];
+    maintainers = [stephank];
   };
 
   nodes = {
-    machine = { pkgs, lib, ... }: {
+    machine = {
+      pkgs,
+      lib,
+      ...
+    }: {
       services.bind = {
         enable = true;
         extraOptions = "empty-zones-enable no;";
@@ -29,7 +37,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     };
   };
 
-  testScript = { nodes, ... }: ''
+  testScript = {nodes, ...}: ''
     url = "http://localhost:3000/dns-query"
     query = "AAABAAABAAAAAAAAAm5zB2V4YW1wbGUDb3JnAAABAAE="  # IN A ns.example.org.
     bin_ip = r"$'\xC0\xA8\x00\x01'"  # 192.168.0.1, as shell binary string

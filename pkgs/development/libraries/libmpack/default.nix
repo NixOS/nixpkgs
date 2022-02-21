@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libtool }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtool,
+}:
 stdenv.mkDerivation rec {
   pname = "libmpack";
   version = "1.0.5";
@@ -10,15 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "0rai5djdkjz7bsn025k5489in7r1amagw1pib0z4qns6b52kiar2";
   };
 
-  nativeBuildInputs = [ libtool ];
+  nativeBuildInputs = [libtool];
 
-  makeFlags = [ "LIBTOOL=libtool" "PREFIX=$(out)" ];
+  makeFlags = ["LIBTOOL=libtool" "PREFIX=$(out)"];
 
   meta = with lib; {
     description = "Simple implementation of msgpack in C";
     homepage = "https://github.com/tarruda/libmpack/";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [lovek323];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

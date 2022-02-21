@@ -8,29 +8,35 @@
 #    Check the version number in the src/llvm-project git submodule in:
 #    https://github.com/rust-lang/rust/blob/<version-tag>/.gitmodules
 # 3. Firefox and Thunderbird should still build on x86_64-linux.
-
-{ stdenv, lib
-, buildPackages
-, newScope, callPackage
-, CoreFoundation, Security, SystemConfiguration
-, pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
-, makeRustPlatform
-, llvmPackages_11
-, llvmPackages_13, llvm_13
+{
+  stdenv,
+  lib,
+  buildPackages,
+  newScope,
+  callPackage,
+  CoreFoundation,
+  Security,
+  SystemConfiguration,
+  pkgsBuildTarget,
+  pkgsBuildBuild,
+  pkgsBuildHost,
+  makeRustPlatform,
+  llvmPackages_11,
+  llvmPackages_13,
+  llvm_13,
 } @ args:
-
 import ./default.nix {
   rustcVersion = "1.58.1";
   rustcSha256 = "1iq7kj16qfpkx8gvw50d8rf7glbm6s0pj2y1qkrz7mi56vfsyfd8";
 
-  llvmSharedForBuild = pkgsBuildBuild.llvmPackages_13.libllvm.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvmPackages_13.libllvm.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvmPackages_13.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = pkgsBuildBuild.llvmPackages_13.libllvm.override {enableSharedLibraries = true;};
+  llvmSharedForHost = pkgsBuildHost.llvmPackages_13.libllvm.override {enableSharedLibraries = true;};
+  llvmSharedForTarget = pkgsBuildTarget.llvmPackages_13.libllvm.override {enableSharedLibraries = true;};
 
   llvmBootstrapForDarwin = llvmPackages_11;
 
   # For use at runtime
-  llvmShared = llvm_13.override { enableSharedLibraries = true; };
+  llvmShared = llvm_13.override {enableSharedLibraries = true;};
 
   # Expose llvmPackages used for rustc from rustc via passthru for LTO in Firefox
   llvmPackagesForBuild = pkgsBuildBuild.llvmPackages_13;
@@ -59,5 +65,4 @@ import ./default.nix {
   rustcPatches = [
   ];
 }
-
-(builtins.removeAttrs args [ "fetchpatch" "pkgsBuildHost" "llvmPackages_11" "llvmPackages_13" "llvm_13"])
+(builtins.removeAttrs args ["fetchpatch" "pkgsBuildHost" "llvmPackages_11" "llvmPackages_13" "llvm_13"])

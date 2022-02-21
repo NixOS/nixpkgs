@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, eprover, ocaml, camlp4, perl, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  makeWrapper,
+  eprover,
+  ocaml,
+  camlp4,
+  perl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "leo2";
   version = "1.7.0";
@@ -9,10 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1b2q7vsz6s9ighypsigqjm1mzjiq3xgnz5id5ssb4rh9zm190r82";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ eprover ocaml camlp4 perl zlib ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [eprover ocaml camlp4 perl zlib];
 
-  patches = [ (fetchpatch {
+  patches = [
+    (fetchpatch {
       url = "https://github.com/niklasso/minisat/commit/7eb6015313561a2586032574788fcb133eeaa19f.patch";
       stripLen = 1;
       extraPrefix = "lib/";
@@ -27,7 +38,7 @@ stdenv.mkDerivation rec {
       --replace '+camlp4' "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
   '';
 
-  buildFlags = [ "opt" ];
+  buildFlags = ["opt"];
 
   preInstall = "mkdir -p $out/bin";
 
@@ -41,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A high-performance typed higher order prover";
-    maintainers = [ maintainers.raskin ];
+    maintainers = [maintainers.raskin];
     platforms = platforms.linux;
     license = licenses.bsd3;
     homepage = "http://www.leoprover.org/";

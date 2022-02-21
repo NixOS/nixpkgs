@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, google-api-core
-, grpcio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  google-api-core,
+  grpcio,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "chirpstack-api";
   version = "3.12.4";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "ChirpStack gRPC API message and service wrappers for Python";
     homepage = "https://github.com/brocaar/chirpstack-api";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

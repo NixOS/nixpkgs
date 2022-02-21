@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "dnscrypt-proxy2";
   version = "2.1.1";
@@ -20,7 +23,7 @@ buildGoModule rec {
 
     license = licenses.isc;
     homepage = "https://dnscrypt.info/";
-    maintainers = with maintainers; [ atemu waynr ];
+    maintainers = with maintainers; [atemu waynr];
     platforms = with platforms; unix;
   };
 }

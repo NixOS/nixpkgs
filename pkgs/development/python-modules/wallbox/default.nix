@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  requests,
+  simplejson,
 }:
-
 buildPythonPackage rec {
   pname = "wallbox";
   version = "0.4.6";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "wallbox" ];
+  pythonImportsCheck = ["wallbox"];
 
   meta = with lib; {
     description = "Module for interacting with Wallbox EV charger api";
     homepage = "https://github.com/cliviu74/wallbox";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

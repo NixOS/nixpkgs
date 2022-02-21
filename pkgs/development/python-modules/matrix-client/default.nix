@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, requests
-, responses
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  requests,
+  responses,
+  urllib3,
 }:
-
 buildPythonPackage rec {
   pname = "matrix_client";
   version = "0.4.0";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
       "pytest-runner~=5.1" ""
   '';
 
-  pythonImportsCheck = [ "matrix_client" ];
+  pythonImportsCheck = ["matrix_client"];
 
   meta = with lib; {
     description = "Python Matrix Client-Server SDK";
     homepage = "https://github.com/matrix-org/matrix-python-sdk";
     license = licenses.asl20;
-    maintainers = with maintainers; [ olejorgenb ];
+    maintainers = with maintainers; [olejorgenb];
   };
 }

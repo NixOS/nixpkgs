@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "liquidprompt";
   version = "2.0.4";
@@ -27,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nojhan/liquidprompt";
     license = licenses.agpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ gerschtli ];
+    maintainers = with maintainers; [gerschtli];
   };
 }

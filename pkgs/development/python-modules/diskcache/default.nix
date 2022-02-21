@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-django
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-django,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "diskcache";
   version = "5.4.0";
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

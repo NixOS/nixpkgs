@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 stdenv.mkDerivation rec {
   version = "2020-12-17";
   pname = "woof";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ypd2fs8isv6bqmlrdl2djgs5lnk91y1c3rn4ar6sfkpsqp9krjn";
   };
 
-  propagatedBuildInputs = [ python3 ];
+  propagatedBuildInputs = [python3];
 
   dontUnpack = true;
 
@@ -26,7 +30,6 @@ stdenv.mkDerivation rec {
     description = "Web Offer One File - Command-line utility to easily exchange files over a local network";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [matthiasbeyer];
   };
 }
-

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, decorator
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  decorator,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "validators";
   version = "0.18.2";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python Data Validation for Humans™";
     homepage = "https://github.com/kvesteri/validators";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

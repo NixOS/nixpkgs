@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, unzip, jre, runtimeShell }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  unzip,
+  jre,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   version = "1.9";
   pname = "msgviewer";
   uname = "MSGViewer";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/msgviewer/${uname}-${version}/${uname}-${version}.zip";
+    url = "mirror://sourceforge/msgviewer/${uname}-${version}/${uname}-${version}.zip";
     sha256 = "0igmr8c0757xsc94xlv2470zv2mz57zaj52dwr9wj8agmj23jbjz";
   };
 
@@ -23,13 +30,13 @@ stdenv.mkDerivation rec {
     chmod 755 $out/bin/msgviewer
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [makeWrapper unzip];
 
   meta = with lib; {
     description = "Viewer for .msg files (MS Outlook)";
-    homepage    = "https://www.washington.edu/alpine/";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.all;
+    homepage = "https://www.washington.edu/alpine/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [peterhoeg];
+    platforms = platforms.all;
   };
 }

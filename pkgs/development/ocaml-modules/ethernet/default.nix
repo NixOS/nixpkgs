@@ -1,8 +1,18 @@
-{ lib, buildDunePackage, fetchurl
-, rresult, cstruct, ppx_cstruct, mirage-net, mirage-protocols
-, mirage-profile, macaddr, fmt, lwt, logs
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  rresult,
+  cstruct,
+  ppx_cstruct,
+  mirage-net,
+  mirage-protocols,
+  mirage-profile,
+  macaddr,
+  fmt,
+  lwt,
+  logs,
 }:
-
 buildDunePackage rec {
   pname = "ethernet";
   version = "3.0.0";
@@ -37,6 +47,6 @@ buildDunePackage rec {
     description = "OCaml Ethernet (IEEE 802.3) layer, used in MirageOS";
     homepage = "https://github.com/mirage/ethernet";
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

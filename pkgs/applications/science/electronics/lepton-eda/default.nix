@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, pkg-config
-, makeWrapper
-, texinfo
-, fetchurl
-, autoreconfHook
-, guile
-, flex
-, gtk2
-, glib
-, gtkextra
-, gettext
-, gawk
-, shared-mime-info
-, groff
-, libstroke
+{
+  stdenv,
+  lib,
+  pkg-config,
+  makeWrapper,
+  texinfo,
+  fetchurl,
+  autoreconfHook,
+  guile,
+  flex,
+  gtk2,
+  glib,
+  gtkextra,
+  gettext,
+  gawk,
+  shared-mime-info,
+  groff,
+  libstroke,
 }:
-
 stdenv.mkDerivation rec {
   pname = "lepton-eda";
   version = "1.9.17-20211219";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lOneKeJUcw6jOX/3iv9BDWOJ3xip/vGhzxHHNAbtsS8=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper texinfo autoreconfHook ];
+  nativeBuildInputs = [pkg-config makeWrapper texinfo autoreconfHook];
 
-  propagatedBuildInputs = [ guile flex gtk2 glib gtkextra gettext gawk shared-mime-info groff libstroke ];
+  propagatedBuildInputs = [guile flex gtk2 glib gtkextra gettext gawk shared-mime-info groff libstroke];
 
   configureFlags = [
     "--disable-update-xdg-database"
@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tesq0 ];
+    maintainers = with maintainers; [tesq0];
   };
 }

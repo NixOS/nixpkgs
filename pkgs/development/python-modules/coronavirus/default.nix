@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
 }:
-
 buildPythonPackage rec {
   pname = "coronavirus";
   version = "1.1.1";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   # no tests are present
   doCheck = false;
-  pythonImportsCheck = [ "coronavirus" ];
+  pythonImportsCheck = ["coronavirus"];
 
   meta = with lib; {
     description = "Python client for getting Corona virus info";
     homepage = "https://github.com/nabucasa/coronavirus";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

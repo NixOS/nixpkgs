@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "keystone";
   version = "0.9.2";
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight multi-platform, multi-architecture assembler framework";
     homepage = "https://www.keystone-engine.org";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [luc65r];
     platforms = platforms.unix;
   };
 }

@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonschema
-, pythonOlder
-, requests
-, pytestCheckHook
-, pyjson5
-, Babel
-, jupyter_server
-, openapi-core
-, pytest-tornasync
-, ruamel-yaml
-, strict-rfc3339
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jsonschema,
+  pythonOlder,
+  requests,
+  pytestCheckHook,
+  pyjson5,
+  Babel,
+  jupyter_server,
+  openapi-core,
+  pytest-tornasync,
+  ruamel-yaml,
+  strict-rfc3339,
 }:
-
 buildPythonPackage rec {
   pname = "jupyterlab_server";
   version = "2.10.3";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  propagatedBuildInputs = [ requests jsonschema pyjson5 Babel jupyter_server ];
+  propagatedBuildInputs = [requests jsonschema pyjson5 Babel jupyter_server];
 
   checkInputs = [
     openapi-core
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  pytestFlagsArray = [ "--pyargs" "jupyterlab_server" ];
+  pytestFlagsArray = ["--pyargs" "jupyterlab_server"];
 
   __darwinAllowLocalNetworking = true;
 
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "JupyterLab Server";
     homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [maintainers.costrouc];
   };
 }

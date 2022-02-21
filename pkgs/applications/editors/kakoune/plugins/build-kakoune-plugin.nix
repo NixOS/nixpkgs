@@ -1,6 +1,9 @@
-{ lib, stdenv, rtpPath ? "share/kak/autoload/plugins" }:
-rec {
-  buildKakounePlugin = attrs@{
+{
+  lib,
+  stdenv,
+  rtpPath ? "share/kak/autoload/plugins",
+}: rec {
+  buildKakounePlugin = attrs @ {
     name ? "${attrs.pname}-${attrs.version}",
     namePrefix ? "kakplugin-",
     src,
@@ -12,7 +15,8 @@ rec {
     path ? lib.getName name,
     ...
   }:
-    stdenv.mkDerivation ((builtins.removeAttrs attrs [ "namePrefix" "path" ]) // {
+    stdenv.mkDerivation ((builtins.removeAttrs attrs ["namePrefix" "path"])
+    // {
       name = namePrefix + name;
 
       installPhase = ''
@@ -26,8 +30,10 @@ rec {
       '';
     });
 
-  buildKakounePluginFrom2Nix = attrs: buildKakounePlugin ({
-    dontBuild = true;
-    dontConfigure = true;
-  } // attrs);
+  buildKakounePluginFrom2Nix = attrs:
+    buildKakounePlugin ({
+      dontBuild = true;
+      dontConfigure = true;
+    }
+    // attrs);
 }

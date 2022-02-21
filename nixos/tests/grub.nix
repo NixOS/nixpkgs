@@ -1,11 +1,11 @@
-import ./make-test-python.nix ({ lib, ... }: {
+import ./make-test-python.nix ({lib, ...}: {
   name = "grub";
 
   meta = with lib.maintainers; {
-    maintainers = [ rnhmjoj ];
+    maintainers = [rnhmjoj];
   };
 
-  machine = { ... }: {
+  machine = {...}: {
     virtualisation.useBootLoader = true;
 
     boot.loader.timeout = null;

@@ -1,8 +1,9 @@
 # DO NOT EDIT! This file is generated automatically.
 # Command: ./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/5.12
-{ fetchurl, mirror }:
-
 {
+  fetchurl,
+  mirror,
+}: {
   qt3d = {
     version = "5.12.10";
     src = fetchurl {

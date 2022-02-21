@@ -1,5 +1,11 @@
-{lib, stdenv, fetchurl, pkg-config, gtk2, synergy}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  synergy,
+}:
 stdenv.mkDerivation rec {
   pname = "quicksynergy";
   version = "0.9.0";
@@ -8,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pi8503bg8q1psw50y6d780i33nnvfjqiy9vnr3v52pdcfip8pix";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
     gtk2
     synergy
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
       host mouse and keyboard.";
     homepage = "https://sourceforge.net/projects/quicksynergy/";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.spinus ];
+    maintainers = [lib.maintainers.spinus];
     platforms = lib.platforms.linux;
   };
 }

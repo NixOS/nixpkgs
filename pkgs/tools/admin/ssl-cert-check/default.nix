@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
-, findutils
-, gawk
-, gnugrep
-, gnused
-, makeWrapper
-, mktemp
-, openssl
-, which
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
+  findutils,
+  gawk,
+  gnugrep,
+  gnused,
+  makeWrapper,
+  mktemp,
+  openssl,
+  which,
 }:
-
 stdenv.mkDerivation rec {
   pname = "ssl-cert-check";
   version = "4.14";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "Bourne shell script that can be used to report on expiring SSL certificates";
     homepage = "https://github.com/Matty9191/ssl-cert-check";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with maintainers; [ryantm];
     platforms = platforms.linux;
   };
 }

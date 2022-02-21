@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, alsa-lib }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  alsa-lib,
+}:
 buildGoModule rec {
   pname = "sampler";
   version = "1.1.0";
@@ -15,15 +19,15 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  buildInputs = [ alsa-lib ];
+  buildInputs = [alsa-lib];
 
   meta = with lib; {
     description = "Tool for shell commands execution, visualization and alerting";
     homepage = "https://sampler.dev";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ uvnikita ];
+    maintainers = with maintainers; [uvnikita];
     platforms = platforms.unix;
   };
 }

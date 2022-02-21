@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
-, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm, zchunk }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  pkg-config,
+  gpgme,
+  libsolv,
+  openssl,
+  check,
+  json_c,
+  libmodulemd,
+  libsmartcols,
+  sqlite,
+  librepo,
+  libyaml,
+  rpm,
+  zchunk,
+}:
 stdenv.mkDerivation rec {
   pname = "libdnf";
   version = "0.65.0";
@@ -59,6 +76,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rpm-software-management/libdnf";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rb2k ];
+    maintainers = with maintainers; [rb2k];
   };
 }

@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, nasm
-, openssl
-, python3
-, extraCmakeFlags ? [ ]
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  nasm,
+  openssl,
+  python3,
+  extraCmakeFlags ? [],
 }:
-
 stdenv.mkDerivation rec {
   pname = "ipp-crypto";
   version = "2021.3";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       --replace 'ippcpo-config.cmake' 'ippcp-config.cmake'
   '';
 
-  cmakeFlags = [ "-DARCH=intel64" ] ++ extraCmakeFlags;
+  cmakeFlags = ["-DARCH=intel64"] ++ extraCmakeFlags;
 
   nativeBuildInputs = [
     cmake

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, libyaml
-, isPy27
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  libyaml,
+  isPy27,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "PyYAML";
   version = "5.4.1.1";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
     sha256 = "1v386gzdvsjg0mgix6v03rd0cgs9dl81qvn3m547849jm8r41dx8";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [cython];
 
-  buildInputs = [ libyaml ];
+  buildInputs = [libyaml];
 
   checkPhase = ''
     runHook preCheck
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "yaml" ];
+  pythonImportsCheck = ["yaml"];
 
   meta = with lib; {
     description = "The next generation YAML parser and emitter for Python";

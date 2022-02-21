@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asyncio-mqtt
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  asyncio-mqtt,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "python-openzwave-mqtt";
   version = "1.4.0";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python wrapper for OpenZWave's MQTT daemon";
     homepage = "https://github.com/cgarwood/python-openzwave-mqtt";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

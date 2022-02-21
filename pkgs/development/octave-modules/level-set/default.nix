@@ -1,13 +1,13 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchgit
-, automake
-, autoconf
-, autoconf-archive
-, parallel
+{
+  buildOctavePackage,
+  stdenv,
+  lib,
+  fetchgit,
+  automake,
+  autoconf,
+  autoconf-archive,
+  parallel,
 }:
-
 buildOctavePackage rec {
   pname = "level-set";
   version = "2019-04-13";
@@ -49,7 +49,7 @@ buildOctavePackage rec {
     name = "Level Set";
     homepage = "https://octave.sourceforge.io/level-set/index.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [KarlJoad];
     description = "Routines for calculating the time-evolution of the level-set equation and extracting geometric information from the level-set function";
     # /build/level-set-2019-04-13.tar.gz: Cannot open: No such file or directory
     broken = stdenv.isDarwin;

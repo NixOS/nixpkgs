@@ -1,5 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash }:
-
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  bash,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "bfetch";
   version = "unstable-2021-05-21";
@@ -11,19 +15,19 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-jS9zI8b+z3KbI+LeHFwIMJfEmAKSzO8HRZ2rk35hJCk=";
   };
 
-  buildInputs = [ bash ];
+  buildInputs = [bash];
 
   postPatch = ''
     patchShebangs --host bin/bfetch
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   meta = with lib; {
     description = "A SuperB general-purpose fetch displayer written in portable sh";
     homepage = "https://github.com/NNBnh/bfetch";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [fortuneteller2k];
   };
 }

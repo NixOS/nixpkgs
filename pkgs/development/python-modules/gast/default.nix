@@ -1,11 +1,11 @@
-{ lib
-, astunparse
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  astunparse,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "gast";
   version = "0.5.3";
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Compatibility layer between the AST of various Python versions";
     homepage = "https://github.com/serge-sans-paille/gast/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jyp cpcloud ];
+    maintainers = with maintainers; [jyp cpcloud];
   };
 }

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, numactl, ncurses, check }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  numactl,
+  ncurses,
+  check,
+}:
 stdenv.mkDerivation rec {
   pname = "numatop";
   version = "2.2";
@@ -10,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GJvTwqgx34ZW10eIJj/xiKe3ZkAfs7GlJImz8jrnjfI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ numactl ncurses ];
-  checkInputs = [ check ];
+  nativeBuildInputs = [autoreconfHook pkg-config];
+  buildInputs = [numactl ncurses];
+  checkInputs = [check];
 
   patches = [
     (fetchpatch {
@@ -27,16 +36,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  doCheck  = true;
+  doCheck = true;
 
   meta = with lib; {
     description = "Tool for runtime memory locality characterization and analysis of processes and threads on a NUMA system";
     homepage = "https://01.org/numatop";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [dtzWill];
     platforms = [
-      "i686-linux" "x86_64-linux"
-      "powerpc64-linux" "powerpc64le-linux"
+      "i686-linux"
+      "x86_64-linux"
+      "powerpc64-linux"
+      "powerpc64le-linux"
     ];
   };
 }

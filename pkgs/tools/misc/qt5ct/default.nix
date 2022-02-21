@@ -1,30 +1,37 @@
-{ mkDerivation, lib, fetchurl, qtbase, qtsvg, qttools, qmake }:
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  qtbase,
+  qtsvg,
+  qttools,
+  qmake,
+}: let
+  inherit (lib) getDev;
+in
+  mkDerivation rec {
+    pname = "qt5ct";
+    version = "1.5";
 
-let inherit (lib) getDev; in
+    src = fetchurl {
+      url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+      sha256 = "sha256-1j0M4W4CQnIH2GUx9wpxxbnIUARN1bLcsihVMfQW5JA=";
+    };
 
-mkDerivation rec {
-  pname = "qt5ct";
-  version = "1.5";
+    nativeBuildInputs = [qmake qttools];
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-1j0M4W4CQnIH2GUx9wpxxbnIUARN1bLcsihVMfQW5JA=";
-  };
+    buildInputs = [qtbase qtsvg];
 
-  nativeBuildInputs = [ qmake qttools ];
+    qmakeFlags = [
+      "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
+      "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    ];
 
-  buildInputs = [ qtbase qtsvg ];
-
-  qmakeFlags = [
-    "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
-    "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
-  ];
-
-  meta = with lib; {
-    description = "Qt5 Configuration Tool";
-    homepage = "https://www.opendesktop.org/content/show.php?content=168066";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ralith ];
-  };
-}
+    meta = with lib; {
+      description = "Qt5 Configuration Tool";
+      homepage = "https://www.opendesktop.org/content/show.php?content=168066";
+      platforms = platforms.linux;
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ralith];
+    };
+  }

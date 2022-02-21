@@ -1,14 +1,11 @@
-{ writeShellScript
-, nix
-, curl
-, gzip
-, xmlstarlet
-, common-updater-scripts
-}:
-
-{ attrPath }:
-
-let
+{
+  writeShellScript,
+  nix,
+  curl,
+  gzip,
+  xmlstarlet,
+  common-updater-scripts,
+}: {attrPath}: let
   url = "http://mirrors.kodi.tv/addons/matrix/addons.xml.gz";
   updateScript = writeShellScript "update.sh" ''
     set -ex
@@ -19,5 +16,4 @@ let
 
     ${common-updater-scripts}/bin/update-source-version "$attrPath" "$version"
   '';
-in
-  [ updateScript attrPath ]
+in [updateScript attrPath]

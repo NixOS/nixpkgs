@@ -1,25 +1,26 @@
-{ lib, stdenv
-, gettext
-, meson
-, ninja
-, fetchurl
-, fetchpatch
-, apacheHttpd
-, nautilus
-, pkg-config
-, gtk3
-, glib
-, libxml2
-, systemd
-, wrapGAppsHook
-, itstool
-, libnotify
-, mod_dnssd
-, gnome
-, libcanberra-gtk3
-, python3
+{
+  lib,
+  stdenv,
+  gettext,
+  meson,
+  ninja,
+  fetchurl,
+  fetchpatch,
+  apacheHttpd,
+  nautilus,
+  pkg-config,
+  gtk3,
+  glib,
+  libxml2,
+  systemd,
+  wrapGAppsHook,
+  itstool,
+  libnotify,
+  mod_dnssd,
+  gnome,
+  libcanberra-gtk3,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-user-share";
   version = "3.34.0";

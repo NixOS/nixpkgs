@@ -1,5 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitHub }:
-
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+}:
 buildNimPackage rec {
   pname = "flatty";
   version = "0.2.3";
@@ -14,9 +17,10 @@ buildNimPackage rec {
   doCheck = true;
 
   meta = with lib;
-    src.meta // {
+    src.meta
+    // {
       description = "Tools and serializer for plain flat binary files";
-      license = [ licenses.mit ];
-      maintainers = [ maintainers.ehmry ];
+      license = [licenses.mit];
+      maintainers = [maintainers.ehmry];
     };
 }

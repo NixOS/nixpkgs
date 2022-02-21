@@ -1,26 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook
-, dpkg
-, atomEnv
-, libuuid
-, libappindicator-gtk3
-, pulseaudio
-, at-spi2-atk
-, coreutils
-, gawk
-, xdg-utils
-, systemd
-, nodePackages
-, xar
-, cpio
-, makeWrapper
-, enableRectOverlay ? false
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  wrapGAppsHook,
+  dpkg,
+  atomEnv,
+  libuuid,
+  libappindicator-gtk3,
+  pulseaudio,
+  at-spi2-atk,
+  coreutils,
+  gawk,
+  xdg-utils,
+  systemd,
+  nodePackages,
+  xar,
+  cpio,
+  makeWrapper,
+  enableRectOverlay ? false,
+}: let
   pname = "teams";
   version = "1.4.00.26453";
   meta = with lib; {
@@ -28,8 +27,8 @@ let
     homepage = "https://teams.microsoft.com";
     downloadPage = "https://teams.microsoft.com/downloads";
     license = licenses.unfree;
-    maintainers = with maintainers; [ liff tricktron ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [liff tricktron];
+    platforms = ["x86_64-linux" "x86_64-darwin" "aarch64-darwin"];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -40,14 +39,16 @@ let
       sha256 = "0ndqk893l17m42hf5fiiv6mka0v7v8r54kblvb67jsxajdvva5gf";
     };
 
-    nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar ];
+    nativeBuildInputs = [dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar];
 
     unpackCmd = "dpkg -x $curSrc .";
 
-    buildInputs = atomEnv.packages ++ [
-      libuuid
-      at-spi2-atk
-    ];
+    buildInputs =
+      atomEnv.packages
+      ++ [
+        libuuid
+        at-spi2-atk
+      ];
 
     runtimeDependencies = [
       (lib.getLib systemd)
@@ -60,7 +61,6 @@ let
       gappsWrapperArgs+=(--add-flags --disable-namespace-sandbox)
       gappsWrapperArgs+=(--add-flags --disable-setuid-sandbox)
     '';
-
 
     buildPhase = ''
       runHook preBuild
@@ -90,11 +90,13 @@ let
 
       ln -s $out/opt/teams/teams $out/bin/
 
-      ${lib.optionalString (!enableRectOverlay) ''
-      # Work-around screen sharing bug
-      # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
-      rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
-      ''}
+      ${
+        lib.optionalString (!enableRectOverlay) ''
+          # Work-around screen sharing bug
+          # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
+          rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
+        ''
+      }
 
       runHook postInstall
     '';
@@ -137,7 +139,7 @@ let
       sha256 = "1mg6a3b3954w4xy5rlcrwxczymygl61dv2rxqp45sjcsh3hp39q0";
     };
 
-    buildInputs = [ xar cpio makeWrapper ];
+    buildInputs = [xar cpio makeWrapper];
 
     unpackPhase = ''
       xar -xf $src
@@ -158,6 +160,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+  if stdenv.isDarwin
+  then darwin
+  else linux

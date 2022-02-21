@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "scudcloud";
   version = "1.65";
@@ -11,13 +14,13 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1ffdy74igll74fwpmnn3brvcxbk4iianqscdzz18sx1pfqpw16cl";
   };
 
-  propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit dbus-python jsmin ];
+  propagatedBuildInputs = with python3Packages; [pyqt5_with_qtwebkit dbus-python jsmin];
 
   meta = with lib; {
     description = "Non-official desktop client for Slack";
     homepage = "https://github.com/raelgc/scudcloud";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ volhovm ];
+    maintainers = with maintainers; [volhovm];
   };
 }

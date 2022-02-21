@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "retry_decorator";
   version = "1.1.1";
@@ -17,5 +17,4 @@ buildPythonPackage rec {
     description = "Retry Decorator for python functions";
     license = licenses.mit;
   };
-
 }

@@ -1,14 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.pinnwand;
 
   format = pkgs.formats.toml {};
   configFile = format.generate "pinnwand.toml" cfg.settings;
-in
-{
+in {
   options.services.pinnwand = {
     enable = mkEnableOption "Pinnwand";
 
@@ -80,23 +81,27 @@ in
     in {
       pinnwand = {
         description = "Pinnwannd HTTP Server";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = ["network.target"];
+        wantedBy = ["multi-user.target"];
 
         unitConfig.Documentation = "https://pinnwand.readthedocs.io/en/latest/";
 
-        serviceConfig = {
-          ExecStart = "${command} http --port ${toString(cfg.port)}";
-        } // hardeningOptions;
+        serviceConfig =
+          {
+            ExecStart = "${command} http --port ${toString (cfg.port)}";
+          }
+          // hardeningOptions;
       };
 
       pinnwand-reaper = {
         description = "Pinnwand Reaper";
         startAt = "daily";
 
-        serviceConfig = {
-          ExecStart = "${command} -vvvv reap";  # verbosity increased to show number of deleted pastes
-        } // hardeningOptions;
+        serviceConfig =
+          {
+            ExecStart = "${command} -vvvv reap"; # verbosity increased to show number of deleted pastes
+          }
+          // hardeningOptions;
       };
     };
   };

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "goodwe";
   version = "0.2.16";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Python library for connecting to GoodWe inverter";
     homepage = "https://github.com/marcelblijleven/goodwe";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

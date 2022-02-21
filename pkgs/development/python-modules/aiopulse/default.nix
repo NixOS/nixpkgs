@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, async-timeout
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  async-timeout,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "aiopulse";
   version = "0.4.3";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
       binary protocol to issues commands to the Pulse Hub.
     '';
     homepage = "https://github.com/atmurray/aiopulse";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

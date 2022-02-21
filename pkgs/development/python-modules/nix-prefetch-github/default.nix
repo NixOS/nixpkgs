@@ -1,10 +1,10 @@
-{ fetchFromGitHub
-, lib
-, buildPythonPackage
-, git
-, pythonOlder
+{
+  fetchFromGitHub,
+  lib,
+  buildPythonPackage,
+  git,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
   version = "5.0.1";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "DOmFfUCLJ+rnS4PznQaQrDrqjUU4DXmOrC9BspqKZVM=";
   };
 
-  checkInputs = [ git ];
+  checkInputs = [git];
 
   checkPhase = ''
     python -m unittest discover
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Prefetch sources from github";
     homepage = "https://github.com/seppeljordan/nix-prefetch-github";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ seppeljordan ];
+    maintainers = with maintainers; [seppeljordan];
   };
 }

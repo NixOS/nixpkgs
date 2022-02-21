@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, scsh, feh, xorg }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  scsh,
+  feh,
+  xorg,
+}:
 stdenv.mkDerivation rec {
   pname = "deco";
   version = "unstable-2019-04-03";
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ebzzry/deco";
     description = "A simple root image setter";
     license = licenses.mit;
-    maintainers = [ maintainers.ebzzry ];
+    maintainers = [maintainers.ebzzry];
     platforms = platforms.unix;
   };
 

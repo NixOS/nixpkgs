@@ -1,11 +1,12 @@
-{ config, lib, pkgs, options }:
-
-with lib;
-
-let
-  cfg = config.services.prometheus.exporters.tor;
-in
 {
+  config,
+  lib,
+  pkgs,
+  options,
+}:
+with lib; let
+  cfg = config.services.prometheus.exporters.tor;
+in {
   port = 9130;
   extraOpts = {
     torControlAddress = mkOption {
@@ -39,6 +40,6 @@ in
     # CPython requires a process to either have $HOME defined or run as a UID
     # defined in /etc/passwd. The latter is false with DynamicUser, so define a
     # dummy $HOME. https://bugs.python.org/issue10496
-    environment = { HOME = "/var/empty"; };
+    environment = {HOME = "/var/empty";};
   };
 }

@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, scikitimage }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-runner,
+  scikitimage,
+}:
 buildPythonPackage {
   pname = "image-match";
   version = "1.1.2";
@@ -11,7 +16,7 @@ buildPythonPackage {
     sha256 = "0vlmpidmhkpgdzw2k03x5layhijcrjpmyfd93yv2ls77ihz00ix5";
   };
 
-  buildInputs = [ pytest-runner ];
+  buildInputs = [pytest-runner];
 
   propagatedBuildInputs = [
     scikitimage
@@ -24,12 +29,12 @@ buildPythonPackage {
 
   # tests cannot work without elasticsearch
   doCheck = false;
-  pythonImportsCheck = [ "image_match" ];
+  pythonImportsCheck = ["image_match"];
 
   meta = with lib; {
     homepage = "https://github.com/ascribe/image-match";
     description = "Quickly search over billions of images";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [cmcdragonkai];
   };
 }

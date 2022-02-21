@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, cherrypy
-, fetchFromGitHub
-, lockfile
-, mock
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cherrypy,
+  fetchFromGitHub,
+  lockfile,
+  mock,
+  msgpack,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
-
 buildPythonPackage rec {
   pname = "cachecontrol";
   version = "0.12.10";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Httplib2 caching for requests";
     homepage = "https://github.com/ionrock/cachecontrol";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [costrouc];
   };
 }

@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, debtcollector, oslotest, stestr, pbr }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  debtcollector,
+  oslotest,
+  stestr,
+  pbr,
+}:
 buildPythonPackage rec {
   pname = "oslo.context";
   version = "3.4.0";
@@ -29,7 +36,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "oslo_context" ];
+  pythonImportsCheck = ["oslo_context"];
 
   meta = with lib; {
     description = "Oslo Context library";

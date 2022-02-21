@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "pluginUtils";
   version = "1.1";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hnr5sp7k6ypf4ks61lnyqx44dkv35yllf3a3xcbrw7yqzagwr1c";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [faust2jaqt faust2lv2];
 
   buildPhase = ''
     for f in *.dsp
@@ -35,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Some simple utility lv2 plugins";
     homepage = "https://github.com/magnetophon/pluginUtils";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
   };
 }

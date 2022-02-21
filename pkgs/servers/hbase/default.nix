@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "hbase";
   version = "0.98.24";
@@ -8,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kz72wqsii09v9hxkw10mzyvjhji5sx3l6aijjalgbybavpcxglb";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
   installPhase = ''
     mkdir -p $out
     cp -R * $out

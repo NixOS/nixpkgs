@@ -1,13 +1,12 @@
-{ stdenv
-, lib
-, callPackage
-, fetchzip
-, jack
-, udev
-, libsForQt5
-}:
-
-rec {
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchzip,
+  jack,
+  udev,
+  libsForQt5,
+}: rec {
   version = "20211223.2.37be4c3";
 
   src = fetchzip {
@@ -28,14 +27,14 @@ rec {
     description = " for Jami, the free and universal communication platform that respects the privacy and freedoms of its users";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.linsui ];
+    maintainers = [maintainers.linsui];
   };
 
-  jami-daemon = callPackage ./daemon.nix { inherit version src udev jack jami-meta; };
+  jami-daemon = callPackage ./daemon.nix {inherit version src udev jack jami-meta;};
 
-  jami-libclient = libsForQt5.callPackage ./libclient.nix { inherit version src jami-meta; };
+  jami-libclient = libsForQt5.callPackage ./libclient.nix {inherit version src jami-meta;};
 
-  jami-client-gnome = libsForQt5.callPackage ./client-gnome.nix { inherit version src jami-meta; };
+  jami-client-gnome = libsForQt5.callPackage ./client-gnome.nix {inherit version src jami-meta;};
 
-  jami-client-qt = libsForQt5.callPackage ./client-qt.nix { inherit version src jami-meta; };
+  jami-client-qt = libsForQt5.callPackage ./client-qt.nix {inherit version src jami-meta;};
 }

@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchurl
-, cmake, docbook_xml_dtd_45, docbook_xsl, doxygen, graphviz-nox, pkg-config, qttools, wrapQtAppsHook
-, alsa-lib, fluidsynth, qtbase, qtsvg, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  doxygen,
+  graphviz-nox,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  alsa-lib,
+  fluidsynth,
+  qtbase,
+  qtsvg,
+  libpulseaudio,
 }:
-
 stdenv.mkDerivation rec {
   pname = "drumstick";
   version = "2.4.1";
@@ -20,14 +33,26 @@ stdenv.mkDerivation rec {
     substituteInPlace library/rt/backendmanager.cpp --subst-var out
   '';
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = ["out" "dev" "man"];
 
   nativeBuildInputs = [
-    cmake docbook_xml_dtd_45 docbook_xml_dtd_45 docbook_xsl doxygen graphviz-nox pkg-config qttools wrapQtAppsHook
+    cmake
+    docbook_xml_dtd_45
+    docbook_xml_dtd_45
+    docbook_xsl
+    doxygen
+    graphviz-nox
+    pkg-config
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    alsa-lib fluidsynth libpulseaudio qtbase qtsvg
+    alsa-lib
+    fluidsynth
+    libpulseaudio
+    qtbase
+    qtsvg
   ];
 
   cmakeFlags = [

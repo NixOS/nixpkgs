@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, unixODBC
-, icu
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  unixODBC,
+  icu,
 }:
-
 buildGoModule rec {
   pname = "usql";
   version = "0.9.3";
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-EsLLBhyOcupx5LrJyWWMu4RAGWDKo3keflyZOASKldE=";
 
-  buildInputs = [ unixODBC icu ];
+  buildInputs = [unixODBC icu];
 
   # These tags and flags are copied from build-release.sh
   tags = [
@@ -47,9 +47,8 @@ buildGoModule rec {
     description = "Universal command-line interface for SQL databases";
     homepage = "https://github.com/xo/usql";
     license = licenses.mit;
-    maintainers = with maintainers; [ georgyo ];
+    maintainers = with maintainers; [georgyo];
     # usql does not build on ARM.
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = ["x86_64-linux" "x86_64-darwin"];
   };
-
 }

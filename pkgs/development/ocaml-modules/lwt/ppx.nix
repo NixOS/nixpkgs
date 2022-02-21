@@ -1,5 +1,9 @@
-{ fetchFromGitHub, buildDunePackage, lwt, ppxlib }:
-
+{
+  fetchFromGitHub,
+  buildDunePackage,
+  lwt,
+  ppxlib,
+}:
 buildDunePackage {
   pname = "lwt_ppx";
   version = "2.0.2";
@@ -22,7 +26,7 @@ buildDunePackage {
     sha256 = "sha256-rRivROVbQbXkHWen1n8+9AwrRJaOK0Fhyilw29T7was=";
   };
 
-  propagatedBuildInputs = [ lwt ppxlib ];
+  propagatedBuildInputs = [lwt ppxlib];
 
   meta = {
     description = "Ppx syntax extension for Lwt";

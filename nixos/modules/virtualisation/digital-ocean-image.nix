@@ -1,16 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-  cfg = config.virtualisation.digitalOceanImage;
-in
 {
-
-  imports = [ ./digital-ocean-config.nix ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.virtualisation.digitalOceanImage;
+in {
+  imports = [./digital-ocean-config.nix];
 
   options = {
     virtualisation.digitalOceanImage.diskSize = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
+      type = with types; either (enum ["auto"]) int;
       default = "auto";
       example = 4096;
       description = ''
@@ -31,7 +32,7 @@ in
     };
 
     virtualisation.digitalOceanImage.compressionMethod = mkOption {
-      type = types.enum [ "gzip" "bzip2" ];
+      type = types.enum ["gzip" "bzip2"];
       default = "gzip";
       example = "bzip2";
       description = ''
@@ -44,27 +45,27 @@ in
 
   #### implementation
   config = {
-
     system.build.digitalOceanImage = import ../../lib/make-disk-image.nix {
       name = "digital-ocean-image";
       format = "qcow2";
       postVM = let
-        compress = {
-          "gzip" = "${pkgs.gzip}/bin/gzip";
-          "bzip2" = "${pkgs.bzip2}/bin/bzip2";
-        }.${cfg.compressionMethod};
+        compress =
+          {
+            "gzip" = "${pkgs.gzip}/bin/gzip";
+            "bzip2" = "${pkgs.bzip2}/bin/bzip2";
+          }
+          .${cfg.compressionMethod};
       in ''
         ${compress} $diskImage
       '';
-      configFile = if cfg.configFile == null
+      configFile =
+        if cfg.configFile == null
         then config.virtualisation.digitalOcean.defaultConfigFile
         else cfg.configFile;
       inherit (cfg) diskSize;
       inherit config lib pkgs;
     };
-
   };
 
-  meta.maintainers = with maintainers; [ arianvp eamsden ];
-
+  meta.maintainers = with maintainers; [arianvp eamsden];
 }

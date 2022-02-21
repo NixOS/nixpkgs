@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, cmake }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "astyle";
   version = "3.1";
@@ -15,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace ' /usr/' " $out/"
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [cmake];
 
   meta = with lib; {
     description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";

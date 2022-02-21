@@ -1,8 +1,9 @@
-{ build-idris-package
-, fetchFromGitHub
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "comonad";
   version = "2018-02-26";
 
@@ -17,6 +18,6 @@ build-idris-package  {
     description = "Comonads for Idris";
     homepage = "https://github.com/vmchale/comonad";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

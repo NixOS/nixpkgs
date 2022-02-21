@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, paramiko
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  paramiko,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "scp";
   version = "0.14.3";
@@ -25,12 +25,12 @@ buildPythonPackage rec {
   #The Pypi package doesn't include the test
   doCheck = false;
 
-  pythonImportsCheck = [ "scp" ];
+  pythonImportsCheck = ["scp"];
 
   meta = with lib; {
     homepage = "https://github.com/jbardin/scp.py";
     description = "SCP module for paramiko";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ xnaveira ];
+    maintainers = with maintainers; [xnaveira];
   };
 }

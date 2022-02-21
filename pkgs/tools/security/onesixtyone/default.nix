@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "onesixtyone";
   version = "unstable-2019-12-26";
@@ -24,7 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/trailofbits/onesixtyone";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.fishi0x01 ];
+    maintainers = [maintainers.fishi0x01];
   };
 }
-

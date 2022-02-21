@@ -1,7 +1,7 @@
-{ lib
-, python
+{
+  lib,
+  python,
 }:
-
 python.pkgs.buildPythonPackage rec {
   pname = "memory_profiler";
   version = "0.55.0";

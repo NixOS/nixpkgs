@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, fuse
-, makeWrapper
-, openssl
-, pandoc
-, pkg-config
-, libfido2
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  fuse,
+  makeWrapper,
+  openssl,
+  pandoc,
+  pkg-config,
+  libfido2,
 }:
-
 buildGoModule rec {
   pname = "gocryptfs";
   version = "2.2.1";
@@ -29,9 +29,9 @@ buildGoModule rec {
     pandoc
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [openssl];
 
-  propagatedBuildInputs = [ libfido2 ];
+  propagatedBuildInputs = [libfido2];
 
   ldflags = [
     "-X main.GitVersion=${version}"
@@ -39,7 +39,7 @@ buildGoModule rec {
     "-X main.BuildDate=unknown"
   ];
 
-  subPackages = [ "." "gocryptfs-xray" "contrib/statfs" ];
+  subPackages = ["." "gocryptfs-xray" "contrib/statfs"];
 
   postBuild = ''
     pushd Documentation/
@@ -55,7 +55,7 @@ buildGoModule rec {
   # as the setuid wrapper is required to use gocryptfs as non-root on NixOS
   postInstall = ''
     wrapProgram $out/bin/gocryptfs \
-      --suffix PATH : ${lib.makeBinPath [ fuse ]}
+      --suffix PATH : ${lib.makeBinPath [fuse]}
     ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
 
@@ -63,7 +63,7 @@ buildGoModule rec {
     description = "Encrypted overlay filesystem written in Go";
     license = licenses.mit;
     homepage = "https://nuetzlich.net/gocryptfs/";
-    maintainers = with maintainers; [ flokli offline prusnak ];
+    maintainers = with maintainers; [flokli offline prusnak];
     platforms = platforms.unix;
   };
 }

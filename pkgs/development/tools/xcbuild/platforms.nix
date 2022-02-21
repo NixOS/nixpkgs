@@ -1,7 +1,11 @@
-{ stdenv, runCommand, lib, sdks, xcodePlatform, writeText }:
-
-let
-
+{
+  stdenv,
+  runCommand,
+  lib,
+  sdks,
+  xcodePlatform,
+  writeText,
+}: let
   inherit (lib.generators) toPlist;
 
   Info = {
@@ -24,14 +28,14 @@ let
       Identifier = "Standard";
       Type = "Architecture";
       Name = "Standard Architectures (Apple Silicon, 64-bit Intel)";
-      RealArchitectures = [ "arm64" "x86_64" ];
+      RealArchitectures = ["arm64" "x86_64"];
       ArchitectureSetting = "ARCHS_STANDARD";
     }
     {
       Identifier = "Universal";
       Type = "Architecture";
       Name = "Universal (Apple Silicon, 64-bit Intel)";
-      RealArchitectures = [ "arm64" "x86_64" ];
+      RealArchitectures = ["arm64" "x86_64"];
       ArchitectureSetting = "ARCHS_STANDARD_32_64_BIT";
     }
     {
@@ -44,11 +48,14 @@ let
       Identifier = "Standard64bit";
       Type = "Architecture";
       Name = "Apple Silicon, 64-bit Intel";
-      RealArchitectures = [ "arm64" "x86_64" ];
+      RealArchitectures = ["arm64" "x86_64"];
       ArchitectureSetting = "ARCHS_STANDARD_64_BIT";
     }
     {
-      Identifier = if stdenv.isAarch64 then "arm64" else "x86_64";
+      Identifier =
+        if stdenv.isAarch64
+        then "arm64"
+        else "x86_64";
       Type = "Architecture";
       Name = "Apple Silicon or Intel 64-bit";
     }
@@ -56,7 +63,7 @@ let
       Identifier = "Standard_Including_64_bit";
       Type = "Architecture";
       Name = "Standard Architectures (including 64-bit)";
-      RealArchitectures = [ "arm64" "x86_64" ];
+      RealArchitectures = ["arm64" "x86_64"];
       ArchitectureSetting = "ARCHS_STANDARD_INCLUDING_64_BIT";
     }
   ];
@@ -177,19 +184,19 @@ let
       Identifier = "com.apple.product-type.tool";
       Type = "ProductType";
       Name = "Command-line Tool";
-      PackageTypes = [ "com.apple.package-type.mach-o-executable" ];
+      PackageTypes = ["com.apple.package-type.mach-o-executable"];
     }
     {
       Identifier = "com.apple.product-type.objfile";
       Type = "ProductType";
       Name = "Object File";
-      PackageTypes = [ "com.apple.package-type.mach-o-objfile" ];
+      PackageTypes = ["com.apple.package-type.mach-o-objfile"];
     }
     {
       Identifier = "com.apple.product-type.library.dynamic";
       Type = "ProductType";
       Name = "Dynamic Library";
-      PackageTypes = [ "com.apple.package-type.mach-o-dylib" ];
+      PackageTypes = ["com.apple.package-type.mach-o-dylib"];
       DefaultBuildProperties = {
         FULL_PRODUCT_NAME = "$(EXECUTABLE_NAME)";
         MACH_O_TYPE = "mh_dylib";
@@ -211,7 +218,7 @@ let
       Identifier = "com.apple.product-type.library.static";
       Type = "ProductType";
       Name = "Static Library";
-      PackageTypes = [ "com.apple.package-type.static-library" ];
+      PackageTypes = ["com.apple.package-type.static-library"];
       DefaultBuildProperties = {
         FULL_PRODUCT_NAME = "$(EXECUTABLE_NAME)";
         MACH_O_TYPE = "staticlib";
@@ -243,7 +250,7 @@ let
         LIBRARY_FLAG_NOSPACE = "YES";
         STRIP_STYLE = "non-global";
       };
-      PackageTypes = [ "com.apple.package-type.wrapper" ];
+      PackageTypes = ["com.apple.package-type.wrapper"];
       IsWrapper = "YES";
       HasInfoPlist = "YES";
       HasInfoPlistStrings = "YES";
@@ -258,7 +265,7 @@ let
         WRAPPER_SUFFIX = ".$(WRAPPER_EXTENSION)";
         WRAPPER_EXTENSION = "app";
       };
-      PackageTypes = [ "com.apple.package-type.wrapper.application" ];
+      PackageTypes = ["com.apple.package-type.wrapper.application"];
     }
     {
       Type = "ProductType";
@@ -276,26 +283,24 @@ let
         LIBRARY_FLAG_NOSPACE = "YES";
         STRIP_STYLE = "non-global";
       };
-      PackageTypes = [ "com.apple.package-type.wrapper" ];
+      PackageTypes = ["com.apple.package-type.wrapper"];
       IsWrapper = "YES";
       HasInfoPlist = "YES";
       HasInfoPlistStrings = "YES";
     }
   ];
-
 in
+  runCommand "Platforms" {} ''
+    platform=$out/${xcodePlatform}.platform
 
-runCommand "Platforms" {} ''
-  platform=$out/${xcodePlatform}.platform
+    install -D ${writeText "Info.plist" (toPlist {} Info)} $platform/Info.plist
+    install -D ${writeText "version.plist" (toPlist {} Version)} $platform/version.plist
+    install -D ${writeText "Architectures.xcspec" (toPlist {} Architectures)} $platform/Developer/Library/Xcode/Specifications/Architectures.xcspec
+    install -D ${writeText "PackageTypes.xcspec" (toPlist {} PackageTypes)} $platform/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
+    install -D ${writeText "ProductTypes.xcspec" (toPlist {} ProductTypes)} $platform/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
 
-  install -D ${writeText "Info.plist" (toPlist {} Info)} $platform/Info.plist
-  install -D ${writeText "version.plist" (toPlist {} Version)} $platform/version.plist
-  install -D ${writeText "Architectures.xcspec" (toPlist {} Architectures)} $platform/Developer/Library/Xcode/Specifications/Architectures.xcspec
-  install -D ${writeText "PackageTypes.xcspec" (toPlist {} PackageTypes)} $platform/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
-  install -D ${writeText "ProductTypes.xcspec" (toPlist {} ProductTypes)} $platform/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
+    ln -s $platform $platform/usr
 
-  ln -s $platform $platform/usr
-
-  mkdir -p $platform/Developer
-  ln -s ${sdks} $platform/Developer/SDKs
-''
+    mkdir -p $platform/Developer
+    ln -s ${sdks} $platform/Developer/SDKs
+  ''

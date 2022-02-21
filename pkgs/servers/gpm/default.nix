@@ -1,9 +1,18 @@
-{ lib, stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch
-
-# Optional Dependencies
-, ncurses ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  automake,
+  autoconf,
+  libtool,
+  flex,
+  bison,
+  texinfo,
+  fetchpatch
+  # Optional Dependencies
+  ,
+  ncurses ? null,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gpm";
   version = "1.20.7";
@@ -17,10 +26,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/prog/gpm-root.y --replace __sigemptyset sigemptyset
   '';
 
-  nativeBuildInputs = [ automake autoconf libtool flex bison texinfo ];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [automake autoconf libtool flex bison texinfo];
+  buildInputs = [ncurses];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   patches = [
     # musl compat patches, safe everywhere
@@ -50,7 +59,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (if ncurses == null then "--without-curses" else "--with-curses")
+    (if ncurses == null
+    then "--without-curses"
+    else "--with-curses")
   ];
 
   # Provide libgpm.so for compatability
@@ -63,6 +74,6 @@ stdenv.mkDerivation rec {
     description = "A daemon that provides mouse support on the Linux console";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.cygwin;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = with maintainers; [eelco];
   };
 }

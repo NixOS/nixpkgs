@@ -1,17 +1,17 @@
-{ alcotest
-, angstrom
-, bigstringaf
-, buildDunePackage
-, crowbar
-, fetchzip
-, fmt
-, hxd
-, ke
-, lib
-, rresult
-, uutf
+{
+  alcotest,
+  angstrom,
+  bigstringaf,
+  buildDunePackage,
+  crowbar,
+  fetchzip,
+  fmt,
+  hxd,
+  ke,
+  lib,
+  rresult,
+  uutf,
 }:
-
 buildDunePackage rec {
   pname = "unstrctrd";
   version = "0.3";
@@ -43,6 +43,6 @@ buildDunePackage rec {
     description = "A library for parsing email headers";
     homepage = "https://github.com/dinosaure/unstrctrd";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
   };
 }

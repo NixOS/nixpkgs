@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 buildGoModule rec {
   pname = "3mux";
   version = "1.1.0";
@@ -11,13 +15,13 @@ buildGoModule rec {
     sha256 = "sha256-QT4QXTlJf2NfTqXE4GF759EoW6Ri12lxDyodyEFc+ag=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   vendorSha256 = "sha256-tbziQZIA1+b+ZtvA/865c8YQxn+r8HQy6Pqaac2kwcU=";
 
   # This is a package used for internally testing 3mux. It's meant for
   # use by 3mux maintainers/contributors only.
-  excludedPackages = [ "fuzz" ];
+  excludedPackages = ["fuzz"];
 
   # 3mux needs to have itself in the path so users can run `3mux detach`.
   # This ensures that, while inside 3mux, the binary in the path is the
@@ -36,7 +40,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/aaronjanse/3mux";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronjanse Br1ght0ne ];
+    maintainers = with maintainers; [aaronjanse Br1ght0ne];
     platforms = platforms.unix;
   };
 }

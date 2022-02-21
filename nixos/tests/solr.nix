@@ -1,24 +1,24 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({pkgs, ...}: {
   name = "solr";
-  meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
+  meta.maintainers = [pkgs.lib.maintainers.aanderse];
 
-  machine =
-    { config, pkgs, ... }:
-    {
-      # Ensure the virtual machine has enough memory for Solr to avoid the following error:
-      #
-      #   OpenJDK 64-Bit Server VM warning:
-      #     INFO: os::commit_memory(0x00000000e8000000, 402653184, 0)
-      #     failed; error='Cannot allocate memory' (errno=12)
-      #
-      #   There is insufficient memory for the Java Runtime Environment to continue.
-      #   Native memory allocation (mmap) failed to map 402653184 bytes for committing reserved memory.
-      virtualisation.memorySize = 2000;
+  machine = {
+    config,
+    pkgs,
+    ...
+  }: {
+    # Ensure the virtual machine has enough memory for Solr to avoid the following error:
+    #
+    #   OpenJDK 64-Bit Server VM warning:
+    #     INFO: os::commit_memory(0x00000000e8000000, 402653184, 0)
+    #     failed; error='Cannot allocate memory' (errno=12)
+    #
+    #   There is insufficient memory for the Java Runtime Environment to continue.
+    #   Native memory allocation (mmap) failed to map 402653184 bytes for committing reserved memory.
+    virtualisation.memorySize = 2000;
 
-      services.solr.enable = true;
-    };
+    services.solr.enable = true;
+  };
 
   testScript = ''
     start_all()

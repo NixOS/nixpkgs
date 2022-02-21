@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, file, fuse, libmtp }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  file,
+  fuse,
+  libmtp,
+}:
 stdenv.mkDerivation rec {
   pname = "jmtpfs";
   version = "0.5";
@@ -19,14 +27,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ file fuse libmtp ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [file fuse libmtp];
 
   meta = with lib; {
     description = "A FUSE filesystem for MTP devices like Android phones";
     homepage = "https://github.com/JasonFerrara/jmtpfs";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.coconnor ];
+    maintainers = [maintainers.coconnor];
   };
 }

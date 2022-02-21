@@ -1,14 +1,30 @@
-{ gcc9Stdenv, fetchurl, autoconf, automake, pkg-config, lib
-, perl, flex, bison, readline, libexif
-, x11Support ? true, SDL
-, svgSupport ? true, inkscape
-, asciiArtSupport ? true, aalib
-, gifSupport ? true, giflib
-, tiffSupport ? true, libtiff
-, jpegSupport ? true, libjpeg
-, pngSupport ? true, libpng
+{
+  gcc9Stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  pkg-config,
+  lib,
+  perl,
+  flex,
+  bison,
+  readline,
+  libexif,
+  x11Support ? true,
+  SDL,
+  svgSupport ? true,
+  inkscape,
+  asciiArtSupport ? true,
+  aalib,
+  gifSupport ? true,
+  giflib,
+  tiffSupport ? true,
+  libtiff,
+  jpegSupport ? true,
+  libjpeg,
+  pngSupport ? true,
+  libpng,
 }:
-
 gcc9Stdenv.mkDerivation rec {
   pname = "fim";
   version = "0.6";
@@ -19,14 +35,14 @@ gcc9Stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-   substituteInPlace doc/vim2html.pl \
-     --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace doc/vim2html.pl \
+      --replace /usr/bin/perl ${perl}/bin/perl
   '';
 
-  nativeBuildInputs = [ autoconf automake pkg-config ];
+  nativeBuildInputs = [autoconf automake pkg-config];
 
   buildInputs = with lib;
-    [ perl flex bison readline libexif ]
+    [perl flex bison readline libexif]
     ++ optional x11Support SDL
     ++ optional svgSupport inkscape
     ++ optional asciiArtSupport aalib
@@ -47,6 +63,6 @@ gcc9Stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/fbi-improved/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [primeos];
   };
 }

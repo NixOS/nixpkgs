@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, hidapi
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  hidapi,
 }:
-
 stdenv.mkDerivation rec {
   pname = "headsetcontrol";
   version = "2.6";
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   /*
-  Test depends on having the apropiate headsets connected.
-  */
+   Test depends on having the apropiate headsets connected.
+   */
   doCheck = false;
 
   meta = with lib; {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Sapd/HeadsetControl";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ leixb ];
+    maintainers = with maintainers; [leixb];
     platforms = platforms.all;
   };
 }

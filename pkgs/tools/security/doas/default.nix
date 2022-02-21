@@ -1,13 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, pam
-
-, withPAM ? true
-, withTimestamp ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  pam,
+  withPAM ? true,
+  withTimestamp ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "doas";
   version = "6.8.2";
@@ -37,13 +36,13 @@ stdenv.mkDerivation rec {
     sed -i '/\(chown\|chmod\)/d' GNUmakefile
   '';
 
-  buildInputs = [ bison pam ];
+  buildInputs = [bison pam];
 
   meta = with lib; {
     description = "Executes the given command as another user";
     homepage = "https://github.com/Duncaen/OpenDoas";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h cstrahan ];
+    maintainers = with maintainers; [cole-h cstrahan];
   };
 }

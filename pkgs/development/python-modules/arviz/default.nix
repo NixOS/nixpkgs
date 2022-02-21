@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bokeh
-, emcee
-, matplotlib
-, netcdf4
-, numba
-, numpy
-, pandas
-, pytest
-, cloudpickle
-, scipy
-, setuptools
-, typing-extensions
-# , tensorflow-probability (incompatible version)
-, xarray
-, zarr
-, h5py
-#, pymc3 (broken)
-#, pyro-ppl (broken)
-#, pystan (not packaged)
-#, numpyro (not packaged)
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bokeh,
+  emcee,
+  matplotlib,
+  netcdf4,
+  numba,
+  numpy,
+  pandas,
+  pytest,
+  cloudpickle,
+  scipy,
+  setuptools,
+  typing-extensions
+  # , tensorflow-probability (incompatible version)
+  ,
+  xarray,
+  zarr,
+  h5py
+  #, pymc3 (broken)
+  #, pyro-ppl (broken)
+  #, pystan (not packaged)
+  #, numpyro (not packaged)
 }:
-
 buildPythonPackage rec {
   pname = "arviz";
   version = "0.11.4";
@@ -100,6 +101,6 @@ buildPythonPackage rec {
     description = "ArviZ is a Python package for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
     license = licenses.asl20;
-    maintainers = [ maintainers.omnipotententity ];
+    maintainers = [maintainers.omnipotententity];
   };
 }

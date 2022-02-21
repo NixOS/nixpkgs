@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k
-, sympy, pytest, pytest-runner, sphinx, setuptools-scm }:
-
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy3k,
+  sympy,
+  pytest,
+  pytest-runner,
+  sphinx,
+  setuptools-scm,
+}:
 buildPythonPackage rec {
   pname = "measurement";
   version = "3.2.0";
@@ -18,14 +26,14 @@ buildPythonPackage rec {
     sed -i 's|use_scm_version=True|version="${version}"|' setup.py
   '';
 
-  checkInputs = [ pytest pytest-runner ];
-  nativeBuildInputs = [ sphinx setuptools-scm ];
-  propagatedBuildInputs = [ sympy ];
+  checkInputs = [pytest pytest-runner];
+  nativeBuildInputs = [sphinx setuptools-scm];
+  propagatedBuildInputs = [sympy];
 
   meta = with lib; {
     description = "Use and manipulate unit-aware measurement objects in Python";
     homepage = "https://github.com/coddingtonbear/python-measurement";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [bhipple];
   };
 }

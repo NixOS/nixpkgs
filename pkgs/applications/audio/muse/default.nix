@@ -1,8 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qttools, wrapQtAppsHook
-, alsa-lib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
-, libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  alsa-lib,
+  dssi,
+  fluidsynth,
+  ladspaH,
+  lash,
+  libinstpatch,
+  libjack2,
+  liblo,
+  libsamplerate,
+  libsndfile,
+  lilv,
+  lrdf,
+  lv2,
+  qtsvg,
+  rtaudio,
+  rubberband,
+  sord,
 }:
-
 stdenv.mkDerivation rec {
   pname = "muse-sequencer";
   version = "3.1.1";
@@ -20,13 +41,28 @@ stdenv.mkDerivation rec {
     chmod u+w $NIX_BUILD_TOP
   '';
 
-  patches = [ ./fix-parallel-building.patch ];
+  patches = [./fix-parallel-building.patch];
 
-  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [cmake pkg-config qttools wrapQtAppsHook];
 
   buildInputs = [
-    alsa-lib dssi fluidsynth ladspaH lash libinstpatch libjack2 liblo
-    libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
+    alsa-lib
+    dssi
+    fluidsynth
+    ladspaH
+    lash
+    libinstpatch
+    libjack2
+    liblo
+    libsamplerate
+    libsndfile
+    lilv
+    lrdf
+    lv2
+    qtsvg
+    rtaudio
+    rubberband
+    sord
   ];
 
   meta = with lib; {
@@ -41,6 +77,6 @@ stdenv.mkDerivation rec {
       it is published under the GNU General Public License.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
   };
 }

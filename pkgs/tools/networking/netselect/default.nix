@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "netselect";
   version = "0.4";
@@ -16,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/" ""
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = ["PREFIX=$(out)"];
 
   installPhase = ''
     runHook preInstall

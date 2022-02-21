@@ -1,8 +1,9 @@
-{ config, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  ...
+}:
+with lib; let
   fileSystems = config.system.build.fileSystems ++ config.swapDevices;
   encDevs = filter (dev: dev.encrypted.enable) fileSystems;
   keyedEncDevs = filter (dev: dev.encrypted.keyFile != null) encDevs;
@@ -11,7 +12,6 @@ let
     foldr (j: v: v || j.encrypted.enable) false encDevs;
 
   encryptedFSOptions = {
-
     options.encrypted = {
       enable = mkOption {
         default = false;
@@ -48,10 +48,7 @@ let
       };
     };
   };
-in
-
-{
-
+in {
   options = {
     fileSystems = mkOption {
       type = with lib.types; attrsOf (submodule encryptedFSOptions);
@@ -67,21 +64,24 @@ in
       message = ''
         The filesystem for ${dev.mountPoint} has encrypted.enable set to true, but no encrypted.label set
       '';
-    }) encDevs;
+    })
+    encDevs;
 
     boot.initrd = {
       luks = {
         devices =
           builtins.listToAttrs (map (dev: {
             name = dev.encrypted.label;
-            value = { device = dev.encrypted.blkDev; };
-          }) keylessEncDevs);
+            value = {device = dev.encrypted.blkDev;};
+          })
+          keylessEncDevs);
         forceLuksSupportInInitrd = true;
       };
       postMountCommands =
-        concatMapStrings (dev:
-          "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
-        ) keyedEncDevs;
+        concatMapStrings (
+          dev: "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
+        )
+        keyedEncDevs;
     };
   };
 }

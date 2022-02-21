@@ -1,17 +1,20 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
-
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 bundlerApp {
   pname = "licensee";
   gemdir = ./.;
-  exes = [ "licensee" ];
+  exes = ["licensee"];
 
   passthru.updateScript = bundlerUpdateScript "licensee";
 
   meta = with lib; {
     description = "A Ruby Gem to detect under what license a project is distributed";
-    homepage    = "https://licensee.github.io/licensee/";
-    license     = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms   = platforms.unix;
+    homepage = "https://licensee.github.io/licensee/";
+    license = licenses.mit;
+    maintainers = [maintainers.sternenseemann];
+    platforms = platforms.unix;
   };
 }

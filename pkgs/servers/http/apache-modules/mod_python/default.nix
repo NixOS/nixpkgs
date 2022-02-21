@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, apacheHttpd, python2, libintl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  apacheHttpd,
+  python2,
+  libintl,
+}:
 stdenv.mkDerivation rec {
   pname = "mod_python";
   version = "3.5.0";
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "146apll3yfqk05s8fkf4acmxzqncl08bgn4rv0c1rd4qxmc91w0f";
   };
 
-  patches = [ ./install.patch ];
+  patches = [./install.patch];
 
   postPatch = ''
     substituteInPlace dist/version.sh \
@@ -17,15 +23,16 @@ stdenv.mkDerivation rec {
         --replace '-$GIT' ""
   '';
 
-  installFlags = [ "LIBEXECDIR=${placeholder "out"}/modules" ];
+  installFlags = ["LIBEXECDIR=${placeholder "out"}/modules"];
 
   preInstall = ''
     mkdir -p $out/modules $out/bin
   '';
 
-  passthru = { inherit apacheHttpd; };
+  passthru = {inherit apacheHttpd;};
 
-  buildInputs = [ apacheHttpd python2 ]
+  buildInputs =
+    [apacheHttpd python2]
     ++ lib.optional stdenv.isDarwin libintl;
 
   meta = {

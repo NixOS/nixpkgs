@@ -1,14 +1,17 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   runDir = "/run/searx";
 
   cfg = config.services.searx;
 
   settingsFile = pkgs.writeText "settings.yml"
-    (builtins.toJSON cfg.settings);
+  (builtins.toJSON cfg.settings);
 
   generateConfig = ''
     cd ${runDir}
@@ -25,32 +28,32 @@ let
     done
   '';
 
-  settingType = with types; (oneOf
-    [ bool int float str
+  settingType = with types;
+    (oneOf
+    [
+      bool
+      int
+      float
+      str
       (listOf settingType)
       (attrsOf settingType)
-    ]) // { description = "JSON value"; };
-
-in
-
-{
-
+    ])
+    // {description = "JSON value";};
+in {
   imports = [
     (mkRenamedOptionModule
-      [ "services" "searx" "configFile" ]
-      [ "services" "searx" "settingsFile" ])
+    ["services" "searx" "configFile"]
+    ["services" "searx" "settingsFile"])
   ];
 
   ###### interface
 
   options = {
-
     services.searx = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
-        relatedPackages = [ "searx" ];
+        relatedPackages = ["searx"];
         description = "Whether to enable Searx, the meta search engine.";
       };
 
@@ -67,7 +70,7 @@ in
 
       settings = mkOption {
         type = types.attrsOf settingType;
-        default = { };
+        default = {};
         example = literalExpression ''
           { server.port = 8080;
             server.bind_address = "0.0.0.0";
@@ -137,7 +140,7 @@ in
 
       uwsgiConfig = mkOption {
         type = options.services.uwsgi.instance.type;
-        default = { http = ":8080"; };
+        default = {http = ":8080";};
         example = literalExpression ''
           {
             disable-logging = true;
@@ -151,56 +154,58 @@ in
           should listen.
         '';
       };
-
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
-    users.users.searx =
-      { description = "Searx daemon user";
-        group = "searx";
-        isSystemUser = true;
-      };
+    users.users.searx = {
+      description = "Searx daemon user";
+      group = "searx";
+      isSystemUser = true;
+    };
 
-    users.groups.searx = { };
+    users.groups.searx = {};
 
     systemd.services.searx-init = {
       description = "Initialise Searx settings";
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "searx";
-        RuntimeDirectory = "searx";
-        RuntimeDirectoryMode = "750";
-      } // optionalAttrs (cfg.environmentFile != null)
-        { EnvironmentFile = builtins.toPath cfg.environmentFile; };
+      serviceConfig =
+        {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "searx";
+          RuntimeDirectory = "searx";
+          RuntimeDirectoryMode = "750";
+        }
+        // optionalAttrs (cfg.environmentFile != null)
+        {EnvironmentFile = builtins.toPath cfg.environmentFile;};
       script = generateConfig;
     };
 
     systemd.services.searx = mkIf (!cfg.runInUwsgi) {
       description = "Searx server, the meta search engine.";
-      wantedBy = [ "network.target" "multi-user.target" ];
-      requires = [ "searx-init.service" ];
-      after = [ "searx-init.service" ];
-      serviceConfig = {
-        User  = "searx";
-        Group = "searx";
-        ExecStart = "${cfg.package}/bin/searx-run";
-      } // optionalAttrs (cfg.environmentFile != null)
-        { EnvironmentFile = builtins.toPath cfg.environmentFile; };
+      wantedBy = ["network.target" "multi-user.target"];
+      requires = ["searx-init.service"];
+      after = ["searx-init.service"];
+      serviceConfig =
+        {
+          User = "searx";
+          Group = "searx";
+          ExecStart = "${cfg.package}/bin/searx-run";
+        }
+        // optionalAttrs (cfg.environmentFile != null)
+        {EnvironmentFile = builtins.toPath cfg.environmentFile;};
       environment.SEARX_SETTINGS_PATH = cfg.settingsFile;
     };
 
     systemd.services.uwsgi = mkIf (cfg.runInUwsgi)
-      { requires = [ "searx-init.service" ];
-        after = [ "searx-init.service" ];
-      };
+    {
+      requires = ["searx-init.service"];
+      after = ["searx-init.service"];
+    };
 
     services.searx.settings = {
       # merge NixOS settings with defaults settings.yml
@@ -209,23 +214,24 @@ in
 
     services.uwsgi = mkIf (cfg.runInUwsgi) {
       enable = true;
-      plugins = [ "python3" ];
+      plugins = ["python3"];
 
       instance.type = "emperor";
-      instance.vassals.searx = {
-        type = "normal";
-        strict = true;
-        immediate-uid = "searx";
-        immediate-gid = "searx";
-        lazy-apps = true;
-        enable-threads = true;
-        module = "searx.webapp";
-        env = [ "SEARX_SETTINGS_PATH=${cfg.settingsFile}" ];
-        pythonPackages = self: [ cfg.package ];
-      } // cfg.uwsgiConfig;
+      instance.vassals.searx =
+        {
+          type = "normal";
+          strict = true;
+          immediate-uid = "searx";
+          immediate-gid = "searx";
+          lazy-apps = true;
+          enable-threads = true;
+          module = "searx.webapp";
+          env = ["SEARX_SETTINGS_PATH=${cfg.settingsFile}"];
+          pythonPackages = self: [cfg.package];
+        }
+        // cfg.uwsgiConfig;
     };
-
   };
 
-  meta.maintainers = with maintainers; [ rnhmjoj ];
+  meta.maintainers = with maintainers; [rnhmjoj];
 }

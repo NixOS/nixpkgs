@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, glib
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, libpulseaudio
-, librsvg
-, meson
-, ninja
-, pkg-config
-, python3
-, rustPlatform
-, wayland
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  gobject-introspection,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libpulseaudio,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustPlatform,
+  wayland,
+  wrapGAppsHook,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kooha";
   version = "2.0.1";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     librsvg
   ];
 
-  propagatedBuildInputs = [ python3.pkgs.pygobject3 ];
+  propagatedBuildInputs = [python3.pkgs.pygobject3];
 
   strictDeps = false;
 
@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/SeaDve/Kooha";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [austinbutler];
   };
 }

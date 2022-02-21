@@ -1,8 +1,25 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, nixosTests
-, boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
-, mysql57, postgresql, lua, openldap, geoip, curl, unixODBC
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  nixosTests,
+  boost,
+  libyamlcpp,
+  libsodium,
+  sqlite,
+  protobuf,
+  openssl,
+  systemd,
+  mysql57,
+  postgresql,
+  lua,
+  openldap,
+  geoip,
+  curl,
+  unixODBC,
 }:
-
 stdenv.mkDerivation rec {
   pname = "powerdns";
   version = "4.3.1";
@@ -13,17 +30,30 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # remove for >= 4.4.0
+    (fetchpatch {
+      # remove for >= 4.4.0
       name = "gcc-10_undefined-reference.diff";
       url = "https://github.com/PowerDNS/pdns/commit/05c9dd77b28.diff";
       sha256 = "1m9szbi02h9kcabgw3kb8k9qrb54d34z0qzizrlfiw3hxs6c2zql";
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
   buildInputs = [
-    boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl unixODBC openssl systemd
+    boost
+    mysql57.connector-c
+    postgresql
+    lua
+    openldap
+    sqlite
+    protobuf
+    geoip
+    libyamlcpp
+    libsodium
+    curl
+    unixODBC
+    openssl
+    systemd
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -55,6 +85,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ mic92 disassembler ];
+    maintainers = with maintainers; [mic92 disassembler];
   };
 }

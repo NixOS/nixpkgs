@@ -1,5 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
-
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pyparsing,
+  robotframework,
+  allpairspy,
+}:
 buildPythonPackage rec {
   pname = "RoboMachine";
   version = "0.9.0";
@@ -9,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "4251d405759a38f1e665acc245dcbcdec319376718169a73c57560183370fe0e";
   };
 
-  propagatedBuildInputs = [ pyparsing robotframework allpairspy ];
+  propagatedBuildInputs = [pyparsing robotframework allpairspy];
 
   # Remove Windows .bat files
   postInstall = ''
@@ -24,6 +30,6 @@ buildPythonPackage rec {
     description = "Test data generator for Robot Framework";
     homepage = "https://github.com/mkorpela/RoboMachine";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [bjornfor];
   };
 }

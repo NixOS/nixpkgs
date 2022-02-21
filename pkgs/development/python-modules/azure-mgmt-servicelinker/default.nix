@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-mgmt-core
-, msrest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-mgmt-core,
+  msrest,
 }:
-
 buildPythonPackage rec {
   pname = "azure-mgmt-servicelinker";
   version = "1.0.0b1";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     msrest
   ];
 
-  pythonImportsCheck = [ "azure.mgmt.servicelinker" ];
+  pythonImportsCheck = ["azure.mgmt.servicelinker"];
 
   # no tests with sdist
   doCheck = false;
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Servicelinker Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [jonringer];
   };
 }

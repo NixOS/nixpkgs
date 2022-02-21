@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, twisted
-, qtpy
-, pyqt5
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  twisted,
+  qtpy,
+  pyqt5,
 }:
-
 buildPythonPackage rec {
   pname = "qreactor-unstable";
   version = "2018-09-29";
@@ -21,7 +21,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.0";
 
   propagatedBuildInputs = [
-    twisted qtpy
+    twisted
+    qtpy
   ];
 
   checkInputs = [
@@ -36,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/frmdstryr/qt-reactor";
     description = "Twisted and PyQt5/qtpy eventloop integration base";
     license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    maintainers = with maintainers; [raboof];
   };
 }

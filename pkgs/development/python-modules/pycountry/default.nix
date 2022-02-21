@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pycountry";
   version = "22.1.10";
@@ -25,7 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/flyingcircusio/pycountry";
     description = "ISO country, subdivision, language, currency and script definitions and their translations";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
-
 }

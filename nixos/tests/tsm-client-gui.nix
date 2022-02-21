@@ -4,14 +4,17 @@
 # After that the test persuades the GUI
 # to show its main application window
 # and verifies some configuration information.
-
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+import ./make-test-python.nix ({
+  lib,
+  pkgs,
+  ...
+}: {
   name = "tsm-client";
 
   enableOCR = true;
 
-  machine = { pkgs, ... }: {
-    imports = [ ./common/x11.nix ];
+  machine = {pkgs, ...}: {
+    imports = [./common/x11.nix];
     programs.tsmClient = {
       enable = true;
       package = pkgs.tsm-client-withGui;
@@ -53,5 +56,5 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.shutdown()
   '';
 
-  meta.maintainers = [ lib.maintainers.yarny ];
+  meta.maintainers = [lib.maintainers.yarny];
 })

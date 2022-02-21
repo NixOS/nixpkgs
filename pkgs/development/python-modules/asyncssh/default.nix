@@ -1,22 +1,22 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, fido2
-, gssapi
-, libnacl
-, libsodium
-, nettle
-, openssh
-, openssl
-, pyopenssl
-, pytestCheckHook
-, python-pkcs11
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  fido2,
+  gssapi,
+  libnacl,
+  libsodium,
+  nettle,
+  openssh,
+  openssl,
+  pyopenssl,
+  pytestCheckHook,
+  python-pkcs11,
+  pythonOlder,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "asyncssh";
   version = "2.9.0";
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     license = licenses.epl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

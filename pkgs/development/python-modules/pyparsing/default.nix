@@ -1,14 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-
-# since this is a dependency of pytest, we need to avoid
-# circular dependencies
-, jinja2
-, railroad-diagrams
-}:
-
-let
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib
+  # since this is a dependency of pytest, we need to avoid
+  # circular dependencies
+  ,
+  jinja2,
+  railroad-diagrams,
+}: let
   pyparsing = buildPythonPackage rec {
     pname = "pyparsing";
     version = "3.0.6";
@@ -32,7 +31,7 @@ let
     '';
 
     passthru.tests = {
-      check = pyparsing.overridePythonAttrs (_: { doCheck = true; });
+      check = pyparsing.overridePythonAttrs (_: {doCheck = true;});
     };
 
     meta = with lib; {

@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "s5cmd";
   version = "1.4.0";
@@ -17,6 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/peak/s5cmd";
     description = "Parallel S3 and local filesystem execution tool";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomberek ];
+    maintainers = with maintainers; [tomberek];
   };
 }

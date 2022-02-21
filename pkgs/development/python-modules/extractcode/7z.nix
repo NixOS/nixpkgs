@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, plugincode
-, p7zip
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  plugincode,
+  p7zip,
 }:
-
 buildPythonPackage rec {
   pname = "extractcode-7z";
   version = "21.5.31";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
     homepage = "https://github.com/nexB/scancode-plugins/tree/main/builtins/extractcode_7z-linux";
-    license = with licenses; [ asl20 lgpl21 ];
+    license = with licenses; [asl20 lgpl21];
     maintainers = teams.determinatesystems.members;
     platforms = platforms.linux;
   };

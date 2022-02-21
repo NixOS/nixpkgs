@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
-
 buildPythonPackage rec {
   pname = "ttp-templates";
   version = "0.1.1";
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Template Text Parser Templates";
     homepage = "https://github.com/dmulyalin/ttp_templates";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [hexa];
   };
 }

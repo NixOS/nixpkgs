@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchurl, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  runCommand,
+  bootstrap_cmds,
+  coreutils,
+  glibc,
+  m4,
+  runtimeShell,
+}: let
   options = rec {
-    /* TODO: there are also FreeBSD and Windows versions */
+    /*
+     TODO: there are also FreeBSD and Windows versions
+     */
     x86_64-linux = {
       arch = "linuxx86";
       sha256 = "0d5bsizgpw9hv0jfsf4bp5sf6kxh8f9hgzz9hsjzpfhs3npmmac4";
@@ -47,65 +57,75 @@ let
     tar xf $inner -C ccl
     tar czf $out ccl
   '';
-
 in
+  stdenv.mkDerivation rec {
+    pname = "ccl";
+    version = "1.12";
 
-stdenv.mkDerivation rec {
-  pname = "ccl";
-  version  = "1.12";
+    src =
+      if cfg.arch == "linuxarm"
+      then linuxarm-src
+      else
+        fetchurl {
+          url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
+          sha256 = cfg.sha256;
+        };
 
-  src = if cfg.arch == "linuxarm" then linuxarm-src else fetchurl {
-    url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
-    sha256 = cfg.sha256;
-  };
+    buildInputs =
+      if stdenv.isDarwin
+      then [bootstrap_cmds m4]
+      else [glibc m4];
 
-  buildInputs = if stdenv.isDarwin then [ bootstrap_cmds m4 ] else [ glibc m4 ];
+    CCL_RUNTIME = cfg.runtime;
+    CCL_KERNEL = cfg.kernel;
 
-  CCL_RUNTIME = cfg.runtime;
-  CCL_KERNEL = cfg.kernel;
+    postPatch =
+      if stdenv.isDarwin
+      then
+        ''
+          substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+            --replace "M4 = gm4"   "M4 = m4" \
+            --replace "dtrace"     "/usr/sbin/dtrace" \
+            --replace "/bin/rm"    "${coreutils}/bin/rm" \
+            --replace "/bin/echo"  "${coreutils}/bin/echo"
 
-  postPatch = if stdenv.isDarwin then ''
-    substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "M4 = gm4"   "M4 = m4" \
-      --replace "dtrace"     "/usr/sbin/dtrace" \
-      --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+          substituteInPlace lisp-kernel/m4macros.m4 \
+            --replace "/bin/pwd" "${coreutils}/bin/pwd"
+        ''
+      else
+        ''
+          substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+            --replace "/bin/rm"    "${coreutils}/bin/rm" \
+            --replace "/bin/echo"  "${coreutils}/bin/echo"
 
-    substituteInPlace lisp-kernel/m4macros.m4 \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
-  '' else ''
-    substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+          substituteInPlace lisp-kernel/m4macros.m4 \
+            --replace "/bin/pwd" "${coreutils}/bin/pwd"
+        '';
 
-    substituteInPlace lisp-kernel/m4macros.m4 \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
-  '';
+    buildPhase = ''
+      make -C lisp-kernel/${CCL_KERNEL} clean
+      make -C lisp-kernel/${CCL_KERNEL} all
 
-  buildPhase = ''
-    make -C lisp-kernel/${CCL_KERNEL} clean
-    make -C lisp-kernel/${CCL_KERNEL} all
+      ./${CCL_RUNTIME} -n -b -e '(ccl:rebuild-ccl :full t)' -e '(ccl:quit)'
+    '';
 
-    ./${CCL_RUNTIME} -n -b -e '(ccl:rebuild-ccl :full t)' -e '(ccl:quit)'
-  '';
+    installPhase = ''
+      mkdir -p "$out/share"
+      cp -r .  "$out/share/ccl-installation"
 
-  installPhase = ''
-    mkdir -p "$out/share"
-    cp -r .  "$out/share/ccl-installation"
+      mkdir -p "$out/bin"
+      echo -e '#!${runtimeShell}\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
+      chmod a+x "$out"/bin/"${CCL_RUNTIME}"
+      ln -s "$out"/bin/"${CCL_RUNTIME}" "$out"/bin/ccl
+    '';
 
-    mkdir -p "$out/bin"
-    echo -e '#!${runtimeShell}\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
-    chmod a+x "$out"/bin/"${CCL_RUNTIME}"
-    ln -s "$out"/bin/"${CCL_RUNTIME}" "$out"/bin/ccl
-  '';
+    hardeningDisable = ["format"];
 
-  hardeningDisable = [ "format" ];
-
-  meta = with lib; {
-    description = "Clozure Common Lisp";
-    homepage    = "https://ccl.clozure.com/";
-    maintainers = with maintainers; [ raskin muflax tohl ];
-    platforms   = attrNames options;
-    license     = licenses.asl20;
-  };
-}
+    meta = with lib; {
+      description = "Clozure Common Lisp";
+      homepage = "https://ccl.clozure.com/";
+      maintainers = with maintainers; [raskin muflax tohl];
+      platforms = attrNames options;
+      license = licenses.asl20;
+    };
+  }

@@ -1,14 +1,14 @@
-{ lib
-, angr
-, buildPythonPackage
-, cmd2
-, coreutils
-, fetchFromGitHub
-, pygments
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  angr,
+  buildPythonPackage,
+  cmd2,
+  coreutils,
+  fetchFromGitHub,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "angrcli";
   version = "1.2.0";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python modules to allow easier interactive use of angr";
     homepage = "https://github.com/fmagin/angr-cli";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

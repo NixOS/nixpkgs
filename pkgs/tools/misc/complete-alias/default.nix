@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "complete-alias";
   version = "1.18.0";
@@ -38,6 +38,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Automagical shell alias completion";
     homepage = "https://github.com/cykerway/complete-alias";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ tuxinaut ];
+    maintainers = with maintainers; [tuxinaut];
   };
 }

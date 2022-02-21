@@ -1,13 +1,13 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pyserial
-, pyserial-asyncio
-, pytestCheckHook
+{
+  lib,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pyserial,
+  pyserial-asyncio,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "velbus-aio";
   version = "2022.2.4";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to support the Velbus home automation system";
     homepage = "https://github.com/Cereal2nd/velbus-aio";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20];
+    maintainers = with maintainers; [fab];
   };
 }

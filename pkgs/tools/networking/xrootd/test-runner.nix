@@ -1,14 +1,14 @@
-{ lib
-, runCommand
-, xrootd
+{
+  lib,
+  runCommand,
+  xrootd,
 }:
-
 # These tests are specified in the test procedure of the upstream CD:
 # https://github.com/xrootd/xrootd/blob/master/.github/workflows/build.yml#L90-L98
 runCommand "${xrootd.pname}-run-tests-${xrootd.version}" {
   testRunnerPath = "${xrootd}/bin/test-runner";
-  testLibraries = [ "XrdClTests" ];
-  XrdClTestsSuites = [ "UtilsTest" "SocketTest" "PollerTest" ];
+  testLibraries = ["XrdClTests"];
+  XrdClTestsSuites = ["UtilsTest" "SocketTest" "PollerTest"];
   pname = "${xrootd.pname}-run-tests";
   inherit (xrootd) version;
   meta.mainProgram = "test-runner";

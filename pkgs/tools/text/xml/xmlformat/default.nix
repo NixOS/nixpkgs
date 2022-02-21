@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "xmlformat";
   version = "1.04";
@@ -8,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vwgzn4ha0az7dx0cyc6dx5nywwrx9gxhyh08mvdcq27wjbh79vi";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [perl];
   buildPhase = ''
     patchShebangs ./xmlformat.pl
   '';

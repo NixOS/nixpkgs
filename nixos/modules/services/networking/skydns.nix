@@ -1,17 +1,18 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.services.skydns;
-
 in {
   options.services.skydns = {
     enable = mkEnableOption "skydns service";
 
     etcd = {
       machines = mkOption {
-        default = [ "http://127.0.0.1:2379" ];
+        default = ["http://127.0.0.1:2379"];
         type = types.listOf types.str;
         description = "Skydns list of etcd endpoints to connect to.";
       };
@@ -71,8 +72,8 @@ in {
 
   config = mkIf (cfg.enable) {
     systemd.services.skydns = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "etcd.service" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target" "etcd.service"];
       description = "Skydns Service";
       environment = {
         ETCD_MACHINES = concatStringsSep "," cfg.etcd.machines;
@@ -88,6 +89,6 @@ in {
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
 }

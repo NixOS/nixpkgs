@@ -1,14 +1,15 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, pruviloj
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  pruviloj,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   name = "js";
   version = "2018-11-27";
 
-  idrisDeps = [ contrib pruviloj ];
+  idrisDeps = [contrib pruviloj];
 
   src = fetchFromGitHub {
     owner = "rbarreiro";
@@ -21,6 +22,6 @@ build-idris-package  {
     description = "Js libraries for idris";
     homepage = "https://github.com/rbarreiro/idrisjs";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    maintainers = [lib.maintainers.brainrape];
   };
 }

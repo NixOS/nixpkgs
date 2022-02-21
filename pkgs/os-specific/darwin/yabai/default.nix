@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, darwin, xxd }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  darwin,
+  xxd,
+}:
 stdenv.mkDerivation rec {
   pname = "yabai";
   version = "3.3.10";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8O6//T894C32Pba3F2Z84Z6VWeCXlwml3xsXoIZGqL0=";
   };
 
-  nativeBuildInputs = [ xxd ];
+  nativeBuildInputs = [xxd];
 
   buildInputs = with darwin.apple_sdk.frameworks; [
     Carbon
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/koekeishiya/yabai";
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ cmacrae shardy ];
+    maintainers = with maintainers; [cmacrae shardy];
     license = licenses.mit;
   };
 }

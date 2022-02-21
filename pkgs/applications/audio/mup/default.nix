@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, autoreconfHook, bison, flex, ghostscript, groff, netpbm
-, fltk, libXinerama, libXpm, libjpeg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  bison,
+  flex,
+  ghostscript,
+  groff,
+  netpbm,
+  fltk,
+  libXinerama,
+  libXpm,
+  libjpeg,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mup";
   version = "6.8";
@@ -11,11 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "06bv5nyl8rcibyb83zzrfdq6x6f93g3rgnv47i5gsjcaw5w6l31y";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex ghostscript groff netpbm ];
+  nativeBuildInputs = [autoreconfHook bison flex ghostscript groff netpbm];
 
-  buildInputs = [ fltk libXinerama libXpm libjpeg ];
+  buildInputs = [fltk libXinerama libXpm libjpeg];
 
-  patches = [ ./ghostscript-permit-file-write.patch ];
+  patches = [./ghostscript-permit-file-write.patch];
 
   postPatch = ''
     for f in Makefile.am doc/Makefile.am doc/htmldocs/Makefile.am src/mupmate/Preferences.C; do
@@ -35,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.arkkra.com/";
     description = "Music typesetting program (ASCII to PostScript and MIDI)";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [orivej];
     platforms = platforms.linux;
   };
 }

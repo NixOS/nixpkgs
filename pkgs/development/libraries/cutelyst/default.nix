@@ -1,7 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
-, qtbase, libuuid, libcap, uwsgi, grantlee, pcre
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  libuuid,
+  libcap,
+  uwsgi,
+  grantlee,
+  pcre,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cutelyst";
   version = "2.14.2";
@@ -13,8 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JUffOeUTeaZvEssP5hfSGipeRuQ7FzLF4bOizCFhe5o=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ qtbase libuuid libcap uwsgi grantlee pcre ];
+  nativeBuildInputs = [cmake pkg-config wrapQtAppsHook];
+  buildInputs = [qtbase libuuid libcap uwsgi grantlee pcre];
 
   cmakeFlags = [
     "-DPLUGIN_UWSGI=ON"
@@ -35,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "C++ Web Framework built on top of Qt";
     homepage = "https://cutelyst.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [fpletz];
   };
 }

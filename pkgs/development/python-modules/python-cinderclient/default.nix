@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, keystoneauth1
-, oslo-i18n
-, oslo-serialization
-, oslo-utils
-, pbr
-, requests
-, prettytable
-, requests-mock
-, simplejson
-, stestr
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  keystoneauth1,
+  oslo-i18n,
+  oslo-serialization,
+  oslo-utils,
+  pbr,
+  requests,
+  prettytable,
+  requests-mock,
+  simplejson,
+  stestr,
+  stevedore,
 }:
-
 buildPythonPackage rec {
   pname = "python-cinderclient";
   version = "8.2.0";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "cinderclient" ];
+  pythonImportsCheck = ["cinderclient"];
 
   meta = with lib; {
     description = "OpenStack Block Storage API Client Library";

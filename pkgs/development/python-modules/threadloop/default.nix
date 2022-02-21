@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, tornado
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  tornado,
 }:
-
 buildPythonPackage rec {
   pname = "threadloop";
   version = "1.0.2";
@@ -19,12 +19,12 @@ buildPythonPackage rec {
 
   doCheck = false; # ImportError: cannot import name 'ThreadLoop' from 'threadloop'
 
-  pythonImportsCheck = [ "threadloop" ];
+  pythonImportsCheck = ["threadloop"];
 
   meta = with lib; {
     description = "A library to run tornado coroutines from synchronous Python";
     homepage = "https://github.com/GoodPete/threadloop";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
-
 buildPythonPackage rec {
   pname = "teamcity-messages";
   version = "1.30";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Python unit test reporting to TeamCity";
     homepage = "https://github.com/JetBrains/teamcity-messages";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [fab];
   };
 }

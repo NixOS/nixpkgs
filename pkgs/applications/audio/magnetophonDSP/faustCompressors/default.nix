@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   name = "faustCompressors-v${version}";
   version = "1.2";
@@ -10,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "144f6g17q4m50kxzdncsfzdyycdfprnpwdaxcwgxj4jky1xsha1d";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [faust2jaqt faust2lv2];
 
   buildPhase = ''
     echo "hack out autoComp.dsp due to https://github.com/grame-cncm/faust/407/issues "
@@ -43,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "A collection of bread and butter compressors";
     homepage = "https://github.com/magnetophon/faustCompressors";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [lib.maintainers.magnetophon];
   };
 }

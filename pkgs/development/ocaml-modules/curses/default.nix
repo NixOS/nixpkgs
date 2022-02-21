@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ncurses }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml-curses";
   version = "1.0.8";
@@ -11,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "0yy3wf8i7jgvzdc40bni7mvpkvclq97cgb5fw265mrjj0iqpkqpd";
   };
 
-  propagatedBuildInputs = [ ncurses ];
+  propagatedBuildInputs = [ncurses];
 
-  nativeBuildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ocaml findlib];
 
   # Fix build for recent ncurses versions
   NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mbacarella/curses";
     license = licenses.lgpl21Plus;
     changelog = "https://github.com/mbacarella/curses/raw/${version}/CHANGES";
-    maintainers = [ maintainers.volth ];
+    maintainers = [maintainers.volth];
     platforms = ocaml.meta.platforms or [];
   };
 }

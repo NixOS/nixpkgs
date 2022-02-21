@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
-
 buildPythonPackage rec {
   pname = "datadiff";
   version = "1.1.6";
@@ -14,12 +14,11 @@ buildPythonPackage rec {
     sha256 = "f1402701063998f6a70609789aae8dc05703f3ad0a34882f6199653654c55543";
   };
 
-  buildInputs = [ nose ];
+  buildInputs = [nose];
 
   meta = with lib; {
     description = "DataDiff";
     homepage = "https://sourceforge.net/projects/datadiff/";
     license = licenses.asl20;
   };
-
 }

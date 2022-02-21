@@ -1,7 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule
-, makeWrapper, git
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  git,
 }:
-
 buildGoModule rec {
   pname = "mycorrhiza";
   version = "1.8.1";
@@ -15,20 +19,20 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-9FMxj3AkbKyUMZWj1S0myoKem4mupOHPIfxNHjYk8mU=";
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     wrapProgram $out/bin/mycorrhiza \
-      --prefix PATH : ${lib.makeBinPath [ git ]}
+      --prefix PATH : ${lib.makeBinPath [git]}
   '';
 
   meta = with lib; {
     description = "Filesystem and git-based wiki engine written in Go using mycomarkup as its primary markup language";
     homepage = "https://github.com/bouncepaw/mycorrhiza";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ chekoopa ];
+    maintainers = with maintainers; [chekoopa];
     platforms = platforms.linux;
   };
 }

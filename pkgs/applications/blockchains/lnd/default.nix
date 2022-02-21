@@ -1,9 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, tags ? [ "autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" "monitoring" "kvdb_postgres" "kvdb_etcd" ]
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  tags ? ["autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" "monitoring" "kvdb_postgres" "kvdb_etcd"],
 }:
-
 buildGoModule rec {
   pname = "lnd";
   version = "0.14.2-beta";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-shDmJcEyobY7Ih1MHMEY2GQnzAffsH/y4J1bme/bT7I=";
 
-  subPackages = [ "cmd/lncli" "cmd/lnd" ];
+  subPackages = ["cmd/lncli" "cmd/lnd"];
 
   preBuild = let
     buildVars = {
@@ -26,15 +26,15 @@ buildGoModule rec {
     };
     buildVarsFlags = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-X github.com/lightningnetwork/lnd/build.${k}=${v}") buildVars);
   in
-  lib.optionalString (tags != []) ''
-    buildFlagsArray+=("-tags=${lib.concatStringsSep " " tags}")
-    buildFlagsArray+=("-ldflags=${buildVarsFlags}")
-  '';
+    lib.optionalString (tags != []) ''
+      buildFlagsArray+=("-tags=${lib.concatStringsSep " " tags}")
+      buildFlagsArray+=("-ldflags=${buildVarsFlags}")
+    '';
 
   meta = with lib; {
     description = "Lightning Network Daemon";
     homepage = "https://github.com/lightningnetwork/lnd";
     license = licenses.mit;
-    maintainers = with maintainers; [ cypherpunk2140 prusnak ];
+    maintainers = with maintainers; [cypherpunk2140 prusnak];
   };
 }

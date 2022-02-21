@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, mock
-, nose
-, plotly
-, pytest
-, requests
-, retrying
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  nose,
+  plotly,
+  pytest,
+  requests,
+  retrying,
+  six,
 }:
-
 buildPythonPackage rec {
   pname = "chart-studio";
   version = "5.5.0";
@@ -29,7 +31,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [ mock nose pytest ];
+  checkInputs = [mock nose pytest];
   # most tests talk to a service
   checkPhase = ''
     HOME=$TMPDIR pytest chart_studio/tests/test_core chart_studio/tests/test_plot_ly/test_api
@@ -38,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities for interfacing with Plotly's Chart Studio service";
     homepage = "https://github.com/plotly/plotly.py/tree/master/packages/python/chart-studio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ jonringer ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [jonringer];
   };
 }

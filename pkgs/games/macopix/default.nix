@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk, openssl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "macopix";
   version = "1.7.4";
@@ -9,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0sgnr0wrw3hglcnsyvipll7icfv69ssmyw584zfhk1rgramlkzyb";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk openssl ];
+  nativeBuildInputs = [pkg-config];
+  buildInputs = [gtk openssl];
 
   preConfigure = ''
     # Build fails on Linux with windres.

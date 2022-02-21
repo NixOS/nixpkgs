@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+  pkg-config,
+}:
 stdenv.mkDerivation rec {
   version = "6.5.0";
   pname = "multitail";
@@ -19,11 +25,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
-  makeFlags = lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
+  makeFlags = lib.optionals stdenv.isDarwin ["-f" "makefile.macosx"];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/halturin/multitail";
     description = "tail on Steroids";
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [matthiasbeyer];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };

@@ -1,5 +1,10 @@
-{lib, stdenv, fetchurl, ncurses, automake}:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  automake,
+}:
 stdenv.mkDerivation rec {
   pname = "aalib";
   version = "1.4rc5";
@@ -9,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1vkh19gb76agvh4h87ysbrgy82hrw88lnsvhynjf4vng629dmpgv";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "info" ];
+  outputs = ["bin" "dev" "out" "man" "info"];
   setOutputFlags = false; # Doesn't support all the flags
 
-  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
+  patches = lib.optionals stdenv.isDarwin [./darwin.patch];
 
   # The fuloong2f is not supported by aalib still
   preConfigure = ''
@@ -24,9 +29,9 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ncurses];
 
-  configureFlags = [ "--without-x" "--with-ncurses=${ncurses.dev}" ];
+  configureFlags = ["--without-x" "--with-ncurses=${ncurses.dev}"];
 
   postInstall = ''
     mkdir -p $dev/bin

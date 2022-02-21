@@ -1,6 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, django }:
-
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+}:
 buildPythonPackage rec {
   pname = "django-sesame";
   version = "1.7";
@@ -12,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0k8s44zn2jmasp0w064vrx685fn4pbmdfx8qmhkab1hd5ys6pi44";
   };
 
-  checkInputs = [ django ];
+  checkInputs = [django];
 
   checkPhase = ''
     make test
@@ -22,6 +25,6 @@ buildPythonPackage rec {
     description = "URLs with authentication tokens for automatic login";
     homepage = "https://github.com/aaugustin/django-sesame";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = with maintainers; [elohmeier];
   };
 }

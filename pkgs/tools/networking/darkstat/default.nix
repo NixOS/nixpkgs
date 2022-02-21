@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libpcap, zlib }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpcap,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   version = "3.0.719";
   pname = "darkstat";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mzddlim6dhd7jhr4smh0n2fa511nvyjhlx76b03vx7phnar1bxf";
   };
 
-  buildInputs = [ libpcap zlib ];
+  buildInputs = [libpcap zlib];
 
   enableParallelBuilding = true;
 

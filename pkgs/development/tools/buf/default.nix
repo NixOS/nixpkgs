@@ -1,13 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, protobuf
-, git
-, testVersion
-, buf
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  protobuf,
+  git,
+  testVersion,
+  buf,
+  installShellFiles,
 }:
-
 buildGoModule rec {
   pname = "buf";
   version = "1.0.0";
@@ -28,9 +28,9 @@ buildGoModule rec {
     ./skip_test_requiring_dotgit.patch
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = ["-s" "-w"];
 
   checkInputs = [
     git # Required for TestGitCloner
@@ -70,13 +70,13 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testVersion { package = buf; };
+  passthru.tests.version = testVersion {package = buf;};
 
   meta = with lib; {
     homepage = "https://buf.build";
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raboof jk lrewega ];
+    maintainers = with maintainers; [raboof jk lrewega];
   };
 }

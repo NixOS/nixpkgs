@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake, zlib, openssl, libsodium }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  zlib,
+  openssl,
+  libsodium,
+}:
 stdenv.mkDerivation rec {
   pname = "libssh";
   version = "0.9.6";
@@ -17,15 +25,15 @@ stdenv.mkDerivation rec {
   # single output, otherwise cmake and .pc files point to the wrong directory
   # outputs = [ "out" "dev" ];
 
-  buildInputs = [ zlib openssl libsodium ];
+  buildInputs = [zlib openssl libsodium];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   meta = with lib; {
     description = "SSH client library";
     homepage = "https://libssh.org";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ sander ];
+    maintainers = with maintainers; [sander];
     platforms = platforms.all;
   };
 }

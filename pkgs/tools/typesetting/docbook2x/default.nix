@@ -1,8 +1,19 @@
-{ fetchurl, lib, stdenv, texinfo, perlPackages
-, groff, libxml2, libxslt, gnused, libiconv, opensp
-, docbook_xml_dtd_43, bash
-, makeWrapper }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  texinfo,
+  perlPackages,
+  groff,
+  libxml2,
+  libxslt,
+  gnused,
+  libiconv,
+  opensp,
+  docbook_xml_dtd_43,
+  bash,
+  makeWrapper,
+}:
 stdenv.mkDerivation rec {
   pname = "docbook2X";
   version = "0.8.8";
@@ -14,11 +25,12 @@ stdenv.mkDerivation rec {
 
   # This patch makes sure that `docbook2texi --to-stdout' actually
   # writes its output to stdout instead of creating a file.
-  patches = [ ./db2x_texixml-to-stdout.patch ];
+  patches = [./db2x_texixml-to-stdout.patch];
 
-  nativeBuildInputs = [ makeWrapper perlPackages.perl texinfo libxslt ];
-  buildInputs = [ groff libxml2 opensp libiconv bash ]
-    ++ (with perlPackages; [ perl XMLSAX XMLParser XMLNamespaceSupport ]);
+  nativeBuildInputs = [makeWrapper perlPackages.perl texinfo libxslt];
+  buildInputs =
+    [groff libxml2 opensp libiconv bash]
+    ++ (with perlPackages; [perl XMLSAX XMLParser XMLNamespaceSupport]);
 
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal

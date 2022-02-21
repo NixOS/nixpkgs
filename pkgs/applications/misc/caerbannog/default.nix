@@ -1,18 +1,18 @@
-{ lib
-, fetchFromSourcehut
-, python3
-, glib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook
-, atk
-, libhandy
-, libnotify
-, pango
+{
+  lib,
+  fetchFromSourcehut,
+  python3,
+  glib,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  atk,
+  libhandy,
+  libnotify,
+  pango,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "caerbannog";
   version = "0.3";
@@ -54,6 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://sr.ht/~craftyguy/caerbannog/";
     changelog = "https://git.sr.ht/~craftyguy/caerbannog/refs/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

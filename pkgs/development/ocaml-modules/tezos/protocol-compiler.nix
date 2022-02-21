@@ -1,34 +1,35 @@
-{ lib
-, buildDunePackage
-, ocaml
-, tezos-stdlib
-, tezos-version
-, tezos-protocol-environment
-, ocp-ocamlres
-, pprint
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  tezos-stdlib,
+  tezos-version,
+  tezos-protocol-environment,
+  ocp-ocamlres,
+  pprint,
 }:
-
-if lib.versionAtLeast ocaml.version "4.13" then
-  throw "tezos-protocol-compiler-${tezos-stdlib.version} is not available for OCaml > 4.12"
+if lib.versionAtLeast ocaml.version "4.13"
+then throw "tezos-protocol-compiler-${tezos-stdlib.version} is not available for OCaml > 4.12"
 else
+  buildDunePackage {
+    pname = "tezos-protocol-compiler";
+    inherit (tezos-stdlib) version useDune2;
+    src = "${tezos-stdlib.base_src}/src/lib_protocol_compiler";
 
-buildDunePackage {
-  pname = "tezos-protocol-compiler";
-  inherit (tezos-stdlib) version useDune2;
-  src = "${tezos-stdlib.base_src}/src/lib_protocol_compiler";
+    minimalOCamlVersion = "4.12";
 
-  minimalOCamlVersion = "4.12";
+    propagatedBuildInputs = [
+      tezos-version
+      tezos-protocol-environment
+      ocp-ocamlres
+      pprint
+    ];
 
-  propagatedBuildInputs = [
-    tezos-version
-    tezos-protocol-environment
-    ocp-ocamlres
-    pprint
-  ];
+    doCheck = true;
 
-  doCheck = true;
-
-  meta = tezos-stdlib.meta // {
-    description = "Tezos: economic-protocol compiler";
-  };
-}
+    meta =
+      tezos-stdlib.meta
+      // {
+        description = "Tezos: economic-protocol compiler";
+      };
+  }

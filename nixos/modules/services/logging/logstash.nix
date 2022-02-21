@@ -1,8 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.logstash;
   ops = lib.optionalString;
   verbosityFlag = "--log.level " + cfg.logLevel;
@@ -26,28 +28,24 @@ let
   logstashJvmOptionsFile = pkgs.writeText "jvm.options" cfg.extraJvmOptions;
 
   logstashSettingsDir = pkgs.runCommand "logstash-settings" {
-      inherit logstashJvmOptionsFile;
-      inherit logstashSettingsYml;
-      preferLocalBuild = true;
-    } ''
+    inherit logstashJvmOptionsFile;
+    inherit logstashSettingsYml;
+    preferLocalBuild = true;
+  } ''
     mkdir -p $out
     ln -s $logstashSettingsYml $out/logstash.yml
     ln -s $logstashJvmOptionsFile $out/jvm.options
   '';
-in
-
-{
+in {
   imports = [
-    (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
-    (mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
+    (mkRenamedOptionModule ["services" "logstash" "address"] ["services" "logstash" "listenAddress"])
+    (mkRemovedOptionModule ["services" "logstash" "enableWeb"] "The web interface was removed from logstash")
   ];
 
   ###### interface
 
   options = {
-
     services.logstash = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -63,7 +61,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.path;
-        default = [ ];
+        default = [];
         example = literalExpression "[ pkgs.logstash-contrib ]";
         description = "The paths to find other logstash plugins in.";
       };
@@ -78,7 +76,7 @@ in
       };
 
       logLevel = mkOption {
-        type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
+        type = types.enum ["debug" "info" "warn" "error" "fatal"];
         default = "warn";
         description = "Logging verbosity level.";
       };
@@ -165,18 +163,16 @@ in
           -Xmx2g
         '';
       };
-
     };
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
     systemd.services.logstash = {
       description = "Logstash Daemon";
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.bash ];
+      wantedBy = ["multi-user.target"];
+      path = [pkgs.bash];
       serviceConfig = {
         ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';
         ExecStart = concatStringsSep " " (filter (s: stringLength s != 0) [

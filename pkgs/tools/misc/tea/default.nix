@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitea }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+}:
 buildGoModule rec {
   pname = "tea";
   version = "0.8.0";
@@ -16,8 +19,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Gitea official CLI client";
-    homepage    = "https://gitea.com/gitea/tea";
-    license     = licenses.mit;
-    maintainers = [ maintainers.j4m3s ];
+    homepage = "https://gitea.com/gitea/tea";
+    license = licenses.mit;
+    maintainers = [maintainers.j4m3s];
   };
 }

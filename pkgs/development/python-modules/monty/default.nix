@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, msgpack
-, pytestCheckHook
-, numpy
-, pandas
-, pydantic
-, pymongo
-, ruamel-yaml
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  msgpack,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  pydantic,
+  pymongo,
+  ruamel-yaml,
+  tqdm,
 }:
-
 buildPythonPackage rec {
   pname = "monty";
   version = "2022.1.12.1";
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     ";
     homepage = "https://github.com/materialsvirtuallab/monty";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [psyanticy];
   };
 }

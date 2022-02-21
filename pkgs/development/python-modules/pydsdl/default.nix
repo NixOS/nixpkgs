@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder }:
-
- buildPythonPackage rec {
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+}:
+buildPythonPackage rec {
   pname = "pydsdl";
   version = "1.12.1";
   disabled = pythonOlder "3.5"; # only python>=3.5 is supported
@@ -30,7 +34,7 @@
       It supports all DSDL features defined in the UAVCAN specification.
     '';
     homepage = "https://uavcan.org";
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with maintainers; [wucke13];
     license = licenses.mit;
   };
 }

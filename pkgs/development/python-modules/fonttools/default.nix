@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, brotlipy
-, zopfli
-, lxml
-, scipy
-, munkres
-, unicodedata2
-, sympy
-, reportlab
-, sphinx
-, pytestCheckHook
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  brotlipy,
+  zopfli,
+  lxml,
+  scipy,
+  munkres,
+  unicodedata2,
+  sympy,
+  reportlab,
+  sphinx,
+  pytestCheckHook,
+  glibcLocales,
 }:
-
 buildPythonPackage rec {
   pname = "fonttools";
   version = "4.29.0";
@@ -23,34 +23,36 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = version;
+    owner = pname;
+    repo = pname;
+    rev = version;
     sha256 = "LnkpTEpZbbRAyqGPJXdfpHjh4t7n6LkjZGLhirVNl7E=";
   };
 
   # all dependencies are optional, but
   # we run the checks with them
 
-  checkInputs = [
-    pytestCheckHook
-    # etree extra
-    lxml
-    # woff extra
-    brotlipy
-    zopfli
-    # interpolatable extra
-    scipy
-    munkres
-    # symfont
-    sympy
-    # pens
-    reportlab
-    sphinx
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    # unicode extra
-    unicodedata2
-  ];
+  checkInputs =
+    [
+      pytestCheckHook
+      # etree extra
+      lxml
+      # woff extra
+      brotlipy
+      zopfli
+      # interpolatable extra
+      scipy
+      munkres
+      # symfont
+      sympy
+      # pens
+      reportlab
+      sphinx
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      # unicode extra
+      unicodedata2
+    ];
 
   preCheck = ''
     # tests want to execute the "fonttools" executable from $PATH
@@ -73,11 +75,10 @@ buildPythonPackage rec {
     "Tests/ufoLib"
   ];
 
-
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
     description = "A library to manipulate font files from Python";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [maintainers.sternenseemann];
   };
 }

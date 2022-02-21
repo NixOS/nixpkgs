@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "zgrab2";
   version = "20210327-${lib.strings.substring 0 7 rev}";
@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorSha256 = "1s0azy5b5hi5h24vs6a9f1n70l980vkid28ihqh10zq6ajmds2z3";
 
-  subPackages = [ "cmd/zgrab2" ];
+  subPackages = ["cmd/zgrab2"];
 
   meta = with lib; {
     description = "Web application scanner";
     homepage = "https://github.com/zmap/zgrab2";
-    license = with licenses; [ asl20 isc ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [asl20 isc];
+    maintainers = with maintainers; [fab];
   };
 }

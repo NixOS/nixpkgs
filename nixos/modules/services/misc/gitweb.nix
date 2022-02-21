@@ -1,15 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.gitweb;
-
-in
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.gitweb;
+in {
   options.services.gitweb = {
-
     projectroot = mkOption {
       default = "/srv/git";
       type = types.path;
@@ -52,9 +50,7 @@ in
       readOnly = true;
       internal = true;
     };
-
   };
 
-  meta.maintainers = with maintainers; [ ];
-
+  meta.maintainers = with maintainers; [];
 }

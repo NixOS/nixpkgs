@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, mirage-clock
+{
+  lib,
+  buildDunePackage,
+  mirage-clock,
 }:
-
 buildDunePackage {
   pname = "mirage-clock-freestanding";
 
-  inherit (mirage-clock)
+  inherit
+    (mirage-clock)
     version
     src
     useDune2
@@ -17,7 +18,9 @@ buildDunePackage {
     mirage-clock
   ];
 
-  meta = mirage-clock.meta // {
-    description = "Paravirtual implementation of the MirageOS Clock interface";
-  };
+  meta =
+    mirage-clock.meta
+    // {
+      description = "Paravirtual implementation of the MirageOS Clock interface";
+    };
 }

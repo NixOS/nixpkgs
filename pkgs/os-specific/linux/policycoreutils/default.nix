@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  libsepol,
+  libselinux,
+  libsemanage,
+}:
 stdenv.mkDerivation rec {
   pname = "policycoreutils";
   version = "3.3";
@@ -19,8 +26,8 @@ stdenv.mkDerivation rec {
     sed -i -e '39i#include <crypt.h>' run_init/run_init.c
   '';
 
-  nativeBuildInputs = [ gettext ];
-  buildInputs = [ libsepol libselinux libsemanage ];
+  nativeBuildInputs = [gettext];
+  buildInputs = [libsepol libselinux libsemanage];
 
   makeFlags = [
     "PREFIX=$(out)"

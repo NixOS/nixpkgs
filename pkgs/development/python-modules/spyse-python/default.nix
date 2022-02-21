@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, dataclasses-json
-, fetchFromGitHub
-, fetchpatch
-, limiter
-, pythonOlder
-, requests
-, responses
+{
+  lib,
+  buildPythonPackage,
+  dataclasses-json,
+  fetchFromGitHub,
+  fetchpatch,
+  limiter,
+  pythonOlder,
+  requests,
+  responses,
 }:
-
 buildPythonPackage rec {
   pname = "spyse-python";
   version = "2.2.3";
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for spyse.com API";
     homepage = "https://github.com/spyse-com/spyse-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with licenses; [mit];
+    maintainers = with maintainers; [fab];
   };
 }

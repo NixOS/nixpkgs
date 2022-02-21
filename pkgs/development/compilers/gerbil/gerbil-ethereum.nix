@@ -1,13 +1,18 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
-
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  gerbil-unstable,
+  gerbil-support,
+  gambit-support,
+}:
 gerbil-support.gerbilPackage {
   pname = "gerbil-ethereum";
   version = "unstable-2020-10-18";
   git-version = "0.0-26-gf27ada8";
   gerbil-package = "mukn/ethereum";
   gerbil = gerbil-unstable;
-  gerbilInputs = with gerbil-support.gerbilPackages-unstable;
-    [gerbil-utils gerbil-crypto gerbil-poo gerbil-persist];
+  gerbilInputs = with gerbil-support.gerbilPackages-unstable; [gerbil-utils gerbil-crypto gerbil-poo gerbil-persist];
   buildInputs = [];
   gambit-params = gambit-support.unstable-params;
   version-path = "version";
@@ -20,9 +25,9 @@ gerbil-support.gerbilPackage {
   };
   meta = {
     description = "Gerbil Ethereum: a Scheme alternative to web3.js";
-    homepage    = "https://github.com/fare/gerbil-ethereum";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    homepage = "https://github.com/fare/gerbil-ethereum";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [fare];
   };
 }

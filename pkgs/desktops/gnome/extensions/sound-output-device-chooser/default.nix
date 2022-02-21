@@ -1,10 +1,11 @@
-{ lib, stdenv
-, substituteAll
-, fetchFromGitHub
-, libpulseaudio
-, python3
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  libpulseaudio,
+  python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-sound-output-device-chooser";
   version = "39";
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNOME Shell extension adding audio device chooser to panel";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [jtojnar];
     homepage = "https://github.com/kgshank/gse-sound-output-device-chooser";
   };
 }

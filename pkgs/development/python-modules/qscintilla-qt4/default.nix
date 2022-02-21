@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, isPyPy
-, pkgs
-, python
-, pyqt4
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  isPyPy,
+  pkgs,
+  python,
+  pyqt4,
 }:
-
 buildPythonPackage {
   pname = "qscintilla-qt4";
   version = pkgs.qscintilla-qt4.version;
@@ -16,9 +16,9 @@ buildPythonPackage {
 
   src = pkgs.qscintilla-qt4.src;
 
-  nativeBuildInputs = [ pkgs.xorg.lndir ];
+  nativeBuildInputs = [pkgs.xorg.lndir];
 
-  buildInputs = [ pyqt4.qt pyqt4 ];
+  buildInputs = [pyqt4.qt pyqt4];
 
   preConfigure = ''
     mkdir -p $out
@@ -36,7 +36,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "A Python binding to QScintilla, Qt based text editing control";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ danbst ];
+    maintainers = with maintainers; [danbst];
     platforms = platforms.linux;
   };
 }

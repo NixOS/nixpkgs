@@ -1,19 +1,35 @@
-{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, fetchpatch, bundlerEnv
-, yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
-
+{
+  lib,
+  stdenv,
+  nodejs-slim,
+  mkYarnPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  bundlerEnv,
+  yarn,
+  callPackage,
+  imagemagick,
+  ffmpeg,
+  file,
+  ruby_3_0,
+  writeShellScript
   # Allow building a fork or custom version of Mastodon:
-, pname ? "mastodon"
-, version ? import ./version.nix
-, srcOverride ? null
-, dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
+  ,
+  pname ? "mastodon",
+  version ? import ./version.nix,
+  srcOverride ? null,
+  dependenciesDir ? ./.
+  # Should contain gemset.nix, yarn.nix and package.json.
 }:
-
 stdenv.mkDerivation rec {
   inherit pname version;
 
   # Using overrideAttrs on src does not build the gems and modules with the overridden src.
   # Putting the callPackage up in the arguments list also does not work.
-  src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
+  src =
+    if srcOverride != null
+    then srcOverride
+    else callPackage ./source.nix {};
 
   patches = [
     (fetchpatch {
@@ -55,7 +71,9 @@ stdenv.mkDerivation rec {
     inherit src version;
 
     buildInputs = [
-      mastodon-gems nodejs-slim yarn
+      mastodon-gems
+      nodejs-slim
+      yarn
     ];
 
     # FIXME: "production" would require OTP_SECRET to be set, so we use
@@ -106,7 +124,7 @@ stdenv.mkDerivation rec {
     ln -s /tmp tmp
   '';
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodon-gems.wrappedRuby ];
+  propagatedBuildInputs = [imagemagick ffmpeg file mastodon-gems.wrappedRuby];
 
   installPhase = let
     run-streaming = writeShellScript "run-streaming.sh" ''
@@ -123,7 +141,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ petabyteboy happy-river erictapen ];
+    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
+    maintainers = with maintainers; [petabyteboy happy-river erictapen];
   };
 }

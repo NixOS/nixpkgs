@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, go-rice }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go-rice,
+}:
 buildGoModule rec {
   pname = "cfssl";
   version = "1.6.1";
@@ -26,7 +30,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ go-rice ];
+  nativeBuildInputs = [go-rice];
 
   preBuild = ''
     pushd cli/serve
@@ -35,7 +39,8 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/cloudflare/cfssl/cli/version.version=v${version}"
   ];
 
@@ -43,6 +48,6 @@ buildGoModule rec {
     homepage = "https://cfssl.org/";
     description = "Cloudflare's PKI and TLS toolkit";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ mbrgm ];
+    maintainers = with maintainers; [mbrgm];
   };
 }

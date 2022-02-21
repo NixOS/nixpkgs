@@ -1,14 +1,14 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, installShellFiles
-, git
-, stestr
-, nix-update-script
-, testVersion
-, git-machete
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  installShellFiles,
+  git,
+  stestr,
+  nix-update-script,
+  testVersion,
+  git-machete,
 }:
-
 buildPythonApplication rec {
   pname = "git-machete";
   version = "3.7.2";
@@ -20,9 +20,9 @@ buildPythonApplication rec {
     sha256 = "sha256-7WaLUCJr29i7JW5YAJG1AuYnSLKRMpAEnCY2i4Zle+c=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
-  checkInputs = [ git stestr ];
+  checkInputs = [git stestr];
 
   postCheck = ''
     stestr run
@@ -48,6 +48,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/VirtusLab/git-machete";
     description = "Git repository organizer and rebase/merge workflow automation tool";
     license = licenses.mit;
-    maintainers = with maintainers; [ blitz ];
+    maintainers = with maintainers; [blitz];
   };
 }

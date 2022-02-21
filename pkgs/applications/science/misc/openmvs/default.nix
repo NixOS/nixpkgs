@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, eigen
-, opencv
-, ceres-solver
-, cgal
-, boost
-, vcg
-, gmp
-, mpfr
-, glog
-, gflags
-, libjpeg_turbo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  eigen,
+  opencv,
+  ceres-solver,
+  cgal,
+  boost,
+  vcg,
+  gmp,
+  mpfr,
+  glog,
+  gflags,
+  libjpeg_turbo,
 }:
-
 stdenv.mkDerivation {
   pname = "openmvs";
   version = "unstable-2018-05-26";
@@ -27,9 +27,9 @@ stdenv.mkDerivation {
     sha256 = "12dgkwwfdp24581y3i41gsd1k9hq0aw917q0ja5s0if4qbmc8pni";
   };
 
-  buildInputs = [ eigen opencv ceres-solver cgal boost vcg gmp mpfr glog gflags libjpeg_turbo ];
+  buildInputs = [eigen opencv ceres-solver cgal boost vcg gmp mpfr glog gflags libjpeg_turbo];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   preConfigure = ''
     cmakeFlagsArray=(
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     homepage = "http://cdcseacave.github.io/openMVS/";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mdaiter ];
+    maintainers = with maintainers; [mdaiter];
     # 20190414-174115: CMake cannot find CGAL which is passed as build input
     broken = true;
   };

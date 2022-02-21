@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, webencodings
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  webencodings,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "tinycss2";
   version = "1.1.0";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "sha256-WA88EYolL76WqeA1UKR3Sfw11j8NuOGOxPezujYizH8=";
   };
 
-  propagatedBuildInputs = [ webencodings ];
+  propagatedBuildInputs = [webencodings];
 
   checkInputs = [
     pytestCheckHook

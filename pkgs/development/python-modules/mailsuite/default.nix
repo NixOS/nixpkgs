@@ -1,15 +1,15 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, lib
-
-# pythonPackages
-, dnspython
-, html2text
-, mail-parser
-, imapclient
+{
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  lib
+  # pythonPackages
+  ,
+  dnspython,
+  html2text,
+  mail-parser,
+  imapclient,
 }:
-
 buildPythonPackage rec {
   pname = "mailsuite";
   version = "1.6.1";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     imapclient
   ];
 
-  pythonImportsCheck = [ "mailsuite" ];
+  pythonImportsCheck = ["mailsuite"];
 
   meta = {
     description = "A Python package to simplify receiving, parsing, and sending email";
     homepage = "https://seanthegeek.github.io/mailsuite/";
-    maintainers = with lib.maintainers; [ talyz ];
+    maintainers = with lib.maintainers; [talyz];
     license = lib.licenses.asl20;
   };
 }

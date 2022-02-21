@@ -1,5 +1,9 @@
-{ fetchurl, lib, stdenv, bash }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  bash,
+}:
 stdenv.mkDerivation rec {
   version = "3.5-rc1";
   pname = "nanoblogger";
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "09mv52a5f0h3das8x96irqyznm69arfskx472b7w3b9q4a2ipxbq";
   };
 
-  buildInputs = [ ];
+  buildInputs = [];
 
   installPhase = ''
     mkdir -p $out/bin

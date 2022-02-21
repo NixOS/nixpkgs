@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, automake, autoconf }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  automake,
+  autoconf,
+}:
 stdenv.mkDerivation rec {
   pname = "avr-libc";
   version = "2.0.0";
@@ -9,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "15svr2fx8j6prql2il2fc0ppwlv50rpmyckaxx38d3gxxv97zpdj";
   };
 
-  nativeBuildInputs = [ automake autoconf ];
+  nativeBuildInputs = [automake autoconf];
 
   # Make sure we don't strip the libraries in lib/gcc/avr.
-  stripDebugList = [ "bin" ];
+  stripDebugList = ["bin"];
   dontPatchELF = true;
 
   passthru = {
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "a C runtime library for AVR microcontrollers";
     homepage = "https://savannah.nongnu.org/projects/avr-libc/";
     license = licenses.bsd3;
-    platforms = [ "avr-none" ];
-    maintainers = with maintainers; [ mguentner ];
+    platforms = ["avr-none"];
+    maintainers = with maintainers; [mguentner];
   };
 }

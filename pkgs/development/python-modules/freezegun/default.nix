@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, fetchpatch
-, fetchPypi
-, python-dateutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  fetchpatch,
+  fetchPypi,
+  python-dateutil,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "freezegun";
   version = "1.1.0";
@@ -26,13 +26,12 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ python-dateutil ];
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [python-dateutil];
+  checkInputs = [pytestCheckHook];
 
   meta = with lib; {
     description = "FreezeGun: Let your Python tests travel through time";
     homepage = "https://github.com/spulec/freezegun";
     license = licenses.asl20;
   };
-
 }

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, certifi
-, circuitbreaker
-, configparser
-, cryptography
-, fetchFromGitHub
-, pyopenssl
-, python-dateutil
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  circuitbreaker,
+  configparser,
+  cryptography,
+  fetchFromGitHub,
+  pyopenssl,
+  python-dateutil,
+  pythonOlder,
+  pytz,
 }:
-
 buildPythonPackage rec {
   pname = "oci";
   version = "2.56.0";
@@ -52,7 +52,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Oracle Cloud Infrastructure Python SDK";
     homepage = "https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/";
-    license = with licenses; [ asl20 /* or */ upl ];
-    maintainers = with maintainers; [ ilian ];
+    license = with licenses; [
+      asl20
+      /*
+       or
+       */
+      upl
+    ];
+    maintainers = with maintainers; [ilian];
   };
 }
